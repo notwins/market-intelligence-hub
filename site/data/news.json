@@ -1,8 +1,46 @@
 {
-  "generated_at": "2026-10-29T15:37:17+08:00",
+  "generated_at": "2026-10-29T17:10:10+08:00",
   "status": "ok",
   "discovery_method": "Google News RSS with exact Reuters publisher name and Reuters source domain. Headlines only; no generated earnings, price, yield or forecast figures.",
   "items": [
+    {
+      "id": "e61d06659576f0cec6a7",
+      "title": "Shell beats expectations with $10.8 billion profit, hikes buybacks",
+      "published_at": "2026-10-29T07:28:28+00:00",
+      "category": "Earnings",
+      "tickers": [],
+      "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPcG1Cdmo4cUo0WUJ2TENLcXNfMERDQ2JWMVlRUUg4enp5RHBhM3FhUkJ3TzJBZG9TVGI2NVNMbVhHT2x6c0NETmdQaWdKRl9CQ0k1T3hGRFdicFBoNUZ0QUtsRnNwd05ndlNacXhGQmZ1RGktUFBoN3owbEFqQXVfRkY4NUozY0N6QVBKZ3kxU3RBb0RvUV8yN2tzdkRvVGp5QXRkSTZuSzluQWJOLS1MYWRuTWQ?oc=5",
+      "link_type": "google_news",
+      "publisher": "Reuters",
+      "publisher_url": "https://www.reuters.com",
+      "verification": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "d8ab4ea1bdf95d2548d3",
+      "title": "Volkswagen's Q3 loss widens to more than $6.5 billion, raising restructuring stakes",
+      "published_at": "2026-10-29T06:46:00+00:00",
+      "category": "Markets",
+      "tickers": [],
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxPME5ta3ZpdnRTQXdPNzgwZ0pkYVEtX1N1OGR2SzRpV2o4V2RDMWJLY1YxQ3VXZ2M3b2JTWTAxUHRmNlhPa3FVQ1A3TUVzSFhLVWJqMXVFX0k3Z050Y2dMdEVJbTF0eVowNG4yUlZUd3VKYXg2MkR6aS1fOHdDbVprLWFnOU5tRXNzVGdNQVN6R0QteXB4SXdIMVozVTFoelF3aExzMXRpczJkZTExSHAtbHpFaVlNWW5NTnlZUHJn?oc=5",
+      "link_type": "google_news",
+      "publisher": "Reuters",
+      "publisher_url": "https://www.reuters.com",
+      "verification": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "db13733a71455a0e9fa2",
+      "title": "Morning Bid: In the AI alphabet, cash is king",
+      "published_at": "2026-10-29T05:32:00+00:00",
+      "category": "Markets",
+      "tickers": [
+        "GOOGL"
+      ],
+      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTE1aU3ptejJzYnZUak01eEhoclJrM1FJUUVIUjJUb0FyTGJZTGhjR0pkb1VuYlB3eXhnN2tBUXFNbmp3S2xtRUN1Mmtpd19NdDU5WkRlWUJ4bkRGdlp3aUNfNGxRNTZENW5VQUQxQTMtRENoXzE1MG13eXNPaVo3cXc?oc=5",
+      "link_type": "google_news",
+      "publisher": "Reuters",
+      "publisher_url": "https://www.reuters.com",
+      "verification": "publisher metadata in Google News RSS; article body not reproduced"
+    },
     {
       "id": "1465fb73d526586b73ba",
       "title": "Fed highlights economic strength but muddies outlook for Treasuries",
@@ -54,18 +92,6 @@
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "007c02af63041f601d8c",
-      "title": "Euro steady before ECB decision, dollar holds ground as Fed stands pat",
-      "published_at": "2026-10-29T01:55:00+00:00",
-      "category": "Markets",
-      "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNYmVmOE5mU3JyckhjNGlWelQ5QVdhNzkwU0h1Zkd4bjJ6UGszY2lYem1BRmxjWW95VDBrYzg5NXNIWFhFWmNjNmFlUHZleE01YnNOWjRWVV9LWU1SYS1lRlVoRm15U1FrNjdvbkhtVzA4UWNzREJFWjBmUS1vU1FmcEN5a2loa1VsaHRRN190UHZNRmtvTVR1a0RmUlZwTlBPTmtoVFpURGpudw?oc=5",
-      "link_type": "google_news",
-      "publisher": "Reuters",
-      "publisher_url": "https://www.reuters.com",
-      "verification": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "b80753e8d8b8da5f6453",
       "title": "Samsung sees AI chip shortage worsening, keeps investors in suspense on returns",
       "published_at": "2026-10-29T00:56:00+00:00",
@@ -78,24 +104,24 @@
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "4480ceee7a8e0d536d66",
-      "title": "EXCLUSIVE: Bloomberg, trading firms to pay Trump for faster Truth Social access, sources say",
-      "published_at": "2026-10-29T00:21:00+00:00",
+      "id": "a58200c8b1cc3c3b7c60",
+      "title": "Nike deepens India push with new running shoe, seeking fresh growth engines",
+      "published_at": "2026-10-29T00:33:00+00:00",
       "category": "Markets",
       "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQdm9qWW1wa0JpT2tGTDBZNDBRZUtkRU1NaU1pd1gtZzBCNGtqZXZmRm5wZDAzRmJ0TEloNGZmX1RvaXRBckVfdjJqTEVxLVdZZ1ZLWXFyNGh0Tm8wYWx5ZnNpVGl4YmF1NnZnd2EzY3MteVk3N0RmMS0tV21ESi1jOVdrRlp5OG12ZFBZRDBBSmhXV3NNeHIzaWI4b2xJR2dTREQ0UDBfdExQejcwUF8walFGUnNRdm9aaFpCQ0ZTRndoZw?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxOUXZKV1d3ZzZrOEwxVzRwQ2ZFTWdKajBNV1BLeHZGZWJuSWVRRjRrSWlTbVc4QU5oWWFfRWs3eDZGQVU1MGdoZkp1OEFQNEs4cUVfYW5UQkpiZTNPUDVUNzZHR3Z3OUZFT3pMdGdWTHdiRVRnWXdvYU11YkdWazF1MTJhQ3ZVUndZTG1jazUtb3pZUm1vV2VGNDRWLTM2NEd6VGJLc0hQa2RWdVMtVjdRdkdmcFFjbU5Bc3ZYQ0FlQ3BOcThTTFd4WXE4R3B0YzB1?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "0d6ba24b4d24c36ff696",
-      "title": "EU energy ministers to discuss soaring fuel prices as winter looms",
-      "published_at": "2026-10-29T00:19:00+00:00",
+      "id": "4480ceee7a8e0d536d66",
+      "title": "EXCLUSIVE: Bloomberg, trading firms to pay Trump for faster Truth Social access, sources say",
+      "published_at": "2026-10-29T00:21:00+00:00",
       "category": "Markets",
       "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQVDByQUZwZlZWZ0Rha3NIN2lVRktZNXgwNkRHYUZHcXliRWVDLWFNTWZCczA2aU52UEs2bGo3dlB3Mmx4QnQyVzN2TmZCemJ3NEhPQkhWT0tmX1RGdVFUX0ZVNllZa3dhTXdZODBXdnlqY0hKM18yYTVZblRFSk9ZejBUal9QUGlYN3NOcWhrbExxWFIyQ241TGJJZmNsbmMxY1gxWXFPRDY5bS00QVBaZmpB?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQdm9qWW1wa0JpT2tGTDBZNDBRZUtkRU1NaU1pd1gtZzBCNGtqZXZmRm5wZDAzRmJ0TEloNGZmX1RvaXRBckVfdjJqTEVxLVdZZ1ZLWXFyNGh0Tm8wYWx5ZnNpVGl4YmF1NnZnd2EzY3MteVk3N0RmMS0tV21ESi1jOVdrRlp5OG12ZFBZRDBBSmhXV3NNeHIzaWI4b2xJR2dTREQ0UDBfdExQejcwUF8walFGUnNRdm9aaFpCQ0ZTRndoZw?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
@@ -144,6 +170,42 @@
       "category": "Markets",
       "tickers": [],
       "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPVDBFVlRXdkVhV1hKV1RaMllIcXBWeUdONzNLcFF2Z1dmdk12Q2RqSmJaaE1hQ0NXOWNWMTQxWkw4S1hOZnBvT0pHNVRWZkFvZm1uY05heWF5U3N5Mm9xeVlPNzhleGNIUkNwOHR4QlREV004ZDI4eEdid3VaZExQSld1cjZOZjNhX3NHa3RzcEtwLVZtaDBVREFoV1FFalI4UHZOUnpHN3JuWURxM3poeEs2UW5yek1BSFVldlF2RQ?oc=5",
+      "link_type": "google_news",
+      "publisher": "Reuters",
+      "publisher_url": "https://www.reuters.com",
+      "verification": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "a54e73dac24722d71813",
+      "title": "ECB to keep rates steady as investors focus on French bonds, Lagarde's future",
+      "published_at": "2026-10-28T23:02:00+00:00",
+      "category": "Fixed income",
+      "tickers": [],
+      "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOZldaRFJxZExRTzZ2T1lfc1pYUWtpbFJwRHk0YmpCaHdkYXd4ZV9vbGpmellrN1Ztck8wallTMnphd1V6VWFLckM4bTRiX1c5VmZmSUZwdUROem02ZXlUY3NKT1poTEhFWDRQOThHcEQ5YkMzY1gxU1NoTm5mdFhVR2xWakJSYUFVSTRKS0Rva1JIR0FhOHFJck5Ic3AzNzNWQTJuMXFySnNFcDNIYXN0TWtn?oc=5",
+      "link_type": "google_news",
+      "publisher": "Reuters",
+      "publisher_url": "https://www.reuters.com",
+      "verification": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "8189aa4eb34927d5eaf1",
+      "title": "EXCLUSIVE: LME plans metal tokens push tied to Hong Kong's 5-year plan, sources say",
+      "published_at": "2026-10-28T23:01:00+00:00",
+      "category": "Markets",
+      "tickers": [],
+      "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxQVVZlWTY1ZE1YVmgwU05DR3MwRW5wM0ZpVk12ckpEZGl4UThvUUtfdTNVTDZyVkhpVFQxV3Rwd0V4azZpX1Y0N0tBd0FQQWpSTmZwUmdmNmxxZzhHQmFaOG95b2cwTFYzTjg0c2tnSVdxZFRTUi1ISV9SYW9VVEIwZ0tYcEtxUzNKbjl5YkpWQTdxcl92V2NkbmZjR3I1Q2lIOXRlUkZrb2UtLWpWX3hlNzg1dFNCdw?oc=5",
+      "link_type": "google_news",
+      "publisher": "Reuters",
+      "publisher_url": "https://www.reuters.com",
+      "verification": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "8a154940b300ae0d0bb0",
+      "title": "Airbus holds annual targets, bets on year-end delivery surge",
+      "published_at": "2026-10-28T22:09:01+00:00",
+      "category": "Markets",
+      "tickers": [],
+      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPZWpvLUNOUFQzeXRMQWpoMFlZXzduMTRXb3hrSUlLU05mMU5hWk42bkdDREdUeU56UTI4MTNMYXZHb01IcmdBVWNsellUZTR3TlBDYlRtYlc0a01oMEZQeVp1SkpvOGpZQkV5Unk0TnFoa0hXel9ha1pIZ3E1TzM0VWIzU09sRnREZTRUV1pkTTFQNzIzWmpWZ2c0THFLRDdKUUluWnEtUnNIeFdUN0dSSV9YRnpEVnl4a1dn?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
@@ -226,18 +288,6 @@
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "c4d327b3126066b5aac5",
-      "title": "HF Sinclair posts record quarterly profit on refining boom, appoints new CEO",
-      "published_at": "2026-10-28T18:01:42+00:00",
-      "category": "Earnings",
-      "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOVlBLaUpGYWpRdGFBMy0yd184VnE3aXktZF9vYi0yZ2xtVGJWdGsxZzdtSzVXeWFFU0g0V2VmaTZEcjJDdVl5dVhjYV9yTEtVaHhlVHplZmE5MDA3OWd1MElNNWExaDVfWmlkUGxCT2lXbmp0QXZNMEstOGZXMEdZRGlFWTdjeFhLZHc5ZUZ5R3VFc0hPQlRWMkUzcWpTTHQ1Z2E1WXAyYktZOFF2NklZ?oc=5",
-      "link_type": "google_news",
-      "publisher": "Reuters",
-      "publisher_url": "https://www.reuters.com",
-      "verification": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "4c65c1b462ce66c74695",
       "title": "AI giants' funding ambitions test Wall Street's appetite for risk",
       "published_at": "2026-10-28T17:37:19+00:00",
@@ -262,12 +312,12 @@
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "b9beb1869c45fd53dead",
-      "title": "GE Vernova boosts grid push with $9 billion Trench deal, lifts revenue forecast",
-      "published_at": "2026-10-28T15:53:53+00:00",
-      "category": "Earnings",
+      "id": "8c8eb0c6e3287ab86529",
+      "title": "European gas touches €100 for first time since 2022 energy crisis as consumers, industry feel the pain",
+      "published_at": "2026-10-28T15:28:46+00:00",
+      "category": "Markets",
       "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxObF9CRlpMQ1Vnb3hHT19ZaXJ2UjFrOVdORXRNVEp6TnZSMjRlcFpKVllVdDNTYWQ2V3FpMnRLMlI0SEhmQmh3bDBrUHI0SEQtaFFiQ0tyTzVteFpWb19lMkZyaThLLS13UExxVG1EaVNaZGxEZHFJYXBDVUI4cVpNU3dGSGc3amJUcEFMdGlES3FFVl9IeHg0X3UtMEQtR25SYWtNTEFSS3pQRGNUZEE?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxOZmZZVVJDOHFvUk81TDltQmFoQmlUOTZqaGNLVEJ6UEtDMnY4VUlJd0dJVTlEZWpMX2Y3NHNOWF92QVpKUjBvdG5ybWZfYlFsNHpTOVRIUlFhWmgtcDRkNFVqdmd0ejhKTU5EWWRlRUd1bTMzM05tYjR3b0RMSHdQb2ZoVGtvQ2hDa0V2blR1bHdlRHdoZF9kbVByNlJPdVd6bTFwZW5lczBfU0p3RU1LZmpJOWtMcnhVWFkxbk9salA?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
@@ -310,24 +360,24 @@
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "b047e4971b28b93a892c",
-      "title": "Stellantis shares leap on bullish cost cuts, cash flow comments",
-      "published_at": "2026-10-28T14:49:56+00:00",
+      "id": "2e467048a676c4624534",
+      "title": "GSK pipeline doubts, vaccine underperformance overshadow sales beat",
+      "published_at": "2026-10-28T15:05:43+00:00",
       "category": "Markets",
       "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQcy04bFRZODBHbmRnMHpGWWVIcW1ab0NoLWZVeXFkdWszd0dHYWwyQVI4dFJLVVdGTy1KbHZTa0lUYi1NNGtIVWg5eWlxcktWQ0lDMDR3VFd1al83ZFB5TlBnX1ZMdGlpVmhUNGJzNmVSQWUwbEFFcXluaWlQZ0NyUUtrXzlNMHJRZ2ZuNWJFeUpfS0VQTDd1T1hicWcxTzlSR0x5bDNjWmRoTGc?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPY1FBbGtkNGhROXJGS3lSUms5VFRZSTRDZHJWblBwLUkycjY2OGJLLUVreTc4NHhGVFNLeklQZkQxMEQ5VS1DNHlBZGxtbGJJbjlJNjBsNDZkRFJPaUFqOGJKcm9Za1YzTGgtcEtGMlF5YXE3djc1OXN6RmU3bHJUZmUxSl9ua3JDdjRqVE94eUxOckVEVUswa0pGa29qRzZTZW10YkxYSGQ1REVCN3l6VlRkNkxhSnFDTVM5ODlWdjFvQVlOTE95azBOV1c2dw?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "704ac80824a41e27be4d",
-      "title": "UK's Healey says government will fill defence gap by 'reprioritising'",
-      "published_at": "2026-10-28T14:40:22+00:00",
+      "id": "b047e4971b28b93a892c",
+      "title": "Stellantis shares leap on bullish cost cuts, cash flow comments",
+      "published_at": "2026-10-28T14:49:56+00:00",
       "category": "Markets",
       "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPVVlMZnVReHVKUHJzV09jMERDMHZMV045NjRaMlRoSnI3WHNjdTY4ZDhycndTWW5leHg0TkVYZVJrcU9VQm9XSjVIYTB4N3VsSDlTWWd4Y1B4QS1HQmFMUXVhdXRjOVVadDkydnptMG4tTTNQRUJneXNTVkJ5TXJWcDY3UkJjb0FLX0llME5NSXpkWnc1cmpnZ0pYUlhHekVxY0VTaUd1anc4RUk3aGd1SHdNXzF5clI3WWd2QkVmWjk3dw?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQcy04bFRZODBHbmRnMHpGWWVIcW1ab0NoLWZVeXFkdWszd0dHYWwyQVI4dFJLVVdGTy1KbHZTa0lUYi1NNGtIVWg5eWlxcktWQ0lDMDR3VFd1al83ZFB5TlBnX1ZMdGlpVmhUNGJzNmVSQWUwbEFFcXluaWlQZ0NyUUtrXzlNMHJRZ2ZuNWJFeUpfS0VQTDd1T1hicWcxTzlSR0x5bDNjWmRoTGc?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
@@ -514,18 +564,6 @@
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "a1d2eefba52ef81241a4",
-      "title": "Generic drugmaker Sandoz cuts sales outlook, shares fall",
-      "published_at": "2026-10-28T06:52:00+00:00",
-      "category": "Markets",
-      "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNYlVPbS1tUHRtY2RwMzF4VHRxY2hEeGo2dGhPd0JVcm9vWklxOTVteDFsdVQzdmRMWTV2cG5zUC1yUHBUeGVCY3NjUXNhY19BVHhyMkI5RTJ4Yy1OcV9YWTM3VWFfZmxpSXcySUFxdndhTzF4ZEVidjZxbmlPX25xS3lGNmdXYjNzcXg2R3FhYUg1ZTlhalNsTkoxR2x1NUcybm1YM2VOejlxRnl0M1ZmdjFEN2xaMVFpNjBreUM0d19OSVZ2UnlMRHJBWnp0MF84OGlEVjhn?oc=5",
-      "link_type": "google_news",
-      "publisher": "Reuters",
-      "publisher_url": "https://www.reuters.com",
-      "verification": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "01ab8c56be7f3bb6f3c7",
       "title": "Santander's Q3 profit jump overshadowed by Brazil weakness",
       "published_at": "2026-10-28T06:38:00+00:00",
@@ -640,18 +678,6 @@
       "category": "Markets",
       "tickers": [],
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOMERINlphR2lkbEQ5OE1lVy1UX3RXYnhidFQ2bzJGQmYxZnZqNzd0eS1JQUlVdDRIU0Z0Yld6TG0tWFdCdG5RNEtsLTJaWGRzUmlZOFlIZTFrenFlZkdPcnVQMExMcVRCdmR4VmNBUWMwMVl4NnBJQ0ZXYjlXX1FaVzRnUV9ZeS1YM1kxMmw1bEltY1Q4cE9rWHEwdGVUZ3otMXNNWHNxazROdG1RR3VuYnNwVy1mREd3V0VLWVNB?oc=5",
-      "link_type": "google_news",
-      "publisher": "Reuters",
-      "publisher_url": "https://www.reuters.com",
-      "verification": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "c56b33cc100bcb3bda21",
-      "title": "Oil prices rise on Yemen fighting, Saudi refinery attack",
-      "published_at": "2026-10-28T01:49:00+00:00",
-      "category": "Markets",
-      "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxQYUhHblNqOGNPczlpdUR2NDFMWjZxX2FZYjVTTzREX2R4YU5jRzF2ckN1MG9sSnIxWG9hbDJ0TjV4YTZXRjdqSUc3aF9OcTJuUVlJZkZrdUd0V0RMUU1qUWxiNDdmdXhCTmJUczZWOFRUWTRKdzJQLUJYNXZBODhnTjJfOXMyNU01OGVreWM5TkNyamNjbzV5UzAxX3ZOdWcwcUE5SFZHSkEyUjZ1M1dUQ3ByRDdxbC13ZzRQR0xfcTZ0bjh6dnNPalJZRWI?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
@@ -898,18 +924,6 @@
       "verification": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "40446bfd56d60f3e97f0",
-      "title": "India should not deplete reserves to defend rupee, ex-RBI chief Rajan says",
-      "published_at": "2026-10-27T07:53:12+00:00",
-      "category": "Markets",
-      "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQcUQ3WnA0SGYtbGQzZDB3SUVhRklXZHFWZWpERVFEU1I2cmZFVi03d25nREtBc1pPMHdmbnN5NUdxU2tuWVRZNFlNdmptR1VLZEY4NkcyaGJ1ckR6VU85dzRWWE9VZFR3SjI1c0phdEdJdHk5eURwTGZLeDdqdWUxTXBPXzF4OHRsMkVXUEFjOVF6c0lTb3kwVnFYaWFEZGF0NlBuRUNwMDZwQS1fOHZ1QXgxeDhzM1lXcEE?oc=5",
-      "link_type": "google_news",
-      "publisher": "Reuters",
-      "publisher_url": "https://www.reuters.com",
-      "verification": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "3e83dc39634f591206c9",
       "title": "Orange raises 2026 profit outlook, talks up satellites as network boost",
       "published_at": "2026-10-27T06:31:00+00:00",
@@ -952,18 +966,6 @@
       "category": "Earnings",
       "tickers": [],
       "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQdEdzTDdxbEtNX1l6VDJMdF9NTGpUNEJPYy1jaUo2SkllaGhJZnZvNzZOOTd5MkZHV3p5T2ZhcjlkcWduOXp5elFKREQ0bFBib0pXUzNKdGI2QmE3eWZxRlktZXhSZG0tQzQ4U1dXNWxOZktiZVZvc1pNUERsYUFLVUJYSQ?oc=5",
-      "link_type": "google_news",
-      "publisher": "Reuters",
-      "publisher_url": "https://www.reuters.com",
-      "verification": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "08c6edf463e172a578aa",
-      "title": "Equities end higher as Anthropic's IPO filing buoys AI stocks",
-      "published_at": "2026-10-26T23:28:41+00:00",
-      "category": "Markets",
-      "tickers": [],
-      "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPVVlfUU5UYnVIOHVRRHJCaWJNQ0NtM0V5aXdZUE5QSEhGVTAxWmdXcU1KeGVEaEtYTXlEal9YNjMwblR6bGZQcm5HODd6N2xnNUppZzdXMDVTSWwtZEc3a3p3Q0M4VzRtaHo3QTd1VDJpaGNPQmw0WjFNaEMyQ2JyOVpGcmZEbktIdk45OHp4blZxdzc5UllRT2V1cnllVTVVTjVYZm1IZ0VjWDlwTnc?oc=5",
       "link_type": "google_news",
       "publisher": "Reuters",
       "publisher_url": "https://www.reuters.com",
