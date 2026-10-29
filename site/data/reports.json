@@ -1,0 +1,104 @@
+{
+  "updated_at": "2026-10-29T15:35:17+08:00",
+  "reports": [
+    {
+      "id": "2026-10-29-us-earnings",
+      "date": "2026-10-29",
+      "type": "US earnings",
+      "time_sgt": "08:00 original edition",
+      "status": "Source-checked historical edition",
+      "title": "The AI cash-flow divide",
+      "subtitle": "Microsoft's cloud momentum and cash generation contrast with Alphabet's costly expansion.",
+      "takeaway": "AI revenue expansion remains strong, but the market is discriminating between self-funded growth and widening cash deficits.",
+      "items": [
+        {
+          "ticker": "MSFT",
+          "company": "Microsoft",
+          "tone": "positive",
+          "change_label": "Higher after-hours",
+          "headline": "Azure rose 48%; free cash flow reached $18.6bn.",
+          "detail": "Reuters reported free cash flow of $18.6bn and Azure growth of 48% for the September quarter. Next-quarter Azure growth guidance was 49%–50%. Figures describe that reporting period, not current market prices.",
+          "metrics": [
+            [
+              "Azure growth",
+              "48%"
+            ],
+            [
+              "Free cash flow",
+              "+$18.6bn"
+            ]
+          ],
+          "url": "https://www.reuters.com/business/retail-consumer/microsoft-beats-quarterly-cloud-revenue-estimates-2026-10-28/",
+          "evidence_url": "https://b93radio.com/2026/10/28/microsoft-beats-quarterly-cloud-revenue-estimates/"
+        },
+        {
+          "ticker": "GOOGL",
+          "company": "Alphabet",
+          "tone": "negative",
+          "change_label": "−10% after-hours",
+          "headline": "Google Cloud doubled, but free cash flow turned negative.",
+          "detail": "Reuters reported September-quarter revenue of $127.6bn and negative free cash flow of $9.07bn. Google Cloud revenue more than doubled.",
+          "metrics": [
+            [
+              "Revenue",
+              "$127.6bn"
+            ],
+            [
+              "Free cash flow",
+              "−$9.07bn"
+            ]
+          ],
+          "url": "https://www.reuters.com/business/alphabets-google-cloud-unit-beats-quarterly-revenue-estimates-steady-ai-demand-2026-10-28/",
+          "evidence_url": "https://ttm.financial/m/news/2679419668"
+        },
+        {
+          "ticker": "AMZN",
+          "company": "Amazon",
+          "tone": "watch",
+          "change_label": "Earnings due 29 Oct US",
+          "headline": "AWS growth expected at 38.2%, according to Reuters' pre-earnings preview.",
+          "detail": "Revenue growth expected at 12.3%. Watch AWS growth, capital spending, financing requirements and free cash flow. These are forecasts, not reported results.",
+          "metrics": [
+            [
+              "AWS growth est.",
+              "38.2%"
+            ],
+            [
+              "Total growth est.",
+              "12.3%"
+            ],
+            [
+              "Status",
+              "Upcoming"
+            ]
+          ],
+          "url": "https://www.reuters.com/technology/big-tech-earnings-test-ai-boom-amid-market-turmoil-2026-10-27/",
+          "evidence_url": "https://www.streetinsider.com/Reuters/Big%2BTech%2Bearnings%2Ba%2Btest%2Bof%2Bthe%2BAI%2Bboom%2Bamid%2Bmarket%2Bturmoil/27235999.html"
+        }
+      ],
+      "sections": [
+        {
+          "label": "Market pulse",
+          "text": "Cloud and AI demand remain firm. Investors are responding more sharply to cash conversion and capital expenditure than to headline revenue growth."
+        },
+        {
+          "label": "Fixed-income lens",
+          "text": "A sustained rise in debt-funded AI capex would increase refinancing sensitivity. This is an analytical risk scenario, not a verified bond-market price reaction."
+        },
+        {
+          "label": "Portfolio discipline",
+          "text": "Compare cash flow after capex, pricing power, guidance and balance-sheet headroom rather than relying only on earnings beats."
+        }
+      ],
+      "sources": [
+        "https://www.reuters.com/business/retail-consumer/microsoft-beats-quarterly-cloud-revenue-estimates-2026-10-28/",
+        "https://www.reuters.com/business/alphabets-google-cloud-unit-beats-quarterly-revenue-estimates-steady-ai-demand-2026-10-28/",
+        "https://www.reuters.com/technology/big-tech-earnings-test-ai-boom-amid-market-turmoil-2026-10-27/",
+        "https://b93radio.com/2026/10/28/microsoft-beats-quarterly-cloud-revenue-estimates/",
+        "https://ttm.financial/m/news/2679419668",
+        "https://www.streetinsider.com/Reuters/Big%2BTech%2Bearnings%2Ba%2Btest%2Bof%2Bthe%2BAI%2Bboom%2Bamid%2Bmarket%2Bturmoil/27235999.html"
+      ],
+      "verified_at": "2026-10-29T15:35:17+08:00"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "generated_at": "2026-10-29T15:35:17+08:00",
+  "discovery_method": "Initial headlines cross-checked against Reuters-syndicated reports. Automated editions use Reuters publisher metadata in Google News RSS; no financial metrics are inferred.",
+  "status": "source-checked",
+  "items": [
+    {
+      "id": "r-msft-2026-10-28",
+      "title": "Microsoft's cloud growth, cash flow offer respite from AI spending fears",
+      "published_at": "2026-10-28",
+      "category": "Earnings",
+      "tickers": [
+        "MSFT"
+      ],
+      "url": "https://www.reuters.com/business/retail-consumer/microsoft-beats-quarterly-cloud-revenue-estimates-2026-10-28/",
+      "link_type": "direct",
+      "verified_at": "2026-10-29T15:35:17+08:00",
+      "evidence_url": "https://b93radio.com/2026/10/28/microsoft-beats-quarterly-cloud-revenue-estimates/",
+      "date_only": true
+    },
+    {
+      "id": "r-googl-2026-10-28",
+      "title": "Alphabet stock sinks as search woes cause revenue miss, cash burn worsens",
+      "published_at": "2026-10-28",
+      "category": "Earnings",
+      "tickers": [
+        "GOOGL"
+      ],
+      "url": "https://www.reuters.com/business/alphabets-google-cloud-unit-beats-quarterly-revenue-estimates-steady-ai-demand-2026-10-28/",
+      "link_type": "direct",
+      "verified_at": "2026-10-29T15:35:17+08:00",
+      "evidence_url": "https://ca.marketscreener.com/news/alphabet-s-google-cloud-unit-beats-quarterly-revenue-estimates-on-steady-ai-demand-ce785cd3d981ff26",
+      "date_only": true
+    },
+    {
+      "id": "r-ai-funding-2026-10-28",
+      "title": "AI giants' funding ambitions test Wall Street's appetite for risk",
+      "published_at": "2026-10-28",
+      "category": "Credit & funding",
+      "tickers": [],
+      "url": "https://www.reuters.com/legal/transactional/ai-giants-funding-ambitions-test-wall-streets-appetite-risk-2026-10-28/",
+      "link_type": "direct",
+      "verified_at": "2026-10-29T15:35:17+08:00",
+      "evidence_url": "https://www.marketscreener.com/news/ai-giants-funding-ambitions-test-wall-street-s-appetite-for-risk-ce785cd2df80f324",
+      "date_only": true
+    },
+    {
+      "id": "r-ai-preview-2026-10-27",
+      "title": "Big Tech earnings to test AI boom amid market turmoil",
+      "published_at": "2026-10-27",
+      "category": "Upcoming earnings",
+      "tickers": [
+        "AMZN",
+        "MSFT",
+        "GOOGL"
+      ],
+      "url": "https://www.reuters.com/technology/big-tech-earnings-test-ai-boom-amid-market-turmoil-2026-10-27/",
+      "link_type": "direct",
+      "verified_at": "2026-10-29T15:35:17+08:00",
+      "evidence_url": "https://www.streetinsider.com/Reuters/Big%2BTech%2Bearnings%2Ba%2Btest%2Bof%2Bthe%2BAI%2Bboom%2Bamid%2Bmarket%2Bturmoil/27235999.html",
+      "date_only": true
+    }
+  ]
+}

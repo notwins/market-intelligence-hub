@@ -1,0 +1,11 @@
+{
+  "updated_at": "2026-10-29T15:37:17+08:00",
+  "days": [
+    {
+      "date": "2026-10-29",
+      "count": 4,
+      "path": "data/archive/2026-10-29.json",
+      "type": "Source-checked initial headlines"
+    }
+  ]
+}
