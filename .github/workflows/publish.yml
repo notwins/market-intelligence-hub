@@ -1,0 +1,66 @@
+name: Daily Reuters headlines and Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Midnight UTC is 08:00 Asia/Singapore. GitHub may delay scheduled jobs.
+    - cron: '0 0 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: market-hub-publish
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      update_outcome: ${{ steps.update.outcome }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Restore source bundle on first publication
+        run: |
+          if [ ! -f site/index.html ]; then
+            unzip -oq Reuters_Market_Intelligence_Hub_Restored.zip
+          fi
+      - name: Test publisher validation and archive retention
+        run: python3 -m unittest discover -s scripts -p 'test_*.py'
+      - name: Refresh Reuters headline metadata
+        id: update
+        if: github.event_name != 'push'
+        continue-on-error: true
+        run: python3 scripts/update_news.py
+      - name: Commit new headlines, archives and update status
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add site scripts README.md .gitignore
+          if ! git diff --cached --quiet; then
+            git commit -m 'Archive daily Reuters headline check'
+            git push origin HEAD:main
+          fi
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment
+      - name: Flag feed failure after publishing visible health status
+        if: needs.build.outputs.update_outcome == 'failure'
+        run: |
+          echo 'The feed failed. The site retains previous headlines and shows the failed update status.'
+          exit 1
