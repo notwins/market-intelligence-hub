@@ -54,3 +54,5 @@ html[data-display-contrast=true] .chart text,html[data-display-contrast=true] .v
 @media print{.display-open,#display-settings{display:none!important}}
 
 .tool-controls input,.tool-controls select,.field input,.field select,.field textarea,.search,textarea{font-size:max(16px,calc(16px * var(--text-scale)))}@media(max-width:760px){.top-controls select{font-size:16px;max-width:104px}}
+
+.chart text,.v3-chart text{fill:var(--muted)}.selection-empty{display:none}
