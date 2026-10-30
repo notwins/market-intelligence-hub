@@ -1,6 +1,62 @@
 {
-  "updated_at": "2026-10-29T15:35:17+08:00",
+  "updated_at": "2026-10-30T10:34:45+08:00",
   "reports": [
+    {
+      "id": "2026-10-30-amazon-results",
+      "date": "2026-10-30",
+      "type": "US earnings",
+      "time_sgt": "Results released 29 Oct US",
+      "status": "Verified results · Amazon release and Reuters reporting",
+      "title": "Amazon: cloud growth meets cash burn",
+      "subtitle": "AWS grew 39.3%, while trailing twelve-month free cash flow was negative $42.4bn.",
+      "takeaway": "Amazon reported faster AWS growth alongside a substantial cash outflow. Quarterly earnings and trailing twelve-month cash flow use different reporting periods.",
+      "items": [
+        {
+          "ticker": "AMZN",
+          "company": "Amazon",
+          "tone": "watch",
+          "change_label": "Results reported · Q3 2026",
+          "headline": "Revenue $201.9bn; diluted EPS $1.89; AWS revenue grew 39.3%.",
+          "detail": "Quarter ended 30 September 2026: revenue $201.9bn (+12% year on year), diluted EPS $1.89 and AWS revenue $46.0bn (+39.3%). Free cash flow was an outflow of $42.4bn for the trailing twelve months, not the quarter. Q4 sales guidance is $240–247bn; guidance is a forecast. Amazon published the results on 29 October US time, which was 30 October in Singapore.",
+          "metrics": [
+            [
+              "Q3 revenue",
+              "$201.9bn"
+            ],
+            [
+              "Q3 diluted EPS",
+              "$1.89"
+            ],
+            [
+              "Q3 AWS growth",
+              "39.3%"
+            ],
+            [
+              "Free cash flow · TTM",
+              "−$42.4bn"
+            ]
+          ],
+          "url": "https://live.euronext.com/en/financial-news/amazon-sinks-ai-spending-eclipses-fastest-cloud-growth-five-years",
+          "evidence_url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/default.aspx"
+        }
+      ],
+      "sections": [
+        {
+          "label": "Reporting periods",
+          "text": "Revenue, diluted EPS and AWS growth relate to Q3 2026. Free cash flow covers the twelve months ended 30 September 2026."
+        },
+        {
+          "label": "Guidance",
+          "text": "Amazon forecasts Q4 2026 net sales of $240–247bn and operating income of $28.5–33.5bn. These are company expectations, not reported results."
+        }
+      ],
+      "sources": [
+        "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/default.aspx",
+        "https://live.euronext.com/en/financial-news/amazon-sinks-ai-spending-eclipses-fastest-cloud-growth-five-years"
+      ],
+      "verified_at": "2026-10-30T10:34:45+08:00",
+      "period_note": "Revenue, diluted EPS and AWS growth: Q3 2026. Free cash flow: trailing twelve months ended 30 September 2026."
+    },
     {
       "id": "2026-10-29-us-earnings",
       "date": "2026-10-29",
