@@ -1,5 +1,7 @@
 # Market Intelligence Hub
 
+**Current release: V3 (31 October 2026, Singapore).** The main URL opens V3, with the security master, historical yield/FX comparisons and UST selection desk. V2 remains at `v2.html`; V1 and original archives remain at `v1.html`. See [V3_NOTES.md](V3_NOTES.md) for imports, local saves, Chinese UI, source limitations and future feed contracts. The new full-history and WSJ connectors are prepared, not connected.
+
 Independent research dashboard, restored from the original Market_Intelligence_Hub_Preview.html. The earlier project ZIP was unavailable in this environment. The original layout, 161 Morningstar equity links and 489 user-supplied bond references are preserved.
 
 Site: https://notwins.github.io/market-intelligence-hub/
@@ -27,3 +29,7 @@ Local check: `python -m unittest discover -s scripts -p 'test_*.py'`
 Local preview: `python -m http.server 8765 --directory site`
 
 Documentation: [GitHub Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), [scheduled workflow behavior](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+## Overview freshness
+
+The overview lead and company coverage use the latest Reuters-attributed company headlines from news.json, sorted by publication time. They change with the daily feed. The separate verified-results panel reads the newest dated report from reports.json; numerical earnings briefs are source-checked before publication. Amazon Q3 2026 results were added on 30 October 2026, with issuer and Reuters-syndication links. The original 29 October edition remains archived. Open tabs recheck data every five minutes and when revisited.
