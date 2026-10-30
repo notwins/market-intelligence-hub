@@ -58,3 +58,5 @@ html[data-display-contrast=true] .chart text,html[data-display-contrast=true] .v
 .chart text,.v3-chart text{fill:var(--muted)}.selection-empty{display:none}
 
 .mini-stat .value{overflow-wrap:anywhere}@media(max-width:760px){.grid.four{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(130px * var(--text-scale))),1fr))}}
+
+@media(max-width:760px){.card:not(.company-card)>.metric-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(100px * var(--text-scale))),1fr))}.ust-comparison{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(130px * var(--text-scale))),1fr))}}
