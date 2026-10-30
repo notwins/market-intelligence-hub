@@ -20,6 +20,12 @@ Uploads are processed in the browser. Reviewed snapshots are stored in IndexedDB
 
 ## Language and phone use
 
+### Appearance settings — 31 October update
+
+Open the gear beside Language, or More → Settings on a phone. Choose System, Arial, Verdana, Georgia or Office sans (using available device fonts), text enlargement from 90% to 150%, Ocean/Forest/Plum/Sand palettes, stronger contrast, compact/balanced/roomy table spacing, centred/full workspace width, taller History/UST charts and an expanded report reader. Changes preview immediately and persist under the separate `market-hub-display-v1` browser key. Reset display only restores these choices while retaining lists, notes, selections and uploaded snapshots. It does not replace browser pinch zoom, synchronize between devices, modify source values or recolour financial status/chart identities.
+
+The maximum text size was checked at 320px phone width, including Chinese settings and the expanded report reader. Fonts/palettes, reload persistence and reset were exercised in the live browser. The empty selection bar now hides until a row is selected. Normal chart label colours use each palette's darker supporting text; their contrast against white is at least 5.39:1. Physical Safari testing remains outstanding.
+
 English, Simplified Chinese and Traditional Chinese are built into the page. New-section explanations and controls are authored in all three languages. Selected research summaries are translated; instrument names, provider headlines and original full English reports retain their source wording. The page identifies original English report text. There is no Google Translate dependency or translation API fee.
 
 Phone navigation uses Briefing, Master, History, UST and More. Cards replace the master table, extra filters are collapsed, and numeric data tables scroll inside their cards. Responsive browser checks cover widths 320, 375, 390 and 430 pixels. This is browser viewport verification, not a physical iPhone/Safari certification.
