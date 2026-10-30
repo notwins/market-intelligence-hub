@@ -29,6 +29,11 @@ jobs:
           fi
       - name: Test publisher validation and archive retention
         run: python3 -m unittest discover -s scripts -p 'test_*.py'
+      - name: Audit V3 source data and comparison logic
+        run: |
+          if [ -f scripts/test_v3.cjs ]; then
+            node scripts/test_v3.cjs
+          fi
       - name: Refresh Reuters headline metadata
         id: update
         if: github.event_name != 'push'
