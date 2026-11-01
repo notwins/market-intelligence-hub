@@ -1,0 +1,16 @@
+{
+  "id": "hourly-2026-11-01T105924-SGT",
+  "report_at": "2026-11-01T11:02:04+08:00",
+  "cutoff": "2026-11-01T10:59:24+08:00",
+  "window_start": "2026-11-01T09:59:24+08:00",
+  "coverage": "partial",
+  "summary": "No material new Reuters market development was verified in the initial 60-minute scan. Source coverage was partial; this does not confirm that no Reuters news occurred.",
+  "limitations": [
+    "Accessible Reuters pages and search results did not provide an exhaustive wire audit.",
+    "Previous-report history was unavailable, so duplicate checks were limited to accessible records.",
+    "The source report did not advance its completed-scan cutoff. No qualifying Reuters article was selected."
+  ],
+  "original_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
+  "sources": [],
+  "stories": []
+}
