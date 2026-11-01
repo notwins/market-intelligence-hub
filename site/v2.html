@@ -8,7 +8,7 @@
 <nav class="bottom-nav" aria-label="Phone navigation"><button data-view="overview"><span>◫</span>Briefing</button><button data-view="earnings"><span>◈</span>Earnings</button><button data-view="credit"><span>▤</span>Bonds</button><button data-view="reports"><span>▣</span>Reports</button><button id="more-btn" aria-haspopup="dialog"><span>•••</span>More</button></nav>
 <dialog id="more"><div class="dialog-head"><h2>More from your desk</h2><button class="close" data-close="more" aria-label="Close menu">×</button></div><div class="more-grid"><button data-view="hourly">◷ <span>Hourly news</span></button><button data-view="headlines">⌁ Reuters coverage</button><button data-view="directory">⌕ Stocks & bond factsheets</button><button data-view="research">◇ Research papers</button><a href="index.html">Version 1 ↗</a></div></dialog>
 <dialog id="reader" aria-label="Report reader"><div class="dialog-head"><h2 id="reader-title"></h2><button class="close" data-close="reader" aria-label="Close report">×</button></div><div id="reader-content" class="reader-body"></div></dialog><div class="toast" id="toast" role="status"></div>
-<script src="hourly-news.js?v=20261101.hourly1"></script><script src="v2-data.js"></script><script>
+<script src="hourly-news.js?v=20261101.hourly2"></script><script src="v2-data.js"></script><script>
 'use strict';
 const D=window.MI_V2_DATA||{tasks:[],reports:[],earnings:[],issues:[],research:[]};
 const S={view:'overview',news:{items:[]},securities:{stocks:[],bonds:[]},status:null,market:null,newsFilter:'all',directoryType:'stocks',query:'',saved:new Set()};
