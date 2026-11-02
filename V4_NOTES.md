@@ -14,3 +14,9 @@ Requested updates implemented:
 No new market-data feed, polling cadence, financial calculations or dataset publication is introduced by this release. Changing a section URL/title is a local browser operation with no additional network fetch; ordinary lazy data loading remains unchanged.
 
 Validation: run `node scripts/test_v3.cjs`, `node scripts/test_v4.cjs` and the existing Python publisher tests. Browser QA covers wide-screen layout, compact cards with maximum text, phone reflow, version switching, preference persistence, section/subtab history and browser errors. Physical Safari is not verified.
+
+## Tools & simulators add-on
+
+V4 now includes a four-link section in the daily briefing and a dedicated `#tools` view, available from desktop navigation and the phone More menu. Options Lab, Portfolio Simulator New, Portfolio Simulator V6 and CLUBS open their exact external URLs in new tabs with `rel="noopener noreferrer"` and visible external-site labels.
+
+Validated with all 14 V3 checks, 5 V4 behavior checks and 17 Python publisher tests. Headless Edge checks cover desktop, phone and 200% text with 50% card size; exact link URLs, new-tab clicks, null opener, visible keyboard focus, Back/Forward and all existing V4 sections pass. Screenshots reviewed. V3, landing defaults, datasets and schedules are unchanged.

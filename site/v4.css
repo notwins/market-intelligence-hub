@@ -25,3 +25,9 @@ html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=
 @media(max-width:760px){.content{overflow-x:visible}.table-scroll{max-width:100%}.topbar b{font-size:12px}.topbar>div:first-child{max-width:130px}.top-controls{flex-wrap:nowrap;gap:5px}.card,.chart-panel{padding:max(12px,calc(var(--card-pad) * .7))}.page-head h1{font-size:calc(28px * var(--text-scale));overflow-wrap:anywhere}.welcome-tools button{flex-wrap:wrap}.welcome-tools small{text-align:left;max-width:none}.v4-history-grid{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.bottom-nav button{font-size:calc(10px * min(var(--text-scale),1.5))}.bar-row{grid-template-columns:minmax(0,1fr) minmax(30px,1fr) auto}.display-heading h2{font-size:calc(20px * var(--text-scale))}}
 @media print{.content{max-width:100%}.v4-history-grid{display:block}}
 
+/* External tools share V4 card sizing and keyboard focus styles. */
+.tool-links{margin-bottom:24px}.tool-link{display:flex;flex-direction:column;gap:9px;color:var(--ink);min-height:160px}
+.tool-link strong{display:flex;align-items:baseline;justify-content:space-between;gap:6px;font-size:calc(16px * var(--text-scale));line-height:1.4}.tool-link>span{font-size:calc(13px * var(--text-scale));color:var(--muted)}
+.tool-link small{font-size:calc(11px * var(--text-scale));margin-top:auto}.tool-link:hover{border-color:var(--purple);text-decoration:none}.tool-link:hover strong{text-decoration:underline}
+
+.tool-link strong>span{flex-shrink:0}
