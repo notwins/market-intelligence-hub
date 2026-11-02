@@ -1,0 +1,27 @@
+/* V4 changes card geometry without applying a transform or zoom to text. */
+:root{--card-scale:1;--card-pad:25px;--card-gap:20px;--card-min:340px;--small-card-min:160px;--chart-min:600px}
+.content{width:100%;max-width:none}
+#view .grid,#view .deal-grid,#view .ust-card-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--card-min)),1fr));gap:var(--card-gap)}
+#view .grid.four,#view .stats-strip,#view .welcome-tools{grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--small-card-min)),1fr));gap:var(--card-gap)}
+#view .grid:has(.chart){grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--chart-min)),1fr))}
+.card,.chart-panel,.deal,.ust-card,.catalog-row{padding:var(--card-pad);height:auto;min-width:0;overflow-wrap:anywhere}
+.hero{overflow:clip}.hero>*{position:relative;z-index:1}
+.v4-history-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--chart-min)),1fr));gap:var(--card-gap);align-items:start;margin-top:18px}
+.v4-history-grid>.chart-panel{margin:0}.v4-history-side{display:grid;gap:var(--card-gap);min-width:0}.v4-history-side>.card{margin:0}.v4-history-side .tool-controls{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.tool-controls{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(200px * var(--text-scale))),1fr))}
+.metric-grid,.company-card .metric-grid,.comparison-delta{grid-template-columns:repeat(auto-fit,minmax(min(100%,calc(110px * var(--text-scale))),1fr))}
+.stats-strip strong,.metric-grid strong,.mini-stat .value{overflow-wrap:anywhere;line-height:1.35}
+.card p,.card h2,.card h3,.card h4,.chart-panel h3,.button,.source-line{overflow-wrap:anywhere}
+summary{line-height:1.5;padding-block:10px;white-space:normal;min-height:44px}
+.button,.pill,.tag{white-space:normal;height:auto}.section-title,.company-top{flex-wrap:wrap}
+.brand-icon{flex-shrink:0}.brand>span:last-child{min-width:0}.rail{overflow-y:auto}.rail .brand{align-items:flex-start}.rail .brand b{font-size:16px}.rail .brand small{font-size:10px}.rail button{font-size:calc(13px * min(var(--text-scale),1.5));overflow-wrap:anywhere}.rail-foot{font-size:12px}
+.topbar>div:first-child{min-width:0}.topbar b{letter-spacing:.04em;overflow-wrap:anywhere}.top-controls{flex-wrap:wrap;justify-content:flex-end;gap:10px}.topbar{align-items:center}.topbar .version{font-size:12px}
+.display-fields{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}.display-scale-row{flex-wrap:wrap}.display-scale-row input{flex-basis:100px}.display-layout summary{white-space:normal}
+html[data-display-columns=one] #view .grid:not(.four),html[data-display-columns=one] #view .deal-grid,html[data-display-columns=one] .v4-history-grid,html[data-display-columns=one] .ust-card-grid{grid-template-columns:minmax(0,1fr)}
+html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=two] .v4-history-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,max(var(--chart-min),calc((100% - var(--card-gap))/2))),1fr))}
+.v3-chart{overflow:visible}.chart text,.v3-chart text{font-family:var(--display-font)}
+.v4-event-legend{color:var(--muted);font-size:calc(11px * var(--text-scale));border-top:1px dashed var(--line);padding-top:10px}.v4-event-legend span{overflow-wrap:anywhere}.subnav{flex-wrap:wrap;overflow:visible}.subnav button{white-space:normal;min-width:0}
+@media(max-width:1100px){html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=two] .v4-history-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--chart-min)),1fr))}}
+@media(max-width:760px){.content{overflow-x:visible}.table-scroll{max-width:100%}.topbar b{font-size:12px}.topbar>div:first-child{max-width:130px}.top-controls{flex-wrap:nowrap;gap:5px}.card,.chart-panel{padding:max(12px,calc(var(--card-pad) * .7))}.page-head h1{font-size:calc(28px * var(--text-scale));overflow-wrap:anywhere}.welcome-tools button{flex-wrap:wrap}.welcome-tools small{text-align:left;max-width:none}.v4-history-grid{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.bottom-nav button{font-size:calc(10px * min(var(--text-scale),1.5))}.bar-row{grid-template-columns:minmax(0,1fr) minmax(30px,1fr) auto}.display-heading h2{font-size:calc(20px * var(--text-scale))}}
+@media print{.content{max-width:100%}.v4-history-grid{display:block}}
+
