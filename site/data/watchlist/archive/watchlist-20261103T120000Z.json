@@ -1,0 +1,1056 @@
+{
+  "schema_version": 1,
+  "id": "watchlist-20261103T120000Z",
+  "as_of": "2026-11-03T20:00:00+08:00",
+  "generated_at": "2026-11-03T12:14:37+00:00",
+  "title": "12-name watchlist · 3 November 2026, 20:00 SGT",
+  "public_research_only": true,
+  "verification": {
+    "sources_checked_at": "2026-11-03T12:14:37+00:00",
+    "prices_verified": true,
+    "research_verified": true
+  },
+  "summary": "Three names rose and nine fell in the 2 November regular session. The biggest decline in this watchlist was AMD (−7.52%); Berkshire Hathaway had the strongest gain (+2.51%).",
+  "coverage_note": "Complete 12-name price and return snapshot, plus selected Apple, NVIDIA, AMD and TSMC catch-up/catalyst notes. Coverage is partial for the other names; absence of a note is not evidence of no news.",
+  "price_basis": "Regular-session closes: 2 November 2026, 16:00 EST (3 November, 05:00 SGT). Daily moves compare with the preceding regular close. Premarket observations are separate, individually timestamped snapshots from 3 November before the 20:00 SGT report cutoff. They are not exact 20:00 quotes and are not live. All prices are USD; TSM is the US-listed ADR.",
+  "return_basis": "100*(Nov 2 adjusted close / baseline adjusted close -1). 1 to 6 calendar months backward from Nov 2, previous session when non-trading day. Yahoo adjusted close accounts for splits and dividends/distributions; returns before fees and taxes.",
+  "caveats": [
+    "Premarket quotes have individual timestamps before 20:00 SGT and are not exact 20:00 observations. TSM uses US-listed USD ADR. TSM Yahoo Sep2 adjusted close 414.39 differs from StockAnalysis 414.62; Yahoo current adjusted series used consistently for TSM.",
+    "Stock Analysis supplied regular-session and premarket observations. Yahoo historical adjusted-close values supplied the 1–6 month return baselines. Adjustments can change after dividends or corporate actions.",
+    "The earlier 2 November research used price-only returns with different endpoint and base dates; those figures are not directly comparable with this edition. No portfolio weight or investment recommendation is implied."
+  ],
+  "rows": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 338.32,
+        "adjusted_close": 338.32,
+        "previous_close": 344.63,
+        "change_pct": -1.83,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/aapl/history/"
+      },
+      "premarket": {
+        "price": 325.5,
+        "change_pct": -3.79,
+        "as_of": "2026-11-03T19:40:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/aapl/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 333.69,
+          "pct": 1.39,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 324.96,
+          "pct": 4.11,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 308.64,
+          "pct": 9.62,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 308.36,
+          "pct": 9.72,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 314.93,
+          "pct": 7.43,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 279.64,
+          "pct": 20.98,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/"
+        }
+      ],
+      "research": [
+        {
+          "date": "2026-11-03",
+          "headline": "Memory costs and margins are the immediate focus",
+          "facts": [
+            "Reuters reported Apple weakness in premarket trading following a warning about memory costs and margins. Its 18:49 SGT report observed a 4.5% decline; that observation predates the separately timestamped quote above."
+          ],
+          "analysis": "Margin pressure is a different question from revenue growth. Read the issuer’s underlying disclosures before attributing the whole price move to a single cause.",
+          "risks": "Premarket pricing can change quickly and may reflect thin liquidity. The reported move is a snapshot, not a return for the regular session.",
+          "next_watch": "Updated company guidance, memory input costs and gross-margin commentary. No additional issuer release is asserted here.",
+          "sources": [
+            {
+              "title": "Reuters via StreetInsider · 3 November market report",
+              "url": "https://www.streetinsider.com/Reuters/US%2Bstock%2Bfutures%2Bmixed%2Bas%2BApple%2Bslides%2C%2Bmidterms%2Bloom/27276330.html"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Selected catch-up and upcoming-event coverage, not a complete news census."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/aapl/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/AAPL/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 507.12,
+        "adjusted_close": 507.12,
+        "previous_close": 521.91,
+        "change_pct": -2.83,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/msft/history/"
+      },
+      "premarket": {
+        "price": 505.51,
+        "change_pct": -0.32,
+        "as_of": "2026-11-03T19:50:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/msft/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 517.53,
+          "pct": -2.01,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 496.82,
+          "pct": 2.07,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 463.85,
+          "pct": 9.33,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 389.76,
+          "pct": 30.11,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 440.48,
+          "pct": 15.13,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 412.77,
+          "pct": 22.86,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/msft/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/MSFT/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 202.06,
+        "adjusted_close": 202.06,
+        "previous_close": 204.64,
+        "change_pct": -1.26,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/nvda/history/"
+      },
+      "premarket": {
+        "price": 204.9,
+        "change_pct": 1.41,
+        "as_of": "2026-11-03T19:40:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/nvda/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 233.95,
+          "pct": -13.63,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 224.16,
+          "pct": -9.86,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 200.53,
+          "pct": 0.76,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 194.61,
+          "pct": 3.83,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 222.31,
+          "pct": -9.11,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 198,
+          "pct": 2.05,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+        }
+      ],
+      "research": [
+        {
+          "date": "2026-11-03",
+          "headline": "China-exposure report remains attributed and unconfirmed",
+          "facts": [
+            "Reuters relayed a Financial Times report that NVIDIA had advised data-centre partners to reduce China exposure. Reuters said it could not independently verify the report."
+          ],
+          "analysis": "Treat this as an attributed report, not a confirmed change in company policy or a measured earnings impact.",
+          "risks": "The original account was not independently verified by Reuters. Customer, export-control and geographic risks require separate primary evidence.",
+          "next_watch": "Company confirmation or clarification and any specific disclosed customer impact.",
+          "sources": [
+            {
+              "title": "Reuters via StreetInsider · attributed Financial Times report",
+              "url": "https://new.streetinsider.com/Reuters/Nvidia%2Borders%2Bdata%2Bcentre%2Bclients%2Bto%2Breduce%2BChina%2Bexposure%2C%2BFT%2Breports/27275695.html"
+            }
+          ]
+        },
+        {
+          "date": "2026-10-28",
+          "headline": "Fiscal Q3 FY2027 results call is scheduled",
+          "facts": [
+            "NVIDIA scheduled its fiscal Q3 FY2027 conference call for 17 November at 17:00 EST, or 18 November at 06:00 SGT."
+          ],
+          "analysis": "The call is a future checkpoint; it is not a statement of the quarter’s result.",
+          "risks": "Forward-looking expectations and actual results can differ. This edition contains no inferred earnings outcome.",
+          "next_watch": "The release and written CFO commentary before the call, then management’s discussion.",
+          "sources": [
+            {
+              "title": "NVIDIA newsroom · official results-call notice",
+              "url": "https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Selected catch-up and upcoming-event coverage, not a complete news census."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/nvda/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/NVDA/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Class A",
+      "group": "Platforms",
+      "instrument": "US-listed Class A share",
+      "price": {
+        "close": 278.99,
+        "adjusted_close": 278.99,
+        "previous_close": 279.84,
+        "change_pct": -0.3,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/googl/history/"
+      },
+      "premarket": {
+        "price": 279.38,
+        "change_pct": 0.14,
+        "as_of": "2026-11-03T19:43:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/googl/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 343.5,
+          "pct": -18.78,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 336.9,
+          "pct": -17.19,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 355.9,
+          "pct": -21.61,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 359.68,
+          "pct": -22.43,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 361.4,
+          "pct": -22.8,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 385.21,
+          "pct": -27.57,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/googl/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 245.63,
+        "adjusted_close": 245.63,
+        "previous_close": 240.35,
+        "change_pct": 2.2,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/amzn/history/"
+      },
+      "premarket": {
+        "price": 246.39,
+        "change_pct": 0.31,
+        "as_of": "2026-11-03T19:45:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/amzn/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 251.52,
+          "pct": -2.34,
+          "source_url": "https://finance.yahoo.com/quote/AMZN/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 254.98,
+          "pct": -3.67,
+          "source_url": "https://finance.yahoo.com/quote/AMZN/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 271.58,
+          "pct": -9.56,
+          "source_url": "https://finance.yahoo.com/quote/AMZN/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 242.67,
+          "pct": 1.22,
+          "source_url": "https://finance.yahoo.com/quote/AMZN/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 256.52,
+          "pct": -4.25,
+          "source_url": "https://finance.yahoo.com/quote/AMZN/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 268.26,
+          "pct": -8.44,
+          "source_url": "https://finance.yahoo.com/quote/AMZN/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/amzn/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/AMZN/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 606.73,
+        "adjusted_close": 606.73,
+        "previous_close": 614.99,
+        "change_pct": -1.34,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/meta/history/"
+      },
+      "premarket": {
+        "price": 610.35,
+        "change_pct": 0.6,
+        "as_of": "2026-11-03T19:44:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/meta/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 728.08,
+          "pct": -16.67,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 592.38,
+          "pct": 2.42,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 556.27,
+          "pct": 9.07,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 582.44,
+          "pct": 4.17,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 596.61,
+          "pct": 1.7,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 607.71,
+          "pct": -0.16,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/meta/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/META/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Class B",
+      "group": "Other",
+      "instrument": "US-listed Class B share",
+      "price": {
+        "close": 556.11,
+        "adjusted_close": 556.11,
+        "previous_close": 542.49,
+        "change_pct": 2.51,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/brk.b/history/"
+      },
+      "premarket": {
+        "price": 553,
+        "change_pct": -0.56,
+        "as_of": "2026-11-03T19:37:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/brk.b/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 502.65,
+          "pct": 10.64,
+          "source_url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 505.24,
+          "pct": 10.07,
+          "source_url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 511.54,
+          "pct": 8.71,
+          "source_url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 507.78,
+          "pct": 9.52,
+          "source_url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 471.51,
+          "pct": 17.94,
+          "source_url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 473.01,
+          "pct": 17.57,
+          "source_url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/brk.b/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "AMD",
+      "name": "Advanced Micro Devices",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 466.84,
+        "adjusted_close": 466.84,
+        "previous_close": 504.8,
+        "change_pct": -7.52,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/amd/history/"
+      },
+      "premarket": {
+        "price": 477,
+        "change_pct": 2.18,
+        "as_of": "2026-11-03T19:36:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/amd/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 633.91,
+          "pct": -26.36,
+          "source_url": "https://ca.finance.yahoo.com/quote/AMD/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 457.06,
+          "pct": 2.14,
+          "source_url": "https://ca.finance.yahoo.com/quote/AMD/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 476.15,
+          "pct": -1.96,
+          "source_url": "https://ca.finance.yahoo.com/quote/AMD/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 517.82,
+          "pct": -9.85,
+          "source_url": "https://ca.finance.yahoo.com/quote/AMD/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 521.54,
+          "pct": -10.49,
+          "source_url": "https://ca.finance.yahoo.com/quote/AMD/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 360.54,
+          "pct": 29.48,
+          "source_url": "https://ca.finance.yahoo.com/quote/AMD/history/"
+        }
+      ],
+      "research": [
+        {
+          "date": "2026-10-06",
+          "headline": "Fiscal Q3 results are the next scheduled catalyst",
+          "facts": [
+            "AMD scheduled fiscal Q3 2026 results for 3 November after the US market close, with its call at 17:00 EST. That is 4 November at 06:00 SGT."
+          ],
+          "analysis": "The scheduled release provides a defined checkpoint for evaluating the business against prior guidance. Results were not yet available at this edition’s cutoff.",
+          "risks": "An event date is not evidence of better or worse earnings. Post-release prices may differ sharply from this snapshot.",
+          "next_watch": "Read the earnings release and call on 4 November, 06:00 SGT. Separate reported results, guidance and market reaction.",
+          "sources": [
+            {
+              "title": "AMD investor relations · official results notice",
+              "url": "https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Selected catch-up and upcoming-event coverage, not a complete news census."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/amd/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://ca.finance.yahoo.com/quote/AMD/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 322.23,
+        "adjusted_close": 322.23,
+        "previous_close": 326.08,
+        "change_pct": -1.18,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/avgo/history/"
+      },
+      "premarket": {
+        "price": 327,
+        "change_pct": 1.48,
+        "as_of": "2026-11-03T19:52:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/avgo/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 355.14,
+          "pct": -9.27,
+          "source_url": "https://finance.yahoo.com/quote/AVGO/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 366.57,
+          "pct": -12.1,
+          "source_url": "https://finance.yahoo.com/quote/AVGO/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 388.57,
+          "pct": -17.07,
+          "source_url": "https://finance.yahoo.com/quote/AVGO/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 359.79,
+          "pct": -10.44,
+          "source_url": "https://finance.yahoo.com/quote/AVGO/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 479.94,
+          "pct": -32.86,
+          "source_url": "https://finance.yahoo.com/quote/AVGO/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 419.85,
+          "pct": -23.25,
+          "source_url": "https://finance.yahoo.com/quote/AVGO/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/avgo/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/AVGO/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 833.59,
+        "adjusted_close": 833.59,
+        "previous_close": 884.74,
+        "change_pct": -5.78,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/mu/history/"
+      },
+      "premarket": {
+        "price": 852.25,
+        "change_pct": 2.24,
+        "as_of": "2026-11-03T19:46:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/mu/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 1074.72,
+          "pct": -22.44,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 955.93,
+          "pct": -12.8,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 822.9,
+          "pct": 1.3,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 975.26,
+          "pct": -14.53,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 1063.77,
+          "pct": -21.64,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 542.04,
+          "pct": 53.79,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/mu/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/MU/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "group": "Other",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 403.82,
+        "adjusted_close": 403.82,
+        "previous_close": 399.81,
+        "change_pct": 1,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/tsla/history/"
+      },
+      "premarket": {
+        "price": 401.68,
+        "change_pct": -0.53,
+        "as_of": "2026-11-03T19:56:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/tsla/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 370.59,
+          "pct": 8.97,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 357.01,
+          "pct": 13.11,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 311.21,
+          "pct": 29.76,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 393.45,
+          "pct": 2.64,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 423.74,
+          "pct": -4.7,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 390.82,
+          "pct": 3.33,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Company news coverage is partial in this edition."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/tsla/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/TSLA/history/"
+        }
+      ]
+    },
+    {
+      "ticker": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "group": "Semiconductors",
+      "instrument": "US-listed USD ADR",
+      "price": {
+        "close": 398.63,
+        "adjusted_close": 398.63,
+        "previous_close": 406.13,
+        "change_pct": -1.85,
+        "as_of": "2026-11-02T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/tsm/history/"
+      },
+      "premarket": {
+        "price": 401.08,
+        "change_pct": 0.61,
+        "as_of": "2026-11-03T19:37:00+08:00",
+        "source_url": "https://stockanalysis.com/stocks/tsm/history/"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 472.78,
+          "pct": -15.68,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-02",
+          "base_adjusted_close": 414.39,
+          "pct": -3.8,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-07-31",
+          "base_adjusted_close": 403.17,
+          "pct": -1.13,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 433,
+          "pct": -7.94,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-02",
+          "base_adjusted_close": 444.45,
+          "pct": -10.31,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 395.68,
+          "pct": 0.75,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/"
+        }
+      ],
+      "research": [
+        {
+          "date": "2026-11-03",
+          "headline": "October monthly sales are due on 10 November",
+          "facts": [
+            "TSMC’s official financial calendar lists October 2026 monthly sales for 10 November 2026."
+          ],
+          "analysis": "Monthly sales provide a nearer-term business update between quarterly reports. They do not by themselves establish profitability.",
+          "risks": "Group revenue is reported in a different currency and scope from the USD ADR price. Do not treat the stock-price change as the revenue change.",
+          "next_watch": "The October monthly revenue release on 10 November; verify its reported currency and comparison period.",
+          "sources": [
+            {
+              "title": "TSMC investor relations · financial calendar",
+              "url": "https://investor.tsmc.com/english/financial-calendar"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Selected catch-up and upcoming-event coverage, not a complete news census."
+      ],
+      "sources": [
+        {
+          "title": "Stock Analysis · prices and session timestamps",
+          "url": "https://stockanalysis.com/stocks/tsm/history/"
+        },
+        {
+          "title": "Yahoo Finance · adjusted historical series",
+          "url": "https://finance.yahoo.com/quote/TSM/history/"
+        }
+      ]
+    }
+  ]
+}
