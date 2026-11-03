@@ -1,0 +1,129 @@
+{
+  "id": "reuters-hourly-20261103T192627Z",
+  "report_at": "2026-11-03T19:30:56Z",
+  "cutoff": "2026-11-03T19:26:27Z",
+  "window_start": "2026-11-03T18:26:27Z",
+  "coverage": "partial",
+  "summary": "Targeted Reuters research identified 2 newly published items in the primary 02:26–03:26 SGT window (SK Hynix/Solidigm export licences and BMW 2026 guidance) plus 3 older eligible catch-up stories on ECB commentary, China FX reserve rules and Virgin Media O2 restructuring. Coverage remains partial; no comprehensive Reuters wire or full historical revision audit was available.",
+  "limitations": [
+    "Reuters access was a targeted website/search check, not an exhaustive Reuters wire audit.",
+    "Full same-URL revision comparisons for every active Reuters thread could not be established.",
+    "Saved story register contains no completed-scan cutoff; uncovered reporting intervals remain pending.",
+    "Latest daily earnings, central-bank and bond/credit briefing extracts were accessible but truncated.",
+    "Exact Reuters subsequent article-update timestamps and price observation times were not independently verified.",
+    "No notification receipt, publisher completion or Library register update inferred from this report.",
+    "Reuters original article publication timestamps have minute precision; no second-level accuracy is claimed.",
+    "Article publication times do not establish exact underlying news-development times. Development timestamps are therefore null and no item is labelled breaking."
+  ],
+  "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+  "sources": [
+    {
+      "url": "https://www.reuters.com/world/china/sk-hynixs-new-york-chip-plans-hit-snag-over-us-restrictions-china-sources-say-2026-11-03/",
+      "title": "SK Hynix's New York chip plans hit snag over US restrictions on China, sources say",
+      "published_at": "2026-11-03T18:50Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/bmw-lowers-2026-automotive-ebit-margin-outlook-deliveries-2026-11-03/",
+      "title": "BMW lowers 2026 automotive EBIT margin outlook and deliveries",
+      "published_at": "2026-11-03T19:06Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/bundesbanks-nagel-joins-ecb-chorus-backing-december-rate-hike-2026-11-03/",
+      "title": "Bundesbank's Nagel joins ECB chorus backing December rate hike",
+      "published_at": "2026-11-03T18:01Z"
+    },
+    {
+      "url": "https://www.reuters.com/world/asia-pacific/china-raise-forex-deposit-reserve-ratio-6-starting-november-15-2026-11-03/",
+      "title": "China to raise FX reserve requirement to slow yuan's rally",
+      "published_at": "2026-11-03T00:55Z",
+      "verification_url": "https://www.investing.com/news/economy-news/china-to-raise-forex-deposit-reserve-ratio-to-6-starting-november-15-4993312"
+    },
+    {
+      "url": "https://www.reuters.com/business/media-telecom/uks-virgin-media-o2-slash-jobs-halt-fibre-roll-out-2026-11-03/",
+      "title": "Virgin Media O2 to cut thousands of jobs and halt UK fibre expansion",
+      "published_at": "2026-11-03T07:47Z"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261103-SKHYNIX-SOLIDIGM-LICENCES",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "equities_and_ai, trade_restrictions",
+      "headline": "SK Hynix US chip expansion faces China export-licence obstacle",
+      "body": "US officials have not approved the equipment-export licences sought for SK Hynix Dalian expansion, according to Reuters sources. Solidigm is considering about US$45 billion investment in New York NAND facilities, potentially about US$100 billion over time; no location decision made. Officials have not formally rejected the requested licences.",
+      "analysis": "US-China technology restrictions may delay or complicate financing a large US semiconductor buildout; a proposal is not committed capital expenditure.",
+      "watch_next": "US Commerce and White House export-licence decisions; formal Solidigm investment announcement.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/china/sk-hynixs-new-york-chip-plans-hit-snag-over-us-restrictions-china-sources-say-2026-11-03/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261103-BMW-OUTLOOK-2026",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "equities, credit",
+      "headline": "BMW cuts 2026 automotive margin and delivery outlook",
+      "body": "BMW lowered its 2026 automotive EBIT margin forecast to negative 0.5% to positive 0.5%. BMW expects a moderate decrease in automotive deliveries in 2026. BMW will accelerate management-function reductions.",
+      "analysis": "Reduced margins merit closer attention to automotive cash flow and credit quality; resulting cash-flow amount was not quantified in this Reuters article.",
+      "watch_next": "Full earnings detail, operating cash flow, restructuring costs and deliveries.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/bmw-lowers-2026-automotive-ebit-margin-outlook-deliveries-2026-11-03/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261103-ECB-NAGEL-DEC-HIKE",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "central_banks, rates, fx",
+      "headline": "Bundesbank Nagel backs likely December ECB rate hike",
+      "body": "Bundesbank President Joachim Nagel said a December ECB rate hike appears very likely necessary absent a significantly improved inflation outlook. ECB held its deposit rate at 2.5% last week. Investors were pricing two to three rate hikes over the coming year, according to Reuters; a December increase was not fully priced in.",
+      "analysis": "Hawkish ECB commentary reinforces euro-area funding-rate sensitivity, without confirming a policy decision or quantifying a new yield move.",
+      "watch_next": "December ECB decision, inflation data and subsequent repricing.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/bundesbanks-nagel-joins-ecb-chorus-backing-december-rate-hike-2026-11-03/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261103-PBOC-FX-RRR",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "central_banks, fx, asia",
+      "headline": "PBOC raises FX deposit reserve ratio to 6% from 4%",
+      "body": "PBOC announced the FX deposit reserve requirement ratio will rise by two percentage points to 6% from 4% effective 15 November 2026. Reuters calculates that the measure absorbs US$24 billion in FX liquidity. Onshore yuan weakened as much as 0.37% to 6.6728 per dollar after the announcement; exact price observation time not independently verified.",
+      "analysis": "The policy signals PBOC concern about one-way yuan appreciation and alters bank FX liquidity; it does not establish USD/SGD or USD/CHF moves.",
+      "watch_next": "15 November implementation, USD/CNH responses and daily PBOC fixings.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/asia-pacific/china-raise-forex-deposit-reserve-ratio-6-starting-november-15-2026-11-03/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261103-VMO2-RESTRUCTURE-DEBT",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "credit, telecom, corporate_restructuring",
+      "headline": "Virgin Media O2 targets restructuring as high debt weighs",
+      "body": "Virgin Media O2 reports £22 billion of debt, equal to 5.6 times annualised third-quarter core earnings. Management targets £800 million savings by 2029, partly through reducing wage costs by 30%. Plans for fibre expansion have been curtailed amid competition and regulatory obstacles.",
+      "analysis": "Illustrates leverage, constrained organic investment and competitive pressure in the telecom sector, but Reuters did not report a default.",
+      "watch_next": "Refinancing terms, net leverage, cash generation and execution of savings.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/media-telecom/uks-virgin-media-o2-slash-jobs-halt-fibre-roll-out-2026-11-03/"
+      ],
+      "development_at": null
+    }
+  ]
+}
