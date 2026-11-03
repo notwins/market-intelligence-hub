@@ -98,7 +98,7 @@ def validate(d, now=None):
 
 def write_json(path,data):
     path.parent.mkdir(parents=True,exist_ok=True)
-    tmp=path.with_suffix('.tmp');tmp.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n');os.replace(tmp,path)
+    tmp=path.with_suffix('.tmp');tmp.write_bytes((json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode('utf-8'));os.replace(tmp,path)
 
 def import_edition(data, root):
     d=validate(data); folder=Path(root)/'data'/'watchlist';archive=folder/'archive'/(d['id']+'.json')

@@ -41,3 +41,23 @@ Command: `python scripts/import_watchlist_call.py --input /tmp/call.json --root 
 - This is a publication path, not proof that recurring delivery is active. Check the actual automation and public timestamps.
 
 Private screenshot evidence must not enter the public repository. Keep vendor-normalized EPS or FCFE distinctly labelled from issuer GAAP EPS or cash-flow measures; quote dates, financial periods, report creation and call dates are separate facts.
+
+## Fixed full reports and guarded publication candidates
+
+The current watchlist/Calls schema remains authoritative. The older separately staged diary prototype is retained privately; it is not a second public feed or a migration of private notes.
+
+`scripts/watchlist_report.py` renders the complete saved edition into `site/data/watchlist/reports/EDITION-ID.html`. It keeps original quote timestamps, return baselines, factual qualifications, sources, coverage gaps, risks and catalysts. Facts and generated analysis are labelled separately, with readable headings, direction labels and colour. The static report is linkable, printable and browser-downloadable; browser printing can produce a PDF. No separately generated PDF/Word call artifact is claimed. `report-index.json` retains paths, cutoffs and SHA-256 receipts. Existing reports with different bytes are rejected; corrections need a new edition ID. Dashboard report links follow the selected edition.
+
+Prepare an update in a fresh portable checkout with Python's standard library:
+
+```
+python scripts/prepare_watchlist_publication.py --input EDITION.json --repo . --output ../NEW-CANDIDATE --base-commit FULL-CURRENT-MAIN-SHA
+```
+
+The output contains a candidate `site/data/watchlist/` tree and `publication-plan.json`; the source checkout is unchanged. The helper validates/imports the edition, generates its fixed report, rejects stale base commits or reused output directories, and records changed paths with old/new SHA-256. It verifies existing archives, calls, reports, notes and publication status remain byte-identical. Only the new edition/report and mutable research indexes/latest may change. Invalid, empty or unverified editions cannot replace prior data. Verification flags attest to producer checks, not checks performed by the renderer.
+
+Review only the plan's paths and atomically publish them together through the connected GitHub tree/commit APIs on freshly read main. Advance main with `expected_sha` and `force: false`. Conflicts require rereading/rebuilding, never a removed guard or force-push. For an uncertain write, read its actual outcome before another attempt. Human calls are outside the machine publication plan. No credentials or persistent grants are embedded. If execution, source checks or write access are unavailable, retain previous editions and report the exact blocker.
+
+Verify the exact main commit, its successful Pages workflow/deployment, live edition ID and report SHA-256. Publishing the initial layout from the approved 3 November 20:00 SGT edition adds no later market observation. Manual publication, configured scheduling and observed scheduled success are distinct states; keep `status.json` honest. Run `test_watchlist_publication.py` with the existing Python test discovery.
+
+Update the existing hosted `(A) Watchlist Research` task rather than creating a duplicate schedule. Preserve its four-hour Singapore cadence. After a verified deployment, its delivery should be a short link to the durable dated public report plus any material coverage warning. No supported automation update field currently retargets its saved conversation; a task title or recorded start time does not prove delivery to a separate `(A)` chat. Verify the destination with supported task/chat tools before claiming that delivery. Keep private chat identifiers and permalinks out of public data. Never automatically promote Watch only to a call or holding, and never import restricted screenshots.

@@ -6,3 +6,5 @@
 @media(max-width:600px){.watchlist-toolbar{grid-template-columns:1fr}.watchlist-scope{padding:14px;margin-left:-5px;margin-right:-5px;border-radius:16px}.watchlist-card{padding:18px}.watchlist-heading h2{font-size:1.8em}.watchlist-heading label{width:100%}.watchlist-card-head{flex-wrap:wrap}.watchlist-archive label{width:100%}}
 /* Keep long navigation labels readable when enlarged, including new research routes. */
 .rail nav{display:flex;flex-direction:column;align-items:stretch;min-height:0}.rail nav>button,.rail nav>a{flex:0 0 auto;height:auto;min-height:44px;line-height:1.45}.rail nav>button>span{min-width:0}
+
+.watchlist-scope .watchlist-report-link{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border-radius:10px;background:var(--w-link);color:var(--w-card);font-weight:750;text-decoration:none}.watchlist-scope[data-theme=dark] .watchlist-report-link{color:#102138}.watchlist-scope .watchlist-report-link:hover{text-decoration:underline}
