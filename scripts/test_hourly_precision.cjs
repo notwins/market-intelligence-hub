@@ -11,6 +11,8 @@ const data = {editions:[edition],last_complete_cutoff:null,publisher_checked_at:
 const html = globalThis.MarketHourly.view(data);
 assert.ok(html.includes('Published 2026-11-03 (publication time unverified)'));
 assert.ok(html.includes('Exact development time not established'));
+assert.ok(html.includes(String.fromCodePoint(0x2197)));
+assert.ok(!html.includes(String.fromCodePoint(0xFFFD)));
 assert.ok(!html.includes('1970'));
 source.publication_precision = 'timestamp';
 source.published_at = '2026-11-03T15:22:00Z';
