@@ -2,60 +2,13 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-03T17:04:40.401Z",
+  "publisher_checked_at": "2026-11-03T17:06:04.214Z",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
-    {
-      "id": "hourly-20261103T164207Z",
-      "report_at": "2026-11-04T00:45:16+08:00",
-      "cutoff": "2026-11-04T00:42:07+08:00",
-      "window_start": "2026-11-03T23:42:07+08:00",
-      "coverage": "partial",
-      "summary": "Partial Reuters discovery for 3 Nov 23:42:07 to 4 Nov 00:42:07 SGT. No material new Reuters development was verified among accessible sources. This does not establish that no Reuters news occurred. Four previously reported articles are retained as context only, not new alerts.",
-      "limitations": [
-        "Direct Reuters article reopening failed for some sources; the accessible excerpts were not an exhaustive wire audit.",
-        "An earlier completed-scan cutoff is not established, leaving past coverage intervals unresolved.",
-        "All four context sources have verified original publication dates only; exact original publication and update timestamps remain unverified.",
-        "Comparison with previous research editions was limited by incomplete accessible extracts; no full historical duplicate audit is claimed.",
-        "Partial coverage and zero newly verified story records must not be treated as a confirmed quiet news hour."
-      ],
-      "original_url": "https://chatgpt.com/c/6ae56595-efc0-83ec-aae5-fd9a9266c2f1",
-      "sources": [
-        {
-          "url": "https://www.reuters.com/business/retail-consumer/us-stock-futures-mixed-apple-slides-midterms-loom-2026-11-03/",
-          "title": "S&P 500, Nasdaq edge higher ahead of midterm results; Apple falls",
-          "published_at": null,
-          "published_date": "2026-11-03",
-          "publication_precision": "date"
-        },
-        {
-          "url": "https://www.reuters.com/world/asia-pacific/dollar-under-pressure-oil-prices-slump-australia-rate-decision-awaited-2026-11-03/",
-          "title": "Dollar edges higher as Mideast, US midterms eyed",
-          "published_at": null,
-          "published_date": "2026-11-03",
-          "publication_precision": "date"
-        },
-        {
-          "url": "https://www.reuters.com/markets/commodities/oil-rises-after-report-us-strike-irans-qeshm-island-2026-11-03/",
-          "title": "Oil prices slide about 2% to multi-week low amid peace talks",
-          "published_at": null,
-          "published_date": "2026-11-03",
-          "publication_precision": "date"
-        },
-        {
-          "url": "https://www.reuters.com/world/us/trump-faces-midterm-verdict-with-control-congress-stake-2026-11-03/",
-          "title": "US voters head to polls to deliver midterm verdict on Trump",
-          "published_at": null,
-          "published_date": "2026-11-03",
-          "publication_precision": "date"
-        }
-      ],
-      "stories": []
-    },
     {
       "id": "reuters-hourly-20261103T164207Z",
       "report_at": "2026-11-04T00:45:16+08:00",
