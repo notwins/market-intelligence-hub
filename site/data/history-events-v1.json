@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0.0",
+  "verified_at": "2026-11-03",
+  "events": [
+    {
+      "date": "2008-11-25",
+      "label": "Fed agency/MBS purchases announced",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20081125b.htm",
+      "id": "event-2008-11-25",
+      "group": "fed-qe"
+    },
+    {
+      "date": "2008-12-16",
+      "label": "Fed target range cut to 0–0.25%",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20081216b.htm",
+      "id": "event-2008-12-16",
+      "group": "fed-rates"
+    },
+    {
+      "date": "2010-11-03",
+      "label": "Fed Treasury purchases announced (QE2)",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20101103a.htm",
+      "id": "event-2010-11-03",
+      "group": "fed-qe"
+    },
+    {
+      "date": "2012-09-13",
+      "label": "Fed MBS purchases expanded (QE3)",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20120913a.htm",
+      "id": "event-2012-09-13",
+      "group": "fed-qe"
+    },
+    {
+      "date": "2013-12-18",
+      "label": "Fed asset-purchase taper announced",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20131218a.htm",
+      "id": "event-2013-12-18",
+      "group": "fed-qe"
+    },
+    {
+      "id": "snb-2015",
+      "group": "snb",
+      "date": "2015-01-15",
+      "label": "SNB ends EUR/CHF minimum exchange rate",
+      "url": "https://www.snb.ch/en/publications/communication/press-releases/2015/pre_20150115"
+    },
+    {
+      "date": "2015-12-16",
+      "label": "Fed raises target range",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20151216a.htm",
+      "id": "event-2015-12-16",
+      "group": "fed-rates"
+    },
+    {
+      "date": "2017-09-20",
+      "label": "Fed balance-sheet runoff announced",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20170920a.htm",
+      "id": "event-2017-09-20",
+      "group": "fed-qe"
+    },
+    {
+      "id": "tariffs-2018",
+      "group": "trade",
+      "date": "2018-07-06",
+      "label": "Initial U.S. Section 301 China tariffs take effect",
+      "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products"
+    },
+    {
+      "date": "2020-03-15",
+      "label": "Fed pandemic rate cut and purchases",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a.htm",
+      "id": "event-2020-03-15",
+      "group": "fed-rates"
+    },
+    {
+      "date": "2022-03-16",
+      "label": "Fed raises target range",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm",
+      "id": "event-2022-03-16",
+      "group": "fed-rates"
+    },
+    {
+      "date": "2024-09-18",
+      "label": "Fed cuts target range by 0.50 pp",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm",
+      "id": "event-2024-09-18",
+      "group": "fed-rates"
+    }
+  ],
+  "interpretation": "Announcement dates provide context, not proof of causation or exact monthly turning points.",
+  "groups": [
+    {
+      "label": "Monetary and currency policy",
+      "children": [
+        {
+          "id": "fed-qe",
+          "label": "Fed asset purchases and balance sheet"
+        },
+        {
+          "id": "fed-rates",
+          "label": "Fed policy rates"
+        },
+        {
+          "id": "snb",
+          "label": "Swiss National Bank"
+        }
+      ]
+    },
+    {
+      "label": "Trade policy",
+      "children": [
+        {
+          "id": "trade",
+          "label": "U.S.–China tariffs"
+        }
+      ]
+    }
+  ],
+  "recession_group": {
+    "label": "Economy",
+    "child": "U.S. recessions (NBER chronology via FRED USREC)"
+  }
+}
