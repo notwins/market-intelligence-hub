@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-03T14:14:25.764475+00:00",
-  "message": "The 3 November 2026, 22:00 SGT scheduled watchlist edition is published. Its exact-commit Pages run succeeded, and the live latest data and fixed report matched the publication receipts. This verifies this scheduled execution, not future runs. Narrative coverage remains partial. Delivery to a separate (A) chat has not yet been verified. Refreshing this page reloads saved files and does not create new research.",
+  "checked_at": "2026-11-03T16:11:51.133Z",
+  "message": "The 4 November 2026, 00:00 SGT scheduled watchlist edition is published. Its exact-commit Pages run succeeded, and the live latest data and fixed report matched the publication receipts. This verifies this scheduled execution, not future runs. Active-session quotes are individually timestamped saved observations; completed-close returns use 2 November. Company-news coverage remains partial because of source-access gaps, and no new verified development does not establish that no news occurred. Delivery to a separate (A) chat remains unverified. Refreshing this page reloads saved files and does not create new research.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,11 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "run_started_at": "2026-11-03T14:00:00.574598+00:00",
-    "commit": "e0ac56bd4df59dea7d98064d85fe3bde6b889313",
-    "pages_run_id": 41651398734,
-    "edition_id": "watchlist-20261103T140000Z",
-    "report_sha256": "9adfbe170841da3a0e9f9be825311d798dc2918218c53eca42ea79889efd1845",
-    "verified_at": "2026-11-03T14:14:25.764475+00:00"
+    "commit": "99d755b20844b44b2cabda4699513b222618d2c1",
+    "pages_run_id": 41671332454,
+    "edition_id": "watchlist-20261103T160000Z",
+    "report_sha256": "f5de3a7c14f15347941267906021be700c1c455b6ecce2ba206ff27c3e6f1f56",
+    "verified_at": "2026-11-03T16:11:51.133Z"
   },
   "separate_A_chat_delivery_verified": false
 }
