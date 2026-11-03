@@ -58,11 +58,22 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add site scripts README.md .gitignore
-          if ! git diff --cached --quiet; then
-            git commit -m 'Archive market data refresh and visible feed status'
-            git push origin HEAD:main
-          fi
+          python3 scripts/publish_generated_data.py
+      - name: Revalidate reconciled source and rebuild deployment catalogue
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_*.py'
+          node scripts/test_v3.cjs
+          node scripts/test_fed_history_ui.cjs
+          node scripts/test_v4.cjs
+          node scripts/test_watchlist.cjs
+          python3 scripts/build_site_search.py
+          node scripts/test_site_search.cjs
+      - name: Preserve conflicting source-data patch
+        if: failure() && hashFiles('pending-publisher.patch') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: pending-publisher-patch
+          path: pending-publisher.patch
       - uses: actions/upload-pages-artifact@v4
         with:
           path: site
