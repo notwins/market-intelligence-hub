@@ -29,6 +29,47 @@ def with_story():
 
 
 class HourlyNewsTests(unittest.TestCase):
+    def test_date_only_source_retains_unknown_time_and_history(self):
+        old = sample()
+        prior, _ = merge(empty_feed(), {'editions': [old]}, NOW)
+        incoming = with_story(); incoming['id'] += '-date'
+        incoming['sources'][0].update(published_at=None, published_date='2026-11-01',
+                                      publication_precision='date')
+        incoming['stories'][0]['development_at'] = None
+        incoming['limitations'].append('Original Reuters publication time is unknown; date only.')
+        result, _ = merge(prior, {'editions': [incoming]}, NOW)
+        self.assertIn(old, result['editions'])
+        self.assertIsNone(result['last_complete_cutoff'])
+        self.assertIsNone(result['editions'][0]['sources'][0]['published_at'])
+        replay, changed = merge(result, {'editions': [incoming]}, NOW)
+        self.assertFalse(changed)
+        self.assertEqual(result, replay)
+
+    def test_date_only_source_cannot_claim_complete_or_unverified_breaking(self):
+        x = with_story()
+        x['sources'][0].update(published_at=None, published_date='2026-11-01', publication_precision='date')
+        x['coverage'] = 'complete'
+        with self.assertRaises(ValueError): validate(x, NOW)
+        x['coverage'] = 'partial'
+        x['stories'][0].update(freshness='breaking', development_at=None)
+        with self.assertRaises(ValueError): validate(x, NOW)
+
+    def test_date_only_invalid_future_old_boundary_and_unknown_dates_reject(self):
+        for value in ('2026-11-02', '2026-10-25', '2026-10-24', '2026-02-30', None, '2026-1-1'):
+            with self.subTest(value=value):
+                x = with_story()
+                x['sources'][0].update(published_at=None, published_date=value, publication_precision='date')
+                with self.assertRaises(ValueError): validate(x, NOW)
+
+    def test_precision_contract_does_not_accept_invented_times_or_unknown_eligibility(self):
+        x = with_story()
+        x['sources'][0].update(published_date='2026-11-01', publication_precision='date')
+        with self.assertRaises(ValueError): validate(x, NOW)
+        x['sources'][0].update(published_at=None, publication_precision='unknown')
+        with self.assertRaises(ValueError): validate(x, NOW)
+        x['sources'][0].pop('publication_precision')
+        with self.assertRaises(ValueError): validate(x, NOW)
+
     def test_partial_zero_stories_does_not_advance_completed_cutoff(self):
         d, changed = merge(empty_feed(), {'editions': [sample()]}, NOW)
         self.assertTrue(changed)
@@ -84,3 +125,4 @@ class HourlyNewsTests(unittest.TestCase):
 
 
 if __name__ == '__main__': unittest.main()
+

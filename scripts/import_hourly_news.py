@@ -8,7 +8,7 @@ import argparse
 import copy
 import json
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -39,6 +39,37 @@ def identifier(value):
         raise ValueError('Stable public identifier required')
 
 
+def source_publication(source, cutoff, report, edition):
+    """Retain date precision without manufacturing an original publication time."""
+    precision = source.get('publication_precision', 'timestamp')
+    value = source.get('published_at')
+    if precision == 'timestamp':
+        published = timestamp(value)
+        if not cutoff - timedelta(days=7) <= published <= cutoff:
+            raise ValueError('Reuters source outside eligible seven-day window')
+        if 'published_date' in source and source['published_date'] is not None:
+            raise ValueError('Exact publication uses published_at only')
+        if source.get('updated_at') and not published <= timestamp(source['updated_at']) <= report:
+            raise ValueError('Invalid source update time')
+        return
+    if precision != 'date' or 'published_at' not in source or value is not None:
+        raise ValueError('Publication precision must agree with published_at')
+    raw_date = source.get('published_date')
+    if not isinstance(raw_date, str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}', raw_date):
+        raise ValueError('Verified original publication date required')
+    published_date = date.fromisoformat(raw_date)
+    cutoff_date = cutoff.astimezone(SGT).date()
+    # Exclude the oldest calendar day: a date alone cannot resolve its seven-day boundary.
+    if not cutoff_date - timedelta(days=7) < published_date <= cutoff_date:
+        raise ValueError('Publication date outside eligible calendar days or on uncertain boundary')
+    if edition['coverage'] == 'complete' or not edition['limitations']:
+        raise ValueError('Date-only source timing requires explicit partial coverage limitations')
+    if source.get('updated_at'):
+        updated = timestamp(source['updated_at'])
+        if updated > report or updated.astimezone(SGT).date() < published_date:
+            raise ValueError('Invalid source update time')
+
+
 def validate(edition, now=None):
     now = now or datetime.now(SGT)
     allowed = {'id', 'report_at', 'cutoff', 'window_start', 'coverage', 'summary',
@@ -64,16 +95,13 @@ def validate(edition, now=None):
         raise ValueError('Sources and stories must be lists')
     urls = set()
     for source in edition['sources']:
-        if set(source) - {'url', 'title', 'published_at', 'updated_at', 'verification_url'}:
+        if set(source) - {'url', 'title', 'published_at', 'updated_at', 'verification_url',
+                          'published_date', 'publication_precision'}:
             raise ValueError('Unknown source field')
         https(source.get('url'), ['reuters.com'])
         if not source.get('title'):
             raise ValueError('Reuters article title required')
-        published = timestamp(source.get('published_at'))
-        if not cutoff - timedelta(days=7) <= published <= cutoff:
-            raise ValueError('Reuters source outside eligible seven-day window')
-        if source.get('updated_at') and not published <= timestamp(source['updated_at']) <= report:
-            raise ValueError('Invalid source update time')
+        source_publication(source, cutoff, report, edition)
         if source.get('verification_url'):
             https(source['verification_url'])
         if source['url'] in urls:
@@ -201,3 +229,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

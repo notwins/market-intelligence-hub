@@ -28,9 +28,12 @@ Each edition must have exactly these fields:
 | `summary` | Edited public research summary; clearly distinguish incomplete scans from a quiet hour. |
 | `limitations` | Array of explicit coverage gaps; required for partial/unavailable scans. |
 | `original_url` | Real HTTPS ChatGPT source report link. |
-| `sources` | Array of Reuters sources: url, title, published_at; optional updated_at and verification_url. Original Reuters publication must fall within seven days before cutoff. |
+| `sources` | Array of Reuters sources: url, title, published_at; optional updated_at and verification_url. Exact original publication uses a timezone timestamp. A verified date without time uses published_at: null, published_date: YYYY-MM-DD and publication_precision: date. Do not manufacture midnight or infer time from a URL. |
+
+Date-only sources require explicitly partial/unavailable coverage and a timing limitation. Dates use the reported calendar date compared with the Singapore cutoff date; they do not establish an exact intraday publication time or that the article appeared inside the hourly window. The oldest seven-day boundary date and future dates are rejected because date precision cannot establish eligibility there. A wholly unknown publication date remains ineligible. Exact timestamp sources retain the existing seven-day instant checks. Unknown development times remain null and cannot support a breaking label. Date-only reports never advance the complete-scan cutoff.
 | `stories` | Array of reviewed story versions; empty is valid without fabricating headlines. |
 
 Each story must have exactly: `story_id` (stable underlying event ID), `version` (positive integer), `status` (new / follow-up / correction), `freshness` (current / breaking / catch-up), `topic`, `headline`, `body`, `analysis`, `watch_next`, `earlier`, `source_urls` (Reuters URLs listed in this edition), `development_at` (verified timezone timestamp or null). Analysis is separate from source facts. An initial version must be new. Every subsequent version requires the preceding retained version and an `earlier` explanation. Do not re-import the same story/version under a different edition. Rewritten headlines or background are not substantive updates.
 
 `publisher_checked_at` records the website update, not source completion. `last_complete_cutoff` derives only from explicitly complete source scans. An unavailable/partial later report never erases earlier verified stories or advances that complete cutoff. Archives remain readable, including corrections. No personal holdings, borrowing balances, Library runtime IDs, credentials or unedited conversation text belong in this public schema.
+
