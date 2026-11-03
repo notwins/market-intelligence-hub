@@ -29,10 +29,34 @@ def with_story():
 
 
 class HourlyNewsTests(unittest.TestCase):
+    def test_report_alias_cannot_duplicate_same_source_run(self):
+        x = sample(); x['original_url'] = 'https://chatgpt.com/c/test?messageId=original'
+        current, _ = merge(empty_feed(), {'editions': [x]}, NOW)
+        alias = copy.deepcopy(x); alias['id'] = 'another-prefix-same-report'
+        alias['original_url'] = 'https://chatgpt.com/c/test/'
+        alias['cutoff'] = '2026-11-01T03:00:00Z'
+        alias['summary'] = 'Different editorial wording does not make a new report'
+        before = copy.deepcopy(current)
+        with self.assertRaisesRegex(ValueError, 'Source report already imported'):
+            merge(current, {'editions': [alias]}, NOW)
+        self.assertEqual(current, before)
+        with self.assertRaisesRegex(ValueError, 'Source report already imported'):
+            merge(empty_feed(), {'editions': [x, alias]}, NOW)
+
+    def test_later_report_same_window_can_retain_correction_history(self):
+        x = with_story(); current, _ = merge(empty_feed(), {'editions': [x]}, NOW)
+        correction = copy.deepcopy(x); correction['id'] += '-later-correction'
+        correction['report_at'] = '2026-11-01T12:02:00+08:00'
+        correction['stories'][0].update(version=2, status='correction', earlier='Correcting previous fixture')
+        result, _ = merge(current, {'editions': [correction]}, NOW)
+        self.assertEqual(len(result['editions']), 2)
+        self.assertIn(x, result['editions'])
+
     def test_date_only_source_retains_unknown_time_and_history(self):
         old = sample()
         prior, _ = merge(empty_feed(), {'editions': [old]}, NOW)
         incoming = with_story(); incoming['id'] += '-date'
+        incoming['report_at'] = '2026-11-01T12:02:00+08:00'
         incoming['sources'][0].update(published_at=None, published_date='2026-11-01',
                                       publication_precision='date')
         incoming['stories'][0]['development_at'] = None

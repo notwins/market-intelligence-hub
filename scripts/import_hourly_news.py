@@ -149,12 +149,21 @@ def empty_feed():
             'source_schedule': {'status': 'Unknown', 'checked_at': None}, 'editions': []}
 
 
+def report_identity(edition):
+    """Report identity survives editorial wording, edition aliases and URL query changes."""
+    source = urlparse(edition['original_url'])
+    return (source.hostname.lower(), source.path.rstrip('/'),
+            timestamp(edition['window_start']), timestamp(edition['cutoff']),
+            timestamp(edition['report_at']))
+
+
 def merge(current, incoming, now=None):
     now = now or datetime.now(SGT)
     if set(incoming) - {'editions', 'source_schedule'} or not isinstance(incoming.get('editions'), list):
         raise ValueError('Incoming editions array required')
     result = copy.deepcopy(current)
     records = {x['id']: x for x in current['editions']}
+    report_ids = {report_identity(x): x['id'] for x in current['editions']}
     changed = False
     if 'source_schedule' in incoming:
         state = incoming['source_schedule']
@@ -172,7 +181,12 @@ def merge(current, incoming, now=None):
             if old != edition:
                 raise ValueError('Published edition IDs are immutable; issue a new correction edition')
             continue
+        prior_id = report_ids.get(report_identity(edition))
+        if prior_id is not None:
+            raise ValueError('Source report already imported as ' + prior_id +
+                             '; reuse the published edition instead of creating an alias')
         records[edition['id']] = copy.deepcopy(edition)
+        report_ids[report_identity(edition)] = edition['id']
         changed = True
     if not changed:
         return result, False
