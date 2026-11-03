@@ -51,7 +51,7 @@ window.MarketDisplay=(()=>{
   // Retain the original node and its handlers across settings rebuilds.
   if(languageSelect)languageSelect.remove();
   dialog.innerHTML=content();
-  if(languageSelect){const field=document.createElement('label');field.className='settings-language';field.append(document.createTextNode('Language / 语言 / 語言'));field.append(languageSelect);dialog.querySelector('.dialog-head')?.after(field);}
+  if(languageSelect){const field=document.createElement('label');field.className='settings-language';field.append(document.createTextNode('Language / 语言 / 語言'));field.append(languageSelect);const heading=dialog.querySelector('.display-heading');if(heading)heading.after(field);else dialog.prepend(field);}
  }
  function open(trigger){restoreFocus=trigger;const more=document.getElementById('more');if(more?.open)more.close();renderSettings();if(!dialog.open)dialog.showModal();}
  function close(){dialog.close();const target=restoreFocus?.getClientRects().length?restoreFocus:document.getElementById('display-settings-open');target?.focus();}
