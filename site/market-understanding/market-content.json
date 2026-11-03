@@ -1,0 +1,738 @@
+{
+  "title": "Market understanding",
+  "reviewed_at": "2026-10-31",
+  "timezone": "Asia/Singapore",
+  "not_live_data": true,
+  "chapters": [
+    {
+      "id": "starting-point",
+      "title": "Three questions before any market headline",
+      "topic": "Start here",
+      "answer": "Ask what is happening in the economy, what is already priced into investments, and what reaches your own pocket.",
+      "paragraphs": [
+        "These reports become easier to understand once the three questions are kept separate. The economy describes activity, jobs and prices. Markets put a price today on an uncertain future. Your personal outcome also depends on the price you paid, the currency you spend, fees, financing and when you need your money back.",
+        "Strong growth can coexist with a disappointing investment return if buyers already paid for even better growth. A highly rated borrower can issue a bond whose market price swings sharply. An overseas portfolio can gain in its own currency yet deliver a much smaller gain in SGD. These are different mechanisms, so a single green or red headline is usually inadequate.",
+        "Use the MAS October review to understand Singapore’s current growth, inflation and policy backdrop. Use JPMorgan to explain global markets and investment mechanics. Use MAS, GIC and Temasek annual reports to understand institutional roles and measurement. The three supplied written reports are secondary analyses: their claims need the underlying official sources.",
+        "The reading order in this briefing follows those links. It moves from growth and inflation to equities, rates and credit, then currency, public finances, institutions and private markets. All quoted numbers retain the source’s own displayed precision. A source-published rounded figure is not converted into a falsely exact economic measurement."
+      ],
+      "meaning": "A useful market update explains a cause, a possible consequence and a decision to monitor. It should help the reader ask a better question.",
+      "risk": "The review date of this briefing is 31 October 2026. The charts are dated snapshots, not live prices or a claim that all figures describe the same day.",
+      "action": "Begin each client discussion with spending currency, time horizon, cash needs and ability to withstand a temporary loss.",
+      "sources": [
+        "mas-macro",
+        "jpm-markets",
+        "jpm-alternatives"
+      ],
+      "figures": [],
+      "table": null,
+      "extra": null,
+      "status": "Explanation with dated evidence"
+    },
+    {
+      "id": "singapore-growth",
+      "title": "Why strong Singapore growth can still feel uneven",
+      "topic": "Singapore",
+      "answer": "Technology is doing much of the heavy lifting; a strong national figure does not mean every sector is thriving.",
+      "paragraphs": [
+        "The MAS October review reports Q3 2026 GDP growth of 5.4% year on year and 1.1% quarter on quarter after seasonal adjustment. These are advance estimates. The two figures answer different questions: the first compares with the same quarter a year earlier; the second compares with the immediately preceding quarter after removing recurring seasonal patterns.",
+        "Technology-related industries accounted for around 75% of year-on-year growth in Q3, according to MAS. That is a share of the increase in output, not a claim that technology is 75% of Singapore’s economy. The same page identifies technology-related industries as 22.1% of nominal value added in 2025. Confusing the level of activity with its contribution to growth would substantially overstate the sector’s size.",
+        "The practical picture is an uneven expansion. Electronics, machinery, related trade and information services benefit from AI investment. Other parts of the economy face different demand and cost conditions. MAS describes weakness in some consumer-facing businesses and pressure on oil-related industries even while the headline economy expands.",
+        "MAS expects the technology expansion to continue into 2027 at a more measured pace. This is its baseline assessment, not a promise. A slowdown in growth means output is rising less quickly; it does not automatically mean a recession. The vulnerability is that a narrower engine leaves the economy more exposed if AI spending or its financing disappoints."
+      ],
+      "meaning": "Think of a company whose best division generates most of the additional profit. The company can be growing strongly while other divisions struggle.",
+      "risk": "Do not treat strong GDP as a buy signal for every Singapore company, property or fund. Sector earnings, balance sheets and prices still differ.",
+      "action": "Watch whether growth broadens beyond technology, whether semiconductor orders hold up, and whether jobs and household spending follow.",
+      "sources": [
+        "mas-macro"
+      ],
+      "figures": [
+        "mas-oct2026-p21"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "Published observations and MAS outlook"
+    },
+    {
+      "id": "inflation-sgd",
+      "title": "Why MAS cares about the SGD basket",
+      "topic": "Singapore",
+      "answer": "Singapore uses the exchange rate to help control imported inflation; USD/SGD is only one part of that policy picture.",
+      "paragraphs": [
+        "MAS Core Inflation rose from 1.5% in Q2 2026 to 2.1% in July–August. The October review forecasts core inflation of 1.5–2.0% for 2026 and 1.5–2.5% for 2027. These are forecasts for annual averages, not a ceiling on every monthly reading. Core inflation excludes accommodation and private transport; it is not identical to a particular household’s cost-of-living change.",
+        "Inflation describes how fast prices rise. If inflation slows, prices can still be increasing. It is the difference between climbing stairs more slowly and going back downstairs. Energy, food, transport, wages, subsidies and competition can move differently, so the components matter as much as the headline.",
+        "MAS maintained the prevailing appreciation rate of the S$NEER policy band in October 2026, after tightening in April and July. S$NEER is a trade-weighted currency measure. The bilateral USD/SGD rate is the price of one currency against another. An appreciating basket can coexist with SGD weakness against a particular currency, because the other basket currencies also move.",
+        "For households, a stronger SGD can soften imported costs. For an investor with unhedged overseas assets, it can reduce the value translated back into SGD. Those effects can occur together. MAS’s policy objective concerns price stability in Singapore; maximising the SGD accounting return on foreign reserves is a different objective.",
+        "The review’s inflation research separates external demand, external supply and domestic forces. It estimates that external factors explain about 68% of the inflation variation captured by its model over the sample. That is a model-based historical decomposition, not a statement that 68% of each household bill is imported. The policy implications depend on the source and persistence of the shock."
+      ],
+      "meaning": "The same stronger dollar that makes some imported goods cheaper can make an overseas investment look smaller on an SGD statement.",
+      "risk": "A fall in USD/SGD alone does not measure the full MAS policy stance. Neither the basket path nor the inflation forecast guarantees a particular future FX rate.",
+      "action": "Separate a household’s SGD cash requirements from long-term foreign assets. Read the latest policy decision alongside inflation components and actual bilateral rates.",
+      "sources": [
+        "mas-macro"
+      ],
+      "figures": [
+        "mas-oct2026-p10",
+        "mas-oct2026-p29"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "Published data and labelled forecasts"
+    },
+    {
+      "id": "ai-financing",
+      "title": "Who pays for the AI buildout",
+      "topic": "Equities",
+      "answer": "Demand can be strong while the bill for future capacity rises even faster than cash generation.",
+      "paragraphs": [
+        "JPMorgan’s page 22 groups Alphabet, Amazon, Meta, Microsoft and Oracle. It shows total company capital expenditure of US$416 billion in 2025, with consensus forecasts of US$799 billion in 2026, US$1,093 billion in 2027 and US$1,200 billion in 2028. The last three are forecasts. The measure is total company capex, not a directly measured AI-only spending total.",
+        "Operating cash flow is cash generated from running a business. Capital expenditure pays for long-lived assets such as equipment and buildings. On the slide, free cash flow is operating cash flow minus capex. A company can report accounting profit while free cash flow is weak because it is spending heavily on future capacity. That does not by itself prove insolvency, but it changes the funding question.",
+        "MAS provides a useful second view. Page 23 compares semiconductor production conditions with a composite indicator of hyperscalers’ capacity to sustain capex. The latter considers cash-flow margins, leverage and investment intensity. Its company universe differs from JPMorgan’s and includes CoreWeave. These are analytical indices, not an observable default probability or a reproducible bank credit score.",
+        "The connection is straightforward: suppliers can enjoy strong orders today while customers take on larger financing commitments. If future AI revenue justifies the spending, the expansion may endure. If monetisation disappoints, buyers may reduce capex, lenders may demand better terms and suppliers may face weaker orders. MAS describes this as a downside risk, while judging near-term backlogs and commitments supportive.",
+        "For a portfolio, inspect the shared economic exposure. Technology equities, semiconductor suppliers, data-centre property, power infrastructure and private credit to the same ecosystem may all respond to one investment cycle. Different product labels do not ensure different underlying risks."
+      ],
+      "meaning": "A restaurant can be busy and profitable while borrowing heavily to open many new outlets. The question is whether the new outlets eventually earn enough to justify the cost.",
+      "risk": "Large capex is neither proof of a bubble nor proof of an attractive investment. Aggregate cash-flow charts cannot establish whether an individual borrower can service its debts.",
+      "action": "Track cash generation against capex, debt and lease commitments, refinancing needs, customer contracts and actual monetisation. Keep each issuer’s analysis separate.",
+      "sources": [
+        "jpm-markets",
+        "mas-macro"
+      ],
+      "figures": [
+        "jpm-gtm-p22",
+        "mas-oct2026-p23"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "Historical observations, forecasts and risk analysis"
+    },
+    {
+      "id": "equity-concentration",
+      "title": "Does owning hundreds of shares spread risk evenly",
+      "topic": "Equities",
+      "answer": "An index can own many names while a small group still drives much of its value.",
+      "paragraphs": [
+        "At 30 September 2026, JPMorgan shows the ten largest S&P 500 constituents at 40.6% of market capitalisation and 36.1% of trailing earnings. A market-cap-weighted index puts more money into larger companies. Counting the number of holdings therefore does not tell you how evenly the risk is spread.",
+        "The earnings share also matters. The largest companies contribute substantial profits as well as substantial market value. Concentration alone does not prove prices are irrational. It tells you which companies and business drivers can most influence results, and where earnings disappointment could be consequential.",
+        "JPMorgan’s valuation page reports a forward P/E of 19.0 times against its 30-year average of 17.2 times. Forward P/E is price divided by forecast earnings. A higher ratio means paying more for each unit of expected profit. If the earnings forecast changes, the valuation can change even without a move in the share price.",
+        "CAPE, also shown in the guide, uses a long historical average of inflation-adjusted earnings. It is a different measurement, so its number should not be compared directly with forward P/E as if one were an alternative price quote. Valuation measures help frame expectations; they do not provide a date for a market correction.",
+        "For a Singapore investor, add a currency lens. A U.S. index chart generally describes the U.S. market in USD. The return in SGD depends on the exchange rate and any hedging. Owning an S&P 500 fund, a technology fund and several megacap shares may add overlapping exposure rather than meaningful new diversification."
+      ],
+      "meaning": "A supermarket basket with hundreds of items can still be dominated by a few expensive purchases. The number of items does not determine where most of the money went.",
+      "risk": "A historical average is not a fair-value guarantee. Concentration can persist, and expensive markets can keep rising.",
+      "action": "Review the largest underlying holdings across all funds and direct shares. Compare business drivers, regions, currencies and valuation assumptions before adding another product.",
+      "sources": [
+        "jpm-markets"
+      ],
+      "figures": [
+        "jpm-gtm-p8",
+        "jpm-gtm-p5"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "30 September 2026 snapshot"
+    },
+    {
+      "id": "bond-duration",
+      "title": "Why a strong borrower can have a volatile bond",
+      "topic": "Bonds",
+      "answer": "Credit quality concerns repayment; duration concerns how much the price moves when required yields change.",
+      "paragraphs": [
+        "A fixed-rate bond promises a stream of payments. If comparable new bonds offer a higher yield, buyers usually pay less for the old payment stream. If required yields fall, the old stream becomes more attractive. The issuer can remain financially sound throughout this repricing.",
+        "Maturity is the date principal is due. Duration measures sensitivity to a change in yield. A long maturity and low coupon often leave more of a bond’s value dependent on distant payments, increasing its rate sensitivity. Convexity describes the bend in the price–yield relationship; it explains why a simple straight-line estimate becomes less accurate for larger moves.",
+        "JPMorgan page 34 illustrates total-return scenarios under a parallel shift in the yield curve. The printed figures below show how the range widens at longer maturities. The slide does not explicitly state the scenario horizon, so these should be described as the publisher’s illustrations, not independently verified one-year forecasts.",
+        "Long yields are influenced by more than the next central-bank meeting. Inflation expectations, the compensation for holding long debt, government borrowing needs and supply can all matter. MAS’s October financial-conditions chapter describes rising long government yields even alongside resilient equity markets.",
+        "Holding to maturity changes the decision if contractual payments are met and the investor can hold. It does not remove inflation, currency, funding or collateral risk. A financed investor might be forced to sell before maturity, turning an interim price fall into a realised loss. This is why duration must be assessed together with liquidity and borrowing terms."
+      ],
+      "meaning": "A reliable tenant does not make the resale price of a long rental contract stable when market rents and interest rates change.",
+      "risk": "These publisher illustrations are not prices or P&L forecasts for a specific Temasek or Treasury holding. They exclude the investor’s own FX, fees, financing and margin arrangements.",
+      "action": "Compare duration and maturity separately. Stress the relevant part of the curve, and check the cash and collateral available to survive the path.",
+      "sources": [
+        "jpm-markets",
+        "mas-macro"
+      ],
+      "figures": [
+        "jpm-gtm-p34",
+        "mas-oct2026-p9"
+      ],
+      "table": {
+        "headers": [
+          "Treasury maturity",
+          "Yield falls 1 percentage point",
+          "No yield change",
+          "Yield rises 1 percentage point"
+        ],
+        "rows": [
+          [
+            "2 years",
+            "6.8%",
+            "4.9%",
+            "3.0%"
+          ],
+          [
+            "10 years",
+            "13.1%",
+            "5.3%",
+            "−2.5%"
+          ],
+          [
+            "30 years",
+            "20.3%",
+            "5.6%",
+            "−9.0%"
+          ]
+        ],
+        "note": "Exact displayed scenario values from JPMorgan page 34. Parallel curve shift; the slide does not explicitly identify the scenario horizon. These are source illustrations, not an investor-specific simulation."
+      },
+      "extra": null,
+      "status": "Publisher illustrative scenarios"
+    },
+    {
+      "id": "credit-spread",
+      "title": "Is a high bond yield good compensation for risk",
+      "topic": "Bonds",
+      "answer": "A bond can offer a high total yield while paying only a small extra amount for the company’s credit risk.",
+      "paragraphs": [
+        "A useful breakdown is a government or near-risk-free reference yield plus compensation for credit, liquidity and other bond features. This is a pricing guide, not an exact universal identity. Credit spread is not the coupon and not the entire yield. One basis point equals 0.01 percentage point.",
+        "JPMorgan page 36 shows investment-grade option-adjusted spreads of 80 basis points versus a 144 basis-point long-run average in its chart. High-yield spreads are 311 basis points versus 498. Yet displayed yields to worst are 6.0% and 8.3%. Much of the attractive-looking yield therefore comes from the wider interest-rate environment, while the extra credit compensation is relatively narrow.",
+        "This distinction matters when deciding between taking more duration and taking weaker credit. They expose the portfolio to different problems. Government yields can rise even if an issuer’s business is healthy. Credit spreads can widen even if government yields are unchanged. Both can happen together.",
+        "An average spread does not establish the value of an individual bond. Seniority, covenants, cash flows, refinancing dates, liquidity and recovery prospects differ. The default chart on the same JPMorgan slide also uses different treatment of distressed exchanges across some categories. A reader should retain that methodology rather than turning the chart into a simple ranking of all default risks."
+      ],
+      "meaning": "The base rental market can be expensive even when the extra rent for accepting a troublesome tenant is small. Total income and compensation for a particular risk are different questions.",
+      "risk": "Tight spreads do not prove an imminent sell-off. High yield does not guarantee a sufficient cushion against defaults or spread widening.",
+      "action": "Compare the extra yield with the specific risk being accepted. For each issuer, examine cash coverage, maturity schedule, debt structure and the liquidity available to exit.",
+      "sources": [
+        "jpm-markets"
+      ],
+      "figures": [
+        "jpm-gtm-p36"
+      ],
+      "table": {
+        "headers": [
+          "30 September 2026 snapshot",
+          "Investment grade",
+          "High yield"
+        ],
+        "rows": [
+          [
+            "Option-adjusted spread",
+            "80 bps",
+            "311 bps"
+          ],
+          [
+            "Long-run average in chart",
+            "144 bps",
+            "498 bps"
+          ],
+          [
+            "Displayed yield to worst",
+            "6.0%",
+            "8.3%"
+          ]
+        ],
+        "note": "Figures retain the source’s displayed precision. The long-run averages use the chart’s historical window, not a promised normal level."
+      },
+      "extra": null,
+      "status": "Dated credit-market observations"
+    },
+    {
+      "id": "fx-return",
+      "title": "Why a USD gain can shrink in SGD",
+      "topic": "Currency",
+      "answer": "The investment return and the currency conversion multiply; they do not simply subtract.",
+      "paragraphs": [
+        "Define the exchange rate as SGD received for one USD. If an investment’s USD value changes by r and this exchange rate changes by f over the same measurement period, a simplified return with no intermediate external flows is (1 + r) × (1 + f) − 1 in SGD. This convention matters: quoting the inverse exchange rate changes the calculation.",
+        "The supplied USD sensitivity report uses a 5.60% USD return and a 3.00% annual USD decline against SGD over a matched annualised horizon. The exact arithmetic is 1.056 × 0.97 − 1 = 0.02432 = 2.432%. The original report displayed 2.43% because it explicitly rounded to two decimal places. This briefing preserves the exact computed value.",
+        "There is a major interpretation limit. GIC’s 5.6% is a historical twenty-year annualised USD return, not a next-year forecast. Pairing it with assumed future FX weakness is a conditional illustration. It does not reveal GIC’s direct net USD position, currency hedges or an expected future SGD return.",
+        "Changing the reporting currency of a diversified global portfolio is also different from measuring how much the portfolio is economically exposed to one currency. Non-USD assets can themselves rise in USD terms when USD weakens. Company revenues, costs, borrowing and hedging can pull in different directions.",
+        "For an actual bond portfolio, coupon payment dates, conversion rates, fees and financing cash flows require their own dated ledger. A simple terminal-return identity should not be used to silently approximate those flows. For a household, the relevant question remains what purchasing power is available in the currency of future spending."
+      ],
+      "meaning": "The investment can grow in dollars while each dollar buys fewer Singapore dollars. Both steps affect the final SGD result.",
+      "risk": "The 3% FX move is a stated scenario from the supplied analysis, not a forecast by MAS. The institutional reports do not disclose enough to estimate a precise common USD sensitivity for MAS, GIC and Temasek.",
+      "action": "Show investment P&L, income, FX effects, fees and financing separately, then reconcile them. Match the currency and horizon before comparing returns.",
+      "sources": [
+        "gic-2026",
+        "mas-2026",
+        "temasek-2026"
+      ],
+      "figures": [],
+      "table": {
+        "headers": [
+          "Assumed annual USD weakening",
+          "USD return assumption",
+          "Exact converted SGD return"
+        ],
+        "rows": [
+          [
+            "0%",
+            "5.60%",
+            "5.6%"
+          ],
+          [
+            "1%",
+            "5.60%",
+            "4.544%"
+          ],
+          [
+            "2%",
+            "5.60%",
+            "3.488%"
+          ],
+          [
+            "3%",
+            "5.60%",
+            "2.432%"
+          ],
+          [
+            "4%",
+            "5.60%",
+            "1.376%"
+          ],
+          [
+            "5%",
+            "5.60%",
+            "0.32%"
+          ]
+        ],
+        "note": "Derived from inputs already shown in supplied Report 2. Assumes matched annualised horizons; not a forecast, institutional exposure estimate or bond/loan simulation."
+      },
+      "extra": null,
+      "status": "Explicit conditional arithmetic"
+    },
+    {
+      "id": "public-finances",
+      "title": "Where Singapore’s government revenue comes from",
+      "topic": "Singapore",
+      "answer": "Taxes and other operating revenue are one stream; the permitted investment-return contribution is another.",
+      "paragraphs": [
+        "A household analogy helps: recurring earnings fund spending, while accumulated savings can also generate income. Singapore’s system has a specific constitutional framework, so the analogy should not be taken as an exact household budget. The important distinction is between the reserve principal, investment returns and the amount available for annual spending.",
+        "The audited FY2025/26 government accounts show operating revenue of S$130,049,822,095.34 and Net Investment Returns Contribution of S$27,522,875,864.50. Adding those two reported values gives S$157,572,697,959.84. This sum describes revenue before deducting expenditure; it is not the fiscal surplus or a measure of total reserves.",
+        "IRAS collections are already inside government operating revenue. IRAS’s 4 September 2026 release reports S$97.3 billion collected in FY2025/26, up 9.4%, representing 74.8% of government operating revenue at the release’s published precision. Adding that S$97.3 billion again would count much of the same revenue twice.",
+        "NIRC includes up to 50% of expected long-term real returns on relevant net assets invested by GIC, MAS and Temasek, plus up to 50% of net investment income on remaining past reserves. Real means after inflation. Relevant net assets account for government liabilities. It is not simply half of this year’s combined accounting profit or dividends.",
+        "This approach helps smooth spending across market cycles. A weak investment year does not mechanically cut the budget by the same amount. Persistent changes in asset values or expected long-term returns can still affect resources over time, so smoothing does not mean markets are irrelevant. Land-sale proceeds add to reserves rather than ordinary spendable operating revenue.",
+        "The supplied revenue report was prepared in August 2026. Its statement that the latest IRAS series ends at FY2024/25 is now outdated. Its FY2026/27 total of approximately S$163.23 billion is derived using rounded components; MOF’s own published total is S$163.24 billion. Use the publisher’s aggregate at its stated precision and retain the rounding caveat. Keep FY2026/27 budget estimates separate from FY2025/26 audited actuals."
+      ],
+      "meaning": "The spending allowance from a long-term investment pool is not the same as the pool’s market gain in one year.",
+      "risk": "Do not add IRAS to operating revenue, treat land-sale receipts as ordinary tax revenue, or add MAS, GIC and Temasek totals into a national-wealth figure. Internal claims and different measurement bases would need reconciliation.",
+      "action": "Use AGD for audited actuals, MOF for the current budget and NIRC rules, and IRAS for agency collections. Preserve fiscal-year labels and classification changes.",
+      "sources": [
+        "budget-actual",
+        "budget-estimate",
+        "iras-2026",
+        "nirc",
+        "reserves"
+      ],
+      "figures": [],
+      "table": {
+        "headers": [
+          "FY2025/26 audited values",
+          "SGD"
+        ],
+        "rows": [
+          [
+            "Operating revenue",
+            "130,049,822,095.34"
+          ],
+          [
+            "NIRC",
+            "27,522,875,864.50"
+          ],
+          [
+            "Sum of the two revenue components",
+            "157,572,697,959.84"
+          ]
+        ],
+        "note": "AGD Statement of Budget Outturn, physical PDF page 17 / printed page 9. Sum is calculated exactly from the displayed audited amounts; it is not the budget surplus."
+      },
+      "extra": null,
+      "status": "Audited actuals with separately labelled estimates"
+    },
+    {
+      "id": "mas-accounts",
+      "title": "How MAS can have an FX drag and still make a profit",
+      "topic": "Currency",
+      "answer": "Currency translation is one part of the result; investment gains, liquidity-management costs and other expenses also matter.",
+      "paragraphs": [
+        "MAS holds foreign reserves for central-bank purposes while reporting its accounts in SGD. A foreign-currency asset can be unchanged in its own units yet translate into fewer SGD when SGD strengthens. That alone does not remove the foreign currency available for policy operations.",
+        "The supplied FY2024/25 infographic is an accessible example: investment gains of S$31.4 billion, negative currency translation of S$3.4 billion and net money-market-operation and other costs of S$8.3 billion produce reported net profit of S$19.7 billion at the infographic’s displayed precision. It is a historical year, not the October 2026 result.",
+        "The separately verified FY2025/26 MAS speech reports investment gains of S$39.8 billion, translation drag of S$16.4 billion, net money-market-operation and other costs of S$2.4 billion and a S$1.0 billion Consolidated Fund contribution. The reported net profit is S$20.0 billion. Showing only the S$16.4 billion drag would give an incomplete picture.",
+        "The FY2021/22 statements provide the opposite historical example: an overall loss despite positive investment gains. That year’s main translation effects involved EUR, JPY and GBP. FY2025/26’s explanation principally involves USD and JPY. It would be inaccurate to describe all three years as simply USD losses.",
+        "There are further measurement distinctions. MAS’s accounts have Group and Authority columns; its accounting investment result is not a fully comparable fund NAV total return. Liquidity operations incur interest costs and have policy objectives. A Consolidated Fund contribution, a later distribution of profit and NIRC are different fiscal concepts.",
+        "For an individual who needs SGD to pay a mortgage or school fees, an FX translation reduction can be economically important. The fact that MAS can continue to conduct policy with its foreign assets does not imply a household should ignore its own currency mismatch."
+      ],
+      "meaning": "Read the whole income statement. A large deduction can coexist with a positive final result when other gains are larger.",
+      "risk": "Headline amounts use issuer rounding. The FY2021/22 cost definition differs from later net-cost figures, so do not force those rounded components into a common exact waterfall. Net USD exposures and full hedges are not disclosed.",
+      "action": "Pair FX effects with the total result, state the affected currencies and period, and distinguish institutional policy capacity from personal SGD purchasing power.",
+      "sources": [
+        "mas-2025-info",
+        "mas-2025-accounts",
+        "mas-2022-accounts",
+        "mas-2022-info",
+        "mas-2022-speech",
+        "mas-2026"
+      ],
+      "figures": [
+        "mas-fy2025-results",
+        "mas-fy2022-highlights"
+      ],
+      "table": {
+        "headers": [
+          "Financial year",
+          "Investment gains",
+          "Negative FX translation",
+          "Reported net result"
+        ],
+        "rows": [
+          [
+            "2021/22",
+            "S$4.0bn",
+            "S$8.7bn",
+            "−S$7.4bn"
+          ],
+          [
+            "2024/25",
+            "S$31.4bn",
+            "S$3.4bn",
+            "+S$19.7bn"
+          ],
+          [
+            "2025/26 update",
+            "S$39.8bn",
+            "S$16.4bn",
+            "+S$20.0bn"
+          ]
+        ],
+        "note": "Published headline precision. Other costs and contributions affect the net result; these three columns alone are not a complete reconciliation."
+      },
+      "extra": null,
+      "status": "Historical uploaded evidence plus verified newer update"
+    },
+    {
+      "id": "gic-temasek",
+      "title": "Why MAS, GIC and Temasek need different scorecards",
+      "topic": "Singapore",
+      "answer": "They have different jobs, portfolios and measurement systems; their headline results are not a league table.",
+      "paragraphs": [
+        "MAS is a central bank and needs liquid foreign reserves for monetary policy and financial stability. GIC manages government assets for long-term global purchasing power. Temasek is an investment company that owns its portfolio assets and reports shareholder returns. Their objectives, funding arrangements and investment flexibility differ.",
+        "GIC’s uploaded FY2024/25 report explains its rolling twenty-year horizon. The separately verified FY2025/26 release reports 5.6% annualised nominal USD return and 3.4% annualised real return for the twenty years ended 31 March 2026. These are compounded annualised results over twenty years, not returns earned in just FY2025/26. A rolling figure can change because an old year drops out as well as because a new year enters.",
+        "The historical GIC asset mix on page 14 is useful for explaining diversification. It is not a prescription for a client. GIC’s funding horizon and ability to hold private investments are different from a household’s. Its 2026 release also announces a Strategic Portfolio framework, so the older Reference Portfolio description should not be presented as the unqualified current framework.",
+        "Temasek’s uploaded 2025 highlights reported S$434 billion net portfolio value, with a further S$35 billion uplift if the remaining unlisted investments were marked to market. The same-date comparable value was S$469 billion. The 2026 release reports S$518 billion after the full transition to mark-to-market reporting. The comparable increase is S$49 billion, not S$84 billion.",
+        "Keep the bridge in sequence: S$434 billion plus S$35 billion equals S$469 billion at 31 March 2025; S$469 billion plus S$49 billion equals S$518 billion at 31 March 2026. The first step changes valuation basis at the same date. The second is the change between dates. Net portfolio value movements are not automatically identical to an investment return because capital flows and shareholder distributions can matter.",
+        "Temasek’s 2026 one-year TSR was 10.5% in SGD, 12.9% at constant currency and 14.8% in USD. The arithmetic constant-currency gap is 2.4 percentage points. It reflects foreign-currency exposures collectively, not a disclosed USD-only loss. Headquarters, underlying business geography and currency exposure are also different classifications."
+      ],
+      "meaning": "Judge a hospital, an insurer and an investment fund against their own jobs. Comparing one headline number without its mandate and measurement would miss the purpose.",
+      "risk": "Do not infer full government reserves, an undisclosed GIC asset base, or each entity’s NIRC allocation from these reports. Do not treat a valuation-method change as an investment gain.",
+      "action": "Compare like periods, like currencies and like valuation methods. Use institutions to learn process and discipline, then adapt to the client’s actual liabilities and liquidity needs.",
+      "sources": [
+        "gic-2025",
+        "gic-2026",
+        "temasek-2025",
+        "temasek-2026",
+        "mas-2025-accounts",
+        "nirc"
+      ],
+      "figures": [
+        "gic-fy2025-horizon",
+        "gic-fy2025-allocation",
+        "temasek-fy2025-overview"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "Historical framework with current source corrections"
+    },
+    {
+      "id": "temasek-bonds",
+      "title": "Why Temasek USD and SGD bonds have different prices",
+      "topic": "Bonds",
+      "answer": "The payment currency, coupon and discount curve can create very different prices even with the same guarantor.",
+      "paragraphs": [
+        "The issuer’s official register confirms the four bonds below. They are issued by Temasek Financial (I) Limited and guaranteed by Temasek Holdings (Private) Limited. Temasek explicitly states that its bonds are not guaranteed by the Singapore Government. The guarantee concerns contractual payments, not a stable market price or ready resale liquidity.",
+        "A USD cash flow is valued against the USD interest-rate environment and relevant issuer spread. An SGD cash flow is valued against the SGD environment. A low fixed coupon becomes less competitive when the market requires a higher yield, so the price may fall well below face value. A higher-coupon bond can trade above face value and still offer a lower yield than its coupon.",
+        "The supplied bilingual report uses two snapshot dates: 14 August 2026 for the 2039 examples, and 7 August 2026 for the 2070/2071 examples. These can illustrate the mechanism but must not appear as live dealing levels. The 2039 ask prices of 118.040 in SGD and 104.092 in USD are above par, not below par. Their location below an earlier chart high is a different claim.",
+        "The report’s displayed yield-gap calculations are arithmetically consistent: 2.588% − 2.313% = 0.275 percentage point = 27.5 basis points, and 4.950% − 4.890% = 0.060 percentage point = 6 basis points. These are illustrative comparisons with particular government bonds. Maturity and cash-flow mismatches mean they are not precise option-adjusted or interpolated credit spreads.",
+        "Pair each price with its own quote side. In the 2070 example, 5.475% is the bid yield paired with the 50.664 bid price, not the 51.076 ask price. The 2071 example likewise shows a 2.975% bid yield. An investor buying at an ask price needs the corresponding ask yield; this cannot be inferred by relabelling the bid yield.",
+        "Compare total settlement cost and expected cash flows rather than the clean price alone. Clean price excludes accrued interest; the settlement amount normally includes it. Accrued interest paid to the seller should be reconciled with the next coupon in a dated cash-flow calculation. It should not be counted twice or mistaken for a permanent change to the coupon rate. If the starting clean price is already an executable ask, do not add the bid-ask spread again; add accrued interest and only separately charged fees or costs.",
+        "A financed holding has additional moving parts: borrowing rates, loan currency, recognition ratios, collateral requirements and refinancing. These must use the actual facility terms. No advance ratio or margin-call threshold can be established from these public reports alone."
+      ],
+      "meaning": "The same company can issue two long-term payment promises in different currencies. Their values depend on what investors require for each currency and payment schedule.",
+      "risk": "A low price alone is not proof of a bargain. High credit quality does not remove duration, FX, liquidity or leverage risks, and the Singapore Government does not guarantee these bonds.",
+      "action": "Obtain current executable bid/ask prices, settlement dates and terms. Compare yield, duration, spread, spending-currency exposure and ability to hold through volatility.",
+      "sources": [
+        "temasek-bonds",
+        "temasek-guarantee",
+        "sgs",
+        "treasury"
+      ],
+      "figures": [],
+      "table": {
+        "headers": [
+          "Bond currency and maturity",
+          "Coupon",
+          "Regulation S / local ISIN"
+        ],
+        "rows": [
+          [
+            "USD · 23 November 2039",
+            "5.3750%",
+            "US87973RAB69"
+          ],
+          [
+            "SGD · 7 December 2039",
+            "4.2000%",
+            "SG7U77951360"
+          ],
+          [
+            "USD · 6 October 2070",
+            "2.5000%",
+            "US87973RAW07"
+          ],
+          [
+            "SGD · 17 August 2071",
+            "2.8000%",
+            "SGXF69044257"
+          ]
+        ],
+        "note": "Official issue terms, checked 31 October 2026. These are distinct bonds; do not merge a USD issue with the SGD issue sharing a similar maturity year."
+      },
+      "extra": null,
+      "status": "Verified issue terms; historical price examples only"
+    },
+    {
+      "id": "alternatives-liquidity",
+      "title": "When a statement value is not cash you can withdraw",
+      "topic": "Alternatives",
+      "answer": "Private investments may earn returns while still limiting when, and at what price, you can recover your money.",
+      "paragraphs": [
+        "Alternatives is a broad label. Private equity owns companies; private credit lends to borrowers; real estate owns property; infrastructure owns or operates physical assets; hedge funds use varied trading strategies. Their risks are not interchangeable. The useful starting point is the economic source of return and the conditions for turning it back into cash.",
+        "Private assets are often valued less frequently than exchange-traded securities. A smoother reported line may reflect the valuation process as well as the economics. It does not prove the asset would hold its value if sold immediately. Historical comparisons can also mix private-fund internal rates of return with public-market annual returns, making simple rankings misleading.",
+        "JPMorgan’s page 58 shows a 4Q 2025 private-equity capital-call rate of 31% of beginning dry powder and a distribution rate of 14% of beginning NAV. These are preliminary rolling twelve-month rates with different denominators. Subtracting 14% from 31% would not calculate a valid net funding gap.",
+        "A capital call asks an investor to deliver money already committed. A distribution returns cash. A fund can call capital before much cash comes back. An investor’s liquidity plan therefore needs to allow for commitment schedules and delays in exits, rather than assuming a stated annual return is spendable cash.",
+        "Page 59 shows 2Q 2026 LP-led secondary pricing at 91% of NAV for buyout, 89% for credit, 79% for venture capital and 68% for real estate. These are market aggregates, not firm offers for a particular fund. A discount may reflect illiquidity, uncertainty or an out-of-date NAV; it is not automatically a bargain.",
+        "Institutional portfolios can offer useful lessons about diversification and manager selection. Copying their allocation without matching their ability to meet future cash needs can create a very different risk. Liquidity is a portfolio property: even attractive long-term holdings can be unsuitable for money needed on a fixed near-term date."
+      ],
+      "meaning": "Owning a valuable apartment is different from having the sale proceeds in your bank account today. Timing and selling price both matter.",
+      "risk": "Reported volatility, NAV, IRR, cash distributions and executable exit prices are different measures. Do not rank private products using a single yield or past-return figure.",
+      "action": "Before allocating, map capital commitments, redemption windows, gates, notice periods, valuation methods, fees and the cash reserve needed outside the investment.",
+      "sources": [
+        "jpm-alternatives",
+        "gic-2025"
+      ],
+      "figures": [
+        "jpm-gta-p58",
+        "jpm-gta-p59"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "Lagged private-market observations with methodology"
+    },
+    {
+      "id": "private-credit",
+      "title": "Is all reported interest paid in cash",
+      "topic": "Alternatives",
+      "answer": "Some interest can be added to debt rather than received in cash, so reported income needs a cash-quality check.",
+      "paragraphs": [
+        "Payment in kind, or PIK, is a form of non-cash payment. In a loan context it often adds interest to the outstanding amount instead of paying it immediately. It can be a contractual feature rather than a default. It can also become more relevant when a borrower is conserving cash.",
+        "JPMorgan page 69 shows PIK at 8.0% of interest and dividend income, on average for the Fitch-rated business development company sample, in 1Q 2026. This does not mean 8.0% of all private loans defaulted. It does not mean 8.0% of a particular fund’s assets are impaired. The population and denominator are essential to understanding the statistic.",
+        "The same page compares public and private default trends with differing definitions and denominators. Private-credit defaults use counts of defaulted loans relative to loans; the public series uses issuer-based measures. Distressed exchanges also change the apparent default rate. A rewrite that strips away these differences can make a precise-looking chart misleading.",
+        "For income-oriented clients, ask where the distribution comes from: cash interest, asset sales, borrowing, accumulated income or other sources permitted by the fund structure. A stated distribution rate is not necessarily a sustainable economic return. Asset-level yield and the investor’s net return can also diverge after fees, leverage and losses.",
+        "The AI connection is worth monitoring, but it should be established issuer by issuer. Private financing can support productive investment; it can also concentrate financing risk in businesses whose revenues arrive later than their interest and capital spending. Aggregate charts identify questions for due diligence, not verdicts on every private-credit fund."
+      ],
+      "meaning": "Being told that someone owes you more is different from receiving more cash this month. Both may have value, but they fund your spending differently.",
+      "risk": "PIK is not automatically default, and a lower reported default rate is not automatically evidence of a safer market if definitions differ.",
+      "action": "Review cash interest coverage, PIK share, non-accruals, amendments, leverage, covenants, recoveries and actual cash distributions at the specific fund or borrower level.",
+      "sources": [
+        "jpm-alternatives"
+      ],
+      "figures": [
+        "jpm-gta-p69"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "1Q 2026 income-quality observation; not a default rate"
+    },
+    {
+      "id": "portfolio-actions",
+      "title": "Build a portfolio that can survive the journey",
+      "topic": "Portfolio",
+      "answer": "A sound long-term idea still needs enough liquidity and manageable concentration to survive difficult periods.",
+      "paragraphs": [
+        "JPMorgan’s drawdown chart covers full calendar years from 1980 to 2025. It reports an average intra-year decline of 14.2%, while 35 of the 46 years finished with positive price returns. The 2026 bar is year to date and is outside that full-year count. These are price returns, not returns including reinvested dividends.",
+        "The lesson is about the route taken, not a guarantee of recovery. A good year can contain a frightening decline. A diversified index’s historical pattern does not imply that every individual share recovers, that every downturn is short, or that leverage is safe. Forced selling can make an interim loss permanent for the investor who must exit.",
+        "Diversification should address sources of risk rather than product count. Inflation or interest-rate shocks can hurt stocks and long bonds together. AI-linked equities and AI-linked private lending can share a cash-flow driver. An offshore bond and a CHF loan introduce two currency exposures, and their movements should not be assumed to offset.",
+        "For a reader deciding what to do, separate money by purpose before selecting products. Near-term spending requires dependable liquidity in the spending currency. Long-term growth capital can tolerate a different path. Income assets should be assessed for cash quality, while duration positions need a clear holding horizon and loss tolerance.",
+        "Use rebalancing to maintain the chosen risk profile rather than allowing winners to determine it unintentionally. Review correlated exposures across direct holdings and funds. For borrowing, use the actual facility rules and stress asset prices, loan FX and financing rates together; the reports do not supply proprietary recognition rules or client-specific margin limits.",
+        "The strategy implication is conditional: preserve the capacity to stay invested when the investment case remains sound, while retaining the flexibility to change course when evidence changes. This follows from the mechanics and historical evidence; it is not a recommendation to buy a particular security or copy an institution’s portfolio."
+      ],
+      "meaning": "A plan should fit the uncomfortable middle of the journey, not only the outcome you hope to reach at the end.",
+      "risk": "Historical averages and previous recoveries are not a minimum future return or a deadline for the next recovery.",
+      "action": "Review cash needs, underlying concentration, duration, credit compensation, currency mismatch and funding resilience together. Record what evidence would change the investment case.",
+      "sources": [
+        "jpm-markets",
+        "jpm-alternatives",
+        "mas-macro"
+      ],
+      "figures": [
+        "jpm-gtm-p16"
+      ],
+      "table": null,
+      "extra": null,
+      "status": "Interpretation and practical monitoring"
+    }
+  ],
+  "audit": [
+    [
+      "All source files",
+      "A downloaded filename or briefing date is treated as the data date",
+      "Show publication edition and observation date separately. JPM Markets is 30 Sep 2026; Alternatives is 31 Jul 2026 and contains older quarterly data."
+    ],
+    [
+      "Revenue report",
+      "Latest IRAS data stated to end in FY2024/25",
+      "Update the status: FY2025/26 was released 4 Sep 2026, with S$97.3bn collected at IRAS headline precision."
+    ],
+    [
+      "Revenue report",
+      "FY2026/27 total derived as about S$163.23bn from rounded components",
+      "Use MOF’s published aggregate S$163.24bn with its stated rounding. Do not manufacture an exact aggregate from mixed-precision figures."
+    ],
+    [
+      "USD sensitivity report",
+      "2.43% converted SGD return",
+      "Use exact scenario arithmetic 2.432%; the original explicitly rounded to two decimals. Retain the matched-horizon assumption."
+    ],
+    [
+      "USD sensitivity report",
+      "Past 20-year GIC return can look like a prospective annual forecast",
+      "Label 5.6% as historical twenty-year annualised USD performance. The FX scenario is conditional, not a forecast or direct net USD exposure."
+    ],
+    [
+      "USD sensitivity report",
+      "MAS S$16.4bn FX drag shown without total result",
+      "Pair it with S$20.0bn FY2025/26 net profit. The effect was mainly USD and JPY, not USD alone."
+    ],
+    [
+      "Temasek comparisons",
+      "S$434bn in 2025 compared directly with S$518bn in 2026",
+      "First bridge 2025 to the S$469bn MTM basis. The like-basis increase to 2026 is S$49bn."
+    ],
+    [
+      "GIC historical report",
+      "Old Reference Portfolio framework shown as current",
+      "Label historical. The 2026 release introduces a Strategic Portfolio framework."
+    ],
+    [
+      "Temasek bond report",
+      "Historical 14 Aug 2026 (2039) and 7 Aug 2026 (2070/2071) quotes presented as current or guaranteed",
+      "Keep the date, bid/ask convention and benchmark mismatch. Verify current dealing prices separately."
+    ],
+    [
+      "Temasek bond report",
+      "Bid yield paired with ask price; spread added twice",
+      "Match bid yield to bid price and ask yield to ask price. Starting from an executable ask, add accrued interest and separately charged costs, not the spread again."
+    ],
+    [
+      "Temasek bond report",
+      "Government ownership confused with sovereign guarantee",
+      "The guarantor is Temasek Holdings. Temasek bonds are not guaranteed by the Singapore Government."
+    ],
+    [
+      "JPM illustrations",
+      "Parallel rate-shock chart called a verified one-year forecast",
+      "Retain the publisher illustration label; its slide does not explicitly specify the scenario horizon."
+    ],
+    [
+      "Private-market charts",
+      "Different denominators compared as if identical",
+      "Keep data populations and definitions: calls vs dry powder, distributions vs NAV, PIK share vs default rate, loans vs issuers."
+    ]
+  ],
+  "glossary": [
+    [
+      "GDP growth",
+      "How much economic output changes; distinguish year-on-year from quarter-on-quarter measures."
+    ],
+    [
+      "Core inflation",
+      "An inflation measure excluding specified components; Singapore and U.S. definitions are not identical."
+    ],
+    [
+      "S$NEER",
+      "A trade-weighted measure of SGD against a basket of currencies; different from USD/SGD."
+    ],
+    [
+      "Coupon",
+      "Contractual bond interest expressed as a percentage of face value."
+    ],
+    [
+      "Yield to maturity",
+      "The discount rate that equates the bond’s price to its scheduled cash flows under the stated conventions."
+    ],
+    [
+      "Yield to worst",
+      "The lowest relevant contractual yield under the source’s call/maturity assumptions; it is not a worst possible loss."
+    ],
+    [
+      "Duration",
+      "Sensitivity of bond value to a change in yield; distinct from years to final repayment."
+    ],
+    [
+      "Convexity",
+      "The curvature of the relationship between bond price and yield."
+    ],
+    [
+      "Credit spread",
+      "Extra yield relative to a reference curve, with the exact definition depending on the measure."
+    ],
+    [
+      "Basis point",
+      "0.01 percentage point. One percentage point equals 100 basis points."
+    ],
+    [
+      "P/E",
+      "Share price relative to earnings; forward P/E uses forecast earnings."
+    ],
+    [
+      "Capex",
+      "Spending on long-lived assets such as equipment, property and infrastructure."
+    ],
+    [
+      "Free cash flow",
+      "In the cited JPM chart, operating cash flow minus capital expenditure; check definitions elsewhere."
+    ],
+    [
+      "NAV / NPV",
+      "A reported net asset or portfolio value. Method, valuation date and liquidity matter."
+    ],
+    [
+      "TSR",
+      "Total shareholder return, reflecting shareholder outcomes under the issuer’s methodology."
+    ],
+    [
+      "Real return",
+      "Return after adjusting for inflation."
+    ],
+    [
+      "NIRC",
+      "The investment-return contribution available to Singapore’s budget under the constitutional framework."
+    ],
+    [
+      "Capital call",
+      "A request to deliver money previously committed to a private fund."
+    ],
+    [
+      "Distribution",
+      "Cash or assets returned by a fund; not necessarily identical to economic profit."
+    ],
+    [
+      "PIK",
+      "Payment in kind: non-cash interest or payment, often added to the amount owed."
+    ],
+    [
+      "Liquidity",
+      "Ability to turn an investment into usable cash at an acceptable price and time."
+    ],
+    [
+      "Mark to market",
+      "Valuing assets using current market-based measures; implementation varies for unlisted assets."
+    ]
+  ]
+}

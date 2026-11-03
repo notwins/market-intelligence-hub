@@ -1,0 +1,11 @@
+/* Navigation-only enhancement. No datasets or scheduled feeds are modified. */
+(()=>{'use strict';
+ const routes=['overview','earnings','credit','hourly','policy','headlines','research','master','history','ust','reports','directory','feeds'];
+ if(document.querySelector('.rail [data-view="tools"]'))routes.push('tools');
+ const names={policy:['Central Banks / US Admin','央行与美国政府','央行與美國政府'],overview:['Daily Briefing','每日简报','每日簡報'],earnings:['US Earnings','美国财报','美國財報'],credit:['Bonds & Credit','债券与信贷','債券與信貸'],hourly:['Hourly News','每小时新闻','每小時新聞'],headlines:['Reuters Coverage','路透报道','路透報導'],research:['Research Papers','研究报告','研究報告'],master:['Master','证券主档','證券主檔'],history:['History','历史数据','歷史數據'],ust:['UST','美国国债','美國國債'],reports:['Scheduled Reports','定期报告','定期報告'],directory:['Research Directory','研究目录','研究目錄'],feeds:['Data & Uploads','数据与上传','資料與上傳'],tools:['Tools & Simulators','工具与模拟器','工具與模擬器']};
+ const next=document.createElement('button');next.className='section-next';next.type='button';document.querySelector('.topbar>div:first-child').append(next);
+ function update(){const lang=document.documentElement.lang,idx=lang==='zh-Hans'?1:lang==='zh-Hant'?2:0;const active=document.querySelector('.rail [data-view].active')?.dataset.view||location.hash.slice(1).split('/')[0]||'overview';const target=routes[(Math.max(0,routes.indexOf(active))+1)%routes.length];next.dataset.view=target;next.textContent=(idx?['','下一节 › ','下一節 › '][idx]:'Jump to next › ')+(names[target]?.[idx]||target);next.setAttribute('aria-label',next.textContent);const title=document.querySelector('.topbar b');if(title)title.textContent=names[active]?.[idx]||active;document.querySelectorAll('.bottom-nav [data-view]').forEach(b=>{const icon=b.querySelector('span')?.textContent||'';b.replaceChildren(Object.assign(document.createElement('span'),{textContent:icon}),document.createTextNode(names[b.dataset.view]?.[idx]||b.dataset.view));});}
+ // Watch active route only: handles V3 replaceState as well as V4 Back/Forward.
+ new MutationObserver(update).observe(document.querySelector('.rail nav'),{attributes:true,subtree:true,attributeFilter:['class']});
+ window.addEventListener('hashchange',update);document.getElementById('language')?.addEventListener('change',()=>queueMicrotask(update));update();
+})();

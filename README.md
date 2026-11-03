@@ -1,6 +1,6 @@
 # Market Intelligence Hub
 
-**Current release: V3 (31 October 2026, Singapore).** The main URL opens V3, with the security master, historical yield/FX comparisons and UST selection desk. V2 remains at `v2.html`; V1 and original archives remain at `v1.html`. See [V3_NOTES.md](V3_NOTES.md) for imports, local saves, Chinese UI, source limitations and future feed contracts. The new full-history and WSJ connectors are prepared, not connected.
+**Current release: V4 (3 November 2026, Singapore).** The main URL opens V4 (an existing explicit V3 preference is respected), with the security master, historical yield/FX comparisons and UST selection desk. V2 remains at `v2.html`; V1 and original archives remain at `v1.html`. See [V3_NOTES.md](V3_NOTES.md) for imports, local saves, Chinese UI, source limitations and future feed contracts. The new full-history and WSJ connectors are prepared, not connected.
 
 Independent research dashboard, restored from the original Market_Intelligence_Hub_Preview.html. The earlier project ZIP was unavailable in this environment. The original layout, 161 Morningstar equity links and 489 user-supplied bond references are preserved.
 
