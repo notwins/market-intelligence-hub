@@ -1,6 +1,19 @@
 {
   "schema_version": 1,
-  "state": "awaiting_scheduled_publication",
-  "checked_at": "2026-11-03T12:14:00Z",
-  "message": "The dated research publishing path is prepared. Automatic watchlist publication has not yet been verified end to end. The latest edition shown here is a source-checked imported snapshot; the separate Reuters headline schedule is unchanged."
+  "state": "manual_verified_schedule_test_requested",
+  "checked_at": "2026-11-03T14:00:29.590Z",
+  "message": "The full dated watchlist report is published and its live content has been verified. Four-hour publishing instructions are configured and an immediate test run was requested. A successful scheduled site update and delivery to a separate (A) chat have not yet been observed. The saved edition keeps its original source dates; refreshing this page does not create new research.",
+  "manual_publication": {
+    "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
+    "pages_run_id": 41648846458,
+    "edition_id": "watchlist-20261103T120000Z",
+    "report_sha256": "853cd05129da2ac7c01edc8d1868d28252d692944a083898d4b491fa695b524e",
+    "verified_at": "2026-11-03T14:00:29.590Z"
+  },
+  "scheduled_publication": {
+    "configured": true,
+    "test_requested_at": "2026-11-03T14:00:29.590Z",
+    "successful_execution_observed": false
+  },
+  "separate_A_chat_delivery_verified": false
 }
