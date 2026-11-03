@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+global.MorningstarLinks=require('../site/morningstar-links.js');const h=require('../site/headline-explorer.js');
+const ctx={time:()=> '3 Nov 2026 · SGT',stockLink:t=>t};
+const a={title:'US Fed rate cuts; Trump tariffs, Singapore MAS and MU',url:'https://www.reuters.com/example',tickers:['TSM'],category:'Markets'};
+const tags=h.tags(a);for(const [g,l] of [['country','US'],['country','Singapore'],['bank','Fed'],['bank','MAS'],['person','Trump'],['topic','Rates'],['topic','Trade / tariffs'],['ticker','MU'],['ticker','TSM']])assert(tags.some(t=>t.group===g&&t.label===l),g+l);
+assert(!h.tags({title:'FedEx delivers masks to Chinatown'}).some(t=>['Fed','MAS','China'].includes(t.label)));
+assert(!h.tags({title:'Apple expands in new market'}).some(t=>t.group==='country'||t.group==='ticker'));
+h.setFilter('country','US');assert.equal(h.filtered([a,{title:'Japan inflation'}]).length,1);h.setFilter('country','');
+assert(h.highlight('<img src=x> US Trump FED MAS').includes('&lt;img'));assert(!h.highlight('<script>').includes('<script>'));
+let html=h.card(a,ctx);assert(html.includes('No verified article summary'));assert(html.includes('General education, not a summary'));assert(html.includes('<details'));assert(html.includes('rel="noopener noreferrer"'));
+html=h.card({...a,summary:'Unverified claims'},ctx);assert(!html.includes('Unverified claims'));
+html=h.card({...a,summary:'<unsafe>',summary_verified:true,summary_source_url:a.url},ctx);assert(html.includes('&lt;unsafe&gt;'));assert(!html.includes('<unsafe>'));
+html=h.card({...a,url:'javascript:alert(1)',title:'<svg onload=alert(1)>',summary:'x',summary_verified:true,summary_source_url:'javascript:alert(1)'},ctx);assert(!html.includes('href="javascript:'));assert(!html.includes('<svg'));
+assert(h.controls([a]).includes('Full category and subtag map'));assert(h.controls([a]).includes('data-hx-reset'));assert(h.controls([a]).includes('Share ticker'));
+const page=fs.readFileSync('site/v4.html','utf8');assert(page.includes('HeadlineExplorer.controls(S.news.items)'));assert(page.includes('HeadlineExplorer.filtered(S.news.items)'));assert(page.includes('HeadlineExplorer.connect(render)'));
+console.log('PASS headline facets, exact-word ambiguity, multi-filter, HTML escaping, missing/verified summaries, source safety, education separation, accessible details and V4 integration');
