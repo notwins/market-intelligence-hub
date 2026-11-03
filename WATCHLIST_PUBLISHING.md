@@ -36,7 +36,7 @@ Command: `python scripts/import_watchlist_call.py --input /tmp/call.json --root 
 ## Testing and limitations
 
 - Python validator/archive tests and existing JS source tests run without third-party data services.
-- `scripts/test_watchlist_browser.cjs` covers 390px/1440px, text at 100% and 200%, light/dark, filtering/search/sort, archive switching, Calls, Back and unavailable data. It requires an authorized local Chromium environment and preview server on port 8766. The build environment blocked Chromium socket creation, so a passing browser render test is not claimed.
+- `scripts/test_watchlist_browser.cjs` covers 390px/1440px, text at 100% and 200%, light/dark, filtering/search/sort, archive switching, Calls, Back and unavailable data. It requires an authorized local Chromium environment and preview server on port 8766. The build environment blocked Chromium socket creation, so that full automated phone/desktop test is not claimed. A subsequent live cloud-browser check verified desktop light/dark rendering, 12 cards, search/filter/sort, archive selection, Calls and Back navigation. Watchlist cards reflowed without horizontal overflow at 200% text.
 - The price snapshot contains real dated source observations; it is not a live feed. The 20:00 SGT edition keeps its original 19:36–19:56 premarket observations even if markets subsequently move.
 - This is a publication path, not proof that recurring delivery is active. Check the actual automation and public timestamps.
 
