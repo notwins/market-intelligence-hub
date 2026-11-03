@@ -2,11 +2,11 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-01T15:17:39+08:00",
+  "publisher_checked_at": "2026-11-03T18:21:21+08:00",
   "last_complete_cutoff": null,
   "source_schedule": {
-    "status": "Paused",
-    "checked_at": "2026-11-01T15:17:39+08:00"
+    "status": "Active",
+    "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
     {
