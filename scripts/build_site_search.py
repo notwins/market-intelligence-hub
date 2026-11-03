@@ -89,6 +89,10 @@ def build():
    add('Tag catalogue',trail,node.get('description',''),'tag-map.html?q='+quote(node['label']),None,node.get('source_url'),'Recommended vocabulary, not an event claim')
    tags(node.get('children',[]),trail)
  tags(taxonomy)
+ # Only the explicit link metadata is indexed; never fetch or copy the PDFs.
+ source_text=(ROOT/'bos-resources.js').read_text()
+ bos=json.loads(re.search(r'const sources=(\[.*?\]);',source_text,re.S)[1])
+ for item in bos:add('External research PDF',item['title'],item['scope'],item['url'],item['date'],item['url'],'Dated link only; indicative previous-business-day prices, not live or automatic')
  counts={k:sum(x['kind']==k for x in rows) for k in sorted({x['kind'] for x in rows})}
  payload={'schema_version':1,'built_at':datetime.now(timezone.utc).isoformat(),'counts':counts,'limits':'Public saved content only. No external article bodies, private chats, linked PDFs, tool outputs or local-browser imports. All saved daily headlines and archived snapshots are included, not just the first 80 displayed. Directory dates can be unknown. Search does not refresh financial data. Some JavaScript-only views are represented by section entries rather than every displayed sentence.','entries':rows}
  (ROOT/'data/site-search.json').write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':')))
