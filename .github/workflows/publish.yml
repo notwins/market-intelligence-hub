@@ -39,6 +39,8 @@ jobs:
         if: github.event_name != 'push'
         continue-on-error: true
         run: python3 scripts/update_news.py
+      - name: Rebuild public site search catalogue
+        run: python3 scripts/build_site_search.py
       - name: Commit new headlines, archives and update status
         run: |
           git config user.name 'github-actions[bot]'

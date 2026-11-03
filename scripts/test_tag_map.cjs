@@ -1,0 +1,12 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const html=fs.readFileSync('site/tag-map.html','utf8'),data=JSON.parse(html.match(/<script type="application\/json" id="taxonomy">([\s\S]*?)<\/script>/)[1]);
+const js=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)][0][1];new vm.Script(js);
+const doc={getElementById:id=>id==='taxonomy'?{textContent:JSON.stringify(data)}:{value:''}};
+const ctx={document:doc,URL,URLSearchParams,encodeURIComponent};vm.createContext(ctx);vm.runInContext(js.split("document.getElementById('legend').innerHTML")[0]+';globalThis.api={filterTree,countNodes,branch};',ctx);
+assert.equal(data.length,14);assert.equal(ctx.api.countNodes(data),515);
+const flat=[];function walk(n){for(const x of n){flat.push(x);walk(x.children||[]);}}walk(data);assert.equal(new Set(flat.map(x=>x.id)).size,515);
+assert(ctx.api.countNodes(ctx.api.filterTree(data,'MAS'))>0);assert.equal(ctx.api.filterTree(data,'not-a-real-branch-zzz').length,0);
+assert(ctx.api.countNodes(ctx.api.filterTree(data,'central bank'))>0);
+assert(ctx.api.branch({label:'<img>',children:[]}).includes('&lt;img&gt;'));
+assert(!html.includes('chatgpt.com/c/'));assert(html.includes('context does not prove causation'));assert(html.includes('aria-live="polite"'));assert(html.includes('max-width:760px'));
+console.log('PASS catalogue: 14 roots, 515 unique nodes, full/multiword/empty search, preserved ancestors, safe labels, sources, keyboard-native details and mobile layout');

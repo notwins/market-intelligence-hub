@@ -1,0 +1,12 @@
+const fs=require('node:fs'),assert=require('node:assert/strict');
+const s=require('../site/site-search.js'),d=JSON.parse(fs.readFileSync('site/data/site-search.json','utf8'));
+assert(d.entries.length>10000);assert(d.counts.Headline>80);assert.equal(d.counts['Tag catalogue'],515);
+assert(s.search(d.entries,'MAS','Tag catalogue').length);assert(s.search(d.entries,'GOOGL','Watchlist research').length);
+assert(s.search(d.entries,'Treasury','').length);assert(s.search(d.entries,'US91282CCA71','Security master').length);
+assert.equal(s.search(d.entries,'completely-unknown-xyz-999','').length,0);
+assert.equal(s.safe('javascript:alert(1)'),null);assert.equal(s.safe('https://user:password@example.com'),null);assert.equal(s.safe('//evil.test'),null);assert(s.safe('tag-map.html?q=MAS'));assert(s.safe('v4.html#history'));
+assert.equal(s.E('<img>'),'&lt;img&gt;');assert.equal(new Set(d.entries.map(x=>x.id)).size,d.entries.length);
+assert(!d.entries.some(x=>x.text.includes('/workspace/')||x.text.includes('C:\\Users\\')||x.text.includes('libfile_')));
+assert(d.limits.includes('not just the first 80'));assert(d.entries.every(e=>e.status));
+const html=fs.readFileSync('site/v4.html','utf8');assert(html.includes('href="tag-map.html"'));assert(html.includes('href="search.html"'));
+console.log('PASS full-site catalogue counts, all-headline coverage, taxonomy/ISIN/watchlist retrieval, query filters, safe links, escaping, unique IDs, data limits and V4 integration');
