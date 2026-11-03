@@ -1,0 +1,125 @@
+{
+  "id": "reuters-hourly-20261103T213055Z",
+  "report_at": "2026-11-03T21:35:32Z",
+  "window_start": "2026-11-04T04:30:55+08:00",
+  "cutoff": "2026-11-04T05:30:55+08:00",
+  "coverage": "partial",
+  "summary": "Targeted Reuters discovery from 4 November 2026, 4:30:55–5:30:55 AM Singapore time. Five newly published Reuters earnings developments were verified: AMD, Super Micro Computer, Block, LATAM Airlines and Amgen. Coverage was partial, not an exhaustive hourly newswire audit.",
+  "limitations": [
+    "Targeted five-article Reuters scan; other new Reuters developments during this hour may have been missed.",
+    "No prior verified complete-scan cutoff exists; earlier coverage gaps, including the previous hour’s missing artifact, remain unresolved.",
+    "Original publication times are verified to the minute, not second; no exact later update times were verified.",
+    "Daily US earnings, central bank and credit research could be compared only partially; full cross-report duplication coverage is not established.",
+    "Exact price-observation times for after-hours market reactions were unavailable. This edition contains no live stock prices."
+  ],
+  "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+  "sources": [
+    {
+      "url": "https://www.reuters.com/business/amd-forecasts-quarterly-revenue-above-estimates-data-center-growth-accelerates-2026-11-03/",
+      "title": "AMD forecasts quarterly revenue above estimates as data-center growth accelerates",
+      "published_at": "2026-11-03T21:18Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/super-micro-forecasts-quarterly-revenue-above-estimates-strong-ai-server-demand-2026-11-03/",
+      "title": "Super Micro forecasts quarterly revenue above estimates on strong AI server demand",
+      "published_at": "2026-11-03T21:07Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/block-raises-full-year-profit-outlook-cash-app-drives-q3-growth-2026-11-03/",
+      "title": "Block raises full-year profit outlook as Cash App drives Q3 growth",
+      "published_at": "2026-11-03T21:09Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/latam-airlines-trims-earnings-outlook-fuel-costs-bite-2026-11-03/",
+      "title": "LATAM Airlines trims earnings outlook as fuel costs bite",
+      "published_at": "2026-11-03T21:18Z"
+    },
+    {
+      "url": "https://www.reuters.com/legal/litigation/amgen-third-quarter-sales-rise-8-led-by-cholesterol-cancer-drugs-2026-11-03/",
+      "title": "Amgen third quarter sales rise 8%, led by cholesterol, cancer drugs",
+      "published_at": "2026-11-03T21:05Z"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261103-AMD-Q3-Q4-GUIDANCE",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "equities-ai",
+      "headline": "AMD beats quarterly estimates and forecasts further data-centre growth",
+      "body": "Fourth-quarter revenue guidance approximately $17 billion plus or minus 3%, versus LSEG consensus $16.23 billion. Third-quarter revenue $13.38 billion, +45%; data-center revenue $8.55 billion, +97%. Adjusted EPS $2.09 versus $1.95 consensus; guided adjusted gross margin approximately 55% versus 55.27% consensus. Reuters reported AMD shares rising more than 6% in extended trading; exact observation time not verified.",
+      "analysis": "AI demand is supporting revenue, but gross-margin guidance slightly below consensus raises a profitability watchpoint.",
+      "watch_next": "Helios rack ramp, Meta deployments, margin and memory supply; full earnings follow-up.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/amd-forecasts-quarterly-revenue-above-estimates-data-center-growth-accelerates-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T21:18Z"
+    },
+    {
+      "story_id": "R-20261103-SMCI-Q1-FY27-GUIDANCE",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "equities-ai",
+      "headline": "Super Micro raises FY2027 sales forecast on AI-server demand",
+      "body": "First-quarter revenue $19.95 billion versus LSEG consensus $16.39 billion; adjusted EPS $1.81 versus $1.23 consensus. Next-quarter revenue outlook $19.5-$21.5 billion versus $17.14 billion consensus. FY2027 forecast raised to $72.0-$82.0 billion from $65.0-$72.0 billion.",
+      "analysis": "AI server demand supports growth, but scaling and export-control compliance remain material execution risks.",
+      "watch_next": "Gross margins, working capital, cash conversion and export-control compliance.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/super-micro-forecasts-quarterly-revenue-above-estimates-strong-ai-server-demand-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T21:07Z"
+    },
+    {
+      "story_id": "R-20261103-BLOCK-Q3-2026-GUIDANCE",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "credit-equities-fintech",
+      "headline": "Block raises gross profit guidance as receivables losses rise",
+      "body": "2026 gross profit outlook raised to $12.63 billion from $12.51 billion. Cash App gross profit +27% year-on-year in Q3; Square gross profit +14%. Losses on transaction, loan and consumer receivables rose 65.6% to $601.7 million in Q3; the specific comparison period for this figure was not stated in the inspected report.",
+      "analysis": "Consumer payment growth is strong, but credit losses matter for risk-adjusted profitability; not evidence of sector-wide delinquencies.",
+      "watch_next": "Receivables losses, repayment trends, 2027 gross profit guidance and source of AI-related revenue.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/block-raises-full-year-profit-outlook-cash-app-drives-q3-growth-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T21:09Z"
+    },
+    {
+      "story_id": "R-20261103-LATAM-FUEL-EBITDA",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "equities-energy-credit",
+      "headline": "LATAM cuts 2026 EBITDA outlook on fuel cost pressure",
+      "body": "Adjusted 2026 EBITDA guidance cut to $3.9-$4.05 billion from $4.1-$4.4 billion. Q3 revenue $4.57 billion and adjusted EBITDA $1.10 billion versus LSEG consensus $1.05 billion. Average fuel prices increased more than 50% versus year earlier, costing approximately $520 million in Q3.",
+      "analysis": "An airline can experience resilient demand yet face margin pressure if fuel costs rise faster than fares.",
+      "watch_next": "Fuel prices, capacity adjustment, operating margin and debt-servicing flexibility.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/latam-airlines-trims-earnings-outlook-fuel-costs-bite-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T21:18Z"
+    },
+    {
+      "story_id": "R-20261103-AMGEN-Q3-2026-OUTLOOK",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "equities-earnings-healthcare",
+      "headline": "Amgen raises 2026 outlook after earnings beat",
+      "body": "Third-quarter revenue $10.4 billion versus $10.1 billion consensus; adjusted EPS $6.45 versus $5.79 consensus. 2026 adjusted EPS range raised to $22.90-$23.70 from $22.30-$23.50. 2026 revenue outlook raised to $38.9-$39.7 billion from $38.2-$39.4 billion.",
+      "analysis": "Stronger drug portfolio sales support guidance; clinical and competitive risks remain.",
+      "watch_next": "Drug pipeline trial data, Repatha competitive pressure, execution of revised guidance.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/legal/litigation/amgen-third-quarter-sales-rise-8-led-by-cholesterol-cancer-drugs-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T21:05Z"
+    }
+  ]
+}
