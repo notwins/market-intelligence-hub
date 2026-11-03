@@ -10,6 +10,23 @@ def strings(x):
  if isinstance(x,list):return ' '.join(strings(v) for v in x)
  if isinstance(x,dict):return ' '.join(strings(v) for k,v in x.items() if k not in ['source_file','sha256','raw','url','source_url','source_sheet','source_path'])
  return ''
+def watchlist_report_target(root,edition,ticker):
+ # Never send an archived search result to whichever edition happens to be latest.
+ from urllib.parse import quote
+ eid=edition.get('id','')
+ if not re.fullmatch(r'watchlist-\d{8}T\d{6}Z(?:-r[1-9][0-9]*)?',eid):return None
+ if not re.fullmatch(r'[A-Z][A-Z0-9.-]{0,11}',ticker or ''):return None
+ try:
+  reports=json.loads((root/'data/watchlist/report-index.json').read_text()).get('reports',[])
+  expected='data/watchlist/reports/'+eid+'.html'
+  matches=[r for r in reports if r.get('edition_id')==eid and r.get('path')==expected and r.get('as_of')==edition.get('as_of')]
+  if len(matches)!=1:return None
+  content=(root/expected).read_bytes()
+  if hashlib.sha256(content).hexdigest()!=matches[0].get('sha256'):return None
+  if ('id="'+ticker+'"').encode() not in content:return None
+  return expected+'#'+quote(ticker,safe='')
+ except (OSError,ValueError,TypeError):return None
+
 def build():
  rows=[];seen=set()
  def add(kind,title,text,href,date=None,source=None,status='Dated saved content'):
@@ -36,7 +53,9 @@ def build():
 
  for file in sorted((ROOT/'data/watchlist/archive').glob('*.json')):
   d=json.loads(file.read_text())
-  for x in d.get('rows',[]):add('Watchlist research',x.get('ticker','')+' · '+x.get('name',''),strings([x.get('research'),x.get('gaps')]),'v4.html#watchlist',d.get('as_of'),(x.get('sources') or [{}])[0].get('url'),'Watch only; dated research, not an executed trade')
+  for x in d.get('rows',[]):
+   target=watchlist_report_target(ROOT,d,x.get('ticker',''))
+   add('Watchlist research',x.get('ticker','')+' · '+x.get('name',''),strings([x.get('research'),x.get('gaps')]),target,d.get('as_of'),(x.get('sources') or [{}])[0].get('url'),'Watch only; dated research, not an executed trade'+('' if target else '; matching dated report unavailable — no redirect to latest'))
  for x in read('data/watchlist/calls.json').get('calls',[]):add('Public diary',x.get('title',x.get('ticker','Public entry')),strings(x),'v4.html#calls',x.get('date'),None,'Public saved entry')
  d=read('data/securities.json')
  for x in d.get('stocks',[]):add('Stock directory',x['ticker']+' · '+x['name'],strings([x.get('sector'),x.get('exchange')]),x['url'],None,x['url'],'User-supplied reference link; not a current quote')
