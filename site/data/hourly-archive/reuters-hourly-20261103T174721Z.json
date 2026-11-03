@@ -1,0 +1,85 @@
+{
+  "id": "reuters-hourly-20261103T174721Z",
+  "report_at": "2026-11-04T01:50:51+08:00",
+  "cutoff": "2026-11-03T17:47:21Z",
+  "window_start": "2026-11-04T00:47:21+08:00",
+  "coverage": "partial",
+  "summary": "Targeted Reuters hourly scan through 4 Nov 2026 01:47:21 SGT: two new Reuters articles in the primary 60-minute reporting window (Polymarket futures-broker approval and Congo mining inquiry) plus one older eligible Shell LNG transaction catch-up. No instrument-specific market price reactions verified; not an exhaustive Reuters-wire scan.",
+  "limitations": [
+    "Reuters site search and accessible source pages are not an exhaustive Reuters wire scan",
+    "Some earlier completed briefing extracts are truncated",
+    "Completed-scan cutoff is null in accessible Library register; uncovered earlier intervals remain",
+    "Exact latest substantive Reuters update times not verified and therefore stored as null",
+    "Market prices are not asserted live and no unverified price reactions are inferred",
+    "Reuters publication times were verified but exact underlying event and substantive update timestamps remain unknown; no story is labelled breaking.",
+    "Congo investigative allegations are not court findings and production interruptions are not established."
+  ],
+  "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+  "sources": [
+    {
+      "url": "https://www.reuters.com/business/finance/polymarket-unit-gets-us-industry-organizations-approval-be-futures-broker-2026-11-03/",
+      "title": "Polymarket unit gets US industry organization's approval to be futures broker",
+      "published_at": "2026-11-03T17:19:00Z"
+    },
+    {
+      "url": "https://www.reuters.com/world/africa/congo-opens-mining-fraud-inquiry-after-copper-cobalt-seizures-statement-shows-2026-11-03/",
+      "title": "Congo opens mining fraud inquiry after copper and cobalt seizures, statement shows",
+      "published_at": "2026-11-03T16:54:00Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/shell-agrees-sell-north-west-shelf-interest-adnocs-xrg-145-billion-2026-11-03/",
+      "title": "Shell to sell North West Shelf stake to XRG for $1.45 billion",
+      "published_at": "2026-11-03T06:12:00Z"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261103-POLYMARKET-NFA-FCM",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "Finance / derivatives",
+      "headline": "Polymarket unit approved by NFA to be futures broker",
+      "body": "The US National Futures Association approved Polymarket unit PM Derivatives LLC as a futures commission merchant. US CFTC authorisation remains required before it can act as a broker. The firm intends to run fully collateralised positions.",
+      "analysis": "Regulatory progress, but licensing and protection of customer funds remain unresolved.",
+      "watch_next": "Watch CFTC authorisation, actual operational start and customer-fund safeguards.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/finance/polymarket-unit-gets-us-industry-organizations-approval-be-futures-broker-2026-11-03/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261103-CONGO-MINING-FRAUD",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "Critical minerals / enforcement",
+      "headline": "Congo opens mining fraud probe following copper and cobalt seizures",
+      "body": "DR Congo ordered investigations into suspected mining fraud and smuggling following seizure of more than 500 trucks and thousands of metric tons of copper and cobalt. Authorities separately reported over 500 pieces of equipment seized at an ERG-owned site and more than 60 foreign nationals detained. Allegations remain under investigation.",
+      "analysis": "Critical minerals supply-chain compliance risk; no global shortage confirmed.",
+      "watch_next": "Watch formal findings, production disruptions and metals-supply effects.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/africa/congo-opens-mining-fraud-inquiry-after-copper-cobalt-seizures-statement-shows-2026-11-03/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261103-SHELL-XRG-NWS",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "Energy / LNG transactions",
+      "headline": "Shell agrees to sell North West Shelf LNG stake to XRG",
+      "body": "Shell agreed to sell its 16.67% non-operated North West Shelf LNG interest to ADNOC subsidiary XRG for US$1.45 billion base consideration, with possible milestone-linked payments. The buyer assumes decommissioning obligations; closing is expected in 2027.",
+      "analysis": "LNG asset rotation; project liabilities and contingent terms matter.",
+      "watch_next": "Watch transaction approvals, contingent payments, decommissioning liabilities and actual LNG flows.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/shell-agrees-sell-north-west-shelf-interest-adnocs-xrg-145-billion-2026-11-03/"
+      ],
+      "development_at": null
+    }
+  ]
+}
