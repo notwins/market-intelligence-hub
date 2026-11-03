@@ -1,0 +1,13 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const html=fs.readFileSync('site/v4.html','utf8'),a=html.indexOf('function headlinePage('),b=html.indexOf('function headlinesView()',a),ctx={};vm.createContext(ctx);vm.runInContext(html.slice(a,b),ctx);
+const page=(...x)=>JSON.parse(JSON.stringify(ctx.headlinePage(...x)));
+assert.deepEqual(page(181,0),{page:0,pages:3,start:0,end:80,total:181});
+assert.deepEqual(page(181,1),{page:1,pages:3,start:80,end:160,total:181});
+assert.deepEqual(page(181,2),{page:2,pages:3,start:160,end:181,total:181});
+assert.equal(page(3,9).page,0);assert.equal(page(0,8).pages,0);assert.equal(page(80,-2).page,0);assert.equal(page(80,Infinity).page,0);
+const data=Array.from({length:181},(_,i)=>i);assert.deepEqual([0,1,2].flatMap(n=>{const p=page(data.length,n);return data.slice(p.start,p.end)}),data);
+const filter=data.filter(x=>x%2===0);assert.deepEqual([0,1].flatMap(n=>{const p=page(filter.length,n);return filter.slice(p.start,p.end)}),filter);
+assert(html.includes("S.newsFilter=nf.dataset.newsFilter;S.newsPage=0;render();"));assert(html.includes("HeadlineExplorer.connect(()=>{S.newsPage=0;render();});"));
+assert(html.includes('rows.slice(page.start,page.end)'));assert(html.includes("$('#headline-page-status')?.focus()"));assert(ctx.headlinePager(page(0,0)).includes('disabled'));assert(ctx.headlinePager(page(181,1)).includes('aria-controls="headline-results"'));
+for(const m of html.matchAll(/<script(?: [^>]*)?>([\s\S]*?)<\/script>/g))if(m[1].trim())new vm.Script(m[1]);
+console.log('PASS all rows reachable without duplicates, filtered pagination, page-size boundaries, empty/shrinking snapshots, filter reset, accessible focus/status and script parsing');

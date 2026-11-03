@@ -12,5 +12,5 @@ html=h.card({...a,summary:'Unverified claims'},ctx);assert(!html.includes('Unver
 html=h.card({...a,summary:'<unsafe>',summary_verified:true,summary_source_url:a.url},ctx);assert(html.includes('&lt;unsafe&gt;'));assert(!html.includes('<unsafe>'));
 html=h.card({...a,url:'javascript:alert(1)',title:'<svg onload=alert(1)>',summary:'x',summary_verified:true,summary_source_url:'javascript:alert(1)'},ctx);assert(!html.includes('href="javascript:'));assert(!html.includes('<svg'));
 assert(h.controls([a]).includes('Full category and subtag map'));assert(h.controls([a]).includes('data-hx-reset'));assert(h.controls([a]).includes('Share ticker'));
-const page=fs.readFileSync('site/v4.html','utf8');assert(page.includes('HeadlineExplorer.controls(S.news.items)'));assert(page.includes('HeadlineExplorer.filtered(S.news.items)'));assert(page.includes('HeadlineExplorer.connect(render)'));
+const page=fs.readFileSync('site/v4.html','utf8');assert(page.includes('HeadlineExplorer.controls(S.news.items)'));assert(page.includes('HeadlineExplorer.filtered(S.news.items)'));assert(page.includes('HeadlineExplorer.connect(()=>{S.newsPage=0;render();})'));
 console.log('PASS headline facets, exact-word ambiguity, multi-filter, HTML escaping, missing/verified summaries, source safety, education separation, accessible details and V4 integration');
