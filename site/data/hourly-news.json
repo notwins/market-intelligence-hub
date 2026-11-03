@@ -2,13 +2,62 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-03T17:06:04.214Z",
+  "publisher_checked_at": "2026-11-03T17:19:20.222Z",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-hourly-20261103T170507Z",
+      "report_at": "2026-11-04T01:05:07+08:00",
+      "cutoff": "2026-11-03T17:05:07Z",
+      "window_start": "2026-11-03T16:05:07Z",
+      "coverage": "partial",
+      "summary": "Partial Reuters discovery for 4 November 2026, 00:05:07–01:05:07 SGT. No material new story was verified within the primary hour. One older, not-yet-published Reuters development is included as catch-up, not breaking news.",
+      "limitations": [
+        "Search results were not a comprehensive Reuters wire audit.",
+        "No verified last complete scan cutoff; unreconciled earlier intervals remain.",
+        "Accessible past report and public feed do not establish complete duplicate checking across other briefings.",
+        "Original update timestamps unavailable; Reuters display 'Updated ago' is not a verified exact time.",
+        "One catch-up development predates the primary window and may have appeared in other inaccessible reports.",
+        "No full automation output comparison completed this run.",
+        "The Reuters market figures cited are historical observations; their intraday observation times are not verified and they are not prices at this report cutoff."
+      ],
+      "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/world/middle-east/trump-says-us-will-stop-paying-israel-after-year-end-2026-11-03/",
+          "title": "As Americans vote, Trump says US will stop $4 billion in aid to Israel",
+          "published_at": "2026-11-03T13:28:41Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/china/global-markets-wrapup-1-2026-11-03/",
+          "title": "Stocks erase losses, oil tumbles after Trump says US will end $4 billion funding to Israel",
+          "published_at": "2026-11-03T02:24:36Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261103-US-ISRAEL-AID",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "US fiscal policy / Middle East / energy and rates",
+          "headline": "Trump says US will end annual funding to Israel after 2026; implementation unclear",
+          "body": "Reuters reported on 3 November that President Trump said he and Prime Minister Benjamin Netanyahu agreed to end $4 billion in annual US funding after 2026, while weapons sales could continue. Reuters noted that an existing $3.8 billion annual military-aid arrangement runs through September 2028 and that appropriations require congressional action. Separately, Reuters described an earlier market session with Brent down 2.9% at $101.75 per barrel and the US 10-year Treasury yield up 2.5 basis points to 4.9187%. These are historical market observations, not quotes at this hourly cutoff; exact intraday observation times were not independently verified.",
+          "analysis": "Interpretation: Uncertainty around implementation could affect geopolitical risk perceptions, oil prices and inflation-sensitive bond yields. The announcement does not establish that the aid has already stopped or supply a fresh FX conversion trigger.",
+          "watch_next": "Watch White House and Israeli clarification, US congressional appropriations and verified market reaction.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/middle-east/trump-says-us-will-stop-paying-israel-after-year-end-2026-11-03/",
+            "https://www.reuters.com/world/china/global-markets-wrapup-1-2026-11-03/"
+          ],
+          "development_at": null
+        }
+      ]
+    },
     {
       "id": "reuters-hourly-20261103T164207Z",
       "report_at": "2026-11-04T00:45:16+08:00",
