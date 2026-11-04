@@ -25,3 +25,7 @@ const mobileCtx={window:{innerWidth:390,BOND_WATCHLIST_DATA:D,addEventListener()
 vm.createContext(mobileCtx);vm.runInContext(fs.readFileSync('site/bond-watchlist.js','utf8'),mobileCtx);const mobileHtml=mobileCtx.window.BondWatchlist.view('ust');assert(mobileHtml.includes('viewBox="0 0 326 390"'));assert(mobileHtml.includes('--bw-chart-scale:2'));assert(mobileHtml.includes('Years to maturity</text>'));assert(!mobileHtml.includes('NaN'));
 const css=fs.readFileSync('site/bond-watchlist.css','utf8');assert(css.includes('var(--text-scale,1)'));assert(css.includes('var(--bw-chart-scale,1)'));assert(!css.includes('.ust-heat-'));
 console.log('PASS 30 pinned bonds, 29 raw UST source values and price conversions, corrected TC27, Temasek terms/no invented quotes, separate corporate/UST curves, master filters and stable sorting, safe navigation, source immutability');
+
+for(const r of D.rows.filter(r=>r.issuerType==='ust'))assert.equal(r.modifiedDuration,Number(r.raw.Mduration));
+assert.equal(B._test.yieldBand(null),'missing');assert.equal(B._test.yieldBand(-.01),'negative');assert.equal(B._test.yieldBand(B._test.yieldRange.min),'0');assert.equal(B._test.yieldBand(B._test.yieldRange.max),'4');
+const heatBefore=B._test.yieldBand(D.rows[0].reportedYield);s.query=D.rows[0].isin;assert(B._test.table(s).includes('Modified<br>duration'));assert(B._test.table(s).includes('5.84'));assert.equal(B._test.yieldBand(D.rows[0].reportedYield),heatBefore);for(const id of B._test.verifiedBSM)assert(B._test.bondLink(D.rows.find(r=>r.isin===id)).includes('/bond-factsheet/'+id));

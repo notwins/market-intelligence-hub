@@ -446,7 +446,31 @@
       ],
       "checked_at": "2026-11-04T11:00:55Z",
       "canonical_url": "https://www.reuters.com/business/ai-related-debt-binge-may-pressure-european-bond-markets-2026-11-03/",
-      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged.",
+      "takeaways": [
+        {
+          "label": "Funding shift",
+          "text": "US technology groups are tapping Europe for AI infrastructure funding."
+        },
+        {
+          "label": "Pipeline estimate",
+          "text": "Fidelity put prospective issuance at €40bn–€60bn; this is not completed borrowing."
+        },
+        {
+          "label": "Market signal",
+          "text": "Reuters reported euro investment-grade asset-swap spreads widened 11bp in October."
+        },
+        {
+          "label": "Why it matters",
+          "text": "Competing supply may require pricing concessions, especially on longer bonds."
+        },
+        {
+          "label": "Keep perspective",
+          "text": "Demand had absorbed supply so far. This is borrowing-pressure risk, not a market-wide inability to borrow."
+        }
+      ],
+      "presentation_version": "Brief bullets v1 · 4 Nov 2026",
+      "takeaways_checked_at": "2026-11-04T19:26:08Z"
     },
     {
       "id": "02c7003c11e9f1aead14",

@@ -54,6 +54,10 @@ jobs:
           node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
+          node scripts/test_dashboard_readability.cjs
+          node scripts/test_reader_independence.cjs
+          node scripts/test_colour_reference.cjs
+          node scripts/test_bond_watchlist.cjs
       - name: Refresh Reuters headline metadata
         id: update
         if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * *'
@@ -88,6 +92,10 @@ jobs:
           node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
+          node scripts/test_dashboard_readability.cjs
+          node scripts/test_reader_independence.cjs
+          node scripts/test_colour_reference.cjs
+          node scripts/test_bond_watchlist.cjs
           python3 scripts/build_site_search.py
           node scripts/test_site_search.cjs
           node scripts/test_boolean_search.cjs

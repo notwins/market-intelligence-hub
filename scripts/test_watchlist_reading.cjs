@@ -6,7 +6,7 @@ assert.equal((html.match(/class="watchlist-return"/g)||[]).length,72);
 for(const x of JSON.parse(fs.readFileSync('site/data/watchlist/identities.json')).identities)assert(html.includes('ISIN '+x.isin));
 assert(html.includes('American depositary receipt'));assert(html.includes('Class A'));assert(html.includes('Class B'));
 assert(!html.includes('Premarket not included'));assert(!html.includes('Not live, not premarket and not a return endpoint'));assert(!html.includes('no new verified item is not proof'));
-assert.equal((html.match(/Shared watchlist context:/g)||[]).length,1);assert(!html.includes('Active-session snapshot:'));
+const current=JSON.parse(fs.readFileSync('site/data/watchlist/latest.json'));const shared=new Set(current.rows.flatMap(r=>r.research||[]).filter(x=>/^Shared watchlist context:/i.test(x.headline||'')).map(x=>JSON.stringify(x)));assert.equal((html.match(/Shared watchlist context:/g)||[]).length,shared.size);assert(!html.includes('Active-session snapshot:'));
 const latest=JSON.parse(fs.readFileSync('site/data/watchlist/latest.json'));
 for(const t of ['MSFT','AVGO','MU']){const c=w.card(latest.rows.find(r=>r.ticker===t));assert(!c.includes('Dated research archive'));assert(!c.includes('Saved research editions'));}
 const c=w.card(latest.rows.find(r=>r.ticker==='AMD'));assert(c.includes('source-number discrepancy'));assert(c.includes('$1.097 billion'));assert(c.includes('$1.07 billion'));assert(c.includes('discrepancy is unresolved'));assert(c.includes('<li>These are management forecasts, not realized results; supply, execution and customer concentration remain relevant.</li>')); // qualifying sentence remains intact

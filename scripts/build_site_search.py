@@ -41,8 +41,8 @@ LOCATIONS={
  'Earnings card':('US earnings','earnings'),
  'Watchlist research':('Watchlist · dated full report','watchlist'),
  'Public diary':('Calls and full reports','calls'),
- 'Stock directory':('Research directory · equities','directory'),
- 'Bond directory':('Research directory · bonds','directory'),
+ 'Stock directory':('Watchlist – equities','watchlist'),
+ 'Bond directory':('Watchlist – bonds','watchlist'),
  'Security master':('Security master','master'),
  'UST reference':('UST selection desk','ust'),
  'Historical series':('Yields and FX history','history'),
@@ -77,7 +77,7 @@ def build():
    location={'label':('V4 → '+label if section else label),'href':href if exact else ('v4.html#'+section if section else href),'exact':exact}
   clean_tags=sorted(set(str(t).strip() for t in (tags or []) if t is not None and str(t).strip()))
   rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status,tags=clean_tags,location=location,source_access='restricted' if restricted else 'public',reading=reading or []))
- sections={'overview':'Daily briefing','watchlist':'12-name watchlist','calls':'Calls and full reports','headlines':'Reuters coverage','hourly':'Hourly news','earnings':'US earnings','credit':'Bonds and credit','policy':'Central Banks and US Administration','reports':'Scheduled reports and archive','directory':'Research directory','research':'Research library','master':'Security master','history':'Yields FX history historical event charts','ust':'UST selection desk','feeds':'Data and uploads','tools':'Tools and simulators'}
+ sections={'overview':'Daily briefing','watchlist':'12-name watchlist','calls':'Calls and full reports','headlines':'Reuters coverage','hourly':'Hourly news','earnings':'US earnings','credit':'Bonds and credit','policy':'Central Banks and US Administration','reports':'Scheduled reports and archive','research':'White Papers & Research Papers','master':'Security master','history':'Yields FX history historical event charts','ust':'UST selection desk','feeds':'Data and uploads','tools':'Tools and simulators'}
  for key,title in sections.items():add('Section',title,title,'v4.html#'+key,status='Navigation')
  add('Section','Tag and event tree map','Searchable colored country sector policy ticker and historical event groupings','tag-map.html',status='Recommended taxonomy')
  for file in [ROOT/'data/news.json',*sorted((ROOT/'data/archive').glob('*.json'))]:
@@ -93,6 +93,9 @@ def build():
  legacy=json.loads((ROOT/'v2-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
  for x in legacy.get('reports',[]):add('Research edition',x.get('title',x.get('id','Research edition')),strings(x),'v4.html#reports',x.get('date'),None,'Original imported edition; not refreshed by search')
  for x in legacy.get('research',[]):add('Research library',x.get('title',x.get('name','Research reference')),strings(x),'v4.html#research',x.get('date'),None,'Saved research reference',reading=reading_sections(x,'Research library'))
+ for c in read('data/earnings-history.json').get('companies',[]):
+  add('Earnings card',c['ticker']+' – '+c['name'],strings(c),'v4.html#earnings',c['history'][0].get('report_date'),None,'Selected issuer-reported actuals; partial history',tags=[c['ticker']])
+ add('Section','Colour and tag reference','Search actual headline tags, companies, atlas colours and palette differences','colour-reference.html',status='Current site colour reference')
  for x in legacy.get('earnings',[]):add('Earnings card',x.get('company',x.get('ticker',x.get('title','Earnings'))),strings(x),'v4.html#earnings',x.get('date'),None,'Saved dated earnings card')
 
  for file in sorted((ROOT/'data/watchlist/archive').glob('*.json')):

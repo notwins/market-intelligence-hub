@@ -20,7 +20,7 @@ class TestReadingEmphasis(unittest.TestCase):
   self.assertEqual(p.conclusions,45);self.assertEqual(len(p.keywords),73);self.assertEqual(set(p.keywords),{'strong'})
   self.assertTrue(any('mas.gov.sg' in (u or '') for u in p.links));self.assertTrue(any('am.jpmorgan.com' in (u or '') for u in p.links))
  def test_saved_context_not_invented(self):
-  text=(ROOT/'site/headline-explorer.js').read_text();self.assertIn('Key takeaway · saved context',text);self.assertIn("<strong>'+esc(context)+'</strong>",text)
+  text=(ROOT/'site/headline-explorer.js').read_text();self.assertIn("label:'Why it matters',text:context",text);self.assertIn('verifiedContext(item,ctx)',text);self.assertIn('esc(x.text)',text)
   text=(ROOT/'site/v4.html').read_text();self.assertIn('Key takeaway · saved analysis',text);self.assertIn('<strong>${esc(x.implication)}</strong>',text)
  def test_print_emphasis_and_no_new_external_assets(self):
   css=(ROOT/'site/market-understanding/market-understanding.css').read_text();self.assertIn('.mu-keyword',css);self.assertIn('print-color-adjust:exact',css);self.assertNotIn('@import',css)

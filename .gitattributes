@@ -1,2 +1,5 @@
 # Public dated artifacts retain identical bytes across Windows/Linux checkouts.
 site/data/watchlist/** -text
+
+# Hashed Treasury shards must retain their exact committed bytes on Windows.
+site/data/ust-curves-history/** -text

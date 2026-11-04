@@ -83,6 +83,8 @@ def make():
  return out
 
 def strip_additions(text):
+ text=re.sub(r'<!-- published-writeups:start -->.*?<!-- published-writeups:end -->','',text,flags=re.S)
+ text=re.sub(r'<!-- published-writeups:style --><link[^>]+>','',text)
  text=re.sub(re.escape(START)+r'.*?'+re.escape(END),'',text,flags=re.S)
  text=re.sub(re.escape(ASSET)+r'<link[^>]+>','',text)
  text=re.sub(re.escape(JUMP)+r'<div.*?</div>','',text,flags=re.S)
@@ -92,7 +94,7 @@ def main():
  manifest_path=ROOT/'scripts/report_additions_manifest.json'
  manifest=json.loads(manifest_path.read_text()) if manifest_path.exists() else {'baseline_commit':'44af7a59a721021b2ecb56048fb06a3c98e1ff37','reports':{}}
  for path, content in make().items():
-  p=SITE/path; original=strip_additions(p.read_text())
+  p=SITE/path; current=p.read_text(); original=strip_additions(current)
   digest=hashlib.sha256(original.encode()).hexdigest()
   if path in manifest['reports'] and manifest['reports'][path]!=digest: raise ValueError('Original report changed; reconcile deliberately: '+path)
   manifest['reports'][path]=digest
@@ -102,6 +104,10 @@ def main():
   output=re.sub(r'(<main\b[^>]*>)',lambda m:m[0]+jump,output,count=1)
   output=output.replace('</main>',content+'</main>',1)
   assert strip_additions(output)==original
+  writeups=re.search(r'<!-- published-writeups:start -->.*?<!-- published-writeups:end -->',current,re.S)
+  style=re.search(r'<!-- published-writeups:style --><link[^>]+>',current)
+  if writeups:output=output.replace('</header>','</header>'+writeups.group(),1)
+  if style:output=output.replace('</head>',style.group()+'</head>',1)
   p.write_text(output)
  manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
  print('Built 5 additive report companions; original report bytes retained.')

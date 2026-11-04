@@ -1,0 +1,944 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-11-04T19:26:08Z",
+  "coverage": "Selected issuer releases and their historical comparatives for all 12 current watchlist shares. Not a complete history; no live feed.",
+  "rights": "Original short factual summaries and selected financial facts. Publisher articles, research PDFs and screenshots are linked externally, not reproduced.",
+  "consensus": "No new consensus series has been collected. Historical tables contain reported actuals, not estimates or surprises. Existing dated Reuters comparisons remain below.",
+  "sources": {
+    "aapl4": {
+      "title": "Apple FY2026 Q4 results",
+      "url": "https://www.apple.com/newsroom/2026/11/apple-reports-fourth-quarter-results/",
+      "published_at": "2026-11-02",
+      "kind": "issuer"
+    },
+    "aapl3": {
+      "title": "Apple FY2026 Q3 results",
+      "url": "https://www.apple.com/newsroom/2026/07/apple-reports-third-quarter-results/",
+      "published_at": "2026-07-30",
+      "kind": "issuer"
+    },
+    "msft": {
+      "title": "Microsoft FY2027 Q1 release and cash-flow statements",
+      "url": "https://www.microsoft.com/en-us/investor/earnings/fy-2027-q1/press-release-webcast",
+      "published_at": "2026-10-28",
+      "kind": "issuer"
+    },
+    "nvda": {
+      "title": "NVIDIA FY2027 Q2 release",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027",
+      "published_at": "2026-08-26",
+      "kind": "issuer"
+    },
+    "googl": {
+      "title": "Alphabet Q3 2026 release, pp. 1 and 8",
+      "url": "https://abc.xyz/files/doc_financials/2026/q3/2026q3-alphabet-earnings-release.pdf",
+      "published_at": "2026-10-28",
+      "kind": "issuer"
+    },
+    "amzn": {
+      "title": "Amazon Q3 2026 release and cash-flow statements",
+      "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/default.aspx",
+      "published_at": "2026-10-29",
+      "kind": "issuer"
+    },
+    "meta": {
+      "title": "Meta Q3 2026 release and FCF reconciliation",
+      "url": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Third-Quarter-2026-Results/default.aspx",
+      "published_at": "2026-10-21",
+      "kind": "issuer"
+    },
+    "brkb": {
+      "title": "Berkshire Q2 2026 release",
+      "url": "https://www.berkshirehathaway.com/news/aug0826.pdf",
+      "published_at": "2026-08-08",
+      "kind": "issuer"
+    },
+    "amd": {
+      "title": "AMD Q3 2026 release and FCF reconciliation",
+      "url": "https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results",
+      "published_at": "2026-11-03",
+      "kind": "issuer"
+    },
+    "avgo": {
+      "title": "Broadcom FY2026 Q3 release",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "published_at": "2026-09-02",
+      "kind": "issuer"
+    },
+    "mu": {
+      "title": "Micron FY2026 Q4 release",
+      "url": "https://investors.micron.com/news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/",
+      "published_at": "2026-09-30",
+      "kind": "issuer"
+    },
+    "tsla": {
+      "title": "Tesla Q3 2026 update, Financial Summary",
+      "url": "https://assets-ir.tesla.com/tesla-contents/IR/TSLA-Q3-2026-Update.pdf",
+      "published_at": "2026-10-21",
+      "kind": "issuer"
+    },
+    "tsm": {
+      "title": "TSMC Q3 2026 release",
+      "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/526b65af7305df2dde6b9ece6812b1fdf1e49f9b/3Q26%20EarningsRelease.pdf",
+      "published_at": "2026-10-15",
+      "kind": "issuer"
+    },
+    "tsmh": {
+      "title": "TSMC Q3 2026 management report, p. 1",
+      "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/f83780000ddc0c3b48e57a87eab6814c4ab35058/3Q26%20ManagementReport.pdf",
+      "published_at": "2026-10-15",
+      "kind": "issuer"
+    }
+  },
+  "companies": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "history": [
+        {
+          "period": "FY2026 Q4",
+          "period_end": "2026-09-26",
+          "revenue_usd_bn": 114.5,
+          "eps": 2.1,
+          "source": "aapl4",
+          "report_date": "2026-11-02",
+          "evidence_basis": "Original release",
+          "precision_note": "Revenue rounded to US$0.1bn in the release narrative."
+        },
+        {
+          "period": "FY2026 Q3",
+          "period_end": "2026-06-27",
+          "revenue_usd_bn": 109.4,
+          "eps": 2.02,
+          "source": "aapl3",
+          "report_date": "2026-07-30",
+          "evidence_basis": "Original release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$114.5bn, up 12% year on year; rounded issuer figure.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP diluted EPS was US$2.10, up 14%.",
+          "kind": "fact"
+        },
+        {
+          "label": "Margin",
+          "text": "Reported gross margin was 47.9%.",
+          "kind": "fact"
+        },
+        {
+          "label": "Refund effect",
+          "text": "Tariff refunds added about 1 percentage point to margin and US$0.05 to EPS.",
+          "kind": "caution"
+        },
+        {
+          "label": "Cash generation",
+          "text": "Quarterly operating cash flow was US$28bn; this is not free cash flow.",
+          "kind": "fact"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share",
+      "additional_reports": [
+        {
+          "period": "FY2026 Q3",
+          "source": "aapl3",
+          "takeaways": [
+            {
+              "label": "Revenue",
+              "text": "US$109.4bn, up 16% year on year.",
+              "kind": "fact"
+            },
+            {
+              "label": "Earnings",
+              "text": "GAAP diluted EPS of US$2.02 increased 29%.",
+              "kind": "fact"
+            },
+            {
+              "label": "Margin",
+              "text": "Reported gross margin reached 50.1%.",
+              "kind": "fact"
+            },
+            {
+              "label": "Refund effect",
+              "text": "Tariff refunds contributed about 2 percentage points of margin and US$0.11 EPS.",
+              "kind": "caution"
+            },
+            {
+              "label": "Read the basis",
+              "text": "The refund benefits are included in reported results; they are not an adjusted earnings forecast.",
+              "kind": "caution"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "history": [
+        {
+          "period": "FY2027 Q1",
+          "period_end": "2026-09-30",
+          "revenue_usd_bn": 92.279,
+          "eps": 4.92,
+          "source": "msft",
+          "report_date": "2026-10-28",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "FY2026 Q1",
+          "period_end": "2025-09-30",
+          "revenue_usd_bn": 77.673,
+          "eps": 3.72,
+          "source": "msft",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$92.279bn, up 19% year on year.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP EPS US$4.92; non-GAAP US$4.89 excludes the OpenAI investment impact.",
+          "kind": "caution"
+        },
+        {
+          "label": "Cloud",
+          "text": "Microsoft Cloud revenue grew 30% to US$63.9bn; Azure grew 48%.",
+          "kind": "fact"
+        },
+        {
+          "label": "Cash investment",
+          "text": "Operating cash flow US$58bn less property/equipment additions US$39.367bn leaves US$18.633bn.",
+          "kind": "fact"
+        },
+        {
+          "label": "Comparability",
+          "text": "Prior segment amounts were recast for the FY2027 reporting structure.",
+          "kind": "caution"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "history": [
+        {
+          "period": "FY2027 Q2",
+          "period_end": "2026-07-26",
+          "revenue_usd_bn": 96.221,
+          "eps": 2.46,
+          "source": "nvda",
+          "report_date": "2026-08-26",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "FY2027 Q1",
+          "period_end": null,
+          "revenue_usd_bn": 81.615,
+          "eps": 2.39,
+          "source": "nvda",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        },
+        {
+          "period": "FY2026 Q2",
+          "period_end": null,
+          "revenue_usd_bn": 46.743,
+          "eps": 1.08,
+          "source": "nvda",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$96.221bn, compared with US$81.615bn in the preceding quarter.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP EPS US$2.46; non-GAAP EPS US$2.22. The measures use different adjustments.",
+          "kind": "caution"
+        },
+        {
+          "label": "Data center",
+          "text": "Revenue of about US$89bn increased 117% year on year.",
+          "kind": "fact"
+        },
+        {
+          "label": "Margin",
+          "text": "GAAP and non-GAAP gross margins were both 75.0%.",
+          "kind": "fact"
+        },
+        {
+          "label": "Outlook",
+          "text": "Q3 revenue guidance was US$108bn ±2%, excluding China data-center compute revenue. Forecast, not actual.",
+          "kind": "outlook"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "history": [
+        {
+          "period": "Q3 2026",
+          "period_end": "2026-09-30",
+          "revenue_usd_bn": 127.577,
+          "eps": 2.12,
+          "source": "googl",
+          "report_date": "2026-10-28",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "Q3 2025",
+          "period_end": "2025-09-30",
+          "revenue_usd_bn": 102.346,
+          "eps": 2.87,
+          "source": "googl",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$127.577bn, up 25% year on year.",
+          "kind": "fact"
+        },
+        {
+          "label": "Cloud",
+          "text": "Google Cloud revenue doubled to US$30.709bn (+103%).",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP diluted EPS fell to US$2.12 from US$2.87.",
+          "kind": "caution"
+        },
+        {
+          "label": "Investment effect",
+          "text": "Equity-security losses reduced EPS by US$0.55; reported earnings include that volatility.",
+          "kind": "caution"
+        },
+        {
+          "label": "Cash investment",
+          "text": "US$42.290bn operating cash flow less US$51.355bn capex produced −US$9.065bn FCF.",
+          "kind": "caution"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "history": [
+        {
+          "period": "Q3 2026",
+          "period_end": "2026-09-30",
+          "revenue_usd_bn": 201.944,
+          "eps": 1.89,
+          "source": "amzn",
+          "report_date": "2026-10-29",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "Q3 2025",
+          "period_end": "2025-09-30",
+          "revenue_usd_bn": 180.169,
+          "eps": 1.95,
+          "source": "amzn",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$201.944bn versus US$180.169bn a year earlier.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP diluted EPS was US$1.89, versus US$1.95.",
+          "kind": "caution"
+        },
+        {
+          "label": "AWS",
+          "text": "Cloud sales were about US$46bn, up 39.3%.",
+          "kind": "fact"
+        },
+        {
+          "label": "Calendar effect",
+          "text": "Prime Day moved from Q3 to Q2; the issuer says this reduced Q3 growth by about 4 percentage points.",
+          "kind": "caution"
+        },
+        {
+          "label": "Cash-flow period",
+          "text": "The headline −US$42.4bn FCF covers twelve months. The cash-flow comparison derives the quarter separately.",
+          "kind": "caution"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "history": [
+        {
+          "period": "Q3 2026",
+          "period_end": "2026-09-30",
+          "revenue_usd_bn": 64.601,
+          "eps": 3.83,
+          "source": "meta",
+          "report_date": "2026-10-21",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "Q3 2025",
+          "period_end": "2025-09-30",
+          "revenue_usd_bn": 51.242,
+          "eps": 1.05,
+          "source": "meta",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$64.601bn, up 26% year on year.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP diluted EPS was US$3.83.",
+          "kind": "fact"
+        },
+        {
+          "label": "Litigation charge",
+          "text": "A US$9.89bn charge reduced EPS by US$3.57; the issuer’s excluding-charge EPS is US$7.40.",
+          "kind": "caution"
+        },
+        {
+          "label": "Cash-flow basis",
+          "text": "Company FCF was −US$2.120bn and deducts finance-lease principal as well as capex.",
+          "kind": "caution"
+        },
+        {
+          "label": "Outlook",
+          "text": "Q4 revenue guidance: US$73bn–US$76bn. This is a forecast.",
+          "kind": "outlook"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway",
+      "history": [
+        {
+          "period": "Q2 2026",
+          "period_end": "2026-06-30",
+          "revenue_usd_bn": null,
+          "eps": 11.91,
+          "source": "brkb",
+          "report_date": "2026-08-08",
+          "evidence_basis": "Original release",
+          "net_income_usd_bn": 25.667
+        },
+        {
+          "period": "Q2 2025",
+          "period_end": "2025-06-30",
+          "revenue_usd_bn": null,
+          "eps": 5.73,
+          "source": "brkb",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release",
+          "net_income_usd_bn": 12.37
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Net earnings",
+          "text": "US$25.667bn versus US$12.370bn a year earlier.",
+          "kind": "fact"
+        },
+        {
+          "label": "Class B earnings",
+          "text": "US$11.91 per average equivalent Class B share; Class A figures are 1,500 times larger.",
+          "kind": "caution"
+        },
+        {
+          "label": "Operating earnings",
+          "text": "The issuer’s non-GAAP measure was US$12.983bn, versus US$11.160bn.",
+          "kind": "fact"
+        },
+        {
+          "label": "Investment volatility",
+          "text": "GAAP earnings included US$12.684bn of investment gains; these can obscure operating trends.",
+          "kind": "caution"
+        },
+        {
+          "label": "Capital returns",
+          "text": "About US$4.5bn of shares were repurchased in the quarter.",
+          "kind": "fact"
+        }
+      ],
+      "coverage": "Q2 results and prior-year comparison. Revenue and later quarters are not indexed here; not zero.",
+      "eps_basis": "GAAP · US$/average equivalent Class B share"
+    },
+    {
+      "ticker": "AMD",
+      "name": "Advanced Micro Devices",
+      "history": [
+        {
+          "period": "Q3 2026",
+          "period_end": "2026-09-26",
+          "revenue_usd_bn": 13.377,
+          "eps": 1.46,
+          "source": "amd",
+          "report_date": "2026-11-03",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "Q2 2026",
+          "period_end": "2026-06-27",
+          "revenue_usd_bn": 11.536,
+          "eps": 1.38,
+          "source": "amd",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        },
+        {
+          "period": "Q3 2025",
+          "period_end": null,
+          "revenue_usd_bn": 9.246,
+          "eps": 0.75,
+          "source": "amd",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$13.377bn, up 45% year on year and 16% sequentially.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP EPS US$1.46; non-GAAP EPS US$2.09.",
+          "kind": "caution"
+        },
+        {
+          "label": "Business mix",
+          "text": "Data Center grew 97% to about US$8.5bn; Client and Gaming fell 8%.",
+          "kind": "fact"
+        },
+        {
+          "label": "Cash-flow basis",
+          "text": "US$0.554bn FCF uses continuing-operations operating cash flow less capex.",
+          "kind": "caution"
+        },
+        {
+          "label": "Outlook",
+          "text": "Q4 revenue forecast US$17bn ±3%; non-GAAP gross margin about 55%. Forecasts, not results.",
+          "kind": "outlook"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "history": [
+        {
+          "period": "FY2026 Q3",
+          "period_end": "2026-08-02",
+          "revenue_usd_bn": 29.591,
+          "eps": 2.68,
+          "source": "avgo",
+          "report_date": "2026-09-02",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "FY2025 Q3",
+          "period_end": null,
+          "revenue_usd_bn": 15.952,
+          "eps": 0.85,
+          "source": "avgo",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$29.591bn, up 86% year on year.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP diluted EPS US$2.68; non-GAAP US$3.32.",
+          "kind": "caution"
+        },
+        {
+          "label": "AI chips",
+          "text": "AI semiconductor revenue reached US$16.7bn, up 221%.",
+          "kind": "fact"
+        },
+        {
+          "label": "Cash generation",
+          "text": "US$14.197bn operating cash flow less US$0.532bn capex produced US$13.665bn FCF.",
+          "kind": "fact"
+        },
+        {
+          "label": "Outlook",
+          "text": "Q4 revenue guidance was about US$34.8bn; this August-ended quarter is outside the September comparison.",
+          "kind": "outlook"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "history": [
+        {
+          "period": "FY2026 Q4",
+          "period_end": "2026-09-03",
+          "revenue_usd_bn": 54.229,
+          "eps": 32.87,
+          "source": "mu",
+          "report_date": "2026-09-30",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "FY2026 Q3",
+          "period_end": "2026-05-28",
+          "revenue_usd_bn": 41.456,
+          "eps": 24.67,
+          "source": "mu",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        },
+        {
+          "period": "FY2025 Q4",
+          "period_end": "2025-08-28",
+          "revenue_usd_bn": 11.315,
+          "eps": 2.83,
+          "source": "mu",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$54.229bn, versus US$41.456bn in the preceding quarter.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP diluted EPS US$32.87; non-GAAP US$33.42.",
+          "kind": "caution"
+        },
+        {
+          "label": "Profit",
+          "text": "GAAP net income was US$37.701bn.",
+          "kind": "fact"
+        },
+        {
+          "label": "Cash generation",
+          "text": "Quarterly operating cash flow was about US$43.97bn; this is not FCF.",
+          "kind": "fact"
+        },
+        {
+          "label": "Period matters",
+          "text": "The fiscal quarter ended 3 September, earlier than the other September observations.",
+          "kind": "caution"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "history": [
+        {
+          "period": "Q3 2026",
+          "period_end": "2026-09-30",
+          "revenue_usd_bn": 28.046,
+          "eps": 0.22,
+          "source": "tsla",
+          "report_date": "2026-10-21",
+          "evidence_basis": "Original release"
+        },
+        {
+          "period": "Q2 2026",
+          "period_end": "2026-06-30",
+          "revenue_usd_bn": 28.236,
+          "eps": 0.32,
+          "source": "tsla",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        },
+        {
+          "period": "Q1 2026",
+          "period_end": "2026-03-31",
+          "revenue_usd_bn": 22.387,
+          "eps": 0.13,
+          "source": "tsla",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        },
+        {
+          "period": "Q4 2025",
+          "period_end": "2025-12-31",
+          "revenue_usd_bn": 24.901,
+          "eps": 0.24,
+          "source": "tsla",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        },
+        {
+          "period": "Q3 2025",
+          "period_end": "2025-09-30",
+          "revenue_usd_bn": 28.095,
+          "eps": 0.39,
+          "source": "tsla",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release"
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$28.046bn versus US$28.095bn a year earlier.",
+          "kind": "fact"
+        },
+        {
+          "label": "Earnings",
+          "text": "GAAP diluted EPS US$0.22; non-GAAP US$0.48.",
+          "kind": "caution"
+        },
+        {
+          "label": "Cash generation",
+          "text": "Operating cash flow was US$6.263bn; capex was US$4.732bn.",
+          "kind": "fact"
+        },
+        {
+          "label": "Free cash flow",
+          "text": "US$1.531bn, versus −US$1.092bn in Q2 and US$3.990bn a year earlier.",
+          "kind": "fact"
+        },
+        {
+          "label": "Definition",
+          "text": "Capex includes energy-generation and storage systems; non-GAAP earnings use separate exclusions.",
+          "kind": "caution"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "GAAP diluted · US$/share"
+    },
+    {
+      "ticker": "TSM",
+      "name": "TSMC ADR",
+      "history": [
+        {
+          "period": "Q3 2026",
+          "period_end": "2026-09-30",
+          "revenue_usd_bn": 46.72,
+          "eps": 4.6,
+          "source": "tsm",
+          "report_date": "2026-10-15",
+          "evidence_basis": "Original release",
+          "ordinary_eps_ntd": 29.43
+        },
+        {
+          "period": "Q2 2026",
+          "period_end": "2026-06-30",
+          "revenue_usd_bn": 40.2,
+          "eps": 4.31,
+          "source": "tsmh",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release",
+          "ordinary_eps_ntd": 27.25
+        },
+        {
+          "period": "Q3 2025",
+          "period_end": "2025-09-30",
+          "revenue_usd_bn": 33.1,
+          "eps": 2.92,
+          "source": "tsmh",
+          "report_date": null,
+          "evidence_basis": "Comparative in later issuer release",
+          "ordinary_eps_ntd": 17.44
+        }
+      ],
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "US$46.72bn (NT$1,494.24bn); US-dollar growth was 41.2% year on year.",
+          "kind": "fact"
+        },
+        {
+          "label": "ADR earnings",
+          "text": "US$4.60 per ADR unit, versus NT$29.43 per ordinary share. Do not mix the units.",
+          "kind": "caution"
+        },
+        {
+          "label": "Margins",
+          "text": "Gross margin 66.4%; operating margin 58.7%, under TIFRS.",
+          "kind": "fact"
+        },
+        {
+          "label": "Technology mix",
+          "text": "7nm and more advanced nodes contributed 79% of wafer revenue.",
+          "kind": "fact"
+        },
+        {
+          "label": "Outlook",
+          "text": "Q4 revenue guidance: US$52.3bn–US$54.3bn. Forecast, not actual.",
+          "kind": "outlook"
+        }
+      ],
+      "coverage": "Selected quarters; not a complete earnings archive.",
+      "eps_basis": "TIFRS diluted · US$/ADR unit (issuer conversion)"
+    }
+  ],
+  "fcf": {
+    "unit": "US$bn",
+    "period_label": "Quarters ending in late September 2026",
+    "method": "FCF is not a uniform GAAP measure. Bars share a US-dollar scale; differences in periods, scope and adjustments remain explicit.",
+    "rows": [
+      {
+        "ticker": "MSFT",
+        "period": "FY2027 Q1",
+        "period_end": "2026-09-30",
+        "operating_cash_flow_usd_bn": 58,
+        "capex_usd_bn": 39.367,
+        "other_adjustment_usd_bn": 0,
+        "fcf_usd_bn": 18.633,
+        "definition": "Operating cash flow less additions to property and equipment.",
+        "source": "msft",
+        "note": "Derived from issuer cash-flow statement; the earlier +18.6bn display was rounded.",
+        "basis": "standard"
+      },
+      {
+        "ticker": "GOOGL",
+        "period": "Q3 2026",
+        "period_end": "2026-09-30",
+        "operating_cash_flow_usd_bn": 42.29,
+        "capex_usd_bn": 51.355,
+        "other_adjustment_usd_bn": 0,
+        "fcf_usd_bn": -9.065,
+        "definition": "Operating cash flow less purchases of property and equipment.",
+        "source": "googl",
+        "note": "Issuer non-GAAP FCF reconciliation; earlier −9.07bn display was rounded.",
+        "basis": "standard"
+      },
+      {
+        "ticker": "TSLA",
+        "period": "Q3 2026",
+        "period_end": "2026-09-30",
+        "operating_cash_flow_usd_bn": 6.263,
+        "capex_usd_bn": 4.732,
+        "other_adjustment_usd_bn": 0,
+        "fcf_usd_bn": 1.531,
+        "definition": "Operating cash flow less capital expenditures.",
+        "source": "tsla",
+        "note": "Capex includes energy-generation and storage systems.",
+        "basis": "standard"
+      },
+      {
+        "ticker": "AMD",
+        "period": "Q3 2026",
+        "period_end": "2026-09-26",
+        "operating_cash_flow_usd_bn": 1.202,
+        "capex_usd_bn": 0.648,
+        "other_adjustment_usd_bn": 0,
+        "fcf_usd_bn": 0.554,
+        "definition": "Continuing-operations operating cash flow less capex.",
+        "source": "amd",
+        "note": "Different quarter-end and continuing-operations scope.",
+        "basis": "different"
+      },
+      {
+        "ticker": "META",
+        "period": "Q3 2026",
+        "period_end": "2026-09-30",
+        "operating_cash_flow_usd_bn": 32.786,
+        "capex_usd_bn": 33.942,
+        "other_adjustment_usd_bn": -0.964,
+        "fcf_usd_bn": -2.12,
+        "definition": "Operating cash flow less property/equipment purchases and finance-lease principal.",
+        "source": "meta",
+        "note": "Additional US$0.964bn finance-lease principal deduction.",
+        "basis": "different"
+      },
+      {
+        "ticker": "AMZN",
+        "period": "Q3 2026",
+        "period_end": "2026-09-30",
+        "operating_cash_flow_usd_bn": 42.422,
+        "capex_usd_bn": 77.259,
+        "other_adjustment_usd_bn": 1.381,
+        "fcf_usd_bn": -33.456,
+        "definition": "Operating cash flow less property/equipment purchases, plus property/equipment sales and incentives.",
+        "source": "amzn",
+        "note": "Derived quarterly value; adds back US$1.381bn sales/incentives. The −US$42.4bn TTM headline is excluded.",
+        "basis": "different"
+      }
+    ],
+    "gaps": [
+      {
+        "ticker": "AAPL",
+        "reason": "September-quarter capex has not been separately reconciled here."
+      },
+      {
+        "ticker": "NVDA",
+        "reason": "Selected quarter ends 26 July, outside this comparison."
+      },
+      {
+        "ticker": "BRK.B",
+        "reason": "Selected quarter ends 30 June; conglomerate/insurance cash flow needs separate treatment."
+      },
+      {
+        "ticker": "AVGO",
+        "reason": "Selected quarter ends 2 August."
+      },
+      {
+        "ticker": "MU",
+        "reason": "Quarter ends 3 September; not aligned with late-September quarters."
+      },
+      {
+        "ticker": "TSM",
+        "reason": "Quarterly FCF and currency conversion have not been reconciled here."
+      }
+    ]
+  }
+}

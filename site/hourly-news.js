@@ -31,11 +31,11 @@
     }).join('');
   }
   function storyBody(s) {
-    return `${s.earlier ? `<div class="insight"><b>Earlier</b><p>${esc(s.earlier)}</p></div>` : ''}<p>${esc(s.body)}</p>${s.analysis ? `<p><b>Why it matters · analysis</b><br>${esc(s.analysis)}</p>` : ''}${s.watch_next ? `<p><b>Watch next</b><br>${esc(s.watch_next)}</p>` : ''}${sources(s)}`;
+    return `${s.earlier ? `<div class="insight"><b>Earlier</b><p>${esc(s.earlier)}</p></div>` : ''}<div class="brief-fact"><b>What happened</b><p>${esc(s.body)}</p></div>${s.reaction?`<div class="brief-reaction"><b>Reported reaction</b><p>${esc(s.reaction)}</p></div>`:''}${s.analysis ? `<p class="brief-analysis"><b>Why it matters · analysis</b><br>${esc(s.analysis)}</p>` : ''}${s.watch_next ? `<p class="brief-next"><b>Watch next</b><br>${esc(s.watch_next)}</p>` : ''}${sources(s)}`;
   }
   function card(list) {
     const s = list[0], label = {'new':'New','follow-up':'Follow-up','correction':'Correction'}[s.status];
-    return `<article class="card hourly-story"><div class="tags"><span class="tag ${s.status === 'correction' ? 'red' : 'purple'}">${esc(label)}</span><span class="tag">${esc(s.topic)}</span>${s.freshness !== 'current' ? `<span class="tag amber">${s.freshness === 'catch-up' ? 'Catch-up' : 'Breaking'}</span>` : ''}</div><h2>${esc(s.headline)}</h2><small>Reported ${esc(time(s.report_at))}${s.development_at ? '<br>Development '+esc(time(s.development_at)) : '<br>Exact development time not established'}</small>${storyBody(s)}${list.length > 1 ? `<details><summary>Earlier updates · ${list.length-1}</summary>${list.slice(1).map(v => `<section class="hourly-version"><h3>Version ${v.version} · ${esc(time(v.report_at))}</h3><p>${esc(v.headline)}</p>${storyBody(v)}</section>`).join('')}</details>` : ''}</article>`;
+    return `<article class="card hourly-story brief-story"><div class="tags"><span class="tag ${s.status === 'correction' ? 'red' : 'purple'}">${esc(label)}</span><span class="tag">${esc(s.topic)}</span>${s.freshness !== 'current' ? `<span class="tag amber">${s.freshness === 'catch-up' ? 'Catch-up' : 'Breaking'}</span>` : ''}</div><h2>${esc(s.headline)}</h2><small>Reported ${esc(time(s.report_at))}${s.development_at ? '<br>Development '+esc(time(s.development_at)) : '<br>Exact development time not established'}</small>${storyBody(s)}${list.length > 1 ? `<details><summary>Earlier updates · ${list.length-1}</summary>${list.slice(1).map(v => `<section class="hourly-version"><h3>Version ${v.version} · ${esc(time(v.report_at))}</h3><p>${esc(v.headline)}</p>${storyBody(v)}</section>`).join('')}</details>` : ''}</article>`;
   }
   function teaser(data) {
     const e = data?.editions?.[0];

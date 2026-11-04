@@ -5,7 +5,7 @@ const ctx={time:()=> '4 Nov 2026 · SGT',stockLink:t=>t},a={id:'a',title:'US Fed
 const saved={...a,summary:'The Fed announced a policy decision.',context:'The report describes a dated change. This is separate context.',summary_verified:true,summary_source_url:a.url};
 let html=h.card(a,{...ctx,contextData:{items:[saved]}});
 assert(html.indexOf('hx-headline')<html.indexOf('hx-summary'));assert(html.indexOf('hx-summary')<html.indexOf('hx-tags'));
-assert(html.includes('Read summary &amp; context'));assert(html.includes(saved.context));assert.equal(html.split(saved.summary).length-1,1);assert(!html.includes('Teach Me'));
+assert(!html.includes('Read summary &amp; context'));assert(html.includes('brief-takeaways'));assert(html.indexOf(saved.context)<html.indexOf('<details'));assert(html.includes(saved.context));assert.equal(html.split(saved.summary).length-1,1);assert(!html.includes('Teach Me'));
 assert(h.card(a,ctx).includes('Summary not yet available'));assert(!h.card(a,ctx).includes('<details'));
 for(const bad of [{...saved,id:'wrong'},{...saved,title:'different'},{...saved,published_at:'2026-11-03'},{...saved,summary_verified:false},{...saved,summary_source_url:'javascript:alert(1)'}])assert(!h.card(a,{...ctx,contextData:{items:[bad]}}).includes(saved.summary));
 assert(!h.card(a,{...ctx,contextData:{items:[{...saved,context:'<img src=x onerror=alert(1)>'}]}}).includes('<img'));

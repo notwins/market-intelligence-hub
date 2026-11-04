@@ -1,0 +1,4508 @@
+{
+  "standard": "Keyword & Tag Colour Standard",
+  "version": "1.0",
+  "date": "2026-11-05",
+  "wcag_aa_normal_text_target": 4.5,
+  "test_surfaces": {
+    "light_page": "#FFFFFF",
+    "dark_page": "#0B1220"
+  },
+  "matching_policy": {
+    "normalize": "Unicode NFKC, collapse whitespace, normalize apostrophes and hyphens for lookup, but preserve presentation/official tickers; case-fold ordinary phrases only.",
+    "match": "Use longest whole-token/phrase match. Never match substrings (e.g. US inside USD, Fed inside FedEx).",
+    "priority": "Named verified companies or financial pairs > named people and institutions > specific instrument > named event > macro data > sector > geography > status. On equal span, use priority number then context confidence.",
+    "short_alias": "Short uppercase aliases such as US, MAS, SNB, Xi, C, SE, MY, AI and ticker symbols need context checks; do not treat common pronouns/verbs/syllables as tags.",
+    "multi_label": "A story may carry independent tags across multiple axes, but a keyword span receives only one dominant text colour. Keep editorial status as a separate chip.",
+    "source": "Tags can be assigned from verified headline metadata, but claims in explanations require verified article evidence. Unverified tickers/people must not be inferred.",
+    "direction": "FX pairs are ordered base/quote; never flip USD/SGD and SGD/USD.",
+    "semantics": "Urgency/direction (breaking, risk, gains, losses) must not be inferred from entity name or hue. Red used for China or Russia is a category identifier, not a market sell signal.",
+    "accessibility": "Use text_light on light backgrounds and text_dark on dark backgrounds, with respective chip backgrounds; preserve written labels/icons and do not communicate meaning solely by colour.",
+    "hierarchy": "Story has primary_category and independent arrays of region, political figures, institution, asset, sector, company/ticker, macro_data, event and editorial status tags."
+  },
+  "rule_definitions": {
+    "geo": "Named place or demonym; exact word/phrase. Short abbreviations uppercase; disambiguate US pronoun, SG ticker, HK stock exchange by context.",
+    "person": "Full name exact; surnames/titles only with confirmed political/person context. Never tag surname embedded in company names or unrelated uses.",
+    "institution": "Official name or known acronym with institutional/market context; do not match ordinary verbs or parts of longer words.",
+    "asset": "Instrument phrase with finance context. Prevent broader instrument tag from overriding a more specific instrument.",
+    "ticker": "Exact $TICKER or exchange-qualified ticker, otherwise case-sensitive ticker plus resolved company context; company names use whole phrase. No substring matching.",
+    "sector": "Named industry/theme as whole phrase; require sector/market context for short ambiguous terms.",
+    "macro": "Statistic name or exact acronym with macroeconomic context; distinguish data release from an event.",
+    "event": "Exact named event or event phrase with evidence; do not infer an event from generic sentiment.",
+    "status": "Use only for verified editorial state (new, follow-up, correction, catch-up, breaking, partial); never infer from headline words alone.",
+    "fxpair": "Explicit currency pair or normalized slash/hyphen form with quote/base direction intact; never split inside a currency pair."
+  },
+  "palette": {
+    "US Blue": {
+      "text_light": "#1D4ED8",
+      "text_dark": "#93C5FD",
+      "chip_bg_light": "#EFF6FF",
+      "chip_bg_dark": "#172554",
+      "contrast_white": 6.7,
+      "contrast_dark_page": 10.38,
+      "contrast_light_chip": 6.16,
+      "contrast_dark_chip": 8.15
+    },
+    "Singapore Jade": {
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "contrast_white": 5.48,
+      "contrast_dark_page": 12.28,
+      "contrast_light_chip": 5.21,
+      "contrast_dark_chip": 6.38
+    },
+    "China Red": {
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "contrast_white": 6.47,
+      "contrast_dark_page": 9.86,
+      "contrast_light_chip": 5.91,
+      "contrast_dark_chip": 8.51
+    },
+    "Trump Orange": {
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "contrast_white": 7.31,
+      "contrast_dark_page": 11.1,
+      "contrast_light_chip": 6.88,
+      "contrast_dark_chip": 9.28
+    },
+    "Fed Indigo": {
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "contrast_white": 7.9,
+      "contrast_dark_page": 9.39,
+      "contrast_light_chip": 7.07,
+      "contrast_dark_chip": 8.02
+    },
+    "MAS Teal": {
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "contrast_white": 5.47,
+      "contrast_dark_page": 12.66,
+      "contrast_light_chip": 5.25,
+      "contrast_dark_chip": 9.78
+    },
+    "SNB Rose": {
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "contrast_white": 7.88,
+      "contrast_dark_page": 9.9,
+      "contrast_light_chip": 7.18,
+      "contrast_dark_chip": 8.27
+    },
+    "Rates Blue": {
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "contrast_white": 8.72,
+      "contrast_dark_page": 13.18,
+      "contrast_light_chip": 7.15,
+      "contrast_dark_chip": 10.34
+    },
+    "Bonds Green": {
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "contrast_white": 7.13,
+      "contrast_dark_page": 13.33,
+      "contrast_light_chip": 6.81,
+      "contrast_dark_chip": 10.62
+    },
+    "Credit Amber": {
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "contrast_white": 7.09,
+      "contrast_dark_page": 12.98,
+      "contrast_light_chip": 6.84,
+      "contrast_dark_chip": 10.39
+    },
+    "FX Purple": {
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "contrast_white": 7.1,
+      "contrast_dark_page": 10.14,
+      "contrast_light_chip": 6.48,
+      "contrast_dark_chip": 8.25
+    },
+    "Equity Cyan": {
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "contrast_white": 5.36,
+      "contrast_dark_page": 12.92,
+      "contrast_light_chip": 5.15,
+      "contrast_dark_chip": 9.24
+    },
+    "AI Violet": {
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "contrast_white": 7.1,
+      "contrast_dark_page": 13.48,
+      "contrast_light_chip": 6.48,
+      "contrast_dark_chip": 10.97
+    },
+    "Energy Amber": {
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "contrast_white": 7.09,
+      "contrast_dark_page": 15.03,
+      "contrast_light_chip": 6.84,
+      "contrast_dark_chip": 12.03
+    },
+    "Macro Slate": {
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "contrast_white": 10.35,
+      "contrast_dark_page": 12.61,
+      "contrast_light_chip": 9.45,
+      "contrast_dark_chip": 9.85
+    },
+    "Data Cyan": {
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "contrast_white": 5.36,
+      "contrast_dark_page": 12.92,
+      "contrast_light_chip": 5.15,
+      "contrast_dark_chip": 9.24
+    },
+    "Risk Red": {
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "contrast_white": 6.47,
+      "contrast_dark_page": 9.86,
+      "contrast_light_chip": 5.91,
+      "contrast_dark_chip": 8.51
+    },
+    "Policy Plum": {
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "contrast_white": 6.98,
+      "contrast_dark_page": 10.59,
+      "contrast_light_chip": 6.51,
+      "contrast_dark_chip": 8.48
+    },
+    "Company Ocean": {
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "contrast_white": 5.93,
+      "contrast_dark_page": 11.23,
+      "contrast_light_chip": 5.57,
+      "contrast_dark_chip": 8.32
+    },
+    "Company Magenta": {
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "contrast_white": 8.24,
+      "contrast_dark_page": 10.64,
+      "contrast_light_chip": 7.67,
+      "contrast_dark_chip": 8.41
+    },
+    "Global Slate": {
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "contrast_white": 10.35,
+      "contrast_dark_page": 12.61,
+      "contrast_light_chip": 9.45,
+      "contrast_dark_chip": 9.85
+    },
+    "Japan Rose": {
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "contrast_white": 7.88,
+      "contrast_dark_page": 9.9,
+      "contrast_light_chip": 7.18,
+      "contrast_dark_chip": 8.27
+    },
+    "UK Purple": {
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "contrast_white": 7.1,
+      "contrast_dark_page": 10.14,
+      "contrast_light_chip": 6.48,
+      "contrast_dark_chip": 8.25
+    },
+    "India Saffron": {
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "contrast_white": 7.31,
+      "contrast_dark_page": 11.1,
+      "contrast_light_chip": 6.88,
+      "contrast_dark_chip": 9.28
+    },
+    "Europe Indigo": {
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "contrast_white": 7.9,
+      "contrast_dark_page": 9.39,
+      "contrast_light_chip": 7.07,
+      "contrast_dark_chip": 8.02
+    },
+    "GCC Sand": {
+      "text_light": "#854D0E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FEFCE8",
+      "chip_bg_dark": "#422006",
+      "contrast_white": 6.85,
+      "contrast_dark_page": 15.03,
+      "contrast_light_chip": 6.62,
+      "contrast_dark_chip": 11.7
+    },
+    "LatAm Terracotta": {
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "contrast_white": 7.31,
+      "contrast_dark_page": 11.1,
+      "contrast_light_chip": 6.88,
+      "contrast_dark_chip": 9.28
+    },
+    "Finance Navy": {
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "contrast_white": 8.72,
+      "contrast_dark_page": 13.18,
+      "contrast_light_chip": 7.15,
+      "contrast_dark_chip": 10.34
+    },
+    "Neutral Charcoal": {
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "contrast_white": 10.35,
+      "contrast_dark_page": 12.61,
+      "contrast_light_chip": 9.45,
+      "contrast_dark_chip": 9.85
+    },
+    "Growth Green": {
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "contrast_white": 7.13,
+      "contrast_dark_page": 13.33,
+      "contrast_light_chip": 6.81,
+      "contrast_dark_chip": 10.62
+    },
+    "Status Gray": {
+      "text_light": "#475569",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "contrast_white": 7.58,
+      "contrast_dark_page": 12.61,
+      "contrast_light_chip": 6.92,
+      "contrast_dark_chip": 9.85
+    }
+  },
+  "keyword_groups": [
+    {
+      "id": "geo.united_states",
+      "category": "Country / region",
+      "keyword_group": "United States",
+      "colour_name": "US Blue",
+      "text_light": "#1D4ED8",
+      "text_dark": "#93C5FD",
+      "chip_bg_light": "#EFF6FF",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "US",
+        "U.S.",
+        "USA",
+        "United States",
+        "America",
+        "American",
+        "US economy"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.singapore",
+      "category": "Country / region",
+      "keyword_group": "Singapore",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "SG",
+        "SGP",
+        "Singapore",
+        "Singaporean"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.mainland_china",
+      "category": "Country / region",
+      "keyword_group": "Mainland China",
+      "colour_name": "China Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "China",
+        "PRC",
+        "Mainland China",
+        "Chinese economy",
+        "CN"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.hong_kong",
+      "category": "Country / region",
+      "keyword_group": "Hong Kong",
+      "colour_name": "China Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Hong Kong",
+        "HK",
+        "HKSAR",
+        "Hang Seng market"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.taiwan",
+      "category": "Country / region",
+      "keyword_group": "Taiwan",
+      "colour_name": "Japan Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "Taiwan",
+        "TW",
+        "Taipei",
+        "Taiwanese"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.japan",
+      "category": "Country / region",
+      "keyword_group": "Japan",
+      "colour_name": "Japan Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "Japan",
+        "JP",
+        "Japanese",
+        "Tokyo"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.south_korea",
+      "category": "Country / region",
+      "keyword_group": "South Korea",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "South Korea",
+        "Republic of Korea",
+        "Korea",
+        "KR",
+        "Seoul"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.india",
+      "category": "Country / region",
+      "keyword_group": "India",
+      "colour_name": "India Saffron",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "India",
+        "IN",
+        "Indian",
+        "Mumbai"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.switzerland",
+      "category": "Country / region",
+      "keyword_group": "Switzerland",
+      "colour_name": "SNB Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "Switzerland",
+        "Swiss",
+        "CH",
+        "Zurich"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.united_kingdom",
+      "category": "Country / region",
+      "keyword_group": "United Kingdom",
+      "colour_name": "UK Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "UK",
+        "U.K.",
+        "Britain",
+        "British",
+        "United Kingdom"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.euro_area_eu",
+      "category": "Country / region",
+      "keyword_group": "Euro area / EU",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Euro area / EU",
+        "Eurozone",
+        "Euro area",
+        "European Union",
+        "EU",
+        "Europe"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.germany",
+      "category": "Country / region",
+      "keyword_group": "Germany",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Germany",
+        "German",
+        "DE",
+        "Bundesrepublik"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.france",
+      "category": "Country / region",
+      "keyword_group": "France",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "France",
+        "French",
+        "FR"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.canada",
+      "category": "Country / region",
+      "keyword_group": "Canada",
+      "colour_name": "US Blue",
+      "text_light": "#1D4ED8",
+      "text_dark": "#93C5FD",
+      "chip_bg_light": "#EFF6FF",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Canada",
+        "Canadian",
+        "CA"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.australia",
+      "category": "Country / region",
+      "keyword_group": "Australia",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Australia",
+        "AU",
+        "Australian"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.new_zealand",
+      "category": "Country / region",
+      "keyword_group": "New Zealand",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "New Zealand",
+        "NZ",
+        "Kiwi economy"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.asean",
+      "category": "Country / region",
+      "keyword_group": "ASEAN",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "ASEAN",
+        "Southeast Asia",
+        "South-East Asia",
+        "SEA region"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.indonesia",
+      "category": "Country / region",
+      "keyword_group": "Indonesia",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "Indonesia",
+        "ID",
+        "Indonesian"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.malaysia",
+      "category": "Country / region",
+      "keyword_group": "Malaysia",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "Malaysia",
+        "MY",
+        "Malaysian"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.vietnam",
+      "category": "Country / region",
+      "keyword_group": "Vietnam",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "Vietnam",
+        "VN",
+        "Vietnamese"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.middle_east",
+      "category": "Country / region",
+      "keyword_group": "Middle East",
+      "colour_name": "GCC Sand",
+      "text_light": "#854D0E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FEFCE8",
+      "chip_bg_dark": "#422006",
+      "aliases": [
+        "Middle East",
+        "MENA",
+        "West Asia"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.gulf_gcc",
+      "category": "Country / region",
+      "keyword_group": "Gulf / GCC",
+      "colour_name": "GCC Sand",
+      "text_light": "#854D0E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FEFCE8",
+      "chip_bg_dark": "#422006",
+      "aliases": [
+        "Gulf / GCC",
+        "GCC",
+        "Gulf States",
+        "Saudi Arabia",
+        "UAE",
+        "Qatar"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.latin_america",
+      "category": "Country / region",
+      "keyword_group": "Latin America",
+      "colour_name": "LatAm Terracotta",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Latin America",
+        "LatAm",
+        "LATAM",
+        "South America"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.brazil",
+      "category": "Country / region",
+      "keyword_group": "Brazil",
+      "colour_name": "LatAm Terracotta",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Brazil",
+        "BR",
+        "Brazilian"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.russia",
+      "category": "Country / region",
+      "keyword_group": "Russia",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Russia",
+        "Russian",
+        "RU",
+        "Moscow"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.ukraine",
+      "category": "Country / region",
+      "keyword_group": "Ukraine",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Ukraine",
+        "Ukrainian",
+        "Kyiv"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.africa",
+      "category": "Country / region",
+      "keyword_group": "Africa",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Africa",
+        "African",
+        "Sub-Saharan Africa"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "geo.global_cross_border",
+      "category": "Country / region",
+      "keyword_group": "Global / cross-border",
+      "colour_name": "Global Slate",
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "aliases": [
+        "Global / cross-border",
+        "Global",
+        "Worldwide",
+        "World economy",
+        "Cross-border"
+      ],
+      "matching_rule": "geo",
+      "priority": 65
+    },
+    {
+      "id": "person.donald_trump",
+      "category": "Political figures",
+      "keyword_group": "Donald Trump",
+      "colour_name": "Trump Orange",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Donald Trump",
+        "Trump",
+        "President Trump",
+        "DJ Trump"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.jerome_powell",
+      "category": "Political figures",
+      "keyword_group": "Jerome Powell",
+      "colour_name": "Fed Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Jerome Powell",
+        "Powell",
+        "Jay Powell",
+        "Fed Chair Powell"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.xi_jinping",
+      "category": "Political figures",
+      "keyword_group": "Xi Jinping",
+      "colour_name": "China Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Xi Jinping",
+        "President Xi",
+        "Xi"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.lawrence_wong",
+      "category": "Political figures",
+      "keyword_group": "Lawrence Wong",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "Lawrence Wong",
+        "PM Lawrence Wong",
+        "PM Wong"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.tharman_shanmugaratnam",
+      "category": "Political figures",
+      "keyword_group": "Tharman Shanmugaratnam",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "Tharman Shanmugaratnam",
+        "Tharman",
+        "President Tharman"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.lee_kuan_yew",
+      "category": "Political figures",
+      "keyword_group": "Lee Kuan Yew",
+      "colour_name": "GCC Sand",
+      "text_light": "#854D0E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FEFCE8",
+      "chip_bg_dark": "#422006",
+      "aliases": [
+        "Lee Kuan Yew",
+        "LKY"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.scott_bessent",
+      "category": "Political figures",
+      "keyword_group": "Scott Bessent",
+      "colour_name": "Trump Orange",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Scott Bessent",
+        "Bessent"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.janet_yellen",
+      "category": "Political figures",
+      "keyword_group": "Janet Yellen",
+      "colour_name": "Fed Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Janet Yellen",
+        "Yellen"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.christine_lagarde",
+      "category": "Political figures",
+      "keyword_group": "Christine Lagarde",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Christine Lagarde",
+        "Lagarde"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.andrew_bailey",
+      "category": "Political figures",
+      "keyword_group": "Andrew Bailey",
+      "colour_name": "UK Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Andrew Bailey",
+        "Bailey",
+        "BoE Governor Bailey"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.kazuo_ueda",
+      "category": "Political figures",
+      "keyword_group": "Kazuo Ueda",
+      "colour_name": "Japan Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "Kazuo Ueda",
+        "Ueda"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.michele_bullock",
+      "category": "Political figures",
+      "keyword_group": "Michele Bullock",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Michele Bullock",
+        "Bullock"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.narendra_modi",
+      "category": "Political figures",
+      "keyword_group": "Narendra Modi",
+      "colour_name": "India Saffron",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Narendra Modi",
+        "Modi"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.keir_starmer",
+      "category": "Political figures",
+      "keyword_group": "Keir Starmer",
+      "colour_name": "UK Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Keir Starmer",
+        "Starmer"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.emmanuel_macron",
+      "category": "Political figures",
+      "keyword_group": "Emmanuel Macron",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Emmanuel Macron",
+        "Macron"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.vladimir_putin",
+      "category": "Political figures",
+      "keyword_group": "Vladimir Putin",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Vladimir Putin",
+        "Putin"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.volodymyr_zelenskyy",
+      "category": "Political figures",
+      "keyword_group": "Volodymyr Zelenskyy",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Volodymyr Zelenskyy",
+        "Zelenskyy",
+        "Zelensky"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "person.political_officeholders_other",
+      "category": "Political figures",
+      "keyword_group": "Political officeholders (other)",
+      "colour_name": "Policy Plum",
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "aliases": [
+        "Political officeholders (other)",
+        "President",
+        "Prime Minister",
+        "Treasury Secretary",
+        "Finance Minister",
+        "Senator",
+        "Congressman"
+      ],
+      "matching_rule": "person",
+      "priority": 105
+    },
+    {
+      "id": "institution.federal_reserve",
+      "category": "Central banks / institutions",
+      "keyword_group": "Federal Reserve",
+      "colour_name": "Fed Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Fed",
+        "FED",
+        "Federal Reserve",
+        "US central bank",
+        "Federal Reserve System"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.fomc",
+      "category": "Central banks / institutions",
+      "keyword_group": "FOMC",
+      "colour_name": "Fed Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "FOMC",
+        "Federal Open Market Committee"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.monetary_authority_of_singapore",
+      "category": "Central banks / institutions",
+      "keyword_group": "Monetary Authority of Singapore",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "MAS",
+        "Monetary Authority of Singapore",
+        "Singapore central bank"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.swiss_national_bank",
+      "category": "Central banks / institutions",
+      "keyword_group": "Swiss National Bank",
+      "colour_name": "SNB Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "SNB",
+        "Swiss National Bank"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.european_central_bank",
+      "category": "Central banks / institutions",
+      "keyword_group": "European Central Bank",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "ECB",
+        "European Central Bank"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.bank_of_england",
+      "category": "Central banks / institutions",
+      "keyword_group": "Bank of England",
+      "colour_name": "UK Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "BoE",
+        "BOE",
+        "Bank of England"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.bank_of_japan",
+      "category": "Central banks / institutions",
+      "keyword_group": "Bank of Japan",
+      "colour_name": "Japan Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "BoJ",
+        "BOJ",
+        "Bank of Japan"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.people_s_bank_of_china",
+      "category": "Central banks / institutions",
+      "keyword_group": "People’s Bank of China",
+      "colour_name": "China Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "PBoC",
+        "PBOC",
+        "People’s Bank of China",
+        "Peoples Bank of China",
+        "China central bank"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.reserve_bank_of_australia",
+      "category": "Central banks / institutions",
+      "keyword_group": "Reserve Bank of Australia",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "RBA",
+        "Reserve Bank of Australia"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.reserve_bank_of_india",
+      "category": "Central banks / institutions",
+      "keyword_group": "Reserve Bank of India",
+      "colour_name": "India Saffron",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "RBI",
+        "Reserve Bank of India"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.bank_of_canada",
+      "category": "Central banks / institutions",
+      "keyword_group": "Bank of Canada",
+      "colour_name": "US Blue",
+      "text_light": "#1D4ED8",
+      "text_dark": "#93C5FD",
+      "chip_bg_light": "#EFF6FF",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "BoC",
+        "Bank of Canada"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.reserve_bank_of_new_zealand",
+      "category": "Central banks / institutions",
+      "keyword_group": "Reserve Bank of New Zealand",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "RBNZ",
+        "Reserve Bank of New Zealand"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.bank_of_korea",
+      "category": "Central banks / institutions",
+      "keyword_group": "Bank of Korea",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "BOK",
+        "Bank of Korea"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.bank_indonesia",
+      "category": "Central banks / institutions",
+      "keyword_group": "Bank Indonesia",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "BI",
+        "Bank Indonesia"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.hong_kong_monetary_authority",
+      "category": "Central banks / institutions",
+      "keyword_group": "Hong Kong Monetary Authority",
+      "colour_name": "China Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "HKMA",
+        "Hong Kong Monetary Authority"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.us_treasury_department",
+      "category": "Central banks / institutions",
+      "keyword_group": "US Treasury Department",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "U.S. Treasury Department",
+        "US Treasury Department",
+        "Treasury Department",
+        "UST Department"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.singapore_ministry_of_finance",
+      "category": "Central banks / institutions",
+      "keyword_group": "Singapore Ministry of Finance",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "Singapore Ministry of Finance",
+        "MOF",
+        "Singapore MOF",
+        "Ministry of Finance Singapore"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.cpf_board_cpf_life",
+      "category": "Central banks / institutions",
+      "keyword_group": "CPF Board / CPF LIFE",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "CPF Board / CPF LIFE",
+        "CPF",
+        "CPF LIFE",
+        "CPF Board",
+        "Central Provident Fund"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.gic",
+      "category": "Central banks / institutions",
+      "keyword_group": "GIC",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "GIC",
+        "GIC Private Limited",
+        "Government of Singapore Investment Corporation"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.temasek",
+      "category": "Central banks / institutions",
+      "keyword_group": "Temasek",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "Temasek",
+        "Temasek Holdings",
+        "Temasek International"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.imf",
+      "category": "Central banks / institutions",
+      "keyword_group": "IMF",
+      "colour_name": "Policy Plum",
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "aliases": [
+        "IMF",
+        "International Monetary Fund"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.world_bank",
+      "category": "Central banks / institutions",
+      "keyword_group": "World Bank",
+      "colour_name": "Policy Plum",
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "aliases": [
+        "World Bank",
+        "IBRD"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.bis",
+      "category": "Central banks / institutions",
+      "keyword_group": "BIS",
+      "colour_name": "Policy Plum",
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "aliases": [
+        "BIS",
+        "Bank for International Settlements"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.sec",
+      "category": "Central banks / institutions",
+      "keyword_group": "SEC",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "SEC",
+        "US Securities and Exchange Commission",
+        "Securities and Exchange Commission"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.cftc",
+      "category": "Central banks / institutions",
+      "keyword_group": "CFTC",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "CFTC",
+        "Commodity Futures Trading Commission"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.fitch_ratings",
+      "category": "Central banks / institutions",
+      "keyword_group": "Fitch Ratings",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Fitch",
+        "Fitch Ratings"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.moody_s_ratings",
+      "category": "Central banks / institutions",
+      "keyword_group": "Moody’s Ratings",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Moody’s",
+        "Moodys",
+        "Moody’s Ratings",
+        "Moody’s Investors Service"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.s_p_global_ratings",
+      "category": "Central banks / institutions",
+      "keyword_group": "S&P Global Ratings",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "S&P Global Ratings",
+        "S&P Ratings",
+        "Standard & Poor’s Ratings"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.opec",
+      "category": "Central banks / institutions",
+      "keyword_group": "OPEC+",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "OPEC+",
+        "OPEC",
+        "Organization of the Petroleum Exporting Countries"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.sgx",
+      "category": "Central banks / institutions",
+      "keyword_group": "SGX",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "SGX",
+        "Singapore Exchange"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "institution.nyse_nasdaq_exchanges",
+      "category": "Central banks / institutions",
+      "keyword_group": "NYSE / Nasdaq exchanges",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "NYSE / Nasdaq exchanges",
+        "NYSE",
+        "NASDAQ",
+        "Nasdaq exchange",
+        "New York Stock Exchange"
+      ],
+      "matching_rule": "institution",
+      "priority": 104
+    },
+    {
+      "id": "asset.us_treasuries",
+      "category": "Asset classes / instruments",
+      "keyword_group": "US Treasuries",
+      "colour_name": "Bonds Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "US Treasuries",
+        "UST",
+        "USTs",
+        "U.S. Treasuries",
+        "US Treasury bonds",
+        "Treasury notes",
+        "Treasury bonds"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.treasury_strips",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Treasury STRIPS",
+      "colour_name": "Bonds Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "STRIPS",
+        "UST STRIPS",
+        "Treasury STRIPS",
+        "Zero-coupon Treasury"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.singapore_government_securities",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Singapore Government Securities",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "SGS",
+        "Singapore Government Securities",
+        "SGS bond",
+        "Singapore Treasury bills"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.singapore_savings_bonds",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Singapore Savings Bonds",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "SSB",
+        "Singapore Savings Bonds"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.fixed_income_bonds",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Fixed income / bonds",
+      "colour_name": "Bonds Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Fixed income / bonds",
+        "Bonds",
+        "Bond market",
+        "Fixed income",
+        "Debt securities"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.investment_grade_credit",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Investment-grade credit",
+      "colour_name": "Bonds Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Investment-grade credit",
+        "Investment-grade",
+        "IG bonds",
+        "IG credit",
+        "Investment grade"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.high_yield_credit",
+      "category": "Asset classes / instruments",
+      "keyword_group": "High-yield credit",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "High-yield credit",
+        "High-yield",
+        "HY bonds",
+        "Junk bonds",
+        "Speculative grade"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.mortgages_mbs",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Mortgages / MBS",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Mortgages / MBS",
+        "MBS",
+        "Mortgage-backed securities",
+        "Mortgage bonds",
+        "RMBS",
+        "CMBS"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.asset_backed_securities",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Asset-backed securities",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "ABS",
+        "Asset-backed securities",
+        "CLO",
+        "Collateralized loan obligations"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.private_credit",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Private credit",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Private credit",
+        "Private debt",
+        "Direct lending"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.secured_financing_margin_loans",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Secured financing / margin loans",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Secured financing / margin loans",
+        "Wealth financing",
+        "Secured loan",
+        "Margin loan",
+        "Portfolio financing",
+        "Lombard loan"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.chf_financing",
+      "category": "Asset classes / instruments",
+      "keyword_group": "CHF financing",
+      "colour_name": "SNB Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "CHF loan",
+        "CHF financing",
+        "Swiss franc loan",
+        "CHF borrowing"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.equities_shares",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Equities / shares",
+      "colour_name": "Equity Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Equities / shares",
+        "Stocks",
+        "Shares",
+        "Equities",
+        "Equity market"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.exchange_traded_funds",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Exchange-traded funds",
+      "colour_name": "Equity Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Exchange-traded funds",
+        "ETF",
+        "ETFs",
+        "Exchange-traded fund"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.options_derivatives",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Options / derivatives",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "Options / derivatives",
+        "Options",
+        "Puts",
+        "Calls",
+        "Derivatives",
+        "Futures",
+        "Swaps",
+        "FCN",
+        "ELN"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.foreign_exchange",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Foreign exchange",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "FX",
+        "Forex",
+        "Foreign exchange",
+        "Currencies"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.usd_sgd",
+      "category": "Asset classes / instruments",
+      "keyword_group": "USD/SGD",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "USD/SGD",
+        "USDSGD",
+        "USD-SGD",
+        "SGD per USD"
+      ],
+      "matching_rule": "fxpair",
+      "priority": 115
+    },
+    {
+      "id": "asset.usd_chf",
+      "category": "Asset classes / instruments",
+      "keyword_group": "USD/CHF",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "USD/CHF",
+        "USDCHF",
+        "USD-CHF",
+        "CHF per USD"
+      ],
+      "matching_rule": "fxpair",
+      "priority": 115
+    },
+    {
+      "id": "asset.chf_sgd",
+      "category": "Asset classes / instruments",
+      "keyword_group": "CHF/SGD",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "CHF/SGD",
+        "CHFSGD",
+        "CHF-SGD",
+        "SGD per CHF"
+      ],
+      "matching_rule": "fxpair",
+      "priority": 115
+    },
+    {
+      "id": "asset.usd_cnh",
+      "category": "Asset classes / instruments",
+      "keyword_group": "USD/CNH",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "USD/CNH",
+        "USDCNH",
+        "USD-CNH"
+      ],
+      "matching_rule": "fxpair",
+      "priority": 115
+    },
+    {
+      "id": "asset.usd_jpy",
+      "category": "Asset classes / instruments",
+      "keyword_group": "USD/JPY",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "USD/JPY",
+        "USDJPY",
+        "USD-JPY"
+      ],
+      "matching_rule": "fxpair",
+      "priority": 115
+    },
+    {
+      "id": "asset.s_neer",
+      "category": "Asset classes / instruments",
+      "keyword_group": "S$NEER",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "S$NEER",
+        "SGD NEER",
+        "S-dollar nominal effective exchange rate"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.gold",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Gold",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Gold",
+        "XAU",
+        "XAU/USD",
+        "Bullion"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.oil_crude",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Oil / crude",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Oil / crude",
+        "Oil",
+        "Crude oil",
+        "Brent",
+        "WTI",
+        "Petroleum"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.commodities",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Commodities",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Commodities",
+        "Commodity futures",
+        "Raw materials"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.reits",
+      "category": "Asset classes / instruments",
+      "keyword_group": "REITs",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "REIT",
+        "REITs",
+        "Real estate investment trust"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.cryptocurrency",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Cryptocurrency",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "Cryptocurrency",
+        "Bitcoin",
+        "BTC",
+        "Ether",
+        "ETH",
+        "Crypto",
+        "Digital assets"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.cash_deposits",
+      "category": "Asset classes / instruments",
+      "keyword_group": "Cash / deposits",
+      "colour_name": "Global Slate",
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "aliases": [
+        "Cash / deposits",
+        "Cash",
+        "Deposits",
+        "Fixed deposit",
+        "T-bill cash equivalent"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.cpf_oa_ra_sa",
+      "category": "Asset classes / instruments",
+      "keyword_group": "CPF OA / RA / SA",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "CPF OA / RA / SA",
+        "CPF OA",
+        "CPF RA",
+        "CPF SA",
+        "Ordinary Account",
+        "Retirement Account",
+        "Special Account"
+      ],
+      "matching_rule": "asset",
+      "priority": 98
+    },
+    {
+      "id": "asset.us_equity_index_etfs",
+      "category": "Asset classes / instruments",
+      "keyword_group": "US equity index ETFs",
+      "colour_name": "Equity Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "US equity index ETFs",
+        "SPY",
+        "QQQ",
+        "IVV",
+        "VOO",
+        "Invesco QQQ"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "sector.artificial_intelligence",
+      "category": "Sectors / themes",
+      "keyword_group": "Artificial intelligence",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "AI",
+        "Artificial intelligence",
+        "Generative AI",
+        "GenAI",
+        "Machine learning"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.semiconductors",
+      "category": "Sectors / themes",
+      "keyword_group": "Semiconductors",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Semiconductors",
+        "Semis",
+        "Chipmakers",
+        "Chipmaking",
+        "Foundries"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.cloud_data_centres",
+      "category": "Sectors / themes",
+      "keyword_group": "Cloud / data centres",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Cloud / data centres",
+        "Cloud",
+        "Cloud computing",
+        "Data centers",
+        "Data centres",
+        "Hyperscalers"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.software_cybersecurity",
+      "category": "Sectors / themes",
+      "keyword_group": "Software / cybersecurity",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "Software / cybersecurity",
+        "Software",
+        "SaaS",
+        "Cybersecurity",
+        "Enterprise software"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.financials_banking",
+      "category": "Sectors / themes",
+      "keyword_group": "Financials / banking",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Financials / banking",
+        "Financials",
+        "Banks",
+        "Banking",
+        "Lenders",
+        "Banking sector"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.insurance",
+      "category": "Sectors / themes",
+      "keyword_group": "Insurance",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Insurance",
+        "Insurers",
+        "Life insurance",
+        "Reinsurance"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.asset_management",
+      "category": "Sectors / themes",
+      "keyword_group": "Asset management",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Asset management",
+        "Asset managers",
+        "Wealth management",
+        "Funds",
+        "Fund management"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.healthcare",
+      "category": "Sectors / themes",
+      "keyword_group": "Healthcare",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Healthcare",
+        "Hospitals",
+        "Medical devices",
+        "Health care"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.pharmaceuticals_biotech",
+      "category": "Sectors / themes",
+      "keyword_group": "Pharmaceuticals / biotech",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Pharmaceuticals / biotech",
+        "Pharmaceuticals",
+        "Pharma",
+        "Biotechnology",
+        "Biotech",
+        "Drugmakers"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.energy_oil_gas",
+      "category": "Sectors / themes",
+      "keyword_group": "Energy / oil & gas",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Energy / oil & gas",
+        "Energy sector",
+        "Oil and gas",
+        "Exploration and production",
+        "E&P"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.clean_energy_renewables",
+      "category": "Sectors / themes",
+      "keyword_group": "Clean energy / renewables",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Clean energy / renewables",
+        "Renewables",
+        "Solar",
+        "Wind power",
+        "Green hydrogen",
+        "Clean energy"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.utilities_power",
+      "category": "Sectors / themes",
+      "keyword_group": "Utilities / power",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Utilities / power",
+        "Utilities",
+        "Electricity",
+        "Grid operators",
+        "Power generation"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.industrials_capital_goods",
+      "category": "Sectors / themes",
+      "keyword_group": "Industrials / capital goods",
+      "colour_name": "Macro Slate",
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "aliases": [
+        "Industrials / capital goods",
+        "Industrials",
+        "Industrial sector",
+        "Capital goods",
+        "Machinery"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.materials_chemicals",
+      "category": "Sectors / themes",
+      "keyword_group": "Materials / chemicals",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Materials / chemicals",
+        "Materials",
+        "Chemicals",
+        "Steel",
+        "Mining",
+        "Metals"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.consumer_discretionary",
+      "category": "Sectors / themes",
+      "keyword_group": "Consumer discretionary",
+      "colour_name": "Trump Orange",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Consumer discretionary",
+        "Luxury goods",
+        "Leisure spending",
+        "Durables"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.consumer_staples",
+      "category": "Sectors / themes",
+      "keyword_group": "Consumer staples",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "Consumer staples",
+        "Groceries",
+        "Household goods",
+        "Staples"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.retail_e_commerce",
+      "category": "Sectors / themes",
+      "keyword_group": "Retail / e-commerce",
+      "colour_name": "Trump Orange",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Retail / e-commerce",
+        "Retail",
+        "E-commerce",
+        "Online shopping",
+        "Merchants"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.automotive_evs",
+      "category": "Sectors / themes",
+      "keyword_group": "Automotive / EVs",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Automotive / EVs",
+        "Automobiles",
+        "Auto sector",
+        "EV",
+        "Electric vehicles",
+        "Battery electric vehicles"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.property_real_estate",
+      "category": "Sectors / themes",
+      "keyword_group": "Property / real estate",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Property / real estate",
+        "Property",
+        "Real estate",
+        "Commercial real estate",
+        "CRE"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.transport_logistics",
+      "category": "Sectors / themes",
+      "keyword_group": "Transport / logistics",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Transport / logistics",
+        "Shipping",
+        "Logistics",
+        "Airlines",
+        "Freight",
+        "Transportation"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.telecoms_media",
+      "category": "Sectors / themes",
+      "keyword_group": "Telecoms / media",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "Telecoms / media",
+        "Telecommunications",
+        "Telecoms",
+        "Streaming",
+        "Media sector"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.defence_aerospace",
+      "category": "Sectors / themes",
+      "keyword_group": "Defence / aerospace",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Defence / aerospace",
+        "Defence",
+        "Defense",
+        "Aerospace",
+        "Military contractors"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.infrastructure_construction",
+      "category": "Sectors / themes",
+      "keyword_group": "Infrastructure / construction",
+      "colour_name": "Macro Slate",
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "aliases": [
+        "Infrastructure / construction",
+        "Infrastructure",
+        "Construction",
+        "Civil engineering",
+        "Data-centre construction"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.agriculture_food",
+      "category": "Sectors / themes",
+      "keyword_group": "Agriculture / food",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Agriculture / food",
+        "Agriculture",
+        "Farming",
+        "Food production",
+        "Grains"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "sector.travel_tourism",
+      "category": "Sectors / themes",
+      "keyword_group": "Travel / tourism",
+      "colour_name": "Trump Orange",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Travel / tourism",
+        "Travel",
+        "Tourism",
+        "Hospitality",
+        "Hotels"
+      ],
+      "matching_rule": "sector",
+      "priority": 80
+    },
+    {
+      "id": "ticker.apple_aapl",
+      "category": "Companies / tickers",
+      "keyword_group": "Apple / AAPL",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Apple / AAPL",
+        "Apple",
+        "Apple Inc.",
+        "AAPL",
+        "$AAPL"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.microsoft_msft",
+      "category": "Companies / tickers",
+      "keyword_group": "Microsoft / MSFT",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Microsoft / MSFT",
+        "Microsoft",
+        "MSFT",
+        "$MSFT"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.nvidia_nvda",
+      "category": "Companies / tickers",
+      "keyword_group": "Nvidia / NVDA",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Nvidia / NVDA",
+        "Nvidia",
+        "NVIDIA",
+        "NVDA",
+        "$NVDA"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.alphabet_googl",
+      "category": "Companies / tickers",
+      "keyword_group": "Alphabet / GOOGL",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Alphabet / GOOGL",
+        "Alphabet",
+        "Google",
+        "GOOGL",
+        "GOOG",
+        "$GOOGL",
+        "$GOOG"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.amazon_amzn",
+      "category": "Companies / tickers",
+      "keyword_group": "Amazon / AMZN",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Amazon / AMZN",
+        "Amazon",
+        "Amazon.com",
+        "AMZN",
+        "$AMZN"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.meta_meta",
+      "category": "Companies / tickers",
+      "keyword_group": "Meta / META",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "Meta / META",
+        "Meta Platforms",
+        "Meta",
+        "Facebook parent",
+        "META",
+        "$META"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.tesla_tsla",
+      "category": "Companies / tickers",
+      "keyword_group": "Tesla / TSLA",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Tesla / TSLA",
+        "Tesla",
+        "TSLA",
+        "$TSLA"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.tsmc_tsm",
+      "category": "Companies / tickers",
+      "keyword_group": "TSMC / TSM",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "TSMC / TSM",
+        "TSMC",
+        "Taiwan Semiconductor Manufacturing",
+        "TSM",
+        "$TSM"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.broadcom_avgo",
+      "category": "Companies / tickers",
+      "keyword_group": "Broadcom / AVGO",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Broadcom / AVGO",
+        "Broadcom",
+        "AVGO",
+        "$AVGO"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.amd",
+      "category": "Companies / tickers",
+      "keyword_group": "AMD",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Advanced Micro Devices",
+        "AMD",
+        "$AMD"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.intel_intc",
+      "category": "Companies / tickers",
+      "keyword_group": "Intel / INTC",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Intel / INTC",
+        "Intel",
+        "INTC",
+        "$INTC"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.micron_mu",
+      "category": "Companies / tickers",
+      "keyword_group": "Micron / MU",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Micron / MU",
+        "Micron",
+        "MU",
+        "$MU"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.oracle_orcl",
+      "category": "Companies / tickers",
+      "keyword_group": "Oracle / ORCL",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Oracle / ORCL",
+        "Oracle",
+        "ORCL",
+        "$ORCL"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.palantir_pltr",
+      "category": "Companies / tickers",
+      "keyword_group": "Palantir / PLTR",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Palantir / PLTR",
+        "Palantir",
+        "PLTR",
+        "$PLTR"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.netflix_nflx",
+      "category": "Companies / tickers",
+      "keyword_group": "Netflix / NFLX",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "Netflix / NFLX",
+        "Netflix",
+        "NFLX",
+        "$NFLX"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.salesforce_crm",
+      "category": "Companies / tickers",
+      "keyword_group": "Salesforce / CRM",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Salesforce / CRM",
+        "Salesforce",
+        "CRM",
+        "$CRM"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.berkshire_hathaway_brk",
+      "category": "Companies / tickers",
+      "keyword_group": "Berkshire Hathaway / BRK",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Berkshire Hathaway / BRK",
+        "Berkshire Hathaway",
+        "BRK.A",
+        "BRK.B",
+        "$BRK.B"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.jpmorgan_jpm",
+      "category": "Companies / tickers",
+      "keyword_group": "JPMorgan / JPM",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "JPMorgan / JPM",
+        "JPMorgan Chase",
+        "JPMorgan",
+        "JPM",
+        "$JPM"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.goldman_sachs_gs",
+      "category": "Companies / tickers",
+      "keyword_group": "Goldman Sachs / GS",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Goldman Sachs / GS",
+        "Goldman Sachs",
+        "Goldman",
+        "GS",
+        "$GS"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.bank_of_america_bac",
+      "category": "Companies / tickers",
+      "keyword_group": "Bank of America / BAC",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Bank of America / BAC",
+        "Bank of America",
+        "BofA",
+        "BAC",
+        "$BAC"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.citigroup_c",
+      "category": "Companies / tickers",
+      "keyword_group": "Citigroup / C",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Citigroup / C",
+        "Citigroup",
+        "Citi",
+        "Citibank",
+        "C (NYSE)",
+        "$C"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.blackrock_blk",
+      "category": "Companies / tickers",
+      "keyword_group": "BlackRock / BLK",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "BlackRock / BLK",
+        "BlackRock",
+        "BLK",
+        "$BLK"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.ocbc_o39",
+      "category": "Companies / tickers",
+      "keyword_group": "OCBC / O39",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "OCBC / O39",
+        "OCBC",
+        "Oversea-Chinese Banking Corporation",
+        "O39",
+        "SGX:O39"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.dbs_d05",
+      "category": "Companies / tickers",
+      "keyword_group": "DBS / D05",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "DBS / D05",
+        "DBS",
+        "DBS Group",
+        "D05",
+        "SGX:D05"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.uob_u11",
+      "category": "Companies / tickers",
+      "keyword_group": "UOB / U11",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "UOB / U11",
+        "UOB",
+        "United Overseas Bank",
+        "U11",
+        "SGX:U11"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.sea_limited_se",
+      "category": "Companies / tickers",
+      "keyword_group": "Sea Limited / SE",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Sea Limited / SE",
+        "Sea Limited",
+        "NYSE:SE",
+        "SE",
+        "$SE"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.grab_grab",
+      "category": "Companies / tickers",
+      "keyword_group": "Grab / GRAB",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Grab / GRAB",
+        "Grab Holdings",
+        "Grab",
+        "GRAB",
+        "$GRAB"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.singtel_z74",
+      "category": "Companies / tickers",
+      "keyword_group": "Singtel / Z74",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "Singtel / Z74",
+        "Singtel",
+        "Singapore Telecommunications",
+        "Z74",
+        "SGX:Z74"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.singapore_airlines_c6l",
+      "category": "Companies / tickers",
+      "keyword_group": "Singapore Airlines / C6L",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "Singapore Airlines / C6L",
+        "Singapore Airlines",
+        "SIA",
+        "C6L",
+        "SGX:C6L"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.capitaland_investment_9ci",
+      "category": "Companies / tickers",
+      "keyword_group": "CapitaLand Investment / 9CI",
+      "colour_name": "Singapore Jade",
+      "text_light": "#047857",
+      "text_dark": "#6EE7B7",
+      "chip_bg_light": "#ECFDF5",
+      "chip_bg_dark": "#064E3B",
+      "aliases": [
+        "CapitaLand Investment / 9CI",
+        "CapitaLand Investment",
+        "CLI",
+        "SGX:9CI",
+        "9CI"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.pimco",
+      "category": "Companies / tickers",
+      "keyword_group": "PIMCO",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "PIMCO",
+        "Pacific Investment Management Company"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "ticker.hsbc",
+      "category": "Companies / tickers",
+      "keyword_group": "HSBC",
+      "colour_name": "Finance Navy",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "HSBC",
+        "HSBC Holdings",
+        "HSBC Life"
+      ],
+      "matching_rule": "ticker",
+      "priority": 120
+    },
+    {
+      "id": "macro.consumer_price_index_cpi",
+      "category": "Macro data / indicators",
+      "keyword_group": "Consumer price index / CPI",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Consumer price index / CPI",
+        "CPI",
+        "Consumer Price Index",
+        "Headline inflation"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.core_cpi",
+      "category": "Macro data / indicators",
+      "keyword_group": "Core CPI",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Core CPI",
+        "CPI excluding food and energy"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.pce_inflation",
+      "category": "Macro data / indicators",
+      "keyword_group": "PCE inflation",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "PCE",
+        "PCE inflation",
+        "Personal consumption expenditures"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.core_pce",
+      "category": "Macro data / indicators",
+      "keyword_group": "Core PCE",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Core PCE",
+        "Core PCE price index"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.producer_price_index_ppi",
+      "category": "Macro data / indicators",
+      "keyword_group": "Producer price index / PPI",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Producer price index / PPI",
+        "PPI",
+        "Producer Price Index"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.nonfarm_payrolls_nfp",
+      "category": "Macro data / indicators",
+      "keyword_group": "Nonfarm payrolls / NFP",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Nonfarm payrolls / NFP",
+        "NFP",
+        "Nonfarm payrolls",
+        "US payrolls",
+        "Jobs report"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.job_openings_jolts",
+      "category": "Macro data / indicators",
+      "keyword_group": "Job openings / JOLTS",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Job openings / JOLTS",
+        "JOLTS",
+        "Job Openings and Labor Turnover Survey",
+        "Job openings"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.unemployment_rate",
+      "category": "Macro data / indicators",
+      "keyword_group": "Unemployment rate",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Unemployment rate",
+        "Jobless rate",
+        "Labour market unemployment"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.jobless_claims",
+      "category": "Macro data / indicators",
+      "keyword_group": "Jobless claims",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Jobless claims",
+        "Initial jobless claims",
+        "Continuing claims",
+        "Unemployment claims"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.wages_average_hourly_earnings",
+      "category": "Macro data / indicators",
+      "keyword_group": "Wages / average hourly earnings",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Wages / average hourly earnings",
+        "Average hourly earnings",
+        "AHE",
+        "Wage growth"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.gdp_economic_growth",
+      "category": "Macro data / indicators",
+      "keyword_group": "GDP / economic growth",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "GDP / economic growth",
+        "GDP",
+        "Gross domestic product",
+        "Economic growth"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.pmi_ism",
+      "category": "Macro data / indicators",
+      "keyword_group": "PMI / ISM",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "PMI / ISM",
+        "PMI",
+        "ISM",
+        "Purchasing Managers Index",
+        "Manufacturing PMI",
+        "Services PMI"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.retail_sales",
+      "category": "Macro data / indicators",
+      "keyword_group": "Retail sales",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Retail sales",
+        "Consumer spending data"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.consumer_confidence",
+      "category": "Macro data / indicators",
+      "keyword_group": "Consumer confidence",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Consumer confidence",
+        "Consumer sentiment",
+        "Michigan sentiment"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.housing_data",
+      "category": "Macro data / indicators",
+      "keyword_group": "Housing data",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Housing data",
+        "Housing starts",
+        "Building permits",
+        "Existing home sales",
+        "New home sales"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.fed_funds_rate",
+      "category": "Macro data / indicators",
+      "keyword_group": "Fed funds rate",
+      "colour_name": "Fed Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "Fed funds rate",
+        "FFR",
+        "Federal funds target",
+        "Fed policy rate"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.sofr_sora",
+      "category": "Macro data / indicators",
+      "keyword_group": "SOFR / SORA",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "SOFR / SORA",
+        "SOFR",
+        "SORA",
+        "Secured Overnight Financing Rate",
+        "Singapore Overnight Rate Average"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.treasury_yields_rates",
+      "category": "Macro data / indicators",
+      "keyword_group": "Treasury yields / rates",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Treasury yields / rates",
+        "Bond yield",
+        "Treasury yields",
+        "YTM",
+        "Yield to maturity",
+        "10Y yield",
+        "30Y yield"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.yield_curve_term_spread",
+      "category": "Macro data / indicators",
+      "keyword_group": "Yield curve / term spread",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Yield curve / term spread",
+        "Yield curve",
+        "2s10s",
+        "2Y-10Y spread",
+        "Term premium",
+        "Curve steepening"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.ig_hy_credit_spreads",
+      "category": "Macro data / indicators",
+      "keyword_group": "IG / HY credit spreads",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "IG / HY credit spreads",
+        "OAS",
+        "Credit spread",
+        "IG spread",
+        "HY spread",
+        "Option-adjusted spread"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.delinquencies_arrears",
+      "category": "Macro data / indicators",
+      "keyword_group": "Delinquencies / arrears",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Delinquencies / arrears",
+        "Delinquencies",
+        "Delinquency",
+        "Late payments",
+        "30-day arrears",
+        "90+ days delinquent"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.defaults_npls",
+      "category": "Macro data / indicators",
+      "keyword_group": "Defaults / NPLs",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Defaults / NPLs",
+        "Default rate",
+        "Non-performing loans",
+        "NPL",
+        "NPL ratio",
+        "Charge-offs"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.government_deficits_debt",
+      "category": "Macro data / indicators",
+      "keyword_group": "Government deficits / debt",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Government deficits / debt",
+        "Fiscal deficit",
+        "Budget deficit",
+        "National debt",
+        "Debt-to-GDP"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.debt_issuance_supply",
+      "category": "Macro data / indicators",
+      "keyword_group": "Debt issuance / supply",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Debt issuance / supply",
+        "Bond issuance",
+        "Primary issuance",
+        "New borrowing",
+        "Issuance volume"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.fx_reserves",
+      "category": "Macro data / indicators",
+      "keyword_group": "FX reserves",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "FX reserves",
+        "Foreign-exchange reserves",
+        "Official reserves"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.snb_sight_deposits",
+      "category": "Macro data / indicators",
+      "keyword_group": "SNB sight deposits",
+      "colour_name": "SNB Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "Sight deposits",
+        "SNB sight deposits"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.money_supply_liquidity",
+      "category": "Macro data / indicators",
+      "keyword_group": "Money supply / liquidity",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Money supply / liquidity",
+        "M2",
+        "Money supply",
+        "Liquidity",
+        "Central bank balance sheet"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.inflation_expectations",
+      "category": "Macro data / indicators",
+      "keyword_group": "Inflation expectations",
+      "colour_name": "Data Cyan",
+      "text_light": "#0E7490",
+      "text_dark": "#67E8F9",
+      "chip_bg_light": "#ECFEFF",
+      "chip_bg_dark": "#083344",
+      "aliases": [
+        "Inflation expectations",
+        "Breakeven inflation",
+        "5Y5Y forward"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.mortgage_rates",
+      "category": "Macro data / indicators",
+      "keyword_group": "Mortgage rates",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Mortgage rates",
+        "Home loan rates",
+        "Fixed mortgage rate"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.trade_data",
+      "category": "Macro data / indicators",
+      "keyword_group": "Trade data",
+      "colour_name": "Macro Slate",
+      "text_light": "#334155",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "aliases": [
+        "Trade data",
+        "Trade balance",
+        "Exports",
+        "Imports",
+        "Current account"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "macro.corporate_earnings_metrics",
+      "category": "Macro data / indicators",
+      "keyword_group": "Corporate earnings metrics",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Corporate earnings metrics",
+        "EPS",
+        "Earnings per share",
+        "Revenue",
+        "EBITDA",
+        "Free cash flow",
+        "FCF",
+        "Capex"
+      ],
+      "matching_rule": "macro",
+      "priority": 85
+    },
+    {
+      "id": "event.fomc_rate_decision",
+      "category": "Events / catalysts",
+      "keyword_group": "FOMC rate decision",
+      "colour_name": "Fed Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "FOMC rate decision",
+        "FOMC decision",
+        "Fed rate decision",
+        "Fed meeting",
+        "FOMC statement"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.mas_monetary_policy_statement",
+      "category": "Events / catalysts",
+      "keyword_group": "MAS monetary policy statement",
+      "colour_name": "MAS Teal",
+      "text_light": "#0F766E",
+      "text_dark": "#5EEAD4",
+      "chip_bg_light": "#F0FDFA",
+      "chip_bg_dark": "#042F2E",
+      "aliases": [
+        "MAS monetary policy statement",
+        "MAS MPS",
+        "MAS policy statement",
+        "MAS policy review",
+        "S$NEER policy decision"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.snb_policy_decision",
+      "category": "Events / catalysts",
+      "keyword_group": "SNB policy decision",
+      "colour_name": "SNB Rose",
+      "text_light": "#9D174D",
+      "text_dark": "#FDA4AF",
+      "chip_bg_light": "#FFF1F2",
+      "chip_bg_dark": "#4C0519",
+      "aliases": [
+        "SNB policy decision",
+        "SNB decision",
+        "SNB rate decision",
+        "Swiss monetary policy assessment"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.ecb_monetary_policy_decision",
+      "category": "Events / catalysts",
+      "keyword_group": "ECB monetary policy decision",
+      "colour_name": "Europe Indigo",
+      "text_light": "#4338CA",
+      "text_dark": "#A5B4FC",
+      "chip_bg_light": "#EEF2FF",
+      "chip_bg_dark": "#1E1B4B",
+      "aliases": [
+        "ECB rate decision",
+        "ECB policy meeting",
+        "ECB monetary policy decision"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.elections_results",
+      "category": "Events / catalysts",
+      "keyword_group": "Elections / results",
+      "colour_name": "Policy Plum",
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "aliases": [
+        "Elections / results",
+        "Election",
+        "Elections",
+        "Midterms",
+        "Presidential election",
+        "Election results",
+        "Polling"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.tariffs_trade_restrictions",
+      "category": "Events / catalysts",
+      "keyword_group": "Tariffs / trade restrictions",
+      "colour_name": "Trump Orange",
+      "text_light": "#9A3412",
+      "text_dark": "#FDBA74",
+      "chip_bg_light": "#FFF7ED",
+      "chip_bg_dark": "#431407",
+      "aliases": [
+        "Tariffs / trade restrictions",
+        "Tariff",
+        "Tariffs",
+        "Import duties",
+        "Export controls",
+        "Trade restrictions"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.sanctions",
+      "category": "Events / catalysts",
+      "keyword_group": "Sanctions",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Sanctions",
+        "Export ban",
+        "Embargo",
+        "Asset freeze"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.war_geopolitical_escalation",
+      "category": "Events / catalysts",
+      "keyword_group": "War / geopolitical escalation",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "War / geopolitical escalation",
+        "War",
+        "Conflict",
+        "Military strike",
+        "Escalation",
+        "Invasion"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.ceasefire_peace_agreement",
+      "category": "Events / catalysts",
+      "keyword_group": "Ceasefire / peace agreement",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Ceasefire / peace agreement",
+        "Ceasefire",
+        "Peace agreement",
+        "Truce",
+        "De-escalation"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.recession_hard_landing",
+      "category": "Events / catalysts",
+      "keyword_group": "Recession / hard landing",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Recession / hard landing",
+        "Recession",
+        "Hard landing",
+        "Economic contraction"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.financial_crisis_liquidity_stress",
+      "category": "Events / catalysts",
+      "keyword_group": "Financial crisis / liquidity stress",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Financial crisis / liquidity stress",
+        "Liquidity crisis",
+        "Bank run",
+        "Systemic risk",
+        "Funding stress",
+        "Contagion"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.earnings_release",
+      "category": "Events / catalysts",
+      "keyword_group": "Earnings release",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Earnings release",
+        "Quarterly earnings",
+        "Results announcement",
+        "Quarterly results"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.guidance_change",
+      "category": "Events / catalysts",
+      "keyword_group": "Guidance change",
+      "colour_name": "Company Ocean",
+      "text_light": "#0369A1",
+      "text_dark": "#7DD3FC",
+      "chip_bg_light": "#F0F9FF",
+      "chip_bg_dark": "#082F49",
+      "aliases": [
+        "Guidance change",
+        "Guidance",
+        "Profit warning",
+        "Forecast revision",
+        "Outlook cut",
+        "Outlook raised"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.credit_downgrade_upgrade",
+      "category": "Events / catalysts",
+      "keyword_group": "Credit downgrade / upgrade",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Credit downgrade / upgrade",
+        "Downgrade",
+        "Upgrade",
+        "Ratings action",
+        "Credit rating change"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.default_restructuring",
+      "category": "Events / catalysts",
+      "keyword_group": "Default / restructuring",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Default / restructuring",
+        "Default",
+        "Distressed exchange",
+        "Debt restructuring",
+        "Covenant breach"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.bankruptcy_insolvency",
+      "category": "Events / catalysts",
+      "keyword_group": "Bankruptcy / insolvency",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Bankruptcy / insolvency",
+        "Bankruptcy",
+        "Insolvency",
+        "Chapter 11",
+        "Administration filing"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.bond_issue_placement",
+      "category": "Events / catalysts",
+      "keyword_group": "Bond issue / placement",
+      "colour_name": "Bonds Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Bond issue / placement",
+        "Bond offering",
+        "Bond issue",
+        "Bond pricing",
+        "Debt placement",
+        "New bond deal"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.treasury_auction",
+      "category": "Events / catalysts",
+      "keyword_group": "Treasury auction",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Treasury auction",
+        "UST auction",
+        "Bond auction",
+        "T-bill auction"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.treasury_refunding",
+      "category": "Events / catalysts",
+      "keyword_group": "Treasury refunding",
+      "colour_name": "Rates Blue",
+      "text_light": "#1E40AF",
+      "text_dark": "#BFDBFE",
+      "chip_bg_light": "#DBEAFE",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "Treasury refunding",
+        "Quarterly refunding",
+        "Refunding announcement"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.mergers_acquisitions",
+      "category": "Events / catalysts",
+      "keyword_group": "Mergers & acquisitions",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "Mergers & acquisitions",
+        "M&A",
+        "Merger",
+        "Acquisition",
+        "Takeover",
+        "Buyout"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.ipo_listing",
+      "category": "Events / catalysts",
+      "keyword_group": "IPO / listing",
+      "colour_name": "Company Magenta",
+      "text_light": "#86198F",
+      "text_dark": "#F0ABFC",
+      "chip_bg_light": "#FDF4FF",
+      "chip_bg_dark": "#4A044E",
+      "aliases": [
+        "IPO / listing",
+        "IPO",
+        "Initial public offering",
+        "Stock listing",
+        "Spin-off"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.buybacks_dividends",
+      "category": "Events / catalysts",
+      "keyword_group": "Buybacks / dividends",
+      "colour_name": "Growth Green",
+      "text_light": "#166534",
+      "text_dark": "#86EFAC",
+      "chip_bg_light": "#F0FDF4",
+      "chip_bg_dark": "#052E16",
+      "aliases": [
+        "Buybacks / dividends",
+        "Share repurchase",
+        "Stock buyback",
+        "Dividend",
+        "Special dividend"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.central_bank_intervention",
+      "category": "Events / catalysts",
+      "keyword_group": "Central bank intervention",
+      "colour_name": "FX Purple",
+      "text_light": "#6D28D9",
+      "text_dark": "#C4B5FD",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "Central bank intervention",
+        "FX intervention",
+        "Currency intervention",
+        "Yield curve control",
+        "Market operation"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.unexpected_shock_surprise",
+      "category": "Events / catalysts",
+      "keyword_group": "Unexpected shock / surprise",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "Unexpected shock / surprise",
+        "Surprise inflation",
+        "Unexpected shock",
+        "Black swan",
+        "Volatility spike"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.supply_chain_disruption",
+      "category": "Events / catalysts",
+      "keyword_group": "Supply chain disruption",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Supply chain disruption",
+        "Port closure",
+        "Export disruption",
+        "Shipping bottleneck"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.ai_capital_expenditure",
+      "category": "Events / catalysts",
+      "keyword_group": "AI capital expenditure",
+      "colour_name": "AI Violet",
+      "text_light": "#6D28D9",
+      "text_dark": "#DDD6FE",
+      "chip_bg_light": "#F5F3FF",
+      "chip_bg_dark": "#2E1065",
+      "aliases": [
+        "AI capital expenditure",
+        "AI capex",
+        "AI investment",
+        "Data-centre financing",
+        "Hyperscaler capex"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.energy_supply_decision",
+      "category": "Events / catalysts",
+      "keyword_group": "Energy supply decision",
+      "colour_name": "Energy Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FDE68A",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "Energy supply decision",
+        "OPEC+ output decision",
+        "Production cut",
+        "Output increase",
+        "Oil supply disruption"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "event.regulatory_legal_decision",
+      "category": "Events / catalysts",
+      "keyword_group": "Regulatory / legal decision",
+      "colour_name": "Policy Plum",
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "aliases": [
+        "Regulatory / legal decision",
+        "Court ruling",
+        "Regulatory action",
+        "Antitrust ruling",
+        "New regulation",
+        "Legislation"
+      ],
+      "matching_rule": "event",
+      "priority": 92
+    },
+    {
+      "id": "status.breaking",
+      "category": "Editorial status",
+      "keyword_group": "BREAKING",
+      "colour_name": "Risk Red",
+      "text_light": "#B91C1C",
+      "text_dark": "#FCA5A5",
+      "chip_bg_light": "#FEF2F2",
+      "chip_bg_dark": "#450A0A",
+      "aliases": [
+        "BREAKING",
+        "Breaking news"
+      ],
+      "matching_rule": "status",
+      "priority": 55
+    },
+    {
+      "id": "status.new",
+      "category": "Editorial status",
+      "keyword_group": "NEW",
+      "colour_name": "US Blue",
+      "text_light": "#1D4ED8",
+      "text_dark": "#93C5FD",
+      "chip_bg_light": "#EFF6FF",
+      "chip_bg_dark": "#172554",
+      "aliases": [
+        "NEW",
+        "New story"
+      ],
+      "matching_rule": "status",
+      "priority": 55
+    },
+    {
+      "id": "status.follow_up",
+      "category": "Editorial status",
+      "keyword_group": "FOLLOW-UP",
+      "colour_name": "Credit Amber",
+      "text_light": "#92400E",
+      "text_dark": "#FCD34D",
+      "chip_bg_light": "#FFFBEB",
+      "chip_bg_dark": "#451A03",
+      "aliases": [
+        "FOLLOW-UP",
+        "Update",
+        "Substantive follow-up"
+      ],
+      "matching_rule": "status",
+      "priority": 55
+    },
+    {
+      "id": "status.correction",
+      "category": "Editorial status",
+      "keyword_group": "CORRECTION",
+      "colour_name": "Policy Plum",
+      "text_light": "#7E22CE",
+      "text_dark": "#D8B4FE",
+      "chip_bg_light": "#FAF5FF",
+      "chip_bg_dark": "#3B0764",
+      "aliases": [
+        "CORRECTION",
+        "Correction",
+        "Retraction"
+      ],
+      "matching_rule": "status",
+      "priority": 55
+    },
+    {
+      "id": "status.catch_up",
+      "category": "Editorial status",
+      "keyword_group": "CATCH-UP",
+      "colour_name": "Status Gray",
+      "text_light": "#475569",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "aliases": [
+        "CATCH-UP",
+        "Backfill",
+        "Late discovery"
+      ],
+      "matching_rule": "status",
+      "priority": 55
+    },
+    {
+      "id": "status.partial_unverified",
+      "category": "Editorial status",
+      "keyword_group": "PARTIAL / UNVERIFIED",
+      "colour_name": "Status Gray",
+      "text_light": "#475569",
+      "text_dark": "#CBD5E1",
+      "chip_bg_light": "#F1F5F9",
+      "chip_bg_dark": "#1E293B",
+      "aliases": [
+        "PARTIAL / UNVERIFIED",
+        "PARTIAL",
+        "Source incomplete",
+        "Unverified",
+        "Coverage gap"
+      ],
+      "matching_rule": "status",
+      "priority": 55
+    }
+  ]
+}
