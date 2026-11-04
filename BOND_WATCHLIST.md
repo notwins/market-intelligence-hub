@@ -1,0 +1,13 @@
+# Default bond watchlist
+
+V4 shares one default reference list across Watchlist, UST, historical yields/curves, and the security master. It contains the 29 U.S. Treasury ISINs supplied on 4 November 2026 plus Temasek Financial (I) 2.5% 6 October 2070, Regulation S ISIN US87973RAW07. This is a watchlist, never a declaration of holdings or executed trades.
+
+All 30 ISINs already occur exactly once in the preserved 8,466-record master. Matching records sort first within active master filters; existing saved lists and selections are untouched. A built-in default-list view is available in Master Watchlists without writing to the user's saved workspace. Clicking a bond filters the master by exact ISIN.
+
+The supplied 29-bond raw fields, including original text, are retained in `site/data/default-bond-watchlist.json` and its byte-equivalent JS data object. Quote dates are unknown; receipt date is explicitly separate. The master continues to show its older independent snapshot. No source record or automatic feed is replaced. UST Treasury-32nd decoded prices are retained for audit only; the panel displays the supplied raw bid/ask, reported yield, after-spread yield and MOA, not recomputed financial returns. Its independently selected yield scatter uses true years to maturity at the receipt date, not an invented quote date. Selection is shared between panels for the session and does not change holdings or curve benchmark data.
+
+The supplied 2% US912810TC27 maturity is corrected to 15 November 2041, consistent with TreasuryDirect and the user's separate New date column. Original 30 November text is retained. Temasek terms are confirmed from https://www.temasek.com.sg/en/our-financials/temasek-bonds/temasek-financial-i-bonds?tagpath=%23tf1 . It is corporate, callable and separate from the UST scatter/benchmark curves. No Temasek quote, yield or MOA is invented.
+
+Tests: `node scripts/test_bond_watchlist.cjs`, included by `test_v4.cjs`; Python discovery and all non-browser JS suites. These check exact identities, source immutability, pinning under name/price/AR order, filters, saved-list preservation, unknown/zero handling, Treasury conversions, source/raw fields, corrected maturity, corporate exclusion and escaped output. DOM interaction tests were additionally run locally with jsdom. Local browser cannot access the executor loopback server; actual production UI must be checked after deployment.
+
+Rollback only these feature files and targeted V4 integration changes; preserve subsequent reports, archives, feeds and user workspaces. No credentials, schedules or access settings are changed.

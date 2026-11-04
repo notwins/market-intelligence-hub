@@ -28,3 +28,5 @@ test('credit desk excludes non-financial word senses without deleting source row
 console.log(`${count} V4 behavior checks passed.`);
 
 require('./test_ust_curves.cjs');
+
+require('./test_bond_watchlist.cjs');
