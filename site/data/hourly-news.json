@@ -2,13 +2,81 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-04T05:20:34.669Z",
+  "publisher_checked_at": "2026-11-04T14:21:42+08:00",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-hourly-20261104T053328Z",
+      "report_at": "2026-11-04T13:38:00+08:00",
+      "cutoff": "2026-11-04T13:33:28+08:00",
+      "window_start": "2026-11-04T12:33:28+08:00",
+      "coverage": "partial",
+      "summary": "Partial Reuters scan, 4 November 2026, 12:33:28–1:33:28 PM SGT. One substantive follow-up on Democratic control of both US congressional chambers and President Trump's response, plus a new Indonesian presidential chief-of-staff dismissal. Three Reuters sources reviewed; not an exhaustive wire scan.",
+      "limitations": [
+        "Targeted Reuters discovery, not an exhaustive wire scan; prior source-report coverage gaps remain unresolved.",
+        "Election overview retains an original 3 November publication timestamp despite substantive later updates; precise revision time is unverified.",
+        "Exact time of the Trump interview, Indonesian dismissal and other underlying developments was not independently established. Development timestamps remain null; no BREAKING designation is claimed.",
+        "No time-matched market prices or reactions attributable to either development were confirmed.",
+        "Cross-briefing duplication checks were limited by incomplete access to earlier daily-briefing contents; no complete-scan cutoff can be advanced."
+      ],
+      "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/world/us/trump-acknowledges-iran-played-role-republican-midterm-losses-2026-11-04/",
+          "title": "Trump acknowledges Iran role in Democratic sweep",
+          "published_at": "2026-11-04T05:17Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/us/trump-faces-midterm-verdict-with-control-congress-stake-2026-11-03/",
+          "title": "Democrats capture Congress in sweeping setback for Trump",
+          "published_at": "2026-11-03T06:04Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/asia-pacific/indonesia-president-sacks-chief-staff-over-alleged-wiretap-2026-11-04/",
+          "title": "Indonesia president sacks chief of staff over alleged wiretap",
+          "published_at": "2026-11-04T05:11Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261104-US-MIDTERMS-ADDITIONAL-FLIPS",
+          "version": 4,
+          "status": "follow-up",
+          "freshness": "current",
+          "topic": "US_POLITICS_FISCAL_POLICY_RATES",
+          "headline": "Reuters reports Democratic control of both chambers; Trump acknowledges Iran war role in Republican losses",
+          "body": "Reuters' election overview reports that Democrats captured the House and Senate, with six Republican-held Senate seats flipped, subject to media projections and counting rather than final certification. A separately published Reuters article reports President Trump acknowledged the war in Iran contributed to Republican losses and said he would veto legislation he opposed. The election overview's exact revision time was not confirmed, and no event-timed market move was verified.",
+          "analysis": "Interpretation: A change in congressional control may affect budget negotiations, oversight and AI policy; presidential veto powers still constrain legislation. It does not establish a directional move in Treasury yields, USD or equities.",
+          "watch_next": "Official election certification, confirmed seat balance, 2027 fiscal negotiations and Reuters-verified market pricing after these developments.",
+          "earlier": "Version 3 at the 12:45:58 PM SGT cutoff reported four further Democratic Senate pickups while ultimate chamber control was unresolved. Reuters now reports control of both chambers and a separate Trump response.",
+          "source_urls": [
+            "https://www.reuters.com/world/us/trump-acknowledges-iran-played-role-republican-midterm-losses-2026-11-04/",
+            "https://www.reuters.com/world/us/trump-faces-midterm-verdict-with-control-congress-stake-2026-11-03/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-IDN-CHIEF-STAFF-DISMISSAL",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "RISKS_ASEAN_GOVERNANCE",
+          "headline": "Indonesia's president dismisses chief of staff amid alleged wiretapping investigation",
+          "body": "Reuters reports President Prabowo Subianto dismissed his chief of staff after the official and two senior police officers were arrested on suspicion of illegally wiretapping the president, ministers and others. A presidential spokesperson said the allegations could amount to treason and threaten national security. These remain allegations, not convictions; an exact dismissal time and attributable financial-market reaction were not verified.",
+          "analysis": "Interpretation: The dismissal creates governance uncertainty in a major Southeast Asian economy, but no economic-policy impact or quantified market repricing has been established.",
+          "watch_next": "Investigation findings, appointment of a replacement and any confirmed policy or rupiah, bond or equity-market developments.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/asia-pacific/indonesia-president-sacks-chief-staff-over-alleged-wiretap-2026-11-04/"
+          ],
+          "development_at": null
+        }
+      ]
+    },
     {
       "id": "reuters-hourly-20261104T044558Z",
       "report_at": "2026-11-04T12:50:15+08:00",
