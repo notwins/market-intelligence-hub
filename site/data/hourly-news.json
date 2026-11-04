@@ -2,13 +2,178 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-04T00:15:22.826Z",
+  "publisher_checked_at": "2026-11-04T04:19:56.246Z",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-hourly-20261104T034709Z",
+      "report_at": "2026-11-04T11:52:07+08:00",
+      "cutoff": "2026-11-04T11:47:09+08:00",
+      "window_start": "2026-11-04T10:47:09+08:00",
+      "coverage": "partial",
+      "summary": "Partial Reuters report covering 4 November 2026, 10:47:09–11:47:09 SGT. One material US House projection follow-up, plus North Korean missiles and US crude inventory catch-up. Selected Reuters developments only; not an exhaustive wire scan.",
+      "limitations": [
+        "Targeted Reuters research; an exhaustive wire scan and full cross-edition audit were not completed.",
+        "No previously verified complete-scan cutoff; missing earlier reports and reporting intervals remain coverage gaps.",
+        "Some earlier daily briefing excerpts and same-URL revision histories were unavailable or incomplete.",
+        "Reuters publication timestamps do not establish precise underlying event or market-reaction times; development_at remains null.",
+        "Source publisher updates and complete cross-briefing duplicate checks remain unverified.",
+        "No directly attributable market reaction to House projection or North Korean launch was verified. API inventory figures were preliminary and not EIA official data."
+      ],
+      "original_url": "https://chatgpt.com/c/6ae56595-efc0-83ec-aae5-fd9a9266c2f1",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/world/us/democrats-projected-win-majority-control-us-house-us-media-project-2026-11-04/",
+          "title": "Democrats projected to win majority control of US House, US media project",
+          "published_at": "2026-11-04T03:18Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/us/democrats-flip-us-representative-ryan-mackenzies-pennsylvania-district-2026-11-04/",
+          "title": "Democrats flip US Representative Ryan Mackenzie's Pennsylvania district",
+          "published_at": "2026-11-04T03:23Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/asia-pacific/north-korea-fires-unidentified-projectile-toward-sea-off-its-east-coast-seoul-2026-11-04/",
+          "title": "North Korea fires multiple missiles in fourth weapons launch in a month, Seoul says",
+          "published_at": "2026-11-04T01:57Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/energy/oil-edges-down-investors-await-us-midterm-election-results-2026-11-04/",
+          "title": "Oil edges down as investors await US midterm election results",
+          "published_at": "2026-11-04T02:10Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261104-US-MIDTERMS-ADDITIONAL-FLIPS",
+          "version": 2,
+          "status": "follow-up",
+          "freshness": "current",
+          "topic": "US_POLITICS_FISCAL_POLICY",
+          "headline": "Democrats projected to win majority control of US House",
+          "body": "Reuters published at 03:18 UTC that US media projected Democrats to win House majority; not certified final count. At 03:23 UTC Reuters reported Democrat Bob Brooks projected to flip Republican Ryan Mackenzie Pennsylvania district. Senate control remained unresolved in accessible Reuters coverage.",
+          "analysis": "A prospective Democratic House majority changes legislative and oversight dynamics and may affect fiscal, Treasury supply, healthcare and AI regulation expectations.",
+          "watch_next": "Final House projections and certification; Senate majority; effects on USD, Treasuries and AI stocks only when independently measured.",
+          "earlier": "Previous report covered individual House and Senate seat flips with control of Congress unresolved. The US House majority itself is now projected for Democrats, beyond isolated seat flips. Pennsylvania seat newly reported as another Republican-to-Democrat flip.",
+          "source_urls": [
+            "https://www.reuters.com/world/us/democrats-projected-win-majority-control-us-house-us-media-project-2026-11-04/",
+            "https://www.reuters.com/world/us/democrats-flip-us-representative-ryan-mackenzies-pennsylvania-district-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-NK-MULTIPLE-MISSILE-LAUNCH",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "ASIA_GEOPOLITICAL_RISK",
+          "headline": "North Korea launches multiple missiles, its fourth weapons test in a month",
+          "body": "South Korea Defence Ministry said North Korea fired multiple missiles from Sondok toward waters off its east coast. Fourth such weapons launch within a month; Seoul and Washington were analysing the launch. Reuters did not establish a new military confrontation or quantifiable market reaction.",
+          "analysis": "A regional security risk relevant to Asian risk sentiment, but no evidence from the cited report of an immediate FX/portfolio repricing.",
+          "watch_next": "Missile classification, allied response and regional-market implications if Reuters subsequently establishes them.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/asia-pacific/north-korea-fires-unidentified-projectile-toward-sea-off-its-east-coast-seoul-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-US-API-CRUDE-DRAW",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "GLOBAL_MARKETS_ENERGY_INVENTORIES",
+          "headline": "Industry data show US crude inventories unexpectedly fall 5.27 million barrels",
+          "body": "Market sources citing API indicated US crude stocks decreased 5.27 million barrels in the week ended 30 October; eight Reuters-polled analysts expected an increase of about 880,000 barrels. Reuters observed Brent down 26 cents to US$103.34 and WTI down 53 cents to US$95.56 at 01:57 UTC, before this Reuters article publication. Official EIA crude inventory release scheduled for 4 Nov 15:30 UTC / 23:30 SGT, not yet available as of cutoff.",
+          "analysis": "Larger-than-expected industry stock draw is supportive for physical oil balance, while geopolitical and demand expectations could dominate price; compare with official EIA data before extrapolating.",
+          "watch_next": "Official EIA inventory report 4 Nov 23:30 SGT; Middle East developments and Brent/WTI movements.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/energy/oil-edges-down-investors-await-us-midterm-election-results-2026-11-04/"
+          ],
+          "development_at": null
+        }
+      ]
+    },
+    {
+      "id": "reuters-hourly-20261104T031602Z",
+      "report_at": "2026-11-04T11:20:12+08:00",
+      "cutoff": "2026-11-04T11:16:02+08:00",
+      "window_start": "2026-11-04T10:16:02+08:00",
+      "coverage": "partial",
+      "summary": "Partial Reuters report covering 4 November 2026, 10:16:02–11:16:02 SGT. One new election story and one material AMD follow-up. Selected Reuters developments only; not an exhaustive wire scan.",
+      "limitations": [
+        "Targeted Reuters research; an exhaustive wire scan and full cross-edition audit were not completed.",
+        "No previously verified complete-scan cutoff; missing earlier reports and reporting intervals remain coverage gaps.",
+        "Some earlier daily briefing excerpts and same-URL revision histories were unavailable or incomplete.",
+        "Reuters publication timestamps do not establish precise underlying event or market-reaction times; development_at remains null.",
+        "Source publisher updates and complete cross-briefing duplicate checks remain unverified.",
+        "South Carolina Senate coverage was revised under an older Reuters article URL without a verified revision timestamp; not treated as breaking."
+      ],
+      "original_url": "https://chatgpt.com/c/6ae56595-efc0-83ec-aae5-fd9a9266c2f1",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/world/us/democrats-flip-us-representative-tom-keans-new-jersey-district-2026-11-04/",
+          "title": "Democrats flip US Representative Tom Kean's New Jersey district",
+          "published_at": "2026-11-04T02:52:53Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/us/trump-faces-midterm-verdict-with-control-congress-stake-2026-11-03/",
+          "title": "Democrats win South Carolina Senate race in rebuke to Trump",
+          "published_at": "2026-11-03T06:04:22Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/china/global-markets-wrapup-1-2026-11-04/",
+          "title": "Stocks, dollar slide after some early wins for Democrats in US midterm election",
+          "published_at": "2026-11-04T01:06:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/legal/transactional/amds-openai-meta-chip-deals-trigger-1-billion-quarterly-charge-2026-11-04/",
+          "title": "AMD's OpenAI, Meta chip deals trigger $1 billion quarterly charge",
+          "published_at": "2026-11-04T02:12:44Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261104-US-MIDTERMS-ADDITIONAL-FLIPS",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "US_POLITICS_FISCAL_POLICY_GLOBAL_MARKETS",
+          "headline": "Democrats gain additional congressional seats, including NJ House and SC Senate",
+          "body": "New Jersey 7th House district projected flipped from Republican Tom Kean to Democrat Rebecca Bennett. Reuters' substantially revised older election article reports South Carolina Senate flip by Democrat Annie Andrews; precise revision timestamp unknown. Earlier Reuters Asian market report observed US 10Y yield down 6bp at 4.906%, S&P500 futures -0.8% and Nasdaq futures -1.8%; not attributable specifically to the subsequently reported seat flips.",
+          "analysis": "Changes the path to congressional control and potentially fiscal/tech oversight; chambers remain undecided.",
+          "watch_next": "Watch additional Senate/House races, certifications, fiscal policy statements and rate market reaction.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/us/democrats-flip-us-representative-tom-keans-new-jersey-district-2026-11-04/",
+            "https://www.reuters.com/world/us/trump-faces-midterm-verdict-with-control-congress-stake-2026-11-03/",
+            "https://www.reuters.com/world/china/global-markets-wrapup-1-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261103-AMD-Q3-Q4-GUIDANCE",
+          "version": 2,
+          "status": "follow-up",
+          "freshness": "catch-up",
+          "topic": "EQUITIES_AI_FINANCING",
+          "headline": "AMD discloses $1.07bn noncash charge tied to AI-customer equity warrants",
+          "body": "AMD recorded Q3 USD1.07bn noncash warrant charge, equal to 66 cents per share. OpenAI and Meta warrants could separately allow ownership stakes of roughly 10%, conditional on vesting and exercise. More AMD guidance on warrant conditions expected in 2027.",
+          "analysis": "Strong AI growth coexists with dilutive equity incentives; noncash charge not immediate cash expenditure.",
+          "watch_next": "Monitor vesting conditions, diluted share count and cash gross margins.",
+          "earlier": "R-20261103-AMD-Q3-Q4-GUIDANCE v1, hourly report cutoff 2026-11-04 05:30:55 SGT ",
+          "source_urls": [
+            "https://www.reuters.com/legal/transactional/amds-openai-meta-chip-deals-trigger-1-billion-quarterly-charge-2026-11-04/"
+          ],
+          "development_at": null
+        }
+      ]
+    },
     {
       "id": "reuters-hourly-20261103T235946Z",
       "report_at": "2026-11-04T08:04:11+08:00",

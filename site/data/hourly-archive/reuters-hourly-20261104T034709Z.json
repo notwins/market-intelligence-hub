@@ -1,0 +1,90 @@
+{
+  "id": "reuters-hourly-20261104T034709Z",
+  "report_at": "2026-11-04T11:52:07+08:00",
+  "cutoff": "2026-11-04T11:47:09+08:00",
+  "window_start": "2026-11-04T10:47:09+08:00",
+  "coverage": "partial",
+  "summary": "Partial Reuters report covering 4 November 2026, 10:47:09–11:47:09 SGT. One material US House projection follow-up, plus North Korean missiles and US crude inventory catch-up. Selected Reuters developments only; not an exhaustive wire scan.",
+  "limitations": [
+    "Targeted Reuters research; an exhaustive wire scan and full cross-edition audit were not completed.",
+    "No previously verified complete-scan cutoff; missing earlier reports and reporting intervals remain coverage gaps.",
+    "Some earlier daily briefing excerpts and same-URL revision histories were unavailable or incomplete.",
+    "Reuters publication timestamps do not establish precise underlying event or market-reaction times; development_at remains null.",
+    "Source publisher updates and complete cross-briefing duplicate checks remain unverified.",
+    "No directly attributable market reaction to House projection or North Korean launch was verified. API inventory figures were preliminary and not EIA official data."
+  ],
+  "original_url": "https://chatgpt.com/c/6ae56595-efc0-83ec-aae5-fd9a9266c2f1",
+  "sources": [
+    {
+      "url": "https://www.reuters.com/world/us/democrats-projected-win-majority-control-us-house-us-media-project-2026-11-04/",
+      "title": "Democrats projected to win majority control of US House, US media project",
+      "published_at": "2026-11-04T03:18Z"
+    },
+    {
+      "url": "https://www.reuters.com/world/us/democrats-flip-us-representative-ryan-mackenzies-pennsylvania-district-2026-11-04/",
+      "title": "Democrats flip US Representative Ryan Mackenzie's Pennsylvania district",
+      "published_at": "2026-11-04T03:23Z"
+    },
+    {
+      "url": "https://www.reuters.com/world/asia-pacific/north-korea-fires-unidentified-projectile-toward-sea-off-its-east-coast-seoul-2026-11-04/",
+      "title": "North Korea fires multiple missiles in fourth weapons launch in a month, Seoul says",
+      "published_at": "2026-11-04T01:57Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/energy/oil-edges-down-investors-await-us-midterm-election-results-2026-11-04/",
+      "title": "Oil edges down as investors await US midterm election results",
+      "published_at": "2026-11-04T02:10Z"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261104-US-MIDTERMS-ADDITIONAL-FLIPS",
+      "version": 2,
+      "status": "follow-up",
+      "freshness": "current",
+      "topic": "US_POLITICS_FISCAL_POLICY",
+      "headline": "Democrats projected to win majority control of US House",
+      "body": "Reuters published at 03:18 UTC that US media projected Democrats to win House majority; not certified final count. At 03:23 UTC Reuters reported Democrat Bob Brooks projected to flip Republican Ryan Mackenzie Pennsylvania district. Senate control remained unresolved in accessible Reuters coverage.",
+      "analysis": "A prospective Democratic House majority changes legislative and oversight dynamics and may affect fiscal, Treasury supply, healthcare and AI regulation expectations.",
+      "watch_next": "Final House projections and certification; Senate majority; effects on USD, Treasuries and AI stocks only when independently measured.",
+      "earlier": "Previous report covered individual House and Senate seat flips with control of Congress unresolved. The US House majority itself is now projected for Democrats, beyond isolated seat flips. Pennsylvania seat newly reported as another Republican-to-Democrat flip.",
+      "source_urls": [
+        "https://www.reuters.com/world/us/democrats-projected-win-majority-control-us-house-us-media-project-2026-11-04/",
+        "https://www.reuters.com/world/us/democrats-flip-us-representative-ryan-mackenzies-pennsylvania-district-2026-11-04/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261104-NK-MULTIPLE-MISSILE-LAUNCH",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "ASIA_GEOPOLITICAL_RISK",
+      "headline": "North Korea launches multiple missiles, its fourth weapons test in a month",
+      "body": "South Korea Defence Ministry said North Korea fired multiple missiles from Sondok toward waters off its east coast. Fourth such weapons launch within a month; Seoul and Washington were analysing the launch. Reuters did not establish a new military confrontation or quantifiable market reaction.",
+      "analysis": "A regional security risk relevant to Asian risk sentiment, but no evidence from the cited report of an immediate FX/portfolio repricing.",
+      "watch_next": "Missile classification, allied response and regional-market implications if Reuters subsequently establishes them.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/asia-pacific/north-korea-fires-unidentified-projectile-toward-sea-off-its-east-coast-seoul-2026-11-04/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261104-US-API-CRUDE-DRAW",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "GLOBAL_MARKETS_ENERGY_INVENTORIES",
+      "headline": "Industry data show US crude inventories unexpectedly fall 5.27 million barrels",
+      "body": "Market sources citing API indicated US crude stocks decreased 5.27 million barrels in the week ended 30 October; eight Reuters-polled analysts expected an increase of about 880,000 barrels. Reuters observed Brent down 26 cents to US$103.34 and WTI down 53 cents to US$95.56 at 01:57 UTC, before this Reuters article publication. Official EIA crude inventory release scheduled for 4 Nov 15:30 UTC / 23:30 SGT, not yet available as of cutoff.",
+      "analysis": "Larger-than-expected industry stock draw is supportive for physical oil balance, while geopolitical and demand expectations could dominate price; compare with official EIA data before extrapolating.",
+      "watch_next": "Official EIA inventory report 4 Nov 23:30 SGT; Middle East developments and Brent/WTI movements.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/energy/oil-edges-down-investors-await-us-midterm-election-results-2026-11-04/"
+      ],
+      "development_at": null
+    }
+  ]
+}
