@@ -19,3 +19,5 @@ test('V4 preferences are independent and sanitize extreme text/card values',()=>
 });
 test('entry defaults to V4 and respects explicit V3 preference',()=>{const script=read('index.html').match(/<script>([\s\S]*?)<\/script>/)[1];for(const preferred of [null,'v3','v4']){let destination;const ctx={URLSearchParams,location:{search:'',hash:'#history',replace:v=>destination=v},document:{getElementById:()=>({})},localStorage:{getItem:()=>preferred}};vm.runInNewContext(script,ctx);assert.ok(destination.startsWith(preferred==='v3'?'v3.html':'v4.html'));} });
 console.log(`${count} V4 behavior checks passed.`);
+
+require('./test_ust_curves.cjs');

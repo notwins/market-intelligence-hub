@@ -1,0 +1,52 @@
+[
+  {
+    "date": "2008-12-16",
+    "eventDate": "2008-12-16",
+    "label": "Fed reaches zero bound",
+    "significance": "Fed establishes a 0–0.25% federal funds target range during the financial crisis.",
+    "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20081216b.htm"
+  },
+  {
+    "date": "2015-12-16",
+    "eventDate": "2015-12-16",
+    "label": "Post-crisis lift-off",
+    "significance": "Fed raises the target range to 0.25–0.50% as policy normalization begins.",
+    "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20151216a.htm"
+  },
+  {
+    "date": "2020-03-16",
+    "eventDate": "2020-03-15",
+    "label": "After emergency COVID cut",
+    "significance": "Monday curve after the Sunday March 15 emergency cut to 0–0.25% and announcement of Treasury and MBS purchases.",
+    "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a.htm",
+    "observationNote": "Event was Sunday March 15; chart uses the next observed business day, Monday March 16. Verify this exact observation exists before enabling."
+  },
+  {
+    "date": "2022-03-16",
+    "eventDate": "2022-03-16",
+    "label": "Inflation hiking cycle begins",
+    "significance": "Fed raises the target range to 0.25–0.50% and signals ongoing increases.",
+    "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm"
+  },
+  {
+    "date": "2022-06-15",
+    "eventDate": "2022-06-15",
+    "label": "75bp inflation hike",
+    "significance": "Fed raises the target range to 1.50–1.75% as inflation remains elevated.",
+    "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm"
+  },
+  {
+    "date": "2023-07-26",
+    "eventDate": "2023-07-26",
+    "label": "Rates reach 5.25–5.50%",
+    "significance": "Fed raises the target range to 5.25–5.50%, a useful high-rate-cycle comparison.",
+    "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230726a.htm"
+  },
+  {
+    "date": "2024-09-18",
+    "eventDate": "2024-09-18",
+    "label": "50bp easing step",
+    "significance": "Fed cuts the target range by 50 basis points to 4.75–5.00% as inflation makes further progress.",
+    "sourceUrl": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm"
+  }
+]
