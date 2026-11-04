@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261104T120000Z",
+  "as_of": "2026-11-04T20:00:00+08:00",
+  "edition_sha256": "2642456f7e755fd8e22f53cb9f8d26722b92527b4813ce336151279d97169dff",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Shared watchlist context: Reuters reports futures reversing early election losses",
+      "item_sha256": "450371cb41c745545c17b3ce85d7a66ea8faab23f218afceb9a640a434d19671",
+      "scope": "market_context",
+      "reason": "Broad market/policy context belongs once outside company cards; it is not company-specific research."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Google plans US$15 billion Malaysian infrastructure investment for 2027–2028",
+      "item_sha256": "87edd551c88b8d1b7d7674ce57e04c162a0ac3358f7af2c462f0681fae375fb7",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Meta launches euro bond offering; SEC terms remain preliminary",
+      "item_sha256": "deca5506f37db44da2ea2953e9e29d6bbf8199e3ff855928a1319d5a14025a87",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261103T160000Z",
+  "as_of": "2026-11-04T00:00:00+08:00",
+  "edition_sha256": "c6a88fee77ae9df36ccfaa77d9aed028c6901428608f489ae37797ad397af486",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Active-session snapshot: $328.78, -2.82% versus the prior close",
+      "item_sha256": "06d50e5cf5e3265545b7ff0e6c5b18637ad4f3e32c02b40e8da1bcfd8926c9fa",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AAPL",
+      "index": 1,
+      "headline": "Retained earlier coverage: Apple memory-cost and margin concern",
+      "item_sha256": "35c06a5f04bd52eb468c07dd7fb99a0da36fc54dd012f6cf91d817c11b4bc07f",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "Active-session snapshot: $515.31, +1.62% versus the prior close",
+      "item_sha256": "e1a06eb15c1c08730c42e707e72b88db785813cc2daaeb61b38dd03763963ef0",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Active-session snapshot: $207.62, +2.75% versus the prior close",
+      "item_sha256": "6dc6c2c232f73cf2ddfbb97ac624b9f1ec01ac8d849d6d7321365040235148f7",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 1,
+      "headline": "Retained earlier coverage: NVIDIA traded higher",
+      "item_sha256": "7a4f35be117ed99aaa290ebaff1b01214a5487069e077059efceab0d73380c75",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 2,
+      "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed",
+      "item_sha256": "03f416e1816182e7912d005b6746469cacbb087366c5c969f8dd03aeb4702cf9",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 3,
+      "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled",
+      "item_sha256": "029a07f9ba34951aa0491d86963bf95abd7a390b3eb3735e15d051852e789d37",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Active-session snapshot: $277.94, -0.38% versus the prior close",
+      "item_sha256": "9bb1eadf31b969553161a8bcf39cdc0a86e6c82e94c4b8e0e412368f0958d495",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AMZN",
+      "index": 0,
+      "headline": "Active-session snapshot: $246.57, +0.38% versus the prior close",
+      "item_sha256": "1341681f4c29bdcecf8712cc8a1243f2bf1e31ad88ece731cc8bbc209614a220",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Active-session snapshot: $621.51, +2.44% versus the prior close",
+      "item_sha256": "074ded263b795486b338e38295ea436c11fba95025894c09f28d381a0d1013a5",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "BRK.B",
+      "index": 0,
+      "headline": "Active-session snapshot: $557.52, +0.25% versus the prior close",
+      "item_sha256": "bb9429a1313798acd790622fbb7c9ea8744e7df0c7932ee2a29adfd592198ff0",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AMD",
+      "index": 0,
+      "headline": "Active-session snapshot: $491.82, +5.35% versus the prior close",
+      "item_sha256": "4f258b56321765d6ca1be51ef17bdb3a50a04a7c04b3e80e9686ad9483e556cb",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AMD",
+      "index": 1,
+      "headline": "Retained earlier coverage: AMD rose ahead of scheduled results",
+      "item_sha256": "27bb639c76debafcbd2b2f44d1c4865bf977da045fe4d6f5624524b806170be5",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AMD",
+      "index": 2,
+      "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst",
+      "item_sha256": "b74abe93e00bff039d0804c898d4c58546a43d1e2d8706918e8cd456a6bdf1a5",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "AVGO",
+      "index": 0,
+      "headline": "Active-session snapshot: $333.94, +3.63% versus the prior close",
+      "item_sha256": "3d3cb99dceef5514ebd76911a97ca9451eac72bc318634de81e6a2a43c27f9f8",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "MU",
+      "index": 0,
+      "headline": "Active-session snapshot: $858.71, +3.01% versus the prior close",
+      "item_sha256": "a02f7b3539d1d6ccc8f449e989f5572a60ad3ad7098997c57fbaa08b3bf3adcf",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "TSLA",
+      "index": 0,
+      "headline": "Active-session snapshot: $401.80, -0.50% versus the prior close",
+      "item_sha256": "ce6d80fd3b68a2039cb36968c54d378388153e302e11209e2d47972e1a056ec0",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "TSM",
+      "index": 0,
+      "headline": "Active-session snapshot: $407.61, +2.25% versus the prior close",
+      "item_sha256": "d04ffa08b89a4b03a221b31885965df3e3ff07463723f1584ffce75b0bb20da0",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "TSM",
+      "index": 1,
+      "headline": "Retained earlier coverage: October monthly sales are due on 10 November",
+      "item_sha256": "903bb3bcc721c5bb7b87a4f8829c64f3d765933cf9e5a88c680c37b15c5b4096",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    }
+  ]
+}

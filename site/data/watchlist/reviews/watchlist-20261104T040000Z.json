@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261104T040000Z",
+  "as_of": "2026-11-04T12:00:00+08:00",
+  "edition_sha256": "6ab2abc1174f869262662b5d41a92503bc8b14823cb9accac14f7dc09a7a99d0",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "BRK.B",
+      "index": 0,
+      "headline": "New SEC filing: Berkshire reports Sirius XM purchases",
+      "item_sha256": "e2af95e74cf42a18f3f9c69842c835ec6c6f835fd12593cd164eeb9cb5e901e9",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "BRK.B",
+      "index": 1,
+      "headline": "Overlap catch-up: Oregon court hears PacifiCorp wildfire appeal",
+      "item_sha256": "2eecfdb14735cf4b61146fe81927d9eecbeee24714072b6aef414c1a87f260db",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "AMD",
+      "index": 0,
+      "headline": "New Reuters warrant report: conditional dilution and a source-number discrepancy",
+      "item_sha256": "d6af25028def04a8a9a467986d1ddc9c4bed0c4ef5c27e52a0060e350e3f4202",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "AMD",
+      "index": 1,
+      "headline": "Earlier call catch-up: 2027 growth outlook and weaker PC-unit demand",
+      "item_sha256": "331a1843831f2594693cd1e99fe90172eb515c108271aacfd456fc75bf4713ac",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "TSLA",
+      "index": 0,
+      "headline": "New Reuters report: Korean consumer group plans FSD marketing complaint",
+      "item_sha256": "03a2e5e278248eb222c1525577692f59f6e8855e83ee113a9242d1517eac4dbe",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261104T160000Z",
+  "as_of": "2026-11-05T00:00:00+08:00",
+  "edition_sha256": "4824878372e9fbb7625681930832de8688eee53faa1a9f599ed6c84a460d6149",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Earlier today: Google confirms buyout offers expanded to five countries",
+      "item_sha256": "3bfdcdfdbd170c4ad9be9124f4e1b1615c29d9c4e36188ca31f489573bd488b2",
+      "scope": "company",
+      "reason": "Company-specific programme scope and financial-impact caveats; retains voluntary exits, unquantified participation and Reuters syndication attribution."
+    },
+    {
+      "ticker": "AMZN",
+      "index": 0,
+      "headline": "Amazon opens a free Shop Direct portal for outside merchants",
+      "item_sha256": "c46ffcbe5b8d98ab716d0e4736a7245abb6fccc6292009315c11badfd00ebce2",
+      "scope": "company",
+      "reason": "Company-specific merchant portal announcement; issuer reach claims, conversion uncertainty and absence of quantified revenue remain explicit."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Meta euro bond demand reaches €53bn; final pricing still pending",
+      "item_sha256": "f2e7ceef45446bbf839355bceed4da84d45f0fd57c09e7310d355613b3c1ec65",
+      "scope": "company",
+      "reason": "Company-specific offering demand at the original cutoff; orders are not completed borrowing and final pricing/settlement remain pending in this historical edition."
+    }
+  ]
+}

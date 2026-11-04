@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261104T000000Z",
+  "as_of": "2026-11-04T08:00:00+08:00",
+  "edition_sha256": "06c4f07b869f754c18e5ee1307e9ca6660ca4d29a54a6d7aeddb82b4c30fabbe",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Earlier update newly checked: Siri AI developer preview expands",
+      "item_sha256": "59e31e06b5ba074900811cb0e3d2fc16b8af1d2b02982f6558ed49c90aeab711",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Reuters close update: AI shares recover; Apple remains lower",
+      "item_sha256": "e0961d6b5106b11c3fec228dddbd945d8df062f64176eab1a51ba9ab4772cc7c",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AMZN",
+      "index": 0,
+      "headline": "New filing: quarter-end investment holdings report",
+      "item_sha256": "79ce0d222c4675d955f90e88f5720a71b821abc7b176cb101688444254f2289f",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "New priced terms: $15 billion senior-note offering",
+      "item_sha256": "0991282d88aeadd603c877f41548934def7acd438661a8b950ed71bfd16c710a",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "AMD",
+      "index": 0,
+      "headline": "New results: Data Center drives record Q3; Q4 revenue guide rises",
+      "item_sha256": "22ac1a5403e8bb8042c3265fa45ffea8d4cb24c7b35aa603a09d4dde1e8d917b",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    }
+  ]
+}

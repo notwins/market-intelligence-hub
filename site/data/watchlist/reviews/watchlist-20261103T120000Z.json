@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261103T120000Z",
+  "as_of": "2026-11-03T20:00:00+08:00",
+  "edition_sha256": "0ab436e4d1f7f56af6eea5f68487ff8c68b0417ecf35dfff9a32b62730b85d47",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Memory costs and margins are the immediate focus",
+      "item_sha256": "97c56adf141d5816b76b561613bf74f5cde09ac4d241079b60aa6c2369ef6844",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "China-exposure report remains attributed and unconfirmed",
+      "item_sha256": "cad3be9b8ee2b2c5e9e6e1862c11f9236a2fea791d8e6b54c78f3dd281e30821",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 1,
+      "headline": "Fiscal Q3 FY2027 results call is scheduled",
+      "item_sha256": "961774bd1277deab7feec8e43b8e21a359a0e829fa6dfe58c0e354181ea57b82",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "AMD",
+      "index": 0,
+      "headline": "Fiscal Q3 results are the next scheduled catalyst",
+      "item_sha256": "c2f956a3d838e5ecdae082930039c1175b74ed0c7c814cf9dab1ce6a1b1089ba",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "TSM",
+      "index": 0,
+      "headline": "October monthly sales are due on 10 November",
+      "item_sha256": "49c63ec541dd2d58d11d2eb1fd10f50b261d1fdd891db89306ce01d50aebd063",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    }
+  ]
+}

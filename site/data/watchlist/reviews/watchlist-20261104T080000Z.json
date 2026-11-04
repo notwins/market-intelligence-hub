@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261104T080000Z",
+  "as_of": "2026-11-04T16:00:00+08:00",
+  "edition_sha256": "6e15bc32ceb0ca1fa0195231e30401ac8163179250b5bbe74cae6197eaeb69c9",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Shared watchlist context: Reuters election and AI-policy update",
+      "item_sha256": "157164c7d20655b19d01578f4abedb1654e47c7621ba7286b4da83ae2d6f49e3",
+      "scope": "market_context",
+      "reason": "Broad market/policy context belongs once outside company cards; it is not company-specific research."
+    },
+    {
+      "ticker": "AMZN",
+      "index": 0,
+      "headline": "AWS launches Malaysian public-sector and SME AI program",
+      "item_sha256": "1301c32d8f806a24635ec10d52df09d0995bae237603b27686fc429d63c8f0db",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    }
+  ]
+}

@@ -1,144 +1,482 @@
 {
-  "schema_version": 1,
-  "reviewed_on": "2026-11-04",
+  "schema_version": 2,
+  "content_binding": "watchlist-research-v1",
   "editions": {
     "watchlist-20261103T120000Z": {
       "AAPL": [
         {
           "index": 0,
-          "headline": "Memory costs and margins are the immediate focus"
+          "headline": "Memory costs and margins are the immediate focus",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Memory costs and margins are the immediate focus\",[\"Reuters reported Apple weakness in premarket trading following a warning about memory costs and margins. Its 18:49 SGT report observed a 4.5% decline; that observation predates the separately timestamped quote above.\"],\"Margin pressure is a different question from revenue growth. Read the issuer’s underlying disclosures before attributing the whole price move to a single cause.\",\"Premarket pricing can change quickly and may reflect thin liquidity. The reported move is a snapshot, not a return for the regular session.\",\"Updated company guidance, memory input costs and gross-margin commentary. No additional issuer release is asserted here.\",[[\"Reuters via StreetInsider · 3 November market report\",\"https://www.streetinsider.com/Reuters/US%2Bstock%2Bfutures%2Bmixed%2Bas%2BApple%2Bslides%2C%2Bmidterms%2Bloom/27276330.html\"]]]",
+          "item_sha256": "97c56adf141d5816b76b561613bf74f5cde09ac4d241079b60aa6c2369ef6844"
         }
       ],
       "NVDA": [
         {
           "index": 0,
-          "headline": "China-exposure report remains attributed and unconfirmed"
+          "headline": "China-exposure report remains attributed and unconfirmed",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"China-exposure report remains attributed and unconfirmed\",[\"Reuters relayed a Financial Times report that NVIDIA had advised data-centre partners to reduce China exposure. Reuters said it could not independently verify the report.\"],\"Treat this as an attributed report, not a confirmed change in company policy or a measured earnings impact.\",\"The original account was not independently verified by Reuters. Customer, export-control and geographic risks require separate primary evidence.\",\"Company confirmation or clarification and any specific disclosed customer impact.\",[[\"Reuters via StreetInsider · attributed Financial Times report\",\"https://new.streetinsider.com/Reuters/Nvidia%2Borders%2Bdata%2Bcentre%2Bclients%2Bto%2Breduce%2BChina%2Bexposure%2C%2BFT%2Breports/27275695.html\"]]]",
+          "item_sha256": "cad3be9b8ee2b2c5e9e6e1862c11f9236a2fea791d8e6b54c78f3dd281e30821"
         },
         {
           "index": 1,
-          "headline": "Fiscal Q3 FY2027 results call is scheduled"
+          "headline": "Fiscal Q3 FY2027 results call is scheduled",
+          "scope": "company",
+          "content_key": "[\"2026-10-28\",\"Fiscal Q3 FY2027 results call is scheduled\",[\"NVIDIA scheduled its fiscal Q3 FY2027 conference call for 17 November at 17:00 EST, or 18 November at 06:00 SGT.\"],\"The call is a future checkpoint; it is not a statement of the quarter’s result.\",\"Forward-looking expectations and actual results can differ. This edition contains no inferred earnings outcome.\",\"The release and written CFO commentary before the call, then management’s discussion.\",[[\"NVIDIA newsroom · official results-call notice\",\"https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873\"]]]",
+          "item_sha256": "961774bd1277deab7feec8e43b8e21a359a0e829fa6dfe58c0e354181ea57b82"
         }
       ],
       "AMD": [
         {
           "index": 0,
-          "headline": "Fiscal Q3 results are the next scheduled catalyst"
+          "headline": "Fiscal Q3 results are the next scheduled catalyst",
+          "scope": "company",
+          "content_key": "[\"2026-10-06\",\"Fiscal Q3 results are the next scheduled catalyst\",[\"AMD scheduled fiscal Q3 2026 results for 3 November after the US market close, with its call at 17:00 EST. That is 4 November at 06:00 SGT.\"],\"The scheduled release provides a defined checkpoint for evaluating the business against prior guidance. Results were not yet available at this edition’s cutoff.\",\"An event date is not evidence of better or worse earnings. Post-release prices may differ sharply from this snapshot.\",\"Read the earnings release and call on 4 November, 06:00 SGT. Separate reported results, guidance and market reaction.\",[[\"AMD investor relations · official results notice\",\"https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results\"]]]",
+          "item_sha256": "c2f956a3d838e5ecdae082930039c1175b74ed0c7c814cf9dab1ce6a1b1089ba"
         }
       ],
       "TSM": [
         {
           "index": 0,
-          "headline": "October monthly sales are due on 10 November"
+          "headline": "October monthly sales are due on 10 November",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"October monthly sales are due on 10 November\",[\"TSMC’s official financial calendar lists October 2026 monthly sales for 10 November 2026.\"],\"Monthly sales provide a nearer-term business update between quarterly reports. They do not by themselves establish profitability.\",\"Group revenue is reported in a different currency and scope from the USD ADR price. Do not treat the stock-price change as the revenue change.\",\"The October monthly revenue release on 10 November; verify its reported currency and comparison period.\",[[\"TSMC investor relations · financial calendar\",\"https://investor.tsmc.com/english/financial-calendar\"]]]",
+          "item_sha256": "49c63ec541dd2d58d11d2eb1fd10f50b261d1fdd891db89306ce01d50aebd063"
         }
       ]
     },
     "watchlist-20261103T140000Z": {
       "AAPL": [
         {
+          "index": 0,
+          "headline": "New in-window market update: Apple remained under pressure",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"New in-window market update: Apple remained under pressure\",[\"Reuters’ 12:34 GMT (20:34 SGT) update reported Apple down 3.9% at 12:07 UTC (20:07 SGT), with memory costs and margin concerns in focus. That observation is earlier than the separately timestamped price snapshot in this edition.\"],\"This updates the market reaction to an existing concern; it does not establish a new issuer guidance announcement or prove that one factor explains the entire move.\",\"Different quote times can produce different percentages. Premarket liquidity and volatility can amplify movements before the regular session.\",\"The US regular-session opening and subsequent issuer disclosures on input costs and gross margins.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"]]]",
+          "item_sha256": "f7a3750fb038d356a3d124e159ceed4d88dfa9a17e536290787d061b3e4f7ecf"
+        },
+        {
           "index": 1,
-          "headline": "Memory costs and margins are the immediate focus"
+          "headline": "Memory costs and margins are the immediate focus",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Memory costs and margins are the immediate focus\",[\"Reuters reported Apple weakness in premarket trading following a warning about memory costs and margins. Its 18:49 SGT report observed a 4.5% decline; that observation predates the separately timestamped quote above.\"],\"Margin pressure is a different question from revenue growth. Read the issuer’s underlying disclosures before attributing the whole price move to a single cause.\",\"Premarket pricing can change quickly and may reflect thin liquidity. The reported move is a snapshot, not a return for the regular session.\",\"Updated company guidance, memory input costs and gross-margin commentary. No additional issuer release is asserted here.\",[[\"Reuters via StreetInsider · 3 November market report\",\"https://www.streetinsider.com/Reuters/US%2Bstock%2Bfutures%2Bmixed%2Bas%2BApple%2Bslides%2C%2Bmidterms%2Bloom/27276330.html\"]]]",
+          "item_sha256": "97c56adf141d5816b76b561613bf74f5cde09ac4d241079b60aa6c2369ef6844"
         }
       ],
       "NVDA": [
         {
+          "index": 0,
+          "headline": "New in-window market update: NVIDIA traded higher",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"New in-window market update: NVIDIA traded higher\",[\"Reuters’ 12:34 GMT (20:34 SGT) update recorded NVIDIA up 1.4% at 12:07 UTC (20:07 SGT). This is an earlier market observation, not the later quote snapshot on this card.\"],\"A premarket rebound alone does not verify changes to earnings expectations or resolve the separately attributed China-exposure report retained below.\",\"Price movement is not confirmation of the underlying attributed report. The regular session may differ from thin premarket trading.\",\"Company clarification of attributed reporting and the previously announced fiscal Q3 results call.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"]]]",
+          "item_sha256": "9519f2f8f05b83c6ee69d604e214a2acf4a30277bb1ea1f4f8ef85869a20bb1b"
+        },
+        {
           "index": 1,
-          "headline": "China-exposure report remains attributed and unconfirmed"
+          "headline": "China-exposure report remains attributed and unconfirmed",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"China-exposure report remains attributed and unconfirmed\",[\"Reuters relayed a Financial Times report that NVIDIA had advised data-centre partners to reduce China exposure. Reuters said it could not independently verify the report.\"],\"Treat this as an attributed report, not a confirmed change in company policy or a measured earnings impact.\",\"The original account was not independently verified by Reuters. Customer, export-control and geographic risks require separate primary evidence.\",\"Company confirmation or clarification and any specific disclosed customer impact.\",[[\"Reuters via StreetInsider · attributed Financial Times report\",\"https://new.streetinsider.com/Reuters/Nvidia%2Borders%2Bdata%2Bcentre%2Bclients%2Bto%2Breduce%2BChina%2Bexposure%2C%2BFT%2Breports/27275695.html\"]]]",
+          "item_sha256": "cad3be9b8ee2b2c5e9e6e1862c11f9236a2fea791d8e6b54c78f3dd281e30821"
         },
         {
           "index": 2,
-          "headline": "Fiscal Q3 FY2027 results call is scheduled"
+          "headline": "Fiscal Q3 FY2027 results call is scheduled",
+          "scope": "company",
+          "content_key": "[\"2026-10-28\",\"Fiscal Q3 FY2027 results call is scheduled\",[\"NVIDIA scheduled its fiscal Q3 FY2027 conference call for 17 November at 17:00 EST, or 18 November at 06:00 SGT.\"],\"The call is a future checkpoint; it is not a statement of the quarter’s result.\",\"Forward-looking expectations and actual results can differ. This edition contains no inferred earnings outcome.\",\"The release and written CFO commentary before the call, then management’s discussion.\",[[\"NVIDIA newsroom · official results-call notice\",\"https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873\"]]]",
+          "item_sha256": "961774bd1277deab7feec8e43b8e21a359a0e829fa6dfe58c0e354181ea57b82"
         }
       ],
       "AMD": [
         {
+          "index": 0,
+          "headline": "New in-window market update: AMD rose ahead of scheduled results",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"New in-window market update: AMD rose ahead of scheduled results\",[\"Reuters’ 12:34 GMT (20:34 SGT) update recorded AMD up 1.8% at 12:07 UTC (20:07 SGT), before the later separately timestamped quote in this edition.\"],\"This is a pre-results price reaction, not evidence of an earnings beat or new guidance. The official results-call notice remains the relevant upcoming event.\",\"Earnings and guidance were not yet released at this cutoff. Post-release prices may reverse or extend premarket moves.\",\"AMD’s official results release after the US close on 3 November and conference call on 4 November at 06:00 SGT, as stated in the retained 6 October notice.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"]]]",
+          "item_sha256": "6955a60f28cf826ab3f45f578fca71e1b7cd0f465ad5a29dd833045304558398"
+        },
+        {
           "index": 1,
-          "headline": "Fiscal Q3 results are the next scheduled catalyst"
+          "headline": "Fiscal Q3 results are the next scheduled catalyst",
+          "scope": "company",
+          "content_key": "[\"2026-10-06\",\"Fiscal Q3 results are the next scheduled catalyst\",[\"AMD scheduled fiscal Q3 2026 results for 3 November after the US market close, with its call at 17:00 EST. That is 4 November at 06:00 SGT.\"],\"The scheduled release provides a defined checkpoint for evaluating the business against prior guidance. Results were not yet available at this edition’s cutoff.\",\"An event date is not evidence of better or worse earnings. Post-release prices may differ sharply from this snapshot.\",\"Read the earnings release and call on 4 November, 06:00 SGT. Separate reported results, guidance and market reaction.\",[[\"AMD investor relations · official results notice\",\"https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results\"]]]",
+          "item_sha256": "c2f956a3d838e5ecdae082930039c1175b74ed0c7c814cf9dab1ce6a1b1089ba"
         }
       ],
       "TSM": [
         {
           "index": 0,
-          "headline": "October monthly sales are due on 10 November"
+          "headline": "October monthly sales are due on 10 November",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"October monthly sales are due on 10 November\",[\"TSMC’s official financial calendar lists October 2026 monthly sales for 10 November 2026.\"],\"Monthly sales provide a nearer-term business update between quarterly reports. They do not by themselves establish profitability.\",\"Group revenue is reported in a different currency and scope from the USD ADR price. Do not treat the stock-price change as the revenue change.\",\"The October monthly revenue release on 10 November; verify its reported currency and comparison period.\",[[\"TSMC investor relations · financial calendar\",\"https://investor.tsmc.com/english/financial-calendar\"]]]",
+          "item_sha256": "49c63ec541dd2d58d11d2eb1fd10f50b261d1fdd891db89306ce01d50aebd063"
         }
       ]
     },
     "watchlist-20261103T160000Z": {
       "AAPL": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $328.78, -2.82% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $328.78, -2.82% versus the prior close\",[\"Stock Analysis displayed $328.78 at 10:33 EST on 3 November 2026 (23:33 SGT on 3 November), with the regular session open. The quoted change was -2.82% from the 2 November close of $338.32.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $323.25 at 08:41 EST. The new observed price is +1.71% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/aapl/history/\"]]]",
+          "item_sha256": "06d50e5cf5e3265545b7ff0e6c5b18637ad4f3e32c02b40e8da1bcfd8926c9fa"
+        },
+        {
           "index": 1,
-          "headline": "Retained earlier coverage: Apple memory-cost and margin concern"
+          "headline": "Retained earlier coverage: Apple memory-cost and margin concern",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: Apple memory-cost and margin concern\",[\"Reuters’ 12:34 GMT (20:34 SGT) update reported Apple down 3.9% at 12:07 UTC (20:07 SGT), with memory costs and margin concerns in focus. That observation is earlier than the separately timestamped price snapshot in this edition.\",\"Reuters reported Apple weakness in premarket trading following a warning about memory costs and margins. Its 18:49 SGT report observed a 4.5% decline; that observation predates the separately timestamped quote above.\"],\"This updates the market reaction to an existing concern; it does not establish a new issuer guidance announcement or prove that one factor explains the entire move.\",\"Different quote times can produce different percentages. Premarket liquidity and volatility can amplify movements before the regular session.\",\"Issuer disclosures on input costs and gross margins, and subsequent regular-session market reaction. The premarket observations above are retained earlier evidence.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"],[\"Reuters via StreetInsider · 3 November market report\",\"https://www.streetinsider.com/Reuters/US%2Bstock%2Bfutures%2Bmixed%2Bas%2BApple%2Bslides%2C%2Bmidterms%2Bloom/27276330.html\"]]]",
+          "item_sha256": "35c06a5f04bd52eb468c07dd7fb99a0da36fc54dd012f6cf91d817c11b4bc07f"
+        }
+      ],
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $515.31, +1.62% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $515.31, +1.62% versus the prior close\",[\"Stock Analysis displayed $515.31 at 10:54 EST on 3 November 2026 (23:54 SGT on 3 November), with the regular session open. The quoted change was +1.62% from the 2 November close of $507.12.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $505.90 at 08:59 EST. The new observed price is +1.86% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/msft/\"]]]",
+          "item_sha256": "e1a06eb15c1c08730c42e707e72b88db785813cc2daaeb61b38dd03763963ef0"
         }
       ],
       "NVDA": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $207.62, +2.75% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $207.62, +2.75% versus the prior close\",[\"Stock Analysis displayed $207.62 at 10:52 EST on 3 November 2026 (23:52 SGT on 3 November), with the regular session open. The quoted change was +2.75% from the 2 November close of $202.06.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $207.33 at 08:57 EST. The new observed price is +0.14% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/nvda/\"]]]",
+          "item_sha256": "6dc6c2c232f73cf2ddfbb97ac624b9f1ec01ac8d849d6d7321365040235148f7"
+        },
+        {
+          "index": 1,
+          "headline": "Retained earlier coverage: NVIDIA traded higher",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: NVIDIA traded higher\",[\"Reuters’ 12:34 GMT (20:34 SGT) update recorded NVIDIA up 1.4% at 12:07 UTC (20:07 SGT). This is an earlier market observation, not the later quote snapshot on this card.\"],\"A premarket rebound alone does not verify changes to earnings expectations or resolve the separately attributed China-exposure report retained below.\",\"Price movement is not confirmation of the underlying attributed report. The regular session may differ from thin premarket trading.\",\"Company clarification of attributed reporting and the previously announced fiscal Q3 results call.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"]]]",
+          "item_sha256": "7a4f35be117ed99aaa290ebaff1b01214a5487069e077059efceab0d73380c75"
+        },
+        {
           "index": 2,
-          "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed"
+          "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: China-exposure report remains attributed and unconfirmed\",[\"Reuters relayed a Financial Times report that NVIDIA had advised data-centre partners to reduce China exposure. Reuters said it could not independently verify the report.\"],\"Treat this as an attributed report, not a confirmed change in company policy or a measured earnings impact.\",\"The original account was not independently verified by Reuters. Customer, export-control and geographic risks require separate primary evidence.\",\"Company confirmation or clarification and any specific disclosed customer impact.\",[[\"Reuters via StreetInsider · attributed Financial Times report\",\"https://new.streetinsider.com/Reuters/Nvidia%2Borders%2Bdata%2Bcentre%2Bclients%2Bto%2Breduce%2BChina%2Bexposure%2C%2BFT%2Breports/27275695.html\"]]]",
+          "item_sha256": "03f416e1816182e7912d005b6746469cacbb087366c5c969f8dd03aeb4702cf9"
         },
         {
           "index": 3,
-          "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled"
+          "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled",
+          "scope": "company",
+          "content_key": "[\"2026-10-28\",\"Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled\",[\"NVIDIA scheduled its fiscal Q3 FY2027 conference call for 17 November at 17:00 EST, or 18 November at 06:00 SGT.\"],\"The call is a future checkpoint; it is not a statement of the quarter’s result.\",\"Forward-looking expectations and actual results can differ. This edition contains no inferred earnings outcome.\",\"The release and written CFO commentary before the call, then management’s discussion.\",[[\"NVIDIA newsroom · official results-call notice\",\"https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873\"],[\"NVIDIA investor relations · previously announced results call rechecked for this edition\",\"https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/default.aspx\"]]]",
+          "item_sha256": "029a07f9ba34951aa0491d86963bf95abd7a390b3eb3735e15d051852e789d37"
+        }
+      ],
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $277.94, -0.38% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $277.94, -0.38% versus the prior close\",[\"Stock Analysis displayed $277.94 at 10:48 EST on 3 November 2026 (23:48 SGT on 3 November), with the regular session open. The quoted change was -0.38% from the 2 November close of $278.99.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $280.45 at 08:54 EST. The new observed price is -0.89% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/googl/\"]]]",
+          "item_sha256": "9bb1eadf31b969553161a8bcf39cdc0a86e6c82e94c4b8e0e412368f0958d495"
+        }
+      ],
+      "AMZN": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $246.57, +0.38% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $246.57, +0.38% versus the prior close\",[\"Stock Analysis displayed $246.57 at 10:54 EST on 3 November 2026 (23:54 SGT on 3 November), with the regular session open. The quoted change was +0.38% from the 2 November close of $245.63.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $249.00 at 08:46 EST. The new observed price is -0.98% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/amzn/history/\"]]]",
+          "item_sha256": "1341681f4c29bdcecf8712cc8a1243f2bf1e31ad88ece731cc8bbc209614a220"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $621.51, +2.44% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $621.51, +2.44% versus the prior close\",[\"Stock Analysis displayed $621.51 at 10:59 EST on 3 November 2026 (23:59 SGT on 3 November), with the regular session open. The quoted change was +2.44% from the 2 November close of $606.73.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $608.75 at 08:49 EST. The new observed price is +2.10% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/meta/history/\"]]]",
+          "item_sha256": "074ded263b795486b338e38295ea436c11fba95025894c09f28d381a0d1013a5"
+        }
+      ],
+      "BRK.B": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $557.52, +0.25% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $557.52, +0.25% versus the prior close\",[\"Stock Analysis displayed $557.52 at 10:54 EST on 3 November 2026 (23:54 SGT on 3 November), with the regular session open. The quoted change was +0.25% from the 2 November close of $556.11.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $551.40 at 08:44 EST. The new observed price is +1.11% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/brk.b/history/\"]]]",
+          "item_sha256": "bb9429a1313798acd790622fbb7c9ea8744e7df0c7932ee2a29adfd592198ff0"
         }
       ],
       "AMD": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $491.82, +5.35% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $491.82, +5.35% versus the prior close\",[\"Stock Analysis displayed $491.82 at 10:57 EST on 3 November 2026 (23:57 SGT on 3 November), with the regular session open. The quoted change was +5.35% from the 2 November close of $466.84.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $486.90 at 08:38 EST. The new observed price is +1.01% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/amd/\"]]]",
+          "item_sha256": "4f258b56321765d6ca1be51ef17bdb3a50a04a7c04b3e80e9686ad9483e556cb"
+        },
+        {
+          "index": 1,
+          "headline": "Retained earlier coverage: AMD rose ahead of scheduled results",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: AMD rose ahead of scheduled results\",[\"Reuters’ 12:34 GMT (20:34 SGT) update recorded AMD up 1.8% at 12:07 UTC (20:07 SGT), before the later separately timestamped quote in this edition.\"],\"This is a pre-results price reaction, not evidence of an earnings beat or new guidance. The official results-call notice remains the relevant upcoming event.\",\"Earnings and guidance were not yet released at this cutoff. Post-release prices may reverse or extend premarket moves.\",\"AMD’s official results release after the US close on 3 November and conference call on 4 November at 06:00 SGT, as stated in the retained 6 October notice.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"]]]",
+          "item_sha256": "27bb639c76debafcbd2b2f44d1c4865bf977da045fe4d6f5624524b806170be5"
+        },
+        {
           "index": 2,
-          "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst"
+          "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst",
+          "scope": "company",
+          "content_key": "[\"2026-10-06\",\"Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst\",[\"AMD scheduled fiscal Q3 2026 results for 3 November after the US market close, with its call at 17:00 EST. That is 4 November at 06:00 SGT.\"],\"The scheduled release provides a defined checkpoint for evaluating the business against prior guidance. Results were not yet available at this edition’s cutoff.\",\"An event date is not evidence of better or worse earnings. Post-release prices may differ sharply from this snapshot.\",\"Read the earnings release and call on 4 November, 06:00 SGT. Separate reported results, guidance and market reaction.\",[[\"AMD investor relations · official results notice\",\"https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results\"]]]",
+          "item_sha256": "b74abe93e00bff039d0804c898d4c58546a43d1e2d8706918e8cd456a6bdf1a5"
+        }
+      ],
+      "AVGO": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $333.94, +3.63% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $333.94, +3.63% versus the prior close\",[\"Stock Analysis displayed $333.94 at 10:57 EST on 3 November 2026 (23:57 SGT on 3 November), with the regular session open. The quoted change was +3.63% from the 2 November close of $322.23.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $331.30 at 08:48 EST. The new observed price is +0.80% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/avgo/\"]]]",
+          "item_sha256": "3d3cb99dceef5514ebd76911a97ca9451eac72bc318634de81e6a2a43c27f9f8"
+        }
+      ],
+      "MU": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $858.71, +3.01% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $858.71, +3.01% versus the prior close\",[\"Stock Analysis displayed $858.71 at 10:51 EST on 3 November 2026 (23:51 SGT on 3 November), with the regular session open. The quoted change was +3.01% from the 2 November close of $833.59.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $868.00 at 08:56 EST. The new observed price is -1.07% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/mu/history/\"]]]",
+          "item_sha256": "a02f7b3539d1d6ccc8f449e989f5572a60ad3ad7098997c57fbaa08b3bf3adcf"
+        }
+      ],
+      "TSLA": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $401.80, -0.50% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $401.80, -0.50% versus the prior close\",[\"Stock Analysis displayed $401.80 at 10:49 EST on 3 November 2026 (23:49 SGT on 3 November), with the regular session open. The quoted change was -0.50% from the 2 November close of $403.82.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $408.20 at 08:33 EST. The new observed price is -1.57% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/tsla/history/\"]]]",
+          "item_sha256": "ce6d80fd3b68a2039cb36968c54d378388153e302e11209e2d47972e1a056ec0"
         }
       ],
       "TSM": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $407.61, +2.25% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $407.61, +2.25% versus the prior close\",[\"Stock Analysis displayed $407.61 at 10:49 EST on 3 November 2026 (23:49 SGT on 3 November), with the regular session open. The quoted change was +2.25% from the 2 November close of $398.63.\",\"The previous validated 22:00 SGT edition saved a premarket observation of $405.27 at 08:31 EST. The new observed price is +0.58% relative to that earlier snapshot; this is not a synchronized edition-to-edition return.\"],\"The market is now in its regular session. The main price and six return fields remain anchored to the last completed regular close, so they are unchanged from the previous edition.\",\"This is an individually timestamped saved observation, not an exact-midnight quote or a live feed. Later prices may differ.\",\"The 3 November completed regular-session close, after 16:00 EST (05:00 SGT on 4 November).\",[[\"Stock Analysis: active-session price and timestamp\",\"https://stockanalysis.com/stocks/tsm/\"]]]",
+          "item_sha256": "d04ffa08b89a4b03a221b31885965df3e3ff07463723f1584ffce75b0bb20da0"
+        },
+        {
           "index": 1,
-          "headline": "Retained earlier coverage: October monthly sales are due on 10 November"
+          "headline": "Retained earlier coverage: October monthly sales are due on 10 November",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: October monthly sales are due on 10 November\",[\"TSMC’s official financial calendar lists October 2026 monthly sales for 10 November 2026.\"],\"Monthly sales provide a nearer-term business update between quarterly reports. They do not by themselves establish profitability.\",\"Group revenue is reported in a different currency and scope from the USD ADR price. Do not treat the stock-price change as the revenue change.\",\"The October monthly revenue release on 10 November; verify its reported currency and comparison period.\",[[\"TSMC investor relations · financial calendar\",\"https://investor.tsmc.com/english/financial-calendar\"]]]",
+          "item_sha256": "903bb3bcc721c5bb7b87a4f8829c64f3d765933cf9e5a88c680c37b15c5b4096"
         }
       ]
     },
     "watchlist-20261103T200000Z": {
       "AAPL": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $329.94, -2.48% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $329.94, -2.48% versus the prior close\",[\"Stock Analysis displayed USD 329.94 at 14:57 EST on 3 November 2026 (03:57 SGT on 4 November), during the regular session. The displayed daily change was -2.48% versus the 2 November completed close of USD 338.32.\",\"The previous 00:00 SGT edition saved USD 328.78 at 10:33 EST. The newer observation is +0.35% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/aapl/history/\"]]]",
+          "item_sha256": "729b909c2711153f861d8a0defaa1d0294dc2381fdba304689cba64c844cc939"
+        },
+        {
+          "index": 1,
+          "headline": "Updated Reuters market reaction: Apple remained lower",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Updated Reuters market reaction: Apple remained lower\",[\"Reuters’ 17:20 UTC update (4 November 01:20 SGT) reported Apple down 2.2%, citing the previously disclosed pressure from memory costs on holiday-quarter margins.\"],\"This refreshes the market reaction to an existing concern; it is not a new guidance announcement.\",\"The article gives no separate timestamp for the Apple percentage. Its explicitly timed index observation is 16:50 UTC. Use the separately timestamped price snapshot for this edition’s quote.\",\"Further issuer disclosures on memory costs and margins.\",[[\"Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026\",\"https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726\"]]]",
+          "item_sha256": "7fd4dcbc2db79474c9deb8e58b80b217d0ffded5406963db486b27e5671020a8"
+        },
+        {
           "index": 2,
-          "headline": "Newly checked product update: Health app language support"
+          "headline": "Newly checked product update: Health app language support",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Newly checked product update: Health app language support\",[\"Apple’s 3 November post says its redesigned Health app is in the iOS 27.3 developer beta, with broader language support and a free public rollout planned later in the year.\",\"The official Newsroom feed marks this entry updated at 18:24:58.012 UTC (4 November 02:24:58 SGT). First-publication time is not separately exposed.\"],\"This is a product rollout update, not quantified revenue or earnings guidance.\",\"Features and availability may vary by language, region and device; the feed timestamp is an update timestamp.\",\"Public release timing and supported feature availability.\",[[\"Apple Newsroom · 3 November product update\",\"https://www.apple.com/newsroom/2026/11/redesigned-health-app-expands-language-support/\"],[\"Apple Newsroom official feed · entry update timestamp\",\"https://www.apple.com/newsroom/rss-feed.rss\"]]]",
+          "item_sha256": "67fbc64d1699de3497fc0272c34917c1826c628ab511d4cb7aa498e349a79808"
         },
         {
           "index": 3,
-          "headline": "Retained earlier coverage: Apple memory-cost and margin concern"
+          "headline": "Retained earlier coverage: Apple memory-cost and margin concern",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: Apple memory-cost and margin concern\",[\"Reuters’ 12:34 GMT (20:34 SGT) update reported Apple down 3.9% at 12:07 UTC (20:07 SGT), with memory costs and margin concerns in focus. That observation is earlier than the separately timestamped price snapshot in this edition.\",\"Reuters reported Apple weakness in premarket trading following a warning about memory costs and margins. Its 18:49 SGT report observed a 4.5% decline; that observation predates the separately timestamped quote above.\"],\"This updates the market reaction to an existing concern; it does not establish a new issuer guidance announcement or prove that one factor explains the entire move.\",\"Different quote times can produce different percentages. Premarket liquidity and volatility can amplify movements before the regular session.\",\"Issuer disclosures on input costs and gross margins, and subsequent regular-session market reaction. The premarket observations above are retained earlier evidence.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"],[\"Reuters via StreetInsider · 3 November market report\",\"https://www.streetinsider.com/Reuters/US%2Bstock%2Bfutures%2Bmixed%2Bas%2BApple%2Bslides%2C%2Bmidterms%2Bloom/27276330.html\"]]]",
+          "item_sha256": "35c06a5f04bd52eb468c07dd7fb99a0da36fc54dd012f6cf91d817c11b4bc07f"
+        }
+      ],
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $521.80, +2.89% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $521.80, +2.89% versus the prior close\",[\"Stock Analysis displayed USD 521.80 at 14:41 EST on 3 November 2026 (03:41 SGT on 4 November), during the regular session. The displayed daily change was +2.89% versus the 2 November completed close of USD 507.12.\",\"The previous 00:00 SGT edition saved USD 515.31 at 10:54 EST. The newer observation is +1.26% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/msft/history/\"]]]",
+          "item_sha256": "93fe768a59ee6bacc1d650658a1396adc2f5e52be88bb2f5bc9fd697b6ad0b81"
         }
       ],
       "NVDA": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $206.79, +2.34% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $206.79, +2.34% versus the prior close\",[\"Stock Analysis displayed USD 206.79 at 14:49 EST on 3 November 2026 (03:49 SGT on 4 November), during the regular session. The displayed daily change was +2.34% versus the 2 November completed close of USD 202.06.\",\"The previous 00:00 SGT edition saved USD 207.62 at 10:52 EST. The newer observation is -0.40% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/nvda/history/\"]]]",
+          "item_sha256": "933f7bb9d418312d19205dcbabe20babc931ff6848c15cc24da30fb7dec406a4"
+        },
+        {
+          "index": 1,
+          "headline": "Updated Reuters market reaction: NVIDIA rebounded",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Updated Reuters market reaction: NVIDIA rebounded\",[\"Reuters’ 17:20 UTC update (4 November 01:20 SGT) reported NVIDIA up 3% after four declining sessions.\"],\"This is a later market observation, not confirmation of a change to earnings expectations.\",\"The article does not separately timestamp the NVIDIA percentage; its index snapshot is timed 16:50 UTC.\",\"Company disclosures and the previously announced 17 November earnings call.\",[[\"Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026\",\"https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726\"]]]",
+          "item_sha256": "4951e0e34a8c0c5cd60b1165d1639e2f1285c11578066ca991ec127d83c733e0"
+        },
+        {
           "index": 2,
-          "headline": "New issuer commentary: AI in semiconductor manufacturing"
+          "headline": "New issuer commentary: AI in semiconductor manufacturing",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"New issuer commentary: AI in semiconductor manufacturing\",[\"NVIDIA published an explanatory blog at 16:00:45 UTC (4 November 00:00:45 SGT) describing accelerated simulation, physics-based AI, agents and digital twins in semiconductor manufacturing.\",\"The post describes partner applications involving COMSOL, Applied Materials, Siemens, Lam Research and Advantest.\"],\"The update illustrates uses for NVIDIA’s software and computing platform. It does not quantify new orders or revenue.\",\"Issuer descriptions and performance examples are not an independently verified earnings contribution or evidence that every cited deployment was newly announced today.\",\"Commercial adoption evidence and quantified business contribution.\",[[\"NVIDIA official blog · publication time from article metadata\",\"https://blogs.nvidia.com/blog/ai-semiconductor-fabs/\"]]]",
+          "item_sha256": "dfaee62227bb18c1a067ab7a2de4985105bf0db00f55568c68ea5afdee3ccd13"
+        },
+        {
+          "index": 3,
+          "headline": "Retained earlier coverage: NVIDIA traded higher",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: NVIDIA traded higher\",[\"Reuters’ 12:34 GMT (20:34 SGT) update recorded NVIDIA up 1.4% at 12:07 UTC (20:07 SGT). This is an earlier market observation, not the later quote snapshot on this card.\"],\"A premarket rebound alone does not verify changes to earnings expectations or resolve the separately attributed China-exposure report retained below.\",\"Price movement is not confirmation of the underlying attributed report. The regular session may differ from thin premarket trading.\",\"Company clarification of attributed reporting and the previously announced fiscal Q3 results call.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"]]]",
+          "item_sha256": "7a4f35be117ed99aaa290ebaff1b01214a5487069e077059efceab0d73380c75"
         },
         {
           "index": 4,
-          "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed"
+          "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: China-exposure report remains attributed and unconfirmed\",[\"Reuters relayed a Financial Times report that NVIDIA had advised data-centre partners to reduce China exposure. Reuters said it could not independently verify the report.\"],\"Treat this as an attributed report, not a confirmed change in company policy or a measured earnings impact.\",\"The original account was not independently verified by Reuters. Customer, export-control and geographic risks require separate primary evidence.\",\"Company confirmation or clarification and any specific disclosed customer impact.\",[[\"Reuters via StreetInsider · attributed Financial Times report\",\"https://new.streetinsider.com/Reuters/Nvidia%2Borders%2Bdata%2Bcentre%2Bclients%2Bto%2Breduce%2BChina%2Bexposure%2C%2BFT%2Breports/27275695.html\"]]]",
+          "item_sha256": "03f416e1816182e7912d005b6746469cacbb087366c5c969f8dd03aeb4702cf9"
         },
         {
           "index": 5,
-          "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled"
+          "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled",
+          "scope": "company",
+          "content_key": "[\"2026-10-28\",\"Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled\",[\"NVIDIA scheduled its fiscal Q3 FY2027 conference call for 17 November at 17:00 EST, or 18 November at 06:00 SGT.\"],\"The call is a future checkpoint; it is not a statement of the quarter’s result.\",\"Forward-looking expectations and actual results can differ. This edition contains no inferred earnings outcome.\",\"The release and written CFO commentary before the call, then management’s discussion.\",[[\"NVIDIA newsroom · official results-call notice\",\"https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873\"],[\"NVIDIA investor relations · previously announced results call rechecked for this edition\",\"https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/default.aspx\"]]]",
+          "item_sha256": "029a07f9ba34951aa0491d86963bf95abd7a390b3eb3735e15d051852e789d37"
+        }
+      ],
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $278.64, -0.13% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $278.64, -0.13% versus the prior close\",[\"Stock Analysis displayed USD 278.64 at 14:54 EST on 3 November 2026 (03:54 SGT on 4 November), during the regular session. The displayed daily change was -0.13% versus the 2 November completed close of USD 278.99.\",\"The previous 00:00 SGT edition saved USD 277.94 at 10:48 EST. The newer observation is +0.25% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/googl/history/\"]]]",
+          "item_sha256": "7238af8a16ed79e89a533e62d0d2219cc87a240e38c61d61b97157236430a0f1"
         }
       ],
       "AMZN": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $251.43, +2.36% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $251.43, +2.36% versus the prior close\",[\"Stock Analysis displayed USD 251.43 at 14:44 EST on 3 November 2026 (03:44 SGT on 4 November), during the regular session. The displayed daily change was +2.36% versus the 2 November completed close of USD 245.63.\",\"The previous 00:00 SGT edition saved USD 246.57 at 10:54 EST. The newer observation is +1.97% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/amzn/history/\"]]]",
+          "item_sha256": "01ab48cf7d9adf4ddf0864f76ba4feb854c29aca6fac0a2c8e9d837892e39674"
+        },
+        {
           "index": 1,
-          "headline": "New program: Sustainability Deep Tech Accelerator"
+          "headline": "New program: Sustainability Deep Tech Accelerator",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"New program: Sustainability Deep Tech Accelerator\",[\"Amazon announced the program at 17:15 UTC (4 November 01:15 SGT), according to its press-release publication metadata.\",\"The program brings Amazon Devices, AWS and Private Brands together to evaluate lower-carbon materials, energy-efficiency and circularity technologies. Applications open in January 2027.\"],\"This creates a path for technology evaluation and possible commercial adoption; it is not a disclosed financial commitment.\",\"Amazon does not require an equity stake as a condition of participation. Any licensing, supply, collaboration or investment arrangement depends on approval and mutual fit.\",\"Application launch and any subsequently announced integration agreements.\",[[\"Amazon official press release · 17:15 UTC, 3 November 2026\",\"https://press.aboutamazon.com/2026/11/amazon-launches-new-amazon-sustainability-deep-tech-accelerator-to-fast-track-adoption-opportunities-for-breakthrough-climate-technologies\"]]]",
+          "item_sha256": "d08cf31a407ff41f32479d6a39702d89cc6d2dc2bb822f6201880a7962c1a56c"
         }
       ],
       "META": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $619.31, +2.07% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $619.31, +2.07% versus the prior close\",[\"Stock Analysis displayed USD 619.31 at 14:56 EST on 3 November 2026 (03:56 SGT on 4 November), during the regular session. The displayed daily change was +2.07% versus the 2 November completed close of USD 606.73.\",\"The previous 00:00 SGT edition saved USD 621.51 at 10:59 EST. The newer observation is -0.35% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/meta/\"]]]",
+          "item_sha256": "622b6e43f915ebee386b11b971ed41ec98ebb0d01d4bbb817937b891ab09afcc"
+        },
+        {
           "index": 1,
-          "headline": "Earlier filing newly checked: proposed senior-note offering"
+          "headline": "Earlier filing newly checked: proposed senior-note offering",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Earlier filing newly checked: proposed senior-note offering\",[\"Meta’s preliminary prospectus supplement describes five series of senior unsecured notes for general corporate purposes. Amounts, coupons and maturities remain blank in this filing.\",\"SEC acceptance was 3 November 13:29:28 UTC (21:29:28 SGT), before this review window. It was not included in the preceding edition.\"],\"This is a catch-up to an earlier financing disclosure, not a new 16:00–20:00 UTC event or a priced/completed bond sale.\",\"Final terms were not established by this preliminary filing. A possible separate euro offering is not assured.\",\"Priced terms, total proceeds, maturity schedule and any later issuer filing.\",[[\"SEC · Meta Form 424B5, accession 0001193125-26-444440\",\"https://www.sec.gov/Archives/edgar/data/1326801/000119312526444440/d135326d424b5.htm\"],[\"SEC · Meta recent submissions and acceptance time\",\"https://data.sec.gov/submissions/CIK0001326801.json\"]]]",
+          "item_sha256": "d3b330f752f8bb7bde34a2f3bcc65daebe15f2e212f376e3904f5152e916cc75"
+        }
+      ],
+      "BRK.B": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $558.64, +0.45% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $558.64, +0.45% versus the prior close\",[\"Stock Analysis displayed USD 558.64 at 14:43 EST on 3 November 2026 (03:43 SGT on 4 November), during the regular session. The displayed daily change was +0.45% versus the 2 November completed close of USD 556.11.\",\"The previous 00:00 SGT edition saved USD 557.52 at 10:54 EST. The newer observation is +0.20% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/brk.b/forecast/\"]]]",
+          "item_sha256": "d2ec567c4a0d8eae422665861cedad8bcf20a182112bd8effc82a44844166d36"
         }
       ],
       "AMD": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $485.73, +4.05% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $485.73, +4.05% versus the prior close\",[\"Stock Analysis displayed USD 485.73 at 14:57 EST on 3 November 2026 (03:57 SGT on 4 November), during the regular session. The displayed daily change was +4.05% versus the 2 November completed close of USD 466.84.\",\"The previous 00:00 SGT edition saved USD 491.82 at 10:57 EST. The newer observation is -1.24% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/amd/history/\"]]]",
+          "item_sha256": "7f21664c6d3da6e1648b07769015dd2858c4616bbbd50c24f45525454ed4739a"
+        },
+        {
+          "index": 1,
+          "headline": "Updated Reuters market reaction: AMD higher before results",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Updated Reuters market reaction: AMD higher before results\",[\"Reuters’ 17:20 UTC update (4 November 01:20 SGT) reported AMD up 5.1% before its scheduled after-close earnings release.\"],\"This is a pre-results market observation; no earnings outcome is inferred.\",\"The article does not separately timestamp the AMD percentage. Results were scheduled after the US close, which is later than the 20:00 UTC cutoff.\",\"Official after-close results and the conference call at 22:00 UTC / 4 November 06:00 SGT.\",[[\"Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026\",\"https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726\"],[\"AMD · retained 6 October official results notice, rechecked\",\"https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results\"]]]",
+          "item_sha256": "484923fd548eea1b1d4579944e9d7337da2897f98667775e12e44591d478d8f9"
+        },
+        {
+          "index": 2,
+          "headline": "Retained earlier coverage: AMD rose ahead of scheduled results",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: AMD rose ahead of scheduled results\",[\"Reuters’ 12:34 GMT (20:34 SGT) update recorded AMD up 1.8% at 12:07 UTC (20:07 SGT), before the later separately timestamped quote in this edition.\"],\"This is a pre-results price reaction, not evidence of an earnings beat or new guidance. The official results-call notice remains the relevant upcoming event.\",\"Earnings and guidance were not yet released at this cutoff. Post-release prices may reverse or extend premarket moves.\",\"AMD’s official results release after the US close on 3 November and conference call on 4 November at 06:00 SGT, as stated in the retained 6 October notice.\",[[\"Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update\",\"https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626\"]]]",
+          "item_sha256": "27bb639c76debafcbd2b2f44d1c4865bf977da045fe4d6f5624524b806170be5"
+        },
+        {
           "index": 3,
-          "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst"
+          "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst",
+          "scope": "company",
+          "content_key": "[\"2026-10-06\",\"Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst\",[\"AMD scheduled fiscal Q3 2026 results for 3 November after the US market close, with its call at 17:00 EST. That is 4 November at 06:00 SGT.\"],\"The scheduled release provides a defined checkpoint for evaluating the business against prior guidance. Results were not yet available at this edition’s cutoff.\",\"An event date is not evidence of better or worse earnings. Post-release prices may differ sharply from this snapshot.\",\"Read the earnings release and call on 4 November, 06:00 SGT. Separate reported results, guidance and market reaction.\",[[\"AMD investor relations · official results notice\",\"https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results\"]]]",
+          "item_sha256": "b74abe93e00bff039d0804c898d4c58546a43d1e2d8706918e8cd456a6bdf1a5"
+        }
+      ],
+      "AVGO": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $331.86, +2.99% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $331.86, +2.99% versus the prior close\",[\"Stock Analysis displayed USD 331.86 at 14:41 EST on 3 November 2026 (03:41 SGT on 4 November), during the regular session. The displayed daily change was +2.99% versus the 2 November completed close of USD 322.23.\",\"The previous 00:00 SGT edition saved USD 333.94 at 10:57 EST. The newer observation is -0.62% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/avgo/history/\"]]]",
+          "item_sha256": "0bf1e91b065ace3037768f4d2dd66b004950bedb9de7f20c9a26cffd5e12a63e"
+        }
+      ],
+      "MU": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $848.17, +1.75% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $848.17, +1.75% versus the prior close\",[\"Stock Analysis displayed USD 848.17 at 14:53 EST on 3 November 2026 (03:53 SGT on 4 November), during the regular session. The displayed daily change was +1.75% versus the 2 November completed close of USD 833.59.\",\"The previous 00:00 SGT edition saved USD 858.71 at 10:51 EST. The newer observation is -1.23% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/mu/history/\"]]]",
+          "item_sha256": "69f8441e1f97cc057a7542aca0eda6960c67cf1348c8ba26ed52d621d2227bd1"
+        }
+      ],
+      "TSLA": [
+        {
+          "index": 0,
+          "headline": "Active-session snapshot: $397.50, -1.57% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $397.50, -1.57% versus the prior close\",[\"Stock Analysis displayed USD 397.50 at 14:55 EST on 3 November 2026 (03:55 SGT on 4 November), during the regular session. The displayed daily change was -1.57% versus the 2 November completed close of USD 403.82.\",\"The previous 00:00 SGT edition saved USD 401.80 at 10:49 EST. The newer observation is -1.07% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/tsla/history/\"]]]",
+          "item_sha256": "cde90de977c2c56d33af605b814c002e553d5bf0d059b06a1f6735d0f2b5f4fb"
         }
       ],
       "TSM": [
         {
+          "index": 0,
+          "headline": "Active-session snapshot: $404.41, +1.45% versus the prior close",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Active-session snapshot: $404.41, +1.45% versus the prior close\",[\"Stock Analysis displayed USD 404.41 at 14:45 EST on 3 November 2026 (03:45 SGT on 4 November), during the regular session. The displayed daily change was +1.45% versus the 2 November completed close of USD 398.63.\",\"The previous 00:00 SGT edition saved USD 407.61 at 10:49 EST. The newer observation is -0.79% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return.\"],\"The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.\",\"Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.\",\"The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).\",[[\"Stock Analysis · active-session USD price and displayed timestamp\",\"https://stockanalysis.com/stocks/tsm/history/\"]]]",
+          "item_sha256": "4353be9532698c397df45a62df4aab4a017b62c3f9ab8fe074faf3572ba45f4c"
+        },
+        {
           "index": 1,
-          "headline": "Retained earlier coverage: October monthly sales are due on 10 November"
+          "headline": "Retained earlier coverage: October monthly sales are due on 10 November",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Retained earlier coverage: October monthly sales are due on 10 November\",[\"TSMC’s official financial calendar lists October 2026 monthly sales for 10 November 2026.\"],\"Monthly sales provide a nearer-term business update between quarterly reports. They do not by themselves establish profitability.\",\"Group revenue is reported in a different currency and scope from the USD ADR price. Do not treat the stock-price change as the revenue change.\",\"The October monthly revenue release on 10 November; verify its reported currency and comparison period.\",[[\"TSMC investor relations · financial calendar\",\"https://investor.tsmc.com/english/financial-calendar\"]]]",
+          "item_sha256": "903bb3bcc721c5bb7b87a4f8829c64f3d765933cf9e5a88c680c37b15c5b4096"
         }
       ]
     },
@@ -146,25 +484,46 @@
       "AAPL": [
         {
           "index": 0,
-          "headline": "Earlier update newly checked: Siri AI developer preview expands"
+          "headline": "Earlier update newly checked: Siri AI developer preview expands",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Earlier update newly checked: Siri AI developer preview expands\",[\"Apple’s official Developer RSS dates this post to 18:00:20 UTC (4 November 02:00:20 SGT), before this review window. It was absent from the preceding edition.\",\"The preview lets developers integrate app content and actions with Siri AI through App Intents in the 27.3 betas. Apple describes customer availability in a few months and App Store submissions opening in spring.\"],\"Broader third-party integration could increase useful Siri experiences, but the announcement supplies no revenue estimate.\",\"This remains a preview with device, language and regional limits. Apple says Siri AI is unavailable in the EU on iOS, iPadOS and watchOS; terms and usage policies are still to follow.\",\"Developer uptake, final policies and customer-release timing.\",[[\"Apple Developer: Siri AI preview\",\"https://developer.apple.com/news/?id=gdk2umrf\"],[\"Apple Developer official RSS: 10:00:20 PST publication time\",\"https://developer.apple.com/news/rss/news.rss\"]]]",
+          "item_sha256": "59e31e06b5ba074900811cb0e3d2fc16b8af1d2b02982f6558ed49c90aeab711"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "Reuters close update: AI shares recover; Apple remains lower",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-03\",\"Reuters close update: AI shares recover; Apple remains lower\",[\"Reuters’ 21:15 UTC close update recorded Apple down 1.9%, NVIDIA up 2.3%, Micron up 2.6%, and Microsoft and Amazon each more than 2% higher. Its Apple margin explanation concerns previously disclosed memory costs, not new guidance.\",\"The Reuters syndicated page was published at 21:02 UTC and updated at 21:15 UTC.\"],\"The broad close-market report provides context across several watchlist names; it is not new issuer guidance or proof of the cause of each stock move.\",\"This was an indexed syndicated Reuters report. Direct page retrieval was limited, and the market reaction does not establish future performance.\",\"Subsequent official issuer disclosures. Regular-session and after-hours observations must remain distinct.\",[[\"Reuters via MarketScreener: published 21:02 UTC, updated 21:15 UTC\",\"https://ca.marketscreener.com/news/nasdaq-ends-higher-as-ai-heavyweights-rebound-ahead-of-midterm-results-ce785fdedd8ef520\"]]]",
+          "item_sha256": "e0961d6b5106b11c3fec228dddbd945d8df062f64176eab1a51ba9ab4772cc7c"
         }
       ],
       "AMZN": [
         {
           "index": 0,
-          "headline": "New filing: quarter-end investment holdings report"
+          "headline": "New filing: quarter-end investment holdings report",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"New filing: quarter-end investment holdings report\",[\"Amazon’s 13F-HR was accepted at 21:17:05 UTC (4 November 05:17:05 SGT). It reports six positions with an aggregate value of $3.774 billion as of 30 September.\"],\"This is a newly filed but backward-looking investment report, not an operating-results release.\",\"The holdings date predates this edition by more than a month; the report does not establish current holdings or subsequent transactions.\",\"Any later filing explaining material changes; no near-term operating catalyst is inferred.\",[[\"SEC: Amazon 13F-HR for 30 September\",\"https://www.sec.gov/Archives/edgar/data/1018724/000110465926122014/xslForm13F_X02/primary_doc.xml\"],[\"SEC: Amazon acceptance timestamp\",\"https://data.sec.gov/submissions/CIK0001018724.json\"]]]",
+          "item_sha256": "79ce0d222c4675d955f90e88f5720a71b821abc7b176cb101688444254f2289f"
         }
       ],
       "META": [
         {
           "index": 0,
-          "headline": "New priced terms: $15 billion senior-note offering"
+          "headline": "New priced terms: $15 billion senior-note offering",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"New priced terms: $15 billion senior-note offering\",[\"Meta filed final pricing terms at 22:25:13 UTC (4 November 06:25:13 SGT), replacing the earlier preliminary filing’s blank amounts and coupons.\",\"The five tranches are $3.25 billion at 5.850% due 2031, $3.25 billion at 6.250% due 2033, $4 billion at 6.550% due 2036, $1.75 billion at 7.350% due 2046 and $2.75 billion at 7.500% due 2056. Settlement is expected on 5 November.\"],\"The filing establishes the dollar offering’s size and borrowing cost, a concrete financing update beyond the earlier launch.\",\"Pricing is not completed settlement. This term sheet does not establish final terms or completion of any separate euro offering.\",\"Expected 5 November settlement and subsequent completion disclosures.\",[[\"SEC: Meta final pricing FWP, accepted 22:25:13 UTC\",\"https://www.sec.gov/Archives/edgar/data/1326801/000119312526445646/d186765dfwp.htm\"],[\"SEC: Meta acceptance timestamp\",\"https://data.sec.gov/submissions/CIK0001326801.json\"]]]",
+          "item_sha256": "0991282d88aeadd603c877f41548934def7acd438661a8b950ed71bfd16c710a"
         }
       ],
       "AMD": [
         {
           "index": 0,
-          "headline": "New results: Data Center drives record Q3; Q4 revenue guide rises"
+          "headline": "New results: Data Center drives record Q3; Q4 revenue guide rises",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"New results: Data Center drives record Q3; Q4 revenue guide rises\",[\"AMD released Q3 results at 21:15 UTC (4 November 05:15 SGT): revenue $13.377 billion, up 45% year-on-year; diluted EPS $1.46 GAAP and $2.09 non-GAAP.\",\"Data Center revenue was $8.546 billion, up 97%; Client and Gaming revenue fell 8% to $3.722 billion. Q4 guidance is $17 billion revenue, plus or minus 3%, and approximately 55% non-GAAP gross margin versus 56% in Q3.\"],\"The revenue midpoint implies approximately 27% sequential growth, but a lower adjusted gross margin. Strong Data Center growth and weaker Client and Gaming demand need separate evaluation.\",\"Guidance depends on execution of the Helios and Venice ramp and component supply. Non-GAAP EPS is not GAAP earnings.\",\"Q4 shipment execution, margin delivery and additional official call materials. The scheduled 22:00 UTC call is no longer an upcoming event at this cutoff.\",[[\"AMD official earnings release\",\"https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results\"],[\"AMD official release list: 3 November, 16:15 EST\",\"https://ir.amd.com/news-events/press-releases\"],[\"SEC earnings 8-K: accepted 21:16:27 UTC\",\"https://www.sec.gov/Archives/edgar/data/2488/000000248826000188/amd-20261103.htm\"]]]",
+          "item_sha256": "22ac1a5403e8bb8042c3265fa45ffea8d4cb24c7b35aa603a09d4dde1e8d917b"
         }
       ]
     },
@@ -172,51 +531,178 @@
       "BRK.B": [
         {
           "index": 0,
-          "headline": "New SEC filing: Berkshire reports Sirius XM purchases"
+          "headline": "New SEC filing: Berkshire reports Sirius XM purchases",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"New SEC filing: Berkshire reports Sirius XM purchases\",[\"A Form 4 accepted at 02:30:04 UTC reports 743,965 Sirius XM shares purchased on 30 October, 66,968 on 2 November and 113,348 on 3 November: 924,281 shares in total.\",\"The filing reports 125,731,398 shares afterward, including 109,746,508 held by GEICO and 15,984,890 in subsidiary pension plans. The filing includes ownership disclaimers for the pension-plan positions.\"],\"This is a disclosed Berkshire-related portfolio transaction, not a Berkshire operating-results release.\",\"The issuer is Sirius XM, not Berkshire. These are dated reported transactions and not evidence of current holdings or any user trade. Do not describe all reported shares as directly owned by Berkshire.\",\"Later ownership filings for additional changes.\",[[\"SEC Form 4: issuer Sirius XM; reporting owner Berkshire\",\"https://www.sec.gov/Archives/edgar/data/1067983/000119312526445930/ownership.xml\"],[\"SEC Berkshire recent submissions, acceptance timestamp\",\"https://data.sec.gov/submissions/CIK0001067983.json\"]]]",
+          "item_sha256": "e2af95e74cf42a18f3f9c69842c835ec6c6f835fd12593cd164eeb9cb5e901e9"
         },
         {
           "index": 1,
-          "headline": "Overlap catch-up: Oregon court hears PacifiCorp wildfire appeal"
+          "headline": "Overlap catch-up: Oregon court hears PacifiCorp wildfire appeal",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Overlap catch-up: Oregon court hears PacifiCorp wildfire appeal\",[\"Reuters reports the Oregon Supreme Court heard arguments on 3 November over reviving a wildfire liability verdict after an appeals court set aside $1.25 billion in awards to 201 plaintiffs.\",\"The report was published at 23:55:50 UTC, in the 15-minute overlap before this edition’s main window; it was not in the previous edition. No new decision is reported.\"],\"The appeal is a contingent legal-risk development for Berkshire’s utility operations, not a new damages award.\",\"Potential damages are uncertain; allegations and courtroom questions do not establish the eventual ruling or payout.\",\"Oregon Supreme Court ruling. Reuters says rulings typically take months; no exact decision date is verified.\",[[\"Reuters via MarketScreener, explicit EST publication timestamp\",\"https://ca.marketscreener.com/news/berkshire-owned-utility-urges-oregon-top-court-against-mammoth-wildfire-class-action-ce785fdedf8af525\"]]]",
+          "item_sha256": "2eecfdb14735cf4b61146fe81927d9eecbeee24714072b6aef414c1a87f260db"
         }
       ],
       "AMD": [
         {
           "index": 0,
-          "headline": "New Reuters warrant report: conditional dilution and a source-number discrepancy"
+          "headline": "New Reuters warrant report: conditional dilution and a source-number discrepancy",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"New Reuters warrant report: conditional dilution and a source-number discrepancy\",[\"Reuters reports CFO Jean Hu said customer warrants begin diluting shareholders only after vesting and exercise conditions are met, with more timing guidance expected in 2027.\",\"The original 3 November earnings release and SEC exhibit show a $1.097 billion fair-value warrant-liability adjustment, or $0.66 per share. Reuters instead reports $1.07 billion; that discrepancy is unresolved. The cash-flow statement separately adds back $1.179 billion of net non-cash customer-warrant impact.\",\"Publication time: 2026-11-04T02:12:22Z. Last modification: 2026-11-04T02:48:41Z.\"],\"Equity-linked customer incentives can create earnings volatility and future dilution alongside chip sales growth. The fair-value adjustment is not a cash outflow.\",\"Do not equate warrants with shares already issued or exercised. Do not silently replace the primary-source $1.097 billion with Reuters $1.07 billion or confuse it with the separate cash-flow addback.\",\"2027 management guidance on vesting/exercise timing and future SEC disclosure.\",[[\"Reuters via Investing.com; UTC structured publication and modification metadata verified\",\"https://www.investing.com/news/stock-market-news/amds-openai-meta-chip-deals-trigger-1-billion-quarterly-charge-4997141\"],[\"AMD original release: reconciliation and cash-flow tables\",\"https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results\"],[\"AMD SEC exhibit 99.1 mirror\",\"https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000188/q32026991.htm\"]]]",
+          "item_sha256": "d6af25028def04a8a9a467986d1ddc9c4bed0c4ef5c27e52a0060e350e3f4202"
         },
         {
           "index": 1,
-          "headline": "Earlier call catch-up: 2027 growth outlook and weaker PC-unit demand"
+          "headline": "Earlier call catch-up: 2027 growth outlook and weaker PC-unit demand",
+          "scope": "company",
+          "content_key": "[\"2026-11-03\",\"Earlier call catch-up: 2027 growth outlook and weaker PC-unit demand\",[\"Reuters attributes to Lisa Su an expectation that overall 2027 revenue will grow more than 80%, with data-center chips supplying about 80% of sales.\",\"Reuters also reports AMD expects PC unit shipments to decline by a double-digit percentage in 2027. These are earlier 3 November call remarks newly verified for this edition, not a new call after midnight UTC.\"],\"The outlook implies greater dependence on data-center demand while the PC market weakens.\",\"These are management forecasts, not realized results; supply, execution and customer concentration remain relevant. No after-hours percentage is carried over from the report.\",\"2027 shipment execution and subsequent official call materials.\",[[\"Reuters via HOT 96, current accessible article\",\"https://hot96.com/2026/11/03/amd-forecasts-quarterly-revenue-above-estimates-as-data-center-growth-accelerates/\"],[\"AMD results page: Q3 audio/slides listed but no official Q3 transcript\",\"https://ir.amd.com/financial-information/financial-results\"]]]",
+          "item_sha256": "331a1843831f2594693cd1e99fe90172eb515c108271aacfd456fc75bf4713ac"
         }
       ],
       "TSLA": [
         {
           "index": 0,
-          "headline": "New Reuters report: Korean consumer group plans FSD marketing complaint"
+          "headline": "New Reuters report: Korean consumer group plans FSD marketing complaint",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"New Reuters report: Korean consumer group plans FSD marketing complaint\",[\"Reuters reports Citizens United for Consumer Sovereignty plans to file a complaint with the Korea Fair Trade Commission on 5 November, alleging Tesla marketed FSD for vehicles that could not legally use it.\",\"A KFTC official told Reuters an investigation into FSD advertising began earlier this year and Tesla submitted written responses. Tesla did not respond to Reuters requests for comment. FSD requires active driver supervision.\",\"Publication time: 2026-11-04T00:01:43Z.\"],\"A potential advertising restriction or certification delay could affect Korean software sales; this report does not quantify an earnings impact.\",\"These are allegations and a planned complaint, not a finding of liability or an imposed penalty. The number of customers who bought FSD on ineligible vehicles remains unclear.\",\"Whether the complaint is filed on 5 November; KFTC decisions, certification progress and Tesla response.\",[[\"Reuters via MarketScreener; published 3 November 19:01:43 EST\",\"https://www.marketscreener.com/news/tesla-misled-south-korean-customers-about-automated-driving-tech-consumer-group-alleges-ce785fdedf8af32d\"]]]",
+          "item_sha256": "03a2e5e278248eb222c1525577692f59f6e8855e83ee113a9242d1517eac4dbe"
         }
       ]
     },
     "watchlist-20261104T080000Z": {
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "Shared watchlist context: Reuters election and AI-policy update",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-04\",\"Shared watchlist context: Reuters election and AI-policy update\",[\"Reuters reports Democrats gained both congressional chambers and Nasdaq futures pared a decline of more than 2%. These are report-time futures observations, not individual stock quotes.\",\"The report describes Taiwan-listed TSMC shares falling before paring losses, not a new US-listed TSM ADR session.\",\"Original publication: 03:50:39 UTC. Visible update: 07:33 GMT, minute precision; structured metadata repeats the original timestamp.\"],\"Possible scrutiny of AI infrastructure and capital spending is a watchlist-wide policy-risk scenario, not an enacted restriction or demonstrated earnings loss.\",\"Election reporting and prices are evolving. A potential Texas data-center moratorium discussed by an analyst is hypothetical, not enacted policy.\",\"Confirmed election outcomes, actual policy proposals and subsequent US trading.\",[[\"Reuters via MarketScreener; full updated article retrieved\",\"https://uk.marketscreener.com/news/stocks-wilt-dollar-slides-as-early-midterm-results-point-to-blue-sweep-ce785fdede8cf321\"]]]",
+          "item_sha256": "157164c7d20655b19d01578f4abedb1654e47c7621ba7286b4da83ae2d6f49e3"
+        }
+      ],
       "AMZN": [
         {
           "index": 0,
-          "headline": "AWS launches Malaysian public-sector and SME AI program"
+          "headline": "AWS launches Malaysian public-sector and SME AI program",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"AWS launches Malaysian public-sector and SME AI program\",[\"AWS announced Semarak AI Malaysia. It plans Amazon Quick access for up to 445,000 government officers; GovHub, powered by Kiro, starts with a 500-developer pilot in 2026 and targets 4,000 developers by 2028.\",\"The SME program aims to onboard 10,000 businesses by 2028, with eligible participants offered six months of complimentary Quick and Kiro access.\",\"Structured publication time: 4 November 07:00 UTC. The body says 4 November; the page label says 3 November.\"],\"This expands AWS distribution and AI adoption in Malaysia. The release does not quantify incremental revenue, contract value or near-term earnings impact.\",\"Targets and pilot sizes are not realized paid subscriptions. Do not describe the previously announced MYR29.2 billion country commitment as new spending.\",\"Pilot rollout, adoption and conversion to paid workloads through 2028.\",[[\"Original AWS release; UTC structured metadata verified\",\"https://press.aboutamazon.com/aws/2026/11/aws-launches-semarak-ai-malaysia-a-national-program-to-bring-ai-tools-to-government-officers-students-and-local-software-companies\"]]]",
+          "item_sha256": "1301c32d8f806a24635ec10d52df09d0995bae237603b27686fc429d63c8f0db"
         }
       ]
     },
     "watchlist-20261104T120000Z": {
-      "META": [
+      "NVDA": [
         {
           "index": 0,
-          "headline": "Meta launches euro bond offering; SEC terms remain preliminary"
+          "headline": "Shared watchlist context: Reuters reports futures reversing early election losses",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-04\",\"Shared watchlist context: Reuters reports futures reversing early election losses\",[\"Reuters’ 05:02 EST (10:02 UTC) update reports US equity futures recovering from early losses after the midterm results. The article’s specific futures snapshot is earlier, at 04:22 EST.\",\"The report describes mixed hyperscaler shares and gains in AMD and other chip stocks during early premarket trading. These report-time observations are not the separate saved quote snapshots in this edition.\"],\"The reversal shows why early election reactions should not be treated as a stable forecast. Possible AI-policy scrutiny remains a scenario, not an enacted restriction.\",\"Election interpretation, policy expectations and thin premarket trading can change rapidly. News association does not demonstrate causation for a particular share move.\",\"The regular US session and specific policy or issuer announcements rather than extrapolation from initial futures moves.\",[[\"Reuters via Schwab: 4 November 05:02 EST updated market report\",\"https://www.schwab.wallst.com/schwab/Prospect/research/stocks/news.asp?doc=3200-nL3N46L0TY-3&symbol=MSFT\"],[\"Reuters canonical market story; later updates may differ from this fixed snapshot\",\"https://www.reuters.com/business/us-stock-index-futures-steady-democrats-seize-congress-2026-11-04/\"]]]",
+          "item_sha256": "450371cb41c745545c17b3ce85d7a66ea8faab23f218afceb9a640a434d19671"
         }
       ],
       "GOOGL": [
         {
           "index": 0,
-          "headline": "Google plans US$15 billion Malaysian infrastructure investment for 2027–2028"
+          "headline": "Google plans US$15 billion Malaysian infrastructure investment for 2027–2028",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"Google plans US$15 billion Malaysian infrastructure investment for 2027–2028\",[\"Reuters reported at 09:13:54 UTC that Google plans US$15 billion of Malaysian investment over 2027–2028, covering data-centre campuses, clean energy, water security and training.\",\"The Reuters report says new campuses are planned in Selangor and Negeri Sembilan, alongside the existing operational Elmina campus. These are company plans reported by Reuters, not independently established future spending.\"],\"The plan expands regional computing capacity while increasing capital and infrastructure commitments. It does not establish new revenue, utilisation or investment returns.\",\"Construction, power and water availability, customer utilisation and returns on capital remain execution risks. A matching original issuer release was not retrieved.\",\"An accessible original company statement, construction milestones, commissioning dates and subsequent capital-spending disclosure.\",[[\"Reuters: Google Malaysian investment, published 4 November 09:13:54 UTC\",\"https://www.reuters.com/world/asia-pacific/google-invest-15-billion-malaysia-2027-2028-2026-11-04/\"],[\"Reuters syndicated by WHBL: full report, 09:13:36 UTC metadata\",\"https://whbl.com/2026/11/04/google-to-invest-15-billion-in-malaysia-in-2027-and-2028/\"]]]",
+          "item_sha256": "87edd551c88b8d1b7d7674ce57e04c162a0ac3358f7af2c462f0681fae375fb7"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Meta launches euro bond offering; SEC terms remain preliminary",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"Meta launches euro bond offering; SEC terms remain preliminary\",[\"Reuters reports that books opened for Meta’s first euro bond sale, with maturities ranging from four to 38 years, citing a lead-manager memo. The English syndication was updated at 09:01:41 UTC.\",\"Meta’s 424B5, accepted by the SEC at 11:01:27 UTC, describes six proposed senior-note series. Euro amounts, coupons and final maturity dates remain blank; proceeds are intended for general corporate purposes.\",\"The filing separately confirms the previously covered US$15 billion dollar-note pricing. It does not confirm either offering has settled.\"],\"Euro borrowing can diversify funding sources, but the preliminary filing cannot establish final financing cost or completed funding.\",\"Pricing, interest expense, currency exposure and completion remain uncertain. The Reuters memo’s maturity range is distinct from the unfilled primary-document fields.\",\"Final euro pricing terms, the completed prospectus and issuer confirmation of settlement.\",[[\"Meta original preliminary euro prospectus, SEC acceptance 11:01:27 UTC\",\"https://www.sec.gov/Archives/edgar/data/1326801/000119312526446110/d44678d424b5.htm\"],[\"Reuters via Zawya: launch report, updated 09:01:41 UTC\",\"https://www.zawya.com/en/capital-markets/ai-shaping-digital-future/meta-kicks-off-first-euro-bond-sale-in-latest-test-for-tech-sector-1931584\"]]]",
+          "item_sha256": "deca5506f37db44da2ea2953e9e29d6bbf8199e3ff855928a1319d5a14025a87"
         }
       ]
+    },
+    "watchlist-20261104T160000Z": {
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "Earlier today: Google confirms buyout offers expanded to five countries",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"Earlier today: Google confirms buyout offers expanded to five countries\",[\"Reuters reported earlier on 04 Nov that Google confirmed it expanded voluntary exit offers in June to some employees in Canada, France, Germany, Japan and Switzerland.\",\"Reuters could not establish how many people accepted. The report concerns a previously unreported programme expansion, not a new compulsory layoff announcement at this cutoff.\"],\"The report adds context to Alphabet’s effort to redirect costs while investing in AI. Without participation or severance figures, the net savings cannot be estimated reliably.\",\"Severance expense and loss of experienced staff may offset some savings. Programme scope and financial impact remain unquantified.\",\"Issuer disclosure of participation, restructuring charges and operating-expense trends.\",[[\"Reuters via Investing.com · earlier 04 Nov report, newly collated\",\"https://www.investing.com/news/stock-market-news/exclusivegoogle-extends-voluntary-buyout-offers-to-employees-in-several-countries-4997689\"]]]",
+          "item_sha256": "3bfdcdfdbd170c4ad9be9124f4e1b1615c29d9c4e36188ca31f489573bd488b2"
+        }
+      ],
+      "AMZN": [
+        {
+          "index": 0,
+          "headline": "Amazon opens a free Shop Direct portal for outside merchants",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"Amazon opens a free Shop Direct portal for outside merchants\",[\"Amazon’s original release, timestamped 14:00:07 UTC, introduces Shop Direct Merchant Workspace, a free self-service portal through which eligible merchants can connect product feeds to Amazon and Alexa for Shopping.\",\"Amazon says tens of millions of customers have discovered hundreds of millions of outside-store products through Shop Direct. Customers can be directed to the merchant’s website, while eligible products support Buy for Me. These reach figures are issuer claims.\"],\"The portal may strengthen Amazon as the starting point for shopping even when inventory sits elsewhere. Participation and discovery do not by themselves establish incremental revenue.\",\"Merchant uptake, data accuracy, purchase conversion and customer experience determine commercial value. No financial contribution was quantified.\",\"Merchant adoption, conversion metrics and any disclosed monetisation or revenue contribution.\",[[\"Amazon original announcement · 04 Nov 14:00:07 UTC\",\"https://www.aboutamazon.com/news/retail/amazon-shop-direct-merchant-workspace\"]]]",
+          "item_sha256": "c46ffcbe5b8d98ab716d0e4736a7245abb6fccc6292009315c11badfd00ebce2"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Meta euro bond demand reaches €53bn; final pricing still pending",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"Meta euro bond demand reaches €53bn; final pricing still pending\",[\"Reuters reported at 14:27 UTC that Meta’s debut euro bond offering attracted €53 billion in orders, citing Bloomberg’s compiled data.\",\"The report said Meta sought up to €9 billion across six maturities from just over four to more than 38 years, with pricing expected later Wednesday. Investor orders are not completed borrowing.\"],\"Strong reported demand suggests access to European funding. The final coupon and spread, rather than the order-book headline alone, determine the financing cost.\",\"Orders can change before allocation. Size, pricing, currency exposure and settlement remain unverified; heavier AI investment can increase funding needs.\",\"Final issuer pricing documents, coupons and spreads, then confirmation of settlement.\",[[\"Reuters via MarketScreener · 04 Nov 09:27 EST · reporting Bloomberg\",\"https://www.marketscreener.com/news/meta-draws-record-orders-for-debut-euro-bond-sale-bloomberg-news-reports-ce785fdfdd8af52d\"]]]",
+          "item_sha256": "f2e7ceef45446bbf839355bceed4da84d45f0fd57c09e7310d355613b3c1ec65"
+        }
+      ]
+    }
+  },
+  "reviewed_editions": {
+    "watchlist-20261103T120000Z": {
+      "as_of": "2026-11-03T20:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "0ab436e4d1f7f56af6eea5f68487ff8c68b0417ecf35dfff9a32b62730b85d47",
+      "path": "data/watchlist/reviews/watchlist-20261103T120000Z.json"
+    },
+    "watchlist-20261103T140000Z": {
+      "as_of": "2026-11-03T22:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "c2edd30dcb32e2147bf34d60c8ee2d4e1a939653ed1e220c4a8e439f7ea15b93",
+      "path": "data/watchlist/reviews/watchlist-20261103T140000Z.json"
+    },
+    "watchlist-20261103T160000Z": {
+      "as_of": "2026-11-04T00:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "c6a88fee77ae9df36ccfaa77d9aed028c6901428608f489ae37797ad397af486",
+      "path": "data/watchlist/reviews/watchlist-20261103T160000Z.json"
+    },
+    "watchlist-20261103T200000Z": {
+      "as_of": "2026-11-04T04:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "e2ad8f6775217040f29f0ff033b5b5438a2c984a7f2b7d552e123bae707b1b94",
+      "path": "data/watchlist/reviews/watchlist-20261103T200000Z.json"
+    },
+    "watchlist-20261104T000000Z": {
+      "as_of": "2026-11-04T08:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "06c4f07b869f754c18e5ee1307e9ca6660ca4d29a54a6d7aeddb82b4c30fabbe",
+      "path": "data/watchlist/reviews/watchlist-20261104T000000Z.json"
+    },
+    "watchlist-20261104T040000Z": {
+      "as_of": "2026-11-04T12:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "6ab2abc1174f869262662b5d41a92503bc8b14823cb9accac14f7dc09a7a99d0",
+      "path": "data/watchlist/reviews/watchlist-20261104T040000Z.json"
+    },
+    "watchlist-20261104T080000Z": {
+      "as_of": "2026-11-04T16:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "6e15bc32ceb0ca1fa0195231e30401ac8163179250b5bbe74cae6197eaeb69c9",
+      "path": "data/watchlist/reviews/watchlist-20261104T080000Z.json"
+    },
+    "watchlist-20261104T120000Z": {
+      "as_of": "2026-11-04T20:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "2642456f7e755fd8e22f53cb9f8d26722b92527b4813ce336151279d97169dff",
+      "path": "data/watchlist/reviews/watchlist-20261104T120000Z.json"
+    },
+    "watchlist-20261104T160000Z": {
+      "as_of": "2026-11-05T00:00:00+08:00",
+      "reviewed_at": "2026-11-04T20:24:00Z",
+      "edition_sha256": "4824878372e9fbb7625681930832de8688eee53faa1a9f599ed6c84a460d6149",
+      "path": "data/watchlist/reviews/watchlist-20261104T160000Z.json"
     }
   }
 }

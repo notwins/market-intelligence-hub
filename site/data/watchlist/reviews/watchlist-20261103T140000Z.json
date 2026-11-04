@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261103T140000Z",
+  "as_of": "2026-11-03T22:00:00+08:00",
+  "edition_sha256": "c2edd30dcb32e2147bf34d60c8ee2d4e1a939653ed1e220c4a8e439f7ea15b93",
+  "reviewed_at": "2026-11-04T20:24:00Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "New in-window market update: Apple remained under pressure",
+      "item_sha256": "f7a3750fb038d356a3d124e159ceed4d88dfa9a17e536290787d061b3e4f7ecf",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AAPL",
+      "index": 1,
+      "headline": "Memory costs and margins are the immediate focus",
+      "item_sha256": "97c56adf141d5816b76b561613bf74f5cde09ac4d241079b60aa6c2369ef6844",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "New in-window market update: NVIDIA traded higher",
+      "item_sha256": "9519f2f8f05b83c6ee69d604e214a2acf4a30277bb1ea1f4f8ef85869a20bb1b",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 1,
+      "headline": "China-exposure report remains attributed and unconfirmed",
+      "item_sha256": "cad3be9b8ee2b2c5e9e6e1862c11f9236a2fea791d8e6b54c78f3dd281e30821",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 2,
+      "headline": "Fiscal Q3 FY2027 results call is scheduled",
+      "item_sha256": "961774bd1277deab7feec8e43b8e21a359a0e829fa6dfe58c0e354181ea57b82",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "AMD",
+      "index": 0,
+      "headline": "New in-window market update: AMD rose ahead of scheduled results",
+      "item_sha256": "6955a60f28cf826ab3f45f578fca71e1b7cd0f465ad5a29dd833045304558398",
+      "scope": "price_context",
+      "reason": "Retain the original quote/session or broad-market reaction in the immutable report; it does not add a substantive company research edition."
+    },
+    {
+      "ticker": "AMD",
+      "index": 1,
+      "headline": "Fiscal Q3 results are the next scheduled catalyst",
+      "item_sha256": "c2f956a3d838e5ecdae082930039c1175b74ed0c7c814cf9dab1ce6a1b1089ba",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    },
+    {
+      "ticker": "TSM",
+      "index": 0,
+      "headline": "October monthly sales are due on 10 November",
+      "item_sha256": "49c63ec541dd2d58d11d2eb1fd10f50b261d1fdd891db89306ce01d50aebd063",
+      "scope": "company",
+      "reason": "Retained previously curated company research. This review binds its full saved facts, analysis, risks, next checks and sources; the original producer source-verification attestation is unchanged."
+    }
+  ]
+}
