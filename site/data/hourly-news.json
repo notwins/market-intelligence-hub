@@ -2,13 +2,198 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-03T22:25:42.767Z",
+  "publisher_checked_at": "2026-11-04T00:15:22.826Z",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-hourly-20261103T235946Z",
+      "report_at": "2026-11-04T08:04:11+08:00",
+      "window_start": "2026-11-04T06:59:46+08:00",
+      "cutoff": "2026-11-04T07:59:46+08:00",
+      "coverage": "partial",
+      "summary": "Partial targeted Reuters scan ending 2026-11-04T07:59:46+08:00. 3 newly selected stories, including 2 catch-up discoveries. Coverage is not exhaustive; no claim of a complete Reuters wire scan.",
+      "limitations": [
+        "Targeted accessible Reuters coverage, not an exhaustive wire scan; some developments may be missing.",
+        "No prior completed-scan cutoff has been established, leaving unrecovered coverage gaps.",
+        "Some daily briefing extracts were truncated, limiting cross-edition duplication checks.",
+        "Original article publication times were verified to minute precision; later revisions and some trade-observation times could not be established."
+      ],
+      "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/world/us-has-no-immediate-plan-strike-iran-trump-tells-ft-2026-11-03/",
+          "title": "US has no immediate plan to strike Iran, Trump tells FT",
+          "published_at": "2026-11-03T23:48:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/legal/litigation/cvs-health-explores-splitting-retail-pharmacy-insurance-businesses-ft-reports-2026-11-03/",
+          "title": "CVS Health to break up into two companies, WSJ reports",
+          "published_at": "2026-11-03T22:42:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/asia-pacific/hong-kong-third-quarter-gdp-expands-by-52-year-on-year-2026-11-03/",
+          "title": "Hong Kong Q3 GDP expands by 5.2% year-on-year, outlook positive",
+          "published_at": "2026-11-03T08:47:00Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261103-US-IRAN-NOSTRIKE",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "RISKS / GEOPOLITICS / COMMODITIES",
+          "headline": "Trump says no immediate US strike planned against Iran",
+          "body": "Reuters reported President Donald Trump told the Financial Times the United States had no immediate plans to strike Iran. The report did not establish a formal ceasefire or peace agreement.",
+          "analysis": "Potential short-term geopolitical de-escalation signal, but insufficient to infer a specific oil-price or interest-rate reaction.",
+          "watch_next": "Formal US statement, Iran response and any confirmed progress in negotiations.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/us-has-no-immediate-plan-strike-iran-trump-tells-ft-2026-11-03/"
+          ],
+          "development_at": "2026-11-03T23:48:00Z"
+        },
+        {
+          "story_id": "R-20261103-CVS-SEPARATION",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "EQUITIES / CREDIT / HEALTHCARE / CORPORATE_RESTRUCTURING",
+          "headline": "CVS Health reportedly plans to separate pharmacy and insurance businesses",
+          "body": "Reuters reported that, according to the Wall Street Journal, CVS Health would split into two businesses separating retail pharmacies from insurance and pharmacy-benefit operations. CVS had not immediately responded to Reuters for confirmation.",
+          "analysis": "Potential changes to debt allocation and credit risk profiles across the resulting issuers.",
+          "watch_next": "Official CVS confirmation, debt allocation, transaction terms and guidance.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/legal/litigation/cvs-health-explores-splitting-retail-pharmacy-insurance-businesses-ft-reports-2026-11-03/"
+          ],
+          "development_at": "2026-11-03T22:42:00Z"
+        },
+        {
+          "story_id": "R-20261103-HK-Q3-GDP",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "MACRO / ASIA / CLIENT_RELEVANCE",
+          "headline": "Hong Kong third-quarter GDP exceeds Reuters-polled expectations",
+          "body": "Hong Kong third-quarter GDP expanded 5.2% year over year, ahead of a 3.6% Reuters-polled forecast. Total goods exports increased 30.4% year over year.",
+          "analysis": "Indicates stronger regional export activity; does not establish a change to MAS policy or USD/SGD.",
+          "watch_next": "GDP revisions, export momentum, and regional demand resilience.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/asia-pacific/hong-kong-third-quarter-gdp-expands-by-52-year-on-year-2026-11-03/"
+          ],
+          "development_at": "2026-11-03T08:47:00Z"
+        }
+      ]
+    },
+    {
+      "id": "reuters-hourly-20261103T232056Z",
+      "report_at": "2026-11-03T23:25:08Z",
+      "window_start": "2026-11-03T22:20:56Z",
+      "cutoff": "2026-11-03T23:20:56Z",
+      "coverage": "partial",
+      "summary": "Partial targeted Reuters scan ending 2026-11-03T23:20:56Z. 4 newly selected stories, including 2 catch-up discoveries. Coverage is not exhaustive; no claim of a complete Reuters wire scan.",
+      "limitations": [
+        "Targeted accessible Reuters coverage, not an exhaustive wire scan; some developments may be missing.",
+        "No prior completed-scan cutoff has been established, leaving unrecovered coverage gaps.",
+        "Some daily briefing extracts were truncated, limiting cross-edition duplication checks.",
+        "Original article publication times were verified to minute precision; later revisions and some trade-observation times could not be established."
+      ],
+      "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/",
+          "title": "Meta raises $15 billion in five-part US bond sale",
+          "published_at": "2026-11-03T22:50Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/skyworks-tumbles-sluggish-smartphone-market-weighs-forecast-2026-11-03/",
+          "title": "Skyworks tumbles as sluggish smartphone market weighs on forecast",
+          "published_at": "2026-11-03T22:09Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/world-at-work/australias-canva-cut-22-jobs-growth-slows-first-time-decade-2026-11-03/",
+          "title": "Australia's Canva to cut 22% of jobs as growth slows for first time in a decade",
+          "published_at": "2026-11-03T22:11Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/energy/canadas-suncor-energy-tops-quarterly-profit-estimates-2026-11-03/",
+          "title": "Canada's Suncor Energy tops quarterly profit estimates",
+          "published_at": "2026-11-03T22:42Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261103-META-USD15B-BONDS",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "rates-credit-ai",
+          "headline": "Meta raises US$15 billion in five-part bond sale",
+          "body": "Reuters reported Meta Platforms is raising US$15 billion through a five-part US-dollar bond offering to fund AI infrastructure investments.",
+          "analysis": "Additional large technology bond issuance may compete for investor capital; pricing and duration are needed before inferring any Treasury-yield or corporate-spread impact.",
+          "watch_next": "Final tranche pricing, coupons, maturities and spreads over matched-maturity Treasuries.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/"
+          ],
+          "development_at": "2026-11-03T22:50Z"
+        },
+        {
+          "story_id": "R-20261103-SKYWORKS-Q1-WEAK-GUIDANCE",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "equities-semiconductors",
+          "headline": "Skyworks warns of smartphone weakness and guides below consensus",
+          "body": "Skyworks forecast first-quarter revenue and earnings below Wall Street expectations amid continued smartphone demand weakness. Reuters reported the stock fell more than 14% in extended trading; precise price-observation time was not established.",
+          "analysis": "Demand weakness in premium Android smartphones contrasts with AI datacentre strength; integration synergies are not yet achieved cash flow.",
+          "watch_next": "Actual first-quarter demand, gross margins, Qorvo integration and savings delivery.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/skyworks-tumbles-sluggish-smartphone-market-weighs-forecast-2026-11-03/"
+          ],
+          "development_at": "2026-11-03T22:09Z"
+        },
+        {
+          "story_id": "R-20261103-CANVA-RESTRUCTURE-JOBS",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "equities-tech-labour",
+          "headline": "Canva announces 1,271 job cuts as growth slows",
+          "body": "Australian design software company Canva announced 1,271 job cuts, approximately 22% of its workforce, after growth slowed for the first time in a decade.",
+          "analysis": "Company-specific hiring retrenchment highlights differentiation between software operating economics and capital-intensive AI hardware demand; not a national jobs data surprise.",
+          "watch_next": "Restructuring execution, renewal trends, remaining workforce capacity and margins.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/world-at-work/australias-canva-cut-22-jobs-growth-slows-first-time-decade-2026-11-03/"
+          ],
+          "development_at": "2026-11-03T22:11Z"
+        },
+        {
+          "story_id": "R-20261103-SUNCOR-Q3-PROFIT-DIVIDEND",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "energy-equities",
+          "headline": "Suncor beats quarterly profit estimates and raises dividend",
+          "body": "Suncor reported adjusted operating profit of C$3.97 a share against the C$3.28 LSEG estimate for the third quarter. It raised its quarterly dividend 10% to C$0.66 a share.",
+          "analysis": "Elevated oil and refining margins can improve integrated energy cash flows while increasing cost pressure elsewhere; a single quarter is not a forward oil-price forecast.",
+          "watch_next": "Dividend funding, realised refinery margins and next-quarter crude pricing.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/energy/canadas-suncor-energy-tops-quarterly-profit-estimates-2026-11-03/"
+          ],
+          "development_at": "2026-11-03T22:42Z"
+        }
+      ]
+    },
     {
       "id": "reuters-hourly-20261103T213055Z",
       "report_at": "2026-11-03T21:35:32Z",
