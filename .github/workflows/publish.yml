@@ -48,6 +48,7 @@ jobs:
           node scripts/test_site_search.cjs
           node scripts/test_boolean_search.cjs
           node scripts/test_search_interactions.cjs
+          node scripts/test_external_sources.cjs
           node scripts/test_research_context.cjs
           node scripts/test_watchlist.cjs
           node scripts/test_market_snapshot.cjs
@@ -91,6 +92,7 @@ jobs:
           node scripts/test_site_search.cjs
           node scripts/test_boolean_search.cjs
           node scripts/test_search_interactions.cjs
+          node scripts/test_external_sources.cjs
           node scripts/test_research_context.cjs
       - name: Preserve conflicting source-data patch
         if: failure() && hashFiles('pending-publisher.patch') != ''

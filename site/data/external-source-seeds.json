@@ -1,0 +1,1386 @@
+{
+  "checked_on": "2026-11-04",
+  "records": [
+    {
+      "url": "https://www.mas.gov.sg/monetary-policy/past-monetary-policy-decisions",
+      "title": "MAS monetary policy decisions",
+      "provider": "MAS",
+      "type": "Policy archive",
+      "groups": [
+        "Singapore",
+        "Monetary policy",
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public page or document identity checked. This does not verify every linked item or any live market value."
+    },
+    {
+      "url": "https://www.mas.gov.sg/statistics/monthly-statistical-bulletin/iv-7-official-foreign-reserves",
+      "title": "MAS official foreign reserves · IV.7",
+      "provider": "MAS",
+      "type": "Data",
+      "groups": [
+        "Singapore",
+        "Reserves",
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "The official page shell loaded; its interactive data table was not independently verified."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications/financial-stability-review/2021/financial-stability-review-2021",
+      "title": "MAS Financial Stability Review 2021",
+      "provider": "MAS",
+      "type": "Report page",
+      "groups": [
+        "Singapore",
+        "Financial stability",
+        "Central banks"
+      ],
+      "period": "2021",
+      "report_date": "2021-12-06",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public page or document identity checked. This does not verify every linked item or any live market value."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications/annual-report/2026/annual-report-2025-2026",
+      "title": "MAS Annual Report 2025/26",
+      "provider": "MAS",
+      "type": "Report page",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2025/26",
+      "report_date": "2026-07-28",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public page or document identity checked. This does not verify every linked item or any live market value."
+    },
+    {
+      "url": "https://www.mas.gov.sg/-/media/mas-media-library/publications/annual-report/2026/mas-financial-statements-2025_2026.pdf",
+      "title": "MAS Financial Statements 2025/26",
+      "provider": "MAS",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Financial statements",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2025/26",
+      "report_date": "2026-07-28",
+      "checked_on": "2026-11-04",
+      "status": "publisher_link",
+      "note": "Linked by the official annual report page. Direct PDF retrieval could not be verified."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications/annual-report/2025/annual-report-2024-2025",
+      "title": "MAS Annual Report 2024/25",
+      "provider": "MAS",
+      "type": "Report page",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2024/25",
+      "report_date": "2025-07-15",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public page or document identity checked. This does not verify every linked item or any live market value."
+    },
+    {
+      "url": "https://www.mas.gov.sg/-/media/mas-media-library/publications/annual-report/2025/mas-financial-statements-2024_2025.pdf",
+      "title": "MAS Financial Statements 2024/25",
+      "provider": "MAS",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Financial statements",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2024/25",
+      "report_date": "2025-07-15",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official PDF title and reporting period checked. Original publisher document; no copy hosted here."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications/annual-report/2022/annual-report-2021-2022",
+      "title": "MAS Annual Report 2021/22",
+      "provider": "MAS",
+      "type": "Report page",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2021/22",
+      "report_date": "2022-07-19",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public page or document identity checked. This does not verify every linked item or any live market value."
+    },
+    {
+      "url": "https://www.mas.gov.sg/-/media/mas-media-library/publications/annual-report/2022/mas-financial-statement-2021_2022.pdf",
+      "title": "MAS Financial Statements 2021/22",
+      "provider": "MAS",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Financial statements",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2021/22",
+      "report_date": "2022-07-19",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official PDF title and reporting period checked. Original publisher document; no copy hosted here."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications/annual-report/2023/annual-report-2022-2023",
+      "title": "MAS Annual Report 2022/23",
+      "provider": "MAS",
+      "type": "Report page",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2022/23",
+      "report_date": "2023-07-05",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public page or document identity checked. This does not verify every linked item or any live market value."
+    },
+    {
+      "url": "https://www.mas.gov.sg/-/media/mas-media-library/publications/annual-report/2023/mas-financial-statement-2022_2023.pdf",
+      "title": "MAS Financial Statements 2022/23",
+      "provider": "MAS",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Financial statements",
+        "Central banks",
+        "Reserves"
+      ],
+      "period": "2022/23",
+      "report_date": "2023-07-05",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official PDF title and reporting period checked. Original publisher document; no copy hosted here."
+    },
+    {
+      "url": "https://www.mas.gov.sg/-/media/mas/news/media-releases/2023/mas-annual-report_infographic.pdf",
+      "title": "MAS Annual Report 2022/23 infographic",
+      "provider": "MAS",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Annual reports",
+        "Central banks"
+      ],
+      "period": "2022/23",
+      "report_date": "2023-07-05",
+      "checked_on": "2026-11-04",
+      "status": "unavailable",
+      "note": "The official annual report links this infographic, but the exact URL returned a maintenance page at the check. Use the 2022/23 report page as a fallback."
+    },
+    {
+      "url": "https://www.gic.com.sg/our-portfolio/gic-reports/",
+      "title": "GIC reports archive",
+      "provider": "GIC",
+      "type": "Research directory",
+      "groups": [
+        "Singapore",
+        "Sovereign investing",
+        "Annual reports"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public page or document identity checked. This does not verify every linked item or any live market value."
+    },
+    {
+      "url": "https://www.gic.com.sg/uploads/2021/11/GIC-Annual-Report-202021.pdf",
+      "title": "GIC Government Portfolio Report 2020/21",
+      "provider": "GIC",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Sovereign investing",
+        "Annual reports"
+      ],
+      "period": "2020/21",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official 116-page PDF identity and reporting period checked. No copy hosted here."
+    },
+    {
+      "url": "https://www.gic.com.sg/uploads/2026/07/GIC_AR_2025-26_PRINT.pdf",
+      "title": "GIC Government Portfolio Report 2025/26",
+      "provider": "GIC",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Sovereign investing",
+        "Annual reports"
+      ],
+      "period": "2025/26",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official 76-page PDF identity and reporting period checked. No copy hosted here."
+    },
+    {
+      "url": "https://www.gic.com.sg/uploads/2025/07/GIC_AR_2024-25_PRINT.pdf",
+      "title": "GIC Government Portfolio Report 2024/25",
+      "provider": "GIC",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Sovereign investing",
+        "Annual reports"
+      ],
+      "period": "2024/25",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official 92-page PDF identity and reporting period checked. No copy hosted here."
+    },
+    {
+      "url": "https://www.gic.com.sg/uploads/2024/07/GIC-Report-2023-24.pdf",
+      "title": "GIC Government Portfolio Report 2023/24",
+      "provider": "GIC",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Sovereign investing",
+        "Annual reports"
+      ],
+      "period": "2023/24",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official 100-page PDF identity and reporting period checked. No copy hosted here."
+    },
+    {
+      "url": "https://www.gic.com.sg/uploads/2022/07/GIC_AR_2021-22_PRINT.pdf",
+      "title": "GIC Government Portfolio Report 2021/22",
+      "provider": "GIC",
+      "type": "PDF",
+      "groups": [
+        "Singapore",
+        "Sovereign investing",
+        "Annual reports"
+      ],
+      "period": "2021/22",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Official 111-page PDF identity and reporting period checked. No copy hosted here."
+    },
+    {
+      "url": "https://www.federalreserve.gov/econres.htm",
+      "title": "Federal Reserve Board - Economic Research",
+      "provider": "Fed Board",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.newyorkfed.org/research",
+      "title": "Economic Research - Federal Reserve Bank of New York",
+      "provider": "NY Fed",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.chicagofed.org/publications/index",
+      "title": "Research & Policy: Publications - Federal Reserve Bank of Chicago",
+      "provider": "Chicago Fed",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.atlantafed.org/research/publications",
+      "title": "Atlanta Fed • Macro & Inflation",
+      "provider": "Atlanta Fed",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "unavailable",
+      "note": "Exact supplied URL returned HTTP 404 Not Found to the web reader. Supplied label retained; page title was not verified."
+    },
+    {
+      "url": "https://www.frbsf.org/about-us/economic-research/",
+      "title": "Economic Research at the SF Fed",
+      "provider": "SF Fed",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.minneapolisfed.org/economic-research",
+      "title": "Economic Research | Federal Reserve Bank of Minneapolis",
+      "provider": "Minneapolis Fed",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.richmondfed.org/publications/research",
+      "title": "Research Publications | Richmond Fed",
+      "provider": "Richmond Fed",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://fred.stlouisfed.org",
+      "title": "Federal Reserve Economic Data | FRED | St. Louis Fed",
+      "provider": "FRED",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public FRED homepage returned. This is a data catalogue, not verification of any particular series, graph, or live quote."
+    },
+    {
+      "url": "https://fraser.stlouisfed.org/theme/federal-reserve-research-publications",
+      "title": "Federal Reserve Research Publications | Theme | FRASER | St. Louis Fed",
+      "provider": "FRASER",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.ecb.europa.eu/pub/research/html/index.en.html",
+      "title": "Research papers | European Central Bank",
+      "provider": "ECB",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.bis.org/publ/index.htm",
+      "title": "BIS • Global Banking Papers",
+      "provider": "BIS",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "unavailable",
+      "note": "Exact supplied URL returned HTTP 404 Not Found to the web reader. Supplied label retained; page title was not verified."
+    },
+    {
+      "url": "https://www.snb.ch/en/publications/",
+      "title": "SNB • Monetary Research",
+      "provider": "SNB",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL was not accessible through the web reader; title and content unverified. Same exact URL also appears under CENTRAL."
+    },
+    {
+      "url": "https://www.boj.or.jp/en/research/",
+      "title": "Research and Studies | Bank of Japan",
+      "provider": "BOJ",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.rba.gov.au/publications/rdp/",
+      "title": "Research Discussion Papers | RBA",
+      "provider": "RBA",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public research index and archive links returned. Page warns some content and functionality require JavaScript; linked papers were not checked."
+    },
+    {
+      "url": "https://www.hkma.gov.hk/eng/news-and-media/research-publications/",
+      "title": "HKMA • FX & Credit Cycles",
+      "provider": "HKMA",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL was not accessible through the web reader. Supplied label retained; page title and content unverified."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications/research",
+      "title": "MAS • Policy & Stability Research",
+      "provider": "MAS",
+      "type": "Research directory",
+      "groups": [
+        "Central banks",
+        "Singapore"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned a web-reader cache miss. Supplied label retained; title and content unverified. Same exact URL also appears under CENTRAL."
+    },
+    {
+      "url": "https://www.imf.org/en/Publications/WP",
+      "title": "IMF • Working Papers",
+      "provider": "IMF",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned HTTP 429 Too Many Requests. No research content or page title verified; this does not establish a paywall."
+    },
+    {
+      "url": "https://www.worldbank.org/en/research",
+      "title": "Publications & Research: Reports, Data, and More | World Bank Group",
+      "provider": "World Bank",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Supplied URL redirected to https://www.worldbank.org/ext/en/research-publications. Public publisher page content returned; original URL preserved."
+    },
+    {
+      "url": "https://www.oecd.org",
+      "title": "The Organisation for Economic Co-operation and Development | OECD",
+      "provider": "OECD",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public OECD homepage returned. This is a general publisher homepage rather than a specific structural-policy paper."
+    },
+    {
+      "url": "https://www.nber.org/papers",
+      "title": "NBER • Academic Macro",
+      "provider": "NBER",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned HTTP 403 Forbidden to the web reader. No paper access or page title verified; no bypass attempted."
+    },
+    {
+      "url": "https://www.brookings.edu/topic/economy/",
+      "title": "Brookings • Economic Policy",
+      "provider": "Brookings",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Supplied economy-topic URL redirected to a specific article dated 4 April 2014: https://www.brookings.edu/articles/economy-added-189000-jobs-according-to-alternative-seasonal-adjustments/. Not verified as an economy topic index."
+    },
+    {
+      "url": "https://www.piie.com/research",
+      "title": "Research | PIIE",
+      "provider": "PIIE",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.cfr.org/research",
+      "title": "CFR • Geopolitics & Economics",
+      "provider": "CFR",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL was not accessible through the web reader. Supplied label retained; page title and content unverified."
+    },
+    {
+      "url": "https://cepr.org/publications/discussion-papers",
+      "title": "Discussion Papers | CEPR",
+      "provider": "CEPR",
+      "type": "Research directory",
+      "groups": [
+        "Global macro"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public discussion-paper index and paper titles returned. Subscription link is visible; access to individual full papers was not tested."
+    },
+    {
+      "url": "https://www.goldmansachs.com/insights",
+      "title": "Insights | Goldman Sachs",
+      "provider": "Goldman Sachs",
+      "type": "Research directory",
+      "groups": [
+        "Bank research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public Insights page and article listings returned. Client research access was not tested."
+    },
+    {
+      "url": "https://www.morganstanley.com/articles",
+      "title": "Morgan Stanley • Market Views",
+      "provider": "Morgan Stanley",
+      "type": "Research directory",
+      "groups": [
+        "Bank research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned HTTP 403 Forbidden to the web reader. No page content or title verified; no bypass attempted."
+    },
+    {
+      "url": "https://www.jpmorgan.com/insights",
+      "title": "JPMorgan • Flows & Rates",
+      "provider": "JPMorgan",
+      "type": "Research directory",
+      "groups": [
+        "Bank research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned HTTP 403 Forbidden to the web reader. No page content or title verified; no bypass attempted."
+    },
+    {
+      "url": "https://www.citivelocity.com/citigps",
+      "title": "Citi GPS • Long-Term Themes",
+      "provider": "Citi GPS",
+      "type": "Research directory",
+      "groups": [
+        "Bank research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned HTTP 401 Unauthorized. No authentication attempted; public content and page title were not verified."
+    },
+    {
+      "url": "https://www.ubs.com/global/en/investment-bank/research.html",
+      "title": "UBS • Asset Allocation",
+      "provider": "UBS",
+      "type": "Research directory",
+      "groups": [
+        "Bank research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL was not accessible through the web reader. Supplied label retained; page title and content unverified."
+    },
+    {
+      "url": "https://research-doc.credit-suisse.com",
+      "title": "Credit Suisse • Research Archive",
+      "provider": "Credit Suisse",
+      "type": "Research directory",
+      "groups": [
+        "Bank research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Host URL was not accessible through the web reader. No archive contents, continued availability, or public access verified."
+    },
+    {
+      "url": "https://www.financialresearch.gov/publications/",
+      "title": "Publications | Office of Financial Research",
+      "provider": "OFR",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.bea.gov/research",
+      "title": "Research @ BEA | U.S. Bureau of Economic Analysis",
+      "provider": "BEA",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.cbo.gov/topics/economy",
+      "title": "Economy | Congressional Budget Office",
+      "provider": "CBO",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.gov.uk/government/publications/hm-treasury-areas-of-research-interest",
+      "title": "HM Treasury Areas of Research Interest | GOV.UK",
+      "provider": "HM Treasury",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public landing page returned for a research-interest document published 11 November 2024. This is not a general fiscal-policy research feed; linked PDF not reviewed."
+    },
+    {
+      "url": "https://data.gov",
+      "title": "Data.gov Home | Data.gov",
+      "provider": "Data.gov",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public U.S. government open-data catalogue returned. Individual datasets were not checked."
+    },
+    {
+      "url": "https://www.bls.gov/opub/research-papers.htm",
+      "title": "BLS • Jobs & Inflation",
+      "provider": "BLS",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL was not accessible through the web reader. Supplied label retained; page title and content unverified."
+    },
+    {
+      "url": "https://www.census.gov/econ/",
+      "title": "2022 Economic Census | U.S. Census Bureau",
+      "provider": "US Census",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Supplied URL redirected to https://www.census.gov/programs-surveys/economic-census/year/2022/2022-main.html. It resolves to the 2022 Economic Census, not a general trade-and-consumption feed."
+    },
+    {
+      "url": "https://www150.statcan.gc.ca/n1/en/subjects/economic_accounts",
+      "title": "Statistics Canada • National Accounts",
+      "provider": "Statistics Canada",
+      "type": "Research directory",
+      "groups": [
+        "Fiscal & economic data"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL timed out in the web reader. Supplied label retained; page title and content unverified."
+    },
+    {
+      "url": "https://www.google.com/search?q=(Swiss+National+Bank+OR+Swiss+Franc+OR+Martin+Schlegel)+(intitle:research+OR+inurl:whitepaper+OR+inurl:pdf)+site:reuters.com+OR+site:cnbc.com+OR+site:snb.ch+OR+site:fred.stlouisfed.org",
+      "title": "SNB / CHF Deep Research",
+      "provider": "SNB / CHF Deep Research",
+      "type": "Search",
+      "groups": [
+        "Research searches"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "This is a saved Google search URL rather than a research publisher. The web reader could not open the results; no results or current coverage verified."
+    },
+    {
+      "url": "https://report.gic.com.sg/investment-report.html",
+      "title": "GIC • Annual Portfolio Report",
+      "provider": "GIC",
+      "type": "Research directory",
+      "groups": [
+        "Singapore"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Public Investment Report page returned, but extracted performance fields include XX placeholders and 0.0%. Report identity is visible; numerical returns and complete dynamic content were not verified."
+    },
+    {
+      "url": "https://www.temasek.com.sg/en/our-financials/library/temasek-review",
+      "title": "Resources | Temasek",
+      "provider": "Temasek",
+      "type": "Research directory",
+      "groups": [
+        "Singapore"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Supplied URL redirected to https://www.temasek.com.sg/en/news-and-resources/resources. Public resources page and Temasek Review link returned; no annual-review file checked."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications?content_type=Macroeconomic%20Reviews",
+      "title": "MAS • Macro Reviews",
+      "provider": "MAS",
+      "type": "Research directory",
+      "groups": [
+        "Singapore"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "MAS Publications page shell returned, but no filtered Macroeconomic Review listings were visible in the extracted text. Filtered results and document access unverified."
+    },
+    {
+      "url": "https://www.cnbc.com/bonds/",
+      "title": "CNBC Bonds",
+      "provider": "CNBC Bonds (UST Live)",
+      "type": "Data / chart tool",
+      "groups": [
+        "Market tools"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Web fetch was denied by robots.txt. No bond prices, yield timestamps, or live updates verified. Live is the supplied bookmark/group label only."
+    },
+    {
+      "url": "https://www.cnbc.com/markets/",
+      "title": "CNBC Markets",
+      "provider": "CNBC Markets",
+      "type": "Data / chart tool",
+      "groups": [
+        "Market tools"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Web fetch was denied by robots.txt. No market prices, timestamps, or live updates verified."
+    },
+    {
+      "url": "https://finance.yahoo.com/quote/USDSGD=X",
+      "title": "USD/SGD Spot",
+      "provider": "USD/SGD Spot",
+      "type": "Data / chart tool",
+      "groups": [
+        "Market tools"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact quote URL returned HTTP 429 Too Many Requests. No USD/SGD quote, quote timestamp, or real-time status verified."
+    },
+    {
+      "url": "https://finance.yahoo.com/quote/USDCHF=X",
+      "title": "USD/CHF Spot",
+      "provider": "USD/CHF Spot",
+      "type": "Data / chart tool",
+      "groups": [
+        "Market tools"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact quote URL returned HTTP 429 Too Many Requests. No USD/CHF quote, quote timestamp, or real-time status verified."
+    },
+    {
+      "url": "https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html",
+      "title": "FedWatch (Rate Odds)",
+      "provider": "FedWatch (Rate Odds)",
+      "type": "Data / chart tool",
+      "groups": [
+        "Market tools"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Public FedWatch description returned and points to an embedded QuikStrike tool. Current probabilities and embedded live data were not verified. Supplied .html URL redirects to the extensionless publisher page."
+    },
+    {
+      "url": "https://www.mufgamericas.com/insights-and-experience/capital-markets-strategy#chart",
+      "title": "Capital Markets Strategy | MUFG Americas",
+      "provider": "MUFG Capital Markets",
+      "type": "Research directory",
+      "groups": [
+        "Market strategy"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public strategy page, publications list, and Chart of the Day section returned. Original #chart fragment preserved; individual charts not reviewed."
+    },
+    {
+      "url": "https://am.jpmorgan.com/sg/en/asset-management/per/insights/market-insights/guide-to-the-markets/",
+      "title": "Guide to the Markets | J.P. Morgan Asset Management",
+      "provider": "JPM Guide (SG)",
+      "type": "Research directory",
+      "groups": [
+        "Market strategy"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public Singapore Guide landing-page commentary returned. Underlying slide files and chart data were not inspected; no live-data claim verified."
+    },
+    {
+      "url": "https://am.jpmorgan.com/ch/en/asset-management/per/insights/market-insights/guide-to-the-markets/",
+      "title": "Guide to the Markets | J.P. Morgan Asset Management",
+      "provider": "JPM Guide (CH)",
+      "type": "Research directory",
+      "groups": [
+        "Market strategy"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public Switzerland Guide commentary and 4Q 2026 heading returned. Page also contains a Loading placeholder; underlying slides and chart freshness were not inspected."
+    },
+    {
+      "url": "https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/guide-to-the-markets/",
+      "title": "Guide to the Markets | J.P. Morgan Asset Management",
+      "provider": "JPM Guide (US)",
+      "type": "Research directory",
+      "groups": [
+        "Market strategy"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public U.S. Guide commentary returned. Page also contains a Loading placeholder; underlying slides and chart freshness were not inspected."
+    },
+    {
+      "url": "https://fred.stlouisfed.org/graph/?g=1Ocok",
+      "title": "UST Curve (FRED)",
+      "provider": "UST Curve (FRED)",
+      "type": "Data / chart tool",
+      "groups": [
+        "Rates & bonds"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact saved FRED graph URL was not accessible through the web reader. Curve series, maturity coverage, date range, values, and freshness unverified."
+    },
+    {
+      "url": "https://fred.stlouisfed.org/graph/fredgraph.png?graph_id=1546362&width=1168&height=450&bgcolor=white",
+      "title": "Saved UST yields chart · FRED",
+      "provider": "UST Yields (2000–Now)",
+      "type": "Chart image",
+      "groups": [
+        "Rates & bonds"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact FRED PNG URL was not accessible through the web reader. Image contents, included yields, 2000-to-now date range, and freshness unverified."
+    },
+    {
+      "url": "https://en.macromicro.me/collections/51/us-treasury-bond/762/us-fed-funds-rate-treasury-bonds-rate",
+      "title": "Fed vs UST Curve",
+      "provider": "Fed vs UST Curve",
+      "type": "Data / chart tool",
+      "groups": [
+        "Rates & bonds"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact MacroMicro chart URL returned HTTP 403 Forbidden. Chart series, values, freshness, and public/subscription access unverified; no bypass attempted."
+    },
+    {
+      "url": "https://am.jpmorgan.com/us/en/asset-management/adv/insights/market-insights/market-updates/weekly-market-recap/",
+      "title": "JPM Weekly (US)",
+      "provider": "JPM Weekly (US)",
+      "type": "Data / chart tool",
+      "groups": [
+        "Flows"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Weekly Market Recap title returned, but extracted content only contained navigation and collection controls. Recap text, charts, and date not verified."
+    },
+    {
+      "url": "https://am.jpmorgan.com/sg/en/asset-management/per/insights/market-insights/market-updates/weekly-market-recap/",
+      "title": "Weekly Market Recap | J.P. Morgan Asset Management",
+      "provider": "JPM Weekly (SG)",
+      "type": "Data / chart tool",
+      "groups": [
+        "Flows"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Singapore recap text returned with an explicit data-as-of date of 23 October 2026. No claim that this is the newest recap; linked chart images were not inspected."
+    },
+    {
+      "url": "https://am.jpmorgan.com/sg/en/asset-management/adv/insights/market-insights/",
+      "title": "Market Insights overview | J.P. Morgan Asset Management",
+      "provider": "JPM Market Insights",
+      "type": "Data / chart tool",
+      "groups": [
+        "Flows"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public Singapore advisor Market Insights listings returned. Individual linked articles and charts were not checked."
+    },
+    {
+      "url": "https://www.ssga.com/sg/en/institutional/insights?",
+      "title": "SSGA Institutional Views",
+      "provider": "SSGA Institutional Views",
+      "type": "Data / chart tool",
+      "groups": [
+        "Flows"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Public Insights shell returned with unresolved placeholders and zero-result controls. It identifies State Street Investment Management, formerly SSGA; actual article results were not verified."
+    },
+    {
+      "url": "https://www.reuters.com/commentary/reuters-open-interest/",
+      "title": "Reuters Open Interest",
+      "provider": "Reuters Open Interest",
+      "type": "News directory",
+      "groups": [
+        "News"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact Reuters URL produced a non-retryable web-reader error. Supplied label retained; page title, article access, and paywall status unverified."
+    },
+    {
+      "url": "https://www.reuters.com/authors/jamie-mcgeever/",
+      "title": "Jamie McGeever",
+      "provider": "Jamie McGeever",
+      "type": "News directory",
+      "groups": [
+        "News"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact Reuters URL produced a non-retryable web-reader error. Supplied label retained; page title, article access, and paywall status unverified."
+    },
+    {
+      "url": "https://www.reuters.com/authors/mike-dolan/",
+      "title": "Mike Dolan",
+      "provider": "Mike Dolan",
+      "type": "News directory",
+      "groups": [
+        "News"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact Reuters URL produced a non-retryable web-reader error. Supplied label retained; page title, article access, and paywall status unverified."
+    },
+    {
+      "url": "https://www.reuters.com/markets/us/",
+      "title": "US Markets",
+      "provider": "US Markets",
+      "type": "News directory",
+      "groups": [
+        "News"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact Reuters URL produced a non-retryable web-reader error. Supplied label retained; page title, article access, and paywall status unverified."
+    },
+    {
+      "url": "https://www.reuters.com/markets/rates-bonds/",
+      "title": "Rates & Bonds",
+      "provider": "Rates & Bonds",
+      "type": "News directory",
+      "groups": [
+        "News"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact Reuters URL produced a non-retryable web-reader error. Supplied label retained; page title, article access, and paywall status unverified."
+    },
+    {
+      "url": "https://www.mas.gov.sg/monetary-policy/past-monetary-policy-decisions",
+      "title": "Past Monetary Policy Decisions | Monetary Authority of Singapore",
+      "provider": "MAS Policy Decisions",
+      "type": "Research directory",
+      "groups": [
+        "Central banks",
+        "Singapore"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public policy-history table and statement links returned. Individual statements and chart image were not separately reviewed."
+    },
+    {
+      "url": "https://www.mas.gov.sg/publications/research",
+      "title": "MAS Research",
+      "provider": "MAS Research",
+      "type": "Research directory",
+      "groups": [
+        "Central banks",
+        "Singapore"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned a web-reader cache miss. Supplied label retained; title and content unverified. Same exact URL also appears under CENTRAL."
+    },
+    {
+      "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "title": "Meeting calendars and information | Federal Reserve Board",
+      "provider": "Fed FOMC Calendar",
+      "type": "Policy calendar",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public FOMC calendar and statement/minutes links returned. This check establishes page identity, not a separate audit of every meeting date."
+    },
+    {
+      "url": "https://www.snb.ch/en/news-publications/news",
+      "title": "New on the website | Swiss National Bank",
+      "provider": "SNB News",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public SNB news and publications list returned. Individual linked releases and data tables were not checked."
+    },
+    {
+      "url": "https://www.snb.ch/en/publications/",
+      "title": "SNB Publications",
+      "provider": "SNB Publications",
+      "type": "Research directory",
+      "groups": [
+        "Central banks"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL was not accessible through the web reader; title and content unverified. Same exact URL also appears under CENTRAL."
+    },
+    {
+      "url": "https://tellerwindow.newyorkfed.org/2024/08/06/the-role-of-the-federal-reserves-balance-sheet-in-monetary-policy-implementation/",
+      "title": "The Federal Reserve's Balance Sheet and Monetary Policy Implementation | The Teller Window",
+      "provider": "Fed Balance Sheet",
+      "type": "Research directory",
+      "groups": [
+        "Financial stability"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public New York Fed article title and page returned. URL date is 6 August 2024; this is explanatory historical content, not a live balance-sheet feed."
+    },
+    {
+      "url": "https://www.federalreserve.gov/econres/notes/feds-notes/default.htm",
+      "title": "FEDS Notes | Federal Reserve Board",
+      "provider": "FEDS Notes",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public publisher page title and page content were returned by the web reader. Linked documents were not individually checked."
+    },
+    {
+      "url": "https://www.stlouisfed.org/publications",
+      "title": "St Louis Fed",
+      "provider": "St Louis Fed",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Public publications page identity returned, but result area contained an unresolved count placeholder and No results. Actual publication listings were not verified."
+    },
+    {
+      "url": "https://www.spglobal.com/ratings/en/research#q=&rows=20&pagenum=1&sort=es_unified_dt%20desc",
+      "title": "Research | S&P Global",
+      "provider": "S&P Ratings",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public research landing page and category links returned. Original search fragment preserved; exact filtered results and subscriber-report access were not verified."
+    },
+    {
+      "url": "https://ratings.moodys.io/ratings-research",
+      "title": "Moody’s Ratings",
+      "provider": "Moody’s Ratings",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact URL returned HTTP 403 Forbidden to the web reader. Ratings research contents and subscription requirements unverified; no bypass attempted."
+    },
+    {
+      "url": "https://www.fitchratings.com/research",
+      "title": "Fitch Ratings",
+      "provider": "Fitch Ratings",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "unavailable",
+      "note": "Exact supplied URL returned a Fitch Not Found page. Research content unavailable at this path in this check."
+    },
+    {
+      "url": "https://tradingeconomics.com/united-states/delinquency-rate-on-commercial-real-estate-loans-excluding-farmland-booked-in-domestic-offices-top-100-banks-ranked-by-assets-percent-fed-data.html",
+      "title": "U.S. commercial real-estate loan delinquency rate, banks ranked 1st to 100th | Trading Economics",
+      "provider": "US CRE Stress",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public indicator page returned and attributes underlying data to the Federal Reserve. Displayed update references September 2026; no independent validation of values or current chart performed."
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/DRSFRMACBS",
+      "title": "Delinquency Rate on Single-Family Residential Mortgages, All Commercial Banks (DRSFRMACBS) | FRED",
+      "provider": "Mortgage Delinquencies",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "page_verified",
+      "note": "Public series metadata returned: quarterly, end-of-period, percent, seasonally adjusted. Latest visible observation was Q2 2026, updated 25 August 2026; this is not live data."
+    },
+    {
+      "url": "https://fred.stlouisfed.org/series/DRALACB",
+      "title": "All Loans Delinquency",
+      "provider": "All Loans Delinquency",
+      "type": "Research directory",
+      "groups": [
+        "Credit research"
+      ],
+      "period": "",
+      "report_date": "",
+      "checked_on": "2026-11-04",
+      "status": "limited",
+      "note": "Exact FRED series URL was not accessible through the web reader. Supplied label retained; series title, frequency, values, and freshness unverified."
+    }
+  ]
+}
