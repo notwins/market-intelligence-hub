@@ -2,6 +2,12 @@
   "schema_version": 1,
   "reports": [
     {
+      "edition_id": "watchlist-20261104T160000Z",
+      "as_of": "2026-11-05T00:00:00+08:00",
+      "path": "data/watchlist/reports/watchlist-20261104T160000Z.html",
+      "sha256": "10a057a6b1176ca80102a54b5659f6b38e9a4babbecfc7f4475a283b71d1da18"
+    },
+    {
       "edition_id": "watchlist-20261104T120000Z",
       "as_of": "2026-11-04T20:00:00+08:00",
       "path": "data/watchlist/reports/watchlist-20261104T120000Z.html",

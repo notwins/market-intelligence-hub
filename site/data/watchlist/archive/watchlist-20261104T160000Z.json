@@ -1,0 +1,1125 @@
+{
+  "schema_version": 1,
+  "id": "watchlist-20261104T160000Z",
+  "as_of": "2026-11-05T00:00:00+08:00",
+  "generated_at": "2026-11-04T16:09:42+00:00",
+  "title": "12-name watchlist · 05 Nov · 00:00 SGT",
+  "public_research_only": true,
+  "verification": {
+    "sources_checked_at": "2026-11-04T16:09:42+00:00",
+    "prices_verified": true,
+    "research_verified": true
+  },
+  "summary": "Meta’s euro offering drew €53 billion of orders, according to Reuters citing Bloomberg; final pricing remains unconfirmed. Amazon launched a free merchant portal for Shop Direct. Also newly collated: Google’s earlier same-day confirmation of voluntary buyout offers in five countries. The 12 saved US closes and all six return periods were freshly checked.",
+  "coverage_note": "Cutoff: 05-Nov-2026 (Thu) 00:00 SGT. News window: 04 Nov 20:00–24:00 SGT, with a 15-minute overlap. Compared with the last successful 20:00 SGT edition and earlier archives. Google’s buyout report is explicitly labelled earlier same-day context newly added, not a new event within the window. Reuters and issuer coverage is partial; source access limitations are listed once below and under affected companies. Checks occurred after cutoff; later intraday quotes are excluded. The original twelve-name schema is retained; requested ETF additions remain outside this edition’s verified coverage.",
+  "price_basis": "USD saved regular closes: 03 Nov 16:00 EST / 04 Nov 05:00 SGT. Daily change: versus 02 Nov ordinary close. Original vendor timestamp precision is retained per company. All close values were rechecked against fresh Yahoo daily-history responses; the new US session was still open at cutoff. These are prior closes, not live quotes. Earlier premarket and after-hours snapshots remain in their dated archives. TSM is the US-listed USD ADR.",
+  "return_basis": "Cumulative 1–6 month return = (03 Nov adjusted close ÷ baseline adjusted close − 1) × 100. Baselines: 02 Oct, 03 Sep, 03 Aug, 02 Jul, 03 Jun and 01 May 2026, using the preceding trading session for weekends and the 03 Jul market holiday. All 72 baselines were independently rechecked. Provider-adjusted closes include splits and dividend/distribution adjustments. Inputs are shown to two decimals; these are cumulative returns before fees and taxes.",
+  "caveats": [
+    "Price checks: fresh Yahoo chart JSON succeeded for all 12 securities. All 12 regular closes, 12 prior closes and 72 adjusted-close baselines match the saved edition at displayed cent precision. Daily and cumulative returns were independently recalculated.",
+    "News coverage: direct Reuters pages and some syndication pages were unavailable; accessible Reuters syndicated search text was used with publisher attribution. Apple, Alphabet, Meta and Micron issuer-news renderings were incomplete. Other issuer lists and all 12 SEC recent-submission feeds were checked, but these do not constitute a complete news census.",
+    "Meta: the €53 billion order book and up-to-€9 billion planned size are Reuters reporting of Bloomberg, not issuer-confirmed completed funding. No final euro pricing or settlement was verified by cutoff.",
+    "Google: Reuters published the buyout report earlier on 04 Nov; the programme expanded in June. It is newly added dated context, not a fresh layoff announcement or a quantified saving.",
+    "Amazon: product reach figures are company claims, not independently measured sales. The SEC feed also showed a Form 144 accepted at 15:20:59 UTC; this is a proposed-sale notice, not evidence of an executed transaction.",
+    "Watch only. No holding, trade, user call or buy recommendation is implied. Existing archives, reports and source records are retained; no private or restricted material is included."
+  ],
+  "rows": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 331.9,
+        "adjusted_close": 331.9,
+        "previous_close": 338.32,
+        "change_pct": -1.9,
+        "as_of": "2026-11-03T16:00:01-05:00",
+        "currency": "USD",
+        "source_url": "https://finance.yahoo.com/quote/AAPL/history/?.tsrc=fin-srch&p=AAPL"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 333.69,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d",
+          "pct": -0.54
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 328.21,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d",
+          "pct": 1.12
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 303.16,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d",
+          "pct": 9.48
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 308.36,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d",
+          "pct": 7.63
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 309.99,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d",
+          "pct": 7.07
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 279.64,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d",
+          "pct": 18.69
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer newsroom rendering was incomplete; SEC feed checked. No new company development verified in the reviewed sources."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://finance.yahoo.com/quote/AAPL/history/?.tsrc=fin-srch&p=AAPL"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0000320193.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://www.apple.com/newsroom/"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AAPL"
+        }
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 520.99,
+        "adjusted_close": 520.99,
+        "previous_close": 507.12,
+        "change_pct": 2.74,
+        "as_of": "2026-11-03T16:00:01-05:00",
+        "currency": "USD",
+        "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 517.53,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d",
+          "pct": 0.67
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 510.12,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d",
+          "pct": 2.13
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 486.73,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d",
+          "pct": 7.04
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 389.76,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d",
+          "pct": 33.67
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 426.54,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d",
+          "pct": 22.14
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 412.77,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d",
+          "pct": 26.22
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer blog and SEC feed checked; no new development verified in the review window."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0000789019.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://blogs.microsoft.com/"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#MSFT"
+        }
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 206.69,
+        "adjusted_close": 206.69,
+        "previous_close": 202.06,
+        "change_pct": 2.29,
+        "as_of": "2026-11-03T16:00:00-05:00",
+        "currency": "USD",
+        "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 233.95,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d",
+          "pct": -11.65
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 228.19,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d",
+          "pct": -9.42
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 206.41,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d",
+          "pct": 0.14
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 194.61,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d",
+          "pct": 6.21
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 214.26,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d",
+          "pct": -3.53
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 198.0,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d",
+          "pct": 4.39
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer blog and SEC feed checked; latest visible blog item was dated 03 Nov, before this window."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://finance.yahoo.com/quote/NVDA/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001045810.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://blogs.nvidia.com/"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#NVDA"
+        }
+      ]
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Class A",
+      "group": "Platforms",
+      "instrument": "US-listed Class A share",
+      "price": {
+        "close": 280.03,
+        "adjusted_close": 280.03,
+        "previous_close": 278.99,
+        "change_pct": 0.37,
+        "as_of": "2026-11-03T16:00:01-05:00",
+        "currency": "USD",
+        "source_url": "https://finance.yahoo.com/quote/GOOGL/?ltr=1"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 343.5,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d",
+          "pct": -18.48
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 342.26,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d",
+          "pct": -18.18
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 373.27,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d",
+          "pct": -24.98
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 359.68,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d",
+          "pct": -22.14
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 358.55,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d",
+          "pct": -21.9
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 385.21,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d",
+          "pct": -27.3
+        }
+      ],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Earlier today: Google confirms buyout offers expanded to five countries",
+          "facts": [
+            "Reuters reported earlier on 04 Nov that Google confirmed it expanded voluntary exit offers in June to some employees in Canada, France, Germany, Japan and Switzerland.",
+            "Reuters could not establish how many people accepted. The report concerns a previously unreported programme expansion, not a new compulsory layoff announcement at this cutoff."
+          ],
+          "analysis": "The report adds context to Alphabet’s effort to redirect costs while investing in AI. Without participation or severance figures, the net savings cannot be estimated reliably.",
+          "risks": "Severance expense and loss of experienced staff may offset some savings. Programme scope and financial impact remain unquantified.",
+          "next_watch": "Issuer disclosure of participation, restructuring charges and operating-expense trends.",
+          "sources": [
+            {
+              "title": "Reuters via Investing.com · earlier 04 Nov report, newly collated",
+              "url": "https://www.investing.com/news/stock-market-news/exclusivegoogle-extends-voluntary-buyout-offers-to-employees-in-several-countries-4997689"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Issuer news rendering was incomplete; the buyout story relies on Reuters reporting of Google confirmation."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://finance.yahoo.com/quote/GOOGL/?ltr=1"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001652044.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://blog.google/"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#GOOGL"
+        },
+        {
+          "title": "Reuters via Investing.com · earlier 04 Nov report, newly collated",
+          "url": "https://www.investing.com/news/stock-market-news/exclusivegoogle-extends-voluntary-buyout-offers-to-employees-in-several-countries-4997689"
+        }
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 250.69,
+        "adjusted_close": 250.69,
+        "previous_close": 245.63,
+        "change_pct": 2.06,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/amzn/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 251.52,
+          "pct": -0.33,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 258.9,
+          "pct": -3.17,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 284.02,
+          "pct": -11.74,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 242.67,
+          "pct": 3.3,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 250.02,
+          "pct": 0.27,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 268.26,
+          "pct": -6.55,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        }
+      ],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Amazon opens a free Shop Direct portal for outside merchants",
+          "facts": [
+            "Amazon’s original release, timestamped 14:00:07 UTC, introduces Shop Direct Merchant Workspace, a free self-service portal through which eligible merchants can connect product feeds to Amazon and Alexa for Shopping.",
+            "Amazon says tens of millions of customers have discovered hundreds of millions of outside-store products through Shop Direct. Customers can be directed to the merchant’s website, while eligible products support Buy for Me. These reach figures are issuer claims."
+          ],
+          "analysis": "The portal may strengthen Amazon as the starting point for shopping even when inventory sits elsewhere. Participation and discovery do not by themselves establish incremental revenue.",
+          "risks": "Merchant uptake, data accuracy, purchase conversion and customer experience determine commercial value. No financial contribution was quantified.",
+          "next_watch": "Merchant adoption, conversion metrics and any disclosed monetisation or revenue contribution.",
+          "sources": [
+            {
+              "title": "Amazon original announcement · 04 Nov 14:00:07 UTC",
+              "url": "https://www.aboutamazon.com/news/retail/amazon-shop-direct-merchant-workspace"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Original Shop Direct release verified at 04 Nov 14:00:07 UTC; SEC feed checked."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/amzn/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001018724.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://www.aboutamazon.com/news"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AMZN"
+        },
+        {
+          "title": "Amazon original announcement · 04 Nov 14:00:07 UTC",
+          "url": "https://www.aboutamazon.com/news/retail/amazon-shop-direct-merchant-workspace"
+        }
+      ]
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 621.03,
+        "adjusted_close": 621.03,
+        "previous_close": 606.73,
+        "change_pct": 2.36,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/meta/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 728.08,
+          "pct": -14.7,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 610.2,
+          "pct": 1.77,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 589.77,
+          "pct": 5.3,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 582.44,
+          "pct": 6.63,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 621.91,
+          "pct": -0.14,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 607.71,
+          "pct": 2.19,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        }
+      ],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Meta euro bond demand reaches €53bn; final pricing still pending",
+          "facts": [
+            "Reuters reported at 14:27 UTC that Meta’s debut euro bond offering attracted €53 billion in orders, citing Bloomberg’s compiled data.",
+            "The report said Meta sought up to €9 billion across six maturities from just over four to more than 38 years, with pricing expected later Wednesday. Investor orders are not completed borrowing."
+          ],
+          "analysis": "Strong reported demand suggests access to European funding. The final coupon and spread, rather than the order-book headline alone, determine the financing cost.",
+          "risks": "Orders can change before allocation. Size, pricing, currency exposure and settlement remain unverified; heavier AI investment can increase funding needs.",
+          "next_watch": "Final issuer pricing documents, coupons and spreads, then confirmation of settlement.",
+          "sources": [
+            {
+              "title": "Reuters via MarketScreener · 04 Nov 09:27 EST · reporting Bloomberg",
+              "url": "https://www.marketscreener.com/news/meta-draws-record-orders-for-debut-euro-bond-sale-bloomberg-news-reports-ce785fdfdd8af52d"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Issuer news rendering was incomplete; no final euro terms verified. SEC feed checked."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/meta/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001326801.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://about.fb.com/news/"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#META"
+        },
+        {
+          "title": "Reuters via MarketScreener · 04 Nov 09:27 EST · reporting Bloomberg",
+          "url": "https://www.marketscreener.com/news/meta-draws-record-orders-for-debut-euro-bond-sale-bloomberg-news-reports-ce785fdfdd8af52d"
+        }
+      ]
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Class B",
+      "group": "Other",
+      "instrument": "US-listed Class B share",
+      "price": {
+        "close": 557.07,
+        "adjusted_close": 557.07,
+        "previous_close": 556.11,
+        "change_pct": 0.17,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/brk.b/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 502.65,
+          "pct": 10.83,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 508.13,
+          "pct": 9.63,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 513.14,
+          "pct": 8.56,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 507.78,
+          "pct": 9.71,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 475.37,
+          "pct": 17.19,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 473.01,
+          "pct": 17.77,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer release list and SEC feed checked; no new development verified in the review window."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/brk.b/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001067983.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://www.berkshirehathaway.com/news/2026news.html"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#BRK.B"
+        }
+      ]
+    },
+    {
+      "ticker": "AMD",
+      "name": "Advanced Micro Devices",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 483.9,
+        "adjusted_close": 483.9,
+        "previous_close": 466.84,
+        "change_pct": 3.65,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/amd/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 633.91,
+          "pct": -23.66,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 456.16,
+          "pct": 6.08,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 484.64,
+          "pct": -0.15,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 517.82,
+          "pct": -6.55,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 542.52,
+          "pct": -10.81,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 360.54,
+          "pct": 34.22,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer newsroom and SEC feed checked. Previously covered 03 Nov results and the earlier Reuters premarket follow-up were not repeated."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/amd/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0000002488.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://newsroom.amd.com/"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AMD"
+        }
+      ]
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 332.13,
+        "adjusted_close": 332.13,
+        "previous_close": 322.23,
+        "change_pct": 3.07,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/avgo/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 355.14,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d",
+          "pct": -6.48
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 356.51,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d",
+          "pct": -6.84
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 391.52,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d",
+          "pct": -15.17
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 359.79,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d",
+          "pct": -7.69
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 477.6,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d",
+          "pct": -30.46
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 419.85,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d",
+          "pct": -20.89
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer financial-news list and SEC feed checked; no new development verified in the review window."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/avgo/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001730168.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://investors.broadcom.com/financial-information/financial-news-releases"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AVGO"
+        }
+      ]
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 855.1,
+        "adjusted_close": 855.1,
+        "previous_close": 833.59,
+        "change_pct": 2.58,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/mu/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 1074.72,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d",
+          "pct": -20.44
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 958.01,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d",
+          "pct": -10.74
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 829.37,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d",
+          "pct": 3.1
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 975.26,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d",
+          "pct": -12.32
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 1079.23,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d",
+          "pct": -20.77
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 542.04,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d",
+          "pct": 57.76
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer news list was incomplete in the direct rendering; indexed overview and SEC feed checked."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/mu/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0000723125.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://investors.micron.com/overview/"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#MU"
+        }
+      ]
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "group": "Other",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 398.5,
+        "adjusted_close": 398.5,
+        "previous_close": 403.82,
+        "change_pct": -1.32,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/tsla/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 370.59,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d",
+          "pct": 7.53
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 376.37,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d",
+          "pct": 5.88
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 322.08,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d",
+          "pct": 23.73
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 393.45,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d",
+          "pct": 1.28
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 423.7,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d",
+          "pct": -5.95
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 390.82,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d",
+          "pct": 1.97
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer press list and SEC feed checked; no new development verified in the review window."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/tsla/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001318605.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://ir.tesla.com/press"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#TSLA"
+        }
+      ]
+    },
+    {
+      "ticker": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "group": "Semiconductors",
+      "instrument": "US-listed USD ADR",
+      "price": {
+        "close": 404.8,
+        "adjusted_close": 404.8,
+        "previous_close": 398.63,
+        "change_pct": 1.55,
+        "as_of": "2026-11-03T16:00-05:00",
+        "currency": "USD",
+        "source_url": "https://stockanalysis.com/stocks/tsm/history/"
+      },
+      "premarket": null,
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 472.78,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d",
+          "pct": -14.38
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 415.89,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d",
+          "pct": -2.67
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 405.02,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d",
+          "pct": -0.05
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 433.0,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d",
+          "pct": -6.51
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 434.5,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d",
+          "pct": -6.84
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-01",
+          "base_adjusted_close": 395.68,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d",
+          "pct": 2.3
+        }
+      ],
+      "research": [],
+      "gaps": [
+        "Issuer press centre and SEC feed checked; latest visible press release was dated 15 Oct."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        },
+        {
+          "title": "Original saved regular-close timestamp source",
+          "url": "https://stockanalysis.com/stocks/tsm/history/"
+        },
+        {
+          "title": "Issuer SEC recent-submission feed checked",
+          "url": "https://data.sec.gov/submissions/CIK0001046179.json"
+        },
+        {
+          "title": "Issuer news source reviewed",
+          "url": "https://pr.tsmc.com/english"
+        },
+        {
+          "title": "Previous full report · 04 Nov 20:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#TSM"
+        }
+      ]
+    }
+  ]
+}
