@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-04T00:10:23.360049+00:00",
-  "message": "The 4 November 2026, 08:00 SGT scheduled watchlist edition is published. Its exact-commit Pages run succeeded, and live latest data and the dated full report match their SHA-256 receipts. This verifies this scheduled execution, not future runs. Prices are completed 3 November US regular-session closes; all 72 adjusted-close baselines were rechecked. AMD results and Meta priced terms are after-close developments, separate from those prices. Reuters and issuer-news coverage remains partial. Delivery to a separate (A) chat remains unverified. Refreshing this page reloads saved files and does not create new research.",
+  "checked_at": "2026-11-04T04:06:10.105870+00:00",
+  "message": "The 4 November 2026, 12:00 SGT scheduled watchlist edition is published. Its exact-commit Pages run succeeded, and live latest data and the dated full report match their SHA-256 receipts. This verifies this scheduled execution, not future runs. All 12 regular closes and 72 adjusted-close baselines were freshly reconfirmed; separately labelled after-hours snapshots are saved observations, not live quotes. New Tesla, AMD and Berkshire research retains source qualifications, including an unresolved AMD amount discrepancy. News coverage remains partial. Delivery to a separate (A) chat remains unverified. Refreshing this page reloads saved files and does not create new research.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,11 +14,11 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "5e8b1fac8221779fe031aeafe826b78b400520d9",
-    "pages_run_id": 41744657337,
-    "edition_id": "watchlist-20261104T000000Z",
-    "report_sha256": "0ba5c22784664b4c701cb93129a8f385164b7fe6caa373604170438edf992146",
-    "verified_at": "2026-11-04T00:10:23.360049+00:00"
+    "commit": "465a26cf89d699276623133a9e1f46387b059d19",
+    "pages_run_id": 41770973748,
+    "edition_id": "watchlist-20261104T040000Z",
+    "report_sha256": "ab84ebf4ef8ddd8bbb20e28792758c13c9fa1011214f3ce9ea9e87fd21337ad7",
+    "verified_at": "2026-11-04T04:06:10.105870+00:00"
   },
   "separate_A_chat_delivery_verified": false
 }
