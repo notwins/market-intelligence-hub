@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-04T08:08:49.332282+00:00",
-  "message": "The 4 November 2026, 16:00 SGT scheduled watchlist edition is published. Its exact-commit Pages run succeeded, and live latest data and the dated full report match their SHA-256 receipts. This verifies this scheduled execution, not future runs. All twelve regular closes and 72 adjusted-close baselines were freshly reconfirmed, unchanged. Saved prices are not live or a measure of later election-related trading. New research covers the AWS Malaysia program and one shared Reuters market update, with source-date qualifications retained. News coverage is partial. Optional overnight quotes requiring calendar-date inference were excluded. Separate (A) chat delivery remains unverified. Refreshing this page reloads saved files and does not create research.",
+  "checked_at": "2026-11-04T12:31:29.274710+00:00",
+  "message": "The 4 November 2026, 20:00 SGT scheduled watchlist edition is published. The exact-commit Pages run succeeded; live latest data and the dated full report match SHA-256 receipts. This verifies this scheduled execution, not future runs. All twelve regular closes and 72 adjusted-close baselines were freshly reconfirmed. Seven separately dated premarket observations before cutoff are included; five later quotes were excluded. Saved observations are not live. New research covers Google’s planned Malaysian investment and Meta’s preliminary euro offering, plus a clearly shared Reuters market update. Google’s matching original release was not retrieved; Meta final pricing and settlement remain unverified. Source coverage is partial. The existing schema covers the original twelve names; SPY, QQQ, TLT, IEI and IEF are not represented as verified coverage. Separate (A) chat delivery remains unverified. Refreshing this page reloads saved files and does not create research.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,11 +14,11 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "189bee17300f40dfa4f0c927dc47f85c9d6e486f",
-    "pages_run_id": 41797137936,
-    "edition_id": "watchlist-20261104T080000Z",
-    "report_sha256": "30aa7f2007151831dada2764cdd43c1980772eeb21e71fba2c31500bda03409e",
-    "verified_at": "2026-11-04T08:08:49.332282+00:00"
+    "commit": "d4623fa23635f7a4ee7aab40c1109f5609977b9e",
+    "pages_run_id": 41829811638,
+    "edition_id": "watchlist-20261104T120000Z",
+    "report_sha256": "bd59597a9b4d58e47afc69f21fdfaeaa69d6a85d467c13f95e686cda06b02244",
+    "verified_at": "2026-11-04T12:31:29.274710+00:00"
   },
   "separate_A_chat_delivery_verified": false
 }
