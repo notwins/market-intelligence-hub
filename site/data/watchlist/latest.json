@@ -1,33 +1,33 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261104T000000Z",
-  "as_of": "2026-11-04T08:00:00+08:00",
-  "generated_at": "2026-11-04T00:07:58+00:00",
-  "title": "12-name watchlist · 4 November 2026, 08:00 SGT",
+  "id": "watchlist-20261104T040000Z",
+  "as_of": "2026-11-04T12:00:00+08:00",
+  "generated_at": "2026-11-04T04:03:29+00:00",
+  "title": "12-name watchlist · 4 November 2026, 12:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-04T00:07:58+00:00",
+    "sources_checked_at": "2026-11-04T04:01:56.007906+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "Ten watchlist names rose and two fell at the completed 3 November US regular-session close. AMD led at +3.65%; Apple fell 1.90%. New in this review window: AMD reported Q3 results and Q4 guidance, while Meta filed final pricing for a $15 billion senior-note offering. Amazon filed a backward-looking 13F. Apple’s developer-preview item is explicitly earlier catch-up, not overnight breaking news.",
-  "coverage_note": "Review window: 4 November 2026, 04:00–08:00 SGT (3 November 20:00–4 November 00:00 UTC), with a 15-minute overlap. The previous 04:00 SGT edition and all older artifacts remain available unchanged. This edition replaces the prior in-progress session snapshots with the verified completed 3 November close and recomputed six-horizon returns. New research is separated from earlier catch-up; quiet names do not receive filler. News coverage is partial, not a complete newswire census.",
-  "price_basis": "All main prices are USD completed regular-session observations for 3 November 2026, at 16:00 EST (4 November 05:00 SGT), with individually recorded vendor quote timestamps. Daily change compares the 2 November ordinary close. Yahoo supplies seconds for some observations; Stock Analysis supplies minute precision, preserved without invented seconds. These are saved closes, not live or exact 08:00 SGT prices. No after-hours price has been substituted for a regular close; premarket fields are null. TSM is the US-listed USD ADR.",
+  "summary": "New reports cover Tesla’s planned Korean FSD complaint, AMD’s conditional warrants and Berkshire’s reported Sirius XM purchases. The AMD report has an unresolved amount discrepancy against the issuer’s tables. Earlier AMD call remarks and the PacifiCorp appeal hearing are clearly labelled catch-up. Regular-close metrics and all six return horizons are unchanged. Separate saved after-hours observations include AMD $508.20 (+5.02%) and Tesla $391.53 (−1.75%) at 08:59 SGT, not live prices.",
+  "coverage_note": "Review window: 4 November 2026, 08:00–12:00 SGT (00:00–04:00 UTC), with a 15-minute overlap from 07:45 SGT. Sources were rechecked after the fixed 12:00 SGT cutoff. The previous 08:00 SGT edition and all earlier research, reports and qualifications remain in their original archives. This incremental edition does not repeat unchanged prior events as new. News coverage remains partial, not a complete newswire census.",
+  "price_basis": "All main prices are USD completed regular-session observations for 3 November 2026, at 16:00 EST (4 November 05:00 SGT), with their original individually recorded vendor timestamps. Daily change compares the 2 November ordinary close. Seconds supplied by Yahoo and minute precision supplied by Stock Analysis are preserved. These are saved closes, not live or exact 12:00 SGT prices. Separately labelled after-hours snapshots in each company’s notes are dated 3 November 19:59 EST (4 November 08:59 SGT), except Berkshire at 19:55 EST (08:55 SGT). Their changes compare the regular close, and none replaces a return endpoint. Premarket fields remain empty. TSM is the US-listed USD ADR.",
   "return_basis": "Cumulative return = 100 × (3 November 2026 adjusted close ÷ baseline adjusted close − 1). The 1–6 calendar-month baselines are 2 October, 3 September, 3 August, 2 July, 3 June and 1 May 2026. October 3 and May 3 fall on weekends; July 3 is the observed US Independence Day market holiday, so preceding sessions are used. All 72 dated inputs were independently checked. Adjusted closes incorporate split and dividend/distribution adjustments; ordinary previous closes remain separate. These are cumulative returns before fees and taxes, not six individual monthly returns.",
   "caveats": [
-    "We could not independently verify a reliably timestamped after-hours price for this edition. Quotes and financial events use separate timestamps. AMD results and Meta pricing occurred after the regular close; the close prices do not include their subsequent after-hours reaction.",
-    "All prices and 72 adjusted-close baseline inputs were independently rechecked. Vendor values may later be revised. Current endpoints were crosschecked against completed history rows; intraday or unfinalized observations were rejected.",
-    "Direct Yahoo pages were rate-limited. Current search-indexed Yahoo historical rows, including regional pages, supplied some older adjusted baselines; direct Stock Analysis and current Quiver history supplied others. Sources are linked beside every calculation.",
-    "TSM uses Yahoo-adjusted historical baselines consistently, including 3 September at 415.89 rather than the 416.13 in Stock Analysis. Its finalized 404.80 close is not the earlier 15:59:59 observation of 404.66.",
-    "Existing dated editions, calls, reports and their qualifications are retained unchanged. Old active-session and premarket snapshots remain in their original archives rather than being represented as current observations.",
-    "Watch only: no current holding, executed trade, user buy call or recommendation is implied. No private diary, brokerage record, personal account information or restricted screenshot is included.",
-    "Apple’s Siri developer-preview post is timestamped 18:00:20 UTC before this window and explicitly labelled earlier catch-up. Meta priced terms do not establish completed settlement.",
-    "Reuters coverage used targeted searches and accessible indexed syndication. Direct Reuters AMD article could not be opened, and direct access to the two syndicated articles returned 403; indexed versions were readable. Coverage is partial.",
-    "Alphabet, Meta and Micron news-release lists were incomplete or did not render. Broadcom’s current list was successfully accessed at its new financial-news URL.",
-    "No unverified after-hours percentage from Reuters is included: syndicated copies carry differing market reactions and do not expose a reliable final update timestamp.",
-    "AMD official release and SEC earnings filing were read; a complete earnings-call transcript was not independently reviewed.",
-    "All 12 SEC recent-submission feeds were checked through the cutoff. This does not constitute a complete census of third-party ownership filings or every company announcement.",
-    "No newly verified item for a ticker is not a blanket no-news finding."
+    "All 12 completed closes, previous closes and 72 adjusted-close baseline inputs were freshly reconfirmed. Every daily, cumulative-return and separate after-hours percentage was independently recomputed. The regular-price and return fields remain unchanged from the previous edition.",
+    "After-hours prices have minute precision from Stock Analysis and are saved observations, not live quotes. The later Reuters reports do not establish what caused any earlier price move. Do not combine after-hours changes with regular-session changes or the adjusted-close return endpoints.",
+    "Direct Yahoo access was sometimes rate-limited. Accessible indexed Yahoo regional historical rows and public Stock Analysis/Quiver histories were used for verification. Stale or differently adjusted alternatives were rejected rather than mixed into the saved provider basis. Source links remain beside every baseline.",
+    "TSM’s historical inputs consistently retain Yahoo’s adjusted series, including 3 September at 415.89. Micron’s 2 July adjusted baseline remains 975.26; an alternative stale 975.41 observation was rejected.",
+    "AMD’s original release shows a $1.097 billion warrant-liability adjustment, while the new Reuters report says $1.07 billion. The discrepancy is unresolved and remains explicit; neither figure is treated as a new cash payment.",
+    "We could not independently verify a complete official AMD Q3 earnings-call transcript. The newly included 2027 call outlook is attributed to Reuters and labelled earlier catch-up, not a new announcement in this review window.",
+    "Watch only: no user holding, executed trade, buy call or recommendation is implied. No private diary, brokerage record, personal account information or restricted screenshot is included.",
+    "All 12 SEC recent-submission feeds rechecked after 04:00 UTC; only Berkshire Form 4 falls in overlap/main window. Not a full third-party filing census.",
+    "Reuters searches and accessible syndications are partial coverage, not a complete wire census. Some direct web opens failed; full direct HTML was obtained for the included Tesla, Berkshire and AMD reports.",
+    "Alphabet and Meta current IR release lists did not render sufficiently; Micron relocated news list was also empty. Microsoft source homepage did not expose a dated current list.",
+    "No newly verified event for quiet tickers does not establish that no news occurred. No generic filler added.",
+    "Prior AMD Q3 results, Meta dollar bond pricing, Amazon 13F and Apple Siri preview deduplicated rather than re-presented as new. No new Meta settlement confirmation verified.",
+    "No current user holdings, trades, recommendations or private information inferred. TSM coverage refers to the US-listed USD ADR."
   ],
   "rows": [
     {
@@ -89,32 +89,12 @@
           "pct": 18.69
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Earlier update newly checked: Siri AI developer preview expands",
-          "facts": [
-            "Apple’s official Developer RSS dates this post to 18:00:20 UTC (4 November 02:00:20 SGT), before this review window. It was absent from the preceding edition.",
-            "The preview lets developers integrate app content and actions with Siri AI through App Intents in the 27.3 betas. Apple describes customer availability in a few months and App Store submissions opening in spring."
-          ],
-          "analysis": "Broader third-party integration could increase useful Siri experiences, but the announcement supplies no revenue estimate.",
-          "risks": "This remains a preview with device, language and regional limits. Apple says Siri AI is unavailable in the EU on iOS, iPadOS and watchOS; terms and usage policies are still to follow.",
-          "next_watch": "Developer uptake, final policies and customer-release timing.",
-          "sources": [
-            {
-              "title": "Apple Developer: Siri AI preview",
-              "url": "https://developer.apple.com/news/?id=gdk2umrf"
-            },
-            {
-              "title": "Apple Developer official RSS: 10:00:20 PST publication time",
-              "url": "https://developer.apple.com/news/rss/news.rss"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
+        "Separate saved after-hours snapshot: USD 329.80, -0.63% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports.",
+        "The newsroom RSS endpoint did not yield a usable item list; the SEC feed was checked separately."
       ],
       "sources": [
         {
@@ -126,20 +106,16 @@
           "url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
-          "url": "https://data.sec.gov/submissions/CIK0000320193.json"
-        },
-        {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/aapl/history/"
         },
         {
-          "title": "Apple Developer: Siri AI preview",
-          "url": "https://developer.apple.com/news/?id=gdk2umrf"
+          "title": "SEC recent issuer submissions checked after the cutoff",
+          "url": "https://data.sec.gov/submissions/CIK0000320193.json"
         },
         {
-          "title": "Apple Developer official RSS: 10:00:20 PST publication time",
-          "url": "https://developer.apple.com/news/rss/news.rss"
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://www.apple.com/newsroom/rss-feed.rss"
         }
       ]
     },
@@ -204,8 +180,10 @@
       ],
       "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
+        "Separate saved after-hours snapshot: USD 516.40, -0.88% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports.",
+        "The issuer source homepage did not expose a sufficiently dated current news list. Its after-hours percentage is recomputed from displayed prices; the source’s dollar-change header differs by one cent."
       ],
       "sources": [
         {
@@ -213,12 +191,16 @@
           "url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
+          "url": "https://stockanalysis.com/stocks/msft/history/"
+        },
+        {
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0000789019.json"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
-          "url": "https://stockanalysis.com/stocks/msft/history/"
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://news.microsoft.com/source/"
         }
       ]
     },
@@ -281,28 +263,11 @@
           "pct": 4.39
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Reuters close update: AI shares recover; Apple remains lower",
-          "facts": [
-            "Reuters’ 21:15 UTC close update recorded Apple down 1.9%, NVIDIA up 2.3%, Micron up 2.6%, and Microsoft and Amazon each more than 2% higher. Its Apple margin explanation concerns previously disclosed memory costs, not new guidance.",
-            "The Reuters syndicated page was published at 21:02 UTC and updated at 21:15 UTC."
-          ],
-          "analysis": "The broad close-market report provides context across several watchlist names; it is not new issuer guidance or proof of the cause of each stock move.",
-          "risks": "This was an indexed syndicated Reuters report. Direct page retrieval was limited, and the market reaction does not establish future performance.",
-          "next_watch": "Subsequent official issuer disclosures. Regular-session and after-hours observations must remain distinct.",
-          "sources": [
-            {
-              "title": "Reuters via MarketScreener: published 21:02 UTC, updated 21:15 UTC",
-              "url": "https://ca.marketscreener.com/news/nasdaq-ends-higher-as-ai-heavyweights-rebound-ahead-of-midterm-results-ce785fdedd8ef520"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
+        "Separate saved after-hours snapshot: USD 206.20, -0.24% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports."
       ],
       "sources": [
         {
@@ -310,16 +275,16 @@
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
-          "url": "https://data.sec.gov/submissions/CIK0001045810.json"
-        },
-        {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/nvda/history/"
         },
         {
-          "title": "Reuters via MarketScreener: published 21:02 UTC, updated 21:15 UTC",
-          "url": "https://ca.marketscreener.com/news/nasdaq-ends-higher-as-ai-heavyweights-rebound-ahead-of-midterm-results-ce785fdedd8ef520"
+          "title": "SEC recent issuer submissions checked after the cutoff",
+          "url": "https://data.sec.gov/submissions/CIK0001045810.json"
+        },
+        {
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://nvidianews.nvidia.com/news"
         }
       ]
     },
@@ -384,9 +349,10 @@
       ],
       "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research.",
-        "The issuer news-release list was incomplete or did not render; SEC submissions were checked separately."
+        "Separate saved after-hours snapshot: USD 278.43, -0.57% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports.",
+        "The current issuer news-release list was incomplete or did not render sufficiently; SEC recent submissions were checked separately."
       ],
       "sources": [
         {
@@ -398,12 +364,16 @@
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
+          "url": "https://stockanalysis.com/stocks/googl/history/"
+        },
+        {
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001652044.json"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
-          "url": "https://stockanalysis.com/stocks/googl/history/"
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://abc.xyz/investor/news/"
         }
       ]
     },
@@ -466,34 +436,15 @@
           "source_url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "New filing: quarter-end investment holdings report",
-          "facts": [
-            "Amazon’s 13F-HR was accepted at 21:17:05 UTC (4 November 05:17:05 SGT). It reports six positions with an aggregate value of $3.774 billion as of 30 September."
-          ],
-          "analysis": "This is a newly filed but backward-looking investment report, not an operating-results release.",
-          "risks": "The holdings date predates this edition by more than a month; the report does not establish current holdings or subsequent transactions.",
-          "next_watch": "Any later filing explaining material changes; no near-term operating catalyst is inferred.",
-          "sources": [
-            {
-              "title": "SEC: Amazon 13F-HR for 30 September",
-              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000110465926122014/xslForm13F_X02/primary_doc.xml"
-            },
-            {
-              "title": "SEC: Amazon acceptance timestamp",
-              "url": "https://data.sec.gov/submissions/CIK0001018724.json"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred."
+        "Separate saved after-hours snapshot: USD 248.78, -0.76% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/amzn/history/"
         },
         {
@@ -501,12 +452,12 @@
           "url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
         },
         {
-          "title": "SEC: Amazon 13F-HR for 30 September",
-          "url": "https://www.sec.gov/Archives/edgar/data/1018724/000110465926122014/xslForm13F_X02/primary_doc.xml"
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://press.aboutamazon.com/press-releases"
         }
       ]
     },
@@ -569,36 +520,16 @@
           "source_url": "https://finance.yahoo.com/quote/META/history/"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "New priced terms: $15 billion senior-note offering",
-          "facts": [
-            "Meta filed final pricing terms at 22:25:13 UTC (4 November 06:25:13 SGT), replacing the earlier preliminary filing’s blank amounts and coupons.",
-            "The five tranches are $3.25 billion at 5.850% due 2031, $3.25 billion at 6.250% due 2033, $4 billion at 6.550% due 2036, $1.75 billion at 7.350% due 2046 and $2.75 billion at 7.500% due 2056. Settlement is expected on 5 November."
-          ],
-          "analysis": "The filing establishes the dollar offering’s size and borrowing cost, a concrete financing update beyond the earlier launch.",
-          "risks": "Pricing is not completed settlement. This term sheet does not establish final terms or completion of any separate euro offering.",
-          "next_watch": "Expected 5 November settlement and subsequent completion disclosures.",
-          "sources": [
-            {
-              "title": "SEC: Meta final pricing FWP, accepted 22:25:13 UTC",
-              "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526445646/d186765dfwp.htm"
-            },
-            {
-              "title": "SEC: Meta acceptance timestamp",
-              "url": "https://data.sec.gov/submissions/CIK0001326801.json"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "The issuer news-release list was incomplete or did not render; SEC submissions were checked separately."
+        "Separate saved after-hours snapshot: USD 618.44, -0.42% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports.",
+        "The current issuer news-release list was incomplete or did not render sufficiently; SEC recent submissions were checked separately."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/meta/history/"
         },
         {
@@ -606,12 +537,12 @@
           "url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001326801.json"
         },
         {
-          "title": "SEC: Meta final pricing FWP, accepted 22:25:13 UTC",
-          "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526445646/d186765dfwp.htm"
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://investor.atmeta.com/investor-news/default.aspx"
         }
       ]
     },
@@ -674,14 +605,53 @@
           "source_url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "New SEC filing: Berkshire reports Sirius XM purchases",
+          "facts": [
+            "A Form 4 accepted at 02:30:04 UTC reports 743,965 Sirius XM shares purchased on 30 October, 66,968 on 2 November and 113,348 on 3 November: 924,281 shares in total.",
+            "The filing reports 125,731,398 shares afterward, including 109,746,508 held by GEICO and 15,984,890 in subsidiary pension plans. The filing includes ownership disclaimers for the pension-plan positions."
+          ],
+          "analysis": "This is a disclosed Berkshire-related portfolio transaction, not a Berkshire operating-results release.",
+          "risks": "The issuer is Sirius XM, not Berkshire. These are dated reported transactions and not evidence of current holdings or any user trade. Do not describe all reported shares as directly owned by Berkshire.",
+          "next_watch": "Later ownership filings for additional changes.",
+          "sources": [
+            {
+              "title": "SEC Form 4: issuer Sirius XM; reporting owner Berkshire",
+              "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526445930/ownership.xml"
+            },
+            {
+              "title": "SEC Berkshire recent submissions, acceptance timestamp",
+              "url": "https://data.sec.gov/submissions/CIK0001067983.json"
+            }
+          ]
+        },
+        {
+          "date": "2026-11-03",
+          "headline": "Overlap catch-up: Oregon court hears PacifiCorp wildfire appeal",
+          "facts": [
+            "Reuters reports the Oregon Supreme Court heard arguments on 3 November over reviving a wildfire liability verdict after an appeals court set aside $1.25 billion in awards to 201 plaintiffs.",
+            "The report was published at 23:55:50 UTC, in the 15-minute overlap before this edition’s main window; it was not in the previous edition. No new decision is reported."
+          ],
+          "analysis": "The appeal is a contingent legal-risk development for Berkshire’s utility operations, not a new damages award.",
+          "risks": "Potential damages are uncertain; allegations and courtroom questions do not establish the eventual ruling or payout.",
+          "next_watch": "Oregon Supreme Court ruling. Reuters says rulings typically take months; no exact decision date is verified.",
+          "sources": [
+            {
+              "title": "Reuters via MarketScreener, explicit EST publication timestamp",
+              "url": "https://ca.marketscreener.com/news/berkshire-owned-utility-urges-oregon-top-court-against-mammoth-wildfire-class-action-ce785fdedf8af525"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
+        "Separate saved after-hours snapshot: USD 556.80, -0.05% versus the 3 November regular close, observed 2026-11-03T19:55-05:00 (2026-11-04T08:55+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/brk.b/history/"
         },
         {
@@ -689,8 +659,20 @@
           "url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC Berkshire recent submissions, acceptance timestamp",
           "url": "https://data.sec.gov/submissions/CIK0001067983.json"
+        },
+        {
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://www.berkshirehathaway.com/news/2026news.html"
+        },
+        {
+          "title": "SEC Form 4: issuer Sirius XM; reporting owner Berkshire",
+          "url": "https://www.sec.gov/Archives/edgar/data/1067983/000119312526445930/ownership.xml"
+        },
+        {
+          "title": "Reuters via MarketScreener, explicit EST publication timestamp",
+          "url": "https://ca.marketscreener.com/news/berkshire-owned-utility-urges-oregon-top-court-against-mammoth-wildfire-class-action-ce785fdedf8af525"
         }
       ]
     },
@@ -755,38 +737,61 @@
       ],
       "research": [
         {
-          "date": "2026-11-03",
-          "headline": "New results: Data Center drives record Q3; Q4 revenue guide rises",
+          "date": "2026-11-04",
+          "headline": "New Reuters warrant report: conditional dilution and a source-number discrepancy",
           "facts": [
-            "AMD released Q3 results at 21:15 UTC (4 November 05:15 SGT): revenue $13.377 billion, up 45% year-on-year; diluted EPS $1.46 GAAP and $2.09 non-GAAP.",
-            "Data Center revenue was $8.546 billion, up 97%; Client and Gaming revenue fell 8% to $3.722 billion. Q4 guidance is $17 billion revenue, plus or minus 3%, and approximately 55% non-GAAP gross margin versus 56% in Q3."
+            "Reuters reports CFO Jean Hu said customer warrants begin diluting shareholders only after vesting and exercise conditions are met, with more timing guidance expected in 2027.",
+            "The original 3 November earnings release and SEC exhibit show a $1.097 billion fair-value warrant-liability adjustment, or $0.66 per share. Reuters instead reports $1.07 billion; that discrepancy is unresolved. The cash-flow statement separately adds back $1.179 billion of net non-cash customer-warrant impact.",
+            "Publication time: 2026-11-04T02:12:22Z. Last modification: 2026-11-04T02:48:41Z."
           ],
-          "analysis": "The revenue midpoint implies approximately 27% sequential growth, but a lower adjusted gross margin. Strong Data Center growth and weaker Client and Gaming demand need separate evaluation.",
-          "risks": "Guidance depends on execution of the Helios and Venice ramp and component supply. Non-GAAP EPS is not GAAP earnings.",
-          "next_watch": "Q4 shipment execution, margin delivery and additional official call materials. The scheduled 22:00 UTC call is no longer an upcoming event at this cutoff.",
+          "analysis": "Equity-linked customer incentives can create earnings volatility and future dilution alongside chip sales growth. The fair-value adjustment is not a cash outflow.",
+          "risks": "Do not equate warrants with shares already issued or exercised. Do not silently replace the primary-source $1.097 billion with Reuters $1.07 billion or confuse it with the separate cash-flow addback.",
+          "next_watch": "2027 management guidance on vesting/exercise timing and future SEC disclosure.",
           "sources": [
             {
-              "title": "AMD official earnings release",
+              "title": "Reuters via Investing.com; UTC structured publication and modification metadata verified",
+              "url": "https://www.investing.com/news/stock-market-news/amds-openai-meta-chip-deals-trigger-1-billion-quarterly-charge-4997141"
+            },
+            {
+              "title": "AMD original release: reconciliation and cash-flow tables",
               "url": "https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results"
             },
             {
-              "title": "AMD official release list: 3 November, 16:15 EST",
-              "url": "https://ir.amd.com/news-events/press-releases"
+              "title": "AMD SEC exhibit 99.1 mirror",
+              "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000188/q32026991.htm"
+            }
+          ]
+        },
+        {
+          "date": "2026-11-03",
+          "headline": "Earlier call catch-up: 2027 growth outlook and weaker PC-unit demand",
+          "facts": [
+            "Reuters attributes to Lisa Su an expectation that overall 2027 revenue will grow more than 80%, with data-center chips supplying about 80% of sales.",
+            "Reuters also reports AMD expects PC unit shipments to decline by a double-digit percentage in 2027. These are earlier 3 November call remarks newly verified for this edition, not a new call after midnight UTC."
+          ],
+          "analysis": "The outlook implies greater dependence on data-center demand while the PC market weakens.",
+          "risks": "These are management forecasts, not realized results; supply, execution and customer concentration remain relevant. No after-hours percentage is carried over from the report.",
+          "next_watch": "2027 shipment execution and subsequent official call materials.",
+          "sources": [
+            {
+              "title": "Reuters via HOT 96, current accessible article",
+              "url": "https://hot96.com/2026/11/03/amd-forecasts-quarterly-revenue-above-estimates-as-data-center-growth-accelerates/"
             },
             {
-              "title": "SEC earnings 8-K: accepted 21:16:27 UTC",
-              "url": "https://www.sec.gov/Archives/edgar/data/2488/000000248826000188/amd-20261103.htm"
+              "title": "AMD results page: Q3 audio/slides listed but no official Q3 transcript",
+              "url": "https://ir.amd.com/financial-information/financial-results"
             }
           ]
         }
       ],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "The official earnings release and SEC filing were read; a full earnings-call transcript and reliably timestamped after-hours quote were not independently verified."
+        "Separate saved after-hours snapshot: USD 508.20, +5.02% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "The complete official earnings-call transcript was not independently reviewed. Reuters call remarks are earlier catch-up; the issuer’s warrant table and SEC exhibit were checked separately."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/amd/history/"
         },
         {
@@ -794,20 +799,32 @@
           "url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0000002488.json"
         },
         {
-          "title": "AMD official earnings release",
-          "url": "https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results"
-        },
-        {
-          "title": "AMD official release list: 3 November, 16:15 EST",
+          "title": "Issuer news source checked; access limitations noted",
           "url": "https://ir.amd.com/news-events/press-releases"
         },
         {
-          "title": "SEC earnings 8-K: accepted 21:16:27 UTC",
-          "url": "https://www.sec.gov/Archives/edgar/data/2488/000000248826000188/amd-20261103.htm"
+          "title": "Reuters via Investing.com; UTC structured publication and modification metadata verified",
+          "url": "https://www.investing.com/news/stock-market-news/amds-openai-meta-chip-deals-trigger-1-billion-quarterly-charge-4997141"
+        },
+        {
+          "title": "AMD original release: reconciliation and cash-flow tables",
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results"
+        },
+        {
+          "title": "AMD SEC exhibit 99.1 mirror",
+          "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000188/q32026991.htm"
+        },
+        {
+          "title": "Reuters via HOT 96, current accessible article",
+          "url": "https://hot96.com/2026/11/03/amd-forecasts-quarterly-revenue-above-estimates-as-data-center-growth-accelerates/"
+        },
+        {
+          "title": "AMD results page: Q3 audio/slides listed but no official Q3 transcript",
+          "url": "https://ir.amd.com/financial-information/financial-results"
         }
       ]
     },
@@ -872,12 +889,14 @@
       ],
       "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
+        "Separate saved after-hours snapshot: USD 330.04, -0.63% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports.",
+        "The financial-news list route returned 404; the investor homepage was accessible. This limits the completeness of the issuer-news scan."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/avgo/history/"
         },
         {
@@ -889,8 +908,12 @@
           "url": "https://fr.finance.yahoo.com/quote/AVGO/history/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001730168.json"
+        },
+        {
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://investors.broadcom.com/"
         }
       ]
     },
@@ -955,13 +978,14 @@
       ],
       "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research.",
-        "The issuer news-release list was incomplete or did not render; SEC submissions were checked separately."
+        "Separate saved after-hours snapshot: USD 849.60, -0.64% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports.",
+        "The current issuer news-release list was incomplete or did not render sufficiently; SEC recent submissions were checked separately."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/mu/history/"
         },
         {
@@ -969,8 +993,12 @@
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
+        },
+        {
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://investors.micron.com/news/default.aspx"
         }
       ]
     },
@@ -1033,14 +1061,33 @@
           "pct": 1.97
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "New Reuters report: Korean consumer group plans FSD marketing complaint",
+          "facts": [
+            "Reuters reports Citizens United for Consumer Sovereignty plans to file a complaint with the Korea Fair Trade Commission on 5 November, alleging Tesla marketed FSD for vehicles that could not legally use it.",
+            "A KFTC official told Reuters an investigation into FSD advertising began earlier this year and Tesla submitted written responses. Tesla did not respond to Reuters requests for comment. FSD requires active driver supervision.",
+            "Publication time: 2026-11-04T00:01:43Z."
+          ],
+          "analysis": "A potential advertising restriction or certification delay could affect Korean software sales; this report does not quantify an earnings impact.",
+          "risks": "These are allegations and a planned complaint, not a finding of liability or an imposed penalty. The number of customers who bought FSD on ineligible vehicles remains unclear.",
+          "next_watch": "Whether the complaint is filed on 5 November; KFTC decisions, certification progress and Tesla response.",
+          "sources": [
+            {
+              "title": "Reuters via MarketScreener; published 3 November 19:01:43 EST",
+              "url": "https://www.marketscreener.com/news/tesla-misled-south-korean-customers-about-automated-driving-tech-consumer-group-alleges-ce785fdedf8af32d"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
+        "Separate saved after-hours snapshot: USD 391.53, -1.75% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/tsla/history/"
         },
         {
@@ -1048,8 +1095,16 @@
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001318605.json"
+        },
+        {
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://ir.tesla.com/press"
+        },
+        {
+          "title": "Reuters via MarketScreener; published 3 November 19:01:43 EST",
+          "url": "https://www.marketscreener.com/news/tesla-misled-south-korean-customers-about-automated-driving-tech-consumer-group-alleges-ce785fdedf8af32d"
         }
       ]
     },
@@ -1114,13 +1169,14 @@
       ],
       "research": [],
       "gaps": [
-        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
-        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research.",
-        "Historical adjusted series differ between vendors; this edition consistently uses Yahoo-adjusted historical inputs, linked for each horizon."
+        "Separate saved after-hours snapshot: USD 404.50, -0.07% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis timestamp precision is one minute. Not live, not premarket and not a return endpoint.",
+        "Reuters and issuer-news coverage is partial; no newly included item does not establish that no news occurred.",
+        "No additional company-specific narrative event was independently verified for the 00:00–04:00 UTC review window among the sources checked. Prior research remains in the earlier dated reports.",
+        "The original press-list route returned 404; the current press homepage was accessible. Historical adjusted series differ across vendors, so the existing Yahoo-adjusted series is preserved."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Stock Analysis: regular history and separate saved after-hours snapshot",
           "url": "https://stockanalysis.com/stocks/tsm/history/"
         },
         {
@@ -1132,8 +1188,12 @@
           "url": "https://hk.finance.yahoo.com/quote/TSM/history/"
         },
         {
-          "title": "SEC recent issuer submissions checked through cutoff",
+          "title": "SEC recent issuer submissions checked after the cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001046179.json"
+        },
+        {
+          "title": "Issuer news source checked; access limitations noted",
+          "url": "https://pr.tsmc.com/english"
         }
       ]
     }
