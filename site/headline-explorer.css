@@ -1,2 +1,26 @@
 .hx-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.hx-chip{font-size:.78em;border:1px solid currentColor;border-radius:20px;padding:2px 8px;line-height:1.55}.hx-country{color:#164a78;background:#eaf3ff}.hx-bank{color:#543389;background:#f1eaff}.hx-sector{color:#185f48;background:#e6f7ed}.hx-topic{color:#6f4c0b;background:#fff3d5}.hx-person{color:#813b49;background:#ffedf0}.hx-ticker{color:#175d68;background:#e6f7fa}.hx-category{color:#445065;background:#f1f3f6}.hx-key{font-weight:750;border-radius:3px;padding:0 2px}.hx-title{display:block;font-size:1.08em;font-weight:650;line-height:1.5}.hx-expand{margin-top:10px}.hx-expand summary,.hx-teach summary,.hx-map summary{cursor:pointer;padding:12px 4px;min-height:44px;font-weight:650}.hx-panel{padding:12px;border-left:3px solid #879dbd;background:#f8faff;color:#182339}.hx-missing{padding:10px;border:1px dashed #8390a6;border-radius:6px}.hx-teach{margin-top:14px;border-top:1px solid #b9c8dc}.hx-controls{margin:16px 0;padding:16px;border:1px solid #c5d1e2;border-radius:12px}.hx-filter-grid,.hx-map-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.hx-filter-grid label{display:flex;flex-direction:column;font-size:.9em;font-weight:650}.hx-filter-grid select{min-height:44px;width:100%;min-width:0;padding:8px;border:1px solid #9eabc0;border-radius:6px;background:#fff;color:#182339}.hx-controls button{margin-top:10px}.hx-story{overflow-wrap:anywhere}.hx-map-grid{font-size:.9em}.hx-story h4{margin-top:8px}summary:focus-visible,select[data-hx-filter]:focus-visible{outline:3px solid #6c55ba;outline-offset:3px}
 @media(max-width:650px){.hx-filter-grid,.hx-map-grid{grid-template-columns:1fr 1fr}.hx-controls{padding:10px}.hx-chip{font-size:.8em}}@media(max-width:380px){.hx-filter-grid,.hx-map-grid{grid-template-columns:1fr}}@media print{.hx-chip,.hx-key{background:transparent!important;color:#111!important}.hx-controls{display:none}.hx-expand>.hx-panel{display:block}}
+
+.hx-tags a.hx-chip{display:inline-flex;align-items:center;min-height:44px;font-size:.8em;padding:7px 10px;text-decoration:underline;text-underline-offset:3px}
+
+/* Titles lead; compact text-labelled tags are controls, not competing headlines. */
+.hx-story .hx-headline{font-family:var(--display-font,inherit);font-size:calc(19px * var(--text-scale,1));font-weight:750;line-height:1.4;letter-spacing:-.01em;margin:0 0 8px}
+.hx-story .hx-title{font:inherit;line-height:inherit;color:var(--ink,#182339)}
+.hx-story .hx-headline a{font:inherit;display:inline;color:inherit;text-decoration:underline;text-underline-offset:3px}
+.hx-story .hx-key{background:transparent;color:inherit;padding:0;font-weight:inherit}
+.hx-story .hx-byline{font-size:calc(11px * var(--text-scale,1));margin:0 0 10px;color:var(--muted,#647188)}
+.hx-summary{font-size:calc(14px * var(--text-scale,1));line-height:1.65;margin:8px 0 12px}
+.hx-unavailable,.hx-source-note{font-size:calc(12px * var(--text-scale,1));color:var(--muted,#647188)}
+.hx-tags{flex-wrap:nowrap;overflow-x:auto;max-width:100%;padding:3px 0 7px;gap:6px;scrollbar-width:thin}
+.hx-tags button.hx-chip{font-family:var(--display-font,inherit);font-size:calc(11px * var(--text-scale,1));font-weight:500;line-height:1.3;min-height:44px;flex-shrink:0;padding:5px 10px;border:1px solid #cbd3df;cursor:pointer}
+.hx-tags button[aria-pressed=true]{border-color:var(--accent,#12687d);box-shadow:inset 0 0 0 1px var(--accent,#12687d);font-weight:700}
+.hx-expand>summary,.hx-teach>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;line-height:1.5;padding-block:10px;font-size:calc(13px * var(--text-scale,1))}
+.hx-expand>summary:after,.hx-teach>summary:after{content:'Show';float:none;font-size:.9em;font-weight:500}
+.hx-expand[open]>summary:after,.hx-teach[open]>summary:after{content:'Hide'}
+.hx-teach{margin-top:8px;padding-top:0}.hx-expand{margin-top:8px;padding-top:0}
+.hx-active{display:flex;align-items:center;gap:6px;overflow-x:auto;padding:4px 0 6px;font-size:calc(11px * var(--text-scale,1));scrollbar-width:thin}
+.hx-active>span,.hx-active>button{flex-shrink:0}.hx-active>button{min-height:44px;border-radius:9px;border:1px solid var(--line,#cbd3df);background:var(--accent-soft,#e6f1f5);color:var(--ink,#182339);padding:6px 10px}
+.hx-source-links .hx-original{display:inline-flex;align-items:center;gap:4px;min-height:44px;font-size:calc(13px * var(--text-scale,1));font-weight:650}
+.hx-tags button:focus-visible,.hx-active button:focus-visible{outline:3px solid #6c55ba;outline-offset:2px}
+
+.hx-story .hx-summary a,.hx-story .hx-panel p a{display:inline;font:inherit}

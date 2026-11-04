@@ -1,0 +1,337 @@
+{
+  "generated_at": "2026-11-04T10:16:27Z",
+  "coverage": "partial",
+  "baseline_generated_at": "2026-11-04T08:53:56+08:00",
+  "baseline_item_count": 230,
+  "limitations": [
+    "Selected leading stories only; remaining headlines have no verified summary.",
+    "Sources describe dated reports, not current prices or a new exhaustive Reuters scan.",
+    "Original RSS timestamps are preserved and are not asserted to be original Reuters publication times.",
+    "Some direct Reuters pages could not be opened; their Reuters-branded syndicated article text was used and identified.",
+    "CAD quote numbers omitted because the returned source extract contained inconsistent currency representations."
+  ],
+  "items": [
+    {
+      "id": "728985e6b3efb6e76dbb",
+      "title": "Meta raises $15 billion in five-part US bond sale",
+      "published_at": "2026-11-03T22:55:43+00:00",
+      "summary": "Meta is raising $15 billion through five US-dollar bond tranches to help fund AI infrastructure. Disclosed tranches include $3.25 billion due in 2031 at a 5.85% coupon and $3.25 billion due in 2033 at 6.25%.",
+      "context": "Reuters links the borrowing to data-centre and computing expansion. The stated coupons are contractual interest rates on those tranches, not their market yields or a forecast return.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/",
+      "sources": [
+        {
+          "title": "Meta raises $15 billion in five-part US bond sale to fund AI expansion",
+          "url": "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T22:50:24Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:15:05Z",
+      "canonical_url": "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "8de9e59e187515be779e",
+      "title": "AMD forecast eases AI spending fears as data-center sales surge",
+      "published_at": "2026-11-03T21:18:00+00:00",
+      "summary": "AMD projected fourth-quarter revenue of about $17 billion, plus or minus 3%, versus analysts’ $16.23 billion estimate. Third-quarter data-centre revenue rose 97% to $8.55 billion, supporting the stronger outlook.",
+      "context": "Chief executive Lisa Su forecast revenue growth above 80% in 2027, compared with analysts’ 77%. These are forward-looking projections, not achieved sales. Reuters reported an 8% after-hours share gain, a dated observation rather than a live quote.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/amd-forecasts-quarterly-revenue-above-estimates-data-center-growth-accelerates-2026-11-03/",
+      "sources": [
+        {
+          "title": "AMD forecast eases AI spending fears as data-center sales surge",
+          "url": "https://www.reuters.com/business/amd-forecasts-quarterly-revenue-above-estimates-data-center-growth-accelerates-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T21:18:46Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:15:05Z",
+      "canonical_url": "https://www.reuters.com/business/amd-forecasts-quarterly-revenue-above-estimates-data-center-growth-accelerates-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "1823d033433d15fac269",
+      "title": "Brazil economists raise inflation, rate forecasts after Lula reelection",
+      "published_at": "2026-11-03T21:43:44+00:00",
+      "summary": "Brazil’s weekly economist survey raised the end-2027 inflation forecast to 4.76% from 4.34% and the end-2027 Selic forecast to 12.50% from 11.75%. The poll followed Lula’s October 25 reelection.",
+      "context": "The end-2026 rate forecast also rose, to 13.50% from 13.25%. These are private-sector expectations collected by the central bank, not an announced interest-rate decision.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/world/americas/brazil-economists-raise-inflation-rate-forecasts-after-lula-reelection-2026-11-03/",
+      "sources": [
+        {
+          "title": "Brazil economists raise inflation, rate forecasts after Lula reelection",
+          "url": "https://www.reuters.com/world/americas/brazil-economists-raise-inflation-rate-forecasts-after-lula-reelection-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T12:21:26Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:15:05Z",
+      "canonical_url": "https://www.reuters.com/world/americas/brazil-economists-raise-inflation-rate-forecasts-after-lula-reelection-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "65816e2612f710b5fcae",
+      "title": "Trump says US close to trade deal with Canada, Carney says work remains",
+      "published_at": "2026-11-03T23:14:05+00:00",
+      "summary": "Trump said a US–Canada trade agreement was close, while Prime Minister Mark Carney said negotiations had progressed but were unfinished. Carney said Washington had dropped some earlier demands.",
+      "context": "One withdrawn demand would have given the US final say over Canadian trade deals with other countries. The report describes negotiations, not a signed agreement or confirmed removal of existing tariffs.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/world/us/trump-says-us-is-close-making-trade-deal-with-canada-2026-11-03/",
+      "sources": [
+        {
+          "title": "Trump says US close to trade deal with Canada, Carney says work remains",
+          "url": "https://www.reuters.com/world/us/trump-says-us-is-close-making-trade-deal-with-canada-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T13:35:01Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:15:05Z",
+      "canonical_url": "https://www.reuters.com/world/us/trump-says-us-is-close-making-trade-deal-with-canada-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "7ab9b0c15764d2b87766",
+      "title": "Booking Holdings takes $1 billion hit to third-quarter results linked to FTC action",
+      "published_at": "2026-11-03T22:11:17+00:00",
+      "summary": "Booking recorded a $900 million revenue reduction and a $100 million loss accrual over an FTC matter involving Priceline and hotel-booking advertising. No settlement had been reached, and further litigation or penalties remained possible.",
+      "context": "Reuters reported quarterly revenue of $8.89 billion, down 1%, while gross bookings rose 10% and room nights 7%. The accounting charge should not be confused with a final agreed settlement payment.",
+      "summary_verified": true,
+      "summary_source_url": "https://uk.marketscreener.com/news/booking-holdings-takes-900-million-hit-to-quarterly-revenue-linked-to-ftc-action-ce785fdedc8bf025",
+      "sources": [
+        {
+          "title": "Booking Holdings takes $1 billion hit to third-quarter results linked to FTC action",
+          "url": "https://uk.marketscreener.com/news/booking-holdings-takes-900-million-hit-to-quarterly-revenue-linked-to-ftc-action-ce785fdedc8bf025",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": null,
+          "timestamp_basis": "Exact original publication/update time unavailable",
+          "retrieval_method": "Full Reuters syndicated article returned by web search; direct Reuters opening unavailable"
+        }
+      ],
+      "checked_at": "2026-11-04T10:15:05Z",
+      "canonical_url": "https://www.reuters.com/business/booking-holdings-takes-900-million-hit-quarterly-revenue-linked-ftc-action-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "6dc81c5ffd7981b4052a",
+      "title": "Super Micro forecasts quarterly revenue above estimates on strong AI server demand",
+      "published_at": "2026-11-03T22:10:51+00:00",
+      "summary": "Super Micro forecast second-quarter revenue of $19.5 billion–$21.5 billion, above analysts’ $17.14 billion estimate, citing AI-server demand. It also raised its fiscal-2027 revenue range to $72 billion–$82 billion.",
+      "context": "First-quarter revenue reached $19.95 billion and adjusted earnings were $1.81 per share, both above estimates. Reuters also noted ongoing scrutiny of export compliance; management said it was strengthening controls.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.marketscreener.com/news/super-micro-forecasts-quarterly-revenue-above-estimates-on-strong-ai-server-demand-ce785fdedd81f521",
+      "sources": [
+        {
+          "title": "Super Micro forecasts quarterly revenue above estimates on strong AI server demand",
+          "url": "https://www.marketscreener.com/news/super-micro-forecasts-quarterly-revenue-above-estimates-on-strong-ai-server-demand-ce785fdedd81f521",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": null,
+          "timestamp_basis": "Exact original publication/update time unavailable",
+          "retrieval_method": "Full Reuters syndicated article returned by web search; direct Reuters opening unavailable"
+        }
+      ],
+      "checked_at": "2026-11-04T10:15:05Z",
+      "canonical_url": "https://www.reuters.com/business/super-micro-forecasts-quarterly-revenue-above-estimates-strong-ai-server-demand-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "6c23037cb425e862adcc",
+      "title": "CVS Health to break up into two companies, WSJ reports",
+      "published_at": "2026-11-03T23:41:40+00:00",
+      "summary": "Reuters, citing the Wall Street Journal, reported plans to separate CVS’s retail pharmacy business from Aetna insurance and Caremark pharmacy-benefit management. Both companies would be publicly traded; CVS had not responded directly to Reuters.",
+      "context": "The Journal said David Joyner would run the business retaining the CVS Health name, while the drugstore business would be called CVS Pharmacy. This is a reported restructuring plan, not a completed separation.",
+      "summary_verified": true,
+      "summary_source_url": "https://new.streetinsider.com/Reuters/CVS%2BHealth%2Bto%2Bbreak%2Bup%2Binto%2Btwo%2Bcompanies%2C%2BWSJ%2Breports/27283758.html",
+      "sources": [
+        {
+          "title": "CVS will split up its pharmacy and insurance business into two companies, WSJ says",
+          "url": "https://new.streetinsider.com/Reuters/CVS%2BHealth%2Bto%2Bbreak%2Bup%2Binto%2Btwo%2Bcompanies%2C%2BWSJ%2Breports/27283758.html",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": null,
+          "timestamp_basis": "Exact original publication/update time unavailable",
+          "retrieval_method": "Opened full Reuters syndicated article; original Reuters page inaccessible"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://www.reuters.com/legal/litigation/cvs-health-explores-splitting-retail-pharmacy-insurance-businesses-ft-reports-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "eea5a05cf73f8a672c12",
+      "title": "Cboe, Citadel Securities-backed group sues US regulator over single-stock 'perps'",
+      "published_at": "2026-11-03T21:33:26+00:00",
+      "summary": "The Capital Markets Alliance, backed by Cboe and Citadel Securities, sued to block the CFTC’s authorization of single-stock perpetual futures. The regulator had said properly registered markets could begin offering them.",
+      "context": "These contracts have no expiry date and can involve high leverage. The dispute concerns regulatory authority and investor protections; the lawsuit itself is not a court ruling. The CFTC defended its approach.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.streetinsider.com/Reuters/Trading%2Bin%2Bsingle-stock%2Bperps%2Bcan%2Bbegin%2C%2BUS%2Bregulator%2Bsays/27279286.html",
+      "sources": [
+        {
+          "title": "Cboe, Citadel Securities-backed group sues US regulator over single-stock perpetual futures",
+          "url": "https://www.streetinsider.com/Reuters/Trading%2Bin%2Bsingle-stock%2Bperps%2Bcan%2Bbegin%2C%2BUS%2Bregulator%2Bsays/27279286.html",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": null,
+          "timestamp_basis": "Exact original publication/update time unavailable",
+          "retrieval_method": "Opened full Reuters syndicated article"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://www.reuters.com/legal/government/trading-single-stock-perps-can-begin-us-regulator-says-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "9da40c4ac151cc51a54d",
+      "title": "BMW cuts automotive outlook for second time as restructuring deepens",
+      "published_at": "2026-11-03T20:51:38+00:00",
+      "summary": "BMW cut its 2026 automotive EBIT-margin forecast to between −0.5% and +0.5%, from 1%–3%. It cited extra restructuring costs and faster job cuts as demand in China weakened.",
+      "context": "The company also forecast automotive deliveries falling 5%–9.9%, while keeping automotive free-cash-flow guidance above €2.5 billion. EBIT margin measures operating profitability; the revised forecast is not the final annual result.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/bmw-lowers-2026-automotive-ebit-margin-outlook-deliveries-2026-11-03/",
+      "sources": [
+        {
+          "title": "BMW cuts automotive outlook for second time as restructuring deepens",
+          "url": "https://www.reuters.com/business/bmw-lowers-2026-automotive-ebit-margin-outlook-deliveries-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T19:06:09Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://www.reuters.com/business/bmw-lowers-2026-automotive-ebit-margin-outlook-deliveries-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "436034e83223686b378f",
+      "title": "US job openings jump in September; layoffs lowest in 1-1/2 years",
+      "published_at": "2026-11-03T18:45:08+00:00",
+      "summary": "US job openings rose by 333,000 to 7.523 million in September, above the Reuters consensus of 7.100 million. August was revised to 7.190 million, while hiring increased to 5.402 million.",
+      "context": "The JOLTS report measures vacancies and worker flows, not the monthly payroll total. Reuters described a resilient but low-hiring labour market; the release does not itself announce any Federal Reserve policy change.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/us-job-openings-increase-sharply-september-2026-11-03/",
+      "sources": [
+        {
+          "title": "US job openings jump in September; layoffs lowest in 1-1/2 years",
+          "url": "https://www.reuters.com/business/us-job-openings-increase-sharply-september-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T15:22:04Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://www.reuters.com/business/us-job-openings-increase-sharply-september-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "63bc1bd157ae1634faed",
+      "title": "Canadian dollar pulls back from six-week high ahead of key jobs data",
+      "published_at": "2026-11-03T20:43:27+00:00",
+      "summary": "The Canadian dollar extended its retreat from a six-week high on November 3 as oil prices declined. Traders were awaiting domestic employment data that could affect expectations for further Bank of Canada rate increases.",
+      "context": "This is a dated market report, not a live currency quote. The source extract’s two exchange-rate representations did not reconcile, so numerical FX levels are deliberately omitted pending verification.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/canadian-dollar-pulls-back-six-week-high-ahead-key-jobs-data-2026-11-03/",
+      "sources": [
+        {
+          "title": "Canadian dollar pulls back from six-week high ahead of key jobs data",
+          "url": "https://www.reuters.com/business/canadian-dollar-pulls-back-six-week-high-ahead-key-jobs-data-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T20:43:20Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://www.reuters.com/business/canadian-dollar-pulls-back-six-week-high-ahead-key-jobs-data-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "ac69b99addb04e582bf8",
+      "title": "As Americans vote, Trump says US will stop $4 billion in aid to Israel",
+      "published_at": "2026-11-03T23:11:02+00:00",
+      "summary": "Trump said he had agreed with Netanyahu to end about $4 billion in annual US funding to Israel after 2026 while continuing weapons sales. Reuters had not received responses from the White House or Netanyahu’s office.",
+      "context": "The report attributes the agreement to Trump’s statement. It does not establish that aid payments have already stopped or that arms sales would end.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/world/middle-east/trump-says-us-will-stop-paying-israel-after-year-end-2026-11-03/",
+      "sources": [
+        {
+          "title": "As Americans vote, Trump says US will stop $4 billion in aid to Israel",
+          "url": "https://www.reuters.com/world/middle-east/trump-says-us-will-stop-paying-israel-after-year-end-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": null,
+          "timestamp_basis": "Exact original publication/update time unavailable",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://www.reuters.com/world/middle-east/trump-says-us-will-stop-paying-israel-after-year-end-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "b38f86e196bc951c31c0",
+      "title": "Russia bombards Ukraine power grid before Abu Dhabi talks; Merz urges Moscow to engage",
+      "published_at": "2026-11-03T22:09:26+00:00",
+      "summary": "Russian missile and drone attacks damaged Ukraine’s energy infrastructure and caused widespread outages on November 3. The attacks came ahead of US-brokered talks scheduled for November 10–11 in Abu Dhabi.",
+      "context": "German Chancellor Friedrich Merz urged Russia to engage in the talks. The scheduled meeting is a diplomatic next step, not evidence that a ceasefire or peace agreement has been reached.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/world/europe/russia-bombards-ukraine-power-grid-before-abu-dhabi-talks-merz-urges-moscow-2026-11-03/",
+      "sources": [
+        {
+          "title": "Russia bombards Ukraine power grid before Abu Dhabi talks; Merz urges Moscow to engage",
+          "url": "https://www.reuters.com/world/europe/russia-bombards-ukraine-power-grid-before-abu-dhabi-talks-merz-urges-moscow-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": null,
+          "timestamp_basis": "Exact original publication/update time unavailable",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://www.reuters.com/world/europe/russia-bombards-ukraine-power-grid-before-abu-dhabi-talks-merz-urges-moscow-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "ec6e3defebd890d53652",
+      "title": "Investors ready for possible shake-up in Congress as US awaits election results",
+      "published_at": "2026-11-03T22:40:05+00:00",
+      "summary": "Ahead of the November 3 results, investors were assessing how a change in congressional control could affect AI investment, government spending and regulation. Reuters described heightened concern about market swings after weakness in AI shares.",
+      "context": "This is a pre-result assessment. Expectations about Democratic gains and possible regulatory scrutiny were scenarios discussed by strategists, not verified election outcomes or guaranteed market reactions.",
+      "summary_verified": true,
+      "summary_source_url": "https://ca.marketscreener.com/news/investors-ready-for-possible-shake-up-in-congress-as-us-awaits-election-results-ce785fdedc81f12d",
+      "sources": [
+        {
+          "title": "Investors ready for possible shake-up in Congress as US awaits election results",
+          "url": "https://ca.marketscreener.com/news/investors-ready-for-possible-shake-up-in-congress-as-us-awaits-election-results-ce785fdedc81f12d",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": null,
+          "timestamp_basis": "Exact original publication/update time unavailable",
+          "retrieval_method": "Reuters syndicated article excerpts returned by web search; direct page timed out"
+        }
+      ],
+      "checked_at": "2026-11-04T10:16:27Z",
+      "canonical_url": "https://ca.marketscreener.com/news/investors-ready-for-possible-shake-up-in-congress-as-us-awaits-election-results-ce785fdedc81f12d",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    }
+  ]
+}

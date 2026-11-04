@@ -3,7 +3,7 @@
 'use strict';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const url=s=>{try{const u=new URL(s);return u.protocol==='https:'&&!u.username&&!u.password?esc(u.href):'';}catch{return '';}};
-const groups={country:'Country / region',bank:'Central bank',sector:'Sector',topic:'Topic / subtopic',person:'People / administration',ticker:'Share ticker'};
+const groups={category:'Saved category',country:'Country / region',bank:'Central bank',sector:'Sector',topic:'Topic / subtopic',person:'People / administration',ticker:'Share ticker'};
 const rules=[
  ['country','US',/\b(?:US|U\.S|United States|American)\b/],
  ['country','Singapore',/\bSingapore(?:an)?\b/i],['country','China',/\bChina|Chinese\b/i],['country','Japan',/\bJapan(?:ese)?\b/i],['country','UK',/\bUK|U\.K|Britain|British|United Kingdom\b/i],['country','Euro area',/\bEurozone|euro area\b/i],['country','Switzerland',/\bSwitzerland|Swiss\b/i],['country','Taiwan',/\bTaiwan(?:ese)?\b/i],['country','India',/\bIndia(?:n)?\b/i],['country','South Korea',/\bSouth Korea(?:n)?\b/i],
@@ -18,6 +18,7 @@ function tags(item){
  const title=String(item.title||''), result=rules.filter(r=>r[2].test(title)).map(r=>({group:r[0],label:r[1],basis:'Headline keyword'}));
  for(const t of Array.isArray(item.tickers)?item.tickers:[]){const r=root.MorningstarLinks?.resolve(t);if(r&&!result.some(x=>x.group==='ticker'&&x.label===r.ticker))result.push({group:'ticker',label:r.ticker,basis:'Saved ticker metadata'});}
  for(const m of root.MorningstarLinks?.matches(title)||[]){if(!result.some(x=>x.group==='ticker'&&x.label===m.record.ticker))result.push({group:'ticker',label:m.record.ticker,basis:'Explicit headline ticker'});}
+ if(item.category)result.unshift({group:'category',label:String(item.category),basis:'Saved category metadata'});
  return result;
 }
 function filtered(items){return items.filter(x=>Object.entries(filters).every(([g,v])=>!v||tags(x).some(t=>t.group===g&&t.label===v)));}
@@ -32,23 +33,38 @@ const lessons={
  general:{title:'How to read this headline',text:'A headline is a starting point, not the full evidence. Separate what happened from expectations, and check the date, comparison period and original source.',example:'Reading example: “forecasts higher revenue” describes an expectation. It does not mean that the higher revenue has already been earned.',sources:[]}
 };
 function lesson(item){const ts=tags(item);return ts.some(t=>t.group==='bank')?lessons.bank:ts.some(t=>['Government bonds','Corporate credit','Defaults / stress'].includes(t.label))?lessons.bonds:lessons.general;}
-function card(item,ctx){
- const ts=tags(item), l=lesson(item), source=url(item.url), summary=typeof item.summary==='string'&&item.summary_verified===true&&url(item.summary_source_url)?item.summary:null;
- return '<article class="news-item hx-story"><div class="hx-tags"><span class="hx-chip hx-category">Saved category: '+esc(item.category||'Markets')+'</span>'+ts.map(t=>'<span class="hx-chip hx-'+t.group+'" title="'+esc(t.basis)+'">'+esc(groups[t.group])+': '+esc(t.label)+'</span>').join('')+'</div>'+
- '<a class="hx-title" href="'+(source||'#')+'" target="_blank" rel="noopener noreferrer">'+highlight(String(item.title||'Untitled record'))+'</a><small>'+esc(ctx.time(item))+' · '+esc(item.publisher||'Reuters')+'</small>'+
- '<details class="hx-expand"><summary>Story details &amp; Teach Me</summary><div class="hx-panel"><h4>Plain-English story summary</h4>'+
- (summary?'<p>'+esc(summary)+'</p><a href="'+url(item.summary_source_url)+'" target="_blank" rel="noopener noreferrer">Saved summary source ↗</a>':'<p class="hx-missing">No verified article summary is stored for this headline. Open the original source for details. The headline has not been expanded into invented facts.</p>')+
- '<p><strong>Source coverage:</strong> '+esc(item.verification||'Stored headline metadata; article body not reproduced or newly verified.')+'</p><p><strong>Tags:</strong> navigation aids from explicit headline terms or saved ticker metadata, not a complete article classification or market conclusion.</p>'+
- '<div class="links">'+(item.tickers||[]).map(t=>ctx.stockLink(t)).join('')+(source?'<a href="'+source+'" target="_blank" rel="noopener noreferrer">Open original article ↗</a>':'<span>Source link unavailable</span>')+'</div>'+
- '<details class="hx-teach"><summary>Teach Me: '+esc(l.title)+'</summary><p><strong>General education, not a summary of this article.</strong></p><p>'+esc(l.text)+'</p><p>'+esc(l.example)+'</p>'+l.sources.map(s=>'<a href="'+url(s[1])+'" target="_blank" rel="noopener noreferrer">'+esc(s[0])+' ↗</a>').join(' · ')+'</details></div></details></article>';
+function verifiedContext(item,ctx={}){
+ const extra=Array.isArray(ctx.contextData?.items)?ctx.contextData.items.find(x=>x.id===item.id&&x.title===item.title&&x.published_at===item.published_at):null;
+ const candidate=extra||item;
+ return candidate.summary_verified===true&&typeof candidate.summary==='string'&&candidate.summary.trim()&&url(candidate.summary_source_url)?candidate:null;
 }
+function tagButton(t){const selected=filters[t.group]===t.label;return '<button type="button" class="hx-chip hx-'+t.group+'" data-hx-tag="'+t.group+'" data-hx-value="'+esc(t.label)+'" aria-pressed="'+selected+'" aria-label="'+esc((selected?'Remove filter: ':'Filter by ')+groups[t.group]+': '+t.label)+'" title="'+esc(groups[t.group]+': '+t.label+' · '+t.basis)+'">'+esc(t.label)+'</button>';}
+function activeControls(){const active=Object.entries(filters).filter(([,v])=>v);if(!active.length)return '';return '<div class="hx-active" aria-label="Selected headline filters"><span>Filtered by</span>'+active.map(([g,v])=>'<button type="button" data-hx-clear="'+g+'" aria-label="'+esc('Remove '+groups[g]+': '+v)+'">'+esc(groups[g]+': '+v)+' <span aria-hidden="true">×</span></button>').join('')+'<button type="button" data-hx-reset>Clear tag filters</button></div>';}
+function card(item,ctx){
+ const ts=tags(item),saved=verifiedContext(item,ctx),source=url(saved?.canonical_url)||url(item.url)||url(saved?.summary_source_url),context=saved&&typeof saved.context==='string'&&saved.context.trim()!==saved.summary.trim()?saved.context.trim():'';
+ const sources=saved?(Array.isArray(saved.sources)?saved.sources:[]).filter(x=>url(x.url)):[];
+ const original=source?'<a class="hx-original" href="'+source+'" target="_blank" rel="noopener noreferrer">Read original article <span aria-hidden="true">↗</span><span class="sr-only"> (external, new tab)</span></a>':'<span>Original article link unavailable</span>';
+ return '<article class="news-item hx-story"><h3 class="hx-headline"><span class="hx-title">'+highlight(String(item.title||'Untitled record'))+'</span></h3><small class="hx-byline">'+esc(ctx.time(item))+' · '+esc(item.publisher||'Reuters')+'</small>'+
+ (saved?'<p class="hx-summary">'+esc(saved.summary)+'</p>':'<p class="hx-unavailable">Summary not yet available for this saved headline. Read the original report below.</p>')+
+ '<div class="hx-tags" aria-label="Filter by this story’s tags">'+ts.map(tagButton).join('')+'</div>'+
+ (context?'<details class="hx-expand"><summary>Read summary &amp; context</summary><div class="hx-panel"><p>'+esc(context)+'</p><p class="hx-source-note">Source-checked summary'+(saved.checked_at?' · checked '+esc(saved.checked_at.slice(0,10)):'')+'. Dated reporting, not live market data.</p>'+sources.map(x=>'<p class="hx-source-note"><a href="'+url(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||'Summary source')+' ↗</a></p>').join('')+'</div></details>':'')+
+ '<div class="links hx-source-links">'+(item.tickers||[]).map(t=>ctx.stockLink(t)).join('')+original+'</div></article>';
+}
+
 function rows(items,limit,ctx){return items.slice(0,limit).map(x=>card(x,ctx)).join('')||'<p class="empty">No matching stored headlines. This does not mean no news occurred.</p>';}
+function education(){return '<details class="hx-teach"><summary>News-reading guide &amp; topic background</summary><p><strong>General education, not a summary of any article.</strong></p>'+Object.values(lessons).map(l=>'<section><h4>'+esc(l.title)+'</h4><p>'+esc(l.text)+'</p><p>'+esc(l.example)+'</p>'+l.sources.map(x=>'<a href="'+url(x[1])+'" target="_blank" rel="noopener noreferrer">'+esc(x[0])+' ↗</a>').join(' · ')+'</section>').join('')+'</details>';}
 function controls(items){
  const all=items.flatMap(tags);
  return '<section class="hx-controls" aria-label="Expanded headline filters"><p>Filter across groups. Labels and text accompany every color. Counts refer to saved headlines, not live wire coverage.</p><div class="hx-filter-grid">'+Object.entries(groups).map(([g,label])=>{
  const values=[...new Set(all.filter(t=>t.group===g).map(t=>t.label))].sort();if(filters[g]&&!values.includes(filters[g]))values.push(filters[g]);
- return '<label>'+label+'<select data-hx-filter="'+g+'"><option value="">All</option>'+values.map(v=>'<option value="'+esc(v)+'"'+(filters[g]===v?' selected':'')+'>'+esc(v)+' ('+items.filter(x=>tags(x).some(t=>t.group===g&&t.label===v)).length+')</option>').join('')+'</select></label>';}).join('')+'</div><button class="button ghost" type="button" data-hx-reset>Reset expanded filters</button><details class="hx-map"><summary>Full category and subtag map</summary><p>Only explicitly matched tags appear on a story. No country is inferred from an exchange or company name. Missing tags mean not identified, not absent from the article.</p><div class="hx-map-grid">'+Object.entries(groups).map(([g,label])=>'<div><strong>'+label+'</strong><p>'+esc(g==='ticker'?'Exchange-aware Morningstar directory; unknown or ambiguous tickers stay unlinked.':rules.filter(r=>r[0]===g).map(r=>r[1]).join(' · '))+'</p></div>').join('')+'</div></details></section>';
+ return '<label>'+label+'<select data-hx-filter="'+g+'"><option value="">All</option>'+values.map(v=>'<option value="'+esc(v)+'"'+(filters[g]===v?' selected':'')+'>'+esc(v)+' ('+items.filter(x=>tags(x).some(t=>t.group===g&&t.label===v)).length+')</option>').join('')+'</select></label>';}).join('')+'</div><button class="button ghost" type="button" data-hx-reset>Reset expanded filters</button><details class="hx-map"><summary>Full category and subtag map</summary><p>Only explicitly matched tags appear on a story. No country is inferred from an exchange or company name. Missing tags mean not identified, not absent from the article.</p><div class="hx-map-grid">'+Object.entries(groups).map(([g,label])=>'<div><strong>'+label+'</strong><p>'+esc(g==='ticker'?'Exchange-aware Morningstar directory; unknown or ambiguous tickers stay unlinked.':rules.filter(r=>r[0]===g).map(r=>r[1]).join(' · '))+'</p></div>').join('')+'</div></details>'+education()+'</section>';
 }
-function connect(callback){onChange=callback;if(root.document){document.addEventListener('change',e=>{const g=e.target.dataset.hxFilter;if(!groups[g])return;filters[g]=e.target.value;onChange();const el=document.querySelector('[data-hx-filter="'+g+'"]');el?.focus();});document.addEventListener('click',e=>{if(e.target.closest('[data-hx-reset]')){filters={};onChange();document.querySelector('[data-hx-reset]')?.focus();}});}}
-const api={tags,filtered,highlight,card,rows,controls,connect,lessons,setFilter:(g,v)=>{if(groups[g])filters[g]=v;}};root.HeadlineExplorer=api;if(typeof module!=='undefined'&&module.exports)module.exports=api;
+function connect(callback){onChange=callback;if(root.document){document.addEventListener('change',e=>{const g=e.target.dataset.hxFilter;if(!groups[g])return;filters[g]=e.target.value;onChange();document.querySelector('[data-hx-filter="'+g+'"]')?.focus({preventScroll:true});});document.addEventListener('click',e=>{
+ const tag=e.target.closest('[data-hx-tag]'),clear=e.target.closest('[data-hx-clear]'),reset=e.target.closest('[data-hx-reset]');
+ if(tag&&groups[tag.dataset.hxTag]){const g=tag.dataset.hxTag,v=tag.dataset.hxValue;filters[g]=filters[g]===v?'':v;onChange();(document.querySelector('[data-hx-clear="'+g+'"]')||document.querySelector('[data-news-filter].active')||document.querySelector('[data-hx-filter="'+g+'"]'))?.focus({preventScroll:true});document.querySelector('#headline-page-status')?.scrollIntoView({block:'start'});}
+ else if(clear&&groups[clear.dataset.hxClear]){delete filters[clear.dataset.hxClear];onChange();(document.querySelector('[data-hx-clear]')||document.querySelector('[data-news-filter].active'))?.focus({preventScroll:true});}
+ else if(reset){filters={};onChange();(document.querySelector('[data-news-filter].active')||document.querySelector('[data-hx-reset]'))?.focus({preventScroll:true});}
+ });}}
+
+const api={tags,filtered,highlight,card,rows,controls,activeControls,verifiedContext,connect,lessons,setFilter:(g,v)=>{if(groups[g])filters[g]=v;}};root.HeadlineExplorer=api;if(typeof module!=='undefined'&&module.exports)module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

@@ -39,3 +39,21 @@ html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=
 #view .v4-history-grid.v4-history-expanded{grid-template-columns:minmax(0,1fr)}
 .event-marker-link rect{stroke:var(--line);stroke-width:1}.event-marker-link:hover rect,.event-marker-link:focus rect{stroke:var(--ink);stroke-width:2}.event-marker-label{font-weight:600}
 @media(max-width:760px){.history-chart-heading .links{width:100%}.history-chart-heading .button{flex:1}.history-comparison .stats-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.history-comparison .stats-strip strong{font-size:calc(18px * var(--text-scale))}}
+
+/* News filter tabs stay inside the existing sticky header. */
+.topbar.has-headline-toolbar{flex-wrap:wrap;row-gap:7px}
+.headline-toolbar{flex:1 0 100%;width:100%;min-width:0}.headline-toolbar[hidden]{display:none}
+.headline-toolbar .filters{margin:0;padding:0 0 3px;flex-wrap:nowrap;overflow-x:auto;gap:8px;scrollbar-width:thin}
+.headline-toolbar .filters button{flex-shrink:0;white-space:nowrap;min-height:44px;padding:7px 13px;font-size:calc(12px * var(--text-scale,1))}
+#headline-page-status{scroll-margin-top:calc(var(--sticky-topbar-height,160px) + 12px)}
+.briefing-lead{margin-top:0;margin-bottom:24px}
+.feed-status{margin:0 0 18px;padding:0 12px;border:1px solid #d4e7e0;border-radius:12px;background:#e9f4f1;color:#386963;overflow-wrap:anywhere}
+.feed-status>summary{padding-block:10px;font-size:calc(12px * var(--text-scale));line-height:1.5;min-height:44px}
+.feed-status .health{margin:0 0 12px;padding:0;border:0;background:transparent;color:inherit}
+.feed-status-warn{background:#fff5e5;color:#8a6327;border-color:#f1dfba}
+.headline-filters{border:1px solid var(--line);border-radius:12px;padding:0 14px;margin:0 0 16px;background:white}
+.headline-filters>summary{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-block:10px}
+.headline-filters>summary span{font-size:.9em;font-weight:400;color:var(--muted);margin-left:auto}
+.headline-filters>summary:after{float:none}.headline-filters .hx-controls{margin-top:8px}
+.headline-results-card>#headline-page-status{margin-top:0;font-size:calc(13px * var(--text-scale))}
+@media(max-width:760px){.briefing-intro .page-head,.headlines-intro .page-head{margin-bottom:12px}.briefing-intro .page-head p,.headlines-intro .page-head p{margin-bottom:8px}.briefing-intro .feed-status,.headlines-intro .feed-status{margin-bottom:14px}.headlines-intro .page-head h1{font-size:calc(24px * var(--text-scale))}.headline-filters>summary{font-size:calc(13px * var(--text-scale))}.briefing-lead+.welcome-tools{margin-top:24px}.topbar.has-headline-toolbar{padding-bottom:7px}}

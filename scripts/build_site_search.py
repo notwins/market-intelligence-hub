@@ -27,24 +27,47 @@ def watchlist_report_target(root,edition,ticker):
   return expected+'#'+quote(ticker,safe='')
  except (OSError,ValueError,TypeError):return None
 
+LOCATIONS={
+ 'Headline':('Reuters coverage · daily headlines and saved archives','headlines'),
+ 'Hourly edition':('Hourly news · scan history','hourly'),
+ 'Hourly story':('Hourly news · saved story version','hourly'),
+ 'Report':('Scheduled reports and archive','reports'),
+ 'Research edition':('Scheduled reports · imported edition history','reports'),
+ 'Research library':('Research library','research'),
+ 'Earnings card':('US earnings','earnings'),
+ 'Watchlist research':('Watchlist · dated full report','watchlist'),
+ 'Public diary':('Calls and full reports','calls'),
+ 'Stock directory':('Research directory · equities','directory'),
+ 'Bond directory':('Research directory · bonds','directory'),
+ 'Security master':('Security master','master'),
+ 'UST reference':('UST selection desk','ust'),
+ 'Historical series':('Yields and FX history','history'),
+ 'External research PDF':('Research library · external PDF reference','research')
+}
 def build():
  rows=[];seen=set()
- def add(kind,title,text,href,date=None,source=None,status='Dated saved content'):
+ def add(kind,title,text,href,date=None,source=None,status='Dated saved content',tags=None,location=None):
   key=(kind,title,href,str(date),str(text))
   if key in seen:return
-  seen.add(key);rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status))
+  seen.add(key)
+  if location is None:
+   label,section=LOCATIONS.get(kind,(title,None))
+   exact=kind in ['Page','Learning chapter','Tag catalogue','Section'] or (kind=='Watchlist research' and href is not None)
+   location={'label':('V4 → '+label if section else label),'href':href if exact else ('v4.html#'+section if section else href),'exact':exact}
+  clean_tags=sorted(set(str(t).strip() for t in (tags or []) if t is not None and str(t).strip()))
+  rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status,tags=clean_tags,location=location))
  sections={'overview':'Daily briefing','watchlist':'12-name watchlist','calls':'Calls and full reports','headlines':'Reuters coverage','hourly':'Hourly news','earnings':'US earnings','credit':'Bonds and credit','policy':'Central Banks and US Administration','reports':'Scheduled reports and archive','directory':'Research directory','research':'Research library','master':'Security master','history':'Yields FX history historical event charts','ust':'UST selection desk','feeds':'Data and uploads','tools':'Tools and simulators'}
  for key,title in sections.items():add('Section',title,title,'v4.html#'+key,status='Navigation')
  add('Section','Tag and event tree map','Searchable colored country sector policy ticker and historical event groupings','tag-map.html',status='Recommended taxonomy')
  for file in [ROOT/'data/news.json',*sorted((ROOT/'data/archive').glob('*.json'))]:
   d=json.loads(file.read_text())
-  for x in d.get('items',[]):add('Headline',x.get('title','Untitled'),strings([x.get('category'),x.get('tickers')]),x.get('url') or 'v4.html#headlines',x.get('published_at'),x.get('url'),'Saved Reuters-attributed headline metadata; article body not indexed')
+  for x in d.get('items',[]):add('Headline',x.get('title','Untitled'),strings([x.get('category'),x.get('tickers')]),x.get('url') or 'v4.html#headlines',x.get('published_at'),x.get('url'),'Saved Reuters-attributed headline metadata; article body not indexed',tags=[x.get('category'),*(x.get('tickers') or [])],location={'label':'V4 → Reuters coverage' if file.name=='news.json' else 'V4 → Scheduled reports → Daily archive → '+file.stem,'href':'v4.html#headlines' if file.name=='news.json' else 'v4.html#reports','exact':False})
  for file in [ROOT/'data/hourly-news.json',*sorted((ROOT/'data/hourly-archive').glob('*.json'))]:
   d=json.loads(file.read_text())
   for edition in d.get('editions',[d] if 'stories' in d else []):
    add('Hourly edition',edition.get('summary') or edition.get('id','Hourly edition'),strings(edition.get('limitations',[])),'v4.html#hourly',edition.get('cutoff'),edition.get('original_url'),edition.get('coverage','Unspecified coverage'))
-   for x in edition.get('stories',[]):add('Hourly story',x.get('title',x.get('headline','Hourly story')),strings(x),'v4.html#hourly',x.get('published_at') or edition.get('cutoff'),x.get('url'),x.get('status','Saved report'))
- for x in read('data/reports.json').get('reports',[]):add('Report',x.get('title',x['id']),strings(x),'v4.html#reports',x.get('date'),None,x.get('status','Saved edition'))
+   for x in edition.get('stories',[]):add('Hourly story',x.get('title',x.get('headline','Hourly story')),strings(x),'v4.html#hourly',x.get('published_at') or edition.get('cutoff'),x.get('url') or next(iter(x.get('source_urls',[])),None),x.get('status','Saved report'),tags=[x.get('topic'),*(x.get('tickers') or [])])
+ for x in read('data/reports.json').get('reports',[]):add('Report',x.get('title',x['id']),strings(x),'v1.html?view=archive',x.get('date'),None,x.get('status','Saved edition'),location={'label':'V1 → Research archive → '+str(x.get('date','Unknown edition')),'href':'v1.html?view=archive','exact':False})
  # Parse the public JSON payload, never index executable JavaScript text.
  legacy=json.loads((ROOT/'v2-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
  for x in legacy.get('reports',[]):add('Research edition',x.get('title',x.get('id','Research edition')),strings(x),'v4.html#reports',x.get('date'),None,'Original imported edition; not refreshed by search')
@@ -55,13 +78,13 @@ def build():
   d=json.loads(file.read_text())
   for x in d.get('rows',[]):
    target=watchlist_report_target(ROOT,d,x.get('ticker',''))
-   add('Watchlist research',x.get('ticker','')+' · '+x.get('name',''),strings([x.get('research'),x.get('gaps')]),target,d.get('as_of'),(x.get('sources') or [{}])[0].get('url'),'Watch only; dated research, not an executed trade'+('' if target else '; matching dated report unavailable — no redirect to latest'))
+   add('Watchlist research',x.get('ticker','')+' · '+x.get('name',''),strings([x.get('research'),x.get('gaps')]),target,d.get('as_of'),(x.get('sources') or [{}])[0].get('url'),'Watch only; dated research, not an executed trade'+('' if target else '; matching dated report unavailable — no redirect to latest'),tags=[x.get('ticker')],location={'label':'V4 → Watchlist → '+str(d.get('as_of','Unknown edition'))+' → '+x.get('ticker',''),'href':target,'exact':bool(target)})
  for x in read('data/watchlist/calls.json').get('calls',[]):add('Public diary',x.get('title',x.get('ticker','Public entry')),strings(x),'v4.html#calls',x.get('date'),None,'Public saved entry')
  d=read('data/securities.json')
- for x in d.get('stocks',[]):add('Stock directory',x['ticker']+' · '+x['name'],strings([x.get('sector'),x.get('exchange')]),x['url'],None,x['url'],'User-supplied reference link; not a current quote')
- for x in d.get('bonds',[]):add('Bond directory',x['name'],strings([x.get('id'),x.get('issuer'),x.get('currency'),x.get('kind'),x.get('maturity')]),x['url'],None,x['url'],'User-supplied reference; terms not independently reverified')
+ for x in d.get('stocks',[]):add('Stock directory',x['ticker']+' · '+x['name'],strings([x.get('sector'),x.get('exchange')]),x['url'],None,x['url'],'User-supplied reference link; not a current quote',tags=[x.get('ticker'),x.get('sector')])
+ for x in d.get('bonds',[]):add('Bond directory',x['name'],strings([x.get('id'),x.get('issuer'),x.get('currency'),x.get('kind'),x.get('maturity')]),x['url'],None,x['url'],'User-supplied reference; terms not independently reverified',tags=[x.get('currency'),x.get('kind')])
  d=read('data/master-v3.json')
- for x in d.get('records',[]):add('Security master',x.get('name',x.get('id','Security')),strings([x.get('isin'),x.get('securityNo'),x.get('currency'),x.get('category'),x.get('vendorType')]),'v4.html#master',None,None,'Imported reference; no live prices or AR verification implied')
+ for x in d.get('records',[]):add('Security master',x.get('name',x.get('id','Security')),strings([x.get('isin'),x.get('securityNo'),x.get('currency'),x.get('category'),x.get('vendorType')]),'v4.html#master',None,None,'Imported reference; no live prices or AR verification implied',tags=[x.get('currency'),x.get('category')])
  d=read('data/ust-v3.json')
  for x in d.get('rows',[]):add('UST reference',x['name'],strings([x.get('currency'),x.get('maturity'),x.get('instrumentType')]),'v4.html#ust',d.get('quote_date'),None,'Quote date not established; candidate identifiers excluded')
  for x in read('data/history-v3.json').get('series',[]):add('Historical series',x['id'],strings([x.get('family'),x.get('unit'),x.get('frequency')]),'v4.html#history',(x.get('points') or [[None]])[-1][0],None,'Historical saved series; gaps retained')
@@ -94,7 +117,7 @@ def build():
  bos=json.loads(re.search(r'const sources=(\[.*?\]);',source_text,re.S)[1])
  for item in bos:add('External research PDF',item['title'],item['scope'],item['url'],item['date'],item['url'],'Dated link only; indicative previous-business-day prices, not live or automatic')
  counts={k:sum(x['kind']==k for x in rows) for k in sorted({x['kind'] for x in rows})}
- payload={'schema_version':1,'built_at':datetime.now(timezone.utc).isoformat(),'counts':counts,'limits':'Public saved content only. No external article bodies, private chats, linked PDFs, tool outputs or local-browser imports. All saved daily headlines and archived snapshots are included, not just the first 80 displayed. Directory dates can be unknown. Search does not refresh financial data. Some JavaScript-only views are represented by section entries rather than every displayed sentence.','entries':rows}
+ payload={'schema_version':2,'built_at':datetime.now(timezone.utc).isoformat(),'counts':counts,'limits':'Public saved content only. No external article bodies, private chats, linked PDFs, tool outputs or local-browser imports. All saved daily headlines and archived snapshots are included, not just the first 80 displayed. Directory dates can be unknown. Search does not refresh financial data. Some JavaScript-only views are represented by section entries rather than every displayed sentence.','entries':rows}
  (ROOT/'data/site-search.json').write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':')))
  return payload
 if __name__=='__main__':

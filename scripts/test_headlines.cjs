@@ -7,10 +7,10 @@ assert(!h.tags({title:'FedEx delivers masks to Chinatown'}).some(t=>['Fed','MAS'
 assert(!h.tags({title:'Apple expands in new market'}).some(t=>t.group==='country'||t.group==='ticker'));
 h.setFilter('country','US');assert.equal(h.filtered([a,{title:'Japan inflation'}]).length,1);h.setFilter('country','');
 assert(h.highlight('<img src=x> US Trump FED MAS').includes('&lt;img'));assert(!h.highlight('<script>').includes('<script>'));
-let html=h.card(a,ctx);assert(html.includes('No verified article summary'));assert(html.includes('General education, not a summary'));assert(html.includes('<details'));assert(html.includes('rel="noopener noreferrer"'));
+let html=h.card(a,ctx);assert(html.includes('Summary not yet available'));assert(!html.includes('General education'));assert(!html.includes('<details'));assert(html.indexOf('hx-headline')<html.indexOf('hx-tags'));assert(html.includes('Read original article'));assert(html.includes('rel="noopener noreferrer"'));
 html=h.card({...a,summary:'Unverified claims'},ctx);assert(!html.includes('Unverified claims'));
 html=h.card({...a,summary:'<unsafe>',summary_verified:true,summary_source_url:a.url},ctx);assert(html.includes('&lt;unsafe&gt;'));assert(!html.includes('<unsafe>'));
 html=h.card({...a,url:'javascript:alert(1)',title:'<svg onload=alert(1)>',summary:'x',summary_verified:true,summary_source_url:'javascript:alert(1)'},ctx);assert(!html.includes('href="javascript:'));assert(!html.includes('<svg'));
-assert(h.controls([a]).includes('Full category and subtag map'));assert(h.controls([a]).includes('data-hx-reset'));assert(h.controls([a]).includes('Share ticker'));
+assert(h.controls([a]).includes('Full category and subtag map'));assert(h.controls([a]).includes('News-reading guide'));assert(h.controls([a]).includes('data-hx-reset'));assert(h.controls([a]).includes('Share ticker'));
 const page=fs.readFileSync('site/v4.html','utf8');assert(page.includes('HeadlineExplorer.controls(S.news.items)'));assert(page.includes('HeadlineExplorer.filtered(S.news.items)'));assert(page.includes('HeadlineExplorer.connect(()=>{S.newsPage=0;render();})'));
 console.log('PASS headline facets, exact-word ambiguity, multi-filter, HTML escaping, missing/verified summaries, source safety, education separation, accessible details and V4 integration');

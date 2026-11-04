@@ -40,7 +40,12 @@ jobs:
           node scripts/test_fed_history_ui.cjs
           node scripts/test_yield_comparisons.cjs
           node scripts/test_v4.cjs
+          node scripts/test_policy_report_visuals.cjs
+          node scripts/test_news_reading.cjs
           node scripts/test_site_search.cjs
+          node scripts/test_boolean_search.cjs
+          node scripts/test_search_interactions.cjs
+          node scripts/test_research_context.cjs
           node scripts/test_watchlist.cjs
       - name: Refresh Reuters headline metadata
         id: update
@@ -67,9 +72,14 @@ jobs:
           node scripts/test_fed_history_ui.cjs
           node scripts/test_yield_comparisons.cjs
           node scripts/test_v4.cjs
+          node scripts/test_policy_report_visuals.cjs
+          node scripts/test_news_reading.cjs
           node scripts/test_watchlist.cjs
           python3 scripts/build_site_search.py
           node scripts/test_site_search.cjs
+          node scripts/test_boolean_search.cjs
+          node scripts/test_search_interactions.cjs
+          node scripts/test_research_context.cjs
       - name: Preserve conflicting source-data patch
         if: failure() && hashFiles('pending-publisher.patch') != ''
         uses: actions/upload-artifact@v4

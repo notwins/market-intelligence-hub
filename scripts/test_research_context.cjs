@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const html=fs.readFileSync('site/v4.html','utf8'),B=require('../site/bos-resources.js');
+const source=html.slice(html.indexOf('function paperCard(x)'),html.indexOf('function reportsView()'));
+const escaped=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ctx={esc:escaped,tag:x=>'<span>'+escaped(x)+'</span>',link:(u,t)=>'<a href="'+escaped(u)+'" target="_blank" rel="noopener noreferrer">'+escaped(t)+'</a>'};vm.createContext(ctx);vm.runInContext(source+';globalThis.render=paperCard;',ctx);
+const data=JSON.parse(fs.readFileSync('site/v2-data.js','utf8').split('=').slice(1).join('=').trim().replace(/;$/,''));
+assert.equal(data.research.length,9);
+for(const r of data.research){const card=ctx.render(r);assert(card.includes('<summary>More info'));assert(card.includes(escaped(r.summary)));assert(card.includes(escaped(r.implication)));assert(card.includes(escaped(r.publisher)));assert(card.includes(escaped(r.date)));assert(card.includes(escaped(r.url)));assert(card.indexOf('Open original report')>card.indexOf('<details'));assert(card.includes('External'));assert(card.includes('saved summary, not the full report'));}
+const malicious=ctx.render({title:'<script>x</script>',summary:'<img src=x>. Next sentence.',implication:'<svg>',publisher:'<b>',date:'unknown',type:'fixture',url:'https://example.com'});assert(!malicious.includes('<script>'));assert(!malicious.includes('<img'));
+const cards=B.cards();assert.equal((cards.match(/<summary>More info/g)||[]).length,3);assert.equal((cards.match(/Open original PDF · External/g)||[]).length,3);assert(cards.includes('no currency field'));assert(cards.includes('not live or executable'));assert(cards.includes('does not reproduce or update those ratings'));
+console.log('PASS research More info: all 9 saved summaries/analyses retained, native collapsible context before original links, accurate source/edition limits, escaped text, and 3 explicitly external BOS/OCBC PDFs');
