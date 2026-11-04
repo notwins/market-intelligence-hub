@@ -1,0 +1,16 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+const Model=require('../site/research/cpf-life-after-55-2026-11-04/model.js');const handlers={};
+const inputValues={capital:100000,entryAge:60,startAge:65,endAge:85,raRate:4,payout:650,growth:0,inflation:2,accumulation:4,returnRate:4};
+const els=Object.fromEntries(Object.entries(inputValues).map(([name,value])=>[name,{name,value:String(value)}]));
+const nodes={};for(const id of ['controls','reset','csv','error','results','income-chart','estate-chart','horizons','xirr-chart','sequence-chart','sequence-caption'])nodes[id]={innerHTML:'',textContent:'',addEventListener:(event,fn)=>handlers[id+':'+event]=fn};
+nodes.controls.elements=Object.values(els);nodes.controls.reset=()=>{for(const[k,v]of Object.entries(inputValues))els[k].value=String(v)};
+const context={window:{CPFLifeModel:Model},document:{getElementById:id=>nodes[id],createElement:()=>({click:()=>{}})},Intl,Number,Math,Blob,URL,setTimeout};
+vm.runInNewContext(fs.readFileSync(__dirname+'/../site/research/cpf-life-after-55-2026-11-04/ui.js','utf8'),context);
+assert.ok(nodes.results.innerHTML.includes('3.12%'));assert.ok(nodes.results.innerHTML.includes('4.00%'));assert.equal(nodes.error.textContent,'');assert.ok(nodes['sequence-chart'].innerHTML.includes('<svg'));assert.ok(nodes.horizons.innerHTML.includes('273,000'));
+els.endAge.value='90';handlers['controls:input']();assert.ok(nodes.results.innerHTML.includes('89.00'));
+els.endAge.value='50';handlers['controls:input']();assert.ok(nodes.error.textContent.includes('whole ages'));assert.equal(nodes.results.innerHTML,'');assert.equal(nodes['income-chart'].innerHTML,'');
+handlers['reset:click']();assert.equal(nodes.error.textContent,'');assert.ok(nodes.results.innerHTML.includes('3.12%'));
+els.payout.value='0';handlers['controls:input']();assert.ok(nodes.results.innerHTML.includes('N/A'));assert.equal(nodes.error.textContent,'');
+els.returnRate.value='-99';handlers['controls:input']();assert.equal(nodes.error.textContent,'');handlers['reset:click']();
+els.returnRate.value='';handlers['controls:input']();assert.ok(nodes.error.textContent.includes('Complete every input'));handlers['reset:click']();
+console.log('Passed 16 UI-harness assertions: dynamic controls, result render, SVG render, validation, clearing, reset, missing inputs and undefined returns. Not a browser-layout test.');
