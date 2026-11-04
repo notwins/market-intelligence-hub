@@ -37,7 +37,31 @@ assert.equal(card('AAPL', [], [], latest.as_of, true),'');
 assert(!card('AAPL', [], [], latest.as_of, true).includes('(0)'));
 assert(card('GOOGL', reports, editions, latest.as_of).includes('research/googl/'));
 assert(legend().includes('External ↗'));
-for(const t of ['MSFT','AVGO','MU'])assert.equal(companyEntries(t,reports,editions,latest.as_of,archives,researchIndex).length,0);
+// These names had no approved research at this historical cutoff; future verified additions are allowed.
+for(const t of ['MSFT','AVGO','MU'])assert.equal(companyEntries(t,reports,editions,'2026-11-04T08:00:00Z',archives,researchIndex).length,0);
 assert(!companyEntries('NVDA',reports,editions,latest.as_of,archives,researchIndex).some(x=>x.edition_id==='watchlist-20261104T080000Z'));
-assert.equal(companyEntries('AMZN',reports,editions,latest.as_of,archives,researchIndex)[0].edition_id,latest.id);
+// The newest overall edition need not contain new research for every company.
+const amznEligible=editions.filter(ed=>Date.parse(ed.as_of)<=Date.parse(latest.as_of)&&
+  (researchIndex[ed.id]?.AMZN||[]).some(approved=>
+    archives[ed.id]?.rows.find(row=>row.ticker==='AMZN')?.research?.[approved.index]?.headline===approved.headline))
+  .sort((a,b)=>Date.parse(b.as_of)-Date.parse(a.as_of)||b.id.localeCompare(a.id));
+assert(amznEligible.length,'Fixture archive must contain independently indexed AMZN research');
+const amznSaved=companyEntries('AMZN',reports,editions,latest.as_of,archives,researchIndex);
+assert.equal(amznSaved[0].edition_id,amznEligible[0].id,'Open the newest eligible company edition, not the newest overall edition');
+const laterAsOf=new Date(Date.parse(latest.as_of)+4*60*60*1000).toISOString().replace('.000Z','Z');
+const laterId='watchlist-'+laterAsOf.replace(/[-:]/g,'');
+const laterReport={...reports[0],edition_id:laterId,as_of:laterAsOf,path:'data/watchlist/reports/'+laterId+'.html'};
+const laterEdition={id:laterId,as_of:laterAsOf,path:'data/watchlist/archive/'+laterId+'.json'};
+const laterReports=[laterReport,...reports],laterEditions=[laterEdition,...editions];
+const unrelatedArchives={...archives,[laterId]:{rows:[{ticker:'AMZN',research:[]},{ticker:'META',research:[{headline:'New source-checked META item',facts:['META-only fact']}]}]}};
+const unrelatedIndex={...researchIndex,[laterId]:{META:[{index:0,headline:'New source-checked META item'}]}};
+const afterUnrelated=companyEntries('AMZN',laterReports,laterEditions,laterAsOf,unrelatedArchives,unrelatedIndex);
+assert.equal(JSON.stringify(afterUnrelated.map(x=>x.edition_id)),JSON.stringify(amznSaved.map(x=>x.edition_id)),'A newer unrelated edition must not add an empty AMZN link or hide prior research');
+const newCompanyItem={headline:'New source-checked AMZN item',date:laterAsOf.slice(0,10),facts:['A distinct AMZN fact'],analysis:'Dated analysis',risks:'Dated risk',next_watch:'Dated next check',sources:[{url:'https://ir.aboutamazon.com/'}]};
+const relatedArchives={...archives,[laterId]:{rows:[{ticker:'AMZN',research:[newCompanyItem]}]}};
+const relatedIndex={...researchIndex,[laterId]:{AMZN:[{index:0,headline:newCompanyItem.headline}]}};
+assert.equal(companyEntries('AMZN',laterReports,laterEditions,laterAsOf,relatedArchives,relatedIndex)[0].edition_id,laterId,'A genuinely approved new company item must become the newest link');
+assert.equal(companyEntries('AMZN',laterReports,laterEditions,latest.as_of,relatedArchives,relatedIndex)[0].edition_id,amznEligible[0].id,'An older cutoff must not acquire the new company item');
+const mismatchedIndex={...relatedIndex,[laterId]:{AMZN:[{index:0,headline:'Mismatched title'}]}};
+assert.equal(companyEntries('AMZN',laterReports,laterEditions,laterAsOf,relatedArchives,mismatchedIndex)[0].edition_id,amznEligible[0].id,'An unverified mapping must not expose a link');
 console.log('PASS all 12 share report controls, exact company anchors, archived cutoffs, stable sorting, duplicates, invalid data/URLs, unavailable versus empty state, public/private and internal/external labels');
