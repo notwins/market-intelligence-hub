@@ -31,3 +31,11 @@ html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=
 .tool-link small{font-size:calc(11px * var(--text-scale));margin-top:auto}.tool-link:hover{border-color:var(--purple);text-decoration:none}.tool-link:hover strong{text-decoration:underline}
 
 .tool-link strong>span{flex-shrink:0}
+
+/* Yield comparisons keep independent series and one shared date range. */
+.history-comparison{margin-top:24px;min-width:0}.history-comparison+.history-comparison{padding-top:22px;border-top:1px solid var(--line)}
+.history-chart-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}.history-chart-heading h3{margin-top:7px}.history-chart-heading .links{margin:0;flex-wrap:wrap}
+.history-series-controls{margin-block:16px}.history-comparison .stats-strip{margin-block:16px;gap:10px}.history-comparison .stats-strip>.card{padding:12px;background:transparent}.history-comparison-toolbar{align-items:center;flex-wrap:wrap;gap:12px}.history-comparison-toolbar .caption{margin:0}
+#view .v4-history-grid.v4-history-expanded{grid-template-columns:minmax(0,1fr)}
+.event-marker-link rect{stroke:var(--line);stroke-width:1}.event-marker-link:hover rect,.event-marker-link:focus rect{stroke:var(--ink);stroke-width:2}.event-marker-label{font-weight:600}
+@media(max-width:760px){.history-chart-heading .links{width:100%}.history-chart-heading .button{flex:1}.history-comparison .stats-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.history-comparison .stats-strip strong{font-size:calc(18px * var(--text-scale))}}

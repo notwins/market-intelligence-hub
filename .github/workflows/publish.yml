@@ -38,6 +38,7 @@ jobs:
             node scripts/test_v3.cjs
           fi
           node scripts/test_fed_history_ui.cjs
+          node scripts/test_yield_comparisons.cjs
           node scripts/test_v4.cjs
           node scripts/test_site_search.cjs
           node scripts/test_watchlist.cjs
@@ -64,6 +65,7 @@ jobs:
           python3 -m unittest discover -s scripts -p 'test_*.py'
           node scripts/test_v3.cjs
           node scripts/test_fed_history_ui.cjs
+          node scripts/test_yield_comparisons.cjs
           node scripts/test_v4.cjs
           node scripts/test_watchlist.cjs
           python3 scripts/build_site_search.py
