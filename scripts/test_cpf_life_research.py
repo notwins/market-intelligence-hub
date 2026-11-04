@@ -45,10 +45,12 @@ class CPFLifeResearchTests(unittest.TestCase):
             self.assertGreaterEqual(len(sheets), 3)
             self.assertTrue(any("XIRR(" in z.read(n).decode() for n in sheets))
 
-    def test_hub_card_is_unique(self):
-        html = (ROOT / "site/v4.html").read_text()
-        self.assertEqual(html.count('id="cpf-life-after-55-card"'), 1)
-        self.assertIn("research/cpf-life-after-55-2026-11-04/", html)
+    def test_writeup_is_unique_in_research_explained(self):
+        hub = (ROOT / "site/v4.html").read_text()
+        explained = (ROOT / "site/market-understanding/index.html").read_text()
+        self.assertEqual(explained.count('href="../research/cpf-life-after-55-2026-11-04/"'), 1)
+        self.assertIn('href="market-understanding/"', hub)
+        self.assertNotIn('id="cpf-life-after-55-card"', hub)
 
     def test_browserless_ui_behaviour(self):
         output = subprocess.check_output(["node", str(ROOT / "scripts/test_cpf_life_ui.cjs")], text=True)

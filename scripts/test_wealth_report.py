@@ -32,7 +32,8 @@ class WealthReport(unittest.TestCase):
    if href.startswith('#'):self.assertIn(href[1:],self.p.ids)
   self.assertEqual(len(self.p.ids),len(set(self.p.ids)))
   self.assertIn('../../v4.html#research',self.p.hrefs)
-  self.assertIn('research/wealth-inequality-2026-11-04/index.html',(ROOT/'v4.html').read_text())
+  self.assertIn('href="../research/wealth-inequality-2026-11-04/"',(ROOT/'market-understanding/index.html').read_text())
+  self.assertIn('href="market-understanding/"',(ROOT/'v4.html').read_text())
   self.assertIn('@media(max-width:680px)',self.text)
   self.assertIn('tabindex="0" role="region"',self.text)
  def test_cash_arithmetic(self):

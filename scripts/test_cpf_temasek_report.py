@@ -130,8 +130,10 @@ class CPFTemasekReportTests(unittest.TestCase):
 
     def test_discoverable_research_card(self):
         hub = (ROOT / "site/v4.html").read_text()
-        self.assertEqual(hub.count('id="cpf-temasek-research-card"'), 1)
-        self.assertIn('href="research/cpf-oa-temasek-2070-2026-11-04/"', hub)
+        explained = (ROOT / "site/market-understanding/index.html").read_text()
+        self.assertEqual(explained.count('href="../research/cpf-oa-temasek-2070-2026-11-04/"'), 1)
+        self.assertIn('href="market-understanding/"', hub)
+        self.assertNotIn('id="cpf-temasek-research-card"', hub)
 
 
 if __name__ == "__main__":

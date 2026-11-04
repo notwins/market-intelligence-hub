@@ -34,8 +34,9 @@ class SharpePublic(unittest.TestCase):
    target=(PAGE.parent/unquote(u.path)) if u.path else PAGE
    self.assertTrue(target.is_file(),href)
    if u.fragment and not (target.name=='v4.html' and u.fragment=='research'):self.assertIn(u.fragment,Parsed(target.read_text()).ids,href)
-  for target in ['site/v4.html','site/research/wealth-inequality-2026-11-04/index.html']:
+  for target in ['site/market-understanding/index.html','site/research/wealth-inequality-2026-11-04/index.html']:
    self.assertIn('sharpe.html',(ROOT/target).read_text())
+  self.assertIn('href="market-understanding/"',(ROOT/'site/v4.html').read_text())
  def test_hypothetical_arithmetic(self):
   rf=D('.02');ma=D('.08');mb=D('.10');sa=D('.10');sb=D('.20');lam=sb/sa
   self.assertEqual((ma-rf)/sa,D('.6'))

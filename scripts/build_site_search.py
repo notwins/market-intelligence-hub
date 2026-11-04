@@ -92,7 +92,7 @@ def build():
  # Parse the public JSON payload, never index executable JavaScript text.
  legacy=json.loads((ROOT/'v2-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
  for x in legacy.get('reports',[]):add('Research edition',x.get('title',x.get('id','Research edition')),strings(x),'v4.html#reports',x.get('date'),None,'Original imported edition; not refreshed by search')
- for x in legacy.get('research',[]):add('Research library',x.get('title',x.get('name','Research reference')),strings(x),'v4.html#research',x.get('date'),None,'Saved research reference',reading=reading_sections(x,'Research library'))
+ for x in legacy.get('research',[]):add('White Papers & Research Papers',x.get('title',x.get('name','Research reference')),strings(x),'v4.html#research',x.get('date'),None,'Saved research reference',reading=reading_sections(x,'White Papers & Research Papers'))
  for c in read('data/earnings-history.json').get('companies',[]):
   add('Earnings card',c['ticker']+' – '+c['name'],strings(c),'v4.html#earnings',c['history'][0].get('report_date'),None,'Selected issuer-reported actuals; partial history',tags=[c['ticker']])
  add('Section','Colour and tag reference','Search actual headline tags, companies, atlas colours and palette differences','colour-reference.html',status='Current site colour reference')

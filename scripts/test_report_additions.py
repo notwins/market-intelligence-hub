@@ -4,6 +4,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 import hashlib, json, re, subprocess, unittest
 from build_report_additions import make, strip_additions, START, END
+from research_presentation import COPY_CORRECTIONS, correct_copy, original_copy
 ROOT=Path(__file__).resolve().parents[1]
 class Parsed(HTMLParser):
  def __init__(self,s):
@@ -17,7 +18,7 @@ class Additions(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
   cls.manifest=json.loads((ROOT/'scripts/report_additions_manifest.json').read_text());cls.output=make()
- def test_five_reports_retain_every_original_byte(self):
+ def test_five_reports_preserve_baseline_apart_from_listed_copy_corrections(self):
   self.assertEqual(len(self.manifest['reports']),5)
   for path,digest in self.manifest['reports'].items():
    with self.subTest(path=path):
@@ -26,6 +27,14 @@ class Additions(unittest.TestCase):
     self.assertEqual(text.count(START),1);self.assertEqual(text.count(END),1)
     self.assertEqual(text.count('id="research-additions"'),1)
     self.assertIn(self.output[path],text)
+ def test_research_disclosures_describe_hosted_content_accurately(self):
+  page=(ROOT/'site/market-understanding/index.html').read_text()
+  for before,after in COPY_CORRECTIONS:
+   self.assertNotIn(before,page);self.assertIn(after,page)
+  self.assertEqual(correct_copy(original_copy(page)),page)
+  self.assertNotRegex(page,r'<(?:img|iframe|embed|object)\b')
+  self.assertEqual(page.count('class="mu-writeup"'),5)
+  self.assertEqual(page.count('class="mu-chapter"'),15)
  def test_all_new_bar_scales_and_visible_data(self):
   charts=tables=0
   for path,addon in self.output.items():

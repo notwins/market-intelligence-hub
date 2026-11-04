@@ -1,10 +1,14 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const html=fs.readFileSync('site/v4.html','utf8'),B=require('../site/bos-resources.js');
 const source=html.slice(html.indexOf('function paperCard(x)'),html.indexOf('function reportsView()'));
+const libraryStart=html.indexOf('function researchView()'),librarySource=html.slice(libraryStart,html.indexOf('\nfunction ',libraryStart+1));
 const escaped=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ctx={esc:escaped,tag:x=>'<span>'+escaped(x)+'</span>',link:(u,t)=>'<a href="'+escaped(u)+'" target="_blank" rel="noopener noreferrer">'+escaped(t)+'</a>'};vm.createContext(ctx);vm.runInContext(source+';globalThis.render=paperCard;',ctx);
+const ctx={esc:escaped,tag:x=>'<span>'+escaped(x)+'</span>',link:(u,t)=>'<a href="'+escaped(u)+'" target="_blank" rel="noopener noreferrer">'+escaped(t)+'</a>'};vm.createContext(ctx);vm.runInContext(source+librarySource+';globalThis.render=paperCard;globalThis.sourceLibrary=researchView;',ctx);
 const data=JSON.parse(fs.readFileSync('site/v2-data.js','utf8').split('=').slice(1).join('=').trim().replace(/;$/,''));
 assert.equal(data.research.length,9);
+ctx.D=data;ctx.BOSResources=B;ctx.heading=(...s)=>s.join(' ');const library=ctx.sourceLibrary();
+for(const path of ['research/cpf-life-after-55-2026-11-04/','research/cpf-oa-temasek-2070-2026-11-04/','research/wealth-inequality-2026-11-04/','research/googl/'])assert(!library.includes(path),'Own write-ups belong in Research Explained, not the source-paper library');
+assert(library.includes('Official papers, reports and source documents'));for(const r of data.research)assert(library.includes(escaped(r.url)),'Original source remains available');
 for(const r of data.research){const card=ctx.render(r);assert(card.includes('<summary>More info'));assert(card.includes(escaped(r.summary)));assert(card.includes(escaped(r.implication)));assert(card.includes(escaped(r.publisher)));assert(card.includes(escaped(r.date)));assert(card.includes(escaped(r.url)));assert(card.indexOf('Open original report')>card.indexOf('<details'));assert(card.includes('External'));assert(card.includes('saved summary, not the full report'));}
 const malicious=ctx.render({title:'<script>x</script>',summary:'<img src=x>. Next sentence.',implication:'<svg>',publisher:'<b>',date:'unknown',type:'fixture',url:'https://example.com'});assert(!malicious.includes('<script>'));assert(!malicious.includes('<img'));
 const cards=B.cards();assert(!cards.includes('<details'));assert(!cards.includes('More info'));assert.equal((cards.match(/Open original PDF · External/g)||[]).length,3);assert(cards.includes('no currency field'));assert(cards.includes('not executable quotes'));assert(cards.includes('no research PDFs or ratings are reproduced'));for(const s of B.sources){assert(cards.includes(escaped(s.url)));assert(cards.includes(escaped(s.edition)));}assert.equal(B.companyReports.length,12);

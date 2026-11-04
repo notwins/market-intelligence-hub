@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Build original, additive visual appendices from explicit dated facts/scenarios.
 No network calls, publisher images, personal data or new calculation assumptions
-are hidden in this build. Original report bytes survive removal of our markers.
+are hidden in this build. Original content survives removal of our markers and
+reversal of the explicitly listed presentation-copy corrections.
 """
 from pathlib import Path
 from decimal import Decimal as D
 import hashlib, html, json, re, subprocess
+from research_presentation import correct_copy, original_copy
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 START = '<!-- research-additions:start -->'
@@ -88,7 +90,7 @@ def strip_additions(text):
  text=re.sub(re.escape(START)+r'.*?'+re.escape(END),'',text,flags=re.S)
  text=re.sub(re.escape(ASSET)+r'<link[^>]+>','',text)
  text=re.sub(re.escape(JUMP)+r'<div.*?</div>','',text,flags=re.S)
- return text
+ return original_copy(text)
 
 def main():
  manifest_path=ROOT/'scripts/report_additions_manifest.json'
@@ -103,6 +105,7 @@ def main():
   jump=JUMP+'<div class="ra-jump" id="research-additions-jump"><a href="#research-additions">New visual companion: charts &amp; exact-value tables ↓</a><span>Added 4 November 2026 · original report retained</span></div>'
   output=re.sub(r'(<main\b[^>]*>)',lambda m:m[0]+jump,output,count=1)
   output=output.replace('</main>',content+'</main>',1)
+  output=correct_copy(output)
   assert strip_additions(output)==original
   writeups=re.search(r'<!-- published-writeups:start -->.*?<!-- published-writeups:end -->',current,re.S)
   style=re.search(r'<!-- published-writeups:style --><link[^>]+>',current)
@@ -110,5 +113,5 @@ def main():
   if style:output=output.replace('</head>',style.group()+'</head>',1)
   p.write_text(output)
  manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
- print('Built 5 additive report companions; original report bytes retained.')
+ print('Built 5 additive report companions; original content retained apart from listed presentation-copy corrections.')
 if __name__=='__main__': main()
