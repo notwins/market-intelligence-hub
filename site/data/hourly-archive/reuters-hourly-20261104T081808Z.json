@@ -1,0 +1,130 @@
+{
+  "id": "reuters-hourly-20261104T081808Z",
+  "report_at": "2026-11-04T16:23:36+08:00",
+  "window_start": "2026-11-04T15:18:08+08:00",
+  "cutoff": "2026-11-04T16:18:08+08:00",
+  "coverage": "partial",
+  "summary": "Five newly selected Reuters items, including one historical crypto-liquidity catch-up: NextDC minority-stake offer, Binance post-hack withdrawals, Smith+Nephew guidance reduction, possible IndiGo aircraft order and drone attacks in northern Iraq. Coverage is partial, with earlier gaps still open; these are dated Reuters reports, not live pricing or trading signals.",
+  "limitations": [
+    "Targeted Reuters article and active-thread searches, not an exhaustive wire scan.",
+    "Earlier incomplete source-coverage intervals remain outstanding; only immediate prior interval was checked selectively for recovery.",
+    "Source article original publication times are to minute precision; subsequent updates cannot generally be timed.",
+    "Historical Binance hack and outflows predate this primary hour; marked catch-up despite current-hour Reuters roundup publication.",
+    "The IndiGo source notes a minor editorial refile to insert dropped words; no earlier report is affected and no new correction card is claimed.",
+    "No executable FX quote or verified market reaction to the newly reported stock bid, aircraft talks, outlook cut or drone incident.",
+    "Direct individual source-run conversation URL was unavailable; linked the known original Reuters producer conversation.",
+    "Original reported development time could not be independently established; publication timestamps do not indicate the event time.",
+    "Reuters syndication carries a correction to the broader crypto market capitalization figure; the corrected total is not repeated in this edition."
+  ],
+  "original_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
+  "sources": [
+    {
+      "url": "https://www.reuters.com/world/goodman-group-digital-realty-launch-up-4997-million-share-bid-nextdc-term-sheet-2026-11-04/",
+      "title": "Goodman Group, Digital Realty launch up to $499.7 million share bid on NextDC: term sheet",
+      "published_at": "2026-11-04T07:32Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/finance/crypto-dips-democrat-midterm-wins-binance-hack-dent-optimism-2026-11-04/",
+      "title": "Crypto dips on Democrat midterm wins, Binance hack dent optimism",
+      "published_at": "2026-11-04T07:35Z",
+      "verification_url": "https://www.globalbankingandfinance.com/crypto-dips-democrat-midterm-wins-binance-hack-dent-optimism/"
+    },
+    {
+      "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/smithnephew-cuts-outlook-confirms-failed-merger-talks-with-jjs-orthopaedics-unit-2026-11-04/",
+      "title": "Smith+Nephew cuts outlook, confirms failed merger talks with J&J's orthopaedics unit",
+      "published_at": "2026-11-04T07:34Z"
+    },
+    {
+      "url": "https://www.reuters.com/world/india/indias-indigo-talks-with-embraer-100-jets-sources-say-2026-11-04/",
+      "title": "EXCLUSIVE India's IndiGo in talks with Embraer for 100 jets, sources say",
+      "published_at": "2026-11-04T07:28Z"
+    },
+    {
+      "url": "https://www.reuters.com/world/middle-east/drones-attack-iranian-kurdish-opposition-iraqs-sulaymaniyah-east-erbil-sources-2026-11-04/",
+      "title": "Drones attack Iranian Kurdish opposition in Iraq's Sulaymaniyah and east Erbil, sources say",
+      "published_at": "2026-11-04T07:56Z"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261104-GOODMAN-DLR-NEXTDC-STAKE",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "EQUITIES_AND_AI_RATES_AND_CREDIT",
+      "headline": "Goodman and Digital Realty offer up to A$715m for a minority stake in NextDC",
+      "body": "According to a term sheet, the pair offered to buy up to 9.9% of NextDC for approximately A$715 million (US$499.7 million). Their offer of A$9.50 a share was 45.5% above NextDC's A$6.53 Wednesday closing price. NextDC had previously said electricity grid upgrades would defer about A$140 million of contracted revenue in the current financial year and has shelved new development projects. Market evidence: Reuters gave the historical A$6.53 Wednesday closing price; no post-offer trading price or change reported.",
+      "analysis": "A prospective strategic shareholder investment could address confidence and financing pressure, but neither a completed deal nor a new cash injection is established. AI data centres still face power-grid execution risk.",
+      "watch_next": "Offer completion, whether capital actually reaches NextDC, debt and grid milestones.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/goodman-group-digital-realty-launch-up-4997-million-share-bid-nextdc-term-sheet-2026-11-04/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261104-BINANCE-POSTHACK-OUTFLOWS",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "RISKS_CRYPTO_LIQUIDITY",
+      "headline": "Binance customers have withdrawn a net US$4.72bn after exchange reopening",
+      "body": "Reuters' newly published crypto roundup reported net customer withdrawals of US$4.72 billion after Binance reopened following last week's hack. Bitcoin was quoted at US$78,070 by 07:15 GMT on 4 November after briefly touching a six-week low. That historical price is not a live quote. Reuters said the wider crypto market lost about US$300 billion in value over the previous month, and investors were also weighing US election implications. Market evidence: Reuters Bitcoin observation: approximately US$78,070 at 07:15 GMT (15:15 SGT); not price movement solely attributable to the earlier hack or today's election.",
+      "analysis": "Large exchange withdrawals highlight custody and platform liquidity risk, but are not proof of insolvency or a bank credit default; the hack and withdrawals predate this primary hour.",
+      "watch_next": "Whether net withdrawals continue, user access and verifiable reserves; new investigations or regulator decisions.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/finance/crypto-dips-democrat-midterm-wins-binance-hack-dent-optimism-2026-11-04/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261104-SMITHNEPHEW-OUTLOOK-JNJ-TALKS",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "EQUITIES_HEALTHCARE_M_AND_A",
+      "headline": "Smith+Nephew cuts annual forecasts and confirms J&J orthopaedics merger talks ended",
+      "body": "Smith+Nephew said merger talks with Johnson & Johnson's orthopaedics business held earlier this year have ended. Smith+Nephew lowered its full-year revenue and profit guidance due to persistent weakness in its Orthopaedics division. The company said it would continue evaluating strategic options for the division. Market evidence: No attributable share-price move in the inspected Reuters article.",
+      "analysis": "Reduced guidance worsens the earnings/cash-generation outlook, while failed merger talks remove a potential strategic outcome; final debt implications are not established.",
+      "watch_next": "Updated numerical guidance, restructuring plans, strategic alternatives and refinancing needs.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/healthcare-pharmaceuticals/smithnephew-cuts-outlook-confirms-failed-merger-talks-with-jjs-orthopaedics-unit-2026-11-04/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261104-INDIGO-EMBRAER-JET-TALKS",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "EQUITIES_CREDIT_ASIA_AVIATION",
+      "headline": "IndiGo in early talks for 100 Embraer regional jets, sources say",
+      "body": "Three people told Reuters IndiGo was discussing a possible purchase of 100 Embraer regional jets, with options for about 50 more. Neither the model nor quantity was settled and no contract was announced; deliveries would likely begin in or after 2030. Reuters said that the 100 aircraft alone could be worth billions of dollars at list prices, before commonly negotiated discounts. Market evidence: No attributable share-price movement reported.",
+      "analysis": "If signed, the order would create major future aircraft financing and fleet-capital-expenditure needs; no financing terms or confirmed obligation exist today.",
+      "watch_next": "Binding purchase agreement, aircraft model, delivery slots, financing/leasing terms.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/india/indias-indigo-talks-with-embraer-100-jets-sources-say-2026-11-04/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261104-IRAQ-KURDISH-OPPOSITION-DRONES",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "RISKS_MIDDLE_EAST_GEOPOLITICS",
+      "headline": "Security sources report two drone attacks on Iranian Kurdish opposition in Iraq",
+      "body": "Reuters cited security sources saying two explosive-laden drones attacked Iranian Kurdish opposition groups in Iraq's Sulaymaniyah and east Erbil on Wednesday. The article noted Iran has struck these groups' bases before; the specific attacker, damage and casualties from this incident were not verified. Market evidence: No attributable crude oil, gold or currency move reported in the inspected source.",
+      "analysis": "This may add to regional escalation risk, but a direct oil-supply disruption is not established by the report.",
+      "watch_next": "Independent identification of the attackers, damage assessments and any response affecting energy routes.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/middle-east/drones-attack-iranian-kurdish-opposition-iraqs-sulaymaniyah-east-erbil-sources-2026-11-04/"
+      ],
+      "development_at": null
+    }
+  ]
+}
