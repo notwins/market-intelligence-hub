@@ -2,13 +2,113 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-04T04:19:56.246Z",
+  "publisher_checked_at": "2026-11-04T05:20:34.669Z",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-hourly-20261104T044558Z",
+      "report_at": "2026-11-04T12:50:15+08:00",
+      "cutoff": "2026-11-04T12:45:58+08:00",
+      "window_start": "2026-11-04T11:45:58+08:00",
+      "coverage": "partial",
+      "summary": "Partial Reuters scan for 4 November 2026, 11:45:58 AM–12:45:58 PM SGT: two new selected developments and one substantive election follow-up. Six Reuters articles verified, but this was not an exhaustive wire scan.",
+      "limitations": [
+        "Targeted Reuters discovery rather than exhaustive wire coverage; earlier missed reporting intervals remain unresolved.",
+        "No last complete scan has been established; partial coverage cannot advance last_complete_cutoff.",
+        "Publication times were verified to minute precision, but incident/development times and later revisions were not independently established.",
+        "Full historical cross-briefing checks and directly attributable market reactions were unavailable."
+      ],
+      "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/world/middle-east/irans-irgc-says-four-tankers-ablaze-after-hitting-mines-near-strait-hormuz-2026-11-04/",
+          "title": "Iran's IRGC says four tankers ablaze after hitting mines near Strait of Hormuz",
+          "published_at": "2026-11-04T03:50:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/us/james-talarico-becomes-first-democrat-win-statewide-texas-since-1994-2026-11-04/",
+          "title": "James Talarico becomes first Democrat to win statewide in Texas since 1994",
+          "published_at": "2026-11-04T04:04:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/us/democrat-sherrod-brown-wins-back-us-senate-seat-ohio-2026-11-04/",
+          "title": "Democrat Sherrod Brown wins back US Senate seat in Ohio",
+          "published_at": "2026-11-04T04:12:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/us/adam-hamilton-becomes-first-democrat-elected-us-senate-kansas-94-years-2026-11-04/",
+          "title": "Adam Hamilton becomes first Democrat elected to the US Senate from Kansas in 94 years",
+          "published_at": "2026-11-04T04:24:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/democrat-josh-turek-flips-republican-held-us-senate-seat-iowa-2026-11-04/",
+          "title": "Democrat Josh Turek flips Republican-held US Senate seat in Iowa",
+          "published_at": "2026-11-04T04:34:00Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/middle-east/uae-non-oil-firms-raise-prices-record-pace-october-pmi-shows-2026-11-04/",
+          "title": "UAE non-oil firms raise prices at record pace in October, PMI shows",
+          "published_at": "2026-11-04T04:19:00Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261104-IRGC-HORMUZ-TANKERS",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "RISKS_GEOPOLITICS_ENERGY",
+          "headline": "Iran Revolutionary Guard claims four oil tankers hit naval mines and two vessels seized near Hormuz",
+          "body": "Iran's Revolutionary Guard claimed four tankers struck naval mines south of the Strait of Hormuz and remained ablaze or destroyed; it also claimed two other vessels were seized. Reuters attributed these statements to the IRGC and did not independently verify tanker losses, identify ships, or establish an event time. No time-matched market-price reaction was established.",
+          "analysis": "Interpretation: If independently confirmed, mine hazards and tanker damage could disrupt oil supply, shipping and marine insurance; the claims are not confirmation of actual losses.",
+          "watch_next": "Verify vessels and maritime-authority reports, plus Reuters-observed tanker traffic and oil or freight market reactions.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/middle-east/irans-irgc-says-four-tankers-ablaze-after-hitting-mines-near-strait-hormuz-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-US-MIDTERMS-ADDITIONAL-FLIPS",
+          "version": 3,
+          "status": "follow-up",
+          "freshness": "current",
+          "topic": "US_POLITICS_FISCAL_POLICY_RATES",
+          "headline": "Further Republican-held US Senate seats flip in media projections: Texas, Ohio, Kansas and Iowa",
+          "body": "Reuters reported US media projections of Democratic Senate wins by James Talarico over Ken Paxton in Texas, Sherrod Brown over Jon Husted in Ohio's special election, Adam Hamilton over Roger Marshall in Kansas and Josh Turek over Ashley Hinson in Iowa. Republicans entered the election with a 53–47 Senate majority; Democrats needed a net gain of four seats. Results are media projections, not certification. No market reaction attributable to these specific calls was verified.",
+          "analysis": "Interpretation: Additional pickups change the Senate-control outlook and potentially fiscal-policy negotiations, but do not themselves quantify a Treasury or foreign-exchange market reaction.",
+          "watch_next": "Remaining Senate races, confirmed majority balance, certification, and measured US rates, FX and equity reactions.",
+          "earlier": "Previous v2 (11:47:09 AM SGT) covered the projected Democratic House majority and individual seat flips, with Senate control unsettled. Reuters now reports four further projected Democratic Senate pickups in Texas, Ohio, Kansas and Iowa.",
+          "source_urls": [
+            "https://www.reuters.com/world/us/james-talarico-becomes-first-democrat-win-statewide-texas-since-1994-2026-11-04/",
+            "https://www.reuters.com/world/us/democrat-sherrod-brown-wins-back-us-senate-seat-ohio-2026-11-04/",
+            "https://www.reuters.com/world/us/adam-hamilton-becomes-first-democrat-elected-us-senate-kansas-94-years-2026-11-04/",
+            "https://www.reuters.com/world/democrat-josh-turek-flips-republican-held-us-senate-seat-iowa-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-UAE-PMI-PRICE-PRESSURE",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "MACRO_INFLATION_MIDDLE_EAST",
+          "headline": "UAE non-oil firms increase selling prices at fastest pace since PMI survey began in 2009",
+          "body": "S&P Global reported UAE non-oil PMI of 54.8 in October versus 55.3 in September, above the 50 expansion threshold. Reuters said selling prices rose at the fastest rate since the survey began in August 2009, while input-cost inflation was highest since June 2022, including raw materials, fuel, energy and freight. New orders accelerated; employment edged down. No attributable market reaction was verified.",
+          "analysis": "Interpretation: Strong demand coexists with price pressure that may affect borrowers' margins and regional credit; this PMI is not an observed CPI surprise.",
+          "watch_next": "Subsequent UAE inflation and PMI releases and corporate margin developments.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/middle-east/uae-non-oil-firms-raise-prices-record-pace-october-pmi-shows-2026-11-04/"
+          ],
+          "development_at": null
+        }
+      ]
+    },
     {
       "id": "reuters-hourly-20261104T034709Z",
       "report_at": "2026-11-04T11:52:07+08:00",
