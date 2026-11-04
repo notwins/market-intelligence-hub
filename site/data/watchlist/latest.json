@@ -1,32 +1,33 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261103T200000Z",
-  "as_of": "2026-11-04T04:00:00+08:00",
-  "generated_at": "2026-11-03T20:16:19+00:00",
-  "title": "12-name watchlist · 4 November 2026, 04:00 SGT",
+  "id": "watchlist-20261104T000000Z",
+  "as_of": "2026-11-04T08:00:00+08:00",
+  "generated_at": "2026-11-04T00:07:58+00:00",
+  "title": "12-name watchlist · 4 November 2026, 08:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-03T20:16:19+00:00",
+    "sources_checked_at": "2026-11-04T00:07:58+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "Nine watchlist names rose and three fell versus the prior regular close in individually timestamped active-session observations. AMD led at +4.05%; Apple lagged at −2.48%. All 12 completed closes and 72 return baselines were rechecked and are unchanged. New NVIDIA and Amazon posts, an Apple feed update and Reuters market-reaction updates are included. Meta’s preliminary financing filing is earlier coverage newly checked, not a new review-window event.",
-  "coverage_note": "Review window: 4 November 2026, 00:00–04:00 SGT (3 November 16:00–20:00 UTC), with overlap against earlier editions. All 12 completed closes and 72 adjusted-close baselines were independently rechecked, and 12 active-session snapshots were checked before the fixed cutoff. Earlier research is retained with its original dates and qualifications. Source access and news coverage remain partial; no newly verified item for a company is not proof that no news occurred.",
-  "price_basis": "The US regular session was open at the fixed 4 November 04:00 SGT cutoff (3 November 15:00 EST). Main price fields use the last completed close: 2 November 2026, 16:00 EST (3 November 05:00 SGT), versus 30 October. Separate active-session observations are saved in the per-stock research, timestamped 3 November 14:41–14:57 EST (4 November 03:41–03:57 SGT). Source timestamps have minute precision; seconds were not supplied. All prices are USD. TSM is the US-listed USD ADR. These are saved observations, not a live feed or synchronized cutoff prices.",
-  "return_basis": "Cumulative return = 100*(2 November 2026 adjusted close / baseline adjusted close - 1). The 1–6 calendar-month baseline dates are 2 October, 2 September, 31 July, 2 July, 2 June and 1 May 2026. The 2 August and 2 May anniversaries fall on Sunday and Saturday, so the preceding trading sessions are used. All 72 dated inputs were independently rechecked on the linked vendor series. Adjusted closes account for splits and dividends/distributions; ordinary previous closes remain separate. These are cumulative returns before fees and taxes, not individual monthly returns. They remain unchanged from the 00:00 SGT edition.",
+  "summary": "Ten watchlist names rose and two fell at the completed 3 November US regular-session close. AMD led at +3.65%; Apple fell 1.90%. New in this review window: AMD reported Q3 results and Q4 guidance, while Meta filed final pricing for a $15 billion senior-note offering. Amazon filed a backward-looking 13F. Apple’s developer-preview item is explicitly earlier catch-up, not overnight breaking news.",
+  "coverage_note": "Review window: 4 November 2026, 04:00–08:00 SGT (3 November 20:00–4 November 00:00 UTC), with a 15-minute overlap. The previous 04:00 SGT edition and all older artifacts remain available unchanged. This edition replaces the prior in-progress session snapshots with the verified completed 3 November close and recomputed six-horizon returns. New research is separated from earlier catch-up; quiet names do not receive filler. News coverage is partial, not a complete newswire census.",
+  "price_basis": "All main prices are USD completed regular-session observations for 3 November 2026, at 16:00 EST (4 November 05:00 SGT), with individually recorded vendor quote timestamps. Daily change compares the 2 November ordinary close. Yahoo supplies seconds for some observations; Stock Analysis supplies minute precision, preserved without invented seconds. These are saved closes, not live or exact 08:00 SGT prices. No after-hours price has been substituted for a regular close; premarket fields are null. TSM is the US-listed USD ADR.",
+  "return_basis": "Cumulative return = 100 × (3 November 2026 adjusted close ÷ baseline adjusted close − 1). The 1–6 calendar-month baselines are 2 October, 3 September, 3 August, 2 July, 3 June and 1 May 2026. October 3 and May 3 fall on weekends; July 3 is the observed US Independence Day market holiday, so preceding sessions are used. All 72 dated inputs were independently checked. Adjusted closes incorporate split and dividend/distribution adjustments; ordinary previous closes remain separate. These are cumulative returns before fees and taxes, not six individual monthly returns.",
   "caveats": [
-    "Active-session snapshots are not synchronized; they span 03:41–03:57 SGT, 3–19 minutes before the cutoff. None is claimed to be an exact 04:00 SGT quote.",
-    "The schema has no active-quote field. Completed-close prices and return inputs remain in the main fields; premarket is null and the active observations are explicitly labelled in research.",
-    "Older adjusted-close rows were independently retrieved through current search-indexed Yahoo Finance pages, including French and Hong Kong variants, and Quiver where cited. Direct Yahoo page access was limited. Stale or inconsistently adjusted alternatives were excluded.",
-    "TSM uses Yahoo-adjusted baseline values consistently. Its 2 September adjusted close is 414.39 versus 414.62 in the Stock Analysis series; the Yahoo value and all TSM return inputs are unchanged from the prior edition.",
-    "The BRK.B page displaying 15:00 EST did not supply seconds and was excluded at the cutoff boundary. A verified 14:43 EST price from the Stock Analysis forecast page is used; no analyst rating is adopted as a user call.",
-    "Earlier Reuters premarket observations and the attributed, unconfirmed NVIDIA/Financial Times account are retained with their original dates and qualifications. Carrying them forward does not independently confirm the underlying report.",
-    "Prior active-session and premarket observations remain in immutable earlier editions. Comparisons below use their individual timestamps and are not synchronized portfolio returns.",
-    "Watch only: no holding, executed trade, user buy call or recommendation is implied. Only public company and market information is included; no private diary, brokerage record, account information or restricted screenshot is imported.",
-    "Direct Reuters US markets and technology pages could not be opened. Accessible Reuters syndication and targeted searches were used.",
-    "No blanket no-news finding is made for any ticker.",
-    "All source checks were performed after the cutoff, using source publication/update/acceptance timestamps to exclude later information.",
-    "All 12 issuers’ SEC recent-submissions JSON lists were retrieved directly; no listed acceptance timestamp fell in 15:45–20:00 UTC. This is not a complete third-party ownership-filing census. Reuters and IR company-news coverage remains partial. New commentary/product/program posts do not establish a quantified earnings effect."
+    "We could not independently verify a reliably timestamped after-hours price for this edition. Quotes and financial events use separate timestamps. AMD results and Meta pricing occurred after the regular close; the close prices do not include their subsequent after-hours reaction.",
+    "All prices and 72 adjusted-close baseline inputs were independently rechecked. Vendor values may later be revised. Current endpoints were crosschecked against completed history rows; intraday or unfinalized observations were rejected.",
+    "Direct Yahoo pages were rate-limited. Current search-indexed Yahoo historical rows, including regional pages, supplied some older adjusted baselines; direct Stock Analysis and current Quiver history supplied others. Sources are linked beside every calculation.",
+    "TSM uses Yahoo-adjusted historical baselines consistently, including 3 September at 415.89 rather than the 416.13 in Stock Analysis. Its finalized 404.80 close is not the earlier 15:59:59 observation of 404.66.",
+    "Existing dated editions, calls, reports and their qualifications are retained unchanged. Old active-session and premarket snapshots remain in their original archives rather than being represented as current observations.",
+    "Watch only: no current holding, executed trade, user buy call or recommendation is implied. No private diary, brokerage record, personal account information or restricted screenshot is included.",
+    "Apple’s Siri developer-preview post is timestamped 18:00:20 UTC before this window and explicitly labelled earlier catch-up. Meta priced terms do not establish completed settlement.",
+    "Reuters coverage used targeted searches and accessible indexed syndication. Direct Reuters AMD article could not be opened, and direct access to the two syndicated articles returned 403; indexed versions were readable. Coverage is partial.",
+    "Alphabet, Meta and Micron news-release lists were incomplete or did not render. Broadcom’s current list was successfully accessed at its new financial-news URL.",
+    "No unverified after-hours percentage from Reuters is included: syndicated copies carry differing market reactions and do not expose a reliable final update timestamp.",
+    "AMD official release and SEC earnings filing were read; a complete earnings-call transcript was not independently reviewed.",
+    "All 12 SEC recent-submission feeds were checked through the cutoff. This does not constitute a complete census of third-party ownership filings or every company announcement.",
+    "No newly verified item for a ticker is not a blanket no-news finding."
   ],
   "rows": [
     {
@@ -35,13 +36,13 @@
       "group": "Platforms",
       "instrument": "US-listed share",
       "price": {
-        "close": 338.32,
-        "adjusted_close": 338.32,
-        "previous_close": 344.63,
-        "change_pct": -1.83,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 331.9,
+        "adjusted_close": 331.9,
+        "previous_close": 338.32,
+        "change_pct": -1.9,
+        "as_of": "2026-11-03T16:00:01-05:00",
         "currency": "USD",
-        "source_url": "https://stockanalysis.com/stocks/aapl/history/"
+        "source_url": "https://finance.yahoo.com/quote/AAPL/history/?.tsrc=fin-srch&p=AAPL"
       },
       "premarket": null,
       "returns": [
@@ -49,158 +50,96 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 333.69,
-          "pct": 1.39,
-          "source_url": "https://stockanalysis.com/stocks/aapl/history/"
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1",
+          "pct": -0.54
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 324.96,
-          "pct": 4.11,
-          "source_url": "https://stockanalysis.com/stocks/aapl/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 328.21,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1",
+          "pct": 1.12
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 308.64,
-          "pct": 9.62,
-          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 303.16,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1",
+          "pct": 9.48
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 308.36,
-          "pct": 9.72,
-          "source_url": "https://finance.yahoo.com/quote/AAPL/history/"
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1",
+          "pct": 7.63
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 314.93,
-          "pct": 7.43,
-          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 309.99,
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1",
+          "pct": 7.07
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 279.64,
-          "pct": 20.98,
-          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1"
+          "source_url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1",
+          "pct": 18.69
         }
       ],
       "research": [
         {
           "date": "2026-11-03",
-          "headline": "Active-session snapshot: $329.94, -2.48% versus the prior close",
+          "headline": "Earlier update newly checked: Siri AI developer preview expands",
           "facts": [
-            "Stock Analysis displayed USD 329.94 at 14:57 EST on 3 November 2026 (03:57 SGT on 4 November), during the regular session. The displayed daily change was -2.48% versus the 2 November completed close of USD 338.32.",
-            "The previous 00:00 SGT edition saved USD 328.78 at 10:33 EST. The newer observation is +0.35% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
+            "Apple’s official Developer RSS dates this post to 18:00:20 UTC (4 November 02:00:20 SGT), before this review window. It was absent from the preceding edition.",
+            "The preview lets developers integrate app content and actions with Siri AI through App Intents in the 27.3 betas. Apple describes customer availability in a few months and App Store submissions opening in spring."
           ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
+          "analysis": "Broader third-party integration could increase useful Siri experiences, but the announcement supplies no revenue estimate.",
+          "risks": "This remains a preview with device, language and regional limits. Apple says Siri AI is unavailable in the EU on iOS, iPadOS and watchOS; terms and usage policies are still to follow.",
+          "next_watch": "Developer uptake, final policies and customer-release timing.",
           "sources": [
             {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/aapl/history/"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Updated Reuters market reaction: Apple remained lower",
-          "facts": [
-            "Reuters’ 17:20 UTC update (4 November 01:20 SGT) reported Apple down 2.2%, citing the previously disclosed pressure from memory costs on holiday-quarter margins."
-          ],
-          "analysis": "This refreshes the market reaction to an existing concern; it is not a new guidance announcement.",
-          "risks": "The article gives no separate timestamp for the Apple percentage. Its explicitly timed index observation is 16:50 UTC. Use the separately timestamped price snapshot for this edition’s quote.",
-          "next_watch": "Further issuer disclosures on memory costs and margins.",
-          "sources": [
-            {
-              "title": "Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026",
-              "url": "https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Newly checked product update: Health app language support",
-          "facts": [
-            "Apple’s 3 November post says its redesigned Health app is in the iOS 27.3 developer beta, with broader language support and a free public rollout planned later in the year.",
-            "The official Newsroom feed marks this entry updated at 18:24:58.012 UTC (4 November 02:24:58 SGT). First-publication time is not separately exposed."
-          ],
-          "analysis": "This is a product rollout update, not quantified revenue or earnings guidance.",
-          "risks": "Features and availability may vary by language, region and device; the feed timestamp is an update timestamp.",
-          "next_watch": "Public release timing and supported feature availability.",
-          "sources": [
-            {
-              "title": "Apple Newsroom · 3 November product update",
-              "url": "https://www.apple.com/newsroom/2026/11/redesigned-health-app-expands-language-support/"
+              "title": "Apple Developer: Siri AI preview",
+              "url": "https://developer.apple.com/news/?id=gdk2umrf"
             },
             {
-              "title": "Apple Newsroom official feed · entry update timestamp",
-              "url": "https://www.apple.com/newsroom/rss-feed.rss"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Retained earlier coverage: Apple memory-cost and margin concern",
-          "facts": [
-            "Reuters’ 12:34 GMT (20:34 SGT) update reported Apple down 3.9% at 12:07 UTC (20:07 SGT), with memory costs and margin concerns in focus. That observation is earlier than the separately timestamped price snapshot in this edition.",
-            "Reuters reported Apple weakness in premarket trading following a warning about memory costs and margins. Its 18:49 SGT report observed a 4.5% decline; that observation predates the separately timestamped quote above."
-          ],
-          "analysis": "This updates the market reaction to an existing concern; it does not establish a new issuer guidance announcement or prove that one factor explains the entire move.",
-          "risks": "Different quote times can produce different percentages. Premarket liquidity and volatility can amplify movements before the regular session.",
-          "next_watch": "Issuer disclosures on input costs and gross margins, and subsequent regular-session market reaction. The premarket observations above are retained earlier evidence.",
-          "sources": [
-            {
-              "title": "Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update",
-              "url": "https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626"
-            },
-            {
-              "title": "Reuters via StreetInsider · 3 November market report",
-              "url": "https://www.streetinsider.com/Reuters/US%2Bstock%2Bfutures%2Bmixed%2Bas%2BApple%2Bslides%2C%2Bmidterms%2Bloom/27276330.html"
+              "title": "Apple Developer official RSS: 10:00:20 PST publication time",
+              "url": "https://developer.apple.com/news/rss/news.rss"
             }
           ]
         }
       ],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://stockanalysis.com/stocks/aapl/history/"
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://finance.yahoo.com/quote/AAPL/history/?.tsrc=fin-srch&p=AAPL"
         },
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1"
         },
         {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://finance.yahoo.com/quote/AAPL/history/"
-        },
-        {
-          "title": "Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update",
-          "url": "https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626"
-        },
-        {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0000320193.json"
         },
         {
-          "title": "Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026",
-          "url": "https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726"
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://stockanalysis.com/stocks/aapl/history/"
         },
         {
-          "title": "Apple Newsroom · 3 November product update",
-          "url": "https://www.apple.com/newsroom/2026/11/redesigned-health-app-expands-language-support/"
+          "title": "Apple Developer: Siri AI preview",
+          "url": "https://developer.apple.com/news/?id=gdk2umrf"
         },
         {
-          "title": "Apple Newsroom official feed · entry update timestamp",
-          "url": "https://www.apple.com/newsroom/rss-feed.rss"
+          "title": "Apple Developer official RSS: 10:00:20 PST publication time",
+          "url": "https://developer.apple.com/news/rss/news.rss"
         }
       ]
     },
@@ -210,13 +149,13 @@
       "group": "Platforms",
       "instrument": "US-listed share",
       "price": {
-        "close": 507.12,
-        "adjusted_close": 507.12,
-        "previous_close": 521.91,
-        "change_pct": -2.83,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 520.99,
+        "adjusted_close": 520.99,
+        "previous_close": 507.12,
+        "change_pct": 2.74,
+        "as_of": "2026-11-03T16:00:01-05:00",
         "currency": "USD",
-        "source_url": "https://stockanalysis.com/stocks/msft/history/"
+        "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
       },
       "premarket": null,
       "returns": [
@@ -224,89 +163,62 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 517.53,
-          "pct": -2.01,
-          "source_url": "https://stockanalysis.com/stocks/msft/history/"
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1",
+          "pct": 0.67
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 496.82,
-          "pct": 2.07,
-          "source_url": "https://stockanalysis.com/stocks/msft/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 510.12,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1",
+          "pct": 2.13
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 463.85,
-          "pct": 9.33,
-          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 486.73,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1",
+          "pct": 7.04
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 389.76,
-          "pct": 30.11,
-          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1",
+          "pct": 33.67
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 440.48,
-          "pct": 15.13,
-          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 426.54,
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1",
+          "pct": 22.14
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 412.77,
-          "pct": 22.86,
-          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
+          "source_url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1",
+          "pct": 26.22
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Active-session snapshot: $521.80, +2.89% versus the prior close",
-          "facts": [
-            "Stock Analysis displayed USD 521.80 at 14:41 EST on 3 November 2026 (03:41 SGT on 4 November), during the regular session. The displayed daily change was +2.89% versus the 2 November completed close of USD 507.12.",
-            "The previous 00:00 SGT edition saved USD 515.31 at 10:54 EST. The newer observation is +1.26% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
-          ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
-          "sources": [
-            {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/msft/history/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://stockanalysis.com/stocks/msft/history/"
-        },
-        {
-          "title": "Stock Analysis: price/history",
-          "url": "https://stockanalysis.com/stocks/msft/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
         },
         {
-          "title": "Yahoo Finance · adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/MSFT/history/"
+          "title": "SEC recent issuer submissions checked through cutoff",
+          "url": "https://data.sec.gov/submissions/CIK0000789019.json"
         },
         {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
-          "url": "https://data.sec.gov/submissions/CIK0000789019.json"
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://stockanalysis.com/stocks/msft/history/"
         }
       ]
     },
@@ -316,13 +228,13 @@
       "group": "Semiconductors",
       "instrument": "US-listed share",
       "price": {
-        "close": 202.06,
-        "adjusted_close": 202.06,
-        "previous_close": 204.64,
-        "change_pct": -1.26,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 206.69,
+        "adjusted_close": 206.69,
+        "previous_close": 202.06,
+        "change_pct": 2.29,
+        "as_of": "2026-11-03T16:00:00-05:00",
         "currency": "USD",
-        "source_url": "https://stockanalysis.com/stocks/nvda/history/"
+        "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
       },
       "premarket": null,
       "returns": [
@@ -330,185 +242,84 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 233.95,
-          "pct": -13.63,
-          "source_url": "https://stockanalysis.com/stocks/nvda/history/"
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/",
+          "pct": -11.65
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 224.16,
-          "pct": -9.86,
-          "source_url": "https://stockanalysis.com/stocks/nvda/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 228.19,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/",
+          "pct": -9.42
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 200.53,
-          "pct": 0.76,
-          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 206.41,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/",
+          "pct": 0.14
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 194.61,
-          "pct": 3.83,
-          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/",
+          "pct": 6.21
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 222.31,
-          "pct": -9.11,
-          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 214.26,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/",
+          "pct": -3.53
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
-          "base_adjusted_close": 198,
-          "pct": 2.05,
-          "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
+          "base_adjusted_close": 198.0,
+          "source_url": "https://finance.yahoo.com/quote/NVDA/history/",
+          "pct": 4.39
         }
       ],
       "research": [
         {
           "date": "2026-11-03",
-          "headline": "Active-session snapshot: $206.79, +2.34% versus the prior close",
+          "headline": "Reuters close update: AI shares recover; Apple remains lower",
           "facts": [
-            "Stock Analysis displayed USD 206.79 at 14:49 EST on 3 November 2026 (03:49 SGT on 4 November), during the regular session. The displayed daily change was +2.34% versus the 2 November completed close of USD 202.06.",
-            "The previous 00:00 SGT edition saved USD 207.62 at 10:52 EST. The newer observation is -0.40% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
+            "Reuters’ 21:15 UTC close update recorded Apple down 1.9%, NVIDIA up 2.3%, Micron up 2.6%, and Microsoft and Amazon each more than 2% higher. Its Apple margin explanation concerns previously disclosed memory costs, not new guidance.",
+            "The Reuters syndicated page was published at 21:02 UTC and updated at 21:15 UTC."
           ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
+          "analysis": "The broad close-market report provides context across several watchlist names; it is not new issuer guidance or proof of the cause of each stock move.",
+          "risks": "This was an indexed syndicated Reuters report. Direct page retrieval was limited, and the market reaction does not establish future performance.",
+          "next_watch": "Subsequent official issuer disclosures. Regular-session and after-hours observations must remain distinct.",
           "sources": [
             {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/nvda/history/"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Updated Reuters market reaction: NVIDIA rebounded",
-          "facts": [
-            "Reuters’ 17:20 UTC update (4 November 01:20 SGT) reported NVIDIA up 3% after four declining sessions."
-          ],
-          "analysis": "This is a later market observation, not confirmation of a change to earnings expectations.",
-          "risks": "The article does not separately timestamp the NVIDIA percentage; its index snapshot is timed 16:50 UTC.",
-          "next_watch": "Company disclosures and the previously announced 17 November earnings call.",
-          "sources": [
-            {
-              "title": "Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026",
-              "url": "https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "New issuer commentary: AI in semiconductor manufacturing",
-          "facts": [
-            "NVIDIA published an explanatory blog at 16:00:45 UTC (4 November 00:00:45 SGT) describing accelerated simulation, physics-based AI, agents and digital twins in semiconductor manufacturing.",
-            "The post describes partner applications involving COMSOL, Applied Materials, Siemens, Lam Research and Advantest."
-          ],
-          "analysis": "The update illustrates uses for NVIDIA’s software and computing platform. It does not quantify new orders or revenue.",
-          "risks": "Issuer descriptions and performance examples are not an independently verified earnings contribution or evidence that every cited deployment was newly announced today.",
-          "next_watch": "Commercial adoption evidence and quantified business contribution.",
-          "sources": [
-            {
-              "title": "NVIDIA official blog · publication time from article metadata",
-              "url": "https://blogs.nvidia.com/blog/ai-semiconductor-fabs/"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Retained earlier coverage: NVIDIA traded higher",
-          "facts": [
-            "Reuters’ 12:34 GMT (20:34 SGT) update recorded NVIDIA up 1.4% at 12:07 UTC (20:07 SGT). This is an earlier market observation, not the later quote snapshot on this card."
-          ],
-          "analysis": "A premarket rebound alone does not verify changes to earnings expectations or resolve the separately attributed China-exposure report retained below.",
-          "risks": "Price movement is not confirmation of the underlying attributed report. The regular session may differ from thin premarket trading.",
-          "next_watch": "Company clarification of attributed reporting and the previously announced fiscal Q3 results call.",
-          "sources": [
-            {
-              "title": "Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update",
-              "url": "https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed",
-          "facts": [
-            "Reuters relayed a Financial Times report that NVIDIA had advised data-centre partners to reduce China exposure. Reuters said it could not independently verify the report."
-          ],
-          "analysis": "Treat this as an attributed report, not a confirmed change in company policy or a measured earnings impact.",
-          "risks": "The original account was not independently verified by Reuters. Customer, export-control and geographic risks require separate primary evidence.",
-          "next_watch": "Company confirmation or clarification and any specific disclosed customer impact.",
-          "sources": [
-            {
-              "title": "Reuters via StreetInsider · attributed Financial Times report",
-              "url": "https://new.streetinsider.com/Reuters/Nvidia%2Borders%2Bdata%2Bcentre%2Bclients%2Bto%2Breduce%2BChina%2Bexposure%2C%2BFT%2Breports/27275695.html"
-            }
-          ]
-        },
-        {
-          "date": "2026-10-28",
-          "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled",
-          "facts": [
-            "NVIDIA scheduled its fiscal Q3 FY2027 conference call for 17 November at 17:00 EST, or 18 November at 06:00 SGT."
-          ],
-          "analysis": "The call is a future checkpoint; it is not a statement of the quarter’s result.",
-          "risks": "Forward-looking expectations and actual results can differ. This edition contains no inferred earnings outcome.",
-          "next_watch": "The release and written CFO commentary before the call, then management’s discussion.",
-          "sources": [
-            {
-              "title": "NVIDIA newsroom · official results-call notice",
-              "url": "https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873"
-            },
-            {
-              "title": "NVIDIA investor relations · previously announced results call rechecked for this edition",
-              "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/default.aspx"
+              "title": "Reuters via MarketScreener: published 21:02 UTC, updated 21:15 UTC",
+              "url": "https://ca.marketscreener.com/news/nasdaq-ends-higher-as-ai-heavyweights-rebound-ahead-of-midterm-results-ce785fdedd8ef520"
             }
           ]
         }
       ],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://stockanalysis.com/stocks/nvda/history/"
-        },
-        {
-          "title": "Stock Analysis: price/history",
-          "url": "https://stockanalysis.com/stocks/nvda/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "Yahoo Finance: adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/NVDA/history/"
-        },
-        {
-          "title": "Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update",
-          "url": "https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626"
-        },
-        {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001045810.json"
         },
         {
-          "title": "Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026",
-          "url": "https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726"
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://stockanalysis.com/stocks/nvda/history/"
         },
         {
-          "title": "NVIDIA official blog · publication time from article metadata",
-          "url": "https://blogs.nvidia.com/blog/ai-semiconductor-fabs/"
+          "title": "Reuters via MarketScreener: published 21:02 UTC, updated 21:15 UTC",
+          "url": "https://ca.marketscreener.com/news/nasdaq-ends-higher-as-ai-heavyweights-rebound-ahead-of-midterm-results-ce785fdedd8ef520"
         }
       ]
     },
@@ -518,13 +329,13 @@
       "group": "Platforms",
       "instrument": "US-listed Class A share",
       "price": {
-        "close": 278.99,
-        "adjusted_close": 278.99,
-        "previous_close": 279.84,
-        "change_pct": -0.3,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 280.03,
+        "adjusted_close": 280.03,
+        "previous_close": 278.99,
+        "change_pct": 0.37,
+        "as_of": "2026-11-03T16:00:01-05:00",
         "currency": "USD",
-        "source_url": "https://stockanalysis.com/stocks/googl/history/"
+        "source_url": "https://finance.yahoo.com/quote/GOOGL/?ltr=1"
       },
       "premarket": null,
       "returns": [
@@ -532,86 +343,67 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 343.5,
-          "pct": -18.78,
-          "source_url": "https://stockanalysis.com/stocks/googl/history/"
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/",
+          "pct": -18.48
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 336.9,
-          "pct": -17.19,
-          "source_url": "https://stockanalysis.com/stocks/googl/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 342.26,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/",
+          "pct": -18.18
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 355.9,
-          "pct": -21.61,
-          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 373.27,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/",
+          "pct": -24.98
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 359.68,
-          "pct": -22.43,
-          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/",
+          "pct": -22.14
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 361.4,
-          "pct": -22.8,
-          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 358.55,
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/",
+          "pct": -21.9
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 385.21,
-          "pct": -27.57,
-          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/"
+          "source_url": "https://finance.yahoo.com/quote/GOOGL/history/",
+          "pct": -27.3
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Active-session snapshot: $278.64, -0.13% versus the prior close",
-          "facts": [
-            "Stock Analysis displayed USD 278.64 at 14:54 EST on 3 November 2026 (03:54 SGT on 4 November), during the regular session. The displayed daily change was -0.13% versus the 2 November completed close of USD 278.99.",
-            "The previous 00:00 SGT edition saved USD 277.94 at 10:48 EST. The newer observation is +0.25% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
-          ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
-          "sources": [
-            {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/googl/history/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked.",
-        "Current investor-relations news coverage was incomplete because the release list did not render or the page was unavailable."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research.",
+        "The issuer news-release list was incomplete or did not render; SEC submissions were checked separately."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://stockanalysis.com/stocks/googl/history/"
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://finance.yahoo.com/quote/GOOGL/?ltr=1"
         },
         {
-          "title": "Stock Analysis: price/history",
-          "url": "https://stockanalysis.com/stocks/googl/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001652044.json"
+        },
+        {
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://stockanalysis.com/stocks/googl/history/"
         }
       ]
     },
@@ -621,11 +413,11 @@
       "group": "Platforms",
       "instrument": "US-listed share",
       "price": {
-        "close": 245.63,
-        "adjusted_close": 245.63,
-        "previous_close": 240.35,
-        "change_pct": 2.2,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 250.69,
+        "adjusted_close": 250.69,
+        "previous_close": 245.63,
+        "change_pct": 2.06,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/amzn/history/"
       },
@@ -635,113 +427,86 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 251.52,
-          "pct": -2.34,
+          "pct": -0.33,
           "source_url": "https://stockanalysis.com/stocks/amzn/history/"
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 254.98,
-          "pct": -3.67,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 258.9,
+          "pct": -3.17,
           "source_url": "https://stockanalysis.com/stocks/amzn/history/"
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 271.58,
-          "pct": -9.56,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 284.02,
+          "pct": -11.74,
           "source_url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 242.67,
-          "pct": 1.22,
+          "pct": 3.3,
           "source_url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 256.52,
-          "pct": -4.25,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 250.02,
+          "pct": 0.27,
           "source_url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 268.26,
-          "pct": -8.44,
+          "pct": -6.55,
           "source_url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         }
       ],
       "research": [
         {
           "date": "2026-11-03",
-          "headline": "Active-session snapshot: $251.43, +2.36% versus the prior close",
+          "headline": "New filing: quarter-end investment holdings report",
           "facts": [
-            "Stock Analysis displayed USD 251.43 at 14:44 EST on 3 November 2026 (03:44 SGT on 4 November), during the regular session. The displayed daily change was +2.36% versus the 2 November completed close of USD 245.63.",
-            "The previous 00:00 SGT edition saved USD 246.57 at 10:54 EST. The newer observation is +1.97% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
+            "Amazon’s 13F-HR was accepted at 21:17:05 UTC (4 November 05:17:05 SGT). It reports six positions with an aggregate value of $3.774 billion as of 30 September."
           ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
+          "analysis": "This is a newly filed but backward-looking investment report, not an operating-results release.",
+          "risks": "The holdings date predates this edition by more than a month; the report does not establish current holdings or subsequent transactions.",
+          "next_watch": "Any later filing explaining material changes; no near-term operating catalyst is inferred.",
           "sources": [
             {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/amzn/history/"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "New program: Sustainability Deep Tech Accelerator",
-          "facts": [
-            "Amazon announced the program at 17:15 UTC (4 November 01:15 SGT), according to its press-release publication metadata.",
-            "The program brings Amazon Devices, AWS and Private Brands together to evaluate lower-carbon materials, energy-efficiency and circularity technologies. Applications open in January 2027."
-          ],
-          "analysis": "This creates a path for technology evaluation and possible commercial adoption; it is not a disclosed financial commitment.",
-          "risks": "Amazon does not require an equity stake as a condition of participation. Any licensing, supply, collaboration or investment arrangement depends on approval and mutual fit.",
-          "next_watch": "Application launch and any subsequently announced integration agreements.",
-          "sources": [
+              "title": "SEC: Amazon 13F-HR for 30 September",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000110465926122014/xslForm13F_X02/primary_doc.xml"
+            },
             {
-              "title": "Amazon official press release · 17:15 UTC, 3 November 2026",
-              "url": "https://press.aboutamazon.com/2026/11/amazon-launches-new-amazon-sustainability-deep-tech-accelerator-to-fast-track-adoption-opportunities-for-breakthrough-climate-technologies"
+              "title": "SEC: Amazon acceptance timestamp",
+              "url": "https://data.sec.gov/submissions/CIK0001018724.json"
             }
           ]
         }
       ],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/amzn/history/"
         },
         {
-          "title": "Yahoo Finance: adjusted historical series",
-          "url": "https://fr.finance.yahoo.com/quote/AMZN/history/"
-        },
-        {
-          "title": "Yahoo Finance: adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/AMZN/history/?p=AMZN"
-        },
-        {
-          "title": "Yahoo Finance · adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/AMZN/history/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         },
         {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
         },
         {
-          "title": "Amazon official press release · 17:15 UTC, 3 November 2026",
-          "url": "https://press.aboutamazon.com/2026/11/amazon-launches-new-amazon-sustainability-deep-tech-accelerator-to-fast-track-adoption-opportunities-for-breakthrough-climate-technologies"
+          "title": "SEC: Amazon 13F-HR for 30 September",
+          "url": "https://www.sec.gov/Archives/edgar/data/1018724/000110465926122014/xslForm13F_X02/primary_doc.xml"
         }
       ]
     },
@@ -751,11 +516,11 @@
       "group": "Platforms",
       "instrument": "US-listed share",
       "price": {
-        "close": 606.73,
-        "adjusted_close": 606.73,
-        "previous_close": 614.99,
-        "change_pct": -1.34,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 621.03,
+        "adjusted_close": 621.03,
+        "previous_close": 606.73,
+        "change_pct": 2.36,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/meta/history/"
       },
@@ -765,123 +530,88 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 728.08,
-          "pct": -16.67,
+          "pct": -14.7,
           "source_url": "https://stockanalysis.com/stocks/meta/history/"
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 592.38,
-          "pct": 2.42,
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 610.2,
+          "pct": 1.77,
           "source_url": "https://stockanalysis.com/stocks/meta/history/"
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 556.27,
-          "pct": 9.07,
-          "source_url": "https://finance.yahoo.com/quote/META/history/?period1=1337347800&period2=1790726400"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 589.77,
+          "pct": 5.3,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 582.44,
-          "pct": 4.17,
-          "source_url": "https://finance.yahoo.com/quote/META/history/?period1=1337347800&period2=1790726400"
+          "pct": 6.63,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 596.61,
-          "pct": 1.7,
-          "source_url": "https://finance.yahoo.com/quote/META/history/?period1=1337347800&period2=1790726400"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 621.91,
+          "pct": -0.14,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 607.71,
-          "pct": -0.16,
-          "source_url": "https://hk.finance.yahoo.com/quote/META/history/"
+          "pct": 2.19,
+          "source_url": "https://finance.yahoo.com/quote/META/history/"
         }
       ],
       "research": [
         {
           "date": "2026-11-03",
-          "headline": "Active-session snapshot: $619.31, +2.07% versus the prior close",
+          "headline": "New priced terms: $15 billion senior-note offering",
           "facts": [
-            "Stock Analysis displayed USD 619.31 at 14:56 EST on 3 November 2026 (03:56 SGT on 4 November), during the regular session. The displayed daily change was +2.07% versus the 2 November completed close of USD 606.73.",
-            "The previous 00:00 SGT edition saved USD 621.51 at 10:59 EST. The newer observation is -0.35% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
+            "Meta filed final pricing terms at 22:25:13 UTC (4 November 06:25:13 SGT), replacing the earlier preliminary filing’s blank amounts and coupons.",
+            "The five tranches are $3.25 billion at 5.850% due 2031, $3.25 billion at 6.250% due 2033, $4 billion at 6.550% due 2036, $1.75 billion at 7.350% due 2046 and $2.75 billion at 7.500% due 2056. Settlement is expected on 5 November."
           ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
+          "analysis": "The filing establishes the dollar offering’s size and borrowing cost, a concrete financing update beyond the earlier launch.",
+          "risks": "Pricing is not completed settlement. This term sheet does not establish final terms or completion of any separate euro offering.",
+          "next_watch": "Expected 5 November settlement and subsequent completion disclosures.",
           "sources": [
             {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/meta/"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Earlier filing newly checked: proposed senior-note offering",
-          "facts": [
-            "Meta’s preliminary prospectus supplement describes five series of senior unsecured notes for general corporate purposes. Amounts, coupons and maturities remain blank in this filing.",
-            "SEC acceptance was 3 November 13:29:28 UTC (21:29:28 SGT), before this review window. It was not included in the preceding edition."
-          ],
-          "analysis": "This is a catch-up to an earlier financing disclosure, not a new 16:00–20:00 UTC event or a priced/completed bond sale.",
-          "risks": "Final terms were not established by this preliminary filing. A possible separate euro offering is not assured.",
-          "next_watch": "Priced terms, total proceeds, maturity schedule and any later issuer filing.",
-          "sources": [
-            {
-              "title": "SEC · Meta Form 424B5, accession 0001193125-26-444440",
-              "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526444440/d135326d424b5.htm"
+              "title": "SEC: Meta final pricing FWP, accepted 22:25:13 UTC",
+              "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526445646/d186765dfwp.htm"
             },
             {
-              "title": "SEC · Meta recent submissions and acceptance time",
+              "title": "SEC: Meta acceptance timestamp",
               "url": "https://data.sec.gov/submissions/CIK0001326801.json"
             }
           ]
         }
       ],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked.",
-        "Current investor-relations news coverage was incomplete because the release list did not render or the page was unavailable."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "The issuer news-release list was incomplete or did not render; SEC submissions were checked separately."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/meta/history/"
         },
         {
-          "title": "Yahoo Finance: adjusted historical series",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
-          "title": "Yahoo Finance: adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/META/history/?guccounter=1&guce_referrer=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8&guce_referrer_sig=AQAAALWdGhX0UjNTQ9kz1nycNCgAoSfpiVboNSIy9_qNOJxI8It6AszusYF3HqykJOvoJiOpCt4jxLR2kqU5bzx_qIaOSTQlMFKDmi8hnCkry4geVwQCYt4aRP_RNefIJ8cqril6GSrrOU_Nhv3Jwxeh4cVQk_4J1eF88eLe8vo0tqkR"
-        },
-        {
-          "title": "Stock Analysis · active-session USD price and displayed timestamp",
-          "url": "https://stockanalysis.com/stocks/meta/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://finance.yahoo.com/quote/META/history/?period1=1337347800&period2=1790726400"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://hk.finance.yahoo.com/quote/META/history/"
-        },
-        {
-          "title": "SEC · Meta recent submissions and acceptance time",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001326801.json"
         },
         {
-          "title": "SEC · Meta Form 424B5, accession 0001193125-26-444440",
-          "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526444440/d135326d424b5.htm"
+          "title": "SEC: Meta final pricing FWP, accepted 22:25:13 UTC",
+          "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526445646/d186765dfwp.htm"
         }
       ]
     },
@@ -891,11 +621,11 @@
       "group": "Other",
       "instrument": "US-listed Class B share",
       "price": {
-        "close": 556.11,
-        "adjusted_close": 556.11,
-        "previous_close": 542.49,
-        "change_pct": 2.51,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 557.07,
+        "adjusted_close": 557.07,
+        "previous_close": 556.11,
+        "change_pct": 0.17,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/brk.b/history/"
       },
@@ -905,89 +635,61 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 502.65,
-          "pct": 10.64,
-          "source_url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
+          "pct": 10.83,
+          "source_url": "https://stockanalysis.com/stocks/brk.b/history/"
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 505.24,
-          "pct": 10.07,
-          "source_url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 508.13,
+          "pct": 9.63,
+          "source_url": "https://stockanalysis.com/stocks/brk.b/history/"
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 511.54,
-          "pct": 8.71,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 513.14,
+          "pct": 8.56,
           "source_url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 507.78,
-          "pct": 9.52,
+          "pct": 9.71,
           "source_url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 471.51,
-          "pct": 17.94,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 475.37,
+          "pct": 17.19,
           "source_url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 473.01,
-          "pct": 17.57,
+          "pct": 17.77,
           "source_url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Active-session snapshot: $558.64, +0.45% versus the prior close",
-          "facts": [
-            "Stock Analysis displayed USD 558.64 at 14:43 EST on 3 November 2026 (03:43 SGT on 4 November), during the regular session. The displayed daily change was +0.45% versus the 2 November completed close of USD 556.11.",
-            "The previous 00:00 SGT edition saved USD 557.52 at 10:54 EST. The newer observation is +0.20% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
-          ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
-          "sources": [
-            {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/brk.b/forecast/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "The BRK.B page displaying 15:00 EST did not supply seconds and was excluded at the cutoff boundary. A verified 14:43 EST price from the Stock Analysis forecast page is used; no analyst rating is adopted as a user call.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: price/history",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/brk.b/history/"
         },
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         },
         {
-          "title": "Yahoo Finance · adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/BRK-B/history/"
-        },
-        {
-          "title": "Stock Analysis · active-session USD price and displayed timestamp",
-          "url": "https://stockanalysis.com/stocks/brk.b/forecast/"
-        },
-        {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001067983.json"
         }
       ]
@@ -998,11 +700,11 @@
       "group": "Semiconductors",
       "instrument": "US-listed share",
       "price": {
-        "close": 466.84,
-        "adjusted_close": 466.84,
-        "previous_close": 504.8,
-        "change_pct": -7.52,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 483.9,
+        "adjusted_close": 483.9,
+        "previous_close": 466.84,
+        "change_pct": 3.65,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/amd/history/"
       },
@@ -1012,152 +714,100 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 633.91,
-          "pct": -26.36,
-          "source_url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
+          "pct": -23.66,
+          "source_url": "https://stockanalysis.com/stocks/amd/history/"
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 457.06,
-          "pct": 2.14,
-          "source_url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 456.16,
+          "pct": 6.08,
+          "source_url": "https://stockanalysis.com/stocks/amd/history/"
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 476.15,
-          "pct": -1.96,
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 484.64,
+          "pct": -0.15,
           "source_url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 517.82,
-          "pct": -9.85,
+          "pct": -6.55,
           "source_url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 521.54,
-          "pct": -10.49,
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 542.52,
+          "pct": -10.81,
           "source_url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 360.54,
-          "pct": 29.48,
+          "pct": 34.22,
           "source_url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
         }
       ],
       "research": [
         {
           "date": "2026-11-03",
-          "headline": "Active-session snapshot: $485.73, +4.05% versus the prior close",
+          "headline": "New results: Data Center drives record Q3; Q4 revenue guide rises",
           "facts": [
-            "Stock Analysis displayed USD 485.73 at 14:57 EST on 3 November 2026 (03:57 SGT on 4 November), during the regular session. The displayed daily change was +4.05% versus the 2 November completed close of USD 466.84.",
-            "The previous 00:00 SGT edition saved USD 491.82 at 10:57 EST. The newer observation is -1.24% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
+            "AMD released Q3 results at 21:15 UTC (4 November 05:15 SGT): revenue $13.377 billion, up 45% year-on-year; diluted EPS $1.46 GAAP and $2.09 non-GAAP.",
+            "Data Center revenue was $8.546 billion, up 97%; Client and Gaming revenue fell 8% to $3.722 billion. Q4 guidance is $17 billion revenue, plus or minus 3%, and approximately 55% non-GAAP gross margin versus 56% in Q3."
           ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
+          "analysis": "The revenue midpoint implies approximately 27% sequential growth, but a lower adjusted gross margin. Strong Data Center growth and weaker Client and Gaming demand need separate evaluation.",
+          "risks": "Guidance depends on execution of the Helios and Venice ramp and component supply. Non-GAAP EPS is not GAAP earnings.",
+          "next_watch": "Q4 shipment execution, margin delivery and additional official call materials. The scheduled 22:00 UTC call is no longer an upcoming event at this cutoff.",
           "sources": [
             {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/amd/history/"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Updated Reuters market reaction: AMD higher before results",
-          "facts": [
-            "Reuters’ 17:20 UTC update (4 November 01:20 SGT) reported AMD up 5.1% before its scheduled after-close earnings release."
-          ],
-          "analysis": "This is a pre-results market observation; no earnings outcome is inferred.",
-          "risks": "The article does not separately timestamp the AMD percentage. Results were scheduled after the US close, which is later than the 20:00 UTC cutoff.",
-          "next_watch": "Official after-close results and the conference call at 22:00 UTC / 4 November 06:00 SGT.",
-          "sources": [
-            {
-              "title": "Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026",
-              "url": "https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726"
+              "title": "AMD official earnings release",
+              "url": "https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results"
             },
             {
-              "title": "AMD · retained 6 October official results notice, rechecked",
-              "url": "https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Retained earlier coverage: AMD rose ahead of scheduled results",
-          "facts": [
-            "Reuters’ 12:34 GMT (20:34 SGT) update recorded AMD up 1.8% at 12:07 UTC (20:07 SGT), before the later separately timestamped quote in this edition."
-          ],
-          "analysis": "This is a pre-results price reaction, not evidence of an earnings beat or new guidance. The official results-call notice remains the relevant upcoming event.",
-          "risks": "Earnings and guidance were not yet released at this cutoff. Post-release prices may reverse or extend premarket moves.",
-          "next_watch": "AMD’s official results release after the US close on 3 November and conference call on 4 November at 06:00 SGT, as stated in the retained 6 October notice.",
-          "sources": [
+              "title": "AMD official release list: 3 November, 16:15 EST",
+              "url": "https://ir.amd.com/news-events/press-releases"
+            },
             {
-              "title": "Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update",
-              "url": "https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626"
-            }
-          ]
-        },
-        {
-          "date": "2026-10-06",
-          "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst",
-          "facts": [
-            "AMD scheduled fiscal Q3 2026 results for 3 November after the US market close, with its call at 17:00 EST. That is 4 November at 06:00 SGT."
-          ],
-          "analysis": "The scheduled release provides a defined checkpoint for evaluating the business against prior guidance. Results were not yet available at this edition’s cutoff.",
-          "risks": "An event date is not evidence of better or worse earnings. Post-release prices may differ sharply from this snapshot.",
-          "next_watch": "Read the earnings release and call on 4 November, 06:00 SGT. Separate reported results, guidance and market reaction.",
-          "sources": [
-            {
-              "title": "AMD investor relations · official results notice",
-              "url": "https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results"
+              "title": "SEC earnings 8-K: accepted 21:16:27 UTC",
+              "url": "https://www.sec.gov/Archives/edgar/data/2488/000000248826000188/amd-20261103.htm"
             }
           ]
         }
       ],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "The official earnings release and SEC filing were read; a full earnings-call transcript and reliably timestamped after-hours quote were not independently verified."
       ],
       "sources": [
         {
-          "title": "Stock Analysis · active-session USD price and displayed timestamp",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/amd/history/"
         },
         {
-          "title": "Stock Analysis: price/history",
-          "url": "https://stockanalysis.com/stocks/amd/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
         },
         {
-          "title": "Yahoo Finance · adjusted historical series",
-          "url": "https://ca.finance.yahoo.com/quote/AMD/history/"
-        },
-        {
-          "title": "Reuters via MarketScreener · 3 November 2026, 12:34 GMT market update",
-          "url": "https://uk.marketscreener.com/news/wall-st-futures-mixed-as-apple-falls-on-margin-warning-midterm-results-awaited-ce785fded98bf626"
-        },
-        {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0000002488.json"
         },
         {
-          "title": "Reuters via MarketScreener · published 17:19 UTC; updated 17:20 UTC, 3 November 2026",
-          "url": "https://ca.marketscreener.com/news/s-p-500-nasdaq-rise-as-tech-stocks-gain-ahead-of-midterm-results-ce785fdeda8ff726"
+          "title": "AMD official earnings release",
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1303/amd-reports-third-quarter-2026-financial-results"
         },
         {
-          "title": "AMD · retained 6 October official results notice, rechecked",
-          "url": "https://ir.amd.com/news-events/press-releases/detail/1300/amd-to-report-fiscal-third-quarter-2026-financial-results"
+          "title": "AMD official release list: 3 November, 16:15 EST",
+          "url": "https://ir.amd.com/news-events/press-releases"
+        },
+        {
+          "title": "SEC earnings 8-K: accepted 21:16:27 UTC",
+          "url": "https://www.sec.gov/Archives/edgar/data/2488/000000248826000188/amd-20261103.htm"
         }
       ]
     },
@@ -1167,11 +817,11 @@
       "group": "Semiconductors",
       "instrument": "US-listed share",
       "price": {
-        "close": 322.23,
-        "adjusted_close": 322.23,
-        "previous_close": 326.08,
-        "change_pct": -1.18,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 332.13,
+        "adjusted_close": 332.13,
+        "previous_close": 322.23,
+        "change_pct": 3.07,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/avgo/history/"
       },
@@ -1181,93 +831,65 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 355.14,
-          "pct": -9.27,
-          "source_url": "https://stockanalysis.com/stocks/avgo/history/"
+          "source_url": "https://stockanalysis.com/stocks/avgo/history/",
+          "pct": -6.48
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 366.57,
-          "pct": -12.1,
-          "source_url": "https://stockanalysis.com/stocks/avgo/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 356.51,
+          "source_url": "https://stockanalysis.com/stocks/avgo/history/",
+          "pct": -6.84
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 388.57,
-          "pct": -17.07,
-          "source_url": "https://fr.finance.yahoo.com/quote/AVGO/history/"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 391.52,
+          "source_url": "https://finance.yahoo.com/quote/AVGO/history/?p=AVGO",
+          "pct": -15.17
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 359.79,
-          "pct": -10.44,
-          "source_url": "https://finance.yahoo.com/quote/AVGO/history/?p=AVGO"
+          "source_url": "https://fr.finance.yahoo.com/quote/AVGO/history/",
+          "pct": -7.69
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 479.94,
-          "pct": -32.86,
-          "source_url": "https://finance.yahoo.com/quote/AVGO/history/?p=AVGO"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 477.6,
+          "source_url": "https://fr.finance.yahoo.com/quote/AVGO/history/",
+          "pct": -30.46
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 419.85,
-          "pct": -23.25,
-          "source_url": "https://fr.finance.yahoo.com/quote/AVGO/history/"
+          "source_url": "https://fr.finance.yahoo.com/quote/AVGO/history/",
+          "pct": -20.89
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Active-session snapshot: $331.86, +2.99% versus the prior close",
-          "facts": [
-            "Stock Analysis displayed USD 331.86 at 14:41 EST on 3 November 2026 (03:41 SGT on 4 November), during the regular session. The displayed daily change was +2.99% versus the 2 November completed close of USD 322.23.",
-            "The previous 00:00 SGT edition saved USD 333.94 at 10:57 EST. The newer observation is -0.62% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
-          ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
-          "sources": [
-            {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/avgo/history/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked.",
-        "Current investor-relations news coverage was incomplete because the release list did not render or the page was unavailable."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/avgo/history/"
         },
         {
-          "title": "Stock Analysis: price/history",
-          "url": "https://stockanalysis.com/stocks/avgo/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://fr.finance.yahoo.com/quote/AVGO/history/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/AVGO/history/?p=AVGO"
         },
         {
-          "title": "Yahoo Finance · adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/AVGO/history/"
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://fr.finance.yahoo.com/quote/AVGO/history/"
         },
         {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001730168.json"
         }
       ]
@@ -1278,11 +900,11 @@
       "group": "Semiconductors",
       "instrument": "US-listed share",
       "price": {
-        "close": 833.59,
-        "adjusted_close": 833.59,
-        "previous_close": 884.74,
-        "change_pct": -5.78,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 855.1,
+        "adjusted_close": 855.1,
+        "previous_close": 833.59,
+        "change_pct": 2.58,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/mu/history/"
       },
@@ -1292,81 +914,62 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 1074.72,
-          "pct": -22.44,
-          "source_url": "https://stockanalysis.com/stocks/mu/history/"
+          "source_url": "https://stockanalysis.com/stocks/mu/history/",
+          "pct": -20.44
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 955.93,
-          "pct": -12.8,
-          "source_url": "https://stockanalysis.com/stocks/mu/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 958.01,
+          "source_url": "https://stockanalysis.com/stocks/mu/history/",
+          "pct": -10.74
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 822.9,
-          "pct": 1.3,
-          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 829.37,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/",
+          "pct": 3.1
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 975.26,
-          "pct": -14.53,
-          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+          "source_url": "https://finance.yahoo.com/quote/MU/history/",
+          "pct": -12.32
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 1063.77,
-          "pct": -21.64,
-          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 1079.23,
+          "source_url": "https://finance.yahoo.com/quote/MU/history/",
+          "pct": -20.77
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 542.04,
-          "pct": 53.79,
-          "source_url": "https://finance.yahoo.com/quote/MU/history/"
+          "source_url": "https://finance.yahoo.com/quote/MU/history/",
+          "pct": 57.76
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Active-session snapshot: $848.17, +1.75% versus the prior close",
-          "facts": [
-            "Stock Analysis displayed USD 848.17 at 14:53 EST on 3 November 2026 (03:53 SGT on 4 November), during the regular session. The displayed daily change was +1.75% versus the 2 November completed close of USD 833.59.",
-            "The previous 00:00 SGT edition saved USD 858.71 at 10:51 EST. The newer observation is -1.23% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
-          ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
-          "sources": [
-            {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/mu/history/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked.",
-        "Current investor-relations news coverage was incomplete because the release list did not render or the page was unavailable."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research.",
+        "The issuer news-release list was incomplete or did not render; SEC submissions were checked separately."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/mu/history/"
         },
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
         }
       ]
@@ -1377,11 +980,11 @@
       "group": "Other",
       "instrument": "US-listed share",
       "price": {
-        "close": 403.82,
-        "adjusted_close": 403.82,
-        "previous_close": 399.81,
-        "change_pct": 1,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 398.5,
+        "adjusted_close": 398.5,
+        "previous_close": 403.82,
+        "change_pct": -1.32,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/tsla/history/"
       },
@@ -1391,84 +994,61 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 370.59,
-          "pct": 8.97,
-          "source_url": "https://stockanalysis.com/stocks/tsla/history/"
+          "source_url": "https://stockanalysis.com/stocks/tsla/history/",
+          "pct": 7.53
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 357.01,
-          "pct": 13.11,
-          "source_url": "https://stockanalysis.com/stocks/tsla/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 376.37,
+          "source_url": "https://stockanalysis.com/stocks/tsla/history/",
+          "pct": 5.88
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 311.21,
-          "pct": 29.76,
-          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 322.08,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/",
+          "pct": 23.73
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
           "base_adjusted_close": 393.45,
-          "pct": 2.64,
-          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/",
+          "pct": 1.28
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 423.74,
-          "pct": -4.7,
-          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 423.7,
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/",
+          "pct": -5.95
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 390.82,
-          "pct": 3.33,
-          "source_url": "https://finance.yahoo.com/quote/TSLA/history/"
+          "source_url": "https://finance.yahoo.com/quote/TSLA/history/",
+          "pct": 1.97
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Active-session snapshot: $397.50, -1.57% versus the prior close",
-          "facts": [
-            "Stock Analysis displayed USD 397.50 at 14:55 EST on 3 November 2026 (03:55 SGT on 4 November), during the regular session. The displayed daily change was -1.57% versus the 2 November completed close of USD 403.82.",
-            "The previous 00:00 SGT edition saved USD 401.80 at 10:49 EST. The newer observation is -1.07% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
-          ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
-          "sources": [
-            {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/tsla/history/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research."
       ],
       "sources": [
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/tsla/history/"
         },
         {
-          "title": "Independently rechecked adjusted-close baseline source",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
-          "url": "https://finance.yahoo.com/quote/TSLA/history/?.tsrc=fin-srch&p=TSLA"
-        },
-        {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001318605.json"
         }
       ]
@@ -1479,11 +1059,11 @@
       "group": "Semiconductors",
       "instrument": "US-listed USD ADR",
       "price": {
-        "close": 398.63,
-        "adjusted_close": 398.63,
-        "previous_close": 406.13,
-        "change_pct": -1.85,
-        "as_of": "2026-11-02T16:00:00-05:00",
+        "close": 404.8,
+        "adjusted_close": 404.8,
+        "previous_close": 398.63,
+        "change_pct": 1.55,
+        "as_of": "2026-11-03T16:00-05:00",
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/tsm/history/"
       },
@@ -1493,108 +1073,66 @@
           "months": 1,
           "base_date": "2026-10-02",
           "base_adjusted_close": 472.78,
-          "pct": -15.68,
-          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/"
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/?p=TSM",
+          "pct": -14.38
         },
         {
           "months": 2,
-          "base_date": "2026-09-02",
-          "base_adjusted_close": 414.39,
-          "pct": -3.8,
-          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/"
+          "base_date": "2026-09-03",
+          "base_adjusted_close": 415.89,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/?p=TSM",
+          "pct": -2.67
         },
         {
           "months": 3,
-          "base_date": "2026-07-31",
-          "base_adjusted_close": 403.17,
-          "pct": -1.13,
-          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/"
+          "base_date": "2026-08-03",
+          "base_adjusted_close": 405.02,
+          "source_url": "https://finance.yahoo.com/quote/TSM/history/?p=TSM",
+          "pct": -0.05
         },
         {
           "months": 4,
           "base_date": "2026-07-02",
-          "base_adjusted_close": 433,
-          "pct": -7.94,
-          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/"
+          "base_adjusted_close": 433.0,
+          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/",
+          "pct": -6.51
         },
         {
           "months": 5,
-          "base_date": "2026-06-02",
-          "base_adjusted_close": 444.45,
-          "pct": -10.31,
-          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/"
+          "base_date": "2026-06-03",
+          "base_adjusted_close": 434.5,
+          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/",
+          "pct": -6.84
         },
         {
           "months": 6,
           "base_date": "2026-05-01",
           "base_adjusted_close": 395.68,
-          "pct": 0.75,
-          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/"
+          "source_url": "https://hk.finance.yahoo.com/quote/TSM/history/",
+          "pct": 2.3
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-03",
-          "headline": "Active-session snapshot: $404.41, +1.45% versus the prior close",
-          "facts": [
-            "Stock Analysis displayed USD 404.41 at 14:45 EST on 3 November 2026 (03:45 SGT on 4 November), during the regular session. The displayed daily change was +1.45% versus the 2 November completed close of USD 398.63.",
-            "The previous 00:00 SGT edition saved USD 407.61 at 10:49 EST. The newer observation is -0.79% relative to that earlier snapshot. This comparison uses two different observation times and is not an exact cutoff-to-cutoff return."
-          ],
-          "analysis": "The regular session is still active at the cutoff. The completed-close price and six cumulative return fields remain anchored to 2 November and are unchanged after independent rechecking.",
-          "risks": "Individually timestamped quotes can move before the close. Quote timing and price movement do not establish a business cause or an earnings outcome.",
-          "next_watch": "The 3 November completed regular-session close after 16:00 EST (4 November 05:00 SGT).",
-          "sources": [
-            {
-              "title": "Stock Analysis · active-session USD price and displayed timestamp",
-              "url": "https://stockanalysis.com/stocks/tsm/history/"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-03",
-          "headline": "Retained earlier coverage: October monthly sales are due on 10 November",
-          "facts": [
-            "TSMC’s official financial calendar lists October 2026 monthly sales for 10 November 2026."
-          ],
-          "analysis": "Monthly sales provide a nearer-term business update between quarterly reports. They do not by themselves establish profitability.",
-          "risks": "Group revenue is reported in a different currency and scope from the USD ADR price. Do not treat the stock-price change as the revenue change.",
-          "next_watch": "The October monthly revenue release on 10 November; verify its reported currency and comparison period.",
-          "sources": [
-            {
-              "title": "TSMC investor relations · financial calendar",
-              "url": "https://investor.tsmc.com/english/financial-calendar"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Exact synchronized 04:00 SGT quotes were not verified; active-session observations have individually stated times and minute precision.",
-        "Reuters review used search and accessible syndicated stories because direct Reuters market/technology pages were unavailable. Coverage remains partial and does not establish that no news occurred.",
-        "No new company-specific event in the 16:00–20:00 UTC interval was independently verified among the sources checked."
+        "Reuters and company-news coverage is partial. No newly included item is not proof that no news occurred.",
+        "No additional company-specific event within the 20:00–00:00 UTC window was independently verified among the sources checked; earlier editions remain available for prior research.",
+        "Historical adjusted series differ between vendors; this edition consistently uses Yahoo-adjusted historical inputs, linked for each horizon."
       ],
       "sources": [
         {
-          "title": "Stock Analysis · active-session USD price and displayed timestamp",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://stockanalysis.com/stocks/tsm/history/"
         },
         {
-          "title": "Stock Analysis: price/history",
-          "url": "https://stockanalysis.com/stocks/tsm/"
-        },
-        {
-          "title": "Independently rechecked adjusted-close baseline source",
-          "url": "https://hk.finance.yahoo.com/quote/TSM/history/"
-        },
-        {
-          "title": "Yahoo Finance: adjusted historical series",
+          "title": "Verified public price or adjusted-close baseline source",
           "url": "https://finance.yahoo.com/quote/TSM/history/?p=TSM"
         },
         {
-          "title": "Yahoo Finance · adjusted historical series",
-          "url": "https://finance.yahoo.com/quote/TSM/history/"
+          "title": "Verified public price or adjusted-close baseline source",
+          "url": "https://hk.finance.yahoo.com/quote/TSM/history/"
         },
         {
-          "title": "SEC · recent issuer submissions checked through the fixed cutoff",
+          "title": "SEC recent issuer submissions checked through cutoff",
           "url": "https://data.sec.gov/submissions/CIK0001046179.json"
         }
       ]
