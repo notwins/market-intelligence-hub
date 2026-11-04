@@ -1,4 +1,5 @@
 """Presentation-only markup must preserve all original research text and links."""
+from build_report_additions import strip_additions
 import hashlib
 import unittest
 from html.parser import HTMLParser
@@ -14,7 +15,7 @@ class Evidence(HTMLParser):
   if t=='a':self.links.append(a.get('href'))
 class TestReadingEmphasis(unittest.TestCase):
  def test_source_text_is_unchanged(self):
-  p=Evidence();p.feed((ROOT/'site/market-understanding/index.html').read_text())
+  p=Evidence();p.feed(strip_additions((ROOT/'site/market-understanding/index.html').read_text()))
   self.assertEqual(hashlib.sha256(''.join(p.text).encode()).hexdigest(),'9d0d92f894f663ea4bd1ff7dd9c8690f8f0a3251ea9262ae78d4a95e822eb22c')
   self.assertEqual(p.conclusions,45);self.assertEqual(len(p.keywords),73);self.assertEqual(set(p.keywords),{'strong'})
   self.assertTrue(any('mas.gov.sg' in (u or '') for u in p.links));self.assertTrue(any('am.jpmorgan.com' in (u or '') for u in p.links))

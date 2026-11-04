@@ -3,6 +3,7 @@
 Run: python3 -m unittest discover -s scripts -p test_cpf_temasek_report.py
 All financial checks use exact fractions, never binary floating-point money.
 """
+from build_report_additions import strip_additions
 from collections import Counter
 from fractions import Fraction as F
 from html.parser import HTMLParser
@@ -43,7 +44,7 @@ class CPFTemasekReportTests(unittest.TestCase):
     def setUpClass(cls):
         cls.html = (ARTICLE / "index.html").read_text()
         cls.data = json.loads((ARTICLE / "scenarios.json").read_text())
-        cls.structure = Structure(cls.html)
+        cls.structure = Structure(strip_additions(cls.html))
 
     def test_complete_native_article(self):
         self.assertEqual(len(self.structure.sections), 34)

@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+let printed=0;const handlers={};const button=id=>({textContent:'',addEventListener:(event,fn)=>handlers[id+':'+event]=fn});
+const search={value:'',addEventListener:(e,f)=>handlers['search:'+e]=f};const count={},empty={},print=button('print'),expand=button('expand');
+const chapters=[{dataset:{topic:'Bonds'},textContent:'Bond duration',hidden:false},{dataset:{topic:'Currency'},textContent:'Currency conversion',hidden:false}];
+const explanations=[{open:false},{open:false}];const filters=['All topics','Bonds'].map(x=>({dataset:{filter:x},setAttribute:(k,v)=>{},addEventListener:(e,f)=>handlers[x+':'+e]=f}));
+const root={querySelector:s=>({'#mu-search':search,'#mu-result-count':count,'.mu-no-results':empty,'#mu-print':print,'#mu-expand':expand}[s]),querySelectorAll:s=>({'.mu-chapter[data-topic]':chapters,'[data-filter]':filters,'.mu-explanation':explanations,'a[href^="#mu-"]':[]}[s]||[])};
+vm.runInNewContext(fs.readFileSync(__dirname+'/../site/market-understanding/market-understanding.js','utf8'),{document:{querySelector:()=>root},window:{print:()=>printed++}});
+assert.equal(printed,0);handlers['print:click']();handlers['print:click']();assert.equal(printed,2);
+handlers['Bonds:click']();assert.equal(chapters[0].hidden,false);assert.equal(chapters[1].hidden,true);
+handlers['All topics:click']();search.value='conversion';handlers['search:input']();assert.equal(chapters[0].hidden,true);assert.equal(chapters[1].hidden,false);
+search.value='';handlers['search:input']();assert(chapters.every(c=>!c.hidden));handlers['expand:click']();assert(explanations.every(c=>c.open));handlers['expand:click']();assert(explanations.every(c=>!c.open));
+console.log('Report additions: print and chapter controls passed (non-browser harness).');

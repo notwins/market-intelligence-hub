@@ -1,4 +1,5 @@
 """Regression checks for the complete approved wealth research article."""
+from build_report_additions import strip_additions
 from pathlib import Path
 from html.parser import HTMLParser
 import re, unittest
@@ -13,7 +14,7 @@ class Parsed(HTMLParser):
   if 'data-value' in a:self.values.append(a['data-value'])
 class WealthReport(unittest.TestCase):
  @classmethod
- def setUpClass(cls):cls.text=REPORT.read_text();cls.p=Parsed();cls.p.feed(cls.text)
+ def setUpClass(cls):cls.text=REPORT.read_text();cls.p=Parsed();cls.p.feed(strip_additions(cls.text))
  def test_complete_original_structure(self):
   self.assertEqual(sum(t=='section' and a.get('class')=='report-section' for t,a in self.p.tags),16)
   self.assertEqual(sum(t=='div' and a.get('class')=='reference' for t,a in self.p.tags),25)
