@@ -3,12 +3,13 @@ import json,re,hashlib
 from pathlib import Path
 from html.parser import HTMLParser
 from datetime import datetime,timezone
+from urllib.parse import urlsplit,unquote
 ROOT=Path(__file__).resolve().parents[1]/'site'
 def read(path):return json.loads((ROOT/path).read_text())
 def strings(x):
  if isinstance(x,str):return x
  if isinstance(x,list):return ' '.join(strings(v) for v in x)
- if isinstance(x,dict):return ' '.join(strings(v) for k,v in x.items() if k not in ['source_file','sha256','raw','url','source_url','source_sheet','source_path'])
+ if isinstance(x,dict):return ' '.join(strings(v) for k,v in x.items() if k not in ['source_file','sha256','raw','url','source_url','source_sheet','source_path','original_url','conversation_id','thread_id'])
  return ''
 def watchlist_report_target(root,edition,ticker):
  # Never send an archived search result to whichever edition happens to be latest.
@@ -44,18 +45,29 @@ LOCATIONS={
  'Historical series':('Yields and FX history','history'),
  'External research PDF':('Research library · external PDF reference','research')
 }
+def restricted_source(url):
+ if not isinstance(url,str):return False
+ try:
+  parsed=urlsplit(url)
+  return parsed.hostname in ['chatgpt.com','chat.openai.com'] and re.match(r'^/(?:c|g)(?:/|$)',unquote(parsed.path)) is not None
+ except ValueError:return True
+
 def build():
  rows=[];seen=set()
  def add(kind,title,text,href,date=None,source=None,status='Dated saved content',tags=None,location=None):
   key=(kind,title,href,str(date),str(text))
   if key in seen:return
   seen.add(key)
+  restricted=restricted_source(source) or restricted_source(href)
+  if restricted_source(source):source=None
+  if restricted_source(href):href=None
+  if location and restricted_source(location.get('href')):location={**location,'href':None}
   if location is None:
    label,section=LOCATIONS.get(kind,(title,None))
    exact=kind in ['Page','Learning chapter','Tag catalogue','Section'] or (kind=='Watchlist research' and href is not None)
    location={'label':('V4 → '+label if section else label),'href':href if exact else ('v4.html#'+section if section else href),'exact':exact}
   clean_tags=sorted(set(str(t).strip() for t in (tags or []) if t is not None and str(t).strip()))
-  rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status,tags=clean_tags,location=location))
+  rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status,tags=clean_tags,location=location,source_access='restricted' if restricted else 'public'))
  sections={'overview':'Daily briefing','watchlist':'12-name watchlist','calls':'Calls and full reports','headlines':'Reuters coverage','hourly':'Hourly news','earnings':'US earnings','credit':'Bonds and credit','policy':'Central Banks and US Administration','reports':'Scheduled reports and archive','directory':'Research directory','research':'Research library','master':'Security master','history':'Yields FX history historical event charts','ust':'UST selection desk','feeds':'Data and uploads','tools':'Tools and simulators'}
  for key,title in sections.items():add('Section',title,title,'v4.html#'+key,status='Navigation')
  add('Section','Tag and event tree map','Searchable colored country sector policy ticker and historical event groupings','tag-map.html',status='Recommended taxonomy')

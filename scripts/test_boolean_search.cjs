@@ -59,3 +59,8 @@ console.log('PASS Boolean precedence, nested groups, aliases, exact phrases, tex
 
 assert(data.entries.filter(e=>e.kind==='Report').every(e=>e.href==='v1.html?view=archive'&&e.location.label.startsWith('V1')));
 assert(data.entries.some(e=>e.kind==='Headline'&&e.location.label.includes('Daily archive')&&e.location.href==='v4.html#reports'));
+
+for(const url of ['https://chatgpt.com/c/private-id','https://chatgpt.com/g/g-project/c/private-id','https://chat.openai.com/c/private-id','https://chatgpt.com/%63/private-id'])assert.equal(UI.safe(url),null);
+assert(data.entries.every(e=>!e.source||!/^https:\/\/(?:chatgpt\.com|chat\.openai\.com)\/(?:c|g)\//.test(e.source)));
+assert(data.entries.some(e=>e.source_access==='restricted'));
+const catalogueText=JSON.stringify(data);for(const prefix of ['https://chatgpt.com/c/','https://chatgpt.com/g/','https://chat.openai.com/c/'])assert(!catalogueText.includes(prefix));
