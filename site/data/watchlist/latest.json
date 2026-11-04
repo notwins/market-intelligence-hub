@@ -1,26 +1,27 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261104T160000Z",
-  "as_of": "2026-11-05T00:00:00+08:00",
-  "generated_at": "2026-11-04T16:09:42+00:00",
-  "title": "12-name watchlist · 05 Nov · 00:00 SGT",
+  "id": "watchlist-20261104T200000Z",
+  "as_of": "2026-11-05T04:00:00+08:00",
+  "generated_at": "2026-11-04T20:16:59.515778+00:00",
+  "title": "12-name watchlist · 05 Nov · 04:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-04T16:09:42+00:00",
+    "sources_checked_at": "2026-11-04T20:16:59.515778+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "Meta’s euro offering drew €53 billion of orders, according to Reuters citing Bloomberg; final pricing remains unconfirmed. Amazon launched a free merchant portal for Shop Direct. Also newly collated: Google’s earlier same-day confirmation of voluntary buyout offers in five countries. The 12 saved US closes and all six return periods were freshly checked.",
-  "coverage_note": "Cutoff: 05-Nov-2026 (Thu) 00:00 SGT. News window: 04 Nov 20:00–24:00 SGT, with a 15-minute overlap. Compared with the last successful 20:00 SGT edition and earlier archives. Google’s buyout report is explicitly labelled earlier same-day context newly added, not a new event within the window. Reuters and issuer coverage is partial; source access limitations are listed once below and under affected companies. Checks occurred after cutoff; later intraday quotes are excluded. The original twelve-name schema is retained; requested ETF additions remain outside this edition’s verified coverage.",
-  "price_basis": "USD saved regular closes: 03 Nov 16:00 EST / 04 Nov 05:00 SGT. Daily change: versus 02 Nov ordinary close. Original vendor timestamp precision is retained per company. All close values were rechecked against fresh Yahoo daily-history responses; the new US session was still open at cutoff. These are prior closes, not live quotes. Earlier premarket and after-hours snapshots remain in their dated archives. TSM is the US-listed USD ADR.",
-  "return_basis": "Cumulative 1–6 month return = (03 Nov adjusted close ÷ baseline adjusted close − 1) × 100. Baselines: 02 Oct, 03 Sep, 03 Aug, 02 Jul, 03 Jun and 01 May 2026, using the preceding trading session for weekends and the 03 Jul market holiday. All 72 baselines were independently rechecked. Provider-adjusted closes include splits and dividend/distribution adjustments. Inputs are shown to two decimals; these are cumulative returns before fees and taxes.",
+  "summary": "Google’s credit support for TeraWulf’s Anthropic campus is newly collated; the $19bn figure is lease value, not Google’s stated guarantee amount. Berkshire confirmed Saturday’s earnings timetable. Reuters covered later-session Big Tech repricing and Texas data-centre policy uncertainty. All 12 saved USD closes and 72 adjusted-close baselines were freshly verified.",
+  "coverage_note": "Cutoff: 05-Nov-2026 (Thu) 04:00 SGT. Compared with the now-successfully deployed 00:00 SGT edition. Main update window is 00:00–04:00 SGT with a 15-minute overlap; research also reviewed the interval since the preceding 20:00 SGT report while deployment was pending. Earlier 04 Nov Google credit-support and Tesla political-context stories are newly collated and explicitly dated, not relabelled as later-window events. Amazon’s portal and Meta’s €53bn order-book report already appear in the now-public 00:00 SGT edition and are not duplicated here. Shared news appears once. Source coverage is partial.",
+  "price_basis": "USD saved completed-session closes: 03 Nov 16:00 EST / 04 Nov 05:00 SGT. Daily change compares the 02 Nov ordinary close. Original individually recorded quote timestamps are preserved; fresh Yahoo daily-history responses reverified their numerical close values. Retrieval times are separate from quote times. The 04 Nov US session was still open at cutoff. No later intraday observation replaces the endpoint. TSM is the US-listed USD ADR.",
+  "return_basis": "Cumulative 1–6 month return = (03 Nov adjusted close / baseline adjusted close − 1) × 100, using displayed cent-rounded inputs. Baselines: 02 Oct, 03 Sep, 03 Aug, 02 Jul, 03 Jun and 01 May 2026, the last available trading sessions on or before each monthly anniversary. All 72 dates and adjusted values were freshly verified against provider history. Provider-adjusted closes incorporate split and dividend/distribution adjustments. Returns exclude investor fees and taxes.",
   "caveats": [
-    "Price checks: fresh Yahoo chart JSON succeeded for all 12 securities. All 12 regular closes, 12 prior closes and 72 adjusted-close baselines match the saved edition at displayed cent precision. Daily and cumulative returns were independently recalculated.",
-    "News coverage: direct Reuters pages and some syndication pages were unavailable; accessible Reuters syndicated search text was used with publisher attribution. Apple, Alphabet, Meta and Micron issuer-news renderings were incomplete. Other issuer lists and all 12 SEC recent-submission feeds were checked, but these do not constitute a complete news census.",
-    "Meta: the €53 billion order book and up-to-€9 billion planned size are Reuters reporting of Bloomberg, not issuer-confirmed completed funding. No final euro pricing or settlement was verified by cutoff.",
-    "Google: Reuters published the buyout report earlier on 04 Nov; the programme expanded in June. It is newly added dated context, not a fresh layoff announcement or a quantified saving.",
-    "Amazon: product reach figures are company claims, not independently measured sales. The SEC feed also showed a Form 144 accepted at 15:20:59 UTC; this is a proposed-sale notice, not evidence of an executed transaction.",
-    "Watch only. No holding, trade, user call or buy recommendation is implied. Existing archives, reports and source records are retained; no private or restricted material is included."
+    "Fresh prices: 12 completed-session closes, 12 prior closes and all 72 adjusted-close baselines independently rechecked at 20:07 UTC. All displayed cent values agree with the prior checked records. Daily and cumulative arithmetic was independently recomputed; no mismatch.",
+    "News: accessible Reuters syndications and original issuer/SEC sources were checked. Direct Reuters article access was limited. Microsoft and Micron issuer endpoints returned HTTP 403; Broadcom returned HTTP 503. Some other newsrooms did not expose complete dated listings. Empty company updates mean no eligible development verified in the reviewed sources, not a complete all-news search.",
+    "Meta: the €53bn order-book report is Reuters citing Bloomberg. A later-looking €9bn sale report lacks a reliable update timestamp, so it is excluded from cutoff-qualified facts; this is not a claim that pricing had not happened.",
+    "Berkshire: the source is dated 04 Nov and its server Last-Modified header is 18:55:51 UTC. That header is not presented as an exact publication timestamp.",
+    "All 12 SEC recent-submission feeds were checked. An Amazon Form 144 was accepted at 15:20:59 UTC. It is a proposed-sale notice, not evidence of an executed transaction.",
+    "The existing 12-name schema is preserved. Requested SPY, QQQ, TLT, IEI and IEF additions require separate schema/integration work and are not represented as verified coverage here.",
+    "Watch only. No holdings, trades, user calls, private notes or restricted research screenshots are included. Earlier public editions and their source qualifications remain unchanged."
   ],
   "rows": [
     {
@@ -82,13 +83,35 @@
           "pct": 18.69
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Shared watchlist context: Reuters reports regular-session Big Tech repricing",
+          "facts": [
+            "Reuters via MarketScreener India timestamps publication at 22:16 IST and modification at 22:23 IST on 04 Nov (16:46 and 16:53 UTC). The report covers Apple, Amazon, Alphabet, Microsoft and Meta.",
+            "Reuters describes platform shares rallying as investors anticipated that possible limits on new data centres could increase the value of existing capacity and ease spending pressure. These are report-time market observations and investor interpretations, not changes to the separate saved-close data."
+          ],
+          "analysis": "Slower infrastructure spending could support near-term cash generation while constraining future capacity growth.",
+          "risks": "Investor expectations are not enacted policy, and a news association does not prove why a particular share moved.",
+          "next_watch": "Specific policy measures and issuer capital-spending decisions.",
+          "sources": [
+            {
+              "title": "Reuters via MarketScreener India · 04 Nov 22:16 IST; updated 22:23 IST",
+              "url": "https://in.marketscreener.com/news/democrats-midterm-sweep-fuels-750-billion-big-tech-rally-ce785fdfdc80f125"
+            },
+            {
+              "title": "Reuters via Investing.com · regular-session Big Tech report",
+              "url": "https://www.investing.com/news/stock-market-news/democrats-midterm-sweep-fuels-750-billion-big-tech-rally-5000648"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Issuer newsroom rendering was incomplete; SEC feed checked. No new company development verified in the reviewed sources."
+        "Original newsroom date enumeration was incomplete. Shared Reuters platform context is included; no standalone issuer event verified."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
         },
         {
@@ -100,12 +123,16 @@
           "url": "https://data.sec.gov/submissions/CIK0000320193.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://www.apple.com/newsroom/"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#AAPL"
         },
         {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AAPL"
+          "title": "Reuters via MarketScreener India · 04 Nov 22:16 IST; updated 22:23 IST",
+          "url": "https://in.marketscreener.com/news/democrats-midterm-sweep-fuels-750-billion-big-tech-rally-ce785fdfdc80f125"
+        },
+        {
+          "title": "Reuters via Investing.com · regular-session Big Tech report",
+          "url": "https://www.investing.com/news/stock-market-news/democrats-midterm-sweep-fuels-750-billion-big-tech-rally-5000648"
         }
       ]
     },
@@ -168,13 +195,35 @@
           "pct": 26.22
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Shared watchlist context: Texas data-centre policy uncertainty",
+          "facts": [
+            "Reuters via MarketScreener India timestamps publication at 22:54 IST and modification at 22:56 IST on 04 Nov (17:24 and 17:26 UTC).",
+            "The report says governor-elect Hinojosa campaigned for a formal statewide data-centre moratorium and names Microsoft, Google and Meta as having major Texas projects. Existing Abbott restrictions pre-date the election; the incoming governor’s proposal is not an enacted new moratorium."
+          ],
+          "analysis": "Permitting uncertainty may affect construction schedules across these companies.",
+          "risks": "Implementation and scope remain unsettled. No company-specific impairment or revised capital plan was verified.",
+          "next_watch": "Actual permit rules, legislation and issuer project updates.",
+          "sources": [
+            {
+              "title": "Reuters via MarketScreener India · 04 Nov 22:54 IST; updated 22:56 IST",
+              "url": "https://in.marketscreener.com/news/texas-data-centers-face-uncertain-future-after-hinojosa-wins-governor-s-race-ce785fdfdf8df020"
+            },
+            {
+              "title": "Reuters via Investing.com · 04 Nov Texas data-centre report",
+              "url": "https://www.investing.com/news/stock-market-news/texas-data-centers-face-uncertain-future-afterhinojosa-wins-governors-race-5000781"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Issuer blog and SEC feed checked; no new development verified in the review window."
+        "Original issuer endpoint returned HTTP 403. SEC and accessible Reuters sources were checked."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
         },
         {
@@ -186,12 +235,16 @@
           "url": "https://data.sec.gov/submissions/CIK0000789019.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://blogs.microsoft.com/"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#MSFT"
         },
         {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#MSFT"
+          "title": "Reuters via MarketScreener India · 04 Nov 22:54 IST; updated 22:56 IST",
+          "url": "https://in.marketscreener.com/news/texas-data-centers-face-uncertain-future-after-hinojosa-wins-governor-s-race-ce785fdfdf8df020"
+        },
+        {
+          "title": "Reuters via Investing.com · 04 Nov Texas data-centre report",
+          "url": "https://www.investing.com/news/stock-market-news/texas-data-centers-face-uncertain-future-afterhinojosa-wins-governors-race-5000781"
         }
       ]
     },
@@ -256,11 +309,11 @@
       ],
       "research": [],
       "gaps": [
-        "Issuer blog and SEC feed checked; latest visible blog item was dated 03 Nov, before this window."
+        "Original blog’s latest visible dated item was 03 Nov. No new standalone development was verified in reviewed sources."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
         },
         {
@@ -272,12 +325,8 @@
           "url": "https://data.sec.gov/submissions/CIK0001045810.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://blogs.nvidia.com/"
-        },
-        {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#NVDA"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#NVDA"
         }
       ]
     },
@@ -343,28 +392,37 @@
       "research": [
         {
           "date": "2026-11-04",
-          "headline": "Earlier today: Google confirms buyout offers expanded to five countries",
+          "headline": "Google provides credit support for TeraWulf’s Anthropic campus",
           "facts": [
-            "Reuters reported earlier on 04 Nov that Google confirmed it expanded voluntary exit offers in June to some employees in Canada, France, Germany, Japan and Switzerland.",
-            "Reuters could not establish how many people accepted. The report concerns a previously unreported programme expansion, not a new compulsory layoff announcement at this cutoff."
+            "Earlier 04 Nov context newly collated in this edition; the original publication time below precedes the main 16:00–20:00 UTC update window.",
+            "TeraWulf’s original news listing timestamps its announcement at 08:15 EST on 04 Nov (13:15 UTC). It announced Google credit-support agreements connected to financing its Hawesville, Kentucky campus and approximately US$19 billion of contracted Anthropic leases. The US$19 billion is lease value, not a disclosed Google guarantee amount.",
+            "TeraWulf’s 8-K describes approximately 401 MW under the existing leases, with delivery expected in phases from late 2027 through Q2 2028. Google agreed to backstop certain Anthropic obligations, becoming effective at final-data-hall commencement under each corresponding lease, subject to contract conditions."
           ],
-          "analysis": "The report adds context to Alphabet’s effort to redirect costs while investing in AI. Without participation or severance figures, the net savings cannot be estimated reliably.",
-          "risks": "Severance expense and loss of experienced staff may offset some savings. Programme scope and financial impact remain unquantified.",
-          "next_watch": "Issuer disclosure of participation, restructuring charges and operating-expense trends.",
+          "analysis": "The arrangement extends Alphabet’s involvement in financing AI infrastructure beyond its own facilities. It is not evidence of immediate cash spending or new Alphabet revenue.",
+          "risks": "Contingent obligations, counterparty exposure and construction timing matter; the full lease value must not be treated as Google’s guaranteed exposure.",
+          "next_watch": "Financing completion, further contract disclosures and campus delivery milestones.",
           "sources": [
             {
-              "title": "Reuters via Investing.com · earlier 04 Nov report, newly collated",
-              "url": "https://www.investing.com/news/stock-market-news/exclusivegoogle-extends-voluntary-buyout-offers-to-employees-in-several-countries-4997689"
+              "title": "TeraWulf original news listing · 04 Nov 08:15 EST",
+              "url": "https://investors.terawulf.com/news-events"
+            },
+            {
+              "title": "TeraWulf original announcement · 04 Nov",
+              "url": "https://investors.terawulf.com/sec-filings/all-sec-filings/content/0001628280-26-069810/wulfhawesvillecsaandepcmpr.htm"
+            },
+            {
+              "title": "TeraWulf original SEC 8-K · Google credit-support terms",
+              "url": "https://www.sec.gov/Archives/edgar/data/1083301/000162828026069810/wulf-20261104.htm"
             }
           ]
         }
       ],
       "gaps": [
-        "Issuer news rendering was incomplete; the buyout story relies on Reuters reporting of Google confirmation."
+        "Original blog date enumeration was incomplete. The counterparty’s original IR release and SEC 8-K verify the credit-support announcement."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
         },
         {
@@ -376,16 +434,20 @@
           "url": "https://data.sec.gov/submissions/CIK0001652044.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://blog.google/"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#GOOGL"
         },
         {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#GOOGL"
+          "title": "TeraWulf original news listing · 04 Nov 08:15 EST",
+          "url": "https://investors.terawulf.com/news-events"
         },
         {
-          "title": "Reuters via Investing.com · earlier 04 Nov report, newly collated",
-          "url": "https://www.investing.com/news/stock-market-news/exclusivegoogle-extends-voluntary-buyout-offers-to-employees-in-several-countries-4997689"
+          "title": "TeraWulf original announcement · 04 Nov",
+          "url": "https://investors.terawulf.com/sec-filings/all-sec-filings/content/0001628280-26-069810/wulfhawesvillecsaandepcmpr.htm"
+        },
+        {
+          "title": "TeraWulf original SEC 8-K · Google credit-support terms",
+          "url": "https://www.sec.gov/Archives/edgar/data/1083301/000162828026069810/wulf-20261104.htm"
         }
       ]
     },
@@ -448,31 +510,13 @@
           "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-04",
-          "headline": "Amazon opens a free Shop Direct portal for outside merchants",
-          "facts": [
-            "Amazon’s original release, timestamped 14:00:07 UTC, introduces Shop Direct Merchant Workspace, a free self-service portal through which eligible merchants can connect product feeds to Amazon and Alexa for Shopping.",
-            "Amazon says tens of millions of customers have discovered hundreds of millions of outside-store products through Shop Direct. Customers can be directed to the merchant’s website, while eligible products support Buy for Me. These reach figures are issuer claims."
-          ],
-          "analysis": "The portal may strengthen Amazon as the starting point for shopping even when inventory sits elsewhere. Participation and discovery do not by themselves establish incremental revenue.",
-          "risks": "Merchant uptake, data accuracy, purchase conversion and customer experience determine commercial value. No financial contribution was quantified.",
-          "next_watch": "Merchant adoption, conversion metrics and any disclosed monetisation or revenue contribution.",
-          "sources": [
-            {
-              "title": "Amazon original announcement · 04 Nov 14:00:07 UTC",
-              "url": "https://www.aboutamazon.com/news/retail/amazon-shop-direct-merchant-workspace"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Original Shop Direct release verified at 04 Nov 14:00:07 UTC; SEC feed checked."
+        "Commercial reach and adoption claims in the source are issuer statements, not independently measured sales."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
         },
         {
@@ -484,12 +528,8 @@
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://www.aboutamazon.com/news"
-        },
-        {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AMZN"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#AMZN"
         },
         {
           "title": "Amazon original announcement · 04 Nov 14:00:07 UTC",
@@ -556,31 +596,13 @@
           "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-04",
-          "headline": "Meta euro bond demand reaches €53bn; final pricing still pending",
-          "facts": [
-            "Reuters reported at 14:27 UTC that Meta’s debut euro bond offering attracted €53 billion in orders, citing Bloomberg’s compiled data.",
-            "The report said Meta sought up to €9 billion across six maturities from just over four to more than 38 years, with pricing expected later Wednesday. Investor orders are not completed borrowing."
-          ],
-          "analysis": "Strong reported demand suggests access to European funding. The final coupon and spread, rather than the order-book headline alone, determine the financing cost.",
-          "risks": "Orders can change before allocation. Size, pricing, currency exposure and settlement remain unverified; heavier AI investment can increase funding needs.",
-          "next_watch": "Final issuer pricing documents, coupons and spreads, then confirmation of settlement.",
-          "sources": [
-            {
-              "title": "Reuters via MarketScreener · 04 Nov 09:27 EST · reporting Bloomberg",
-              "url": "https://www.marketscreener.com/news/meta-draws-record-orders-for-debut-euro-bond-sale-bloomberg-news-reports-ce785fdfdd8af52d"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Issuer news rendering was incomplete; no final euro terms verified. SEC feed checked."
+        "Original newsroom dates were incompletely rendered. The final-pricing report lacks a verified update timestamp for this cutoff."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
         },
         {
@@ -592,15 +614,11 @@
           "url": "https://data.sec.gov/submissions/CIK0001326801.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://about.fb.com/news/"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#META"
         },
         {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#META"
-        },
-        {
-          "title": "Reuters via MarketScreener · 04 Nov 09:27 EST · reporting Bloomberg",
+          "title": "Reuters via MarketScreener · 04 Nov 09:27 EST · citing Bloomberg",
           "url": "https://www.marketscreener.com/news/meta-draws-record-orders-for-debut-euro-bond-sale-bloomberg-news-reports-ce785fdfdd8af52d"
         }
       ]
@@ -664,13 +682,35 @@
           "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Berkshire confirms Saturday earnings-release schedule",
+          "facts": [
+            "Berkshire’s original announcement dated 04 Nov schedules its Q3 earnings release and Form 10-Q for Saturday 07 Nov at approximately 07:00 Central time (13:00 UTC / 21:00 SGT).",
+            "The PDF supplies no exact publication time. Its HTTP Last-Modified header is 04 Nov 18:55:51 GMT; this is a server modification timestamp, not an asserted publication time."
+          ],
+          "analysis": "The notice confirms a near-term reporting catalyst, not an earnings result.",
+          "risks": "Release timing is approximate; operating performance and capital-allocation outcomes are not yet established by this announcement.",
+          "next_watch": "The scheduled report’s operating earnings, insurance performance and capital allocation.",
+          "sources": [
+            {
+              "title": "Berkshire original earnings-schedule announcement · dated 04 Nov",
+              "url": "https://www.berkshirehathaway.com/news/nov0426.pdf"
+            },
+            {
+              "title": "Berkshire original 2026 news index",
+              "url": "https://www.berkshirehathaway.com/news/2026news.html"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Issuer release list and SEC feed checked; no new development verified in the review window."
+        "Exact publication time is unavailable; the dated PDF and server modification time are retained separately."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
         },
         {
@@ -682,12 +722,16 @@
           "url": "https://data.sec.gov/submissions/CIK0001067983.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://www.berkshirehathaway.com/news/2026news.html"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#BRK.B"
         },
         {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#BRK.B"
+          "title": "Berkshire original earnings-schedule announcement · dated 04 Nov",
+          "url": "https://www.berkshirehathaway.com/news/nov0426.pdf"
+        },
+        {
+          "title": "Berkshire original 2026 news index",
+          "url": "https://www.berkshirehathaway.com/news/2026news.html"
         }
       ]
     },
@@ -752,11 +796,11 @@
       ],
       "research": [],
       "gaps": [
-        "Issuer newsroom and SEC feed checked. Previously covered 03 Nov results and the earlier Reuters premarket follow-up were not repeated."
+        "Original newsroom’s latest visible earnings item was 03 Nov. No new eligible development verified in reviewed sources."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
         },
         {
@@ -768,12 +812,8 @@
           "url": "https://data.sec.gov/submissions/CIK0000002488.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://newsroom.amd.com/"
-        },
-        {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AMD"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#AMD"
         }
       ]
     },
@@ -838,11 +878,11 @@
       ],
       "research": [],
       "gaps": [
-        "Issuer financial-news list and SEC feed checked; no new development verified in the review window."
+        "Original issuer endpoint returned HTTP 503. SEC feed and partial Reuters search were checked."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
         },
         {
@@ -854,12 +894,8 @@
           "url": "https://data.sec.gov/submissions/CIK0001730168.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://investors.broadcom.com/financial-information/financial-news-releases"
-        },
-        {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#AVGO"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#AVGO"
         }
       ]
     },
@@ -924,11 +960,11 @@
       ],
       "research": [],
       "gaps": [
-        "Issuer news list was incomplete in the direct rendering; indexed overview and SEC feed checked."
+        "Original issuer endpoint returned HTTP 403. SEC feed and partial Reuters search were checked."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
         },
         {
@@ -940,12 +976,8 @@
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://investors.micron.com/overview/"
-        },
-        {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#MU"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#MU"
         }
       ]
     },
@@ -1008,13 +1040,36 @@
           "pct": 1.97
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Reuters examines post-election scrutiny facing Musk’s businesses",
+          "facts": [
+            "Earlier 04 Nov context newly collated in this edition; the original publication time below precedes the main 16:00–20:00 UTC update window.",
+            "Reuters syndicated by StreetInsider at 07:10 EST on 04 Nov (12:10 UTC) examines Musk’s businesses following Democratic congressional gains and the Texas governor change.",
+            "The report discusses possible greater oversight and slower data-centre approvals. These prospective risks are not newly enacted restrictions or a quantified Tesla earnings impact; SpaceX operating disclosures are not Tesla results."
+          ],
+          "analysis": "Political and infrastructure uncertainty may affect Tesla sentiment, but the report does not establish a company-specific financial outcome.",
+          "risks": "Possible oversight or policy changes may differ from campaign positions and analyst expectations.",
+          "next_watch": "Concrete oversight and permitting actions, alongside Tesla’s own disclosures.",
+          "sources": [
+            {
+              "title": "Reuters via StreetInsider · 04 Nov 07:10 EST",
+              "url": "https://www.streetinsider.com/Reuters/Elon%2BMusks%2Bbusiness%2Bempire%2Bbraces%2Bfor%2BDemocratic%2Bwave%2Bas%2BTexas%2Bflips%2Bblue/27285778.html"
+            },
+            {
+              "title": "Reuters syndicated by Quews · 04 Nov report",
+              "url": "https://quews.news/elon-musks-business-empire/"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Issuer press list and SEC feed checked; no new development verified in the review window."
+        "Original press-page date enumeration was incomplete. Reuters report distinguishes possible scrutiny from confirmed financial impact."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
         },
         {
@@ -1026,12 +1081,16 @@
           "url": "https://data.sec.gov/submissions/CIK0001318605.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://ir.tesla.com/press"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#TSLA"
         },
         {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#TSLA"
+          "title": "Reuters via StreetInsider · 04 Nov 07:10 EST",
+          "url": "https://www.streetinsider.com/Reuters/Elon%2BMusks%2Bbusiness%2Bempire%2Bbraces%2Bfor%2BDemocratic%2Bwave%2Bas%2BTexas%2Bflips%2Bblue/27285778.html"
+        },
+        {
+          "title": "Reuters syndicated by Quews · 04 Nov report",
+          "url": "https://quews.news/elon-musks-business-empire/"
         }
       ]
     },
@@ -1096,11 +1155,11 @@
       ],
       "research": [],
       "gaps": [
-        "Issuer press centre and SEC feed checked; latest visible press release was dated 15 Oct."
+        "Original press-centre date enumeration was incomplete. No new eligible development verified in reviewed SEC/Reuters sources."
       ],
       "sources": [
         {
-          "title": "Yahoo daily history · closes and all six adjusted baselines freshly checked",
+          "title": "Yahoo daily history · all price/baseline inputs rechecked 04 Nov 20:07 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
         },
         {
@@ -1112,12 +1171,8 @@
           "url": "https://data.sec.gov/submissions/CIK0001046179.json"
         },
         {
-          "title": "Issuer news source reviewed",
-          "url": "https://pr.tsmc.com/english"
-        },
-        {
-          "title": "Previous full report · 04 Nov 20:00 SGT",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T120000Z.html#TSM"
+          "title": "Previous verified full report · 05 Nov 00:00 SGT",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T160000Z.html#TSM"
         }
       ]
     }

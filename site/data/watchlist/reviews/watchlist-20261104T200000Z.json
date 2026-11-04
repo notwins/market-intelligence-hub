@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261104T200000Z",
+  "as_of": "2026-11-05T04:00:00+08:00",
+  "edition_sha256": "e7d0a2df6b2aef6682308145ce9a4bb9ed6802365555d90c143c1a818e157425",
+  "reviewed_at": "2026-11-04T20:38:47.183700+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Shared watchlist context: Reuters reports regular-session Big Tech repricing",
+      "item_sha256": "d68fa6fe3b36c83e9b76aba760431e6951c089d39ce0f7d84e32086254ea3de8",
+      "scope": "market_context",
+      "reason": "Shared Reuters market repricing across several platforms. Report-time observations are separate from saved-close prices; investor interpretation is not enacted policy or proven causal attribution."
+    },
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "Shared watchlist context: Texas data-centre policy uncertainty",
+      "item_sha256": "e316eaedcddfb7b664cb83b7a886059f37002f120b9645dd37f9970adb86103b",
+      "scope": "market_context",
+      "reason": "Shared Texas policy exposure explicitly covers Microsoft, Google and Meta. The proposed moratorium is not described as enacted; no issuer impairment is invented."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Google provides credit support for TeraWulf’s Anthropic campus",
+      "item_sha256": "38f71433ef7e69d66bde9e9158f3c85de2e203d421ad663d15f5bde2476d515b",
+      "scope": "company",
+      "reason": "Alphabet-related credit support independently checked against original counterparty IR and SEC documents. The $19bn lease value is not labelled a guarantee amount; conditional obligations, timing and earlier-context status are retained."
+    },
+    {
+      "ticker": "BRK.B",
+      "index": 0,
+      "headline": "Berkshire confirms Saturday earnings-release schedule",
+      "item_sha256": "9e702cfd12c5f71a8b5b6e7223cb8771427a9594e13a3459880a78a6820b18df",
+      "scope": "company",
+      "reason": "Original Berkshire PDF confirms a future reporting schedule, not earnings results. Approximate timing and separate server modification timestamp are explicit."
+    },
+    {
+      "ticker": "TSLA",
+      "index": 0,
+      "headline": "Reuters examines post-election scrutiny facing Musk’s businesses",
+      "item_sha256": "41af6b90076c03d552c4cab335da2b611ad9727c434220eaca2b7aa4f7e30484",
+      "scope": "company",
+      "reason": "Public Reuters political-risk context is attributed, dated as earlier newly collated context, and explicitly distinguishes possible scrutiny from enacted restrictions, Tesla results and SpaceX disclosures."
+    }
+  ]
+}
