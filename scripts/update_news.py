@@ -30,6 +30,13 @@ def write_json(path, value):
     temp.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     os.replace(temp,path)
 
+def is_credit_title(title):
+    # Exclude two non-financial word senses without losing genuine debt context.
+    if re.search(r'\bbarrels?\b|\bSPR\b',title,re.I): return False
+    cleaned = re.sub(r'\bdeserv(?:e|es|ed|ing)\s+(?:more\s+)?credit\b','',title,flags=re.I)
+    cleaned = re.sub(r'\bdefault(?=\s+(?:options?\b|choices?\b|settings?\b|for\s+(?:private\s+)?pensions\b))','',cleaned,flags=re.I)
+    return bool(re.search(r'\bbonds?\b|\bcredit\b|\bdebt\b|yield|delinquen|refinanc|default|borrowing|financing|\bloans?\b',cleaned,re.I))
+
 def parse_feed(raw, now, stocks):
     tree = ET.fromstring(raw)
     if tree.tag != 'rss' or tree.find('channel') is None:
@@ -59,7 +66,7 @@ def parse_feed(raw, now, stocks):
         aliases = {'MSFT':['Microsoft'],'GOOGL':['Alphabet','Google'],'AMZN':['Amazon'],'AAPL':['Apple'],'NVDA':['Nvidia'],'META':['Meta Platforms'],'TSLA':['Tesla'],'INTC':['Intel'],'LLY':['Eli Lilly'],'MA':['Mastercard'],'CAT':['Caterpillar'],'LIN':['Linde'],'XOM':['Exxon','ExxonMobil'],'MRK':['Merck'],'BMY':['Bristol Myers'],'LNG':['Cheniere'],'FDX':['FedEx'],'UPS':['UPS'],'OWL':['Blue Owl'],'ORCL':['Oracle']}
         tickers = [ticker for ticker,names in aliases.items() if ticker in stocks and any(re.search(r'\b'+re.escape(n)+r'\b',title,re.I) for n in names)]
         ident = hashlib.sha256(url.encode()).hexdigest()[:20]
-        category = 'Fixed income' if re.search(r'\bbond|yield|credit|debt|refinanc|delinquen|default|\bloan|borrowing|financing',title,re.I) else 'Earnings' if re.search(r'earnings|profit|quarter|revenue|guidance|cash burn|cloud growth',title,re.I) else 'Elections' if re.search(r'election|midterm|\bpoll',title,re.I) else 'Markets'
+        category = 'Fixed income' if is_credit_title(title) else 'Earnings' if re.search(r'earnings|profit|quarter|revenue|guidance|cash burn|cloud growth',title,re.I) else 'Elections' if re.search(r'election|midterm|\bpoll',title,re.I) else 'Markets'
         items[ident] = {'id':ident,'title':title,'published_at':published.astimezone(timezone.utc).isoformat(),'category':category,'tickers':tickers,'url':url,'link_type':'google_news' if parsed.hostname=='news.google.com' else 'direct','publisher':'Reuters','publisher_url':source.get('url'),'verification':'publisher metadata in Google News RSS; article body not reproduced'}
     return sorted(items.values(),key=lambda x:x['published_at'],reverse=True)[:80]
 

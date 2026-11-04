@@ -64,3 +64,23 @@ for(const url of ['https://chatgpt.com/c/private-id','https://chatgpt.com/g/g-pr
 assert(data.entries.every(e=>!e.source||!/^https:\/\/(?:chatgpt\.com|chat\.openai\.com)\/(?:c|g)\//.test(e.source)));
 assert(data.entries.some(e=>e.source_access==='restricted'));
 const catalogueText=JSON.stringify(data);for(const prefix of ['https://chatgpt.com/c/','https://chatgpt.com/g/','https://chat.openai.com/c/'])assert(!catalogueText.includes(prefix));
+
+// Structured reading uses saved fields, renders sentence bullets and escapes all text.
+const story=data.entries.find(e=>e.kind==='Hourly story'&&e.title.includes('UOB lowers'));
+assert(story&&story.reading.length>=3);assert.equal(story.reading[0].label,'What happened');assert(story.reading[0].text.includes('S$1.25 billion'));assert(UI.brief(story).includes('Saved analysis'));assert(UI.brief(story).includes('What to watch'));assert(UI.brief(story).includes('Original indexed text'));
+const reading=UI.readingHTML([{label:'<script>','text':'First saved point. Second saved point.'}]);assert(reading.includes('&lt;script&gt;'));assert(reading.includes('<ul>'));assert.equal((reading.match(/<li>/g)||[]).length,2);assert(!UI.readingHTML([{label:'x',text:'<img onerror=bad>'}]).includes('<img'));
+assert.equal(UI.brief({text:'metadata only'}),'');assert(data.entries.filter(e=>e.kind==='Research library').every(e=>e.reading.length===2));
+console.log('PASS structured saved summaries, existing analysis/watch context, sentence bullets, fallback and escaping');
+
+assert.equal(UI.summaryExcerpt('First fact. Second fact. Third fact.'),'First fact. Second fact. …');assert.equal(UI.summaryExcerpt('One fact, with its qualification; not a live quote.'),'One fact, with its qualification; not a live quote.');
+
+const stats=UI.tagStats(data.entries);for(const item of stats.slice(0,20))assert.equal(item.count,Q.search(data.entries,'tag:'+JSON.stringify(item.tag)).length);assert(stats.slice(0,16).some(x=>x.tag==='Nvidia'));assert(stats.some(x=>x.tag==='Google'&&x.articles>0));
+assert.deepEqual(UI.insertRule('Google',6,6,'AND'),{query:'Google AND ',caret:11});
+assert.deepEqual(UI.insertRule('Google',6,6,'text:'),{query:'Google AND text:',caret:16});
+assert.equal(UI.insertRule('Google AND ',11,11,'text:').query,'Google AND text:');
+assert.equal(UI.insertRule('Google OR MSFT',10,14,'text:').query,'Google OR text:"MSFT" ');
+assert.equal(UI.insertRule('Google MSFT',7,7,'AND').query,'Google AND MSFT');
+assert.equal(UI.insertRule('',0,0,'OR').query,'');assert.equal(UI.insertRule('Google',6,6,'bad').query,'Google');
+assert.equal(UI.insertRule('Google',6,6,'text:','OR').query,'Google OR text:');
+assert(Q.parse(UI.insertRule('Google OR MSFT',10,14,'text:').query).tree);
+console.log('PASS real tag frequencies, company options, operator insertion at caret, selection wrapping, spacing, text-prefix completion and parser preservation');

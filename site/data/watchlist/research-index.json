@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-11-04",
+  "editions": {
+    "watchlist-20261103T120000Z": {
+      "AAPL": [
+        {
+          "index": 0,
+          "headline": "Memory costs and margins are the immediate focus"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "China-exposure report remains attributed and unconfirmed"
+        },
+        {
+          "index": 1,
+          "headline": "Fiscal Q3 FY2027 results call is scheduled"
+        }
+      ],
+      "AMD": [
+        {
+          "index": 0,
+          "headline": "Fiscal Q3 results are the next scheduled catalyst"
+        }
+      ],
+      "TSM": [
+        {
+          "index": 0,
+          "headline": "October monthly sales are due on 10 November"
+        }
+      ]
+    },
+    "watchlist-20261103T140000Z": {
+      "AAPL": [
+        {
+          "index": 1,
+          "headline": "Memory costs and margins are the immediate focus"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 1,
+          "headline": "China-exposure report remains attributed and unconfirmed"
+        },
+        {
+          "index": 2,
+          "headline": "Fiscal Q3 FY2027 results call is scheduled"
+        }
+      ],
+      "AMD": [
+        {
+          "index": 1,
+          "headline": "Fiscal Q3 results are the next scheduled catalyst"
+        }
+      ],
+      "TSM": [
+        {
+          "index": 0,
+          "headline": "October monthly sales are due on 10 November"
+        }
+      ]
+    },
+    "watchlist-20261103T160000Z": {
+      "AAPL": [
+        {
+          "index": 1,
+          "headline": "Retained earlier coverage: Apple memory-cost and margin concern"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 2,
+          "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed"
+        },
+        {
+          "index": 3,
+          "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled"
+        }
+      ],
+      "AMD": [
+        {
+          "index": 2,
+          "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst"
+        }
+      ],
+      "TSM": [
+        {
+          "index": 1,
+          "headline": "Retained earlier coverage: October monthly sales are due on 10 November"
+        }
+      ]
+    },
+    "watchlist-20261103T200000Z": {
+      "AAPL": [
+        {
+          "index": 2,
+          "headline": "Newly checked product update: Health app language support"
+        },
+        {
+          "index": 3,
+          "headline": "Retained earlier coverage: Apple memory-cost and margin concern"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 2,
+          "headline": "New issuer commentary: AI in semiconductor manufacturing"
+        },
+        {
+          "index": 4,
+          "headline": "Retained earlier coverage: China-exposure report remains attributed and unconfirmed"
+        },
+        {
+          "index": 5,
+          "headline": "Retained earlier coverage: Fiscal Q3 FY2027 results call is scheduled"
+        }
+      ],
+      "AMZN": [
+        {
+          "index": 1,
+          "headline": "New program: Sustainability Deep Tech Accelerator"
+        }
+      ],
+      "META": [
+        {
+          "index": 1,
+          "headline": "Earlier filing newly checked: proposed senior-note offering"
+        }
+      ],
+      "AMD": [
+        {
+          "index": 3,
+          "headline": "Retained earlier coverage: Fiscal Q3 results are the next scheduled catalyst"
+        }
+      ],
+      "TSM": [
+        {
+          "index": 1,
+          "headline": "Retained earlier coverage: October monthly sales are due on 10 November"
+        }
+      ]
+    },
+    "watchlist-20261104T000000Z": {
+      "AAPL": [
+        {
+          "index": 0,
+          "headline": "Earlier update newly checked: Siri AI developer preview expands"
+        }
+      ],
+      "AMZN": [
+        {
+          "index": 0,
+          "headline": "New filing: quarter-end investment holdings report"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "New priced terms: $15 billion senior-note offering"
+        }
+      ],
+      "AMD": [
+        {
+          "index": 0,
+          "headline": "New results: Data Center drives record Q3; Q4 revenue guide rises"
+        }
+      ]
+    },
+    "watchlist-20261104T040000Z": {
+      "BRK.B": [
+        {
+          "index": 0,
+          "headline": "New SEC filing: Berkshire reports Sirius XM purchases"
+        },
+        {
+          "index": 1,
+          "headline": "Overlap catch-up: Oregon court hears PacifiCorp wildfire appeal"
+        }
+      ],
+      "AMD": [
+        {
+          "index": 0,
+          "headline": "New Reuters warrant report: conditional dilution and a source-number discrepancy"
+        },
+        {
+          "index": 1,
+          "headline": "Earlier call catch-up: 2027 growth outlook and weaker PC-unit demand"
+        }
+      ],
+      "TSLA": [
+        {
+          "index": 0,
+          "headline": "New Reuters report: Korean consumer group plans FSD marketing complaint"
+        }
+      ]
+    },
+    "watchlist-20261104T080000Z": {
+      "AMZN": [
+        {
+          "index": 0,
+          "headline": "AWS launches Malaysian public-sector and SME AI program"
+        }
+      ]
+    }
+  }
+}

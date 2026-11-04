@@ -30,7 +30,9 @@ class WatchlistReportDestinations(unittest.TestCase):
         self.assertLess(page.index('src="watchlist-report-links.js'), page.index('src="watchlist.js'))
         source = (SITE / 'watchlist.js').read_text()
         self.assertIn('search.html?q=${encodeURIComponent(r.ticker)}', source)
-        self.assertIn('External source · leaves Market Intel · new tab', source)
+        self.assertIn('External ↗', source)
+        self.assertTrue((SITE / 'watchlist-report.html').exists())
+        self.assertTrue((SITE / 'watchlist-reader.js').exists())
         self.assertNotIn('Open the full GOOGL company report ↗', source)
         public = (SITE / 'watchlist-report-links.js').read_text()
         for private_identifier in ['libfile_', 'chatgpt.com/c/', 'chatgpt.com/g/', 'sediment://']:

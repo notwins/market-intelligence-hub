@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-04T10:16:27Z",
+  "generated_at": "2026-11-04T11:00:55Z",
   "coverage": "partial",
   "baseline_generated_at": "2026-11-04T08:53:56+08:00",
   "baseline_item_count": 230,
@@ -331,6 +331,287 @@
       ],
       "checked_at": "2026-11-04T10:16:27Z",
       "canonical_url": "https://ca.marketscreener.com/news/investors-ready-for-possible-shake-up-in-congress-as-us-awaits-election-results-ce785fdedc81f12d",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "2a18555d0ee0b2aa0e89",
+      "title": "Brazil’s post-election market shock clouds path to cheaper credit​",
+      "published_at": "2026-11-03T20:19:09+00:00",
+      "summary": "Brazil’s post-election currency and bond selloff complicated the central bank’s scope to cut borrowing costs. Before the 4 November decision, 33 of 48 economists in a Reuters poll expected the benchmark rate to stay at 13.75%.",
+      "context": "A weaker real can lift import prices, while uncertainty over public finances can keep financing expensive. The article describes expectations ahead of the policy meeting, not its outcome; the government’s fiscal plans remain central to the outlook.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/world/americas/brazils-post-election-market-shock-clouds-path-cheaper-credit-2026-11-03/",
+      "sources": [
+        {
+          "title": "Brazil’s post-election market shock clouds path to cheaper credit​",
+          "url": "https://www.reuters.com/world/americas/brazils-post-election-market-shock-clouds-path-cheaper-credit-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T09:03:52Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/world/americas/brazils-post-election-market-shock-clouds-path-cheaper-credit-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "fe9c9d158c6de8a18e2f",
+      "title": "Britain to make lifetime retirement income the default for private pensions",
+      "published_at": "2026-11-03T18:27:27+00:00",
+      "summary": "Britain proposed making lifelong retirement income the standard option for about 17 million workers with defined-contribution pensions, while allowing them to opt out. The aim is to reduce the burden of managing a pension pot alone.",
+      "context": "These are proposals, with consultation open until 22 December. Here ‘default’ means the option applied unless a saver chooses otherwise, not a missed debt payment or a credit-loss event.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/world/uk/britain-make-lifetime-retirement-income-default-private-pensions-2026-11-03/",
+      "sources": [
+        {
+          "title": "Britain to make lifetime retirement income the default for private pensions",
+          "url": "https://www.reuters.com/world/uk/britain-make-lifetime-retirement-income-default-private-pensions-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T12:30:35Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/world/uk/britain-make-lifetime-retirement-income-default-private-pensions-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "85a2680a334dd857d7e8",
+      "title": "World faces €30 trillion financing gap, Santander report warns",
+      "published_at": "2026-11-03T14:37:01+00:00",
+      "summary": "Santander estimated that investment needs of roughly €50 trillion during 2026–2030 could leave a financing shortfall of about €30 trillion. Energy-transition projects account for most of the gap, alongside AI and defence needs.",
+      "context": "The bank argues that private capital and public support must work together to fund these projects. The figures are forward-looking estimates of unmet financing needs, not existing bond issuance or money already borrowed.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/finance/world-faces-30-trillion-financing-gap-santander-report-warns-2026-11-03/",
+      "sources": [
+        {
+          "title": "World faces €30 trillion financing gap, Santander report warns",
+          "url": "https://www.reuters.com/business/finance/world-faces-30-trillion-financing-gap-santander-report-warns-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T14:31:03Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/business/finance/world-faces-30-trillion-financing-gap-santander-report-warns-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "ab949e2c5cfccc14aed3",
+      "title": "New Africa credit rating agency in talks with 15 sovereign borrowers",
+      "published_at": "2026-11-03T10:07:03+00:00",
+      "summary": "The new Africa Credit Rating Agency said it was discussing assessments with 15 African sovereign borrowers and aimed to issue its first ratings by March. Governments would pay for requested assessments and provide access to financial information.",
+      "context": "Ratings can influence financing costs and which investors may buy a borrower’s debt. The agency offers another assessment of creditworthiness; its launch alone does not establish that borrowing costs will fall.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/world/africa/new-africa-credit-rating-agency-talks-with-15-sovereign-borrowers-2026-11-03/",
+      "sources": [
+        {
+          "title": "New Africa credit rating agency in talks with 15 sovereign borrowers",
+          "url": "https://www.reuters.com/world/africa/new-africa-credit-rating-agency-talks-with-15-sovereign-borrowers-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T09:58:38Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/world/africa/new-africa-credit-rating-agency-talks-with-15-sovereign-borrowers-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "74dff4697d528d2cf3e2",
+      "title": "AI-related debt binge may pressure European bond markets",
+      "published_at": "2026-11-03T05:03:00+00:00",
+      "summary": "US technology groups are seeking more European funding for AI infrastructure, adding debt supply that could compete with other companies and governments for investors. Fidelity estimated a €40 billion–€60 billion issuance pipeline.",
+      "context": "Large simultaneous deals may require higher yields or pricing concessions, particularly for long maturities. Reuters reported that demand had absorbed supply so far, so the article describes a funding-pressure risk, not a market-wide failure to borrow.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/ai-related-debt-binge-may-pressure-european-bond-markets-2026-11-03/",
+      "sources": [
+        {
+          "title": "AI-related debt binge may pressure European bond markets",
+          "url": "https://www.reuters.com/business/ai-related-debt-binge-may-pressure-european-bond-markets-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03T05:03:21Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/business/ai-related-debt-binge-may-pressure-european-bond-markets-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "02c7003c11e9f1aead14",
+      "title": "Gold edges lower again as dollar, yields strengthen; US midterms in focus",
+      "published_at": "2026-11-03T04:16:00+00:00",
+      "summary": "Gold gave back a brief rise on 3 November as a stronger dollar and higher Treasury yields weighed on demand. Investors were waiting for the US midterm result and its implications for fiscal policy.",
+      "context": "Lower oil prices briefly eased inflation concerns, but currency and rate movements again dominated trading. This was a dated market report ahead of the election outcome, not a live gold quotation or a settled forecast of policy.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.kitco.com/news/off-the-wire/2026-11-03/gold-edges-lower-again-dollar-yields-strengthen-us-midterms-focus",
+      "sources": [
+        {
+          "title": "Gold edges lower again as dollar, yields strengthen; US midterms in focus",
+          "url": "https://www.reuters.com/world/india/gold-eases-ahead-us-midterm-elections-2026-11-03/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-03",
+          "retrieval_method": "Canonical Reuters story identified; substantive summary verified against the Reuters-branded syndicated text linked separately"
+        },
+        {
+          "title": "Gold edges lower again as dollar, yields strengthen; US midterms in focus",
+          "url": "https://www.kitco.com/news/off-the-wire/2026-11-03/gold-edges-lower-again-dollar-yields-strengthen-us-midterms-focus",
+          "publisher": "Reuters via Kitco",
+          "publication_date": "2026-11-03",
+          "reported_timestamp": "2026-11-03 19:49; updated 19:51; timezone not stated",
+          "timestamp_basis": "Displayed publication/update labels on syndicated page; not assumed to be original Reuters publication time",
+          "retrieval_method": "Reuters-branded article text retrieved from the publicly accessible syndicated page"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/world/india/gold-eases-ahead-us-midterm-elections-2026-11-03/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "422a9d4741e2ed39d543",
+      "title": "Meta eyes at least $20 billion from potential bond offerings, Bloomberg News reports",
+      "published_at": "2026-11-02T19:18:49+00:00",
+      "summary": "Reuters relayed a Bloomberg report that Meta was considering a cross-border bond transaction of at least $20 billion. The report cited people familiar with the discussions rather than a final company announcement.",
+      "context": "No final decision had been made, and the size could change with investor demand. Treat this 2 November item as a proposed financing, not confirmed proceeds; it has a different scope from the later US-dollar bond-sale report.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.investing.com/news/stock-market-news/meta-eyes-at-least-20-billion-from-potential-bond-offerings-bloomberg-news-reports-4992542",
+      "sources": [
+        {
+          "title": "Meta eyes at least $20 billion from potential bond offerings, Bloomberg News reports",
+          "url": "https://www.reuters.com/business/meta-eyes-least-20-billion-potential-bond-offerings-bloomberg-news-reports-2026-11-02/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-02",
+          "retrieval_method": "Canonical Reuters story identified; substantive summary verified against the Reuters-branded syndicated text linked separately"
+        },
+        {
+          "title": "Meta eyes at least $20 billion from potential bond offerings, Bloomberg News reports",
+          "url": "https://www.investing.com/news/stock-market-news/meta-eyes-at-least-20-billion-from-potential-bond-offerings-bloomberg-news-reports-4992542",
+          "publisher": "Reuters via Investing.com",
+          "publication_date": "2026-11-02",
+          "reported_timestamp": "2026-11-02 12:56; updated 13:00; timezone not stated",
+          "timestamp_basis": "Displayed publication/update labels on syndicated page; not assumed to be original Reuters publication time",
+          "retrieval_method": "Reuters-branded article text retrieved from the publicly accessible syndicated page"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/business/meta-eyes-least-20-billion-potential-bond-offerings-bloomberg-news-reports-2026-11-02/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "bd727a417c282c8ec61b",
+      "title": "Alphabet kicks off €6 billion bond sale, tests appetite for tech debt",
+      "published_at": "2026-11-02T17:16:03+00:00",
+      "summary": "Alphabet launched a €6 billion bond offering in seven tranches, drawing orders above €17 billion. The proposed maturities ranged from two to 19 years, with one floating-rate tranche and six fixed-rate tranches.",
+      "context": "The deal tested demand after AI-spending concerns unsettled technology debt. Proceeds were intended for general corporate needs, potentially including debt repayment. This launch-stage report preceded final pricing; orders are demand indications, not additional money raised.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/finance/alphabet-kicks-off-6-billion-bond-sale-tests-appetite-tech-debt-2026-11-02/",
+      "sources": [
+        {
+          "title": "Alphabet kicks off €6 billion bond sale, tests appetite for tech debt",
+          "url": "https://www.reuters.com/business/finance/alphabet-kicks-off-6-billion-bond-sale-tests-appetite-tech-debt-2026-11-02/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-02",
+          "reported_timestamp": "2026-11-02T14:12:45Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/business/finance/alphabet-kicks-off-6-billion-bond-sale-tests-appetite-tech-debt-2026-11-02/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "d012c9ee5f6010de91e6",
+      "title": "ECB flags AI valuations, bond stress and fund losses as main risks",
+      "published_at": "2026-11-02T14:56:08+00:00",
+      "summary": "ECB Vice-President Boris Vujcic highlighted three financial-stability concerns: stretched AI valuations, pressure on government bonds, and potential losses at investment funds and other non-bank lenders.",
+      "context": "Funds’ technology exposure and rising yields in heavily indebted countries could transmit market stress. He said the ECB was monitoring bonds but that fiscal problems primarily require government responses. The comments were a risk assessment, not an announced intervention.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.reuters.com/business/finance/ecb-flags-ai-valuations-bond-stress-fund-losses-main-risks-2026-11-02/",
+      "sources": [
+        {
+          "title": "ECB flags AI valuations, bond stress and fund losses as main risks",
+          "url": "https://www.reuters.com/business/finance/ecb-flags-ai-valuations-bond-stress-fund-losses-main-risks-2026-11-02/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-02",
+          "reported_timestamp": "2026-11-02T10:46:55Z",
+          "timestamp_basis": "Search metadata, not independently established as original publication time",
+          "retrieval_method": "Reuters article content returned by web search"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/business/finance/ecb-flags-ai-valuations-bond-stress-fund-losses-main-risks-2026-11-02/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "251c0bac2fc7f9a4fc70",
+      "title": "Anthropic revenue growth slows, compute financing risks mount ahead of IPO",
+      "published_at": "2026-11-02T14:50:00+00:00",
+      "summary": "Anthropic’s third-quarter revenue rose 47% from the prior quarter to $16.96 billion, but growth slowed from the previous quarter. Its amended IPO filing also described risks to the computing capacity needed for expansion.",
+      "context": "Some infrastructure partners depend on outside financing: tighter or costlier funding could delay, reprice or reduce contracted capacity. The credit concern is the delivery and funding of future computing commitments, not simply whether revenue is growing.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.marketscreener.com/news/anthropic-s-quarterly-loss-shrinks-revenue-jumps-ahead-of-blockbuster-ipo-ce785fd9d98ff521",
+      "sources": [
+        {
+          "title": "Anthropic revenue growth slows, compute financing risks mount ahead of IPO",
+          "url": "https://www.reuters.com/business/anthropics-quarterly-loss-shrinks-revenue-jumps-ahead-blockbuster-ipo-2026-11-02/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-02",
+          "retrieval_method": "Canonical Reuters story identified; substantive summary verified against the Reuters-branded syndicated text linked separately"
+        },
+        {
+          "title": "Anthropic revenue growth slows, compute financing risks mount ahead of IPO",
+          "url": "https://www.marketscreener.com/news/anthropic-s-quarterly-loss-shrinks-revenue-jumps-ahead-of-blockbuster-ipo-ce785fd9d98ff521",
+          "publisher": "Reuters via MarketScreener",
+          "publication_date": "2026-11-02",
+          "reported_timestamp": "2026-11-02 09:52 EST; updated 16:21 EST",
+          "timestamp_basis": "Displayed publication/update labels on syndicated page; not assumed to be original Reuters publication time",
+          "retrieval_method": "Reuters-branded article text retrieved from the publicly accessible syndicated page"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/business/anthropics-quarterly-loss-shrinks-revenue-jumps-ahead-blockbuster-ipo-2026-11-02/",
+      "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
+    },
+    {
+      "id": "47038e5057ba26b28320",
+      "title": "Apollo launches €10 billion European credit platform",
+      "published_at": "2026-11-02T10:50:55+00:00",
+      "summary": "Apollo launched the €10 billion European Credit Company to provide corporate and asset-backed lending to businesses, financial sponsors and real-asset owners. It targets financing demand connected to European defence, energy and infrastructure investment.",
+      "context": "The platform brings institutional capital into private lending alongside existing banks and funds. Its announced size describes the new platform, not evidence that the full amount has already been lent or a guarantee of investment returns.",
+      "summary_verified": true,
+      "summary_source_url": "https://www.marketscreener.com/news/apollo-launches-eur10-billion-european-credit-platform-ce785fd8de80f027",
+      "sources": [
+        {
+          "title": "Apollo launches €10 billion European credit platform",
+          "url": "https://www.reuters.com/legal/transactional/apollo-launches-10-billion-european-credit-platform-2026-11-02/",
+          "publisher": "Reuters",
+          "publication_date": "2026-11-02",
+          "retrieval_method": "Canonical Reuters story identified; substantive summary verified against the Reuters-branded syndicated text linked separately"
+        },
+        {
+          "title": "Apollo launches €10 billion European credit platform",
+          "url": "https://www.marketscreener.com/news/apollo-launches-eur10-billion-european-credit-platform-ce785fd8de80f027",
+          "publisher": "Reuters via MarketScreener",
+          "publication_date": "2026-11-02",
+          "reported_timestamp": "2026-11-02 05:45 EST; updated 05:51 EST",
+          "timestamp_basis": "Displayed publication/update labels on syndicated page; not assumed to be original Reuters publication time",
+          "retrieval_method": "Reuters-branded article text retrieved from the publicly accessible syndicated page"
+        }
+      ],
+      "checked_at": "2026-11-04T11:00:55Z",
+      "canonical_url": "https://www.reuters.com/legal/transactional/apollo-launches-10-billion-european-credit-platform-2026-11-02/",
       "match_basis": "Exact stored item ID and title; Reuters story title and subject/date match. Original Google News RSS timestamp retained unchanged."
     }
   ]

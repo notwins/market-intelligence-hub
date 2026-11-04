@@ -18,6 +18,13 @@ test('V4 preferences are independent and sanitize extreme text/card values',()=>
  let values={};ctx.document.documentElement.style.setProperty=(k,v)=>values[k]=v;vm.runInContext(read('v4-display.js'),ctx);assert.equal(values['--text-scale'],2);assert.equal(values['--card-scale'],.5);
 });
 test('entry defaults to V4 and respects explicit V3 preference',()=>{const script=read('index.html').match(/<script>([\s\S]*?)<\/script>/)[1];for(const preferred of [null,'v3','v4']){let destination;const ctx={URLSearchParams,location:{search:'',hash:'#history',replace:v=>destination=v},document:{getElementById:()=>({})},localStorage:{getItem:()=>preferred}};vm.runInNewContext(script,ctx);assert.ok(destination.startsWith(preferred==='v3'?'v3.html':'v4.html'));} });
+test('credit desk excludes non-financial word senses without deleting source rows',()=>{
+ const code=html.slice(html.indexOf('function isCredit('),html.indexOf('\nfunction dealCard('));const ctx={};vm.createContext(ctx);vm.runInContext(code,ctx);
+ for(const title of ["Norris says Antonelli deserves more credit for 'insane job' this season",'Britain to make lifetime retirement income the default for private pensions','Pension funds change their default options'])assert.equal(ctx.isCredit({title,category:'Fixed income'}),false,title);
+ for(const title of ['Borrower defaults on sovereign debt','New Africa credit rating agency in talks with 15 sovereign borrowers','Apollo launches European credit platform','Default option for pensions shifts into government bonds','Bank deserves more credit for refinancing debt','Credit spreads widen','Sovereign bond sale'])assert.equal(ctx.isCredit({title,category:'Markets'}),true,title);
+ assert.equal(ctx.isCredit({title:'A verified fixed income update',category:'Fixed income'}),true);
+ const rows=JSON.parse(read('data/news.json')).items,before=JSON.stringify(rows);rows.filter(ctx.isCredit);assert.equal(JSON.stringify(rows),before);assert.equal(rows.length,JSON.parse(before).length);
+});
 console.log(`${count} V4 behavior checks passed.`);
 
 require('./test_ust_curves.cjs');

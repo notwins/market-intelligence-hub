@@ -25,6 +25,9 @@ def watchlist_report_target(root,edition,ticker):
   content=(root/expected).read_bytes()
   if hashlib.sha256(content).hexdigest()!=matches[0].get('sha256'):return None
   if ('id="'+ticker+'"').encode() not in content:return None
+  # The reader renders this exact saved edition; the original receipt stays authoritative.
+  if (root/'watchlist-report.html').is_file():
+   return 'watchlist-report.html?edition='+quote(eid,safe='')+'#'+quote(ticker,safe='')
   return expected+'#'+quote(ticker,safe='')
  except (OSError,ValueError,TypeError):return None
 
@@ -52,9 +55,15 @@ def restricted_source(url):
   return parsed.hostname in ['chatgpt.com','chat.openai.com'] and re.match(r'^/(?:c|g)(?:/|$)',unquote(parsed.path)) is not None
  except ValueError:return True
 
+def reading_sections(record,kind):
+ # Display-only structure from explicit public saved fields. Never synthesize facts.
+ fields={'Hourly story':[('What happened','body'),('Saved analysis','analysis'),('What to watch','watch_next'),('Earlier version','earlier')],
+         'Research library':[('Saved summary','summary'),('Saved analysis','implication')]}.get(kind,[])
+ return [dict(label=label,text=re.sub(r'https?://\S+','',record[key]).strip()) for label,key in fields if isinstance(record.get(key),str) and record[key].strip()]
+
 def build():
  rows=[];seen=set()
- def add(kind,title,text,href,date=None,source=None,status='Dated saved content',tags=None,location=None):
+ def add(kind,title,text,href,date=None,source=None,status='Dated saved content',tags=None,location=None,reading=None):
   key=(kind,title,href,str(date),str(text))
   if key in seen:return
   seen.add(key)
@@ -67,7 +76,7 @@ def build():
    exact=kind in ['Page','Learning chapter','Tag catalogue','Section'] or (kind=='Watchlist research' and href is not None)
    location={'label':('V4 → '+label if section else label),'href':href if exact else ('v4.html#'+section if section else href),'exact':exact}
   clean_tags=sorted(set(str(t).strip() for t in (tags or []) if t is not None and str(t).strip()))
-  rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status,tags=clean_tags,location=location,source_access='restricted' if restricted else 'public'))
+  rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status,tags=clean_tags,location=location,source_access='restricted' if restricted else 'public',reading=reading or []))
  sections={'overview':'Daily briefing','watchlist':'12-name watchlist','calls':'Calls and full reports','headlines':'Reuters coverage','hourly':'Hourly news','earnings':'US earnings','credit':'Bonds and credit','policy':'Central Banks and US Administration','reports':'Scheduled reports and archive','directory':'Research directory','research':'Research library','master':'Security master','history':'Yields FX history historical event charts','ust':'UST selection desk','feeds':'Data and uploads','tools':'Tools and simulators'}
  for key,title in sections.items():add('Section',title,title,'v4.html#'+key,status='Navigation')
  add('Section','Tag and event tree map','Searchable colored country sector policy ticker and historical event groupings','tag-map.html',status='Recommended taxonomy')
@@ -78,12 +87,12 @@ def build():
   d=json.loads(file.read_text())
   for edition in d.get('editions',[d] if 'stories' in d else []):
    add('Hourly edition',edition.get('summary') or edition.get('id','Hourly edition'),strings(edition.get('limitations',[])),'v4.html#hourly',edition.get('cutoff'),edition.get('original_url'),edition.get('coverage','Unspecified coverage'))
-   for x in edition.get('stories',[]):add('Hourly story',x.get('title',x.get('headline','Hourly story')),strings(x),'v4.html#hourly',x.get('published_at') or edition.get('cutoff'),x.get('url') or next(iter(x.get('source_urls',[])),None),x.get('status','Saved report'),tags=[x.get('topic'),*(x.get('tickers') or [])])
+   for x in edition.get('stories',[]):add('Hourly story',x.get('title',x.get('headline','Hourly story')),strings(x),'v4.html#hourly',x.get('published_at') or edition.get('cutoff'),x.get('url') or next(iter(x.get('source_urls',[])),None),x.get('status','Saved report'),tags=[x.get('topic'),*(x.get('tickers') or [])],reading=reading_sections(x,'Hourly story'))
  for x in read('data/reports.json').get('reports',[]):add('Report',x.get('title',x['id']),strings(x),'v1.html?view=archive',x.get('date'),None,x.get('status','Saved edition'),location={'label':'V1 → Research archive → '+str(x.get('date','Unknown edition')),'href':'v1.html?view=archive','exact':False})
  # Parse the public JSON payload, never index executable JavaScript text.
  legacy=json.loads((ROOT/'v2-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
  for x in legacy.get('reports',[]):add('Research edition',x.get('title',x.get('id','Research edition')),strings(x),'v4.html#reports',x.get('date'),None,'Original imported edition; not refreshed by search')
- for x in legacy.get('research',[]):add('Research library',x.get('title',x.get('name','Research reference')),strings(x),'v4.html#research',x.get('date'),None,'Saved research reference')
+ for x in legacy.get('research',[]):add('Research library',x.get('title',x.get('name','Research reference')),strings(x),'v4.html#research',x.get('date'),None,'Saved research reference',reading=reading_sections(x,'Research library'))
  for x in legacy.get('earnings',[]):add('Earnings card',x.get('company',x.get('ticker',x.get('title','Earnings'))),strings(x),'v4.html#earnings',x.get('date'),None,'Saved dated earnings card')
 
  for file in sorted((ROOT/'data/watchlist/archive').glob('*.json')):

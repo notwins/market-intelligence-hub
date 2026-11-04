@@ -1,0 +1,102 @@
+{
+  "verified_on": "2026-11-04",
+  "directory_url": "https://productgroup.bankofsingapore.com/equities_research/2026-11-03_equity_coverage_universe.pdf",
+  "companies": {
+    "GOOGL": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P000002HD_20261029_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-29",
+      "report_as_of_utc": "29 Oct 2026 23:10, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "META": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P0000W3KZ_20261021_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-21",
+      "report_as_of_utc": "21 Oct 2026 23:00, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "AMZN": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P000000B7_20261030_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-30",
+      "report_as_of_utc": "30 Oct 2026 13:53, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "TSLA": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P0000OQN8_20261022_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-22",
+      "report_as_of_utc": "22 Oct 2026 14:20, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "BRK.B": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P000000RD_20261015_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-15",
+      "report_as_of_utc": "15 Oct 2026 19:19, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "AVGO": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P0000KU35_20261027_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-27",
+      "report_as_of_utc": "27 Oct 2026 09:17, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "NVDA": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Sep/0P000003RE_20260903_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-09-03",
+      "report_as_of_utc": "3 Sep 2026 14:39, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "TSM": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P000005AR_20261015_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-15",
+      "report_as_of_utc": "15 Oct 2026 16:16, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "MSFT": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P000003MH_20261029_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-29",
+      "report_as_of_utc": "29 Oct 2026 14:26, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "AMD": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Aug/0P0000006A_20260804_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-08-05",
+      "report_as_of_utc": "5 Aug 2026 01:57, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "MU": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Sep/0P000003MC_20260930_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-02",
+      "report_as_of_utc": "2 Oct 2026 01:46, UTC",
+      "label": "BOS-hosted research PDF"
+    },
+    "AAPL": {
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Oct/0P000000GY_20261013_RT.pdf",
+      "author": "Morningstar",
+      "host": "Bank of Singapore",
+      "report_date": "2026-10-13",
+      "report_as_of_utc": "13 Oct 2026 19:16, UTC",
+      "label": "BOS-hosted research PDF"
+    }
+  }
+}

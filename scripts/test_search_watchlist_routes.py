@@ -18,6 +18,18 @@ class DatedSearchRouting(unittest.TestCase):
  def test_exact_edition_and_company_anchor(self):
   self.assertEqual(watchlist_report_target(self.root,self.edition,'AAPL'),self.path+'#AAPL')
   self.assertEqual(watchlist_report_target(self.root,self.edition,'BRK.B'),self.path+'#BRK.B')
+ def test_reader_targets_the_exact_validated_edition(self):
+  (self.root/'watchlist-report.html').write_text('<main>Reader</main>')
+  for ticker in ['AAPL','BRK.B']:
+   self.assertEqual(watchlist_report_target(self.root,self.edition,ticker),'watchlist-report.html?edition='+self.edition['id']+'#'+ticker)
+ def test_reader_does_not_bypass_receipt_or_anchor_checks(self):
+  (self.root/'watchlist-report.html').write_text('<main>Reader</main>')
+  self.assertIsNone(watchlist_report_target(self.root,self.edition,'MSFT'))
+  (self.root/self.path).write_text('changed')
+  self.assertIsNone(watchlist_report_target(self.root,self.edition,'AAPL'))
+ def test_missing_reader_retains_immutable_original_fallback(self):
+  (self.root/'watchlist-report.html').mkdir()
+  self.assertEqual(watchlist_report_target(self.root,self.edition,'AAPL'),self.path+'#AAPL')
  def test_never_route_to_a_different_or_latest_edition(self):
   self.row['edition_id']='watchlist-20261103T160000Z';self.write()
   self.assertIsNone(watchlist_report_target(self.root,self.edition,'AAPL'))
