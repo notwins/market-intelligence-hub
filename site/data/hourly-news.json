@@ -2,13 +2,151 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-04T09:24:44.015Z",
+  "publisher_checked_at": "2026-11-04T18:13:44+08:00",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-hourly-20261104T091354Z",
+      "report_at": "2026-11-04T17:19:07+08:00",
+      "cutoff": "2026-11-04T17:13:54+08:00",
+      "window_start": "2026-11-04T16:13:54+08:00",
+      "coverage": "partial",
+      "summary": "Partial Reuters scan to 4 November 2026, 5:13:54 PM SGT. US futures recovered after earlier midterm-related declines; UOB revised its NIM guidance (catch-up); France, Germany and Italy services PMIs diverged; Google voluntary exit programmes and Emaar's proposed minority buyout were reported. Historical price observations are not live.",
+      "limitations": [
+        "Targeted Reuters search, not exhaustive wire coverage; unresolved prior gaps and no verified last complete scan.",
+        "US stock-futures observations were at 4:13 PM SGT, before Reuters publication at 4:35 PM; precise earlier trough times were unavailable.",
+        "UOB and Emaar articles were first published outside the primary hourly window and are marked catch-up.",
+        "Google's June voluntary exit offers were reported in November; acceptance totals and fresh layoffs were not established.",
+        "Prices in source articles are historical, not real-time quotes.",
+        "Daily briefings were compared only to the accessible partial extracts; some output was truncated."
+      ],
+      "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/business/us-stock-index-futures-steady-democrats-seize-congress-2026-11-04/",
+          "title": "US stock index futures steady as Democrats seize Congress",
+          "published_at": "2026-11-04T08:35Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/asia-pacific/singapore-bank-uob-third-quarter-net-profit-more-than-doubles-year-2026-11-03/",
+          "title": "Singapore's UOB misses on Q3 profit, margin pressures loom; shares slide",
+          "published_at": "2026-11-03T23:08Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/french-services-sector-contracts-october-fastest-pace-since-may-pmi-shows-2026-11-04/",
+          "title": "French services sector contracts in October at fastest pace since May, PMI shows",
+          "published_at": "2026-11-04T08:52Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/germany-services-growth-slows-october-demand-slips-pmi-shows-2026-11-04/",
+          "title": "Germany services growth slows in October as demand slips, PMI shows",
+          "published_at": "2026-11-04T09:01Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/italy-services-growth-accelerates-cost-pressures-intensify-pmi-shows-2026-11-04/",
+          "title": "Italy services growth accelerates but cost pressures intensify, PMI shows",
+          "published_at": "2026-11-04T08:48Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/media-telecom/google-extends-voluntary-buyout-offers-employees-several-countries-2026-11-04/",
+          "title": "Google extends voluntary buyout offers to employees in several countries",
+          "published_at": "2026-11-04T08:32Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/middle-east/dubais-emaar-plans-offer-buy-out-construction-arm-34-billion-deal-2026-11-04/",
+          "title": "Dubai's Emaar plans offer to buy out construction arm in $3.4 billion deal",
+          "published_at": "2026-11-04T07:53Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261104-US-MIDTERMS-ADDITIONAL-FLIPS",
+          "version": 5,
+          "status": "follow-up",
+          "freshness": "current",
+          "topic": "US equities / midterm market reaction",
+          "headline": "US index futures recover after sharp early post-election losses",
+          "body": "Reuters reported earlier falls of as much as 2.4% for Nasdaq-100 futures and 1.4% for S&P 500 futures. At 3:13 a.m. ET on 4 November, Dow futures were up 0.46%, S&P 500 futures up 0.15% and Nasdaq-100 futures up 0.26%. These were intraday observations, not live quotes; the earlier trough times were not established.",
+          "analysis": "Reversal highlights repricing uncertainty and does not prove steady rate or FX response.",
+          "watch_next": "US open, US Treasury curve and Big Tech regulation",
+          "earlier": "The previous v4 documented projected Democratic control of both US congressional chambers without a verified, time-matched market reaction.",
+          "source_urls": [
+            "https://www.reuters.com/business/us-stock-index-futures-steady-democrats-seize-congress-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-UOB-Q3-NIM-OUTLOOK",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "Singapore banks / net interest margin",
+          "headline": "UOB lowers full-year margin forecast after Q3 profit misses estimates",
+          "body": "UOB reported Q3 net profit of S$1.25 billion against the S$1.35 billion LSEG mean estimate from two analysts. Q3 net interest margin was 1.68%, down six basis points quarter-on-quarter. Management expects full-year NIM below 1.75%, versus previous guidance of 1.75%–1.80%. Reuters observed shares down over 5% to S$38.15; observation time not established. This is a catch-up story from an earlier reporting window.",
+          "analysis": "Deposit competition pressures banks margins; avoid generalising sector.",
+          "watch_next": "Upcoming DBS and OCBC earnings",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/asia-pacific/singapore-bank-uob-third-quarter-net-profit-more-than-doubles-year-2026-11-03/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-EUROPE-SERVICES-PMI-OCT",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "European services / ECB",
+          "headline": "French services contract as Germany and Italy maintain growth",
+          "body": "October services PMI readings: France 46.2, down from 51.2 in September and below a 48.4 flash estimate; Germany 52.5, from 52.9; Italy 52.0, from 51.7 and above a Reuters survey forecast of 51.5. Italy's selling-price PMI rose to 55.9 from 54.8 and input prices to 68.4 from 65.4. PMI values are diffusion indices, not annual inflation percentages.",
+          "analysis": "French contraction with Italian cost pressure complicates ECB assessment.",
+          "watch_next": "Euro area aggregate PMI, inflation and ECB guidance",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/french-services-sector-contracts-october-fastest-pace-since-may-pmi-shows-2026-11-04/",
+            "https://www.reuters.com/business/germany-services-growth-slows-october-demand-slips-pmi-shows-2026-11-04/",
+            "https://www.reuters.com/business/italy-services-growth-accelerates-cost-pressures-intensify-pmi-shows-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-GOOGLE-VOLUNTARY-BUYOUTS",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "Technology / staffing and AI capex",
+          "headline": "Google confirms June expansion of voluntary exit offers across five countries",
+          "body": "Google confirmed voluntary exit packages offered in June 2026 to certain employees in Canada, France, Germany, Japan and Switzerland. The number who accepted has not been established. Reuters sources said the Swiss programme excluded DeepMind. November reporting newly disclosed an existing initiative, not fresh layoffs.",
+          "analysis": "Cost controls accompanying AI capex; no quantified savings demonstrated.",
+          "watch_next": "Alphabet employee changes, severance and AI capex economics",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/media-telecom/google-extends-voluntary-buyout-offers-employees-several-countries-2026-11-04/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261104-EMAAR-DEVELOPMENT-BUYOUT",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "Dubai property / financing",
+          "headline": "Emaar proposes voluntary minority buyout of Emaar Development",
+          "body": "Emaar Properties, which owns just over 79% of Emaar Development, plans a voluntary cash offer of AED 15 per share for the remainder, potentially worth up to US$3.43 billion. Reuters observed Emaar Development up 5.3% at AED 14.64 by 06:30 UTC before article publication. The offer is not completed and funding details are unverified. This article is a catch-up discovery.",
+          "analysis": "Potential funding and leverage impact, pending terms.",
+          "watch_next": "Offer acceptance, acquisition financing and delisting decision",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/middle-east/dubais-emaar-plans-offer-buy-out-construction-arm-34-billion-deal-2026-11-04/"
+          ],
+          "development_at": null
+        }
+      ]
+    },
     {
       "id": "reuters-hourly-20261104T081808Z",
       "report_at": "2026-11-04T16:23:36+08:00",
