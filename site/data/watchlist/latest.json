@@ -1,30 +1,30 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261104T080000Z",
-  "as_of": "2026-11-04T16:00:00+08:00",
-  "generated_at": "2026-11-04T08:06:21+00:00",
-  "title": "12-name watchlist · 4 November 2026, 16:00 SGT",
+  "id": "watchlist-20261104T120000Z",
+  "as_of": "2026-11-04T20:00:00+08:00",
+  "generated_at": "2026-11-04T12:25:36+00:00",
+  "title": "12-name watchlist · 4 November 2026, 20:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-04T08:02:03.175192+00:00",
+    "sources_checked_at": "2026-11-04T12:25:36+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "AWS announced a Malaysian AI-adoption program. Reuters updated its election-related market report with concerns about possible AI regulation; this is shared market context, not a new restriction or issuer earnings forecast. No new acceptance appeared in the twelve tracked SEC submission feeds during the review interval. All twelve saved regular closes and six-horizon return series are unchanged and are not live prices.",
-  "coverage_note": "Review window: 4 November 2026, 12:00–16:00 SGT (04:00–08:00 UTC), with a 15-minute overlap from 11:45 SGT. Source checks were completed after the fixed 16:00 SGT cutoff. Prior editions, reports, source qualifications and calls remain unchanged in their archives. New company research is limited to the verified AWS release; the substantive Reuters update appears once as shared context. Coverage is partial, not a complete wire or issuer-news census.",
-  "price_basis": "Main prices are USD completed regular-session observations for 3 November 2026 at 16:00 EST (4 November 05:00 SGT), with original vendor timestamps preserved. Daily change compares the 2 November ordinary close. These are saved prior closes, not live or exact 16:00 SGT prices. The unchanged separate after-hours observations in company notes are dated 3 November 19:59 EST (4 November 08:59 SGT), except Berkshire at 19:55 EST (08:55 SGT). Their changes compare the regular close and never replace adjusted-close return endpoints. No premarket observation is included. TSM is the US-listed USD ADR.",
+  "summary": "Google plans a US$15 billion Malaysian infrastructure investment in 2027–2028, according to Reuters. Meta launched its first euro bond offering and filed preliminary terms, with pricing still unverified. A separate Reuters update records US futures recovering from early election-related losses. All twelve main prices remain saved 3 November regular closes; seven separately dated premarket observations are included. Watch only, not holdings or calls.",
+  "coverage_note": "Fixed cutoff: 4 November 2026, 20:00 SGT (12:00 UTC). Review interval: 16:00–20:00 SGT, with overlap from 15:45 SGT (07:45 UTC), compared against the prior durable editions. Source checking occurred after cutoff; only developments and quotes timestamped at or before cutoff are included. Reuters and issuer-news coverage is partial, not a complete wire census. Prior research, qualifications and after-hours observations remain in unchanged archives. The existing schema contains the original twelve names; requested SPY, QQQ, TLT, IEI and IEF additions are not represented as verified quote coverage in this edition.",
+  "price_basis": "Main prices are USD completed regular-session observations for 3 November 2026 at 16:00 EST (4 November 05:00 SGT), with original vendor timestamp precision retained. Daily change compares the 2 November ordinary close. These are saved prior closes, not live or exact 20:00 SGT prices. Separate premarket observations for NVDA, GOOGL, BRK.B, AMD, MU, TSLA and TSM are dated 4 November, 06:40–06:56 EST (19:40–19:56 SGT), with minute precision and changes against the 3 November close. They are saved observations, not live prices or return endpoints. Five later premarket observations were excluded. TSM is the US-listed USD ADR.",
   "return_basis": "Cumulative return = 100 × (3 November 2026 adjusted close ÷ baseline adjusted close − 1). The 1–6 calendar-month baselines are 2 October, 3 September, 3 August, 2 July, 3 June and 1 May 2026. October 3 and May 3 fall on weekends; July 3 is the observed US Independence Day market holiday, so preceding sessions are used. All 72 dated inputs were independently checked. Adjusted closes incorporate split and dividend/distribution adjustments; ordinary previous closes remain separate. These are cumulative returns before fees and taxes, not six individual monthly returns.",
   "caveats": [
-    "All 12 regular and previous closes and all 72 dated adjusted-close baselines were freshly reconfirmed. Every daily, cumulative and separate after-hours percentage was independently recomputed; numeric regular-price and return fields are unchanged.",
-    "Search-indexed historical observations can lag vendor changes. Direct Yahoo retrieval was rate-limited; accessible indexed histories and other public history sources were checked, with stale or differently adjusted alternatives rejected. Original source links and provider-adjusted inputs remain attached to every horizon.",
-    "Optional Yahoo Blue Ocean overnight observations displayed clock times but required calendar-date inference from page context. They are excluded rather than assigned unverified dates. The precisely dated regular-close and after-hours observations are separate from subsequent market news.",
-    "We could not independently verify a comprehensive issuer-news feed for every company. Apple, Alphabet, Meta and Micron list-rendering gaps and Broadcom/TSMC homepage limitations are stated in their company notes.",
-    "The AWS page displays 3 November, while its body dateline and structured publication timestamp identify 4 November at 07:00 UTC. The discrepancy is disclosed; program targets do not establish new paid revenue.",
-    "The Reuters story originated in the overlap at 03:50:39 UTC. Its visible update is 07:33 GMT with minute precision, while structured metadata repeats the original timestamp. The substantive updated text is retained with that qualification.",
-    "Earlier AMD, Tesla, Berkshire and Meta developments are not repeated as new. The unresolved AMD source-number discrepancy and other prior qualifications remain in the earlier reports; no correction or new settlement confirmation was verified.",
-    "All twelve SEC recent-submission feeds were checked after the cutoff. This is not a complete census of third-party ownership filings or company announcements.",
-    "Quiet names have no newly verified company-specific narrative in this edition; that does not establish that no news occurred.",
-    "Watch only: no user holding, executed trade, buy call or recommendation is implied. No private diary, brokerage record, personal account information or restricted screenshot is included."
+    "All twelve regular and previous closes and all 72 dated adjusted-close baselines were freshly reconfirmed. The regular-price and return numbers are unchanged. Daily changes, six cumulative horizons and seven included premarket changes were independently recomputed.",
+    "Direct Stock Analysis requests returned HTTP 403; accessible indexed tables and fresh pages were used. Indexed observations can lag vendor changes. A Broadcom historical-table result showed 332.75, but its fresh close header and Yahoo dated history agree on 332.13; the inconsistent result was excluded. Stale and differently adjusted alternatives were not substituted.",
+    "Premarket coverage is intentionally partial. Apple, Microsoft, Amazon, Meta and Broadcom observations were later than the fixed cutoff and were not backdated. Yahoo observations lacking an explicit calendar date were not substituted. Earlier after-hours snapshots remain in their original reports.",
+    "Meta’s primary SEC prospectus is preliminary and leaves euro offering size, coupons and maturities unfilled. Reuters reports an offering launch, not verified final pricing or settlement. The earlier $15 billion USD pricing is a separate transaction already covered.",
+    "Google’s Malaysian investment is attributed to Reuters reporting of the company announcement. A matching original $15 billion issuer release was not retrieved; the accessible regional issuer index still showed the earlier $160 million water-infrastructure announcement. Investment plans are not realised spending or booked revenue.",
+    "All twelve issuer SEC recent-submission feeds were checked. Only Meta’s 11:01:27 UTC filing fell in the review window. These feeds do not constitute a census of all third-party ownership filings or company news.",
+    "Apple’s RSS was empty; Alphabet, Meta and Micron news lists were incomplete in the accessible rendering. Other issuer homepages and targeted Reuters searches do not guarantee comprehensive coverage. No new verified company item is not proof of no news.",
+    "The shared Reuters market update is kept separate from issuer announcements. Its 05:02 EST publication describes earlier market observations and possible policy risks, not enacted restrictions or the cause of a specific stock’s price move.",
+    "The older AMD warrant-number discrepancy, Tesla consumer-group complaint, Nvidia China-exposure qualification and other prior items are preserved in earlier reports and are not relabelled as new.",
+    "Watch only: no user holding, executed trade, buy call or recommendation is implied. No private diary, account information, restricted screenshot or analyst-house report is reproduced."
   ],
   "rows": [
     {
@@ -88,22 +88,30 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 329.80, -0.63% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "RSS body was empty and newsroom fallback rendered navigation only; issuer news coverage partial.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged."
+        "Apple RSS returned an empty body. No new company-specific development was independently verified in accessible in-window sources; issuer-news coverage remains partial.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "No before-cutoff premarket observation with a sufficiently verified date and time was included. The retrieved Stock Analysis premarket quote was later than 20:00 SGT.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/AAPL/history/?.tsrc=fin-srch&p=AAPL"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/AAPL/history/?ltr=1"
         },
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/AAPL/history/?guccounter=1&guce_referrer=aHR0cHM6Ly93d3cubWFjcnVtb3JzLmNvbS8&guce_referrer_sig=AQAAAE66_5FPOjL2UVM6K4Ht6cYHZXrgw_vDAZk9HYYDCMh5C8UC43sERR0XZlK_QDCi9KWRXojYT-XdK1X3toighx0Kc3qGwBmepZy2dALHM1bwJN7PopslieLUOvMMii7fSi7sQWUIsR7ZpDvnx0PJ3-vqJyB4bK4n1NySRIQhq_aS"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/AAPL/history/"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://stockanalysis.com/stocks/aapl/history/"
         },
         {
@@ -113,6 +121,10 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://www.apple.com/newsroom/rss-feed.rss"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#AAPL"
         }
       ]
     },
@@ -177,19 +189,22 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 516.40, -0.88% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Company Source newsroom scanned; latest full investor earnings release separately verified as 28 October. No comprehensive all-news feed guarantee.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged.",
-        "The after-hours percentage is recomputed from displayed prices; the source’s dollar-change header differs by one cent."
+        "Microsoft Source was accessible. The planned 4 November debt settlement is not treated as completed without confirmation; no new settlement filing appeared in the checked issuer feed.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "No before-cutoff premarket observation with a sufficiently verified date and time was included. The retrieved Stock Analysis premarket quote was later than 20:00 SGT.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/MSFT/history/?ltr=1"
         },
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/MSFT/history/?.tsrc=fin-srch&p=MSFT"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://stockanalysis.com/stocks/msft/history/"
         },
         {
@@ -199,6 +214,10 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://news.microsoft.com/source/"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#MSFT"
         }
       ]
     },
@@ -216,7 +235,12 @@
         "currency": "USD",
         "source_url": "https://finance.yahoo.com/quote/NVDA/history/"
       },
-      "premarket": null,
+      "premarket": {
+        "price": 208.87,
+        "as_of": "2026-11-04T06:47-05:00",
+        "source_url": "https://stockanalysis.com/stocks/nvda/history/",
+        "change_pct": 1.05
+      },
       "returns": [
         {
           "months": 1,
@@ -264,37 +288,44 @@
       "research": [
         {
           "date": "2026-11-04",
-          "headline": "Shared watchlist context: Reuters election and AI-policy update",
+          "headline": "Shared watchlist context: Reuters reports futures reversing early election losses",
           "facts": [
-            "Reuters reports Democrats gained both congressional chambers and Nasdaq futures pared a decline of more than 2%. These are report-time futures observations, not individual stock quotes.",
-            "The report describes Taiwan-listed TSMC shares falling before paring losses, not a new US-listed TSM ADR session.",
-            "Original publication: 03:50:39 UTC. Visible update: 07:33 GMT, minute precision; structured metadata repeats the original timestamp."
+            "Reuters’ 05:02 EST (10:02 UTC) update reports US equity futures recovering from early losses after the midterm results. The article’s specific futures snapshot is earlier, at 04:22 EST.",
+            "The report describes mixed hyperscaler shares and gains in AMD and other chip stocks during early premarket trading. These report-time observations are not the separate saved quote snapshots in this edition."
           ],
-          "analysis": "Possible scrutiny of AI infrastructure and capital spending is a watchlist-wide policy-risk scenario, not an enacted restriction or demonstrated earnings loss.",
-          "risks": "Election reporting and prices are evolving. A potential Texas data-center moratorium discussed by an analyst is hypothetical, not enacted policy.",
-          "next_watch": "Confirmed election outcomes, actual policy proposals and subsequent US trading.",
+          "analysis": "The reversal shows why early election reactions should not be treated as a stable forecast. Possible AI-policy scrutiny remains a scenario, not an enacted restriction.",
+          "risks": "Election interpretation, policy expectations and thin premarket trading can change rapidly. News association does not demonstrate causation for a particular share move.",
+          "next_watch": "The regular US session and specific policy or issuer announcements rather than extrapolation from initial futures moves.",
           "sources": [
             {
-              "title": "Reuters via MarketScreener; full updated article retrieved",
-              "url": "https://uk.marketscreener.com/news/stocks-wilt-dollar-slides-as-early-midterm-results-point-to-blue-sweep-ce785fdede8cf321"
+              "title": "Reuters via Schwab: 4 November 05:02 EST updated market report",
+              "url": "https://www.schwab.wallst.com/schwab/Prospect/research/stocks/news.asp?doc=3200-nL3N46L0TY-3&symbol=MSFT"
+            },
+            {
+              "title": "Reuters canonical market story; later updates may differ from this fixed snapshot",
+              "url": "https://www.reuters.com/business/us-stock-index-futures-steady-democrats-seize-congress-2026-11-04/"
             }
           ]
         }
       ],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 206.20, -0.24% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Issuer news page retrieved after cutoff. No additional verified company-specific event in reviewed sources.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged.",
-        "The Reuters item is shared market context, not a new Nvidia issuer announcement or proof of the cause of its price move."
+        "Nvidia’s release list was accessible. The China-exposure story dates to 3 November and remains attributed and unconfirmed in earlier coverage; it is not a new in-window event.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "Premarket is a saved, separately timed observation with minute precision. It does not replace the completed regular close or the adjusted-close return endpoint.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window.",
+        "The shared Reuters market item is not a new Nvidia issuer announcement and should not be read as company-specific research."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/NVDA/history/?guce_referrer=aHR0cHM6Ly90LmNvLw&guce_referrer_sig=AQAAAGDFwleRIvxFFMajAgkJNpOhjdXIjHCigDGSX2Qorqd2sptUkdjpfjroyv9rrY2Al33hTAXJhxBCXDQpAGd8GFdp5Z4DFjlSBH89yqlHGMgQbaH3bhLz2dWXLjlMLFdYNbhTApejJUbP7inD37zkPtlPOu4WxZFGuBYmJPDuxFqL"
+        },
+        {
+          "title": "Stock Analysis: dated saved premarket observation",
           "url": "https://stockanalysis.com/stocks/nvda/history/"
         },
         {
@@ -306,8 +337,16 @@
           "url": "https://nvidianews.nvidia.com/news"
         },
         {
-          "title": "Reuters via MarketScreener; full updated article retrieved",
-          "url": "https://uk.marketscreener.com/news/stocks-wilt-dollar-slides-as-early-midterm-results-point-to-blue-sweep-ce785fdede8cf321"
+          "title": "Reuters via Schwab: 4 November 05:02 EST updated market report",
+          "url": "https://www.schwab.wallst.com/schwab/Prospect/research/stocks/news.asp?doc=3200-nL3N46L0TY-3&symbol=MSFT"
+        },
+        {
+          "title": "Reuters canonical market story; later updates may differ from this fixed snapshot",
+          "url": "https://www.reuters.com/business/us-stock-index-futures-steady-democrats-seize-congress-2026-11-04/"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#NVDA"
         }
       ]
     },
@@ -325,7 +364,12 @@
         "currency": "USD",
         "source_url": "https://finance.yahoo.com/quote/GOOGL/?ltr=1"
       },
-      "premarket": null,
+      "premarket": {
+        "price": 282.46,
+        "as_of": "2026-11-04T06:56-05:00",
+        "source_url": "https://stockanalysis.com/stocks/googl/history/",
+        "change_pct": 0.87
+      },
       "returns": [
         {
           "months": 1,
@@ -370,24 +414,46 @@
           "pct": -27.3
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Google plans US$15 billion Malaysian infrastructure investment for 2027–2028",
+          "facts": [
+            "Reuters reported at 09:13:54 UTC that Google plans US$15 billion of Malaysian investment over 2027–2028, covering data-centre campuses, clean energy, water security and training.",
+            "The Reuters report says new campuses are planned in Selangor and Negeri Sembilan, alongside the existing operational Elmina campus. These are company plans reported by Reuters, not independently established future spending."
+          ],
+          "analysis": "The plan expands regional computing capacity while increasing capital and infrastructure commitments. It does not establish new revenue, utilisation or investment returns.",
+          "risks": "Construction, power and water availability, customer utilisation and returns on capital remain execution risks. A matching original issuer release was not retrieved.",
+          "next_watch": "An accessible original company statement, construction milestones, commissioning dates and subsequent capital-spending disclosure.",
+          "sources": [
+            {
+              "title": "Reuters: Google Malaysian investment, published 4 November 09:13:54 UTC",
+              "url": "https://www.reuters.com/world/asia-pacific/google-invest-15-billion-malaysia-2027-2028-2026-11-04/"
+            },
+            {
+              "title": "Reuters syndicated by WHBL: full report, 09:13:36 UTC metadata",
+              "url": "https://whbl.com/2026/11/04/google-to-invest-15-billion-in-malaysia-in-2027-and-2028/"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 278.43, -0.57% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "News list rendered an old 2025 item only; current issuer-news coverage partial.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged."
+        "Alphabet’s investor news list did not provide a complete current listing. Reuters supplies the new Malaysia report; the matching original issuer release was not retrieved.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "Premarket is a saved, separately timed observation with minute precision. It does not replace the completed regular close or the adjusted-close return endpoint.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/GOOGL/?ltr=1"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Stock Analysis: dated saved premarket observation",
           "url": "https://stockanalysis.com/stocks/googl/history/"
         },
         {
@@ -397,6 +463,18 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://abc.xyz/investor/news/"
+        },
+        {
+          "title": "Reuters: Google Malaysian investment, published 4 November 09:13:54 UTC",
+          "url": "https://www.reuters.com/world/asia-pacific/google-invest-15-billion-malaysia-2027-2028-2026-11-04/"
+        },
+        {
+          "title": "Reuters syndicated by WHBL: full report, 09:13:36 UTC metadata",
+          "url": "https://whbl.com/2026/11/04/google-to-invest-15-billion-in-malaysia-in-2027-and-2028/"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#GOOGL"
         }
       ]
     },
@@ -459,39 +537,29 @@
           "source_url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-04",
-          "headline": "AWS launches Malaysian public-sector and SME AI program",
-          "facts": [
-            "AWS announced Semarak AI Malaysia. It plans Amazon Quick access for up to 445,000 government officers; GovHub, powered by Kiro, starts with a 500-developer pilot in 2026 and targets 4,000 developers by 2028.",
-            "The SME program aims to onboard 10,000 businesses by 2028, with eligible participants offered six months of complimentary Quick and Kiro access.",
-            "Structured publication time: 4 November 07:00 UTC. The body says 4 November; the page label says 3 November."
-          ],
-          "analysis": "This expands AWS distribution and AI adoption in Malaysia. The release does not quantify incremental revenue, contract value or near-term earnings impact.",
-          "risks": "Targets and pilot sizes are not realized paid subscriptions. Do not describe the previously announced MYR29.2 billion country commitment as new spending.",
-          "next_watch": "Pilot rollout, adoption and conversion to paid workloads through 2028.",
-          "sources": [
-            {
-              "title": "Original AWS release; UTC structured metadata verified",
-              "url": "https://press.aboutamazon.com/aws/2026/11/aws-launches-semarak-ai-malaysia-a-national-program-to-bring-ai-tools-to-government-officers-students-and-local-software-companies"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 248.78, -0.76% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Issuer news page retrieved after cutoff. No additional verified company-specific event in reviewed sources."
+        "Amazon’s press archive was accessible. The 07:00 UTC Malaysian AWS program was covered in the prior edition and is not repeated as new.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "No before-cutoff premarket observation with a sufficiently verified date and time was included. The retrieved Stock Analysis premarket quote was later than 20:00 SGT.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://stockanalysis.com/stocks/amzn/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://www.quiverquant.com/stock/AMZN/historical-prices/"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/AMZN/history/?p=AMZN"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/AMZN/history/"
         },
         {
           "title": "SEC recent issuer submissions checked after cutoff",
@@ -502,8 +570,8 @@
           "url": "https://press.aboutamazon.com/press-releases"
         },
         {
-          "title": "Original AWS release; UTC structured metadata verified",
-          "url": "https://press.aboutamazon.com/aws/2026/11/aws-launches-semarak-ai-malaysia-a-national-program-to-bring-ai-tools-to-government-officers-students-and-local-software-companies"
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#AMZN"
         }
       ]
     },
@@ -566,21 +634,52 @@
           "source_url": "https://finance.yahoo.com/quote/META/history/"
         }
       ],
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-04",
+          "headline": "Meta launches euro bond offering; SEC terms remain preliminary",
+          "facts": [
+            "Reuters reports that books opened for Meta’s first euro bond sale, with maturities ranging from four to 38 years, citing a lead-manager memo. The English syndication was updated at 09:01:41 UTC.",
+            "Meta’s 424B5, accepted by the SEC at 11:01:27 UTC, describes six proposed senior-note series. Euro amounts, coupons and final maturity dates remain blank; proceeds are intended for general corporate purposes.",
+            "The filing separately confirms the previously covered US$15 billion dollar-note pricing. It does not confirm either offering has settled."
+          ],
+          "analysis": "Euro borrowing can diversify funding sources, but the preliminary filing cannot establish final financing cost or completed funding.",
+          "risks": "Pricing, interest expense, currency exposure and completion remain uncertain. The Reuters memo’s maturity range is distinct from the unfilled primary-document fields.",
+          "next_watch": "Final euro pricing terms, the completed prospectus and issuer confirmation of settlement.",
+          "sources": [
+            {
+              "title": "Meta original preliminary euro prospectus, SEC acceptance 11:01:27 UTC",
+              "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526446110/d44678d424b5.htm"
+            },
+            {
+              "title": "Reuters via Zawya: launch report, updated 09:01:41 UTC",
+              "url": "https://www.zawya.com/en/capital-markets/ai-shaping-digital-future/meta-kicks-off-first-euro-bond-sale-in-latest-test-for-tech-sector-1931584"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 618.44, -0.42% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Investor press-release list did not render entries; coverage partial.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged."
+        "Meta’s investor news listing rendered without complete release entries. The original SEC preliminary euro prospectus was retrieved and independently read.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "No before-cutoff premarket observation with a sufficiently verified date and time was included. The retrieved Stock Analysis premarket quote was later than 20:00 SGT.",
+        "SEC issuer feed: one new preliminary 424B5 accepted at 11:01:27 UTC."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://stockanalysis.com/stocks/meta/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/META/history/"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/META/history/?guccounter=1&guce_referrer=aHR0cHM6Ly93d3cuZ29vZ2xlLmNvbS8&guce_referrer_sig=AQAAALWdGhX0UjNTQ9kz1nycNCgAoSfpiVboNSIy9_qNOJxI8It6AszusYF3HqykJOvoJiOpCt4jxLR2kqU5bzx_qIaOSTQlMFKDmi8hnCkry4geVwQCYt4aRP_RNefIJ8cqril6GSrrOU_Nhv3Jwxeh4cVQk_4J1eF88eLe8vo0tqkR"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/META/history/?period1=1337347800&period2=1790726400"
         },
         {
           "title": "SEC recent issuer submissions checked after cutoff",
@@ -589,6 +688,18 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://investor.atmeta.com/investor-news/default.aspx"
+        },
+        {
+          "title": "Meta original preliminary euro prospectus, SEC acceptance 11:01:27 UTC",
+          "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526446110/d44678d424b5.htm"
+        },
+        {
+          "title": "Reuters via Zawya: launch report, updated 09:01:41 UTC",
+          "url": "https://www.zawya.com/en/capital-markets/ai-shaping-digital-future/meta-kicks-off-first-euro-bond-sale-in-latest-test-for-tech-sector-1931584"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#META"
         }
       ]
     },
@@ -606,7 +717,12 @@
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/brk.b/history/"
       },
-      "premarket": null,
+      "premarket": {
+        "price": 560.0,
+        "as_of": "2026-11-04T06:40-05:00",
+        "source_url": "https://stockanalysis.com/stocks/brk.b/history/",
+        "change_pct": 0.53
+      },
       "returns": [
         {
           "months": 1,
@@ -653,18 +769,18 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 556.80, -0.05% versus the 3 November regular close, observed 2026-11-03T19:55-05:00 (2026-11-04T08:55+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Issuer news page retrieved after cutoff. No additional verified company-specific event in reviewed sources.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged."
+        "Berkshire’s public news menu and issuer submissions were checked. The Sirius XM purchases and PacifiCorp appeal were already covered; no new in-window item was verified.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "Premarket is a saved, separately timed observation with minute precision. It does not replace the completed regular close or the adjusted-close return endpoint.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Stock Analysis: dated saved premarket observation",
           "url": "https://stockanalysis.com/stocks/brk.b/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://www.quiverquant.com/stock/BRK.B/historical-prices/"
         },
         {
@@ -674,6 +790,10 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://www.berkshirehathaway.com/news/2026news.html"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#BRK.B"
         }
       ]
     },
@@ -691,7 +811,12 @@
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/amd/history/"
       },
-      "premarket": null,
+      "premarket": {
+        "price": 510.6,
+        "as_of": "2026-11-04T06:42-05:00",
+        "source_url": "https://stockanalysis.com/stocks/amd/history/",
+        "change_pct": 5.52
+      },
       "returns": [
         {
           "months": 1,
@@ -738,19 +863,18 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 508.20, +5.02% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Issuer news page retrieved after cutoff. No additional verified company-specific event in reviewed sources.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged.",
-        "The earlier Reuters warrant article still gives $1.07 billion versus the issuer reconciliation’s $1.097 billion. No correction was verified; the noon report retains the detailed qualification."
+        "AMD’s press list still showed the 3 November earnings release as latest. The earlier warrant discrepancy ($1.07 billion in Reuters versus $1.097 billion in the issuer reconciliation) remains unresolved; it is preserved in the noon edition.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "Premarket is a saved, separately timed observation with minute precision. It does not replace the completed regular close or the adjusted-close return endpoint.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Stock Analysis: dated saved premarket observation",
           "url": "https://stockanalysis.com/stocks/amd/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://www.quiverquant.com/stock/AMD/historical-prices/"
         },
         {
@@ -762,8 +886,8 @@
           "url": "https://ir.amd.com/news-events/press-releases"
         },
         {
-          "title": "Earlier noon edition with unresolved AMD source discrepancy",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T040000Z.html"
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#AMD"
         }
       ]
     },
@@ -828,22 +952,23 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 330.04, -0.63% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Investor homepage used after previously observed ordinary 404 on financial-news path; completeness limited.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged."
+        "Broadcom’s investor homepage is not a comprehensive news feed. No new in-window company-specific development was independently verified.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "No before-cutoff premarket observation with a sufficiently verified date and time was included. The retrieved Stock Analysis premarket quote was later than 20:00 SGT.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window.",
+        "The inconsistent indexed 332.75 historical-table close was rejected; the fresh Stock Analysis header and Yahoo history both show 332.13 for 3 November."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://stockanalysis.com/stocks/avgo/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/AVGO/history/?p=AVGO"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://fr.finance.yahoo.com/quote/AVGO/history/"
         },
         {
@@ -853,6 +978,10 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://investors.broadcom.com/"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#AVGO"
         }
       ]
     },
@@ -870,7 +999,12 @@
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/mu/history/"
       },
-      "premarket": null,
+      "premarket": {
+        "price": 858.34,
+        "as_of": "2026-11-04T06:52-05:00",
+        "source_url": "https://stockanalysis.com/stocks/mu/history/",
+        "change_pct": 0.38
+      },
       "returns": [
         {
           "months": 1,
@@ -917,18 +1051,18 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 849.60, -0.64% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Investor news route rendered site navigation but no complete current release list; coverage partial.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged."
+        "Micron’s news page did not expose a complete release list. No new company-specific development was verified in the accessible in-window sources.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "Premarket is a saved, separately timed observation with minute precision. It does not replace the completed regular close or the adjusted-close return endpoint.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Stock Analysis: dated saved premarket observation",
           "url": "https://stockanalysis.com/stocks/mu/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
@@ -938,6 +1072,10 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://investors.micron.com/news/default.aspx"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#MU"
         }
       ]
     },
@@ -955,7 +1093,12 @@
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/tsla/history/"
       },
-      "premarket": null,
+      "premarket": {
+        "price": 379.11,
+        "as_of": "2026-11-04T06:55-05:00",
+        "source_url": "https://stockanalysis.com/stocks/tsla/history/",
+        "change_pct": -4.87
+      },
       "returns": [
         {
           "months": 1,
@@ -1002,19 +1145,31 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 391.53, -1.75% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Issuer news page retrieved after cutoff. No additional verified company-specific event in reviewed sources.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged."
+        "Tesla’s press page still showed its 21 October results release as latest. The Korean FSD marketing-complaint report was already covered and is not repeated as new.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "Premarket is a saved, separately timed observation with minute precision. It does not replace the completed regular close or the adjusted-close return endpoint.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Stock Analysis: dated saved premarket observation",
           "url": "https://stockanalysis.com/stocks/tsla/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/TSLA/history/?guccounter=1"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/TSLA/history/?.tsrc=fin-srch&p=TSLA"
+        },
+        {
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
+          "url": "https://finance.yahoo.com/quote/TSLA/history/?p=TSLA%22"
         },
         {
           "title": "SEC recent issuer submissions checked after cutoff",
@@ -1023,6 +1178,10 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://ir.tesla.com/press"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#TSLA"
         }
       ]
     },
@@ -1040,7 +1199,12 @@
         "currency": "USD",
         "source_url": "https://stockanalysis.com/stocks/tsm/history/"
       },
-      "premarket": null,
+      "premarket": {
+        "price": 411.26,
+        "as_of": "2026-11-04T06:45-05:00",
+        "source_url": "https://stockanalysis.com/stocks/tsm/history/",
+        "change_pct": 1.6
+      },
       "returns": [
         {
           "months": 1,
@@ -1087,23 +1251,23 @@
       ],
       "research": [],
       "gaps": [
-        "Unchanged separate after-hours snapshot: USD 404.50, -0.07% versus the 3 November regular close, observed 2026-11-03T19:59-05:00 (2026-11-04T08:59+08:00). Stock Analysis provides minute precision. Not live, not premarket and not a return endpoint.",
-        "Reuters and issuer-news coverage is partial; no new verified item is not proof that no news occurred.",
-        "Current press homepage used after previously observed ordinary 404 on /english/news; local stock and USD ADR are distinguished.",
-        "No new company-specific narrative was independently verified in the reviewed 04:00–08:00 UTC sources. Earlier dated research remains available unchanged.",
-        "Historical inputs retain the existing Yahoo-adjusted series, including 3 September at 415.89; a differently adjusted 416.13 observation was not substituted."
+        "TSMC’s broad press-center page is not a complete release feed. No new in-window company-specific announcement was independently verified; Taiwan-listed stock movements are not substituted for the USD ADR.",
+        "Reuters and issuer-news coverage is partial; absence of a newly verified item does not establish that no news occurred.",
+        "Premarket is a saved, separately timed observation with minute precision. It does not replace the completed regular close or the adjusted-close return endpoint.",
+        "SEC issuer feed: no new acceptance in the 07:45–12:00 UTC review window.",
+        "The Yahoo-adjusted 3 September baseline remains 415.89. Stock Analysis showed a different adjustment of 416.13, which was not substituted."
       ],
       "sources": [
         {
-          "title": "Stock Analysis: regular history and unchanged separate after-hours snapshot",
+          "title": "Stock Analysis: dated saved premarket observation",
           "url": "https://stockanalysis.com/stocks/tsm/history/"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://finance.yahoo.com/quote/TSM/history/?p=TSM"
         },
         {
-          "title": "Verified public price or adjusted-close baseline source",
+          "title": "Price or provider-adjusted historical input; session and basis labelled above",
           "url": "https://hk.finance.yahoo.com/quote/TSM/history/"
         },
         {
@@ -1113,6 +1277,10 @@
         {
           "title": "Issuer news source checked; coverage limitations noted",
           "url": "https://pr.tsmc.com/english"
+        },
+        {
+          "title": "Previous verified full report · 4 November 16:00 SGT · preserved dated context",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261104T080000Z.html#TSM"
         }
       ]
     }
