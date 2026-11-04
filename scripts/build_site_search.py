@@ -3,9 +3,14 @@ import json,re,hashlib
 from pathlib import Path
 from html.parser import HTMLParser
 from datetime import datetime,timezone
-from urllib.parse import urlsplit,unquote
+from urllib.parse import urlsplit,unquote,quote
 ROOT=Path(__file__).resolve().parents[1]/'site'
 def read(path):return json.loads((ROOT/path).read_text())
+
+def master_record_target(record):
+ identity=record.get('id')
+ if not isinstance(identity,str) or not identity.strip():return None
+ return 'v4.html?security='+quote(identity,safe='')+'#master/explore'
 def strings(x):
  if isinstance(x,str):return x
  if isinstance(x,list):return ' '.join(strings(v) for v in x)
@@ -108,7 +113,9 @@ def build():
  for x in d.get('stocks',[]):add('Stock directory',x['ticker']+' · '+x['name'],strings([x.get('sector'),x.get('exchange')]),x['url'],None,x['url'],'User-supplied reference link; not a current quote',tags=[x.get('ticker'),x.get('sector')])
  for x in d.get('bonds',[]):add('Bond directory',x['name'],strings([x.get('id'),x.get('issuer'),x.get('currency'),x.get('kind'),x.get('maturity')]),x['url'],None,x['url'],'User-supplied reference; terms not independently reverified',tags=[x.get('currency'),x.get('kind')])
  d=read('data/master-v3.json')
- for x in d.get('records',[]):add('Security master',x.get('name',x.get('id','Security')),strings([x.get('isin'),x.get('securityNo'),x.get('currency'),x.get('category'),x.get('vendorType')]),'v4.html#master',None,None,'Imported reference; no live prices or AR verification implied',tags=[x.get('currency'),x.get('category')])
+ for x in d.get('records',[]):
+  target=master_record_target(x)
+  add('Security master',x.get('name',x.get('id','Security')),strings([x.get('isin'),x.get('securityNo'),x.get('currency'),x.get('category'),x.get('vendorType')]),target or 'v4.html#master',None,None,'Imported reference; no live prices or AR verification implied',tags=[x.get('currency'),x.get('category')],location={'label':'V4 → Security master','href':target or 'v4.html#master','exact':bool(target)})
  d=read('data/ust-v3.json')
  for x in d.get('rows',[]):add('UST reference',x['name'],strings([x.get('currency'),x.get('maturity'),x.get('instrumentType')]),'v4.html#ust',d.get('quote_date'),None,'Quote date not established; candidate identifiers excluded')
  for x in read('data/history-v3.json').get('series',[]):add('Historical series',x['id'],strings([x.get('family'),x.get('unit'),x.get('frequency')]),'v4.html#history',(x.get('points') or [[None]])[-1][0],None,'Historical saved series; gaps retained')

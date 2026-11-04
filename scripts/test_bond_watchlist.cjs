@@ -19,6 +19,17 @@ for(const sort of ['name','price','ar']){x.sort=sort;const a=t.masterRows();asse
 x.q='US87973RAW07';assert.equal(t.masterRows().length,1);x.q='';x.categories=['Equities'];assert(t.masterRows().every(r=>r.category==='Equities'));x.categories=[];x.activeList=B.defaultListId;assert.equal(t.masterRows().length,30);x.activeList='existing';assert.equal(t.masterRows().length,1);assert.deepEqual(x.selection,['existing']);assert.equal(x.watchlists[0].name,'Keep me');assert(t.rowHTML(master.records.find(r=>r.isin===tem.isin)).includes('Pinned bond watchlist'));
 handlers.click({target:{closest:s=>s==='[data-bw-master]'?{dataset:{bwMaster:tem.isin}}:null},preventDefault(){}});assert.equal(nav,'master/explore');assert.equal(x.q,tem.isin);assert.equal(x.activeList,null);
 assert.equal(JSON.stringify({master,ust,D}),before,'No source snapshots or identities changed');
+// A catalogue deep link opens exactly one known record after the master has loaded.
+let opened=0;const dialog={open:false,innerHTML:'',close(){this.open=false;},showModal(){this.open=true;opened++;}};
+doc.querySelector=s=>s==='#tool-dialog'?dialog:null;t.setHost({getDirectory:()=>null,render(){}});
+const chosen=master.records.find(r=>r.isin==='US91282CCA71');ctx.location.href='https://example.com/v4.html?security='+encodeURIComponent(chosen.id)+'#master/explore';
+const selectedBefore=JSON.stringify(x.selection),listsBefore=JSON.stringify(x.watchlists),snapshotBefore=JSON.stringify(x.master);
+x.master=null;ctx.window.MarketV3.afterRender('overview');assert.equal(opened,0,'wait for the master data');
+x.master=master;ctx.window.MarketV3.afterRender('master');assert.equal(opened,1);assert(dialog.innerHTML.includes(chosen.isin));assert(dialog.innerHTML.includes(chosen.name));
+dialog.close();ctx.window.MarketV3.afterRender('master');assert.equal(opened,1,'do not reopen after dismissal or rerender');
+ctx.location.href='https://example.com/v4.html?security=unknown-fixture#master/explore';ctx.window.MarketV3.afterRender('master');assert.equal(opened,2);assert(dialog.innerHTML.includes('Security not found'));assert(!dialog.innerHTML.includes(chosen.isin));
+ctx.location.href='https://example.com/v4.html#master/explore';dialog.close();ctx.window.MarketV3.afterRender('master');assert.equal(opened,2);
+assert.equal(JSON.stringify(x.selection),selectedBefore);assert.equal(JSON.stringify(x.watchlists),listsBefore);assert.equal(JSON.stringify(x.master),snapshotBefore);
 const html=fs.readFileSync('site/v4.html','utf8');assert(html.includes("watchlist:()=>BondWatchlist.view('watchlist')+MarketWatchlist.view()"));assert(html.indexOf('bond-watchlist.js')<html.indexOf('v4-tools.js'));assert(!fs.readFileSync('site/bond-watchlist.js','utf8').includes('localStorage'));
 // Viewport and existing display preferences are respected without touching heat scales.
 const mobileCtx={window:{innerWidth:390,BOND_WATCHLIST_DATA:D,addEventListener(){}},document:{documentElement:{style:{getPropertyValue:()=>2},dataset:{displayCharts:'large'}},addEventListener(){}}};
