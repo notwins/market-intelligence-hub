@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "frequency": "daily",
+  "source": "Monetary Authority of Singapore, Daily SGS Prices \u2014 Closing Levels",
+  "source_url": "https://eservices.mas.gov.sg/Statistics/fdanet/SgsBenchmarkIssuePrices.aspx",
+  "license_url": "https://www.mas.gov.sg/Terms-of-Use.aspx",
+  "checked_at": "2026-11-04T11:40:43Z",
+  "observed_time": null,
+  "time_precision": "date_only",
+  "basis": "SGS benchmark closing bid yields quoted by primary dealers, percent per annum. Bills are quoted in yield terms; bond prices are clean SGD per 100 principal. These are benchmark issues, not constant-maturity par estimates.",
+  "source_scope": "Six dated closing rows shown on the official page when checked; no earlier daily history inferred. Issue identifiers and clean prices describe the latest source table, 4 November 2026.",
+  "attribution": "Contains information from Daily SGS Prices accessed on 4 November 2026 from the Monetary Authority of Singapore, made available under the Monetary Authority of Singapore Terms of Use of Datasets. MAS does not endorse this website.",
+  "tenors": [
+    {
+      "label": "6M",
+      "issue_code": "BS26122V",
+      "maturity": "2027-05-11",
+      "coupon_percent": null,
+      "latest_clean_price_sgd_per_100": null
+    },
+    {
+      "label": "1Y",
+      "issue_code": "BY26103X",
+      "maturity": "2027-10-19",
+      "coupon_percent": null,
+      "latest_clean_price_sgd_per_100": null
+    },
+    {
+      "label": "2Y",
+      "issue_code": "N523100W",
+      "maturity": "2028-08-01",
+      "coupon_percent": 2.875,
+      "latest_clean_price_sgd_per_100": 101.78
+    },
+    {
+      "label": "5Y",
+      "issue_code": "N526100H",
+      "maturity": "2031-11-01",
+      "coupon_percent": 2,
+      "latest_clean_price_sgd_per_100": 100.11
+    },
+    {
+      "label": "10Y",
+      "issue_code": "NZ16100X",
+      "maturity": "2036-08-01",
+      "coupon_percent": 2.25,
+      "latest_clean_price_sgd_per_100": 100.62
+    },
+    {
+      "label": "15Y",
+      "issue_code": "NY25200N",
+      "maturity": "2040-07-01",
+      "coupon_percent": 2.25,
+      "latest_clean_price_sgd_per_100": 100.4
+    },
+    {
+      "label": "20Y",
+      "issue_code": "NZ26300E",
+      "maturity": "2046-08-01",
+      "coupon_percent": 2.375,
+      "latest_clean_price_sgd_per_100": 103.08
+    },
+    {
+      "label": "30Y",
+      "issue_code": "NA24300E",
+      "maturity": "2054-06-01",
+      "coupon_percent": 3.25,
+      "latest_clean_price_sgd_per_100": 121.41
+    },
+    {
+      "label": "50Y",
+      "issue_code": "NC22300W",
+      "maturity": "2072-08-01",
+      "coupon_percent": 3,
+      "latest_clean_price_sgd_per_100": 115.86
+    }
+  ],
+  "observations": [
+    {
+      "date": "2026-10-28",
+      "values": [
+        1.92,
+        1.91,
+        1.89,
+        2.09,
+        2.3,
+        2.34,
+        2.3,
+        2.32,
+        2.53
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "values": [
+        1.92,
+        1.91,
+        1.89,
+        2.07,
+        2.28,
+        2.32,
+        2.29,
+        2.3,
+        2.52
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "values": [
+        1.91,
+        1.9,
+        1.87,
+        2.03,
+        2.24,
+        2.29,
+        2.25,
+        2.27,
+        2.49
+      ]
+    },
+    {
+      "date": "2026-11-02",
+      "values": [
+        1.9,
+        1.9,
+        1.86,
+        2.02,
+        2.23,
+        2.28,
+        2.24,
+        2.27,
+        2.49
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "values": [
+        1.9,
+        1.9,
+        1.85,
+        2.0,
+        2.21,
+        2.25,
+        2.22,
+        2.25,
+        2.46
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "values": [
+        1.86,
+        1.88,
+        1.83,
+        1.98,
+        2.18,
+        2.22,
+        2.18,
+        2.21,
+        2.42
+      ]
+    }
+  ]
+}

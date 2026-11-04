@@ -50,6 +50,7 @@ jobs:
           node scripts/test_search_interactions.cjs
           node scripts/test_research_context.cjs
           node scripts/test_watchlist.cjs
+          node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
       - name: Refresh Reuters headline metadata
@@ -83,6 +84,7 @@ jobs:
           node scripts/test_policy_report_visuals.cjs
           node scripts/test_news_reading.cjs
           node scripts/test_watchlist.cjs
+          node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
           python3 scripts/build_site_search.py
