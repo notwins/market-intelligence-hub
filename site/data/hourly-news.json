@@ -2,13 +2,117 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-04T14:21:42+08:00",
+  "publisher_checked_at": "2026-11-04T15:20:19.750+08:00",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-hourly-20261104T070233Z",
+      "report_at": "2026-11-04T15:07:40+08:00",
+      "cutoff": "2026-11-04T15:02:33+08:00",
+      "window_start": "2026-11-04T14:02:33+08:00",
+      "coverage": "partial",
+      "summary": "Partial Reuters scan to 3:02:33 PM SGT, 4 November 2026. Novo Nordisk and Continental raised company guidance; Reuters relayed an unconfirmed FT account of an Oracle–Tencent AI-chip deal cancellation. Prior Meta bond issuance coverage was supplemented with two tranche coupons whose original first-appearance time is unverified. No live trading prices or issue yields established.",
+      "limitations": [
+        "Targeted Reuters searches, not exhaustive Reuters wire coverage; earlier scan gaps remain open.",
+        "Daily earnings, central-bank and bond-credit cross-checks were limited by truncated report extracts.",
+        "Oracle–Tencent cancellation allegation is attributed to the Financial Times and is not independently verified by Reuters.",
+        "Meta bond-tranche terms were newly inspected relative to prior hourly coverage; their first publication time is unknown, so this is catch-up.",
+        "No verified contemporaneous market prices, Meta issue yields or bond spreads; this partial scan does not advance the complete cutoff."
+      ],
+      "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+      "sources": [
+        {
+          "url": "https://www.reuters.com/business/novo-nordisk-q3-profit-beats-forecast-raises-2026-guidance-2026-11-04/",
+          "title": "Novo Nordisk's Wegovy pill beats forecasts as it battles Lilly",
+          "published_at": "2026-11-04T06:36Z"
+        },
+        {
+          "url": "https://www.reuters.com/business/continental-raises-2026-outlook-tyre-business-strength-2026-11-04/",
+          "title": "Continental raises 2026 outlook on tyre business strength",
+          "published_at": "2026-11-04T06:34Z"
+        },
+        {
+          "url": "https://www.reuters.com/world/china/oracle-abandons-7-billion-tencent-ai-deal-under-trump-pressure-ft-reports-2026-11-04/",
+          "title": "Oracle abandons $7 billion Tencent AI deal under Trump pressure, FT reports",
+          "published_at": "2026-11-04T05:21Z"
+        },
+        {
+          "url": "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/",
+          "title": "Meta raises $15 billion in five-part US bond sale to fund AI expansion",
+          "published_at": "2026-11-03T22:50Z"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261104-NOVO-Q3-2026-GUIDANCE",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "equities-healthcare",
+          "headline": "Novo Nordisk's Wegovy-pill sales beat estimates; 2026 guidance raised",
+          "body": "Wegovy pill third-quarter revenue DKK5.39bn, versus company-compiled consensus DKK4.62bn, up 53% from Q2. Adjusted operating profit DKK31.72bn vs DKK28.39bn expected; adjusted sales DKK79.20bn vs DKK73.22bn expected. Adjusted 2026 sales and operating-profit outlook at constant exchange rates raised to -2% through +2% from previous -6% through 0%.",
+          "analysis": "Interpretation: Positive oral-obesity-drug adoption and better operating profits; monitor competitive pricing, Lilly market share and sustainability of guidance.",
+          "watch_next": "Wegovy pill market share, 2026 profit delivery and forthcoming Lilly results.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/novo-nordisk-q3-profit-beats-forecast-raises-2026-guidance-2026-11-04/"
+          ],
+          "development_at": "2026-11-04T06:36Z"
+        },
+        {
+          "story_id": "R-20261104-CONTINENTAL-2026-MARGIN",
+          "version": 1,
+          "status": "new",
+          "freshness": "current",
+          "topic": "equities-europe-guidance",
+          "headline": "Continental raises 2026 operating-margin outlook on tyre strength",
+          "body": "Continental raised FY2026 operating profit margin guidance excluding discontinued ContiTech to 13.4%-14%. Previous range was 12%-13.5%; company-supplied analyst consensus stood at 13.7%.",
+          "analysis": "Interpretation: Better tyre margins modestly improve earnings expectations; does not imply a broad recovery in European manufacturing.",
+          "watch_next": "Actual reported margins, tyre demand, restructuring and credit metrics.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/continental-raises-2026-outlook-tyre-business-strength-2026-11-04/"
+          ],
+          "development_at": "2026-11-04T06:34Z"
+        },
+        {
+          "story_id": "R-20261104-ORACLE-TENCENT-LEASE-REPORT",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "equities-ai-china-trade-restrictions",
+          "headline": "Reuters relays unconfirmed FT report of Oracle–Tencent US$7bn AI deal cancellation",
+          "body": "Reuters relayed a Financial Times report alleging cancellation of an estimated US$7 billion Oracle–Tencent AI-chip lease involving about 100,000 chips at Southeast Asian data centres. Reuters could not independently verify the claim; company confirmation was unavailable.",
+          "analysis": "Interpretation: If confirmed, trade controls could alter cloud revenue assumptions, asset utilisation and China/SEA data-centre buildout financing. Cancellation is not confirmed by Oracle or Reuters independently.",
+          "watch_next": "Official Oracle/Tencent statements, contractual status, cancellation costs and further US export-policy clarifications.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/china/oracle-abandons-7-billion-tencent-ai-deal-under-trump-pressure-ft-reports-2026-11-04/"
+          ],
+          "development_at": "2026-11-04T05:21Z"
+        },
+        {
+          "story_id": "R-20261103-META-USD15B-BONDS",
+          "version": 2,
+          "status": "follow-up",
+          "freshness": "catch-up",
+          "topic": "rates-credit-ai-issuance",
+          "headline": "Meta US$15bn bond offering: 2031 and 2033 tranche coupons reviewed",
+          "body": "The Reuters account gives US$3.25 billion of Meta notes due in 2031 carrying a 5.85% coupon and US$3.25 billion due in 2033 at a 6.25% coupon, with Moody's assigning Aa3. The time these terms first appeared is unknown. Coupon does not establish issue yield.",
+          "analysis": "Interpretation: Coupon and issue yield are not interchangeable; credit evaluation requires final issue price, maturity-specific UST spreads, leverage and expected capex.",
+          "watch_next": "Full tranche pricing, issue yields, benchmark spreads and free-cash-flow/debt trajectory.",
+          "earlier": "Previous hourly edition ending 2026-11-04 07:20:56 SGT, R-20261103-META-USD15B-BONDS v1: reported five-part US$15bn issue without verified tranche terms.",
+          "source_urls": [
+            "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/"
+          ],
+          "development_at": null
+        }
+      ]
+    },
     {
       "id": "reuters-hourly-20261104T053328Z",
       "report_at": "2026-11-04T13:38:00+08:00",
