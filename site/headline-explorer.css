@@ -24,3 +24,5 @@
 .hx-tags button:focus-visible,.hx-active button:focus-visible{outline:3px solid #6c55ba;outline-offset:2px}
 
 .hx-story .hx-summary a,.hx-story .hx-panel p a{display:inline;font:inherit}
+
+.hx-takeaway{border-left:3px solid #39877e;background:#eff8f5;border-radius:0 9px 9px 0;padding:12px 15px;margin:12px 0}.hx-takeaway>span{font-size:calc(10px * var(--text-scale,1));font-weight:750;text-transform:uppercase;letter-spacing:.07em;color:#376c68}.hx-takeaway p{margin:8px 0 0;color:#274b52;line-height:1.7}.hx-takeaway strong{font-weight:700}

@@ -47,7 +47,7 @@ function card(item,ctx){
  return '<article class="news-item hx-story"><h3 class="hx-headline"><span class="hx-title">'+highlight(String(item.title||'Untitled record'))+'</span></h3><small class="hx-byline">'+esc(ctx.time(item))+' · '+esc(item.publisher||'Reuters')+'</small>'+
  (saved?'<p class="hx-summary">'+esc(saved.summary)+'</p>':'<p class="hx-unavailable">Summary not yet available for this saved headline. Read the original report below.</p>')+
  '<div class="hx-tags" aria-label="Filter by this story’s tags">'+ts.map(tagButton).join('')+'</div>'+
- (context?'<details class="hx-expand"><summary>Read summary &amp; context</summary><div class="hx-panel"><p>'+esc(context)+'</p><p class="hx-source-note">Source-checked summary'+(saved.checked_at?' · checked '+esc(saved.checked_at.slice(0,10)):'')+'. Dated reporting, not live market data.</p>'+sources.map(x=>'<p class="hx-source-note"><a href="'+url(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||'Summary source')+' ↗</a></p>').join('')+'</div></details>':'')+
+ (context?'<details class="hx-expand"><summary>Read summary &amp; context</summary><div class="hx-panel"><div class="hx-takeaway"><span>Key takeaway · saved context</span><p><strong>'+esc(context)+'</strong></p></div><p class="hx-source-note">Source-checked summary'+(saved.checked_at?' · checked '+esc(saved.checked_at.slice(0,10)):'')+'. Dated reporting, not live market data.</p>'+sources.map(x=>'<p class="hx-source-note"><a href="'+url(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.title||'Summary source')+' ↗</a></p>').join('')+'</div></details>':'')+
  '<div class="links hx-source-links">'+(item.tickers||[]).map(t=>ctx.stockLink(t)).join('')+original+'</div></article>';
 }
 

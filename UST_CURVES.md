@@ -19,3 +19,13 @@ To rebuild the complete history, download the Treasury annual daily CSVs from th
 `node scripts/test_v4.cjs` includes the daily-curve tests. These cover data validation, exact dates, multiple additions, duplicate rejection, missing values, latest-feed merging, source conflicts, accessible SVG, markup escaping, and mounted add/remove/clear interactions. Python discovery includes Treasury importer and archived-gap checks.
 
 Rollback should revert only the daily-curve feature commit, preserving later concurrent commits. The feature consists of `ust-curves.js`, `ust-curves.css`, its two data files, importer/tests, the V4 script/style references and the UST mounting hooks. It does not change access settings, source snapshots, positions, or financial calculations.
+
+## Full UST observations: cards, table and yield heat
+
+The supplied-security list can switch between Cards and Table without changing filters, sorting, selected comparisons or source observations. Pagination makes every matching source row reachable; the earlier display stopped at 36. Each page contains up to 36 observations. Numeric sort supports both directions for coupon and reported yield, plus maturity order. Optional grouping uses exact coupon or maturity year; sorting applies within groups.
+
+Yield shading uses five equal-width bands across all nonnegative reported yields in the loaded snapshot, so filtering or changing pages does not change a bond's color. Negative source yields are amber and labelled for review; missing values are grey. The legend exposes the numeric range and states that higher yield is not better or safer. Values keep their existing displayed precision and exact raw source text remains in details.
+
+The table is a real horizontal-scroll table on phones, with keyboard-accessible scrolling, labelled view buttons, source-detail maturity buttons and compare actions. Security identity, source quote time and price convention remain unverified. No AR/MOA policy data are inferred or newly joined; their unavailable state is stated beside the list. No observation or live-feed behavior is changed.
+
+Test: scripts/test_ust_table.cjs covers both views, 353 matching rows across ten pages at the 4 November research date, filters, sort directions, grouping, selection retention, source precision, heat extremes/negative/missing/equal cases, no matches, escaping and source immutability.

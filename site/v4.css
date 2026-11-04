@@ -57,3 +57,10 @@ html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=
 .headline-filters>summary:after{float:none}.headline-filters .hx-controls{margin-top:8px}
 .headline-results-card>#headline-page-status{margin-top:0;font-size:calc(13px * var(--text-scale))}
 @media(max-width:760px){.briefing-intro .page-head,.headlines-intro .page-head{margin-bottom:12px}.briefing-intro .page-head p,.headlines-intro .page-head p{margin-bottom:8px}.briefing-intro .feed-status,.headlines-intro .feed-status{margin-bottom:14px}.headlines-intro .page-head h1{font-size:calc(24px * var(--text-scale))}.headline-filters>summary{font-size:calc(13px * var(--text-scale))}.briefing-lead+.welcome-tools{margin-top:24px}.topbar.has-headline-toolbar{padding-bottom:7px}}
+
+/* Chart labels have an independent absolute scale, not multiplied by global text. */
+.chart text,.v3-chart text{font-size:calc(11px * var(--chart-text-scale,1));font-family:var(--display-font)}
+.chart-panel .legend,.v4-event-legend,.chart-hover{font-size:calc(11px * var(--chart-text-scale,1))}
+.policy-scale{font-size:calc(10px * var(--chart-text-scale,1))}.policy-bar-label{font-size:calc(13px * var(--chart-text-scale,1))}.policy-bar-label strong{font-size:calc(24px * var(--chart-text-scale,1))}
+.bars .bar-row,.bars .bar-row b{font-size:calc(12px * var(--chart-text-scale,1))}
+.policy-seat-pair strong{font-size:calc(27px * var(--chart-text-scale,1))}.policy-seat-pair span,.policy-lead span{font-size:calc(11px * var(--chart-text-scale,1))}.policy-lead strong{font-size:calc(29px * var(--chart-text-scale,1))}
