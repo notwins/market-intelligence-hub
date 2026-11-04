@@ -1,0 +1,103 @@
+{
+  "id": "reuters-hourly-20261103T232056Z",
+  "report_at": "2026-11-03T23:25:08Z",
+  "window_start": "2026-11-03T22:20:56Z",
+  "cutoff": "2026-11-03T23:20:56Z",
+  "coverage": "partial",
+  "summary": "Partial targeted Reuters scan ending 2026-11-03T23:20:56Z. 4 newly selected stories, including 2 catch-up discoveries. Coverage is not exhaustive; no claim of a complete Reuters wire scan.",
+  "limitations": [
+    "Targeted accessible Reuters coverage, not an exhaustive wire scan; some developments may be missing.",
+    "No prior completed-scan cutoff has been established, leaving unrecovered coverage gaps.",
+    "Some daily briefing extracts were truncated, limiting cross-edition duplication checks.",
+    "Original article publication times were verified to minute precision; later revisions and some trade-observation times could not be established."
+  ],
+  "original_url": "https://chatgpt.com/c/6aea1027-b868-83ec-bdc0-7766b3207575",
+  "sources": [
+    {
+      "url": "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/",
+      "title": "Meta raises $15 billion in five-part US bond sale",
+      "published_at": "2026-11-03T22:50Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/skyworks-tumbles-sluggish-smartphone-market-weighs-forecast-2026-11-03/",
+      "title": "Skyworks tumbles as sluggish smartphone market weighs on forecast",
+      "published_at": "2026-11-03T22:09Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/world-at-work/australias-canva-cut-22-jobs-growth-slows-first-time-decade-2026-11-03/",
+      "title": "Australia's Canva to cut 22% of jobs as growth slows for first time in a decade",
+      "published_at": "2026-11-03T22:11Z"
+    },
+    {
+      "url": "https://www.reuters.com/business/energy/canadas-suncor-energy-tops-quarterly-profit-estimates-2026-11-03/",
+      "title": "Canada's Suncor Energy tops quarterly profit estimates",
+      "published_at": "2026-11-03T22:42Z"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261103-META-USD15B-BONDS",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "rates-credit-ai",
+      "headline": "Meta raises US$15 billion in five-part bond sale",
+      "body": "Reuters reported Meta Platforms is raising US$15 billion through a five-part US-dollar bond offering to fund AI infrastructure investments.",
+      "analysis": "Additional large technology bond issuance may compete for investor capital; pricing and duration are needed before inferring any Treasury-yield or corporate-spread impact.",
+      "watch_next": "Final tranche pricing, coupons, maturities and spreads over matched-maturity Treasuries.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/technology/meta-raises-15-billion-in-five-part-us-bond-sale-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T22:50Z"
+    },
+    {
+      "story_id": "R-20261103-SKYWORKS-Q1-WEAK-GUIDANCE",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "equities-semiconductors",
+      "headline": "Skyworks warns of smartphone weakness and guides below consensus",
+      "body": "Skyworks forecast first-quarter revenue and earnings below Wall Street expectations amid continued smartphone demand weakness. Reuters reported the stock fell more than 14% in extended trading; precise price-observation time was not established.",
+      "analysis": "Demand weakness in premium Android smartphones contrasts with AI datacentre strength; integration synergies are not yet achieved cash flow.",
+      "watch_next": "Actual first-quarter demand, gross margins, Qorvo integration and savings delivery.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/skyworks-tumbles-sluggish-smartphone-market-weighs-forecast-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T22:09Z"
+    },
+    {
+      "story_id": "R-20261103-CANVA-RESTRUCTURE-JOBS",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "equities-tech-labour",
+      "headline": "Canva announces 1,271 job cuts as growth slows",
+      "body": "Australian design software company Canva announced 1,271 job cuts, approximately 22% of its workforce, after growth slowed for the first time in a decade.",
+      "analysis": "Company-specific hiring retrenchment highlights differentiation between software operating economics and capital-intensive AI hardware demand; not a national jobs data surprise.",
+      "watch_next": "Restructuring execution, renewal trends, remaining workforce capacity and margins.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/world-at-work/australias-canva-cut-22-jobs-growth-slows-first-time-decade-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T22:11Z"
+    },
+    {
+      "story_id": "R-20261103-SUNCOR-Q3-PROFIT-DIVIDEND",
+      "version": 1,
+      "status": "new",
+      "freshness": "current",
+      "topic": "energy-equities",
+      "headline": "Suncor beats quarterly profit estimates and raises dividend",
+      "body": "Suncor reported adjusted operating profit of C$3.97 a share against the C$3.28 LSEG estimate for the third quarter. It raised its quarterly dividend 10% to C$0.66 a share.",
+      "analysis": "Elevated oil and refining margins can improve integrated energy cash flows while increasing cost pressure elsewhere; a single quarter is not a forward oil-price forecast.",
+      "watch_next": "Dividend funding, realised refinery margins and next-quarter crude pricing.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/energy/canadas-suncor-energy-tops-quarterly-profit-estimates-2026-11-03/"
+      ],
+      "development_at": "2026-11-03T22:42Z"
+    }
+  ]
+}
