@@ -18,6 +18,10 @@ class CreditReport(unittest.TestCase):
   for needed in ['98.657','1.001x','144.748','30.80%','not calculated','Historical','Source register']:
    self.assertIn(needed,s)
   self.assertTrue((base/'creditworthiness-guide.pdf').read_bytes().startswith(b'%PDF'))
+ def test_index_link(self):
+  s=(ROOT/'site/market-understanding/index.html').read_text()
+  self.assertEqual(s.count('id="creditworthiness-report-card"'),1)
+  self.assertIn('href="creditworthiness-2026-11-05/"',s)
  def test_arithmetic(self):
   self.assertAlmostEqual(7.979+12.350+78.328,98.657)
   self.assertAlmostEqual(111.482-12.715,98.767)

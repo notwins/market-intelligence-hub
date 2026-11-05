@@ -35,7 +35,8 @@ class Additions(unittest.TestCase):
   self.assertNotRegex(page,r'<(?:img|iframe|embed|object)\b')
   self.assertGreaterEqual(page.count('class="mu-writeup"'),10)
   original=page.split('<!-- published-writeups:start -->')[1].split('<!-- published-writeups:end -->')[0]
-  self.assertEqual(original.count('class="mu-writeup"'),9)
+  self.assertEqual(original.count('class="mu-writeup"'),10)
+  self.assertEqual(original.count('id="creditworthiness-report-card"'),1)
   self.assertEqual(page.count('id="research-readings"'),1)
   self.assertEqual(page.count('class="mu-chapter"'),15)
  def test_all_new_bar_scales_and_visible_data(self):
