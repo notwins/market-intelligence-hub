@@ -11,7 +11,7 @@ assert.deepEqual(m.matches('AAPLish xAAPL AAPL.foo NYSE:MU Nasdaq:MU').map(x=>x.
 assert.equal(m.matches('NYSE:MU').length,0);
 m.rows.push({...m.resolve('MU'),exchange:'NYSE',url:'https://www.morningstar.com/stocks/xnys/mu/quote'});
 assert.equal(m.resolve('MU'),null);assert.equal(m.resolve('XNAS:MU').mic,'XNAS');m.rows.pop();
-for(const f of ['v3.html','v4.html']){const s=fs.readFileSync('site/'+f,'utf8');assert(s.includes('morningstar-links.js'));assert(s.includes('MorningstarLinks.resolve(t)'));}
+for(const f of ['v4.html']){const s=fs.readFileSync('site/'+f,'utf8');assert(s.includes('morningstar-links.js'));assert(s.includes('MorningstarLinks.resolve(t)'));}
 const script=fs.readFileSync('site/morningstar-links.js','utf8');
 assert(script.includes("p.closest('a,button"));assert(script.includes("a.href=searchPage+'?q='+encodeURIComponent(hit.record.ticker)"));assert(!script.includes('a.href=hit.record.url'));assert(!script.includes("a.target='_blank'"));assert(script.includes('observer.disconnect()'));
 console.log('PASS 12 watchlist identities, exchange mismatch, ADR identity, BRK alias, ambiguity, boundaries, source-link preservation, rerender integration and internal-first ticker navigation');

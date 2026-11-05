@@ -87,13 +87,15 @@ def build():
  add('Section','Tag and event tree map','Searchable colored country sector policy ticker and historical event groupings','tag-map.html',status='Recommended taxonomy')
  for file in [ROOT/'data/news.json',*sorted((ROOT/'data/archive').glob('*.json'))]:
   d=json.loads(file.read_text())
-  for x in d.get('items',[]):add('Headline',x.get('title','Untitled'),strings([x.get('category'),x.get('tickers')]),x.get('url') or 'v4.html#headlines',x.get('published_at'),x.get('url'),'Saved Reuters-attributed headline metadata; article body not indexed',tags=[x.get('category'),*(x.get('tickers') or [])],location={'label':'V4 → Reuters coverage' if file.name=='news.json' else 'V4 → Scheduled reports → Daily archive → '+file.stem,'href':'v4.html#headlines' if file.name=='news.json' else 'v4.html#reports','exact':False})
+  for x in d.get('items',[]):add('Headline',x.get('title','Untitled'),strings([x.get('category'),x.get('tickers')]),x.get('url') or 'v4.html#headlines',x.get('published_at'),x.get('url'),'Saved Reuters-attributed headline metadata; article body not indexed',tags=[x.get('category'),*(x.get('tickers') or [])],location={'label':'V4 → Reuters coverage' if file.name=='news.json' else 'V4 → Scheduled reports → Daily archive → '+file.stem,'href':'v4.html#headlines' if file.name=='news.json' else 'archive.html?day='+file.stem+'#archive-snapshot','exact':file.name!='news.json'})
  for file in [ROOT/'data/hourly-news.json',*sorted((ROOT/'data/hourly-archive').glob('*.json'))]:
   d=json.loads(file.read_text())
   for edition in d.get('editions',[d] if 'stories' in d else []):
    add('Hourly edition',edition.get('summary') or edition.get('id','Hourly edition'),strings(edition.get('limitations',[])),'v4.html#hourly',edition.get('cutoff'),edition.get('original_url'),edition.get('coverage','Unspecified coverage'))
    for x in edition.get('stories',[]):add('Hourly story',x.get('title',x.get('headline','Hourly story')),strings(x),'v4.html#hourly',x.get('published_at') or edition.get('cutoff'),x.get('url') or next(iter(x.get('source_urls',[])),None),x.get('status','Saved report'),tags=[x.get('topic'),*(x.get('tickers') or [])],reading=reading_sections(x,'Hourly story'))
- for x in read('data/reports.json').get('reports',[]):add('Report',x.get('title',x['id']),strings(x),'v1.html?view=archive',x.get('date'),None,x.get('status','Saved edition'),location={'label':'V1 → Research archive → '+str(x.get('date','Unknown edition')),'href':'v1.html?view=archive','exact':False})
+ for x in read('data/reports.json').get('reports',[]):
+  target='archive.html?report='+quote(x['id'],safe='')+'#report-'+quote(x['id'],safe='')
+  add('Report',x.get('title',x['id']),strings(x),target,x.get('date'),None,x.get('status','Saved edition'),location={'label':'Research archive → '+str(x.get('date','Unknown edition')),'href':target,'exact':True})
  # Parse the public JSON payload, never index executable JavaScript text.
  legacy=json.loads((ROOT/'v2-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
  for x in legacy.get('reports',[]):add('Research edition',x.get('title',x.get('id','Research edition')),strings(x),'v4.html#reports',x.get('date'),None,'Original imported edition; not refreshed by search')
@@ -139,7 +141,7 @@ def build():
    if not self.skip:self.out.append(d)
  # Catalogues all public HTML pages, excludes code and transient UI preferences.
  for file in sorted(ROOT.rglob('*.html')):
-  if file.name in ['search.html','tag-map.html']:continue
+  if file.name in ['search.html','tag-map.html','index.html','v1.html','v3.html','v3-backup.html','v3-settings-preview.html','saved-securities.html']:continue
   p=Text();p.feed(file.read_text());title=re.search(r'<title>(.*?)</title>',file.read_text(),re.S)
   add('Page',re.sub('<[^>]+>','',title.group(1)) if title else file.stem,' '.join(p.out),file.relative_to(ROOT).as_posix(),None,None,'Public page text; JavaScript-only content indexed separately where supported')
  taxonomy_html=(ROOT/'tag-map.html').read_text()

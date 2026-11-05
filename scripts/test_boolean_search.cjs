@@ -57,8 +57,8 @@ assert(Q.search(data.entries,'Google AND (MSFT OR AMZN)').length);
 assert(data.entries.every(e=>!e.location.href||UI.safe(e.location.href)), 'All location links must be usable');
 console.log('PASS Boolean precedence, nested groups, aliases, exact phrases, text/tag fields, implicit AND, NOT, malformed input, bounds, safe links, article filtering, tag composition and every indexed location');
 
-assert(data.entries.filter(e=>e.kind==='Report').every(e=>e.href==='v1.html?view=archive'&&e.location.label.startsWith('V1')));
-assert(data.entries.some(e=>e.kind==='Headline'&&e.location.label.includes('Daily archive')&&e.location.href==='v4.html#reports'));
+assert(data.entries.filter(e=>e.kind==='Report').every(e=>e.href.startsWith('archive.html?report=')&&e.location.href===e.href&&e.location.exact&&e.location.label.startsWith('Research archive')));
+assert(data.entries.some(e=>e.kind==='Headline'&&e.location.label.includes('Daily archive')&&e.location.href.startsWith('archive.html?day=')&&e.location.exact));
 
 for(const url of ['https://chatgpt.com/c/private-id','https://chatgpt.com/g/g-project/c/private-id','https://chat.openai.com/c/private-id','https://chatgpt.com/%63/private-id'])assert.equal(UI.safe(url),null);
 assert(data.entries.every(e=>!e.source||!/^https:\/\/(?:chatgpt\.com|chat\.openai\.com)\/(?:c|g)\//.test(e.source)));

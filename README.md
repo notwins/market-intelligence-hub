@@ -1,6 +1,6 @@
 # Market Intelligence Hub
 
-**Current release: V4 (3 November 2026, Singapore).** The main URL opens V4 (an existing explicit V3 preference is respected), with the security master, historical yield/FX comparisons and UST selection desk. V2 remains at `v2.html`; V1 and original archives remain at `v1.html`. See [V3_NOTES.md](V3_NOTES.md) for imports, local saves, Chinese UI, source limitations and future feed contracts. The new full-history and WSJ connectors are prepared, not connected.
+**Current release: V4 (3 November 2026, Singapore).** The main URL opens V4, with the security master, historical yield/FX comparisons and UST selection desk. V2 remains at `v2.html`. V1 and V3 dashboard views are retired; their entry URLs redirect to the corresponding current route, and an old V3 preference is migrated to V4. Dated earnings editions and daily headline snapshots remain readable at `archive.html`; the browser-local original shortlist is readable and exportable at `saved-securities.html`. See [V3_NOTES.md](V3_NOTES.md) for imports, local saves, Chinese UI, source limitations and future feed contracts. The new full-history and WSJ connectors are prepared, not connected.
 
 Independent research dashboard, restored from the original Market_Intelligence_Hub_Preview.html. The earlier project ZIP was unavailable in this environment. The original layout, 161 Morningstar equity links and 489 user-supplied bond references are preserved.
 
@@ -25,6 +25,8 @@ Reuters, Morningstar and Bondsupermart attribution is retained. This project is 
 Run the workflow manually under Actions to validate data refresh and publication. Review failed Actions notifications. Inspect the public data/status.json and headline date. Update curated reports only after checking their sources, keeping prior editions. Restore a previous repository revision and rerun publication to roll back. Do not delete the archive directory.
 
 Local check: `python -m unittest discover -s scripts -p 'test_*.py'`
+
+The V3-named engines, data files and browser storage keys remain shared V4 internals. Do not remove them or clear browser storage when maintaining the retired entry redirects. `node scripts/test_v4.cjs` includes route, archive and saved-list retirement regressions; keep `node scripts/test_v3.cjs` for shared-engine validation. The complete publishing checks are listed in `.github/workflows/publish.yml`.
 
 Local preview: `python -m http.server 8765 --directory site`
 

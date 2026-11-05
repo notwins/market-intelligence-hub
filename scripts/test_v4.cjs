@@ -2,7 +2,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),asse
 const root=path.join(__dirname,'../site'),read=f=>fs.readFileSync(path.join(root,f),'utf8');let count=0;
 function test(name,fn){fn();count++;console.log('PASS '+name);}
 const html=read('v4.html');
-test('V3 has requested mobile navigation and retains backup',()=>{assert.ok(read('v3.html').includes('mobile-navigation.js'));assert.ok(read('v3-backup.html').includes('data-view="master"'));});
+test('V4 retains mobile navigation and shared V3 engines',()=>{assert.ok(html.includes('mobile-navigation.js'));for(const file of ['v3.css','v3-display.css','v3-source-engine.js','v3-core.js','v3-i18n.js'])assert.ok(html.includes(file),file);});
 test('all V4 inline and external application scripts parse',()=>{for(const f of ['v4-tools.js','v4-display.js','version-switch.js','v4-layout.js'])new vm.Script(read(f));for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);});
 test('navigation creates distinct history entries, preserves search and restores without pushing',()=>{
  const log=[],location={pathname:'/v4.html',search:'?test=1',hash:'#overview'},state={view:'overview'},tabs={history:'yield',master:'explore'};
@@ -17,7 +17,7 @@ test('V4 preferences are independent and sanitize extreme text/card values',()=>
  vm.createContext(ctx);vm.runInContext(read('v4-display.js'),ctx);assert.equal(ctx.document.documentElement.dataset.displayColumns,'auto');
  let values={};ctx.document.documentElement.style.setProperty=(k,v)=>values[k]=v;vm.runInContext(read('v4-display.js'),ctx);assert.equal(values['--text-scale'],2);assert.equal(values['--card-scale'],.5);
 });
-test('entry defaults to V4 and respects explicit V3 preference',()=>{const script=read('index.html').match(/<script>([\s\S]*?)<\/script>/)[1];for(const preferred of [null,'v3','v4']){let destination;const ctx={URLSearchParams,location:{search:'',hash:'#history',replace:v=>destination=v},document:{getElementById:()=>({})},localStorage:{getItem:()=>preferred}};vm.runInNewContext(script,ctx);assert.ok(destination.startsWith(preferred==='v3'?'v3.html':'v4.html'));} });
+require('./test_legacy_retirement.cjs');
 test('credit desk excludes non-financial word senses without deleting source rows',()=>{
  const code=html.slice(html.indexOf('function isCredit('),html.indexOf('\nfunction dealCard('));const ctx={};vm.createContext(ctx);vm.runInContext(code,ctx);
  for(const title of ["Norris says Antonelli deserves more credit for 'insane job' this season",'Britain to make lifetime retirement income the default for private pensions','Pension funds change their default options'])assert.equal(ctx.isCredit({title,category:'Fixed income'}),false,title);
