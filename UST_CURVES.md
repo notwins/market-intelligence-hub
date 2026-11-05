@@ -5,7 +5,7 @@ V4's UST selection desk now includes a separate daily Treasury benchmark panel. 
 - Select a sourced event preset or an exact observation date. Add up to eight historical curves over the latest available curve, with distinct colors, dash patterns, numbered keys, date/context labels and an exact-value table.
 - Curves use daily Treasury par yields (% per annum), not the History section's monthly averages. Maturity tenors are equally spaced for readability. Connecting lines are visual guides, not estimated intermediate yields. Missing maturities break paths, and missing dates are never silently substituted.
 - Dates and context labels appear at the right on wide screens and below the chart on phones. The latest curve cannot be removed by historical-clear controls.
-- The archive contains 9,216 actual daily observations from 1990-01-02 through 2026-11-03. Seven event presets link directly to Federal Reserve policy statements. The March 2020 preset explicitly distinguishes the Sunday event from Monday's observed curve.
+- The archive contains 9,217 actual daily observations from 1990-01-02 through 2026-11-04. Seven event presets link directly to Federal Reserve policy statements. The March 2020 preset explicitly distinguishes the Sunday event from Monday's observed curve.
 - All 37 Treasury annual CSV source URLs, byte counts, retrieval times and SHA-256 hashes are retained in `site/data/ust-curves-daily.json`. Provider blanks remain null, including the discontinued 30Y interval. No private user or client data is used.
 
 ## Refresh and data provenance

@@ -42,5 +42,7 @@ class ImportTests(unittest.TestCase):
         self.assertNotIn('2020-03-15',rows);self.assertEqual(rows['2020-03-16'],[.25,.24,.29,.29,.36,.43,.49,.67,.73,1.10,1.34])
         self.assertIsNone(rows['2005-06-15'][-1]);self.assertIsNone(rows['2008-12-10'][1]);self.assertIsNone(rows['2008-12-18'][1]);self.assertIsNone(rows['2008-12-24'][1])
         self.assertEqual(p['events'][2]['event_date'],'2020-03-15');self.assertEqual(p['events'][2]['date'],'2020-03-16')
-        self.assertEqual(p['observations'][-1]['date'],'2026-11-03')
+        self.assertGreaterEqual(p['observations'][-1]['date'],'2026-11-04')
+        self.assertEqual(rows['2026-11-03'],[4.03,4.21,4.26,4.40,4.61,4.68,4.74,4.83,4.95,5.35,5.32])
+        self.assertEqual(rows['2026-11-04'],[4.01,4.21,4.25,4.39,4.58,4.64,4.69,4.77,4.90,5.30,5.28])
 if __name__=='__main__':unittest.main()
