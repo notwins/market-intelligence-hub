@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-05T01:05:44.334605+00:00",
-  "message": "05 Nov 08:00 SGT fixed-cutoff watchlist edition published after validation repair. Exact-commit Pages deployment, live edition ID and report hash verified at 09:05 SGT. All 12 completed-session prices and 72 adjusted baselines checked; four current company research items render. Source coverage is partial. This was a resumed scheduled execution, not a new live snapshot or proof of future runs.",
+  "checked_at": "2026-11-05T04:11:28.813314+00:00",
+  "message": "05 Nov 12:00 SGT fixed-cutoff watchlist edition published by this scheduled execution using the connected desktop after the cloud environment was unavailable. Exact-commit Pages deployment, live edition ID, full-report hash and current research mappings verified at 12:11 SGT. All 12 completed-session prices and 72 adjusted baselines were freshly checked. One shared market-context item is included; no new company-specific item was verified within the review window. Source coverage remains partial. This confirms this execution, not future runs or separate-chat delivery.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,14 +14,13 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "f40ec17ab29e2a982feff41ce0af3f8ef294974c",
-    "pages_run_id": 41945949975,
-    "edition_id": "watchlist-20261105T000000Z",
-    "report_sha256": "90a62a56abe7d47be8c1177b0e7ff31e67f2edb0585dafa8d629d2f0e2e16e5d",
-    "verified_at": "2026-11-05T01:05:44.334605+00:00",
-    "scheduled_for": "2026-11-05T00:00:00+00:00",
-    "execution_kind": "scheduled_run_resumed_after_validation_repair",
-    "recovered_after_publishing_gate_repair": true
+    "commit": "69b5be2a16b3e0d6283dfe5a6c66870e5ffdf2eb",
+    "pages_run_id": 41966077901,
+    "edition_id": "watchlist-20261105T040000Z",
+    "report_sha256": "e1e8007c8cbbe7409024f9b6b0cdc30e7cc7a631ed361e940e8d37a2da0d51d3",
+    "verified_at": "2026-11-05T04:11:28.813314+00:00",
+    "scheduled_for": "2026-11-05T04:00:00Z",
+    "execution_kind": "scheduled_run_connected_desktop_fallback"
   },
   "separate_A_chat_delivery_verified": false,
   "previous_verified_publications": [
@@ -46,6 +45,19 @@
       "verified_at": "2026-11-04T20:43:58.148250+00:00",
       "scheduled_for": "2026-11-04T20:00:00+00:00",
       "execution_kind": "scheduled_run",
+      "recovered_after_publishing_gate_repair": true
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "f40ec17ab29e2a982feff41ce0af3f8ef294974c",
+      "pages_run_id": 41945949975,
+      "edition_id": "watchlist-20261105T000000Z",
+      "report_sha256": "90a62a56abe7d47be8c1177b0e7ff31e67f2edb0585dafa8d629d2f0e2e16e5d",
+      "verified_at": "2026-11-05T01:05:44.334605+00:00",
+      "scheduled_for": "2026-11-05T00:00:00+00:00",
+      "execution_kind": "scheduled_run_resumed_after_validation_repair",
       "recovered_after_publishing_gate_repair": true
     }
   ],
@@ -86,6 +98,10 @@
     ],
     "news_access": "partial",
     "price_session": "2026-11-04",
-    "basis": "USD completed regular-session observations; adjusted-close cumulative returns"
+    "basis": "USD completed regular-session observations; adjusted-close cumulative returns",
+    "required_prices_verified": 12,
+    "adjusted_baselines_verified": 72,
+    "new_company_research_items": 0,
+    "shared_market_context_items": 1
   }
 }
