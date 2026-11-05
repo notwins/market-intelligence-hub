@@ -14,3 +14,5 @@ function callsContext(payload){
  const bad=JSON.parse(JSON.stringify(payload));bad.calls[0].report.html_path='javascript:alert(1)';bad.calls[0].summary='<img src=x onerror=1>';const safe=callsContext(bad);await new Promise(r=>setTimeout(r,0));await new Promise(r=>setTimeout(r,0));const sh=safe.MarketWatchlist.callsView();assertCalls(!sh.includes('href="javascript:'));assertCalls(!sh.includes('<img'));assertCalls(sh.includes('&lt;img'));assertCalls(sh.includes('Full report link unavailable.'));
  console.log('PASS dated Calls reviews, ETF instruments, safe static report links, empty state and HTML escaping');
 })().catch(e=>{console.error(e);process.exitCode=1;});
+
+assertCalls(fsCalls.readFileSync('site/v4.html','utf8').includes('src="watchlist.js?v=20261105.calls1"'),'Calls publication must update the browser asset version');
