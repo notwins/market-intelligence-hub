@@ -1,0 +1,4444 @@
+{
+  "title": "AI data centres: from power to profit",
+  "as_of": "2026-11-05",
+  "timezone": "Asia/Singapore",
+  "scope": "40 original-company annual comparisons;12 additional financial spotlights; technical and company-map verification",
+  "unit_policy": "Monetary figures in named reporting currency, millions. Source precision retained. Charts and ratios rounded.",
+  "core_financials": [
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 402836,
+        "gross_profit": 240301,
+        "rd": 61087,
+        "operating_income": 129039,
+        "net_income": 132170,
+        "operating_cash_flow": 164713,
+        "cash_capex": 91447,
+        "fcf_simple": 73266.0,
+        "fcf_issuer": null,
+        "cash_and_investments": 126843,
+        "debt": 48543,
+        "stock_based_compensation": null,
+        "gross_margin_pct_calculated": 59.65231508603998,
+        "net_margin_pct_calculated": 32.80987796522654
+      },
+      "definitions": {
+        "gross_profit": "Calculated: revenue 402836 minus cost of revenues 162535.",
+        "fcf_simple": "Calculated: operating cash flow minus cash purchases of property and equipment.",
+        "cash_and_investments": "Cash and cash equivalents 30708 plus marketable securities 96135; excludes nonmarketable investments.",
+        "debt": "Carrying amounts: current debt 1996 plus long-term debt 46547; excludes leases. Principal debt 49085.",
+        "rd": "Total corporate R&D; not a separately identified AI investment number.",
+        "net_income": "FY2025 includes investment valuation gains. Current trailing earnings are especially distorted by 9M2026 equity-security gains."
+      },
+      "net_income_scope": "FY2025 includes investment valuation gains. Current trailing earnings are especially distorted by 9M2026 equity-security gains.",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 282836,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+          "published_date": "2026-02-05",
+          "scope": "FY2025 financial statements, segments and investment gains"
+        },
+        {
+          "id": "latest",
+          "url": "https://abc.xyz/investor/events/event-details/2026/2026-Q3-Earnings-Call-2026-Ujou16CTw9/default.aspx",
+          "published_date": "2026-10-28",
+          "scope": "Q3 2026 discussion and capex guidance"
+        },
+        {
+          "id": "latest_10q",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000084/goog-20260930.htm",
+          "published_date": null,
+          "scope": "9M and Q3 investment gains/losses"
+        },
+        {
+          "id": "baseline",
+          "url": "https://abc.xyz/assets/d4/4f/a48b94d548d0b2fdc029a95e8c63/2022-alphabet-annual-report.pdf",
+          "published_date": null,
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft Corporation",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-30",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 331839,
+        "gross_profit": 225465,
+        "rd": 35562,
+        "operating_income": 155237,
+        "net_income": 133749,
+        "operating_cash_flow": 182935,
+        "cash_capex": 115948,
+        "fcf_simple": 66987.0,
+        "fcf_issuer": null,
+        "cash_and_investments": 76843,
+        "debt": 40294,
+        "stock_based_compensation": 12405,
+        "gross_margin_pct_calculated": 67.9440933705803,
+        "net_margin_pct_calculated": 40.305389059152176
+      },
+      "definitions": {
+        "cash_and_investments": "Cash 20935 plus short-term investments 55908.",
+        "debt": "Current debt 9227 plus long-term debt 31067; excludes finance leases.",
+        "cash_capex": "Cash additions to property and equipment; not management capex including finance-lease commencements.",
+        "fcf_simple": "Operating cash flow less cash property and equipment additions; excludes finance-lease principal.",
+        "net_income": "FY2026 net income increased by USD 5.0bn from OpenAI investment impacts, per issuer discussion."
+      },
+      "net_income_scope": "FY2026 net income increased by USD 5.0bn from OpenAI investment impacts, per issuer discussion.",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-06-30",
+        "revenue": 198270,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.microsoft.com/investor/reports/ar26/",
+          "published_date": "2026-10",
+          "scope": "FY2026 statements, segments, OpenAI impact"
+        },
+        {
+          "id": "latest",
+          "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast",
+          "published_date": "2026-10-28",
+          "scope": "FY2027 Q1 statements"
+        },
+        {
+          "id": "call",
+          "url": "https://www.microsoft.com/en-us/investor/events/fy-2027/earnings-fy-2027-q1",
+          "published_date": "2026-10-28",
+          "scope": "Capex and segment change"
+        },
+        {
+          "id": "baseline",
+          "url": "https://www.microsoft.com/investor/reports/ar22/index.html",
+          "published_date": null,
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon.com, Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 716924,
+        "gross_profit": 360510,
+        "rd": null,
+        "operating_income": 79975,
+        "net_income": 77670,
+        "operating_cash_flow": 139514,
+        "cash_capex": 131819,
+        "fcf_simple": 7695.0,
+        "fcf_issuer": 11194,
+        "cash_and_investments": 123029,
+        "debt": 68396,
+        "stock_based_compensation": 19467,
+        "gross_margin_pct_calculated": 50.28566486824266,
+        "net_margin_pct_calculated": 10.83378433418326
+      },
+      "definitions": {
+        "gross_profit": "Calculated: revenue 716924 less cost of sales 356414. Fulfillment 109074 and technology/infrastructure 108521 are separate operating costs; gross margin is not comparable to a software vendor without this caveat.",
+        "rd": "R&D is not separately reported. Technology and infrastructure expense 108521 is a broader category and must not be presented as pure R&D.",
+        "cash_capex": "Gross cash property/equipment payments 131819.",
+        "fcf_simple": "139514 minus 131819 = 7695.",
+        "fcf_issuer": "139514 minus net cash capex 128320 = 11194; net capex deducts 3499 proceeds/incentives.",
+        "cash_and_investments": "Cash 86810 plus marketable securities 36219.",
+        "debt": "Long-term borrowings carrying amount including current portion: 2748 + 65648; excludes lease liabilities and any separately classified other short-term facilities.",
+        "net_income": "FY2025 includes substantial Anthropic-related nonoperating gains; 9M2026 fair-value gains distort current trailing P/E."
+      },
+      "net_income_scope": "FY2025 includes substantial Anthropic-related nonoperating gains; 9M2026 fair-value gains distort current trailing P/E.",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 513983,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+          "published_date": "2026-02-06",
+          "scope": "FY2025 statements, debt, revenue composition"
+        },
+        {
+          "id": "annual_release",
+          "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/",
+          "published_date": "2026-02-05",
+          "scope": "Cash-flow definitions"
+        },
+        {
+          "id": "latest",
+          "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/",
+          "published_date": "2026-10-29",
+          "scope": "Q3 2026 results"
+        },
+        {
+          "id": "latest_10q",
+          "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000040/amzn-20260930.htm",
+          "published_date": null,
+          "scope": "Anthropic noncash gains"
+        },
+        {
+          "id": "baseline",
+          "url": "https://ir.aboutamazon.com/news-release/news-release-details/2023/Amazon-com-Announces-Fourth-Quarter-Results/default.aspx",
+          "published_date": "2023-02-02",
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms, Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 200966,
+        "gross_profit": 164791,
+        "rd": 57372,
+        "operating_income": 83276,
+        "net_income": 60458,
+        "operating_cash_flow": 115800,
+        "cash_capex": 69691,
+        "fcf_simple": 46109.0,
+        "fcf_issuer": 43585,
+        "cash_and_investments": 81592,
+        "debt": 58744,
+        "stock_based_compensation": null,
+        "gross_margin_pct_calculated": 81.9994426917986,
+        "net_margin_pct_calculated": 30.08369574952977
+      },
+      "definitions": {
+        "gross_profit": "Calculated: revenue 200966 minus cost of revenue 36175.",
+        "fcf_simple": "115800 minus cash PP&E 69691 = 46109, before finance-lease principal.",
+        "fcf_issuer": "115800 minus PP&E 69691 minus finance-lease principal 2524 = 43585.",
+        "cash_and_investments": "Cash 35873 plus marketable securities 45719.",
+        "debt": "Carrying value 58744; principal 59000; excludes leases.",
+        "net_income": "FY2025 depressed by USD 15.93bn tax charge, including a USD 14.03bn deferred-tax valuation allowance. A different USD 9.89bn legal charge depressed Q3 2026."
+      },
+      "net_income_scope": "FY2025 depressed by USD 15.93bn tax charge, including a USD 14.03bn deferred-tax valuation allowance. A different USD 9.89bn legal charge depressed Q3 2026.",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 116609,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm",
+          "published_date": null,
+          "scope": "FY2025 financials, tax, FCF definition"
+        },
+        {
+          "id": "latest",
+          "url": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Third-Quarter-2026-Results/",
+          "published_date": "2026-10-21",
+          "scope": "Q3 2026 legal charge and capex"
+        },
+        {
+          "id": "baseline",
+          "url": "https://investor.atmeta.com/investor-news/press-release-details/2023/Meta-Reports-Fourth-Quarter-and-Full-Year-2022-Results/default.aspx",
+          "published_date": "2023-02-01",
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-09-26",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 478834,
+        "gross_profit": 233602,
+        "rd": 45765,
+        "operating_income": 158063,
+        "net_income": 132175,
+        "operating_cash_flow": 145097,
+        "cash_capex": 9041,
+        "fcf_simple": 136056.0,
+        "fcf_issuer": null,
+        "cash_and_investments": 136935,
+        "debt": 80111,
+        "stock_based_compensation": 13789,
+        "gross_margin_pct_calculated": 48.78559166642302,
+        "net_margin_pct_calculated": 27.603511864236875
+      },
+      "definitions": {
+        "cash_and_investments": "Cash 36305 + current marketable securities 20417 + noncurrent marketable securities 80213.",
+        "debt": "Commercial paper 1997 + current term debt 9906 + noncurrent term debt 68208; excludes leases.",
+        "cash_capex": "Apple-owned cash PP&E; outsourced manufacturing and third-party infrastructure costs are not zero simply because Apple does not own the assets.",
+        "fcf_simple": "145097 minus 9041; calculation rather than a universally comparable economic cash-profit measure."
+      },
+      "net_income_scope": "Reported net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-09-24",
+        "revenue": 394328,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926.htm",
+          "published_date": "2026-11-03",
+          "scope": "FY2026 statements and product sales"
+        },
+        {
+          "id": "latest",
+          "url": "https://www.apple.com/newsroom/2026/11/apple-reports-fourth-quarter-results/",
+          "published_date": "2026-11-02",
+          "scope": "Q4 FY2026 results"
+        },
+        {
+          "id": "baseline",
+          "url": "https://d18rn0p25nwr6d.cloudfront.net/CIK-0000320193/2095e158-2009-40a8-985a-c821f0020341.html",
+          "published_date": null,
+          "scope": "FY2022 10-K mirror"
+        }
+      ]
+    },
+    {
+      "ticker": "ORCL",
+      "name": "Oracle Corporation",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-05-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 67357,
+        "gross_profit": 44336,
+        "rd": 10272,
+        "operating_income": 20606,
+        "net_income": 17087,
+        "operating_cash_flow": 31977,
+        "cash_capex": 55663,
+        "fcf_simple": -23686.0,
+        "fcf_issuer": null,
+        "cash_and_investments": 31894,
+        "debt": 129541,
+        "stock_based_compensation": 4811,
+        "gross_margin_pct_calculated": 65.8224089552682,
+        "net_margin_pct_calculated": 25.36781626260077
+      },
+      "definitions": {
+        "gross_profit": "Calculated revenue less directly reported cloud/software costs 17597, hardware 868 and services 4556; before separately classified intangible amortization. This is not a fully comparable reported gross-profit line.",
+        "net_income": "Consolidated net income 17087; net income available to common shareholders 16984 after preferred dividends 103.",
+        "operating_cash_flow": "Includes 4592 of customer prepayments with a significant financing component.",
+        "cash_and_investments": "Cash 31289 plus marketable securities 605.",
+        "debt": "Current 7199 + long-term 122342 = 129541, excluding lease obligations.",
+        "fcf_simple": "31977 minus 55663 = -23686."
+      },
+      "net_income_scope": "Consolidated net income 17087; net income available to common shareholders 16984 after preferred dividends 103.",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-05-31",
+        "revenue": 42440,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Announces-Record-Q4-and-FY-2026-Results-Driven-by-Cloud-Infrastructure--Cloud-Applications/default.aspx",
+          "published_date": "2026-06-10",
+          "scope": "FY2026 statements, cash prepayments and financing"
+        },
+        {
+          "id": "latest",
+          "url": "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Announces-Q1-Results-Driven-by-Triple-Digit-Growth-in-Cloud-Infrastructure-Revenues/default.aspx",
+          "published_date": "2026-09-10",
+          "scope": "FY2027 Q1 and ATM financing"
+        },
+        {
+          "id": "baseline",
+          "url": "https://investor.oracle.com/investor-news/news-details/2022/Oracle-Announces-Fiscal-2022-Fourth-Quarter-and-Fiscal-Full-Year-Financial-Results/default.aspx",
+          "published_date": null,
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "CRM",
+      "name": "Salesforce, Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-01-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 41525,
+        "gross_profit": 32255,
+        "rd": 5993,
+        "operating_income": 8331,
+        "net_income": 7457,
+        "operating_cash_flow": 14996,
+        "cash_capex": 594,
+        "fcf_simple": 14402.0,
+        "fcf_issuer": null,
+        "cash_and_investments": 9565,
+        "debt": 14439,
+        "stock_based_compensation": 3480,
+        "gross_margin_pct_calculated": 77.67609873570139,
+        "net_margin_pct_calculated": 17.9578567128236
+      },
+      "definitions": {
+        "cash_and_investments": "Cash 7327 plus marketable securities 2238.",
+        "debt": "Current debt 4000 plus noncurrent debt 10439; excludes operating leases.",
+        "gross_profit": "Revenue less reported cost of revenues 9270.",
+        "fcf_simple": "14996 minus 594 = 14402; matches issuer FCF.",
+        "AI_metrics": "Agentforce and Data 360 ARR are not recognized revenue; combined ARR includes acquired Informatica business."
+      },
+      "net_income_scope": "Reported net income",
+      "baseline": {
+        "fiscal_year": "FY2023",
+        "period_end": "2023-01-31",
+        "revenue": 31352,
+        "unit": "million",
+        "currency": "USD",
+        "notes": "January year-end nearest the late-2022 generative-AI starting point."
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://investor.salesforce.com/news/news-details/2026/Salesforce-Delivers-Record-Fourth-Quarter-Fiscal-2026-Results/",
+          "published_date": "2026-02-25",
+          "scope": "FY2026 statements, ARR and cash flow"
+        },
+        {
+          "id": "latest",
+          "url": "https://investor.salesforce.com/news/news-details/2026/Salesforce-Delivers-Record-Second-Quarter-Fiscal-2027-Results/default.aspx",
+          "published_date": "2026-08-26",
+          "scope": "FY2027 Q2 results"
+        },
+        {
+          "id": "baseline",
+          "url": "https://investor.salesforce.com/news/news-details/2023/Salesforce-Announces-Strong-Fourth-Quarter-and-Full-Fiscal-2023-Results/default.aspx",
+          "published_date": null,
+          "scope": "FY2023 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "ADBE",
+      "name": "Adobe Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-11-28",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 23769,
+        "gross_profit": 21218,
+        "rd": 4294,
+        "operating_income": 8706,
+        "net_income": 7130,
+        "operating_cash_flow": 10031,
+        "cash_capex": 179,
+        "fcf_simple": 9852.0,
+        "fcf_issuer": null,
+        "cash_and_investments": 6595,
+        "debt": 6210,
+        "stock_based_compensation": null,
+        "gross_margin_pct_calculated": 89.26753334174765,
+        "net_margin_pct_calculated": 29.997054987588875
+      },
+      "definitions": {
+        "cash_and_investments": "Cash 5431 plus short-term investments 1164.",
+        "debt": "Long-term debt 6210; no current debt in the year-end balance sheet; excludes leases.",
+        "fcf_simple": "Calculated 10031 minus 179 = 9852."
+      },
+      "net_income_scope": "Reported net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-02",
+        "revenue": 17606,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/796343/000079634326000003/adbe-20251128.htm",
+          "published_date": null,
+          "scope": "FY2025 statements and segments"
+        },
+        {
+          "id": "latest",
+          "url": "https://www.adobe.com/cc-shared/assets/investor-relations/pdfs/01906202/au56y4ter.pdf",
+          "published_date": "2026-09-10",
+          "scope": "FY2026 Q3 results"
+        },
+        {
+          "id": "baseline",
+          "url": "https://www.sec.gov/Archives/edgar/data/796343/000079634324000055/adbe2024annualreport.pdf",
+          "published_date": null,
+          "scope": "Historical FY2022 revenue in annual statements"
+        }
+      ]
+    },
+    {
+      "ticker": "IBM",
+      "name": "International Business Machines Corporation",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 67535,
+        "gross_profit": 39297,
+        "rd": 8316,
+        "operating_income": null,
+        "net_income": 10593,
+        "operating_cash_flow": 13193,
+        "cash_capex": 1617,
+        "fcf_simple": 11576.0,
+        "fcf_issuer": 14734,
+        "cash_and_investments": 14417,
+        "debt": 61260,
+        "stock_based_compensation": null,
+        "gross_margin_pct_calculated": 58.18760642629748,
+        "net_margin_pct_calculated": 15.685200266528467
+      },
+      "definitions": {
+        "gross_profit": "Issuer-reported 39297; reported revenue minus cost may differ by USD 1m because of rounding in the issuer tables.",
+        "operating_income": "Not supplied: use pretax/segment data with explicit definitions rather than infer an unreported comparable GAAP operating-income line.",
+        "net_income": "Total net income 10593; continuing-operations income 10571; the difference is discontinued operations.",
+        "cash_capex": "Net capital expenditure (payments less proceeds), not verified gross PP&E payments.",
+        "fcf_simple": "13193 minus net capex 1617 = 11576. This is an OCF-minus-net-capex bridge, not identical to the gross-PP&E formula used elsewhere.",
+        "fcf_issuer": "14734 excludes financing-receivable cash movements in addition to deducting net capital expenditure. The issuer shows a 3159 financing-receivable adjustment and 16352 adjusted OCF; 16352 minus 1617 differs from the reported 14734 by 1 because issuer tables are rounded. Preserve the issuer-reported figure rather than force the bridge to foot.",
+        "cash_and_investments": "Cash 13587 plus marketable securities 830 = 14417, excluding restricted cash 54.",
+        "debt": "Current 6424 plus long-term 54836 = 61260, including USD 15.1bn financing debt. Financing receivables must be considered when assessing operating leverage.",
+        "one_offs": "FY2025 tax benefit includes audit-resolution matters; FY2024 comparisons include pension settlement charges."
+      },
+      "net_income_scope": "Total net income 10593; continuing-operations income 10571; the difference is discontinued operations.",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 60530,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://newsroom.ibm.com/2026-01-28-IBM-RELEASES-FOURTH-QUARTER-RESULTS",
+          "published_date": "2026-01-28",
+          "scope": "FY2025 financial tables and FCF reconciliation"
+        },
+        {
+          "id": "annual_income",
+          "url": "https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/R3.htm",
+          "published_date": null,
+          "scope": "FY2025 income statement"
+        },
+        {
+          "id": "latest",
+          "url": "https://newsroom.ibm.com/2026-10-21-IBM-RELEASES-THIRD-QUARTER-RESULTS",
+          "published_date": "2026-10-21",
+          "scope": "Q3 2026 results"
+        },
+        {
+          "id": "baseline",
+          "url": "https://www.ibm.com/annualreport/assets/downloads/IBM_Annual_Report_2022.pdf",
+          "published_date": null,
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "NOW",
+      "name": "ServiceNow, Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 13278,
+        "gross_profit": 10295,
+        "rd": 2960,
+        "operating_income": 1824,
+        "net_income": 1748,
+        "operating_cash_flow": 5444,
+        "cash_capex": 868,
+        "fcf_simple": 4576.0,
+        "fcf_issuer": 4636,
+        "cash_and_investments": 10055,
+        "debt": 1491,
+        "stock_based_compensation": 1955,
+        "gross_margin_pct_calculated": 77.534267208917,
+        "net_margin_pct_calculated": 13.164633227895768
+      },
+      "definitions": {
+        "cash_and_investments": "Cash 3726 + short-term securities 2558 + long-term securities 3771.",
+        "debt": "Long-term debt 1491; excludes leases.",
+        "fcf_simple": "5444 minus 868 = 4576.",
+        "fcf_issuer": "Adjusted FCF 4636 adds back 60 of business-combination-related cash payments.",
+        "AI_metrics": "AI ACV is an annual-contract-value measure; it must not be labeled recognized revenue."
+      },
+      "net_income_scope": "Reported net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 7245,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://investor.servicenow.com/news/news-details/2026/ServiceNow-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results-Board-of-Directors-Authorizes-Additional-5B-for-Share-Repurchase-Program/default.aspx",
+          "published_date": null,
+          "scope": "FY2025 statements and adjusted FCF"
+        },
+        {
+          "id": "latest",
+          "url": "https://investor.servicenow.com/news/news-details/2026/ServiceNow-Reports-Third-Quarter-2026-Financial-Results/default.aspx",
+          "published_date": "2026-10-28",
+          "scope": "Q3 2026 results"
+        },
+        {
+          "id": "baseline",
+          "url": "https://newsroom.servicenow.com/press-releases/details/2023/ServiceNow-Reports-Fourth-Quarter-and-Full-Year-2022-Financial-Results-01-25-2023-12-00-AM/default.aspx",
+          "published_date": "2023-01-25",
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "PLTR",
+      "name": "Palantir Technologies Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 4475.446,
+        "gross_profit": 3686.269,
+        "rd": 557.677,
+        "operating_income": 1414.015,
+        "net_income": 1625.033,
+        "operating_cash_flow": 2134.473,
+        "cash_capex": 33.882,
+        "fcf_simple": 2100.591,
+        "fcf_issuer": 2270.436,
+        "cash_and_investments": 7177.043,
+        "debt": 0,
+        "stock_based_compensation": 684.033,
+        "gross_margin_pct_calculated": 82.36651721415028,
+        "net_margin_pct_calculated": 36.30996776634105
+      },
+      "definitions": {
+        "source_precision": "Source statements are USD thousands; all values here are divided by 1000 exactly.",
+        "net_income": "Net income attributable to common shareholders.",
+        "cash_and_investments": "Cash 1423.796 plus marketable securities 5753.247.",
+        "debt": "No outstanding debt at year-end; excludes lease and purchase commitments.",
+        "fcf_simple": "2134.473 minus 33.882 = 2100.591.",
+        "fcf_issuer": "Adjusted free cash flow 2270.436 adds back specified cash payroll-tax expense related to stock compensation; not the same as simple cash FCF."
+      },
+      "net_income_scope": "Net income attributable to common shareholders.",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 1905.871,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/1321655/000132165526000011/pltr-20251231.htm",
+          "published_date": null,
+          "scope": "FY2025 statements, segments, SBC"
+        },
+        {
+          "id": "latest",
+          "url": "https://www.sec.gov/Archives/edgar/data/1321655/000132165526000045/a2026q3ex991pressrelease.htm",
+          "published_date": "2026-11-02",
+          "scope": "Q3 2026 results"
+        },
+        {
+          "id": "baseline",
+          "url": "https://www.sec.gov/Archives/edgar/data/1321655/000132165523000011/pltr-20221231.htm",
+          "published_date": null,
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "SNOW",
+      "name": "Snowflake Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-01-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 4683.946,
+        "gross_profit": 3146.141,
+        "rd": 1969.472,
+        "operating_income": -1435.165,
+        "net_income": -1331.616,
+        "operating_cash_flow": 1221.942,
+        "cash_capex": 101.628,
+        "fcf_simple": 1120.314,
+        "fcf_issuer": 1192.7,
+        "cash_and_investments": 4784.699,
+        "debt": 2279.827,
+        "stock_based_compensation": 1599.547,
+        "gross_margin_pct_calculated": 67.16860100436683,
+        "net_margin_pct_calculated": -28.429362763789335
+      },
+      "definitions": {
+        "source_precision": "USD-thousand source values are divided by 1000 exactly; issuer adjusted FCF 1192.7 is only the precision retrieved and is explicitly issuer-rounded.",
+        "net_income": "Net loss attributable to Snowflake shareholders -1331.616; consolidated net loss -1329.035.",
+        "cash_and_investments": "Cash 2828.163 + short-term investments 1201.523 + long-term investments 755.013.",
+        "debt": "Convertible debt carrying value 2279.827; principal 2300; excludes leases.",
+        "fcf_simple": "1221.942 minus PPE 101.628 minus capitalized software 0 = 1120.314.",
+        "fcf_issuer": "Adjusted FCF is a non-GAAP measure and differs from simple FCF; SBC 1599.547 exceeds simple FCF."
+      },
+      "net_income_scope": "Net loss attributable to Snowflake shareholders -1331.616; consolidated net loss -1329.035.",
+      "baseline": {
+        "fiscal_year": "FY2023",
+        "period_end": "2023-01-31",
+        "revenue": 2065.659,
+        "unit": "million",
+        "currency": "USD",
+        "notes": "January year-end nearest late-2022 baseline."
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/1640147/000164014726000008/snow-20260131.htm",
+          "published_date": "2026-03-20",
+          "scope": "FY2026 financial statements"
+        },
+        {
+          "id": "latest",
+          "url": "https://investors.snowflake.com/financials/quarterly-results/default.aspx",
+          "published_date": null,
+          "scope": "FY2027 Q2 release indexed by issuer"
+        },
+        {
+          "id": "baseline",
+          "url": "https://www.snowflake.com/en/news/press-releases/snowflake-reports-financial-results-for-the-fourth-quarter-and-full-year-of-fiscal-2023/",
+          "published_date": null,
+          "scope": "FY2023 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "INTU",
+      "name": "Intuit Inc.",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-07-31",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 21448,
+        "gross_profit": 17195,
+        "rd": 3376,
+        "operating_income": 5884,
+        "net_income": 4566,
+        "operating_cash_flow": 8838,
+        "cash_capex": 221,
+        "fcf_simple": 8617.0,
+        "fcf_issuer": null,
+        "cash_and_investments": 7200,
+        "debt": 7669,
+        "stock_based_compensation": 2056,
+        "gross_margin_pct_calculated": 80.17064528161134,
+        "net_margin_pct_calculated": 21.28869824692279
+      },
+      "definitions": {
+        "gross_profit": "Calculated revenue 21448 less cost-of-revenue components 4016 + 63 + 174 = 4253.",
+        "cash_and_investments": "Cash 4705 plus current investments 2495; excludes customer restricted funds 4511 and long-term investments 248.",
+        "debt": "Current debt 1249 plus noncurrent debt 6420; excludes leases.",
+        "fcf_simple": "8838 minus 221 = 8617.",
+        "comparability": "Starting FY2027, adjusted reporting includes SBC and Mailchimp is a separate reportable segment; adjusted margin comparisons require recasting."
+      },
+      "net_income_scope": "Reported net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-07-31",
+        "revenue": 12726,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-26-000029/fy26q4earningspressrelease.htm",
+          "published_date": "2026-08-25",
+          "scope": "FY2026 statements, FY2027 guidance and reporting changes"
+        },
+        {
+          "id": "baseline",
+          "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-22-000028/intu-20220731.htm",
+          "published_date": null,
+          "scope": "FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "TEAM",
+      "name": "Atlassian Corporation",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-30",
+      "accounting": "US GAAP; see source definitions",
+      "financials": {
+        "revenue": 6572.308,
+        "gross_profit": 5575.478,
+        "rd": 3269.257,
+        "operating_income": 10.355,
+        "net_income": -53.828,
+        "operating_cash_flow": 1353.135,
+        "cash_capex": 34.06,
+        "fcf_simple": 1319.075,
+        "fcf_issuer": null,
+        "cash_and_investments": 1239.512,
+        "debt": 989.56,
+        "stock_based_compensation": 1606.561,
+        "gross_margin_pct_calculated": 84.83287758273045,
+        "net_margin_pct_calculated": -0.8190121339413795
+      },
+      "definitions": {
+        "source_precision": "USD-thousand source values divided by 1000 exactly.",
+        "cash_and_investments": "Cash and equivalents 1239.512; marketable securities zero at year-end.",
+        "debt": "Long-term debt 989.560; excludes leases.",
+        "fcf_simple": "1353.135 minus 34.060 = 1319.075.",
+        "profitability": "FY2026 GAAP net loss remains despite a profitable Q4. SBC 1606.561 exceeds simple FCF.",
+        "cutoff": "FY2027 Q1 scheduled after US close on 2026-11-05, which is 2026-11-06 in Singapore. Do not include those pending results in a 2026-11-05 Singapore report."
+      },
+      "net_income_scope": "Reported net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-06-30",
+        "revenue": 2802.882,
+        "unit": "million",
+        "currency": "USD",
+        "notes": "Original FY2022 report used IFRS; later US-GAAP historical presentation should be checked before comparing margins. Revenue baseline is source-exact."
+      },
+      "sources": [
+        {
+          "id": "annual",
+          "url": "https://www.sec.gov/Archives/edgar/data/1650372/000165037226000031/ex991q4fy26.htm",
+          "published_date": "2026-08-06",
+          "scope": "FY2026 statements and Q4 results"
+        },
+        {
+          "id": "baseline",
+          "url": "https://investors.atlassian.com/files/doc_financials/2022/ar/FY22-Annual-Report.pdf",
+          "published_date": null,
+          "scope": "FY2022 revenue"
+        },
+        {
+          "id": "calendar",
+          "url": "https://investors.atlassian.com/ir-home/default.aspx",
+          "published_date": "2026-10-05",
+          "scope": "Issuer announcement of next earnings date"
+        }
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-01-25",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 215938,
+        "gross_profit": 153463,
+        "net_income": 120067,
+        "operating_income": 130387,
+        "rd": 18497,
+        "operating_cash_flow": 102718,
+        "cash_capex": 6042,
+        "cash_and_investments": 62556,
+        "debt": 8468,
+        "other_fcf": 96575,
+        "fcf_simple": 96676.0,
+        "gross_margin_pct_calculated": 71.06808435754708,
+        "net_margin_pct_calculated": 55.60253406070261
+      },
+      "definitions": {
+        "cash_capex": "Purchases of property and equipment AND intangible assets",
+        "cash_and_investments": "Cash, cash equivalents and marketable securities",
+        "debt": "Short-term 999 + long-term 7469; excludes operating leases",
+        "other_fcf": "Company definition: operating cash flow − purchases of PP&E/intangibles − principal payments on PP&E/intangibles",
+        "other_fcf_working": "102718 − 6042 − 101 = 96575",
+        "net_income": "Consolidated",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated",
+      "baseline": {
+        "fiscal_year": "FY2023",
+        "period_end": "2023-01-29",
+        "revenue": 26974,
+        "unit": "million",
+        "currency": "USD",
+        "notes": "Closest completed annual period to late-2022 AI inflection; includes two months after ChatGPT launch."
+      },
+      "sources": [
+        {
+          "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
+          "purpose": "FY2026 income, balance sheet, cash flow and FCF; FY2024/25 comparisons"
+        },
+        {
+          "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027",
+          "purpose": "Latest Q2/H1 FY2027; exact TTM reconciliation"
+        },
+        {
+          "url": "https://investor.nvidia.com/news/press-release-details/2023/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2023/",
+          "purpose": "Pre-AI baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-11-02",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 63887,
+        "gross_profit": 43294,
+        "net_income": 23126,
+        "operating_income": 25484,
+        "rd": 10977,
+        "operating_cash_flow": 27537,
+        "cash_capex": 623,
+        "cash_and_investments": 16178,
+        "debt": 65136,
+        "other_fcf": 26914,
+        "fcf_simple": 26914.0,
+        "gross_margin_pct_calculated": 67.76652527118193,
+        "net_margin_pct_calculated": 36.19828760154648
+      },
+      "definitions": {
+        "cash_capex": "PP&E purchases",
+        "cash_and_investments": "Cash and cash equivalents",
+        "debt": "Carrying value: short-term 3152 + long-term 61984; principal amount outstanding 67120",
+        "other_fcf": "Operating cash flow − capital expenditures",
+        "other_fcf_working": "27537 − 623 = 26914",
+        "net_income": "Consolidated",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-10-30",
+        "revenue": 33203,
+        "unit": "million",
+        "currency": "USD",
+        "notes": "Growth includes subsequent VMware acquisition, so not an organic AI-growth measure."
+      },
+      "sources": [
+        {
+          "url": "https://investors.broadcom.com/static-files/752e631c-b5f3-46af-9d67-bdeb658f5fa2",
+          "purpose": "FY2025 10-K, statements, exact carrying debt and principal"
+        },
+        {
+          "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+          "purpose": "FY2025 release and segment mix"
+        },
+        {
+          "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+          "purpose": "Latest quarter"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016822000118/avgo-20221030.htm",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "AMD",
+      "name": "Advanced Micro Devices",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-27",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 34639,
+        "gross_profit": 17152,
+        "net_income": 4335,
+        "operating_income": 3694,
+        "rd": 8091,
+        "operating_cash_flow": 6493,
+        "cash_capex": 974,
+        "cash_and_investments": 10552,
+        "debt": 3222,
+        "other_fcf": 5519,
+        "fcf_simple": 5519.0,
+        "gross_margin_pct_calculated": 49.516441005802704,
+        "net_margin_pct_calculated": 12.514795461762754
+      },
+      "definitions": {
+        "cash_capex": "Continuing operations PP&E; discontinued PP&E 38 excluded",
+        "cash_and_investments": "Cash 5539 + short-term investments 5013",
+        "debt": "Current 874 + long-term 2348",
+        "other_fcf": "Continuing operating cash flow − continuing PP&E",
+        "other_fcf_working": "6493 − 974 = 5519",
+        "net_income": "Consolidated; continuing operations 4269 and discontinued operations 66",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated; continuing operations 4269 and discontinued operations 66",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 23601,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1276/amd-reports-fourth-quarter-and-full-year-2025-financial-results",
+          "purpose": "FY2025 financials and mix"
+        },
+        {
+          "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-26-000188/q32026991.htm",
+          "purpose": "Latest Q3 2026"
+        },
+        {
+          "url": "https://ir.amd.com/news-events/press-releases/detail/1115/amd-reports-fourth-quarter-and-full-year-2022-financial-results",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "ARM",
+      "name": "Arm Holdings",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-03-31",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 4920,
+        "gross_profit": 4799,
+        "net_income": 904,
+        "operating_income": 900,
+        "rd": 2776,
+        "operating_cash_flow": 1524,
+        "cash_capex": 545,
+        "cash_and_investments": 3601,
+        "debt": null,
+        "other_fcf": 882,
+        "fcf_simple": 979.0,
+        "gross_margin_pct_calculated": 97.54065040650407,
+        "net_margin_pct_calculated": 18.3739837398374
+      },
+      "definitions": {
+        "cash_capex": "PP&E only; intangible purchases 30 and intangible-obligation payments 67 additional",
+        "cash_and_investments": "Cash 2751 + short-term investments 850",
+        "debt": "Not transcribed; do not infer zero",
+        "other_fcf": "Company FCF subtracts PP&E, intangible purchases and payments on intangible obligations",
+        "other_fcf_working": "1524 − 545 − 30 − 67 = 882",
+        "net_income": "Consolidated",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated",
+      "baseline": {
+        "fiscal_year": "FY2023",
+        "period_end": "2023-03-31",
+        "revenue": 2679,
+        "unit": "million",
+        "currency": "USD",
+        "notes": "Closest annual published comparison to 2022 inflection; includes four post-launch months."
+      },
+      "sources": [
+        {
+          "url": "https://investors.arm.com/node/8141/html",
+          "purpose": "FY2026 6-K financials, related-party revenue, cash flow"
+        },
+        {
+          "url": "https://investors.arm.com/node/8506/html",
+          "purpose": "Latest Q2 FY2027 and direct silicon update"
+        },
+        {
+          "url": "https://newsroom.arm.com/news/arm-q2-fye27-results",
+          "purpose": "Latest results summary"
+        },
+        {
+          "url": "https://investors.arm.com/node/7151/html",
+          "purpose": "FY2023 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "QCOM",
+      "name": "QUALCOMM",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-09-27",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 43120,
+        "gross_profit": 22898,
+        "net_income": 13628,
+        "operating_income": 8658,
+        "rd": 10207,
+        "operating_cash_flow": 11145,
+        "cash_capex": 2494,
+        "cash_and_investments": 7681,
+        "debt": 15112,
+        "other_fcf": 8651,
+        "fcf_simple": 8651.0,
+        "gross_margin_pct_calculated": 53.10296846011132,
+        "net_margin_pct_calculated": 31.60482374768089
+      },
+      "definitions": {
+        "cash_capex": "Capital expenditures",
+        "cash_and_investments": "Cash 4636 + marketable securities 3045",
+        "debt": "Short-term 2492 + long-term 12620",
+        "other_fcf": "Analyst calculation: operating cash flow − capex",
+        "other_fcf_working": "11145 − 2494 = 8651",
+        "net_income": "Consolidated; US$5.7B valuation-allowance release materially boosts GAAP earnings",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated; US$5.7B valuation-allowance release materially boosts GAAP earnings",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-09-25",
+        "revenue": 44200,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432826000127/qcom092726erex991.htm",
+          "purpose": "Latest FY2026/Q4 release and full statements"
+        },
+        {
+          "url": "https://investor.qualcomm.com/files/content_files/FY2026-4th-Quarter-Earnings-Release.pdf",
+          "purpose": "Company release PDF"
+        },
+        {
+          "url": "https://s204.q4cdn.com/645488518/files/doc_financials/2022/ar/0001104659-23-005003.pdf",
+          "purpose": "Company historical FY2022 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-27",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 52853,
+        "gross_profit": 18375,
+        "net_income": -267,
+        "operating_income": -2214,
+        "rd": 13774,
+        "operating_cash_flow": 9697,
+        "cash_capex": 14646,
+        "cash_and_investments": 14712,
+        "debt": 46585,
+        "other_fcf": -4949,
+        "fcf_simple": -4949.0,
+        "gross_margin_pct_calculated": 34.76623843490436,
+        "net_margin_pct_calculated": -0.5051747299112633
+      },
+      "definitions": {
+        "cash_capex": "PP&E additions in investing cash flow; additional 3026 PP&E in financing activities excluded from this figure",
+        "cash_and_investments": "Cash, equivalents and restricted cash only; investments not included",
+        "debt": "Debt carrying amount inclusive of current 2499; face amount senior notes 47235",
+        "other_fcf": "Analyst simple OCF − investing PP&E; excludes financing-funded PP&E",
+        "other_fcf_working": "9697 − 14646 = −4949",
+        "net_income": "Attributable to Intel; consolidated net income 26 includes noncontrolling interests",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Attributable to Intel; consolidated net income 26 includes noncontrolling interests",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 63054,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://www.intc.com/filings-reports/annual-reports/content/0000050863-26-000011/intc-20251227.htm",
+          "purpose": "FY2025 annual financials and cash-flow definitions"
+        },
+        {
+          "url": "https://www.intc.com/news-events/press-releases/detail/1786/intel-reports-third-quarter-2026-financial-results",
+          "purpose": "Latest Q3 2026"
+        },
+        {
+          "url": "https://www.intc.com/filings-reports/all-sec-filings/content/0000050863-23-000006/intc-20221231.htm",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "MRVL",
+      "name": "Marvell Technology",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-01-31",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 8194.6,
+        "gross_profit": 4180.7,
+        "net_income": 2670.1,
+        "operating_income": 1322.9,
+        "rd": 2075.2,
+        "operating_cash_flow": 1750.5,
+        "cash_capex": 354.1,
+        "cash_and_investments": 2638.8,
+        "debt": 4470.6,
+        "other_fcf": 1396.4,
+        "fcf_simple": 1396.4,
+        "gross_margin_pct_calculated": 51.017743391989846,
+        "net_margin_pct_calculated": 32.58365264930564
+      },
+      "definitions": {
+        "cash_capex": "PP&E only; technology-license purchases 4.5 additional",
+        "cash_and_investments": "Cash and cash equivalents",
+        "debt": "Short-term 499.8 + long-term 3970.8",
+        "other_fcf": "Analyst simple OCF − PP&E; excludes technology-license payments",
+        "other_fcf_working": "1750.5 − 354.1 = 1396.4",
+        "net_income": "Consolidated; includes pretax business-sale gain 1830.4",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated; includes pretax business-sale gain 1830.4",
+      "baseline": {
+        "fiscal_year": "FY2023",
+        "period_end": "2023-01-28",
+        "revenue": 5919.6,
+        "unit": "million",
+        "currency": "USD",
+        "notes": "Closest annual period to late-2022 inflection."
+      },
+      "sources": [
+        {
+          "url": "https://investor.marvell.com/news-events/press-releases/detail/1011/marvell-technology-inc-reports-fourth-quarter-and-fiscal-year-2026-financial-results",
+          "purpose": "FY2026 financials, sale gain and Q4 mix"
+        },
+        {
+          "url": "https://investor.marvell.com/news-events/press-releases/detail/1031/marvell-technology-inc-reports-second-quarter-of-fiscal-year-2027-financial-results",
+          "purpose": "Latest Q2 FY2027"
+        },
+        {
+          "url": "https://investor.marvell.com/news-events/press-releases/detail/187/marvell-technology-inc-reports-fourth-quarter-and-fiscal-year-2023-financial-results",
+          "purpose": "FY2023 baseline and Q4 data-center mix"
+        },
+        {
+          "url": "https://investor.marvell.com/news-events/press-releases/detail/1040/marvell-and-lumentum-to-combine-creating-a-category-leader-in-ai-connectivity",
+          "purpose": "2 November 2026 Lumentum agreement and preliminary Q3 FY2027 revenue"
+        }
+      ]
+    },
+    {
+      "ticker": "2454.TW",
+      "name": "MediaTek",
+      "currency": "TWD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "Taiwan IFRS",
+      "financials": {
+        "revenue": 595965.682,
+        "gross_profit": 283079.941,
+        "net_income": 105319.255,
+        "operating_income": 103469.695,
+        "rd": 148306.389,
+        "operating_cash_flow": 162792.872,
+        "cash_capex": 15059.1,
+        "cash_and_investments": 247709.102,
+        "debt": 1000,
+        "other_fcf": 147733.772,
+        "fcf_simple": 147733.772,
+        "gross_margin_pct_calculated": 47.49936943516825,
+        "net_margin_pct_calculated": 17.67203350477486
+      },
+      "definitions": {
+        "cash_capex": "PP&E acquisitions, source precision NT$0.1m; intangible acquisitions 10360.5 additional",
+        "cash_and_investments": "Cash 235290.082 + current financial assets FVPL1837.821 + FVOCI6378.814 + amortized-cost4202.385; total calculated from offering circular balance sheet",
+        "debt": "Short-term bank loans 940 + long-term borrowings 60; current portion of long-term debt not separately transcribed, so this is disclosed component sum",
+        "other_fcf": "Analyst simple OCF − PP&E, before intangible purchases; capex input has lower precision",
+        "other_fcf_working": "162792.872 − 15059.1 = 147733.772",
+        "net_income": "Attributable to owners of parent, offering circular audited annual table",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Attributable to owners of parent, offering circular audited annual table",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 548796,
+        "unit": "million",
+        "currency": "TWD",
+        "notes": "Official earnings release NT$m"
+      },
+      "sources": [
+        {
+          "url": "https://www.mediatek.com/hubfs/MediaTek%20Assets/Pdfs/Quarterly%20Earnings%20Release/2025/Quarterly%20Earnings%20Release-2025Q4/Press%20Release.pdf",
+          "purpose": "FY2025 release, reported margin/net income/current cash assets"
+        },
+        {
+          "url": "https://links.sgx.com/FileOpen/MediaTek%20Inc.%20-%20Final%20Offering%20Circular%20dated%2031%20August%202026.ashx?App=Prospectus&FileID=70978",
+          "purpose": "Issuer offering circular with exact annual revenue, GP, R&D, OCF, capex, debt components, H1 2026 cash flow"
+        },
+        {
+          "url": "https://www.mediatek.com/investor-relations/financial-information",
+          "purpose": "Official monthly cumulative revenue through September 2026"
+        },
+        {
+          "url": "https://www.mediatek.com/investor-relations",
+          "purpose": "Q3 2026 results release date"
+        },
+        {
+          "url": "https://corp.mediatek.com/investor-relations/investor-relation-news/2022-q4-financial-results",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing Company",
+      "currency": "TWD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "Taiwan IFRS primary row; SEC IFRS reconciliation explicitly separate",
+      "financials": {
+        "revenue": 3809054.272,
+        "gross_profit": 2281293.979,
+        "net_income": 1717882.627,
+        "operating_income": 1936091.677,
+        "rd": 246427.264,
+        "operating_cash_flow": 2274975.625,
+        "cash_capex": 1272410.529,
+        "cash_and_investments": 2767856.402,
+        "debt": 1032988,
+        "other_fcf": 1002565.096,
+        "fcf_simple": 1002565.096,
+        "gross_margin_pct_calculated": 59.89134877309514,
+        "net_margin_pct_calculated": 45.09997769336063
+      },
+      "definitions": {
+        "cash_capex": "Annual-report capital expenditures, exact NT$thousands converted to millions; excludes intangible acquisitions (SEC statement 10146.9m)",
+        "cash_and_investments": "Cash and cash equivalents",
+        "debt": "Aggregate long-term debt including current 136926; short-term loans nil, per SEC IFRS 20-F",
+        "other_fcf": "Analyst OCF − cash PP&E; intangibles excluded",
+        "other_fcf_working": "2274975.625 − 1272410.529 = 1002565.096",
+        "net_income": "Taiwan IFRS attributable to parent; consolidated net income 1715396.780",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Taiwan IFRS attributable to parent; consolidated net income 1715396.780",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 2263891,
+        "unit": "million",
+        "currency": "TWD",
+        "notes": "Official audited statement NT$m"
+      },
+      "sources": [
+        {
+          "url": "https://investor.tsmc.com/static/annualReports/2025/english/index.html",
+          "purpose": "Taiwan IFRS exact annual financials and company USD presentation"
+        },
+        {
+          "url": "https://investor.tsmc.com/sites/ir/annual-report/2025/2025%20Annual%20Report_E.pdf",
+          "purpose": "Taiwan IFRS annual R&D and cash flow"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm",
+          "purpose": "SEC IFRS reconciliation, cash PP&E, debt, platform mix"
+        },
+        {
+          "url": "https://pr.tsmc.com/japanese/news/3346",
+          "purpose": "Latest Q3 2026 results, English text served under Japanese URL"
+        },
+        {
+          "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2023-02/8dd8b6bbd00c6c6fc6b6880790247c714597212c/FS.pdf",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "ASML",
+      "name": "ASML Holding",
+      "currency": "EUR",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP, not IFRS",
+      "financials": {
+        "revenue": 32667.3,
+        "gross_profit": 17258,
+        "net_income": 9609.4,
+        "operating_income": 11301.4,
+        "rd": 4698.8,
+        "operating_cash_flow": 12658.5,
+        "cash_capex": 1573.6,
+        "cash_and_investments": 13321.9,
+        "debt": 4390.9,
+        "other_fcf": 11027.3,
+        "fcf_simple": 11084.9,
+        "gross_margin_pct_calculated": 52.82958799778372,
+        "net_margin_pct_calculated": 29.415960302810454
+      },
+      "definitions": {
+        "cash_capex": "PP&E; intangible purchases 57.6 additional",
+        "cash_and_investments": "Cash and cash equivalents 12916.0 plus short-term investments 405.9 at 2025-12-31; investments are not labelled cash.",
+        "debt": "US-GAAP carrying debt at 2025-12-31: long-term debt INCLUDING current portion 3699.2 + short-term commercial paper 691.7 = 4390.9; excludes lease liabilities. Principal debt maturities total 4459.3 is a different measure.",
+        "other_fcf": "Operating cash flow − PP&E − intangible purchases",
+        "other_fcf_working": "12658.5 − 1573.6 − 57.6 = 11027.3",
+        "net_income": "Consolidated US GAAP",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated US GAAP",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 21173.4,
+        "unit": "million",
+        "currency": "EUR",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://investor.asml.com/static-files/f98553ea-bc52-49ed-ada0-8513a8a6fde5",
+          "purpose": "FY2025 US-GAAP financial performance section, exact annual financials"
+        },
+        {
+          "url": "https://investor.asml.com/news-releases/news-release-details/q4-2025-financial-results",
+          "purpose": "FY2025 release"
+        },
+        {
+          "url": "https://www.investor.asml.com/news-releases/news-release-details/asml-reports-eu11.7-billion-total-net-sales-and-eu5.0-billion-net-income-q3-2026",
+          "purpose": "Latest Q3 2026 and updated guidance"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000093796623000014/asml-20221231.htm",
+          "purpose": "FY2022 baseline"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/937966/000162828026011378/R27.htm",
+          "purpose": "FY2025 US-GAAP annual debt note: debt carrying/principal amounts, current portion, commercial paper; exact EUR million"
+        }
+      ]
+    },
+    {
+      "ticker": "AMAT",
+      "name": "Applied Materials",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-10-26",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 28368,
+        "gross_profit": 13808,
+        "net_income": 6998,
+        "operating_income": 8289,
+        "rd": 3570,
+        "operating_cash_flow": 7958,
+        "cash_capex": 2260,
+        "cash_and_investments": 8573,
+        "debt": 6555,
+        "other_fcf": 5698,
+        "fcf_simple": 5698.0,
+        "gross_margin_pct_calculated": 48.67456288776086,
+        "net_margin_pct_calculated": 24.668640721940214
+      },
+      "definitions": {
+        "cash_capex": "Capital expenditures",
+        "cash_and_investments": "Cash 7241 + short-term investments 1332; excludes long-term investments 4327",
+        "debt": "Short-term 100 + long-term 6455",
+        "other_fcf": "Operating cash flow − capex",
+        "other_fcf_working": "7958 − 2260 = 5698",
+        "net_income": "Consolidated",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-10-30",
+        "revenue": 25785,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-fourth-quarter-and-fiscal-year-2025",
+          "purpose": "FY2025 annual statements and mix"
+        },
+        {
+          "url": "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-third-quarter-2026-results",
+          "purpose": "Latest quarter"
+        },
+        {
+          "url": "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-fourth-quarter-and-fiscal-year-2022/",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "LRCX",
+      "name": "Lam Research",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-28",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 23232.69,
+        "gross_profit": 11725.308,
+        "net_income": 7265.396,
+        "operating_income": 8199.795,
+        "rd": 2375.873,
+        "operating_cash_flow": 5857.657,
+        "cash_capex": 966.405,
+        "cash_and_investments": 5597.943,
+        "debt": null,
+        "other_fcf": 4891.252,
+        "fcf_simple": 4891.252,
+        "gross_margin_pct_calculated": 50.46900724797688,
+        "net_margin_pct_calculated": 31.27229778385542
+      },
+      "definitions": {
+        "cash_capex": "PP&E AND intangible purchases",
+        "cash_and_investments": "Cash, cash equivalents and restricted cash",
+        "debt": "Not transcribed",
+        "other_fcf": "Analyst OCF − PP&E/intangible cash purchases",
+        "other_fcf_working": "5857.657 − 966.405 = 4891.252",
+        "net_income": "Consolidated",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-06-26",
+        "revenue": 17227.039,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://newsroom.lamresearch.com/2026-07-29-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-June-28,-2026",
+          "purpose": "FY2026 financials and Q4 systems/support mix"
+        },
+        {
+          "url": "https://investor.lamresearch.com/2026-10-21-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-September-27%2C-2026",
+          "purpose": "Latest Q1 FY2027"
+        },
+        {
+          "url": "https://investor.lamresearch.com/download/AR2022.pdf",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "KLAC",
+      "name": "KLA",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-30",
+      "accounting": "US GAAP",
+      "financials": {
+        "revenue": 13579.476,
+        "gross_profit": 8324.416,
+        "net_income": 4830.771,
+        "operating_income": 5660.78,
+        "rd": 1532.118,
+        "operating_cash_flow": 4143.079,
+        "cash_capex": 375.945,
+        "cash_and_investments": 4902.408,
+        "debt": 5887.415,
+        "other_fcf": 3767.134,
+        "fcf_simple": 3767.134,
+        "gross_margin_pct_calculated": 61.301452279896516,
+        "net_margin_pct_calculated": 35.57406044239115
+      },
+      "definitions": {
+        "cash_capex": "Capital expenditures",
+        "cash_and_investments": "Cash 1649.842 + marketable securities 3252.566",
+        "debt": "Disclosed long-term debt; no separate short-term debt line in condensed balance sheet",
+        "other_fcf": "Operating cash flow − capex",
+        "other_fcf_working": "4143.079 − 375.945 = 3767.134",
+        "net_income": "Consolidated",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Consolidated",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-06-30",
+        "revenue": 9211.883,
+        "unit": "million",
+        "currency": "USD",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://ir.kla.com/news-events/press-releases/detail/518/kla-corporation-reports-fiscal-2026-fourth-quarter-and-full",
+          "purpose": "FY2026 statements and split treatment"
+        },
+        {
+          "url": "https://ir.kla.com/news-events/press-releases/detail/523/kla-corporation-reports-fiscal-2027-first-quarter-results",
+          "purpose": "Latest Q1 FY2027"
+        },
+        {
+          "url": "https://ir.kla.com/news-events/press-releases/detail/436/kla-corporation-reports-fiscal-2022-fourth-quarter-and-full",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "8035.T",
+      "name": "Tokyo Electron",
+      "currency": "JPY",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-03-31",
+      "accounting": "Japanese GAAP",
+      "financials": {
+        "revenue": 2443533,
+        "gross_profit": 1107880,
+        "net_income": 574454,
+        "operating_income": 624936,
+        "rd": 277866,
+        "operating_cash_flow": 539732,
+        "cash_capex": 208984,
+        "cash_and_investments": 505414,
+        "debt": null,
+        "other_fcf": 330748,
+        "fcf_simple": 330748.0,
+        "gross_margin_pct_calculated": 45.33926900107345,
+        "net_margin_pct_calculated": 23.509156618715604
+      },
+      "definitions": {
+        "cash_capex": "PP&E; intangible purchases 10457 additional",
+        "cash_and_investments": "Cash and cash equivalents",
+        "debt": "Not transcribed; do not infer zero",
+        "other_fcf": "Analyst simple OCF − PP&E; including intangible purchases FCF 320291",
+        "other_fcf_working": "539732 − 208984 = 330748",
+        "net_income": "Attributable to owners of parent",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Attributable to owners of parent",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-03-31",
+        "revenue": 2003805,
+        "unit": "million",
+        "currency": "JPY",
+        "notes": "Completed before late-2022 launch; includes FPD equipment subsequently restructured."
+      },
+      "sources": [
+        {
+          "url": "https://www.tel.com/ir/library/report/pjuomj00000000tf-att/fy26q4tanshin-e.pdf",
+          "purpose": "FY2026 statements"
+        },
+        {
+          "url": "https://www.tel.com/ir/library/report/i61j9u00000000gf-att/fy27q2tanshin-e.pdf",
+          "purpose": "Latest H1 FY2027 and split"
+        },
+        {
+          "url": "https://www.tel.com/ir/library/report/hq95qj00000007nc-att/fy22q4tanshin-e.pdf",
+          "purpose": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "2317.TW",
+      "name": "Hon Hai Precision Industry (Foxconn)",
+      "currency": "TWD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "Taiwan IFRS",
+      "financials": {
+        "revenue": 8103105,
+        "gross_profit": 498161,
+        "net_income": 189354,
+        "operating_income": 259223,
+        "rd": 121705.158,
+        "operating_cash_flow": 226852,
+        "cash_capex": 173763,
+        "cash_and_investments": 1016440,
+        "debt": null,
+        "other_fcf": 53089,
+        "fcf_simple": 53089.0,
+        "gross_margin_pct_calculated": 6.147779153793515,
+        "net_margin_pct_calculated": 2.33680792733156
+      },
+      "definitions": {
+        "cash_capex": "Reported capital expenditure in earnings presentation",
+        "cash_and_investments": "Cash and cash equivalents only at 2025-12-31; source earnings presentation consolidated balance sheet, NT$ million. No investments added.",
+        "debt": "Total interest-bearing debt not established from retrieved consolidated balance-sheet summary and annual comparative table. Total liabilities and the reported debt ratio are not substitutes for borrowings. Retained null; no net-cash conclusion inferred.",
+        "other_fcf": "Operating cash flow − capital expenditure",
+        "other_fcf_working": "226852 − 173763 = 53089",
+        "net_income": "Attributable to owners of parent; use presentation NT$m precision",
+        "rd": "Corporate R&D; not an AI-only spending disclosure."
+      },
+      "net_income_scope": "Attributable to owners of parent; use presentation NT$m precision",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 6626997,
+        "unit": "million",
+        "currency": "TWD",
+        "notes": "Audited annual revenue; monthly unaudited cumulative revenue differs."
+      },
+      "sources": [
+        {
+          "url": "https://image.honhai.com/upload/202603/law_talk/Hon_Hai_4Q25_Results_English_20260316_0435.pdf",
+          "purpose": "FY2025 earnings financials, cash flow and product mix"
+        },
+        {
+          "url": "https://image.honhai.com/upload/202605/financy_by_year/2025_Annual_Report_20260523_7728.pdf",
+          "purpose": "FY2025 annual R&D"
+        },
+        {
+          "url": "https://www.foxconn.com/en-us/press-center/press-releases/latest-news/2095",
+          "purpose": "Latest Q2 2026"
+        },
+        {
+          "url": "https://www.foxconn.com/en-us/investor-relations/financial-information/financial-hightlights?section=main-indicators",
+          "purpose": "Audited historical revenue and profits including FY2022"
+        },
+        {
+          "url": "https://image.honhai.com/upload/202603/law_talk/Hon_Hai_4Q25_Results_English_20260316_0435.pdf",
+          "purpose": "FY2025 consolidated balance sheet, slide 6/37: cash and cash equivalents NT$1016440 million at 2025-12-31"
+        }
+      ]
+    },
+    {
+      "ticker": "005930.KS",
+      "name": "Samsung Electronics",
+      "currency": "KRW",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "K-IFRS; audited",
+      "financials": {
+        "revenue": 333605938,
+        "gross_profit": 131370425,
+        "net_income": 45206805,
+        "operating_income": 43601051,
+        "rd": 37740392,
+        "operating_cash_flow": 85315148,
+        "cash_capex": 47522179,
+        "debt": 25239139,
+        "cash_and_investments": 125821399,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 37792969.0,
+        "gross_margin_pct_calculated": 39.37892286557561,
+        "net_margin_pct_calculated": 13.5509593357418
+      },
+      "definitions": {
+        "cash_capex": "Cash acquisitions of property, plant and equipment; excludes intangible acquisitions",
+        "cash_and_investments": "Cash and cash equivalents; includes selected additional liquid investments as stated in source",
+        "debt": "Total borrowings per note 27, including lease liabilities",
+        "net_income": "Consolidated profit for the year",
+        "rd": "Expensed research and development",
+        "fcf_issuer": "",
+        "notes": "",
+        "intangible_cash_acquisitions": 4630970,
+        "simple_fcf_after_intangibles": 33161999
+      },
+      "net_income_scope": "Consolidated profit for the year",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 302231000.0,
+        "unit": "million",
+        "currency": "KRW",
+        "original_revenue": 302231,
+        "original_unit": "billion",
+        "notes": "Source public disclosure reports KRW billions; do not imply additional million-won precision."
+      },
+      "sources": [
+        {
+          "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf",
+          "scope": "FY2025 audited consolidated financial statements and segment notes"
+        },
+        {
+          "url": "https://www.samsung.com/global/ir/reports-disclosures/public-disclosure-view.83995/",
+          "scope": "FY2022 baseline at KRW billion precision"
+        },
+        {
+          "url": "https://news.samsungsemiconductor.com/global/samsung-electronics-announces-third-quarter-2026-results/",
+          "scope": "Latest Q3 2026 results and capex guidance"
+        }
+      ]
+    },
+    {
+      "ticker": "000660.KS",
+      "name": "SK hynix",
+      "currency": "KRW",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "K-IFRS; audited financial statements in July 2026 SEC prospectus",
+      "financials": {
+        "revenue": 97146675,
+        "gross_profit": 58690790,
+        "net_income": 42947902,
+        "operating_income": 47206319,
+        "rd": 6465637,
+        "operating_cash_flow": 53373126,
+        "cash_capex": 27518924,
+        "debt": 22247905,
+        "cash_and_investments": 34942253,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 25854202.0,
+        "gross_margin_pct_calculated": 60.41461532265515,
+        "net_margin_pct_calculated": 44.20933809623438
+      },
+      "definitions": {
+        "cash_capex": "Cash PP&E acquisitions; excludes intangible acquisitions",
+        "cash_and_investments": "Cash and cash equivalents; includes selected additional liquid investments as stated in source",
+        "debt": "Total borrowings as disclosed in prospectus",
+        "net_income": "Consolidated profit for the year",
+        "rd": "Expensed R&D; gross R&D spending 6732527 less capitalized development 266890",
+        "fcf_issuer": "",
+        "notes": "",
+        "intangible_cash_acquisitions": 1060419,
+        "simple_fcf_after_intangibles": 24793783
+      },
+      "net_income_scope": "Consolidated profit for the year",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 44648000.0,
+        "unit": "million",
+        "currency": "KRW",
+        "original_revenue": 44.648,
+        "original_unit": "trillion",
+        "notes": "Official FY2022 release precision."
+      },
+      "sources": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526299963/d32785d424b4.htm",
+          "scope": "Audited 2023-2025 financials, business mix and ADS ratio"
+        },
+        {
+          "url": "https://news.skhynix.com/en/sk-hynix-announces-fy25-financial-results/",
+          "scope": "FY2025 earnings release"
+        },
+        {
+          "url": "https://news.skhynix.com/en/sk-hynix-reports-2022-and-fourth-quarter-financial-results/",
+          "scope": "FY2022 baseline"
+        },
+        {
+          "url": "https://news.skhynix.com/en/q3-2026-business-results/",
+          "scope": "Latest Q3 2026 update"
+        }
+      ]
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-09-03",
+      "accounting": "US GAAP; official release, corroborated by FY2026 Form 10-K",
+      "financials": {
+        "revenue": 133188,
+        "gross_profit": 107504,
+        "net_income": 84969,
+        "operating_income": 99340,
+        "rd": 5650,
+        "operating_cash_flow": 89675,
+        "cash_capex": 30712,
+        "debt": 5179,
+        "cash_and_investments": 73453,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 58963.0,
+        "gross_margin_pct_calculated": 80.71598041865633,
+        "net_margin_pct_calculated": 63.796287953869715
+      },
+      "definitions": {
+        "cash_capex": "Gross cash PP&E expenditure before government incentives",
+        "cash_and_investments": "Cash and cash equivalents; includes selected additional liquid investments as stated in source",
+        "debt": "Current debt 491 plus long-term debt 4688; excludes customer deposit liabilities",
+        "net_income": "Consolidated net income",
+        "rd": "Expensed R&D",
+        "fcf_issuer": "",
+        "notes": "",
+        "company_reported_adjusted_fcf": {
+          "value": 62.31,
+          "unit": "USD billion",
+          "scope": "Company narrative precision; net capex treatment differs from CFO less gross PP&E"
+        }
+      },
+      "net_income_scope": "Consolidated net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-09-01",
+        "revenue": 30758.0,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 30758,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://investors.micron.com/news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/",
+          "scope": "FY2026 financial statements, Q4 results and Q1 guidance"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+          "scope": "FY2026 Form 10-K; pricing and business analysis"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/R47.htm",
+          "scope": "FY2026 business unit revenue"
+        },
+        {
+          "url": "https://www.sec.gov/ixviewer/ix.html?doc=%2FArchives%2Fedgar%2Fdata%2F723125%2F000072312524000027%2Fmu-20240829.htm",
+          "scope": "FY2022-2024 financial history"
+        }
+      ]
+    },
+    {
+      "ticker": "DELL",
+      "name": "Dell Technologies",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-01-30",
+      "accounting": "US GAAP; official earnings release unaudited",
+      "financials": {
+        "revenue": 113538,
+        "gross_profit": 22707,
+        "net_income": 5936,
+        "operating_income": 8149,
+        "rd": 3142,
+        "operating_cash_flow": 11185,
+        "cash_capex": 2633,
+        "debt": 31503,
+        "cash_and_investments": 11528,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 8552.0,
+        "gross_margin_pct_calculated": 19.999471542567246,
+        "net_margin_pct_calculated": 5.228205534710845
+      },
+      "definitions": {
+        "cash_capex": "Capital expenditures and capitalized software development costs",
+        "cash_and_investments": "Cash and cash equivalents",
+        "debt": "Short-term debt 7990 plus long-term debt 23513; includes financing subsidiary liabilities",
+        "net_income": "Consolidated net income",
+        "rd": "Expensed R&D",
+        "fcf_issuer": "",
+        "notes": "",
+        "company_reported_adjusted_fcf": 11508
+      },
+      "net_income_scope": "Consolidated net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-01-28",
+        "revenue": 101197.0,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 101197,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://investors.delltechnologies.com/news-events/press-releases/detail/93/dell-technologies-delivers-fourth-quarter-and-full-year-fiscal-2026-results",
+          "scope": "FY2026 consolidated financials"
+        },
+        {
+          "url": "https://investors.delltechnologies.com/news-events/press-releases/detail/1653/dell-technologies-delivers-second-quarter-fiscal-2027-financial-results",
+          "scope": "Q2 FY2027 and guidance"
+        },
+        {
+          "url": "https://investors.delltechnologies.com/sec-filings/all-sec-filings/content/0001571996-24-000036/dell-20240202.htm",
+          "scope": "FY2022-2024 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "SMCI",
+      "name": "Super Micro Computer",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-30",
+      "accounting": "US GAAP; audited Form 10-K supersedes preliminary release",
+      "financials": {
+        "revenue": 39063.072,
+        "gross_profit": 4227.251,
+        "net_income": 2230.453,
+        "operating_income": 2770.486,
+        "rd": 771.232,
+        "operating_cash_flow": -6809.886,
+        "cash_capex": 161.999,
+        "debt": 8720.287,
+        "cash_and_investments": 7521.474,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": -6971.885,
+        "gross_margin_pct_calculated": 10.821604097086885,
+        "net_margin_pct_calculated": 5.709876069142744
+      },
+      "definitions": {
+        "cash_capex": "Purchases of PP&E",
+        "cash_and_investments": "Cash and cash equivalents; excludes restricted cash",
+        "debt": "Current loans 2039.774 + noncurrent loans 2016.374 + convertible notes 4664.139; excludes mandatory convertible preferred equity",
+        "net_income": "Consolidated net income before preferred dividends",
+        "rd": "Expensed R&D",
+        "fcf_issuer": "",
+        "notes": ""
+      },
+      "net_income_scope": "Consolidated net income before preferred dividends",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-06-30",
+        "revenue": 5196.099,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 5196.099,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1375365/000137536526000022/smci-20260630.htm",
+          "scope": "Audited FY2026 and current governance disclosures"
+        },
+        {
+          "url": "https://ir.supermicro.com/news/news-details/2026/Supermicro-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Financial-Results/default.aspx",
+          "scope": "Initial FY2026 financial tables"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1375365/000137536526000026/exhibit991_20260930.htm",
+          "scope": "Latest preliminary Q1 FY2027"
+        },
+        {
+          "url": "https://ir.supermicro.com/news/news-details/2022/Supermicro-Announces-Fourth-Quarter-and-Full-Year-Fiscal-Year-2022-Financial-Results/",
+          "scope": "FY2022 baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco Systems",
+      "currency": "USD",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-07-25",
+      "accounting": "US GAAP; official earnings release",
+      "financials": {
+        "revenue": 63325,
+        "gross_profit": 40860,
+        "net_income": 13267,
+        "operating_income": 15368,
+        "rd": 9563,
+        "operating_cash_flow": 14177,
+        "cash_capex": 1410,
+        "debt": 29533,
+        "cash_and_investments": 15918,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 12767.0,
+        "gross_margin_pct_calculated": 64.52427951046191,
+        "net_margin_pct_calculated": 20.9506514015002
+      },
+      "definitions": {
+        "cash_capex": "Acquisition of property and equipment",
+        "cash_and_investments": "Cash and cash equivalents; includes selected additional liquid investments as stated in source",
+        "debt": "Short-term debt 10161 plus long-term debt 19372",
+        "net_income": "Consolidated net income",
+        "rd": "Expensed R&D",
+        "fcf_issuer": "",
+        "notes": ""
+      },
+      "net_income_scope": "Consolidated net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-07-30",
+        "revenue": 51557.0,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 51557,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://investor.cisco.com/news/news-details/2026/CISCO-REPORTS-FOURTH-QUARTER-AND-FISCAL-YEAR-2026-EARNINGS/default.aspx",
+          "scope": "FY2026 financials and guidance"
+        },
+        {
+          "url": "https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2022/m08/cisco-reports-fourth-quarter-and-fiscal-year-2022-earnings.html",
+          "scope": "FY2022 baseline"
+        },
+        {
+          "url": "https://newsroom.cisco.com/c/r/newsroom/en/us/a/y2024/m03/cisco-completes-acquisition-of-splunk.html",
+          "scope": "Splunk closing"
+        }
+      ]
+    },
+    {
+      "ticker": "ANET",
+      "name": "Arista Networks",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; audited Form 10-K",
+      "financials": {
+        "revenue": 9005.7,
+        "gross_profit": 5768.7,
+        "net_income": 3511.4,
+        "operating_income": 3856.1,
+        "rd": 1237.3,
+        "operating_cash_flow": 4371.9,
+        "cash_capex": 119.5,
+        "debt": null,
+        "cash_and_investments": 10743,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 4252.4,
+        "gross_margin_pct_calculated": 64.05609780472368,
+        "net_margin_pct_calculated": 38.99086134337142
+      },
+      "definitions": {
+        "cash_capex": "Purchases of property, equipment and intangible assets",
+        "cash_and_investments": "Cash and cash equivalents; includes selected additional liquid investments as stated in source",
+        "debt": "No conventional borrowing line in audited balance sheet; null retained instead of assuming every debt/lease obligation is zero",
+        "net_income": "Consolidated net income",
+        "rd": "Expensed R&D",
+        "fcf_issuer": "",
+        "notes": ""
+      },
+      "net_income_scope": "Consolidated net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 4381.3,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 4381.3,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1596532/000159653226000013/anet-20251231.htm",
+          "scope": "FY2025 audited financials and concentration"
+        },
+        {
+          "url": "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2023/Arista-Networks-Inc.-Reports-Fourth-Quarter-and-Year-End-2022-Financial-Results/",
+          "scope": "FY2022 baseline"
+        },
+        {
+          "url": "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2026/Arista-Networks-Inc--Reports-Third-Quarter-2026-Financial-Results/default.aspx",
+          "scope": "Q3 2026 update"
+        }
+      ]
+    },
+    {
+      "ticker": "HPE",
+      "name": "Hewlett Packard Enterprise",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-10-31",
+      "accounting": "US GAAP; official earnings tables",
+      "financials": {
+        "revenue": 34296,
+        "gross_profit": 10377,
+        "net_income": 57,
+        "operating_income": -437,
+        "rd": 2518,
+        "operating_cash_flow": 2919,
+        "cash_capex": 2292,
+        "debt": 22365,
+        "cash_and_investments": 5773,
+        "fcf_issuer": 986,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 627.0,
+        "gross_margin_pct_calculated": 30.257172848145558,
+        "net_margin_pct_calculated": 0.16620013995801258
+      },
+      "definitions": {
+        "cash_capex": "PP&E and capitalized software purchases",
+        "cash_and_investments": "Cash and cash equivalents",
+        "debt": "Short debt 4609 plus long debt 17756; includes financing business",
+        "net_income": "Net earnings attributable to HPE; common stockholders -59 after preferred dividends 116",
+        "rd": "Expensed R&D",
+        "fcf_issuer": "2919 CFO -2292 capex +380 PP&E sales -21 FX",
+        "notes": ""
+      },
+      "net_income_scope": "Net earnings attributable to HPE; common stockholders -59 after preferred dividends 116",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-10-31",
+        "revenue": 28496.0,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 28496,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://www.hpe.com/content/dam/hpe/newsroom/2025/12/HPE_Q4FY25_earnings_financial%20_tables.pdf",
+          "scope": "FY2025 complete official tables"
+        },
+        {
+          "url": "https://www.hpe.com/us/en/newsroom/press-release/2025/12/hpe-reports-fiscal-2025-fourth-quarter-results.html",
+          "scope": "FY2025 narrative"
+        },
+        {
+          "url": "https://www.hpe.com/us/en/newsroom/press-release/2026/09/hpe-reports-fiscal-2026-third-quarter-results.html",
+          "scope": "Latest Q3 FY2026"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1645590/000164559022000071/hpe-20221031.htm",
+          "scope": "FY2022 audited baseline"
+        }
+      ]
+    },
+    {
+      "ticker": "0992.HK",
+      "name": "Lenovo Group",
+      "currency": "USD",
+      "fiscal_year": "FY2025/26",
+      "period_end": "2026-03-31",
+      "accounting": "HKFRS; official IR tables",
+      "financials": {
+        "revenue": 83074.555,
+        "gross_profit": 12809.422,
+        "net_income": 2159.913,
+        "operating_income": 3261.743,
+        "rd": 2490.403,
+        "operating_cash_flow": 4023.705,
+        "cash_capex": 1261.995,
+        "debt": 4741.038,
+        "cash_and_investments": 4887.162,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 2761.71,
+        "gross_margin_pct_calculated": 15.41918822195316,
+        "net_margin_pct_calculated": 2.599969388942258
+      },
+      "definitions": {
+        "cash_capex": "PP&E acquisitions 653.978 plus construction in progress 608.017; excludes intangible purchases 596.979",
+        "cash_and_investments": "Cash and cash equivalents per cash-flow statement",
+        "debt": "Current borrowings 878.443 plus noncurrent borrowings 3862.595",
+        "net_income": "Consolidated profit including noncontrolling interests",
+        "rd": "Expensed R&D",
+        "fcf_issuer": "",
+        "notes": "",
+        "intangible_cash_acquisitions": 596.979,
+        "simple_fcf_after_intangibles": 2164.731
+      },
+      "net_income_scope": "Consolidated profit including noncontrolling interests",
+      "baseline": {
+        "fiscal_year": "FY2021/22",
+        "period_end": "2022-03-31",
+        "revenue": 71618.216,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 71618.216,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://investor.lenovo.com/en/financial/five_year_summary.php",
+          "scope": "Exact annual sales/net profits and baseline"
+        },
+        {
+          "url": "https://investor.lenovo.com/en/financial/income_statement.php?data=quarterly",
+          "scope": "Exact quarterly P&L and summed FY totals"
+        },
+        {
+          "url": "https://investor.lenovo.com/en/financial/cash_flow.php",
+          "scope": "FY2025/26 cash flows"
+        },
+        {
+          "url": "https://investor.lenovo.com/en/financial/balance_sheet.php",
+          "scope": "FY2025/26 cash/bank deposits and borrowing"
+        },
+        {
+          "url": "https://news.lenovo.com/pressroom/press-releases/fy-2025-26/",
+          "scope": "FY2025/26 operating mix"
+        },
+        {
+          "url": "https://news.lenovo.com/pressroom/press-releases/q1-fy-2026-27/",
+          "scope": "Latest quarter and AI revenue definition"
+        },
+        {
+          "url": "https://investor.lenovo.com/en/financial/results/presentation_2627_q1.pdf",
+          "scope": "Warrant charge and non-HKFRS bridge"
+        }
+      ]
+    },
+    {
+      "ticker": "VRT",
+      "name": "Vertiv",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; official release and Form 10-K",
+      "financials": {
+        "revenue": 10229.9,
+        "gross_profit": 3715.2,
+        "net_income": 1332.8,
+        "operating_income": 1829.7,
+        "rd": 441.7,
+        "operating_cash_flow": 2113.8,
+        "cash_capex": 220,
+        "debt": 2913,
+        "cash_and_investments": 1827.9,
+        "fcf_issuer": null,
+        "affo": null,
+        "affo_per_share": null,
+        "fcf_simple": 1893.8,
+        "gross_margin_pct_calculated": 36.3170705480992,
+        "net_margin_pct_calculated": 13.028475351665216
+      },
+      "definitions": {
+        "cash_capex": "Cash capital expenditures excluding capitalized software 6.4",
+        "cash_and_investments": "Cash and cash equivalents; includes selected additional liquid investments as stated in source",
+        "debt": "Current debt 20.9 plus long-term net carrying amount 2892.1",
+        "net_income": "Consolidated net income",
+        "rd": "Engineering, research and development combined (ER&D); not strictly comparable with pure R&D",
+        "fcf_issuer": "",
+        "notes": "",
+        "capitalized_software": 6.4,
+        "simple_fcf_after_software": 1887.4
+      },
+      "net_income_scope": "Consolidated net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 5691.5,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 5691.5,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-Fourth-Quarter-with-Organic-Orders-Growth-of-252-and-Diluted-EPS-Growth-of-200-Adjusted-Diluted-EPS-37/",
+          "scope": "FY2025 financials"
+        },
+        {
+          "url": "https://www.sec.gov/Archives/edgar/data/1674101/000167410126000008/vrt-20251231.htm",
+          "scope": "FY2025 ER&D definition"
+        },
+        {
+          "url": "https://investors.vertiv.com/news/news-details/2023/Vertiv-Reports-Record-Fourth-Quarter-2022-Net-Sales-Operating-Profit-Adjusted-Operating-Profit1-and-Price-Realization-Raising-Operating-Profit-and-Adjusted-Operating-Profit-Guidance-for-2023/default.aspx",
+          "scope": "FY2022 baseline and operating history"
+        },
+        {
+          "url": "https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-Third-Quarter-2026-with-Net-Sales-Growth-of-61-Organic-Orders-Growth-over-100-and-Diluted-EPS-Growth-of-91-Adjusted-Diluted-EPS-Growth-of-78-Raises-Full-Year-2026-Guidance-Across-All-Key-Metrics/default.aspx",
+          "scope": "Latest Q3 2026"
+        }
+      ]
+    },
+    {
+      "ticker": "EQIX",
+      "name": "Equinix",
+      "currency": "USD",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "accounting": "US GAAP; official earnings release",
+      "financials": {
+        "revenue": 9217,
+        "gross_profit": 4709,
+        "net_income": 1348,
+        "operating_income": 1848,
+        "rd": null,
+        "operating_cash_flow": 3911,
+        "cash_capex": 4311,
+        "debt": 21417,
+        "cash_and_investments": 3227,
+        "fcf_issuer": -2572,
+        "affo": 3761,
+        "affo_per_share": 38.33,
+        "fcf_simple": -400.0,
+        "gross_margin_pct_calculated": 51.09037647824672,
+        "net_margin_pct_calculated": 14.625149180861452
+      },
+      "definitions": {
+        "cash_capex": "Other property, plant and equipment cash purchases; excludes separate real-estate acquisitions 994",
+        "cash_and_investments": "Cash and cash equivalents; includes selected additional liquid investments as stated in source",
+        "debt": "Company total debt principal measure; includes lease/financing obligations as defined in earnings supplement",
+        "net_income": "Consolidated net income",
+        "rd": "Not separately disclosed; null is not zero",
+        "fcf_issuer": "Company definition differs: operating plus investing cash flows, excluding equity investments",
+        "notes": "Negative simple FCF during development is not automatically distress; AFFO is also not cash left after every growth investment. Show both.",
+        "real_estate_acquisitions": 994,
+        "company_reported_adjusted_fcf": -1327,
+        "company_reported_adjusted_fcf_scope": "Company FCF excluding acquisitions; not comparable with simple CFO minus PP&E"
+      },
+      "net_income_scope": "Consolidated net income",
+      "baseline": {
+        "fiscal_year": "FY2022",
+        "period_end": "2022-12-31",
+        "revenue": 7263.105,
+        "unit": "million",
+        "currency": "USD",
+        "original_revenue": 7263.105,
+        "original_unit": "million",
+        "notes": ""
+      },
+      "sources": [
+        {
+          "url": "https://investor.equinix.com/news-events/press-releases/detail/1096/equinix-provides-robust-2026-outlook-driven-by-strong",
+          "scope": "FY2025 financials, AFFO and company FCF definitions"
+        },
+        {
+          "url": "https://investor.equinix.com/sec-filings/all-sec-filings/content/0001628280-23-004039/eqix-20221231.htm",
+          "scope": "FY2022 audited baseline"
+        },
+        {
+          "url": "https://equinix.mediaroom.com/2026-10-28-Equinix-Reports-Third-Quarter-Results-and-Raises-2026-Guidance",
+          "scope": "Latest Q3 2026; normalized AFFO and guidance"
+        }
+      ]
+    }
+  ],
+  "power_financials": {
+    "ETN": {
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "unit": "millions; source-native reported precision",
+      "revenue": 27448,
+      "operating_income": null,
+      "net_income": 4087,
+      "net_income_definition": "Net income attributable to Eaton ordinary shareholders",
+      "operating_cash_flow": 4472,
+      "cash_capex": 919,
+      "free_cash_flow": 3553,
+      "source_ids": [
+        "P10"
+      ],
+      "accounting_basis": "US GAAP, except explicitly identified segment metric and FCF",
+      "operating_metric": {
+        "label": "Total segment operating profit; before corporate items; not consolidated GAAP operating income",
+        "value": 6713
+      },
+      "other_reported_values": {
+        "net_income_consolidated": 4090,
+        "income_before_income_taxes": 4932
+      },
+      "capex_definition": "Capital expenditures for property, plant and equipment",
+      "fcf_definition": "Operating cash flow less cash PP&E capex: 4472 - 919 = 3553; agrees with issuer FCF.",
+      "comparability_notes": [
+        "No consolidated operating-income subtotal in selected source; do not label segment profit as GAAP operating income.",
+        "FY2025 predates the March2026 Boyd Thermal acquisition."
+      ]
+    },
+    "SU": {
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "currency": "EUR",
+      "unit": "millions; source-native reported precision",
+      "revenue": 40152,
+      "operating_income": null,
+      "net_income": 4163,
+      "net_income_definition": "Net income, Group share",
+      "operating_cash_flow": null,
+      "cash_capex": 1496,
+      "free_cash_flow": 4635,
+      "source_ids": [
+        "P11"
+      ],
+      "accounting_basis": "IFRS accounts; EBITA/adjusted EBITA and cash-flow bridge are issuer-defined measures",
+      "operating_metric": {
+        "label": "Reported EBITA, not IFRS operating income",
+        "value": 7156
+      },
+      "other_reported_values": {
+        "adjusted_EBITA": 7520,
+        "cash_generation_before_working_capital_labelled_operating_cash_flow": 6748,
+        "trade_working_capital_outflow": 360,
+        "nontrade_working_capital_outflow": 257,
+        "net_debt": 13721
+      },
+      "capex_definition": "Net capital expenditure, tangible and intangible; not gross PP&E purchases alone",
+      "fcf_definition": "Issuer FCF: 6748 - 1496 - 360 - 257 = 4635. The 6748 headline is BEFORE working-capital movements, so it is not directly comparable with the other CFO columns.",
+      "derived_bridge_cash_after_working_capital": {
+        "value": 6131,
+        "formula": "6748 - 360 - 257",
+        "status": "Derived from issuer bridge; not separately verified IFRS cash-flow subtotal"
+      },
+      "comparability_notes": [
+        "Operating-income field left null; reported EBITA 7156 and adjusted EBITA 7520 are different measures.",
+        "FY2025 net income includes EUR388m impairment of associates and convertible notes; FCF includes EUR207m French fine.",
+        "Pending PTC acquisition is excluded from FY2025 financials."
+      ]
+    },
+    "GEV": {
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "unit": "millions; source-native reported precision",
+      "revenue": 38068,
+      "operating_income": 1388,
+      "net_income": 4884,
+      "net_income_definition": "Net income attributable to GE Vernova; consolidated net income is 4879",
+      "operating_cash_flow": 4987,
+      "cash_capex": 1277,
+      "free_cash_flow": 3710,
+      "source_ids": [
+        "P12"
+      ],
+      "accounting_basis": "US GAAP except issuer FCF and adjusted EBITDA",
+      "other_reported_values": {
+        "net_income_consolidated": 4879,
+        "adjusted_EBITDA": 3196,
+        "services_revenue": 17134,
+        "equipment_revenue": 20934,
+        "increase_in_contract_liabilities_and_current_deferred_income": 8019
+      },
+      "capex_definition": "Additions to PP&E and internal-use software",
+      "fcf_definition": "Issuer FCF: 4987 - 1277 = 3710.",
+      "comparability_notes": [
+        "Net income includes a USD2.9bn US deferred-tax valuation-allowance release (issuer-reported approximate amount). It is not recurring cash operating earnings.",
+        "Large customer advance/deferred-income inflows boost CFO; delivery obligations remain.",
+        "Pending Trench acquisition is excluded."
+      ]
+    },
+    "CEG": {
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "unit": "millions; source-native reported precision",
+      "revenue": 25533,
+      "operating_income": 3086,
+      "net_income": 2319,
+      "net_income_definition": "Net income attributable to common shareholders; consolidated net income is 2323",
+      "operating_cash_flow": 4237,
+      "cash_capex": 2949,
+      "free_cash_flow": 1288,
+      "source_ids": [
+        "P09"
+      ],
+      "accounting_basis": "US GAAP; simple FCF is our stated calculation",
+      "other_reported_values": {
+        "net_income_consolidated": 2323
+      },
+      "capex_definition": "Capital expenditures as labeled in consolidated cash-flow statement; includes nuclear investment; not a cash acquisition measure",
+      "fcf_definition": "Calculated simple FCF: 4237 - 2949 = 1288; not a separately quoted issuer adjusted FCF metric.",
+      "comparability_notes": [
+        "FY2025 excludes Calpine, which closed 7January2026. Current business and funding scope therefore differ.",
+        "Derivative revaluation, nuclear decommissioning-trust investments, tax support and collateral movements affect reported results/cash flows.",
+        "Receivables-financing/deferred-purchase-price cash-flow classifications affect historical CFO comparisons; do not treat the FY2024-to-FY2025 CFO change as purely operating growth."
+      ]
+    },
+    "VST": {
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "unit": "millions; source-native reported precision",
+      "revenue": 17738,
+      "operating_income": 1906,
+      "net_income": 752,
+      "net_income_definition": "Net income attributable to Vistra common stock after 192 preferred dividends; consolidated/Vistra net income is 944",
+      "operating_cash_flow": 4070,
+      "cash_capex": 2752,
+      "free_cash_flow": 1318,
+      "source_ids": [
+        "P13"
+      ],
+      "accounting_basis": "US GAAP; simple FCF calculated; adjusted ongoing FCF is a separate non-GAAP measure",
+      "other_reported_values": {
+        "net_income_consolidated": 944,
+        "net_income_attributable_to_Vistra": 944,
+        "preferred_dividends": 192,
+        "ongoing_operations_adjusted_FCF_before_growth": 3592,
+        "unrealized_hedge_losses_pretax": 808
+      },
+      "capex_definition": "Capital expenditures including nuclear-fuel purchases and long-term-service-agreement prepayments",
+      "fcf_definition": "Calculated simple FCF after the stated capex: 4070 - 2752 = 1318. Not the issuer ongoing-operations adjusted FCF before growth of 3592.",
+      "comparability_notes": [
+        "808 pretax unrealized hedge losses relate to future-period settlements; GAAP earnings are not a pure measure of current physical generation profitability.",
+        "Preferred dividends matter when comparing profit available to common equity."
+      ]
+    },
+    "ENR": {
+      "fiscal_year": "FY2025",
+      "period_end": "2025-09-30",
+      "currency": "EUR",
+      "unit": "millions; source-native reported precision",
+      "revenue": 39077,
+      "operating_income": 2149,
+      "net_income": 1414,
+      "net_income_definition": "Net income attributable to Siemens Energy AG shareholders; consolidated net income is 1685",
+      "operating_cash_flow": 5821,
+      "cash_capex": 1724,
+      "free_cash_flow": 4097,
+      "source_ids": [
+        "P14",
+        "P21"
+      ],
+      "accounting_basis": "IFRS; FCF and profit before special items are issuer supplemental measures",
+      "other_reported_values": {
+        "net_income_consolidated": 1685,
+        "profit_before_special_items": 2355,
+        "FCF_pre_tax": 4663,
+        "income_taxes_paid": 566,
+        "increase_in_contract_liabilities": 3976,
+        "interest_paid_classified_financing": 221,
+        "lease_principal_paid_classified_financing": 392
+      },
+      "capex_definition": "Purchase of intangible assets and PP&E",
+      "fcf_definition": "Issuer FCF: 5821 - 1724 = 4097. Pre-tax FCF adds tax paid: 4097 + 566 = 4663.",
+      "comparability_notes": [
+        "FY2026 ended30September2026 but results scheduled11November2026; FY2025 remains latest reported full year at cutoff.",
+        "Customer advances help cash generation but must fund later deliveries.",
+        "IFRS CFO excludes interest and lease-principal payments classified as financing here; US GAAP comparisons require care."
+      ]
+    }
+  },
+  "connectivity_financials": [
+    {
+      "ticker": "ALAB",
+      "name": "Astera Labs",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "unit": "million",
+      "accounting": "US GAAP",
+      "revenue": 852.525,
+      "gross_profit": 645.261,
+      "operating_income": 173.423,
+      "net_income": 219.134,
+      "net_income_scope": "Consolidated net income",
+      "research_development": 303.998,
+      "operating_cash_flow": 319.306,
+      "cash_capex": 37.544,
+      "cash_capex_definition": "Cash purchases/additions of property, plant and equipment from investing cash-flow statement; excludes acquisitions, purchased intangibles and noncash additions",
+      "simple_fcf": 281.762,
+      "simple_fcf_definition": "Analyst calculation: operating cash flow minus cash PP&E capex. Not necessarily issuer-defined FCF; not cash distributable without considering other investment/financing needs.",
+      "fcf_working": "319.306 - 37.544 = 281.762",
+      "source_precision": "US$1 thousand, converted exactly to US$ million",
+      "sources": [
+        "E06",
+        "E33"
+      ],
+      "notes": [
+        "FY2025 stock-based compensation was US$160.033m, added back in operating cash flow; dilution remains an economic cost.",
+        "Net income exceeds operating profit partly because of US$44.730m interest income and US$0.981m tax benefit."
+      ],
+      "valuation_status": "No current price/fair-value screen performed in this addendum. Business suitability is not an unconditional buy recommendation.",
+      "source_urls": [
+        "https://www.sec.gov/Archives/edgar/data/1736297/000173629726000010/alab-20251231.htm",
+        "https://ir.asteralabs.com/news-releases/news-release-details/astera-labs-reports-fourth-quarter-and-full-year-2025-financial"
+      ],
+      "source_web_refs": [
+        "turn193view0",
+        "turn165view0"
+      ]
+    },
+    {
+      "ticker": "COHR",
+      "name": "Coherent",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-30",
+      "currency": "USD",
+      "unit": "million",
+      "accounting": "US GAAP",
+      "revenue": 7118.181,
+      "gross_profit": 2669.04,
+      "operating_income": 897.861,
+      "net_income": 786.884,
+      "net_income_scope": "Consolidated net income",
+      "research_development": 722.952,
+      "operating_cash_flow": 79.514,
+      "cash_capex": 1102.909,
+      "cash_capex_definition": "Cash purchases/additions of property, plant and equipment from investing cash-flow statement; excludes acquisitions, purchased intangibles and noncash additions",
+      "simple_fcf": -1023.395,
+      "simple_fcf_definition": "Analyst calculation: operating cash flow minus cash PP&E capex. Not necessarily issuer-defined FCF; not cash distributable without considering other investment/financing needs.",
+      "fcf_working": "79.514 - 1102.909 = -1023.395",
+      "source_precision": "US$1 thousand, converted exactly to US$ million",
+      "sources": [
+        "E07",
+        "E32"
+      ],
+      "notes": [
+        "Gross profit derived exactly: 7118.181 - 4449.141 = 2669.040.",
+        "Operating income derived from listed operating lines: 2669.040 - 722.952 - 1044.566 - 63.390 - 64.404 + 124.133 = 897.861; includes US$124.133m business-sale gain and US$64.404m impairment of assets held for sale. Not an explicitly presented subtotal.",
+        "The 10-K attributes weaker CFO primarily to inventory growth, partly offset by accounts payable and higher earnings. Inventory cash-flow use was US$1183.000m.",
+        "Datacenter & Communications revenue US$5274.629m; Industrial US$1843.552m. Industrial declined partly because of divestitures.",
+        "Two major customers represented 20% and 12% of FY2026 consolidated revenue, respectively."
+      ],
+      "valuation_status": "No current price/fair-value screen performed in this addendum. Business suitability is not an unconditional buy recommendation.",
+      "net_income_attributable": 804.998,
+      "net_income_available_common": 769.896,
+      "operating_income_is_derived": true,
+      "gross_profit_is_derived": true,
+      "source_urls": [
+        "https://www.sec.gov/Archives/edgar/data/820318/000082031826000020/iivi-20260630.htm",
+        "https://ir.coherent.com/news-releases/news-release-details/coherent-corp-reports-fourth-quarter-and-full-year-fiscal-2026"
+      ],
+      "source_web_refs": [
+        "turn182view0",
+        "turn169view0"
+      ]
+    },
+    {
+      "ticker": "LITE",
+      "name": "Lumentum",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-27",
+      "currency": "USD",
+      "unit": "million",
+      "accounting": "US GAAP",
+      "revenue": 3014.0,
+      "gross_profit": 1255.9,
+      "operating_income": 524.8,
+      "net_income": -6935.1,
+      "net_income_scope": "Consolidated net income",
+      "research_development": 356.5,
+      "operating_cash_flow": 751.4,
+      "cash_capex": 451.3,
+      "cash_capex_definition": "Cash purchases/additions of property, plant and equipment from investing cash-flow statement; excludes acquisitions, purchased intangibles and noncash additions",
+      "simple_fcf": 300.1,
+      "simple_fcf_definition": "Analyst calculation: operating cash flow minus cash PP&E capex. Not necessarily issuer-defined FCF; not cash distributable without considering other investment/financing needs.",
+      "fcf_working": "751.4 - 451.3 = 300.1",
+      "source_precision": "US$0.1 million, as reported",
+      "sources": [
+        "E08",
+        "E31",
+        "E12"
+      ],
+      "notes": [
+        "GAAP net loss includes US$7756.6m one-time noncash debt-extinguishment charge on equitization of convertible notes. It is not a GPU impairment or a measure of annual operating cash loss.",
+        "FY2026 GAAP operating profit and operating cash flow were positive despite the GAAP net loss.",
+        "Marvell announced an all-stock acquisition agreement on 2026-11-02: fixed 4.500 MRVL shares for each LITE share; expected close first half2028, subject to approvals and other conditions. LITE is now also a merger/Marvell-share-price exposure."
+      ],
+      "valuation_status": "No current price/fair-value screen performed in this addendum. Business suitability is not an unconditional buy recommendation.",
+      "source_urls": [
+        "https://www.sec.gov/Archives/edgar/data/1633978/000162828026057358/lite-20260627.htm",
+        "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Results/default.aspx",
+        "https://investor.marvell.com/news-events/press-releases/detail/1040/marvell-and-lumentum-to-combine-creating-a-category-leader-in-ai-connectivity"
+      ],
+      "source_web_refs": [
+        "turn175view1",
+        "turn169view1",
+        "turn197view0"
+      ]
+    },
+    {
+      "ticker": "FN",
+      "name": "Fabrinet",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-06-26",
+      "currency": "USD",
+      "unit": "million",
+      "accounting": "US GAAP",
+      "revenue": 4641.097,
+      "gross_profit": 556.511,
+      "operating_income": 462.887,
+      "net_income": 473.027,
+      "net_income_scope": "Consolidated net income",
+      "research_development": null,
+      "operating_cash_flow": 256.725,
+      "cash_capex": 252.503,
+      "cash_capex_definition": "Cash purchases/additions of property, plant and equipment from investing cash-flow statement; excludes acquisitions, purchased intangibles and noncash additions",
+      "simple_fcf": 4.222,
+      "simple_fcf_definition": "Analyst calculation: operating cash flow minus cash PP&E capex. Not necessarily issuer-defined FCF; not cash distributable without considering other investment/financing needs.",
+      "fcf_working": "256.725 - 252.503 = 4.222",
+      "source_precision": "US$1 thousand, converted exactly to US$ million",
+      "sources": [
+        "E09"
+      ],
+      "notes": [
+        "R&D is included within SG&A for customized optics/glass and is not separately quantified in the retrieved statement; null is not zero.",
+        "Simple FCF excludes US$1.181m purchased intangibles. Deducting that additional investment gives US$3.041m.",
+        "CFO weakened because of inventory and trade-receivable growth, partly offset by payables and earnings.",
+        "Net income includes a US$56.743m gain on non-marketable equity securities; use operating profit and normalized cash flow when valuing the manufacturing business."
+      ],
+      "valuation_status": "No current price/fair-value screen performed in this addendum. Business suitability is not an unconditional buy recommendation.",
+      "source_urls": [
+        "https://www.sec.gov/Archives/edgar/data/1408710/000140871026000028/fn-20260626.htm"
+      ],
+      "source_web_refs": [
+        "turn182view1"
+      ]
+    },
+    {
+      "ticker": "APH",
+      "name": "Amphenol",
+      "fiscal_year": "FY2025",
+      "period_end": "2025-12-31",
+      "currency": "USD",
+      "unit": "million",
+      "accounting": "US GAAP",
+      "revenue": 23094.7,
+      "gross_profit": 8517.7,
+      "operating_income": 5868.6,
+      "net_income": 4305.3,
+      "net_income_scope": "Consolidated net income",
+      "research_development": null,
+      "operating_cash_flow": 5374.7,
+      "cash_capex": 996.6,
+      "cash_capex_definition": "Cash purchases/additions of property, plant and equipment from investing cash-flow statement; excludes acquisitions, purchased intangibles and noncash additions",
+      "simple_fcf": 4378.1,
+      "simple_fcf_definition": "Analyst calculation: operating cash flow minus cash PP&E capex. Not necessarily issuer-defined FCF; not cash distributable without considering other investment/financing needs.",
+      "fcf_working": "5374.7 - 996.6 = 4378.1",
+      "source_precision": "US$0.1 million, as reported",
+      "sources": [
+        "E10",
+        "E30"
+      ],
+      "notes": [
+        "Gross profit derived exactly: revenue23094.7 - cost of sales14577.0 =8517.7.",
+        "R&D/engineering exists but a separate dollar amount was not verified in retrieved statements; null is not zero.",
+        "Simple FCF here excludes US$14.8m proceeds from PP&E disposals; issuer FCF definitions can differ.",
+        "FY2025 annual statements predate the January2026 CommScope Connectivity and Cable Solutions acquisition; future mix and leverage differ.",
+        "Revenue growth includes acquisitions; it must not all be attributed to AI."
+      ],
+      "valuation_status": "No current price/fair-value screen performed in this addendum. Business suitability is not an unconditional buy recommendation.",
+      "net_income_attributable": 4270.3,
+      "gross_profit_is_derived": true,
+      "segments": [
+        {
+          "name": "Communications Solutions",
+          "revenue": 12056.0
+        },
+        {
+          "name": "Harsh Environment Solutions",
+          "revenue": 5881.7
+        },
+        {
+          "name": "Interconnect and Sensor Systems",
+          "revenue": 5157.0
+        }
+      ],
+      "source_urls": [
+        "https://investors.amphenol.com/news-and-events/news-details/2026/Amphenol-Reports-Record-Fourth-Quarter-and-Full-Year-2025-Results/default.aspx",
+        "https://www.sec.gov/Archives/edgar/data/820313/000110465926013549/aph-20251231x10k.htm"
+      ],
+      "source_web_refs": [
+        "turn167view0",
+        "turn172view2"
+      ]
+    },
+    {
+      "ticker": "STX",
+      "name": "Seagate",
+      "fiscal_year": "FY2026",
+      "period_end": "2026-07-03",
+      "currency": "USD",
+      "unit": "million",
+      "accounting": "US GAAP",
+      "revenue": 12195,
+      "gross_profit": 5558,
+      "operating_income": 4094,
+      "net_income": 3184,
+      "net_income_scope": "Consolidated net income",
+      "research_development": 755,
+      "operating_cash_flow": 3674,
+      "cash_capex": 569,
+      "cash_capex_definition": "Cash purchases/additions of property, plant and equipment from investing cash-flow statement; excludes acquisitions, purchased intangibles and noncash additions",
+      "simple_fcf": 3105.0,
+      "simple_fcf_definition": "Analyst calculation: operating cash flow minus cash PP&E capex. Not necessarily issuer-defined FCF; not cash distributable without considering other investment/financing needs.",
+      "fcf_working": "3674 - 569 = 3105",
+      "source_precision": "US$1 million, as reported",
+      "sources": [
+        "E11"
+      ],
+      "notes": [
+        "Gross profit derived exactly: revenue12195 - cost of revenue6637 =5558.",
+        "The company labels US$755m as product development; retained under R&D with this scope explicit.",
+        "Annual operating expenses include US$105m legal settlement and US$27m restructuring/other; below operating profit is US$151m net loss from debt transactions.",
+        "High-capacity HDD demand is a cloud/data-retention exposure. HDD is not a substitute for GPU HBM or all-flash performance tiers."
+      ],
+      "valuation_status": "No current price/fair-value screen performed in this addendum. Business suitability is not an unconditional buy recommendation.",
+      "gross_profit_is_derived": true,
+      "research_development_scope": "Product development",
+      "source_urls": [
+        "https://investors.seagate.com/news/news-details/2026/Seagate-Technology-Reports-Fiscal-Fourth-Quarter-and-Fiscal-Year-2026-Financial-Results/"
+      ],
+      "source_web_refs": [
+        "turn167view1"
+      ]
+    }
+  ],
+  "financial_caveats": {
+    "table_notes": [
+      {
+        "id": "A01",
+        "tickers": [],
+        "field": "Table header",
+        "text": "All monetary figures are in the named reporting currency, millions, at the source’s precision. Each row is a different fiscal year-end, not a common calendar-year/TTM comparison. R&D is total company expense, not disclosed AI-only spending. Blank/null means not separately disclosed or not verified, never zero."
+      },
+      {
+        "id": "A02",
+        "tickers": [],
+        "field": "Cash capex / simple FCF header",
+        "text": "Label the columns “Capex (scope note)” and “CFO − shown capex”. Simple FCF is an analyst bridge, not a standardized GAAP measure or cash necessarily available for distribution. Scope varies by issuer; stock compensation, financing principal, leases, acquisitions, intangibles and growth investment can materially change economic cash returns."
+      },
+      {
+        "id": "A03",
+        "tickers": [
+          "AMZN",
+          "ORCL"
+        ],
+        "field": "Gross profit",
+        "text": "AMZN gross profit subtracts cost of sales but leaves fulfillment and technology/infrastructure in operating expenses. ORCL gross profit is derived from directly reported cloud/software, hardware and services costs before separately presented intangible amortization. Neither is a fully like-for-like gross margin with all other firms."
+      },
+      {
+        "id": "A04",
+        "tickers": [
+          "IBM"
+        ],
+        "field": "Gross profit / capex / FCF",
+        "text": "IBM uses net capex US$1,617m, not verified gross PP&E payments. Shown CFO−net capex is US$11,576m. Issuer FCF US$14,734m also removes financing-receivable cash movements; issuer rounding causes a US$1m bridge difference. Preserve reported GP US$39,297m even if rounded revenue−cost differs by US$1m."
+      },
+      {
+        "id": "A05",
+        "tickers": [
+          "NVDA",
+          "LRCX",
+          "ANET",
+          "DELL",
+          "HPE"
+        ],
+        "field": "Capex scope",
+        "text": "NVDA, LRCX and ANET capex includes intangibles; DELL and HPE includes capitalized software. Do not label these five rows as pure physical PP&E. NVIDIA’s company FCF also deducts US$101m principal payments, so it is US$96,575m versus the shown bridge US$96,676m."
+      },
+      {
+        "id": "A06",
+        "tickers": [
+          "MSFT",
+          "META",
+          "INTC"
+        ],
+        "field": "Leases / financed assets",
+        "text": "MSFT and META shown FCF excludes finance-lease principal; META company FCF is US$43,585m after US$2,524m principal versus shown US$46,109m. INTC shown capex US$14,646m excludes another US$3,026m of PP&E classified in financing cash flows. These are not total infrastructure cash-cost measures."
+      },
+      {
+        "id": "A07",
+        "tickers": [
+          "AMZN",
+          "MU"
+        ],
+        "field": "Gross versus net capex",
+        "text": "AMZN shown capex is gross cash PP&E US$131,819m; issuer FCF US$11,194m deducts net capex US$128,320m after US$3,499m proceeds/incentives, versus shown bridge US$7,695m. MU shown capex is gross PP&E before government incentives; its reported adjusted FCF uses different treatment. Do not substitute the larger issuer measures in a same-label column."
+      },
+      {
+        "id": "A08",
+        "tickers": [
+          "ARM",
+          "ASML",
+          "MRVL",
+          "8035.T",
+          "2454.TW",
+          "TSM",
+          "005930.KS",
+          "000660.KS",
+          "0992.HK",
+          "VRT"
+        ],
+        "field": "Excluded intangible/software investment",
+        "text": "Shown capex omits separately disclosed intangible/software investment: ARM US$30m purchases plus US$67m obligation payments; ASML EUR57.6m; MRVL US$4.5m licenses; Tokyo Electron JPY10,457m; MediaTek TWD10,360.5m; TSMC intangible purchases separately reported; Samsung KRW4,630,970m; SK hynix KRW1,060,419m; Lenovo US$596.979m; Vertiv US$6.4m. Do not claim a fully harmonized economic FCF ranking."
+      },
+      {
+        "id": "A09",
+        "tickers": [
+          "EQIX"
+        ],
+        "field": "Capex / FCF / AFFO",
+        "text": "EQIX shown capex US$4,311m excludes US$994m real-estate acquisitions. CFO−shown capex is −US$400m; company FCF is −US$2,572m under a broader definition. Show FY2025 AFFO US$3,761m / US$38.33 per diluted share nearby, while explaining that AFFO does not deduct every growth investment. Use development funding and AFFO, not ordinary tech P/E alone."
+      },
+      {
+        "id": "A10",
+        "tickers": [
+          "AMD",
+          "2317.TW"
+        ],
+        "field": "Continuing scope / reported capex",
+        "text": "AMD CFO US$6,493m and capex US$974m both use continuing operations; net income US$4,335m includes US$66m discontinued income. Foxconn capex is the earnings-presentation capital-expenditure measure; do not silently relabel it independently verified gross cash PP&E."
+      },
+      {
+        "id": "A11",
+        "tickers": [
+          "PLTR",
+          "SNOW",
+          "INTC",
+          "2454.TW",
+          "TSM",
+          "8035.T",
+          "2317.TW",
+          "HPE",
+          "ORCL",
+          "SMCI"
+        ],
+        "field": "Profit attribution",
+        "text": "Net income is not uniform across owners: PLTR is common-shareholder income; SNOW, INTC, MediaTek, TSMC, Tokyo Electron and Foxconn are parent/owner-attributable. INTC −US$267m parent income differs from +US$26m consolidated. HPE US$57m is attributable to HPE but common-shareholder income is −US$59m after preferred dividends. ORCL US$17,087m is consolidated versus common US$16,984m; SMCI is before preferred dividends. Add a simple P/C/Common scope marker or explicit footnote."
+      },
+      {
+        "id": "A12",
+        "tickers": [
+          "0992.HK",
+          "005930.KS",
+          "000660.KS",
+          "EQIX"
+        ],
+        "field": "Consolidated profit",
+        "text": "Lenovo, Samsung, SK hynix and EQIX figures are consolidated, including noncontrolling interests, rather than solely income available to listed ordinary shareholders. Do not change the numerators without changing the stated scope."
+      },
+      {
+        "id": "A13",
+        "tickers": [
+          "TSM",
+          "ASML"
+        ],
+        "field": "Accounting basis",
+        "text": "TSMC uses Taiwan-IFRS figures here; do not splice SEC-IFRS net margin into this row. ASML uses US GAAP here; US-GAAP CFO EUR12,658.5m differs from IFRS CFO EUR13,826.5m. Preserve the selected basis across each row."
+      },
+      {
+        "id": "A14",
+        "tickers": [
+          "GOOGL",
+          "AMZN",
+          "MSFT",
+          "META",
+          "AVGO",
+          "QCOM",
+          "MRVL",
+          "IBM"
+        ],
+        "field": "Major GAAP distortions",
+        "text": "Net profit is reported, not normalized: Alphabet/Amazon include investment valuation gains; Microsoft FY2026 includes US$5.0bn OpenAI investment impacts; Meta FY2025 includes US$15.93bn tax charge; Broadcom FY2025 includes US$2.1bn tax benefit; Qualcomm FY2026 includes US$5.7bn valuation-allowance release; Marvell includes US$1,830.4m pretax business-sale gain; IBM includes tax-resolution benefits. Do not read headline net margins as recurring operating returns."
+      },
+      {
+        "id": "A15",
+        "tickers": [
+          "SNOW",
+          "TEAM",
+          "PLTR",
+          "NOW"
+        ],
+        "field": "Cash flow versus dilution",
+        "text": "SBC is added back in CFO and remains an ownership cost. SNOW FY2026 SBC US$1,599.547m and TEAM US$1,606.561m exceed their shown simple FCF. PLTR and NOW issuer adjusted FCF also add back specified cash items; retain the simple bridge in the common column."
+      },
+      {
+        "id": "A16",
+        "tickers": [
+          "AMZN",
+          "EQIX",
+          "VRT",
+          "000660.KS"
+        ],
+        "field": "R&D scope",
+        "text": "AMZN does not separately disclose R&D; technology/infrastructure US$108,521m is broader and must not fill the R&D blank. EQIX R&D is not separately disclosed. VRT US$441.7m is engineering plus R&D (ER&D). SK hynix expensed R&D KRW6,465,637m differs from gross spending KRW6,732,527m because KRW266,890m was capitalized."
+      },
+      {
+        "id": "A17",
+        "tickers": [
+          "2454.TW",
+          "8035.T",
+          "2317.TW",
+          "IBM"
+        ],
+        "field": "Source precision",
+        "text": "MediaTek capex is reported only to TWD0.1m although other inputs are to TWD0.001m; the many decimal places in derived FCF do not improve capex precision. Tokyo Electron issuer figures are rounded down to JPY1m. Foxconn combines TWD1m presentation data with separately retrieved finer R&D precision. IBM table rounding is a source characteristic, not an arithmetic error."
+      },
+      {
+        "id": "A18",
+        "tickers": [
+          "ORCL"
+        ],
+        "field": "Operating cash flow",
+        "text": "Oracle FY2026 CFO includes US$4,592m customer prepayments with a significant financing component. Current cash inflow therefore also represents future delivery obligations; do not treat it all as mature recurring cash earnings."
+      },
+      {
+        "id": "A19",
+        "tickers": [
+          "AAPL"
+        ],
+        "field": "Outsourced asset intensity",
+        "text": "Apple’s low cash PP&E reflects its ownership footprint. Outsourced manufacturing and external infrastructure still have costs; low owned capex does not mean the whole supply chain is capital-light."
+      }
+    ],
+    "period_and_currency_caveats": [
+      "FY2026 is a fiscal label: NVIDIA ends2026-01-25, Salesforce/Snowflake/Marvell2026-01-31, Microsoft2026-06-30, Apple2026-09-26. They do not cover the same12months.",
+      "HPE, Applied Materials and Broadcom remain on their latest reported FY2025 annual statements as of the cutoff even if their next fiscal year has ended; do not relabel FY2025 as FY2026.",
+      "Lenovo reports FY2025/26 ended2026-03-31 in USD despite HKD share trading. TSMC/MediaTek/Foxconn report TWD; Samsung/SK hynix KRW; Tokyo Electron JPY; ASML EUR.",
+      "TEAM FY2027Q1 scheduled after US close5Nov means6NovSingapore; exclude pending results at a5NovSingapore cutoff. Do not splice current quarter data into the annual rows."
+    ],
+    "additional_company_notes": [
+      {
+        "ticker": "ALAB",
+        "note": "FY2025 US$0.001m precision. CFO includes add-back of US$160.033m SBC. NI includes US$44.730m interest income and US$0.981m tax benefit; 281.762 simple FCF is not dilution-adjusted owner earnings.",
+        "source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/1736297/000173629726000010/alab-20251231.htm",
+          "https://ir.asteralabs.com/news-releases/news-release-details/astera-labs-reports-fourth-quarter-and-full-year-2025-financial"
+        ]
+      },
+      {
+        "ticker": "COHR",
+        "note": "FY2026 audited US$0.001m precision. GP2669.040 and operating profit897.861 are derived subtotals. Operating profit includes124.133 business-sale gain and64.404 held-for-sale impairment. NI786.884 is consolidated; parent804.998 and common769.896 differ. CFO79.514−PP&E1102.909=−1023.395; also excludes7.174 purchased intangibles. Working-capital expansion is a principal cash drag.",
+        "source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/820318/000082031826000020/iivi-20260630.htm",
+          "https://ir.coherent.com/news-releases/news-release-details/coherent-corp-reports-fourth-quarter-and-full-year-fiscal-2026"
+        ]
+      },
+      {
+        "ticker": "LITE",
+        "note": "FY2026 US$0.1m precision. NI−6935.1 includes7756.6 noncash convertible-debt extinguishment. CFO751.4−cash PP&E451.3=300.1 is positive. Do not call the net loss a GPU impairment or operating cash burn. Pending MRVL deal changes the investment exposure.",
+        "source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/1633978/000162828026057358/lite-20260627.htm",
+          "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Results/default.aspx",
+          "https://investor.marvell.com/news-events/press-releases/detail/1040/marvell-and-lumentum-to-combine-creating-a-category-leader-in-ai-connectivity"
+        ]
+      },
+      {
+        "ticker": "FN",
+        "note": "FY2026 audited US$0.001m precision. NI473.027 includes56.743 gain on nonmarketable equity securities. CFO256.725−PP&E252.503=4.222; deducting1.181 purchased intangibles gives3.041. R&D not separately quantified; null≠zero.",
+        "source_urls": [
+          "https://www.sec.gov/Archives/edgar/data/1408710/000140871026000028/fn-20260626.htm"
+        ]
+      },
+      {
+        "ticker": "APH",
+        "note": "FY2025 US$0.1m precision. GP8517.7 is derived; NI4305.3 consolidated versus4270.3 attributable. CFO5374.7−gross cash capex996.6=4378.1 excludes14.8 PP&E disposal proceeds. Annual period predates January2026 CommScope CCS acquisition. Separate R&D amount unverified.",
+        "source_urls": [
+          "https://investors.amphenol.com/news-and-events/news-details/2026/Amphenol-Reports-Record-Fourth-Quarter-and-Full-Year-2025-Results/default.aspx",
+          "https://www.sec.gov/Archives/edgar/data/820313/000110465926013549/aph-20251231x10k.htm"
+        ]
+      },
+      {
+        "ticker": "STX",
+        "note": "FY2026 US$1m precision. GP5558 is derived; R&D column is company-labelled product development755. Operating profit includes105 legal settlement and27 restructuring; NI includes151 loss from debt transactions. CFO3674−cash PP&E569=3105. Storage-cycle peak margins should not be treated as guaranteed future margins.",
+        "source_urls": [
+          "https://investors.seagate.com/news/news-details/2026/Seagate-Technology-Reports-Fiscal-Fourth-Quarter-and-Fiscal-Year-2026-Financial-Results/"
+        ]
+      }
+    ]
+  },
+  "edition": "Public financial data; third-party valuation tables and private source annotations excluded.",
+  "sources": [
+    {
+      "id": "S001",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+      "label": "Alphabet Inc. — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S002",
+      "url": "https://www.microsoft.com/investor/reports/ar26/",
+      "label": "Microsoft Corporation — FY2026",
+      "date": "2026-06-30",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S003",
+      "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+      "label": "Amazon.com, Inc. — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S004",
+      "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm",
+      "label": "Meta Platforms, Inc. — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S005",
+      "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926.htm",
+      "label": "Apple Inc. — FY2026",
+      "date": "2026-09-26",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S006",
+      "url": "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Announces-Record-Q4-and-FY-2026-Results-Driven-by-Cloud-Infrastructure--Cloud-Applications/default.aspx",
+      "label": "Oracle Corporation — FY2026",
+      "date": "2026-05-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S007",
+      "url": "https://investor.salesforce.com/news/news-details/2026/Salesforce-Delivers-Record-Fourth-Quarter-Fiscal-2026-Results/",
+      "label": "Salesforce, Inc. — FY2026",
+      "date": "2026-01-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S008",
+      "url": "https://www.sec.gov/Archives/edgar/data/796343/000079634326000003/adbe-20251128.htm",
+      "label": "Adobe Inc. — FY2025",
+      "date": "2025-11-28",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S009",
+      "url": "https://newsroom.ibm.com/2026-01-28-IBM-RELEASES-FOURTH-QUARTER-RESULTS",
+      "label": "International Business Machines Corporation — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S010",
+      "url": "https://investor.servicenow.com/news/news-details/2026/ServiceNow-Reports-Fourth-Quarter-and-Full-Year-2025-Financial-Results-Board-of-Directors-Authorizes-Additional-5B-for-Share-Repurchase-Program/default.aspx",
+      "label": "ServiceNow, Inc. — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S011",
+      "url": "https://www.sec.gov/Archives/edgar/data/1321655/000132165526000011/pltr-20251231.htm",
+      "label": "Palantir Technologies Inc. — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S012",
+      "url": "https://www.sec.gov/Archives/edgar/data/1640147/000164014726000008/snow-20260131.htm",
+      "label": "Snowflake Inc. — FY2026",
+      "date": "2026-01-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S013",
+      "url": "https://investors.intuit.com/sec-filings/all-sec-filings/content/0000896878-26-000029/fy26q4earningspressrelease.htm",
+      "label": "Intuit Inc. — FY2026",
+      "date": "2026-07-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S014",
+      "url": "https://www.sec.gov/Archives/edgar/data/1650372/000165037226000031/ex991q4fy26.htm",
+      "label": "Atlassian Corporation — FY2026",
+      "date": "2026-06-30",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S015",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/",
+      "label": "NVIDIA — FY2026",
+      "date": "2026-01-25",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S016",
+      "url": "https://investors.broadcom.com/static-files/752e631c-b5f3-46af-9d67-bdeb658f5fa2",
+      "label": "Broadcom — FY2025",
+      "date": "2025-11-02",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S017",
+      "url": "https://ir.amd.com/news-events/press-releases/detail/1276/amd-reports-fourth-quarter-and-full-year-2025-financial-results",
+      "label": "Advanced Micro Devices — FY2025",
+      "date": "2025-12-27",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S018",
+      "url": "https://investors.arm.com/node/8141/html",
+      "label": "Arm Holdings — FY2026",
+      "date": "2026-03-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S019",
+      "url": "https://www.sec.gov/Archives/edgar/data/804328/000080432826000127/qcom092726erex991.htm",
+      "label": "QUALCOMM — FY2026",
+      "date": "2026-09-27",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S020",
+      "url": "https://www.intc.com/filings-reports/annual-reports/content/0000050863-26-000011/intc-20251227.htm",
+      "label": "Intel — FY2025",
+      "date": "2025-12-27",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S021",
+      "url": "https://investor.marvell.com/news-events/press-releases/detail/1011/marvell-technology-inc-reports-fourth-quarter-and-fiscal-year-2026-financial-results",
+      "label": "Marvell Technology — FY2026",
+      "date": "2026-01-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S022",
+      "url": "https://www.mediatek.com/hubfs/MediaTek%20Assets/Pdfs/Quarterly%20Earnings%20Release/2025/Quarterly%20Earnings%20Release-2025Q4/Press%20Release.pdf",
+      "label": "MediaTek — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S023",
+      "url": "https://investor.tsmc.com/static/annualReports/2025/english/index.html",
+      "label": "Taiwan Semiconductor Manufacturing Company — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S024",
+      "url": "https://investor.asml.com/static-files/f98553ea-bc52-49ed-ada0-8513a8a6fde5",
+      "label": "ASML Holding — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S025",
+      "url": "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-fourth-quarter-and-fiscal-year-2025",
+      "label": "Applied Materials — FY2025",
+      "date": "2025-10-26",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S026",
+      "url": "https://newsroom.lamresearch.com/2026-07-29-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-June-28,-2026",
+      "label": "Lam Research — FY2026",
+      "date": "2026-06-28",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S027",
+      "url": "https://ir.kla.com/news-events/press-releases/detail/518/kla-corporation-reports-fiscal-2026-fourth-quarter-and-full",
+      "label": "KLA — FY2026",
+      "date": "2026-06-30",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S028",
+      "url": "https://www.tel.com/ir/library/report/pjuomj00000000tf-att/fy26q4tanshin-e.pdf",
+      "label": "Tokyo Electron — FY2026",
+      "date": "2026-03-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S029",
+      "url": "https://image.honhai.com/upload/202603/law_talk/Hon_Hai_4Q25_Results_English_20260316_0435.pdf",
+      "label": "Hon Hai Precision Industry (Foxconn) — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S030",
+      "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2025_con_quarter04_all.pdf",
+      "label": "Samsung Electronics — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S031",
+      "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526299963/d32785d424b4.htm",
+      "label": "SK hynix — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S032",
+      "url": "https://investors.micron.com/news/press-release/2026/Micron-Technology-Inc--Reports-Record-Fiscal-Fourth-Quarter-and-Full-Year-2026-Results/",
+      "label": "Micron Technology — FY2026",
+      "date": "2026-09-03",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S033",
+      "url": "https://investors.delltechnologies.com/news-events/press-releases/detail/93/dell-technologies-delivers-fourth-quarter-and-full-year-fiscal-2026-results",
+      "label": "Dell Technologies — FY2026",
+      "date": "2026-01-30",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S034",
+      "url": "https://www.sec.gov/Archives/edgar/data/1375365/000137536526000022/smci-20260630.htm",
+      "label": "Super Micro Computer — FY2026",
+      "date": "2026-06-30",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S035",
+      "url": "https://investor.cisco.com/news/news-details/2026/CISCO-REPORTS-FOURTH-QUARTER-AND-FISCAL-YEAR-2026-EARNINGS/default.aspx",
+      "label": "Cisco Systems — FY2026",
+      "date": "2026-07-25",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S036",
+      "url": "https://www.sec.gov/Archives/edgar/data/1596532/000159653226000013/anet-20251231.htm",
+      "label": "Arista Networks — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S037",
+      "url": "https://www.hpe.com/content/dam/hpe/newsroom/2025/12/HPE_Q4FY25_earnings_financial%20_tables.pdf",
+      "label": "Hewlett Packard Enterprise — FY2025",
+      "date": "2025-10-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S038",
+      "url": "https://investor.lenovo.com/en/financial/five_year_summary.php",
+      "label": "Lenovo Group — FY2025/26",
+      "date": "2026-03-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S039",
+      "url": "https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-Fourth-Quarter-with-Organic-Orders-Growth-of-252-and-Diluted-EPS-Growth-of-200-Adjusted-Diluted-EPS-37/",
+      "label": "Vertiv — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S040",
+      "url": "https://investor.equinix.com/news-events/press-releases/detail/1096/equinix-provides-robust-2026-outlook-driven-by-strong",
+      "label": "Equinix — FY2025",
+      "date": "2025-12-31",
+      "scope": "annual financial source"
+    },
+    {
+      "id": "S041",
+      "url": "https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary",
+      "label": "IEA — Key Questions on Energy and AI",
+      "date": "16 Apr 2026",
+      "scope": ""
+    },
+    {
+      "id": "S042",
+      "url": "https://www.iea.org/reports/powering-artificial-intelligence/executive-summary",
+      "label": "IEA — Powering Artificial Intelligence",
+      "date": "14 Oct 2026",
+      "scope": ""
+    },
+    {
+      "id": "S043",
+      "url": "https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches/factsheets/2025/launch-of-second-data-centre",
+      "label": "IMDA — second Data Centre Call for Application",
+      "date": "1 Dec 2025",
+      "scope": ""
+    },
+    {
+      "id": "S044",
+      "url": "https://www.meti.gov.sg/newsroom/written-reply-to-pq-on-modelling-and-balancing-additional-electricity-and-water-demand-arising-from-ai-computing-and-data-centre-growth-with-singapore-s-energy-and-sustainability-objectives/",
+      "label": "Singapore METI — data centre resource planning",
+      "date": "7 Oct 2026",
+      "scope": ""
+    },
+    {
+      "id": "S045",
+      "url": "https://productgroup.bankofsingapore.com/equities_research/2026-11-03_equity_coverage_universe.pdf",
+      "label": "BOS Equity Coverage Universe",
+      "date": "3 Nov 2026",
+      "scope": "prices dated 2 Nov 2026"
+    },
+    {
+      "id": "S046",
+      "url": "https://notwins.github.io/market-intelligence-hub/v4.html#earnings",
+      "label": "Market Intelligence Hub — earnings/research links",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S047",
+      "url": "https://infinibandta.org/ibta-specification/",
+      "label": "InfiniBand Specification Frequently Asked Questions",
+      "date": "2026-09-21",
+      "scope": ""
+    },
+    {
+      "id": "S048",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-completes-acquisition-of-mellanox-creating-major-force-driving-next-gen-data-centers",
+      "label": "NVIDIA Completes Acquisition of Mellanox",
+      "date": "2020-04-27",
+      "scope": ""
+    },
+    {
+      "id": "S049",
+      "url": "https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/",
+      "label": "Mastering LLM Techniques: Inference Optimization",
+      "date": "2023-11-17",
+      "scope": ""
+    },
+    {
+      "id": "S050",
+      "url": "https://docs.cloud.google.com/tpu/docs/system-architecture-tpu-vm",
+      "label": "TPU architecture",
+      "date": "2026-10-26",
+      "scope": ""
+    },
+    {
+      "id": "S051",
+      "url": "https://dam-cdn.nvd.orangelogic.com/AssetLink/05p8225000qc1l606krfd80k80kis0om.pdf",
+      "label": "NVIDIA DGX Vera Rubin NVL72 Datasheet",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S052",
+      "url": "https://investor.nvidia.com/news/press-release-details/2023/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2023/",
+      "label": "NVIDIA — baseline",
+      "date": "",
+      "scope": "Pre-AI baseline"
+    },
+    {
+      "id": "S053",
+      "url": "https://www.sec.gov/ixviewer/ix.html?doc=%2FArchives%2Fedgar%2Fdata%2F723125%2F000072312524000027%2Fmu-20240829.htm",
+      "label": "Micron Technology — baseline",
+      "date": "",
+      "scope": "FY2022-2024 financial history"
+    },
+    {
+      "id": "S054",
+      "url": "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2023/Arista-Networks-Inc.-Reports-Fourth-Quarter-and-Year-End-2022-Financial-Results/",
+      "label": "Arista Networks — baseline",
+      "date": "",
+      "scope": "FY2022 baseline"
+    },
+    {
+      "id": "S055",
+      "url": "https://investors.vertiv.com/news/news-details/2023/Vertiv-Reports-Record-Fourth-Quarter-2022-Net-Sales-Operating-Profit-Adjusted-Operating-Profit1-and-Price-Realization-Raising-Operating-Profit-and-Adjusted-Operating-Profit-Guidance-for-2023/default.aspx",
+      "label": "Vertiv — baseline",
+      "date": "",
+      "scope": "FY2022 baseline and operating history"
+    },
+    {
+      "id": "S056",
+      "url": "https://www.microsoft.com/investor/reports/ar22/index.html",
+      "label": "Microsoft Corporation — baseline",
+      "date": "",
+      "scope": "FY2022 revenue"
+    },
+    {
+      "id": "S057",
+      "url": "https://abc.xyz/assets/d4/4f/a48b94d548d0b2fdc029a95e8c63/2022-alphabet-annual-report.pdf",
+      "label": "Alphabet Inc. — baseline",
+      "date": "",
+      "scope": "FY2022 revenue"
+    },
+    {
+      "id": "S058",
+      "url": "https://investors.delltechnologies.com/sec-filings/all-sec-filings/content/0001571996-24-000036/dell-20240202.htm",
+      "label": "Dell Technologies — baseline",
+      "date": "",
+      "scope": "FY2022-2024 baseline"
+    },
+    {
+      "id": "S059",
+      "url": "https://www.intc.com/filings-reports/all-sec-filings/content/0000050863-23-000006/intc-20221231.htm",
+      "label": "Intel — baseline",
+      "date": "",
+      "scope": "FY2022 baseline"
+    },
+    {
+      "id": "S060",
+      "url": "https://developers.google.com/machine-learning/crash-course/llm/transformers",
+      "label": "LLMs: What is a large language model?",
+      "date": "2026-01-02",
+      "scope": ""
+    },
+    {
+      "id": "S061",
+      "url": "https://developer.nvidia.com/blog/co-designing-ai-model-attention-for-fast-interactive-long-context-inference/",
+      "label": "Co-Designing AI Model Attention for Fast, Interactive Long-Context Inference",
+      "date": "2026-07-31",
+      "scope": ""
+    },
+    {
+      "id": "S062",
+      "url": "https://docs.nvidia.com/cuda/archive/12.9.0/cuda-c-programming-guide/index.html",
+      "label": "CUDA C++ Programming Guide, archived version 12.9.0",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S063",
+      "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+      "label": "Micron FY2026 Form 10-K",
+      "date": "2026-10-09",
+      "scope": ""
+    },
+    {
+      "id": "S064",
+      "url": "https://www.micron.com/about/micron-glossary/solid-state-drives",
+      "label": "Solid-state drives glossary",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S065",
+      "url": "https://news.samsungsemiconductor.com/global/samsung-electronics-announces-third-quarter-2026-results/",
+      "label": "Samsung Electronics Third Quarter 2026 Results",
+      "date": "2026-10-29",
+      "scope": ""
+    },
+    {
+      "id": "S066",
+      "url": "https://news.skhynix.com/en/q3-2026-business-results/",
+      "label": "SK hynix Third Quarter 2026 Results",
+      "date": "2026-10-28",
+      "scope": ""
+    },
+    {
+      "id": "S067",
+      "url": "https://www.sec.gov/Archives/edgar/data/2023554/000162828026004407/sndk-20260102.htm",
+      "label": "Sandisk FY2026 Q2 Form 10-Q",
+      "date": "2026-01-30",
+      "scope": ""
+    },
+    {
+      "id": "S068",
+      "url": "https://investors.seagate.com/news/news-details/2026/Seagate-Delivers-Industrys-Highest-Capacity-Hard-Drives-with-Next-Generation-Mozaic-4/default.aspx",
+      "label": "Seagate Delivers Highest-Capacity Hard Drives with Mozaic 4+",
+      "date": "2026-03-03",
+      "scope": ""
+    },
+    {
+      "id": "S069",
+      "url": "https://www.sec.gov/Archives/edgar/data/1736297/000173629726000010/alab-20251231.htm",
+      "label": "Astera Labs FY2025 Form 10-K",
+      "date": "2026-02-20",
+      "scope": ""
+    },
+    {
+      "id": "S070",
+      "url": "https://www.sec.gov/Archives/edgar/data/820318/000082031826000020/iivi-20260630.htm",
+      "label": "Coherent FY2026 Form 10-K",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S071",
+      "url": "https://www.sec.gov/Archives/edgar/data/1633978/000162828026057358/lite-20260627.htm",
+      "label": "Lumentum FY2026 Form 10-K",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S072",
+      "url": "https://www.sec.gov/Archives/edgar/data/1408710/000140871026000028/fn-20260626.htm",
+      "label": "Fabrinet FY2026 Form 10-K",
+      "date": "2026-08-18",
+      "scope": ""
+    },
+    {
+      "id": "S073",
+      "url": "https://investors.amphenol.com/news-and-events/news-details/2026/Amphenol-Reports-Record-Fourth-Quarter-and-Full-Year-2025-Results/default.aspx",
+      "label": "Amphenol FY2025 results",
+      "date": "2026-01-28",
+      "scope": ""
+    },
+    {
+      "id": "S074",
+      "url": "https://www.sec.gov/Archives/edgar/data/24741/000002474126000253/glw-20260728xex99xq22026.htm",
+      "label": "Corning Q2 FY2026 release filed with SEC",
+      "date": "2026-07-28",
+      "scope": ""
+    },
+    {
+      "id": "S075",
+      "url": "https://docs.pytorch.org/docs/2.9/notes/hip.html",
+      "label": "HIP (ROCm) semantics, PyTorch 2.9 documentation",
+      "date": "2025-08-08",
+      "scope": ""
+    },
+    {
+      "id": "S076",
+      "url": "https://investor.vistracorp.com/2026-01-09-Vistra-and-Meta-Announce-Agreements-to-Support-Nuclear-Plants-in-PJM-and-Add-New-Nuclear-Generation-to-the-Grid",
+      "label": "Vistra and Meta nuclear agreements",
+      "date": "2026-01-09",
+      "scope": ""
+    },
+    {
+      "id": "S077",
+      "url": "https://investors.constellationenergy.com/news-releases/news-release-details/constellation-meta-sign-20-year-deal-clean-reliable-nuclear",
+      "label": "Constellation and Meta Clinton agreement",
+      "date": "2025-06-03",
+      "scope": ""
+    },
+    {
+      "id": "S078",
+      "url": "https://www.sec.gov/Archives/edgar/data/1868275/000186827526000032/ceg-20251231.htm",
+      "label": "Constellation FY2025 Form 10-K",
+      "date": "2026-02-24",
+      "scope": ""
+    },
+    {
+      "id": "S079",
+      "url": "https://www.eaton.com/content/dam/eaton/company/investor-relations/quarterly-earnings/filings/2025/q4/4Q-2025-financials-only.pdf",
+      "label": "Eaton FY2025 financial tables",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S080",
+      "url": "https://www.se.com/ww/en/assets/564/document/528237/release-fy-results-2025.pdf",
+      "label": "Schneider Electric FY2025 results",
+      "date": "2026-02-26",
+      "scope": ""
+    },
+    {
+      "id": "S081",
+      "url": "https://www.gevernova.com/sites/default/files/gev_webcast_pressrelease_01282026.pdf",
+      "label": "GE Vernova FY2025 earnings financial statements",
+      "date": "2026-01-28",
+      "scope": ""
+    },
+    {
+      "id": "S082",
+      "url": "https://investor.vistracorp.com/2026-02-26-Vistra-Reports-Fourth-Quarter-and-Full-Year-2025-Results",
+      "label": "Vistra FY2025 results",
+      "date": "2026-02-26",
+      "scope": ""
+    },
+    {
+      "id": "S083",
+      "url": "https://assets.siemens-energy.com/dam/b17980ef-1d11-4d4a-8c24-b394012dd9f4/2025-11-13_Earnings-Release-Q4-FY25-pdf_Original%20file.pdf",
+      "label": "Siemens Energy FY2025 earnings release",
+      "date": "2025-11-13",
+      "scope": ""
+    },
+    {
+      "id": "S084",
+      "url": "https://www.sec.gov/Archives/edgar/data/18230/000001823026000008/cat-20251231.htm",
+      "label": "Caterpillar FY2025 Form 10-K",
+      "date": "2026-02 (filing month)",
+      "scope": ""
+    },
+    {
+      "id": "S085",
+      "url": "https://investor.cummins.com/news/detail/702/cummins-selected-to-supply-battery-energy-storage-systems",
+      "label": "Cummins data-center battery-storage award",
+      "date": "2026-08-18",
+      "scope": ""
+    },
+    {
+      "id": "S086",
+      "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html",
+      "label": "NVIDIA DGX GB200 hardware guide",
+      "date": "2026-09-17 (last update)",
+      "scope": ""
+    },
+    {
+      "id": "S087",
+      "url": "https://blog.se.com/datacenter/2025/10/23/liquid-cooling-lessons-from-hpc-to-ai-factories-how-to-enable-next-gen-ai-data-centers/",
+      "label": "Schneider Electric liquid-cooling engineering discussion",
+      "date": "2025-10-23",
+      "scope": ""
+    },
+    {
+      "id": "S088",
+      "url": "https://blogs.nvidia.com/blog/ocp-global-summit-vera-rubin-scale-ai-factories/",
+      "label": "NVIDIA OCP 2026 MGX architecture announcement",
+      "date": "2026-10-12",
+      "scope": ""
+    },
+    {
+      "id": "S089",
+      "url": "https://www.nvidia.com/en-us/on-demand/session/gtc25-s72484/",
+      "label": "NVIDIA GTC 2025 keynote",
+      "date": "2025-03-18",
+      "scope": ""
+    },
+    {
+      "id": "S090",
+      "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-pod-seven-chips-five-rack-scale-systems-one-ai-supercomputer",
+      "label": "NVIDIA Vera Rubin POD technical architecture",
+      "date": "2026-03-16",
+      "scope": ""
+    },
+    {
+      "id": "S091",
+      "url": "https://www.ecolab.com/en-us/media-center/news/ecolab-closes-coolit-acquisition-and-expands-ai-cooling-platform",
+      "label": "Ecolab closes CoolIT acquisition",
+      "date": "2026-07-02",
+      "scope": ""
+    },
+    {
+      "id": "S092",
+      "url": "https://www.eaton.com/sg/en-us/company/news-insights/news-releases/2026/eaton-completes-acquisition-of-leading-liquid-cooling-solutions-provider-boyd-thermal.html",
+      "label": "Eaton completes Boyd Thermal acquisition",
+      "date": "2026-03-12",
+      "scope": ""
+    },
+    {
+      "id": "S093",
+      "url": "https://blogs.nvidia.com/blog/from-megawatts-to-tokens-how-nvidia-maximizes-ai-factory-production/",
+      "label": "NVIDIA: From Megawatts to Tokens",
+      "date": "2026-09-15",
+      "scope": ""
+    },
+    {
+      "id": "S094",
+      "url": "https://abc.xyz/investor/events/event-details/2026/2026-Q3-Earnings-Call-2026-Ujou16CTw9/default.aspx",
+      "label": "Alphabet Inc.",
+      "date": "",
+      "scope": "Q3 2026 discussion and capex guidance"
+    },
+    {
+      "id": "S095",
+      "url": "https://www.microsoft.com/en-us/investor/events/fy-2027/earnings-fy-2027-q1",
+      "label": "Microsoft Corporation",
+      "date": "",
+      "scope": "Capex and segment change"
+    },
+    {
+      "id": "S096",
+      "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/",
+      "label": "Amazon.com, Inc.",
+      "date": "",
+      "scope": "Q3 2026 results"
+    },
+    {
+      "id": "S097",
+      "url": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Third-Quarter-2026-Results/",
+      "label": "Meta Platforms, Inc.",
+      "date": "",
+      "scope": "Q3 2026 legal charge and capex"
+    },
+    {
+      "id": "S098",
+      "url": "https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4",
+      "label": "Microsoft FY2026 Q4 earnings call",
+      "date": "2026-07-29",
+      "scope": ""
+    },
+    {
+      "id": "S099",
+      "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026066773/meta-20260930.htm",
+      "label": "Meta September2026 Form 10-Q",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S100",
+      "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526436133/msft-20260930.htm",
+      "label": "Microsoft September2026 Form 10-Q",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S101",
+      "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000040/amzn-20260930.htm",
+      "label": "Amazon September2026 Form 10-Q",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S102",
+      "url": "https://investors.seagate.com/news/news-details/2026/Seagate-Technology-Reports-Fiscal-Fourth-Quarter-and-Fiscal-Year-2026-Financial-Results/",
+      "label": "Seagate FY2026 results",
+      "date": "2026-07-28",
+      "scope": ""
+    },
+    {
+      "id": "S103",
+      "url": "https://investor.marvell.com/news-events/press-releases/detail/1040/marvell-and-lumentum-to-combine-creating-a-category-leader-in-ai-connectivity",
+      "label": "Marvell and Lumentum proposed combination",
+      "date": "2026-11-02",
+      "scope": ""
+    },
+    {
+      "id": "S104",
+      "url": "https://www.sec.gov/Archives/edgar/data/820313/000110465926013549/aph-20251231x10k.htm",
+      "label": "Amphenol FY2025 Form 10-K",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S115",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/bank-america-blackstone-citi-and-morgan-stanley-announce",
+      "label": "Broadcom — AI compute financing structure",
+      "date": "26 Oct 2026",
+      "scope": ""
+    },
+    {
+      "id": "S122",
+      "url": "https://investor.ptc.com/resources/news/news-details/2026/Schneider-Electric-to-acquire-PTC-creating-the-next-level-of-Energy-and-Industrial-Intelligence/default.aspx",
+      "label": "Schneider Electric definitive agreement to acquire PTC",
+      "date": "2026-10-05",
+      "scope": ""
+    },
+    {
+      "id": "S123",
+      "url": "https://www.siemensenergy.com/global/en/home/investor-relations.html",
+      "label": "Siemens Energy current IR calendar and portfolio updates",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S124",
+      "url": "https://www.gevernova.com/news/press-releases/ge-vernova-acquire-trench-group",
+      "label": "GE Vernova definitive agreement to acquire Trench",
+      "date": "2026-10-28",
+      "scope": ""
+    },
+    {
+      "id": "S125",
+      "url": "https://links.sgx.com/FileOpen/MediaTek%20Inc.%20-%20Final%20Offering%20Circular%20dated%2031%20August%202026.ashx?App=Prospectus&FileID=70978",
+      "label": "MediaTek",
+      "date": "",
+      "scope": "Issuer offering circular with exact annual revenue, GP, R&D, OCF, capex, debt components, H1 2026 cash flow"
+    },
+    {
+      "id": "S126",
+      "url": "https://investor.tsmc.com/sites/ir/annual-report/2025/2025%20Annual%20Report_E.pdf",
+      "label": "Taiwan Semiconductor Manufacturing Company",
+      "date": "",
+      "scope": "Taiwan IFRS annual R&D and cash flow"
+    },
+    {
+      "id": "S127",
+      "url": "https://image.honhai.com/upload/202605/financy_by_year/2025_Annual_Report_20260523_7728.pdf",
+      "label": "Hon Hai Precision Industry (Foxconn)",
+      "date": "",
+      "scope": "FY2025 annual R&D"
+    },
+    {
+      "id": "S128",
+      "url": "https://investor.lenovo.com/en/financial/income_statement.php?data=quarterly",
+      "label": "Lenovo Group",
+      "date": "",
+      "scope": "Exact quarterly P&L and summed FY totals"
+    },
+    {
+      "id": "S129",
+      "url": "https://investor.lenovo.com/en/financial/cash_flow.php",
+      "label": "Lenovo Group",
+      "date": "",
+      "scope": "FY2025/26 cash flows"
+    },
+    {
+      "id": "S130",
+      "url": "https://www.sec.gov/Archives/edgar/data/1674101/000167410126000008/vrt-20251231.htm",
+      "label": "Vertiv",
+      "date": "",
+      "scope": "FY2025 ER&D definition"
+    },
+    {
+      "id": "S131",
+      "url": "https://www.zj-innolight.com/en/",
+      "label": "Zhongji InnoLight issuer homepage and listings",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S132",
+      "url": "https://www.quantatw.com/quanta/english/investment/services_sq.aspx",
+      "label": "Quanta investor stock-code confirmation",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S133",
+      "url": "https://www.wiwynn.com/about-wiwynn/company-info",
+      "label": "Wiwynn company profile",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S134",
+      "url": "https://corporate.celestica.com/",
+      "label": "Celestica investor relations: NYSE and TSX listings",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S135",
+      "url": "https://www.wistron.com/en/AboutWistron/CompanyProfile",
+      "label": "Wistron company profile and listing",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S136",
+      "url": "https://www.inventec.com/en/investor",
+      "label": "Inventec investor relations and stock code",
+      "date": "accessed 5 Nov 2026",
+      "scope": ""
+    },
+    {
+      "id": "S137",
+      "url": "https://investor.wdc.com/node/27841",
+      "label": "WD HDD strategy and Nasdaq WDC confirmation",
+      "date": "2026-02-03",
+      "scope": ""
+    },
+    {
+      "id": "S138",
+      "url": "https://developer.nvidia.com/blog/building-the-modular-foundation-for-ai-factories-with-nvidia-mgx/",
+      "label": "NVIDIA MGX modular foundation",
+      "date": "accessed 2026-11-05",
+      "scope": "GB200 NVL72 rack demand 120 kW"
+    }
+  ],
+  "source_aliases": {
+    "C": {
+      "C01": {
+        "url": "https://developers.google.com/machine-learning/crash-course/llm/transformers",
+        "title": "LLMs: What is a large language model?",
+        "date": "2026-01-02"
+      },
+      "C02": {
+        "url": "https://developer.nvidia.com/blog/mastering-llm-techniques-inference-optimization/",
+        "title": "Mastering LLM Techniques: Inference Optimization",
+        "date": "2023-11-17"
+      },
+      "C03": {
+        "url": "https://developer.nvidia.com/blog/co-designing-ai-model-attention-for-fast-interactive-long-context-inference/",
+        "title": "Co-Designing AI Model Attention for Fast, Interactive Long-Context Inference",
+        "date": "2026-07-31"
+      },
+      "C04": {
+        "url": "https://docs.cloud.google.com/tpu/docs/system-architecture-tpu-vm",
+        "title": "TPU architecture",
+        "date": "2026-10-26"
+      },
+      "C05": {
+        "url": "https://docs.nvidia.com/cuda/archive/12.9.0/cuda-c-programming-guide/index.html",
+        "title": "CUDA C++ Programming Guide, archived version 12.9.0",
+        "date": "accessed 2026-11-05"
+      },
+      "C06": {
+        "url": "https://docs.pytorch.org/docs/2.9/notes/hip.html",
+        "title": "HIP (ROCm) semantics, PyTorch 2.9 documentation",
+        "date": "2025-08-08"
+      },
+      "C07": {
+        "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/mu-20260903.htm",
+        "title": "Micron FY2026 Form 10-K",
+        "date": "2026-10-09"
+      },
+      "C08": {
+        "url": "https://infinibandta.org/ibta-specification/",
+        "title": "InfiniBand Specification Frequently Asked Questions",
+        "date": "2026-09-21"
+      },
+      "C09": {
+        "url": "https://nvidianews.nvidia.com/news/nvidia-completes-acquisition-of-mellanox-creating-major-force-driving-next-gen-data-centers",
+        "title": "NVIDIA Completes Acquisition of Mellanox",
+        "date": "2020-04-27"
+      },
+      "C10": {
+        "url": "https://dam-cdn.nvd.orangelogic.com/AssetLink/05p8225000qc1l606krfd80k80kis0om.pdf",
+        "title": "NVIDIA DGX Vera Rubin NVL72 Datasheet",
+        "date": "accessed 2026-11-05"
+      },
+      "C11": {
+        "url": "https://www.sec.gov/Archives/edgar/data/2023554/000162828026004407/sndk-20260102.htm",
+        "title": "Sandisk FY2026 Q2 Form 10-Q",
+        "date": "2026-01-30"
+      },
+      "C12": {
+        "url": "https://investors.seagate.com/news/news-details/2026/Seagate-Delivers-Industrys-Highest-Capacity-Hard-Drives-with-Next-Generation-Mozaic-4/default.aspx",
+        "title": "Seagate Delivers Highest-Capacity Hard Drives with Mozaic 4+",
+        "date": "2026-03-03"
+      },
+      "S01": {
+        "url": "https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/",
+        "title": "NVIDIA Vera Rubin NVL72 product page",
+        "date": "accessed 2026-11-05"
+      },
+      "S02": {
+        "url": "https://nvidianews.nvidia.com/news/rubin-platform-ai-supercomputer",
+        "title": "NVIDIA Kicks Off the Next Generation of AI With Rubin",
+        "date": "2026-01-05"
+      },
+      "S03": {
+        "url": "https://nvidianews.nvidia.com/news/vera-rubin-full-production-agentic-ai-factory",
+        "title": "NVIDIA Vera Rubin Ramps Into Full Production",
+        "date": "2026-05-31"
+      },
+      "S04": {
+        "url": "https://developer.nvidia.com/blog/inside-nvidia-rubin-gpu-architecture-powering-the-era-of-agentic-ai/",
+        "title": "Inside NVIDIA Rubin GPU Architecture",
+        "date": "2026-07-21"
+      },
+      "S05": {
+        "url": "https://developer.nvidia.com/blog/building-the-modular-foundation-for-ai-factories-with-nvidia-mgx/",
+        "title": "Building the Modular Foundation for AI Factories with NVIDIA MGX",
+        "date": "2025-05-16"
+      },
+      "S06": {
+        "url": "https://developer.nvidia.com/blog/nvidia-800-v-hvdc-architecture-will-power-the-next-generation-of-ai-factories",
+        "title": "NVIDIA 800 VDC Architecture Will Power the Next Generation of AI Factories",
+        "date": "2025-05-20"
+      },
+      "S07": {
+        "url": "https://news.samsungsemiconductor.com/global/samsung-electronics-announces-third-quarter-2026-results/",
+        "title": "Samsung Electronics Third Quarter 2026 Results",
+        "date": "2026-10-29"
+      },
+      "S08": {
+        "url": "https://news.skhynix.com/en/q3-2026-business-results/",
+        "title": "SK hynix Third Quarter 2026 Results",
+        "date": "2026-10-28"
+      },
+      "S09": {
+        "url": "https://investor.wdc.com/news-releases/news-release-details/western-digital-completes-planned-company-separation",
+        "title": "Western Digital Completes Planned Company Separation",
+        "date": "2025-02-24"
+      },
+      "S10": {
+        "url": "https://www.micron.com/about/micron-glossary/solid-state-drives",
+        "title": "Solid-state drives glossary",
+        "date": "accessed 2026-11-05"
+      },
+      "S11": {
+        "url": "https://www.nvidia.com/en-us/on-demand/session/gtc25-s72484/",
+        "title": "GTC 2025 keynote, session S72484",
+        "date": "accessed 2026-11-05"
+      },
+      "S12": {
+        "url": "https://blogs.nvidia.com/blog/ocp-global-summit-vera-rubin-scale-ai-factories/",
+        "title": "OCP Global Summit: NVIDIA Opens Vera Rubin Architecture",
+        "date": "2026-10-12"
+      },
+      "S13": {
+        "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-pod-seven-chips-five-rack-scale-systems-one-ai-supercomputer",
+        "title": "NVIDIA Vera Rubin POD: Seven Chips, Five Rack-Scale Systems",
+        "date": "2026-03-16"
+      }
+    },
+    "E": {
+      "E01": {
+        "url": "https://www.microsoft.com/investor/reports/ar26/",
+        "title": "Microsoft FY2026 annual report",
+        "date": "2026-07-29"
+      },
+      "E02": {
+        "url": "https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4",
+        "title": "Microsoft FY2026 Q4 earnings call",
+        "date": "2026-07-29"
+      },
+      "E03": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm",
+        "title": "Meta FY2025 Form 10-K",
+        "date": "accessed 2026-11-05"
+      },
+      "E04": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm",
+        "title": "Amazon FY2025 Form 10-K",
+        "date": "accessed 2026-11-05"
+      },
+      "E05": {
+        "url": "https://blogs.nvidia.com/blog/from-megawatts-to-tokens-how-nvidia-maximizes-ai-factory-production/",
+        "title": "NVIDIA: From Megawatts to Tokens",
+        "date": "2026-09-15"
+      },
+      "E06": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1736297/000173629726000010/alab-20251231.htm",
+        "title": "Astera Labs FY2025 Form 10-K",
+        "date": "2026-02-20"
+      },
+      "E07": {
+        "url": "https://www.sec.gov/Archives/edgar/data/820318/000082031826000020/iivi-20260630.htm",
+        "title": "Coherent FY2026 Form 10-K",
+        "date": "accessed 2026-11-05"
+      },
+      "E08": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1633978/000162828026057358/lite-20260627.htm",
+        "title": "Lumentum FY2026 Form 10-K",
+        "date": "accessed 2026-11-05"
+      },
+      "E09": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1408710/000140871026000028/fn-20260626.htm",
+        "title": "Fabrinet FY2026 Form 10-K",
+        "date": "2026-08-18"
+      },
+      "E10": {
+        "url": "https://investors.amphenol.com/news-and-events/news-details/2026/Amphenol-Reports-Record-Fourth-Quarter-and-Full-Year-2025-Results/default.aspx",
+        "title": "Amphenol FY2025 results",
+        "date": "2026-01-28"
+      },
+      "E11": {
+        "url": "https://investors.seagate.com/news/news-details/2026/Seagate-Technology-Reports-Fiscal-Fourth-Quarter-and-Fiscal-Year-2026-Financial-Results/",
+        "title": "Seagate FY2026 results",
+        "date": "2026-07-28"
+      },
+      "E12": {
+        "url": "https://investor.marvell.com/news-events/press-releases/detail/1040/marvell-and-lumentum-to-combine-creating-a-category-leader-in-ai-connectivity",
+        "title": "Marvell and Lumentum proposed combination",
+        "date": "2026-11-02"
+      },
+      "E13": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026066773/meta-20260930.htm",
+        "title": "Meta September2026 Form 10-Q",
+        "date": "accessed 2026-11-05"
+      },
+      "E14": {
+        "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526436133/msft-20260930.htm",
+        "title": "Microsoft September2026 Form 10-Q",
+        "date": "accessed 2026-11-05"
+      },
+      "E15": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1018724/000101872426000040/amzn-20260930.htm",
+        "title": "Amazon September2026 Form 10-Q",
+        "date": "accessed 2026-11-05"
+      },
+      "E16": {
+        "url": "https://www.zj-innolight.com/en/",
+        "title": "Zhongji InnoLight issuer homepage and listings",
+        "date": "accessed 2026-11-05"
+      },
+      "E17": {
+        "url": "https://www.zj-innolight.com/en/about.html",
+        "title": "Zhongji InnoLight issuer history: 2026 Hong Kong listing",
+        "date": "accessed 2026-11-05"
+      },
+      "E18": {
+        "url": "https://www.sec.gov/Archives/edgar/data/24741/000002474126000253/glw-20260728xex99xq22026.htm",
+        "title": "Corning Q2 FY2026 release filed with SEC",
+        "date": "2026-07-28"
+      },
+      "E19": {
+        "url": "https://www.quantatw.com/quanta/english/investment/services_sq.aspx",
+        "title": "Quanta investor stock-code confirmation",
+        "date": "accessed 2026-11-05"
+      },
+      "E20": {
+        "url": "https://www.quantatw.com/Quanta/english/product/qci_all.aspx",
+        "title": "Quanta products and business scope",
+        "date": "accessed 2026-11-05"
+      },
+      "E21": {
+        "url": "https://www.wiwynn.com/about-wiwynn/company-info",
+        "title": "Wiwynn company profile",
+        "date": "accessed 2026-11-05"
+      },
+      "E22": {
+        "url": "https://www.wiwynn.com/news/page/2",
+        "title": "Wiwynn June2026 issuer news with TWSE6669",
+        "date": "2026-06-04"
+      },
+      "E23": {
+        "url": "https://corporate.celestica.com/",
+        "title": "Celestica investor relations: NYSE and TSX listings",
+        "date": "accessed 2026-11-05"
+      },
+      "E24": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1030894/000103089426000050/cls-20260930.htm",
+        "title": "Celestica September2026 Form 10-Q",
+        "date": "accessed 2026-11-05"
+      },
+      "E25": {
+        "url": "https://www.wistron.com/en/AboutWistron/CompanyProfile",
+        "title": "Wistron company profile and listing",
+        "date": "accessed 2026-11-05"
+      },
+      "E26": {
+        "url": "https://www.inventec.com/en/investor",
+        "title": "Inventec investor relations and stock code",
+        "date": "accessed 2026-11-05"
+      },
+      "E27": {
+        "url": "https://www.inventec.com/en/products",
+        "title": "Inventec enterprise and cloud products",
+        "date": "accessed 2026-11-05"
+      },
+      "E28": {
+        "url": "https://investor.wdc.com/node/27841",
+        "title": "WD HDD strategy and Nasdaq WDC confirmation",
+        "date": "2026-02-03"
+      },
+      "E29": {
+        "url": "https://investor.sandisk.com/news-releases/news-release-details/sandisk-celebrates-nasdaq-listing-after-completing-separation",
+        "title": "Sandisk separate listing after separation from Western Digital",
+        "date": "2025-02-24"
+      },
+      "E30": {
+        "url": "https://www.sec.gov/Archives/edgar/data/820313/000110465926013549/aph-20251231x10k.htm",
+        "title": "Amphenol FY2025 Form 10-K",
+        "date": "accessed 2026-11-05"
+      },
+      "E31": {
+        "url": "https://investor.lumentum.com/financial-news-releases/news-details/2026/Lumentum-Announces-Fourth-Quarter-and-Full-Fiscal-Year-2026-Results/default.aspx",
+        "title": "Lumentum FY2026 earnings release and GAAP debt-charge footnote",
+        "date": "2026-08-11"
+      },
+      "E32": {
+        "url": "https://ir.coherent.com/news-releases/news-release-details/coherent-corp-reports-fourth-quarter-and-full-year-fiscal-2026",
+        "title": "Coherent FY2026 earnings release",
+        "date": "2026-08-12"
+      },
+      "E33": {
+        "url": "https://ir.asteralabs.com/news-releases/news-release-details/astera-labs-reports-fourth-quarter-and-full-year-2025-financial",
+        "title": "Astera Labs FY2025 earnings release",
+        "date": "2026-02-10"
+      }
+    },
+    "P": {
+      "P01": {
+        "url": "https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html",
+        "title": "NVIDIA DGX GB200 hardware guide",
+        "date": "2026-09-17 (last update)"
+      },
+      "P02": {
+        "url": "https://blogs.nvidia.com/blog/ocp-global-summit-vera-rubin-scale-ai-factories/",
+        "title": "NVIDIA OCP 2026 MGX architecture announcement",
+        "date": "2026-10-12"
+      },
+      "P03": {
+        "url": "https://www.nvidia.com/en-us/on-demand/session/gtc25-s72484/",
+        "title": "NVIDIA GTC 2025 keynote",
+        "date": "2025-03-18"
+      },
+      "P04": {
+        "url": "https://developer.nvidia.com/blog/nvidia-vera-rubin-pod-seven-chips-five-rack-scale-systems-one-ai-supercomputer",
+        "title": "NVIDIA Vera Rubin POD technical architecture",
+        "date": "2026-03-16"
+      },
+      "P05": {
+        "url": "https://blog.se.com/datacenter/2025/10/23/liquid-cooling-lessons-from-hpc-to-ai-factories-how-to-enable-next-gen-ai-data-centers/",
+        "title": "Schneider Electric liquid-cooling engineering discussion",
+        "date": "2025-10-23"
+      },
+      "P06": {
+        "url": "https://www.ferc.gov/news-events/news/ferc-launches-aggressive-targeted-action-speed-large-load-integration",
+        "title": "FERC action on large-load integration",
+        "date": "2026-06-18"
+      },
+      "P07": {
+        "url": "https://investor.vistracorp.com/2026-01-09-Vistra-and-Meta-Announce-Agreements-to-Support-Nuclear-Plants-in-PJM-and-Add-New-Nuclear-Generation-to-the-Grid",
+        "title": "Vistra and Meta nuclear agreements",
+        "date": "2026-01-09"
+      },
+      "P08": {
+        "url": "https://investors.constellationenergy.com/news-releases/news-release-details/constellation-meta-sign-20-year-deal-clean-reliable-nuclear",
+        "title": "Constellation and Meta Clinton agreement",
+        "date": "2025-06-03"
+      },
+      "P09": {
+        "url": "https://www.sec.gov/Archives/edgar/data/1868275/000186827526000032/ceg-20251231.htm",
+        "title": "Constellation FY2025 Form 10-K",
+        "date": "2026-02-24"
+      },
+      "P10": {
+        "url": "https://www.eaton.com/content/dam/eaton/company/investor-relations/quarterly-earnings/filings/2025/q4/4Q-2025-financials-only.pdf",
+        "title": "Eaton FY2025 financial tables",
+        "date": "accessed 2026-11-05"
+      },
+      "P11": {
+        "url": "https://www.se.com/ww/en/assets/564/document/528237/release-fy-results-2025.pdf",
+        "title": "Schneider Electric FY2025 results",
+        "date": "2026-02-26"
+      },
+      "P12": {
+        "url": "https://www.gevernova.com/sites/default/files/gev_webcast_pressrelease_01282026.pdf",
+        "title": "GE Vernova FY2025 earnings financial statements",
+        "date": "2026-01-28"
+      },
+      "P13": {
+        "url": "https://investor.vistracorp.com/2026-02-26-Vistra-Reports-Fourth-Quarter-and-Full-Year-2025-Results",
+        "title": "Vistra FY2025 results",
+        "date": "2026-02-26"
+      },
+      "P14": {
+        "url": "https://assets.siemens-energy.com/dam/b17980ef-1d11-4d4a-8c24-b394012dd9f4/2025-11-13_Earnings-Release-Q4-FY25-pdf_Original%20file.pdf",
+        "title": "Siemens Energy FY2025 earnings release",
+        "date": "2025-11-13"
+      },
+      "P15": {
+        "url": "https://www.ecolab.com/en-us/media-center/news/ecolab-closes-coolit-acquisition-and-expands-ai-cooling-platform",
+        "title": "Ecolab closes CoolIT acquisition",
+        "date": "2026-07-02"
+      },
+      "P16": {
+        "url": "https://investors.nvent.com/press-releases/press-release-details/2025/nVent-Unveils-New-Liquid-Cooling-and-Power-Portfolio-at-SC25/default.aspx",
+        "title": "nVent liquid-cooling and power portfolio",
+        "date": "2025-11-17"
+      },
+      "P17": {
+        "url": "https://www.sec.gov/Archives/edgar/data/18230/000001823026000008/cat-20251231.htm",
+        "title": "Caterpillar FY2025 Form 10-K",
+        "date": "2026-02 (filing month)"
+      },
+      "P18": {
+        "url": "https://investor.cummins.com/news/detail/702/cummins-selected-to-supply-battery-energy-storage-systems",
+        "title": "Cummins data-center battery-storage award",
+        "date": "2026-08-18"
+      },
+      "P19": {
+        "url": "https://www.se.com/ww/en/about-us/investor-relations/share-information/share-price/",
+        "title": "Schneider Electric share information",
+        "date": "accessed 2026-11-05"
+      },
+      "P20": {
+        "url": "https://live.deutsche-boerse.com/equity/siemens-energy-ag/company-details",
+        "title": "Deutsche Börse Siemens Energy listing",
+        "date": "accessed 2026-11-05"
+      },
+      "P21": {
+        "url": "https://www.siemensenergy.com/global/en/home/investor-relations.html",
+        "title": "Siemens Energy current IR calendar and portfolio updates",
+        "date": "accessed 2026-11-05"
+      },
+      "P22": {
+        "url": "https://www.eaton.com/sg/en-us/company/news-insights/news-releases/2026/eaton-completes-acquisition-of-leading-liquid-cooling-solutions-provider-boyd-thermal.html",
+        "title": "Eaton completes Boyd Thermal acquisition",
+        "date": "2026-03-12"
+      },
+      "P23": {
+        "url": "https://investor.ptc.com/resources/news/news-details/2026/Schneider-Electric-to-acquire-PTC-creating-the-next-level-of-Energy-and-Industrial-Intelligence/default.aspx",
+        "title": "Schneider Electric definitive agreement to acquire PTC",
+        "date": "2026-10-05"
+      },
+      "P24": {
+        "url": "https://www.gevernova.com/news/press-releases/ge-vernova-acquire-trench-group",
+        "title": "GE Vernova definitive agreement to acquire Trench",
+        "date": "2026-10-28"
+      }
+    }
+  }
+}
