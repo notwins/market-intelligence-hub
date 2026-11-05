@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261105T080000Z",
+  "as_of": "2026-11-05T08:00:00Z",
+  "edition_sha256": "0dd14afff3b8abf8172dc9025da73078c45595f7224004c8df3c2f1d67881693",
+  "reviewed_at": "2026-11-05T08:03:43.465950+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "Microsoft: optional Nscale expansion reportedly declined",
+      "item_sha256": "b8b03b7cb4a2092d6ab04d2e79e1ad22d1ffab1168870172f937c10a07f03572",
+      "scope": "company",
+      "reason": "Reviewed public Reuters/FT reporting and source dates; optional added capacity distinguished from existing contract, unnamed-source attribution and lack of issuer confirmation preserved. Short paraphrase within source limits. No private content or user call."
+    }
+  ]
+}

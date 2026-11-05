@@ -743,6 +743,17 @@
           "item_sha256": "b01485f0745a1a1ddc0b3ef03d6ddf0a0af4bebdd4121c29e4523ca0b016da81"
         }
       ]
+    },
+    "watchlist-20261105T080000Z": {
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "Microsoft: optional Nscale expansion reportedly declined",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Microsoft: optional Nscale expansion reportedly declined\",[\"Reuters (05 Nov, 05:11:41 UTC), citing the Financial Times and unnamed sources, reported Microsoft declined optional additional Texas computing capacity from Nscale.\",\"The FT distinguishes this from cancelling the existing contract; both companies declined comment.\"],\"Selective expansion is one interpretation; weaker Azure demand is not established.\",\"Unconfirmed by the companies.\",\"Issuer clarification and future capacity or spending guidance.\",[[\"Reuters · 05 Nov 2026, 05:11:41 UTC · cites FT\",\"https://www.reuters.com/technology/microsoft-rejects-multibillion-dollar-ai-deal-with-uks-nscale-ft-reports-2026-11-05/\"],[\"Financial Times · 05 Nov 2026, 05:00:16 UTC\",\"https://www.ft.com/content/668e6ef8-88a1-4bef-8664-8f495baf09f8\"]]]",
+          "item_sha256": "b8b03b7cb4a2092d6ab04d2e79e1ad22d1ffab1168870172f937c10a07f03572"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -817,6 +828,12 @@
       "reviewed_at": "2026-11-05T04:06:05.612469+00:00",
       "edition_sha256": "965d8301702755a47d7d7670e4ad6be31d833d88b9fa4fce8a0900016984c8ba",
       "path": "data/watchlist/reviews/watchlist-20261105T040000Z.json"
+    },
+    "watchlist-20261105T080000Z": {
+      "as_of": "2026-11-05T08:00:00Z",
+      "reviewed_at": "2026-11-05T08:03:43.465950+00:00",
+      "edition_sha256": "0dd14afff3b8abf8172dc9025da73078c45595f7224004c8df3c2f1d67881693",
+      "path": "data/watchlist/reviews/watchlist-20261105T080000Z.json"
     }
   }
 }
