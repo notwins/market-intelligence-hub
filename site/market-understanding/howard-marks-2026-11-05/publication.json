@@ -8,5 +8,30 @@
   "charts": 4,
   "sources": "17 linked primary sources in the report; Oaktree memos linked rather than reproduced.",
   "html_text_and_layout_sha256": "fb20b356f179c02830e4488ed01f442a0c8fcd9e3de7a2bf0057d643b6402749",
-  "chart_format": "Inline SVG generated from the cited numerical tables; no image files or embedded bitmap data."
+  "chart_format": "Inline SVG generated from the cited numerical tables; no image files or embedded bitmap data.",
+  "presentations": {
+    "published_date": "2026-11-05",
+    "description": "Independent summary and analysis of Howard Marks’s public memos; not an Oaktree publication or endorsement.",
+    "audit": "All ten slides and speaker notes reviewed. Public primary-source figures checked; original editable charts and diagrams; no publisher report images, private records or personal financial data.",
+    "files": [
+      {
+        "title": "Financial briefing",
+        "path": "presentations/Howard_Marks_Financial_Briefing_5_Slides.pptx",
+        "bytes": 55398,
+        "sha256": "147e8d3a38a63d6f20186dc76234bee792fc044ce18fc73261939eeb1b0aee0a",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 2
+      },
+      {
+        "title": "Clear visual story",
+        "path": "presentations/Howard_Marks_Clear_Visual_Story_5_Slides.pptx",
+        "bytes": 57848,
+        "sha256": "c493653822df1f65cfd1f80c49dbb943f9daa03cedfa005c2242adf3f31e0aeb",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 3
+      }
+    ]
+  }
 }
