@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-05T12:12:57.296976+00:00",
-  "message": "05 Nov 20:00 SGT fixed-cutoff watchlist edition published by this scheduled execution. Exact-commit Pages deployment, live edition ID, report hash and research mappings verified. All 12 saved closes and 72 adjusted baselines freshly checked; five company items include a clarification and newly filed prior-day event. Source coverage is partial. This verifies this execution, not future runs or separate-chat delivery.",
+  "checked_at": "2026-11-05T16:14:41.846183+00:00",
+  "message": "06 Nov 00:00 SGT fixed-cutoff watchlist edition published by this scheduled execution. Exact-commit Pages deployment, live edition ID, report hash and research mappings verified after retrying a transient Pages HTTP 500. All 12 saved completed-session closes and 72 adjusted baselines freshly checked; five company items. News coverage is partial. This verifies this execution, not future runs or separate-chat delivery.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,12 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "056f5b7ff9a70f148edd8110dc50d018bfa63f22",
-    "pages_run_id": 42025030428,
-    "edition_id": "watchlist-20261105T120000Z",
-    "report_sha256": "780a8d39a66483b6af140f78193b58798bb154087c2fad45b5b5b1f2f8f3631c",
-    "verified_at": "2026-11-05T12:12:57.296976+00:00",
-    "scheduled_for": "2026-11-05T12:00:00Z",
+    "commit": "423c74383c6543d14cc6c0e6bf8421a749b38e77",
+    "pages_run_id": 42062070962,
+    "edition_id": "watchlist-20261105T160000Z",
+    "report_sha256": "fb5133ff5a7aa122b7451e8891d1e8e52fd54055c3f21c68354988b3b1e36ef0",
+    "verified_at": "2026-11-05T16:14:41.846183+00:00",
+    "scheduled_for": "2026-11-05T16:00:00Z",
     "execution_kind": "scheduled_run_cloud"
   },
   "separate_A_chat_delivery_verified": false,
@@ -83,6 +83,18 @@
       "verified_at": "2026-11-05T08:10:11.385156+00:00",
       "scheduled_for": "2026-11-05T08:00:00Z",
       "execution_kind": "scheduled_run_cloud"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "056f5b7ff9a70f148edd8110dc50d018bfa63f22",
+      "pages_run_id": 42025030428,
+      "edition_id": "watchlist-20261105T120000Z",
+      "report_sha256": "780a8d39a66483b6af140f78193b58798bb154087c2fad45b5b5b1f2f8f3631c",
+      "verified_at": "2026-11-05T12:12:57.296976+00:00",
+      "scheduled_for": "2026-11-05T12:00:00Z",
+      "execution_kind": "scheduled_run_cloud"
     }
   ],
   "recovered_attempts": [
@@ -109,6 +121,13 @@
       "publication_commit": "f40ec17ab29e2a982feff41ce0af3f8ef294974c",
       "recovery_pages_run_id": 41945949975,
       "public_report_verified_at": "2026-11-05T01:05:44.334605+00:00"
+    },
+    {
+      "edition_id": "watchlist-20261105T160000Z",
+      "publication_commit": "423c74383c6543d14cc6c0e6bf8421a749b38e77",
+      "pages_run_id": 42062070962,
+      "reason": "Initial Pages deployment creation returned HTTP 500; build passed. Failed-job rerun succeeded; live content verified.",
+      "public_report_verified_at": "2026-11-05T16:14:41.846183+00:00"
     }
   ],
   "coverage": {
