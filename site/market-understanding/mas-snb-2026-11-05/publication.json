@@ -1,0 +1,262 @@
+{
+  "title": "MAS and SNB: monetary policy, inflation and CHF/SGD",
+  "as_of": "2026-11-05",
+  "edition": "Independent official-source factual research and public presentations",
+  "html_sha256": "f34f4127264c1ca0d2e84f1e3450fea87043bd91d07b0c203b66ab46ba1d6871",
+  "html_sha256_before_download_panel": "353f27cd8d3bdc8b59da752d72db5004d4fe183fb637bc32015c9e356b2045ca",
+  "report_sections": 26,
+  "svg_visuals": 10,
+  "tables": 28,
+  "official_references": 37,
+  "files": [
+    {
+      "title": "Financial briefing",
+      "path": "presentations/CHF_SGD_Financial_Briefing_5_Slides.pptx",
+      "bytes": 49209,
+      "sha256": "ab7d5e4926e8bbf0031f5d9c55eb33684de0a1e60df54ccca8ea1c8e112b6897",
+      "slides": 5,
+      "speaker_notes": 5,
+      "native_charts": 2
+    },
+    {
+      "title": "Clear visual story",
+      "path": "presentations/CHF_SGD_Clear_Visual_Story_5_Slides.pptx",
+      "bytes": 51115,
+      "sha256": "d4ff5746675cfac463848b19eb0a9efc77a95bb114a71d08b673b89cfa747f89",
+      "slides": 5,
+      "speaker_notes": 5,
+      "native_charts": 3
+    }
+  ],
+  "source_dates": [
+    {
+      "id": "S01",
+      "name": "MAS Monetary Policy Statement - October 2026",
+      "date": "14 Oct 2026",
+      "url": "https://www.mas.gov.sg/news/monetary-policy-statements/2026/mas-monetary-policy-statement-14oct26"
+    },
+    {
+      "id": "S02",
+      "name": "MAS Macroeconomic Review, Volume XXV Issue 4",
+      "date": "14 Oct 2026; information cutoff 13 Oct",
+      "url": "https://www.mas.gov.sg/-/media/mas-media-library/publications/macroeconomic-review/2026/oct/mroct26.pdf"
+    },
+    {
+      "id": "S03",
+      "name": "MAS Monetary Policy Statement - January 2026",
+      "date": "29 Jan 2026",
+      "url": "https://www.mas.gov.sg/news/monetary-policy-statements/2026/mas-monetary-policy-statement-29jan26"
+    },
+    {
+      "id": "S04",
+      "name": "MAS Monetary Policy Statement - April 2026",
+      "date": "14 Apr 2026",
+      "url": "https://www.mas.gov.sg/news/monetary-policy-statements/2026/mas-monetary-policy-statement-14apr26"
+    },
+    {
+      "id": "S05",
+      "name": "MAS Monetary Policy Statement - July 2026",
+      "date": "27 Jul 2026",
+      "url": "https://www.mas.gov.sg/news/monetary-policy-statements/2026/mas-monetary-policy-statement-27jul26"
+    },
+    {
+      "id": "S06",
+      "name": "MAS framework FAQ 1: objective and inflation",
+      "date": "Accessed 5 Nov 2026",
+      "url": "https://www.mas.gov.sg/monetary-policy/singapores-monetary-policy-framework/faqs/section-1"
+    },
+    {
+      "id": "S07",
+      "name": "MAS framework FAQ 2: exchange-rate rationale",
+      "date": "Accessed 5 Nov 2026",
+      "url": "https://www.mas.gov.sg/monetary-policy/singapores-monetary-policy-framework/faqs/section-2"
+    },
+    {
+      "id": "S08",
+      "name": "MAS framework FAQ 3: formulation and policy lags",
+      "date": "Accessed 5 Nov 2026",
+      "url": "https://www.mas.gov.sg/monetary-policy/singapores-monetary-policy-framework/faqs/section-3"
+    },
+    {
+      "id": "S09",
+      "name": "MAS framework FAQ 4: implementation and disclosure",
+      "date": "Accessed 5 Nov 2026",
+      "url": "https://www.mas.gov.sg/monetary-policy/singapores-monetary-policy-framework/faqs/section-4"
+    },
+    {
+      "id": "S10",
+      "name": "Singapore consumer prices - June 2026",
+      "date": "23 Jul 2026",
+      "url": "https://www.meti.gov.sg/newsroom/consumer-price-deveiopments-in-june-2026/"
+    },
+    {
+      "id": "S11",
+      "name": "Singapore consumer prices - August 2026",
+      "date": "23 Sep 2026",
+      "url": "https://www.meti.gov.sg/newsroom/consumer-price-developments-in-august-2026-/"
+    },
+    {
+      "id": "S12",
+      "name": "Singapore consumer prices - September 2026",
+      "date": "23 Oct 2026",
+      "url": "https://www.mas.gov.sg/-/media/mas-media-library/news/consumer-price-developments/2026/consumer-price-developments-in-september-2026.pdf"
+    },
+    {
+      "id": "S13",
+      "name": "SingStat CPI release and technical note - September",
+      "date": "23 Oct 2026",
+      "url": "https://www.singstat.gov.sg/files/04256a5a-daa1-4db5-b500-dc6c0d5cfef8.pdf"
+    },
+    {
+      "id": "S14",
+      "name": "MOM Labour Market Report 1Q 2026",
+      "date": "15 Jun 2026",
+      "url": "https://www.mom.gov.sg/newsroom/press-releases/2026/0615-lmr-1q-2026"
+    },
+    {
+      "id": "S15",
+      "name": "MOM Labour Market Report 2Q 2026",
+      "date": "21 Sep 2026",
+      "url": "https://www.mom.gov.sg/newsroom/press-releases/2026/0921-labour-market-report---second-quarter-2026"
+    },
+    {
+      "id": "S16",
+      "name": "MOM Labour Market Advance Release 3Q 2026",
+      "date": "30 Oct 2026",
+      "url": "https://www.mom.gov.sg/newsroom/press-releases/2026/1030-labour-market-advance-release-3q-2026"
+    },
+    {
+      "id": "S17",
+      "name": "MOM monthly unemployment: explanatory notes",
+      "date": "9 Oct 2026; August observations",
+      "url": "https://stats.mom.gov.sg/iMAS_PdfLibrary/End-Monthly-Unemployment-Situation-August-2026.pdf"
+    },
+    {
+      "id": "S18",
+      "name": "SNB monetary policy assessment - September",
+      "date": "24 Sep 2026",
+      "url": "https://www.snb.ch/en/publications/communication/press-releases-restricted/pre_20260924"
+    },
+    {
+      "id": "S19",
+      "name": "SNB monetary policy assessment - June",
+      "date": "18 Jun 2026",
+      "url": "https://www.snb.ch/en/publications/communication/press-releases-restricted/pre_20260618"
+    },
+    {
+      "id": "S20",
+      "name": "SNB monetary policy assessment - March",
+      "date": "19 Mar 2026",
+      "url": "https://www.snb.ch/en/publications/communication/press-releases-restricted/pre_20260319"
+    },
+    {
+      "id": "S21",
+      "name": "SNB monetary policy assessment - December 2025",
+      "date": "11 Dec 2025",
+      "url": "https://www.snb.ch/en/publications/communication/press-releases-restricted/pre_20251211"
+    },
+    {
+      "id": "S22",
+      "name": "SNB Quarterly Bulletin 3/2026",
+      "date": "30 Sep 2026; information cutoff 24 Sep",
+      "url": "https://www.snb.ch/public/asset/en/www-snb-ch/publications/quarterly-bulletin/2026/quartbul_2026_3_komplett/publications0_en/quartbul_2026_3_komplett.en.pdf"
+    },
+    {
+      "id": "S23",
+      "name": "SNB September assessment: summary of discussion",
+      "date": "Published 22 Oct 2026; meeting 22-23 Sep",
+      "url": "https://www.snb.ch/en/publications/communication/summaries/zus_20261022"
+    },
+    {
+      "id": "S24",
+      "name": "FSO Swiss Consumer Price Index - October 2026",
+      "date": "3 Nov 2026",
+      "url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36894291/master"
+    },
+    {
+      "id": "S25",
+      "name": "FSO Swiss Consumer Price Index - September 2026",
+      "date": "1 Oct 2026",
+      "url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36870831/master"
+    },
+    {
+      "id": "S26",
+      "name": "FSO Swiss Labour Force Survey - Q1 2026",
+      "date": "18 May 2026",
+      "url": "https://statistik.admin.ch/en/asset/36516722"
+    },
+    {
+      "id": "S27",
+      "name": "FSO Swiss Labour Force Survey - Q2 2026",
+      "date": "18 Aug 2026",
+      "url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36698034/master"
+    },
+    {
+      "id": "S28",
+      "name": "SECO: Die Lage auf dem Arbeitsmarkt Oktober 2026",
+      "date": "5 Nov 2026",
+      "url": "https://www.admin.ch/de/newnsb/UuA5YIwSJ2xh"
+    },
+    {
+      "id": "S29",
+      "name": "SNB monetary policy strategy",
+      "date": "Accessed 5 Nov 2026",
+      "url": "https://www.snb.ch/en/the-snb/mandates-goals/monetary-policy/strategy"
+    },
+    {
+      "id": "S30",
+      "name": "SNB: price stability with a safe-haven currency",
+      "date": "22 Nov 2024",
+      "url": "https://www.snb.ch/en/publications/communication/speeches/2024/ref_20241122_msl"
+    },
+    {
+      "id": "S31",
+      "name": "SECO GDP in the second quarter of 2026",
+      "date": "3 Sep 2026",
+      "url": "https://www.bak.admin.ch/en/newnsb/xrrzuLVT1pbC"
+    },
+    {
+      "id": "S43",
+      "name": "Singapore GDP advance estimates - Q3 2026",
+      "date": "14 Oct 2026",
+      "url": "https://www.meti.gov.sg/newsroom/singapore-s-gdp-grew-by-5-4-per-cent-in-the-third-quarter-of-2026/"
+    },
+    {
+      "id": "S44",
+      "name": "MOM Q2 full report: vacancy adjustment",
+      "date": "21 Sep 2026",
+      "url": "https://stats.mom.gov.sg/iMAS_PdfLibrary/mrsd-Labour-Market-Report-2Q-2026.pdf"
+    },
+    {
+      "id": "S45",
+      "name": "MOM employment summary table",
+      "date": "30 Oct 2026",
+      "url": "https://stats.mom.gov.sg/Pages/employment-Summary-Table.aspx?PageVersion=105472"
+    },
+    {
+      "id": "S46",
+      "name": "SNB introductory remarks - September assessment",
+      "date": "24 Sep 2026",
+      "url": "https://www.snb.ch/en/publications/communication/speeches-restricted/ref_20260924_mslanmargpe"
+    },
+    {
+      "id": "S47",
+      "name": "SNB chronicle of monetary events",
+      "date": "Accessed 5 Nov 2026",
+      "url": "https://www.snb.ch/en/the-snb/organisation/history/geld-und-waehrungspolitische-chronik"
+    },
+    {
+      "id": "S48",
+      "name": "SNB policy assessment - June 2025",
+      "date": "19 Jun 2025",
+      "url": "https://www.snb.ch/en/publications/communication/press-releases-restricted/pre_20250619_2"
+    }
+  ],
+  "limitations": [
+    "Dated evidence through 5 November 2026; observation and publication dates differ and are specified in the report.",
+    "No live or historical bilateral CHF/SGD market-price data; scenarios are conditional mechanisms, not forecasts or investment advice.",
+    "Independent factual analysis and paraphrases, with official source links. No official endorsement or blanket MAS/SNB commercial licence is claimed.",
+    "Private records, screenshots and proprietary third-party market-price series are excluded.",
+    "OOXML packages and slide renders were audited; native Microsoft PowerPoint application execution was not available."
+  ]
+}

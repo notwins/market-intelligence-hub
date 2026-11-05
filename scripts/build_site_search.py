@@ -141,7 +141,7 @@ def build():
    if not self.skip:self.out.append(d)
  # Catalogues all public HTML pages, excludes code and transient UI preferences.
  for file in sorted(ROOT.rglob('*.html')):
-  if file.name in ['search.html','tag-map.html','index.html','v1.html','v3.html','v3-backup.html','v3-settings-preview.html','saved-securities.html'] and file.relative_to(ROOT).as_posix() not in ['market-understanding/ai-tech-2026-11-05/index.html','market-understanding/ai-data-centres-2026-11-05/index.html','market-understanding/structured-investment-hypothetical/index.html','market-understanding/spx-floor-cap-2026-11-05/index.html','research/nvda-2026-11-05/index.html','research/tsm-2026-11-05/index.html']:continue
+  if file.name in ['search.html','tag-map.html','index.html','v1.html','v3.html','v3-backup.html','v3-settings-preview.html','saved-securities.html'] and file.relative_to(ROOT).as_posix() not in ['market-understanding/mas-snb-2026-11-05/index.html','market-understanding/ai-tech-2026-11-05/index.html','market-understanding/ai-data-centres-2026-11-05/index.html','market-understanding/structured-investment-hypothetical/index.html','market-understanding/spx-floor-cap-2026-11-05/index.html','research/nvda-2026-11-05/index.html','research/tsm-2026-11-05/index.html']:continue
   p=Text();p.feed(file.read_text());title=re.search(r'<title>(.*?)</title>',file.read_text(),re.S)
   add('Page',re.sub('<[^>]+>','',title.group(1)) if title else file.stem,' '.join(p.out),file.relative_to(ROOT).as_posix(),None,None,'Public page text; JavaScript-only content indexed separately where supported')
  taxonomy_html=(ROOT/'tag-map.html').read_text()
