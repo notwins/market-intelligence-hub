@@ -1,0 +1,29 @@
+{
+  "title": "Structured investments",
+  "as_of": "2026-11-05",
+  "edition": "audited public teaching summaries",
+  "description": "Independently invented teaching examples. No live quotes or real trades. These summaries do not specify an investable product.",
+  "source_page_sha256_before_download_section": "0dced431c3fb4d19ca526f92a3fc335c7ae4701d6f85e3d823ab51841980bd0a",
+  "files": [
+    {
+      "title": "Financial briefing",
+      "path": "presentations/Structured_Investments_Financial_Briefing_Public.pptx",
+      "bytes": 39510,
+      "sha256": "da3776e793140b54b52b9452b2014ff02f03ecd7618d5113656faeefacbb4125",
+      "slides": 5,
+      "speaker_notes": 5,
+      "native_charts": 0,
+      "native_tables": 4
+    },
+    {
+      "title": "Clear visual story",
+      "path": "presentations/Structured_Investments_Clear_Visual_Story_Public.pptx",
+      "bytes": 39874,
+      "sha256": "a9821c955c1d3463116f4af8a4deaf8f573c28689080b354276f951bbf2c220b",
+      "slides": 5,
+      "speaker_notes": 5,
+      "native_charts": 0,
+      "native_tables": 1
+    }
+  ]
+}

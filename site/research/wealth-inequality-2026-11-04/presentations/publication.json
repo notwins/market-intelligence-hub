@@ -1,0 +1,30 @@
+{
+  "title": "Wealth, portfolios and borrowing",
+  "as_of": "2026-11-05",
+  "edition": "audited public teaching summaries",
+  "description": "Summaries of the public wealth and Sharpe research. Historical ownership figures and invented teaching examples are labelled separately. Observed wealth patterns do not establish that borrowing causes wealth.",
+  "source_page_sha256_before_download_section": "b0024a0b440ea4910333f3b16a83b70fccfe5d59b075a3ecf46384c8c4082c58",
+  "files": [
+    {
+      "title": "Financial briefing",
+      "path": "presentations/Wealth_Inequality_Financial_Briefing_Public.pptx",
+      "bytes": 41554,
+      "sha256": "4b0e279ec0ab0b94f5c474a0b91aef2d8f94346f3c408da1e2bae0f5cd3b623e",
+      "slides": 5,
+      "speaker_notes": 5,
+      "native_charts": 1,
+      "native_tables": 4
+    },
+    {
+      "title": "Clear visual story",
+      "path": "presentations/Wealth_Inequality_Clear_Visual_Story_Public.pptx",
+      "bytes": 50327,
+      "sha256": "779d94e7234eb8e95c75cb7bd836cbc77d80d2cca5b955dfaad63ce83e88d911",
+      "slides": 5,
+      "speaker_notes": 5,
+      "native_charts": 4,
+      "native_tables": 1
+    }
+  ],
+  "sharpe_sha256_before_download_link": "f13bb30c5390a01d715e799af59d31a79aa2425859dd6b3ba0da78ef0db44232"
+}

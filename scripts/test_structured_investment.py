@@ -17,12 +17,12 @@ class StructuredInvestment(unittest.TestCase):
   out=subprocess.check_output(['node',str(ROOT/'scripts/test_structured_investment.cjs')],text=True)
   self.assertIn('checks passed',out)
  def test_public_files_contain_no_source_payload_or_transmission(self):
-  self.assertEqual({p.name for p in PAGE.iterdir()},{'index.html','app.js','model.js','style.css'})
-  combined='\n'.join(p.read_text()for p in PAGE.iterdir())
+  self.assertEqual({p.name for p in PAGE.iterdir()},{'index.html','app.js','model.js','style.css','presentations'})
+  combined='\n'.join(p.read_text()for p in PAGE.iterdir() if p.is_file())
   self.assertNotRegex(combined,r'FinIQ|IMG_609|Winston|source_excel_row|PHOTO_ONLY|libfile_|/workspace/|chatgpt\.com/c/|primary_image|corroborating_image')
   self.assertNotRegex(combined,r'\b(?:fetch|XMLHttpRequest|WebSocket|sendBeacon|localStorage|sessionStorage)\b')
   self.assertIn("connect-src 'none'",combined)
-  self.assertLess(sum(p.stat().st_size for p in PAGE.iterdir()),50000)
+  self.assertLess(sum(p.stat().st_size for p in PAGE.iterdir() if p.is_file()),50000)
  def test_disclosures_assets_and_responsive_layout(self):
   text=(PAGE/'index.html').read_text();p=Parser(text)
   self.assertEqual(len(p.ids),len(set(p.ids)))
