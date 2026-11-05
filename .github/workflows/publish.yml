@@ -42,6 +42,7 @@ jobs:
           node scripts/test_v4.cjs
           node scripts/test_ust_table.cjs
           node scripts/test_chart_controls.cjs
+          node scripts/test_ust_chart_layout.cjs
           node scripts/test_scheduled_reports.cjs
           node scripts/test_policy_report_visuals.cjs
           node scripts/test_news_reading.cjs
@@ -86,6 +87,7 @@ jobs:
           node scripts/test_v4.cjs
           node scripts/test_ust_table.cjs
           node scripts/test_chart_controls.cjs
+          node scripts/test_ust_chart_layout.cjs
           node scripts/test_scheduled_reports.cjs
           node scripts/test_policy_report_visuals.cjs
           node scripts/test_news_reading.cjs
