@@ -1,23 +1,25 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261105T000000Z",
-  "as_of": "2026-11-05T08:00:00+08:00",
-  "generated_at": "2026-11-05T00:08:29.195086+00:00",
-  "title": "12-name watchlist · 05 Nov 2026 (Thu) · 08:00 SGT",
+  "id": "watchlist-20261105T040000Z",
+  "as_of": "2026-11-05T04:00:00Z",
+  "generated_at": "2026-11-05T04:05:38.804881+00:00",
+  "title": "12-name watchlist - 05 Nov 2026 (Thu) - 12:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-05T00:08:29.195086+00:00",
+    "sources_checked_at": "2026-11-05T04:05:38.804881+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "Meta: €9bn euro-bond pricing confirmed. Microsoft: $25bn note issuance documented. Alphabet: €6bn offering terms filed, with delivery expected 5 Nov. Apple: Reuters reports tighter employee AI budgets, citing Bloomberg. All 12 prices now use the 4 Nov completed session; six return horizons have been recalculated.",
-  "coverage_note": "Update window: 05 Nov 04:00–08:00 SGT, with a 15-minute overlap against the last successful edition. Four substantive additions; earlier stories remain in their dated archives. SEC feeds were checked for all 12 companies. Reuters syndication and issuer coverage are partial, with specific access gaps in the source details.",
-  "price_basis": "USD saved regular-session observations for 4 Nov 2026, around 16:00 EST / 05 Nov 05:00 SGT. Each row preserves Yahoo’s exact recorded timestamp, including Berkshire at 16:01:26 EST. Daily change uses the 3 Nov ordinary close. These are dated vendor observations, not live prices. TSM is the US-listed USD ADR.",
-  "return_basis": "Six cumulative 1–6 month returns use Yahoo adjusted closes, adjusted for splits and dividend/capital-gain distributions. Formula: (endpoint adjusted close ÷ baseline adjusted close − 1) × 100. Endpoints and baselines are rounded to cents before calculation; percentages are rounded to two decimals. Baseline sessions: 2 Oct, 4 Sep, 4 Aug, 2 Jul, 4 Jun and 4 May 2026, using the last available trading session on or before each monthly anniversary. Returns are not annualised and exclude investor fees, tax and FX.",
+  "summary": "All 12 completed-session prices and 72 adjusted-close baselines were freshly checked. One new shared market-context report is included; no new company-specific item was verified within the review window. All names remain Watch only.",
+  "coverage_note": "Review window: 04 Nov 23:45 UTC through 05 Nov 04:00 UTC (05 Nov 07:45-12:00 SGT), including a 15-minute overlap with the prior cutoff. SEC recent-submission acceptance times were checked for all 12 issuers. Reuters and issuer coverage is partial. The single shared item is stored under NVDA and reviewed as market_context; it is not NVIDIA-specific company news. Prior company stories remain in their dated archives.",
+  "price_basis": "USD saved regular-session observations for 4 Nov 2026, the latest completed US session at this cutoff. Yahoo daily bars and separate five-day data agree with regularMarketPrice metadata. Each row preserves the exact regularMarketTime in UTC, including Berkshire at 21:01:26 UTC. Daily change uses the 3 Nov ordinary close, separately from adjusted close. These are dated vendor observations, not live or after-hours prices. TSM is the US-listed USD ADR.",
+  "return_basis": "Six cumulative 1-6 month returns use Yahoo adjusted closes, adjusted for splits and dividend/capital-gain distributions. Formula: (endpoint adjusted close / baseline adjusted close - 1) x 100. Source values are rounded to cents before independent Decimal arithmetic; percentages are rounded to two decimals. Baselines are the latest available sessions on or before each monthly anniversary: 2 Oct, 4 Sep, 4 Aug, 2 Jul, 4 Jun and 4 May 2026. Returns are not annualised and exclude investor fees, tax and FX.",
   "caveats": [
-    "Price cross-check: Yahoo daily bars, regular-market metadata and its separate five-day endpoint agree. Stock Analysis showed small different closes in spot-checks, including MSFT $556.00 versus Yahoo $555.80 and BRK.B $579.92 versus $579.09. This edition consistently uses the explicitly sourced Yahoo observations rather than blending vendors.",
-    "Reuters’ Apple report cites Bloomberg and unnamed sources; Apple confirmation was not available. SEC filing acceptance dates, deal pricing dates and expected settlement dates are separately identified.",
-    "Partial coverage: Apple, Google and Meta newsroom rendering was incomplete; Micron’s listing returned navigation without news rows. No additional verified item for a quiet name is not a claim that no news occurred."
+    "Fresh retrieval confirmed unchanged 4 Nov closes and return baselines; rechecking saved market observations does not create a new trading session.",
+    "Vendor comparison: fresh Stock Analysis spot-checks show MSFT $555.80 and BRK.B $579.09, matching Yahoo. The prior edition recorded different Stock Analysis observations ($556.00 and $579.92); those historical discrepancies remain disclosed in that archive. No vendor values are blended.",
+    "Reuters evidence was accessible through search-index text and its publication timestamp; direct article opening failed. Shared context is included once and does not establish company orders, guidance or enacted regulation.",
+    "Apple, Meta and Micron newsroom lists rendered incompletely; Alphabet investor-relations opening failed in the parallel review. No verified new company item is not proof of no news.",
+    "The prior Apple AI-budget report and Microsoft, Alphabet and Meta financing items are deduplicated. Undated-intraday Berkshire and Microsoft issuer notices and older Tesla reporting are not asserted as new in this window."
   ],
   "rows": [
     {
@@ -30,7 +32,7 @@
         "adjusted_close": 349.51,
         "previous_close": 331.9,
         "change_pct": 5.31,
-        "as_of": "2026-11-04T16:00:01-05:00",
+        "as_of": "2026-11-04T21:00:01Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
       },
@@ -79,43 +81,32 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "headline": "Reuters reports tighter employee AI budgets",
-          "facts": [
-            "Reuters, citing Bloomberg and people familiar with the matter, reports Apple cut some engineers’ daily AI allowance from $300 to $200 last month and is considering further cuts. Apple had not immediately commented."
-          ],
-          "analysis": "Internal AI cost discipline is distinct from cuts to customer AI features or a quantified earnings impact.",
-          "risks": "Unconfirmed company-specific sourcing; contemplated further cuts are not completed actions.",
-          "next_watch": "Apple confirmation and evidence of productivity or expense effects.",
-          "date": "2026-11-04",
-          "sources": [
-            {
-              "title": "Reuters via StreetInsider; Bloomberg-sourced, 15:28 EST",
-              "url": "https://new.streetinsider.com/Reuters/Apple%2Bcuts%2Bemployee%2BAI%2Bbudgets%2Bin%2Bcost-control%2Bpush%2C%2BBloomberg%2BNews%2Breports/27289281.html"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Apple newsroom rendering incomplete; the Reuters-syndicated report and SEC feed were accessible."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Apple newsroom listing rendered incompletely in the parallel public-source review."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/AAPL/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
-          "url": "https://data.sec.gov/submissions/CIK0000320193.json"
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
         },
         {
-          "title": "Reuters via StreetInsider; Bloomberg-sourced, 15:28 EST",
-          "url": "https://new.streetinsider.com/Reuters/Apple%2Bcuts%2Bemployee%2BAI%2Bbudgets%2Bin%2Bcost-control%2Bpush%2C%2BBloomberg%2BNews%2Breports/27289281.html"
+          "title": "SEC recent submissions: acceptance-time window checked",
+          "url": "https://data.sec.gov/submissions/CIK0000320193.json"
         }
       ]
     },
@@ -129,7 +120,7 @@
         "adjusted_close": 555.8,
         "previous_close": 520.99,
         "change_pct": 6.68,
-        "as_of": "2026-11-04T16:00:01-05:00",
+        "as_of": "2026-11-04T21:00:01Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
       },
@@ -178,49 +169,36 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "headline": "New filing confirms $25 billion senior-note issuance",
-          "facts": [
-            "Microsoft’s newly filed 8-K details ten senior unsecured note tranches totalling $25 billion, with maturities in 2028–2066.",
-            "The underlying underwriting agreement is dated 29 October; the supplemental indenture is dated 4 November. This is new filing confirmation, not a newly announced $25 billion deal.",
-            "Eight fixed-rate tranches have coupons of 4.85%–6.35%, with two additional floating-rate tranches."
-          ],
-          "analysis": "The filing provides primary-source confirmation of debt terms and long-duration funding; it does not itself establish incremental AI spending or investment returns.",
-          "risks": "Higher debt adds contractual interest obligations; coupon is not the same as market yield.",
-          "next_watch": "Subsequent debt disclosures, interest expense and capital-spending cashflow.",
-          "date": "2026-11-04",
-          "sources": [
-            {
-              "title": "Issuer SEC filing; accepted 2026-11-04T21:01:27Z",
-              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526447173/d178557d8k.htm"
-            },
-            {
-              "title": "SEC submissions feed: acceptance timestamp",
-              "url": "https://data.sec.gov/submissions/CIK0000789019.json"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "SEC 8-K and submissions feed verified; Microsoft blog listing showed no newer relevant post."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "A 4 November board-slate announcement lacked an exposed publication time, so it was not classified as fresh within this window."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/MSFT/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0000789019.json"
         },
         {
-          "title": "Issuer SEC filing; accepted 2026-11-04T21:01:27Z",
-          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526447173/d178557d8k.htm"
+          "title": "Stock Analysis: fresh regular close and prior-close spot-check",
+          "url": "https://stockanalysis.com/stocks/msft/history/"
         }
       ]
     },
@@ -234,7 +212,7 @@
         "adjusted_close": 200.13,
         "previous_close": 206.69,
         "change_pct": -3.17,
-        "as_of": "2026-11-04T16:00:01-05:00",
+        "as_of": "2026-11-04T21:00:01Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
       },
@@ -283,22 +261,53 @@
         }
       ],
       "premarket": null,
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Shared watchlist context: Asian chip-sector sentiment",
+          "facts": [
+            "Reuters reported at 02:35:19 UTC that Asian chip and data-centre suppliers fell amid expectations of tighter post-election regulation; South Korea's KOSPI fell 4% and Taiwan's benchmark 1.8%."
+          ],
+          "analysis": "Sector sentiment may affect NVDA, AMD, AVGO, MU and TSM; this does not demonstrate cancelled orders or changed guidance.",
+          "risks": "Expectations may differ from enacted policy.",
+          "next_watch": "Concrete permitting measures and issuer commentary.",
+          "sources": [
+            {
+              "title": "Reuters, 05 Nov 02:35:19 UTC; search-index text verified, direct opening unavailable",
+              "url": "https://www.reuters.com/business/energy/global-markets-global-markets-2026-11-05/"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "SEC feed and NVIDIA blog checked; latest visible blog post dated 3 Nov."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Latest visible issuer entry in the parallel review was dated 3 November; listing coverage does not establish absence of other news."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0001045810.json"
+        },
+        {
+          "title": "Reuters, 05 Nov 02:35:19 UTC; search-index text verified, direct opening unavailable",
+          "url": "https://www.reuters.com/business/energy/global-markets-global-markets-2026-11-05/"
         }
       ]
     },
@@ -312,7 +321,7 @@
         "adjusted_close": 288.93,
         "previous_close": 280.03,
         "change_pct": 3.18,
-        "as_of": "2026-11-04T16:00:01-05:00",
+        "as_of": "2026-11-04T21:00:01Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
       },
@@ -361,49 +370,32 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "headline": "New prospectus confirms Alphabet’s €6 billion offering terms",
-          "facts": [
-            "Alphabet filed a prospectus supplement for €6 billion across seven senior unsecured tranches maturing in 2028–2045.",
-            "The prospectus is dated 2 November; expected delivery is on or about 5 November. This is a newly filed document for an earlier-priced deal, not evidence settlement has occurred.",
-            "Six fixed-rate coupons range from 3.70% to 5.25%; the €750 million floating-rate tranche pays three-month EURIBOR plus 0.50%."
-          ],
-          "analysis": "Term details make financing cost and maturity structure clearer, but do not directly demonstrate AI project returns.",
-          "risks": "Currency, floating-rate interest and execution risks; avoid treating coupon as yield or expected delivery as completed settlement.",
-          "next_watch": "Confirmation of expected 5 November delivery and later financing/cashflow disclosures.",
-          "date": "2026-11-04",
-          "sources": [
-            {
-              "title": "Issuer SEC filing; accepted 2026-11-04T21:21:20Z",
-              "url": "https://www.sec.gov/Archives/edgar/data/1652044/000119312526447343/d125079d424b2.htm"
-            },
-            {
-              "title": "SEC submissions feed: acceptance timestamp",
-              "url": "https://data.sec.gov/submissions/CIK0001652044.json"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "SEC prospectus and submissions feed verified; Google newsroom rendering incomplete."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Alphabet investor-relations opening failed in the parallel public-source review."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
-          "url": "https://data.sec.gov/submissions/CIK0001652044.json"
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
         },
         {
-          "title": "Issuer SEC filing; accepted 2026-11-04T21:21:20Z",
-          "url": "https://www.sec.gov/Archives/edgar/data/1652044/000119312526447343/d125079d424b2.htm"
+          "title": "SEC recent submissions: acceptance-time window checked",
+          "url": "https://data.sec.gov/submissions/CIK0001652044.json"
         }
       ]
     },
@@ -417,7 +409,7 @@
         "adjusted_close": 266.03,
         "previous_close": 250.69,
         "change_pct": 6.12,
-        "as_of": "2026-11-04T16:00:01-05:00",
+        "as_of": "2026-11-04T21:00:01Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
       },
@@ -468,19 +460,29 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "SEC feed and Shop Direct source checked; the 4 Nov Shop Direct event was already in the previous durable edition."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Latest visible issuer entry in the parallel review was dated 3 November; listing coverage does not establish absence of other news."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/AMZN/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
         }
       ]
@@ -495,7 +497,7 @@
         "adjusted_close": 630.0,
         "previous_close": 621.03,
         "change_pct": 1.44,
-        "as_of": "2026-11-04T16:00:00-05:00",
+        "as_of": "2026-11-04T21:00:00Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
       },
@@ -544,49 +546,32 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "headline": "Meta prices €9 billion euro bonds; settlement expected 12 November",
-          "facts": [
-            "Meta’s SEC pricing term sheet confirms six tranches totalling €9 billion, replacing the earlier provisional “up to €9 billion” status.",
-            "Maturities run from February 2031 to February 2065. Coupons range from 4.30% to 6.40%; issue yields range from 4.327% to 6.442%.",
-            "Trade date is 4 November and expected settlement is 12 November. Pricing is verified; settlement is not yet completed."
-          ],
-          "analysis": "Primary-source pricing resolves the earlier issuance-size uncertainty while extending funding duration.",
-          "risks": "Interest costs are fixed contractual obligations; long maturities create duration risk for bondholders. No conclusion about equity valuation follows from orderbook size.",
-          "next_watch": "Expected 12 November settlement and subsequent debt/capital-spending disclosures.",
-          "date": "2026-11-04",
-          "sources": [
-            {
-              "title": "Issuer SEC filing; accepted 2026-11-04T21:53:19Z",
-              "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526447522/d154804dfwp.htm"
-            },
-            {
-              "title": "SEC submissions feed: acceptance timestamp",
-              "url": "https://data.sec.gov/submissions/CIK0001326801.json"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "SEC final pricing term sheet and submissions feed verified; Meta newsroom rendering incomplete."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Meta newsroom listing rendered incompletely in the parallel public-source review."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
-          "url": "https://data.sec.gov/submissions/CIK0001326801.json"
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
         },
         {
-          "title": "Issuer SEC filing; accepted 2026-11-04T21:53:19Z",
-          "url": "https://www.sec.gov/Archives/edgar/data/1326801/000119312526447522/d154804dfwp.htm"
+          "title": "SEC recent submissions: acceptance-time window checked",
+          "url": "https://data.sec.gov/submissions/CIK0001326801.json"
         }
       ]
     },
@@ -600,7 +585,7 @@
         "adjusted_close": 579.09,
         "previous_close": 557.07,
         "change_pct": 3.95,
-        "as_of": "2026-11-04T16:01:26-05:00",
+        "as_of": "2026-11-04T21:01:26Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
       },
@@ -651,20 +636,34 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "SEC feed checked; the 4 Nov earnings-timetable notice was unchanged from the prior edition."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "The official 4 November earnings-release notice lacked a release-time timestamp and was not classified as fresh within this window."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/BRK-B/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0001067983.json"
+        },
+        {
+          "title": "Stock Analysis: fresh regular close and prior-close spot-check",
+          "url": "https://stockanalysis.com/stocks/brk.b/history/"
         }
       ]
     },
@@ -678,7 +677,7 @@
         "adjusted_close": 488.78,
         "previous_close": 483.9,
         "change_pct": 1.01,
-        "as_of": "2026-11-04T16:00:00-05:00",
+        "as_of": "2026-11-04T21:00:00Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
       },
@@ -729,19 +728,29 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "SEC feed checked; a 4 Nov filing-date item was accepted on 3 Nov, outside this update window."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Latest visible issuer entry in the parallel review was dated 3 November; listing coverage does not establish absence of other news."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/AMD/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0000002488.json"
         }
       ]
@@ -756,7 +765,7 @@
         "adjusted_close": 325.48,
         "previous_close": 332.13,
         "change_pct": -2.0,
-        "as_of": "2026-11-04T16:00:01-05:00",
+        "as_of": "2026-11-04T21:00:01Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
       },
@@ -807,19 +816,29 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "SEC feed and issuer financial-news listing checked; latest visible release dated 27 Oct."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Latest visible issuer entry in the parallel review was dated 27 October; listing coverage does not establish absence of other news."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/AVGO/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0001730168.json"
         }
       ]
@@ -834,7 +853,7 @@
         "adjusted_close": 795.23,
         "previous_close": 855.1,
         "change_pct": -7.0,
-        "as_of": "2026-11-04T16:00:00-05:00",
+        "as_of": "2026-11-04T21:00:00Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
       },
@@ -885,19 +904,29 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "SEC feed accessible; issuer news listing rendered navigation without news rows."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Micron newsroom listing rendered incompletely in the parallel public-source review."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
         }
       ]
@@ -912,7 +941,7 @@
         "adjusted_close": 385.19,
         "previous_close": 398.5,
         "change_pct": -3.34,
-        "as_of": "2026-11-04T16:00:01-05:00",
+        "as_of": "2026-11-04T21:00:01Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
       },
@@ -963,19 +992,29 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "SEC feed and issuer press listing checked; latest visible release dated 21 Oct."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Older Korea FSD complaint reporting was excluded; a planned filing was not treated as confirmation that it occurred."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0001318605.json"
         }
       ]
@@ -990,7 +1029,7 @@
         "adjusted_close": 395.75,
         "previous_close": 404.8,
         "change_pct": -2.24,
-        "as_of": "2026-11-04T16:00:02-05:00",
+        "as_of": "2026-11-04T21:00:02Z",
         "currency": "USD",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
       },
@@ -1041,19 +1080,29 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "SEC feed and issuer press listing checked; latest visible release dated 15 Oct."
+        "No new company-specific item was independently verified for inclusion in the 23:45 UTC to 04:00 UTC review window. Partial coverage is not a claim that no news occurred.",
+        "The issuer SEC recent-submission feed contained no acceptance timestamp within that window.",
+        "Latest visible issuer entry in the parallel review was dated 15 October; listing coverage does not establish absence of other news."
       ],
       "sources": [
         {
-          "title": "Yahoo Finance · recorded regular-session price and adjusted-close history",
+          "title": "Yahoo Finance: freshly retrieved daily close and adjusted-close history",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
         },
         {
-          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "title": "Yahoo Finance: separate five-day endpoint and exact regularMarketTime cross-check",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=5d&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance: historical prices and adjustment basis",
           "url": "https://finance.yahoo.com/quote/TSM/history/"
         },
         {
-          "title": "Issuer SEC recent-submission feed checked",
+          "title": "Yahoo Help: split and dividend adjustment methodology",
+          "url": "https://help.yahoo.com/kb/SLN28256.html"
+        },
+        {
+          "title": "SEC recent submissions: acceptance-time window checked",
           "url": "https://data.sec.gov/submissions/CIK0001046179.json"
         }
       ]

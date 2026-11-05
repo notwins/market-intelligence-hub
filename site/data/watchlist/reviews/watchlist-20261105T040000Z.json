@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261105T040000Z",
+  "as_of": "2026-11-05T04:00:00Z",
+  "edition_sha256": "965d8301702755a47d7d7670e4ad6be31d833d88b9fa4fce8a0900016984c8ba",
+  "reviewed_at": "2026-11-05T04:06:05.612469+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Shared watchlist context: Asian chip-sector sentiment",
+      "item_sha256": "b01485f0745a1a1ddc0b3ef03d6ddf0a0af4bebdd4121c29e4523ca0b016da81",
+      "scope": "market_context",
+      "reason": "A single attributed Reuters sector-market report, independently checked through accessible search-index text and timestamp. It is relevant to several semiconductor names, but contains no verified NVIDIA-specific operating development. Access caveats, policy uncertainty and the public/private boundary are retained. Prior company stories and notices without verified freshness were excluded."
+    }
+  ]
+}

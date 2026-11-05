@@ -732,6 +732,17 @@
           "item_sha256": "8758476473f0af1f75fe1ba61342b1e44e504daa12c348e4aada784ada2ec6cb"
         }
       ]
+    },
+    "watchlist-20261105T040000Z": {
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "Shared watchlist context: Asian chip-sector sentiment",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-05\",\"Shared watchlist context: Asian chip-sector sentiment\",[\"Reuters reported at 02:35:19 UTC that Asian chip and data-centre suppliers fell amid expectations of tighter post-election regulation; South Korea's KOSPI fell 4% and Taiwan's benchmark 1.8%.\"],\"Sector sentiment may affect NVDA, AMD, AVGO, MU and TSM; this does not demonstrate cancelled orders or changed guidance.\",\"Expectations may differ from enacted policy.\",\"Concrete permitting measures and issuer commentary.\",[[\"Reuters, 05 Nov 02:35:19 UTC; search-index text verified, direct opening unavailable\",\"https://www.reuters.com/business/energy/global-markets-global-markets-2026-11-05/\"]]]",
+          "item_sha256": "b01485f0745a1a1ddc0b3ef03d6ddf0a0af4bebdd4121c29e4523ca0b016da81"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -800,6 +811,12 @@
       "reviewed_at": "2026-11-05T00:08:29.200715+00:00",
       "edition_sha256": "f457ff62a3588fb1046a0ab27c43b8e6cc3bd711829f839b2c5f213f862fd4a6",
       "path": "data/watchlist/reviews/watchlist-20261105T000000Z.json"
+    },
+    "watchlist-20261105T040000Z": {
+      "as_of": "2026-11-05T04:00:00Z",
+      "reviewed_at": "2026-11-05T04:06:05.612469+00:00",
+      "edition_sha256": "965d8301702755a47d7d7670e4ad6be31d833d88b9fa4fce8a0900016984c8ba",
+      "path": "data/watchlist/reviews/watchlist-20261105T040000Z.json"
     }
   }
 }
