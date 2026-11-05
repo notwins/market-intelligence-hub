@@ -18,7 +18,18 @@ click('[data-hx-clear]',{hxClear:'bank'});assert(ui.activeControls().includes('C
 click('[data-hx-tag]',{hxTag:'country',hxValue:'US'});assert.equal(ui.activeControls(),'');
 click('[data-hx-tag]',{hxTag:'category',hxValue:'Markets'});assert.equal(ui.filtered([a,{...a,category:'Elections'}]).length,1);click('[data-hx-reset]',{});assert.equal(ui.activeControls(),'');assert.equal(renders,6);assert.equal(focused.length,6);
 const data=JSON.parse(read('headline-context.json'.replace(/^/,'data/'))),news=JSON.parse(read('data/news.json'));
-assert(data.items.length>=14);for(const item of data.items){assert(news.items.some(n=>n.id===item.id&&n.title===item.title&&n.published_at===item.published_at));assert.equal(item.summary_verified,true);assert(item.summary!==item.context);assert(item.summary!==item.title);assert(item.context.length>40);assert(new URL(item.summary_source_url).protocol==='https:');}
+// Current headlines roll forward; saved context must retain exact provenance in
+// either that feed or an indexed immutable snapshot, not disappear with the feed.
+const archivedNews=JSON.parse(read('data/archive-index.json')).days.map(day=>{
+ assert(/^\d{4}-\d{2}-\d{2}$/.test(day.date));assert.equal(day.path,'data/archive/'+day.date+'.json');
+ const snapshot=JSON.parse(read(day.path));assert(Array.isArray(snapshot.items));return snapshot;
+});
+const matchesSource=(item,snapshots)=>snapshots.some(snapshot=>snapshot.items.some(n=>n.id===item.id&&n.title===item.title&&n.published_at===item.published_at));
+assert(matchesSource(saved,[{items:[a]}]),'Exact current source is accepted');
+assert(matchesSource(saved,[{items:[]},{items:[a]}]),'Exact archived source survives current-feed rollover');
+assert(!matchesSource(saved,[{items:[]},{items:[]}]),'Missing evidence is rejected');
+for(const change of [{id:'wrong'},{title:'different'},{published_at:'2026-11-03'}])assert(!matchesSource(saved,[{items:[]},{items:[{...a,...change}]}]),'An archive cannot approve a mismatched identity, title or date');
+assert(data.items.length>=14);for(const item of data.items){assert(matchesSource(item,[news,...archivedNews]),'Exact current or archived source required: '+item.id);assert.equal(item.summary_verified,true);assert(item.summary!==item.context);assert(item.summary!==item.title);assert(item.context.length>40);assert(new URL(item.summary_source_url).protocol==='https:');assert(item.sources.some(source=>source.url===item.summary_source_url),'Summary source must retain its explicit provenance');}
 const page=read('v4.html'),overview=page.slice(page.indexOf('function overview()'),page.indexOf('function earningsView()'));
 assert(overview.indexOf('briefing-lead')<overview.indexOf('MarketV3.welcome()'));assert.equal((page.match(/researchLearningCard\(\)/g)||[]).length,1);assert(page.includes('class="research-shortcuts"'));assert(page.indexOf('class="research-shortcuts"')<page.indexOf('id="view"'));
 assert(page.includes('id="headline-toolbar"'));assert(page.includes('syncHeadlineToolbar();'));assert(page.includes('data-v4-disclosure="newsFiltersOpen"'));assert(page.includes("S.newsFiltersOpen??!matchMedia('(max-width:760px)').matches"));
