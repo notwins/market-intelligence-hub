@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261105T120000Z",
+  "as_of": "2026-11-05T12:00:00Z",
+  "edition_sha256": "3f471acbec74abbf4008054ba2957516ebc675340d771333432d11ed097488f9",
+  "reviewed_at": "2026-11-05T12:09:34.290988+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "Microsoft: new sourcing clarifies earlier Nscale report",
+      "item_sha256": "4d7cab75c8a2279ef238b0c2872076e60649bacf821b93aea700f91cb4b3cb4a",
+      "scope": "company",
+      "reason": "Source-backed public company update reviewed against cutoff and prior archives. Attribution and unverified-source qualifications retained, facts separate from analysis. MSFT clarification and prior-day governance event explicitly distinguished. No private content, recommendation or inferred holding."
+    },
+    {
+      "ticker": "MSFT",
+      "index": 1,
+      "headline": "New SEC filing: Walmsley will not seek board re-election",
+      "item_sha256": "7052041babd836d027ee2b34e198259279345286e1b62ab0cfe34a11731edef5",
+      "scope": "company",
+      "reason": "Source-backed public company update reviewed against cutoff and prior archives. Attribution and unverified-source qualifications retained, facts separate from analysis. MSFT clarification and prior-day governance event explicitly distinguished. No private content, recommendation or inferred holding."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "NVIDIA: Reuters reports H200 stockpile awaiting China approval",
+      "item_sha256": "c894039cebec11ac4c80330ff6e91953ac4930907994fc82f33c6d0d26e0f5f9",
+      "scope": "company",
+      "reason": "Source-backed public company update reviewed against cutoff and prior archives. Attribution and unverified-source qualifications retained, facts separate from analysis. MSFT clarification and prior-day governance event explicitly distinguished. No private content, recommendation or inferred holding."
+    },
+    {
+      "ticker": "AMZN",
+      "index": 0,
+      "headline": "Amazon adds Uber Eats restaurant ordering to Prime",
+      "item_sha256": "35c0144479082d86ff401bfc7c3b4e05d68a9c2e8580769e7460d1d475bd9d0f",
+      "scope": "company",
+      "reason": "Source-backed public company update reviewed against cutoff and prior archives. Attribution and unverified-source qualifications retained, facts separate from analysis. MSFT clarification and prior-day governance event explicitly distinguished. No private content, recommendation or inferred holding."
+    },
+    {
+      "ticker": "MU",
+      "index": 0,
+      "headline": "Micron: reported Taiwan plant pause remains unverified",
+      "item_sha256": "0ee072245c252526ecab60e0360c6f6d95d7c89acd101647945241a6ea314744",
+      "scope": "company",
+      "reason": "Source-backed public company update reviewed against cutoff and prior archives. Attribution and unverified-source qualifications retained, facts separate from analysis. MSFT clarification and prior-day governance event explicitly distinguished. No private content, recommendation or inferred holding."
+    }
+  ]
+}

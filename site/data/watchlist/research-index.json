@@ -754,6 +754,51 @@
           "item_sha256": "b8b03b7cb4a2092d6ab04d2e79e1ad22d1ffab1168870172f937c10a07f03572"
         }
       ]
+    },
+    "watchlist-20261105T120000Z": {
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "Microsoft: new sourcing clarifies earlier Nscale report",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Microsoft: new sourcing clarifies earlier Nscale report\",[\"Reuters’ 07:59 UTC update cites its own unnamed source: the optional Texas expansion decision was made months ago and leaves the existing contract intact.\",\"The source says Nscale’s disclosed total contract value is unaffected.\"],\"This clarification does not establish weaker current Azure demand.\",\"The companies had not responded; the explanation remains source-attributed.\",\"Issuer confirmation and capacity guidance.\",[[\"Reuters · updated sourcing in 07:59 UTC syndication\",\"https://www.reuters.com/technology/microsoft-rejects-multibillion-dollar-ai-deal-with-uks-nscale-ft-reports-2026-11-05/\"],[\"Reuters syndication · 02:59 ET / 07:59 UTC update\",\"https://www.schwab.wallst.com/schwab/Prospect/research/stocks/news.asp?doc=3200-nL6N46M0CA-5&symbol=MSFT\"]]]",
+          "item_sha256": "4d7cab75c8a2279ef238b0c2872076e60649bacf821b93aea700f91cb4b3cb4a"
+        },
+        {
+          "index": 1,
+          "headline": "New SEC filing: Walmsley will not seek board re-election",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"New SEC filing: Walmsley will not seek board re-election\",[\"An 8-K accepted at 11:01:52 UTC confirms Emma Walmsley will serve until the annual meeting but not seek re-election; it states there is no management disagreement.\",\"Microsoft announced the decision on 4 November and set the meeting for 8 December.\"],\"Governance update, not a new operating or earnings forecast.\",\"The filing formalizes an earlier announcement rather than a new event.\",\"8 December annual meeting.\",[[\"SEC · 8-K accepted 05 Nov 2026, 11:01:52 UTC\",\"https://www.sec.gov/Archives/edgar/data/789019/000119312526448357/d177209d8k.htm\"],[\"Microsoft · earlier issuer announcement, 4 November\",\"https://news.microsoft.com/source/2026/11/04/microsoft-announces-change-to-director-slate-for-annual-shareholders-meeting/\"]]]",
+          "item_sha256": "7052041babd836d027ee2b34e198259279345286e1b62ab0cfe34a11731edef5"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "NVIDIA: Reuters reports H200 stockpile awaiting China approval",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"NVIDIA: Reuters reports H200 stockpile awaiting China approval\",[\"Reuters, citing two unnamed sources, reports about 600,000 H200 chips stored in Hong Kong awaiting mainland China shipment approval.\",\"NVIDIA and the Chinese authorities did not respond to Reuters requests for comment.\"],\"Import permissions, not demand alone, may constrain conversion of Chinese interest into shipments.\",\"Unconfirmed source estimates; timing and financial impact are unknown.\",\"Official import decisions and NVIDIA shipment guidance.\",[[\"Reuters · 05 Nov 2026, 11:27:09 UTC\",\"https://www.reuters.com/world/china/nvidia-chips-pile-up-hong-kong-china-withholds-import-approval-2026-11-05/\"]]]",
+          "item_sha256": "c894039cebec11ac4c80330ff6e91953ac4930907994fc82f33c6d0d26e0f5f9"
+        }
+      ],
+      "AMZN": [
+        {
+          "index": 0,
+          "headline": "Amazon adds Uber Eats restaurant ordering to Prime",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Amazon adds Uber Eats restaurant ordering to Prime\",[\"Amazon announced a US Prime benefit: $0 delivery fees on Uber Eats restaurant orders of $25 or more placed through Amazon’s website or shopping app.\"],\"The integration may support Prime engagement and retention.\",\"Commercial economics and earnings contribution were not disclosed; consumer offers have eligibility and availability conditions.\",\"Adoption, repeat ordering and any disclosed contribution to Prime retention.\",[[\"Amazon · 05 Nov 2026, 11:00 UTC (issuer metadata)\",\"https://press.aboutamazon.com/2026/11/amazon-launches-partnership-with-uber-eats-featuring-0-delivery-fee-for-prime-members\"]]]",
+          "item_sha256": "35c0144479082d86ff401bfc7c3b4e05d68a9c2e8580769e7460d1d475bd9d0f"
+        }
+      ],
+      "MU": [
+        {
+          "index": 0,
+          "headline": "Micron: reported Taiwan plant pause remains unverified",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Micron: reported Taiwan plant pause remains unverified\",[\"Reuters relays Bloomberg’s report that a prolonged labor dispute paused plans for a $4.5 billion Taiwan memory-chip plant.\",\"Reuters could not independently verify the report; Micron had not responded.\"],\"If confirmed, the pause could delay planned capacity.\",\"Plant timing, cost and earnings effects remain unestablished.\",\"Micron clarification and any revised construction schedule.\",[[\"Reuters citing Bloomberg · 05 Nov 2026, 09:22:01 UTC\",\"https://www.reuters.com/world/asia-pacific/micron-pauses-work-45-billion-taiwan-plant-bloomberg-news-reports-2026-11-05/\"]]]",
+          "item_sha256": "0ee072245c252526ecab60e0360c6f6d95d7c89acd101647945241a6ea314744"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -834,6 +879,12 @@
       "reviewed_at": "2026-11-05T08:03:43.465950+00:00",
       "edition_sha256": "0dd14afff3b8abf8172dc9025da73078c45595f7224004c8df3c2f1d67881693",
       "path": "data/watchlist/reviews/watchlist-20261105T080000Z.json"
+    },
+    "watchlist-20261105T120000Z": {
+      "as_of": "2026-11-05T12:00:00Z",
+      "reviewed_at": "2026-11-05T12:09:34.290988+00:00",
+      "edition_sha256": "3f471acbec74abbf4008054ba2957516ebc675340d771333432d11ed097488f9",
+      "path": "data/watchlist/reviews/watchlist-20261105T120000Z.json"
     }
   }
 }
