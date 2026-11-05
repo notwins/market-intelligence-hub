@@ -40,7 +40,7 @@ class SPXResearch(unittest.TestCase):
             if href.startswith('#'): self.assertIn(href[1:],self.page.ids)
             elif href and not href.startswith(('https:','http:')):
                 self.assertTrue((FOLDER/href.split('#')[0]).exists(),href)
-        self.assertEqual(sorted(p.name for p in FOLDER.iterdir()),['index.html','publication.json'])
+        self.assertEqual(sorted(p.name for p in FOLDER.iterdir()),['index.html','presentations','publication.json'])
         self.assertFalse(self.record['raw_series_downloads']); self.assertFalse(self.record['copied_source_documents'])
         self.assertNotRegex(self.text,r'libfile_|/workspace/|chatgpt\.com/c/|sediment:|\.csv["\']|\.zip["\']')
         for n in range(31,35):

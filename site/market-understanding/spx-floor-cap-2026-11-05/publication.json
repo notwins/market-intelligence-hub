@@ -32,5 +32,37 @@
     ],
     "monthly_denominator": 97
   },
-  "rights_review": "Research prose and original aggregate/synthetic charts only. Raw appendix, full-series charts and source files not redistributed; sources linked."
+  "rights_review": "Research prose and original aggregate/synthetic charts only. Raw appendix, full-series charts and source files not redistributed; sources linked.",
+  "presentations": {
+    "as_of": "2026-11-05",
+    "edition": "audited aggregate-only public copies",
+    "description": "Full historical wealth paths and their embedded chart workbooks replaced by aggregate terminal comparisons. Other charts contain aggregate statistics, synthetic payoff points or theoretical pricing. Sources linked; no source-data redistribution licence claimed.",
+    "html_sha256_before_download_panel": "2d978c8ffd4ff96f82bd41642aea3d56c4294efedfdb05f1cf625a533b99d2ca",
+    "files": [
+      {
+        "title": "Financial briefing",
+        "path": "presentations/IFI_SPX_Financial_Briefing_5_Slides_Public.pptx",
+        "bytes": 58254,
+        "sha256": "688ede9be56bd2bbe88bc76bd7d25813e2d2865e66494b8f291df41ed064b7f5",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 4
+      },
+      {
+        "title": "Clear visual story",
+        "path": "presentations/IFI_SPX_Visual_Story_5_Slides_Public.pptx",
+        "bytes": 64859,
+        "sha256": "6a7eec4da14f97caaf188d996a3396885d081fa985f7c4881b2e940755d92302",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 3
+      }
+    ],
+    "formatted_notes": {
+      "path": "presentations/IFI_SPX_Formatted_Speaker_Notes_Public.docx",
+      "bytes": 49656,
+      "sha256": "9dfcfb3f919806da7b3c072a3caf99e916ec663a6a86912a7d84f1144967d643",
+      "pages": 10
+    }
+  }
 }
