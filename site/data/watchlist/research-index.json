@@ -694,6 +694,44 @@
           "item_sha256": "41af6b90076c03d552c4cab335da2b611ad9727c434220eaca2b7aa4f7e30484"
         }
       ]
+    },
+    "watchlist-20261105T000000Z": {
+      "AAPL": [
+        {
+          "index": 0,
+          "headline": "Reuters reports tighter employee AI budgets",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"Reuters reports tighter employee AI budgets\",[\"Reuters, citing Bloomberg and people familiar with the matter, reports Apple cut some engineers’ daily AI allowance from $300 to $200 last month and is considering further cuts. Apple had not immediately commented.\"],\"Internal AI cost discipline is distinct from cuts to customer AI features or a quantified earnings impact.\",\"Unconfirmed company-specific sourcing; contemplated further cuts are not completed actions.\",\"Apple confirmation and evidence of productivity or expense effects.\",[[\"Reuters via StreetInsider; Bloomberg-sourced, 15:28 EST\",\"https://new.streetinsider.com/Reuters/Apple%2Bcuts%2Bemployee%2BAI%2Bbudgets%2Bin%2Bcost-control%2Bpush%2C%2BBloomberg%2BNews%2Breports/27289281.html\"]]]",
+          "item_sha256": "6e1060e11676331de9089daf6297781ca6c574a0d2c6db55561c04cb6ee918d1"
+        }
+      ],
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "New filing confirms $25 billion senior-note issuance",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"New filing confirms $25 billion senior-note issuance\",[\"Microsoft’s newly filed 8-K details ten senior unsecured note tranches totalling $25 billion, with maturities in 2028–2066.\",\"The underlying underwriting agreement is dated 29 October; the supplemental indenture is dated 4 November. This is new filing confirmation, not a newly announced $25 billion deal.\",\"Eight fixed-rate tranches have coupons of 4.85%–6.35%, with two additional floating-rate tranches.\"],\"The filing provides primary-source confirmation of debt terms and long-duration funding; it does not itself establish incremental AI spending or investment returns.\",\"Higher debt adds contractual interest obligations; coupon is not the same as market yield.\",\"Subsequent debt disclosures, interest expense and capital-spending cashflow.\",[[\"Issuer SEC filing; accepted 2026-11-04T21:01:27Z\",\"https://www.sec.gov/Archives/edgar/data/789019/000119312526447173/d178557d8k.htm\"],[\"SEC submissions feed: acceptance timestamp\",\"https://data.sec.gov/submissions/CIK0000789019.json\"]]]",
+          "item_sha256": "e942be058fe80f4a49c7e91a074e90869f9f9f74675e92f7bdb9367c73614b16"
+        }
+      ],
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "New prospectus confirms Alphabet’s €6 billion offering terms",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"New prospectus confirms Alphabet’s €6 billion offering terms\",[\"Alphabet filed a prospectus supplement for €6 billion across seven senior unsecured tranches maturing in 2028–2045.\",\"The prospectus is dated 2 November; expected delivery is on or about 5 November. This is a newly filed document for an earlier-priced deal, not evidence settlement has occurred.\",\"Six fixed-rate coupons range from 3.70% to 5.25%; the €750 million floating-rate tranche pays three-month EURIBOR plus 0.50%.\"],\"Term details make financing cost and maturity structure clearer, but do not directly demonstrate AI project returns.\",\"Currency, floating-rate interest and execution risks; avoid treating coupon as yield or expected delivery as completed settlement.\",\"Confirmation of expected 5 November delivery and later financing/cashflow disclosures.\",[[\"Issuer SEC filing; accepted 2026-11-04T21:21:20Z\",\"https://www.sec.gov/Archives/edgar/data/1652044/000119312526447343/d125079d424b2.htm\"],[\"SEC submissions feed: acceptance timestamp\",\"https://data.sec.gov/submissions/CIK0001652044.json\"]]]",
+          "item_sha256": "9297b5acc4381fc5d3f69eb7dc0614a4f9e3f17b012a946e8e05d25dac2c88a6"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Meta prices €9 billion euro bonds; settlement expected 12 November",
+          "scope": "company",
+          "content_key": "[\"2026-11-04\",\"Meta prices €9 billion euro bonds; settlement expected 12 November\",[\"Meta’s SEC pricing term sheet confirms six tranches totalling €9 billion, replacing the earlier provisional “up to €9 billion” status.\",\"Maturities run from February 2031 to February 2065. Coupons range from 4.30% to 6.40%; issue yields range from 4.327% to 6.442%.\",\"Trade date is 4 November and expected settlement is 12 November. Pricing is verified; settlement is not yet completed.\"],\"Primary-source pricing resolves the earlier issuance-size uncertainty while extending funding duration.\",\"Interest costs are fixed contractual obligations; long maturities create duration risk for bondholders. No conclusion about equity valuation follows from orderbook size.\",\"Expected 12 November settlement and subsequent debt/capital-spending disclosures.\",[[\"Issuer SEC filing; accepted 2026-11-04T21:53:19Z\",\"https://www.sec.gov/Archives/edgar/data/1326801/000119312526447522/d154804dfwp.htm\"],[\"SEC submissions feed: acceptance timestamp\",\"https://data.sec.gov/submissions/CIK0001326801.json\"]]]",
+          "item_sha256": "8758476473f0af1f75fe1ba61342b1e44e504daa12c348e4aada784ada2ec6cb"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -756,6 +794,12 @@
       "reviewed_at": "2026-11-04T20:38:47.183700+00:00",
       "edition_sha256": "e7d0a2df6b2aef6682308145ce9a4bb9ed6802365555d90c143c1a818e157425",
       "path": "data/watchlist/reviews/watchlist-20261104T200000Z.json"
+    },
+    "watchlist-20261105T000000Z": {
+      "as_of": "2026-11-05T08:00:00+08:00",
+      "reviewed_at": "2026-11-05T00:08:29.200715+00:00",
+      "edition_sha256": "f457ff62a3588fb1046a0ab27c43b8e6cc3bd711829f839b2c5f213f862fd4a6",
+      "path": "data/watchlist/reviews/watchlist-20261105T000000Z.json"
     }
   }
 }

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261105T000000Z",
+  "as_of": "2026-11-05T08:00:00+08:00",
+  "edition_sha256": "f457ff62a3588fb1046a0ab27c43b8e6cc3bd711829f839b2c5f213f862fd4a6",
+  "reviewed_at": "2026-11-05T00:08:29.200715+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Reuters reports tighter employee AI budgets",
+      "item_sha256": "6e1060e11676331de9089daf6297781ca6c574a0d2c6db55561c04cb6ee918d1",
+      "scope": "company",
+      "reason": "Reviewed actual Reuters syndication bytes; Bloomberg/unnamed-source attribution, October event timing and lack of company confirmation retained. Public company-specific report, not a user call."
+    },
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "New filing confirms $25 billion senior-note issuance",
+      "item_sha256": "e942be058fe80f4a49c7e91a074e90869f9f9f74675e92f7bdb9367c73614b16",
+      "scope": "company",
+      "reason": "Reviewed issuer 8-K and acceptance timestamp; ten tranche amounts sum to $25bn. Earlier underwriting date retained, issuance confirmation distinct from a new deal announcement."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "New prospectus confirms Alphabet’s €6 billion offering terms",
+      "item_sha256": "9297b5acc4381fc5d3f69eb7dc0614a4f9e3f17b012a946e8e05d25dac2c88a6",
+      "scope": "company",
+      "reason": "Reviewed issuer prospectus and acceptance timestamp; seven tranches sum to €6bn. Document date, floating coupon and expected delivery distinguished from completed settlement."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Meta prices €9 billion euro bonds; settlement expected 12 November",
+      "item_sha256": "8758476473f0af1f75fe1ba61342b1e44e504daa12c348e4aada784ada2ec6cb",
+      "scope": "company",
+      "reason": "Reviewed issuer pricing term sheet and acceptance timestamp; six tranches sum to €9bn. Coupons, issue yields and future settlement date distinguished; substantive update to prior provisional story."
+    }
+  ]
+}
