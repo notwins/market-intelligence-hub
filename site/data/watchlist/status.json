@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-05T16:14:41.846183+00:00",
-  "message": "06 Nov 00:00 SGT fixed-cutoff watchlist edition published by this scheduled execution. Exact-commit Pages deployment, live edition ID, report hash and research mappings verified after retrying a transient Pages HTTP 500. All 12 saved completed-session closes and 72 adjusted baselines freshly checked; five company items. News coverage is partial. This verifies this execution, not future runs or separate-chat delivery.",
+  "checked_at": "2026-11-05T20:09:27.716674+00:00",
+  "message": "06 Nov 04:00 SGT fixed-cutoff watchlist edition published by this scheduled execution. Exact-commit Pages deployment, live edition ID, report hash and research mappings verified. All 12 completed 4 Nov prices and 72 adjusted baselines freshly checked; three company items and one shared market-context item. Original close seconds retained from the prior verified edition. News coverage is partial. This verifies this execution, not future runs or separate-chat delivery.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,12 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "423c74383c6543d14cc6c0e6bf8421a749b38e77",
-    "pages_run_id": 42062070962,
-    "edition_id": "watchlist-20261105T160000Z",
-    "report_sha256": "fb5133ff5a7aa122b7451e8891d1e8e52fd54055c3f21c68354988b3b1e36ef0",
-    "verified_at": "2026-11-05T16:14:41.846183+00:00",
-    "scheduled_for": "2026-11-05T16:00:00Z",
+    "commit": "e9debd81c252e08b1672fefcac0c79c3159a3447",
+    "pages_run_id": 42100483983,
+    "edition_id": "watchlist-20261105T200000Z",
+    "report_sha256": "e6ec81c617286ebb5532f52e47ece83d3fea23beda1fbb0c7a9f76beface8202",
+    "verified_at": "2026-11-05T20:09:27.716674+00:00",
+    "scheduled_for": "2026-11-05T20:00:00Z",
     "execution_kind": "scheduled_run_cloud"
   },
   "separate_A_chat_delivery_verified": false,
@@ -95,6 +95,18 @@
       "verified_at": "2026-11-05T12:12:57.296976+00:00",
       "scheduled_for": "2026-11-05T12:00:00Z",
       "execution_kind": "scheduled_run_cloud"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "423c74383c6543d14cc6c0e6bf8421a749b38e77",
+      "pages_run_id": 42062070962,
+      "edition_id": "watchlist-20261105T160000Z",
+      "report_sha256": "fb5133ff5a7aa122b7451e8891d1e8e52fd54055c3f21c68354988b3b1e36ef0",
+      "verified_at": "2026-11-05T16:14:41.846183+00:00",
+      "scheduled_for": "2026-11-05T16:00:00Z",
+      "execution_kind": "scheduled_run_cloud"
     }
   ],
   "recovered_attempts": [
@@ -144,7 +156,8 @@
     "basis": "USD completed regular-session observations; adjusted-close cumulative returns",
     "required_prices_verified": 12,
     "adjusted_baselines_verified": 72,
-    "new_company_research_items": 5,
-    "shared_market_context_items": 0
+    "new_company_research_items": 3,
+    "shared_market_context_items": 1,
+    "source_price_timestamps": "Original exact close timestamps retained; completed daily values freshly verified."
   }
 }
