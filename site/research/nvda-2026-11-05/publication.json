@@ -1,0 +1,15 @@
+{
+  "title": "NVIDIA: the platform and the price",
+  "section": "Research Explained",
+  "as_of": "2026-11-05",
+  "cutoff": "2026-11-05T15:15:00Z",
+  "edition": "public adaptation",
+  "svg_visuals": 4,
+  "html_sha256": "3b9161bd206b5026436e8aebaee8f43049c6d827934556589af41051a63f4a88",
+  "omissions": [
+    "Third-party analyst fair-value and rating data and their derived chart",
+    "Private records, reports, download links and screenshots",
+    "Market-feed price without a reusable public provenance link"
+  ],
+  "sources": "NVIDIA issuer releases and SEC filings; short attributed Reuters reporting; external Morningstar reading links. Original analysis is labelled separately."
+}
