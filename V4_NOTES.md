@@ -20,3 +20,9 @@ Validation: run `node scripts/test_v3.cjs`, `node scripts/test_v4.cjs` and the e
 V4 now includes a four-link section in the daily briefing and a dedicated `#tools` view, available from desktop navigation and the phone More menu. Options Lab, Portfolio Simulator New, Portfolio Simulator V6 and CLUBS open their exact external URLs in new tabs with `rel="noopener noreferrer"` and visible external-site labels.
 
 Validated with all 14 V3 checks, 5 V4 behavior checks and 17 Python publisher tests. Headless Edge checks cover desktop, phone and 200% text with 50% card size; exact link URLs, new-tab clicks, null opener, visible keyboard focus, Back/Forward and all existing V4 sections pass. Screenshots reviewed. V3, landing defaults, datasets and schedules are unchanged.
+
+## Dynamic card layouts — 5 November 2026
+
+Dynamic is the default Card layout. Ordinary card collections now share automatic wrapping across briefing, tools, report/research grids, watchlist and company earnings. Wider windows and browser zoom-out admit more columns without another settings change. Fixed one-, two-, three- and four-column options are available and reduce the count when space or enlarged text requires it. Saved choices remain browser-local.
+
+Card size now reaches the readable minimum instead of being overridden by a separate 330px floor. Summary-stat cards retain their smaller minimum. Chart-bearing collections keep the larger chart minimum; independent UST/history charts, dense tables, full report readers and unrelated page sections are not merged or narrowed. A collection with only two cards naturally still contains two cards.

@@ -17,11 +17,11 @@ summary{line-height:1.5;padding-block:10px;white-space:normal;min-height:44px}
 .brand-icon{flex-shrink:0}.brand>span:last-child{min-width:0}.rail{overflow-y:auto}.rail .brand{align-items:flex-start}.rail .brand b{font-size:16px}.rail .brand small{font-size:10px}.rail button{font-size:calc(13px * min(var(--text-scale),1.5));overflow-wrap:anywhere}.rail-foot{font-size:12px}
 .topbar>div:first-child{min-width:0}.topbar b{letter-spacing:.04em;overflow-wrap:anywhere}.top-controls{flex-wrap:wrap;justify-content:flex-end;gap:10px}.topbar{align-items:center}.topbar .version{font-size:12px}
 .display-fields{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}.display-scale-row{flex-wrap:wrap}.display-scale-row input{flex-basis:100px}.display-layout summary{white-space:normal}
-html[data-display-columns=one] #view .grid:not(.four),html[data-display-columns=one] #view .deal-grid,html[data-display-columns=one] .v4-history-grid,html[data-display-columns=one] .ust-card-grid{grid-template-columns:minmax(0,1fr)}
-html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=two] .v4-history-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,max(var(--chart-min),calc((100% - var(--card-gap))/2))),1fr))}
+html[data-display-columns=one] .v4-history-grid,html[data-display-columns=one] .ust-card-grid{grid-template-columns:minmax(0,1fr)}
+html[data-display-columns=two] .v4-history-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,max(var(--chart-min),calc((100% - var(--card-gap))/2))),1fr))}
 .v3-chart{overflow:visible}.chart text,.v3-chart text{font-family:var(--display-font)}
 .v4-event-legend{color:var(--muted);font-size:calc(11px * var(--text-scale));border-top:1px dashed var(--line);padding-top:10px}.v4-event-legend span{overflow-wrap:anywhere}.subnav{flex-wrap:wrap;overflow:visible}.subnav button{white-space:normal;min-width:0}
-@media(max-width:1100px){html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=two] .v4-history-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--chart-min)),1fr))}}
+@media(max-width:1100px){html[data-display-columns=two] .v4-history-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--chart-min)),1fr))}}
 @media(max-width:760px){.content{overflow-x:visible}.table-scroll{max-width:100%}.topbar b{font-size:12px}.topbar>div:first-child{max-width:130px}.top-controls{flex-wrap:nowrap;gap:5px}.card,.chart-panel{padding:max(12px,calc(var(--card-pad) * .7))}.page-head h1{font-size:calc(28px * var(--text-scale));overflow-wrap:anywhere}.welcome-tools button{flex-wrap:wrap}.welcome-tools small{text-align:left;max-width:none}.v4-history-grid{grid-template-columns:minmax(0,1fr)}.flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg)}.bottom-nav button{font-size:calc(10px * min(var(--text-scale),1.5))}.bar-row{grid-template-columns:minmax(0,1fr) minmax(30px,1fr) auto}.display-heading h2{font-size:calc(20px * var(--text-scale))}}
 @media print{.content{max-width:100%}.v4-history-grid{display:block}}
 
@@ -64,3 +64,24 @@ html[data-display-columns=two] #view .grid:not(.four),html[data-display-columns=
 .policy-scale{font-size:calc(10px * var(--chart-text-scale,1))}.policy-bar-label{font-size:calc(13px * var(--chart-text-scale,1))}.policy-bar-label strong{font-size:calc(24px * var(--chart-text-scale,1))}
 .bars .bar-row,.bars .bar-row b{font-size:calc(12px * var(--chart-text-scale,1))}
 .policy-seat-pair strong{font-size:calc(27px * var(--chart-text-scale,1))}.policy-seat-pair span,.policy-lead span{font-size:calc(11px * var(--chart-text-scale,1))}.policy-lead strong{font-size:calc(29px * var(--chart-text-scale,1))}
+
+/* One shared card layout: no two-column ceiling in the default Dynamic mode.
+   Only real card collections participate. Full-width tables, article readers,
+   and independently sized UST/history charts keep their own layouts. */
+html[data-display-columns] #view :is(.grid,.deal-grid,.watchlist-grid,.ed-companies){
+ --layout-min:var(--card-min);
+ --layout-gap:var(--card-gap);
+ --layout-floor:var(--layout-min);
+ display:grid;gap:var(--layout-gap);
+ grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--layout-floor)),1fr));
+}
+html[data-display-columns] #view .grid.four:not(.tool-links){--layout-min:var(--small-card-min)}
+html[data-display-columns] #view :is(.watchlist-grid,.ed-companies){--layout-min:max(var(--card-min),calc(300px * var(--text-scale,1)))}
+html[data-display-columns] #view .grid:has(.chart){--layout-min:var(--chart-min)}
+html[data-display-columns=one] #view :is(.grid,.deal-grid,.watchlist-grid,.ed-companies){--layout-floor:100%}
+html[data-display-columns=two] #view :is(.grid,.deal-grid,.watchlist-grid,.ed-companies){--layout-floor:max(var(--layout-min),calc((100% - var(--layout-gap)) / 2))}
+html[data-display-columns=three] #view :is(.grid,.deal-grid,.watchlist-grid,.ed-companies){--layout-floor:max(var(--layout-min),calc((100% - var(--layout-gap) - var(--layout-gap)) / 3))}
+html[data-display-columns=four] #view :is(.grid,.deal-grid,.watchlist-grid,.ed-companies){--layout-floor:max(var(--layout-min),calc((100% - var(--layout-gap) - var(--layout-gap) - var(--layout-gap)) / 4))}
+/* Enlarged watchlist controls must shrink with their phone-width card collection. */
+#view .watchlist-scope :is(label,input,select){min-width:0;max-width:100%}
+#view .watchlist-scope :is(input,select){width:100%;box-sizing:border-box}
