@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "id": "call-qqq-hedge-review-20261031",
+  "ticker": "QQQ",
+  "review_date": "2026-10-31",
+  "recorded_at": "2026-11-05T07:03:24Z",
+  "call_type": "Hypothetical hedge review",
+  "summary": "The working eight-put example showed an indicative gain of US$14,216, not a confirmed trading profit. The analysis used eight QQQ US$750 puts expiring 19 February 2027, a reconstructed reference premium of US$46.50 and the later displayed bid of US$64.27. Entry and exit fills were not established.",
+  "public_approval": true,
+  "report": {
+    "title": "QQQ hedge update: partial protection through a sharper selloff",
+    "as_of": "2026-10-31T03:57:36Z",
+    "created_at": "2026-11-05T07:03:24Z",
+    "visibility": "public",
+    "quote_date": null,
+    "financial_period_end": null,
+    "period_basis": "Historical option snapshot and scenario analysis",
+    "provenance": "Approved redacted summary of the dated private report. Original account evidence is not published.",
+    "sections": [
+      {
+        "heading": "Summary",
+        "body": "The working eight-put example showed an indicative gain of US$14,216, not a confirmed trading profit. The analysis used eight QQQ US$750 puts expiring 19 February 2027, a reconstructed reference premium of US$46.50 and the later displayed bid of US$64.27. Entry and exit fills were not established."
+      },
+      {
+        "heading": "Visual 1: Three-stage quote and valuation table",
+        "body": "| Measure | Initial reference | 30 October review | 31 October update |\n| --- | ---: | ---: | ---: |\n| QQQ snapshot | US$721.25 | US$715.28 | US$690.53 |\n| Put premium per share | US$46.50 reconstructed | US$51.96 bid | US$64.27 bid |\n| Eight-contract value | US$37,200 | US$41,568 | US$51,416 |\n| Conditional gain | US$0 | +US$4,368 | +US$14,216 |\n\nChart: use three separate labelled observations, not a continuous live-price series. Reference cost is reconstructed; later values are indicative bid-side marks."
+      },
+      {
+        "heading": "Purpose and outcome",
+        "body": "The plan was temporary protection through an earnings window, with an intended exit one week after entry. A longer option expiry was chosen to reduce estimated short-holding-period time decay. The stated purpose was protection against a repricing associated with AI capital spending, cash-flow pressure and debt-service concerns, rather than a claim that a particular company would fail.\n\nThe later update showed a larger dollar gain but a smaller proportion of the illustrative stock loss offset. The report's QQQ-equivalent portfolio comparison showed 47.68% of the reference loss offset, versus 75.39% in the earlier review. Actual stock holdings and their returns were not established."
+      },
+      {
+        "heading": "Visual 2: Normalized hedge comparison",
+        "body": "Normalize the stock sleeve to 100 reference units. Fund the option premium separately at 5.3143 units, so both cases start with 105.3143 total units.\n\n| At the 31 October snapshot | Without hedge | With the assumed puts |\n| --- | ---: | ---: |\n| Stock-sleeve change | -4.2593 units | -4.2593 units |\n| Hedge contribution | 0.0000 units | +2.0309 units |\n| Combined change | -4.2593 units | -2.2284 units |\n| Stock loss offset | 0.00% | 47.68% |\n\nChart: two loss bars, with the hedge contribution shown as a green bridge. Label this a normalized hypothetical portfolio, not personal account performance."
+      },
+      {
+        "heading": "Costs and limitations",
+        "body": "Time decay was one component of cost, not a fixed insurance bill. Starting Greeks suggested approximately US$660 of seven-day theta for the eight-put example if price and implied volatility were unchanged. Price moves, volatility changes, bid-ask spreads and execution costs could produce very different results.\n\nThese snapshots do not establish a completed one-week hedge or a realized return. The latest midpoint would imply a US$14,908 gain, but midpoint is not an assured fill. Fees, financing, dividends, tax and slippage are excluded, and a QQQ proxy cannot establish the performance of a different stock portfolio."
+      }
+    ],
+    "sources": [
+      {
+        "title": "Option Greeks",
+        "url": "https://tastytrade.com/learn/trading-products/options/options-greeks/"
+      },
+      {
+        "title": "Vega",
+        "url": "https://tastytrade.com/learn/trading-products/options/vega/"
+      }
+    ],
+    "html_path": "research/calls/call-qqq-hedge-review-20261031/index.html",
+    "sha256": "a1b45a66682b08465ea265e761d573049f76db14f9a090764742aa02cef0c3d0"
+  }
+}

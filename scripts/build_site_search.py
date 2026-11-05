@@ -108,7 +108,15 @@ def build():
   for x in d.get('rows',[]):
    target=watchlist_report_target(ROOT,d,x.get('ticker',''))
    add('Watchlist research',x.get('ticker','')+' · '+x.get('name',''),strings([x.get('research'),x.get('gaps')]),target,d.get('as_of'),(x.get('sources') or [{}])[0].get('url'),'Watch only; dated research, not an executed trade'+('' if target else '; matching dated report unavailable — no redirect to latest'),tags=[x.get('ticker')],location={'label':'V4 → Watchlist → '+str(d.get('as_of','Unknown edition'))+' → '+x.get('ticker',''),'href':target,'exact':bool(target)})
- for x in read('data/watchlist/calls.json').get('calls',[]):add('Public diary',x.get('title',x.get('ticker','Public entry')),strings(x),'v4.html#calls',x.get('date'),None,'Public saved entry')
+ for x in read('data/watchlist/calls.json').get('calls',[]):
+  if x.get('public_approval') is not True:continue
+  r=x.get('report',{});target='v4.html#calls'
+  if x.get('schema_version')==2:
+   path=r.get('html_path','');expected='research/calls/'+str(x.get('id',''))+'/index.html'
+   if re.fullmatch(r'call-[a-z0-9-]+',x.get('id','')) and path==expected:
+    report=ROOT/path
+    if report.is_file() and hashlib.sha256(report.read_bytes()).hexdigest()==r.get('sha256'):target=path
+  add('Public diary',r.get('title',x.get('title',x.get('ticker','Public entry'))),strings(x),target,x.get('review_date',x.get('called_at',x.get('date'))),None,x.get('call_type','Public saved entry'))
  d=read('data/securities.json')
  for x in d.get('stocks',[]):add('Stock directory',x['ticker']+' · '+x['name'],strings([x.get('sector'),x.get('exchange')]),x['url'],None,x['url'],'User-supplied reference link; not a current quote',tags=[x.get('ticker'),x.get('sector')])
  for x in d.get('bonds',[]):add('Bond directory',x['name'],strings([x.get('id'),x.get('issuer'),x.get('currency'),x.get('kind'),x.get('maturity')]),x['url'],None,x['url'],'User-supplied reference; terms not independently reverified',tags=[x.get('currency'),x.get('kind')])

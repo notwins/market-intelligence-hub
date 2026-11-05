@@ -79,3 +79,12 @@ Each of the 12 watchlist cards has a labelled Past reports disclosure. Its links
 Company names and ticker headings open the internal saved-content search. Public report destinations are labelled “within Market Intel”; publisher/source links are labelled “External source · leaves Market Intel · new tab.” A visible private notice explains that private notes and restricted screenshots are not available on this public page. It is not a claim that a private report exists for every name, and contains no private identifier or link. Do not replace this notice with a private destination until that destination is verified, authorized and appropriately protected. Frozen reports are not rewritten to add these navigation controls.
 
 `test_watchlist_report_destinations.py` verifies public report SHA-256 receipts and all 12 company anchors. `test_watchlist_report_links.cjs` covers exact edition paths, archived cutoffs, unsafe/invalid values, duplicate reports and unavailable versus empty states; the existing `test_watchlist.cjs` runs it as part of the normal workflow.
+
+
+## Historical ETF/options reviews (schema version 2)
+
+The Calls archive also accepts explicitly approved historical research reviews for the watchlist equities, QQQ and SPY. Schema 1 point-of-call records and their validation are unchanged. Schema 2 uses an ISO `review_date`, never a fabricated `called_at`; its classes are `Hypothetical hedge review`, `Hypothetical strategy comparison`, and `Historical closed-trade review`. It preserves the historical evidence cutoff separately from the public summary creation/recording time. Later evidence cannot be backdated into the historical review.
+
+Version 2 reports add a constrained `html_path` (`research/calls/CALL-ID/index.html`) and SHA-256 receipt. The permanent full summary has small code-native charts, accessible data tables, written limitations and public source links. There are no image files, broker screenshots, account balances, family labels or private chat links. Actual closed-trade results remain separate from indicative or hypothetical values. A missing broker buying-power figure cannot be replaced with an earlier proposal's margin or represented as a verified return on margin.
+
+The Calls view and saved-content search link each review directly to its historical full summary. Existing schema 1 calls remain inline and immutable. Tests check report receipts, dated labels, safe links, no image assets/private data, contract arithmetic and distinction of return denominators.
