@@ -33,3 +33,22 @@ html[data-display-contrast="true"] .history-page{--history-key:#004c60;--history
 .history-spx{min-height:calc(100vh - var(--sticky-topbar-height,75px))}
 .history-page .bw-controls label{min-width:0;max-width:100%}
 .history-page .bw-controls select{min-width:0;max-width:100%;width:100%}
+
+/* Reflow only monthly-yield cards on wide desktops: data left, plot right.
+   Preserve the existing stacked markup, mobile view and explicit expanded view. */
+.history-yield-data,.history-yield-plot{display:contents}
+@media(min-width:761px){
+ .history-yield-comparison{container-type:inline-size}
+ @container(min-width:980px){
+  html:not([data-display-columns=one]) #view .history-yield-comparison:not(.is-expanded)>.v4-history-grid{grid-template-columns:clamp(320px,25cqi,400px) minmax(0,1fr);grid-template-rows:auto auto 1fr;gap:var(--card-gap);padding:var(--card-pad);border:1px solid var(--line);border-radius:20px;background:var(--panel,#fff);box-shadow:0 8px 28px #19344e06}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .chart-panel{display:contents}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .history-chart-heading{grid-column:1/-1;grid-row:1}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .history-yield-data{display:block;grid-column:1;grid-row:2;min-width:0}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .history-yield-plot{display:block;grid-column:2;grid-row:2/4;min-width:0}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .v4-history-side{grid-column:1;grid-row:3}
+  html:not([data-display-columns=one]) #view .history-yield-comparison:not(.is-expanded) .stats-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .history-series-controls{grid-template-columns:minmax(0,1fr);margin-top:0}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .v4-history-side>.card{padding:15px}
+  html:not([data-display-columns=one]) .history-yield-comparison:not(.is-expanded) .v4-history-side .table-scroll{max-height:420px;overflow:auto}
+ }
+}

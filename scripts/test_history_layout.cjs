@@ -1,0 +1,12 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const read=f=>fs.readFileSync('site/'+f,'utf8');
+function layout(width,viewport=width+294,columns='dynamic',card=1){const root={style:{getPropertyValue:key=>key==='--card-scale'?card:1},dataset:{displayColumns:columns}},ctx={window:{},innerWidth:viewport,document:{documentElement:root,readyState:'loading',addEventListener(){},querySelector:()=>({getBoundingClientRect:()=>({width})})}};vm.createContext(ctx);vm.runInContext(read('v4-layout.js'),ctx);return ctx.window.MarketLayout;}
+for(const width of [280,320,390,680,838,979,980,986,1146,1280,1578,2218,3546])for(const columns of ['dynamic','one','two','three','four'])for(const card of [.6,1,1.35,2]){
+ const viewport=width<=390?width:width+294,l=layout(width,viewport,columns,card),actual=l.historyChartWidth(),gap=Math.max(10,20*card),padding=Math.max(12,25*card),data=Math.min(400,Math.max(320,width*.25)),split=viewport>760&&columns!=='one'&&width>=980,expected=split?Math.max(280,Math.round(width-2*padding-2-data-gap)):l.chartWidth();
+ assert.equal(actual,expected,`${width}/${columns}/${card}`);assert.equal(l.historyChartWidth({fullWidth:true}),l.chartWidth({fullWidth:true}));if(split)assert(actual>=500||card>1.35);
+}
+const css=read('history-context.css'),js=read('v4-tools.js'),html=read('v4.html');
+assert.match(css,/@media\(min-width:761px\)/);assert.match(css,/@container\(min-width:980px\)/);assert(css.includes('grid-template-columns:clamp(320px,25cqi,400px) minmax(0,1fr)'));assert(css.includes('.history-yield-data{display:block;grid-column:1;grid-row:2'));assert(css.includes('.history-yield-plot{display:block;grid-column:2;grid-row:2/4'));assert(css.includes('html:not([data-display-columns=one])'));assert(css.includes('max-height:420px;overflow:auto'));assert(!css.includes('transform:scale'));assert.match(js,/historyLayout:!fx/);assert.match(js,/historyChartWidth\?\.\(\{fullWidth\}\)/);assert(js.includes("class=\"history-comparison${fx?'':' history-yield-comparison'}"));
+for(const f of ['v4-tools.js','v4-layout.js','history-context.css'])assert(html.includes(f+'?v=20261105.history-layout1'));
+assert(layout(2218).historyChartWidth()>layout(1578).historyChartWidth(),'plot uses extra monitor width');
+console.log('PASS monthly yield data-left/plot-right geometry, mobile through ultrawide widths, dynamic/fixed columns, large cards, preserved expanded/mobile/FX flows and cache refresh');
