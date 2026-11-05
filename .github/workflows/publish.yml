@@ -55,6 +55,7 @@ jobs:
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
           node scripts/test_dashboard_readability.cjs
+          node scripts/test_sidebar_scrollbar.cjs
           node scripts/test_reader_independence.cjs
           node scripts/test_colour_reference.cjs
           node scripts/test_bond_watchlist.cjs
@@ -93,6 +94,7 @@ jobs:
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
           node scripts/test_dashboard_readability.cjs
+          node scripts/test_sidebar_scrollbar.cjs
           node scripts/test_reader_independence.cjs
           node scripts/test_colour_reference.cjs
           node scripts/test_bond_watchlist.cjs
