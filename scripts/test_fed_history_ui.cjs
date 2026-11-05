@@ -10,7 +10,7 @@ function setup(published=sample,status={status:'success',last_success:new Date()
 }
 (async()=>{
  const app=setup(),api=app._test;
- await api.loadHistory();assert.equal(api.getState().history.status,'provider_snapshot');assert.equal(api.getState().end,'2020-04-01');
+ await api.loadHistory();assert.equal(api.getState().history.status,'mixed_source_snapshot');assert.equal(api.getState().end,'2026-08-01');assert.equal(api.getState().history.series.filter(s=>s.family==='sgs').length,9);api.chooseHistory('published');assert.equal(api.getState().end,'2020-04-01');
  assert.match(app.historyView(),/History source/);assert.match(app.historyView(),/Last successful Fed retrieval/);
  assert.match(api.contextControls(),/Monetary and currency policy/);assert.match(api.contextControls(),/U.S. recessions/);
  const all=api.chosenEvents().length;api.toggleEventGroup('fed-qe',false);assert.equal(api.chosenEvents().length,all-5);assert.ok(api.chosenEvents().some(e=>e.group==='snb'));api.toggleEventGroup('fed-qe',true);assert.equal(api.chosenEvents().length,all);
