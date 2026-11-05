@@ -6,12 +6,44 @@
   "original_companies": 40,
   "additional_financial_spotlights": 12,
   "svg_visuals": 11,
-  "html_sha256": "5d46d42e918f44f9e57a9593d5da4311b82ec6bbaaafbcbe1f57ff98f5416702",
+  "html_sha256": "1d478498320548ee39c15b660e9a5cd1e7b5b2c7539a7cd2d06e86b28e939622",
   "omissions": [
     "Third-party price/fair-value tables",
     "Purchase rankings dependent on omitted analyst estimates",
     "Private attachment descriptions and personal identifiers",
     "Private source-correction and coordination metadata"
   ],
-  "sources": "Issuer filings, releases, technical documentation and public institutions; third-party originals linked externally only."
+  "sources": "Issuer filings, releases, technical documentation and public institutions; third-party originals linked externally only.",
+  "presentations": {
+    "as_of": "2026-11-05",
+    "edition": "audited public adaptation",
+    "description": "Original independent summaries from public issuer disclosures and attributed IEA data. Proprietary valuation tables and related rankings omitted.",
+    "files": [
+      {
+        "title": "Financial briefing",
+        "path": "presentations/AI_Data_Centre_Financial_Briefing_Public.pptx",
+        "bytes": 49281,
+        "sha256": "0bcae985a097d5980c4e12cb0f7816f049cdec389f9862e7bc5632e6c65fefd1",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 1,
+        "native_tables": 3
+      },
+      {
+        "title": "Clear visual story",
+        "path": "presentations/AI_Data_Centre_Clear_Visual_Story_Public.pptx",
+        "bytes": 49616,
+        "sha256": "a04cdf80a40095b0d0cd254a127ba157576c70eef4c48aae1fce146dd348e7a6",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 1,
+        "native_tables": 2
+      }
+    ],
+    "notes_companion": {
+      "path": "presentations/Presentation_Notes.html",
+      "bytes": 43862,
+      "sha256": "d746cdc8fe0bfd56461e14c0c368b8836e88d251f4c4471ead45d6316a0f9334"
+    }
+  }
 }
