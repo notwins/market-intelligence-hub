@@ -33,9 +33,9 @@ class Additions(unittest.TestCase):
    self.assertNotIn(before,page);self.assertIn(after,page)
   self.assertEqual(correct_copy(original_copy(page)),page)
   self.assertNotRegex(page,r'<(?:img|iframe|embed|object)\b')
-  self.assertGreaterEqual(page.count('class="mu-writeup"'),8)
+  self.assertGreaterEqual(page.count('class="mu-writeup"'),10)
   original=page.split('<!-- published-writeups:start -->')[1].split('<!-- published-writeups:end -->')[0]
-  self.assertEqual(original.count('class="mu-writeup"'),6)
+  self.assertEqual(original.count('class="mu-writeup"'),7)
   self.assertEqual(page.count('id="research-readings"'),1)
   self.assertEqual(page.count('class="mu-chapter"'),15)
  def test_all_new_bar_scales_and_visible_data(self):

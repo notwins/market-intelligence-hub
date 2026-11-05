@@ -1,0 +1,36 @@
+{
+  "title": "SPX: floors, caps and the price of protection",
+  "published_date": "2026-11-05",
+  "edition": "Public-safe aggregate edition",
+  "source_report_sha256": "8c7b8b0182cd433bda3e726fb730762ef36f1c0982562bcc8256b951beafe1c3",
+  "original_sections": 35,
+  "published_sections": 35,
+  "charts": 9,
+  "source_series_charts_replaced": [
+    3,
+    4,
+    5,
+    9
+  ],
+  "raw_series_downloads": false,
+  "copied_source_documents": false,
+  "correction": "Collar payoff example column renamed Gross payoff return; unchanged values.",
+  "source_basis": "NYU annual price levels 1960\u20132025; 65 returns. 109 government-table monthly endpoints, 97 rolling windows.",
+  "verified_headlines": {
+    "annual_counts": [
+      17,
+      10,
+      38
+    ],
+    "annual_denominator": 65,
+    "price_cagr_percent": 7.612795231570346,
+    "hypothetical_cagr_percent": 5.786322393581211,
+    "monthly_counts": [
+      16,
+      16,
+      65
+    ],
+    "monthly_denominator": 97
+  },
+  "rights_review": "Research prose and original aggregate/synthetic charts only. Raw appendix, full-series charts and source files not redistributed; sources linked."
+}
