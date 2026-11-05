@@ -26,6 +26,15 @@ class SPXResearch(unittest.TestCase):
         self.assertEqual(self.text.count('<figcaption>'),9)
         self.assertIn('overflow-x:auto',self.text); self.assertIn('@media print',self.text)
         self.assertIn('window.print()',self.text)
+    def test_histogram_threshold_labels_clear_the_bars(self):
+        for n, label in [(17,'0% floor'),(18,'9% cap')]:
+            group=re.search(rf'<g id="spx-chart-2-text_{n}">(.*?)</g>',self.text,re.S)[1]
+            self.assertIn(label,group)
+            y=float(re.search(r'\by="([0-9.]+)"',group)[1])
+            # Highest histogram bar starts at SVG y=121.017656 (count=10).
+            # Labels sit at count=13 with substantial white space below them.
+            self.assertAlmostEqual(y,78.087656,places=6)
+            self.assertLess(y+12,121.017656)
     def test_links_and_no_raw_series_distribution(self):
         for href in self.page.links:
             if href.startswith('#'): self.assertIn(href[1:],self.page.ids)
