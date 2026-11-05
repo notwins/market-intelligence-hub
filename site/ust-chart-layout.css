@@ -1,10 +1,24 @@
-/* Keep desktop UST plots compact without scaling dashboard text or chart data.
-   SVG view boxes use the same width limit, so labels are not enlarged on wide screens.
-   Mobile dimensions and the existing Taller charts preference stay independent. */
+/* Constrain the entire desktop card, not the drawing within it.
+   Two readable cards share wide screens; narrower desktops retain space at the right.
+   Phones keep the original stacked cards and chart dimensions. */
 @media(min-width:761px){
-  #ust-curves .uc-visual{max-width:960px;margin-inline:auto}
+  .ust-chart-deck{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;align-items:start;max-width:1740px;margin:22px 0 30px}
+  .ust-chart-deck>.bond-watchlist,.ust-chart-deck>#ust-curves{width:100%;max-width:860px;min-width:0;margin:0}
+  .ust-chart-deck .uc-panel{margin:0}
   #ust-curves .uc-chart{min-height:0}
-  .bond-watchlist .bw-chart{max-width:960px;margin-inline:auto}
-  .bond-watchlist .bw-chart svg{min-height:0}
-  #ust-results>.chart-panel>.v3-chart{max-width:960px;margin-inline:auto}
+  #ust-results>.chart-panel{width:100%;max-width:860px;margin-inline:0}
+}
+@media(min-width:761px){.ust-chart-deck{grid-template-columns:repeat(auto-fit,minmax(min(100%,640px),1fr))}}
+
+/* Tighten supporting space while leaving the plotted area and text readable. */
+@media(min-width:761px){
+  .ust-chart-deck .uc-heading{margin-bottom:10px}
+  .ust-chart-deck .uc-heading .eyebrow{margin-bottom:6px}
+  .ust-chart-deck .uc-panel #uc-status{margin:4px 0 8px}
+  .ust-chart-deck .uc-help{margin:4px 0 8px}
+  .ust-chart-deck .uc-visual{padding-top:10px}
+  .ust-chart-deck .uc-key{padding-bottom:6px}
+  .ust-chart-deck .uc-axis-controls{margin:4px 0}
+  .ust-chart-deck .uc-table{margin-top:8px}
+  .ust-chart-deck .bw-controls label{margin-block:10px}
 }

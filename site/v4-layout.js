@@ -5,7 +5,9 @@ function update(){const{root,scale,card}=values();const minimum=Math.max(340*car
 function chartWidth({fullWidth=false}={}){const{root,scale,card}=values(),content=document.querySelector('#view'),width=content?.getBoundingClientRect().width||innerWidth;
  const columns=root.dataset.displayColumns;const minimum=Math.max(600*card,330*scale);const split=!fullWidth&&columns!=='one'&&width>=minimum*2+20;
  return Math.max(280,Math.round((split?(width-20)/2:width)-Math.max(24,50*card)));}
+// UST card geometry is independent of the plot height. Fit the whole card first.
+function ustChartWidth({deck=true,pinned=false}={}){const{card}=values(),width=document.querySelector('#view')?.getBoundingClientRect().width||innerWidth,available=deck?Math.min(width,1740):width,columns=deck&&available>=1300?2:1,panel=Math.min(860,(available-20*(columns-1))/columns),padding=pinned?Math.min(28,Math.max(16,innerWidth*.025)):Math.max(12,25*card);return Math.max(280,Math.round(panel-2*padding-(pinned?8:2)));}
 function resized(){cancelAnimationFrame(frame);frame=requestAnimationFrame(()=>{const width=document.querySelector('#view')?.clientWidth||innerWidth;if(Math.abs(width-previousWidth)<2)return;previousWidth=width;update();window.dispatchEvent(new CustomEvent('market-display-change'));});}
 function ready(){update();new ResizeObserver(resized).observe(document.querySelector('.content'));}
 document.readyState==='loading'?document.addEventListener('DOMContentLoaded',ready,{once:true}):ready();
-return{update,chartWidth};})();
+return{update,chartWidth,ustChartWidth};})();
