@@ -1,0 +1,26 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {bounds,inWindow,select,safeHref}=require('../site/publication-timeline.js');
+const now=Date.parse('2026-11-05T16:30:00Z'),b=bounds(now);
+assert.equal(new Date(b.start).toISOString(),'2026-11-03T16:00:00.000Z');
+assert.equal(new Date(b.end).toISOString(),'2026-11-06T16:00:00.000Z');
+assert(inWindow({at:'2026-11-04T00:00:00+08:00'},now));
+assert(!inWindow({at:'2026-11-03T23:59:59+08:00'},now));
+assert(!inWindow({at:'2026-11-05T16:31:00Z'},now));
+assert(!inWindow({at:null},now));
+const rows={entries:[{id:'a',title:'Credit',source:'Hub research',kind:'PDF',format:'PDF',category:'research',at:'2026-11-05T23:59:00+08:00'},{id:'b',title:'Wire',source:'Reuters',category:'reuters',at:'2026-11-05T16:10:00Z'}]};
+assert.deepEqual(select(rows,{now}).map(x=>x.id),['b','a']);
+assert.equal(select(rows,{now,filter:'research',query:'PDF'}).length,1);
+assert.equal(select(rows,{now,filter:'research',query:'not present'}).length,0);
+for(const url of ['javascript:alert(1)','https://chatgpt.com/c/private','//evil.example','../private','https://a:b@example.com','data:text/html,hi'])assert.equal(safeHref(url),'#');
+assert.equal(safeHref('research/public/index.html'),'research/public/index.html');
+const root=path.join(__dirname,'../site'),data=JSON.parse(fs.readFileSync(path.join(root,'data/publication-timeline.json')));
+assert.equal(data.schema_version,1);
+assert.equal(new Set(data.entries.map(x=>x.id)).size,data.entries.length);
+for(const row of data.entries){assert.notEqual(safeHref(row.href),'#',row.href);assert(Number.isFinite(Date.parse(row.at)),row.title);assert(!row.href.includes('chatgpt.com'));if(row.category!=='reuters'){assert(row.provenance_url.includes('/commit/'));assert.equal(row.date_basis,'Added to hub repository');}else assert.equal(row.date_basis,'Reuters publication time');}
+const research=fs.readdirSync(path.join(root,'research/nvda-2026-11-05'));
+assert(data.entries.some(x=>x.href==='research/nvda-2026-11-05/index.html'));
+assert(data.entries.some(x=>x.href.endsWith('creditworthiness-guide.pdf')));
+assert(data.entries.some(x=>x.format==='PPTX'));
+assert.equal(data.invalid_watchlist_reports,0);
+const html=fs.readFileSync(path.join(root,'v4.html'),'utf8');assert.equal((html.match(/MarketPublications.shell\(\)/g)||[]).length,1);assert(html.includes('MarketPublications.mount()'));
+console.log('PASS publication timeline: SGT boundaries, offset sorting, future exclusion, filters, safe links, provenance, unique records and v4 mounting.');

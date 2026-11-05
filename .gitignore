@@ -1,3 +1,6 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Derived for the Pages artifact from public files and Git history.
+site/data/publication-timeline.json
