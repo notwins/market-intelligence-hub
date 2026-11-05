@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-04T20:43:58.148250+00:00",
-  "message": "05 Nov 04:00 SGT watchlist edition is published. Exact-commit Pages deployment, live edition ID and report hash verified. All 12 completed-session prices and 72 adjusted baselines checked; five current company/shared research items render. Source coverage is partial. This verifies this scheduled execution, not future runs.",
+  "checked_at": "2026-11-05T01:05:44.334605+00:00",
+  "message": "05 Nov 08:00 SGT fixed-cutoff watchlist edition published after validation repair. Exact-commit Pages deployment, live edition ID and report hash verified at 09:05 SGT. All 12 completed-session prices and 72 adjusted baselines checked; four current company research items render. Source coverage is partial. This was a resumed scheduled execution, not a new live snapshot or proof of future runs.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,13 +14,13 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "7ffc138d31f43ce474edc3a0b176654a32181409",
-    "pages_run_id": 41908941739,
-    "edition_id": "watchlist-20261104T200000Z",
-    "report_sha256": "835e3eeda289c022e2b723f55c8229cb6e87c94e2f7b7bd5b260c3e244bdc6f2",
-    "verified_at": "2026-11-04T20:43:58.148250+00:00",
-    "scheduled_for": "2026-11-04T20:00:00+00:00",
-    "execution_kind": "scheduled_run",
+    "commit": "f40ec17ab29e2a982feff41ce0af3f8ef294974c",
+    "pages_run_id": 41945949975,
+    "edition_id": "watchlist-20261105T000000Z",
+    "report_sha256": "90a62a56abe7d47be8c1177b0e7ff31e67f2edb0585dafa8d629d2f0e2e16e5d",
+    "verified_at": "2026-11-05T01:05:44.334605+00:00",
+    "scheduled_for": "2026-11-05T00:00:00+00:00",
+    "execution_kind": "scheduled_run_resumed_after_validation_repair",
     "recovered_after_publishing_gate_repair": true
   },
   "separate_A_chat_delivery_verified": false,
@@ -34,6 +34,19 @@
       "edition_id": "watchlist-20261104T120000Z",
       "report_sha256": "bd59597a9b4d58e47afc69f21fdfaeaa69d6a85d467c13f95e686cda06b02244",
       "verified_at": "2026-11-04T12:31:29.274710+00:00"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "7ffc138d31f43ce474edc3a0b176654a32181409",
+      "pages_run_id": 41908941739,
+      "edition_id": "watchlist-20261104T200000Z",
+      "report_sha256": "835e3eeda289c022e2b723f55c8229cb6e87c94e2f7b7bd5b260c3e244bdc6f2",
+      "verified_at": "2026-11-04T20:43:58.148250+00:00",
+      "scheduled_for": "2026-11-04T20:00:00+00:00",
+      "execution_kind": "scheduled_run",
+      "recovered_after_publishing_gate_repair": true
     }
   ],
   "recovered_attempts": [
@@ -51,6 +64,15 @@
       "reason": "Publication held before push because current company narratives were absent from the in-site reader. Content-bound review and preparation integration repaired and independently tested.",
       "recovered_by_commit": "f49f0e9328b7f3ed4860d65c3a16f30dfc8db0af",
       "repair_pages_run_id": 41908128891
+    },
+    {
+      "edition_id": "watchlist-20261105T000000Z",
+      "reason": "Held before any GitHub write because the reader test assumed Microsoft had no dated research archive. A new verified Microsoft SEC filing exposed that stale expectation.",
+      "recovered_by_commit": "ccfaaf66ddad52a5a1e47bfeae118b7a9ebd5c0f",
+      "repair_pages_run_id": 41945303970,
+      "publication_commit": "f40ec17ab29e2a982feff41ce0af3f8ef294974c",
+      "recovery_pages_run_id": 41945949975,
+      "public_report_verified_at": "2026-11-05T01:05:44.334605+00:00"
     }
   ],
   "coverage": {
@@ -63,7 +85,7 @@
       "IEF"
     ],
     "news_access": "partial",
-    "price_session": "2026-11-03",
+    "price_session": "2026-11-04",
     "basis": "USD completed regular-session observations; adjusted-close cumulative returns"
   }
 }
