@@ -846,6 +846,42 @@
           "item_sha256": "407bf761ee41ca828d3cd470a523f000c5c1ea0d8268a111b27c3c8a46dce36c"
         }
       ]
+    },
+    "watchlist-20261105T200000Z": {
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "Microsoft tightens neocloud oversight, Reuters reports citing Bloomberg",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Microsoft tightens neocloud oversight, Reuters reports citing Bloomberg\",[\"Reuters at 17:30:04 UTC reported, citing Bloomberg and unnamed sources, that Microsoft is tightening oversight of some Nebius, IREN and Nscale data-center projects.\",\"The report says Microsoft is stepping away from projects it deems risky and weighing new neocloud deals while focusing on its own data centers. The companies did not immediately comment.\"],\"Greater supplier scrutiny may improve execution discipline but could alter the timing and mix of external AI capacity.\",\"Source-based reporting, not company-confirmed cancellation of existing contracts.\",\"Company clarification and capacity-delivery updates.\",[[\"Reuters citing Bloomberg · 17:30:04 UTC\",\"https://www.reuters.com/business/microsoft-tightens-oversight-neocloud-data-center-projects-bloomberg-news-2026-11-05/\"],[\"Reuters syndication with full details\",\"https://www.investing.com/news/stock-market-news/microsoft-tightens-oversight-of-neocloud-data-center-projects-bloomberg-news-reports-5005281\"]]]",
+          "item_sha256": "3674c7f35e7573c69b1fab72260e4297db860dac9eb46e6dadf995977d7ed15a"
+        },
+        {
+          "index": 1,
+          "headline": "Officer files notice of proposed share sale",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Officer files notice of proposed share sale\",[\"SEC accepted Takeshi Numoto’s Form 144 at 16:34:35 UTC, covering a proposed sale of 16,153 Microsoft shares with an aggregate market value of $8,732,311.80 and approximate sale date November 5.\"],\"This is an insider transaction notice, not a company operating update.\",\"Form 144 does not prove a completed sale or establish motive.\",\"Any subsequent ownership transaction filing.\",[[\"SEC · Form 144 accepted 16:34:35 UTC\",\"https://www.sec.gov/Archives/edgar/data/789019/000195917326007778/primary_doc.xml\"]]]",
+          "item_sha256": "80460e572279611d1c1a030acaa4e390c2cc090448788348d8037bda9e08b930"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "NVIDIA outlines memory-efficiency approach for AI inference",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"NVIDIA outlines memory-efficiency approach for AI inference\",[\"In a blog published at 16:00 UTC, NVIDIA described using lower precision, distributed model weights and memory/storage tiers to reduce pressure on expensive GPU high-bandwidth memory.\",\"The company presents workload-specific throughput-per-dollar comparisons; these are vendor claims, not independently verified benchmarks.\"],\"The emphasis is on reducing inference cost and using existing memory more efficiently. It does not establish a new revenue order or prove weaker aggregate memory demand.\",\"Performance depends on workload, system configuration and service targets.\",\"Independent benchmarks and the November 17 fiscal Q3 results call, announced by NVIDIA on October 28.\",[[\"NVIDIA blog · metadata published 16:00:00 UTC\",\"https://blogs.nvidia.com/blog/memory-full-stack-codesign/\"],[\"NVIDIA · October 28 earnings-call announcement\",\"https://nvidianews.nvidia.com/news/nvidia-sets-conference-call-for-third-quarter-financial-results-6928873\"]]]",
+          "item_sha256": "e78e96bb10673ff61d1c19f1052a16afd57621a6b0868c72b9f41de6330074a2"
+        }
+      ],
+      "AMD": [
+        {
+          "index": 0,
+          "headline": "Shared market context: intraday tech and AI selloff",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-05\",\"Shared market context: intraday tech and AI selloff\",[\"Reuters reported that the SOX had fallen as much as 11% and the Nasdaq Composite as much as 5% intraday; AMD and Micron were among double-digit decliners. These describe moves observed by reporting time, not 20:00 UTC quotes or closing returns.\"],\"The report links the selloff to AI-financing and data-center expansion concerns. Market moves do not establish order cancellations.\",\"Intraday losses can reverse; policy effects remain uncertain.\",\"Completed-session prices and confirmed company or permitting updates.\",[[\"Reuters · intraday report published 16:40:48 UTC\",\"https://www.reuters.com/business/view-tech-stock-rout-accelerates-retreat-ai-trade-2026-11-05/\"]]]",
+          "item_sha256": "377dca9b08b63b3bf6c6ad16747f1b8facf45a1b0a96e52a6a88d889b904d1ef"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -938,6 +974,12 @@
       "reviewed_at": "2026-11-05T16:10:44.395131+00:00",
       "edition_sha256": "b87f17978aca7056b519a5afc94fc9a45e6e87c332b0e2ae5031108a0f684f9a",
       "path": "data/watchlist/reviews/watchlist-20261105T160000Z.json"
+    },
+    "watchlist-20261105T200000Z": {
+      "as_of": "2026-11-05T20:00:00Z",
+      "reviewed_at": "2026-11-05T20:06:05.410065+00:00",
+      "edition_sha256": "d133adb5378b8625b0bd74c838946f6d8088208e21cb4675ae99cdd3282f2025",
+      "path": "data/watchlist/reviews/watchlist-20261105T200000Z.json"
     }
   }
 }

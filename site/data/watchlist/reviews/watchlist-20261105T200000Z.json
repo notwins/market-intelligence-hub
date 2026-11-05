@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261105T200000Z",
+  "as_of": "2026-11-05T20:00:00Z",
+  "edition_sha256": "d133adb5378b8625b0bd74c838946f6d8088208e21cb4675ae99cdd3282f2025",
+  "reviewed_at": "2026-11-05T20:06:05.410065+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "Microsoft tightens neocloud oversight, Reuters reports citing Bloomberg",
+      "item_sha256": "3674c7f35e7573c69b1fab72260e4297db860dac9eb46e6dadf995977d7ed15a",
+      "scope": "company",
+      "reason": "Reuters/Bloomberg company-specific supplier-oversight reporting with unnamed-source and no-confirmation qualifications retained."
+    },
+    {
+      "ticker": "MSFT",
+      "index": 1,
+      "headline": "Officer files notice of proposed share sale",
+      "item_sha256": "80460e572279611d1c1a030acaa4e390c2cc090448788348d8037bda9e08b930",
+      "scope": "company",
+      "reason": "Original SEC proposed transaction notice, preserving the distinction from execution and avoiding motive claims."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "NVIDIA outlines memory-efficiency approach for AI inference",
+      "item_sha256": "e78e96bb10673ff61d1c19f1052a16afd57621a6b0868c72b9f41de6330074a2",
+      "scope": "company",
+      "reason": "Original NVIDIA dated technical blog; vendor claims and workload limitations retained; no inferred order or revenue claim."
+    },
+    {
+      "ticker": "AMD",
+      "index": 0,
+      "headline": "Shared market context: intraday tech and AI selloff",
+      "item_sha256": "377dca9b08b63b3bf6c6ad16747f1b8facf45a1b0a96e52a6a88d889b904d1ef",
+      "scope": "market_context",
+      "reason": "Reuters intraday sector and index moves explicitly separated from completed-session price tables; not company operating research."
+    }
+  ]
+}
