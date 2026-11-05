@@ -1,0 +1,41 @@
+{
+  "title": "Understanding Creditworthiness",
+  "published_date": "2026-11-05",
+  "edition": "Corrected historical educational report with audited public presentations",
+  "presentations": {
+    "as_of": "2026-11-05",
+    "edition": "Audited public copies",
+    "html_sha256_before_download_panel": "47085384d6f0961132295d4cc913c4652c9ba2ae207588810e4a3d0927ec1650",
+    "preserved_source_files": {
+      "creditworthiness-guide.pdf": "65412d92d459749fef31b90bbbd36f1382fb3cc2343d6f76b09eea4cfcace0cf",
+      "report.css": "84eadc48a1cc07a57422454c21291f8fcdeb7cead5920106158cfda6e901fef7"
+    },
+    "files": [
+      {
+        "title": "Financial briefing",
+        "path": "presentations/Creditworthiness_Financial_Briefing_Public.pptx",
+        "bytes": 46186,
+        "sha256": "2f5153a062c479c141188234f06795ba272be94a77c344220156c54bc970f361",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 1
+      },
+      {
+        "title": "Clear visual story",
+        "path": "presentations/Creditworthiness_Clear_Visual_Story_Public.pptx",
+        "bytes": 53628,
+        "sha256": "80a0ce5ba0b5c59b7abb891511be6ce7a8cbc9c44bc2c70980f853fdc187d148",
+        "slides": 5,
+        "speaker_notes": 5,
+        "native_charts": 4
+      }
+    ],
+    "limitations": [
+      "Historical FY2025 issuer data with different fiscal year ends; not live quotations or current agency ratings.",
+      "Cash-stress cases are illustrative and exclude the cash uses identified on the slides and in notes; they are not forecasts.",
+      "Meta issue terms were checked using the disclosed SEC mirror; original and mirror links and the access limitation are retained. Settlement completion is not asserted.",
+      "Slides summarize the corrected report; public financial snapshots and original educational material only. No private records or reproduced third-party reports are included.",
+      "Rendered output and OOXML packages were audited; native Microsoft PowerPoint application testing was not available."
+    ]
+  }
+}
