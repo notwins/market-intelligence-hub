@@ -3,7 +3,7 @@
   'use strict';
   const views = new Set(['overview','watchlist','calls','policy','tools','master','history','ust','earnings','credit','reports','hourly','headlines','research','feeds']);
   const tabs = {history: new Set(['yield','fx','curves']), master: new Set(['explore','pivot','watchlists','screens','review'])};
-  const aliases = {stocks:'watchlist',bonds:'watchlist',directory:'watchlist',news:'headlines'};
+  const aliases = {directory:'watchlist',news:'headlines'};
   function validRoute(route) {
     const parts = route.split('/');
     return views.has(parts[0]) && (parts.length === 1 || (parts.length === 2 && tabs[parts[0]]?.has(parts[1])));
@@ -16,6 +16,10 @@
     query.delete('v'); // Expired cache tags are not layout preferences.
     const suffix = () => query.size ? '?' + query.toString() : '';
     if (validRoute(hash)) return 'v4.html' + suffix() + '#' + hash;
+    if (requested === 'stocks' || requested === 'bonds') {
+      query.set('directory', requested);
+      return 'v2.html' + suffix() + '#directory';
+    }
     if (requested === 'archive') return 'archive.html' + suffix();
     if (requested === 'saved') return 'saved-securities.html' + suffix();
     const route = aliases[requested] || requested;

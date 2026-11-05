@@ -9,7 +9,7 @@ test('all retired entries preserve supported V4 routes and query filters without
   for(const route of ['overview','watchlist','calls','policy','tools','master/explore','master/pivot','master/watchlists','master/screens','master/review','history/yield','history/fx','history/curves','ust','earnings','credit','reports','hourly','headlines','research','feeds']){
    assert.equal(target(page+'?v=20261103.mobile&security=00001#'+route),'v4.html?security=00001#'+route);
   }
-  const html=read(page);assert.ok(html.length<2000);assert.ok(html.includes('src="legacy-redirect.js"'));assert.ok(html.includes('<noscript>'));
+  const html=read(page);assert.ok(html.length<2000);assert.ok(html.includes('src="legacy-redirect.js?v=20261105.retirement2"'));assert.ok(html.includes('<noscript>'));
   for(const destination of ['v4.html','v2.html','archive.html','saved-securities.html'])assert.ok(html.includes('href="'+destination+'"'));
   assert.ok(!html.includes('data-view='));
  }
@@ -20,11 +20,28 @@ test('all retired entries preserve supported V4 routes and query filters without
 });
 test('old query and hash bookmarks retain archives, shortlists and equivalent current sections',()=>{
  for(const page of ['index.html','v1.html']){
-  for(const [old,route] of [['overview','overview'],['stocks','watchlist'],['bonds','watchlist'],['news','headlines'],['directory','watchlist']])assert.equal(target(page+'?view='+old+'&q=Amazon'),'v4.html?q=Amazon#'+route);
+  for(const [old,route] of [['overview','overview'],['news','headlines'],['directory','watchlist']])assert.equal(target(page+'?view='+old+'&q=Amazon'),'v4.html?q=Amazon#'+route);
+  for(const type of ['stocks','bonds']){
+   assert.equal(target(page+'?view='+type+'&q=Amazon'),'v2.html?q=Amazon&directory='+type+'#directory');
+   assert.equal(target(page+'#'+type),'v2.html?directory='+type+'#directory');
+   assert.equal(target(page+'?view='+type+'&q=Amazon#watchlist'),'v4.html?q=Amazon#watchlist');
+  }
   assert.equal(target(page+'?view=archive&report=2026-10-29-us-earnings'),'archive.html?report=2026-10-29-us-earnings');
   assert.equal(target(page+'?view=archive&day=2026-10-29'),'archive.html?day=2026-10-29');
   assert.equal(target(page+'?view=saved'),'saved-securities.html');
   assert.equal(target(page+'#archive'),'archive.html');assert.equal(target(page+'#saved'),'saved-securities.html');
+ }
+});
+test('legacy stock and bond filters restore the full directory and survive navigation or reload',()=>{
+ const html=read('v2.html'),setup=html.slice(html.indexOf('const S='),html.indexOf('const $=')),data=JSON.parse(read('data/securities.json'));
+ for(const [type,query] of [['stocks','Amazon'],['bonds',data.bonds[0].id]]){
+  const location={pathname:'/v2.html',search:'?directory='+type+'&q='+encodeURIComponent(query)},ctx={URLSearchParams,location,localStorage:{getItem:()=>null},history:{replaceState:(_,__,url)=>ctx.url=url},$:()=>({close(){}}),render(){},window:{scrollTo(){}}};
+  vm.createContext(ctx);vm.runInContext(setup,ctx);
+  assert.equal(vm.runInContext('S.directoryType',ctx),type);assert.equal(vm.runInContext('S.query',ctx),query);
+  const matches=data[type].filter(x=>Object.values(x).join(' ').toLowerCase().includes(query.toLowerCase()));
+  assert.ok(matches.length);if(type==='stocks')assert.ok(matches.some(x=>x.ticker==='AMZN'));else assert.ok(matches.some(x=>x.id===query));
+  vm.runInContext(html.slice(html.indexOf('function navigate('),html.indexOf('\nfunction openReport')),ctx);vm.runInContext("navigate('directory')",ctx);
+  assert.equal(ctx.url,'/v2.html'+location.search+'#directory');
  }
 });
 test('preference migration changes only the retired dashboard preference and tolerates blocked storage',()=>{
