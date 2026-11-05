@@ -799,6 +799,53 @@
           "item_sha256": "0ee072245c252526ecab60e0360c6f6d95d7c89acd101647945241a6ea314744"
         }
       ]
+    },
+    "watchlist-20261105T160000Z": {
+      "AAPL": [
+        {
+          "index": 0,
+          "headline": "Apple files preliminary bond offering; reported $7bn size unconfirmed",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Apple files preliminary bond offering; reported $7bn size unconfirmed\",[\"Apple’s 13:14 UTC preliminary prospectus proposes seven debt tranches maturing from 2028 to 2036; amounts and coupons remain blank.\",\"Reuters at 14:52 UTC relays Bloomberg’s roughly $7bn target, which Reuters could not independently verify.\"],\"The filing allows general corporate uses, including buybacks, dividends, capital spending and debt repayment; it does not earmark all proceeds for AI.\",\"Final size, rates and completion remain unsettled.\",\"Final pricing prospectus and settlement.\",[[\"SEC · Apple 424B2 accepted 13:14:16 UTC\",\"https://www.sec.gov/Archives/edgar/data/320193/000114036126042046/ny20084621x1_424b2.htm\"],[\"Reuters citing Bloomberg · 14:52:21 UTC\",\"https://www.reuters.com/business/finance/apple-seeks-about-7-billion-bond-sale-bloomberg-news-reports-2026-11-05/\"]]]",
+          "item_sha256": "30cdb54cadd9a57d482a5e277d402119121c215d5987e8f2f1f3943404fa4a7b"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "Box expands NVIDIA enterprise-AI partnership",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Box expands NVIDIA enterprise-AI partnership\",[\"Box announced a Nemotron-powered retrieval engine, planned for Enterprise Advanced customers early next year; Reuters reported it at 14:06 UTC.\"],\"Another enterprise integration broadens NVIDIA’s software ecosystem.\",\"No NVIDIA revenue contribution was disclosed; rollout and adoption remain uncertain.\",\"Availability and enterprise uptake.\",[[\"Reuters · 14:06:14 UTC\",\"https://www.reuters.com/business/box-expands-nvidia-partnership-unveils-ai-workflow-builder-2026-11-05/\"],[\"Box issuer release via Business Wire syndication · 14:00 UTC\",\"https://www.stocktitan.net/news/BOX/box-partners-with-nvidia-to-deliver-the-trusted-content-layer-for-uc94dfek0gf2.html\"]]]",
+          "item_sha256": "ab4a79f380b2e2c2d434a757bf3814d1d7ea8315f02eaadd84888d7789e978e1"
+        }
+      ],
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "Google challenges California youth-platform law",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Google challenges California youth-platform law\",[\"Reuters reports Google sued Wednesday to block California’s under-16 platform restrictions.\"],\"YouTube faces product-design uncertainty.\",\"Lawsuit allegations are not court findings.\",\"Court rulings.\",[[\"Reuters · 15:46:50 UTC\",\"https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/\"]]]",
+          "item_sha256": "408abed8fee99cb0b9331018451dc98753b3a123f9ffa0559ba7463155d71e97"
+        }
+      ],
+      "AMZN": [
+        {
+          "index": 0,
+          "headline": "Amended notice corrects an erroneous proposed-sale filing",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Amended notice corrects an erroneous proposed-sale filing\",[\"A new Form 144/A states the original notice was filed in error and that General Alexander sold no Amazon shares on 4 November; its proposed-sale amount is zero.\"],\"The amendment prevents treating the original notice as evidence of a completed sale.\",\"This is a filer correction, not an Amazon operating update.\",\"Any further corrected disclosure.\",[[\"SEC · Form 144/A accepted 14:58:19 UTC\",\"https://www.sec.gov/Archives/edgar/data/1018724/000100027526000122/xsl144X01/primary_doc.xml\"]]]",
+          "item_sha256": "47745a7d93be22d6c33e9a4e9dc15d698b9c5e339df3d5f90f09dc64577d7c64"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Meta challenges California youth-platform law",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Meta challenges California youth-platform law\",[\"Reuters reports Meta also sued Wednesday, arguing the restrictions violate free-speech protections.\"],\"Compliance could affect platform design.\",\"Outcome remains unresolved.\",\"Court rulings.\",[[\"Reuters · 15:46:50 UTC\",\"https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/\"]]]",
+          "item_sha256": "407bf761ee41ca828d3cd470a523f000c5c1ea0d8268a111b27c3c8a46dce36c"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -885,6 +932,12 @@
       "reviewed_at": "2026-11-05T12:09:34.290988+00:00",
       "edition_sha256": "3f471acbec74abbf4008054ba2957516ebc675340d771333432d11ed097488f9",
       "path": "data/watchlist/reviews/watchlist-20261105T120000Z.json"
+    },
+    "watchlist-20261105T160000Z": {
+      "as_of": "2026-11-05T16:00:00Z",
+      "reviewed_at": "2026-11-05T16:10:44.395131+00:00",
+      "edition_sha256": "b87f17978aca7056b519a5afc94fc9a45e6e87c332b0e2ae5031108a0f684f9a",
+      "path": "data/watchlist/reviews/watchlist-20261105T160000Z.json"
     }
   }
 }

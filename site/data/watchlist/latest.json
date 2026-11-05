@@ -1,23 +1,23 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261105T120000Z",
-  "as_of": "2026-11-05T12:00:00Z",
-  "generated_at": "2026-11-05T12:09:34.223027+00:00",
-  "title": "12-name watchlist · 05 Nov 2026 (Thu) · 20:00 SGT",
+  "id": "watchlist-20261105T160000Z",
+  "as_of": "2026-11-05T16:00:00Z",
+  "generated_at": "2026-11-05T16:10:44.330219+00:00",
+  "title": "12-name watchlist · 06 Nov 2026 (Fri) · 00:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-05T12:09:34.223027+00:00",
+    "sources_checked_at": "2026-11-05T16:10:44.330219+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "NVIDIA China shipment approvals, a qualified Micron plant report, Microsoft clarification and governance filing, and Amazon’s Prime delivery partnership. All 12 saved closes and 72 return baselines freshly checked.",
-  "coverage_note": "Review window: 05 Nov 15:45–20:00 SGT, with a 15-minute overlap. Five company items include one substantive clarification and one newly filed prior-day event. Earlier research stays in the archives. Reuters and issuer coverage is partial; all 12 SEC recent-submission feeds were checked.",
-  "price_basis": "USD saved regular-session observations for 4 Nov 2026, the latest completed US session at this cutoff. Yahoo daily bars, its separate five-day endpoint and regularMarketPrice agree. Each exact vendor regularMarketTime is retained. Daily change compares the 3 Nov ordinary close, not adjusted close. These are saved observations, not live prices. TSM is the US-listed USD ADR.",
+  "summary": "Apple’s proposed bond financing, NVIDIA’s Box integration, Google and Meta litigation, and an Amazon filing correction. All 12 saved closes and 72 adjusted-close baselines freshly verified.",
+  "coverage_note": "Review window: 05 Nov 19:45 SGT–06 Nov 00:00 SGT, including a 15-minute overlap. Five company items; earlier research remains in dated archives. All 12 SEC submission feeds checked. Reuters and issuer coverage is partial.",
+  "price_basis": "USD saved regular-session observations for 4 Nov 2026, the latest completed US session at the cutoff. Fresh one-year and five-day Yahoo daily bars confirm these completed closes. Original exact vendor close timestamps are retained from the verified prior edition. The ongoing 5 Nov session is excluded from return endpoints. Daily change compares the 3 Nov ordinary close; prices are saved closes, not live. TSM is the US-listed USD ADR.",
   "return_basis": "Six cumulative 1-6 month returns use Yahoo adjusted closes, adjusted for splits and dividend/capital-gain distributions. Formula: (endpoint adjusted close / baseline adjusted close - 1) x 100. Source values are rounded to cents before independent Decimal arithmetic; percentages are rounded to two decimals. Baselines are the latest available sessions on or before each monthly anniversary: 2 Oct, 4 Sep, 4 Aug, 2 Jul, 4 Jun and 4 May 2026. Returns are not annualised and exclude investor fees, tax and FX.",
   "caveats": [
-    "Prices remain the 4 Nov completed-session observations; there is no new completed US session at this cutoff.",
-    "NVIDIA and Microsoft reporting relies on unnamed sources. Reuters could not independently verify the Micron report, which cites Bloomberg.",
-    "Issuer-list access was incomplete for Apple, Alphabet, Meta, Broadcom and Micron."
+    "The 5 Nov US session is ongoing. Price and return tables retain the verified 4 Nov completed-session endpoints, not intraday observations.",
+    "Apple’s approximate $7bn issuance size is unverified Reuters/Bloomberg reporting; the SEC preliminary filing leaves amounts and coupons blank.",
+    "Issuer listing access was incomplete for Apple, Alphabet, Meta, Broadcom and Micron. Court allegations are not findings."
   ],
   "rows": [
     {
@@ -79,9 +79,31 @@
         }
       ],
       "premarket": null,
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Apple files preliminary bond offering; reported $7bn size unconfirmed",
+          "facts": [
+            "Apple’s 13:14 UTC preliminary prospectus proposes seven debt tranches maturing from 2028 to 2036; amounts and coupons remain blank.",
+            "Reuters at 14:52 UTC relays Bloomberg’s roughly $7bn target, which Reuters could not independently verify."
+          ],
+          "analysis": "The filing allows general corporate uses, including buybacks, dividends, capital spending and debt repayment; it does not earmark all proceeds for AI.",
+          "risks": "Final size, rates and completion remain unsettled.",
+          "next_watch": "Final pricing prospectus and settlement.",
+          "sources": [
+            {
+              "title": "SEC · Apple 424B2 accepted 13:14:16 UTC",
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126042046/ny20084621x1_424b2.htm"
+            },
+            {
+              "title": "Reuters citing Bloomberg · 14:52:21 UTC",
+              "url": "https://www.reuters.com/business/finance/apple-seeks-about-7-billion-bond-sale-bloomberg-news-reports-2026-11-05/"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Newsroom opened but article list did not render."
+        "Newsroom list did not render; actual new 424B2 downloaded and read."
       ],
       "sources": [
         {
@@ -95,6 +117,14 @@
         {
           "title": "SEC · issuer submissions and acceptance times",
           "url": "https://data.sec.gov/submissions/CIK0000320193.json"
+        },
+        {
+          "title": "SEC · Apple 424B2 accepted 13:14:16 UTC",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126042046/ny20084621x1_424b2.htm"
+        },
+        {
+          "title": "Reuters citing Bloomberg · 14:52:21 UTC",
+          "url": "https://www.reuters.com/business/finance/apple-seeks-about-7-billion-bond-sale-bloomberg-news-reports-2026-11-05/"
         }
       ]
     },
@@ -157,50 +187,7 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "date": "2026-11-05",
-          "headline": "Microsoft: new sourcing clarifies earlier Nscale report",
-          "facts": [
-            "Reuters’ 07:59 UTC update cites its own unnamed source: the optional Texas expansion decision was made months ago and leaves the existing contract intact.",
-            "The source says Nscale’s disclosed total contract value is unaffected."
-          ],
-          "analysis": "This clarification does not establish weaker current Azure demand.",
-          "risks": "The companies had not responded; the explanation remains source-attributed.",
-          "next_watch": "Issuer confirmation and capacity guidance.",
-          "sources": [
-            {
-              "title": "Reuters · updated sourcing in 07:59 UTC syndication",
-              "url": "https://www.reuters.com/technology/microsoft-rejects-multibillion-dollar-ai-deal-with-uks-nscale-ft-reports-2026-11-05/"
-            },
-            {
-              "title": "Reuters syndication · 02:59 ET / 07:59 UTC update",
-              "url": "https://www.schwab.wallst.com/schwab/Prospect/research/stocks/news.asp?doc=3200-nL6N46M0CA-5&symbol=MSFT"
-            }
-          ]
-        },
-        {
-          "date": "2026-11-05",
-          "headline": "New SEC filing: Walmsley will not seek board re-election",
-          "facts": [
-            "An 8-K accepted at 11:01:52 UTC confirms Emma Walmsley will serve until the annual meeting but not seek re-election; it states there is no management disagreement.",
-            "Microsoft announced the decision on 4 November and set the meeting for 8 December."
-          ],
-          "analysis": "Governance update, not a new operating or earnings forecast.",
-          "risks": "The filing formalizes an earlier announcement rather than a new event.",
-          "next_watch": "8 December annual meeting.",
-          "sources": [
-            {
-              "title": "SEC · 8-K accepted 05 Nov 2026, 11:01:52 UTC",
-              "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526448357/d177209d8k.htm"
-            },
-            {
-              "title": "Microsoft · earlier issuer announcement, 4 November",
-              "url": "https://news.microsoft.com/source/2026/11/04/microsoft-announces-change-to-director-slate-for-annual-shareholders-meeting/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [],
       "sources": [
         {
@@ -214,22 +201,6 @@
         {
           "title": "SEC · issuer submissions and acceptance times",
           "url": "https://data.sec.gov/submissions/CIK0000789019.json"
-        },
-        {
-          "title": "Reuters · updated sourcing in 07:59 UTC syndication",
-          "url": "https://www.reuters.com/technology/microsoft-rejects-multibillion-dollar-ai-deal-with-uks-nscale-ft-reports-2026-11-05/"
-        },
-        {
-          "title": "Reuters syndication · 02:59 ET / 07:59 UTC update",
-          "url": "https://www.schwab.wallst.com/schwab/Prospect/research/stocks/news.asp?doc=3200-nL6N46M0CA-5&symbol=MSFT"
-        },
-        {
-          "title": "SEC · 8-K accepted 05 Nov 2026, 11:01:52 UTC",
-          "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526448357/d177209d8k.htm"
-        },
-        {
-          "title": "Microsoft · earlier issuer announcement, 4 November",
-          "url": "https://news.microsoft.com/source/2026/11/04/microsoft-announces-change-to-director-slate-for-annual-shareholders-meeting/"
         }
       ]
     },
@@ -295,18 +266,21 @@
       "research": [
         {
           "date": "2026-11-05",
-          "headline": "NVIDIA: Reuters reports H200 stockpile awaiting China approval",
+          "headline": "Box expands NVIDIA enterprise-AI partnership",
           "facts": [
-            "Reuters, citing two unnamed sources, reports about 600,000 H200 chips stored in Hong Kong awaiting mainland China shipment approval.",
-            "NVIDIA and the Chinese authorities did not respond to Reuters requests for comment."
+            "Box announced a Nemotron-powered retrieval engine, planned for Enterprise Advanced customers early next year; Reuters reported it at 14:06 UTC."
           ],
-          "analysis": "Import permissions, not demand alone, may constrain conversion of Chinese interest into shipments.",
-          "risks": "Unconfirmed source estimates; timing and financial impact are unknown.",
-          "next_watch": "Official import decisions and NVIDIA shipment guidance.",
+          "analysis": "Another enterprise integration broadens NVIDIA’s software ecosystem.",
+          "risks": "No NVIDIA revenue contribution was disclosed; rollout and adoption remain uncertain.",
+          "next_watch": "Availability and enterprise uptake.",
           "sources": [
             {
-              "title": "Reuters · 05 Nov 2026, 11:27:09 UTC",
-              "url": "https://www.reuters.com/world/china/nvidia-chips-pile-up-hong-kong-china-withholds-import-approval-2026-11-05/"
+              "title": "Reuters · 14:06:14 UTC",
+              "url": "https://www.reuters.com/business/box-expands-nvidia-partnership-unveils-ai-workflow-builder-2026-11-05/"
+            },
+            {
+              "title": "Box issuer release via Business Wire syndication · 14:00 UTC",
+              "url": "https://www.stocktitan.net/news/BOX/box-partners-with-nvidia-to-deliver-the-trusted-content-layer-for-uc94dfek0gf2.html"
             }
           ]
         }
@@ -326,8 +300,12 @@
           "url": "https://data.sec.gov/submissions/CIK0001045810.json"
         },
         {
-          "title": "Reuters · 05 Nov 2026, 11:27:09 UTC",
-          "url": "https://www.reuters.com/world/china/nvidia-chips-pile-up-hong-kong-china-withholds-import-approval-2026-11-05/"
+          "title": "Reuters · 14:06:14 UTC",
+          "url": "https://www.reuters.com/business/box-expands-nvidia-partnership-unveils-ai-workflow-builder-2026-11-05/"
+        },
+        {
+          "title": "Box issuer release via Business Wire syndication · 14:00 UTC",
+          "url": "https://www.stocktitan.net/news/BOX/box-partners-with-nvidia-to-deliver-the-trusted-content-layer-for-uc94dfek0gf2.html"
         }
       ]
     },
@@ -390,9 +368,26 @@
         }
       ],
       "premarket": null,
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Google challenges California youth-platform law",
+          "facts": [
+            "Reuters reports Google sued Wednesday to block California’s under-16 platform restrictions."
+          ],
+          "analysis": "YouTube faces product-design uncertainty.",
+          "risks": "Lawsuit allegations are not court findings.",
+          "next_watch": "Court rulings.",
+          "sources": [
+            {
+              "title": "Reuters · 15:46:50 UTC",
+              "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Investor news page could not be opened."
+        "Investor news URL inaccessible. Reuters lawsuit report readable."
       ],
       "sources": [
         {
@@ -406,6 +401,10 @@
         {
           "title": "SEC · issuer submissions and acceptance times",
           "url": "https://data.sec.gov/submissions/CIK0001652044.json"
+        },
+        {
+          "title": "Reuters · 15:46:50 UTC",
+          "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
         }
       ]
     },
@@ -471,17 +470,17 @@
       "research": [
         {
           "date": "2026-11-05",
-          "headline": "Amazon adds Uber Eats restaurant ordering to Prime",
+          "headline": "Amended notice corrects an erroneous proposed-sale filing",
           "facts": [
-            "Amazon announced a US Prime benefit: $0 delivery fees on Uber Eats restaurant orders of $25 or more placed through Amazon’s website or shopping app."
+            "A new Form 144/A states the original notice was filed in error and that General Alexander sold no Amazon shares on 4 November; its proposed-sale amount is zero."
           ],
-          "analysis": "The integration may support Prime engagement and retention.",
-          "risks": "Commercial economics and earnings contribution were not disclosed; consumer offers have eligibility and availability conditions.",
-          "next_watch": "Adoption, repeat ordering and any disclosed contribution to Prime retention.",
+          "analysis": "The amendment prevents treating the original notice as evidence of a completed sale.",
+          "risks": "This is a filer correction, not an Amazon operating update.",
+          "next_watch": "Any further corrected disclosure.",
           "sources": [
             {
-              "title": "Amazon · 05 Nov 2026, 11:00 UTC (issuer metadata)",
-              "url": "https://press.aboutamazon.com/2026/11/amazon-launches-partnership-with-uber-eats-featuring-0-delivery-fee-for-prime-members"
+              "title": "SEC · Form 144/A accepted 14:58:19 UTC",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000100027526000122/xsl144X01/primary_doc.xml"
             }
           ]
         }
@@ -501,8 +500,8 @@
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
         },
         {
-          "title": "Amazon · 05 Nov 2026, 11:00 UTC (issuer metadata)",
-          "url": "https://press.aboutamazon.com/2026/11/amazon-launches-partnership-with-uber-eats-featuring-0-delivery-fee-for-prime-members"
+          "title": "SEC · Form 144/A accepted 14:58:19 UTC",
+          "url": "https://www.sec.gov/Archives/edgar/data/1018724/000100027526000122/xsl144X01/primary_doc.xml"
         }
       ]
     },
@@ -565,9 +564,26 @@
         }
       ],
       "premarket": null,
-      "research": [],
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Meta challenges California youth-platform law",
+          "facts": [
+            "Reuters reports Meta also sued Wednesday, arguing the restrictions violate free-speech protections."
+          ],
+          "analysis": "Compliance could affect platform design.",
+          "risks": "Outcome remains unresolved.",
+          "next_watch": "Court rulings.",
+          "sources": [
+            {
+              "title": "Reuters · 15:46:50 UTC",
+              "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
+            }
+          ]
+        }
+      ],
       "gaps": [
-        "Investor news page opened but release list did not render."
+        "Investor listing rendered without releases. Reuters lawsuit report readable."
       ],
       "sources": [
         {
@@ -581,6 +597,10 @@
         {
           "title": "SEC · issuer submissions and acceptance times",
           "url": "https://data.sec.gov/submissions/CIK0001326801.json"
+        },
+        {
+          "title": "Reuters · 15:46:50 UTC",
+          "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
         }
       ]
     },
@@ -797,7 +817,7 @@
       "premarket": null,
       "research": [],
       "gaps": [
-        "Investor news URL returned 404; targeted dated search returned no result."
+        "Listing returned404; supplemental search found older releases only."
       ],
       "sources": [
         {
@@ -873,27 +893,9 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "date": "2026-11-05",
-          "headline": "Micron: reported Taiwan plant pause remains unverified",
-          "facts": [
-            "Reuters relays Bloomberg’s report that a prolonged labor dispute paused plans for a $4.5 billion Taiwan memory-chip plant.",
-            "Reuters could not independently verify the report; Micron had not responded."
-          ],
-          "analysis": "If confirmed, the pause could delay planned capacity.",
-          "risks": "Plant timing, cost and earnings effects remain unestablished.",
-          "next_watch": "Micron clarification and any revised construction schedule.",
-          "sources": [
-            {
-              "title": "Reuters citing Bloomberg · 05 Nov 2026, 09:22:01 UTC",
-              "url": "https://www.reuters.com/world/asia-pacific/micron-pauses-work-45-billion-taiwan-plant-bloomberg-news-reports-2026-11-05/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "Investor news routes returned 404 or were inaccessible; targeted dated search returned no result."
+        "Listing returned404; targeted search found no substantive update to earlier unverified plant report."
       ],
       "sources": [
         {
@@ -907,10 +909,6 @@
         {
           "title": "SEC · issuer submissions and acceptance times",
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
-        },
-        {
-          "title": "Reuters citing Bloomberg · 05 Nov 2026, 09:22:01 UTC",
-          "url": "https://www.reuters.com/world/asia-pacific/micron-pauses-work-45-billion-taiwan-plant-bloomberg-news-reports-2026-11-05/"
         }
       ]
     },

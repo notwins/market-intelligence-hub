@@ -1,0 +1,1068 @@
+{
+  "schema_version": 1,
+  "id": "watchlist-20261105T160000Z",
+  "as_of": "2026-11-05T16:00:00Z",
+  "generated_at": "2026-11-05T16:10:44.330219+00:00",
+  "title": "12-name watchlist · 06 Nov 2026 (Fri) · 00:00 SGT",
+  "public_research_only": true,
+  "verification": {
+    "sources_checked_at": "2026-11-05T16:10:44.330219+00:00",
+    "prices_verified": true,
+    "research_verified": true
+  },
+  "summary": "Apple’s proposed bond financing, NVIDIA’s Box integration, Google and Meta litigation, and an Amazon filing correction. All 12 saved closes and 72 adjusted-close baselines freshly verified.",
+  "coverage_note": "Review window: 05 Nov 19:45 SGT–06 Nov 00:00 SGT, including a 15-minute overlap. Five company items; earlier research remains in dated archives. All 12 SEC submission feeds checked. Reuters and issuer coverage is partial.",
+  "price_basis": "USD saved regular-session observations for 4 Nov 2026, the latest completed US session at the cutoff. Fresh one-year and five-day Yahoo daily bars confirm these completed closes. Original exact vendor close timestamps are retained from the verified prior edition. The ongoing 5 Nov session is excluded from return endpoints. Daily change compares the 3 Nov ordinary close; prices are saved closes, not live. TSM is the US-listed USD ADR.",
+  "return_basis": "Six cumulative 1-6 month returns use Yahoo adjusted closes, adjusted for splits and dividend/capital-gain distributions. Formula: (endpoint adjusted close / baseline adjusted close - 1) x 100. Source values are rounded to cents before independent Decimal arithmetic; percentages are rounded to two decimals. Baselines are the latest available sessions on or before each monthly anniversary: 2 Oct, 4 Sep, 4 Aug, 2 Jul, 4 Jun and 4 May 2026. Returns are not annualised and exclude investor fees, tax and FX.",
+  "caveats": [
+    "The 5 Nov US session is ongoing. Price and return tables retain the verified 4 Nov completed-session endpoints, not intraday observations.",
+    "Apple’s approximate $7bn issuance size is unverified Reuters/Bloomberg reporting; the SEC preliminary filing leaves amounts and coupons blank.",
+    "Issuer listing access was incomplete for Apple, Alphabet, Meta, Broadcom and Micron. Court allegations are not findings."
+  ],
+  "rows": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 349.51,
+        "adjusted_close": 349.51,
+        "previous_close": 331.9,
+        "change_pct": 5.31,
+        "as_of": "2026-11-04T21:00:01Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 333.69,
+          "pct": 4.74,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 319.97,
+          "pct": 9.23,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 309.11,
+          "pct": 13.07,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 308.36,
+          "pct": 13.34,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 310.96,
+          "pct": 12.4,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 276.34,
+          "pct": 26.48,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Apple files preliminary bond offering; reported $7bn size unconfirmed",
+          "facts": [
+            "Apple’s 13:14 UTC preliminary prospectus proposes seven debt tranches maturing from 2028 to 2036; amounts and coupons remain blank.",
+            "Reuters at 14:52 UTC relays Bloomberg’s roughly $7bn target, which Reuters could not independently verify."
+          ],
+          "analysis": "The filing allows general corporate uses, including buybacks, dividends, capital spending and debt repayment; it does not earmark all proceeds for AI.",
+          "risks": "Final size, rates and completion remain unsettled.",
+          "next_watch": "Final pricing prospectus and settlement.",
+          "sources": [
+            {
+              "title": "SEC · Apple 424B2 accepted 13:14:16 UTC",
+              "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126042046/ny20084621x1_424b2.htm"
+            },
+            {
+              "title": "Reuters citing Bloomberg · 14:52:21 UTC",
+              "url": "https://www.reuters.com/business/finance/apple-seeks-about-7-billion-bond-sale-bloomberg-news-reports-2026-11-05/"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Newsroom list did not render; actual new 424B2 downloaded and read."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/AAPL/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0000320193.json"
+        },
+        {
+          "title": "SEC · Apple 424B2 accepted 13:14:16 UTC",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126042046/ny20084621x1_424b2.htm"
+        },
+        {
+          "title": "Reuters citing Bloomberg · 14:52:21 UTC",
+          "url": "https://www.reuters.com/business/finance/apple-seeks-about-7-billion-bond-sale-bloomberg-news-reports-2026-11-05/"
+        }
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 555.8,
+        "adjusted_close": 555.8,
+        "previous_close": 520.99,
+        "change_pct": 6.68,
+        "as_of": "2026-11-04T21:00:01Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 517.53,
+          "pct": 7.39,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 499.7,
+          "pct": 11.23,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 491.88,
+          "pct": 13.0,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 389.76,
+          "pct": 42.6,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 427.25,
+          "pct": 30.09,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 411.95,
+          "pct": 34.92,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [],
+      "gaps": [],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/MSFT/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0000789019.json"
+        }
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 200.13,
+        "adjusted_close": 200.13,
+        "previous_close": 206.69,
+        "change_pct": -3.17,
+        "as_of": "2026-11-04T21:00:01Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 233.95,
+          "pct": -14.46,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 230.1,
+          "pct": -13.02,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 211.7,
+          "pct": -5.47,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 194.61,
+          "pct": 2.84,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 218.42,
+          "pct": -8.37,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 198.03,
+          "pct": 1.06,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Box expands NVIDIA enterprise-AI partnership",
+          "facts": [
+            "Box announced a Nemotron-powered retrieval engine, planned for Enterprise Advanced customers early next year; Reuters reported it at 14:06 UTC."
+          ],
+          "analysis": "Another enterprise integration broadens NVIDIA’s software ecosystem.",
+          "risks": "No NVIDIA revenue contribution was disclosed; rollout and adoption remain uncertain.",
+          "next_watch": "Availability and enterprise uptake.",
+          "sources": [
+            {
+              "title": "Reuters · 14:06:14 UTC",
+              "url": "https://www.reuters.com/business/box-expands-nvidia-partnership-unveils-ai-workflow-builder-2026-11-05/"
+            },
+            {
+              "title": "Box issuer release via Business Wire syndication · 14:00 UTC",
+              "url": "https://www.stocktitan.net/news/BOX/box-partners-with-nvidia-to-deliver-the-trusted-content-layer-for-uc94dfek0gf2.html"
+            }
+          ]
+        }
+      ],
+      "gaps": [],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/NVDA/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001045810.json"
+        },
+        {
+          "title": "Reuters · 14:06:14 UTC",
+          "url": "https://www.reuters.com/business/box-expands-nvidia-partnership-unveils-ai-workflow-builder-2026-11-05/"
+        },
+        {
+          "title": "Box issuer release via Business Wire syndication · 14:00 UTC",
+          "url": "https://www.stocktitan.net/news/BOX/box-partners-with-nvidia-to-deliver-the-trusted-content-layer-for-uc94dfek0gf2.html"
+        }
+      ]
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet Class A",
+      "group": "Platforms",
+      "instrument": "US-listed Class A share",
+      "price": {
+        "close": 288.93,
+        "adjusted_close": 288.93,
+        "previous_close": 280.03,
+        "change_pct": 3.18,
+        "as_of": "2026-11-04T21:00:01Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 343.5,
+          "pct": -15.89,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 338.46,
+          "pct": -14.63,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 377.41,
+          "pct": -23.44,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 359.68,
+          "pct": -19.67,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 371.73,
+          "pct": -22.27,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 382.78,
+          "pct": -24.52,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Google challenges California youth-platform law",
+          "facts": [
+            "Reuters reports Google sued Wednesday to block California’s under-16 platform restrictions."
+          ],
+          "analysis": "YouTube faces product-design uncertainty.",
+          "risks": "Lawsuit allegations are not court findings.",
+          "next_watch": "Court rulings.",
+          "sources": [
+            {
+              "title": "Reuters · 15:46:50 UTC",
+              "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Investor news URL inaccessible. Reuters lawsuit report readable."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/GOOGL/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001652044.json"
+        },
+        {
+          "title": "Reuters · 15:46:50 UTC",
+          "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
+        }
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 266.03,
+        "adjusted_close": 266.03,
+        "previous_close": 250.69,
+        "change_pct": 6.12,
+        "as_of": "2026-11-04T21:00:01Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 251.52,
+          "pct": 5.77,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 258.51,
+          "pct": 2.91,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 277.42,
+          "pct": -4.11,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 242.67,
+          "pct": 9.63,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 253.79,
+          "pct": 4.82,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 272.05,
+          "pct": -2.21,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Amended notice corrects an erroneous proposed-sale filing",
+          "facts": [
+            "A new Form 144/A states the original notice was filed in error and that General Alexander sold no Amazon shares on 4 November; its proposed-sale amount is zero."
+          ],
+          "analysis": "The amendment prevents treating the original notice as evidence of a completed sale.",
+          "risks": "This is a filer correction, not an Amazon operating update.",
+          "next_watch": "Any further corrected disclosure.",
+          "sources": [
+            {
+              "title": "SEC · Form 144/A accepted 14:58:19 UTC",
+              "url": "https://www.sec.gov/Archives/edgar/data/1018724/000100027526000122/xsl144X01/primary_doc.xml"
+            }
+          ]
+        }
+      ],
+      "gaps": [],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/AMZN/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001018724.json"
+        },
+        {
+          "title": "SEC · Form 144/A accepted 14:58:19 UTC",
+          "url": "https://www.sec.gov/Archives/edgar/data/1018724/000100027526000122/xsl144X01/primary_doc.xml"
+        }
+      ]
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "group": "Platforms",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 630.0,
+        "adjusted_close": 630.0,
+        "previous_close": 621.03,
+        "change_pct": 1.44,
+        "as_of": "2026-11-04T21:00:00Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 728.08,
+          "pct": -13.47,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 616.28,
+          "pct": 2.23,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 587.48,
+          "pct": 7.24,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 582.44,
+          "pct": 8.17,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 626.49,
+          "pct": 0.56,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 609.36,
+          "pct": 3.39,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [
+        {
+          "date": "2026-11-05",
+          "headline": "Meta challenges California youth-platform law",
+          "facts": [
+            "Reuters reports Meta also sued Wednesday, arguing the restrictions violate free-speech protections."
+          ],
+          "analysis": "Compliance could affect platform design.",
+          "risks": "Outcome remains unresolved.",
+          "next_watch": "Court rulings.",
+          "sources": [
+            {
+              "title": "Reuters · 15:46:50 UTC",
+              "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
+            }
+          ]
+        }
+      ],
+      "gaps": [
+        "Investor listing rendered without releases. Reuters lawsuit report readable."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/META/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001326801.json"
+        },
+        {
+          "title": "Reuters · 15:46:50 UTC",
+          "url": "https://www.reuters.com/world/us/google-meta-tiktok-sue-block-california-youth-social-media-law-2026-11-05/"
+        }
+      ]
+    },
+    {
+      "ticker": "BRK.B",
+      "name": "Berkshire Hathaway Class B",
+      "group": "Other",
+      "instrument": "US-listed Class B share",
+      "price": {
+        "close": 579.09,
+        "adjusted_close": 579.09,
+        "previous_close": 557.07,
+        "change_pct": 3.95,
+        "as_of": "2026-11-04T21:01:26Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 502.65,
+          "pct": 15.21,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 506.03,
+          "pct": 14.44,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 517.22,
+          "pct": 11.96,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 507.78,
+          "pct": 14.04,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 478.63,
+          "pct": 20.99,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 468.52,
+          "pct": 23.6,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [],
+      "gaps": [],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/BRK-B/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001067983.json"
+        }
+      ]
+    },
+    {
+      "ticker": "AMD",
+      "name": "Advanced Micro Devices",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 488.78,
+        "adjusted_close": 488.78,
+        "previous_close": 483.9,
+        "change_pct": 1.01,
+        "as_of": "2026-11-04T21:00:00Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 633.91,
+          "pct": -22.89,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 477.57,
+          "pct": 2.35,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 518.58,
+          "pct": -5.75,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 517.82,
+          "pct": -5.61,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 523.2,
+          "pct": -6.58,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 341.54,
+          "pct": 43.11,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [],
+      "gaps": [],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/AMD/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0000002488.json"
+        }
+      ]
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 325.48,
+        "adjusted_close": 325.48,
+        "previous_close": 332.13,
+        "change_pct": -2.0,
+        "as_of": "2026-11-04T21:00:01Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 355.14,
+          "pct": -8.35,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 357.25,
+          "pct": -8.89,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 417.4,
+          "pct": -22.02,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 359.79,
+          "pct": -9.54,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 417.49,
+          "pct": -22.04,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 415.09,
+          "pct": -21.59,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [],
+      "gaps": [
+        "Listing returned404; supplemental search found older releases only."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/AVGO/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001730168.json"
+        }
+      ]
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "group": "Semiconductors",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 795.23,
+        "adjusted_close": 795.23,
+        "previous_close": 855.1,
+        "change_pct": -7.0,
+        "as_of": "2026-11-04T21:00:00Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 1074.72,
+          "pct": -26.01,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 1016.43,
+          "pct": -21.76,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 892.53,
+          "pct": -10.9,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 975.26,
+          "pct": -18.46,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 995.69,
+          "pct": -20.13,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 576.27,
+          "pct": 38.0,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [],
+      "gaps": [
+        "Listing returned404; targeted search found no substantive update to earlier unverified plant report."
+      ],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/MU/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0000723125.json"
+        }
+      ]
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "group": "Other",
+      "instrument": "US-listed share",
+      "price": {
+        "close": 385.19,
+        "adjusted_close": 385.19,
+        "previous_close": 398.5,
+        "change_pct": -3.34,
+        "as_of": "2026-11-04T21:00:01Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 370.59,
+          "pct": 3.94,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 354.08,
+          "pct": 8.79,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 327.35,
+          "pct": 17.67,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 393.45,
+          "pct": -2.1,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 418.45,
+          "pct": -7.95,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 392.51,
+          "pct": -1.86,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [],
+      "gaps": [],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/TSLA/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001318605.json"
+        }
+      ]
+    },
+    {
+      "ticker": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "group": "Semiconductors",
+      "instrument": "US-listed USD ADR",
+      "price": {
+        "close": 395.75,
+        "adjusted_close": 395.75,
+        "previous_close": 404.8,
+        "change_pct": -2.24,
+        "as_of": "2026-11-04T21:00:02Z",
+        "currency": "USD",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+      },
+      "returns": [
+        {
+          "months": 1,
+          "base_date": "2026-10-02",
+          "base_adjusted_close": 472.78,
+          "pct": -16.29,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        },
+        {
+          "months": 2,
+          "base_date": "2026-09-04",
+          "base_adjusted_close": 427.76,
+          "pct": -7.48,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        },
+        {
+          "months": 3,
+          "base_date": "2026-08-04",
+          "base_adjusted_close": 416.05,
+          "pct": -4.88,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        },
+        {
+          "months": 4,
+          "base_date": "2026-07-02",
+          "base_adjusted_close": 433.0,
+          "pct": -8.6,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        },
+        {
+          "months": 5,
+          "base_date": "2026-06-04",
+          "base_adjusted_close": 442.69,
+          "pct": -10.6,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        },
+        {
+          "months": 6,
+          "base_date": "2026-05-04",
+          "base_adjusted_close": 399.6,
+          "pct": -0.96,
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        }
+      ],
+      "premarket": null,
+      "research": [],
+      "gaps": [],
+      "sources": [
+        {
+          "title": "Yahoo Finance · saved regular-session price and adjusted-close history",
+          "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
+        },
+        {
+          "title": "Yahoo Finance · historical prices and adjustment basis",
+          "url": "https://finance.yahoo.com/quote/TSM/history/"
+        },
+        {
+          "title": "SEC · issuer submissions and acceptance times",
+          "url": "https://data.sec.gov/submissions/CIK0001046179.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261105T160000Z",
+  "as_of": "2026-11-05T16:00:00Z",
+  "edition_sha256": "b87f17978aca7056b519a5afc94fc9a45e6e87c332b0e2ae5031108a0f684f9a",
+  "reviewed_at": "2026-11-05T16:10:44.395131+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Apple files preliminary bond offering; reported $7bn size unconfirmed",
+      "item_sha256": "30cdb54cadd9a57d482a5e277d402119121c215d5987e8f2f1f3943404fa4a7b",
+      "scope": "company",
+      "reason": "Reviewed public company-specific reporting against cutoff and archive. Preliminary financing terms and second-hand size distinguished; court claims not findings; SEC correction not execution. Source qualifications retained and shared source word limits observed. No private client data or user calls."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Box expands NVIDIA enterprise-AI partnership",
+      "item_sha256": "ab4a79f380b2e2c2d434a757bf3814d1d7ea8315f02eaadd84888d7789e978e1",
+      "scope": "company",
+      "reason": "Reviewed public company-specific reporting against cutoff and archive. Preliminary financing terms and second-hand size distinguished; court claims not findings; SEC correction not execution. Source qualifications retained and shared source word limits observed. No private client data or user calls."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Google challenges California youth-platform law",
+      "item_sha256": "408abed8fee99cb0b9331018451dc98753b3a123f9ffa0559ba7463155d71e97",
+      "scope": "company",
+      "reason": "Reviewed public company-specific reporting against cutoff and archive. Preliminary financing terms and second-hand size distinguished; court claims not findings; SEC correction not execution. Source qualifications retained and shared source word limits observed. No private client data or user calls."
+    },
+    {
+      "ticker": "AMZN",
+      "index": 0,
+      "headline": "Amended notice corrects an erroneous proposed-sale filing",
+      "item_sha256": "47745a7d93be22d6c33e9a4e9dc15d698b9c5e339df3d5f90f09dc64577d7c64",
+      "scope": "company",
+      "reason": "Reviewed public company-specific reporting against cutoff and archive. Preliminary financing terms and second-hand size distinguished; court claims not findings; SEC correction not execution. Source qualifications retained and shared source word limits observed. No private client data or user calls."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Meta challenges California youth-platform law",
+      "item_sha256": "407bf761ee41ca828d3cd470a523f000c5c1ea0d8268a111b27c3c8a46dce36c",
+      "scope": "company",
+      "reason": "Reviewed public company-specific reporting against cutoff and archive. Preliminary financing terms and second-hand size distinguished; court claims not findings; SEC correction not execution. Source qualifications retained and shared source word limits observed. No private client data or user calls."
+    }
+  ]
+}
