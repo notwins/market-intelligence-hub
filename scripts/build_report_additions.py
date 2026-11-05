@@ -85,6 +85,7 @@ def make():
  return out
 
 def strip_additions(text):
+ text=re.sub(r'<!-- research-readings:start -->.*?<!-- research-readings:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- published-writeups:start -->.*?<!-- published-writeups:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- published-writeups:style --><link[^>]+>','',text)
  text=re.sub(re.escape(START)+r'.*?'+re.escape(END),'',text,flags=re.S)
@@ -108,8 +109,10 @@ def main():
   output=correct_copy(output)
   assert strip_additions(output)==original
   writeups=re.search(r'<!-- published-writeups:start -->.*?<!-- published-writeups:end -->',current,re.S)
+  readings=re.search(r'<!-- research-readings:start -->.*?<!-- research-readings:end -->',current,re.S)
   style=re.search(r'<!-- published-writeups:style --><link[^>]+>',current)
   if writeups:output=output.replace('</header>','</header>'+writeups.group(),1)
+  if readings:output=output.replace('</header>','</header>'+readings.group(),1)
   if style:output=output.replace('</head>',style.group()+'</head>',1)
   p.write_text(output)
  manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')

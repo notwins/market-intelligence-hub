@@ -7,7 +7,7 @@ COPY_CORRECTIONS = [
     ('<title>Market understanding | 31 October 2026</title>',
      '<title>Research Explained | Market Intelligence Hub</title>'),
     ('MARKET UPDATE / UNDERSTANDING THE EVIDENCE',
-     'RESEARCH EXPLAINED / YOUR WRITE-UPS &amp; EXPLANATIONS'),
+     'RESEARCH EXPLAINED / READINGS, RESEARCH &amp; EXPLANATIONS'),
     ('Evidence images are rendered from the uploaded originals. Complete PDFs remain on their publishers’ websites. The JPMorgan PDF URLs roll forward; a future click can open a newer edition, while this briefing’s screenshot captions retain their original dates.',
      'This page provides explanations and dated source references. Publisher images, slides and full PDFs are not hosted here. Open the original documents on their publishers’ websites. Rolling PDF links may show a newer edition; the reference captions retain the edition and page reviewed.'),
     ('Definitions and disclosures accompanying the JPMorgan slides',
