@@ -34,9 +34,9 @@
  if(typeof module!=='undefined'&&module.exports){module.exports={scalar,profile,compare,heatBand};return;}
  const doc=root.document;if(!doc||root.MarketTableControls)return;
  const states=new WeakMap(),live=new Set(),pending=new Set();let observer,frame=0,dialog,active,trigger,serial=0;
- const observation={childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']};
+ const observation={childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','data-table-controls']};
  const own=node=>node?.nodeType===1&&(node.matches('[data-tc-ui]')||node.closest('[data-tc-ui]'));
- function ingest(records){for(const record of records){if(own(record.target))continue;const table=record.target.nodeType===1?record.target.closest('table'):record.target.parentElement?.closest('table');if(table)pending.add(table);for(const node of record.addedNodes||[]){if(node.nodeType!==1||own(node))continue;if(node.matches('table'))pending.add(node);node.querySelectorAll('table').forEach(t=>pending.add(t));}}if(records.length)schedule();}
+ function ingest(records){for(const record of records){if(own(record.target))continue;const table=record.target.nodeType===1?record.target.closest('table'):record.target.parentElement?.closest('table');if(table)pending.add(table);if(record.type==='attributes'&&record.attributeName==='data-table-controls')record.target.querySelectorAll('table').forEach(t=>pending.add(t));for(const node of record.addedNodes||[]){if(node.nodeType!==1||own(node))continue;if(node.matches('table'))pending.add(node);node.querySelectorAll('table').forEach(t=>pending.add(t));}}if(records.length)schedule();}
  function mutate(fn){if(observer){ingest(observer.takeRecords());observer.disconnect();}try{return fn();}finally{observer?.observe(doc.body,observation);}}
  function schedule(){if(!frame)frame=root.requestAnimationFrame(()=>{frame=0;mutate(()=>{for(const state of live)if(!state.table.isConnected){live.delete(state);state.status.remove();}if(active&&(!active.state.table.isConnected||!trigger?.isConnected))close();const tables=[...pending];pending.clear();tables.forEach(mount);});});}
  function sourceText(cell){if(!cell)return '';return (cell.dataset.tcValue??cell.querySelector('[data-tc-original]')?.textContent??cell.textContent).replace(/\s+/g,' ').trim();}
@@ -49,9 +49,27 @@
   const leaf=grid[grid.length-1]||[];leaf.forEach((cell,index)=>{if(cell?.tagName==='TH'&&cell.colSpan===1)columns.push({cell,index});});
   return {count:leaf.length,columns,rows:[...table.tBodies].flatMap(body=>[...body.rows]),merged:[...table.tBodies].some(body=>[...body.rows].some(row=>cells(row).some(c=>c.rowSpan>1)))};
  }
+ // Article comparisons are reading aids, not spreadsheet workspaces. Count all
+ // loaded rows (including hidden ones), so filtering never removes its own menu.
+ function smallArticleTable(table,structure){
+  return table.dataset.tableControls!=='on'&&table.closest('article, .sr-report-body, [data-research-article]')&&structure.rows.filter(row=>dataRow(row,structure.count)).length<=8;
+ }
+ function unmount(table){
+  const state=states.get(table);if(!state)return;
+  if(active?.state===state){close();active=null;trigger=null;}
+  state.rows=state.rows.filter(row=>dataRow(row,state.model.count));
+  state.sort=null;state.restoreOrder=true;state.focus=null;
+  for(const config of state.configs.values())Object.assign(config,{filter:'',heat:false,font:'original',percent:false});
+  apply(state,false);
+  table.querySelectorAll('[data-tc-button]').forEach(button=>button.remove());
+  table.querySelectorAll('.tc-filtered,.tc-heat,.tc-focus,[data-tc-font],[data-tc-band]').forEach(node=>{node.classList.remove('tc-filtered','tc-heat','tc-focus');delete node.dataset.tcFont;delete node.dataset.tcBand;delete node.dataset.tcScale;});
+  table.querySelectorAll('[data-tc-original]').forEach(original=>{original.parentElement.querySelector('[data-tc-formatted]')?.remove();while(original.firstChild)original.before(original.firstChild);original.remove();});
+  table.classList.remove('tc-table');state.status.remove();live.delete(state);states.delete(table);
+ }
  function mount(table){
-  if(!table.isConnected||table.closest('[data-table-controls="off"], [role="presentation"]'))return;
-  const structure=model(table);if(!structure?.columns.length)return;
+  if(!table.isConnected)return;
+  const structure=model(table);
+  if(table.closest('[data-table-controls="off"], [role="presentation"]')||!structure?.columns.length||smallArticleTable(table,structure)){unmount(table);return;}
   let state=states.get(table);
   if(!state){const status=doc.createElement('p');status.className='tc-status';status.dataset.tcUi='';status.setAttribute('role','status');status.setAttribute('aria-live','polite');table.after(status);state={table,status,configs:new Map(),order:new WeakMap(),next:0,sort:null,focus:null,restoreOrder:false};states.set(table,state);live.add(state);table.classList.add('tc-table');}
   const indices=new Set(structure.columns.map(c=>c.index));for(const index of state.configs.keys())if(!indices.has(index))state.configs.delete(index);if(state.sort&&!indices.has(state.sort.index))state.sort=null;if(!indices.has(state.focus))state.focus=null;
@@ -59,7 +77,7 @@
   state.rows.forEach(row=>{if(!state.order.has(row))state.order.set(row,state.next++);});
   for(const {cell,index} of structure.columns){
    let button=[...cell.children].find(c=>c.hasAttribute('data-tc-button'));
-   if(!button){button=doc.createElement('button');button.type='button';button.className='tc-column-button';button.dataset.tcUi='';button.dataset.tcButton='';button.textContent='⋮';button.setAttribute('aria-haspopup','dialog');button.addEventListener('click',event=>{event.stopPropagation();open(state,index,button);});button.addEventListener('keydown',event=>{if(event.key==='ArrowDown'){event.preventDefault();event.stopPropagation();open(state,index,button);}});cell.append(button);}
+   if(!button){button=doc.createElement('button');button.type='button';button.className='tc-column-button';button.dataset.tcUi='';button.dataset.tcButton='';button.innerHTML='<svg class="tc-triangle" viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1.5 1.5h9L6 6.5z"/></svg>';button.setAttribute('aria-haspopup','dialog');button.addEventListener('click',event=>{event.stopPropagation();open(state,index,button);});button.addEventListener('keydown',event=>{if(event.key==='ArrowDown'){event.preventDefault();event.stopPropagation();open(state,index,button);}});cell.append(button);}
    const clone=cell.cloneNode(true);clone.querySelectorAll('[data-tc-ui]').forEach(n=>n.remove());const label=clone.textContent.replace(/\s+/g,' ').trim()||'Column '+(index+1);
    button.setAttribute('aria-label','Column options: '+label);button.title='Sort, filter and display '+label;
    const previous=state.configs.get(index)||{filter:'',heat:false,font:'original',percent:false};
@@ -121,7 +139,7 @@
   const bound=Math.max(Math.abs(config.range.min),Math.abs(config.range.max));query('tc-heat-note').textContent=config.info.numeric?(config.info.change?'Purple (negative) ← 0 → Blue (positive). Symmetric range: '+(-bound)+' to '+bound:'Low → high. Blue intensity shows magnitude. Range: '+config.range.min+' to '+config.range.max)+(config.info.unit?' '+config.info.unit:'')+'. Range uses all loaded rows before column filters. Colors do not show investment merit. Missing values are uncolored.':'Heat scale needs single numeric values with consistent units. Mixed text, identifiers and missing-only columns are not scaled.';
   query('tc-font').value=config.font;query('tc-focus').checked=state.focus===index;query('tc-percent-label').hidden=!config.info.percent;query('tc-percent').checked=config.percent;
  }
- function open(state,index,button){if(!dialog?.isConnected)createDialog();trigger=button;active={state,index};mutate(()=>{mount(state.table);sync();});if(!dialog.open)dialog.showModal();dialog.querySelector('[data-tc-sort="asc"]:not([disabled]),#tc-font')?.focus();}
+ function open(state,index,button){if(!dialog?.isConnected)createDialog();trigger=button;active={state,index};mutate(()=>{mount(state.table);sync();});if(!active||states.get(state.table)!==state)return;if(!dialog.open)dialog.showModal();dialog.querySelector('[data-tc-sort="asc"]:not([disabled]),#tc-font')?.focus();}
  function close(){if(dialog?.open)dialog.close();}
  function refresh(scope=doc){mutate(()=>{if(scope.matches?.('table'))mount(scope);scope.querySelectorAll('table').forEach(mount);});}
  function start(){refresh();observer=new MutationObserver(ingest);observer.observe(doc.body,observation);}

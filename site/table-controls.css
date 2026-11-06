@@ -1,5 +1,9 @@
 /* Neutral display controls. Financial status colors remain the source default. */
-.tc-table .tc-column-button{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;min-width:44px;min-height:44px;margin-inline-start:3px;padding:3px;border:1px solid currentColor;border-radius:7px;background:transparent;color:inherit;font:700 20px system-ui;cursor:pointer;opacity:.8}
+.tc-table .tc-column-button{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:28px;min-width:28px;height:28px;min-height:28px;margin-inline-start:3px;padding:6px;border:1px solid transparent;border-radius:7px;background:transparent;color:inherit;cursor:pointer;opacity:.72;transition:background-color .15s,opacity .15s}
+.tc-column-button .tc-triangle{display:block;width:10px;height:7px;pointer-events:none;fill:currentColor;stroke:currentColor;stroke-width:1;stroke-linejoin:round}
+.tc-table .tc-column-button:hover,.tc-table .tc-column-button:focus-visible{background:color-mix(in srgb,currentColor 9%,transparent);opacity:1}
+@media(pointer:coarse){.tc-table .tc-column-button{width:44px;min-width:44px;height:44px;min-height:44px}}
+@media(prefers-reduced-motion:reduce){.tc-table .tc-column-button{transition:none}}
 .tc-table .tc-column-button[data-active=true]{outline:2px solid #6a67c7;outline-offset:-3px;opacity:1}
 .tc-table .tc-column-button:focus-visible,.tc-dialog :focus-visible{outline:3px solid #987b00;outline-offset:2px}
 .tc-table .tc-filtered{display:none!important}

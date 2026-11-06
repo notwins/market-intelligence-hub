@@ -19,4 +19,5 @@ const luminance=h=>{const c=h.match(/[0-9a-f]{2}/gi).map(v=>parseInt(v,16)/255).
 for(const text of ['153852','103a69','491958','023c35'])for(const background of ['f0f7ff','deedff','c6ddf5','a9c9ec','8ab2df','dcc8ef','eee3f8','f7f8fb']){const a=luminance(text),b=luminance(background);assert((Math.max(a,b)+.05)/(Math.min(a,b)+.05)>=4.5,text+' on '+background);}
 assert(profile(['-2%','+4.2%'],{kind:'signed-change',unit:'%'}).change);assert(!profile(['3%','4%'],{label:'Coupon'}).change);
 const js=fs.readFileSync('site/table-controls.js','utf8');assert(!/localStorage|sessionStorage|fetch\(|\.innerHTML\s*=\s*(?!')/.test(js));
+const css=fs.readFileSync('site/table-controls.css','utf8');assert(js.includes('tc-triangle'));assert(!js.includes("button.textContent='⋮'"));assert(css.includes('@media(pointer:coarse)'));assert(css.includes('width:28px'));assert(css.includes('width:44px'));
 console.log('PASS strict scalar parsing, unit compatibility, explicit signed percent types, missing/date/natural stable comparison, heat bounds and active host includes');
