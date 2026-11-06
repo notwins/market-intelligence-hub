@@ -26,3 +26,8 @@ Implemented in requested order: colored taxonomy first, then search/grouping.
 - V4 Research library cards use native More info details before the external report link. Each preserves the existing saved summary, implication, publisher, date and document type; no new numerical findings or publisher claims are generated.
 - The three BOS/OCBC references have More info panels explaining their original edition, known scope and access/price limitations. The OCBC list remains unclassified by currency; PDF contents are not copied.
 - test_research_context.cjs checks all nine saved research entries and the three PDF panels, text escaping, external labels and context/link ordering.
+
+## CPF LIFE and RA external tool (6 November 2026)
+
+- `tools/cpf-life-ra.html` is a new self-contained public calculator linked from Tools and the site map, opening outside the dashboard in a new tab. It is indexed automatically as a Page; existing CPF/RA tags retain Singapore Jade from the verified V1.2 Merged master.
+- It separates hypothetical RA growth from independently supplied income estimates; no private calculator contents or access settings changed. See `docs/CPF_CALCULATOR.md` for maths, source boundaries and tests.
