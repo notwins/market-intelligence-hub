@@ -85,6 +85,7 @@ def build():
   rows.append(dict(id=hashlib.sha256(repr(key).encode()).hexdigest()[:16],kind=kind,title=str(title),text=re.sub(r'\s+',' ',re.sub(r'https?://\S+','',str(text))).strip(),href=href,date=date,source=source,status=status,tags=clean_tags,location=location,source_access='restricted' if restricted else 'public',reading=reading or []))
  sections={'overview':'Daily briefing','watchlist':'12-name watchlist','calls':'Calls and full reports','headlines':'Reuters coverage','hourly':'Hourly news','earnings':'US earnings','credit':'Bonds and credit','policy':'Central Banks and US Administration','reports':'Scheduled reports and archive','research':'White Papers & Research Papers','master':'Security master','history':'Yields FX history historical event charts','ust':'UST selection desk','feeds':'Data and uploads','tools':'Tools and simulators'}
  for key,title in sections.items():add('Section',title,title,'v4.html#'+key,status='Navigation')
+ add('Section','My research · published and pending','Dated original research editions, revisions, add-ons and safe pending-publication status; filter by topic and sort by date','market-understanding/#my-research',status='Navigation')
  add('Section','Tag and event tree map','Searchable colored country sector policy ticker and historical event groupings','tag-map.html',status='Recommended taxonomy')
  for file in [ROOT/'data/news.json',*sorted((ROOT/'data/archive').glob('*.json'))]:
   d=json.loads(file.read_text())

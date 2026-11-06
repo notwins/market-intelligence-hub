@@ -85,6 +85,9 @@ def make():
  return out
 
 def strip_additions(text):
+ text=re.sub(r'<!-- my-research-register:start -->.*?<!-- my-research-register:end -->','',text,flags=re.S)
+ text=re.sub(r'<!-- my-research-register:style --><link[^>]+>','',text)
+ text=re.sub(r'<!-- my-research-register:script --><script[^>]+></script>','',text)
  text=re.sub(r'<!-- publication-audit-20261106:start -->.*?<!-- publication-audit-20261106:end -->\n?','',text,flags=re.S)
  text=re.sub(r'<!-- company-research-nav:start -->.*?<!-- company-research-nav:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-presentations:start -->.*?<!-- research-presentations:end -->','',text,flags=re.S)
@@ -122,6 +125,12 @@ def main():
   if publications:output=output.replace('</header>','</header>'+publications.group()+'\n',1)
   if style:output=output.replace('</head>',style.group()+'</head>',1)
   if presentations:output=output.replace('</header>','</header>'+presentations.group(),1)
+  register=re.search(r'<!-- my-research-register:start -->.*?<!-- my-research-register:end -->',current,re.S)
+  register_style=re.search(r'<!-- my-research-register:style --><link[^>]+>',current)
+  register_script=re.search(r'<!-- my-research-register:script --><script[^>]+></script>',current)
+  if register:output=output.replace('</header>','</header>'+register.group(),1)
+  if register_style:output=output.replace('</head>',register_style.group()+'</head>',1)
+  if register_script:output=output.replace('</body>',register_script.group()+'</body>',1)
   p.write_text(output)
  manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
  print('Built 5 additive report companions; original content retained apart from listed presentation-copy corrections.')

@@ -1,0 +1,927 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-11-06T16:40:28.566517+00:00",
+  "standard_version": "V1.2 Merged",
+  "standard_sha256": "46ecab67f4eba9e57a9320489f4f7b07688f645f34d093372554c2871d319694",
+  "scope": "Public research editions and safe status summaries for pending files or revisions. Dates describe the report or request, not live market observations. Earlier editions and add-ons are retained.",
+  "entries": [
+    {
+      "id": "research-anthropic-ipo-2026-11-05",
+      "title": "Anthropic’s IPO: who pays for all that thinking?",
+      "href": "research/anthropic-ipo-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Revised public reading",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "asset.equities_shares"
+      ],
+      "summary": "Funding, valuation and the cost of AI, with the original wordplay retained.",
+      "assets": [
+        "research/anthropic-ipo-2026-11-05/Anthropic_IPO_Report.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "3ef14d613c99fbcd908f5b99ce5f87017f6038e4b2294442f54451470ef437e9"
+    },
+    {
+      "id": "research-cpf-life-after-55-2026-11-04",
+      "title": "CPF LIFE: the next dollar after 55",
+      "href": "research/cpf-life-after-55-2026-11-04/",
+      "date": "2026-11-04",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Original study",
+      "section": "Research",
+      "tags": [
+        "institution.cpf_board_cpf_life",
+        "asset.cpf_oa_ra_sa"
+      ],
+      "summary": "Retirement-account choices, extra contributions and lifetime income.",
+      "assets": [
+        "research/cpf-life-after-55-2026-11-04/cpf-life-xirr-comparison.xlsx"
+      ],
+      "published_date": null,
+      "sha256": "a508d1f37deea98881605d642ad8d9e0d85668ba55be9175036553075d6a7664"
+    },
+    {
+      "id": "research-cpf-life-explained-2026-11-06-v2",
+      "title": "CPF LIFE: growth, refund and income for life",
+      "href": "research/cpf-life-explained-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "V2",
+      "section": "Research",
+      "tags": [
+        "institution.cpf_board_cpf_life",
+        "asset.cpf_oa_ra_sa"
+      ],
+      "summary": "A revised public model of balances, refunds and lifetime payouts.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "83c613b55f63805640e9cb09eb550521e47b42262e937dee03f00b3b98f4a6fc"
+    },
+    {
+      "id": "research-cpf-life-yield-2026-11-05",
+      "title": "CPF LIFE: growth, recovery and lifetime income",
+      "href": "research/cpf-life-yield-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Earlier reading edition",
+      "section": "Research",
+      "tags": [
+        "institution.cpf_board_cpf_life",
+        "asset.cpf_oa_ra_sa"
+      ],
+      "summary": "Separating interest credited, capital recovery and lifelong insurance.",
+      "assets": [
+        "research/cpf-life-yield-2026-11-05/presentations/CPF_LIFE_Clear_Visual_Story_Public.pptx",
+        "research/cpf-life-yield-2026-11-05/presentations/CPF_LIFE_Financial_Briefing_Public.pptx",
+        "research/cpf-life-yield-2026-11-05/presentations/CPF_LIFE_Speaker_Notes_Public.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "684916b6bdb9f5f0744a1c82e38ae24f0817b35f5448c22482ef141937a501a1"
+    },
+    {
+      "id": "research-cpf-oa-temasek-2070-2026-11-04",
+      "title": "CPF OA and Temasek 2070",
+      "href": "research/cpf-oa-temasek-2070-2026-11-04/",
+      "date": "2026-11-04",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Original study",
+      "section": "Research",
+      "tags": [
+        "institution.cpf_board_cpf_life",
+        "institution.temasek",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "A comparison of retirement savings and a long-dated bond, including risk and cash flow.",
+      "assets": [],
+      "published_date": null,
+      "sha256": "72ecd752f5eeb2a8afbba4b96f98c45af9619543ed2abaf0a74192d3795e5b36"
+    },
+    {
+      "id": "research-diversification-made-simple-2026-11-06",
+      "title": "Diversification, made simple",
+      "href": "research/diversification-made-simple-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Standalone addition",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "How combining different investments can change portfolio risk.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "16cf74a630df95d5e202c08490d7c481959969c2a0fc33cd497b3db8f209de05"
+    },
+    {
+      "id": "research-electricity-infrastructure-2026-11-05",
+      "title": "Singapore–Malaysia electricity and infrastructure risk",
+      "href": "research/electricity-infrastructure-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Public reading",
+      "section": "Research",
+      "tags": [
+        "geo.singapore",
+        "sector.utilities_power",
+        "sector.infrastructure_construction"
+      ],
+      "summary": "Power supply, cross-border infrastructure and the financial risks behind investment.",
+      "assets": [
+        "research/electricity-infrastructure-2026-11-05/Singapore_Malaysia_Electricity_Infrastructure_Research.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "11832ee317f7278ad5006dcb69ae000fa0977bd894d09e9032359829ba94d852"
+    },
+    {
+      "id": "research-googl",
+      "title": "Alphabet: business quality and valuation",
+      "href": "research/googl/",
+      "date": "2026-11-03",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Research watch",
+      "section": "Calls",
+      "tags": [
+        "ticker.alphabet_googl",
+        "sector.artificial_intelligence"
+      ],
+      "summary": "Alphabet’s business model, earnings evidence and valuation scenarios.",
+      "assets": [],
+      "published_date": null,
+      "sha256": "4585678f310fc9dceb7f0dbd3a1dbf102af49b3f600ac83c175907d3537f0828"
+    },
+    {
+      "id": "research-historical-market-events-2026-11-05",
+      "title": "Historical market events: mechanisms and consequences",
+      "href": "research/historical-market-events-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Research atlas",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds",
+        "asset.foreign_exchange"
+      ],
+      "summary": "A dated guide to market shocks, transmission channels and historical comparisons.",
+      "assets": [
+        "research/historical-market-events-2026-11-05/Historical_Market_Events_Research_Report.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "c17f48ec32e83087e8d6807a58a67581677e6687cd8a9fff87b14d9f31d3e616"
+    },
+    {
+      "id": "research-jpm-price-growth-2026-11-05",
+      "title": "JPMorgan: the price of growth and the value of income",
+      "href": "research/jpm-price-growth-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Public reading",
+      "section": "Research",
+      "tags": [
+        "ticker.jpmorgan_jpm",
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "Expectations, valuations and income through a source-linked market guide.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "56d121d473e9a22a5dca3cdbe8f95c42e3e5b1cbbb456274ca9e09f20f098cc5"
+    },
+    {
+      "id": "research-nvda-2026-11-05",
+      "title": "NVIDIA: the platform and the price",
+      "href": "research/nvda-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Deep dive",
+      "section": "Calls",
+      "tags": [
+        "ticker.nvidia_nvda",
+        "sector.artificial_intelligence",
+        "sector.semiconductors"
+      ],
+      "summary": "AI demand, platform economics, cash flow and valuation risk.",
+      "assets": [],
+      "published_date": null,
+      "sha256": "3b9161bd206b5026436e8aebaee8f43049c6d827934556589af41051a63f4a88"
+    },
+    {
+      "id": "research-oaktree-rates-wayne-dahl-2026-11-05",
+      "title": "Oaktree’s Rates: yield and spreads",
+      "href": "research/oaktree-rates-wayne-dahl-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Public reading",
+      "section": "Research",
+      "tags": [
+        "asset.fixed_income_bonds",
+        "macro.treasury_yields_rates"
+      ],
+      "summary": "Wayne Dahl’s rates discussion explained through yield, spread and return drivers.",
+      "assets": [
+        "research/oaktree-rates-wayne-dahl-2026-11-05/Oaktree_Rates_Wayne_Dahl_Public.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "eaa4f48f01d59749b6fd8a0f2b82ea45de7e93b62e702390d9c7675e71b2bfbd"
+    },
+    {
+      "id": "research-pimco-income-bonds-2026-11-06",
+      "title": "PIMCO Income, UST 2041 and Temasek 2070",
+      "href": "research/pimco-income-bonds-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Current public edition",
+      "section": "Research",
+      "tags": [
+        "ticker.pimco",
+        "asset.fixed_income_bonds",
+        "institution.temasek"
+      ],
+      "summary": "Fund income, long-bond duration and the difference between yield and cash distributions.",
+      "assets": [
+        "research/pimco-income-bonds-2026-11-06/PIMCO_Income_and_USD_Bonds_Public.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "7b36c9fe41e769fceaf973e21ce59219353f60dbcccd6073feb0046b77649c47"
+    },
+    {
+      "id": "research-snb-mas-policy-2026-11-05",
+      "title": "SNB and MAS: a second monetary-policy study",
+      "href": "research/snb-mas-policy-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Public reading",
+      "section": "Research",
+      "tags": [
+        "institution.swiss_national_bank",
+        "institution.monetary_authority_of_singapore",
+        "asset.foreign_exchange"
+      ],
+      "summary": "A separate comparison of Swiss and Singapore monetary policy and currency effects.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "448d64baac9529b839c995648d8843dbff6061a2ac8e9659f8fc3c156e385b66"
+    },
+    {
+      "id": "research-sti-banks-2026-11-06",
+      "title": "The STI’s bank premium",
+      "href": "research/sti-banks-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Part 1",
+      "section": "Research",
+      "tags": [
+        "geo.singapore",
+        "sector.financials_banking",
+        "asset.equities_shares"
+      ],
+      "summary": "Singapore bank earnings, index concentration and the valuation behind the STI.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "6ebde1eeafd9b2d9fe2ef5aec972a97240bb3d7131834be6ec78405916a86664"
+    },
+    {
+      "id": "research-sti-banks-part2-2026-11-06",
+      "title": "STI banks: NIM, SGS and T-bills",
+      "href": "research/sti-banks-part2-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Part 2 · add-on",
+      "section": "Research",
+      "tags": [
+        "sector.financials_banking",
+        "asset.singapore_government_securities",
+        "macro.treasury_yields_rates"
+      ],
+      "summary": "An expansion on bank net interest margins and Singapore government yields; Part 1 is retained.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "d1fe458d29c8b3d5f46eca91357cf2572f4aecc23a8d65c70c6bd1ac6401819c"
+    },
+    {
+      "id": "research-tsm-2026-11-05",
+      "title": "TSMC: foundry leadership and cash returns",
+      "href": "research/tsm-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Deep dive",
+      "section": "Calls",
+      "tags": [
+        "ticker.tsmc_tsm",
+        "sector.semiconductors",
+        "sector.artificial_intelligence"
+      ],
+      "summary": "Foundry economics, AI concentration, capital spending and shareholder returns.",
+      "assets": [],
+      "published_date": null,
+      "sha256": "f0980e2ff1fbf39021ecbf6b2b84e19b4abcbd27d1cce238fb9936c7c88c7202"
+    },
+    {
+      "id": "research-wealth-inequality-2026-11-04",
+      "title": "Own the assets. Understand the borrowing.",
+      "href": "research/wealth-inequality-2026-11-04/",
+      "date": "2026-11-04",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Full research",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds",
+        "asset.secured_financing_margin_loans"
+      ],
+      "summary": "Asset ownership, wealth concentration and the risks of financing investments.",
+      "assets": [
+        "research/wealth-inequality-2026-11-04/presentations/Wealth_Inequality_Clear_Visual_Story_Public.pptx",
+        "research/wealth-inequality-2026-11-04/presentations/Wealth_Inequality_Financial_Briefing_Public.pptx"
+      ],
+      "published_date": null,
+      "sha256": "6c1adcdad0b3442604a90fc8a39ece814cb8fe7b0f759c228b2658fea7a2f24c"
+    },
+    {
+      "id": "research-wealth-inequality-2026-11-04-sharpe",
+      "title": "Sharpe ratio: detailed mathematics",
+      "href": "research/wealth-inequality-2026-11-04/sharpe.html",
+      "date": "2026-11-04",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Detailed math · retained",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "The original formulas and worked risk-adjusted-return explanation remain available.",
+      "assets": [],
+      "published_date": null,
+      "sha256": "7728c8f01b4d2296f4cce74f99730aae06cb8109d4c3618adbab812284fbedcb"
+    },
+    {
+      "id": "research-xau-central-banks-2026-11-05",
+      "title": "Gold and central banks: demand, reserves and price",
+      "href": "research/xau-central-banks-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Original study",
+      "section": "Research",
+      "tags": [
+        "asset.gold",
+        "asset.foreign_exchange"
+      ],
+      "summary": "How reserve demand, valuation and currency translation affect the gold narrative.",
+      "assets": [
+        "research/xau-central-banks-2026-11-05/XAU_Central_Bank_Deep_Dive_Public.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "cda929fbb52a5aadcd420b1b1097006abfbe246abd3d12febd149cfd9404ea96"
+    },
+    {
+      "id": "research-xau-gold-outlook-2026-11-06",
+      "title": "Who is buying gold? Buyers, sellers and SGD returns",
+      "href": "research/xau-gold-outlook-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Earlier edition",
+      "section": "Research",
+      "tags": [
+        "asset.gold",
+        "asset.usd_sgd"
+      ],
+      "summary": "Central-bank buying and selling, price scenarios and SGD-based returns.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "0c44fe79d33c43637056a88e21c25b6bf6a1f0228343478986325916ad34c7fd"
+    },
+    {
+      "id": "research-xau-gold-outlook-2026-11-06-v2",
+      "title": "Who is buying gold?",
+      "href": "research/xau-gold-outlook-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "V2 · HTML and slides",
+      "section": "Research",
+      "tags": [
+        "asset.gold",
+        "asset.usd_sgd"
+      ],
+      "summary": "The revised gold outlook, with the earlier edition preserved separately.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "0f83f0540e31fe8463f5051a595224e3d301127283d29bc64710437a5cd20a95"
+    },
+    {
+      "id": "market-understanding-ai-data-centres-2026-11-05",
+      "title": "AI data centres: from power to profit",
+      "href": "market-understanding/ai-data-centres-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Public adaptation",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "sector.cloud_data_centres",
+        "sector.utilities_power"
+      ],
+      "summary": "The path from infrastructure spending to revenue, cash flow and investment returns.",
+      "assets": [
+        "market-understanding/ai-data-centres-2026-11-05/presentations/AI_Data_Centre_Clear_Visual_Story_Public.pptx",
+        "market-understanding/ai-data-centres-2026-11-05/presentations/AI_Data_Centre_Financial_Briefing_Public.pptx"
+      ],
+      "published_date": null,
+      "sha256": "1d478498320548ee39c15b660e9a5cd1e7b5b2c7539a7cd2d06e86b28e939622"
+    },
+    {
+      "id": "market-understanding-ai-selloff-2026-11-06",
+      "title": "The AI selloff hit suppliers hardest",
+      "href": "market-understanding/ai-selloff-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Market update",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "sector.semiconductors",
+        "asset.equities_shares"
+      ],
+      "summary": "A dated examination of the 5 November US close and early Asian trading.",
+      "assets": [
+        "market-understanding/ai-selloff-2026-11-06/AI_Selloff_2026-11-06.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "5cd41923ae29716b93f4a8ffcd9a771f6bf7496a332db9d870f9711471603bfb"
+    },
+    {
+      "id": "market-understanding-ai-tech-2026-11-05",
+      "title": "AI and technology: business quality and cash flow",
+      "href": "market-understanding/ai-tech-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Current public adaptation",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "asset.equities_shares"
+      ],
+      "summary": "A framework for distinguishing business strength from share-price expectations.",
+      "assets": [],
+      "published_date": null,
+      "sha256": "9888a1c57286e82e57194655606dff7d8c18a6f4b208dc434456a8aa7cf74bf3"
+    },
+    {
+      "id": "market-understanding-bond-research-review-2026-11-06",
+      "title": "Three risks. One bond portfolio.",
+      "href": "market-understanding/bond-research-review-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Full report",
+      "section": "Research",
+      "tags": [
+        "asset.fixed_income_bonds",
+        "macro.treasury_yields_rates",
+        "asset.foreign_exchange"
+      ],
+      "summary": "Interest-rate, credit and currency risks, including an official 14-tenor Treasury curve.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "0bbb30050b9fbaf7d79608fc7d03fa9230d0500cee59793010b8ae824d2d9cc4"
+    },
+    {
+      "id": "market-understanding-creditworthiness-2026-11-05",
+      "title": "Understanding creditworthiness",
+      "href": "market-understanding/creditworthiness-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Earlier corrected edition",
+      "section": "Research",
+      "tags": [
+        "asset.fixed_income_bonds",
+        "asset.investment_grade_credit"
+      ],
+      "summary": "A teaching framework for balance sheets, liquidity and the ability to repay debt.",
+      "assets": [
+        "market-understanding/creditworthiness-2026-11-05/creditworthiness-guide.pdf",
+        "market-understanding/creditworthiness-2026-11-05/presentations/Creditworthiness_Clear_Visual_Story_Public.pptx",
+        "market-understanding/creditworthiness-2026-11-05/presentations/Creditworthiness_Financial_Briefing_Public.pptx"
+      ],
+      "published_date": null,
+      "sha256": "c1da7418662ebd7fc7b1b933dd388bda2a4f44853718d0182cd6e91afbada67c"
+    },
+    {
+      "id": "market-understanding-creditworthiness-2026-11-06-v2",
+      "title": "Can the business survive and repay its bonds?",
+      "href": "market-understanding/creditworthiness-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "V2 · corrected teaching edition",
+      "section": "Research",
+      "tags": [
+        "asset.fixed_income_bonds",
+        "asset.investment_grade_credit"
+      ],
+      "summary": "The revised company-credit framework, with sourced calculations and risk explanations.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "b4745d08c51b69aab286554cc6e4647877c1342468472fbfa88eeb1ddff172b3"
+    },
+    {
+      "id": "market-understanding-howard-marks-2026-11-05",
+      "title": "Howard Marks and the price of conviction",
+      "href": "market-understanding/howard-marks-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Earlier edition",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "An explanation of investment conviction, price and uncertainty.",
+      "assets": [
+        "market-understanding/howard-marks-2026-11-05/presentations/Howard_Marks_Clear_Visual_Story_5_Slides.pptx",
+        "market-understanding/howard-marks-2026-11-05/presentations/Howard_Marks_Financial_Briefing_5_Slides.pptx"
+      ],
+      "published_date": "2026-11-05",
+      "sha256": "d1517beac46563485c4cbbbe944a8e7a9f0b3493a92a68a52a9deaf18397d535"
+    },
+    {
+      "id": "market-understanding-howard-marks-2026-11-06-v2",
+      "title": "Howard Marks: conviction needs a price",
+      "href": "market-understanding/howard-marks-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "V2",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "A revised explanation of valuation discipline and the limits of certainty.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "9eeff6b23f349c32f794ac8544f9c98a6bfe58bd7b3ac9d95a3effa48bdfdbf5"
+    },
+    {
+      "id": "market-understanding-mas-snb-2026-11-05",
+      "title": "MAS and SNB: monetary policy, inflation and CHF/SGD",
+      "href": "market-understanding/mas-snb-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Current public study",
+      "section": "Research",
+      "tags": [
+        "institution.monetary_authority_of_singapore",
+        "institution.swiss_national_bank",
+        "asset.chf_sgd"
+      ],
+      "summary": "Comparing policy tools, inflation and the interpretation of CHF/SGD movements.",
+      "assets": [
+        "market-understanding/mas-snb-2026-11-05/presentations/CHF_SGD_Clear_Visual_Story_5_Slides.pptx",
+        "market-understanding/mas-snb-2026-11-05/presentations/CHF_SGD_Financial_Briefing_5_Slides.pptx"
+      ],
+      "published_date": null,
+      "sha256": "f34f4127264c1ca0d2e84f1e3450fea87043bd91d07b0c203b66ab46ba1d6871"
+    },
+    {
+      "id": "market-understanding-spx-collars-2026-11-06",
+      "title": "SPX put-and-call collars",
+      "href": "market-understanding/spx-collars-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "6 November revision",
+      "section": "Research",
+      "tags": [
+        "asset.options_derivatives",
+        "asset.equities_shares"
+      ],
+      "summary": "The revised floor-and-cap analysis, with payoff exploration, return tables and a heatmap.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "1d44a067acbb6dfbeaebab39a678c3bffe518106004b6df72c8481c2d90ac8af"
+    },
+    {
+      "id": "market-understanding-spx-floor-cap-2026-11-05",
+      "title": "SPX: floors, caps and the price of protection",
+      "href": "market-understanding/spx-floor-cap-2026-11-05/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Earlier aggregate edition",
+      "section": "Research",
+      "tags": [
+        "asset.options_derivatives",
+        "asset.equities_shares"
+      ],
+      "summary": "Historical annual returns and hypothetical 0%–9% payoff limits, with option-pricing caveats.",
+      "assets": [
+        "market-understanding/spx-floor-cap-2026-11-05/presentations/IFI_SPX_Financial_Briefing_5_Slides_Public.pptx",
+        "market-understanding/spx-floor-cap-2026-11-05/presentations/IFI_SPX_Formatted_Speaker_Notes_Public.docx",
+        "market-understanding/spx-floor-cap-2026-11-05/presentations/IFI_SPX_Visual_Story_5_Slides_Public.pptx"
+      ],
+      "published_date": null,
+      "sha256": "7635747364298c08d460d19274a9e4ca4e68afe4e7bbfd22c5ee908a12f77857"
+    },
+    {
+      "id": "market-understanding-structured-investment-hypothetical",
+      "title": "Structured investments: hypothetical reader",
+      "href": "market-understanding/structured-investment-hypothetical/",
+      "date": "2026-11-05",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Current hypothetical edition",
+      "section": "Research",
+      "tags": [
+        "asset.options_derivatives",
+        "asset.equities_shares"
+      ],
+      "summary": "An educational guide to coupons, barriers, tenor and underlying shares using invented examples.",
+      "assets": [
+        "market-understanding/structured-investment-hypothetical/presentations/Structured_Investments_Clear_Visual_Story_Public.pptx",
+        "market-understanding/structured-investment-hypothetical/presentations/Structured_Investments_Financial_Briefing_Public.pptx"
+      ],
+      "published_date": null,
+      "sha256": "c4f4e8cd235b74d4f8f40bdb03bdb78d63c19308be33735bd857fb0666ef9364"
+    },
+    {
+      "id": "market-understanding-treasuries-chf-gold-2026-11-06",
+      "title": "Treasuries, CHF and gold: the case for a staged entry",
+      "href": "market-understanding/treasuries-chf-gold-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "6 November quote refresh",
+      "section": "Research",
+      "tags": [
+        "asset.us_treasuries",
+        "asset.foreign_exchange",
+        "asset.gold"
+      ],
+      "summary": "The dated bond thesis, 2041 Treasury and Temasek comparisons, with currency and gold scenarios.",
+      "assets": [],
+      "published_date": "2026-11-06",
+      "sha256": "24ec075766dfdbf34bcea59490a2c5a1df5c5ec5b7e78126f2bf56958f56a8ec"
+    },
+    {
+      "id": "market-understanding-us-earnings-cash-flow-2026-11-06",
+      "title": "US earnings: the cash-flow test",
+      "href": "market-understanding/us-earnings-cash-flow-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Full report · 73 companies",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "macro.corporate_earnings_metrics"
+      ],
+      "summary": "66 company briefs and seven market-reaction-only entries, with the 65-page public report.",
+      "assets": [
+        "market-understanding/us-earnings-cash-flow-2026-11-06/US-Earnings-Cash-Flow-2026-11-06.pdf"
+      ],
+      "published_date": "2026-11-06",
+      "sha256": "99e62462dc161689b55965e04dec98e09dbe3205a56ad0210783ff8d4e1ff2c9"
+    },
+    {
+      "id": "pending-pimco-v2",
+      "title": "PIMCO Income: revised V2 report",
+      "href": "research/pimco-income-bonds-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source/reuse review",
+      "section": "Research",
+      "tags": [
+        "ticker.pimco",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "The revised report is complete. Its source-data reuse checks remain open; the current public report is available.",
+      "assets": []
+    },
+    {
+      "id": "pending-mas-snb-v2",
+      "title": "MAS and SNB: revised V2 report",
+      "href": "market-understanding/mas-snb-2026-11-05/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source/reuse review",
+      "section": "Research",
+      "tags": [
+        "institution.monetary_authority_of_singapore",
+        "institution.swiss_national_bank",
+        "asset.foreign_exchange"
+      ],
+      "summary": "The 29-page revised edition is complete; source verification and reuse checks remain open.",
+      "assets": []
+    },
+    {
+      "id": "pending-snb-mas-v2",
+      "title": "SNB and MAS: second study V2",
+      "href": "research/snb-mas-policy-2026-11-05/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source/reuse review",
+      "section": "Research",
+      "tags": [
+        "institution.swiss_national_bank",
+        "institution.monetary_authority_of_singapore",
+        "asset.foreign_exchange"
+      ],
+      "summary": "The separate 30-page revision is complete; source verification and reuse checks remain open.",
+      "assets": []
+    },
+    {
+      "id": "pending-ai-tech-v2",
+      "title": "AI and technology: full V2 report",
+      "href": "market-understanding/ai-tech-2026-11-05/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source/reuse review",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "asset.equities_shares"
+      ],
+      "summary": "The completed full revision contains material requiring further source and reuse checks. The public adaptation remains available.",
+      "assets": []
+    },
+    {
+      "id": "pending-gold-v2-pdf",
+      "title": "Gold outlook V2: full PDF",
+      "href": "research/xau-gold-outlook-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source check pending",
+      "section": "Research",
+      "tags": [
+        "asset.gold",
+        "asset.foreign_exchange"
+      ],
+      "summary": "The V2 HTML and presentation slides are published. The full 35-page PDF has a remaining source check.",
+      "assets": []
+    },
+    {
+      "id": "pending-spx-pdf",
+      "title": "SPX collars: revised PDF",
+      "href": "market-understanding/spx-collars-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source/reuse review",
+      "section": "Research",
+      "tags": [
+        "asset.options_derivatives",
+        "asset.equities_shares"
+      ],
+      "summary": "The revised interactive HTML is published. The separate 19-page source PDF still needs reuse clearance.",
+      "assets": []
+    },
+    {
+      "id": "pending-cpf-source-pdf",
+      "title": "CPF LIFE: full source PDF",
+      "href": "research/cpf-life-explained-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source/provenance review",
+      "section": "Research",
+      "tags": [
+        "institution.cpf_board_cpf_life"
+      ],
+      "summary": "The public model, presentations and notes are available. The original full source PDF remains under review.",
+      "assets": []
+    },
+    {
+      "id": "pending-weekly-fx-decks",
+      "title": "Weekly FX and yields: two presentation versions",
+      "href": null,
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Completion not verified",
+      "section": "Research",
+      "tags": [
+        "asset.foreign_exchange",
+        "macro.treasury_yields_rates"
+      ],
+      "summary": "The two requested slide versions have not yet been verified as finished. This is not a claim that the existing written research is unpublished.",
+      "assets": []
+    },
+    {
+      "id": "pending-si-revision",
+      "title": "Structured investments: expanded revision",
+      "href": "market-understanding/structured-investment-hypothetical/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Awaiting finished revision",
+      "section": "Research",
+      "tags": [
+        "asset.options_derivatives",
+        "asset.equities_shares"
+      ],
+      "summary": "The existing hypothetical reader is published. A finished expanded revision has not yet been verified.",
+      "assets": []
+    },
+    {
+      "id": "pending-anthropic-revision",
+      "title": "Anthropic IPO: further revision",
+      "href": "research/anthropic-ipo-2026-11-05/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Awaiting finished revision",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "asset.equities_shares"
+      ],
+      "summary": "The earlier revised public article is live. The later requested revision has not yet produced a verified finished artifact.",
+      "assets": []
+    },
+    {
+      "id": "pending-wealth-revision",
+      "title": "Wealth and Sharpe ratio: further revision",
+      "href": "research/wealth-inequality-2026-11-04/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Awaiting finished revision",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "The detailed mathematics and simpler diversification add-on remain published. The further revision is not yet verified complete.",
+      "assets": []
+    },
+    {
+      "id": "pending-wealth-source-pdf",
+      "title": "Wealth research: full source PDF",
+      "href": "research/wealth-inequality-2026-11-04/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "PDF review",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "The public HTML and detailed mathematics are available. The full source PDF has not been cleared for public release.",
+      "assets": []
+    },
+    {
+      "id": "pending-bond-comparison",
+      "title": "Bond research: same-maturity market comparison",
+      "href": "market-understanding/treasuries-chf-gold-2026-11-06/",
+      "date": "2026-11-06",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Source/reuse review",
+      "section": "Research",
+      "tags": [
+        "asset.fixed_income_bonds",
+        "macro.treasury_yields_rates"
+      ],
+      "summary": "The main bond thesis and official 14-tenor curve are published. The additional market-comparison material remains under review.",
+      "assets": []
+    }
+  ]
+}
