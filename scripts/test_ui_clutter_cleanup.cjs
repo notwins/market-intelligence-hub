@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const html=fs.readFileSync('site/v4.html','utf8'),earnings=fs.readFileSync('site/earnings-desk.js','utf8');
+const overview=html.slice(html.indexOf('function overview()'),html.indexOf('function earningsView()'));
+for(const label of ['10Y TREASURY','30Y TREASURY','YOUR SCHEDULES','VERIFIED ISSUANCE'])assert(!overview.includes(label),label+' must be removed from overview');
+assert(overview.includes('The bond desk'));assert(overview.includes('Your scheduled editions'));assert(overview.includes('treasuryCard()'));assert(overview.includes('spreadCard()'));assert(overview.includes('toolsSection()'));
+assert(!earnings.includes('class="ed-intro"'));assert(!earnings.includes('Twelve companies. The facts that matter.'));
+assert(earnings.includes('<details class="ed-data-notes">'));assert(earnings.includes('esc(data.coverage)'));assert(earnings.includes('esc(data.consensus)'));
+assert(earnings.includes('fcfChart()'));assert(earnings.includes('data.companies.filter'));assert(earnings.includes('history(c)'));
+assert(html.includes('earnings-desk.js?v=20261106.clean-intro1'));
+for(const [,script]of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi))if(script.trim())new vm.Script(script);
+new vm.Script(earnings);
+const css=fs.readFileSync('site/publication-timeline.css','utf8');assert(css.includes('.publication-source-research{color:#1E40AF;background:#DBEAFE}'));assert(html.includes('publication-timeline.css?v=20261106.navy1'));
+console.log('PASS: only requested clutter removed; source caveats retained collapsed; analytical content and JS syntax preserved.');

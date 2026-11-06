@@ -13,10 +13,20 @@ const ctx={window:null,console,fetch:async()=>({ok:!broken,json:async()=>payload
  listeners.change[0]({target:{id:'si-currency',value:'USD'}});assert(si.filtered().every(r=>r.currency==='USD'));listeners.change[0]({target:{id:'si-review-only',checked:true}});assert(si.filtered().every(r=>r.additional_review));
  listeners.input[0]({target:{id:'si-query',value:'<svg onload=alert(1)>'}});assert(nodes['si-rows'].innerHTML.includes('No records match'));assert(!nodes['si-rows'].innerHTML.includes('<svg'));
  listeners.click[0]({target:{closest:s=>s==='[data-si-reset]'?{}:null}});assert.equal(si.filtered().length,225);assert.equal(nodes['si-currency'].value,'All');assert.equal(nodes['si-review-only'].checked,false);
+ const before=JSON.stringify(payload);
+ listeners.input[0]({target:{id:'si-query',value:'Alphabet'}});
+ assert(si.filtered().length>0);assert(si.filtered().every(r=>r.shares.includes('GOOGL')),'search accepts approved company names');
+ assert(nodes['si-rows'].innerHTML.includes('aria-label="Alphabet (GOOGL)"'));
+ assert(nodes['si-rows'].innerHTML.includes('class="si-shares"'));
+ assert(si.view().includes('data-table-controls="off"'),'SI keeps its direct filters while the new pivot remains design-first');
+ listeners.click[0]({target:{closest:s=>s==='[data-si-reset]'?{}:null}});
+ assert.equal(JSON.stringify(payload),before,'sorting and presentation must not mutate source records');
+ assert(si.view().includes('class="si-mobile-source"'));assert(si.view().includes('class="si-source-column"'));
+ assert(si.view().includes('--si-label:#6D28D9'),'approved Nvidia text colour');
  const panel=si.panel();assert(panel.startsWith('<details'));assert(!panel.includes('data-si-panel open'));listeners.toggle[0]({target:{matches:()=>true,isConnected:true,open:true}});assert(si.panel().includes('data-si-panel open'));listeners.toggle[0]({target:{matches:()=>true,isConnected:true,open:false}});assert(!si.panel().includes('data-si-panel open'));
  for(const mutate of [d=>{d.live_quotes=true;},d=>{d.tenor_unit='months';},d=>{d.coupon_basis='annual';},d=>{d.rows[0].coupon_pct=15.01;},d=>{d.rows[0].isin='private';},d=>{d.rows[0].shares=['<img>','AMD'];},d=>{d.rows[0].reference=d.rows[1].reference;},d=>{d.rows[0].source_date='2027-11-05';},d=>{d.source_date_range=null;},d=>{d.rows[0]=null;}]){const bad=structuredClone(payload);mutate(bad);assert.equal(si.acceptable(bad),false);}
  broken=true;await si.refresh();html=si.view();assert(html.includes('Showing the last loaded reference'));assert(html.includes('SI-225'));
  const v4=read('v4.html'),tools=read('v4-tools.js'),watch=read('watchlist.js');
- assert(v4.includes('si-pricing.js?v=20261106.si-reference1'));assert(v4.includes('si-pricing.css?v=20261106.si-reference1'));assert(v4.includes('MarketSI.connect('));assert(watch.includes('href="#history/si"'));assert.equal((v4.match(/data-view="history\/si"/g)||[]).length,2,'desktop and More-menu SI shortcuts');assert(tools.includes("['si','▧ SI Pricing']"));assert(tools.includes("['yield','fx','curves','spx','si']"));assert(tools.indexOf("if(X.historyTab==='si')")<tools.indexOf("if(!X.history)return intro+tabs+loading('history')"));
+ assert(v4.includes('si-pricing.js?v=20261106.compact-ui1'));assert(v4.includes('si-pricing.css?v=20261106.compact-ui1'));assert(v4.includes('MarketSI.connect('));assert(watch.includes('href="#history/si"'));assert.equal((v4.match(/data-view="history\/si"/g)||[]).length,2,'desktop and More-menu SI shortcuts');assert(tools.includes("['si','▧ SI Pricing']"));assert(tools.includes("['yield','fx','curves','spx','si']"));assert(tools.indexOf("if(X.historyTab==='si')")<tools.indexOf("if(!X.history)return intro+tabs+loading('history')"));
  console.log('PASS SI225 allowlist, unverified historical terms, unit/basis limits, filters/reset, safe data, failure retention and Historical charts integration');
 })().catch(e=>{console.error(e);process.exitCode=1;});

@@ -10,3 +10,41 @@
  new MutationObserver(update).observe(document.querySelector('.rail nav'),{attributes:true,subtree:true,attributeFilter:['class']});
  window.addEventListener('hashchange',update);document.getElementById('language')?.addEventListener('change',()=>queueMicrotask(update));update();
 })();
+/* Mirror the existing subsection controls; original route state and handlers stay authoritative. */
+(()=>{'use strict';
+ const bar=document.querySelector('.topbar'),view=document.getElementById('view');
+ if(!bar||!view)return;
+ const tabs=document.createElement('nav');tabs.className='top-subsections';tabs.setAttribute('aria-label','Subsections');tabs.hidden=true;
+ bar.insertBefore(tabs,bar.querySelector('.top-controls'));
+ let signature='',frame=0;
+ function sync(){frame=0;const source=view.querySelector('.subnav');
+  const next=source?source.innerHTML+'|'+source.getAttribute('aria-label'):'';
+  view.querySelectorAll('.subnav').forEach(n=>n.classList.toggle('subnav-in-topbar',n===source));
+  if(next===signature)return;signature=next;
+  const focused=tabs.contains(document.activeElement)?document.activeElement?.dataset.tab:null;
+  tabs.replaceChildren();tabs.hidden=!source;bar.classList.toggle('has-top-subsections',!!source);
+  view.querySelectorAll('.subnav').forEach(n=>n.classList.toggle('subnav-in-topbar',n===source));
+  if(!source)return;
+  tabs.setAttribute('aria-label',(source.getAttribute('aria-label')||'Section')+' subsections');
+  for(const child of source.children)tabs.append(child.cloneNode(true));
+  const active=tabs.querySelector('.active');
+  if(active){const left=active.offsetLeft-tabs.offsetLeft;if(left<tabs.scrollLeft||left+active.offsetWidth>tabs.scrollLeft+tabs.clientWidth)tabs.scrollLeft=Math.max(0,left-16);}
+  if(focused)tabs.querySelector('[data-tab="'+CSS.escape(focused)+'"]')?.focus({preventScroll:true});
+ }
+ const schedule=()=>{if(!frame)frame=requestAnimationFrame(sync);};
+ new MutationObserver(schedule).observe(view,{subtree:true,childList:true,attributes:true,attributeFilter:['aria-pressed']});
+ window.addEventListener('hashchange',schedule);window.addEventListener('market-display-change',schedule);sync();
+})();
+
+/* Written hierarchy labels accompany the standard's semantic colour swatches. */
+(()=>{'use strict';
+ const menu=document.querySelector('#more .more-grid');if(!menu)return;
+ const themes={stocks:['#233840','#E7F1F5','#F1F7FA','#D9E6EB'],bonds:['#26382F','#E7F1EA','#F1F7F3','#D8E5DC'],macro:['#302D3C','#EBE6F3','#F5F2FA','#E2DAEA'],research:['#182822','#EAF0EC','#F2F6F4','#DCE6E0']};
+ const themeFor=route=>/^(?:watchlist|calls|earnings|master|history\/si)/.test(route)?'stocks':/^(?:credit|ust|history\/(?:yield|curves))/.test(route)?'bonds':/^(?:policy|history)/.test(route)?'macro':'research';
+ function label(node){if(node.querySelector('.nav-level'))return;const route=node.dataset.view||'';const sub=route.includes('/');node.dataset.navLevel=sub?'subsection':'main';
+  const span=document.createElement('small');span.className='nav-level';span.textContent=sub?'Subsection':'Main section';node.append(span);
+  const colours=themes[themeFor(route)];node.style.setProperty('--menu-ink',colours[0]);node.style.setProperty('--menu-bg',colours[sub?2:1]);node.style.setProperty('--menu-border',colours[3]);
+ }
+ menu.querySelectorAll(':scope > button,:scope > a').forEach(label);
+ new MutationObserver(records=>{for(const r of records)for(const n of r.addedNodes)if(n.nodeType===1&&n.matches('button,a'))label(n);}).observe(menu,{childList:true});
+})();

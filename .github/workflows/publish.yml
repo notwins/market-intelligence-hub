@@ -60,6 +60,8 @@ jobs:
           node scripts/test_external_sources_interactions.cjs
           node scripts/test_research_context.cjs
           node scripts/test_si_pricing.cjs
+          node scripts/test_global_search.cjs
+          node scripts/test_ui_clutter_cleanup.cjs
           node scripts/test_watchlist.cjs
           node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs
@@ -106,6 +108,8 @@ jobs:
           node scripts/test_policy_report_visuals.cjs
           node scripts/test_news_reading.cjs
           node scripts/test_si_pricing.cjs
+          node scripts/test_global_search.cjs
+          node scripts/test_ui_clutter_cleanup.cjs
           node scripts/test_watchlist.cjs
           node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs

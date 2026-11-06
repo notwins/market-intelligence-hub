@@ -1,0 +1,74 @@
+{
+  "version": "V1.2 Merged",
+  "source": "Market_Colour_Tag_Master_v1_2_Merged.xlsx / MASTER TAGS; verified 2026-11-06",
+  "source_sha256": "46ECAB67F4EBA9E57A9320489F4F7B07688F645F34D093372554C2871D319694",
+  "scope": "Conservative search-only whitelist. Longest valid whole phrase then priority. Ambiguous short aliases, bare tickers, status and unmapped terms remain neutral. No template-theme authority asserted.",
+  "tags": [
+    {
+      "id": "geo.united_states",
+      "label": "United States",
+      "aliases": [
+        "United States",
+        "US economy"
+      ],
+      "priority": 65,
+      "text": "#1D4ED8",
+      "dark_text": "#93C5FD",
+      "background": "#EFF6FF",
+      "dark_background": "#172554"
+    },
+    {
+      "id": "geo.singapore",
+      "label": "Singapore",
+      "aliases": [
+        "Singapore",
+        "Singaporean"
+      ],
+      "priority": 65,
+      "text": "#047857",
+      "dark_text": "#6EE7B7",
+      "background": "#ECFDF5",
+      "dark_background": "#064E3B"
+    },
+    {
+      "id": "institution.federal_reserve",
+      "label": "Federal Reserve",
+      "aliases": [
+        "Federal Reserve",
+        "Federal Reserve System"
+      ],
+      "priority": 104,
+      "text": "#4338CA",
+      "dark_text": "#A5B4FC",
+      "background": "#EEF2FF",
+      "dark_background": "#1E1B4B"
+    },
+    {
+      "id": "institution.monetary_authority_of_singapore",
+      "label": "Monetary Authority of Singapore",
+      "aliases": [
+        "Monetary Authority of Singapore"
+      ],
+      "priority": 104,
+      "text": "#0F766E",
+      "dark_text": "#5EEAD4",
+      "background": "#F0FDFA",
+      "dark_background": "#042F2E"
+    },
+    {
+      "id": "ticker.nvidia_nvda",
+      "label": "Nvidia / NVDA",
+      "aliases": [
+        "Nvidia",
+        "NVIDIA Corporation",
+        "$NVDA",
+        "NASDAQ:NVDA"
+      ],
+      "priority": 120,
+      "text": "#6D28D9",
+      "dark_text": "#DDD6FE",
+      "background": "#F5F3FF",
+      "dark_background": "#2E1065"
+    }
+  ]
+}

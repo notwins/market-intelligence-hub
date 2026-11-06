@@ -5,7 +5,8 @@
 
 /* Source styles are navigation treatments, separate from mapped entity colours. */
 .publication-source{display:inline-flex;align-items:center;gap:5px;border:1px solid currentColor;border-radius:5px;padding:2px 6px;font-size:calc(9px * var(--text-scale,1));line-height:1.35;font-weight:750;letter-spacing:.02em;white-space:nowrap}
-.publication-source-research{color:#7E22CE;background:#FAF5FF}
+/* Own research: user-requested navy, using V1.2 Merged Finance Navy light-chip pair. */
+.publication-source-research{color:#1E40AF;background:#DBEAFE}
 .publication-source-reuters{color:#334155;background:#F1F5F9;border-style:dashed}
 .publication-source-automation{color:var(--muted,#536176);background:transparent}
 .publication-source-research:before{content:'▤';font-size:1.1em}.publication-source-reuters:before{content:'↗';font-size:1.1em}.publication-source-automation:before{content:'◷';font-size:1.1em}
