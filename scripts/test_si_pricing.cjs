@@ -1,0 +1,22 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const read=p=>fs.readFileSync('site/'+p,'utf8'),source=read('si-pricing.js'),payload=JSON.parse(read('data/si-pricing-reference.json'));
+const listeners={},nodes={'si-rows':{innerHTML:''},'si-count':{textContent:''},'si-query':{value:''},'si-currency':{value:'All'},'si-review-only':{checked:false}};
+let renders=0,broken=false;
+const ctx={window:null,console,fetch:async()=>({ok:!broken,json:async()=>payload}),document:{addEventListener:(n,f)=>(listeners[n]??=[]).push(f),getElementById:k=>nodes[k]}};ctx.window=ctx;vm.createContext(ctx);vm.runInContext(source,ctx);const si=ctx.MarketSI;
+(async()=>{
+ assert(si.acceptable(payload));assert.equal(payload.rows.length,225);assert.equal(payload.rows.filter(r=>r.additional_review).length,13);
+ assert.deepEqual(payload.rows[0],{reference:'SI-001',shares:['NVDA','AMD','NOW','MRVL'],source_date:'2026-11-05',currency:'SGD',tenor_source_value:9,coupon_pct:15,strike_pct:90,ko_pct:100,ki_pct:50,additional_review:false});
+ si.connect(()=>renders++);await new Promise(r=>setTimeout(r,0));assert(renders);
+ let html=si.view();for(const text of ['SI Pricing','Historical charts','Not live prices','Basis unconfirmed','Unit unconfirmed','whole percentage points','not a verified annual yield','not a verified 11-month term','issuer terms','13 additional-review rows'])assert(html.includes(text),text);
+ assert.equal((html.match(/<tr>/g)||[]).length,226);assert(!html.includes('p.a.'));assert(!html.includes('source_excel_row'));assert(!html.includes('IMG_609'));assert(html.includes('tabindex="0" role="region"'));assert(html.includes('scope="col"'));assert(html.includes('scope="row"'));assert(html.includes('data-si-reference-table'));
+ listeners.input[0]({target:{id:'si-query',value:'NVDA'}});assert(si.filtered().length>0&&si.filtered().length<225);assert(si.filtered().every(r=>r.shares.includes('NVDA')));assert(nodes['si-count'].textContent.includes('of 225'));assert(!nodes['si-rows'].innerHTML.includes('colspan'));
+ listeners.change[0]({target:{id:'si-currency',value:'USD'}});assert(si.filtered().every(r=>r.currency==='USD'));listeners.change[0]({target:{id:'si-review-only',checked:true}});assert(si.filtered().every(r=>r.additional_review));
+ listeners.input[0]({target:{id:'si-query',value:'<svg onload=alert(1)>'}});assert(nodes['si-rows'].innerHTML.includes('No records match'));assert(!nodes['si-rows'].innerHTML.includes('<svg'));
+ listeners.click[0]({target:{closest:s=>s==='[data-si-reset]'?{}:null}});assert.equal(si.filtered().length,225);assert.equal(nodes['si-currency'].value,'All');assert.equal(nodes['si-review-only'].checked,false);
+ const panel=si.panel();assert(panel.startsWith('<details'));assert(!panel.includes('data-si-panel open'));listeners.toggle[0]({target:{matches:()=>true,isConnected:true,open:true}});assert(si.panel().includes('data-si-panel open'));listeners.toggle[0]({target:{matches:()=>true,isConnected:true,open:false}});assert(!si.panel().includes('data-si-panel open'));
+ for(const mutate of [d=>{d.live_quotes=true;},d=>{d.tenor_unit='months';},d=>{d.coupon_basis='annual';},d=>{d.rows[0].coupon_pct=15.01;},d=>{d.rows[0].isin='private';},d=>{d.rows[0].shares=['<img>','AMD'];},d=>{d.rows[0].reference=d.rows[1].reference;},d=>{d.rows[0].source_date='2027-11-05';},d=>{d.source_date_range=null;},d=>{d.rows[0]=null;}]){const bad=structuredClone(payload);mutate(bad);assert.equal(si.acceptable(bad),false);}
+ broken=true;await si.refresh();html=si.view();assert(html.includes('Showing the last loaded reference'));assert(html.includes('SI-225'));
+ const v4=read('v4.html'),tools=read('v4-tools.js'),watch=read('watchlist.js');
+ assert(v4.includes('si-pricing.js?v=20261106.si-reference1'));assert(v4.includes('si-pricing.css?v=20261106.si-reference1'));assert(v4.includes('MarketSI.connect('));assert(watch.includes('href="#history/si"'));assert.equal((v4.match(/data-view="history\/si"/g)||[]).length,1,'one More-menu shortcut only');assert(tools.includes("['si','▧ SI Pricing']"));assert(tools.includes("['yield','fx','curves','spx','si']"));assert(tools.indexOf("if(X.historyTab==='si')")<tools.indexOf("if(!X.history)return intro+loading('history')"));
+ console.log('PASS SI225 allowlist, unverified historical terms, unit/basis limits, filters/reset, safe data, failure retention and Historical charts integration');
+})().catch(e=>{console.error(e);process.exitCode=1;});

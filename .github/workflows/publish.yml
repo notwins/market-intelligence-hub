@@ -54,6 +54,7 @@ jobs:
           node scripts/test_search_interactions.cjs
           node scripts/test_external_sources.cjs
           node scripts/test_research_context.cjs
+          node scripts/test_si_pricing.cjs
           node scripts/test_watchlist.cjs
           node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs
@@ -96,6 +97,7 @@ jobs:
           node scripts/test_scheduled_reports.cjs
           node scripts/test_policy_report_visuals.cjs
           node scripts/test_news_reading.cjs
+          node scripts/test_si_pricing.cjs
           node scripts/test_watchlist.cjs
           node scripts/test_market_snapshot.cjs
           node scripts/test_watchlist_reading.cjs

@@ -18,4 +18,4 @@ function callsContext(payload){
  console.log('PASS dated Calls reviews, ETF instruments, safe static report links, empty state and HTML escaping');
 })().catch(e=>{console.error(e);process.exitCode=1;});
 
-assertCalls(fsCalls.readFileSync('site/v4.html','utf8').includes('src="watchlist.js?v=20261106.equity-research1"'),'Calls publication must update the browser asset version');
+assertCalls(fsCalls.readFileSync('site/v4.html','utf8').includes('src="watchlist.js?v=20261106.si-reference1"'),'Calls publication must update the browser asset version');

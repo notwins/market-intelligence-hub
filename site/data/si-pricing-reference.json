@@ -1,0 +1,3663 @@
+{
+  "schema_version": 1,
+  "classification": "rounded_historical_reference",
+  "live_quotes": false,
+  "source_capture_date": "2026-11-05",
+  "source_date_range": [
+    "2026-10-30",
+    "2026-11-05"
+  ],
+  "source_verification": "photo_transcribed_unverified",
+  "tenor_unit": "unconfirmed",
+  "coupon_basis": "unconfirmed",
+  "rounding": {
+    "unit": "whole_percentage_point",
+    "strike": "up",
+    "ko": "up",
+    "ki": "up",
+    "coupon": "down"
+  },
+  "record_count": 225,
+  "additional_review_count": 13,
+  "rows": [
+    {
+      "reference": "SI-001",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "NOW",
+        "MRVL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 15,
+      "strike_pct": 90,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-002",
+      "shares": [
+        "SHOP",
+        "CRM",
+        "NOW",
+        "INTU"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 65,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-003",
+      "shares": [
+        "GOOGL",
+        "NVDA",
+        "MRVL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 9,
+      "coupon_pct": 8,
+      "strike_pct": 57,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-004",
+      "shares": [
+        "CRM",
+        "PANW",
+        "ANET"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 65,
+      "ko_pct": 98,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-005",
+      "shares": [
+        "INTC",
+        "MRVL",
+        "NVDA",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 60,
+      "ko_pct": 95,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-006",
+      "shares": [
+        "TSM",
+        "NVDA",
+        "GOOGL",
+        "AVGO"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 73,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-007",
+      "shares": [
+        "AMD",
+        "ASML",
+        "META"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 76,
+      "ko_pct": 93,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-008",
+      "shares": [
+        "AMD",
+        "ASML",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 80,
+      "ko_pct": 96,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-009",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "INTC"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 65,
+      "ko_pct": 98,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-010",
+      "shares": [
+        "AMD",
+        "ASML",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 80,
+      "ko_pct": 96,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-011",
+      "shares": [
+        "AMD",
+        "ASML",
+        "WDC",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-012",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "SGXL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 6,
+      "strike_pct": 98,
+      "ko_pct": 100,
+      "ki_pct": 90,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-013",
+      "shares": [
+        "GOOGL",
+        "WDC",
+        "AMAT",
+        "NVDA"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 65,
+      "ko_pct": 94,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-014",
+      "shares": [
+        "ORCL",
+        "GOOGL",
+        "NVDA"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 54,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-015",
+      "shares": [
+        "GOOGL",
+        "META",
+        "AVGO"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 100,
+      "ko_pct": 100,
+      "ki_pct": 56,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-016",
+      "shares": [
+        "DELL",
+        "IBM"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 8,
+      "coupon_pct": 12,
+      "strike_pct": 72,
+      "ko_pct": 98,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-017",
+      "shares": [
+        "MSFT",
+        "GOOGL",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 66,
+      "ko_pct": 105,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-018",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "SATS"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 7,
+      "strike_pct": 97,
+      "ko_pct": 103,
+      "ki_pct": 90,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-019",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "SGXL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 96,
+      "ko_pct": 110,
+      "ki_pct": 96,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-020",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "DELL",
+        "INTC"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 15,
+      "strike_pct": 70,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-021",
+      "shares": [
+        "DELL",
+        "STX",
+        "INTC"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 17,
+      "strike_pct": 55,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-022",
+      "shares": [
+        "ISRG",
+        "AVGO",
+        "SKHY",
+        "AMZN"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 63,
+      "ko_pct": 100,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-023",
+      "shares": [
+        "9988",
+        "1810"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 10,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-024",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "STEG",
+        "SGXL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 96,
+      "ko_pct": 100,
+      "ki_pct": 88,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-025",
+      "shares": [
+        "AMD",
+        "FTNT",
+        "MU"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 66,
+      "ko_pct": 98,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-026",
+      "shares": [
+        "INTC",
+        "HPE",
+        "DELL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 10,
+      "coupon_pct": 13,
+      "strike_pct": 85,
+      "ko_pct": 77,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-027",
+      "shares": [
+        "CRM",
+        "PANW",
+        "ANET"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 65,
+      "ko_pct": 98,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-028",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "TSM",
+        "NVDA"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 73,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-029",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "GOOGL",
+        "AMZN"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 3,
+      "coupon_pct": 12,
+      "strike_pct": 81,
+      "ko_pct": 95,
+      "ki_pct": 72,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-030",
+      "shares": [
+        "MRVL",
+        "AVGO"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 10,
+      "coupon_pct": 12,
+      "strike_pct": 75,
+      "ko_pct": 98,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-031",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "SPCX"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 9,
+      "coupon_pct": 15,
+      "strike_pct": 70,
+      "ko_pct": 110,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-032",
+      "shares": [
+        "MSFT",
+        "META",
+        "TSM"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 82,
+      "ko_pct": 100,
+      "ki_pct": 75,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-033",
+      "shares": [
+        "ORCL",
+        "AVGO",
+        "NVDA"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 66,
+      "ko_pct": 95,
+      "ki_pct": 55,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-034",
+      "shares": [
+        "DELL",
+        "STX",
+        "HPE"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 16,
+      "strike_pct": 55,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-035",
+      "shares": [
+        "DELL",
+        "STX",
+        "HPE"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 16,
+      "strike_pct": 55,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-036",
+      "shares": [
+        "META",
+        "PANW",
+        "NVDA"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 59,
+      "ko_pct": 96,
+      "ki_pct": 58,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-037",
+      "shares": [
+        "AVGO",
+        "NVDA",
+        "ORCL"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "USD",
+      "tenor_source_value": 4,
+      "coupon_pct": 12,
+      "strike_pct": 79,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-038",
+      "shares": [
+        "NVDA",
+        "AVGO",
+        "GOOGL",
+        "MSFT"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 71,
+      "ko_pct": 100,
+      "ki_pct": 68,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-039",
+      "shares": [
+        "AMD",
+        "AVGO",
+        "INTC"
+      ],
+      "source_date": "2026-11-05",
+      "currency": "SGD",
+      "tenor_source_value": 6,
+      "coupon_pct": 16,
+      "strike_pct": 74,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-040",
+      "shares": [
+        "PLTR",
+        "NVDA",
+        "CRWD"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 18,
+      "strike_pct": 80,
+      "ko_pct": 98,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-041",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "AVGO"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 51,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-042",
+      "shares": [
+        "PLTR",
+        "COHR",
+        "SPCX"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 17,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-043",
+      "shares": [
+        "MRVL",
+        "INTC",
+        "SKHY"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 61,
+      "ko_pct": 100,
+      "ki_pct": 53,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-044",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "META",
+        "NOW"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 78,
+      "ko_pct": 95,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-045",
+      "shares": [
+        "MU",
+        "AVGO",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 11,
+      "strike_pct": 77,
+      "ko_pct": 90,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-046",
+      "shares": [
+        "6146",
+        "4063",
+        "3110"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 53,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-047",
+      "shares": [
+        "GOOGL",
+        "NVDA",
+        "META"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 10,
+      "coupon_pct": 8,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 80,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-048",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "TSM",
+        "NVDA"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-049",
+      "shares": [
+        "1398",
+        "0939",
+        "2628"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-050",
+      "shares": [
+        "NVDA",
+        "ASML",
+        "SKHY"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 63,
+      "ko_pct": 96,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-051",
+      "shares": [
+        "3988",
+        "0939",
+        "1398"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 8,
+      "coupon_pct": 6,
+      "strike_pct": 98,
+      "ko_pct": 101,
+      "ki_pct": 85,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-052",
+      "shares": [
+        "AMZN",
+        "MSFT",
+        "GOOGL",
+        "NVDA"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 69,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-053",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "AVGO",
+        "MU"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 8,
+      "coupon_pct": 10,
+      "strike_pct": 100,
+      "ko_pct": 90,
+      "ki_pct": 57,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-054",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "TSM",
+        "NVDA"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-055",
+      "shares": [
+        "INTC",
+        "ORCL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 4,
+      "coupon_pct": 35,
+      "strike_pct": 80,
+      "ko_pct": 110,
+      "ki_pct": 80,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-056",
+      "shares": [
+        "AVGO",
+        "AMAT",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 14,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-057",
+      "shares": [
+        "NOW",
+        "BSP"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 4,
+      "coupon_pct": 34,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 75,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-058",
+      "shares": [
+        "INTC",
+        "LRCX",
+        "MRVL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 8,
+      "coupon_pct": 8,
+      "strike_pct": 75,
+      "ko_pct": 85,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-059",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "AMZN",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 71,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-060",
+      "shares": [
+        "AVGO",
+        "CRWD",
+        "MU"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 18,
+      "strike_pct": 69,
+      "ko_pct": 105,
+      "ki_pct": 69,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-061",
+      "shares": [
+        "AVGO",
+        "AMAT",
+        "MRVL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 15,
+      "strike_pct": 69,
+      "ko_pct": 96,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-062",
+      "shares": [
+        "MU",
+        "PANW"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 70,
+      "ko_pct": 88,
+      "ki_pct": 53,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-063",
+      "shares": [
+        "TSM",
+        "GOOGL",
+        "NVDA"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 10,
+      "coupon_pct": 8,
+      "strike_pct": 85,
+      "ko_pct": 100,
+      "ki_pct": 64,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-064",
+      "shares": [
+        "NVDA",
+        "MU"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 74,
+      "ko_pct": 92,
+      "ki_pct": 62,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-065",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "AMZN",
+        "PLTR"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 92,
+      "ko_pct": 93,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-066",
+      "shares": [
+        "NVDA",
+        "PANW"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 71,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-067",
+      "shares": [
+        "MU",
+        "MRVL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 12,
+      "strike_pct": 72,
+      "ko_pct": 88,
+      "ki_pct": 58,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-068",
+      "shares": [
+        "NOW",
+        "ORCL"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 80,
+      "ko_pct": 83,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-069",
+      "shares": [
+        "AVGO",
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 6,
+      "coupon_pct": 8,
+      "strike_pct": 78,
+      "ko_pct": 97,
+      "ki_pct": 78,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-070",
+      "shares": [
+        "SHOP",
+        "CRM",
+        "NOW",
+        "INTU"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 64,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-071",
+      "shares": [
+        "NOC",
+        "GD",
+        "RTX"
+      ],
+      "source_date": "2026-11-04",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 90,
+      "ko_pct": 100,
+      "ki_pct": 72,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-072",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "AMZN"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 79,
+      "ko_pct": 94,
+      "ki_pct": 58,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-073",
+      "shares": [
+        "AVGO",
+        "META",
+        "AMAT"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 15,
+      "strike_pct": 76,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-074",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "SKHY"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 9,
+      "strike_pct": 74,
+      "ko_pct": 94,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-075",
+      "shares": [
+        "SPY",
+        "QQQ",
+        "GDX",
+        "SMH"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 64,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-076",
+      "shares": [
+        "META",
+        "GOOGL",
+        "PANW"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 90,
+      "ko_pct": 100,
+      "ki_pct": 58,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-077",
+      "shares": [
+        "MU",
+        "GOOGL",
+        "NVDA"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 68,
+      "ko_pct": 98,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-078",
+      "shares": [
+        "JPM",
+        "BX",
+        "WFC",
+        "MS"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 95,
+      "ko_pct": 96,
+      "ki_pct": 66,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-079",
+      "shares": [
+        "AMAT",
+        "AMD",
+        "QCOM",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 60,
+      "ko_pct": 105,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-080",
+      "shares": [
+        "JPM",
+        "BX",
+        "WFC",
+        "MS"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 100,
+      "ko_pct": 99,
+      "ki_pct": 67,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-081",
+      "shares": [
+        "AMZN",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 90,
+      "ko_pct": 93,
+      "ki_pct": 67,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-082",
+      "shares": [
+        "NVDA",
+        "AMZN",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 90,
+      "ko_pct": 97,
+      "ki_pct": 67,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-083",
+      "shares": [
+        "AMAT",
+        "LRCX",
+        "TSM"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 11,
+      "strike_pct": 70,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-084",
+      "shares": [
+        "SPCX",
+        "NVDA",
+        "MU"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "HKD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 63,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-085",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "AMD"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 8,
+      "coupon_pct": 8,
+      "strike_pct": 71,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-086",
+      "shares": [
+        "NVDA",
+        "AVGO",
+        "AMD"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 15,
+      "strike_pct": 74,
+      "ko_pct": 98,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-087",
+      "shares": [
+        "NVDA",
+        "META",
+        "AVGO"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 69,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-088",
+      "shares": [
+        "MRVL",
+        "AMAT",
+        "NVDA"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 10,
+      "coupon_pct": 10,
+      "strike_pct": 82,
+      "ko_pct": 82,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-089",
+      "shares": [
+        "MU",
+        "AMD",
+        "NVDA"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-090",
+      "shares": [
+        "NVDA",
+        "AMZN",
+        "META",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 10,
+      "strike_pct": 94,
+      "ko_pct": 94,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-091",
+      "shares": [
+        "NOW",
+        "SNOW",
+        "MSFT",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 3,
+      "coupon_pct": 18,
+      "strike_pct": 78,
+      "ko_pct": 102,
+      "ki_pct": 75,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-092",
+      "shares": [
+        "AMZN",
+        "NVDA",
+        "TSLA",
+        "NET"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 78,
+      "ko_pct": 91,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-093",
+      "shares": [
+        "AMZN",
+        "AVGO",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 15,
+      "strike_pct": 90,
+      "ko_pct": 98,
+      "ki_pct": 74,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-094",
+      "shares": [
+        "META",
+        "GOOGL",
+        "AMZN"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 70,
+      "ko_pct": 105,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-095",
+      "shares": [
+        "MU",
+        "TSM",
+        "NVDA"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 66,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-096",
+      "shares": [
+        "NVDA",
+        "MRVL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 65,
+      "ko_pct": 100,
+      "ki_pct": 53,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-097",
+      "shares": [
+        "GOOGL",
+        "NVDA",
+        "META"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 10,
+      "coupon_pct": 8,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 75,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-098",
+      "shares": [
+        "SKHY",
+        "GOOGL",
+        "META",
+        "AMZN"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 80,
+      "ko_pct": 96,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-099",
+      "shares": [
+        "INTC",
+        "AMD",
+        "ORCL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 4,
+      "coupon_pct": 41,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 75,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-100",
+      "shares": [
+        "MU",
+        "NVDA",
+        "ANET"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 76,
+      "ko_pct": 100,
+      "ki_pct": 52,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-101",
+      "shares": [
+        "META",
+        "NVDA",
+        "AMZN",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 64,
+      "ko_pct": 105,
+      "ki_pct": 64,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-102",
+      "shares": [
+        "SPCX",
+        "NVDA",
+        "MU"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 64,
+      "ko_pct": 110,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-103",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "AMAT",
+        "MRVL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 54,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-104",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "AMAT",
+        "MRVL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 54,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-105",
+      "shares": [
+        "GOOGL",
+        "META"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 20,
+      "strike_pct": 91,
+      "ko_pct": 120,
+      "ki_pct": 83,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-106",
+      "shares": [
+        "GOOGL",
+        "AMD",
+        "NVDA",
+        "WDC"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 60,
+      "ko_pct": 90,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-107",
+      "shares": [
+        "GOOGL",
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-108",
+      "shares": [
+        "MU",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 61,
+      "ko_pct": 105,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-109",
+      "shares": [
+        "TSLA",
+        "NVDA",
+        "AMAT",
+        "ORCL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 51,
+      "ko_pct": 110,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-110",
+      "shares": [
+        "MU",
+        "NVDA",
+        "ANET"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 76,
+      "ko_pct": 100,
+      "ki_pct": 52,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-111",
+      "shares": [
+        "MU",
+        "NVDA",
+        "ANET"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 76,
+      "ko_pct": 100,
+      "ki_pct": 52,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-112",
+      "shares": [
+        "MU",
+        "NVDA",
+        "ANET"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 76,
+      "ko_pct": 100,
+      "ki_pct": 52,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-113",
+      "shares": [
+        "MRVL",
+        "AMZN",
+        "TSM",
+        "NVDA"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 65,
+      "ko_pct": 100,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-114",
+      "shares": [
+        "INTC",
+        "ASML",
+        "TSM"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 18,
+      "strike_pct": 70,
+      "ko_pct": 105,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-115",
+      "shares": [
+        "AMZN",
+        "META",
+        "NVDA",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-116",
+      "shares": [
+        "META",
+        "MU",
+        "JPM"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 77,
+      "ko_pct": 93,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-117",
+      "shares": [
+        "AVGO",
+        "NVDA",
+        "AMZN"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 76,
+      "ko_pct": 92,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-118",
+      "shares": [
+        "GOOGL",
+        "MSFT",
+        "META",
+        "AMZN"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 11,
+      "strike_pct": 85,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-119",
+      "shares": [
+        "AMZN",
+        "JPM",
+        "BX",
+        "MS"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 100,
+      "ko_pct": 98,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-120",
+      "shares": [
+        "INTC",
+        "ASML"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 15,
+      "strike_pct": 78,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-121",
+      "shares": [
+        "DIS",
+        "ELV",
+        "CI"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 7,
+      "strike_pct": 91,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-122",
+      "shares": [
+        "GLW",
+        "TSLA",
+        "ORCL"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 56,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-123",
+      "shares": [
+        "SPCX",
+        "TSLA",
+        "COIN"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 15,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-124",
+      "shares": [
+        "GLW",
+        "SKHY",
+        "TSM"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 63,
+      "ko_pct": 96,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-125",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "NVDA"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 8,
+      "strike_pct": 71,
+      "ko_pct": 100,
+      "ki_pct": 67,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-126",
+      "shares": [
+        "GOOGL",
+        "AMZN",
+        "TSM"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 90,
+      "ko_pct": 97,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-127",
+      "shares": [
+        "GOOGL",
+        "AMZN",
+        "TSM"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 90,
+      "ko_pct": 97,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-128",
+      "shares": [
+        "META",
+        "AVGO",
+        "JD"
+      ],
+      "source_date": "2026-11-03",
+      "currency": "SGD",
+      "tenor_source_value": 5,
+      "coupon_pct": 10,
+      "strike_pct": 82,
+      "ko_pct": 100,
+      "ki_pct": 69,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-129",
+      "shares": [
+        "META",
+        "NVDA",
+        "AVGO"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 68,
+      "ko_pct": 100,
+      "ki_pct": 68,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-130",
+      "shares": [
+        "GOOGL",
+        "AMZN",
+        "NVDA",
+        "TSLA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 72,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-131",
+      "shares": [
+        "GOOGL",
+        "MSFT",
+        "TSLA",
+        "AMZN"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 80,
+      "ko_pct": 95,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-132",
+      "shares": [
+        "AMD",
+        "TSLA",
+        "TSM"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 78,
+      "ko_pct": 95,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-133",
+      "shares": [
+        "META",
+        "GOOGL",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 79,
+      "ko_pct": 96,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-134",
+      "shares": [
+        "GOOGL",
+        "INTC",
+        "NOW"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 68,
+      "ko_pct": 100,
+      "ki_pct": 58,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-135",
+      "shares": [
+        "DELL",
+        "AMAT"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 62,
+      "ko_pct": 88,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-136",
+      "shares": [
+        "MSFT",
+        "META",
+        "AMZN"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 6,
+      "coupon_pct": 9,
+      "strike_pct": 96,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-137",
+      "shares": [
+        "MRVL",
+        "AVGO",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 9,
+      "strike_pct": 68,
+      "ko_pct": 88,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-138",
+      "shares": [
+        "INTC",
+        "AVGO",
+        "MRVL",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 55,
+      "ko_pct": 103,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-139",
+      "shares": [
+        "AMZN",
+        "MSFT",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-140",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 18,
+      "strike_pct": 83,
+      "ko_pct": 105,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-141",
+      "shares": [
+        "AMD",
+        "DELL",
+        "NOW"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 6,
+      "coupon_pct": 15,
+      "strike_pct": 70,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-142",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 18,
+      "strike_pct": 83,
+      "ko_pct": 105,
+      "ki_pct": 70,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-143",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "NVDA",
+        "META"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 100,
+      "ko_pct": 100,
+      "ki_pct": 57,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-144",
+      "shares": [
+        "AMZN",
+        "META",
+        "ASML"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 86,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-145",
+      "shares": [
+        "GOOGL",
+        "AMZN",
+        "ORCL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 66,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-146",
+      "shares": [
+        "NVDA",
+        "META",
+        "AMZN",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 15,
+      "strike_pct": 80,
+      "ko_pct": 100,
+      "ki_pct": 80,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-147",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 18,
+      "strike_pct": 83,
+      "ko_pct": 105,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-148",
+      "shares": [
+        "GOOGL",
+        "MSFT",
+        "ORCL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 67,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-149",
+      "shares": [
+        "QCOM",
+        "PLTR",
+        "TSLA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 15,
+      "strike_pct": 70,
+      "ko_pct": 105,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-150",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "SIAL",
+        "SGXL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 96,
+      "ko_pct": 100,
+      "ki_pct": 88,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-151",
+      "shares": [
+        "INTC",
+        "NOW",
+        "ANET",
+        "MRVL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 8,
+      "coupon_pct": 13,
+      "strike_pct": 70,
+      "ko_pct": 88,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-152",
+      "shares": [
+        "TSM",
+        "NVDA",
+        "MRVL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 13,
+      "strike_pct": 69,
+      "ko_pct": 98,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-153",
+      "shares": [
+        "NVDA",
+        "GOOGL",
+        "MSFT"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 8,
+      "strike_pct": 78,
+      "ko_pct": 100,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-154",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "MRVL",
+        "ASML"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 68,
+      "ko_pct": 95,
+      "ki_pct": 54,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-155",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "AMZN"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 77,
+      "ko_pct": 94,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-156",
+      "shares": [
+        "MU",
+        "AMD",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 69,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-157",
+      "shares": [
+        "GOOGL",
+        "AMZN",
+        "TSM",
+        "AMD"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 90,
+      "ko_pct": 96,
+      "ki_pct": 63,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-158",
+      "shares": [
+        "WDC",
+        "GOOGL",
+        "META",
+        "SKHY"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 11,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-159",
+      "shares": [
+        "NVDA",
+        "GOOGL",
+        "META",
+        "TSM"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 78,
+      "ko_pct": 98,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-160",
+      "shares": [
+        "NVDA",
+        "AVGO",
+        "AMZN"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 10,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 68,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-161",
+      "shares": [
+        "GOOGL",
+        "AMZN",
+        "MSFT",
+        "MRVL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 69,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-162",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 18,
+      "strike_pct": 83,
+      "ko_pct": 105,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-163",
+      "shares": [
+        "AMD",
+        "AMZN"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 9,
+      "coupon_pct": 7,
+      "strike_pct": 71,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-164",
+      "shares": [
+        "WMT",
+        "KR",
+        "COST"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 90,
+      "ko_pct": 100,
+      "ki_pct": 75,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-165",
+      "shares": [
+        "META",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 6,
+      "strike_pct": 79,
+      "ko_pct": 100,
+      "ki_pct": 75,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-166",
+      "shares": [
+        "AMD",
+        "MU"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 4,
+      "coupon_pct": 9,
+      "strike_pct": 71,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-167",
+      "shares": [
+        "NVDA",
+        "TSM",
+        "AMD"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 9,
+      "strike_pct": 75,
+      "ko_pct": 97,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-168",
+      "shares": [
+        "AMD",
+        "MU",
+        "LLY"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 66,
+      "ko_pct": 100,
+      "ki_pct": 52,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-169",
+      "shares": [
+        "AMD",
+        "MU",
+        "LLY"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 66,
+      "ko_pct": 100,
+      "ki_pct": 52,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-170",
+      "shares": [
+        "AVGO",
+        "MU",
+        "NVDA",
+        "INTC"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 64,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-171",
+      "shares": [
+        "MRVL",
+        "AMD",
+        "WDC",
+        "CRWV"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 5,
+      "coupon_pct": 28,
+      "strike_pct": 70,
+      "ko_pct": 90,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-172",
+      "shares": [
+        "AMD",
+        "AMAT",
+        "AVGO"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 8,
+      "strike_pct": 63,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-173",
+      "shares": [
+        "AMD",
+        "AMAT",
+        "AVGO"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 8,
+      "strike_pct": 63,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-174",
+      "shares": [
+        "AMD",
+        "AMAT",
+        "AVGO"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 8,
+      "strike_pct": 63,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-175",
+      "shares": [
+        "AMD",
+        "AMAT",
+        "AVGO"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 8,
+      "strike_pct": 63,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-176",
+      "shares": [
+        "AMD",
+        "AMAT",
+        "AVGO"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 8,
+      "strike_pct": 63,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-177",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "META",
+        "NVDA"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 85,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-178",
+      "shares": [
+        "MRVL",
+        "DELL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 58,
+      "ko_pct": 85,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-179",
+      "shares": [
+        "MRVL",
+        "DELL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 58,
+      "ko_pct": 85,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-180",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "INTC"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 8,
+      "coupon_pct": 8,
+      "strike_pct": 69,
+      "ko_pct": 96,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-181",
+      "shares": [
+        "GOOGL",
+        "NVDA",
+        "DELL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 65,
+      "ko_pct": 88,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-182",
+      "shares": [
+        "MRVL",
+        "AMD",
+        "NVDA",
+        "AVGO"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 70,
+      "ko_pct": 87,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-183",
+      "shares": [
+        "GOOGL",
+        "META",
+        "INTC"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 80,
+      "ko_pct": 88,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-184",
+      "shares": [
+        "GOOGL",
+        "META",
+        "INTC"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 80,
+      "ko_pct": 88,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-185",
+      "shares": [
+        "GOOGL",
+        "META",
+        "INTC"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 80,
+      "ko_pct": 88,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-186",
+      "shares": [
+        "GOOGL",
+        "META",
+        "INTC"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 80,
+      "ko_pct": 88,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-187",
+      "shares": [
+        "MU",
+        "NVDA",
+        "AMD"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "AUD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 61,
+      "ko_pct": 95,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-188",
+      "shares": [
+        "GOOGL",
+        "INTC",
+        "NOW"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 72,
+      "ko_pct": 100,
+      "ki_pct": 62,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-189",
+      "shares": [
+        "ISRG",
+        "TMO",
+        "JNJ"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 85,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-190",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "STEG",
+        "STEL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 6,
+      "coupon_pct": 7,
+      "strike_pct": 100,
+      "ko_pct": 102,
+      "ki_pct": 86,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-191",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "STEL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 100,
+      "ko_pct": 103,
+      "ki_pct": 81,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-192",
+      "shares": [
+        "DBSM",
+        "UOBH",
+        "STEL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 6,
+      "strike_pct": 100,
+      "ko_pct": 103,
+      "ki_pct": 83,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-193",
+      "shares": [
+        "SKHY",
+        "MU",
+        "MRVL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 6,
+      "coupon_pct": 8,
+      "strike_pct": 77,
+      "ko_pct": 84,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-194",
+      "shares": [
+        "AMZN",
+        "GOOGL",
+        "AMD"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 9,
+      "strike_pct": 81,
+      "ko_pct": 96,
+      "ki_pct": 59,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-195",
+      "shares": [
+        "MU",
+        "AMD",
+        "GOOGL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 77,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-196",
+      "shares": [
+        "DELL",
+        "INTC"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 58,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-197",
+      "shares": [
+        "NVDA",
+        "ORCL"
+      ],
+      "source_date": "2026-11-02",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 50,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-198",
+      "shares": [
+        "GOOGL",
+        "TSLA",
+        "MRNA"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 13,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-199",
+      "shares": [
+        "MRVL",
+        "AMAT",
+        "AMD"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 60,
+      "ko_pct": 98,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-200",
+      "shares": [
+        "8001",
+        "6857"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "JPY",
+      "tenor_source_value": 4,
+      "coupon_pct": 10,
+      "strike_pct": 70,
+      "ko_pct": 100,
+      "ki_pct": 61,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-201",
+      "shares": [
+        "GOOGL",
+        "NVDA",
+        "META"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 75,
+      "ko_pct": 105,
+      "ki_pct": 70,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-202",
+      "shares": [
+        "META",
+        "QCOM",
+        "AMAT",
+        "ASML"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 8,
+      "strike_pct": 79,
+      "ko_pct": 92,
+      "ki_pct": 62,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-203",
+      "shares": [
+        "6976",
+        "6981",
+        "6920"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "JPY",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 50,
+      "ko_pct": 85,
+      "ki_pct": 50,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-204",
+      "shares": [
+        "GOOGL",
+        "TSLA",
+        "MRNA"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 13,
+      "strike_pct": 60,
+      "ko_pct": 100,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-205",
+      "shares": [
+        "8001",
+        "6857"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "JPY",
+      "tenor_source_value": 4,
+      "coupon_pct": 10,
+      "strike_pct": 70,
+      "ko_pct": 100,
+      "ki_pct": 61,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-206",
+      "shares": [
+        "6976",
+        "6981",
+        "6920"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "JPY",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 50,
+      "ko_pct": 85,
+      "ki_pct": 50,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-207",
+      "shares": [
+        "GOOGL",
+        "NVDA",
+        "MRVL"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 9,
+      "strike_pct": 66,
+      "ko_pct": 98,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-208",
+      "shares": [
+        "NVDA",
+        "MSFT",
+        "SKHY",
+        "GEV"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 72,
+      "ko_pct": 97,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-209",
+      "shares": [
+        "SHOP",
+        "NFLX",
+        "PANW"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 6,
+      "coupon_pct": 15,
+      "strike_pct": 70,
+      "ko_pct": 105,
+      "ki_pct": 69,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-210",
+      "shares": [
+        "WDC",
+        "MRVL"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 11,
+      "strike_pct": 65,
+      "ko_pct": 100,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-211",
+      "shares": [
+        "AVGO",
+        "AMD",
+        "LRCX"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 68,
+      "ko_pct": 96,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-212",
+      "shares": [
+        "TSLA",
+        "ORCL",
+        "SKHY"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 8,
+      "coupon_pct": 8,
+      "strike_pct": 66,
+      "ko_pct": 95,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-213",
+      "shares": [
+        "AVGO",
+        "NVDA",
+        "AMD"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 69,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-214",
+      "shares": [
+        "MRVL",
+        "SKHY",
+        "AMD"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 59,
+      "ko_pct": 94,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-215",
+      "shares": [
+        "NVDA",
+        "AMD",
+        "ASML"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 9,
+      "coupon_pct": 9,
+      "strike_pct": 74,
+      "ko_pct": 95,
+      "ki_pct": 62,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-216",
+      "shares": [
+        "ORCL",
+        "NOC",
+        "NVO",
+        "OXY"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 12,
+      "strike_pct": 75,
+      "ko_pct": 100,
+      "ki_pct": 57,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-217",
+      "shares": [
+        "GOOGL",
+        "ASML",
+        "AVGO"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 77,
+      "ko_pct": 100,
+      "ki_pct": 65,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-218",
+      "shares": [
+        "AMAT",
+        "GLW",
+        "ANET",
+        "MRVL"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 9,
+      "coupon_pct": 9,
+      "strike_pct": 85,
+      "ko_pct": 85,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-219",
+      "shares": [
+        "TSLA",
+        "AMD",
+        "AVGO"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 67,
+      "ko_pct": 95,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-220",
+      "shares": [
+        "MRVL",
+        "NVDA",
+        "ASML"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "GBP",
+      "tenor_source_value": 11,
+      "coupon_pct": 10,
+      "strike_pct": 75,
+      "ko_pct": 95,
+      "ki_pct": 54,
+      "additional_review": true
+    },
+    {
+      "reference": "SI-221",
+      "shares": [
+        "NVDA",
+        "AMAT",
+        "ANET"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 7,
+      "strike_pct": 73,
+      "ko_pct": 90,
+      "ki_pct": 55,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-222",
+      "shares": [
+        "TSLA",
+        "META",
+        "ORCL"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 6,
+      "strike_pct": 65,
+      "ko_pct": 100,
+      "ki_pct": 54,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-223",
+      "shares": [
+        "AVGO",
+        "AMD",
+        "NVDA"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 72,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-224",
+      "shares": [
+        "AVGO",
+        "AMD",
+        "NVDA"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 72,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    },
+    {
+      "reference": "SI-225",
+      "shares": [
+        "AVGO",
+        "AMD",
+        "NVDA"
+      ],
+      "source_date": "2026-10-30",
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 72,
+      "ko_pct": 98,
+      "ki_pct": 60,
+      "additional_review": false
+    }
+  ]
+}
