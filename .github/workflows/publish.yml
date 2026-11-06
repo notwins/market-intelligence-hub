@@ -165,6 +165,8 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/deploy-pages@v4
         id: deployment
+        with:
+          timeout: 1200000
       - name: Flag feed failure after publishing visible health status
         if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure'
         run: |
