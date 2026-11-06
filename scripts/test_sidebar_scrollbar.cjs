@@ -1,6 +1,6 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.join(__dirname,'../site'),css=fs.readFileSync(path.join(root,'v4-navigation.css'),'utf8'),html=fs.readFileSync(path.join(root,'v4.html'),'utf8');
-assert.match(html,/v4-navigation\.css\?v=20261105\.scrollbar1/,'Fresh CSS must bypass the previous cached navigation stylesheet');
+assert.match(html,/v4-navigation\.css\?v=20261106\.desktop-si1/,'Fresh CSS must bypass the previous cached navigation stylesheet');
 const sidebar=css.slice(css.indexOf('/* Keep the side-menu scrollbar'));
 assert.match(sidebar,/scrollbar-color:var\(--rail-scroll-thumb\) var\(--rail-scroll-track\)/);
 assert.match(sidebar,/--rail-scroll-track:var\(--nav,#102c44\)/,'Track follows the existing dark side-menu palette');

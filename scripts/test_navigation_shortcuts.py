@@ -47,6 +47,28 @@ class NavigationShortcutsTests(unittest.TestCase):
   self.assertIn('@media(max-width:760px)',css)
   self.assertIn('.bottom-nav button{min-width:0;white-space:normal',css)
   self.assertIn('.topbar .top-controls{flex-shrink:0}',css)
+ def test_complete_desktop_phone_and_map_navigation(self):
+  rail=self.html.split('<aside class="rail">')[1].split('</aside>')[0]
+  self.assertIn('data-view="history/si"',rail)
+  self.assertIn('id="all-sections-btn"',self.html)
+  self.assertIn("querySelectorAll('#more-btn,#all-sections-btn')",self.html)
+  self.assertIn('aria-controls="more"',self.html)
+  css=(ROOT/'v4-navigation.css').read_text()
+  self.assertIn('@media(max-width:760px){#all-sections-btn{display:none}}',css)
+  self.assertIn('.history-tabs{flex-wrap:wrap;overflow-x:visible}',css)
+  menu=Links();menu.feed(self.more)
+  site_map=Links();site_map.feed((ROOT/'site-map.html').read_text())
+  for parent,tabs in self.tabs.items():
+   for tab in tabs:
+    self.assertIn(parent+'/'+tab,menu.routes)
+    self.assertIn('v4.html#'+parent+'/'+tab,site_map.links)
+  for view in self.views-{'master','history','directory'}:
+   self.assertIn(view,menu.routes)
+   self.assertIn('v4.html#'+view,site_map.links)
+  tools=(ROOT/'v4-tools.js').read_text().split('function historyView(){')[1].split('function ')[0]
+  self.assertIn("if(!X.history)return intro+tabs+loading('history')",tools)
+  self.assertIn("return '<div class=\"history-page\">'+intro+tabs+",tools)
+  self.assertNotIn('contextControls()+tabs',tools)
  def test_settings_shortcuts_and_phone_grid(self):
   display=(ROOT/'v4-display.js').read_text();self.assertIn('class="settings-shortcuts"',display)
   self.assertIn('href="site-map.html"',display);self.assertIn('href="tag-map.html"',display)

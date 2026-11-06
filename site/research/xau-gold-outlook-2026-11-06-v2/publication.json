@@ -1,0 +1,21 @@
+{
+  "title": "Who is buying gold? \u00b7 V2",
+  "publication_date": "2026-11-06",
+  "edition": "6 November 2026 \u00b7 V2 public HTML and slide edition",
+  "html_sha256": "0f83f0540e31fe8463f5051a595224e3d301127283d29bc64710437a5cd20a95",
+  "files": [
+    {
+      "path": "XAU-Executive-Briefing-v2.pptx",
+      "bytes": 50571,
+      "sha256": "2f623c77acd26ee864bc0164e35f7b5b2a5f823766c83bf2210cb2724342b861"
+    },
+    {
+      "path": "XAU-Visual-Story-v2.pptx",
+      "bytes": 49276,
+      "sha256": "2316b6927b9dc9518f2f8dd3d13771f011951c057eda7c287de64e85c186171b"
+    }
+  ],
+  "sections": 20,
+  "pdf_status": "Withheld: exact supplied OCBC passage not independently inspected",
+  "review": "Selected primary-source figures and rendered slides checked. Dated forecast retrieval gaps disclosed. Original source PDF not published."
+}

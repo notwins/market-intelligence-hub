@@ -1,6 +1,12 @@
 /* Navigation-only layout. Does not change card, font or chart preferences. */
 #more .more-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}#more .more-grid>.more-group-title{grid-column:1/-1;font-size:calc(15px * var(--text-scale,1));margin:18px 0 3px;line-height:1.35}#more .more-grid>.more-group-title:first-child{margin-top:4px}#more .more-grid>button,#more .more-grid>a{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:7px;min-width:0;min-height:84px;padding:11px 8px;border:1px solid var(--line,#d8e2eb);border-radius:12px;text-align:center;font-size:calc(12px * var(--text-scale,1));line-height:1.35;white-space:normal;overflow-wrap:anywhere}.nav-icon{display:block;font-size:1.65em;line-height:1}.settings-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 18px}.settings-shortcuts a{display:flex;align-items:center;justify-content:center;gap:10px;min-height:58px;padding:10px;border:1px solid var(--line,#d8e2eb);border-radius:12px;background:var(--soft,#edf4f8);font-weight:650;text-decoration:none;color:var(--ink,#182b42)}.settings-shortcuts .nav-icon{font-size:1.4em}.settings-shortcuts a:focus-visible,#more .more-grid>a:focus-visible,#more .more-grid>button:focus-visible{outline:3px solid #8a78e8;outline-offset:3px}@media(max-width:480px){#more .more-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#more .more-grid>button,#more .more-grid>a{min-height:80px}.settings-shortcuts a{font-size:calc(13px * var(--text-scale,1));gap:7px}}
 
+/* Complete navigation on desktop; phones keep the existing More button. */
+#all-sections-btn{min-height:44px;white-space:nowrap}
+.rail .rail-subsection{padding-left:23px;font-weight:650}
+.history-tabs{flex-wrap:wrap;overflow-x:visible}
+@media(max-width:760px){#all-sections-btn{display:none}}
+
 /* Keep the side-menu scrollbar visible against its dark rail, in every palette.
    Native scrolling and OS scrollbar sizing stay intact. */
 .rail nav{
@@ -25,3 +31,4 @@ html[data-display-palette=sand] .rail nav{--rail-scroll-thumb:#c1a574;--rail-scr
   .rail nav::-webkit-scrollbar,.rail nav::-webkit-scrollbar-track,.rail nav::-webkit-scrollbar-corner{background:Canvas}
   .rail nav::-webkit-scrollbar-thumb,.rail nav::-webkit-scrollbar-thumb:hover{background:CanvasText;border-color:Canvas}
 }
+
