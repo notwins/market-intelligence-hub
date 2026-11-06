@@ -3,6 +3,7 @@
 import hashlib,json,re
 from collections import Counter
 from pathlib import Path
+from public_display_text import public_display_payload
 from urllib.parse import urlsplit
 from extract_recent_sources import canonical_url, PUBLISHERS, PublicAnchorParser
 from index_external_source_usage import collect
@@ -82,6 +83,6 @@ def build(root=ROOT):
  editions={ref['id']:ref for r in refs for ref in r['references']}
  statistics={'unique_sources':len(refs),'saved_editions':len(editions),'source_edition_references':sum(r['reference_count'] for r in refs)}
  coverage={**recent['coverage'],'edition_counts':dict(sorted(Counter(r['type'] for r in editions.values()).items()))}
- return {'schema_version':2,'built_on':'2026-11-06','coverage':coverage,'usage_coverage':usage_coverage,'usage_statistics':{'sources_with_usage':sum(bool(r['usages']) for r in rows.values()),'source_usages':sum(r['usage_count'] for r in rows.values()),'public_destinations':len({u['id'] for r in rows.values() for u in r['usages']})},'reference_window':recent['date_range'],'reference_statistics':statistics,'initial_snapshot_statistics':recent['statistics'],'records':list(rows.values())}
+ return public_display_payload({'schema_version':2,'built_on':'2026-11-06','coverage':coverage,'usage_coverage':usage_coverage,'usage_statistics':{'sources_with_usage':sum(bool(r['usages']) for r in rows.values()),'source_usages':sum(r['usage_count'] for r in rows.values()),'public_destinations':len({u['id'] for r in rows.values() for u in r['usages']})},'reference_window':recent['date_range'],'reference_statistics':statistics,'initial_snapshot_statistics':recent['statistics'],'records':list(rows.values())})
 if __name__=='__main__':
  data=build();path=ROOT/'site/data/external-sources.json';path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n');print(f"Built {len(data['records'])} canonical source records")

@@ -1,6 +1,7 @@
 """Build a public-content catalogue, never inspect private files or external pages."""
 import json,re,hashlib
 from pathlib import Path
+from public_display_text import public_display_payload
 from html.parser import HTMLParser
 from datetime import datetime,timezone
 from urllib.parse import urlsplit,unquote,quote
@@ -159,6 +160,7 @@ def build():
  for item in bos:add('External research PDF',item['title'],item['scope'],item['url'],item['date'],item['url'],'Dated link only; indicative previous-business-day prices, not live or automatic')
  counts={k:sum(x['kind']==k for x in rows) for k in sorted({x['kind'] for x in rows})}
  payload={'schema_version':2,'built_at':datetime.now(timezone.utc).isoformat(),'counts':counts,'limits':'Public saved content only. No external article bodies, private chats, linked PDFs, tool outputs or local-browser imports. All saved daily headlines and archived snapshots are included, not just the first 80 displayed. Directory dates can be unknown. Search does not refresh financial data. Some JavaScript-only views are represented by section entries rather than every displayed sentence.','entries':rows}
+ payload=public_display_payload(payload)
  (ROOT/'data/site-search.json').write_text(json.dumps(payload,ensure_ascii=False,separators=(',',':')))
  return payload
 if __name__=='__main__':

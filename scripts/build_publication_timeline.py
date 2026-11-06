@@ -12,6 +12,7 @@ import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
+from public_display_text import public_display_payload
 from urllib.parse import urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -217,6 +218,7 @@ def build(root=ROOT, now=None):
                'undated_count': len(missing), 'undated_titles': missing, 'invalid_watchlist_reports': invalid_watchlist,
                'counts': {kind: sum(row['category'] == kind for row in rows) for kind in ['research', 'automation', 'reuters']},
                'entries': rows}
+    payload = public_display_payload(payload)
     (site / 'data/publication-timeline.json').write_text(json.dumps(payload, ensure_ascii=False, separators=(',', ':')) + '\n')
     return payload
 
