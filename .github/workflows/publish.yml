@@ -32,7 +32,9 @@ jobs:
             unzip -oq Reuters_Market_Intelligence_Hub_Restored.zip
           fi
       - name: Test publisher validation and archive retention
-        run: python3 -m unittest discover -s scripts -p 'test_*.py'
+        run: |
+          python3 scripts/build_external_sources.py
+          python3 -m unittest discover -s scripts -p 'test_*.py'
       - name: Audit V3 source data and comparison logic
         run: |
           if [ -f scripts/test_v3.cjs ]; then
@@ -53,6 +55,7 @@ jobs:
           node scripts/test_boolean_search.cjs
           node scripts/test_search_interactions.cjs
           node scripts/test_external_sources.cjs
+          node scripts/test_external_sources_interactions.cjs
           node scripts/test_research_context.cjs
           node scripts/test_si_pricing.cjs
           node scripts/test_watchlist.cjs
@@ -84,6 +87,7 @@ jobs:
           python3 scripts/publish_generated_data.py
       - name: Revalidate reconciled source and rebuild deployment catalogue
         run: |
+          python3 scripts/build_external_sources.py
           python3 -m unittest discover -s scripts -p 'test_*.py'
           node scripts/test_v3.cjs
           node scripts/test_fed_history_ui.cjs
@@ -112,6 +116,7 @@ jobs:
           node scripts/test_boolean_search.cjs
           node scripts/test_search_interactions.cjs
           node scripts/test_external_sources.cjs
+          node scripts/test_external_sources_interactions.cjs
           node scripts/test_research_context.cjs
       - name: Build public publication timeline
         run: |

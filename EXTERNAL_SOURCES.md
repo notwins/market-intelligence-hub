@@ -1,0 +1,13 @@
+# External source directory · 6 November 2026
+
+`external-sources.html` keeps the existing directory and browser-local stars. Compact tables are the default. Expand any row for full-size description/access notes, all tags, exact public usage links and earlier saved-reference history. Search includes source titles, providers, tags, exact URLs and the titles of citing articles. Filters include exact research article, provider, source type, date, access and any-of selected groups.
+
+`build_external_sources.py` retains the curated seeds, all stock/bond references and the earlier saved public-source inventory, then merges current links from `index_external_source_usage.py`. URL normalization removes only established tracking parameters; meaningful paths, query order and fragments remain distinct. IDs remain derived from canonical URLs.
+
+Current usage comes from real public HTML anchors, embedded JSON and named data contracts. Article links are never associated by topic alone. The directory shows no usage found for bookmarks with no indexed citation. Source dates, Hub edition dates and access-check dates are separate. No full third-party articles are copied. Private originals, unsafe URLs, arbitrary executable JavaScript and source-document bodies are not scanned. The UI explains these coverage limits.
+
+The publisher rebuilds the derived directory before checks and after feed reconciliation, so new public reports and archived feeds are reflected in the deployed artifact. It does not create timestamp-only directory commits or race concurrent publishers. The original saved-reference snapshot remains as historical provenance, not a claim of complete October coverage.
+
+Colours use exact aliases from the verified 5 November 2026 Colour & Tagging Standard V1.2 Merged workbook (437 canonical mappings, checked 6 November). Unmapped labels stay neutral. The companion PDF returned 403; workbook design rules are applied and the limitation is visible in Coverage. Expanded prose is 16px/1.5 by default and inherits the Hub's selected font and text scale.
+
+Checks: source builder reproducibility, all original links/security URLs retained, unique safe URLs, all public article anchors indexed with exact paths, access-state preservation, filters/search/URL state, full usage lists, escaping, font inheritance and repeated disclosure/save interactions. Browser QA verified the compact table, bank filter, exact URL search and DBS source-to-STI article link; expanded prose computed at 16px with 24px line height. Responsive CSS keeps phone rows to source/usage with details expanded below; a phone viewport was not visually inspected in this change.

@@ -28,7 +28,7 @@ class ExternalSourcesTests(unittest.TestCase):
    if r.get('references'):
     self.assertEqual(r['first_referenced'],min(x['date'] for x in r['references']));self.assertEqual(r['last_referenced'],max(x['date'] for x in r['references']));self.assertEqual(r['reference_count'],len(r['references']))
  def test_redirects_honestly_labeled(self):
-  rows=[r for r in self.rows if r['domain']=='news.google.com'];self.assertEqual(len(rows),723)
+  rows=[r for r in self.rows if r['domain']=='news.google.com'];self.assertGreaterEqual(len(rows),723)
   for r in rows:self.assertEqual(r['type'],'News redirect');self.assertEqual(r['status'],'not_rechecked');self.assertIn('not been resolved',r['note'])
  def test_no_private_upload_identifiers_or_paths(self):
   text=json.dumps(self.data)
@@ -56,6 +56,36 @@ class ExternalSourcesTests(unittest.TestCase):
    for row in rows:
     refs=[x for x in row['references'] if x['id']=='article:'+slug];self.assertEqual(len(refs),1);self.assertEqual(refs[0]['date'],'2026-11-04')
     self.assertTrue((ROOT/'site'/refs[0]['path']).is_file())
+ def test_actual_usage_is_generated_from_public_content(self):
+  self.assertGreater(self.data['usage_statistics']['sources_with_usage'],2000)
+  self.assertGreater(self.data['usage_coverage']['input_count'],50)
+  for row in self.rows:
+   self.assertEqual(row['usage_count'],len(row['usages']))
+   self.assertEqual(len(row['usages']),len({u['id'] for u in row['usages']}))
+   for usage in row['usages']:
+    path=usage['path'].split('?')[0].split('#')[0]
+    self.assertTrue((ROOT/'site'/path).is_file(),usage['path'])
+ def test_all_public_article_anchors_are_indexed_with_exact_usage(self):
+  from index_external_source_usage import Page
+  by_url={r['url']:r for r in self.rows}
+  for base in ['research','market-understanding']:
+   for page in (ROOT/'site'/base).rglob('*.html'):
+    parser=Page();parser.feed(page.read_text());path=page.relative_to(ROOT/'site').as_posix()
+    for raw,label,_ in parser.links:
+     url,_=canonical_url(raw)
+     if url:self.assertTrue(any(u['path']==path for u in by_url[url]['usages']),(url,path))
+ def test_bank_sources_retain_checks_and_do_not_invent_usage(self):
+  bank=json.loads((ROOT/'site/data/external-bank-sources.json').read_text())['records'];self.assertEqual(len(bank),10)
+  by_url={r['url']:r for r in self.rows}
+  for row in bank:
+   found=by_url[canonical_url(row['url'])[0]];self.assertEqual(found['status'],row['status']);self.assertIn('Bank earnings',found['groups'])
+  for title in ['OCBC 3Q26 CEO presentation','OCBC 3Q26 results highlights']:
+   row=next(r for r in bank if r['title']==title);self.assertEqual(row['status'],'limited');self.assertNotIn('report_date',row)
+ def test_standard_is_verified_merged_mapping(self):
+  standard=json.loads((ROOT/'site/data/external-source-standard.json').read_text());self.assertEqual(standard['version'],'V1.2 Merged');self.assertEqual(len(standard['tags']),437)
+  mapping={t['label']:t for t in standard['tags']}
+  for label in ['DBS / D05','OCBC / O39','UOB / U11','Singapore']:
+   self.assertEqual(mapping[label]['text'],'#047857');self.assertEqual(mapping[label]['background'],'#ECFDF5')
  def test_navigation(self):
   for name in ['v4.html','site-map.html']:self.assertIn('href="external-sources.html"',(ROOT/'site'/name).read_text())
   self.assertIn('aria-live="polite"',(ROOT/'site/external-sources.html').read_text())

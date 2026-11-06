@@ -1,0 +1,48 @@
+{
+  "title": "CPF LIFE: growth, recovery and lifetime income",
+  "research_date": "2026-11-05",
+  "publication_date": "2026-11-06",
+  "public_edition": true,
+  "source_report_sha256": "a6dc88a28e2ecb1dec9dfbd83a7f173a03367c23255785447a980a4beca7a7c5",
+  "sections": 17,
+  "source_references": 20,
+  "figures": 4,
+  "files": [
+    {
+      "path": "CPF_LIFE_Calculation_Audit_Public.zip",
+      "bytes": 100230,
+      "sha256": "231ca35697f9b79ba840b792cdf070e92f574d663589dba6120106cc53f7d64f",
+      "title": "CPF LIFE Calculation Audit Public"
+    },
+    {
+      "path": "presentations/CPF_LIFE_Clear_Visual_Story_Public.pptx",
+      "bytes": 48174,
+      "sha256": "87b74870eddc2db901ef552bf4ee350b376d89ddb7d7741dd8efc7d178e6ab86",
+      "slides": 5,
+      "speaker_notes": 5,
+      "title": "CPF LIFE Clear Visual Story Public"
+    },
+    {
+      "path": "presentations/CPF_LIFE_Financial_Briefing_Public.pptx",
+      "bytes": 56344,
+      "sha256": "77ebec376735b76f6fddad767a4cc32f8708ae2aa676cc9c67f0bdffbdf813e3",
+      "slides": 5,
+      "speaker_notes": 5,
+      "title": "CPF LIFE Financial Briefing Public"
+    },
+    {
+      "path": "presentations/CPF_LIFE_Speaker_Notes_Public.pdf",
+      "bytes": 102665,
+      "sha256": "3c849a4d8f4d6e88d9825e0af9db37f85c5f5c788dcc807cabdca99db4399432",
+      "title": "CPF LIFE Speaker Notes Public"
+    }
+  ],
+  "privacy": "Personal recipient metadata removed from PDF; private design-standard URLs removed from PowerPoint notes. All original research, numerical inputs, charts, workbooks and other speaker notes preserved. The separate notes PDF has personal author metadata and private design-standard link annotations removed. Calculation data and model are included; presentation authoring files are omitted.",
+  "limitations": [
+    "Research cut-off 5 November 2026. Reference estimates are not personalised CPF quotations.",
+    "Conditional cash-flow scenarios are not promised annual yields. No current personal Basic or Escalating quote or named alternative product illustration was supplied."
+  ],
+  "as_of": "2026-11-05",
+  "edition": "Public reading edition",
+  "html_sha256": "684916b6bdb9f5f0744a1c82e38ae24f0817b35f5448c22482ef141937a501a1"
+}

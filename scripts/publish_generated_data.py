@@ -8,12 +8,14 @@ def publish(root, attempts=3):
   return subprocess.run(['git',*args],cwd=root,text=True,capture_output=True,check=check)
  # Derived catalogue is rebuilt for the Pages artifact after reconciliation.
  # Never create a repository commit merely because its build timestamp changed.
- index='site/data/site-search.json'
- if git('ls-files','--error-unmatch',index,check=False).returncode==0:
-  git('restore','--staged','--worktree','--',index)
+ indexes=['site/data/site-search.json','site/data/external-sources.json']
+ for index in indexes:
+  if git('ls-files','--error-unmatch',index,check=False).returncode==0:
+   git('restore','--staged','--worktree','--',index)
  paths=[p for p in ['site','scripts','README.md','.gitignore'] if (root/p).exists()]
  if paths:git('add','--',*paths)
- if (root/index).exists():git('reset','--',index)
+ for index in indexes:
+  if (root/index).exists():git('reset','--',index)
  if git('diff','--cached','--quiet',check=False).returncode==0:
   return 'No source-data changes; search catalogue will be rebuilt for deployment only.'
  base=git('rev-parse','HEAD').stdout.strip()

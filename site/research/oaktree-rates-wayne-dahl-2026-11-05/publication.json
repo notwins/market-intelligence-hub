@@ -1,0 +1,17 @@
+{
+  "title": "Oaktree’s Rates: Wayne Dahl on yield and spreads",
+  "as_of": "2026-11-05",
+  "publication_date": "2026-11-06",
+  "edition": "Public reading edition",
+  "html_sha256": "eaa4f48f01d59749b6fd8a0f2b82ea45de7e93b62e702390d9c7675e71b2bfbd",
+  "files": [
+    {
+      "path": "Oaktree_Rates_Wayne_Dahl_Public.pdf",
+      "title": "Oaktree Rates Wayne Dahl Public",
+      "bytes": 516330,
+      "sha256": "c359a475c826d8e80cb3b5481810b358d781eed2cc9941af8ab731d7927a1a74"
+    }
+  ],
+  "pdf_pages": 9,
+  "publication_note": "This is independent commentary on an Oaktree episode, not a transcript or an Oaktree publication. The public edition omits the licensed ICE BofA index table and calculations derived from it; U.S. Treasury observations, original analysis and source links remain."
+}

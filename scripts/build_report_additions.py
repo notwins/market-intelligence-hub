@@ -85,6 +85,7 @@ def make():
  return out
 
 def strip_additions(text):
+ text=re.sub(r'<!-- publication-audit-20261106:start -->.*?<!-- publication-audit-20261106:end -->\n?','',text,flags=re.S)
  text=re.sub(r'<!-- company-research-nav:start -->.*?<!-- company-research-nav:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-presentations:start -->.*?<!-- research-presentations:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-readings:start -->.*?<!-- research-readings:end -->','',text,flags=re.S)
@@ -111,12 +112,14 @@ def main():
   output=output.replace('</main>',content+'</main>',1)
   output=correct_copy(output)
   assert strip_additions(output)==original
+  publications=re.search(r'<!-- publication-audit-20261106:start -->.*?<!-- publication-audit-20261106:end -->',current,re.S)
   writeups=re.search(r'<!-- published-writeups:start -->.*?<!-- published-writeups:end -->',current,re.S)
   readings=re.search(r'<!-- research-readings:start -->.*?<!-- research-readings:end -->',current,re.S)
   style=re.search(r'<!-- published-writeups:style --><link[^>]+>',current)
   presentations=re.search(r'<!-- research-presentations:start -->.*?<!-- research-presentations:end -->',current,re.S)
   if writeups:output=output.replace('</header>','</header>'+writeups.group(),1)
   if readings:output=output.replace('</header>','</header>'+readings.group(),1)
+  if publications:output=output.replace('</header>','</header>'+publications.group()+'\n',1)
   if style:output=output.replace('</head>',style.group()+'</head>',1)
   if presentations:output=output.replace('</header>','</header>'+presentations.group(),1)
   p.write_text(output)

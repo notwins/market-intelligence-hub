@@ -7,7 +7,7 @@ s=a.empty();s.groups=['Sovereign investing','Central banks'];let groups=a.filter
 s=a.empty();s.month='2026-10';let oct=a.filterRecords(rows,s);assert(oct.length>0);assert(oct.every(r=>r.references.some(x=>x.date.startsWith('2026-10'))));s.year='2026';assert(a.filterRecords(rows,s).every(r=>a.years(r).includes('2026')));
 assert.deepEqual(a.years({period:'2025/26'}),['2025','2026']);
 s=a.empty();s.saved=true;assert.equal(a.filterRecords(rows,s,new Set([rows[0].id])).length,1);
-let sorted=a.sortRecords(rows,'referenced');assert.equal(sorted[0].last_referenced,'2026-11-04');let dates=a.sortRecords(rows,'report').map(r=>r.report_date||'');assert.deepEqual(dates,[...dates].sort().reverse());
+let sorted=a.sortRecords(rows,'referenced');assert(sorted[0].usages.some(x=>x.date==='2026-11-06'));let dates=a.sortRecords(rows,'report').map(r=>r.report_date||'');assert.deepEqual(dates,[...dates].sort().reverse());
 s={...a.empty(),q:'MAS reserves',groups:['Singapore','Central banks'],type:'PDF',month:'2026-10',view:'topic',sort:'report'};assert.deepEqual(a.readState(new URLSearchParams(a.serialize(s))),s);
 let g=a.groupRecords(rows.slice(0,20),s);assert.equal(g.reduce((n,[_,x])=>n+x.length,0),20);
 let bad={...rows[0],title:'<script>x</script>',note:'<img src=x>',url:'javascript:alert(1)'};let html=a.card(bad,new Set());assert(!html.includes('<script>'));assert(!html.includes('<img'));assert(!html.includes('href="javascript:'));assert(html.includes('&lt;script&gt;'));
@@ -19,5 +19,19 @@ assert.equal(a.referenceHref({path:'data/watchlist/reports/watchlist-20261103T20
 assert.equal(a.referenceHref({path:'data/credit-issues.json'}),'v4.html#credit');assert.equal(a.referenceHref({path:'data/ust-curves-daily.json'}),'v4.html#ust');assert.equal(a.referenceHref({path:'data/history-fed.json'}),'v4.html#history');
 const more=JSON.parse(fs.readFileSync('site/data/supplemental-public-sources.json')).records;for(const r of more){const found=rows.find(x=>x.url===r.url);assert(found,r.url);for(const ref of r.references)assert(found.references.some(x=>x.id===ref.id&&x.date===ref.date));}
 
-assert.equal(rows.length,1915);assert.equal(new Set(rows.map(r=>r.id)).size,1915);assert.equal(new Set(rows.map(r=>r.url)).size,1915);
-s={...a.empty(),provider:'GIC',layout:'table',view:'year'};assert.deepEqual(a.readState(new URLSearchParams(a.serialize(s))),s);const gic=a.filterRecords(rows,s);assert.equal(gic.length,10);const years=a.groupRecords(gic,s);assert.equal(years.reduce((n,[_,r])=>n+r.length,0),gic.length);let th=a.table(gic,new Set(),'GIC');for(const r of gic){assert(th.includes(a.safeURL(r.url).replace(/&/g,'&amp;')));assert(th.includes(r.status==='not_rechecked'?'Not rechecked':'source-details'));}assert(!a.table([bad],new Set(),'Test').includes('<script>'));assert(!a.table([bad],new Set(),'Test').includes('href="javascript:'));assert(a.table([{...rows[0],period:null,report_date:null}],new Set(),'Test').includes('Report date: unavailable'));
+assert(rows.length>=1915);assert.equal(new Set(rows.map(r=>r.id)).size,rows.length);assert.equal(new Set(rows.map(r=>r.url)).size,rows.length);
+s={...a.empty(),provider:'GIC',layout:'table',view:'year'};assert.deepEqual(a.readState(new URLSearchParams(a.serialize(s))),s);const gic=a.filterRecords(rows,s);assert(gic.length>=10);const years=a.groupRecords(gic,s);assert.equal(years.reduce((n,[_,r])=>n+r.length,0),gic.length);let th=a.table(gic,new Set(),'GIC');for(const r of gic){assert(th.includes(a.safeURL(r.url).replace(/&/g,'&amp;')));assert(th.includes(r.status==='not_rechecked'?'Not rechecked':'Description &amp; access'));}assert(!a.table([bad],new Set(),'Test').includes('<script>'));assert(!a.table([bad],new Set(),'Test').includes('href="javascript:'));assert(a.table([{...rows[0],period:null,report_date:null}],new Set(),'Test').includes('Report date: unavailable'));
+
+assert.equal(a.empty().layout,'table');
+const actual=rows.filter(r=>r.usages?.length);assert(actual.length>2000);
+const bank=rows.find(r=>r.url.endsWith('/3Q26_trading_update.pdf'));assert(bank);assert(bank.usages.some(x=>x.path==='research/sti-banks-2026-11-06/index.html'));
+s={...a.empty(),q:'3Q26_trading_update.pdf'};assert(a.filterRecords(rows,s).some(r=>r.id===bank.id));
+s={...a.empty(),q:'STI’s bank premium'};assert(a.filterRecords(rows,s).some(r=>r.id===bank.id));
+s={...a.empty(),usage:'research/sti-banks-2026-11-06/index.html'};assert(a.filterRecords(rows,s).length>10);assert(a.filterRecords(rows,s).every(r=>r.usages.some(x=>x.path===s.usage)));
+s={...a.empty(),usage:'unused'};assert(a.filterRecords(rows,s).every(r=>!r.usage_count));
+s={...a.empty(),usage:'used'};assert(a.filterRecords(rows,s).every(r=>r.usage_count>0));
+assert.deepEqual(a.readState(new URLSearchParams(a.serialize({...s,layout:'cards'}))),{...s,layout:'cards'});
+const compact=a.table([bank],new Set(),'DBS');assert(compact.includes('aria-expanded="false"'));assert(compact.includes('class="source-detail-row" hidden'));assert(compact.includes('Used in Market Intel'));assert(compact.includes('research/sti-banks-2026-11-06/index.html'));assert(!compact.includes('Plus '));
+const many={...bank,usages:Array.from({length:14},(_,i)=>({id:String(i),title:'Usage '+i,path:'research/article-'+i+'/index.html',type:'Research articles',date:''}))};assert(a.detail(many).includes('Usage 13'));
+assert(a.detail({...bank,note:'<script>evil</script>',usages:[{title:'<img>',path:'javascript:alert(1)'}]}).includes('&lt;script&gt;'));assert(!a.detail({...bank,usages:[{title:'Unsafe',path:'javascript:alert(1)'}]}).includes('href="javascript:'));
+console.log('Compact default, source URL / article title search, exact usage facets, expandable full descriptions and complete citation history passed.');

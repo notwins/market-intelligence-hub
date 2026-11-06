@@ -1,0 +1,17 @@
+{
+  "title": "JPMorgan 4Q 2026: price, growth and expectations",
+  "as_of": "2026-11-05",
+  "publication_date": "2026-11-06",
+  "edition": "Public reading edition",
+  "html_sha256": "56d121d473e9a22a5dca3cdbe8f95c42e3e5b1cbbb456274ca9e09f20f098cc5",
+  "files": [],
+  "sections": 40,
+  "original_visuals": 16,
+  "omissions": [
+    "Bulk extracted source JSON and download",
+    "Dense copied source-data tables",
+    "Detailed numerical source-chart reproductions",
+    "Source-derived bond scenario selector"
+  ],
+  "publication_note": "Original commentary, selected attributed facts and hypothetical EPS tool retained; not the publisher’s Guide."
+}

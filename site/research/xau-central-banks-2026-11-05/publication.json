@@ -1,0 +1,17 @@
+{
+  "title": "Gold and central banks: demand, reserves and price",
+  "as_of": "2026-11-05",
+  "publication_date": "2026-11-06",
+  "edition": "Public reading edition",
+  "html_sha256": "cda929fbb52a5aadcd420b1b1097006abfbe246abd3d12febd149cfd9404ea96",
+  "files": [
+    {
+      "path": "XAU_Central_Bank_Deep_Dive_Public.pdf",
+      "title": "XAU Central Bank Deep Dive Public",
+      "bytes": 618766,
+      "sha256": "b9ced7a344238b2634ab9d4887700f03c5abd60574f48924a1fc11ee0b5b8f9a"
+    }
+  ],
+  "pdf_pages": 34,
+  "publication_note": "The report retains the original country research and central-bank demand analysis. Three LBMA/IBA benchmark-price displays sourced through WGC are omitted. Selected quantity statistics are attributed to the World Gold Council and Metals Focus; the source links remain in the report."
+}

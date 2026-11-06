@@ -1,0 +1,19 @@
+{
+  "title": "PIMCO Income, UST 2041 and Temasek 2070",
+  "as_of": "2026-11-06",
+  "publication_date": "2026-11-06",
+  "edition": "Public reading edition",
+  "html_sha256": "7b36c9fe41e769fceaf973e21ce59219353f60dbcccd6073feb0046b77649c47",
+  "files": [
+    {
+      "path": "PIMCO_Income_and_USD_Bonds_Public.pdf",
+      "title": "PIMCO Income and USD Bonds Public",
+      "bytes": 678827,
+      "sha256": "afd4ba30dc257195b1e0ae5433f0c85b6d4d6948e757325e5cc950e5507db791"
+    }
+  ],
+  "pdf_pages": 16,
+  "publication_note": "Original issuer rankings and fund-holdings calculations are retained. Three private workbook links have been removed. The dated calculation inputs are identified in the source register but are not distributed with this public report. Two native vector charts replace raster images; full daily NAV source-series reproduction is omitted.",
+  "chart_format": "No raster page images. Duration comparison retains the same 12 attributed values. The restricted full daily NAV curve is replaced by original cash-flow arithmetic using selected dated NAV and distribution facts.",
+  "nav_chart_scope": "Selected endpoints and distribution arithmetic only; source workbook and full daily series not redistributed"
+}

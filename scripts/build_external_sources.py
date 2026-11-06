@@ -5,10 +5,13 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import urlsplit
 from extract_recent_sources import canonical_url, PUBLISHERS, PublicAnchorParser
+from index_external_source_usage import collect
 ROOT=Path(__file__).resolve().parents[1]
 PROVIDERS={**PUBLISHERS,'gic.com.sg':'GIC','mas.gov.sg':'MAS','temasek.com.sg':'Temasek','newyorkfed.org':'Federal Reserve Bank of New York','chicagofed.org':'Federal Reserve Bank of Chicago','atlantafed.org':'Federal Reserve Bank of Atlanta','frbsf.org':'Federal Reserve Bank of San Francisco','minneapolisfed.org':'Federal Reserve Bank of Minneapolis','richmondfed.org':'Federal Reserve Bank of Richmond','stlouisfed.org':'Federal Reserve Bank of St. Louis','ecb.europa.eu':'European Central Bank','snb.ch':'Swiss National Bank','boj.or.jp':'Bank of Japan','rba.gov.au':'Reserve Bank of Australia','hkma.gov.hk':'Hong Kong Monetary Authority','bondsupermart.com':'Bondsupermart','google.com':'Google','cnbc.com':'CNBC','cmegroup.com':'CME Group','am.jpmorgan.com':'J.P. Morgan Asset Management','mufgamericas.com':'MUFG','ssga.com':'State Street','spglobal.com':'S&P Global','moodys.io':"Moody’s",'fitchratings.com':'Fitch Ratings','tradingeconomics.com':'Trading Economics','macromicro.me':'MacroMicro','brookings.edu':'Brookings','oecd.org':'OECD','nber.org':'NBER','piie.com':'Peterson Institute','cfr.org':'Council on Foreign Relations','cepr.org':'CEPR','goldmansachs.com':'Goldman Sachs','morganstanley.com':'Morgan Stanley','citivelocity.com':'Citi','ubs.com':'UBS','credit-suisse.com':'Credit Suisse','financialresearch.gov':'Office of Financial Research','bea.gov':'Bureau of Economic Analysis','cbo.gov':'Congressional Budget Office','gov.uk':'UK Government','data.gov':'Data.gov','bls.gov':'Bureau of Labor Statistics','census.gov':'U.S. Census Bureau','statcan.gc.ca':'Statistics Canada'}
 def provider(url):
  host=urlsplit(url).hostname
+ for suffix,name in [('dbs.com','DBS'),('ocbc.com','OCBC'),('uobgroup.com','UOB'),('uob.com.sg','UOB')]:
+  if host==suffix or host.endswith('.'+suffix):return name
  return next((v for k,v in sorted(PROVIDERS.items(),key=lambda p:-len(p[0])) if host==k or host.endswith('.'+k)),host)
 def build(root=ROOT):
  site=root/'site';rows={}
@@ -33,6 +36,9 @@ def build(root=ROOT):
   rows[url]=item
  seeds=json.loads((site/'data/external-source-seeds.json').read_text())
  for index,row in enumerate(seeds['records']):add(row,'Curated sources',0 if index<18 else 1)
+ bank=site/'data/external-bank-sources.json'
+ if bank.is_file():
+  for row in json.loads(bank.read_text())['records']:add(row,'User-supplied bank sources',0)
  securities=json.loads((site/'data/securities.json').read_text())
  for row in securities['stocks']:
   add(dict(url=row['url'],title=f"{row['ticker']} · {row['name']}",type='Stock factsheet',groups=['Equities',row['sector']],status='not_rechecked',note='Saved stock reference. Current listing status, quote and page availability have not been rechecked.'),'Security directory',4)
@@ -63,10 +69,19 @@ def build(root=ROOT):
    seen.add(url);label=re.sub(r'^\[[A-Z]?\d+\]\s*','',label).strip() or provider(url)+' source'
    ref={'id':'article:'+slug,'date':'2026-11-04','type':'curated_report','title':title,'path':path,'date_basis':'Explicit public article edition date'}
    add(dict(url=url,title=label,type='PDF' if '.pdf' in urlsplit(url).path.lower() else 'Saved source',groups=['Recently referenced','Research reports']+groups,status='not_rechecked',note='Original external citation saved in a public research article. Current source availability and contents have not been rechecked for this directory.',references=[ref],first_referenced='2026-11-04',last_referenced='2026-11-04',reference_count=1),'Published research articles',3)
+ usage,usage_coverage=collect(site)
+ for item in usage:
+  url=item['url'];redirect=urlsplit(url).hostname=='news.google.com'
+  add(dict(url=url,title=item['title'],type='News redirect' if redirect else 'PDF' if '.pdf' in urlsplit(url).path.lower() else 'Saved source',groups=item['groups'],status='not_rechecked',note='Saved Google News redirect; final publisher destination has not been resolved.' if redirect else 'External link indexed from public Hub content. Current provider availability and contents have not been rechecked for this directory.'),'Current public Hub content',3)
+  row=rows[url];row.setdefault('usages',{})[item['usage']['id']]=item['usage']
+ for row in rows.values():
+  current=row.get('usages',{})
+  row['usages']=sorted(current.values(),key=lambda r:(r['type'],r['title'],r['id']))
+  row['usage_count']=len(row['usages'])
  refs=[r for r in rows.values() if r.get('references')]
  editions={ref['id']:ref for r in refs for ref in r['references']}
  statistics={'unique_sources':len(refs),'saved_editions':len(editions),'source_edition_references':sum(r['reference_count'] for r in refs)}
  coverage={**recent['coverage'],'edition_counts':dict(sorted(Counter(r['type'] for r in editions.values()).items()))}
- return {'schema_version':1,'built_on':'2026-11-04','coverage':coverage,'reference_window':recent['date_range'],'reference_statistics':statistics,'initial_snapshot_statistics':recent['statistics'],'records':list(rows.values())}
+ return {'schema_version':2,'built_on':'2026-11-06','coverage':coverage,'usage_coverage':usage_coverage,'usage_statistics':{'sources_with_usage':sum(bool(r['usages']) for r in rows.values()),'source_usages':sum(r['usage_count'] for r in rows.values()),'public_destinations':len({u['id'] for r in rows.values() for u in r['usages']})},'reference_window':recent['date_range'],'reference_statistics':statistics,'initial_snapshot_statistics':recent['statistics'],'records':list(rows.values())}
 if __name__=='__main__':
  data=build();path=ROOT/'site/data/external-sources.json';path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n');print(f"Built {len(data['records'])} canonical source records")
