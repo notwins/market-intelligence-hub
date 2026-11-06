@@ -1,0 +1,23 @@
+{
+  "title": "US Earnings: The Cash-Flow Test",
+  "publication_date": "2026-11-06",
+  "edition": "2026-11-06 public edition",
+  "category": "Original Hub research",
+  "as_of": "28 October–6 November 2026; source-specific market observations remain labelled",
+  "html_sha256": "99e62462dc161689b55965e04dec98e09dbe3205a56ad0210783ff8d4e1ff2c9",
+  "audit_changes": [
+    "Corrected Amazon chart attribution to Reuters reporting.",
+    "Changed CVS reaction to the cited −12.6% intraday snapshot rather than an unsupported closing label.",
+    "Removed draft-only publication wording.",
+    "Removed personal PDF author metadata and corrected quote timing/provenance in the 65-page companion PDF."
+  ],
+  "review_scope": "Substantive risk-based source, financial-calculation and privacy review; not independent revalidation of every cited fact.",
+  "files": [
+    {
+      "path": "US-Earnings-Cash-Flow-2026-11-06.pdf",
+      "bytes": 853722,
+      "sha256": "934a0b9d760ed626f7930155f4559c8eaa248682dea7deb76c5bc9f555560883"
+    }
+  ],
+  "prepared_at": "2026-11-06T12:27:02+00:00"
+}

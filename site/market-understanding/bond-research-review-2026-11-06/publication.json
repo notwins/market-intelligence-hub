@@ -1,0 +1,17 @@
+{
+  "title": "Three risks. One bond portfolio.",
+  "publication_date": "2026-11-06",
+  "edition": "2026-11-06 public edition",
+  "category": "Original Hub research",
+  "as_of": "6 November 2026 review; Treasury observations through 5 November; historical shared chart through October 2026",
+  "html_sha256": "0bbb30050b9fbaf7d79608fc7d03fa9230d0500cee59793010b8ae824d2d9cc4",
+  "audit_changes": [
+    "Removed licensed ICE spread observations and dependent change.",
+    "Retained original educational spread explanation and provider source link.",
+    "Preserved archived issuance caveats and financial calculation assumptions.",
+    "Added independently verified official 14-tenor Treasury observations for 3, 4 and 5 November, preserving newer quotes in the separate buy-bonds article."
+  ],
+  "review_scope": "Substantive risk-based source, financial-calculation and privacy review; not independent revalidation of every cited fact.",
+  "files": [],
+  "prepared_at": "2026-11-06T12:27:02+00:00"
+}
