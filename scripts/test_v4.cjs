@@ -32,3 +32,5 @@ require('./test_ust_curves.cjs');
 require('./test_bond_watchlist.cjs');
 
 require('./test_dynamic_cards.cjs');
+
+require("./test_grouping_pivot.cjs");

@@ -7,6 +7,6 @@ for(const width of [280,320,390,680,838,979,980,986,1146,1280,1578,2218,3546])fo
 }
 const css=read('history-context.css'),js=read('v4-tools.js'),html=read('v4.html');
 assert.match(css,/@media\(min-width:761px\)/);assert.match(css,/@container\(min-width:980px\)/);assert(css.includes('grid-template-columns:clamp(320px,25cqi,400px) minmax(0,1fr)'));assert(css.includes('.history-yield-data{display:block;grid-column:1;grid-row:2'));assert(css.includes('.history-yield-plot{display:block;grid-column:2;grid-row:2/4'));assert(css.includes('html:not([data-display-columns=one])'));assert(css.includes('max-height:420px;overflow:auto'));assert(!css.includes('transform:scale'));assert.match(js,/historyLayout:!fx/);assert.match(js,/historyChartWidth\?\.\(\{fullWidth\}\)/);assert(js.includes("class=\"history-comparison${fx?'':' history-yield-comparison'}"));
-for(const f of ['v4-layout.js','history-context.css'])assert(html.includes(f+'?v=20261105.history-layout1'));assert(html.includes('v4-tools.js?v=20261106.desktop-si1'));
+for(const f of ['v4-layout.js','history-context.css'])assert(html.includes(f+'?v=20261105.history-layout1'));assert(html.includes('v4-tools.js?v=20261106.grouping-pivot1'));
 assert(layout(2218).historyChartWidth()>layout(1578).historyChartWidth(),'plot uses extra monitor width');
 console.log('PASS monthly yield data-left/plot-right geometry, mobile through ultrawide widths, dynamic/fixed columns, large cards, preserved expanded/mobile/FX flows and cache refresh');
