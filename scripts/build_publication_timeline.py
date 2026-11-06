@@ -10,6 +10,7 @@ import html
 import json
 import re
 import subprocess
+from html.parser import HTMLParser
 from datetime import datetime, timezone
 from pathlib import Path
 from public_display_text import public_display_payload
@@ -97,6 +98,93 @@ def page_title(path):
     return html.unescape(re.sub('<[^>]+>', '', match[1])).strip() if match else path.stem
 
 
+
+def useful_summary(value, title=''):
+    """Use existing editorial text only; never turn provenance into article content."""
+    if not isinstance(value, str):
+        return None
+    text = re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]*>', '', value))).strip()
+    if len(text) < 45 or text.casefold() == title.strip().casefold():
+        return None
+    if re.match(r'^(?:Saved (?:Reuters|research|edition)|Summary (?:not|unavailable)|No summary|Article body|Read the (?:original|full)|Not (?:personalised|personalized) investment advice)', text, re.I):
+        return None
+    # Preserve qualifying text rather than chopping off the end of a claim.
+    return text if len(text) <= 900 else None
+
+
+class ArticleDescription(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.description = None
+        self.leads = []
+        self.paragraph = None
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        if tag == 'meta' and attrs.get('name', '').lower() == 'description':
+            self.description = attrs.get('content')
+        if tag == 'p' and set(attrs.get('class', '').split()) & {'dek', 'deck', 'lede', 'lead', 'intro', 'takeaway'}:
+            self.paragraph = []
+
+    def handle_data(self, value):
+        if self.paragraph is not None:
+            self.paragraph.append(value)
+
+    def handle_endtag(self, tag):
+        if tag == 'p' and self.paragraph is not None:
+            self.leads.append(''.join(self.paragraph))
+            self.paragraph = None
+
+
+def article_summary(path, title=''):
+    # Do not amplify order screenshots or personal transaction material in cards.
+    if 'calls' in path.parts or not path.is_file() or path.suffix != '.html':
+        return None
+    parser = ArticleDescription()
+    parser.feed(path.read_text())
+    return next((text for value in parser.leads[:1] + [parser.description]
+                 if (text := useful_summary(value, title))), None)
+
+
+def verified_reuters_summary(item, contexts):
+    saved = next((x for x in contexts if x.get('id') == item.get('id')
+                  and x.get('title') == item.get('title')
+                  and x.get('published_at') == item.get('published_at')), item)
+    if saved.get('summary_verified') is True and public_url(saved.get('summary_source_url')):
+        text = useful_summary(saved.get('summary'), item.get('title', ''))
+        if text:
+            return {'summary': text, 'summary_source_url': saved['summary_source_url']}
+    return {}
+
+
+def title_terms(title, standard):
+    """Conservative explicit terms from the locked V1 mappings in merged V1.2.
+
+    No bare short/ambiguous tickers, geography inference or sentiment colouring.
+    Offsets are UTF-16 units so the browser slices Unicode headlines correctly.
+    """
+    allowed = {'Federal Reserve', 'Fed', 'FOMC', 'Monetary Authority of Singapore', 'MAS',
+               'Swiss National Bank', 'SNB', 'European Central Bank', 'ECB', 'Bank of England',
+               'Bank of Japan', 'CPF LIFE', 'CPF', 'Temasek', 'GIC', 'Nvidia', 'NVIDIA',
+               'Microsoft', 'Amazon', 'Alphabet', 'Google', 'Apple', 'Meta Platforms',
+               'Broadcom', 'TSMC', 'Micron', 'PIMCO', 'OCBC', 'DBS', 'UOB', 'JPMorgan',
+               'Goldman Sachs', 'Berkshire Hathaway', 'USD/SGD', 'USD/CHF', 'CHF/SGD',
+               'US Treasuries', 'Treasury STRIPS', 'private credit', 'gold', 'artificial intelligence', 'AI'}
+    candidates = []
+    for group in standard.get('keyword_groups', []):
+        for alias in group.get('aliases', []):
+            if alias not in allowed:
+                continue
+            flags = 0 if alias.isupper() or len(alias) <= 3 else re.I
+            for match in re.finditer(r'(?<![\w/])' + re.escape(alias) + r'(?![\w/])', title, flags):
+                candidates.append((match.start(), match.end(), group.get('priority', 0), group['text_light']))
+    chosen = []
+    for start, end, priority, color in sorted(candidates, key=lambda x: (-(x[1]-x[0]), -x[2], x[0])):
+        if not any(start < b and end > a for a, b, _, _ in chosen):
+            chosen.append((start, end, priority, color))
+    units = lambda offset: len(title[:offset].encode('utf-16-le')) // 2
+    return [{'start': units(a), 'end': units(b), 'color': c} for a, b, _, c in sorted(chosen)]
+
 def build(root=ROOT, now=None):
     root = Path(root)
     site = root / 'site'
@@ -141,7 +229,8 @@ def build(root=ROOT, now=None):
             add('document:' + rel, title, rel, 'research', source, added.get(rel),
                 kind=kind, format=path.suffix[1:].upper(),
                 attribution='Individual user / GPT authorship is not recorded in this catalogue.',
-                source_date=manifest.get('as_of'))
+                source_date=manifest.get('as_of'),
+                **({'summary': summary} if (summary := article_summary(path, title)) else {}))
 
     reports = read(site / 'data/watchlist/report-index.json').get('reports', [])
     editions = {x.get('id'): x for x in read(site / 'data/watchlist/index.json').get('editions', [])}
@@ -159,7 +248,7 @@ def build(root=ROOT, now=None):
         add('document:' + rel, editions.get(eid, {}).get('title', '12-name watchlist · ' + eid),
             'watchlist-report.html?edition=' + eid, 'automation', 'Scheduled watchlist', added.get(rel),
             kind='Automated report', format='HTML', source_date=report.get('as_of'),
-            note='Saved research edition, not a trade or live quote.')
+            **({'summary': summary} if (summary := useful_summary(editions.get(eid, {}).get('summary'))) else {}))
 
     for rel, key, js in [('v2-data.js', 'reports', True), ('data/reports.json', 'reports', False), ('data/hourly-news.json', 'editions', False)]:
         try:
@@ -178,11 +267,12 @@ def build(root=ROOT, now=None):
                 kind='Hourly report' if hourly else 'Scheduled report', format='HTML',
                 report_id=eid if js else None,
                 source_date=item.get('report_at') or item.get('date'),
-                note=('Partial scan; find this date in Scan history.' if hourly and item.get('coverage') != 'complete' else item.get('cutoff') or item.get('status', 'Saved edition')))
+                **({'summary': summary} if (summary := useful_summary(item.get('takeaway') or item.get('summary') or item.get('subtitle'), title)) else {}))
 
     # Reuters is external publisher metadata. Do not relabel an article's date as hub publication.
     files = [site / 'data/news.json', *sorted((site / 'data/archive').glob('*.json'))]
     latest_news = None
+    contexts = read(site / 'data/headline-context.json').get('items', [])
     news_seen = set()
     for path in files:
         data = read(path)
@@ -205,7 +295,7 @@ def build(root=ROOT, now=None):
             news_seen.update([identity, key, (normalized_title, at)])
             add('reuters:' + identity, item.get('title', 'Reuters headline'), url, 'reuters', 'Reuters', {'at': at},
                 kind='External article', format='LINK', date_basis='Reuters publication time',
-                note='Saved Reuters-attributed headline metadata via Google News; opens the publisher route. Article body is not hosted.')
+                **verified_reuters_summary(item, contexts))
 
     rows.sort(key=lambda x: (x['at'] or '', x['id']), reverse=True)
     now = now or datetime.now(timezone.utc)
@@ -213,12 +303,20 @@ def build(root=ROOT, now=None):
                'window': 'Today and the previous two Singapore calendar days',
                'coverage': 'Already-public hub research pages, PDFs, slide decks, downloadable documents/workbooks, saved scheduled/hourly editions, verified watchlist reports, and saved Reuters headline metadata from all retained daily archives. Not every private chat, unpublished file, or Reuters wire article.',
                'date_note': 'Hub entries use first addition to the public repository, not original authorship, data date, or a verified historical Pages deployment time. Reuters uses the saved publisher timestamp. Source edition dates remain separate.',
+               'summary_note': 'Descriptions use existing public article descriptions or saved report summaries. Reuters descriptions require an exact matched, source-checked summary. Entries without a useful saved description have no summary control.',
+               'reuters_note': 'Reuters links use saved publisher metadata via Google News and open the publisher route. Article bodies are not hosted.',
                'authorship_note': 'Hub research combines user and GPT work; individual authorship is not consistently recorded. Scheduled reports are separately labelled. No authorship is guessed.',
                'feeds': {'reuters_saved_at': latest_news, 'hourly_report_at': (read(site / 'data/hourly-news.json').get('editions') or [{}])[0].get('report_at')},
                'undated_count': len(missing), 'undated_titles': missing, 'invalid_watchlist_reports': invalid_watchlist,
                'counts': {kind: sum(row['category'] == kind for row in rows) for kind in ['research', 'automation', 'reuters']},
                'entries': rows}
     payload = public_display_payload(payload)
+    standard = read(site / 'data/keyword-colour-standard.json')
+    for row in payload['entries']:
+        terms = title_terms(row['title'], standard)
+        if terms and row.get('kind') != 'Hourly report':
+            row['title_terms'] = terms
+
     (site / 'data/publication-timeline.json').write_text(json.dumps(payload, ensure_ascii=False, separators=(',', ':')) + '\n')
     return payload
 

@@ -1,5 +1,5 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
-const {bounds,inWindow,select,safeHref}=require('../site/publication-timeline.js');
+const {bounds,inWindow,select,safeHref,summaryText,titleHTML,row,editionLabel}=require('../site/publication-timeline.js');
 const now=Date.parse('2026-11-05T16:30:00Z'),b=bounds(now);
 assert.equal(new Date(b.start).toISOString(),'2026-11-03T16:00:00.000Z');
 assert.equal(new Date(b.end).toISOString(),'2026-11-06T16:00:00.000Z');
@@ -24,3 +24,31 @@ assert(data.entries.some(x=>x.format==='PPTX'));
 assert.equal(data.invalid_watchlist_reports,0);
 const html=fs.readFileSync(path.join(root,'v4.html'),'utf8');assert.equal((html.match(/MarketPublications.shell\(\)/g)||[]).length,1);assert(html.includes('MarketPublications.mount()'));
 console.log('PASS publication timeline: SGT boundaries, offset sorting, future exclusion, filters, safe links, provenance, unique records and v4 mounting.');
+
+const summary='This research compares bond yields, duration and currency risk using dated official source observations.';
+assert.equal(summaryText({summary:'',title:'Title'}),'');
+assert.equal(summaryText({summary:'Saved Reuters-attributed headline metadata via Google News; opens the publisher route.'}), '');
+assert.equal(summaryText({summary,title:summary}), '');
+assert.equal(summaryText({summary,title:'A useful report'}), summary);
+const fixture={id:'safe-id',title:'Fed & AI <script>',source:'Hub research',category:'research',kind:'Research article',format:'HTML',href:'research/test/index.html',at:'2026-11-06T00:00:00Z'};
+assert(!row(fixture).includes('data-publication-summary'));
+assert(row({...fixture,summary}).includes('data-publication-summary="safe-id"'));
+assert(!row({...fixture,note:'Pointless boilerplate'}).includes('Pointless boilerplate'));
+assert(row(fixture).includes('publication-source-research'));
+assert(row({...fixture,category:'reuters',source:'Reuters'}).includes('publication-source-reuters'));
+assert(!row({...fixture,summary:'<script>alert(1)</script>'+summary}).includes('<script>'));
+assert.equal(titleHTML({title:'FedEx',title_terms:[{start:0,end:3,color:'bad; color:red'}]}),'FedEx');
+assert.equal(titleHTML({title:'Fed & AI',title_terms:[{start:0,end:3,color:'#4338CA'}]}),'<span class="publication-term" style="--term-color:#4338CA">Fed</span> &amp; AI');
+for(const entry of data.entries){if(entry.summary)assert(summaryText(entry),entry.title);if(entry.category==='reuters'&&entry.summary)assert(entry.summary_source_url);if(entry.href.startsWith('research/calls/'))assert(!entry.summary);}
+const source=fs.readFileSync(path.join(root,'publication-timeline.js'),'utf8');
+assert(source.includes('Open')&&source.includes('Close')&&source.includes('all descriptions'));
+assert(source.includes("document.addEventListener('toggle'"));
+assert(source.includes('summaryOverrides.clear()'));
+const css=fs.readFileSync(path.join(root,'market-snapshot.css'),'utf8');
+assert(css.includes('@media(min-width:1000px)'));
+assert(css.includes('padding-block:var(--table-pad,12px)'));
+assert(css.includes('.ms-provenance:not([open]){grid-column:2;grid-row:1 / span 2'));
+console.log('PASS useful summaries only, verified Reuters identity, escaped content, mapped title colours, distinct compact source labels and scoped desktop density.');
+
+assert.equal(editionLabel('6 November 2026, Singapore time'),'6 November 2026, Singapore time');
+assert.equal(editionLabel('2026-11-06'),'2026-11-06');

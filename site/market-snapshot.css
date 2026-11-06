@@ -15,3 +15,14 @@
 .market-snapshot :is(a,button,select,summary,[tabindex]):focus-visible{outline:3px solid #785ac5;outline-offset:3px}
 @media(max-width:760px){.ms-table th:first-child{min-width:162px;max-width:195px}.ms-name{font-size:calc(17px * var(--text-scale,1))}.ms-table .ms-description{font-size:calc(11px * var(--text-scale,1))}.ms-asset-group>header{padding:14px}.ms-curve{padding:14px}.ms-identity{grid-template-columns:minmax(0,1fr)}.ms-curve-value{min-height:88px}}
 @media print{.ms-provenance>summary{display:none}.ms-asset-group{break-inside:auto}.ms-curve{break-inside:avoid}.ms-chart-scroll{overflow:visible}.ms-curve svg{min-width:0}.ms-table th:first-child{position:static}}
+
+/* Wide-screen density uses the existing display preference without shrinking controls. */
+@media(min-width:1000px){
+ .ms-table td,.ms-table th{padding-block:var(--table-pad,12px)}
+ .ms-table .ms-identity{grid-template-columns:minmax(0,1fr) 44px;column-gap:10px}
+ .ms-table .ms-description{grid-column:1;grid-row:2}
+ .ms-table .ms-provenance:not([open]){grid-column:2;grid-row:1 / span 2;align-self:center}
+ .ms-table .ms-provenance[open]{grid-column:1/-1;grid-row:auto}
+}
+/* Override the older table-wide 30px summary rule for the source control. */
+.ms-table .ms-provenance>summary{min-height:44px;min-width:44px}
