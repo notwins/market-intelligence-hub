@@ -85,6 +85,7 @@ def make():
  return out
 
 def strip_additions(text):
+ text=re.sub(r'<!-- company-research-nav:start -->.*?<!-- company-research-nav:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-presentations:start -->.*?<!-- research-presentations:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-readings:start -->.*?<!-- research-readings:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- published-writeups:start -->.*?<!-- published-writeups:end -->','',text,flags=re.S)
@@ -105,6 +106,7 @@ def main():
   prefix='../' if path.startswith('market-understanding/') else '../../'
   output=original.replace('</head>',ASSET+'<link rel="stylesheet" href="'+prefix+'research-additions.css?v=20261104.1"></head>',1)
   jump=JUMP+'<div class="ra-jump" id="research-additions-jump"><a href="#research-additions">New visual companion: charts &amp; exact-value tables ↓</a><span>Added 4 November 2026 · original report retained</span></div>'
+  if path=='research/googl/index.html': jump='<!-- company-research-nav:start --><nav class="notice" aria-label="Company research navigation"><strong>Equity research</strong> · <a href="../../v4.html#calls">Back to Calls &amp; full reports</a><br><a href="../tsm-2026-11-05/">TSMC (TSM) research</a> · <a href="../nvda-2026-11-05/">NVIDIA (NVDA) research</a></nav><!-- company-research-nav:end -->'+jump
   output=re.sub(r'(<main\b[^>]*>)',lambda m:m[0]+jump,output,count=1)
   output=output.replace('</main>',content+'</main>',1)
   output=correct_copy(output)
