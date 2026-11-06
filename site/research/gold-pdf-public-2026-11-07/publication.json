@@ -1,0 +1,17 @@
+{
+  "title": "Gold outlook V2: corrected public PDF",
+  "publication_date": "2026-11-07",
+  "edition": "Public corrected / abridged edition",
+  "as_of": "Original research observations retained; publication review 7 November 2026 SGT",
+  "html_sha256": "82b2e5790df1fb4b428e65fc0c1455bf16a78a6d114aba732d414e994311884c",
+  "files": [
+    {
+      "path": "XAU_Research_V2_Corrected_Public_2026-11-07.pdf",
+      "title": "Gold outlook V2: corrected public PDF",
+      "bytes": 139271,
+      "sha256": "5d4aa5923e386e95fea3c2bbfe9862fe740c5d811fc1a813991fe665c2aba354"
+    }
+  ],
+  "earlier_edition": "/market-intelligence-hub/research/xau-gold-outlook-2026-11-06-v2/",
+  "review_scope": "Source/privacy review and disclosed omissions; not a fresh verification of every original external assertion."
+}

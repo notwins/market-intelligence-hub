@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-06T16:40:28.566517+00:00",
+  "checked_at": "2026-11-06T17:07:40.248090+00:00",
   "standard_version": "V1.2 Merged",
   "standard_sha256": "46ecab67f4eba9e57a9320489f4f7b07688f645f34d093372554c2871d319694",
   "scope": "Public research editions and safe status summaries for pending files or revisions. Dates describe the report or request, not live market observations. Earlier editions and add-ons are retained.",
@@ -716,116 +716,136 @@
     },
     {
       "id": "pending-pimco-v2",
-      "title": "PIMCO Income: revised V2 report",
-      "href": "research/pimco-income-bonds-2026-11-06/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source/reuse review",
+      "title": "PIMCO Income and USD bonds: public-source abridgement",
+      "href": "research/pimco-income-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public adaptation · 7 Nov",
       "section": "Research",
       "tags": [
         "ticker.pimco",
         "asset.fixed_income_bonds"
       ],
-      "summary": "The revised report is complete. Its source-data reuse checks remain open; the current public report is available.",
-      "assets": []
+      "summary": "Compares fund income, bond cash flows, currency hedging and credit risk. Restricted workbook-derived figures are omitted.",
+      "assets": [],
+      "published_date": "2026-11-07",
+      "sha256": "38fb807fc419dd141aab32fd67cb8e8c3671cb03e621d1991e682480a6ffffd8"
     },
     {
       "id": "pending-mas-snb-v2",
-      "title": "MAS and SNB: revised V2 report",
-      "href": "market-understanding/mas-snb-2026-11-05/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source/reuse review",
+      "title": "MAS and SNB: public V2 policy study",
+      "href": "market-understanding/mas-snb-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public V2 abridgement",
       "section": "Research",
       "tags": [
         "institution.monetary_authority_of_singapore",
         "institution.swiss_national_bank",
         "asset.foreign_exchange"
       ],
-      "summary": "The 29-page revised edition is complete; source verification and reuse checks remain open.",
-      "assets": []
+      "summary": "Official-source policy, inflation, labour and financing analysis. Vendor FX history and forecasts omitted; pending further information review.",
+      "assets": [],
+      "published_date": "2026-11-07",
+      "sha256": "b3945c715bcf4cbc08a07ed75eabb158417201ad40a770a6f895b5542072b92d"
     },
     {
       "id": "pending-snb-mas-v2",
-      "title": "SNB and MAS: second study V2",
-      "href": "research/snb-mas-policy-2026-11-05/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source/reuse review",
+      "title": "SNB and MAS: separate public V2 study",
+      "href": "research/snb-mas-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public V2 abridgement",
       "section": "Research",
       "tags": [
         "institution.swiss_national_bank",
         "institution.monetary_authority_of_singapore",
         "asset.foreign_exchange"
       ],
-      "summary": "The separate 30-page revision is complete; source verification and reuse checks remain open.",
-      "assets": []
+      "summary": "Official-source policy, inflation, labour and financing analysis. Vendor FX history and forecasts omitted; pending further information review.",
+      "assets": [],
+      "published_date": "2026-11-07",
+      "sha256": "fc1d7b74d14d22233c66cfe2185c08bcf134835836d39c6a182a20e69b8dcc2e"
     },
     {
       "id": "pending-ai-tech-v2",
-      "title": "AI and technology: full V2 report",
-      "href": "market-understanding/ai-tech-2026-11-05/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source/reuse review",
+      "title": "AI and technology: public-source abridgement",
+      "href": "market-understanding/ai-tech-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public adaptation · 7 Nov",
       "section": "Research",
       "tags": [
         "sector.artificial_intelligence",
         "asset.equities_shares"
       ],
-      "summary": "The completed full revision contains material requiring further source and reuse checks. The public adaptation remains available.",
-      "assets": []
+      "summary": "Business quality, cash discipline and infrastructure demand, using public primary sources. Proprietary analyst valuations are omitted.",
+      "assets": [],
+      "published_date": "2026-11-07",
+      "sha256": "675375d91c6121f284b208ea5916315219b6c0a6c2502c48452fa3101a8d9d22"
     },
     {
       "id": "pending-gold-v2-pdf",
-      "title": "Gold outlook V2: full PDF",
-      "href": "research/xau-gold-outlook-2026-11-06-v2/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source check pending",
+      "title": "Gold outlook V2: corrected public PDF",
+      "href": "research/gold-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public adaptation · 7 Nov",
       "section": "Research",
       "tags": [
         "asset.gold",
         "asset.foreign_exchange"
       ],
-      "summary": "The V2 HTML and presentation slides are published. The full 35-page PDF has a remaining source check.",
-      "assets": []
+      "summary": "Corrected 36-page public PDF, including a correction notice. The unverified OCBC tracker passage is removed; dated research and original charts remain.",
+      "assets": [
+        "research/gold-pdf-public-2026-11-07/XAU_Research_V2_Corrected_Public_2026-11-07.pdf"
+      ],
+      "published_date": "2026-11-07",
+      "sha256": "82b2e5790df1fb4b428e65fc0c1455bf16a78a6d114aba732d414e994311884c"
     },
     {
       "id": "pending-spx-pdf",
-      "title": "SPX collars: revised PDF",
-      "href": "market-understanding/spx-collars-2026-11-06/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source/reuse review",
+      "title": "SPX options: public payoff-mathematics PDF",
+      "href": "market-understanding/spx-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public adaptation · 7 Nov",
       "section": "Research",
       "tags": [
         "asset.options_derivatives",
         "asset.equities_shares"
       ],
-      "summary": "The revised interactive HTML is published. The separate 19-page source PDF still needs reuse clearance.",
-      "assets": []
+      "summary": "New 7-page mathematical adaptation. Historical vendor series and audit tables are omitted; payoff algebra and contract risks remain.",
+      "assets": [
+        "market-understanding/spx-pdf-public-2026-11-07/SPX_Collar_Mechanics_Public_Adaptation.pdf"
+      ],
+      "published_date": "2026-11-07",
+      "sha256": "84b3469c887585ce176ad8cb07379b48fd43f543d3941934fdaf57493ca3eee2"
     },
     {
       "id": "pending-cpf-source-pdf",
-      "title": "CPF LIFE: full source PDF",
-      "href": "research/cpf-life-explained-2026-11-06-v2/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source/provenance review",
+      "title": "CPF LIFE: reviewed public research PDF",
+      "href": "research/cpf-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public adaptation · 7 Nov",
       "section": "Research",
       "tags": [
         "institution.cpf_board_cpf_life"
       ],
-      "summary": "The public model, presentations and notes are available. The original full source PDF remains under review.",
-      "assets": []
+      "summary": "Reviewed 18-page PDF with cited policy sources, original monthly-cash-flow calculations and explicit modelling limits.",
+      "assets": [
+        "research/cpf-pdf-public-2026-11-07/CPF_LIFE_Full_Research_Corrected_Public_2026-11-07.pdf"
+      ],
+      "published_date": "2026-11-07",
+      "sha256": "bcb74b25298007623f743b6328c3b22f2171a12f0b76367774f7e4b25f0f2f73"
     },
     {
       "id": "pending-weekly-fx-decks",
@@ -893,35 +913,41 @@
     },
     {
       "id": "pending-wealth-source-pdf",
-      "title": "Wealth research: full source PDF",
-      "href": "research/wealth-inequality-2026-11-04/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "PDF review",
+      "title": "Wealth and Sharpe: public mathematics PDF",
+      "href": "research/wealth-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public adaptation · 7 Nov",
       "section": "Research",
       "tags": [
         "asset.equities_shares",
         "asset.fixed_income_bonds"
       ],
-      "summary": "The public HTML and detailed mathematics are available. The full source PDF has not been cleared for public release.",
-      "assets": []
+      "summary": "New 12-page adaptation retaining Sharpe, diversification, leverage and FX mathematics. Original third-party exhibits are omitted.",
+      "assets": [
+        "research/wealth-pdf-public-2026-11-07/Wealth_Sharpe_Mathematics_Public_Adaptation.pdf"
+      ],
+      "published_date": "2026-11-07",
+      "sha256": "38511646ee006b7e5737ae2e28a9e209aff0b6b59bbe2b55b0f357d2602e1b6c"
     },
     {
       "id": "pending-bond-comparison",
-      "title": "Bond research: same-maturity market comparison",
-      "href": "market-understanding/treasuries-chf-gold-2026-11-06/",
-      "date": "2026-11-06",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Source/reuse review",
+      "title": "Compare 2041 bonds: public analytical addendum",
+      "href": "market-understanding/bond-comparison-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Publication date",
+      "state": "published",
+      "edition": "Public adaptation · 7 Nov",
       "section": "Research",
       "tags": [
         "asset.fixed_income_bonds",
         "macro.treasury_yields_rates"
       ],
-      "summary": "The main bond thesis and official 14-tenor curve are published. The additional market-comparison material remains under review.",
-      "assets": []
+      "summary": "Dated Treasury and Temasek comparison explains maturity, duration and quoted-yield differences. No fresh quotes or bulk market tables.",
+      "assets": [],
+      "published_date": "2026-11-07",
+      "sha256": "00e20f047742d572e46b122add1e2d3214a544616aabe1e9afa662f89db3e64f"
     }
   ]
 }

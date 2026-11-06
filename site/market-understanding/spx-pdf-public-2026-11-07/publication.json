@@ -1,0 +1,17 @@
+{
+  "title": "SPX options: public payoff-mathematics PDF",
+  "publication_date": "2026-11-07",
+  "edition": "Public corrected / abridged edition",
+  "as_of": "Original research observations retained; publication review 7 November 2026 SGT",
+  "html_sha256": "84b3469c887585ce176ad8cb07379b48fd43f543d3941934fdaf57493ca3eee2",
+  "files": [
+    {
+      "path": "SPX_Collar_Mechanics_Public_Adaptation.pdf",
+      "title": "SPX options: public payoff-mathematics PDF",
+      "bytes": 55936,
+      "sha256": "689bf48a7ca1d23695aa4eece04713178a12fe78b08a205732896dcfe5a5a325"
+    }
+  ],
+  "earlier_edition": "/market-intelligence-hub/market-understanding/spx-collars-2026-11-06/",
+  "review_scope": "Source/privacy review and disclosed omissions; not a fresh verification of every original external assertion."
+}
