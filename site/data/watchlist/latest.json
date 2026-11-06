@@ -1,24 +1,25 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261106T080000Z",
-  "as_of": "2026-11-06T08:00:00Z",
-  "generated_at": "2026-11-06T08:09:22.770034+00:00",
-  "title": "12-name watchlist · 06 Nov 2026 (Fri) · 16:00 SGT",
+  "id": "watchlist-20261106T120000Z",
+  "as_of": "2026-11-06T12:00:00Z",
+  "generated_at": "2026-11-06T12:06:23.689133+00:00",
+  "title": "12-name watchlist · 06 Nov 2026 (Fri) · 20:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-06T08:08:10.808683+00:00",
+    "sources_checked_at": "2026-11-06T12:05:04.565556+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "Three new items: Tesla factory plans, reported NVIDIA packaging funding and Taiwan-session context for TSMC. All 12 USD prices and 72 adjusted-close baselines were rechecked. Prices remain the completed 5 November US session, not live quotes.",
-  "coverage_note": "Window: 6 November 07:45–16:00 SGT, including the 15-minute overlap. Reuters evidence is article text or a substantial excerpt retrieved through search, not successfully opened article pages. Primary issuer coverage remains partial and is qualified by name. Prior canonical stories were deduplicated across all saved editions. The previous successful report cutoff was 6 November 08:00 SGT; this report covers the intervening eight hours. No new accepted filings appeared in 11 successfully checked SEC feeds. Amazon SEC coverage remains unavailable. Earlier editions and full reports are retained.",
-  "price_basis": "USD saved regular-session closes for 5 Nov 2026, the latest completed US session at the cutoff. Fresh Yahoo daily bars and regularMarketTime metadata confirm all 12 closes and exact vendor quote timestamps. Daily changes compare ordinary closes with 4 Nov ordinary closes; adjusted closes are separate return endpoints. BRK.B vendor time is 21:04:07 UTC; other quote times are 21:00:01 or 21:00:02 UTC. Postmarket prices are excluded. Prices are saved observations, not live. TSM is the US-listed USD ADR.",
+  "summary": "One new sector update is included; no new distinct company announcement was verified. All 12 USD prices and 72 adjusted-close baselines were rechecked. The price tables retain the completed 5 November US session, not live quotes.",
+  "coverage_note": "Window: November 6 15:45–20:00 SGT, including 15-minute overlap. Reuters article text was retrieved through search; its direct page was inaccessible. Issuer listings/searches provide partial coverage, detailed per name. Search silence is not proof of no news. Coverage correction: Apple’s current SEC feed contains an FWP accepted at 02:54:06 UTC, absent in the prior retrieval. This is outside the current delta window; the underlying document was unreadable, so no financing facts or significance are inferred. Original archived editions remain unchanged. The previous successful cutoff was 16:00 SGT. Eleven SEC feeds had no filings accepted within the current window; Amazon SEC coverage remains unavailable. Correction to the prior filing-feed observation: Apple’s feed now shows an FWP accepted at 02:54:06 UTC, absent from the prior retrieved feed. Its underlying document was inaccessible, so no financing conclusion is drawn. Earlier editions and full reports are retained.",
+  "price_basis": "USD saved regular-session closes for 5 Nov 2026, the latest completed US session at the cutoff. Yahoo daily bars and regularMarketTime metadata, freshly retrieved at 12:02:35–12:02:42 UTC, confirm all 12 closes and exact vendor quote timestamps. Daily changes compare ordinary closes with 4 Nov ordinary closes; adjusted closes are separate return endpoints. BRK.B vendor time is 21:04:07 UTC; other quote times are 21:00:01 or 21:00:02 UTC. Postmarket prices are excluded. Prices are saved observations, not live. TSM is the US-listed USD ADR.",
   "return_basis": "Six cumulative 1–6 month returns use Yahoo adjusted closes, adjusted for splits and dividend/capital-gain distributions. Formula: (endpoint adjusted close / baseline adjusted close - 1) x 100. Source values are rounded to cents before independent Decimal arithmetic; percentages are rounded to two decimals. Baselines are the latest available sessions on or before each monthly anniversary: 5 Oct, 4 Sep, 5 Aug, 2 Jul, 5 Jun and 5 May 2026. Returns are not annualised and exclude investor fees, tax and FX.",
   "caveats": [
-    "News coverage is partial. Reuters article text or a substantial excerpt was available through search, but direct article opens were inaccessible. Primary-source access and usable publication times varied by company; missing verified news does not establish no news.",
+    "News coverage is partial. Reuters article text was available through search, but its direct page was inaccessible. Primary-source access and usable publication times varied by company; a missing verified development does not establish no news.",
     "Amazon SEC submissions and Micron investor-relations endpoints previously returned HTTP 403 and were not retried. The source checks do not claim exhaustive coverage.",
-    "The included Reuters reports appeared after the saved 5 November US close. They must not be used as confirmed causes of those closing-price moves.",
-    "NVIDIA financing is reported from an unnamed source and remains unconfirmed. Tesla production is a reported management plan, not a completed change. TSMC market context refers to Taiwan shares, not an updated USD ADR quote.",
+    "The new sector report is early premarket context, separate from the completed-session USD prices. Individual premarket figures have no separate quote timestamps; no cutoff-time price is inferred.",
+    "The Apple FWP entry is a late-observed metadata correction outside the normal research window, not a verified substantive financing announcement. The prior edition is retained unchanged.",
+    "Price checks and the independent arithmetic cross-check use one vendor, Yahoo Finance, not cross-vendor corroboration.",
     "Cents-first adjusted-close calculations are reproducible from displayed values and can differ by 0.01 percentage point from calculations using unrounded vendor values."
   ],
   "rows": [
@@ -91,7 +92,7 @@
           "url": "https://finance.yahoo.com/quote/AAPL/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0000320193.json"
         },
         {
@@ -101,10 +102,9 @@
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Dated November archive checked; newest visible item November 3, before this window. Main newsroom returned navigation only.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "November newsroom archive checked; newest visible item November 3. SEC metadata correction: today’s feed includes an FWP accepted November 6 at 02:54:06 UTC that was absent from the prior saved feed. It is outside this window; its document was inaccessible, so its substantive content is unverified.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     },
     {
@@ -176,25 +176,19 @@
           "url": "https://finance.yahoo.com/quote/MSFT/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0000789019.json"
         },
         {
           "title": "Issuer release listing · coverage limits stated",
           "url": "https://news.microsoft.com/source/"
-        },
-        {
-          "title": "Reuters shared packaging story · summarized once under NVDA",
-          "url": "https://www.reuters.com/world/asia-pacific/ai-boom-turns-chip-packaging-into-next-battleground-semiconductors-2026-11-06/"
         }
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Related packaging-sector context appears in the NVDA Reuters item; background references are not treated as new company announcements.",
-        "Source homepage checked. Two newest company-news links have primary publication metadata at November 5 17:00:49Z and 17:00:04Z, before the window. Broader homepage items lack usable times.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Source homepage checked; latest company-news links unchanged from the previous check, whose publication metadata was November 5. Broader homepage items lack usable publication times.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     },
     {
@@ -266,7 +260,7 @@
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0001045810.json"
         },
         {
@@ -274,32 +268,33 @@
           "url": "https://nvidianews.nvidia.com/news"
         },
         {
-          "title": "Reuters · 6 November 05:52:03 UTC · article text available through search",
-          "url": "https://www.reuters.com/world/asia-pacific/ai-boom-turns-chip-packaging-into-next-battleground-semiconductors-2026-11-06/"
+          "title": "Reuters · 6 November 09:41:45 UTC · article text retrieved through search",
+          "url": "https://www.reuters.com/business/nasdaq-futures-rise-after-steep-ai-selloff-chip-stocks-stabilize-2026-11-06/"
         }
       ],
       "research": [
         {
           "date": "2026-11-06",
-          "headline": "Reuters reports NVIDIA funding for additional packaging capacity",
+          "headline": "Chip stocks rebound in early US premarket trading",
           "facts": [
-            "Reuters, citing an unnamed industry executive, reports NVIDIA is providing billions of dollars to expand CoWoS packaging capacity at ASE’s SPIL unit."
+            "Reuters reported NVIDIA up 3.6% in early premarket trading. AMD, Broadcom and Micron were among chip stocks up 5%–8.3%; the report did not give their individual moves."
           ],
-          "analysis": "If realized, the investment could ease a production bottleneck while adding capacity-execution risk.",
-          "risks": "NVIDIA did not respond; ASE declined to discuss customer rumors. The amount and financing terms remain unconfirmed.",
-          "next_watch": "Company confirmation, financing terms and added capacity.",
+          "analysis": "This is a sector sentiment update, not a company announcement or a 12:00 UTC quote.",
+          "risks": "Early premarket gains can reverse and do not replace completed-session prices.",
+          "next_watch": "US October jobs report, scheduled for 13:30 UTC, and the regular-session open.",
           "sources": [
             {
-              "title": "Reuters · 6 November 05:52:03 UTC · article text available through search",
-              "url": "https://www.reuters.com/world/asia-pacific/ai-boom-turns-chip-packaging-into-next-battleground-semiconductors-2026-11-06/"
+              "title": "Reuters · 6 November 09:41:45 UTC · article text retrieved through search",
+              "url": "https://www.reuters.com/business/nasdaq-futures-rise-after-steep-ai-selloff-chip-stocks-stabilize-2026-11-06/"
             }
           ]
         }
       ],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "News archive checked; newest visible items dated November 5. Newly inspected Alexiuk profile has publication metadata November 5 16:00:05Z, outside window. Prior Vera story excluded as duplicate/outside window.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Newsroom archive checked; newest visible items dated November 5. Prior packaging-funding report excluded as the same canonical event.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window.",
+        "Reuters article publication time is 09:41:45 UTC; its individual stock percentages have no separate quote timestamps. These are attributed early-premarket observations, not a 12:00 UTC snapshot."
       ]
     },
     {
@@ -371,7 +366,7 @@
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0001652044.json"
         },
         {
@@ -381,10 +376,9 @@
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Alphabet IR page inaccessible in this check. Targeted Google issuer-blog search found no verified in-window item; date-only November 5 results cannot establish overlap-window inclusion.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Targeted Alphabet IR and Google issuer searches completed. Results did not establish a new in-window release; search-only coverage remains incomplete.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     },
     {
@@ -456,7 +450,7 @@
           "url": "https://finance.yahoo.com/quote/AMZN/history/"
         },
         {
-          "title": "SEC · coverage gap, prior 403 not retried",
+          "title": "SEC · coverage gap; prior HTTP403 not retried",
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
         },
         {
@@ -466,9 +460,9 @@
       ],
       "research": [],
       "gaps": [
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "IR release-detail URL inaccessible. Public Amazon news and press archive search results list November 5 items but do not establish precise publication times. SEC submissions endpoint was not retried after its earlier 403.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed unavailable; no assertion about new filings.",
+        "Amazon public newsroom and press archive search results show November 5 items, without verified in-window publication times. SEC submissions remains unavailable: prior HTTP403 was not retried.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     },
     {
@@ -540,7 +534,7 @@
           "url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0001326801.json"
         },
         {
@@ -550,10 +544,9 @@
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Issuer newsroom lists November 5 Muse/WhatsApp items without verified exact times; no item assigned to the window. Investor-news page returned an empty release shell.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Issuer newsroom search results show November 5 items, with no verified new in-window publication timestamp. Search-only issuer coverage is incomplete.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     },
     {
@@ -625,7 +618,7 @@
           "url": "https://finance.yahoo.com/quote/BRK-B/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0001067983.json"
         },
         {
@@ -635,10 +628,9 @@
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Dated 2026 release list checked; newest visible release November 4, before window.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "2026 issuer release list checked; newest visible item November 4.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     },
     {
@@ -710,7 +702,7 @@
           "url": "https://finance.yahoo.com/quote/AMD/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0000002488.json"
         },
         {
@@ -718,17 +710,16 @@
           "url": "https://ir.amd.com/news-events/press-releases"
         },
         {
-          "title": "Reuters shared packaging story · summarized once under NVDA",
-          "url": "https://www.reuters.com/world/asia-pacific/ai-boom-turns-chip-packaging-into-next-battleground-semiconductors-2026-11-06/"
+          "title": "Reuters · 6 November 09:41:45 UTC · article text retrieved through search",
+          "url": "https://www.reuters.com/business/nasdaq-futures-rise-after-steep-ai-selloff-chip-stocks-stabilize-2026-11-06/"
         }
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Related packaging-sector context appears in the NVDA Reuters item; background references are not treated as new company announcements.",
-        "Dated issuer list checked; newest visible release November 3 16:15 EST, before window.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Issuer press list checked; newest visible release November 3 at 16:15 EST.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window.",
+        "Shared premarket-sector context is summarized once under NVIDIA; no individual percentage is inferred from the reported group range."
       ]
     },
     {
@@ -800,7 +791,7 @@
           "url": "https://finance.yahoo.com/quote/AVGO/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0001730168.json"
         },
         {
@@ -808,17 +799,16 @@
           "url": "https://investors.broadcom.com/financial-information/financial-news-releases"
         },
         {
-          "title": "Reuters shared packaging story · summarized once under NVDA",
-          "url": "https://www.reuters.com/world/asia-pacific/ai-boom-turns-chip-packaging-into-next-battleground-semiconductors-2026-11-06/"
+          "title": "Reuters · 6 November 09:41:45 UTC · article text retrieved through search",
+          "url": "https://www.reuters.com/business/nasdaq-futures-rise-after-steep-ai-selloff-chip-stocks-stabilize-2026-11-06/"
         }
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Related packaging-sector context appears in the NVDA Reuters item; background references are not treated as new company announcements.",
-        "Dated issuer financial-news list checked; newest visible release October 27, before window.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Issuer financial-news list checked; newest visible release October 27.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window.",
+        "Shared premarket-sector context is summarized once under NVIDIA; no individual percentage is inferred from the reported group range."
       ]
     },
     {
@@ -890,20 +880,24 @@
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
         },
         {
           "title": "Issuer release listing · coverage limits stated",
           "url": "https://investors.micron.com/news/default.aspx"
+        },
+        {
+          "title": "Reuters · 6 November 09:41:45 UTC · article text retrieved through search",
+          "url": "https://www.reuters.com/business/nasdaq-futures-rise-after-steep-ai-selloff-chip-stocks-stabilize-2026-11-06/"
         }
       ],
       "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "No new distinct company-specific item verified in the checked window; coverage is partial.",
-        "Prior IR-page 403 respected; not retried. Targeted issuer search surfaced only the November 5 director retirement already covered by the preceding edition, not a new item.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Prior Micron IR HTTP403 respected; endpoint not retried. Targeted issuer search surfaced the November 5 board retirement already covered, not a new event.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window.",
+        "Shared premarket-sector context is summarized once under NVIDIA; no individual percentage is inferred from the reported group range."
       ]
     },
     {
@@ -975,40 +969,19 @@
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0001318605.json"
         },
         {
           "title": "Issuer release listing · coverage limits stated",
           "url": "https://ir.tesla.com/press"
-        },
-        {
-          "title": "Reuters · 6 November 07:04:15 UTC · article text available through search",
-          "url": "https://www.reuters.com/business/autos-transportation/tesla-wind-down-cybertruck-production-texas-gigafactory-next-year-musk-says-2026-11-06/"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-06",
-          "headline": "Tesla plans Texas Cybertruck wind-down to expand Cybercab output",
-          "facts": [
-            "Reuters reports Musk said Texas Cybertruck production will wind down around mid-2027 to make room for more Cybercab output."
-          ],
-          "analysis": "The plan shifts factory capacity toward the robotaxi strategy.",
-          "risks": "Reuters says relocation versus ending Cybertruck production entirely remains unclear. Tesla had not responded to its request for comment.",
-          "next_watch": "Detailed production plans and Cybercab ramp execution.",
-          "sources": [
-            {
-              "title": "Reuters · 6 November 07:04:15 UTC · article text available through search",
-              "url": "https://www.reuters.com/business/autos-transportation/tesla-wind-down-cybertruck-production-texas-gigafactory-next-year-musk-says-2026-11-06/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "Dated issuer press list checked; newest visible release October 21. The in-window production story is Reuters reporting of Musk’s statement, not an IR release.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Issuer press list checked; newest visible release October 21. Reuters Cybertruck story has an expanded headline/text but the same canonical URL, publication timestamp and production plan; no timed substantive correction verified, so not repeated.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     },
     {
@@ -1080,40 +1053,19 @@
           "url": "https://finance.yahoo.com/quote/TSM/history/"
         },
         {
-          "title": "SEC · issuer submissions and acceptance times",
+          "title": "SEC · issuer submissions",
           "url": "https://data.sec.gov/submissions/CIK0001046179.json"
         },
         {
           "title": "Issuer release listing · coverage limits stated",
           "url": "https://pr.tsmc.com/english/latest-news"
-        },
-        {
-          "title": "Reuters Morning Bid · 6 November 05:37:57 UTC · substantial opening excerpt available through search",
-          "url": "https://www.reuters.com/world/china/global-markets-view-europe-2026-11-06/"
         }
       ],
-      "research": [
-        {
-          "date": "2026-11-06",
-          "headline": "TSMC Taiwan shares hit their lower limit at the open",
-          "facts": [
-            "Reuters reported TSMC’s Taiwan-listed shares hit their daily lower limit at the Taipei open on November 6 amid the regional technology selloff."
-          ],
-          "analysis": "This is overnight sentiment context for TSM, not a new US ADR price.",
-          "risks": "Taiwan shares and the US ADR trade in different sessions and currencies; no matching ADR percentage move is implied.",
-          "next_watch": "The next US ADR session and company disclosures.",
-          "sources": [
-            {
-              "title": "Reuters Morning Bid · 6 November 05:37:57 UTC · substantial opening excerpt available through search",
-              "url": "https://www.reuters.com/world/china/global-markets-view-europe-2026-11-06/"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "gaps": [
-        "SEC submissions checked: no filings accepted during 5 November 23:45 UTC–6 November 08:00 UTC. This is a filing-feed observation, not proof of no company news.",
-        "Dated issuer latest-news list checked; newest visible release October 15. Reuters Asia-session market context is separately identified from US ADR pricing.",
-        "Targeted Reuters searches were completed for all 12 names. Reuters article text and timestamps were available through search; direct opens of the three included stories were inaccessible and not retried. Coverage is partial, not an exhaustive no-news determination."
+        "SEC feed checked: no filings accepted November 6 07:45–12:00 UTC.",
+        "Issuer latest-news list checked; newest visible release October 15. Prior Taiwan-session market report excluded as already covered; TSM remains the US-listed USD ADR.",
+        "Targeted Reuters name searches completed. Search results are not exhaustive; no new distinct company announcement verified in this window."
       ]
     }
   ]

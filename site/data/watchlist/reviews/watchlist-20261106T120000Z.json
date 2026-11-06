@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261106T120000Z",
+  "as_of": "2026-11-06T12:00:00Z",
+  "edition_sha256": "87c068b3f2fbd80daf88bd763cc3efefd017cfabf01dd96051223b10fde1e7a9",
+  "reviewed_at": "2026-11-06T12:06:23.807312+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Chip stocks rebound in early US premarket trading",
+      "item_sha256": "d49602dd796d866e8c67b48f0ba44890d188d69c35c2f3eb3025ae3ebf668dfe",
+      "scope": "market_context",
+      "reason": "Reviewed source text and timestamp: shared chip-sector premarket context, not a company announcement, execution or current quote. Dated observations and access limitations retained; no private data. Canonical source absent from previous editions."
+    }
+  ]
+}

@@ -967,6 +967,17 @@
           "item_sha256": "f1c975d1eb7b1d0bd9eaabfb318f5fe184d682ee6b7d4552611bb9740a18e42f"
         }
       ]
+    },
+    "watchlist-20261106T120000Z": {
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "Chip stocks rebound in early US premarket trading",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-06\",\"Chip stocks rebound in early US premarket trading\",[\"Reuters reported NVIDIA up 3.6% in early premarket trading. AMD, Broadcom and Micron were among chip stocks up 5%–8.3%; the report did not give their individual moves.\"],\"This is a sector sentiment update, not a company announcement or a 12:00 UTC quote.\",\"Early premarket gains can reverse and do not replace completed-session prices.\",\"US October jobs report, scheduled for 13:30 UTC, and the regular-session open.\",[[\"Reuters · 6 November 09:41:45 UTC · article text retrieved through search\",\"https://www.reuters.com/business/nasdaq-futures-rise-after-steep-ai-selloff-chip-stocks-stabilize-2026-11-06/\"]]]",
+          "item_sha256": "d49602dd796d866e8c67b48f0ba44890d188d69c35c2f3eb3025ae3ebf668dfe"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -1077,6 +1088,12 @@
       "reviewed_at": "2026-11-06T08:09:22.972741+00:00",
       "edition_sha256": "690295507cbfe0b3ce50c4487c50d0c31e229d9d350ff7f6224024e9ae763103",
       "path": "data/watchlist/reviews/watchlist-20261106T080000Z.json"
+    },
+    "watchlist-20261106T120000Z": {
+      "as_of": "2026-11-06T12:00:00Z",
+      "reviewed_at": "2026-11-06T12:06:23.807312+00:00",
+      "edition_sha256": "87c068b3f2fbd80daf88bd763cc3efefd017cfabf01dd96051223b10fde1e7a9",
+      "path": "data/watchlist/reviews/watchlist-20261106T120000Z.json"
     }
   }
 }
