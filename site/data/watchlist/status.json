@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-06T00:13:35.096056+00:00",
-  "message": "06 Nov 08:00 SGT fixed-cutoff watchlist edition published by this scheduled execution. Exact-commit Pages deployment, live edition ID, immutable report hash and six company research mappings verified. All 12 completed 5 Nov prices, exact vendor quote times and 72 adjusted baselines freshly checked. Reuters/issuer news coverage is partial; the market-close Reuters narrative was excluded for an original-publication-time verification gap. This verifies this execution, not future runs or separate-chat delivery.",
+  "checked_at": "2026-11-06T08:18:28.532898+00:00",
+  "message": "06 Nov 16:00 SGT watchlist edition published by this scheduled execution. Exact-commit Pages deployment, live edition ID and immutable full-report SHA-256 verified. All 12 saved 5 Nov USD closes and 72 adjusted baselines freshly checked. Three new Reuters items include two company reports and Taiwan-session market context; source access is partial. This proves this execution, not future runs or delivery to a separate chat.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,12 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "5a628490d969aa7bfb847d61a3de33c264436d0a",
-    "pages_run_id": 42135077347,
-    "edition_id": "watchlist-20261106T000000Z",
-    "report_sha256": "0cad796ef0c5700f571106b3fb883a9e53588e23c449af7383966bee0fcbf0d6",
-    "verified_at": "2026-11-06T00:13:35.096056+00:00",
-    "scheduled_for": "2026-11-06T00:00:00Z",
+    "commit": "d08499bce470898140e25f47d8cef755cf451cb9",
+    "pages_run_id": 42186418883,
+    "edition_id": "watchlist-20261106T080000Z",
+    "report_sha256": "56d49f0ef72f22a6686ddb9c7e5d3d3375b2b2ccb91fcbcf1869503da0186bb0",
+    "verified_at": "2026-11-06T08:18:28.532898+00:00",
+    "scheduled_for": "2026-11-06T08:00:00Z",
     "execution_kind": "scheduled_run_cloud"
   },
   "separate_A_chat_delivery_verified": false,
@@ -119,6 +119,18 @@
       "verified_at": "2026-11-05T20:09:27.716674+00:00",
       "scheduled_for": "2026-11-05T20:00:00Z",
       "execution_kind": "scheduled_run_cloud"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "5a628490d969aa7bfb847d61a3de33c264436d0a",
+      "pages_run_id": 42135077347,
+      "edition_id": "watchlist-20261106T000000Z",
+      "report_sha256": "0cad796ef0c5700f571106b3fb883a9e53588e23c449af7383966bee0fcbf0d6",
+      "verified_at": "2026-11-06T00:13:35.096056+00:00",
+      "scheduled_for": "2026-11-06T00:00:00Z",
+      "execution_kind": "scheduled_run_cloud"
     }
   ],
   "recovered_attempts": [
@@ -168,9 +180,9 @@
     "basis": "USD completed regular-session observations; adjusted-close cumulative returns",
     "required_prices_verified": 12,
     "adjusted_baselines_verified": 72,
-    "new_company_research_items": 6,
-    "shared_market_context_items": 0,
-    "source_price_timestamps": "Freshly verified Yahoo regularMarketTime metadata; all quotes precede cutoff.",
-    "excluded_reuters_market_narrative": "Original Reuters publication time not independently verified; no causal market-close narrative published."
+    "new_company_research_items": 2,
+    "shared_market_context_items": 1,
+    "source_price_timestamps": "Fresh Yahoo regularMarketTime metadata verified before the fixed cutoff; completed US-session observations, not live.",
+    "source_limits": "Reuters search text checked; direct article opens unavailable. Eleven SEC feeds checked with no in-window filings. Amazon SEC prior403 not retried; issuer coverage gaps retained by company."
   }
 }
