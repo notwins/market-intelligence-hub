@@ -30,6 +30,23 @@ class NavigationShortcutsTests(unittest.TestCase):
   tools=(ROOT/'v4-tools.js').read_text()
   for values in self.tabs.values():
    for value in values:self.assertIn("'"+value+"'",tools)
+ def test_next_section_shortcut_is_visible_on_desktop_and_phone(self):
+  css=(ROOT/'mobile-navigation.css').read_text()
+  # The base rule, before the phone-only query, must render the shortcut.
+  base=css.split('@media')[0]
+  shortcut=re.search(r'\.section-next\{([^}]+)\}',base).group(1)
+  self.assertIn('display:flex',shortcut);self.assertIn('min-height:44px',shortcut)
+  self.assertIn('flex-wrap:wrap',shortcut);self.assertIn('text-align:left',shortcut)
+  self.assertNotRegex(css,r'\.section-next\s*\{[^}]*display\s*:\s*none')
+  self.assertIn('mobile-navigation.css?v=20261106.desktop-next1',self.html)
+  # Use the visible label as the accessible name, so translation cannot cache an old destination.
+  script=(ROOT/'mobile-navigation.js').read_text()
+  self.assertNotIn("next.setAttribute('aria-label'",script)
+  self.assertIn('mobile-navigation.js?v=20261106.desktop-next1',self.html)
+  # The phone's bottom navigation and title layout remain responsive.
+  self.assertIn('@media(max-width:760px)',css)
+  self.assertIn('.bottom-nav button{min-width:0;white-space:normal',css)
+  self.assertIn('.topbar .top-controls{flex-shrink:0}',css)
  def test_settings_shortcuts_and_phone_grid(self):
   display=(ROOT/'v4-display.js').read_text();self.assertIn('class="settings-shortcuts"',display)
   self.assertIn('href="site-map.html"',display);self.assertIn('href="tag-map.html"',display)
