@@ -978,6 +978,51 @@
           "item_sha256": "d49602dd796d866e8c67b48f0ba44890d188d69c35c2f3eb3025ae3ebf668dfe"
         }
       ]
+    },
+    "watchlist-20261106T160000Z": {
+      "AAPL": [
+        {
+          "index": 0,
+          "headline": "Reuters reports approximately $7.5 billion seven-part Apple bond offering",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Reuters reports approximately $7.5 billion seven-part Apple bond offering\",[\"Reuters, citing a term sheet it reviewed, reported Apple is raising about $7.5 billion across seven US-dollar bond tranches.\"],\"Research analysis: This supersedes the earlier preliminary roughly $7 billion estimate for the same offering, not a second transaction. Settlement is not confirmed.\",\"Final pricing, settlement and issuer-confirmed terms remain unverified.\",\"Final issuer documents and closing confirmation.\",[[\"Reuters · 14:43:56 UTC ·  article text retrieved through search ·  direct page inaccessible\",\"https://www.reuters.com/legal/transactional/big-tech-drives-us-corporate-bond-sales-annual-record-high-data-shows-2026-11-06/\"]]]",
+          "item_sha256": "13bc39978990c706abe7b492d5aa5d176536c8a950ee3945b7b91c3d06842cb8"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "Shared watchlist context: technology advisory meeting postponed",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-06\",\"Shared watchlist context: technology advisory meeting postponed\",[\"Reuters reported a White House technology-panel postponement and a new November 13 date. Members include the NVIDIA, Meta and AMD chief executives.\"],\"Research analysis: A policy-calendar change, not an operational announcement or revised financial guidance.\",\"The reason for postponement was not established.\",\"The rescheduled meeting and any actual policy decisions.\",[[\"Reuters · 14:29:37 UTC; article text retrieved through search\",\"https://www.reuters.com/world/us/trump-administration-scraps-meeting-panel-that-includes-metas-zuckerberg-nvidias-2026-11-06/\"]]]",
+          "item_sha256": "48c9ed9ec0c19e8b1240a45efd705992a47209351e883742aaa4c6e36427c5f8"
+        },
+        {
+          "index": 1,
+          "headline": "Active-session snapshot: the rebound reaches regular US trading",
+          "scope": "price_context",
+          "content_key": "[\"2026-11-06\",\"Active-session snapshot: the rebound reaches regular US trading\",[\"Reuters reported the S&P 500 up 1.00% and Nasdaq up 1.73% at 15:21 UTC (10:21 a.m. ET).\"],\"Research analysis: This updates the same earlier premarket story, not a separate event or proof of a lasting reversal.\",\"A changing intraday snapshot, separate from the saved November 5 closing prices.\",\"Closing market breadth and whether recovery persists.\",[[\"Reuters · 15:21 UTC snapshot; initial publication 09:41:45 UTC\",\"https://www.reuters.com/business/nasdaq-futures-rise-after-steep-ai-selloff-chip-stocks-stabilize-2026-11-06/\"]]]",
+          "item_sha256": "6f468fd2923866c044428130d7ad6273ac66717daddcc273b72037dbd3845a27"
+        }
+      ],
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "Coverage correction: Alphabet disclosed a Qualcomm holding",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Coverage correction: Alphabet disclosed a Qualcomm holding\",[\"Alphabet’s original SEC holdings table lists 2,976,982 Qualcomm shares valued at $547,883,767 for 30 September 2026.\",\"Reuters reported the stake at 11:13:29 UTC on 6 November, before this edition’s overlap window. It was missed in the previous edition and is included here as a coverage correction.\"],\"Research analysis: This adds financial exposure to an existing technology relationship; it does not establish a new commercial agreement.\",\"Quarter-end value is neither acquisition cost nor current value. Holdings may since have changed.\",\"Subsequent holdings disclosures and any disclosed changes.\",[[\"Reuters 11:13:29 UTC ·  text through search\",\"https://www.reuters.com/business/alphabet-discloses-548-million-worth-qualcomm-stake-2026-11-06/\"],[\"SEC · Alphabet 13F original holdings table; 30 September 2026 period\",\"https://www.sec.gov/Archives/edgar/data/1652044/000165204426000086/information_table.xml\"],[\"SEC · 13F cover; reporting period 30 September 2026\",\"https://www.sec.gov/Archives/edgar/data/1652044/000165204426000086/primary_doc.xml\"]]]",
+          "item_sha256": "5f2271e2ec7b6701c8a9d115275f590e67df09d6324f67e3e5b0983a5d4be1e7"
+        }
+      ],
+      "AMZN": [
+        {
+          "index": 0,
+          "headline": "Amazon begins invitation-only Alexa shopping by text",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Amazon begins invitation-only Alexa shopping by text\",[\"Amazon began rolling out text-based Alexa for Shopping to selected US customers, with wider availability planned over coming weeks.\",\"Customers can request product searches, build carts, complete purchases and receive order updates by text.\"],\"Research analysis: Text-based shopping could reduce friction, but the release does not establish higher conversion or revenue.\",\"Rollout is initially limited, and adoption, transaction accuracy and privacy remain execution risks.\",\"Broader US rollout and evidence of use or sales impact.\",[[\"Amazon issuer article · published 13:55:08.095 UTC; HTML metadata verified\",\"https://www.aboutamazon.com/news/retail/alexa-for-shopping-text-to-shop\"],[\"Reuters · 14:01:55 UTC; corroborating report\",\"https://www.reuters.com/business/retail-consumer/amazon-rolls-out-text-based-shopping-through-alexa-2026-11-06/\"]]]",
+          "item_sha256": "5aa20aa8f40ef5df2e3c2c459f8561baa74c9d8dc73e5f4f4a0ab70d0452f54e"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -1094,6 +1139,12 @@
       "reviewed_at": "2026-11-06T12:06:23.807312+00:00",
       "edition_sha256": "87c068b3f2fbd80daf88bd763cc3efefd017cfabf01dd96051223b10fde1e7a9",
       "path": "data/watchlist/reviews/watchlist-20261106T120000Z.json"
+    },
+    "watchlist-20261106T160000Z": {
+      "as_of": "2026-11-06T16:00:00Z",
+      "reviewed_at": "2026-11-06T16:14:28.122645+00:00",
+      "edition_sha256": "13ba53fc3325ea0c807499c92864b610d16e3d1276a9fe9e8bdd0d00aa4b71f9",
+      "path": "data/watchlist/reviews/watchlist-20261106T160000Z.json"
     }
   }
 }

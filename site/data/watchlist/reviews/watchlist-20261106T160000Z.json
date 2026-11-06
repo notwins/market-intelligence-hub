@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261106T160000Z",
+  "as_of": "2026-11-06T16:00:00Z",
+  "edition_sha256": "13ba53fc3325ea0c807499c92864b610d16e3d1276a9fe9e8bdd0d00aa4b71f9",
+  "reviewed_at": "2026-11-06T16:14:28.122645+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Reuters reports approximately $7.5 billion seven-part Apple bond offering",
+      "item_sha256": "13bc39978990c706abe7b492d5aa5d176536c8a950ee3945b7b91c3d06842cb8",
+      "scope": "company",
+      "reason": "Source-attributed issuer-specific development. Facts, date and scope checked; prior-window correction and updated offering estimate are labelled. Public-safe content only."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Shared watchlist context: technology advisory meeting postponed",
+      "item_sha256": "48c9ed9ec0c19e8b1240a45efd705992a47209351e883742aaa4c6e36427c5f8",
+      "scope": "market_context",
+      "reason": "Shared policy scheduling or index-price context, explicitly separated from company operating developments."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 1,
+      "headline": "Active-session snapshot: the rebound reaches regular US trading",
+      "item_sha256": "6f468fd2923866c044428130d7ad6273ac66717daddcc273b72037dbd3845a27",
+      "scope": "price_context",
+      "reason": "Dated intraday index snapshot updating a previously cited canonical Reuters story; retained in the full report, not issuer research or company-history content."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Coverage correction: Alphabet disclosed a Qualcomm holding",
+      "item_sha256": "5f2271e2ec7b6701c8a9d115275f590e67df09d6324f67e3e5b0983a5d4be1e7",
+      "scope": "company",
+      "reason": "Source-attributed issuer-specific development. Facts, date and scope checked; prior-window correction and updated offering estimate are labelled. Public-safe content only."
+    },
+    {
+      "ticker": "AMZN",
+      "index": 0,
+      "headline": "Amazon begins invitation-only Alexa shopping by text",
+      "item_sha256": "5aa20aa8f40ef5df2e3c2c459f8561baa74c9d8dc73e5f4f4a0ab70d0452f54e",
+      "scope": "company",
+      "reason": "Source-attributed issuer-specific development. Facts, date and scope checked; prior-window correction and updated offering estimate are labelled. Public-safe content only."
+    }
+  ]
+}
