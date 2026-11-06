@@ -882,6 +882,62 @@
           "item_sha256": "377dca9b08b63b3bf6c6ad16747f1b8facf45a1b0a96e52a6a88d889b904d1ef"
         }
       ]
+    },
+    "watchlist-20261106T000000Z": {
+      "AAPL": [
+        {
+          "index": 0,
+          "headline": "Apple officer discloses sale under a trading plan",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Apple officer discloses sale under a trading plan\",[\"Jennifer Newstead reported selling 2,399 shares on November 3 at $325.75 per share, leaving 29,997 shares directly held.\",\"The filing says the sale followed a Rule 10b5-1 plan adopted May 5, 2026.\"],\"Routine insider disclosure rather than an operating update.\",\"This is a disclosed November 3 transaction, not a proposed sale notice; the prearranged sale does not establish the seller's investment view.\",\"Subsequent ownership disclosures.\",[[\"SEC 4 accepted 2026-11-05T23:30:13.000Z\",\"https://www.sec.gov/Archives/edgar/data/320193/000114036126042149/xslF345X06/form4.xml\"]]]",
+          "item_sha256": "386956e73ed812bd67b70de483f3ac34c20356488a5b48f640c3326a11697eea"
+        }
+      ],
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "IREN discloses Microsoft-requested network changes and revised deployment timing",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"IREN discloses Microsoft-requested network changes and revised deployment timing\",[\"IREN says Microsoft requested a network design change across its Horizon deployments. Its 10-Q says delivery dates extend without delay credits for delays caused by that requested change; discussions on delivery dates, fees, credits and reimbursements continue.\",\"IREN moved the target for more than $4 billion of operational annualized run-rate revenue from year-end 2026 to January 2027, possibly end-February, citing a customer-requested change and supplier timing. Horizon 1 was accepted by Microsoft in August and remains in service.\"],\"The new primary disclosure identifies delivery timing and contract mechanics relevant to Microsoft's external AI capacity, rather than establishing cancellation of an existing contract.\",\"IREN's ARR is an operating metric, not GAAP revenue, and requires commissioning, testing and customer acceptance. The delay-credit relief described is specific to Microsoft-requested changes, not a blanket exemption for every delay.\",\"Revised delivery schedule, customer acceptance and final treatment of fees, credits and cost reimbursements.\",[[\"IREN Q1 FY27 release, published 21:02:39 UTC\",\"https://iren.gcs-web.com/news-releases/news-release-details/iren-reports-q1-fy27-results\"],[\"IREN SEC 10-Q, accepted 21:06:52 UTC\",\"https://www.sec.gov/Archives/edgar/data/1878848/000187884826000066/iren-20260930.htm\"],[\"SEC IREN submissions with acceptance timestamps\",\"https://data.sec.gov/submissions/CIK0001878848.json\"]]]",
+          "item_sha256": "542e89683f9575e1e8f054e61e1281dc4239fc53449ca5ba8f51e9c63327ceb9"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "NVIDIA promotes Vera CPU agent performance and power efficiency",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"NVIDIA promotes Vera CPU agent performance and power efficiency\",[\"NVIDIA says Vera delivers 1.6 times more agents per watt than the fastest x86 comparator and twice the agent speed of the most energy-efficient x86 comparator in its 100 MW data-center comparison.\",\"The company cites partner production-style tests and says Perplexity plans a Vera deployment in an upcoming production system.\"],\"The pitch positions Vera as a CPU complement to GPU-based agent infrastructure.\",\"Vendor-selected comparisons and partner claims are not independently validated benchmarks or quantified revenue guidance.\",\"Commercial deployment, independently comparable benchmarks and system economics.\",[[\"NVIDIA issuer blog · 20:00:41 UTC\",\"https://blogs.nvidia.com/blog/vera-cpu-highest-throughput-fastest-agents/\"]]]",
+          "item_sha256": "fb5c9359556bd4a03b3e1dde9dc859c7513d0ec933e2f4274dec91f96d8edbf8"
+        }
+      ],
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "Alphabet closes €6 billion senior-note offering",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Alphabet closes €6 billion senior-note offering\",[\"Alphabet closed a €6 billion euro-denominated senior-note offering on November 5.\",\"Seven tranches mature from 2028 to 2045, including floating-rate 2028 notes and fixed coupons from 3.700% to 5.250%.\"],\"The closing adds long-dated funding and associated debt-service obligations.\",\"A financing closing is not a new earnings outlook.\",\"Capital spending, cash flow and financing needs.\",[[\"SEC 8-K accepted 2026-11-05T21:10:44.000Z\",\"https://www.sec.gov/Archives/edgar/data/1652044/000119312526449835/d174184d8k.htm\"]]]",
+          "item_sha256": "253c6c74525edd3912a352e26b8e1b28d0838b71c17398a22ed14da4ee392344"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Meta completes $15 billion debt offering and expands forward equity sale",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Meta completes $15 billion debt offering and expands forward equity sale\",[\"Meta completed $15 billion of senior notes in five tranches, maturing 2031–2056, with coupons of 5.850%–7.500%.\",\"Underwriters exercised their full option for 6 million additional Class A shares on November 4; Meta entered additional forward sale agreements tied to those shares.\"],\"The disclosures confirm additional debt financing and expand potential future equity issuance under the forward structure.\",\"Do not treat forward shares as immediate issuer cash proceeds or conflate this completion with the earlier pricing announcement.\",\"Settlement choices and timing, dilution and use of funding.\",[[\"SEC 8-K accepted 2026-11-05T21:58:46.000Z\",\"https://www.sec.gov/Archives/edgar/data/1326801/000119312526450074/d166273d8k.htm\"]]]",
+          "item_sha256": "e9c79d5b2528825a188e96a9f6b6d67e63494c5feca69c16813f297c41e32748"
+        }
+      ],
+      "MU": [
+        {
+          "index": 0,
+          "headline": "Micron announces director retirement",
+          "scope": "company",
+          "content_key": "[\"2026-11-05\",\"Micron announces director retirement\",[\"Linnie M. Haynesworth will retire at the annual shareholders meeting expected January 14, 2027, and will not stand for re-election.\",\"Micron says eight directors will remain after her departure.\"],\"A board-composition change, not an operating or financial guidance update.\",\"The planned meeting date is described as expected.\",\"Annual meeting and governance disclosures.\",[[\"SEC 8-K accepted 2026-11-05T21:33:48.000Z\",\"https://www.sec.gov/Archives/edgar/data/723125/000110465926123389/tm2629062d1_8k.htm\"],[\"Micron press release filed as Exhibit 99.1\",\"https://www.sec.gov/Archives/edgar/data/723125/000110465926123389/tm2629062d1_ex99-1.htm\"]]]",
+          "item_sha256": "267e1512335f42885f03f0f1d65501d77aa2b52e68912b3ec39df86c3862eaf7"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -980,6 +1036,12 @@
       "reviewed_at": "2026-11-05T20:06:05.410065+00:00",
       "edition_sha256": "d133adb5378b8625b0bd74c838946f6d8088208e21cb4675ae99cdd3282f2025",
       "path": "data/watchlist/reviews/watchlist-20261105T200000Z.json"
+    },
+    "watchlist-20261106T000000Z": {
+      "as_of": "2026-11-06T00:00:00Z",
+      "reviewed_at": "2026-11-06T00:09:30Z",
+      "edition_sha256": "0a2cb7fa19efeef6db4a366445fb0a4ac11eaf50fc67d856f20c4f74bc3a5afd",
+      "path": "data/watchlist/reviews/watchlist-20261106T000000Z.json"
     }
   }
 }

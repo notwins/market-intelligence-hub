@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261106T000000Z",
+  "as_of": "2026-11-06T00:00:00Z",
+  "edition_sha256": "0a2cb7fa19efeef6db4a366445fb0a4ac11eaf50fc67d856f20c4f74bc3a5afd",
+  "reviewed_at": "2026-11-06T00:09:30Z",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Apple officer discloses sale under a trading plan",
+      "item_sha256": "386956e73ed812bd67b70de483f3ac34c20356488a5b48f640c3326a11697eea",
+      "scope": "company",
+      "reason": "SEC Form 4 and acceptance time verify the November 3 sale, 2,399 shares, $325.75 price, 29,997 directly held and May 5 trading plan. Public Apple-specific disclosure; no investment-view or price-causation inference."
+    },
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "IREN discloses Microsoft-requested network changes and revised deployment timing",
+      "item_sha256": "542e89683f9575e1e8f054e61e1281dc4239fc53449ca5ba8f51e9c63327ceb9",
+      "scope": "company",
+      "reason": "IREN release and 10-Q verify Microsoft-requested Horizon changes, limited delay-credit relief, ongoing fee discussions and revised ARR timing. Direct Microsoft capacity relevance; counterparty attribution, ARR caveat and Horizon 1 acceptance retained."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "NVIDIA promotes Vera CPU agent performance and power efficiency",
+      "item_sha256": "fb5c9359556bd4a03b3e1dde9dc859c7513d0ec933e2f4274dec91f96d8edbf8",
+      "scope": "company",
+      "reason": "Issuer article and datePublished metadata verify Vera comparisons and planned Perplexity use. NVIDIA-specific product research; vendor-selected benchmarks are attributed and distinguished from independent validation or revenue guidance."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Alphabet closes €6 billion senior-note offering",
+      "item_sha256": "253c6c74525edd3912a352e26b8e1b28d0838b71c17398a22ed14da4ee392344",
+      "scope": "company",
+      "reason": "SEC 8-K and acceptance time verify the November 5 EUR 6 billion closing, seven tranches, 2028–2045 maturities and fixed-coupon range. Alphabet-specific financing, clearly separate from an earnings outlook."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Meta completes $15 billion debt offering and expands forward equity sale",
+      "item_sha256": "e9c79d5b2528825a188e96a9f6b6d67e63494c5feca69c16813f297c41e32748",
+      "scope": "company",
+      "reason": "SEC 8-K and acceptance time verify the USD 15 billion debt completion and November 4 full option exercise for six million forward shares. Meta-specific financing; closing versus pricing and potential issuance versus immediate cash remain distinct."
+    },
+    {
+      "ticker": "MU",
+      "index": 0,
+      "headline": "Micron announces director retirement",
+      "item_sha256": "267e1512335f42885f03f0f1d65501d77aa2b52e68912b3ec39df86c3862eaf7",
+      "scope": "company",
+      "reason": "SEC 8-K and Exhibit 99.1 verify Haynesworth retirement, expected January 14 meeting and eight remaining directors. Micron-specific governance with the expected-date qualification and no operating-guidance or price-causation claim."
+    }
+  ]
+}
