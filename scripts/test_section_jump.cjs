@@ -35,4 +35,18 @@ test('compact controls retain touch sizing, keyboard focus, print hiding and bot
   const css=fs.readFileSync(path.join(__dirname,'../site/section-jump.css'),'utf8');
   for(const text of ['min-height:44px','min-width:44px','focus-visible','@media print','--section-jump-bottom','safe-area-inset-bottom','[hidden]','forced-colors','var(--text-scale,1)']) assert(css.includes(text),text);
 });
+test('mobile disclosure preserves full labels and accessible dismissal',()=>{
+  const code=fs.readFileSync(path.join(__dirname,'../site/section-jump.js'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../site/section-jump.css'),'utf8');
+  for(const text of ['aria-expanded="false"','aria-controls="section-jump-panel"',"event.key === 'Escape'","addEventListener('pointerdown'","addEventListener('focusin'",'setExpanded(false, !focusHeading)','aria-current','node.innerText']) assert(code.includes(text),text);
+  for(const text of ['white-space:normal','overflow-wrap:anywhere','overflow-y:auto','min-height:48px','--sj-focus:#1E40AF','--sj-soft:#F2F6F4','--sj-selected:#EAF0EC']) assert(css.includes(text),text);
+});
+test('desktop controls dock in the existing rail while mobile clears measured navigation and footer',()=>{
+  const code=fs.readFileSync(path.join(__dirname,'../site/section-jump.js'),'utf8');
+  const css=fs.readFileSync(path.join(__dirname,'../site/section-jump.css'),'utf8');
+  for(const text of ["rail.insertBefore(bar, rail.querySelector('.rail-foot'))",'section-jump-docked','doc.documentElement.clientWidth - 24','spacer !== doc.body.lastElementChild','bottom + toggle.getBoundingClientRect().height + 28',"doc.querySelectorAll('.bottom-nav,.topbar')"]) assert(code.includes(text),text);
+  assert(css.includes('#section-jump.section-jump-docked{position:relative;inset:auto'));
+  assert(code.includes("if (bar.hidden) setExpanded(false)"),'Dynamic content must not close an open picker');
+  assert(!code.includes('if (bar.hidden || changed) setExpanded(false)'));
+});
 console.log(`${checks} subsection-jump checks passed.`);

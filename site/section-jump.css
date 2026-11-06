@@ -1,12 +1,35 @@
-/* Compact in-page controls, above the phone's existing main navigation. */
-#section-jump{position:fixed;z-index:55;right:max(12px,env(safe-area-inset-right));bottom:calc(max(12px,env(safe-area-inset-bottom)) + var(--section-jump-bottom,0px));display:flex;align-items:center;gap:4px;width:min(360px,calc(100% - 24px));padding:5px;border:1px solid var(--line,#cbd6e4);border-radius:13px;background:var(--card,#fff);color:var(--ink,#182b42);box-shadow:0 4px 22px #102b4530;font:calc(16px * var(--text-scale,1))/1.25 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;isolation:isolate}
-#section-jump[hidden],.section-jump-spacer[hidden]{display:none!important}
-#section-jump button{flex:0 0 auto;display:inline-grid;place-items:center;min-height:44px;min-width:44px;margin:0;padding:7px 10px;border:0;border-radius:9px;background:var(--accent-soft,#eeebff);color:var(--accent,#5142b5);font:inherit;font-weight:750;cursor:pointer}
-#section-jump button:disabled{opacity:.4;cursor:default}
-#section-jump select{flex:1 1 0;min-width:0;width:0;min-height:44px;margin:0;border:0;border-radius:8px;padding:6px 4px;background:var(--card,#fff);color:inherit;font:inherit;text-overflow:ellipsis;cursor:pointer}
-#section-jump button:focus-visible,#section-jump select:focus-visible{outline:3px solid var(--accent,#6658d9);outline-offset:2px}
+/* Soft Editorial navigation chrome. Semantic entity/status colours are untouched. */
+#section-jump{--sj-card:#FFFFFF;--sj-soft:#F2F6F4;--sj-selected:#EAF0EC;--sj-border:#DCE6E0;--sj-text:#182822;--sj-muted:#526259;--sj-focus:#1E40AF;position:fixed;z-index:55;right:max(12px,env(safe-area-inset-right));bottom:calc(var(--section-jump-bottom,env(safe-area-inset-bottom,0px)) + 10px);width:max-content;max-width:calc(100% - 24px);color:var(--sj-text);font:calc(16px * var(--text-scale,1))/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;isolation:isolate}
+#section-jump[hidden],#section-jump [hidden],.section-jump-spacer[hidden]{display:none!important}
+#section-jump button{box-sizing:border-box;min-height:44px;min-width:44px;margin:0;padding:8px 12px;border:1px solid transparent;border-radius:10px;background:var(--sj-soft);color:var(--sj-text);font:inherit;font-weight:650;cursor:pointer}
+#section-jump button:disabled{opacity:.45;cursor:default}
+#section-jump button:focus-visible,#section-jump select:focus-visible{outline:3px solid var(--sj-focus);outline-offset:2px}
+#section-jump #section-jump-toggle{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;max-width:100%;border:1px solid var(--sj-focus);border-radius:999px;background:var(--sj-card);color:var(--sj-focus);box-shadow:0 3px 14px #18282218;padding:8px 14px;font-weight:750}
+#section-jump .section-jump-count{font-size:.75em;font-variant-numeric:tabular-nums;color:var(--sj-muted)}
+#section-jump-toggle[aria-expanded=true] .section-jump-chevron{transform:rotate(180deg)}
+#section-jump-panel{position:absolute;right:0;bottom:calc(100% + 8px);width:var(--section-jump-panel-width,min(350px,calc(100vw - 40px)));max-height:min(60dvh,var(--section-jump-available,60dvh));display:flex;flex-direction:column;overflow:hidden;padding:10px;background:var(--sj-card);border:1px solid var(--sj-border);border-radius:16px;box-shadow:0 5px 24px #18282224}
+#section-jump .section-jump-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px 6px;font-size:.85em;font-weight:750}
+#section-jump .section-jump-close{background:transparent;font-size:1.4em}
+#section-jump .section-jump-controls{display:flex;align-items:center;gap:6px;flex:0 0 auto;padding:2px 2px 8px}
+#section-jump .section-jump-controls>button{flex:0 0 auto;display:inline-grid;place-items:center;color:var(--sj-focus);font-size:1.2em}
+#section-jump select{display:none;flex:1 1 0;min-width:0;width:0;min-height:44px;margin:0;border:1px solid var(--sj-muted);border-radius:8px;padding:6px 4px;background:var(--sj-card);color:inherit;font:inherit;text-overflow:ellipsis;cursor:pointer}
+#section-jump .section-jump-progress{flex:1;text-align:center;color:var(--sj-muted);font-size:.8em}
+#section-jump .section-jump-list{margin:0;padding:2px 3px;list-style:none;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border-top:1px solid var(--sj-border)}
+#section-jump .section-jump-list li{margin:3px 0}
+#section-jump .section-jump-list button{display:block;width:100%;text-align:left;background:transparent;font-weight:500;white-space:normal;overflow-wrap:anywhere;border-radius:8px;font-size:.875em;line-height:1.4}
+#section-jump .section-jump-list button.section-jump-nested{padding-left:24px}
+#section-jump .section-jump-list button[aria-current=location]{background:var(--sj-selected);border-left:3px solid var(--sj-focus);font-weight:750}
+#section-jump .section-jump-list button:hover{background:var(--sj-soft)}
 #section-jump .section-jump-label,#section-jump .section-jump-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .section-jump-spacer{display:block;clear:both;pointer-events:none}
-@media(max-width:760px){#section-jump{width:min(320px,calc(100% - 24px))}}
+/* The full desktop control occupies the existing rail, never the article. */
+#section-jump.section-jump-docked{position:relative;inset:auto;width:100%;max-width:none;flex:0 0 auto;margin-top:12px;z-index:auto}
+#section-jump.section-jump-docked #section-jump-toggle,#section-jump.section-jump-docked .section-jump-close,#section-jump.section-jump-docked .section-jump-list,#section-jump.section-jump-docked .section-jump-progress{display:none}
+#section-jump.section-jump-docked #section-jump-panel{position:relative;inset:auto;width:100%;max-height:none;padding:8px;box-shadow:none;border-radius:12px}
+#section-jump.section-jump-docked .section-jump-controls{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0}
+#section-jump.section-jump-docked select{display:block;grid-column:1/-1;grid-row:1;width:100%;font-size:.8em}
+#section-jump.section-jump-docked .section-jump-controls>button{width:100%;min-height:44px;padding:4px 10px}
 @media print{#section-jump,.section-jump-spacer{display:none!important}}
-@media(forced-colors:active){#section-jump{background:Canvas;color:CanvasText;border:1px solid CanvasText}#section-jump button,#section-jump select{background:ButtonFace;color:ButtonText}#section-jump button:disabled{color:GrayText;opacity:1}}
+@media(forced-colors:active){#section-jump{--sj-card:Canvas;--sj-soft:Canvas;--sj-selected:Canvas;--sj-border:CanvasText;--sj-text:CanvasText;--sj-muted:CanvasText;--sj-focus:Highlight}#section-jump button,#section-jump select{background:ButtonFace;color:ButtonText}#section-jump button:disabled{color:GrayText;opacity:1}}
+
+@media(max-width:340px){#section-jump .section-jump-count{display:none}}
