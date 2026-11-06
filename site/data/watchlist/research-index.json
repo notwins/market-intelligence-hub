@@ -1023,6 +1023,42 @@
           "item_sha256": "5aa20aa8f40ef5df2e3c2c459f8561baa74c9d8dc73e5f4f4a0ab70d0452f54e"
         }
       ]
+    },
+    "watchlist-20261106T200000Z": {
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "Coverage correction: protesters entered Amsterdam data-center construction site",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Coverage correction: protesters entered Amsterdam data-center construction site\",[\"Reuters reported protesters entered a Microsoft data-center construction site in Amsterdam. Microsoft said it respected peaceful expression but did not condone unlawful actions.\",\"First published 12:47:37 UTC, this report was missed in the prior edition. It is a coverage correction, not a new event after 16:00 UTC.\"],\"Local opposition remains an infrastructure execution risk; the report establishes no quantified financial impact.\",\"No verified construction-delay estimate.\",\"Confirmed effects on schedules or permits.\",[[\"Reuters timestamp and article text retrieved through search; full direct source not retrieved · published 2026-11-06T12:47:37Z\",\"https://www.reuters.com/world/europe/activists-breach-microsoft-data-centre-construction-site-protests-spread-europe-2026-11-06/\"]]]",
+          "item_sha256": "dd0136712ff448cada5992866952cc8c36e8c66181a2647f69c2e09511cd7132"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "NVIDIA reports wider adoption of open-source wireless research tools",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"NVIDIA reports wider adoption of open-source wireless research tools\",[\"NVIDIA says developer adoption of AI Aerial and Sionna grew tenfold over the past year and its open-source 5G/6G tools exceeded one million downloads.\"],\"Research analysis: Wider research use may strengthen the wireless software ecosystem; download counts do not establish commercial revenue.\",\"Issuer-reported adoption is not a measure of paid deployment or earnings contribution.\",\"Commercial deployment announcements and independently supported adoption.\",[[\"NVIDIA original blog HTML saved in prior research; publication metadata inspected; current issuer search corroboration · published 2026-11-06T16:00:35Z\",\"https://blogs.nvidia.com/blog/telco-open-source-tools-research-6g-networks/\"]]]",
+          "item_sha256": "033a55e408a0c04f156c46d06777bde8640025bf0c36d9dadb4f1382a9cc4e60"
+        },
+        {
+          "index": 1,
+          "headline": "Shared risk context: AI stress persists despite stock rebound",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-06\",\"Shared risk context: AI stress persists despite stock rebound\",[\"Reuters reported CoreWeave five-year credit-default-swap spreads above 1,000 basis points and the VIX near the prior day’s level above 28.\"],\"Financing strain among AI infrastructure customers may matter to suppliers even during an equity rebound.\",\"This is a reported market snapshot, not evidence of impairment at a watchlist company or a current quote.\",\"Credit spreads, funding access and supplier customer exposure.\",[[\"Reuters 17:07:25 UTC; article text retrieved through search\",\"https://www.reuters.com/business/ai-rout-sets-off-market-alarm-signals-traders-brace-whats-next-2026-11-06/\"]]]",
+          "item_sha256": "0cc563bfb6df9ce3128d9344c0fd9f96e02a63ca2d380c9461b4439fc7c458db"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Meta introduces customizable spaces in Muse",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Meta introduces customizable spaces in Muse\",[\"Meta launched spaces, personalized experiences created from user descriptions inside Muse, wherever Muse is available.\",\"Users can place spaces in tabs or the sidebar; connected apps can keep information updated in the background.\"],\"Research analysis: Extends Muse from chat toward ongoing personal workflows. Revenue and retention effects are unproven.\",\"Reliability, user adoption and handling of connected-app information remain execution risks.\",\"Usage evidence and promised exploration of collaborative sharing.\",[[\"Meta original article fully retrieved; HTML datePublished and article:published_time verified · published 2026-11-06T18:00:58Z\",\"https://about.fb.com/news/2026/11/introducing-spaces-customize-muse-app/\"]]]",
+          "item_sha256": "47d1e36acb73e4991f8ed11d45ca8e268634d50c1ab692f8e6d4ba17de8e32f4"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -1145,6 +1181,12 @@
       "reviewed_at": "2026-11-06T16:14:28.122645+00:00",
       "edition_sha256": "13ba53fc3325ea0c807499c92864b610d16e3d1276a9fe9e8bdd0d00aa4b71f9",
       "path": "data/watchlist/reviews/watchlist-20261106T160000Z.json"
+    },
+    "watchlist-20261106T200000Z": {
+      "as_of": "2026-11-06T20:00:00Z",
+      "reviewed_at": "2026-11-06T20:03:43.240366+00:00",
+      "edition_sha256": "8eb9b54107377c570b598297719cf76ff977ce9d3b4406e22076c521fe6ef9a9",
+      "path": "data/watchlist/reviews/watchlist-20261106T200000Z.json"
     }
   }
 }

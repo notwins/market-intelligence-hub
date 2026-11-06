@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261106T200000Z",
+  "as_of": "2026-11-06T20:00:00Z",
+  "edition_sha256": "8eb9b54107377c570b598297719cf76ff977ce9d3b4406e22076c521fe6ef9a9",
+  "reviewed_at": "2026-11-06T20:03:43.240366+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "Coverage correction: protesters entered Amsterdam data-center construction site",
+      "item_sha256": "dd0136712ff448cada5992866952cc8c36e8c66181a2647f69c2e09511cd7132",
+      "scope": "company",
+      "reason": "Source-attributed company-specific development. Original issuer evidence or Reuters search article inspected, timestamps checked, facts separated from analysis. Microsoft prior-window omission explicitly corrected. Public-safe original summary only."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "NVIDIA reports wider adoption of open-source wireless research tools",
+      "item_sha256": "033a55e408a0c04f156c46d06777bde8640025bf0c36d9dadb4f1382a9cc4e60",
+      "scope": "company",
+      "reason": "Source-attributed company-specific development. Original issuer evidence or Reuters search article inspected, timestamps checked, facts separated from analysis. Microsoft prior-window omission explicitly corrected. Public-safe original summary only."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 1,
+      "headline": "Shared risk context: AI stress persists despite stock rebound",
+      "item_sha256": "0cc563bfb6df9ce3128d9344c0fd9f96e02a63ca2d380c9461b4439fc7c458db",
+      "scope": "market_context",
+      "reason": "Shared reported AI financing-risk context, not an issuer financial development. Source levels and limits explicitly attributed; exclude from company research history."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Meta introduces customizable spaces in Muse",
+      "item_sha256": "47d1e36acb73e4991f8ed11d45ca8e268634d50c1ab692f8e6d4ba17de8e32f4",
+      "scope": "company",
+      "reason": "Source-attributed company-specific development. Original issuer evidence or Reuters search article inspected, timestamps checked, facts separated from analysis. Microsoft prior-window omission explicitly corrected. Public-safe original summary only."
+    }
+  ]
+}
