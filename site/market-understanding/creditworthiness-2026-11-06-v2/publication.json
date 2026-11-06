@@ -1,0 +1,20 @@
+{
+  "title": "Creditworthiness \u00b7 corrected teaching edition",
+  "publication_date": "2026-11-06",
+  "as_of": "2026-11-06",
+  "edition": "Reviewed public edition \u00b7 6 November 2026",
+  "html_sha256": "b4745d08c51b69aab286554cc6e4647877c1342468472fbfa88eeb1ddff172b3",
+  "files": [
+    {
+      "path": "Creditworthiness_Research_2026-11-06.pdf",
+      "bytes": 372674,
+      "sha256": "eb8792e03811df3541aa8b604e34293903c4c446e4aa5f3fa4cc00376b796169"
+    },
+    {
+      "path": "Creditworthiness_Model_2026-11-06.xlsx",
+      "bytes": 83758,
+      "sha256": "2f5df7af57e3175f56f1f588bb785b28fa09ba96521e53281ce0497d3ebd99cd"
+    }
+  ],
+  "earlier_edition": "/market-intelligence-hub/market-understanding/creditworthiness-2026-11-05/"
+}

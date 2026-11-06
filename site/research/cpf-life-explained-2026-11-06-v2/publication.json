@@ -1,0 +1,14 @@
+{
+  "title": "CPF LIFE explained \u00b7 V2 public model",
+  "publication_date": "2026-11-06",
+  "as_of": "2026-11-06",
+  "html_sha256": "83c613b55f63805640e9cb09eb550521e47b42262e937dee03f00b3b98f4a6fc",
+  "files": [
+    {
+      "path": "CPF_LIFE_Model_Data_public_v2_2026-11-06.json",
+      "bytes": 113441,
+      "sha256": "085331807e94e807851c23486c67e3f4255c5fa18a2777bfc384e02b67b590cb"
+    }
+  ],
+  "review": "Private client/design-source metadata removed. Official source checks and independently recomputed monthly cashflow and IRR calculations passed. Hypothetical model, not a CPF payout quote. Original PDF and authoring archive not published."
+}
