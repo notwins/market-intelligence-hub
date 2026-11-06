@@ -1,0 +1,24 @@
+{
+  "title": "The AI selloff hit suppliers hardest",
+  "publication_date": "2026-11-06",
+  "category": "Original Hub research",
+  "content_type": "Dated public market research and original analysis",
+  "as_of": "5 November 2026 US close and 6 November early Asian trading",
+  "html_sha256": "5cd41923ae29716b93f4a8ffcd9a771f6bf7496a332db9d870f9711471603bfb",
+  "sections": 6,
+  "sources": 17,
+  "charts": "Original CSS charts and vector PDF charts; no photographs or screenshots",
+  "scope": "Public sources only. No client names, actual client portfolio records, private links or internal meeting notes. Not personalised investment advice.",
+  "audit_changes": [
+    "Corrected gold intraday timing to 5 November trading.",
+    "Replaced inaccessible stock-price citation with independently read public sources.",
+    "Retained four corroborated sector price indices; omitted two unconfirmed observations and dependent spread calculation."
+  ],
+  "files": [
+    {
+      "path": "AI_Selloff_2026-11-06.pdf",
+      "bytes": 173949,
+      "sha256": "c0758d697b5cf5ae36856ca25c1db2f18f6e4b550c14934db70ec800408b769c"
+    }
+  ]
+}
