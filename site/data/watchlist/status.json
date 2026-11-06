@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-06T12:13:05.871334+00:00",
-  "message": "06 Nov 20:00 SGT watchlist edition published by this scheduled execution. Exact-commit Pages deployment, live edition ID and immutable full-report SHA-256 verified. All 12 saved 5 Nov USD closes and 72 adjusted baselines freshly checked. One new Reuters chip-sector premarket update is included; news coverage is partial. Apple late-observed filing metadata qualifies the prior feed observation. This proves this execution, not future runs or separate-chat delivery.",
+  "checked_at": "2026-11-06T16:22:04.785005+00:00",
+  "message": "07 Nov 00:00 SGT watchlist edition published by this scheduled execution. Exact-commit successful Pages deployment, live edition ID and immutable report SHA-256 verified. Twelve completed 5 Nov USD closes and 72 adjusted-close baselines rechecked. Apple and Amazon developments, a late-observed Alphabet holdings correction, and separately labelled policy/market context included. News access is partial. This proves this execution, not future runs or separate-chat delivery.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,12 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "3b5c90c917accabbb26a53713edfddbde60bcb1c",
-    "pages_run_id": 42215582441,
-    "edition_id": "watchlist-20261106T120000Z",
-    "report_sha256": "a1b7585d38a196252a995a6744fddbea9dcb5c0d7fc2e11ab6f23a541409e3f0",
-    "verified_at": "2026-11-06T12:13:05.871334+00:00",
-    "scheduled_for": "2026-11-06T12:00:00Z",
+    "commit": "177d3eb5a7854ec4e9e0541aad798f460d73567b",
+    "pages_run_id": 42250898696,
+    "edition_id": "watchlist-20261106T160000Z",
+    "report_sha256": "90a26fea7c92158d3061175c1fd08900494fef641998ebe6b05962ff24fc6836",
+    "verified_at": "2026-11-06T16:22:04.785005+00:00",
+    "scheduled_for": "2026-11-06T16:00:00Z",
     "execution_kind": "scheduled_run_cloud"
   },
   "separate_A_chat_delivery_verified": false,
@@ -143,6 +143,18 @@
       "verified_at": "2026-11-06T08:18:28.532898+00:00",
       "scheduled_for": "2026-11-06T08:00:00Z",
       "execution_kind": "scheduled_run_cloud"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "3b5c90c917accabbb26a53713edfddbde60bcb1c",
+      "pages_run_id": 42215582441,
+      "edition_id": "watchlist-20261106T120000Z",
+      "report_sha256": "a1b7585d38a196252a995a6744fddbea9dcb5c0d7fc2e11ab6f23a541409e3f0",
+      "verified_at": "2026-11-06T12:13:05.871334+00:00",
+      "scheduled_for": "2026-11-06T12:00:00Z",
+      "execution_kind": "scheduled_run_cloud"
     }
   ],
   "recovered_attempts": [
@@ -192,9 +204,11 @@
     "basis": "USD completed regular-session observations; adjusted-close cumulative returns",
     "required_prices_verified": 12,
     "adjusted_baselines_verified": 72,
-    "new_company_research_items": 0,
+    "new_company_research_items": 2,
     "shared_market_context_items": 1,
-    "source_price_timestamps": "Yahoo regularMarketTime metadata freshly verified after the fixed cutoff; all underlying quote observations precede cutoff and represent the completed US session, not live.",
-    "source_limits": "Reuters search text checked; direct page inaccessible. Eleven SEC feeds checked with no in-window filings. Amazon SEC and Micron IR prior403 not retried. Apple FWP metadata accepted at 02:54:06 UTC was absent from prior feed; document inaccessible and substantive content unverified."
+    "source_price_timestamps": "Historical daily bars freshly rechecked. Exact 5 Nov vendor quote times retained from preserved earlier raw evidence and matched to fresh closes; current 6 Nov intraday metadata was after cutoff and excluded.",
+    "source_limits": "Reuters article text retrieved through search with limited direct-page access. Ten accessible SEC feeds had no in-window filings; Meta filed duplicate financing terms. Amazon SEC and Micron IR prior HTTP 403 not retried. Alphabet holding correction verified against original SEC 13F. Post-cutoff NVIDIA blog excluded.",
+    "late_observed_company_corrections": 1,
+    "price_context_items": 1
   }
 }
