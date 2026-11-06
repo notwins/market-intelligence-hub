@@ -132,6 +132,10 @@ jobs:
         with:
           name: pending-publisher-patch
           path: pending-publisher.patch
+      - name: Append legal and disclosure footer to every HTML page
+        run: |
+          node scripts/inject_legal_footer.cjs
+          node scripts/test_legal_footer.cjs
       - uses: actions/upload-pages-artifact@v4
         with:
           path: site
