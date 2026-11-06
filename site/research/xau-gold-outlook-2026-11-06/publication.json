@@ -1,0 +1,31 @@
+{
+  "title": "Who is buying gold? Central-bank buyers, sellers and SGD returns",
+  "as_of": "2026-11-06",
+  "publication_date": "2026-11-06",
+  "edition": "Research edition · 6 November 2026",
+  "html_sha256": "0c44fe79d33c43637056a88e21c25b6bf6a1f0228343478986325916ad34c7fd",
+  "files": [
+    {
+      "path": "XAU-Executive-Briefing.pptx",
+      "title": "XAU Executive Briefing",
+      "bytes": 45761,
+      "sha256": "42b7387ca2faff346938efda99b13bcb2e3768ab97339000e9a75965775c5ca5"
+    },
+    {
+      "path": "XAU-Research-Report.pdf",
+      "title": "XAU Research Report",
+      "bytes": 149337,
+      "sha256": "5ee10d3d0e5235d9a794c3a2bdebdf6a6c678a501d8cbda81ae3f72eba4503a6"
+    },
+    {
+      "path": "XAU-Visual-Story.pptx",
+      "title": "XAU Visual Story",
+      "bytes": 45394,
+      "sha256": "b2b1d9dfb8e4e653574458e8a3097c4bd663c6535d62ef28c71681404179afac"
+    }
+  ],
+  "pdf_pages": 24,
+  "slides_per_deck": 5,
+  "sections": 16,
+  "publication_note": "Original Market Intelligence Hub synthesis and charts. Public institutional source links are retained. No third-party source PDFs, private client information, personal byline or decorative image assets are hosted. Earlier gold research remains available unchanged."
+}
