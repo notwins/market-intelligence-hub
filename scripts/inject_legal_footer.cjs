@@ -1,14 +1,38 @@
 'use strict';
-const fs=require('node:fs'),path=require('node:path');
-const root=path.resolve(__dirname,'../site');
-const marker='<!-- MIH_LEGAL_FOOTER_V1 -->';
-const footer="<!-- MIH_LEGAL_FOOTER_V1 -->\n<footer class=\"mih-legal-footer\" role=\"contentinfo\" style=\"display:block!important;position:relative!important;z-index:1;clear:both;box-sizing:border-box;width:100%;max-width:none;margin:36px 0 0;padding:22px 16px 26px;background:#f8fafc;color:#334155;border-top:1px solid #cbd5e1;text-align:center;font:14px/1.65 system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif\">\n<div style=\"max-width:1080px;margin:0 auto\"><p style=\"margin:0 0 11px;font-size:14px;color:#334155\">Market Intelligence Hub · Independent educational research · Not personalised financial advice. Market data and simulations may be delayed, hypothetical or incomplete.</p>\n<nav aria-label=\"Legal and disclosure information\" style=\"display:flex;flex-wrap:wrap;justify-content:center;gap:7px 17px\">\n<a style=\"color:#155e75;font-weight:600;text-decoration:underline;text-underline-offset:3px\" href=\"https://notwins.github.io/market-intelligence-hub/legal/index.html\">Legal & transparency</a>\n<a style=\"color:#155e75\" href=\"https://notwins.github.io/market-intelligence-hub/legal/disclaimer.html\">Disclaimer</a>\n<a style=\"color:#155e75\" href=\"https://notwins.github.io/market-intelligence-hub/legal/privacy.html\">Privacy</a>\n<a style=\"color:#155e75\" href=\"https://notwins.github.io/market-intelligence-hub/legal/terms.html\">Terms</a>\n<a style=\"color:#155e75\" href=\"https://notwins.github.io/market-intelligence-hub/legal/risk-disclosures.html\">Investment risks</a>\n<a style=\"color:#155e75\" href=\"https://notwins.github.io/market-intelligence-hub/legal/editorial-policy.html\">Editorial standards</a>\n</nav></div></footer>";
-function walk(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(d=>{const p=path.join(dir,d.name);return d.isDirectory()?walk(p):d.isFile()&&p.toLowerCase().endsWith('.html')?[p]:[]})}
-let updated=0,unchanged=0,legal=0;
-for(const filename of walk(root)){const rel=path.relative(root,filename).replace(/\\/g,'/');if(rel.startsWith('legal/')){legal++;continue}
-let content=fs.readFileSync(filename,'utf8');if(content.includes(marker)){unchanged++;continue}
-const matches=[...content.matchAll(/<\/body\s*>/gi)],fallbacks=[...content.matchAll(/<\/html\s*>/gi)];if(!matches.length&&!fallbacks.length)throw new Error('Cannot place footer at document end: '+rel);
-const at=matches.length?matches[matches.length-1].index:fallbacks[fallbacks.length-1].index;
-content=content.slice(0,at)+'\n'+footer+'\n'+content.slice(at);
-fs.writeFileSync(filename,content,'utf8');updated++}
-console.log('Legal footer injection: '+updated+' new, '+unchanged+' already tagged, '+legal+' legal policy pages (native footer)');
+const fs = require('node:fs'), path = require('node:path');
+const {walk, protectedHtml} = require('./publication_policy.cjs');
+const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
+const protectedPaths = protectedHtml(root);
+const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
+const links = [
+  ['index.html', 'Legal &amp; transparency'], ['disclaimer.html', 'Disclaimer'],
+  ['privacy.html', 'Privacy'], ['terms.html', 'Terms'],
+  ['risk-disclosures.html', 'Investment risks'], ['editorial-policy.html', 'Editorial standards']
+];
+let updated = 0, unchanged = 0, legal = 0, preserved = 0;
+for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))) {
+  const relative = path.relative(root, filename).split(path.sep).join('/');
+  if (protectedPaths.has(relative)) { preserved++; continue; }
+  if (relative.startsWith('legal/')) { legal++; continue; }
+  let content = fs.readFileSync(filename, 'utf8');
+  if (content.includes(marker)) { unchanged++; continue; }
+  const directory = path.posix.dirname(relative);
+  const legalBase = path.posix.relative(directory, 'legal') + '/';
+  const css = path.posix.relative(directory, 'legal-footer.css');
+  if (!/<\/head\s*>/i.test(content)) throw new Error('Cannot attach footer stylesheet: ' + relative);
+  content = content.replace(/<\/head\s*>/i, '<link rel="stylesheet" href="' + css + '"></head>');
+  const footer = marker + '\n<footer class="mih-legal-footer" role="contentinfo"><div>' +
+    '<p>Market Intelligence Hub · Independent educational research · Not personalised financial advice. ' +
+    'Market data and simulations may be delayed, hypothetical or incomplete.</p>' +
+    '<nav aria-label="Legal and disclosure information">' +
+    links.map(([file, title]) => '<a href="' + legalBase + file + '">' + title + '</a>').join(' ') +
+    '</nav></div></footer>';
+  const bodies = [...content.matchAll(/<\/body\s*>/gi)], endings = [...content.matchAll(/<\/html\s*>/gi)];
+  if (!bodies.length && !endings.length) throw new Error('Cannot place footer at document end: ' + relative);
+  const at = bodies.length ? bodies.at(-1).index : endings.at(-1).index;
+  content = content.slice(0, at) + '\n' + footer + '\n' + content.slice(at);
+  fs.writeFileSync(filename, content, 'utf8');
+  updated++;
+}
+console.log('Legal footer injection: ' + updated + ' new, ' + unchanged + ' already tagged, ' +
+  legal + ' legal policy pages (native footer), ' + preserved + ' protected originals unchanged');

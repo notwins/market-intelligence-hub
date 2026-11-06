@@ -132,13 +132,20 @@ jobs:
         with:
           name: pending-publisher-patch
           path: pending-publisher.patch
-      - name: Append legal and disclosure footer to every HTML page
+      - name: Stage Pages without changing protected original bytes
         run: |
-          node scripts/inject_legal_footer.cjs
-          node scripts/test_legal_footer.cjs
+          python3 scripts/build_pages_artifact.py --output "$RUNNER_TEMP/mih-pages"
+      - name: Validate final Pages artifact after all transformations
+        run: |
+          python3 scripts/validate_pages_artifact.py --artifact-root "$RUNNER_TEMP/mih-pages" --report "$RUNNER_TEMP/pages-integrity-audit.json"
+      - name: Retain final artifact integrity audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-integrity-audit
+          path: ${{ runner.temp }}/pages-integrity-audit.json
       - uses: actions/upload-pages-artifact@v4
         with:
-          path: site
+          path: ${{ runner.temp }}/mih-pages/site
   deploy:
     needs: build
     runs-on: ubuntu-latest

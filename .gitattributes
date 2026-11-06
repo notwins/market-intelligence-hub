@@ -3,3 +3,7 @@ site/data/watchlist/** -text
 
 # Hashed Treasury shards must retain their exact committed bytes on Windows.
 site/data/ust-curves-history/** -text
+
+# Published research, manifests and companion bytes are also hash-bound.
+site/research/** -text
+site/market-understanding/** -text

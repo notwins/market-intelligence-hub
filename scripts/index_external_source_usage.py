@@ -11,16 +11,25 @@ from extract_recent_sources import PublicAnchorParser,canonical_url,clean_title,
 
 class Page(PublicAnchorParser):
  def __init__(self):
-  super().__init__();self.in_title=False;self.title_parts=[];self.json_parts=None;self.payloads=[]
+  super().__init__();self.in_title=False;self.title_parts=[];self.json_parts=None;self.payloads=[];self.legal_footer_depth=0
  def handle_starttag(self,tag,attrs):
+  # The generated legal navigation is presentation chrome, not research evidence.
+  # Ignore it for source-catalogue statistics only; integrity audits hash raw bytes.
+  if tag=='footer' and (self.legal_footer_depth or 'mih-legal-footer' in dict(attrs).get('class','').split()):
+   self.legal_footer_depth+=1;return
+  if self.legal_footer_depth:return
   super().handle_starttag(tag,attrs)
   if tag=='title':self.in_title=True
   if tag=='script' and dict(attrs).get('type')=='application/json':self.json_parts=[]
  def handle_data(self,data):
+  if self.legal_footer_depth:return
   super().handle_data(data)
   if self.in_title:self.title_parts.append(data)
   if self.json_parts is not None:self.json_parts.append(data)
  def handle_endtag(self,tag):
+  if self.legal_footer_depth:
+   if tag=='footer':self.legal_footer_depth-=1
+   return
   super().handle_endtag(tag)
   if tag=='title':self.in_title=False
   if tag=='script' and self.json_parts is not None:
