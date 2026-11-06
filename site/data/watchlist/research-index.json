@@ -938,6 +938,35 @@
           "item_sha256": "267e1512335f42885f03f0f1d65501d77aa2b52e68912b3ec39df86c3862eaf7"
         }
       ]
+    },
+    "watchlist-20261106T080000Z": {
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "Reuters reports NVIDIA funding for additional packaging capacity",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Reuters reports NVIDIA funding for additional packaging capacity\",[\"Reuters, citing an unnamed industry executive, reports NVIDIA is providing billions of dollars to expand CoWoS packaging capacity at ASE’s SPIL unit.\"],\"If realized, the investment could ease a production bottleneck while adding capacity-execution risk.\",\"NVIDIA did not respond; ASE declined to discuss customer rumors. The amount and financing terms remain unconfirmed.\",\"Company confirmation, financing terms and added capacity.\",[[\"Reuters · 6 November 05:52:03 UTC · article text available through search\",\"https://www.reuters.com/world/asia-pacific/ai-boom-turns-chip-packaging-into-next-battleground-semiconductors-2026-11-06/\"]]]",
+          "item_sha256": "1bfc43cd3beed26514211c2a0c4e49845acea0c6f561ce8ce3ff6f14c62f05da"
+        }
+      ],
+      "TSLA": [
+        {
+          "index": 0,
+          "headline": "Tesla plans Texas Cybertruck wind-down to expand Cybercab output",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Tesla plans Texas Cybertruck wind-down to expand Cybercab output\",[\"Reuters reports Musk said Texas Cybertruck production will wind down around mid-2027 to make room for more Cybercab output.\"],\"The plan shifts factory capacity toward the robotaxi strategy.\",\"Reuters says relocation versus ending Cybertruck production entirely remains unclear. Tesla had not responded to its request for comment.\",\"Detailed production plans and Cybercab ramp execution.\",[[\"Reuters · 6 November 07:04:15 UTC · article text available through search\",\"https://www.reuters.com/business/autos-transportation/tesla-wind-down-cybertruck-production-texas-gigafactory-next-year-musk-says-2026-11-06/\"]]]",
+          "item_sha256": "18909075b4b14673335a46446a71b1d0dbea2000c5c61dc4117a8ab2f97df2bf"
+        }
+      ],
+      "TSM": [
+        {
+          "index": 0,
+          "headline": "TSMC Taiwan shares hit their lower limit at the open",
+          "scope": "market_context",
+          "content_key": "[\"2026-11-06\",\"TSMC Taiwan shares hit their lower limit at the open\",[\"Reuters reported TSMC’s Taiwan-listed shares hit their daily lower limit at the Taipei open on November 6 amid the regional technology selloff.\"],\"This is overnight sentiment context for TSM, not a new US ADR price.\",\"Taiwan shares and the US ADR trade in different sessions and currencies; no matching ADR percentage move is implied.\",\"The next US ADR session and company disclosures.\",[[\"Reuters Morning Bid · 6 November 05:37:57 UTC · substantial opening excerpt available through search\",\"https://www.reuters.com/world/china/global-markets-view-europe-2026-11-06/\"]]]",
+          "item_sha256": "f1c975d1eb7b1d0bd9eaabfb318f5fe184d682ee6b7d4552611bb9740a18e42f"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -1042,6 +1071,12 @@
       "reviewed_at": "2026-11-06T00:09:30Z",
       "edition_sha256": "0a2cb7fa19efeef6db4a366445fb0a4ac11eaf50fc67d856f20c4f74bc3a5afd",
       "path": "data/watchlist/reviews/watchlist-20261106T000000Z.json"
+    },
+    "watchlist-20261106T080000Z": {
+      "as_of": "2026-11-06T08:00:00Z",
+      "reviewed_at": "2026-11-06T08:09:22.972741+00:00",
+      "edition_sha256": "690295507cbfe0b3ce50c4487c50d0c31e229d9d350ff7f6224024e9ae763103",
+      "path": "data/watchlist/reviews/watchlist-20261106T080000Z.json"
     }
   }
 }

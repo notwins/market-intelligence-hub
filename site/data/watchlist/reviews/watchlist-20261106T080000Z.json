@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261106T080000Z",
+  "as_of": "2026-11-06T08:00:00Z",
+  "edition_sha256": "690295507cbfe0b3ce50c4487c50d0c31e229d9d350ff7f6224024e9ae763103",
+  "reviewed_at": "2026-11-06T08:09:22.972741+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "Reuters reports NVIDIA funding for additional packaging capacity",
+      "item_sha256": "1bfc43cd3beed26514211c2a0c4e49845acea0c6f561ce8ce3ff6f14c62f05da",
+      "scope": "company",
+      "reason": "New issuer-specific Reuters reporting inside the cutoff, canonical event absent from prior editions. Actual source text and UTC timestamp checked; anonymous-source or reported-plan uncertainty retained, with analysis separate. No private/client data or restricted reproduction."
+    },
+    {
+      "ticker": "TSLA",
+      "index": 0,
+      "headline": "Tesla plans Texas Cybertruck wind-down to expand Cybercab output",
+      "item_sha256": "18909075b4b14673335a46446a71b1d0dbea2000c5c61dc4117a8ab2f97df2bf",
+      "scope": "company",
+      "reason": "New issuer-specific Reuters reporting inside the cutoff, canonical event absent from prior editions. Actual source text and UTC timestamp checked; anonymous-source or reported-plan uncertainty retained, with analysis separate. No private/client data or restricted reproduction."
+    },
+    {
+      "ticker": "TSM",
+      "index": 0,
+      "headline": "TSMC Taiwan shares hit their lower limit at the open",
+      "item_sha256": "f1c975d1eb7b1d0bd9eaabfb318f5fe184d682ee6b7d4552611bb9740a18e42f",
+      "scope": "market_context",
+      "reason": "Observed Reuters market-column fact about Taiwan trading, explicitly separated from US ADR prices. Not a new issuer announcement. Source excerpt, timestamp, instrument distinction and copyright budget checked."
+    }
+  ]
+}
