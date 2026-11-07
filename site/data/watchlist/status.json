@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-07T08:13:02.743851+00:00",
-  "message": "07 Nov 16:00 SGT watchlist edition published by this scheduled execution. Exact-commit successful Pages deployment, live edition ID and immutable report SHA-256 verified. Twelve completed 6 Nov USD closes and 72 adjusted-close baselines freshly checked, all unchanged. One earlier Microsoft item added as a labelled late-observed coverage correction; no distinct new development verified in the checked window. News access is partial. This proves this execution, not future runs or separate-chat delivery.",
+  "checked_at": "2026-11-07T12:19:47.177095+00:00",
+  "message": "07 Nov 20:00 SGT watchlist edition published by this scheduled execution. Exact-commit successful Pages deployment, live edition ID and immutable report SHA-256 verified. Twelve completed 6 Nov USD closes and 72 adjusted-close baselines freshly checked, all unchanged. No distinct new company research verified in the checked window; prior dated research retained. Berkshire results are after cutoff and excluded. News access is partial. This proves this execution, not future runs or separate-chat delivery.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,12 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "811d66287387ebce3fbc51fb9d44f67b764c6336",
-    "pages_run_id": 42354359500,
-    "edition_id": "watchlist-20261107T080000Z",
-    "report_sha256": "d38fdce4f0be5667b4f8210d059bc5356c8aaf92e18d0d57311f22d4002731fb",
-    "verified_at": "2026-11-07T08:13:02.743851+00:00",
-    "scheduled_for": "2026-11-07T08:00:00Z",
+    "commit": "7923d339bcd24f557de0afaa990ba3bdd2c4372c",
+    "pages_run_id": 42371425864,
+    "edition_id": "watchlist-20261107T120000Z",
+    "report_sha256": "6246581794963de93eb70490e2a365a72a41d5ddeb91b60dc8c86b8de5cc38b4",
+    "verified_at": "2026-11-07T12:19:47.177095+00:00",
+    "scheduled_for": "2026-11-07T12:00:00Z",
     "execution_kind": "scheduled_run_cloud"
   },
   "separate_A_chat_delivery_verified": false,
@@ -203,6 +203,18 @@
       "verified_at": "2026-11-07T04:06:57.578511+00:00",
       "scheduled_for": "2026-11-07T04:00:00Z",
       "execution_kind": "scheduled_run_cloud"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "811d66287387ebce3fbc51fb9d44f67b764c6336",
+      "pages_run_id": 42354359500,
+      "edition_id": "watchlist-20261107T080000Z",
+      "report_sha256": "d38fdce4f0be5667b4f8210d059bc5356c8aaf92e18d0d57311f22d4002731fb",
+      "verified_at": "2026-11-07T08:13:02.743851+00:00",
+      "scheduled_for": "2026-11-07T08:00:00Z",
+      "execution_kind": "scheduled_run_cloud"
     }
   ],
   "recovered_attempts": [
@@ -252,11 +264,11 @@
     "basis": "USD completed regular-session observations; adjusted-close cumulative returns",
     "required_prices_verified": 12,
     "adjusted_baselines_verified": 72,
-    "new_company_research_items": 1,
+    "new_company_research_items": 0,
     "shared_market_context_items": 0,
-    "source_price_timestamps": "Fresh daily series retrieved 7 Nov 08:05:27–08:06:13 UTC. Exact 6 Nov regularMarketTime quote metadata matches completed closes: 21:00:00–21:00:02 UTC for eleven tickers; BRK.B 21:03:23 UTC. Postmarket excluded.",
-    "source_limits": "Reuters search coverage is partial; direct Microsoft article open unavailable. Ten issuer listings and eleven SEC feeds directly checked. Amazon SEC and Micron IR prior HTTP 403 respected; Alphabet IR remains inaccessible. Microsoft correction is earlier qualified reporting, with historical Oracle issuer context only. Quiet-name coverage is not exhaustive.",
-    "late_observed_company_corrections": 1,
+    "source_price_timestamps": "Fresh daily series retrieved 7 Nov 12:06:24–12:06:31 UTC. Exact 6 Nov regularMarketTime quote metadata matches completed closes: 21:00:00–21:00:02 UTC for eleven tickers; BRK.B 21:03:23 UTC. Postmarket excluded.",
+    "source_limits": "Reuters search coverage is partial. Ten issuer listings and eleven SEC feeds directly checked. Amazon SEC and Micron IR prior HTTP 403 respected; Alphabet IR remains inaccessible. No distinct eligible new company development verified. Quiet-name coverage is not exhaustive.",
+    "late_observed_company_corrections": 0,
     "price_context_items": 0
   }
 }
