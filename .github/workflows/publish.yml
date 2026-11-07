@@ -34,6 +34,7 @@ jobs:
       - name: Test publisher validation and archive retention
         run: |
           python3 scripts/build_external_sources.py
+          python3 scripts/validate_research_contracts.py
           python3 -m unittest discover -s scripts -p 'test_*.py'
       - name: Audit V3 source data and comparison logic
         run: |
@@ -93,6 +94,7 @@ jobs:
       - name: Revalidate reconciled source and rebuild deployment catalogue
         run: |
           python3 scripts/build_external_sources.py
+          python3 scripts/validate_research_contracts.py
           python3 -m unittest discover -s scripts -p 'test_*.py'
           node scripts/test_v3.cjs
           node scripts/test_fed_history_ui.cjs

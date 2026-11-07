@@ -6,6 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 from audit_pages_artifact import audit, ROOT
+from validate_research_contracts import validate_site
 
 
 def validate(artifact_root, report):
@@ -22,7 +23,9 @@ def validate(artifact_root, report):
         checks.append('test_legal_footer.cjs')
     for name in checks:
         subprocess.run(['node', 'scripts/' + name], cwd=artifact_root, check=True)
+    research_contracts = validate_site(artifact_root/'site')
     result = audit(ROOT/'site', artifact_root/'site')
+    result['research_contracts'] = research_contracts
     result['source_git_commit'] = subprocess.check_output(
         ['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     result['final_validation'] = {'python': "unittest discover -s scripts -p test_*.py", 'javascript': checks}

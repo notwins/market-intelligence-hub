@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="mih-content-type" content="research"><title>[REPLACE: report title]</title>
+<style>body{margin:auto;padding:1.5rem;max-width:70rem;background:#FEFDFB;color:#222D31;font:1.1rem/1.65 system-ui}main{padding:1.5rem;background:#FFFFFF;border:1px solid #D8E9EE;border-radius:1rem}aside{padding:1rem;background:#F4F5F1}a{color:#007190}table{width:100%}</style></head>
+<body><main><h1 id="report-title">[REPLACE: conclusion-led title]</h1><p id="cutoff">[REPLACE: exact ISO 8601 research cutoff with timezone]</p>
+<ul><li id="takeaway-1">[REPLACE: evidence-supported key takeaway; 1–5 total]</li></ul>
+<section><h2>Evidence and mechanism</h2><p>[REPLACE: sourced facts, calculations and clearly labelled independent analysis]</p></section>
+<aside><h2>Teach me</h2><p>[REPLACE: plain-English explanation and relevant practical example]</p></aside>
+<section><h2>Risks and counterarguments</h2><p id="limitations">[REPLACE: methodology, limitations, opposing evidence and what changes the view]</p></section>
+<section><h2>Sources and dates</h2><a id="report-source" href="https://example.invalid/replace">[REPLACE: original source and publication/data dates]</a></section>
+</main>
+<script id="mih-research-contract" type="application/json">
+{
+  "version": 3,
+  "theme": "03",
+  "route": "route-008",
+  "route_rationale": "[REPLACE with the approved route that fits the analytical question]",
+  "presentation_tokens": {
+    "canvas": "#FEFDFB",
+    "card": "#FFFFFF",
+    "panel": "#F4F5F1",
+    "focusPanel": "#EBF4F6",
+    "border": "#D8E9EE",
+    "ink": "#222D31",
+    "secondaryInk": "#45535A",
+    "chartOriginal": "#007190",
+    "chartRecommended": "#007190"
+  },
+  "cutoff": "[REPLACE with ISO 8601 date/time and timezone]",
+  "cutoff_id": "cutoff",
+  "title_id": "report-title",
+  "takeaways": [
+    "takeaway-1"
+  ],
+  "source_ids": [
+    "report-source"
+  ],
+  "limitations_id": "limitations",
+  "semantic_tags": [],
+  "visuals": [],
+  "no_visuals_reason": "[REPLACE; justify no visual, or register every chart/table/diagram]",
+  "cards": [],
+  "no_cards_reason": "[REPLACE; justify no cards, or register them]",
+  "editorial_review": {
+    "reviewer": "[REPLACE after review]",
+    "evidence_checked": false,
+    "semantic_context_checked": false,
+    "accessibility_checked": false
+  }
+}
+</script>
+</body></html>

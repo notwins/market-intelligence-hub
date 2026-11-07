@@ -1,0 +1,120 @@
+THE COLOUR ATLAS
+10 SANZO WADA-INSPIRED PALETTES | 5 CORE COLOURS × 3 SHADES = 150 HEX SWATCHES
+
+Custom palette expansion from the preceding 10-set collection.
+Light = 55% blend toward #FFFFFF; Original = the core colour; Dark = 35% blend toward #000000.
+RGB channel values are rounded to the nearest integer (half upwards).
+These are inspired-by arrangements, not historical 15-colour schemes published by Sanzo Wada.
+
+01. JAPANESE HERITAGE
+Mood: Warm · Traditional · Elegant
+Suggested use: Heritage branding and refined editorial layouts
+Core     Light       Original    Dark
+ 1       #F0A99E     #DD4027     #902A19
+ 2       #FFF8DB     #FFEFAE     #A69B71
+ 3       #E5D7BE     #C5A56E     #806B48
+ 4       #B2BFC1     #547076     #37494D
+ 5       #9DA5AD     #263849     #19242F
+
+02. BOLD BOTANICAL
+Mood: Earthy · Botanical · Dramatic
+Suggested use: Fashion, botanical illustrations and statement graphics
+Core     Light       Original    Dark
+ 1       #FAC5CF     #F37F94     #9E5360
+ 2       #DBB19C     #AE5224     #713517
+ 3       #98C0AB     #1A7444     #114B2C
+ 4       #A2A4A5     #303438     #1F2224
+ 5       #E9DBB2     #CDAE53     #857136
+
+03. EARTH & SLATE
+Mood: Professional · Calm · Organic
+Suggested use: Financial research dashboards, tables and report cards
+Core     Light       Original    Dark
+ 1       #E0BF9D     #BB7125     #7A4918
+ 2       #F6EBD5     #EBD3A2     #998969
+ 3       #BCBFA9     #6B7140     #46492A
+ 4       #A4ABAE     #34454C     #222D31
+ 5       #8CBFCD     #007190     #00495E
+
+04. MUTED RETRO
+Mood: Vintage · Subtle · Balanced
+Suggested use: Lifestyle branding and editorial layouts
+Core     Light       Original    Dark
+ 1       #DECECE     #B59392     #76605F
+ 2       #E5B89E     #C56127     #803F19
+ 3       #BDC5C2     #6D7E77     #47524D
+ 4       #8CBFCD     #007190     #00495E
+ 5       #ECE6DA     #D5C7AC     #8A8170
+
+05. DEEP VINTAGE
+Mood: Rich · Moody · Luxurious
+Suggested use: Dark mode interfaces and premium presentations
+Core     Light       Original    Dark
+ 1       #D7A0A5     #A62C37     #6C1D24
+ 2       #C6CEA5     #819238     #545F24
+ 3       #94A4AF     #12354E     #0C2233
+ 4       #A4ABAE     #34454C     #222D31
+ 5       #D9C8B2     #AA8454     #6F5637
+
+06. SOFT TERRACOTTA
+Mood: Warm · Gentle · Pastel
+Suggested use: Soft website themes and interior inspiration
+Core     Light       Original    Dark
+ 1       #FCDEE0     #F8B6BA     #A17679
+ 2       #D8AA9C     #A84222     #6D2B16
+ 3       #FBF6E4     #F5ECC2     #9F997E
+ 4       #FEE5C5     #FDC57E     #A48052
+ 5       #CAD2C2     #8A9B78     #5A654E
+
+07. COLOURFUL MODERNISM
+Mood: Energetic · Graphic · Bold
+Suggested use: Posters, charts and creative graphics
+Core     Light       Original    Dark
+ 1       #E0BF9D     #BB7125     #7A4918
+ 2       #FFF08C     #FFDD00     #A69000
+ 3       #8CD0CC     #00978D     #00625C
+ 4       #99AAC9     #1C4286     #122B57
+ 5       #EBAAA3     #D34232     #892B21
+
+08. LAVENDER & ROSE
+Mood: Artistic · Soft · Refined
+Suggested use: Illustrations, fashion and creative branding
+Core     Light       Original    Dark
+ 1       #FAC5CF     #F37F94     #9E5360
+ 2       #E1CAA0     #BC892B     #7A591C
+ 3       #DEDCED     #B5B1D8     #76738C
+ 4       #BFAAB3     #704357     #492C39
+ 5       #B3C5C9     #577F88     #395358
+
+09. RUST & OCHRE
+Mood: Timeless · Earthy · Classic
+Suggested use: Luxury editorial and classic dashboard designs
+Core     Light       Original    Dark
+ 1       #C3A39E     #793327     #4F2119
+ 2       #E4DBCE     #C2AE93     #7E7160
+ 3       #EDDDA8     #D6B43E     #8B7528
+ 4       #B2BFC1     #547076     #37494D
+ 5       #AFB1C5     #4D527D     #323551
+
+10. FRESH JAPANESE MODERN
+Mood: Bright · Fresh · Contemporary
+Suggested use: Infographics, UI graphics and fresh web themes
+Core     Light       Original    Dark
+ 1       #E7DDB3     #CAB356     #837438
+ 2       #F9B5A2     #F15A30     #9D3B1F
+ 3       #8CDDD2     #00B49B     #007565
+ 4       #E1F3F3     #BCE4E5     #7A9495
+ 5       #9DB3C2     #265777     #19394D
+
+ALL COLOURS (15 HEX per palette, row order light / original / dark):
+
+01. Japanese Heritage: #F0A99E, #DD4027, #902A19, #FFF8DB, #FFEFAE, #A69B71, #E5D7BE, #C5A56E, #806B48, #B2BFC1, #547076, #37494D, #9DA5AD, #263849, #19242F
+02. Bold Botanical: #FAC5CF, #F37F94, #9E5360, #DBB19C, #AE5224, #713517, #98C0AB, #1A7444, #114B2C, #A2A4A5, #303438, #1F2224, #E9DBB2, #CDAE53, #857136
+03. Earth & Slate: #E0BF9D, #BB7125, #7A4918, #F6EBD5, #EBD3A2, #998969, #BCBFA9, #6B7140, #46492A, #A4ABAE, #34454C, #222D31, #8CBFCD, #007190, #00495E
+04. Muted Retro: #DECECE, #B59392, #76605F, #E5B89E, #C56127, #803F19, #BDC5C2, #6D7E77, #47524D, #8CBFCD, #007190, #00495E, #ECE6DA, #D5C7AC, #8A8170
+05. Deep Vintage: #D7A0A5, #A62C37, #6C1D24, #C6CEA5, #819238, #545F24, #94A4AF, #12354E, #0C2233, #A4ABAE, #34454C, #222D31, #D9C8B2, #AA8454, #6F5637
+06. Soft Terracotta: #FCDEE0, #F8B6BA, #A17679, #D8AA9C, #A84222, #6D2B16, #FBF6E4, #F5ECC2, #9F997E, #FEE5C5, #FDC57E, #A48052, #CAD2C2, #8A9B78, #5A654E
+07. Colourful Modernism: #E0BF9D, #BB7125, #7A4918, #FFF08C, #FFDD00, #A69000, #8CD0CC, #00978D, #00625C, #99AAC9, #1C4286, #122B57, #EBAAA3, #D34232, #892B21
+08. Lavender & Rose: #FAC5CF, #F37F94, #9E5360, #E1CAA0, #BC892B, #7A591C, #DEDCED, #B5B1D8, #76738C, #BFAAB3, #704357, #492C39, #B3C5C9, #577F88, #395358
+09. Rust & Ochre: #C3A39E, #793327, #4F2119, #E4DBCE, #C2AE93, #7E7160, #EDDDA8, #D6B43E, #8B7528, #B2BFC1, #547076, #37494D, #AFB1C5, #4D527D, #323551
+10. Fresh Japanese Modern: #E7DDB3, #CAB356, #837438, #F9B5A2, #F15A30, #9D3B1F, #8CDDD2, #00B49B, #007565, #E1F3F3, #BCE4E5, #7A9495, #9DB3C2, #265777, #19394D
