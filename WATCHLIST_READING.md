@@ -13,3 +13,16 @@ The dashboard and new `watchlist-report.html?edition=ID#TICKER` reader are prese
 Validation: 75 Python tests and all non-browser CJS suites passed, including new watchlist reading coverage. Independent financial review checked all seven readers and all 15 original archive/report/call hashes. Managed browser checks passed desktop and 390px phone, 200% global text, horizontal returns, calculation table, meaningful history, internal company routes and anchored reader.
 
 Integration adds the source-verified credit issuance desk, structured search reading, exact company PDF/chart hub links, query composition controls, grouped phone navigation, Settings shortcuts and eleven additional saved credit explanations. Final combined tests are rerun after catalogue generation and browser QA.
+
+## Ticker controls (7 November 2026)
+
+Clickable watchlist tickers use exact Colour & Tagging Standard V1.2 Merged company
+colours, verified against the current master on 7 November. Ocean: AAPL, MSFT,
+GOOGL, AMZN, TSLA. Violet: NVDA, AMD, AVGO, MU, TSM. Magenta: META. Navy: BRK.B.
+Prescribed light/dark text and chip pairs pass 4.5:1 normal-text contrast. A border,
+hover/focus underline and 44px minimum height keep controls identifiable. Unknown
+tickers retain existing link colours, without inferred company assignments.
+
+Only watchlist card ticker headings and their saved-edition reader are changed.
+Destinations, company names, card accents, prices/returns, earnings cards and
+immutable original reports are unchanged. No proposed V3 palette is used.

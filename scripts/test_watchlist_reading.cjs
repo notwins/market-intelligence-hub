@@ -61,3 +61,25 @@ await assert.rejects(()=>w.readEdition('../secret'));await assert.rejects(()=>w.
 const files=['site/data/watchlist/identities.json','site/data/watchlist/company-resources.json','site/data/watchlist/research-index.json','site/watchlist.js','site/watchlist-reader.js'];for(const p of files){const s=fs.readFileSync(p,'utf8');assert(!/libfile_|chatgpt\.com\/(?:c|g)\//.test(s));}
 console.log('PASS concise watchlist reader: 12 verified identities, 72 horizons, meaningful-only company history, shared context once, material risk/number caveats, SGT midnight, immutable original links, safe routing');
 })().catch(e=>{console.error(e);process.exit(1)});
+
+// Exact V1.2 Merged company palette, scoped to clickable watchlist headings.
+const tickerCSS=fs.readFileSync('site/watchlist.css','utf8');
+const tickerPalettes=[
+ [['AAPL','MSFT','GOOGL','AMZN','TSLA'],'#0369A1','#7DD3FC','#F0F9FF','#082F49'],
+ [['NVDA','AMD','AVGO','MU','TSM'],'#6D28D9','#DDD6FE','#F5F3FF','#2E1065'],
+ [['META'],'#86198F','#F0ABFC','#FDF4FF','#4A044E'],
+ [['BRK.B'],'#1E40AF','#BFDBFE','#DBEAFE','#172554']
+];
+const luminance=hex=>hex.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);
+const contrast=(a,b)=>(Math.max(luminance(a),luminance(b))+.05)/(Math.min(luminance(a),luminance(b))+.05);
+for(const [tickers,light,dark,lightChip,darkChip] of tickerPalettes){
+ const declarations=`--ticker-light:${light};--ticker-dark:${dark};--ticker-chip-light:${lightChip};--ticker-chip-dark:${darkChip}`;
+ const rule=tickerCSS.split('\n').find(line=>line.includes(declarations));assert(rule,'Exact approved palette');
+ for(const t of tickers)assert(rule.includes(`.watchlist-card[data-ticker="${t}"]`),'Exact ticker mapping: '+t);
+ assert(contrast(light,lightChip)>=4.5);assert(contrast(dark,darkChip)>=4.5);
+}
+assert.equal((tickerCSS.match(/--ticker-light:/g)||[]).length,4,'No inferred assignments');
+for(const selector of ['.watchlist-card[data-ticker] .watchlist-company h3','.watchlist-scope[data-theme="dark"]','.watchlist-scope[data-theme="system"]','@media(prefers-color-scheme:dark)'])assert(tickerCSS.includes(selector));
+assert(tickerCSS.includes('min-height:44px;max-width:100%'));assert(tickerCSS.includes('border:1px solid currentColor'));
+for(const file of ['v4.html','watchlist-report.html'])assert(fs.readFileSync('site/'+file,'utf8').includes('watchlist.css?v=20261107.ticker1'));
+console.log('PASS exact approved ticker colours: 12 names, light/dark AA contrast, scoped selectors, visible controls and cache version');

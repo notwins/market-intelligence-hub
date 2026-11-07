@@ -17,3 +17,14 @@
 .watchlist-card-head .watchlist-badge{max-width:none;white-space:nowrap;overflow-wrap:normal;font-size:.68em}.watchlist-company:hover{text-decoration:none}.watchlist-source-notes>summary{font-weight:600}
 /* Keep long legal company names and ISINs readable at 200% text on phones. */
 .watchlist-card-head{display:block!important}.watchlist-card-head .watchlist-badge{display:inline-block;margin-top:7px}.watchlist-return{flex-basis:7em;min-width:7em}.watchlist-isin{overflow-wrap:normal;word-break:normal}
+
+/* Watchlist ticker controls only. Colour & Tagging Standard V1.2 Merged.
+   Preserve company mappings; do not derive colours from sectors or returns. */
+.watchlist-card[data-ticker="AAPL"],.watchlist-card[data-ticker="MSFT"],.watchlist-card[data-ticker="GOOGL"],.watchlist-card[data-ticker="AMZN"],.watchlist-card[data-ticker="TSLA"]{--ticker-light:#0369A1;--ticker-dark:#7DD3FC;--ticker-chip-light:#F0F9FF;--ticker-chip-dark:#082F49}
+.watchlist-card[data-ticker="NVDA"],.watchlist-card[data-ticker="AMD"],.watchlist-card[data-ticker="AVGO"],.watchlist-card[data-ticker="MU"],.watchlist-card[data-ticker="TSM"]{--ticker-light:#6D28D9;--ticker-dark:#DDD6FE;--ticker-chip-light:#F5F3FF;--ticker-chip-dark:#2E1065}
+.watchlist-card[data-ticker="META"]{--ticker-light:#86198F;--ticker-dark:#F0ABFC;--ticker-chip-light:#FDF4FF;--ticker-chip-dark:#4A044E}
+.watchlist-card[data-ticker="BRK.B"]{--ticker-light:#1E40AF;--ticker-dark:#BFDBFE;--ticker-chip-light:#DBEAFE;--ticker-chip-dark:#172554}
+.watchlist-card[data-ticker] .watchlist-company h3{display:inline-flex;align-items:center;justify-content:center;min-height:44px;max-width:100%;padding:7px 12px;border:1px solid currentColor;border-radius:10px;color:var(--ticker-light,var(--w-link));background:var(--ticker-chip-light,var(--w-card));font-size:1.1em;letter-spacing:.02em;line-height:1.3;white-space:nowrap;margin-bottom:8px!important}
+.watchlist-card[data-ticker] .watchlist-company:hover h3,.watchlist-card[data-ticker] .watchlist-company:focus-visible h3{text-decoration:underline;text-underline-offset:3px}
+.watchlist-scope[data-theme="dark"] .watchlist-card[data-ticker] .watchlist-company h3{color:var(--ticker-dark,var(--w-link));background:var(--ticker-chip-dark,var(--w-card))}
+@media(prefers-color-scheme:dark){.watchlist-scope[data-theme="system"] .watchlist-card[data-ticker] .watchlist-company h3{color:var(--ticker-dark,var(--w-link));background:var(--ticker-chip-dark,var(--w-card))}}
