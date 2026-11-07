@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261107T160000Z",
-  "as_of": "2026-11-07T16:00:00Z",
-  "generated_at": "2026-11-07T16:08:32.382025+00:00",
-  "title": "12-name watchlist · 08 Nov 2026 (Sun) · 00:00 SGT",
+  "id": "watchlist-20261107T200000Z",
+  "as_of": "2026-11-07T20:00:00Z",
+  "generated_at": "2026-11-07T20:02:27.557350+00:00",
+  "title": "12-name watchlist · 08 Nov 2026 (Sun) · 04:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-07T16:08:32.382025+00:00",
+    "sources_checked_at": "2026-11-07T20:02:27.557350+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "Berkshire released Q3 results: operating earnings fell 5.8% as insurance weakened, while Q3 share repurchases reached $9.6 billion. This is the only distinct new company event verified in the checked window. All 12 November 6 regular-session closes and 72 adjusted-close baselines were freshly verified and remain unchanged. Friday prices predate the Saturday earnings release; no earnings-related price reaction is claimed.",
-  "coverage_note": "Fixed cutoff: 8 November 00:00 SGT (7 November 16:00 UTC). Incremental window: 7 November 19:30 SGT to 8 November 00:00 SGT, including a 30-minute overlap with the preceding 20:00 SGT edition. Reuters-oriented searches covered all 12 names. Eight issuer listings and eleven SEC feeds were directly retrieved successfully. Compared all 25 retained editions and 128 prior research records to exclude duplicate events and source URLs. Berkshire results are a substantive update to the earlier scheduling notice. Coverage remains partial; no verified update does not establish that no news occurred.",
-  "price_basis": "USD regular-session closes for 6 Nov 2026, the latest completed US session at cutoff. Fresh Yahoo Finance daily series and regularMarketTime metadata retrieved 7 Nov 16:02 UTC verify all 12 closes; independent arithmetic verification completed at 16:03:06 UTC. Exact vendor quote timestamps are 6 Nov 21:00:00–21:00:02 UTC for eleven names and 21:03:23 UTC for BRK.B, each matching the completed daily bar. Daily changes compare Nov 6 with Nov 5 ordinary closes. Adjusted closes are separate cumulative-return endpoints. Daily-bar timestamps label sessions and are not substituted quote times. Postmarket observations are excluded. TSM is the US-listed USD ADR. Prices are saved observations, not live.",
+  "summary": "No distinct new company development was verified in this incremental window. Berkshire’s earlier Saturday earnings and previously covered technology stories were excluded as duplicates. All 12 November 6 regular-session closes and 72 adjusted-close baselines were freshly verified and remain unchanged. Friday prices predate the Saturday Berkshire earnings release; no earnings-related price reaction is claimed.",
+  "coverage_note": "Fixed cutoff: 8 November 04:00 SGT (7 November 20:00 UTC). Incremental window: 7 November 23:30 SGT to 8 November 04:00 SGT, including a 30-minute overlap with the preceding 00:00 SGT edition. Reuters-oriented searches covered all 12 names. Seven issuer listings and eleven SEC archive directories were readable; Meta’s listing did not populate. Compared all 26 retained editions and 129 prior research records by events and source URLs. Coverage remains partial; no verified update does not establish that no news occurred.",
+  "price_basis": "USD regular-session closes for 6 Nov 2026, the latest completed US session at cutoff. Fresh Yahoo Finance daily series and regularMarketTime metadata retrieved 7 Nov 20:00:01–20:00:03 UTC verify all 12 closes; the source verification completed at 20:00:47 UTC and independent raw-series arithmetic checks followed. Exact vendor quote timestamps are 6 Nov 21:00:00–21:00:02 UTC for eleven names and 21:03:23 UTC for BRK.B, each matching the completed daily bar. Daily changes compare Nov 6 with Nov 5 ordinary closes. Adjusted closes are separate cumulative-return endpoints. Daily-bar timestamps label sessions and are not substituted quote times. Postmarket observations are excluded. TSM is the US-listed USD ADR. Prices are saved observations, not live.",
   "return_basis": "Six cumulative 1–6 month returns use Yahoo adjusted closes reflecting vendor split and dividend/distribution adjustments. Formula: (endpoint adjusted close / baseline adjusted close - 1) x 100. Source values are rounded to cents before independent Decimal arithmetic; percentages round to two decimals. Baselines are the latest available sessions on or before each monthly anniversary: 6 Oct, 4 Sep, 6 Aug, 6 Jul, 5 Jun and 6 May 2026. Returns are not annualised and exclude investor fees, tax and FX. No independent reconstruction of dividend-adjustment factors or reinvestment model is claimed.",
   "caveats": [
-    "Reuters coverage is partial search-index and syndicated text, not an exhaustive wire feed. Direct Reuters access returned HTTP 401 and was not retried. Berkshire earnings figures are independently supported by original issuer PDFs.",
-    "Microsoft issuer access returned HTTP 403 and Broadcom issuer access returned HTTP 503. Prior Amazon SEC and Micron IR HTTP 403 restrictions were respected; Alphabet issuer direct access remained unavailable. Search coverage for inaccessible issuer listings is incomplete.",
-    "No filing accepted within 11:30–16:00 UTC appeared in the eleven retrieved SEC feeds. Berkshire results are supported by issuer-hosted documents; a new SEC acceptance is not claimed.",
-    "Berkshire issuer PDFs are dated November 7 without an independently verified exact release time. Reuters syndication on AOL timestamped 13:16 UTC establishes public availability within the window. Retrieval times do not replace original publication times.",
-    "Berkshire liquidity is stated using the 10-Q definition: insurance and other cash, equivalents and Treasury bills, net of payables for September purchases settling in October. This is not cash alone; differently scoped media figures are not substituted.",
-    "No other distinct new narrative research was verified. Empty research arrays do not erase earlier reports or imply a changed bullish or bearish view. The Berkshire November 6 closing price precedes the November 7 results.",
+    "Reuters coverage uses partial search-index text, not an exhaustive live-wire feed. The prior direct Reuters HTTP 401 restriction was respected. Retrieval times do not replace original publication times.",
+    "Microsoft/Micron direct issuer and Amazon SEC restrictions, the earlier Broadcom issuer failure, Alphabet issuer unavailability and Meta’s incomplete listing rendering limit coverage. Seven readable issuer listings are not comprehensive company-news feeds.",
+    "Eleven readable SEC archive directories displayed latest modification dates November 6 or earlier. Directory modification metadata is not a filing acceptance timestamp. EDGAR browse pages were unpopulated shells, and no exhaustive statement about filings accepted in the incremental window is made.",
+    "Berkshire’s November 7 results were already included in the 16:00 UTC edition. Reuters indexed original publication time was 13:16:58 UTC, before this incremental window; later syndication updates are not treated as a new event.",
+    "A secondary article timestamped 17:01 UTC November 7 about the Magnificent Seven and an OKX-ICE venue described a November 5 notice. An original issuer or SEC document was not verified, so this retelling was excluded rather than promoted into new research.",
+    "No distinct new narrative research was verified. Empty research arrays preserve earlier reports and do not imply no news or a changed bullish or bearish view. Prior risks and catalysts remain available in dated reports; none are invented to fill this edition.",
     "Prices and baselines use Yahoo Finance without independent cross-vendor corroboration. Vendor split/dividend adjustments and reinvestment conventions are not independently reconstructed. Cents-first Decimal arithmetic is reproducible from displayed values and may differ slightly from unrounded calculations."
   ],
   "rows": [
@@ -86,7 +86,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?range=1y&interval=1d"
         },
         {
@@ -94,21 +94,22 @@
           "url": "https://finance.yahoo.com/quote/AAPL/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
           "url": "https://www.apple.com/newsroom/archive/?month=11&year=2026"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0000320193.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/320193/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#AAPL"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#AAPL"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "November archive readable; latest listed entry November 3.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -173,7 +174,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=1y&interval=1d"
         },
         {
@@ -181,18 +182,18 @@
           "url": "https://finance.yahoo.com/quote/MSFT/history/"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0000789019.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/789019/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#MSFT"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#MSFT"
         }
       ],
       "gaps": [
-        "Issuer listing retrieval failed: HTTP Error 403: Forbidden. The request was not retried; coverage is partial.",
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Earlier direct issuer HTTP 403 restriction respected; official-domain search only.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -257,7 +258,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?range=1y&interval=1d"
         },
         {
@@ -265,21 +266,22 @@
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
-          "url": "https://nvidianews.nvidia.com/news"
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
+          "url": "https://nvidianews.nvidia.com/"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0001045810.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/1045810/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#NVDA"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#NVDA"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Newsroom readable; latest listed item November 6.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -344,7 +346,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?range=1y&interval=1d"
         },
         {
@@ -352,18 +354,18 @@
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0001652044.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/1652044/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#GOOGL"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#GOOGL"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "Issuer-domain date search only; prior direct-access unavailability respected. No distinct new issuer event verified through that partial search.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Issuer availability remains incomplete; targeted official-domain search did not verify an incremental release.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -428,7 +430,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMZN?range=1y&interval=1d"
         },
         {
@@ -436,17 +438,18 @@
           "url": "https://finance.yahoo.com/quote/AMZN/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
-          "url": "https://www.aboutamazon.com/news"
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
+          "url": "https://press.aboutamazon.com/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#AMZN"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#AMZN"
         }
       ],
       "gaps": [
-        "Amazon SEC submissions were not requested because the prior HTTP 403 restriction remains; issuer and Reuters searches do not replace complete filings coverage.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Press center readable; latest listed releases November 5.",
+        "Prior Amazon SEC access restriction was respected and not retried; filing coverage remains incomplete.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -511,7 +514,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/META?range=1y&interval=1d"
         },
         {
@@ -519,21 +522,22 @@
           "url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
-          "url": "https://about.fb.com/news/"
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
+          "url": "https://investor.atmeta.com/investor-news/default.aspx"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0001326801.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/1326801/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#META"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#META"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Issuer page returned navigation/filter controls without populated release items; completeness cannot be established.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -595,42 +599,10 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "date": "2026-11-07",
-          "headline": "Berkshire steps up buybacks as insurance weakness lowers operating earnings",
-          "facts": [
-            "Berkshire's November 7 original release reports Q3 operating earnings of $12.705 billion versus $13.485 billion a year earlier, a calculated decline of 5.8%. It repurchased approximately $9.6 billion of shares during Q3, bringing nine-month repurchases to $14.4 billion.",
-            "After-tax insurance underwriting earnings fell to $1.352 billion from $2.369 billion, while insurance investment income fell to $2.734 billion from $3.181 billion. BNSF, Berkshire Hathaway Energy and manufacturing/service/retailing earnings increased.",
-            "GAAP net earnings were $22.112 billion versus $30.796 billion. Operating earnings are a non-GAAP measure excluding investment gains/losses and specified impairments; Berkshire warns that investment valuation movements can make quarterly net earnings misleading.",
-            "The original 10-Q reports $352.3 billion in cash, equivalents and Treasury bills at insurance and other businesses, net of payables for September purchases settling in October. This is a specifically scoped liquidity measure, not cash alone."
-          ],
-          "analysis": "Research analysis: Faster repurchases demonstrate capital deployment but do not offset the operating deterioration in insurance. Growth in non-insurance subsidiaries provided a partial earnings cushion. Repurchases alone do not establish that the shares are undervalued.",
-          "risks": "GEICO's Q3 loss ratio rose to 76.6% from 71.5%, with higher claims frequency/severity and lower average earned premiums per policy. Buybacks remain discretionary. The saved November 6 closing price predates this Saturday release and is not an earnings reaction.",
-          "next_watch": "The next regular US trading session's response, subsequent repurchase disclosures, and whether GEICO claims costs and insurance investment income stabilize. No direction of share-price response is predicted.",
-          "sources": [
-            {
-              "title": "Berkshire original earnings release, November 7; PDF retrieved directly HTTP 200",
-              "url": "https://www.berkshirehathaway.com/news/nov0726.pdf"
-            },
-            {
-              "title": "Berkshire original Q3 2026 Form 10-Q; PDF retrieved directly HTTP 200; GEICO pp.34–35 and liquidity p.48",
-              "url": "https://www.berkshirehathaway.com/qtrly/3rdqtr26.pdf"
-            },
-            {
-              "title": "Reuters report, November 7; search-index and syndicated text checked; direct access unavailable",
-              "url": "https://www.reuters.com/business/finance/berkshire-hathaway-accelerates-stock-buybacks-operating-profit-falls-2026-11-07/"
-            },
-            {
-              "title": "Reuters syndicated by AOL · November 7 13:16 UTC; indexed text corroborates earnings and repurchases",
-              "url": "https://www.aol.com/articles/berkshire-hathaway-accelerates-stock-buybacks-131649000.html"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/BRK-B?range=1y&interval=1d"
         },
         {
@@ -638,37 +610,23 @@
           "url": "https://finance.yahoo.com/quote/BRK-B/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
           "url": "https://www.berkshirehathaway.com/news/2026news.html"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0001067983.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/1067983/"
         },
         {
-          "title": "Berkshire original earnings release, November 7; PDF retrieved directly HTTP 200",
-          "url": "https://www.berkshirehathaway.com/news/nov0726.pdf"
-        },
-        {
-          "title": "Berkshire original Q3 2026 Form 10-Q; PDF retrieved directly HTTP 200; GEICO pp.34–35 and liquidity p.48",
-          "url": "https://www.berkshirehathaway.com/qtrly/3rdqtr26.pdf"
-        },
-        {
-          "title": "Reuters report, November 7; search-index and syndicated text checked; direct access unavailable",
-          "url": "https://www.reuters.com/business/finance/berkshire-hathaway-accelerates-stock-buybacks-operating-profit-falls-2026-11-07/"
-        },
-        {
-          "title": "Reuters syndicated by AOL · November 7 13:16 UTC; indexed text corroborates earnings and repurchases",
-          "url": "https://www.aol.com/articles/berkshire-hathaway-accelerates-stock-buybacks-131649000.html"
-        },
-        {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#BRK.B"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#BRK.B"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "Issuer release and 10-Q were directly retrieved. Exact issuer release time is unavailable; the AOL syndicated Reuters 13:16 UTC timestamp establishes in-window public availability. Friday close is not a reaction to Saturday earnings."
+        "Issuer list showed the same November 7 quarterly release already covered in the preceding edition.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view.",
+        "Saturday earnings and buyback results were already reported in the preceding 16:00 UTC edition and are excluded as a duplicate. November 6 closing prices predate that release; no earnings-related price reaction is claimed."
       ]
     },
     {
@@ -733,7 +691,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AMD?range=1y&interval=1d"
         },
         {
@@ -741,21 +699,22 @@
           "url": "https://finance.yahoo.com/quote/AMD/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
           "url": "https://ir.amd.com/news-events/press-releases"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0000002488.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/2488/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#AMD"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#AMD"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Release list readable; latest listed release November 3.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -820,7 +779,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/AVGO?range=1y&interval=1d"
         },
         {
@@ -828,18 +787,18 @@
           "url": "https://finance.yahoo.com/quote/AVGO/history/"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0001730168.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/1730168/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#AVGO"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#AVGO"
         }
       ],
       "gaps": [
-        "Issuer listing retrieval failed: HTTP Error 503: Service Unavailable. The request was not retried; coverage is partial.",
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Earlier direct issuer HTTP 503 failure not retried; official-domain search only.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -904,7 +863,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/MU?range=1y&interval=1d"
         },
         {
@@ -912,18 +871,18 @@
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0000723125.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/723125/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#MU"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#MU"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "Issuer-domain date search only; prior direct-access unavailability respected. No distinct new issuer event verified through that partial search.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Earlier direct issuer HTTP 403 restriction respected; official-domain search only.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -988,7 +947,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSLA?range=1y&interval=1d"
         },
         {
@@ -996,21 +955,22 @@
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
-          "url": "https://ir.tesla.com/press"
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
+          "url": "https://ir.tesla.com/"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0001318605.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/1318605/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#TSLA"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#TSLA"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "IR disclosure table readable; latest listed quarterly results October 21.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     },
     {
@@ -1075,7 +1035,7 @@
       "research": [],
       "sources": [
         {
-          "title": "Yahoo Finance · freshly verified completed-session prices and adjusted-close series",
+          "title": "Yahoo Finance · completed-session quote metadata and adjusted-close series, freshly retrieved 7 Nov 20:00 UTC",
           "url": "https://query1.finance.yahoo.com/v8/finance/chart/TSM?range=1y&interval=1d"
         },
         {
@@ -1083,21 +1043,22 @@
           "url": "https://finance.yahoo.com/quote/TSM/history/"
         },
         {
-          "title": "Issuer listing · directly checked 7 Nov 16:02 UTC",
-          "url": "https://pr.tsmc.com/english/latest-news"
+          "title": "Issuer listing · checked in this run by 7 Nov 20:00:45 UTC",
+          "url": "https://pr.tsmc.com/english"
         },
         {
-          "title": "SEC submissions · directly checked 7 Nov 16:02 UTC",
-          "url": "https://data.sec.gov/submissions/CIK0001046179.json"
+          "title": "SEC archive directory · checked in this run; modification dates are not filing acceptance times",
+          "url": "https://www.sec.gov/Archives/edgar/data/1046179/"
         },
         {
-          "title": "Previous 7 Nov 20:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T120000Z.html#TSM"
+          "title": "Previous 8 Nov 00:00 SGT edition · retained dated research",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T160000Z.html#TSM"
         }
       ],
       "gaps": [
-        "No accepted filing in the 11:30–16:00 UTC window appeared in the retrieved SEC submissions feed. This is not proof of no company news.",
-        "No distinct new company development verified for 7 November 11:30–16:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports; search silence is not absence of news."
+        "Press-center overview readable; latest listed release October 15.",
+        "SEC archive directory was readable and showed latest modification dates November 6 or earlier. These are modification metadata, not verified acceptance times; this does not establish an exhaustive absence of new filings. EDGAR browse landing pages were unpopulated shells.",
+        "No distinct new company development verified for 7 November 15:30–20:00 UTC. Earlier sourced facts, analysis, risks and catalysts remain in retained dated reports. Partial search coverage and empty research sections do not establish that no news occurred or imply a changed investment view."
       ]
     }
   ]
