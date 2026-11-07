@@ -1,26 +1,25 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261107T000000Z",
-  "as_of": "2026-11-07T00:00:00Z",
-  "generated_at": "2026-11-07T00:10:03.440031+00:00",
-  "title": "12-name watchlist · 07 Nov 2026 (Sat) · 08:00 SGT",
+  "id": "watchlist-20261107T040000Z",
+  "as_of": "2026-11-07T04:00:00Z",
+  "generated_at": "2026-11-07T04:01:46.515174+00:00",
+  "title": "12-name watchlist · 07 Nov 2026 (Sat) · 12:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-07T00:10:03.440031+00:00",
+    "sources_checked_at": "2026-11-07T04:01:46.515174+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "All 12 prices now reflect the completed November 6 US session, with 72 freshly checked adjusted-close baselines. Google acquires a Wyoming data-center site and a Google executive leaves the SpaceX board. Apple’s final bond prospectus resolves an earlier terms gap; Tesla files annual-meeting materials. NVIDIA and Meta ownership transfers are distinguished from market sales. A TSMC advanced-memory report is added as a qualified late-observed correction.",
-  "coverage_note": "Fixed cutoff: 7 November 08:00 SGT (00:00 UTC). Incremental window: 7 November 03:30–08:00 SGT, covering the previous 04:00 SGT edition with a 30-minute overlap. TSMC’s 6 November 23:45:40 SGT Reuters article predates the window and is explicitly a late-observed correction. Eleven accessible SEC feeds were checked; four original in-window filings were read. Amazon’s previously unavailable SEC feed was not retried. Reuters and issuer access is partial, and a quiet-name result does not mean no news occurred. Prior editions remain unchanged.",
-  "price_basis": "USD regular-session closes for 6 Nov 2026, the latest completed US session at cutoff. Fresh Yahoo Finance daily series and regularMarketTime metadata retrieved 7 Nov 00:06:42–00:06:51 UTC verify all 12 closes. The exact vendor quote timestamps are 6 Nov 21:00:00–21:00:02 UTC for eleven names and 21:03:23 UTC for BRK.B; each quoted price matches the completed daily bar. Daily changes compare Nov 6 with Nov 5 ordinary closes. Adjusted closes are separate cumulative-return endpoints. Daily-bar timestamps are session labels, not substituted quote timestamps. Postmarket observations are excluded. TSM is the US-listed USD ADR. These saved observations are not live.",
+  "summary": "No distinct new company development was verified in the checked sources since the prior edition. All 12 November 6 regular-session closes and all 72 adjusted-close baselines were freshly rechecked and are unchanged. Previously covered Google and Meta overlap items are not repeated; earlier research remains available in retained dated reports.",
+  "coverage_note": "Fixed cutoff: 7 November 12:00 SGT (04:00 UTC). Incremental window: 7 November 07:30–12:00 SGT, with a 30-minute overlap from the previous 08:00 SGT edition. Reuters searches, ten directly retrieved issuer listings and eleven accessible SEC feeds were checked; Micron and Alphabet issuer coverage was search-only. The Google executive board-departure story and Meta Form 4 in the overlap were already covered. No distinct new research item is added. Coverage is partial, and this does not establish that no news occurred. All prior editions, reports and calls remain unchanged.",
+  "price_basis": "USD regular-session closes for 6 Nov 2026, the latest completed US session at cutoff. Fresh Yahoo Finance daily series and regularMarketTime metadata retrieved 7 Nov 04:00:18–04:00:27 UTC verify all 12 closes. Exact vendor quote timestamps remain 6 Nov 21:00:00–21:00:02 UTC for eleven names and 21:03:23 UTC for BRK.B; each quoted price matches the completed daily bar. Daily changes compare Nov 6 with Nov 5 ordinary closes. Adjusted closes are separate cumulative-return endpoints. Daily-bar timestamps are session labels, not substituted quote timestamps. Postmarket observations are excluded. TSM is the US-listed USD ADR. These saved observations are not live.",
   "return_basis": "Six cumulative 1–6 month returns use Yahoo adjusted closes reflecting vendor split and dividend/distribution adjustments. Formula: (endpoint adjusted close / baseline adjusted close - 1) x 100. Source values are rounded to cents before independent Decimal arithmetic; percentages round to two decimals. Baselines are the latest available sessions on or before each monthly anniversary: 6 Oct, 4 Sep, 6 Aug, 6 Jul, 5 Jun and 6 May 2026. Returns are not annualised and exclude investor fees, tax and FX. No independent reconstruction of dividend-adjustment factors or reinvestment model is claimed.",
   "caveats": [
-    "Reuters access is partial. Included narrow article facts and publication timestamps were retrieved through search; original company/SEC evidence is identified separately. Search silence does not establish absence of news.",
-    "Amazon SEC and Micron IR prior HTTP 403 responses were respected without retry. Alphabet IR direct access remains unavailable; Crusoe’s release text was retrieved through search rather than a successful direct page open.",
-    "The $17 billion Wyoming figure is prior announced project investment, not a disclosed purchase price. TSMC’s advanced-memory consideration is Reuters reporting attributed to The Information, not issuer confirmation.",
-    "Apple’s final prospectus is a substantive update to the same previously reported financing, not a second deal; expected November 9 settlement has not been verified as completed.",
-    "NVIDIA’s gift and Meta’s estate-planning transfer are ownership disclosures, not verified open-market sales or indications of the user’s holdings. Tesla’s requested votes are board views, not research recommendations.",
-    "Price and baseline checks use one vendor, Yahoo Finance, without independent cross-vendor corroboration. Vendor adjustment factors are not independently reconstructed. Cents-first arithmetic is reproducible from displayed inputs and can differ slightly from unrounded calculations."
+    "Reuters coverage is search-based and partial, not an exhaustive wire feed. Search silence does not establish absence of news.",
+    "Amazon SEC and Micron IR prior HTTP 403 responses were respected without direct retry. Alphabet IR direct access remains unavailable. Ten other issuer listings and eleven SEC feeds were directly checked.",
+    "Issuer listing dates are not treated as exact publication timestamps. Date-only posts were not arbitrarily placed inside the cutoff window. Previously covered events are excluded unless a substantive update is verified.",
+    "No new narrative research is included in this edition. Empty research arrays do not erase or invalidate prior dated research, and are not a new bullish or bearish view.",
+    "Price and baseline checks use one vendor, Yahoo Finance, without independent cross-vendor corroboration. Vendor split/dividend adjustments are not independently reconstructed. Cents-first arithmetic is reproducible from displayed inputs and can differ slightly from unrounded calculations."
   ],
   "rows": [
     {
@@ -82,6 +81,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -92,38 +92,23 @@
           "url": "https://finance.yahoo.com/quote/AAPL/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Apple issuer listing · retrieved during this run",
           "url": "https://www.apple.com/newsroom/archive/?month=11&year=2026"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000320193.json"
-        }
-      ],
-      "research": [
+        },
         {
-          "date": "2026-11-06",
-          "headline": "Apple files final terms for the previously reported $7.5 billion bond offering",
-          "facts": [
-            "The prospectus supplement dated November 5 was accepted by the SEC on November 6 at 21:30:47 UTC. It confirms seven tranches totalling $7.5 billion, rather than a second financing transaction.",
-            "Five fixed-rate tranches carry coupons from 4.650% to 5.350%, maturing in 2028, 2029, 2031, 2033 and 2036. Two floating-rate tranches mature in 2028 and 2029 at compounded SOFR plus 0.33% and 0.45%, respectively.",
-            "Underwriters expect delivery on or about November 9. This is a scheduled settlement, not confirmation that the transaction has closed."
-          ],
-          "analysis": "The original issuer document resolves the earlier edition’s final-terms gap and clarifies the blend of fixed and floating borrowing costs. Coupon rates are not yields to maturity.",
-          "risks": "Settlement remains prospective at the cutoff. Floating-rate costs vary with SOFR; issuance alone does not establish a change in operating performance.",
-          "next_watch": "Closing confirmation and subsequent debt disclosures.",
-          "sources": [
-            {
-              "title": "SEC 424B2 · accepted 2026-11-06T21:30:47.000Z · original filing inspected",
-              "url": "https://www.sec.gov/Archives/edgar/data/320193/000114036126042505/ny20084621x2_424b2.htm"
-            }
-          ]
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#AAPL"
         }
       ],
       "gaps": [
-        "November newsroom archive retrieved; latest visible release November 3. Earlier financing headline is not repeated as a new deal; newly filed final prospectus terms are the substantive update.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "1 filing accepted during the 19:30–00:00 UTC overlap window; original document retrieved and inspected."
+        "Apple November archive retrieved; newest visible release dated November 3. No distinct in-window announcement verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -185,6 +170,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -195,20 +181,23 @@
           "url": "https://finance.yahoo.com/quote/MSFT/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Microsoft issuer listing · retrieved during this run",
           "url": "https://news.microsoft.com/source/"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000789019.json"
+        },
+        {
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#MSFT"
         }
       ],
-      "research": [],
       "gaps": [
-        "Source listing retrieved; two latest linked stories inspected and dated November 5. Prior Amsterdam protest coverage correction not repeated.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "No filing accepted during the 19:30–00:00 UTC overlap window appeared in the checked SEC feed. This does not establish absence of other news.",
-        "Earlier verified research remains available in retained past editions; no distinct company item is added here."
+        "Microsoft Source retrieved; inspected leading Windows security post, dated November 5. Listing lacks consistent exact publication times; no distinct in-window announcement verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -270,6 +259,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -280,37 +270,23 @@
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "NVIDIA issuer listing · retrieved during this run",
           "url": "https://nvidianews.nvidia.com/news"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001045810.json"
-        }
-      ],
-      "research": [
+        },
         {
-          "date": "2026-11-06",
-          "headline": "NVIDIA director’s disclosure records a gift, not a market sale",
-          "facts": [
-            "Tench Coxe reported a November 4 gift of 500,000 shares for no consideration, with transaction code G. The Form 4 was accepted November 6 at 21:12:02 UTC.",
-            "The filing references a Rule 10b5-1 plan adopted March 19, 2026, and states that the shares were held by a trust."
-          ],
-          "analysis": "This is an ownership disclosure, not a company operating update or evidence of shares being sold in the market.",
-          "risks": "A gift does not establish a bearish investment view; do not read the zero consideration as the market price.",
-          "next_watch": "Subsequent ownership filings, keeping gifts and market transactions distinct.",
-          "sources": [
-            {
-              "title": "SEC 4 · accepted 2026-11-06T21:12:02.000Z · original filing inspected",
-              "url": "https://www.sec.gov/Archives/edgar/data/1045810/000119764726000013/xslF345X06/wk-form4_1793999520.xml"
-            }
-          ]
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#NVDA"
         }
       ],
       "gaps": [
-        "Newsroom retrieved; latest entry is previously covered November 6 wireless research-tools blog. See TSM late-observed report for unconfirmed cross-company context.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "1 filing accepted during the 19:30–00:00 UTC overlap window; original document retrieved and inspected."
+        "NVIDIA newsroom retrieved; November 6 6G/open-source blog inspected. Already covered in November 6 20:00 UTC edition; not repeated.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -372,6 +348,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -382,62 +359,23 @@
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Alphabet Class A issuer listing · search-only; direct access unavailable",
           "url": "https://abc.xyz/investor/news/"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001652044.json"
-        }
-      ],
-      "research": [
-        {
-          "date": "2026-11-06",
-          "headline": "Google acquires Crusoe Wyoming data-center site",
-          "facts": [
-            "Crusoe says Google acquired its southeast Wyoming site, completing Crusoe’s pre-development role covering site selection, approvals and power strategy.",
-            "Reuters places the acquisition after Google’s prior-day $17 billion project-investment announcement; that figure is not a disclosed site purchase price."
-          ],
-          "analysis": "Research analysis: Advances site control for Google’s infrastructure expansion.",
-          "risks": "Construction, power availability and returns remain execution risks; no acquisition consideration or operating date verified.",
-          "next_watch": "Construction and energization milestones.",
-          "sources": [
-            {
-              "title": "Reuters publication timestamp and limited text retrieved via search; direct open unavailable · published 2026-11-06T20:00:55Z",
-              "url": "https://www.reuters.com/business/google-acquires-wyoming-data-center-site-ai-infrastructure-firm-crusoe-2026-11-06/"
-            },
-            {
-              "title": "Crusoe original release text via search, dated November 6; exact publication time unavailable",
-              "url": "https://www.crusoe.ai/resources/newsroom/crusoe-wyoming-data-center-campus-update"
-            }
-          ]
         },
         {
-          "date": "2026-11-06",
-          "headline": "Google executive Donald Harrison leaves SpaceX board",
-          "facts": [
-            "Reuters reports Google executive Donald Harrison left the SpaceX board after more than a decade. The original SEC filing’s text states that he notified SpaceX on November 4, effective immediately.",
-            "SpaceX says the decision was not due to disagreement regarding its operations, policies or practices. This is the issuer’s statement."
-          ],
-          "analysis": "A governance change involving a Google executive; it does not establish any change in Alphabet’s economic exposure.",
-          "risks": "The statement does not establish the full personal rationale or any Alphabet stake sale, financial impact or Tesla transaction.",
-          "next_watch": "Further company disclosure of governance or investment changes.",
-          "sources": [
-            {
-              "title": "Reuters timestamp and limited article text retrieved via search · published 2026-11-06T23:48:40Z",
-              "url": "https://www.reuters.com/business/media-telecom/google-executive-donald-harrison-resigns-spacex-board-2026-11-06/"
-            },
-            {
-              "title": "SpaceX original SEC 8-K · signed November 6 · Item 5.02 text retrieved via search; direct open unavailable",
-              "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026071689/spcx-20261104.htm"
-            }
-          ]
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#GOOGL"
         }
       ],
       "gaps": [
-        "Reuters search returned two current-window items. Wyoming acquisition corroborated by original Crusoe release text via search; direct article and release opens unavailable. Prior inaccessible Alphabet IR endpoint not retried.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "No filing accepted during the 19:30–00:00 UTC overlap window appeared in the checked SEC feed. This does not establish absence of other news."
+        "Direct Alphabet IR remains unavailable and was not retried. Reuters group/date searches found earlier stories; Harrison board departure at November 6 23:48:40 UTC is inside overlap but already covered at 00:00 UTC. No substantive new information verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -499,6 +437,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -509,20 +448,23 @@
           "url": "https://finance.yahoo.com/quote/AMZN/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Amazon issuer listing · retrieved during this run",
           "url": "https://www.aboutamazon.com/news"
         },
         {
           "title": "SEC submissions feed · unavailable; prior HTTP 403 respected",
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
+        },
+        {
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#AMZN"
         }
       ],
-      "research": [],
       "gaps": [
-        "Newsroom retrieved; November 6 text-shopping release already covered; entertainment guides excluded as immaterial. No new distinct item verified. SEC access limitation is stated below.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "Amazon SEC feed remains unavailable after a prior HTTP 403; not retried.",
-        "Earlier verified research remains available in retained past editions; no distinct company item is added here."
+        "Amazon News retrieved. November 6 Alexa text-shopping article inspected and already covered at November 6 16:00 UTC. Date-only entertainment items do not establish a new material in-window development.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "Amazon SEC feed remains unavailable after a prior HTTP 403; not retried. No absence-of-filings claim is made.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -584,6 +526,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -594,37 +537,23 @@
           "url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Meta Platforms issuer listing · retrieved during this run",
           "url": "https://about.fb.com/news/"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001326801.json"
-        }
-      ],
-      "research": [
+        },
         {
-          "date": "2026-11-06",
-          "headline": "Meta ownership filing describes an estate-planning transfer",
-          "facts": [
-            "Mark Zuckerberg’s Form 4, accepted November 6 at 23:36:37 UTC, reports a November 4 transfer involving 97,935 Class B shares.",
-            "The filing identifies estate planning and the end of a pecuniary interest in the transferred shares. Other footnotes identify changes in ownership form without consideration."
-          ],
-          "analysis": "The disclosed transfer should not be described as a verified open-market sale or a new Meta operating development.",
-          "risks": "Transaction codes and footnotes matter; a reported value in the form is not automatically cash sale proceeds.",
-          "next_watch": "Further ownership disclosures rather than inferring an investment signal from this transfer.",
-          "sources": [
-            {
-              "title": "SEC 4 · accepted 2026-11-06T23:36:37.000Z · original filing inspected",
-              "url": "https://www.sec.gov/Archives/edgar/data/1326801/000095010326017123/xslF345X06/ownership.xml"
-            }
-          ]
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#META"
         }
       ],
       "gaps": [
-        "Newsroom retrieved; latest entry is previously covered November 6 Muse spaces announcement. No new distinct item verified.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "1 filing accepted during the 19:30–00:00 UTC overlap window; original document retrieved and inspected."
+        "Meta Newsroom retrieved and November 6 Muse spaces release inspected; already covered at November 6 20:00 UTC. No substantive new information verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "The only filing in the 23:30–04:00 UTC overlap window was Meta’s 23:36:37 UTC Form 4, already covered in the prior edition. It is not repeated as new research.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -686,6 +615,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -696,20 +626,23 @@
           "url": "https://finance.yahoo.com/quote/BRK-B/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Berkshire Hathaway Class B issuer listing · retrieved during this run",
           "url": "https://www.berkshirehathaway.com/news/2026news.html"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001067983.json"
+        },
+        {
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#BRK.B"
         }
       ],
-      "research": [],
       "gaps": [
-        "2026 releases listing retrieved; latest visible November 4 earnings-release notice. No new distinct item verified.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "No filing accepted during the 19:30–00:00 UTC overlap window appeared in the checked SEC feed. This does not establish absence of other news.",
-        "Earlier verified research remains available in retained past editions; no distinct company item is added here."
+        "Berkshire 2026 news menu retrieved; newest visible item dated November 4. No distinct in-window announcement verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -771,6 +704,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -781,20 +715,23 @@
           "url": "https://finance.yahoo.com/quote/AMD/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Advanced Micro Devices issuer listing · retrieved during this run",
           "url": "https://ir.amd.com/news-events/press-releases"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000002488.json"
+        },
+        {
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#AMD"
         }
       ],
-      "research": [],
       "gaps": [
-        "Issuer press releases retrieved; latest visible November 3 at 16:15 EST. No new distinct item verified.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "No filing accepted during the 19:30–00:00 UTC overlap window appeared in the checked SEC feed. This does not establish absence of other news.",
-        "Earlier verified research remains available in retained past editions; no distinct company item is added here."
+        "AMD press-release listing retrieved; newest visible release November 3, 16:15 EST. No distinct in-window announcement verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -856,6 +793,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -866,20 +804,23 @@
           "url": "https://finance.yahoo.com/quote/AVGO/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Broadcom issuer listing · retrieved during this run",
           "url": "https://investors.broadcom.com/financial-information/financial-news-releases"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001730168.json"
+        },
+        {
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#AVGO"
         }
       ],
-      "research": [],
       "gaps": [
-        "Issuer financial-news listing retrieved; latest visible October 27. No new distinct item verified.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "No filing accepted during the 19:30–00:00 UTC overlap window appeared in the checked SEC feed. This does not establish absence of other news.",
-        "Earlier verified research remains available in retained past editions; no distinct company item is added here."
+        "Broadcom financial-news listing retrieved; newest visible release October 27. No distinct in-window announcement verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -941,6 +882,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -951,20 +893,23 @@
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Micron Technology issuer listing · search-only; direct access unavailable",
           "url": "https://investors.micron.com/news/default.aspx"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
+        },
+        {
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#MU"
         }
       ],
-      "research": [],
       "gaps": [
-        "Prior IR HTTP 403 respected; no retry. Search-only issuer coverage shows latest November 5. See TSM late-observed report for unconfirmed competitive context.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "No filing accepted during the 19:30–00:00 UTC overlap window appeared in the checked SEC feed. This does not establish absence of other news.",
-        "Earlier verified research remains available in retained past editions; no distinct company item is added here."
+        "Prior Micron IR HTTP 403 respected, with no direct retry. Authorized search results surfaced issuer November 5 board-retirement release and news listing; no distinct in-window announcement verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -1026,6 +971,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -1036,37 +982,23 @@
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Tesla issuer listing · retrieved during this run",
           "url": "https://ir.tesla.com/press"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001318605.json"
-        }
-      ],
-      "research": [
+        },
         {
-          "date": "2026-11-06",
-          "headline": "Tesla files shareholder letter ahead of December 3 annual meeting",
-          "facts": [
-            "Tesla filed additional proxy materials on November 6 at 22:00:07 UTC, including a shareholder letter and updated voting website.",
-            "The letter identifies December 3, 2026 as the annual meeting date and asks shareholders to support the re-election of Elon Musk, Robyn Denholm and JB Straubel."
-          ],
-          "analysis": "Governance and board composition are near-term monitoring items. These are the board’s solicitation views, not independent voting advice.",
-          "risks": "The filing does not establish the vote outcome or a new earnings forecast.",
-          "next_watch": "The December 3 meeting and subsequent official voting results.",
-          "sources": [
-            {
-              "title": "SEC DEFA14A · accepted 2026-11-06T22:00:07.000Z · original filing inspected",
-              "url": "https://www.sec.gov/Archives/edgar/data/1318605/000110465926123945/tm267596d10_defa14a.htm"
-            }
-          ]
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#TSLA"
         }
       ],
       "gaps": [
-        "Issuer press releases retrieved; latest visible October 21. Prior Cybertruck wind-down and historical timeline excluded.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "1 filing accepted during the 19:30–00:00 UTC overlap window; original document retrieved and inspected."
+        "Tesla IR press-release listing retrieved; newest visible release October 21. No distinct in-window announcement verified.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     },
     {
@@ -1128,6 +1060,7 @@
         }
       ],
       "premarket": null,
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -1138,37 +1071,23 @@
           "url": "https://finance.yahoo.com/quote/TSM/history/"
         },
         {
-          "title": "Issuer release listing · coverage limits stated",
+          "title": "Taiwan Semiconductor Manufacturing issuer listing · retrieved during this run",
           "url": "https://pr.tsmc.com/english/latest-news"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 00:07 UTC",
+          "title": "SEC submissions feed · checked 7 Nov 04:00 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001046179.json"
-        }
-      ],
-      "research": [
+        },
         {
-          "date": "2026-11-06",
-          "headline": "Coverage correction: TSMC reportedly considers advanced-memory production",
-          "facts": [
-            "Reuters, citing The Information, reports TSMC is considering advanced-memory production. TSMC and Nvidia had not immediately responded to Reuters.",
-            "Published before this window and absent from the preceding archived reports checked."
-          ],
-          "analysis": "Potential new AI exposure for TSMC and competition for memory suppliers.",
-          "risks": "Attributed consideration, not a confirmed launch, investment or order.",
-          "next_watch": "Issuer confirmation and commercial timing.",
-          "sources": [
-            {
-              "title": "Reuters timestamp and limited article text retrieved via search; direct open unavailable · published 2026-11-06T15:45:40Z",
-              "url": "https://www.reuters.com/world/asia-pacific/tsmc-considers-making-advanced-memory-chips-information-reports-2026-11-06/"
-            }
-          ]
+          "title": "Previous 7 Nov 08:00 SGT edition · original research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T000000Z.html#TSM"
         }
       ],
       "gaps": [
-        "Issuer latest-news listing retrieved; newest visible October 15. Reuters memory-chip report published before this window was absent from archive search; included as an explicitly late-observed correction.",
-        "Targeted Reuters group/name searches completed. Results are not exhaustive; no verified new item is not proof of no news.",
-        "No filing accepted during the 19:30–00:00 UTC overlap window appeared in the checked SEC feed. This does not establish absence of other news."
+        "TSMC latest-news listing retrieved; newest visible release October 15. Reuters advanced-memory report dated November 6 15:45:40 UTC already covered in 00:00 UTC edition; not repeated.",
+        "No new distinct item verified in checked sources for 2026-11-06T23:30:00Z through 2026-11-07T04:00:00Z. Search silence is not proof of absence of news.",
+        "No filing accepted in the 23:30–04:00 UTC overlap window appeared in the freshly checked SEC feed. This is a feed-limited observation, not a guarantee of no news.",
+        "Earlier verified research remains in retained dated reports. No new company-specific analysis, risk or catalyst is inferred solely from quiet sources."
       ]
     }
   ]

@@ -1122,7 +1122,8 @@
           "item_sha256": "87ffc73c52247b318975727109361838cf7b751a6ccd601f0d42e209104a7e94"
         }
       ]
-    }
+    },
+    "watchlist-20261107T040000Z": {}
   },
   "reviewed_editions": {
     "watchlist-20261103T120000Z": {
@@ -1256,6 +1257,12 @@
       "reviewed_at": "2026-11-07T00:10:17.849109+00:00",
       "edition_sha256": "bc22ea6cfa0a0383c5d7cfa0d8b37ce67e86ccf5aed3090a83fd579964f03e11",
       "path": "data/watchlist/reviews/watchlist-20261107T000000Z.json"
+    },
+    "watchlist-20261107T040000Z": {
+      "as_of": "2026-11-07T04:00:00Z",
+      "reviewed_at": "2026-11-07T04:01:46.569805+00:00",
+      "edition_sha256": "9e943ba203022b84ce098d318cd6cbb288ec6205c6aede359c032d8d94949767",
+      "path": "data/watchlist/reviews/watchlist-20261107T040000Z.json"
     }
   }
 }
