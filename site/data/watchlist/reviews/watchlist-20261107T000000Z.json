@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261107T000000Z",
+  "as_of": "2026-11-07T00:00:00Z",
+  "edition_sha256": "bc22ea6cfa0a0383c5d7cfa0d8b37ce67e86ccf5aed3090a83fd579964f03e11",
+  "reviewed_at": "2026-11-07T00:10:17.849109+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "AAPL",
+      "index": 0,
+      "headline": "Apple files final terms for the previously reported $7.5 billion bond offering",
+      "item_sha256": "e7255cbc764de79911f2498bea53c4364e4736132a9d1c6c00633a94aa049c7c",
+      "scope": "company",
+      "reason": "Original prospectus inspected; same prior offering with newly verified final terms and prospective settlement qualification."
+    },
+    {
+      "ticker": "NVDA",
+      "index": 0,
+      "headline": "NVIDIA director’s disclosure records a gift, not a market sale",
+      "item_sha256": "7889a78e109a7bdcc464c846438be42e11141d62ea88401a7feb6e794c787973",
+      "scope": "company",
+      "reason": "Original Form4 inspected. Gift/plan qualifications preserved; no market sale or bearish inference."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 0,
+      "headline": "Google acquires Crusoe Wyoming data-center site",
+      "item_sha256": "87125afa62aea9b81aac69495545c08cbe5f6f85c4ac95994ad810be9606cc13",
+      "scope": "company",
+      "reason": "Narrow dated Reuters/original-source text checked with access limits; project spend distinct from purchase price, governance distinct from stake sale."
+    },
+    {
+      "ticker": "GOOGL",
+      "index": 1,
+      "headline": "Google executive Donald Harrison leaves SpaceX board",
+      "item_sha256": "0d55030270a6c0ebb07e0f0192fc791cebac5cedfa7bb6d3c6a4156579821b00",
+      "scope": "company",
+      "reason": "Narrow dated Reuters/original-source text checked with access limits; project spend distinct from purchase price, governance distinct from stake sale."
+    },
+    {
+      "ticker": "META",
+      "index": 0,
+      "headline": "Meta ownership filing describes an estate-planning transfer",
+      "item_sha256": "7d9586a02982990ee81a09a6d32e4cd772d5b092a82ccd83988f11f0815b9a4a",
+      "scope": "company",
+      "reason": "Original Form4 inspected. Estate-planning/ownership-form qualifications preserved; no market sale inferred."
+    },
+    {
+      "ticker": "TSLA",
+      "index": 0,
+      "headline": "Tesla files shareholder letter ahead of December 3 annual meeting",
+      "item_sha256": "ec7c48e442bc5a99cf32c9d6598f9e7d7b363296d42668bd34743469b94e0865",
+      "scope": "company",
+      "reason": "Original additional proxy materials inspected; upcoming meeting and board views attributed without voting advice."
+    },
+    {
+      "ticker": "TSM",
+      "index": 0,
+      "headline": "Coverage correction: TSMC reportedly considers advanced-memory production",
+      "item_sha256": "87ffc73c52247b318975727109361838cf7b751a6ccd601f0d42e209104a7e94",
+      "scope": "company",
+      "reason": "Late-observed Reuters reporting qualified as consideration attributed to The Information, not issuer-confirmed production."
+    }
+  ]
+}

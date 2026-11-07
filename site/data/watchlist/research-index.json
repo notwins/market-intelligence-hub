@@ -1059,6 +1059,69 @@
           "item_sha256": "47d1e36acb73e4991f8ed11d45ca8e268634d50c1ab692f8e6d4ba17de8e32f4"
         }
       ]
+    },
+    "watchlist-20261107T000000Z": {
+      "AAPL": [
+        {
+          "index": 0,
+          "headline": "Apple files final terms for the previously reported $7.5 billion bond offering",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Apple files final terms for the previously reported $7.5 billion bond offering\",[\"The prospectus supplement dated November 5 was accepted by the SEC on November 6 at 21:30:47 UTC. It confirms seven tranches totalling $7.5 billion, rather than a second financing transaction.\",\"Five fixed-rate tranches carry coupons from 4.650% to 5.350%, maturing in 2028, 2029, 2031, 2033 and 2036. Two floating-rate tranches mature in 2028 and 2029 at compounded SOFR plus 0.33% and 0.45%, respectively.\",\"Underwriters expect delivery on or about November 9. This is a scheduled settlement, not confirmation that the transaction has closed.\"],\"The original issuer document resolves the earlier edition’s final-terms gap and clarifies the blend of fixed and floating borrowing costs. Coupon rates are not yields to maturity.\",\"Settlement remains prospective at the cutoff. Floating-rate costs vary with SOFR; issuance alone does not establish a change in operating performance.\",\"Closing confirmation and subsequent debt disclosures.\",[[\"SEC 424B2 · accepted 2026-11-06T21:30:47.000Z · original filing inspected\",\"https://www.sec.gov/Archives/edgar/data/320193/000114036126042505/ny20084621x2_424b2.htm\"]]]",
+          "item_sha256": "e7255cbc764de79911f2498bea53c4364e4736132a9d1c6c00633a94aa049c7c"
+        }
+      ],
+      "NVDA": [
+        {
+          "index": 0,
+          "headline": "NVIDIA director’s disclosure records a gift, not a market sale",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"NVIDIA director’s disclosure records a gift, not a market sale\",[\"Tench Coxe reported a November 4 gift of 500,000 shares for no consideration, with transaction code G. The Form 4 was accepted November 6 at 21:12:02 UTC.\",\"The filing references a Rule 10b5-1 plan adopted March 19, 2026, and states that the shares were held by a trust.\"],\"This is an ownership disclosure, not a company operating update or evidence of shares being sold in the market.\",\"A gift does not establish a bearish investment view; do not read the zero consideration as the market price.\",\"Subsequent ownership filings, keeping gifts and market transactions distinct.\",[[\"SEC 4 · accepted 2026-11-06T21:12:02.000Z · original filing inspected\",\"https://www.sec.gov/Archives/edgar/data/1045810/000119764726000013/xslF345X06/wk-form4_1793999520.xml\"]]]",
+          "item_sha256": "7889a78e109a7bdcc464c846438be42e11141d62ea88401a7feb6e794c787973"
+        }
+      ],
+      "GOOGL": [
+        {
+          "index": 0,
+          "headline": "Google acquires Crusoe Wyoming data-center site",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Google acquires Crusoe Wyoming data-center site\",[\"Crusoe says Google acquired its southeast Wyoming site, completing Crusoe’s pre-development role covering site selection, approvals and power strategy.\",\"Reuters places the acquisition after Google’s prior-day $17 billion project-investment announcement; that figure is not a disclosed site purchase price.\"],\"Research analysis: Advances site control for Google’s infrastructure expansion.\",\"Construction, power availability and returns remain execution risks; no acquisition consideration or operating date verified.\",\"Construction and energization milestones.\",[[\"Reuters publication timestamp and limited text retrieved via search; direct open unavailable · published 2026-11-06T20:00:55Z\",\"https://www.reuters.com/business/google-acquires-wyoming-data-center-site-ai-infrastructure-firm-crusoe-2026-11-06/\"],[\"Crusoe original release text via search, dated November 6; exact publication time unavailable\",\"https://www.crusoe.ai/resources/newsroom/crusoe-wyoming-data-center-campus-update\"]]]",
+          "item_sha256": "87125afa62aea9b81aac69495545c08cbe5f6f85c4ac95994ad810be9606cc13"
+        },
+        {
+          "index": 1,
+          "headline": "Google executive Donald Harrison leaves SpaceX board",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Google executive Donald Harrison leaves SpaceX board\",[\"Reuters reports Google executive Donald Harrison left the SpaceX board after more than a decade. The original SEC filing’s text states that he notified SpaceX on November 4, effective immediately.\",\"SpaceX says the decision was not due to disagreement regarding its operations, policies or practices. This is the issuer’s statement.\"],\"A governance change involving a Google executive; it does not establish any change in Alphabet’s economic exposure.\",\"The statement does not establish the full personal rationale or any Alphabet stake sale, financial impact or Tesla transaction.\",\"Further company disclosure of governance or investment changes.\",[[\"Reuters timestamp and limited article text retrieved via search · published 2026-11-06T23:48:40Z\",\"https://www.reuters.com/business/media-telecom/google-executive-donald-harrison-resigns-spacex-board-2026-11-06/\"],[\"SpaceX original SEC 8-K · signed November 6 · Item 5.02 text retrieved via search; direct open unavailable\",\"https://www.sec.gov/Archives/edgar/data/1181412/000162828026071689/spcx-20261104.htm\"]]]",
+          "item_sha256": "0d55030270a6c0ebb07e0f0192fc791cebac5cedfa7bb6d3c6a4156579821b00"
+        }
+      ],
+      "META": [
+        {
+          "index": 0,
+          "headline": "Meta ownership filing describes an estate-planning transfer",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Meta ownership filing describes an estate-planning transfer\",[\"Mark Zuckerberg’s Form 4, accepted November 6 at 23:36:37 UTC, reports a November 4 transfer involving 97,935 Class B shares.\",\"The filing identifies estate planning and the end of a pecuniary interest in the transferred shares. Other footnotes identify changes in ownership form without consideration.\"],\"The disclosed transfer should not be described as a verified open-market sale or a new Meta operating development.\",\"Transaction codes and footnotes matter; a reported value in the form is not automatically cash sale proceeds.\",\"Further ownership disclosures rather than inferring an investment signal from this transfer.\",[[\"SEC 4 · accepted 2026-11-06T23:36:37.000Z · original filing inspected\",\"https://www.sec.gov/Archives/edgar/data/1326801/000095010326017123/xslF345X06/ownership.xml\"]]]",
+          "item_sha256": "7d9586a02982990ee81a09a6d32e4cd772d5b092a82ccd83988f11f0815b9a4a"
+        }
+      ],
+      "TSLA": [
+        {
+          "index": 0,
+          "headline": "Tesla files shareholder letter ahead of December 3 annual meeting",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Tesla files shareholder letter ahead of December 3 annual meeting\",[\"Tesla filed additional proxy materials on November 6 at 22:00:07 UTC, including a shareholder letter and updated voting website.\",\"The letter identifies December 3, 2026 as the annual meeting date and asks shareholders to support the re-election of Elon Musk, Robyn Denholm and JB Straubel.\"],\"Governance and board composition are near-term monitoring items. These are the board’s solicitation views, not independent voting advice.\",\"The filing does not establish the vote outcome or a new earnings forecast.\",\"The December 3 meeting and subsequent official voting results.\",[[\"SEC DEFA14A · accepted 2026-11-06T22:00:07.000Z · original filing inspected\",\"https://www.sec.gov/Archives/edgar/data/1318605/000110465926123945/tm267596d10_defa14a.htm\"]]]",
+          "item_sha256": "ec7c48e442bc5a99cf32c9d6598f9e7d7b363296d42668bd34743469b94e0865"
+        }
+      ],
+      "TSM": [
+        {
+          "index": 0,
+          "headline": "Coverage correction: TSMC reportedly considers advanced-memory production",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Coverage correction: TSMC reportedly considers advanced-memory production\",[\"Reuters, citing The Information, reports TSMC is considering advanced-memory production. TSMC and Nvidia had not immediately responded to Reuters.\",\"Published before this window and absent from the preceding archived reports checked.\"],\"Potential new AI exposure for TSMC and competition for memory suppliers.\",\"Attributed consideration, not a confirmed launch, investment or order.\",\"Issuer confirmation and commercial timing.\",[[\"Reuters timestamp and limited article text retrieved via search; direct open unavailable · published 2026-11-06T15:45:40Z\",\"https://www.reuters.com/world/asia-pacific/tsmc-considers-making-advanced-memory-chips-information-reports-2026-11-06/\"]]]",
+          "item_sha256": "87ffc73c52247b318975727109361838cf7b751a6ccd601f0d42e209104a7e94"
+        }
+      ]
     }
   },
   "reviewed_editions": {
@@ -1187,6 +1250,12 @@
       "reviewed_at": "2026-11-06T20:03:43.240366+00:00",
       "edition_sha256": "8eb9b54107377c570b598297719cf76ff977ce9d3b4406e22076c521fe6ef9a9",
       "path": "data/watchlist/reviews/watchlist-20261106T200000Z.json"
+    },
+    "watchlist-20261107T000000Z": {
+      "as_of": "2026-11-07T00:00:00Z",
+      "reviewed_at": "2026-11-07T00:10:17.849109+00:00",
+      "edition_sha256": "bc22ea6cfa0a0383c5d7cfa0d8b37ce67e86ccf5aed3090a83fd579964f03e11",
+      "path": "data/watchlist/reviews/watchlist-20261107T000000Z.json"
     }
   }
 }
