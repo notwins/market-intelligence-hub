@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261107T160000Z",
+  "as_of": "2026-11-07T16:00:00Z",
+  "edition_sha256": "c04cd45a49e1d46c8fa504d1e01b8e7ee0dee1b12c24410f34051e59cc74f4f5",
+  "reviewed_at": "2026-11-07T16:08:32.491545+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "BRK.B",
+      "index": 0,
+      "headline": "Berkshire steps up buybacks as insurance weakness lowers operating earnings",
+      "item_sha256": "d22f5496449337ec936792302b9fb911d54a9376c62d64023dedc7b2838d35d9",
+      "scope": "company",
+      "reason": "Original Berkshire release and 10-Q substantiate new Q3 results and repurchases; Saved AOL-syndicated Reuters minute-level timestamp establishes cutoff eligibility. Non-GAAP basis, scoped liquidity, pre-results quote timing and access limits retained. Facts, analysis, risks and catalysts separated; no personal data or user call."
+    }
+  ]
+}

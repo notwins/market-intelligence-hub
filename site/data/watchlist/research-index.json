@@ -1135,7 +1135,18 @@
         }
       ]
     },
-    "watchlist-20261107T120000Z": {}
+    "watchlist-20261107T120000Z": {},
+    "watchlist-20261107T160000Z": {
+      "BRK.B": [
+        {
+          "index": 0,
+          "headline": "Berkshire steps up buybacks as insurance weakness lowers operating earnings",
+          "scope": "company",
+          "content_key": "[\"2026-11-07\",\"Berkshire steps up buybacks as insurance weakness lowers operating earnings\",[\"Berkshire's November 7 original release reports Q3 operating earnings of $12.705 billion versus $13.485 billion a year earlier, a calculated decline of 5.8%. It repurchased approximately $9.6 billion of shares during Q3, bringing nine-month repurchases to $14.4 billion.\",\"After-tax insurance underwriting earnings fell to $1.352 billion from $2.369 billion, while insurance investment income fell to $2.734 billion from $3.181 billion. BNSF, Berkshire Hathaway Energy and manufacturing/service/retailing earnings increased.\",\"GAAP net earnings were $22.112 billion versus $30.796 billion. Operating earnings are a non-GAAP measure excluding investment gains/losses and specified impairments; Berkshire warns that investment valuation movements can make quarterly net earnings misleading.\",\"The original 10-Q reports $352.3 billion in cash, equivalents and Treasury bills at insurance and other businesses, net of payables for September purchases settling in October. This is a specifically scoped liquidity measure, not cash alone.\"],\"Research analysis: Faster repurchases demonstrate capital deployment but do not offset the operating deterioration in insurance. Growth in non-insurance subsidiaries provided a partial earnings cushion. Repurchases alone do not establish that the shares are undervalued.\",\"GEICO's Q3 loss ratio rose to 76.6% from 71.5%, with higher claims frequency/severity and lower average earned premiums per policy. Buybacks remain discretionary. The saved November 6 closing price predates this Saturday release and is not an earnings reaction.\",\"The next regular US trading session's response, subsequent repurchase disclosures, and whether GEICO claims costs and insurance investment income stabilize. No direction of share-price response is predicted.\",[[\"Berkshire original earnings release, November 7; PDF retrieved directly HTTP 200\",\"https://www.berkshirehathaway.com/news/nov0726.pdf\"],[\"Berkshire original Q3 2026 Form 10-Q; PDF retrieved directly HTTP 200; GEICO pp.34–35 and liquidity p.48\",\"https://www.berkshirehathaway.com/qtrly/3rdqtr26.pdf\"],[\"Reuters report, November 7; search-index and syndicated text checked; direct access unavailable\",\"https://www.reuters.com/business/finance/berkshire-hathaway-accelerates-stock-buybacks-operating-profit-falls-2026-11-07/\"],[\"Reuters syndicated by AOL · November 7 13:16 UTC; indexed text corroborates earnings and repurchases\",\"https://www.aol.com/articles/berkshire-hathaway-accelerates-stock-buybacks-131649000.html\"]]]",
+          "item_sha256": "d22f5496449337ec936792302b9fb911d54a9376c62d64023dedc7b2838d35d9"
+        }
+      ]
+    }
   },
   "reviewed_editions": {
     "watchlist-20261103T120000Z": {
@@ -1287,6 +1298,12 @@
       "reviewed_at": "2026-11-07T12:09:46.347777+00:00",
       "edition_sha256": "6658c97958d90bb640656edf7b94dfeed5db2b7072dcc7a0487643f0e969c628",
       "path": "data/watchlist/reviews/watchlist-20261107T120000Z.json"
+    },
+    "watchlist-20261107T160000Z": {
+      "as_of": "2026-11-07T16:00:00Z",
+      "reviewed_at": "2026-11-07T16:08:32.491545+00:00",
+      "edition_sha256": "c04cd45a49e1d46c8fa504d1e01b8e7ee0dee1b12c24410f34051e59cc74f4f5",
+      "path": "data/watchlist/reviews/watchlist-20261107T160000Z.json"
     }
   }
 }
