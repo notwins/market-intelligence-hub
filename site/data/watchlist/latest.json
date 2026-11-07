@@ -1,24 +1,24 @@
 {
   "schema_version": 1,
-  "id": "watchlist-20261107T080000Z",
-  "as_of": "2026-11-07T08:00:00Z",
-  "generated_at": "2026-11-07T08:08:03.952192+00:00",
-  "title": "12-name watchlist · 07 Nov 2026 (Sat) · 16:00 SGT",
+  "id": "watchlist-20261107T120000Z",
+  "as_of": "2026-11-07T12:00:00Z",
+  "generated_at": "2026-11-07T12:09:23.796034+00:00",
+  "title": "12-name watchlist · 07 Nov 2026 (Sat) · 20:00 SGT",
   "public_research_only": true,
   "verification": {
-    "sources_checked_at": "2026-11-07T08:08:03.952192+00:00",
+    "sources_checked_at": "2026-11-07T12:09:23.796034+00:00",
     "prices_verified": true,
     "research_verified": true
   },
-  "summary": "One previously omitted Microsoft report is added as a clearly labelled late-observed coverage correction. No distinct new company development was verified in the checked 03:30–08:00 UTC window. All 12 November 6 regular-session closes and all 72 adjusted-close baselines were freshly rechecked and remain unchanged. Earlier research remains in retained dated reports.",
-  "coverage_note": "Fixed cutoff: 7 November 16:00 SGT (08:00 UTC). Incremental window: 7 November 11:30–16:00 SGT, with a 30-minute overlap from the previous 12:00 SGT edition. Reuters searches, ten directly retrieved issuer listings and eleven accessible SEC feeds were checked; Micron and Alphabet issuer coverage was search-only. The Microsoft item predates this window and was absent from the 23 earlier durable editions checked. Coverage is partial, and search silence does not establish that no news occurred. All prior editions, reports and calls remain unchanged.",
-  "price_basis": "USD regular-session closes for 6 Nov 2026, the latest completed US session at cutoff. Fresh Yahoo Finance daily series and regularMarketTime metadata retrieved 7 Nov 08:05:27–08:06:13 UTC verify all 12 closes. Exact vendor quote timestamps remain 6 Nov 21:00:00–21:00:02 UTC for eleven names and 21:03:23 UTC for BRK.B; each quoted price matches the completed daily bar. Daily changes compare Nov 6 with Nov 5 ordinary closes. Adjusted closes are separate cumulative-return endpoints. Daily-bar timestamps are session labels, not substituted quote timestamps. Postmarket observations are excluded. TSM is the US-listed USD ADR. These saved observations are not live.",
+  "summary": "No distinct new company development was verified in the checked sources since the previous edition. All 12 November 6 regular-session closes and all 72 adjusted-close baselines were freshly rechecked and remain unchanged. Previously covered events are not repeated; earlier research remains in retained dated reports. Berkshire’s scheduled results are after this cutoff and are not included.",
+  "coverage_note": "Fixed cutoff: 7 November 20:00 SGT (12:00 UTC). Incremental window: 7 November 15:30–20:00 SGT, with a 30-minute overlap from the previous 16:00 SGT edition. Reuters searches covered all 12 names; ten issuer listings and eleven SEC feeds were directly checked. Alphabet and Micron issuer coverage was search-only, and Amazon SEC remained unavailable. Recent durable reports and the 24-edition research/source catalogue were compared to exclude repeated events. Coverage is partial; no verified update does not establish that no news occurred. All prior editions, reports and calls remain unchanged.",
+  "price_basis": "USD regular-session closes for 6 Nov 2026, the latest completed US session at cutoff. Fresh Yahoo Finance daily series and regularMarketTime metadata retrieved 7 Nov 12:06:24–12:06:31 UTC verify all 12 closes. Exact vendor quote timestamps remain 6 Nov 21:00:00–21:00:02 UTC for eleven names and 21:03:23 UTC for BRK.B; each quoted price matches the completed daily bar. Daily changes compare Nov 6 with Nov 5 ordinary closes. Adjusted closes are separate cumulative-return endpoints. Daily-bar timestamps are session labels, not substituted quote timestamps. Postmarket observations are excluded. TSM is the US-listed USD ADR. These saved observations are not live.",
   "return_basis": "Six cumulative 1–6 month returns use Yahoo adjusted closes reflecting vendor split and dividend/distribution adjustments. Formula: (endpoint adjusted close / baseline adjusted close - 1) x 100. Source values are rounded to cents before independent Decimal arithmetic; percentages round to two decimals. Baselines are the latest available sessions on or before each monthly anniversary: 6 Oct, 4 Sep, 6 Aug, 6 Jul, 5 Jun and 6 May 2026. Returns are not annualised and exclude investor fees, tax and FX. No independent reconstruction of dividend-adjustment factors or reinvestment model is claimed.",
   "caveats": [
-    "Reuters coverage is search-based and partial, not an exhaustive wire feed. The Microsoft article’s qualified text and original timestamp were returned through search; direct page access was unavailable.",
+    "Reuters coverage is search-based and partial, not an exhaustive wire feed. Search silence does not establish absence of news.",
     "Amazon SEC and Micron IR prior HTTP 403 responses were respected without direct retry. Alphabet IR direct access remains unavailable. Ten other issuer listings and eleven SEC feeds were directly checked.",
     "Issuer listing dates are not treated as exact publication timestamps. Date-only posts were not arbitrarily placed inside the cutoff window. Previously covered events are excluded unless a substantive update is verified.",
-    "The one late-observed item is labelled as earlier evidence, not new in-window news. Eleven companies have no new narrative in this edition; empty research arrays do not erase earlier research or imply a new bullish or bearish view.",
+    "No new narrative research is included in this edition. Empty research arrays do not erase earlier research and do not represent a new bullish or bearish view. Berkshire’s previously announced November 7 release at approximately 13:00 UTC is after the 12:00 UTC cutoff.",
     "Price and baseline checks use one vendor, Yahoo Finance, without independent cross-vendor corroboration. Vendor split/dividend adjustments are not independently reconstructed. Cents-first arithmetic is reproducible from displayed inputs and can differ slightly from unrounded calculations."
   ],
   "rows": [
@@ -92,22 +92,22 @@
           "url": "https://finance.yahoo.com/quote/AAPL/history/"
         },
         {
-          "title": "Apple issuer listing · retrieved during this run",
+          "title": "AAPL issuer listing · directly retrieved",
           "url": "https://www.apple.com/newsroom/archive/?month=11&year=2026"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000320193.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#AAPL"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#AAPL"
         }
       ],
       "gaps": [
-        "Apple November archive retrieved; latest listed release is November 3. No distinct in-window company development verified.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Apple November archive latest release November 3; no distinct in-window release verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -170,30 +170,7 @@
         }
       ],
       "premarket": null,
-      "research": [
-        {
-          "date": "2026-11-06",
-          "headline": "Coverage correction: Microsoft reportedly winds down Oracle AI-capacity rental",
-          "facts": [
-            "Late-observed evidence, published by Reuters November 6 at 17:46:46 UTC: Bloomberg, citing unnamed sources, reported Microsoft was winding down Oracle capacity after nonrenewal. The process reportedly began in prior months.",
-            "Oracle told Reuters that demand remained strong, including older GPUs. Microsoft had not responded; current issuer confirmation was not verified.",
-            "Oracle’s original November 8, 2023 announcement confirms a multiyear arrangement supplying OCI infrastructure alongside Azure for Bing inference. This historical release does not confirm the reported wind-down."
-          ],
-          "analysis": "If confirmed, this could reflect procurement discipline, without proving weaker aggregate AI demand.",
-          "risks": "Economics, replacement capacity and migration costs remain uncertain.",
-          "next_watch": "Watch for issuer confirmation and financial effects.",
-          "sources": [
-            {
-              "title": "Reuters search text · 2026-11-06T17:46:46Z · direct open unavailable",
-              "url": "https://www.reuters.com/business/microsoft-is-winding-down-oracle-deal-rent-ai-cloud-capacity-bloomberg-news-2026-11-06/"
-            },
-            {
-              "title": "Oracle original Spanish-language issuer announcement, November 8 2023; historical agreement only",
-              "url": "https://blogs.oracle.com/oracle-latinoamerica/microsoft-utiliza-oracle-cloud-para-la-busqueda-conversacional-de-bing"
-            }
-          ]
-        }
-      ],
+      "research": [],
       "sources": [
         {
           "title": "Yahoo Finance · freshly checked completed-session prices and adjusted-close history",
@@ -204,31 +181,23 @@
           "url": "https://finance.yahoo.com/quote/MSFT/history/"
         },
         {
-          "title": "Microsoft issuer listing · retrieved during this run",
+          "title": "MSFT issuer listing · directly retrieved",
           "url": "https://news.microsoft.com/source/"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000789019.json"
         },
         {
-          "title": "Reuters search text · 2026-11-06T17:46:46Z · direct open unavailable",
-          "url": "https://www.reuters.com/business/microsoft-is-winding-down-oracle-deal-rent-ai-cloud-capacity-bloomberg-news-2026-11-06/"
-        },
-        {
-          "title": "Oracle original Spanish-language issuer announcement, November 8 2023; historical agreement only",
-          "url": "https://blogs.oracle.com/oracle-latinoamerica/microsoft-utiliza-oracle-cloud-para-la-busqueda-conversacional-de-bing"
-        },
-        {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#MSFT"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#MSFT"
         }
       ],
       "gaps": [
-        "Microsoft Source retrieved and leading Windows security post inspected, dated November 5. One earlier Reuters item first identified this run is included as a coverage correction, not new in-window news.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
-        "The current report was accessed through search. Original event timing remains imprecise. Historical issuer evidence supports background only; direct current confirmation remains missing."
+        "Microsoft Source latest-news list unchanged. Oracle rental wind-down report already covered at 08:00 UTC; no substantive update verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
+        "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
     {
@@ -301,22 +270,22 @@
           "url": "https://finance.yahoo.com/quote/NVDA/history/"
         },
         {
-          "title": "NVIDIA issuer listing · retrieved during this run",
+          "title": "NVDA issuer listing · directly retrieved",
           "url": "https://nvidianews.nvidia.com/news"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001045810.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#NVDA"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#NVDA"
         }
       ],
       "gaps": [
-        "NVIDIA newsroom retrieved; leading November 6 open-source 6G item is already covered in November 6 20:00 UTC edition. No substantive update verified.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Latest issuer item is November 6 open-source 6G tools, already covered November 6 20:00 UTC; no substantive update verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -390,22 +359,22 @@
           "url": "https://finance.yahoo.com/quote/GOOGL/history/"
         },
         {
-          "title": "Alphabet Class A issuer listing · search-only; direct access unavailable",
+          "title": "GOOGL issuer listing · search-only; direct access unavailable",
           "url": "https://abc.xyz/investor/news/"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001652044.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#GOOGL"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#GOOGL"
         }
       ],
       "gaps": [
-        "Alphabet direct IR remains unavailable and was not retried. Date/name Reuters and issuer-domain searches yielded no distinct in-window development. Search-only issuer coverage.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Alphabet direct IR remains unavailable and was not retried. Issuer-domain date search and Reuters searches found no eligible distinct update.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -479,22 +448,22 @@
           "url": "https://finance.yahoo.com/quote/AMZN/history/"
         },
         {
-          "title": "Amazon issuer listing · retrieved during this run",
+          "title": "AMZN issuer listing · directly retrieved",
           "url": "https://www.aboutamazon.com/news"
         },
         {
-          "title": "SEC submissions feed · unavailable; prior HTTP 403 respected",
+          "title": "SEC submissions · unavailable; prior HTTP 403 respected",
           "url": "https://data.sec.gov/submissions/CIK0001018724.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#AMZN"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#AMZN"
         }
       ],
       "gaps": [
-        "Amazon newsroom retrieved; November 6 Alexa text-shopping item previously covered. Date-only entertainment listings do not establish a material new in-window announcement.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "Amazon SEC feed unavailable; prior HTTP 403 respected without retry.",
+        "Amazon newsroom leads with November 6 entertainment items and previously covered Alexa text-shopping release; no new in-window material release verified.",
+        "Prior Amazon SEC HTTP 403 respected without retry; SEC coverage unavailable.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -568,22 +537,22 @@
           "url": "https://finance.yahoo.com/quote/META/history/"
         },
         {
-          "title": "Meta Platforms issuer listing · retrieved during this run",
+          "title": "META issuer listing · directly retrieved",
           "url": "https://about.fb.com/news/"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001326801.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#META"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#META"
         }
       ],
       "gaps": [
-        "Meta newsroom retrieved; leading November 6 Muse spaces release previously covered. No substantive update verified.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Meta newsroom leads with November 6 Muse spaces, previously covered November 6 20:00 UTC; no substantive update verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -657,22 +626,26 @@
           "url": "https://finance.yahoo.com/quote/BRK-B/history/"
         },
         {
-          "title": "Berkshire Hathaway Class B issuer listing · retrieved during this run",
+          "title": "BRK.B issuer listing · directly retrieved",
           "url": "https://www.berkshirehathaway.com/news/2026news.html"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001067983.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#BRK.B"
+          "title": "Berkshire original November 4 scheduling announcement · directly retrieved",
+          "url": "https://www.berkshirehathaway.com/news/nov0426.pdf"
+        },
+        {
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#BRK.B"
         }
       ],
       "gaps": [
-        "Berkshire 2026 release listing and original November 4 announcement retrieved. Saturday November 7 earnings scheduled approximately 07:00 Central time (13:00 UTC), after this cutoff; schedule already covered in November 4 20:00 UTC edition.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Latest listed release is November 4 scheduling notice. Original PDF confirms November 7 earnings at approximately 07:00 Central, equivalent to 13:00 UTC and after cutoff. No earnings results included.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -746,22 +719,22 @@
           "url": "https://finance.yahoo.com/quote/AMD/history/"
         },
         {
-          "title": "Advanced Micro Devices issuer listing · retrieved during this run",
+          "title": "AMD issuer listing · directly retrieved",
           "url": "https://ir.amd.com/news-events/press-releases"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000002488.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#AMD"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#AMD"
         }
       ],
       "gaps": [
-        "AMD IR release listing retrieved; latest shown earnings release dated November 3 16:15 EST. No new in-window release verified.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Latest listed release is November 3 16:15 EST earnings; no new in-window release verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -835,22 +808,22 @@
           "url": "https://finance.yahoo.com/quote/AVGO/history/"
         },
         {
-          "title": "Broadcom issuer listing · retrieved during this run",
+          "title": "AVGO issuer listing · directly retrieved",
           "url": "https://investors.broadcom.com/financial-information/financial-news-releases"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001730168.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#AVGO"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#AVGO"
         }
       ],
       "gaps": [
-        "Broadcom financial news retrieved; latest shown release dated October 27. No new in-window release verified.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Latest listed release is October 27; no new in-window release verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -924,22 +897,22 @@
           "url": "https://finance.yahoo.com/quote/MU/history/"
         },
         {
-          "title": "Micron Technology issuer listing · search-only; direct access unavailable",
+          "title": "MU issuer listing · search-only; direct access unavailable",
           "url": "https://investors.micron.com/news/default.aspx"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0000723125.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#MU"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#MU"
         }
       ],
       "gaps": [
-        "Prior Micron IR HTTP 403 respected without retry. Reuters and issuer-domain searches checked; no distinct eligible update verified. Issuer coverage search-only.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Prior Micron IR HTTP 403 respected without retry. Issuer-domain date search returned only an old 2024 filing; no eligible update verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -1013,22 +986,22 @@
           "url": "https://finance.yahoo.com/quote/TSLA/history/"
         },
         {
-          "title": "Tesla issuer listing · retrieved during this run",
+          "title": "TSLA issuer listing · directly retrieved",
           "url": "https://ir.tesla.com/press"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001318605.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#TSLA"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#TSLA"
         }
       ],
       "gaps": [
-        "Tesla press listing retrieved; latest shown release dated October 21. No new in-window issuer release verified.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Latest listed release is October 21 earnings; no new in-window release verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     },
@@ -1102,22 +1075,22 @@
           "url": "https://finance.yahoo.com/quote/TSM/history/"
         },
         {
-          "title": "Taiwan Semiconductor Manufacturing issuer listing · retrieved during this run",
+          "title": "TSM issuer listing · directly retrieved",
           "url": "https://pr.tsmc.com/english/latest-news"
         },
         {
-          "title": "SEC submissions feed · checked 7 Nov 08:05 UTC",
+          "title": "SEC submissions · checked 7 Nov 12:06 UTC",
           "url": "https://data.sec.gov/submissions/CIK0001046179.json"
         },
         {
-          "title": "Previous 7 Nov 12:00 SGT edition · retained dated research",
-          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T040000Z.html#TSM"
+          "title": "Previous 7 Nov 16:00 SGT edition · original dated research retained",
+          "url": "https://notwins.github.io/market-intelligence-hub/data/watchlist/reports/watchlist-20261107T080000Z.html#TSM"
         }
       ],
       "gaps": [
-        "TSMC latest news retrieved; latest shown release dated October 15. Earlier November 6 advanced-memory Reuters report already covered in November 7 00:00 UTC edition.",
-        "No distinct newly published company development verified in checked sources for 7 November 03:30–08:00 UTC. Partial searches cannot establish absence of news.",
-        "No accepted filing in the 03:30–08:00 UTC window appeared in the retrieved SEC feed.",
+        "Latest listed release is October 15 earnings. Advanced-memory Reuters story already covered November 7 00:00 UTC; no substantive update verified.",
+        "No accepted filing in the 07:30–12:00 UTC window appeared in the retrieved SEC feed.",
+        "No distinct newly published company development verified in checked sources for 7 November 07:30–12:00 UTC. Partial searches cannot establish absence of news.",
         "Earlier company-specific research, analysis, risks and catalysts remain in retained dated reports; quiet coverage does not imply a changed view."
       ]
     }
