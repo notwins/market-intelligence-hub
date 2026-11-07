@@ -95,6 +95,7 @@ jobs:
           python3 scripts/publish_generated_data.py
       - name: Revalidate reconciled source and rebuild deployment catalogue
         run: |
+          python3 scripts/build_site_search.py
           python3 scripts/build_external_sources.py
           python3 scripts/validate_research_contracts.py
           python3 -m unittest discover -s scripts -p 'test_*.py'

@@ -5,3 +5,5 @@
 .search-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.search-tag{display:inline-block;max-width:100%;border:1px solid currentColor;border-radius:6px;background:var(--search-tag-bg,#f1f5f9);color:var(--search-tag-ink,#334155);font-size:.7em;line-height:1.4;padding:2px 7px;overflow-wrap:anywhere}.search-tag-more{font-size:.7em;line-height:1.5;color:inherit}.result-tags .search-tag{background:var(--search-tag-bg,#f1f5f9);color:var(--search-tag-ink,#334155)}.result-date{font-size:.82em;color:#465b73;margin:5px 0 10px}.gs-date{display:block;font-size:.72em;line-height:1.5;margin-top:4px;color:inherit}.gs-section .gs-date{color:#d4dfed}
 @media(max-width:760px){.featured-research{padding:16px}.market-shortcuts{margin-bottom:12px}.feed-freshness-list{gap:8px 14px}.feed-freshness-item{flex:1 1 150px}.featured-research p{font-size:.9em}.search-tags{gap:4px}.search-tag{font-size:.72em}}
 @media(forced-colors:active){.search-tag,.featured-research{background:Canvas;color:CanvasText;border:1px solid CanvasText}}
+
+#view .watchlist-scope{scroll-margin-top:180px}
