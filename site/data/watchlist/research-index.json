@@ -1123,7 +1123,18 @@
         }
       ]
     },
-    "watchlist-20261107T040000Z": {}
+    "watchlist-20261107T040000Z": {},
+    "watchlist-20261107T080000Z": {
+      "MSFT": [
+        {
+          "index": 0,
+          "headline": "Coverage correction: Microsoft reportedly winds down Oracle AI-capacity rental",
+          "scope": "company",
+          "content_key": "[\"2026-11-06\",\"Coverage correction: Microsoft reportedly winds down Oracle AI-capacity rental\",[\"Late-observed evidence, published by Reuters November 6 at 17:46:46 UTC: Bloomberg, citing unnamed sources, reported Microsoft was winding down Oracle capacity after nonrenewal. The process reportedly began in prior months.\",\"Oracle told Reuters that demand remained strong, including older GPUs. Microsoft had not responded; current issuer confirmation was not verified.\",\"Oracle’s original November 8, 2023 announcement confirms a multiyear arrangement supplying OCI infrastructure alongside Azure for Bing inference. This historical release does not confirm the reported wind-down.\"],\"If confirmed, this could reflect procurement discipline, without proving weaker aggregate AI demand.\",\"Economics, replacement capacity and migration costs remain uncertain.\",\"Watch for issuer confirmation and financial effects.\",[[\"Reuters search text · 2026-11-06T17:46:46Z · direct open unavailable\",\"https://www.reuters.com/business/microsoft-is-winding-down-oracle-deal-rent-ai-cloud-capacity-bloomberg-news-2026-11-06/\"],[\"Oracle original Spanish-language issuer announcement, November 8 2023; historical agreement only\",\"https://blogs.oracle.com/oracle-latinoamerica/microsoft-utiliza-oracle-cloud-para-la-busqueda-conversacional-de-bing\"]]]",
+          "item_sha256": "c46ba90c332c1ba0af9b0b07fc6505117621ed616ad0f09ee03651ac20c937b1"
+        }
+      ]
+    }
   },
   "reviewed_editions": {
     "watchlist-20261103T120000Z": {
@@ -1263,6 +1274,12 @@
       "reviewed_at": "2026-11-07T04:01:46.569805+00:00",
       "edition_sha256": "9e943ba203022b84ce098d318cd6cbb288ec6205c6aede359c032d8d94949767",
       "path": "data/watchlist/reviews/watchlist-20261107T040000Z.json"
+    },
+    "watchlist-20261107T080000Z": {
+      "as_of": "2026-11-07T08:00:00Z",
+      "reviewed_at": "2026-11-07T08:08:27.304051+00:00",
+      "edition_sha256": "01f25394ea8da3653ec94552df338fd9ef5502aadf6b0ddf7c5b4ec0e6629dac",
+      "path": "data/watchlist/reviews/watchlist-20261107T080000Z.json"
     }
   }
 }

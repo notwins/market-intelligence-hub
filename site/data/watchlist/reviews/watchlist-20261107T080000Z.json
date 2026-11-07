@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "edition_id": "watchlist-20261107T080000Z",
+  "as_of": "2026-11-07T08:00:00Z",
+  "edition_sha256": "01f25394ea8da3653ec94552df338fd9ef5502aadf6b0ddf7c5b4ec0e6629dac",
+  "reviewed_at": "2026-11-07T08:08:27.304051+00:00",
+  "public_content_reviewed": true,
+  "items": [
+    {
+      "ticker": "MSFT",
+      "index": 0,
+      "headline": "Coverage correction: Microsoft reportedly winds down Oracle AI-capacity rental",
+      "item_sha256": "c46ba90c332c1ba0af9b0b07fc6505117621ed616ad0f09ee03651ac20c937b1",
+      "scope": "company",
+      "reason": "Directly about Microsoft procurement. Qualified Reuters/Bloomberg account is explicitly late-observed, not issuer-confirmed or newly in-window; Oracle issuer source corroborates historical agreement only. Event and URLs absent from 23 prior editions. Facts, generated analysis, uncertainty and catalysts are separate. Public research only; no calls, holdings or private data."
+    }
+  ]
+}
