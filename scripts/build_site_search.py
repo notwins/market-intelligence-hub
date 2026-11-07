@@ -142,11 +142,17 @@ def build():
   def handle_data(self,d):
    if not self.skip:self.out.append(d)
  # Catalogues all public HTML pages, excludes code and transient UI preferences.
+ research_metadata={r['href']+'index.html' if r['href'].endswith('/') else r['href']:r for r in read('data/research-register.json')['entries'] if r.get('href') and r.get('state')=='published'}
  registered_pages={r['href']+'index.html' if r['href'].endswith('/') else r['href'] for r in read('data/research-register.json')['entries'] if r.get('href') and r.get('state')=='published'}
  for file in sorted(ROOT.rglob('*.html')):
   if file.name in ['search.html','tag-map.html','index.html','v1.html','v3.html','v3-backup.html','v3-settings-preview.html','saved-securities.html'] and file.relative_to(ROOT).as_posix() not in registered_pages and file.relative_to(ROOT).as_posix() not in ['market-understanding/us-earnings-cash-flow-2026-11-06/index.html','market-understanding/bond-research-review-2026-11-06/index.html','market-understanding/ai-selloff-2026-11-06/index.html','market-understanding/treasuries-chf-gold-2026-11-06/index.html','market-understanding/mas-snb-2026-11-05/index.html','market-understanding/ai-tech-2026-11-05/index.html','market-understanding/ai-data-centres-2026-11-05/index.html','market-understanding/structured-investment-hypothetical/index.html','market-understanding/spx-floor-cap-2026-11-05/index.html','research/nvda-2026-11-05/index.html','research/tsm-2026-11-05/index.html','research/diversification-made-simple-2026-11-06/index.html','research/sti-banks-2026-11-06/index.html','market-understanding/spx-collars-2026-11-06/index.html','market-understanding/creditworthiness-2026-11-06-v2/index.html','research/cpf-life-explained-2026-11-06-v2/index.html','research/sti-banks-part2-2026-11-06/index.html','market-understanding/howard-marks-2026-11-06-v2/index.html','research/anthropic-ipo-2026-11-05/index.html','research/jpm-price-growth-2026-11-05/index.html','research/xau-central-banks-2026-11-05/index.html','research/xau-gold-outlook-2026-11-06/index.html','research/xau-gold-outlook-2026-11-06-v2/index.html','research/historical-market-events-2026-11-05/index.html','research/cpf-life-yield-2026-11-05/index.html','research/pimco-income-bonds-2026-11-06/index.html','research/electricity-infrastructure-2026-11-05/index.html','research/oaktree-rates-wayne-dahl-2026-11-05/index.html','research/snb-mas-policy-2026-11-05/index.html']:continue
   p=Text();p.feed(file.read_text());title=re.search(r'<title>(.*?)</title>',file.read_text(),re.S)
   add('Page',re.sub('<[^>]+>','',title.group(1)) if title else file.stem,' '.join(p.out),file.relative_to(ROOT).as_posix(),None,None,'Public page text; JavaScript-only content indexed separately where supported')
+  # Display the registered report date without changing the existing date/ranking key.
+  metadata=research_metadata.get(file.relative_to(ROOT).as_posix())
+  if metadata:
+   rows[-1]['display_date']=metadata.get('date')
+   rows[-1]['date_label']=metadata.get('date_label') or 'Report date'
  taxonomy_html=(ROOT/'tag-map.html').read_text()
  taxonomy=json.loads(re.search(r'<script type="application/json" id="taxonomy">(.*?)</script>',taxonomy_html,re.S)[1])
  def tags(nodes,path=''):
@@ -160,6 +166,8 @@ def build():
  source_text=(ROOT/'bos-resources.js').read_text()
  bos=json.loads(re.search(r'const sources=(\[.*?\]);',source_text,re.S)[1])
  for item in bos:add('External research PDF',item['title'],item['scope'],item['url'],item['date'],item['url'],'Dated link only; indicative previous-business-day prices, not live or automatic')
+ for row in rows:
+  if row['kind']=='Hourly story':row['date_label']='Saved story / edition cutoff'
  counts={k:sum(x['kind']==k for x in rows) for k in sorted({x['kind'] for x in rows})}
  payload={'schema_version':2,'built_at':datetime.now(timezone.utc).isoformat(),'counts':counts,'limits':'Public saved content only. No external article bodies, private chats, linked PDFs, tool outputs or local-browser imports. All saved daily headlines and archived snapshots are included, not just the first 80 displayed. Directory dates can be unknown. Search does not refresh financial data. Some JavaScript-only views are represented by section entries rather than every displayed sentence.','entries':rows}
  payload=public_display_payload(payload)

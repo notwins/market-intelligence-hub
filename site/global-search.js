@@ -2,6 +2,7 @@
 (function(root){
 'use strict';
 const Q=typeof module!=='undefined'&&module.exports?require('./search-query.js'):root.MarketSearchQuery;
+const M=typeof module!=='undefined'&&module.exports?require('./search-metadata.js'):root.SearchMetadata;
 const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').normalize('NFKC').toLocaleLowerCase().replace(/[’‘]/g,"'").replace(/[‐‑–−]/g,'-').replace(/\s+/g,' ').trim();
 const tokens=s=>norm(s).match(/[\p{L}\p{N}]+(?:[.-][\p{L}\p{N}]+)*/gu)||[];
@@ -55,8 +56,8 @@ function rowHTML(entry,index,standard){
  const [icon,label]=type(entry),tag=mappedTag(entry,standard),section=entry.kind==='Section',subsection=entry.kind==='Subsection',href=safe(entry.href),external=href?.startsWith('https:');
  if(!href)return '';
  const style=tag&&!section?' style="--gs-row-bg:'+tag.background+';--gs-row-ink:'+tag.text+';--gs-row-edge:'+tag.text+'"':'';
- const location=entry.location?.label,description=[label,entry.date?String(entry.date).slice(0,10):'',external?'External ↗':'',tag?'Colour tag: '+tag.label:''].filter(Boolean).join(' · ');
- return '<li id="global-search-option-'+index+'" role="option" aria-selected="false" class="gs-result'+(section?' gs-section':subsection?' gs-subsection':' gs-content')+'"'+style+'><a tabindex="-1" href="'+E(href)+'"'+(external?' target="_blank" rel="noopener noreferrer"':'')+'><span class="gs-icon" aria-hidden="true">'+icon+'</span><span class="gs-copy"><strong>'+E(entry.title)+'</strong><span class="gs-meta">'+E(description)+'</span>'+(location&&location!==entry.title?'<span class="gs-location">'+E(location)+'</span>':'')+'</span><span class="gs-arrow" aria-hidden="true">'+(external?'↗':'→')+'</span></a></li>';
+ const location=entry.location?.label,description=[label,external?'External ↗':'',tag?'Colour tag: '+tag.label:''].filter(Boolean).join(' · ');
+ return '<li id="global-search-option-'+index+'" role="option" aria-selected="false" class="gs-result'+(section?' gs-section':subsection?' gs-subsection':' gs-content')+'"'+style+'><a tabindex="-1" href="'+E(href)+'"'+(external?' target="_blank" rel="noopener noreferrer"':'')+'><span class="gs-icon" aria-hidden="true">'+icon+'</span><span class="gs-copy"><strong>'+E(entry.title)+'</strong><span class="gs-meta">'+E(description)+'</span>'+(!section&&!subsection?'<span class="gs-date">'+E(M.dateLabel(entry))+': '+M.sourceDate(entry)+'</span>':'')+((Q.record(entry).tags||[]).length?'<span class="search-tags" aria-label="Tags">'+M.tagsHTML(Q.record(entry).tags,standard)+'</span>':'')+(location&&location!==entry.title?'<span class="gs-location">'+E(location)+'</span>':'')+'</span><span class="gs-arrow" aria-hidden="true">'+(external?'↗':'→')+'</span></a></li>';
 }
 const api={safe,norm,tokens,type,prepare,suggest,validStandard,mappedTag,rowHTML};if(typeof module!=='undefined'&&module.exports)module.exports=api;
 if(!root.document)return;
