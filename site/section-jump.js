@@ -29,13 +29,13 @@
     const bar = doc.createElement('nav');
     bar.id = 'section-jump'; bar.hidden = true;
     bar.setAttribute('aria-label', 'Subsection navigation');
-    bar.innerHTML = '<button type="button" id="section-jump-toggle" aria-expanded="false" aria-controls="section-jump-panel"><span aria-hidden="true">☷</span> Sections <span class="section-jump-count" aria-hidden="true"></span><span class="section-jump-chevron" aria-hidden="true">⌃</span></button><div id="section-jump-panel" hidden><div class="section-jump-heading">On this page <button type="button" class="section-jump-close" aria-label="Close sections">×</button></div><div class="section-jump-controls"><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection">↑</button><label class="section-jump-label" for="section-jump-select">Jump to subsection</label><select id="section-jump-select" aria-label="Jump to subsection"></select><span class="section-jump-progress" aria-hidden="true"></span><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection">↓</button></div><ol class="section-jump-list" aria-label="Page sections"></ol></div><span class="section-jump-status" role="status" aria-live="polite" aria-atomic="true"></span>';
+    bar.innerHTML = '<div class="section-jump-toolbar"><button type="button" id="section-jump-toggle" aria-label="Choose subsection" title="Choose subsection" aria-expanded="false" aria-controls="section-jump-panel"><span aria-hidden="true">☰</span></button><span class="section-jump-divider" aria-hidden="true"></span><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection"><span aria-hidden="true">↑</span></button><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection"><span aria-hidden="true">↓</span></button></div><div id="section-jump-panel" hidden><div class="section-jump-heading">On this page <button type="button" class="section-jump-close" aria-label="Close sections">×</button></div><div class="section-jump-controls"><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection">↑</button><label class="section-jump-label" for="section-jump-select">Jump to subsection</label><select id="section-jump-select" aria-label="Jump to subsection"></select><span class="section-jump-progress" aria-hidden="true"></span><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection">↓</button></div><ol class="section-jump-list" aria-label="Page sections"></ol></div><span class="section-jump-status" role="status" aria-live="polite" aria-atomic="true"></span>';
     const spacer = doc.createElement('div'); spacer.className = 'section-jump-spacer'; spacer.hidden = true; spacer.setAttribute('aria-hidden', 'true');
     doc.body.append(bar, spacer);
-    const previous = bar.querySelector('.section-jump-prev'), next = bar.querySelector('.section-jump-next');
+    const previous = [...bar.querySelectorAll('.section-jump-prev')], next = [...bar.querySelectorAll('.section-jump-next')];
     const picker = bar.querySelector('select'), status = bar.querySelector('.section-jump-status');
     const toggle = bar.querySelector('#section-jump-toggle'), panel = bar.querySelector('#section-jump-panel');
-    const list = bar.querySelector('.section-jump-list'), count = bar.querySelector('.section-jump-count');
+    const list = bar.querySelector('.section-jump-list'), toolbar = bar.querySelector('.section-jump-toolbar');
     const progress = bar.querySelector('.section-jump-progress'), rail = doc.querySelector('aside.rail');
     let docked = false, expanded = false;
     function setExpanded(value, restoreFocus = false) {
@@ -77,11 +77,11 @@
       });
       // The measured nav already includes its safe-area padding. Never add it twice.
       bar.style.setProperty('--section-jump-bottom', bottom ? bottom + 'px' : 'env(safe-area-inset-bottom,0px)');
-      bar.style.setProperty('--section-jump-available', Math.max(120, root.innerHeight - bottom - toggle.getBoundingClientRect().height - 40) + 'px');
+      bar.style.setProperty('--section-jump-available', Math.max(120, root.innerHeight - bottom - toolbar.getBoundingClientRect().height - 40) + 'px');
       bar.style.setProperty('--section-jump-panel-width', Math.min(350, doc.documentElement.clientWidth - 24) + 'px');
       // Keep this as the last body child so even subsequently inserted legal links clear the pill.
       if (spacer !== doc.body.lastElementChild) doc.body.append(spacer);
-      spacer.style.height = docked ? '0px' : (bottom + toggle.getBoundingClientRect().height + 28) + 'px';
+      spacer.style.height = docked ? '0px' : (bottom + toolbar.getBoundingClientRect().height + 28) + 'px';
     }
     function position() {
       positionFrame = 0;
@@ -92,19 +92,23 @@
       const chosenVisibleAtEnd = atEnd && anchored !== -1 && tops[anchored] >= offset - 12 && tops[anchored] < root.innerHeight - bar.getBoundingClientRect().height;
       current = (pending || chosenVisibleAtEnd) && anchored !== -1 ? anchored : indexAt(tops, offset, anchored);
       picker.value = String(current);
-      count.textContent = (current + 1) + '/' + targets.length;
       progress.textContent = 'Section ' + (current + 1) + ' of ' + targets.length;
       picker.title = targets[current]?.label || 'Jump to subsection';
       list.querySelectorAll('button').forEach((button, i) => {
         if (i === current) button.setAttribute('aria-current', 'location');
         else button.removeAttribute('aria-current');
       });
-      previous.disabled = current <= 0; next.disabled = current >= targets.length - 1;
       const before = targets[current - 1]?.label, after = targets[current + 1]?.label;
-      previous.title = before ? 'Previous subsection: ' + before : 'At the first subsection';
-      previous.setAttribute('aria-label', previous.title);
-      next.title = after ? 'Next subsection: ' + after : 'At the last subsection';
-      next.setAttribute('aria-label', next.title);
+      previous.forEach(button => {
+        button.disabled = current <= 0;
+        button.title = before ? 'Previous subsection: ' + before : 'At the first subsection';
+        button.setAttribute('aria-label', button.title);
+      });
+      next.forEach(button => {
+        button.disabled = current >= targets.length - 1;
+        button.title = after ? 'Next subsection: ' + after : 'At the last subsection';
+        button.setAttribute('aria-label', button.title);
+      });
     }
     function refresh() {
       const scope = doc.querySelector('main') || doc.body;
@@ -142,7 +146,7 @@
       const target = targets[index];
       if (!target || bar.hidden) return;
       anchor = pending = target.node; current = index;
-      if (!docked) setExpanded(false, !focusHeading);
+      if (!docked) setExpanded(false, expanded && !focusHeading);
       if (focusHeading) {
         if (!target.node.hasAttribute('tabindex')) target.node.setAttribute('tabindex', '-1');
         target.node.focus({ preventScroll: true });
@@ -164,8 +168,8 @@
     doc.addEventListener('focusin', event => {
       if (expanded && !bar.contains(event.target)) setExpanded(false);
     });
-    previous.addEventListener('click', () => jump(current - 1, false));
-    next.addEventListener('click', () => jump(current + 1, false));
+    previous.forEach(button => button.addEventListener('click', () => jump(current - 1, false)));
+    next.forEach(button => button.addEventListener('click', () => jump(current + 1, false)));
     picker.addEventListener('change', () => jump(Number(picker.value), true));
     root.addEventListener('scroll', () => {
       if (!positionFrame) positionFrame = root.requestAnimationFrame(position);

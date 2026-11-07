@@ -4,9 +4,11 @@
 #section-jump button{box-sizing:border-box;min-height:44px;min-width:44px;margin:0;padding:8px 12px;border:1px solid transparent;border-radius:10px;background:var(--sj-soft);color:var(--sj-text);font:inherit;font-weight:650;cursor:pointer}
 #section-jump button:disabled{opacity:.45;cursor:default}
 #section-jump button:focus-visible,#section-jump select:focus-visible{outline:3px solid var(--sj-focus);outline-offset:2px}
-#section-jump #section-jump-toggle{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;max-width:100%;border:1px solid var(--sj-focus);border-radius:999px;background:var(--sj-card);color:var(--sj-focus);box-shadow:0 3px 14px #18282218;padding:8px 14px;font-weight:750}
-#section-jump .section-jump-count{font-size:.75em;font-variant-numeric:tabular-nums;color:var(--sj-muted)}
-#section-jump-toggle[aria-expanded=true] .section-jump-chevron{transform:rotate(180deg)}
+/* Three direct actions in a narrow 143px pill; each remains a 44px tap target. */
+#section-jump .section-jump-toolbar{display:flex;align-items:center;width:max-content;max-width:100%;padding:0 4px;border:1px solid var(--sj-focus);border-radius:999px;background:var(--sj-card);box-shadow:0 3px 14px #18282218}
+#section-jump .section-jump-toolbar>button{display:inline-grid;place-items:center;flex:0 0 44px;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--sj-focus);font-size:1.2em;line-height:1}
+#section-jump .section-jump-toolbar>button:hover:not(:disabled),#section-jump-toggle[aria-expanded=true]{background:var(--sj-soft)}
+#section-jump .section-jump-divider{flex:0 0 1px;height:20px;background:var(--sj-border)}
 #section-jump-panel{position:absolute;right:0;bottom:calc(100% + 8px);width:var(--section-jump-panel-width,min(350px,calc(100vw - 40px)));max-height:min(60dvh,var(--section-jump-available,60dvh));display:flex;flex-direction:column;overflow:hidden;padding:10px;background:var(--sj-card);border:1px solid var(--sj-border);border-radius:16px;box-shadow:0 5px 24px #18282224}
 #section-jump .section-jump-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px 6px;font-size:.85em;font-weight:750}
 #section-jump .section-jump-close{background:transparent;font-size:1.4em}
@@ -24,12 +26,10 @@
 .section-jump-spacer{display:block;clear:both;pointer-events:none}
 /* The full desktop control occupies the existing rail, never the article. */
 #section-jump.section-jump-docked{position:relative;inset:auto;width:100%;max-width:none;flex:0 0 auto;margin-top:12px;z-index:auto}
-#section-jump.section-jump-docked #section-jump-toggle,#section-jump.section-jump-docked .section-jump-close,#section-jump.section-jump-docked .section-jump-list,#section-jump.section-jump-docked .section-jump-progress{display:none}
+#section-jump.section-jump-docked .section-jump-toolbar,#section-jump.section-jump-docked .section-jump-close,#section-jump.section-jump-docked .section-jump-list,#section-jump.section-jump-docked .section-jump-progress{display:none}
 #section-jump.section-jump-docked #section-jump-panel{position:relative;inset:auto;width:100%;max-height:none;padding:8px;box-shadow:none;border-radius:12px}
 #section-jump.section-jump-docked .section-jump-controls{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0}
 #section-jump.section-jump-docked select{display:block;grid-column:1/-1;grid-row:1;width:100%;font-size:.8em}
 #section-jump.section-jump-docked .section-jump-controls>button{width:100%;min-height:44px;padding:4px 10px}
 @media print{#section-jump,.section-jump-spacer{display:none!important}}
 @media(forced-colors:active){#section-jump{--sj-card:Canvas;--sj-soft:Canvas;--sj-selected:Canvas;--sj-border:CanvasText;--sj-text:CanvasText;--sj-muted:CanvasText;--sj-focus:Highlight}#section-jump button,#section-jump select{background:ButtonFace;color:ButtonText}#section-jump button:disabled{color:GrayText;opacity:1}}
-
-@media(max-width:340px){#section-jump .section-jump-count{display:none}}
