@@ -1,9 +1,17 @@
 /* Compact, source-dated reading entry points and feed status. */
-.market-shortcuts{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 15px}.market-shortcuts a{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:1px solid #c5d0de;border-radius:9px;background:white;color:#243c57;font-weight:700}
 .featured-research{margin:0 0 20px;padding:19px 22px;background:#fff;border:1px solid #c5d0de;border-radius:15px}.featured-research .eyebrow{margin-bottom:6px}.featured-research h2{font-size:clamp(22px,2.5vw,30px);margin:0 0 8px}.featured-research p{max-width:840px;margin:7px 0 10px}.featured-research .featured-date{font-size:.76em;color:#46576d}.featured-research .links{margin-top:10px}.featured-research a{min-height:44px;display:inline-flex;align-items:center}.featured-research .links a{font-size:13px}
 .feed-freshness{margin:10px 0 18px}.feed-freshness>p{font-size:.75em;color:#46576d;margin:4px 0 7px}.feed-freshness-list{display:flex;flex-wrap:wrap;gap:7px 20px}.feed-freshness-item{font-size:.73em;line-height:1.55;min-width:0}.feed-freshness-item a{font-weight:650;color:#254a72}.feed-freshness-item span{display:block;color:#46576d}.feed-freshness-item[data-unavailable=true] span{font-style:italic}
 .search-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.search-tag{display:inline-block;max-width:100%;border:1px solid currentColor;border-radius:6px;background:var(--search-tag-bg,#f1f5f9);color:var(--search-tag-ink,#334155);font-size:.7em;line-height:1.4;padding:2px 7px;overflow-wrap:anywhere}.search-tag-more{font-size:.7em;line-height:1.5;color:inherit}.result-tags .search-tag{background:var(--search-tag-bg,#f1f5f9);color:var(--search-tag-ink,#334155)}.result-date{font-size:.82em;color:#465b73;margin:5px 0 10px}.gs-date{display:block;font-size:.72em;line-height:1.5;margin-top:4px;color:inherit}.gs-section .gs-date{color:#d4dfed}
-@media(max-width:760px){.featured-research{padding:16px}.market-shortcuts{margin-bottom:12px}.feed-freshness-list{gap:8px 14px}.feed-freshness-item{flex:1 1 150px}.featured-research p{font-size:.9em}.search-tags{gap:4px}.search-tag{font-size:.72em}}
-@media(forced-colors:active){.search-tag,.featured-research{background:Canvas;color:CanvasText;border:1px solid CanvasText}}
-
-#view .watchlist-scope{scroll-margin-top:180px}
+@media(max-width:760px){.featured-research{padding:16px}.feed-freshness-list{gap:8px 14px}.feed-freshness-item{flex:1 1 150px}.featured-research p{font-size:.9em}.search-tags{gap:4px}.search-tag{font-size:.72em}}
+/* Match the linked STI article's hero palette and mixed sans/Georgia title.
+   These tokens are scoped to this feature; dashboard and other cards stay unchanged. */
+.featured-research--sti{--sti-bg:#f4f6f5;--sti-ink:#182822;--sti-muted:#485b53;--sti-line:#cbd6d0;--sti-sg:#047857;--sti-link:#0369a1;background:var(--sti-bg);color:var(--sti-ink);border-color:var(--sti-line);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.featured-research--sti .eyebrow{color:var(--sti-sg);font-size:calc(12px * var(--text-scale,1));line-height:1.4;letter-spacing:.115em;font-weight:700}
+.featured-research--sti h2{font-size:clamp(calc(30px * var(--text-scale,1)),calc(3.8vw * var(--text-scale,1)),calc(44px * var(--text-scale,1)));line-height:1.12;letter-spacing:-.033em;font-weight:740;text-wrap:balance;margin:12px 0}
+.featured-research--sti h2 a{display:block;color:var(--sti-ink);font-family:inherit;font-weight:inherit}
+.featured-research--sti h2 em{font-family:Georgia,serif;font-weight:500;color:var(--sti-sg)}
+.featured-research--sti .featured-date{color:var(--sti-muted)}
+.featured-research--sti .links a{color:var(--sti-link)}
+.featured-research--sti a:focus-visible{outline-color:var(--sti-link)}
+@media(prefers-color-scheme:dark){.featured-research--sti{--sti-bg:#101915;--sti-ink:#f0f4f1;--sti-muted:#c1cec7;--sti-line:#415349;--sti-sg:#6ee7b7;--sti-link:#7dd3fc}}
+@media(forced-colors:active){.search-tag,.featured-research{background:Canvas;color:CanvasText;border:1px solid CanvasText}.featured-research--sti{--sti-ink:CanvasText;--sti-muted:CanvasText;--sti-sg:CanvasText;--sti-link:LinkText}}
