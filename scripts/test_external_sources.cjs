@@ -7,7 +7,20 @@ s=a.empty();s.groups=['Sovereign investing','Central banks'];let groups=a.filter
 s=a.empty();s.month='2026-10';let oct=a.filterRecords(rows,s);assert(oct.length>0);assert(oct.every(r=>r.references.some(x=>x.date.startsWith('2026-10'))));s.year='2026';assert(a.filterRecords(rows,s).every(r=>a.years(r).includes('2026')));
 assert.deepEqual(a.years({period:'2025/26'}),['2025','2026']);
 s=a.empty();s.saved=true;assert.equal(a.filterRecords(rows,s,new Set([rows[0].id])).length,1);
-let sorted=a.sortRecords(rows,'referenced');assert(sorted[0].usages.some(x=>x.date==='2026-11-06'));let dates=a.sortRecords(rows,'report').map(r=>r.report_date||'');assert.deepEqual(dates,[...dates].sort().reverse());
+// Publication adds newer usage dates; verify the ordering, not a fixed live date.
+const referenceFixtures=[
+ {id:'undated',title:'A',usages:[{}]},
+ {id:'usage',title:'Z',last_referenced:'2026-11-06',usages:[{date:'2027-01-01'},{date:'2026-12-30'}]},
+ {id:'reference',title:'A',last_referenced:'2027-01-02',usages:[{date:'2026-12-31'}]},
+ {id:'tie-b',title:'B',usages:[{date:'2027-01-01'}]},
+ {id:'tie-a',title:'B',usages:[{date:'2027-01-01'}]},
+ {id:'saved-only',title:'S',last_referenced:'2026-11-06'}
+];
+const referenceSnapshot=JSON.stringify(referenceFixtures);
+assert.deepEqual(a.sortRecords(referenceFixtures,'referenced').map(r=>r.id),['reference','tie-a','tie-b','usage','saved-only','undated']);
+assert.equal(JSON.stringify(referenceFixtures),referenceSnapshot);
+const latestReference=r=>[r.last_referenced||'',...(r.usages||[]).map(x=>x.date||'')].sort().pop()||'';
+let sorted=a.sortRecords(rows,'referenced');assert.deepEqual(sorted.map(latestReference),rows.map(latestReference).sort().reverse());let dates=a.sortRecords(rows,'report').map(r=>r.report_date||'');assert.deepEqual(dates,[...dates].sort().reverse());
 s={...a.empty(),q:'MAS reserves',groups:['Singapore','Central banks'],type:'PDF',month:'2026-10',view:'topic',sort:'report'};assert.deepEqual(a.readState(new URLSearchParams(a.serialize(s))),s);
 let g=a.groupRecords(rows.slice(0,20),s);assert.equal(g.reduce((n,[_,x])=>n+x.length,0),20);
 let bad={...rows[0],title:'<script>x</script>',note:'<img src=x>',url:'javascript:alert(1)'};let html=a.card(bad,new Set());assert(!html.includes('<script>'));assert(!html.includes('<img'));assert(!html.includes('href="javascript:'));assert(html.includes('&lt;script&gt;'));
