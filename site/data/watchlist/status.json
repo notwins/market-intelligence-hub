@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-06T20:09:41.166028+00:00",
-  "message": "07 Nov 04:00 SGT watchlist edition published by this scheduled execution. Exact-commit successful Pages deployment, live edition ID and immutable report SHA-256 verified. Twelve completed 5 Nov USD closes and 72 adjusted-close baselines rechecked. NVIDIA and Meta developments, a late-observed Microsoft coverage correction, and separately labelled shared credit-risk context included. News access is partial. This proves this execution, not future runs or separate-chat delivery.",
+  "checked_at": "2026-11-07T00:15:16.353813+00:00",
+  "message": "07 Nov 08:00 SGT watchlist edition published by this scheduled execution. Exact-commit successful Pages deployment, live edition ID and immutable report SHA-256 verified. Twelve completed 6 Nov USD closes and 72 adjusted-close baselines checked. Six current-window research items and one late-observed TSM coverage correction included. News access is partial. This proves this execution, not future runs or separate-chat delivery.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,12 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "9a6ddfab7141440917a9e99e50cd7fb45676e7ef",
-    "pages_run_id": 42285629971,
-    "edition_id": "watchlist-20261106T200000Z",
-    "report_sha256": "aed9b267936796a71275250073e3bc628b635f04e71490942c90e0d653f23486",
-    "verified_at": "2026-11-06T20:09:41.166028+00:00",
-    "scheduled_for": "2026-11-06T20:00:00Z",
+    "commit": "617275488945368cfe78028906a60b1e013f67ee",
+    "pages_run_id": 42316842816,
+    "edition_id": "watchlist-20261107T000000Z",
+    "report_sha256": "ffc56c1b3d0c5887029fe40382afdf00f16d973a0db06182f7ae07c4da226396",
+    "verified_at": "2026-11-07T00:15:16.353813+00:00",
+    "scheduled_for": "2026-11-07T00:00:00Z",
     "execution_kind": "scheduled_run_cloud"
   },
   "separate_A_chat_delivery_verified": false,
@@ -167,6 +167,18 @@
       "verified_at": "2026-11-06T16:22:04.785005+00:00",
       "scheduled_for": "2026-11-06T16:00:00Z",
       "execution_kind": "scheduled_run_cloud"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "9a6ddfab7141440917a9e99e50cd7fb45676e7ef",
+      "pages_run_id": 42285629971,
+      "edition_id": "watchlist-20261106T200000Z",
+      "report_sha256": "aed9b267936796a71275250073e3bc628b635f04e71490942c90e0d653f23486",
+      "verified_at": "2026-11-06T20:09:41.166028+00:00",
+      "scheduled_for": "2026-11-06T20:00:00Z",
+      "execution_kind": "scheduled_run_cloud"
     }
   ],
   "recovered_attempts": [
@@ -212,14 +224,14 @@
       "IEF"
     ],
     "news_access": "partial",
-    "price_session": "2026-11-05",
+    "price_session": "2026-11-06",
     "basis": "USD completed regular-session observations; adjusted-close cumulative returns",
     "required_prices_verified": 12,
     "adjusted_baselines_verified": 72,
-    "new_company_research_items": 2,
-    "shared_market_context_items": 1,
-    "source_price_timestamps": "Historical daily bars freshly rechecked 6 Nov 20:00:06–20:00:15 UTC. Exact 5 Nov vendor quote times retained from preserved earlier raw evidence and matched to fresh closes; current 6 Nov intraday prices and metadata excluded.",
-    "source_limits": "Reuters article text retrieved through search with direct-page access unavailable. Eleven accessible SEC feeds had no in-window filings. Amazon SEC and Micron IR prior HTTP 403 respected; Alphabet IR remained inaccessible. NVIDIA original saved issuer HTML inspected with current search corroboration; Meta original HTML retrieved. Quiet-name coverage is not exhaustive.",
+    "new_company_research_items": 6,
+    "shared_market_context_items": 0,
+    "source_price_timestamps": "Fresh daily series retrieved 7 Nov 00:06:42–00:06:51 UTC. Exact 6 Nov regularMarketTime quote metadata matches the completed closes: 21:00:00–21:00:02 UTC for eleven tickers; BRK.B 21:03:23 UTC. Postmarket excluded.",
+    "source_limits": "Reuters article text and Crusoe release retrieved through search with direct access limits. Eleven SEC feeds checked, four original in-window filings inspected. SpaceX original filing text obtained through search. Amazon SEC and Micron IR prior HTTP 403 respected; Alphabet IR remains inaccessible. TSM consideration is attributed reporting, not issuer confirmation. Quiet-name coverage is not exhaustive.",
     "late_observed_company_corrections": 1,
     "price_context_items": 0
   }
