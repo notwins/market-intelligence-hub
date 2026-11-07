@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-06T17:07:40.248090+00:00",
+  "checked_at": "2026-11-07T06:44:38.306250+00:00",
   "standard_version": "V1.2 Merged",
   "standard_sha256": "46ecab67f4eba9e57a9320489f4f7b07688f645f34d093372554c2871d319694",
   "scope": "Public research editions and safe status summaries for pending files or revisions. Dates describe the report or request, not live market observations. Earlier editions and add-ons are retained.",
@@ -948,6 +948,24 @@
       "assets": [],
       "published_date": "2026-11-07",
       "sha256": "00e20f047742d572e46b122add1e2d3214a544616aabe1e9afa662f89db3e64f"
+    },
+    {
+      "id": "global-credit-public-2026-11-07",
+      "title": "Global Markets & Credit Research: public extract",
+      "href": "market-understanding/global-credit-public-2026-11-07/",
+      "date": "2026-11-07",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "Public extract · 7 Nov",
+      "section": "Market understanding",
+      "tags": [
+        "asset.fixed_income_bonds",
+        "sector.financials_banking"
+      ],
+      "summary": "October U.S. employment, June EU bank credit quality and new BIS banking scenarios: three official-source findings, with rate, credit and liquidity risks kept separate. Public abridgement, not the full briefing.",
+      "assets": [],
+      "published_date": "2026-11-07",
+      "sha256": "cf07228c7bcb786e038059fb273b4f9f797b895e4c26c7e4228f7277cc15a5b4"
     }
   ]
 }
