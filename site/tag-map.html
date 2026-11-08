@@ -31,4 +31,4 @@ function render(){const q=document.getElementById('q').value,nodes=filterTree(ta
 document.getElementById('legend').innerHTML=taxonomy.map((n,i)=>'<a style="color:'+(n.color||palette[i%palette.length][0])+'" href="#'+esc(n.id)+'">'+esc(n.label)+'</a>').join('');
 document.getElementById('q').value=new URLSearchParams(location.search).get('q')||'';
 document.getElementById('q').addEventListener('input',render);document.getElementById('expand').onclick=()=>{opened=true;render();};document.getElementById('collapse').onclick=()=>{opened=false;document.querySelectorAll('#tree details').forEach(x=>x.open=false);};document.getElementById('reset').onclick=()=>{document.getElementById('q').value='';opened=false;render();document.getElementById('q').focus();};render();
-</script><script src="tag-family-tree.js"></script></body></html>
+</script><script src="tag-family-tree.js?v=20261108-2"></script></body></html>
