@@ -2,6 +2,12 @@
   "schema_version": 1,
   "editions": [
     {
+      "id": "watchlist-20261108T000000Z",
+      "as_of": "2026-11-08T00:00:00Z",
+      "title": "12-name watchlist · 08 Nov 2026 (Sun) · 08:00 SGT",
+      "path": "data/watchlist/archive/watchlist-20261108T000000Z.json"
+    },
+    {
       "id": "watchlist-20261107T200000Z",
       "as_of": "2026-11-07T20:00:00Z",
       "title": "12-name watchlist · 08 Nov 2026 (Sun) · 04:00 SGT",
@@ -164,5 +170,5 @@
       "path": "data/watchlist/archive/watchlist-20261103T120000Z.json"
     }
   ],
-  "latest_id": "watchlist-20261107T200000Z"
+  "latest_id": "watchlist-20261108T000000Z"
 }
