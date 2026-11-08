@@ -142,9 +142,15 @@ class ResearchContractTests(unittest.TestCase):
             (site/'research').mkdir()
             old = site/'research/old.html'
             old.write_text('<p>Old report</p>')
-            (site/'dashboard.html').write_text('<h1>Utility page</h1>')
+            (site/'dashboard.html').write_text('<h1>Utility page</h1><p>Documentation names mih-research-contract.</p><pre>&lt;script id="mih-research-contract"&gt;</pre>')
             baseline = {'paths':['research/old.html']}
             validate_site(site,baseline)
+            dashboard = site/'dashboard.html'
+            documentation = dashboard.read_text()
+            dashboard.write_text(documentation + '<script type="application/json" id="mih-research-contract">{}</script>')
+            with self.assertRaises(ValueError):
+                validate_site(site,baseline)
+            dashboard.write_text(documentation)
             new = site/'research/new.html'
             new.write_text('<p>New report, missing contract</p>')
             with self.assertRaises(ValueError):

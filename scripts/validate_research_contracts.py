@@ -216,10 +216,12 @@ def validate_site(site, baseline=None):
         text = path.read_text(encoding='utf-8')
         # Fixed source inventory, never dynamically grandfather a new path. A
         # legacy page explicitly opting in is checked too. UI pages are not reports.
-        opted_in = CONTRACT_ID in text
         research_path = relative.startswith(('research/', 'market-understanding/', 'data/'))
+        # A guide quoting the contract name is not opting in. Only an actual
+        # contract script is an opt-in; article namespaces/metadata stay gated.
+        parsed = Document(text) if CONTRACT_ID in text or (relative not in legacy and not research_path) else None
+        opted_in = parsed is not None and bool(parsed.contracts)
         # Attribute order must not permit article metadata to bypass the gate.
-        parsed = Document(text) if relative not in legacy and not research_path else None
         article = parsed is not None and any(n['tag'] == 'meta' and (
             (n['attrs'].get('property') == 'og:type' and n['attrs'].get('content') == 'article') or
             (n['attrs'].get('name') == 'mih-content-type' and n['attrs'].get('content') in {'article','research'})

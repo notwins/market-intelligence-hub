@@ -4,6 +4,10 @@ const norm=v=>String(v??'').normalize('NFKC').toLocaleLowerCase();
 const hex=v=>/^#[0-9A-F]{6}$/i.test(v)?v:'#222D31';
 const match=(q,values)=>norm(q).trim().split(/\s+/).filter(Boolean).every(t=>norm(values.join(' ')).includes(t));
 let data,selected='03',companyLimit=24,tagLimit=24;
+async function copyUnifiedPrompt(){
+ try{if(!navigator.clipboard)throw Error('Clipboard unavailable');await navigator.clipboard.writeText(JSON.parse($('unified-prompt-source').textContent));$('unified-copy-status').textContent='Complete research prompt copied.';}catch{$('unified-copy-status').textContent='Copy is unavailable here. Use Download prompt or select the full text below.';}
+}
+if($('copy-unified-prompt'))$('copy-unified-prompt').addEventListener('click',copyUnifiedPrompt);
 let articleLimit=12;
 function renderArticles(){
  const cards=[...document.querySelectorAll('[data-article-search]')], q=$('article-query').value, chosen=$('article-theme').value, status=$('article-status').value;

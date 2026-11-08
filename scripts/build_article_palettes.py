@@ -103,6 +103,9 @@ def build(root=ROOT):
  root=Path(root);data=directory(root);standard=json.loads((root/'site/data/colour-templates-v3.json').read_text());page=root/'site/colour-templates-v3/index.html';text=page.read_text();start='<!-- ARTICLE PALETTES START -->';end='<!-- ARTICLE PALETTES END -->';fragment=start+'\n'+render(data,standard)+'\n'+end
  if start in text:text=text[:text.index(start)]+fragment+text[text.index(end)+len(end):]
  else:text=text.replace('<main id="main">','<main id="main">'+fragment)
- page.write_text(text);(root/'site/data/article-palettes.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n');return data
+ page.write_text(text);(root/'site/data/article-palettes.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+ from build_research_standard import build as build_standard
+ build_standard(root)
+ return data
 if __name__=='__main__':
  data=build();print('Built palette directory:',len(data['articles']),'published editions;',dict(Counter(a['status'] for a in data['articles'])))
