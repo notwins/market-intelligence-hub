@@ -67,6 +67,7 @@ class SiteMapTests(unittest.TestCase):
                 self.assertEqual(attrs.get('aria-hidden'), 'true')
         self.assertNotIn('role="tree"', self.html)  # Native links/disclosures, no incomplete ARIA tree widget.
         self.assertNotIn('javascript:', self.html)
+        self.assertNotIn('aria-hidden="true">↗', self.html)
 
     def test_mapped_colours_and_contrast(self):
         tags = {t['id']: t for t in json.loads((ROOT / 'site/data/colour-templates-v3.json').read_text())['tags']}
