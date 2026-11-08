@@ -104,7 +104,7 @@
     return true;
   }
   function followHash(){let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}navigateAtlas(id);}
-  host.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link)return;const id=link.getAttribute('href').slice(1);if(!ids.has(id))return;event.preventDefault();if(location.hash!=='#'+id)history.pushState(null,'','#'+id);navigateAtlas(id);});
+  host.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(!link)return;const id=link.getAttribute('href').slice(1);if(!ids.has(id))return;event.preventDefault();if(location.hash!=='#'+id)location.hash='#'+id;navigateAtlas(id);});
   query.addEventListener('input',()=>{remember();expand=false;renderFamily();});
   document.getElementById('family-expand').addEventListener('click',()=>{remember();expand=true;renderFamily();});
   document.getElementById('family-overview').addEventListener('click',()=>{opened.clear();expand=false;query.value='';renderFamily();query.focus();});
