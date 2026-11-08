@@ -49,3 +49,7 @@ Required colour and editorial references
 Read and apply these references as part of every article and posting prompt:
 https://notwins.github.io/market-intelligence-hub/tag-map.html
 https://notwins.github.io/market-intelligence-hub/legal/editorial-policy.html
+
+
+Required main-subject theme guide
+All future research follows https://notwins.github.io/market-intelligence-hub/colour-templates-v3/#subject-guide. Choose the main analytical question and its prescribed V3 palette; use restrained Original swatches and documented near-white UI tints. Preserve V1.2 company, ticker and keyword colours. State the selected theme and route rationale. Do not claim an existing page has adopted V3 merely because its subject maps to a theme.

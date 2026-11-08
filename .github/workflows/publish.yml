@@ -33,6 +33,7 @@ jobs:
           fi
       - name: Test publisher validation and archive retention
         run: |
+          python3 scripts/build_article_palettes.py
           python3 scripts/build_site_search.py
           python3 scripts/build_external_sources.py
           python3 scripts/validate_research_contracts.py
@@ -97,6 +98,7 @@ jobs:
           python3 scripts/publish_generated_data.py
       - name: Revalidate reconciled source and rebuild deployment catalogue
         run: |
+          python3 scripts/build_article_palettes.py
           python3 scripts/build_site_search.py
           python3 scripts/build_external_sources.py
           python3 scripts/validate_research_contracts.py

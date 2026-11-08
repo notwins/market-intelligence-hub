@@ -1,0 +1,878 @@
+{
+  "schema_version": 1,
+  "standard": "V3.0 presentation / V1.2 Merged semantics",
+  "guidance_date": "2026-11-08",
+  "scope": "Published editions in the research register. Prescribed future themes are not evidence that existing articles have been restyled. CSS samples are literal source declarations, not a computed-style or full-palette audit. PDFs and generated watchlist editions are not individually inventoried.",
+  "topics": [
+    {
+      "theme": "04",
+      "subject": "US/global shares, earnings and equity ETFs"
+    },
+    {
+      "theme": "03",
+      "subject": "UST, generic bonds, investment-grade credit and cross-asset research"
+    },
+    {
+      "theme": "05",
+      "subject": "High-yield/distressed credit, options and derivatives"
+    },
+    {
+      "theme": "06",
+      "subject": "Singapore banks, CPF, retirement, SGS and SSB"
+    },
+    {
+      "theme": "08",
+      "subject": "FX, central banks, CPI and macro policy"
+    },
+    {
+      "theme": "07",
+      "subject": "AI, chips and digital innovation"
+    },
+    {
+      "theme": "09",
+      "subject": "Gold, oil and commodities"
+    },
+    {
+      "theme": "02",
+      "subject": "China/Hong Kong, property and infrastructure"
+    },
+    {
+      "theme": "01",
+      "subject": "Japan"
+    },
+    {
+      "theme": "10",
+      "subject": "Taiwan/Korea and Asian technology"
+    }
+  ],
+  "articles": [
+    {
+      "id": "research-anthropic-ipo-2026-11-05",
+      "title": "Anthropic’s IPO: who pays for all that thinking?",
+      "href": "research/anthropic-ipo-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Revised public reading",
+      "recommended_theme": "04",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172337",
+        "#28374B",
+        "#49586C",
+        "#536176",
+        "#A5B2C1"
+      ],
+      "source_sha256": "3ef14d613c99fbcd908f5b99ce5f87017f6038e4b2294442f54451470ef437e9"
+    },
+    {
+      "id": "research-cpf-life-after-55-2026-11-04",
+      "title": "CPF LIFE: the next dollar after 55",
+      "href": "research/cpf-life-after-55-2026-11-04/",
+      "date": "2026-11-04",
+      "edition": "Original study",
+      "recommended_theme": "06",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172D42",
+        "#526575",
+        "#1D6D93",
+        "#B47826",
+        "#247666"
+      ],
+      "source_sha256": "a508d1f37deea98881605d642ad8d9e0d85668ba55be9175036553075d6a7664"
+    },
+    {
+      "id": "research-cpf-life-explained-2026-11-06-v2",
+      "title": "CPF LIFE: growth, refund and income for life",
+      "href": "research/cpf-life-explained-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "edition": "V2",
+      "recommended_theme": "06",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#334155",
+        "#475569",
+        "#CBD5E1",
+        "#047857",
+        "#1E40AF"
+      ],
+      "source_sha256": "83c613b55f63805640e9cb09eb550521e47b42262e937dee03f00b3b98f4a6fc"
+    },
+    {
+      "id": "research-cpf-life-yield-2026-11-05",
+      "title": "CPF LIFE: growth, recovery and lifetime income",
+      "href": "research/cpf-life-yield-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Earlier reading edition",
+      "recommended_theme": "06",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#047857",
+        "#334155",
+        "#CBD5E1",
+        "#B91C1C",
+        "#6EE7B7"
+      ],
+      "source_sha256": "684916b6bdb9f5f0744a1c82e38ae24f0817b35f5448c22482ef141937a501a1"
+    },
+    {
+      "id": "research-cpf-oa-temasek-2070-2026-11-04",
+      "title": "CPF OA and Temasek 2070",
+      "href": "research/cpf-oa-temasek-2070-2026-11-04/",
+      "date": "2026-11-04",
+      "edition": "Original study",
+      "recommended_theme": "06",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#17323D",
+        "#21665E",
+        "#B3C5CA",
+        "#52656D",
+        "#F6EEDC"
+      ],
+      "source_sha256": "72ecd752f5eeb2a8afbba4b96f98c45af9619543ed2abaf0a74192d3795e5b36"
+    },
+    {
+      "id": "research-diversification-made-simple-2026-11-06",
+      "title": "Diversification, made simple",
+      "href": "research/diversification-made-simple-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Standalone addition",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#282239",
+        "#35234E",
+        "#79529E",
+        "#5B3D8A",
+        "#C05A28"
+      ],
+      "source_sha256": "16cf74a630df95d5e202c08490d7c481959969c2a0fc33cd497b3db8f209de05"
+    },
+    {
+      "id": "research-electricity-infrastructure-2026-11-05",
+      "title": "Singapore–Malaysia electricity and infrastructure risk",
+      "href": "research/electricity-infrastructure-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Public reading",
+      "recommended_theme": "02",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1F2937",
+        "#075B94",
+        "#466274",
+        "#247B88",
+        "#CCD7E2"
+      ],
+      "source_sha256": "11832ee317f7278ad5006dcb69ae000fa0977bd894d09e9032359829ba94d852"
+    },
+    {
+      "id": "research-googl",
+      "title": "Alphabet: business quality and valuation",
+      "href": "research/googl/",
+      "date": "2026-11-03",
+      "edition": "Research watch",
+      "recommended_theme": "04",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#182339",
+        "#5142B5",
+        "#53647D",
+        "#6658D9",
+        "#5C6980"
+      ],
+      "source_sha256": "4585678f310fc9dceb7f0dbd3a1dbf102af49b3f600ac83c175907d3537f0828"
+    },
+    {
+      "id": "research-historical-market-events-2026-11-05",
+      "title": "Historical market events: mechanisms and consequences",
+      "href": "research/historical-market-events-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Research atlas",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#334155",
+        "#475569",
+        "#CBD5E1",
+        "#0F766E",
+        "#1E40AF"
+      ],
+      "source_sha256": "c17f48ec32e83087e8d6807a58a67581677e6687cd8a9fff87b14d9f31d3e616"
+    },
+    {
+      "id": "research-jpm-price-growth-2026-11-05",
+      "title": "JPMorgan: the price of growth and the value of income",
+      "href": "research/jpm-price-growth-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Public reading",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#334155",
+        "#CBD5E1",
+        "#1D4ED8",
+        "#0E7490",
+        "#166534"
+      ],
+      "source_sha256": "56d121d473e9a22a5dca3cdbe8f95c42e3e5b1cbbb456274ca9e09f20f098cc5"
+    },
+    {
+      "id": "research-nvda-2026-11-05",
+      "title": "NVIDIA: the platform and the price",
+      "href": "research/nvda-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Deep dive",
+      "recommended_theme": "04",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172033",
+        "#475569",
+        "#CBD5E1",
+        "#6D28D9",
+        "#0F172A"
+      ],
+      "source_sha256": "3b9161bd206b5026436e8aebaee8f43049c6d827934556589af41051a63f4a88"
+    },
+    {
+      "id": "research-oaktree-rates-wayne-dahl-2026-11-05",
+      "title": "Oaktree’s Rates: yield and spreads",
+      "href": "research/oaktree-rates-wayne-dahl-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Public reading",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1F2937",
+        "#075B94",
+        "#466274",
+        "#247B88",
+        "#CCD7E2"
+      ],
+      "source_sha256": "eaa4f48f01d59749b6fd8a0f2b82ea45de7e93b62e702390d9c7675e71b2bfbd"
+    },
+    {
+      "id": "research-pimco-income-bonds-2026-11-06",
+      "title": "PIMCO Income, UST 2041 and Temasek 2070",
+      "href": "research/pimco-income-bonds-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Current public edition",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1F2937",
+        "#075B94",
+        "#466274",
+        "#247B88",
+        "#CCD7E2"
+      ],
+      "source_sha256": "7b36c9fe41e769fceaf973e21ce59219353f60dbcccd6073feb0046b77649c47"
+    },
+    {
+      "id": "research-snb-mas-policy-2026-11-05",
+      "title": "SNB and MAS: a second monetary-policy study",
+      "href": "research/snb-mas-policy-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Public reading",
+      "recommended_theme": "08",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E293B",
+        "#475569",
+        "#CBD5E1",
+        "#0F766E",
+        "#047857"
+      ],
+      "source_sha256": "448d64baac9529b839c995648d8843dbff6061a2ac8e9659f8fc3c156e385b66"
+    },
+    {
+      "id": "research-sti-banks-2026-11-06",
+      "title": "The STI’s bank premium",
+      "href": "research/sti-banks-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Part 1",
+      "recommended_theme": "06",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#047857",
+        "#1E40AF",
+        "#DBEAFE",
+        "#0369A1",
+        "#7E22CE"
+      ],
+      "source_sha256": "6ebde1eeafd9b2d9fe2ef5aec972a97240bb3d7131834be6ec78405916a86664"
+    },
+    {
+      "id": "research-sti-banks-part2-2026-11-06",
+      "title": "STI banks: NIM, SGS and T-bills",
+      "href": "research/sti-banks-part2-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Part 2 · add-on",
+      "recommended_theme": "06",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#047857",
+        "#1E40AF",
+        "#DBEAFE",
+        "#0369A1",
+        "#7E22CE"
+      ],
+      "source_sha256": "d1fe458d29c8b3d5f46eca91357cf2572f4aecc23a8d65c70c6bd1ac6401819c"
+    },
+    {
+      "id": "research-tsm-2026-11-05",
+      "title": "TSMC: foundry leadership and cash returns",
+      "href": "research/tsm-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Deep dive",
+      "recommended_theme": "10",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#6D28D9",
+        "#111827",
+        "#475569",
+        "#DDD6FE",
+        "#F5F3FF"
+      ],
+      "source_sha256": "f0980e2ff1fbf39021ecbf6b2b84e19b4abcbd27d1cce238fb9936c7c88c7202"
+    },
+    {
+      "id": "research-wealth-inequality-2026-11-04",
+      "title": "Own the assets. Understand the borrowing.",
+      "href": "research/wealth-inequality-2026-11-04/",
+      "date": "2026-11-04",
+      "edition": "Full research",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172B3D",
+        "#526676",
+        "#176B74",
+        "#132B40",
+        "#126378"
+      ],
+      "source_sha256": "6c1adcdad0b3442604a90fc8a39ece814cb8fe7b0f759c228b2658fea7a2f24c"
+    },
+    {
+      "id": "research-wealth-inequality-2026-11-04-sharpe",
+      "title": "Sharpe ratio: detailed mathematics",
+      "href": "research/wealth-inequality-2026-11-04/sharpe.html",
+      "date": "2026-11-04",
+      "edition": "Detailed math · retained",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#282239",
+        "#5B3D8A",
+        "#C05A28",
+        "#35234E",
+        "#AC98C2"
+      ],
+      "source_sha256": "7728c8f01b4d2296f4cce74f99730aae06cb8109d4c3618adbab812284fbedcb"
+    },
+    {
+      "id": "research-xau-central-banks-2026-11-05",
+      "title": "Gold and central banks: demand, reserves and price",
+      "href": "research/xau-central-banks-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Original study",
+      "recommended_theme": "09",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1F2937",
+        "#075B94",
+        "#466274",
+        "#247B88",
+        "#CCD7E2"
+      ],
+      "source_sha256": "cda929fbb52a5aadcd420b1b1097006abfbe246abd3d12febd149cfd9404ea96"
+    },
+    {
+      "id": "research-xau-gold-outlook-2026-11-06",
+      "title": "Who is buying gold? Buyers, sellers and SGD returns",
+      "href": "research/xau-gold-outlook-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Earlier edition",
+      "recommended_theme": "09",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E293B",
+        "#334155",
+        "#475569",
+        "#CBD5E1",
+        "#92400E"
+      ],
+      "source_sha256": "0c44fe79d33c43637056a88e21c25b6bf6a1f0228343478986325916ad34c7fd"
+    },
+    {
+      "id": "research-xau-gold-outlook-2026-11-06-v2",
+      "title": "Who is buying gold?",
+      "href": "research/xau-gold-outlook-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "edition": "V2 · HTML and slides",
+      "recommended_theme": "09",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E293B",
+        "#334155",
+        "#475569",
+        "#CBD5E1",
+        "#92400E"
+      ],
+      "source_sha256": "0f83f0540e31fe8463f5051a595224e3d301127283d29bc64710437a5cd20a95"
+    },
+    {
+      "id": "market-understanding-ai-data-centres-2026-11-05",
+      "title": "AI data centres: from power to profit",
+      "href": "market-understanding/ai-data-centres-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Public adaptation",
+      "recommended_theme": "07",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#334155",
+        "#475569",
+        "#CBD5E1",
+        "#0E7490",
+        "#0F172A"
+      ],
+      "source_sha256": "1d478498320548ee39c15b660e9a5cd1e7b5b2c7539a7cd2d06e86b28e939622"
+    },
+    {
+      "id": "market-understanding-ai-selloff-2026-11-06",
+      "title": "The AI selloff hit suppliers hardest",
+      "href": "market-understanding/ai-selloff-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Market update",
+      "recommended_theme": "04",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172132",
+        "#435264",
+        "#334155",
+        "#1E40AF",
+        "#DBEAFE"
+      ],
+      "source_sha256": "5cd41923ae29716b93f4a8ffcd9a771f6bf7496a332db9d870f9711471603bfb"
+    },
+    {
+      "id": "market-understanding-ai-tech-2026-11-05",
+      "title": "AI and technology: business quality and cash flow",
+      "href": "market-understanding/ai-tech-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Current public adaptation",
+      "recommended_theme": "07",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172033",
+        "#526174",
+        "#CBD5E1",
+        "#334155",
+        "#0F172A"
+      ],
+      "source_sha256": "9888a1c57286e82e57194655606dff7d8c18a6f4b208dc434456a8aa7cf74bf3"
+    },
+    {
+      "id": "market-understanding-bond-research-review-2026-11-06",
+      "title": "Three risks. One bond portfolio.",
+      "href": "market-understanding/bond-research-review-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Full report",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#166534",
+        "#1E40AF",
+        "#DBEAFE",
+        "#92400E",
+        "#0369A1"
+      ],
+      "source_sha256": "0bbb30050b9fbaf7d79608fc7d03fa9230d0500cee59793010b8ae824d2d9cc4"
+    },
+    {
+      "id": "market-understanding-creditworthiness-2026-11-05",
+      "title": "Understanding creditworthiness",
+      "href": "market-understanding/creditworthiness-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Earlier corrected edition",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#334155",
+        "#0369A1",
+        "#92400E",
+        "#475569",
+        "#166534"
+      ],
+      "source_sha256": "c1da7418662ebd7fc7b1b933dd388bda2a4f44853718d0182cd6e91afbada67c"
+    },
+    {
+      "id": "market-understanding-creditworthiness-2026-11-06-v2",
+      "title": "Can the business survive and repay its bonds?",
+      "href": "market-understanding/creditworthiness-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "edition": "V2 · corrected teaching edition",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#334155",
+        "#0369A1",
+        "#0F766E",
+        "#1E40AF",
+        "#475569"
+      ],
+      "source_sha256": "b4745d08c51b69aab286554cc6e4647877c1342468472fbfa88eeb1ddff172b3"
+    },
+    {
+      "id": "market-understanding-howard-marks-2026-11-05",
+      "title": "Howard Marks and the price of conviction",
+      "href": "market-understanding/howard-marks-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Earlier edition",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#395E4C",
+        "#244A3B",
+        "#AACEB8",
+        "#B4D6BE",
+        "#315440"
+      ],
+      "source_sha256": "d1517beac46563485c4cbbbe944a8e7a9f0b3493a92a68a52a9deaf18397d535"
+    },
+    {
+      "id": "market-understanding-howard-marks-2026-11-06-v2",
+      "title": "Howard Marks: conviction needs a price",
+      "href": "market-understanding/howard-marks-2026-11-06-v2/",
+      "date": "2026-11-06",
+      "edition": "V2",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#15283E",
+        "#475569",
+        "#1E40AF",
+        "#166534",
+        "#92400E"
+      ],
+      "source_sha256": "9eeff6b23f349c32f794ac8544f9c98a6bfe58bd7b3ac9d95a3effa48bdfdbf5"
+    },
+    {
+      "id": "market-understanding-mas-snb-2026-11-05",
+      "title": "MAS and SNB: monetary policy, inflation and CHF/SGD",
+      "href": "market-understanding/mas-snb-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Current public study",
+      "recommended_theme": "08",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#182433",
+        "#0F766E",
+        "#CBD5E1",
+        "#94A3B8",
+        "#475569"
+      ],
+      "source_sha256": "f34f4127264c1ca0d2e84f1e3450fea87043bd91d07b0c203b66ab46ba1d6871"
+    },
+    {
+      "id": "market-understanding-spx-collars-2026-11-06",
+      "title": "SPX put-and-call collars",
+      "href": "market-understanding/spx-collars-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "6 November revision",
+      "recommended_theme": "05",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E293B",
+        "#334155",
+        "#475569",
+        "#CBD5E1",
+        "#0E7490"
+      ],
+      "source_sha256": "1d44a067acbb6dfbeaebab39a678c3bffe518106004b6df72c8481c2d90ac8af"
+    },
+    {
+      "id": "market-understanding-spx-floor-cap-2026-11-05",
+      "title": "SPX: floors, caps and the price of protection",
+      "href": "market-understanding/spx-floor-cap-2026-11-05/",
+      "date": "2026-11-05",
+      "edition": "Earlier aggregate edition",
+      "recommended_theme": "05",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#334155",
+        "#CBD5E1",
+        "#7E22CE",
+        "#0E7490",
+        "#475569"
+      ],
+      "source_sha256": "7635747364298c08d460d19274a9e4ca4e68afe4e7bbfd22c5ee908a12f77857"
+    },
+    {
+      "id": "market-understanding-structured-investment-hypothetical",
+      "title": "Structured investments: hypothetical reader",
+      "href": "market-understanding/structured-investment-hypothetical/",
+      "date": "2026-11-05",
+      "edition": "Current hypothetical edition",
+      "recommended_theme": "05",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172637",
+        "#475569",
+        "#CBD5E1",
+        "#0F766E",
+        "#0369A1"
+      ],
+      "source_sha256": "c4f4e8cd235b74d4f8f40bdb03bdb78d63c19308be33735bd857fb0666ef9364"
+    },
+    {
+      "id": "market-understanding-treasuries-chf-gold-2026-11-06",
+      "title": "Treasuries, CHF and gold: the case for a staged entry",
+      "href": "market-understanding/treasuries-chf-gold-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "6 November quote refresh",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172033",
+        "#1E40AF",
+        "#6D28D9",
+        "#CBD5E1",
+        "#334155"
+      ],
+      "source_sha256": "24ec075766dfdbf34bcea59490a2c5a1df5c5ec5b7e78126f2bf56958f56a8ec"
+    },
+    {
+      "id": "market-understanding-us-earnings-cash-flow-2026-11-06",
+      "title": "US earnings: the cash-flow test",
+      "href": "market-understanding/us-earnings-cash-flow-2026-11-06/",
+      "date": "2026-11-06",
+      "edition": "Full report · 73 companies",
+      "recommended_theme": "04",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#17283B",
+        "#4C5E70",
+        "#1D4ED8",
+        "#0E7490",
+        "#6D28D9"
+      ],
+      "source_sha256": "99e62462dc161689b55965e04dec98e09dbe3205a56ad0210783ff8d4e1ff2c9"
+    },
+    {
+      "id": "pending-pimco-v2",
+      "title": "PIMCO Income and USD bonds: public-source abridgement",
+      "href": "research/pimco-income-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public adaptation · 7 Nov",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#F9FBF9",
+        "#26382F",
+        "#FFFFFF",
+        "#D8E5DC",
+        "#333333"
+      ],
+      "source_sha256": "38fb807fc419dd141aab32fd67cb8e8c3671cb03e621d1991e682480a6ffffd8"
+    },
+    {
+      "id": "pending-mas-snb-v2",
+      "title": "MAS and SNB: public V2 policy study",
+      "href": "market-understanding/mas-snb-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public V2 abridgement",
+      "recommended_theme": "08",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#0F766E",
+        "#9D174D",
+        "#6D28D9",
+        "#047857",
+        "#0E7490"
+      ],
+      "source_sha256": "b3945c715bcf4cbc08a07ed75eabb158417201ad40a770a6f895b5542072b92d"
+    },
+    {
+      "id": "pending-snb-mas-v2",
+      "title": "SNB and MAS: separate public V2 study",
+      "href": "research/snb-mas-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public V2 abridgement",
+      "recommended_theme": "08",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#475569",
+        "#0F766E",
+        "#047857",
+        "#9D174D",
+        "#6D28D9"
+      ],
+      "source_sha256": "fc1d7b74d14d22233c66cfe2185c08bcf134835836d39c6a182a20e69b8dcc2e"
+    },
+    {
+      "id": "pending-ai-tech-v2",
+      "title": "AI and technology: public-source abridgement",
+      "href": "market-understanding/ai-tech-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public adaptation · 7 Nov",
+      "recommended_theme": "07",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#F9FBF9",
+        "#26382F",
+        "#FFFFFF",
+        "#D8E5DC",
+        "#333333"
+      ],
+      "source_sha256": "675375d91c6121f284b208ea5916315219b6c0a6c2502c48452fa3101a8d9d22"
+    },
+    {
+      "id": "pending-gold-v2-pdf",
+      "title": "Gold outlook V2: corrected public PDF",
+      "href": "research/gold-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public adaptation · 7 Nov",
+      "recommended_theme": "09",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E40AF",
+        "#F8FAF9",
+        "#182822",
+        "#DCE6E0",
+        "#F2F6F4"
+      ],
+      "source_sha256": "82b2e5790df1fb4b428e65fc0c1455bf16a78a6d114aba732d414e994311884c"
+    },
+    {
+      "id": "pending-spx-pdf",
+      "title": "SPX options: public payoff-mathematics PDF",
+      "href": "market-understanding/spx-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public adaptation · 7 Nov",
+      "recommended_theme": "05",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E40AF",
+        "#F8FAF9",
+        "#182822",
+        "#DCE6E0",
+        "#F2F6F4"
+      ],
+      "source_sha256": "84b3469c887585ce176ad8cb07379b48fd43f543d3941934fdaf57493ca3eee2"
+    },
+    {
+      "id": "pending-cpf-source-pdf",
+      "title": "CPF LIFE: reviewed public research PDF",
+      "href": "research/cpf-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public adaptation · 7 Nov",
+      "recommended_theme": "06",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E40AF",
+        "#F8FAF9",
+        "#182822",
+        "#DCE6E0",
+        "#F2F6F4"
+      ],
+      "source_sha256": "bcb74b25298007623f743b6328c3b22f2171a12f0b76367774f7e4b25f0f2f73"
+    },
+    {
+      "id": "pending-wealth-source-pdf",
+      "title": "Wealth and Sharpe: public mathematics PDF",
+      "href": "research/wealth-pdf-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public adaptation · 7 Nov",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E40AF",
+        "#F8FAF9",
+        "#182822",
+        "#DCE6E0",
+        "#F2F6F4"
+      ],
+      "source_sha256": "38511646ee006b7e5737ae2e28a9e209aff0b6b59bbe2b55b0f357d2602e1b6c"
+    },
+    {
+      "id": "pending-bond-comparison",
+      "title": "Compare 2041 bonds: public analytical addendum",
+      "href": "market-understanding/bond-comparison-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public adaptation · 7 Nov",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#1E40AF",
+        "#166534",
+        "#F9FBF9",
+        "#26382F",
+        "#FFFFFF"
+      ],
+      "source_sha256": "00e20f047742d572e46b122add1e2d3214a544616aabe1e9afa662f89db3e64f"
+    },
+    {
+      "id": "global-credit-public-2026-11-07",
+      "title": "Global Markets & Credit Research: public extract",
+      "href": "market-understanding/global-credit-public-2026-11-07/",
+      "date": "2026-11-07",
+      "edition": "Public extract · 7 Nov",
+      "recommended_theme": "03",
+      "declared_theme": null,
+      "status": "legacy-unassigned",
+      "source_css_samples": [
+        "#172B44",
+        "#1D4ED8",
+        "#142B46",
+        "#C7D6E9",
+        "#57728D"
+      ],
+      "source_sha256": "cf07228c7bcb786e038059fb273b4f9f797b895e4c26c7e4228f7277cc15a5b4"
+    }
+  ]
+}

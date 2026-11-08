@@ -4,7 +4,20 @@ const norm=v=>String(v??'').normalize('NFKC').toLocaleLowerCase();
 const hex=v=>/^#[0-9A-F]{6}$/i.test(v)?v:'#222D31';
 const match=(q,values)=>norm(q).trim().split(/\s+/).filter(Boolean).every(t=>norm(values.join(' ')).includes(t));
 let data,selected='03',companyLimit=24,tagLimit=24;
+let articleLimit=12;
+function renderArticles(){
+ const cards=[...document.querySelectorAll('[data-article-search]')], q=$('article-query').value, chosen=$('article-theme').value, status=$('article-status').value;
+ const rows=cards.filter(c=>(!chosen||c.dataset.articleTheme===chosen)&&(!status||c.dataset.articleStatus===status)&&match(q,[c.dataset.articleSearch]));
+ const visible=new Set(rows.slice(0,articleLimit));cards.forEach(c=>c.hidden=!visible.has(c));
+ $('article-count').textContent=rows.length+' matching article editions · showing '+Math.min(articleLimit,rows.length)+' of '+cards.length+' published editions.';
+ $('article-more').hidden=rows.length<=articleLimit;$('article-empty').hidden=rows.length!==0;
+}
+for(const id of ['article-query','article-theme','article-status'])$(id).addEventListener(id.endsWith('query')?'input':'change',()=>{articleLimit=12;renderArticles();});
+$('article-more').addEventListener('click',()=>{articleLimit+=24;renderArticles();});renderArticles();
+
 const theme=id=>data.themes.find(t=>t.id===id);
+const semanticPalette=name=>data.semanticPalettes.find(p=>p['Colour name']===name);
+const identityIcon=(label,light,backdrop)=>'<span class="identity-icon" aria-hidden="true" style="color:'+hex(light)+';background:'+hex(backdrop)+'">'+esc(label)+'</span>';
 const themeName=id=>{const t=theme(id);return t?t.id+' · '+t.name:'No presentation assignment';};
 function selectTheme(id,scroll=false){
  const t=theme(id);if(!t)return;selected=id;
@@ -32,14 +45,14 @@ function renderRoutes(){
 function renderCompanies(){
  const rows=data.companies.filter(c=>(!$('company-theme').value||c.themeId===$('company-theme').value)&&match($('company-query').value,[c.name,c.id,c.listings,c.colourName,...c.aliases]));
  $('company-count').textContent=rows.length+' matching companies · showing '+Math.min(companyLimit,rows.length)+'. Full supplied set: 212 entities.';
- $('company-results').innerHTML=rows.slice(0,companyLimit).map(c=>'<article class="entry"><h3>'+esc(c.name)+'</h3><div class="meta">'+esc(c.listings)+' · '+esc(c.id)+'</div><div class="semantic-samples"><span style="color:'+hex(c.light)+';background:white">'+esc(c.colourName)+' '+esc(c.light)+'</span><span style="color:'+hex(c.dark)+';background:#0B1220">Dark text '+esc(c.dark)+'</span></div><p><strong>Presentation default:</strong> '+esc(themeName(c.themeId))+'. '+esc(c.rationale)+'.</p><p>'+esc(c.identityPolicy)+'</p><details><summary>Aliases and inherited source labels</summary><p><strong>Aliases:</strong> '+c.aliases.map(esc).join(' · ')+'</p><p><strong>Sector:</strong> '+esc(c.sectorSource||'Not supplied')+'</p><p><strong>Country source, not headquarters:</strong> '+esc(c.countrySourceNotHQ||'Not supplied')+'</p><p>Listings and membership are inherited references, not fresh verification. A company mention alone does not establish a specific security or share class.</p></details></article>').join('')||'<p class="empty">No supplied company matches. This is a lookup of the approved source set, not proof a company does not exist.</p>';
- $('company-more').hidden=rows.length<=companyLimit;
+ $('company-results').innerHTML=rows.slice(0,companyLimit).map(c=>'<article class="entry"><div class="identity-heading">'+identityIcon(c.name.slice(0,2).toUpperCase(),c.light,semanticPalette(c.colourName)['Light chip'])+'<h3>'+esc(c.name)+'</h3></div><div class="meta">'+esc(c.listings)+' · '+esc(c.id)+'</div><div class="semantic-samples"><span style="color:'+hex(c.light)+';background:'+hex(semanticPalette(c.colourName)['Light chip'])+'">Light · '+esc(c.colourName)+' '+esc(c.light)+'</span><span style="color:'+hex(c.dark)+';background:'+hex(semanticPalette(c.colourName)['Dark chip'])+'">Dark · '+esc(c.dark)+'</span></div><p><strong>Exact backdrop HEX:</strong> '+esc(semanticPalette(c.colourName)['Light chip'])+' / '+esc(semanticPalette(c.colourName)['Dark chip'])+'.</p><p><strong>Presentation default:</strong> '+esc(themeName(c.themeId))+'. '+esc(c.rationale)+'.</p><p>'+esc(c.identityPolicy)+'</p><details><summary>Aliases and inherited source labels</summary><p><strong>Aliases:</strong> '+c.aliases.map(esc).join(' · ')+'</p><p><strong>Sector:</strong> '+esc(c.sectorSource||'Not supplied')+'</p><p><strong>Country source, not headquarters:</strong> '+esc(c.countrySourceNotHQ||'Not supplied')+'</p><p>Listings and membership are inherited references, not fresh verification. A company mention alone does not establish a specific security or share class.</p></details></article>').join('')||'<p class="empty">No supplied company matches. This is a lookup of the approved source set, not proof a company does not exist.</p>';
+ $('company-more').hidden=rows.length<=companyLimit;$('company-all').hidden=rows.length<=companyLimit;
 }
 function renderTags(){
  const rows=data.tags.filter(t=>(!$('tag-category').value||t.category===$('tag-category').value)&&match($('tag-query').value,[t.label,t.id,t.category,t.colourName,...t.aliases]));
  $('tag-count').textContent=rows.length+' matching canonical tags · showing '+Math.min(tagLimit,rows.length)+'. Full preserved set: 437.';
- $('tag-results').innerHTML=rows.slice(0,tagLimit).map(t=>'<article class="entry"><h3>'+esc(t.label)+'</h3><div class="meta">'+esc(t.category)+' · '+esc(t.id)+'</div><div class="semantic-samples"><span style="color:'+hex(t.light)+';background:'+hex(t.lightChip)+'">Light · '+esc(t.colourName)+'</span><span style="color:'+hex(t.dark)+';background:'+hex(t.darkChip)+'">Dark · '+esc(t.colourName)+'</span></div><p><strong>Exact text HEX:</strong> '+esc(t.light)+' / '+esc(t.dark)+'.<br><strong>Chip backgrounds:</strong> '+esc(t.lightChip)+' / '+esc(t.darkChip)+'.</p><p><strong>Matching rule:</strong> '+esc(t.matchingRule)+' · priority '+esc(t.priority)+'. Context and longest valid phrase come before a numeric tie-break.</p><details><summary>Aliases and presentation context</summary><p>'+t.aliases.map(esc).join(' · ')+'</p><p><strong>Presentation default:</strong> '+esc(themeName(t.themeId))+'. '+esc(t.routingRationale||'No extra routing rationale supplied.')+'</p><p>This directory is not a tagging engine. Resolve the actual context and ambiguity guards before applying a label.</p></details></article>').join('')||'<p class="empty">No canonical tag matches. Keep unverified or unmapped terms explicit; do not invent a semantic colour.</p>';
- $('tag-more').hidden=rows.length<=tagLimit;
+ $('tag-results').innerHTML=rows.slice(0,tagLimit).map(t=>'<article class="entry"><div class="identity-heading">'+identityIcon('#',t.light,t.lightChip)+'<h3>'+esc(t.label)+'</h3></div><div class="meta">'+esc(t.category)+' · '+esc(t.id)+'</div><div class="semantic-samples"><span style="color:'+hex(t.light)+';background:'+hex(t.lightChip)+'">Light · '+esc(t.colourName)+'</span><span style="color:'+hex(t.dark)+';background:'+hex(t.darkChip)+'">Dark · '+esc(t.colourName)+'</span></div><p><strong>Exact text HEX:</strong> '+esc(t.light)+' / '+esc(t.dark)+'.<br><strong>Chip backgrounds:</strong> '+esc(t.lightChip)+' / '+esc(t.darkChip)+'.</p><p><strong>Matching rule:</strong> '+esc(t.matchingRule)+' · priority '+esc(t.priority)+'. Context and longest valid phrase come before a numeric tie-break.</p><details><summary>Aliases and presentation context</summary><p>'+t.aliases.map(esc).join(' · ')+'</p><p><strong>Presentation default:</strong> '+esc(themeName(t.themeId))+'. '+esc(t.routingRationale||'No extra routing rationale supplied.')+'</p><p>This directory is not a tagging engine. Resolve the actual context and ambiguity guards before applying a label.</p></details></article>').join('')||'<p class="empty">No canonical tag matches. Keep unverified or unmapped terms explicit; do not invent a semantic colour.</p>';
+ $('tag-more').hidden=rows.length<=tagLimit;$('tag-all').hidden=rows.length<=tagLimit;
 }
 function renderRules(){
  const rows=data.rules.filter(r=>r['Priority / rule']!=='Website / accounts');
@@ -60,8 +73,9 @@ fetch('../data/colour-templates-v3.json').then(r=>{if(!r.ok)throw Error('Referen
  for(const id of ['route-query','route-axis'])$(id).addEventListener(id.endsWith('query')?'input':'change',renderRoutes);
  for(const id of ['company-query','company-theme'])$(id).addEventListener(id.endsWith('query')?'input':'change',()=>{companyLimit=24;renderCompanies();});
  for(const id of ['tag-query','tag-category'])$(id).addEventListener(id.endsWith('query')?'input':'change',()=>{tagLimit=24;renderTags();});
+ $('company-all').addEventListener('click',()=>{companyLimit=data.companies.length;renderCompanies();});$('tag-all').addEventListener('click',()=>{tagLimit=data.tags.length;renderTags();});
  $('company-more').addEventListener('click',()=>{companyLimit+=48;renderCompanies();});$('tag-more').addEventListener('click',()=>{tagLimit+=48;renderTags();});
  $('route-results').addEventListener('click',e=>{const a=e.target.closest('[data-route-theme]');if(a)selectTheme(a.dataset.routeTheme);});
  const requested=new URLSearchParams(location.search).get('theme');if(requested&&theme(requested))selectTheme(requested);
-}).catch(()=>{$('theme-grid').innerHTML='<p class="error">The interactive reference could not load. Reload to retry, or use the verified Excel, PDF and text files in Downloads. No substitute colours have been loaded.</p>';for(const id of ['company-more','tag-more','copy-all'])$(id).disabled=true;});
+}).catch(()=>{$('theme-grid').innerHTML='<p class="error">The interactive reference could not load. Reload to retry, or use the verified Excel, PDF and text files in Downloads. No substitute colours have been loaded.</p>';for(const id of ['company-more','company-all','tag-more','tag-all','copy-all'])$(id).disabled=true;});
 })();

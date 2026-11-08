@@ -133,3 +133,18 @@ python3 -m unittest discover -s scripts -p 'test_*.py'
 python3 scripts/build_pages_artifact.py --output /tmp/unique-v3-candidate
 python3 scripts/validate_pages_artifact.py --artifact-root /tmp/unique-v3-candidate --report /tmp/unique-v3-audit.json
 ```
+
+## Required subject guide and article colour key
+
+All future research follows `colour-templates-v3/#subject-guide`, using the main
+analytical question and existing route precedence. The ten subject mappings are
+published there with exact Original swatches. V1.2 semantic mappings do not change.
+
+`python3 scripts/build_article_palettes.py` rebuilds the article directory from
+the public research register. It runs before validation and after source
+reconciliation in Pages. Existing reports are never restyled by this command.
+A reviewed next-edition recommendation is not an applied-theme claim. Only a
+valid article contract supplies a declared V3 theme; rendered colours still
+need visual review. Unreviewed subjects are labelled Needs subject review.
+Literal CSS samples may include dark-mode colours and are not a computed-style
+audit. PDFs and generated watchlist editions are outside this article inventory.
