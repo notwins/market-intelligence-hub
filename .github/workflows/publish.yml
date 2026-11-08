@@ -74,6 +74,8 @@ jobs:
           node scripts/test_sidebar_scrollbar.cjs
           node scripts/test_reader_independence.cjs
           node scripts/test_colour_reference.cjs
+          node scripts/test_tag_map.cjs
+          node scripts/test_tag_family_tree.cjs
           node scripts/test_bond_watchlist.cjs
       - name: Refresh Reuters headline metadata
         id: update
@@ -126,6 +128,8 @@ jobs:
           node scripts/test_sidebar_scrollbar.cjs
           node scripts/test_reader_independence.cjs
           node scripts/test_colour_reference.cjs
+          node scripts/test_tag_map.cjs
+          node scripts/test_tag_family_tree.cjs
           node scripts/test_bond_watchlist.cjs
           python3 scripts/build_site_search.py
           node scripts/test_site_search.cjs
