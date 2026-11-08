@@ -8,7 +8,10 @@ assert.equal(flat.length,515);assert.equal(taxonomy.length,14);assert.equal(new 
 assert(html.indexOf('id="family-map"')<html.indexOf('id="catalogue"'));
 assert(html.includes('tag-family-tree.css'));assert(html.includes('tag-family-tree.js'));
 let mapped=0;for(const [i,root] of taxonomy.entries())for(const n of api.flatten([root])){const s=api.nodeStyle(n,root,index,i);assert(api.contrast(s.ink,s.bg)>=4.5,`${n.label}: contrast`);if(s.canonical){mapped++;let t=standard.tags.find(x=>x.id===s.canonical);assert.equal(s.ink,t.light);assert.equal(s.bg,t.lightChip);}else assert.equal(s.ink,root.color);}
-assert(mapped>100);assert.equal(api.resolveTag({label:'BOC',id:'institutions--boc'},index),null);assert.equal(api.resolveTag({label:'DE',id:'country-region--de'},index),null);assert.equal(api.resolveTag({label:'FedEx',id:'x'},index).id,'company.fdx');
+assert.equal(mapped,123);
+const chipSurfaces=new Set(standard.semanticPalettes.map(p=>p['Light chip']));for(const [i,root] of taxonomy.entries())assert(chipSurfaces.has(api.nodeStyle(root,root,index,i).bg));
+assert.equal(api.resolveTag({label:'Monetary Authority of Singapore (MAS)',id:'institutions--mas'},index).id,'institution.monetary_authority_of_singapore');assert.equal(api.resolveTag({label:'Federal Reserve (MAS)',id:'institutions--fed'},index),null);
+assert.equal(api.resolveTag({label:'BOC',id:'institutions--boc'},index),null);assert.equal(api.resolveTag({label:'DE',id:'country-region--de'},index),null);assert.equal(api.resolveTag({label:'FedEx',id:'x'},index).id,'company.fdx');
 assert.equal(api.resolveTag({label:'Singapore',id:'country-region--singapore'},index).light,'#047857');assert.equal(api.resolveTag({label:'MAS',id:'institutions--mas'},index).light,'#0F766E');
 assert.equal(api.count(api.searchTree(taxonomy,'')),515);assert(api.count(api.searchTree(taxonomy,'central bank'))>0);assert.equal(api.count(api.searchTree(taxonomy,'not-present-xyz')),0);assert(api.escape('<img onerror="x">').includes('&lt;img'));
 // Render the actual scripts with minimal DOM fixtures to verify every jump target and controls.

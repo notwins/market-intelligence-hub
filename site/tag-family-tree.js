@@ -23,7 +23,8 @@
     root:'M9 3h6v5H9z M3 16h6v5H3z M15 16h6v5h-6z M12 8v4 M6 16v-4h12v4'
   };
   const icon = key => '<span class="family-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="'+(icons[key] || icons.root)+'"/></svg></span>';
-  const tints = ['#eef5ff','#f7f0ff','#eefaf4','#fff8e7','#fff0f3','#ebfafd','#f6f3fa','#fbf4ee'];
+  // Existing atlas font assignments, paired with compatible approved master chip surfaces.
+  const tints = ['#F1F5F9','#F0FDFA','#EFF6FF','#F5F3FF','#ECFDF5','#F0F9FF','#FEFCE8','#F0F9FF','#FFF7ED','#FFF1F2','#F1F5F9','#F5F3FF','#FAF5FF','#F0FDFA'];
   const luminance = hex => hex.slice(1).match(/../g).map(x => parseInt(x,16)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((sum,x,i)=>sum+x*[.2126,.7152,.0722][i],0);
   const contrast = (a,b) => (Math.max(luminance(a),luminance(b))+.05)/(Math.min(luminance(a),luminance(b))+.05);
   function canonicalIndex(tags) {
@@ -36,6 +37,13 @@
   }
   function resolveTag(node,index) {
     const key=normalize(node.label);
+    // Atlas labels sometimes show the canonical name plus its verified abbreviation.
+    const qualified=key.match(/^(.+?)\s*\(([^()]+)\)$/);
+    if(qualified){
+      const named=index.names.get(qualified[1].trim())||[];
+      const shorthand=index.aliases.get(qualified[2].trim())||[];
+      if(named.length===1&&shorthand.length===1&&named[0].id===shorthand[0].id)return named[0];
+    }
     // These exact aliases explicitly require disambiguation in the master.
     if (key==='boc'||key==='de') return null;
     const exact=index.names.get(key)||[]; if(exact.length===1)return exact[0];
