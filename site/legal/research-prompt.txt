@@ -1,0 +1,51 @@
+Create a detailed, client-friendly research report on **[TOPIC]**, using **[SOURCES / ATTACHMENTS]**, with information checked up to **[DATE AND TIME ZONE]**.
+
+**Reference style**
+Use my [DBS and STI banks report](https://notwins.github.io/market-intelligence-hub/research/sti-banks-2026-11-06/) as the main reference for its card layout, charts, explanations and overall presentation. Inspect it first. Adapt the design to the new topic rather than copying its figures or conclusions.
+
+**My colour and presentation standard**
+Apply my current approved Colour & Tagging Standard. The Excel governs keywords, tickers, aliases, tags and colour mappings. The matching PDF governs visual design, charts and layout. Follow the documented precedence rules and do not invent or overwrite mappings.
+
+Each report can have a different colour theme and background shades, while keeping approved colours for the same companies, terms and concepts consistent. If the current standard cannot be accessed, say so and continue the research without claiming it has been applied.
+
+**Research and writing**
+Start with one to five key takeaways. Explain what happened, why it matters, what the evidence supports, the outlook, risks and what could change the conclusion.
+
+Use plain English, short paragraphs and point form where helpful. Include a bold key takeaway in each paragraph, but avoid making everything bold. Explain unfamiliar terms and make the report easy to understand without sounding condescending.
+
+Separate verified facts, source opinions, forecasts and your own analysis. Include counterarguments and material risks. Cite sources and distinguish the date of the data from the date it was published. Don’t invent figures or present forecasts as guarantees.
+
+**Charts and market context**
+Inspect the charts and data already available on my Market Intelligence Hub and reuse suitable components and verified data where practical. Where relevant to the research, include:
+• Prices of the security, commodity or index discussed.
+• Bond yields, yield curves or credit spreads.
+• Relevant FX pairs.
+• S&P 500 / SPX prices or performance.
+
+Include only charts that help explain the report. Identify the instrument, currency, units, source, data date and whether prices are adjusted or include dividends. Label FX direction and yield tenor clearly. Do not describe dated data as live.
+
+**Targets, scenarios and calls**
+Where the research provides them, add base-case, bull-case or bear-case levels, targets and calls to the relevant chart. Label each with its source, date, horizon, assumptions and units. Clearly distinguish actual data from forecasts.
+
+If only a target level is available, show a labelled target line or marker. Don’t invent a forecast path, missing target, probability or analyst call. Explain qualitative scenarios in a card rather than assigning them invented numbers. Show the reference price and date for any calculated upside or downside.
+
+**Card style and visual explanations**
+Aim for roughly half meaningful charts, tables and diagrams and half concise explanation. Each substantive card should have:
+• A clear takeaway title.
+• A relevant chart, table, diagram or comparison.
+• A short layman explanation of how to read it and why it matters.
+• Source, date and units where applicable.
+
+Choose the visual that best explains the point; don’t add decorative charts just to fill space. Use direct labels and avoid misleading scales, tiny text and clipped headings. Ensure the report works on mobile and remains understandable in greyscale.
+
+**File size and checks**
+Keep files small for later upload to Market Intel. Use lightweight code-drawn visuals and editable charts rather than large embedded images. State the final file size. Check figures, calculations, chart labels, links and the rendered desktop and mobile layouts. Clearly identify any unresolved gaps.
+
+Deliver: **[REPORT FORMAT AND DESTINATION]**.
+
+Do not change my websites, files or scheduled tasks, or publish the report, unless I explicitly ask.
+
+Required colour and editorial references
+Read and apply these references as part of every article and posting prompt:
+https://notwins.github.io/market-intelligence-hub/tag-map.html
+https://notwins.github.io/market-intelligence-hub/legal/editorial-policy.html
