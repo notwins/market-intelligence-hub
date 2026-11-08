@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "state": "scheduled_publication_verified",
-  "checked_at": "2026-11-07T20:08:30.741137+00:00",
-  "message": "08 Nov 04:00 SGT watchlist edition published by this scheduled execution. Exact-commit successful Pages deployment, live edition ID and immutable report SHA-256 verified. Twelve completed 6 Nov USD closes and 72 adjusted-close baselines freshly checked, all unchanged. No distinct new company event verified in the incremental window; earlier Berkshire results retained in their original edition. News access is partial. This proves this execution, not future runs or separate-chat delivery.",
+  "checked_at": "2026-11-08T00:12:48.189394+00:00",
+  "message": "08 Nov 08:00 SGT watchlist edition published by this scheduled execution. Exact-commit successful Pages deployment, live edition ID and immutable report SHA-256 verified. Twelve completed 6 Nov USD closes and 72 adjusted-close baselines freshly checked, all unchanged. No distinct new company event verified in the incremental window. News access is partial and fresh SEC-directory retrieval failed. This proves this execution, not future runs or separate-chat delivery.",
   "manual_publication": {
     "commit": "b31c0772dbe44efc8fe3bd31df64eaa746f52a33",
     "pages_run_id": 41648846458,
@@ -14,12 +14,12 @@
     "configured": true,
     "test_requested_at": "2026-11-03T14:00:29.590Z",
     "successful_execution_observed": true,
-    "commit": "e87b876cd53f3d251bb9fe41369640a3971f52c9",
-    "pages_run_id": 42409402589,
-    "edition_id": "watchlist-20261107T200000Z",
-    "report_sha256": "50fc35fa58772177024c78617406a2cfee2a7726f8caf6bc2dde168bd278448a",
-    "verified_at": "2026-11-07T20:08:30.741137+00:00",
-    "scheduled_for": "2026-11-07T20:00:00Z",
+    "commit": "19a5b21623b3b85b7bb57946f3701ab427696db0",
+    "pages_run_id": 42428471284,
+    "edition_id": "watchlist-20261108T000000Z",
+    "report_sha256": "6de58c34f711bbefc18e1c143b10c466450b98e3d8580f7274c534679990681f",
+    "verified_at": "2026-11-08T00:12:48.189394+00:00",
+    "scheduled_for": "2026-11-08T00:00:00Z",
     "execution_kind": "scheduled_run_cloud"
   },
   "separate_A_chat_delivery_verified": false,
@@ -239,6 +239,18 @@
       "verified_at": "2026-11-07T16:13:25.144779+00:00",
       "scheduled_for": "2026-11-07T16:00:00Z",
       "execution_kind": "scheduled_run_cloud"
+    },
+    {
+      "configured": true,
+      "test_requested_at": "2026-11-03T14:00:29.590Z",
+      "successful_execution_observed": true,
+      "commit": "e87b876cd53f3d251bb9fe41369640a3971f52c9",
+      "pages_run_id": 42409402589,
+      "edition_id": "watchlist-20261107T200000Z",
+      "report_sha256": "50fc35fa58772177024c78617406a2cfee2a7726f8caf6bc2dde168bd278448a",
+      "verified_at": "2026-11-07T20:08:30.741137+00:00",
+      "scheduled_for": "2026-11-07T20:00:00Z",
+      "execution_kind": "scheduled_run_cloud"
     }
   ],
   "recovered_attempts": [
@@ -290,8 +302,8 @@
     "adjusted_baselines_verified": 72,
     "new_company_research_items": 0,
     "shared_market_context_items": 0,
-    "source_price_timestamps": "Fresh Yahoo daily series retrieved 7 Nov 20:00:01–20:00:03 UTC; source checks completed 20:00:47 UTC and raw-series arithmetic independently checked. Exact 6 Nov regularMarketTime metadata matches completed closes: 21:00:00–21:00:02 UTC for eleven tickers; BRK.B 21:03:23 UTC. Postmarket excluded.",
-    "source_limits": "Reuters search-index coverage only; prior direct restriction respected. Seven issuer lists and eleven SEC archive directories readable; Meta listing unpopulated. Directory modification dates are not acceptance timestamps. Microsoft/Micron issuer and Amazon SEC restrictions, earlier Broadcom issuer failure and Alphabet issuer unavailability limit coverage. No distinct new narrative event verified.",
+    "source_price_timestamps": "Fresh Yahoo query2 daily series retrieved 8 Nov 00:04:00–00:04:47 UTC. Exact 6 Nov regularMarketTime metadata matches completed closes: 21:00:00–21:00:02 UTC for eleven tickers; BRK.B 21:03:23 UTC. Postmarket excluded. All 84 daily/cumulative arithmetic calculations independently checked.",
+    "source_limits": "Nineteen public queries covered all 12 names, Reuters, issuer domains and SEC indexing. Seven issuer lists reread. SEC-directory batch returned search-service HTTP 503 and no usable data; previous SEC timestamps not reused. Reuters/Microsoft/Micron/Amazon SEC direct restrictions respected. Broadcom earlier failure and incomplete GOOGL/META issuer coverage remain limits. Unverified NVIDIA/TSMC leads and duplicate Berkshire results excluded.",
     "late_observed_company_corrections": 0,
     "price_context_items": 0
   }
