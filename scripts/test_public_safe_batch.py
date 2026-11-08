@@ -33,7 +33,10 @@ class PublicSafeBatch(unittest.TestCase):
   d=json.loads((SITE/'data/research-register.json').read_text())
   for route in ROUTES:
    self.assertTrue(any(r['href']==route+'/' and r['state']=='published' for r in d['entries']))
-  self.assertEqual(sum(r['state']=='pending' for r in d['entries']),4)
+  # This historical publication batch must retain its unfinished requests.
+  # New reviewed pending entries may be added without changing its published editions.
+  pending={r['id'] for r in d['entries'] if r['state']=='pending'}
+  self.assertTrue({'pending-weekly-fx-decks','pending-si-revision','pending-anthropic-revision','pending-wealth-revision'} <= pending)
  def test_distinct_fx_and_no_vendor_series(self):
   for route in ROUTES[-2:]:
    h=(SITE/route/'index.html').read_text();self.assertNotIn('currencynews.co.uk',h);self.assertNotIn('tradingeconomics.com',h)

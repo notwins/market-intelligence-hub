@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-07T06:44:38.306250+00:00",
+  "checked_at": "2026-11-08T13:32:48.691980+00:00",
   "standard_version": "V1.2 Merged",
   "standard_sha256": "46ecab67f4eba9e57a9320489f4f7b07688f645f34d093372554c2871d319694",
   "scope": "Public research editions and safe status summaries for pending files or revisions. Dates describe the report or request, not live market observations. Earlier editions and add-ons are retained.",
@@ -899,7 +899,7 @@
       "id": "pending-wealth-revision",
       "title": "Wealth and Sharpe ratio: further revision",
       "href": "research/wealth-inequality-2026-11-04/",
-      "date": "2026-11-06",
+      "date": "2026-11-08",
       "date_label": "Request/revision date",
       "state": "pending",
       "edition": "Awaiting finished revision",
@@ -908,7 +908,7 @@
         "asset.equities_shares",
         "asset.fixed_income_bonds"
       ],
-      "summary": "The detailed mathematics and simpler diversification add-on remain published. The further revision is not yet verified complete.",
+      "summary": "The detailed mathematics and simpler diversification add-on remain published. The latest requested remake, including clearer explanations and interpretation of each chart, has not yet been verified complete.",
       "assets": []
     },
     {
@@ -966,6 +966,37 @@
       "assets": [],
       "published_date": "2026-11-07",
       "sha256": "cf07228c7bcb786e038059fb273b4f9f797b895e4c26c7e4228f7277cc15a5b4"
+    },
+    {
+      "id": "pending-us-cre-remake",
+      "title": "US commercial real estate: requested remake",
+      "href": null,
+      "date": "2026-11-08",
+      "date_label": "Request/revision date",
+      "state": "pending",
+      "edition": "Awaiting finished remake",
+      "section": "Research",
+      "tags": [
+        "sector.property_real_estate",
+        "macro.mortgage_rates"
+      ],
+      "summary": "A finished version of the latest requested remake has not yet been verified. The earlier source report is not being counted as this new remake.",
+      "assets": []
+    },
+    {
+      "id": "pending-humans-only-ai",
+      "title": "A World Where Humans Talk Only to AI",
+      "href": null,
+      "date": "2026-11-06",
+      "date_label": "Report date",
+      "state": "pending",
+      "edition": "Awaiting visual checks",
+      "section": "Market Understanding",
+      "tags": [
+        "sector.artificial_intelligence"
+      ],
+      "summary": "A public HTML edition has been prepared with source qualifications and a reconstructed survey chart. Publication is awaiting final rendered layout and accessibility checks.",
+      "assets": []
     }
   ]
 }
