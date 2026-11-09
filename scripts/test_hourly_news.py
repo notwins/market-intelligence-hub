@@ -1,7 +1,7 @@
 import copy
 import unittest
 from datetime import datetime, timezone
-from import_hourly_news import empty_feed, merge, validate
+from import_hourly_news import empty_feed, merge, validate, source_report_key
 
 NOW = datetime(2026, 11, 1, 5, tzinfo=timezone.utc)
 
@@ -10,7 +10,7 @@ def sample():
     return {'id': 'hourly-20261101-1100', 'report_at': '2026-11-01T11:02:04+08:00',
             'cutoff': '2026-11-01T11:00:00+08:00', 'window_start': '2026-11-01T10:00:00+08:00',
             'coverage': 'partial', 'summary': 'Test coverage gap', 'limitations': ['Limited source access'],
-            'original_url': 'https://chatgpt.com/c/test', 'sources': [], 'stories': []}
+            'original_url': None, 'source_report_key': source_report_key('https://chatgpt.com/c/test'), 'sources': [], 'stories': []}
 
 
 def story():
@@ -29,11 +29,33 @@ def with_story():
 
 
 class HourlyNewsTests(unittest.TestCase):
+    def test_private_url_rejected_for_new_editions(self):
+        x = sample(); x['original_url'] = 'https://chatgpt.com/c/test'
+        with self.assertRaisesRegex(ValueError, 'Private conversation'):
+            merge(empty_feed(), {'editions': [x]}, NOW)
+        x.pop('source_report_key')
+        with self.assertRaisesRegex(ValueError, 'public-safe'):
+            merge(empty_feed(), {'editions': [x]}, NOW)
+
+    def test_legacy_replay_preserves_bytes_and_dedupe(self):
+        old = sample(); old.pop('source_report_key'); old['original_url'] = 'https://chatgpt.com/c/test?messageId=old'
+        current = empty_feed(); current['editions'] = [old]
+        result, changed = merge(current, {'editions': [old]}, NOW)
+        self.assertFalse(changed); self.assertEqual(current, result)
+        alias = sample(); alias['id'] += '-alias'
+        with self.assertRaisesRegex(ValueError, 'Source report already imported'):
+            merge(current, {'editions': [alias]}, NOW)
+
+    def test_source_key_rejects_private_text(self):
+        x = sample(); x['source_report_key'] = 'https://chatgpt.com/c/test'
+        with self.assertRaisesRegex(ValueError, 'SHA-256'):
+            validate(x, NOW)
+
     def test_report_alias_cannot_duplicate_same_source_run(self):
-        x = sample(); x['original_url'] = 'https://chatgpt.com/c/test?messageId=original'
+        x = sample(); x['source_report_key'] = source_report_key('https://chatgpt.com/c/test?messageId=original')
         current, _ = merge(empty_feed(), {'editions': [x]}, NOW)
         alias = copy.deepcopy(x); alias['id'] = 'another-prefix-same-report'
-        alias['original_url'] = 'https://chatgpt.com/c/test/'
+        alias['source_report_key'] = source_report_key('https://chatgpt.com/c/test/')
         alias['cutoff'] = '2026-11-01T03:00:00Z'
         alias['summary'] = 'Different editorial wording does not make a new report'
         before = copy.deepcopy(current)

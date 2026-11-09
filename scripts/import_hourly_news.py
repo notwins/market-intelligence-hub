@@ -6,6 +6,7 @@ The operator must check the completed source report and verify Reuters facts fir
 """
 import argparse
 import copy
+import hashlib
 import json
 import re
 from datetime import date, datetime, timedelta, timezone
@@ -74,7 +75,7 @@ def validate(edition, now=None):
     now = now or datetime.now(SGT)
     allowed = {'id', 'report_at', 'cutoff', 'window_start', 'coverage', 'summary',
                'limitations', 'original_url', 'sources', 'stories'}
-    if not isinstance(edition, dict) or set(edition) != allowed:
+    if not isinstance(edition, dict) or set(edition) not in (allowed, allowed | {'source_report_key'}):
         raise ValueError('Use the public edition schema; private or unknown fields are rejected')
     identifier(edition['id'])
     if ':' in edition['id']:
@@ -90,7 +91,16 @@ def validate(edition, now=None):
         raise ValueError('Coverage limitations must be text')
     if edition['coverage'] != 'complete' and not edition['limitations']:
         raise ValueError('Incomplete coverage must state the gap')
-    https(edition['original_url'], ['chatgpt.com'])
+    if 'source_report_key' in edition:
+        if not isinstance(edition['source_report_key'], str) or not re.fullmatch(r'[a-f0-9]{64}', edition['source_report_key']):
+            raise ValueError('SHA-256 source report key required')
+        if edition['original_url'] is not None:
+            https(edition['original_url'])
+            host = urlparse(edition['original_url']).hostname.lower().rstrip('.')
+            if any(host == x or host.endswith('.' + x) for x in ('chatgpt.com', 'chat.openai.com')):
+                raise ValueError('Private conversation URLs cannot enter new public editions')
+    else:
+        https(edition['original_url'], ['chatgpt.com'])  # Immutable legacy replay only.
     if not isinstance(edition['sources'], list) or not isinstance(edition['stories'], list):
         raise ValueError('Sources and stories must be lists')
     urls = set()
@@ -149,10 +159,18 @@ def empty_feed():
             'source_schedule': {'status': 'Unknown', 'checked_at': None}, 'editions': []}
 
 
+def source_report_key(private_source_url):
+    """Digest verified canonical source identity locally; do not publish the private URL."""
+    source = urlparse(private_source_url)
+    https(private_source_url, ['chatgpt.com'])
+    canonical = source.hostname.lower() + source.path.rstrip('/')
+    return hashlib.sha256(canonical.encode('utf-8')).hexdigest()
+
+
 def report_identity(edition):
     """Report identity survives editorial wording, edition aliases and URL query changes."""
-    source = urlparse(edition['original_url'])
-    return (source.hostname.lower(), source.path.rstrip('/'),
+    key = edition.get('source_report_key') or source_report_key(edition['original_url'])
+    return (key,
             timestamp(edition['window_start']), timestamp(edition['cutoff']),
             timestamp(edition['report_at']))
 
@@ -181,6 +199,8 @@ def merge(current, incoming, now=None):
             if old != edition:
                 raise ValueError('Published edition IDs are immutable; issue a new correction edition')
             continue
+        if 'source_report_key' not in edition:
+            raise ValueError('New editions require a public-safe source_report_key')
         prior_id = report_ids.get(report_identity(edition))
         if prior_id is not None:
             raise ValueError('Source report already imported as ' + prior_id +

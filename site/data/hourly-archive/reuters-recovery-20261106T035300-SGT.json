@@ -1,0 +1,44 @@
+{
+  "id": "reuters-recovery-20261106T035300-SGT",
+  "report_at": "2026-11-06T03:56:15+08:00",
+  "window_start": "2026-11-05T23:53:00+08:00",
+  "cutoff": "2026-11-06T03:53:00+08:00",
+  "coverage": "partial",
+  "summary": "Recovered historical Reuters report: congressional request for an Nvidia briefing. Other report stories remain withheld pending checks or predecessor recovery.",
+  "limitations": [
+    "Historical report, not current market news.",
+    "Only one independently corroborated story retained from the four-story source.",
+    "Original publication date verified; exact original versus update timestamp not established.",
+    "No exhaustive Reuters scan claimed."
+  ],
+  "original_url": null,
+  "source_report_key": "027561cadd4342dab1fba5b1c16913066eaf0f9738c5526dd3784b61d706a416",
+  "sources": [
+    {
+      "url": "https://www.reuters.com/legal/litigation/key-republicans-seek-briefing-nvidia-ceo-over-chinese-spy-allegations-document-2026-11-05/",
+      "title": "Key Republicans seek briefing from Nvidia CEO over Chinese spy allegations-document",
+      "published_at": null,
+      "published_date": "2026-11-05",
+      "publication_precision": "date",
+      "verification_url": "https://www.investing.com/news/stock-market-news/key-republicans-seek-briefing-from-nvidia-ceo-over-chinese-spy-allegationsdocument-5005367"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261105-NVDA-CONGRESS-CHINA-SECURITY-BRIEFING",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "Nvidia / US–China / oversight",
+      "headline": "US lawmakers request Nvidia briefing",
+      "body": "Reuters reported that three House committee chairs requested a closed-door November 18 briefing from Jensen Huang in a November 4 letter concerning China-related allegations. Nvidia said customer discussions do not involve national-security-sensitive secrets. Allegations are not findings.",
+      "analysis": "A request for a briefing is not a regulatory sanction or proof of wrongdoing.",
+      "watch_next": "Whether the briefing occurs and official findings emerge.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/legal/litigation/key-republicans-seek-briefing-nvidia-ceo-over-chinese-spy-allegations-document-2026-11-05/"
+      ],
+      "development_at": null
+    }
+  ]
+}

@@ -39,3 +39,7 @@ Each story must have exactly: `story_id` (stable underlying event ID), `version`
 
 Before proposing an edition ID, compare the source conversation path and timezone-normalized window start, cutoff and report timestamp against the feed. A matching report is already imported even when another proposed ID, wording, URL query or timestamp offset differs. Reuse the existing published identity and skip that report; never manufacture an alias. The importer rejects aliases before writing any feed or archives. A genuinely later correction report can retain the same research window with its own later report timestamp and connected correction version. Retain any earlier immutable archive, including an accidental alias already archived, rather than rewriting history.
 
+
+## Public-safe source identity for new editions
+
+New editions require `source_report_key`, a lowercase SHA-256 digest generated locally with `source_report_key(verified_private_conversation_url)`. The helper normalizes hostname and conversation path, excluding query parameters; timestamps remain separate identity fields. Never publish the private input URL. Set `original_url` to null or a public source/report URL. Existing immutable legacy editions retain their exact bytes and can be replayed, but new legacy-format editions are rejected. A matching key and normalized timestamps remain an alias even when its new edition ID differs. Story-version and correction guards remain unchanged.
