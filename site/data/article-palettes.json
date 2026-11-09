@@ -873,6 +873,24 @@
         "#57728D"
       ],
       "source_sha256": "cf07228c7bcb786e038059fb273b4f9f797b895e4c26c7e4228f7277cc15a5b4"
+    },
+    {
+      "id": "research-sti-banks-v2-2026-11-09",
+      "title": "Singapore local banks V2: Q3 earnings, NIM, SGS & 2027 outlook",
+      "href": "research/sti-banks-v2-2026-11-09/",
+      "date": "2026-11-09",
+      "edition": "V2 · 9 Nov · BT update + MAS verification",
+      "recommended_theme": "06",
+      "declared_theme": "06",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#047857",
+        "#1E40AF",
+        "#DBEAFE",
+        "#0369A1",
+        "#7E22CE"
+      ],
+      "source_sha256": "59957078f285a30a309d8b8f54c4fc8786ef51ad4c4c16683555a97c036c862e"
     }
   ]
 }
