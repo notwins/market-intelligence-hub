@@ -70,15 +70,10 @@ def parse_feed(raw, now, stocks):
         items[ident] = {'id':ident,'title':title,'published_at':published.astimezone(timezone.utc).isoformat(),'category':category,'tickers':tickers,'url':url,'link_type':'google_news' if parsed.hostname=='news.google.com' else 'direct','publisher':'Reuters','publisher_url':source.get('url'),'verification':'publisher metadata in Google News RSS; article body not reproduced'}
     return sorted(items.values(),key=lambda x:x['published_at'],reverse=True)[:80]
 
-TREASURY_SERIES = [('DGS1MO','1M'),('DGS3MO','3M'),('DGS6MO','6M'),('DGS1','1Y'),('DGS2','2Y'),('DGS3','3Y'),('DGS5','5Y'),('DGS7','7Y'),('DGS10','10Y'),('DGS20','20Y'),('DGS30','30Y')]
-
 def parse_treasury_csv(raw, now):
-    reader = csv.DictReader(io.StringIO(raw.decode('utf-8-sig')))
-    selected = [(key,label) for key,label in TREASURY_SERIES if key in (reader.fieldnames or [])]
-    if len(selected)<4: raise ValueError('Insufficient Treasury series columns')
-    series = [key for key,label in selected]
+    series = ['DGS2','DGS5','DGS10','DGS30']
     rows = []
-    for row in reader:
+    for row in csv.DictReader(io.StringIO(raw.decode('utf-8-sig'))):
         date = row.get('observation_date') or row.get('DATE')
         try:
             observed = datetime.strptime(date,'%Y-%m-%d').replace(tzinfo=timezone.utc)
@@ -89,7 +84,7 @@ def parse_treasury_csv(raw, now):
     if not rows: raise ValueError('No valid Treasury observations')
     rows.sort(key=lambda row:row['date'])
     rows=rows[-30:]
-    return {'status':'ok','as_of':rows[-1]['date'],'labels':[label for key,label in selected],'values':rows[-1]['values'],'history':rows,'source':'Federal Reserve H.15, retrieved via FRED','source_url':'https://fred.stlouisfed.org/series/DGS10','checked_at':now.astimezone(SGT).isoformat(timespec='seconds')}
+    return {'status':'ok','as_of':rows[-1]['date'],'labels':['2Y','5Y','10Y','30Y'],'values':rows[-1]['values'],'history':rows,'source':'Federal Reserve H.15, retrieved via FRED','source_url':'https://fred.stlouisfed.org/series/DGS10','checked_at':now.astimezone(SGT).isoformat(timespec='seconds')}
 
 def fetch_bytes(url):
     request=urllib.request.Request(url,headers={'User-Agent':'MarketIntelligenceHub/2.0 (public research metadata)'})
@@ -101,7 +96,7 @@ def fetch_bytes(url):
 
 def refresh_treasury(now):
     try:
-        raw=fetch_bytes('https://fred.stlouisfed.org/graph/fredgraph.csv?id='+','.join(key for key,label in TREASURY_SERIES)+'&cosd='+ (now-timedelta(days=60)).date().isoformat())
+        raw=fetch_bytes('https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2,DGS5,DGS10,DGS30&cosd='+ (now-timedelta(days=60)).date().isoformat())
         write_json(ROOT/'market.json',parse_treasury_csv(raw,now))
     except Exception as error:
         previous=read_json(ROOT/'market.json',{})

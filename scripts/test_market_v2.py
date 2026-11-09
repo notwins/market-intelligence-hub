@@ -9,15 +9,6 @@ class MarketV2Tests(unittest.TestCase):
         self.assertEqual(result['as_of'],'2026-10-28')
         self.assertEqual(result['values'],[4.67,4.85,5.05,5.37])
         self.assertEqual(len(result['history']),1)
-    def test_all_eleven_tenors_keep_last_complete_date(self):
-        from update_news import TREASURY_SERIES
-        header='observation_date,'+','.join(k for k,l in TREASURY_SERIES)+'\n'
-        raw=(header+'2026-11-05,'+','.join(['4']*11)+'\n2026-11-06,'+','.join(['4']*10+['.'])+'\n').encode()
-        result=parse_treasury_csv(raw,datetime(2026,11,9,tzinfo=timezone.utc))
-        self.assertEqual(result['labels'],[l for k,l in TREASURY_SERIES])
-        self.assertEqual(result['as_of'],'2026-11-05')
-        self.assertEqual(len(result['values']),11)
-
     def test_empty_csv_fails_without_a_fake_observation(self):
         with self.assertRaises(ValueError): parse_treasury_csv(b'observation_date,DGS2,DGS5,DGS10,DGS30\n',datetime.now(timezone.utc))
     def test_bond_earnings_story_remains_credit_coverage(self):

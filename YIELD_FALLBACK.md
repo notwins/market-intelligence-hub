@@ -1,6 +1,6 @@
 # Dated yield fallback
 
-The daily Treasury updater requests eleven H.15 constant-maturity series through FRED: 1M, 3M, 6M, 1Y, 2Y, 3Y, 5Y, 7Y, 10Y, 20Y and 30Y. It retains the latest complete dated source row and preserves the previous snapshot on request failure. It does not fetch WSJ security prices.
+The user designates WSJ for current US Treasury pricing and Fed/Treasury for historical context. Current WSJ data is not connected: usable timestamped quotes, instrument/convention verification and public-display rights have not been verified. The public page is linked for direct reading; no WSJ table is republished. Existing official snapshots remain labelled historical fallback, not current WSJ quotes. The prior four-series H.15 updater remains unchanged for historical observation usefulness; the briefly introduced eleven-series expansion was withdrawn. No schedule is paused or changed.
 
 The UST comparison desk keeps a separately dated complete prior curve visible automatically if the newest snapshot has missing tenors and a complete observation exists within seven calendar days. Values from different dates are not stitched into a same-date curve. Source links and exact values remain in the table. Historical selected dates are still exact-date observations.
 
