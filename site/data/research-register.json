@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checked_at": "2026-11-08T13:32:48.691980+00:00",
+  "checked_at": "2026-11-09T10:53:00+00:00",
   "standard_version": "V1.2 Merged",
   "standard_sha256": "46ecab67f4eba9e57a9320489f4f7b07688f645f34d093372554c2871d319694",
   "scope": "Public research editions and safe status summaries for pending files or revisions. Dates describe the report or request, not live market observations. Earlier editions and add-ons are retained.",
@@ -997,6 +997,27 @@
       ],
       "summary": "A public HTML edition has been prepared with source qualifications and a reconstructed survey chart. Publication is awaiting final rendered layout and accessibility checks.",
       "assets": []
+    },
+    {
+      "id": "research-sti-banks-v2-2026-11-09",
+      "title": "Singapore local banks V2: Q3 earnings, NIM, SGS & 2027 outlook",
+      "href": "research/sti-banks-v2-2026-11-09/",
+      "date": "2026-11-09",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "V2 · 9 Nov · BT update + MAS verification",
+      "section": "Research",
+      "tags": [
+        "geo.singapore",
+        "sector.financials_banking",
+        "asset.singapore_government_securities",
+        "macro.treasury_yields_rates",
+        "asset.equities_shares"
+      ],
+      "summary": "Q3 issuer earnings, 2027 guidance and AI/Indonesia/wealth themes, the verified 6 November MAS SGS curve, and the same interactive monthly yields as the original addendum.",
+      "assets": [],
+      "published_date": "2026-11-09",
+      "sha256": "59957078f285a30a309d8b8f54c4fc8786ef51ad4c4c16683555a97c036c862e"
     }
   ]
 }
