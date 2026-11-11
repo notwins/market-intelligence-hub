@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "as_of": "2026-11-06",
+  "as_of": "2026-11-09",
   "labels": [
     "2Y",
     "5Y",
@@ -8,21 +8,12 @@
     "30Y"
   ],
   "values": [
-    4.51,
-    4.64,
-    4.86,
+    4.56,
+    4.67,
+    4.88,
     5.26
   ],
   "history": [
-    {
-      "date": "2026-09-25",
-      "values": [
-        4.81,
-        4.98,
-        5.17,
-        5.49
-      ]
-    },
     {
       "date": "2026-09-28",
       "values": [
@@ -283,9 +274,18 @@
         4.86,
         5.26
       ]
+    },
+    {
+      "date": "2026-11-09",
+      "values": [
+        4.56,
+        4.67,
+        4.88,
+        5.26
+      ]
     }
   ],
   "source": "Federal Reserve H.15, retrieved via FRED",
   "source_url": "https://fred.stlouisfed.org/series/DGS10",
-  "checked_at": "2026-11-10T08:54:26+08:00"
+  "checked_at": "2026-11-11T08:54:52+08:00"
 }
