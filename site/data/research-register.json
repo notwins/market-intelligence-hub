@@ -1018,6 +1018,25 @@
       "assets": [],
       "published_date": "2026-11-09",
       "sha256": "ed786f2975ba6e539d860202dba9f0782e3ca82ef21ecd16dafded1c33a67afb"
+    },
+    {
+      "id": "research-ai-circular-financing-2026-11-10",
+      "title": "AI’s financing loop: circular funding, CDS and supplier guarantees",
+      "href": "research/ai-circular-financing-2026-11-10/",
+      "date": "2026-11-10",
+      "date_label": "Research cutoff date",
+      "state": "published",
+      "edition": "Standalone research · 10 November 2026",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "macro.ig_hy_credit_spreads",
+        "geo.united_states"
+      ],
+      "summary": "Circular AI funding, supplier guarantees and CDS pricing, with BIS, Federal Reserve and issuer evidence, a recovery-sensitivity calculator and a dated Treasury-yield comparison.",
+      "assets": [],
+      "published_date": "2026-11-11",
+      "sha256": "97c474a04743d66939d1a694d51e534bec3bacf2fa207e1b998c9028fd2f1800"
     }
   ]
 }
