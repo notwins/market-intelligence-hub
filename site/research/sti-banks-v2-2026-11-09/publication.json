@@ -3,12 +3,15 @@
   "as_of": "2026-11-09",
   "publication_date": "2026-11-09",
   "edition": "Updated independent public research · V2 · 9 November 2026",
-  "html_sha256": "726d989178ce95fe9a4e2b80a9939ecc55f50bb141f8b1a1f3885aec57b672a4",
+  "html_sha256": "ed786f2975ba6e539d860202dba9f0782e3ca82ef21ecd16dafded1c33a67afb",
   "earlier_editions": [
     "/market-intelligence-hub/research/sti-banks-2026-11-06/",
     "/market-intelligence-hub/research/sti-banks-part2-2026-11-06/"
   ],
   "source_scope": "DBS, OCBC and UOB 3Q26 IR disclosures; MAS benchmark SGS quotes to 6 Nov 2026; two dated Business Times commentaries; unchanged user-supplied SGS monthly snapshot through Aug 2026.",
   "privacy_review": "Public research only; no client holdings or personal identifiers. Independent commentary distinct from OCBC Group Research.",
-  "files": []
+  "files": [],
+  "revision_date": "2026-11-11",
+  "revision_scope": "Source reconciliation wording, keyboard-accessible responsive charts and calculator result announcements; earlier editions and all chart data preserved.",
+  "review_scope": "Browser previews at 1128px desktop and 320px/390px report widths in light and dark modes; chart scrolling, labels, keyboard focus, calculator result semantics and source/edition anchors checked. Physical devices and screen-reader audio were not tested."
 }
