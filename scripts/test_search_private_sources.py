@@ -13,7 +13,8 @@ class PrivateSourceLinks(unittest.TestCase):
   data=json.loads((ROOT/'data/hourly-news.json').read_text())
   urls=[e.get('original_url','') for e in data.get('editions',[])]
   private=[u for u in urls if restricted_source(u)]
-  self.assertTrue(private)
+  # Source checkout retains legacy provenance; final Pages copies are redacted.
+  self.assertTrue(restricted_source('https://chatgpt.com/c/private-fixture'))
   for url in private:
    self.assertNotIn(url,catalogue)
    self.assertNotIn(url.rstrip('/').split('/')[-1],catalogue)

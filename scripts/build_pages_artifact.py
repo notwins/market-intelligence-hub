@@ -3,6 +3,7 @@ import argparse
 import shutil
 import subprocess
 from pathlib import Path
+from public_data_projection import stage
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,6 +22,7 @@ def build(output, repo=ROOT):
     for source in repo.glob('*.md'):
         shutil.copyfile(source, output / source.name)
     subprocess.run(['node', str(repo / 'scripts/inject_legal_footer.cjs'), str(output / 'site')], check=True)
+    stage(output / 'site')
     return output / 'site'
 
 

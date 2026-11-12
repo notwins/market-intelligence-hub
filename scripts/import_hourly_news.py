@@ -15,7 +15,6 @@ from urllib.parse import urlparse
 
 SGT = timezone(timedelta(hours=8))
 SOURCE_NAME = 'Reuters Hourly News'
-SOURCE_CHAT = 'https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041'
 
 
 def timestamp(value):
@@ -154,7 +153,7 @@ def validate(edition, now=None):
 
 
 def empty_feed():
-    return {'schema_version': 1, 'source_name': SOURCE_NAME, 'source_url': SOURCE_CHAT,
+    return {'schema_version': 1, 'source_name': SOURCE_NAME, 'source_url': None,
             'publisher_checked_at': None, 'last_complete_cutoff': None,
             'source_schedule': {'status': 'Unknown', 'checked_at': None}, 'editions': []}
 

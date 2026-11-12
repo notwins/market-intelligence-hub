@@ -5,6 +5,7 @@ import json
 import subprocess
 from collections import Counter
 from pathlib import Path
+from public_data_projection import projected_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -36,13 +37,18 @@ def audit(source, artifact, repo=ROOT):
         ['node', '-e', code, str(repo/'scripts/publication_policy.cjs'), str(source), str(repo)], text=True)))
     unchanged = 0
     mutable = []
+    privacy_projection = []
     for relative, path in source_files.items():
         # Everything except an explicitly eligible HTML presentation must survive
         # byte-for-byte: manifests, archives, review receipts, downloads, CSS, JSON.
         if not relative.lower().endswith('.html') or relative in protected or relative.startswith('legal/'):
-            if path.read_bytes() != artifact_files[relative].read_bytes():
+            original = path.read_bytes()
+            expected = projected_bytes(relative, original)
+            if expected != original:
+                privacy_projection.append(relative)
+            if expected != artifact_files[relative].read_bytes():
                 raise ValueError(f'Protected source bytes changed: {relative}')
-            unchanged += 1
+            unchanged += int(expected == original)
         else:
             mutable.append(relative)
 
@@ -100,7 +106,7 @@ def audit(source, artifact, repo=ROOT):
         'publication_manifest_count': len(manifests),
         'receipt_checks': dict(sorted(Counter(row['category'] for row in checks).items())),
         'mutable_html': sorted(mutable), 'immutable_footer_exceptions': sorted(protected),
-        'checks': checks,
+        'checks': checks, 'public_data_privacy_projection': privacy_projection,
     }
 
 

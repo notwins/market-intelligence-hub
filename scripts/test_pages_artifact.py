@@ -77,6 +77,18 @@ class PagesArtifactTests(unittest.TestCase):
                 finally:
                     target.write_bytes(original)
 
+    def test_privacy_projection_rejects_unrelated_news_changes(self):
+        target = self.site/'data/hourly-news.json'
+        original = target.read_bytes()
+        try:
+            data = json.loads(original)
+            data['editions'][0]['summary'] += ' unapproved mutation'
+            target.write_text(json.dumps(data))
+            with self.assertRaisesRegex(ValueError, 'Protected source bytes changed'):
+                audit(ROOT/'site', self.site)
+        finally:
+            target.write_bytes(original)
+
     def test_removing_an_original_is_not_hidden_by_missing_receipt(self):
         target = self.site/'data/watchlist/report-index.json'
         original = target.read_bytes()
