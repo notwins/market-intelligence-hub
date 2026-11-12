@@ -2,13 +2,153 @@
   "schema_version": 1,
   "source_name": "Reuters Hourly News",
   "source_url": "https://chatgpt.com/c/6ae6ab06-c2b0-83ec-8029-537540a31041",
-  "publisher_checked_at": "2026-11-09T20:18:51+08:00",
+  "publisher_checked_at": "2026-11-12T15:41:26+08:00",
   "last_complete_cutoff": null,
   "source_schedule": {
     "status": "Active",
     "checked_at": "2026-11-03T18:21:21+08:00"
   },
   "editions": [
+    {
+      "id": "reuters-recovery-20261111T194604-SGT",
+      "report_at": "2026-11-11T19:50:39+08:00",
+      "window_start": "2026-11-11T15:46:04+08:00",
+      "cutoff": "2026-11-11T19:46:04+08:00",
+      "coverage": "partial",
+      "summary": "Historical recovery of the completed 11 November evening report. All five source story topics are retained as concise, independently checked summaries. This is not a current market snapshot.",
+      "limitations": [
+        "The original report had targeted, partial Reuters coverage; earlier uncovered intervals remain unresolved.",
+        "Original article dates are verified, but separate initial-publication and update times are not established. Date-only sources do not establish exact intraday timing.",
+        "Historical observations and proposed terms apply to the source cutoff, not the date this recovery was published.",
+        "Cross-report duplicate checks cover the retained public editions and accessible source responses, not all inaccessible briefing history."
+      ],
+      "original_url": null,
+      "sources": [
+        {
+          "url": "https://www.reuters.com/world/china/alphabet-eyes-3-billion-hong-kong-singapore-bond-sale-sources-say-2026-11-11/",
+          "title": "Alphabet eyes $3 billion Hong Kong, Singapore bond sale, sources say",
+          "published_at": null,
+          "published_date": "2026-11-11",
+          "publication_precision": "date",
+          "verification_url": "https://www.aol.com/articles/alphabet-eyes-3-billion-hong-021942000.html"
+        },
+        {
+          "url": "https://www.reuters.com/world/eu-threatens-significant-fines-unfair-online-trade-practices-2026-11-11/",
+          "title": "EU threatens significant fines for unfair online trade practices",
+          "published_at": null,
+          "published_date": "2026-11-11",
+          "publication_precision": "date",
+          "verification_url": "https://live.euronext.com/en/financial-news/eu-threatens-significant-fines-unfair-online-trade-practices"
+        },
+        {
+          "url": "https://www.reuters.com/world/asia-pacific/chinas-central-bank-vows-step-up-policy-support-economy-2026-11-11/",
+          "title": "China's central bank vows to step up policy support for the economy",
+          "published_at": null,
+          "published_date": "2026-11-11",
+          "publication_precision": "date",
+          "verification_url": "https://www.investing.com/news/economy-news/chinas-central-bank-vows-to-step-up-policy-support-for-the-economy-5018404"
+        },
+        {
+          "url": "https://www.reuters.com/business/finance/after-us-market-shake-out-signs-suggest-too-soon-say-worst-is-over-2026-11-11/",
+          "title": "After US market shake-out, signs suggest too soon to say worst is over",
+          "published_at": null,
+          "published_date": "2026-11-11",
+          "publication_precision": "date",
+          "verification_url": "https://www.marketscreener.com/news/after-us-market-shake-out-signs-suggest-too-soon-to-say-worst-is-over-ce785edbdd8af321"
+        },
+        {
+          "url": "https://www.reuters.com/world/asia-pacific/japan-advisors-urge-focus-sustaining-growth-after-inflation-hits-boj-goal-2026-11-11/",
+          "title": "Japan advisers urge focus on sustaining growth after inflation hits BOJ goal",
+          "published_at": null,
+          "published_date": "2026-11-11",
+          "publication_precision": "date",
+          "verification_url": "https://www.marketscreener.com/news/japan-advisors-urge-focus-on-sustaining-growth-after-inflation-hits-boj-goal-ce785edbda8cf722"
+        }
+      ],
+      "stories": [
+        {
+          "story_id": "R-20261111-ALPHABET-SGD-HKD-BOND-PLANS",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "Singapore / Alphabet / SGD bonds",
+          "headline": "Alphabet explores SGD and HKD borrowing",
+          "body": "Reuters cited sources saying Alphabet sought about US$3 billion from inaugural SGD and HKD issues. Proposed minimums were S$1.5 billion and HK$8 billion; SGD maturities could extend to 30 years. Final size, timing and pricing were unsettled at the report cutoff.",
+          "analysis": "Long maturity adds rate sensitivity; proposed borrowing is not a completed issuance.",
+          "watch_next": "Final terms, pricing, size and settlement.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/china/alphabet-eyes-3-billion-hong-kong-singapore-bond-sale-sources-say-2026-11-11/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261111-EU-DIGITAL-FAIRNESS-ACT-DRAFT",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "Europe / Digital regulation",
+          "headline": "EU proposes stronger online consumer rules",
+          "body": "Reuters described a proposed Digital Fairness Act and a separate consumer-protection enforcement revision allowing fines up to 6% of global annual revenue. The proposals still needed legislative agreement; this was not an enacted fine or a penalty already imposed.",
+          "analysis": "Platforms may face additional compliance costs if the proposals become law.",
+          "watch_next": "Final legislative scope and enforcement provisions.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/eu-threatens-significant-fines-unfair-online-trade-practices-2026-11-11/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261111-PBOC-Q3-MONETARY-POLICY-REPORT-SUPPORT",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "China / PBoC / FX",
+          "headline": "PBoC reiterates monetary support",
+          "body": "Reuters reported that the PBoC's quarterly policy report pledged counter-cyclical support, stronger domestic demand, low overall borrowing costs and a broadly stable yuan. These were policy commitments, not a newly quantified rate cut or liquidity injection.",
+          "analysis": "Policy direction alone does not establish immediate currency or funding-market effects.",
+          "watch_next": "Specific policy actions and domestic demand.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/asia-pacific/chinas-central-bank-vows-step-up-policy-support-economy-2026-11-11/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261111-US-TECH-POSITIONING-OPTIONS-POST-SELLOFF",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "US / Technology / Options",
+          "headline": "Tech positioning signals remain mixed",
+          "body": "Reuters analysis cited Deutsche Bank data showing technology positioning below April 2025 lows and Carrick Lane evidence of reduced AI call-option buying. Other technical indicators remained cautious; the reporting did not establish that the selloff had ended.",
+          "analysis": "Reduced crowding can help stabilisation without proving a durable market bottom.",
+          "watch_next": "Options flows, market breadth and company cash flows.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/business/finance/after-us-market-shake-out-signs-suggest-too-soon-say-worst-is-over-2026-11-11/"
+          ],
+          "development_at": null
+        },
+        {
+          "story_id": "R-20261111-JAPAN-ECONOMIC-COUNCIL-REAL-WAGES-BOJ",
+          "version": 1,
+          "status": "new",
+          "freshness": "catch-up",
+          "topic": "Japan / BOJ / Wages",
+          "headline": "Japan advisers prioritise real-income growth",
+          "body": "Reuters reported that private-sector members of Japan's economic policy council urged sustained income and productivity gains rather than treating 2% inflation as the final objective. They said consumption remained weak and real-income improvements were not fully realised.",
+          "analysis": "Meeting an inflation target does not necessarily restore household purchasing power.",
+          "watch_next": "Real wages, consumption and BOJ decisions.",
+          "earlier": "",
+          "source_urls": [
+            "https://www.reuters.com/world/asia-pacific/japan-advisors-urge-focus-sustaining-growth-after-inflation-hits-boj-goal-2026-11-11/"
+          ],
+          "development_at": null
+        }
+      ],
+      "source_report_key": "a4533b2a710f1a34af0e4190b0a7f70c392116f4b4c853b6582d71c9e8f1c859"
+    },
     {
       "id": "reuters-recovery-20261106T035300-SGT",
       "report_at": "2026-11-06T03:56:15+08:00",
