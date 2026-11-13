@@ -64,11 +64,28 @@ function match(node,entry){
 }
 const articleKinds=new Set(['Headline','Hourly story','Hourly edition','Report','Research edition','Research library','Earnings card','Watchlist research','Public diary','External research PDF']);
 function isArticle(entry){return articleKinds.has(entry.kind)||(entry.kind==='Page'&&/^(research\/|data\/watchlist\/reports\/)/.test(entry.href||''));}
+// Content priority is only a relevance tie-breaker, never a match or score boost.
+const securityKinds=new Set(['Security master','Stock directory','Bond directory','UST reference']);
+const researchKinds=new Set(['Report','Research edition','Research library','White Papers & Research Papers','Watchlist research','Public diary','External research PDF']);
+function exactSecurity(entry,query){
+ if(!securityKinds.has(entry.kind))return false;
+ const q=String(query||'').trim().toLowerCase();
+ if(!q||!/^[a-z0-9][a-z0-9.:-]*$/i.test(q))return false;
+ // Use explicit identifiers or the catalogue's ticker-first title convention.
+ const identifiers=[entry.ticker,entry.symbol,entry.isin,String(entry.title||'').split(/\s+[·|–—]\s+/)[0]];
+ return identifiers.some(value=>typeof value==='string'&&value.trim().toLowerCase()===q);
+}
+function relevancePriority(entry,query){
+ if(!String(query||'').trim())return 1;
+ if(exactSecurity(entry,query))return -1;
+ if(researchKinds.has(entry.kind)||(entry.kind==='Page'&&/^(research\/|data\/watchlist\/reports\/)/.test(entry.href||'')))return 0;
+ return securityKinds.has(entry.kind)?2:1;
+}
 function search(entries,query,kind='',scope='all'){
  const parsed=parse(query);
- return entries.filter(e=>(!kind||e.kind===kind)&&(scope!=='articles'||isArticle(e))&&match(parsed.tree,e)).map(e=>({e,score:parsed.terms.reduce((n,t)=>n+(contains(e.title||'',t.value,t.phrase)?5:0),0)})).sort((a,b)=>b.score-a.score||String(b.e.date||'').localeCompare(String(a.e.date||''))||String(a.e.title).localeCompare(String(b.e.title))).map(x=>x.e);
+ return entries.filter(e=>(!kind||e.kind===kind)&&(scope!=='articles'||isArticle(e))&&match(parsed.tree,e)).map(e=>({e,score:parsed.terms.reduce((n,t)=>n+(contains(e.title||'',t.value,t.phrase)?5:0),0)})).sort((a,b)=>b.score-a.score||relevancePriority(a.e,query)-relevancePriority(b.e,query)||String(b.e.date||'').localeCompare(String(a.e.date||''))||String(a.e.title).localeCompare(String(b.e.title))).map(x=>x.e);
 }
 function quote(value){return '"'+String(value).replace(/\\/g,'\\\\').replace(/"/g,'\\"')+'"';}
 function appendTag(query,tag,operator='AND'){const term='tag:'+quote(canonical(tag));return query.trim()?'('+query.trim()+') '+(operator==='OR'?'OR':'AND')+' '+term:term;}
-const api={parse,search,match,record,canonical,contains,appendTag,isArticle};root.MarketSearchQuery=api;if(typeof module!=='undefined'&&module.exports)module.exports=api;
+const api={parse,search,match,record,canonical,contains,appendTag,isArticle,relevancePriority,exactSecurity};root.MarketSearchQuery=api;if(typeof module!=='undefined'&&module.exports)module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

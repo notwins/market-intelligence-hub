@@ -1,0 +1,30 @@
+const assert=require('node:assert/strict');
+const Q=require('../site/search-query.js'),G=require('../site/global-search.js');
+const report={id:'report',kind:'Report',title:'Gold outlook',href:'research/gold/',date:'2020-01-01',text:'Gold outlook',tags:[]};
+const security={id:'security',kind:'Security master',title:'Gold outlook',href:'v4.html#master',date:'2026-01-01',text:'Gold outlook',tags:[]};
+const ids=entries=>entries.map(e=>e.id);
+for(const run of [(e,q)=>Q.search(e,q),(e,q)=>G.suggest(G.prepare(e),q).entries]){
+ assert.deepEqual(ids(run([security,report],'gold')),['report','security'],'equal relevance favors research over newer security');
+ assert.deepEqual(ids(run([report,security],'gold')),['report','security'],'input order cannot change differentiated ties');
+ const stronger={...security,title:'Gold outlook',text:'Gold'};
+ const weaker={...report,title:'Market review',text:'Gold'};
+ assert.equal(run([weaker,stronger],'gold')[0].id,'security','stronger title match still wins');
+ const stock={...security,title:'NVDA · Nvidia',ticker:'NVDA'};
+ const nvReport={...report,title:'NVDA · Nvidia',text:'Nvidia earnings'};
+ assert.equal(run([nvReport,stock],'NVDA')[0].id,'security','exact ticker lookup stays first at equal relevance');
+ assert.equal(run([stock,nvReport],'Nvidia')[0].id,'report','company name is research intent, not a ticker');
+ const brk={...stock,title:'BRK.B · Berkshire Hathaway',ticker:'BRK.B'};
+ assert.equal(run([{...nvReport,title:brk.title},brk],'brk.b')[0].id,'security');
+ const tied=[{...report,id:'b'},{...report,id:'a'}];
+ assert.deepEqual(ids(run(tied,'gold')),['b','a'],'complete ties retain catalogue order');
+ assert.equal(run([security,report],'unmatched').length,0);
+}
+assert.equal(Q.exactSecurity({...security,title:'CPI notes'},'CPI'),false,'do not guess tickers from title words');
+assert.equal(Q.relevancePriority(report,''),Q.relevancePriority(security,''),'empty browsing has no content preference');
+assert.equal(Q.search([security,report],'gold','Security master')[0],security);
+assert.deepEqual(Q.search([security,report],'gold','','articles'),[report]);
+assert.deepEqual(ids(Q.search([security,report],'gold AND NOT silver')),['report','security']);
+assert.throws(()=>Q.search([security,report],'gold AND'));
+const section={id:'nav',kind:'Section',title:'Gold outlook',href:'v4.html#gold'};
+assert.equal(G.suggest(G.prepare([report,section]),'gold').entries[0],section,'navigation hierarchy unchanged');
+console.log('PASS relevance tie-breaks, exact ticker identifiers, stronger matches, stable ties, Boolean/filter semantics and navigation hierarchy');

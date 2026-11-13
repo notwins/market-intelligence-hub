@@ -1,0 +1,33 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const F=require('../site/featured-research.js');
+const make=(id,href,published_date='2026-11-13')=>({id,href,published_date,date:'2026-11-08',date_label:'Report date',state:'published',title:'Title <test>',summary:'Summary & context'});
+const cre=make('pending-us-cre-remake','research/us-cre-refinancing-test-2026-11-08/');
+const ai=make('research-ai-circular-financing-2026-11-10','research/ai-circular-financing-2026-11-10/','2026-11-11');
+const data=entries=>({schema_version:1,entries});
+assert.equal(F.select(data([ai,cre])).id,cre.id);
+assert.equal(F.select(data([make('research-ocbc-premier-welcome-2026-11-13','research/ocbc-premier-welcome-2026-11-13/','2026-12-01'),ai])).id,ai.id);
+for(const change of [{state:'pending'},{href:'javascript:alert(1)'},{href:'research/../secret/'},{published_date:null},{published_date:'2026-02-30'},{date:null},{title:''},{summary:null}]) assert.equal(F.select(data([{...cre,...change},ai])).id,ai.id);
+assert.equal(F.select(data([cre,cre,ai])).id,ai.id);
+assert.equal(F.select(data([{...ai,published_date:cre.published_date},cre])).id,cre.id);
+assert.equal(F.select({entries:[cre]}),null);
+assert.equal(F.select(data([])),null);
+assert(F.card(cre).includes('Title &lt;test&gt;'));
+assert(F.card(cre).includes('Summary &amp; context'));
+assert(F.card(cre).includes('Report date: 8 Nov 2026 · Published: 13 Nov 2026'));
+for(const html of [F.shell(),F.card(cre)]) for(const path of ['research/sti-banks-2026-11-06/','research/sti-banks-part2-2026-11-06/','market-understanding/#my-research']) assert(html.includes(path));
+assert(!F.shell().includes('Latest'));
+const source=fs.readFileSync(require.resolve('../site/featured-research.js'),'utf8');
+async function browserChecks(){
+ let host={isConnected:true,innerHTML:''},calls=0,resolve;
+ const ctx={window:{},document:{querySelector:()=>host},fetch:()=>{calls++;return new Promise(r=>resolve=r);},Date,Intl};vm.createContext(ctx);vm.runInContext(source,ctx);
+ const old=host,p1=ctx.window.FeaturedResearch.mount(),p2=ctx.window.FeaturedResearch.mount();assert.equal(calls,1);
+ host={isConnected:true,innerHTML:''};old.isConnected=false;
+ resolve({ok:true,json:async()=>data([cre])});await Promise.all([p1,p2]);assert.equal(old.innerHTML,'');assert.equal(host.innerHTML,'');
+ await ctx.window.FeaturedResearch.mount();assert(host.innerHTML.includes(cre.href));assert.equal(calls,1);
+ let attempts=0;const failHost={isConnected:true,innerHTML:''},fail={window:{},document:{querySelector:()=>failHost},fetch:async()=>{attempts++;throw Error('offline');},Date,Intl};vm.createContext(fail);vm.runInContext(source,fail);
+ await fail.window.FeaturedResearch.mount();assert(failHost.innerHTML.includes('Explore my research'));assert(!failHost.innerHTML.includes(cre.href));await fail.window.FeaturedResearch.mount();assert.equal(attempts,2);
+ const invalid={window:{},document:{querySelector:()=>failHost},fetch:async()=>({ok:true,json:async()=>data([])}),Date,Intl};vm.createContext(invalid);vm.runInContext(source,invalid);await invalid.window.FeaturedResearch.mount();assert(failHost.innerHTML.includes('Explore my research'));
+ console.log('PASS curated published selection, exact destinations, date validation/ties, escaping, retained links, concurrent mounts, route changes, cached remount, failure/retry and empty response');
+}
+browserChecks().catch(e=>{console.error(e);process.exitCode=1;});
