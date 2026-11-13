@@ -969,19 +969,23 @@
     },
     {
       "id": "pending-us-cre-remake",
-      "title": "US commercial real estate: requested remake",
-      "href": null,
+      "title": "US CRE: the refinancing test",
+      "href": "research/us-cre-refinancing-test-2026-11-08/",
       "date": "2026-11-08",
-      "date_label": "Request/revision date",
-      "state": "pending",
-      "edition": "Awaiting finished remake",
+      "date_label": "Report date",
+      "state": "published",
+      "edition": "8 November 2026 remake · corrected HTML",
       "section": "Research",
       "tags": [
+        "geo.united_states",
         "sector.property_real_estate",
-        "macro.mortgage_rates"
+        "sector.financials_banking",
+        "macro.treasury_yields_rates"
       ],
-      "summary": "A finished version of the latest requested remake has not yet been verified. The earlier source report is not being counted as this new remake.",
-      "assets": []
+      "summary": "The distinct 8 November remake examines CRE refinancing, office CMBS, bank concentration, credit recognition and conditional transmission. Original source dates and unresolved video/vendor claims remain explicit. Corrected HTML only; a PDF edition requires separate review.",
+      "assets": [],
+      "sha256": "b1be21b5cdfc02556f2e9bdc31636af2b31eaf9e80870f47168199dcdc645d51",
+      "published_date": "2026-11-13"
     },
     {
       "id": "pending-humans-only-ai",

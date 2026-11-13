@@ -1,0 +1,15 @@
+{
+  "title": "US CRE: the refinancing test",
+  "as_of": "2026-11-08T18:00:00+08:00",
+  "research_date": "2026-11-08",
+  "publication_preparation_recorded_date": "2026-11-12",
+  "publication_date": "2026-11-13",
+  "edition": "Distinct 8 November 2026 remake · HTML",
+  "html_sha256": "b1be21b5cdfc02556f2e9bdc31636af2b31eaf9e80870f47168199dcdc645d51",
+  "earlier_editions": [],
+  "source_scope": "Official Treasury, archived H.8, FDIC and Federal Reserve evidence; Trepp public commentary; attributed research papers; CREFC maturity corroboration and qualified video paraphrases. MBA direct access remains blocked. Unverified vendor-cohort/loss-severity claims are excluded from bank-wide loss assumptions. Original research cutoff and all underlying observation dates remain separate from publication preparation.",
+  "privacy_review": "Public educational research; no client accounts, private source links, confidential banking material or source PDF copies distributed.",
+  "files": [],
+  "review_scope": "Independent evidence, calculation, privacy, rights and current canonical semantic/style reviews passed on the exact reviewed candidate. Native-browser QA on 13 November 2026 verified actual 1388px desktop and 390px/320px narrow reading widths: 16 sections, 22 sources, four desktop charts and all four phone alternatives, 12 tables without cell overflow, eight real internal anchors, keyboard grayscale control/aria/focus, dated-editions navigation and legal destinations. No visible report changes were needed. Physical-device testing, screen-reader/full WCAG certification, print/PDF QA and clicking every external source were not performed. Release provenance, source/staged integrity and deployed-artifact checks are recorded separately.",
+  "publication_preparation_completed_at": "2026-11-13T15:39:04+08:00"
+}

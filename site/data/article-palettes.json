@@ -875,6 +875,24 @@
       "source_sha256": "cf07228c7bcb786e038059fb273b4f9f797b895e4c26c7e4228f7277cc15a5b4"
     },
     {
+      "id": "pending-us-cre-remake",
+      "title": "US CRE: the refinancing test",
+      "href": "research/us-cre-refinancing-test-2026-11-08/",
+      "date": "2026-11-08",
+      "edition": "8 November 2026 remake · corrected HTML",
+      "recommended_theme": "05",
+      "declared_theme": "05",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#0C2233",
+        "#4A5C67",
+        "#12354E",
+        "#1E40AF",
+        "#4338CA"
+      ],
+      "source_sha256": "13076870358936a92c2d55497ffeaae8c293b4b7c97126a28b049f8a0f1966cb"
+    },
+    {
       "id": "research-sti-banks-v2-2026-11-09",
       "title": "Singapore local banks V2: Q3 earnings, NIM, SGS & 2027 outlook",
       "href": "research/sti-banks-v2-2026-11-09/",
