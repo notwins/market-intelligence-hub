@@ -85,6 +85,7 @@ def make():
  return out
 
 def strip_additions(text):
+ text=re.sub(r'<!-- research-shortcuts:start -->.*?<!-- research-shortcuts:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- my-research-register:start -->.*?<!-- my-research-register:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- my-research-register:style --><link[^>]+>','',text)
  text=re.sub(r'<!-- my-research-register:script --><script[^>]+></script>','',text)
@@ -128,7 +129,9 @@ def main():
   register=re.search(r'<!-- my-research-register:start -->.*?<!-- my-research-register:end -->',current,re.S)
   register_style=re.search(r'<!-- my-research-register:style --><link[^>]+>',current)
   register_script=re.search(r'<!-- my-research-register:script --><script[^>]+></script>',current)
-  if register:output=output.replace('</header>','</header>'+register.group(),1)
+  if register:output=output.replace('<section class="mu-summary">',register.group()+'<section class="mu-summary">',1)
+  shortcuts=re.search(r'<!-- research-shortcuts:start -->.*?<!-- research-shortcuts:end -->',current,re.S)
+  if shortcuts:output=output.replace('</header>','</header>'+shortcuts.group(),1)
   if register_style:output=output.replace('</head>',register_style.group()+'</head>',1)
   if register_script:output=output.replace('</body>',register_script.group()+'</body>',1)
   p.write_text(output)

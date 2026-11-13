@@ -58,6 +58,19 @@ class ResearchRegisterTests(unittest.TestCase):
    self.assertEqual(build.strip_additions(result),before)
    self.assertEqual(result.count('id="my-research"'),1)
    self.assertIn('research-register.js',result);self.assertIn('research-register.css',result)
+   self.assertLess(result.index('id="published-research"'),result.index('id="my-research"'))
+   self.assertLess(result.index('id="my-research"'),result.index('<section class="mu-summary">'))
+   self.assertEqual(result.count('id="mu-shortcuts-title"'),1)
+   self.assertLess(result.index('id="mu-shortcuts-title"'),result.index('id="full-market-research-20261106"'))
+ def test_navigation_order_and_shortcut_targets(self):
+  page=(SITE/'market-understanding/index.html').read_text()
+  self.assertRegex(page,r'<!-- my-research-register:end --><section class="mu-summary">')
+  self.assertLess(page.index('id="published-research"'),page.index('id="my-research"'))
+  shortcuts=re.search(r'<!-- research-shortcuts:start -->(.*?)<!-- research-shortcuts:end -->',page,re.S).group(1)
+  self.assertIn('aria-labelledby="mu-shortcuts-title"',shortcuts)
+  targets=re.findall(r'<a href="#([^"]+)"><b>([^<]+)</b>',shortcuts)
+  self.assertEqual(targets,[('mu-ai-financing','Growth'),('mu-bond-duration','Bonds'),('mu-fx-return','Currency'),('mu-alternatives-liquidity','Liquidity')])
+  for target,_ in targets:self.assertEqual(page.count('id="'+target+'"'),1)
  def test_ui_interactions(self):
   p=subprocess.run(['node','scripts/test_research_register_ui.cjs'],cwd=ROOT,text=True,capture_output=True);self.assertEqual(p.returncode,0,p.stdout+p.stderr)
  def test_ui_wiring_and_accessibility(self):

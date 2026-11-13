@@ -9,3 +9,8 @@
 /* Emphasis only: the original explanation, precision and source links are unchanged. */
 .market-understanding .mu-keyword{font-weight:750;color:#125967;background:#e8f4f3;border-radius:3px;padding:0 .12em;box-decoration-break:clone;-webkit-box-decoration-break:clone}.market-understanding .mu-answer .mu-conclusion{font-weight:750;color:#173f57}.market-understanding .mu-takeaways .mu-conclusion{font-size:inherit;letter-spacing:normal;text-transform:none;font-weight:700;color:#29475b}.market-understanding .mu-takeaways>div:first-child .mu-conclusion{color:#694c24}.market-understanding .mu-takeaways>div+div{border-left:4px solid #397987}.market-understanding .mu-takeaways>div:first-child{border-left:4px solid #bc9653}
 @media print{.market-understanding .mu-keyword{color:#123f49!important;background:#e8f4f3!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.market-understanding .mu-conclusion{font-weight:750!important}}
+
+/* Topic shortcuts stay in a labelled two-by-two grid above the research cards. */
+.market-understanding #my-research .rr-results h3 a{overflow-wrap:anywhere}
+.market-understanding .mu-shortcuts{margin:28px 4%;padding:24px;background:white;border:1px solid var(--mu-line);border-radius:18px}.market-understanding .mu-shortcuts h2{font-size:22px;margin:0 0 16px}.market-understanding .mu-shortcuts .mu-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.market-understanding .mu-shortcuts a{min-width:0;overflow-wrap:anywhere}.market-understanding .mu-shortcuts a:focus-visible{outline:3px solid #006e67;outline-offset:3px}
+@media(max-width:620px){.market-understanding .mu-shortcuts{margin:20px 4%;padding:20px}.market-understanding .mu-shortcuts h2{font-size:20px}}
