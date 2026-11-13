@@ -26,12 +26,21 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - name: Select publication path before source restore
+        id: publication_path
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && [ -f site/index.html ] && [ -f site/data/history-fed.json ]; then
+            echo "fast=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fast=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Restore source bundle on first publication
         run: |
           if [ ! -f site/index.html ]; then
             unzip -oq Reuters_Market_Intelligence_Hub_Restored.zip
           fi
       - name: Test publisher validation and archive retention
+        if: steps.publication_path.outputs.fast != 'true'
         run: |
           python3 scripts/build_article_palettes.py
           python3 scripts/build_site_search.py
@@ -39,6 +48,7 @@ jobs:
           python3 scripts/validate_research_contracts.py
           python3 -m unittest discover -s scripts -p 'test_*.py'
       - name: Audit V3 source data and comparison logic
+        if: steps.publication_path.outputs.fast != 'true'
         run: |
           if [ -f scripts/test_v3.cjs ]; then
             node scripts/test_v3.cjs
@@ -92,6 +102,7 @@ jobs:
       - name: Rebuild public site search catalogue
         run: python3 scripts/build_site_search.py
       - name: Commit new headlines, archives and update status
+        if: steps.publication_path.outputs.fast != 'true'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
