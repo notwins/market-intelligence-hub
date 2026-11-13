@@ -1041,6 +1041,42 @@
       "assets": [],
       "published_date": "2026-11-11",
       "sha256": "97c474a04743d66939d1a694d51e534bec3bacf2fa207e1b998c9028fd2f1800"
+    },
+    {
+      "id": "research-ocbc-home-loans-2026-11-13",
+      "title": "OCBC Home Loans",
+      "href": "research/ocbc-home-loans-2026-11-13/",
+      "date": "2026-11-13",
+      "date_label": "Source check",
+      "state": "published",
+      "edition": "One-pager",
+      "section": "Research",
+      "tags": [
+        "ticker.ocbc_o39",
+        "geo.singapore"
+      ],
+      "summary": "Fixed or SORA-linked? Compare rates, lock-in and switching costs.",
+      "assets": [],
+      "published_date": "2026-11-13",
+      "sha256": "1e6e53ede7a5c14255f184f3c40fb58e8cf4b439dae5496bb44ee9cef6ea96e4"
+    },
+    {
+      "id": "research-ocbc-premier-welcome-2026-11-13",
+      "title": "OCBC Premier welcome rewards",
+      "href": "research/ocbc-premier-welcome-2026-11-13/",
+      "date": "2026-11-13",
+      "date_label": "Source check",
+      "state": "published",
+      "edition": "One-pager",
+      "section": "Research",
+      "tags": [
+        "ticker.ocbc_o39",
+        "geo.singapore"
+      ],
+      "summary": "Check the conditions before counting a welcome reward as a benefit.",
+      "assets": [],
+      "published_date": "2026-11-13",
+      "sha256": "e0e8a5b51ad95f8273c682a1c8421f653e0e4646e730f725f657860c97fdbbb7"
     }
   ]
 }
