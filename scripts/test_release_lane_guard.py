@@ -1,0 +1,71 @@
+import json,subprocess,unittest,os
+from pathlib import Path
+from release_lane_guard import validate, Rejected, REGISTER
+SHA='a'*40
+NEW='b'*40
+class GuardTests(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  cls.base={'site/v4.html':'ui', 'site/market-understanding/market-understanding.css':'css', 'site/research/old-edition/index.html':'old-report', REGISTER:'old-register', 'site/data/site-search.json':'search', 'site/market-understanding/index.html':'page'}
+  cls.old=json.dumps({'entries':[{'id':'old','href':'research/old-edition/','title':'Preserved'}]})
+ def setUp(self):
+  self.report=dict(self.base);self.report['site/research/pilot-new-edition/index.html']='new-report';self.report[REGISTER]='new-register'
+  doc=json.loads(self.old);doc['entries'].append({'id':'pilot-new','href':'research/pilot-new-edition/','state':'published'});self.new=json.dumps(doc)
+ def reportcheck(self,candidate=None,**kw):
+  return validate(self.base,candidate or self.report,lane='report',expected_sha=SHA,current_sha=SHA,register_before=self.old,register_after=self.new,**kw)
+ def test_report_then_ui_preserves_every_other_blob(self):
+  self.reportcheck();ui=dict(self.report);ui['site/market-understanding/market-understanding.css']='new-ui'
+  plan=validate(self.report,ui,lane='ui',expected_sha=NEW,current_sha=NEW)
+  self.assertEqual(plan['changed_paths'],['site/market-understanding/market-understanding.css'])
+  self.assertEqual(ui['site/research/pilot-new-edition/index.html'],'new-report')
+  self.assertTrue(all(ui[p]==v for p,v in self.base.items() if p not in (REGISTER,'site/market-understanding/market-understanding.css')))
+ def test_ui_then_report_preserves_ui(self):
+  ui=dict(self.base);ui['site/market-understanding/market-understanding.css']='new-ui'
+  validate(self.base,ui,lane='ui',expected_sha=SHA,current_sha=SHA)
+  combined=dict(self.report);combined['site/market-understanding/market-understanding.css']='new-ui'
+  validate(ui,combined,lane='report',expected_sha=NEW,current_sha=NEW,register_before=self.old,register_after=self.new)
+  self.assertEqual(combined['site/market-understanding/market-understanding.css'],'new-ui')
+ def test_independent_ui_revert_keeps_new_report(self):
+  ui=dict(self.report);ui['site/market-understanding/market-understanding.css']='new-ui'
+  validate(ui,self.report,lane='ui',expected_sha=NEW,current_sha=NEW)
+  self.assertEqual(self.report['site/research/pilot-new-edition/index.html'],'new-report')
+ def test_report_removal_rollback_is_not_silently_allowed(self):
+  with self.assertRaisesRegex(Rejected,'deletion'):
+   validate(self.report,self.base,lane='report',expected_sha=NEW,current_sha=NEW,register_before=self.new,register_after=self.old)
+ def test_stale_ui_after_report_is_rejected(self):
+  with self.assertRaisesRegex(Rejected,'stale'):validate(self.base,self.report,lane='ui',expected_sha=SHA,current_sha=NEW)
+ def test_ui_cannot_touch_report_or_register(self):
+  with self.assertRaisesRegex(Rejected,'ownership'):validate(self.base,self.report,lane='ui',expected_sha=SHA,current_sha=SHA)
+ def test_report_cannot_touch_ui(self):
+  self.report['site/v4.html']='bad'
+  with self.assertRaises(Rejected):self.reportcheck()
+ def test_old_report_cannot_be_overwritten(self):
+  path=next(p for p in self.base if p.startswith('site/research/') and p.endswith('index.html'));self.report[path]='bad'
+  with self.assertRaises(Rejected):self.reportcheck()
+ def test_deletion_rejected(self):
+  del self.report['site/v4.html']
+  with self.assertRaisesRegex(Rejected,'deletion'):self.reportcheck()
+ def test_search_overlap_rejected_in_both_lanes(self):
+  for lane in ['report','ui']:
+   with self.subTest(lane=lane):
+    candidate=dict(self.base);candidate['site/data/site-search.json']='stale-derived'
+    with self.assertRaisesRegex(Rejected,'assembler'):validate(self.base,candidate,lane=lane,expected_sha=SHA,current_sha=SHA)
+ def test_register_old_entry_change_rejected(self):
+  doc=json.loads(self.new);doc['entries'][0]['title']='lost';self.new=json.dumps(doc)
+  with self.assertRaisesRegex(Rejected,'existing'):self.reportcheck()
+ def test_duplicate_register_rejected(self):
+  doc=json.loads(self.new);doc['entries'].append(doc['entries'][0]);self.new=json.dumps(doc)
+  with self.assertRaisesRegex(Rejected,'duplicate'):self.reportcheck()
+ def test_unregistered_html_rejected(self):
+  self.new=self.old
+  with self.assertRaisesRegex(Rejected,'no new'):self.reportcheck()
+ def test_missing_new_html_rejected(self):
+  del self.report['site/research/pilot-new-edition/index.html']
+  with self.assertRaisesRegex(Rejected,'lacks'):self.reportcheck()
+ def test_extra_unregistered_edition_rejected(self):
+  self.report['site/research/unregistered-report/index.html']='orphan'
+  with self.assertRaisesRegex(Rejected,'unregistered'):self.reportcheck()
+ def test_noncanonical_path_rejected(self):
+  self.report['site/research/../v4.html']='bad'
+  with self.assertRaisesRegex(Rejected,'noncanonical'):self.reportcheck()
+if __name__=='__main__':unittest.main(verbosity=2)
