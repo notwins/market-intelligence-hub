@@ -62,3 +62,19 @@ independent reader, every published report and companion, historical URLs and
 all newer independent publications. Never reset main to an old revision or
 redeploy a pre-separation artifact. Verify current report destinations after the
 rollback deployment.
+
+## Automatic publication colours
+
+The publication-colour integration adds five named shared display/catalogue/test
+paths to ordinary UI ownership. Its guard, guard-test, workflow and this document
+remain in the existing explicit astra-infrastructure lane. Review and commit
+those four infrastructure paths first; the UI commit follows on that base. Do
+not include either derived desk-data.json or new publication records in a UI
+commit. The additional workflow step runs a local semantic-colour test only;
+schedules, permissions, credentials, source refresh and hosting are unchanged.
+
+Desk cards expose existing tag/ticker metadata to one shared display filter.
+The filter adds canonical links and limited emphasis, reuses the existing news
+badge position, and creates no modal. Existing report URLs and original bytes
+remain protected. Content preparation and publication still belong to the
+independent content repository.

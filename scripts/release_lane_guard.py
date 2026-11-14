@@ -22,6 +22,8 @@ ASTRA_DESK_UI = frozenset({'site/index.html', 'site/legacy-redirect.js',
 ASTRA_RELEASE_INFRA = frozenset({'.github/workflows/publish.yml',
  'scripts/release_lane_guard.py', 'scripts/test_release_lane_guard.py',
  'docs/astra-desk-release.md'})
+PUBLICATION_COLOUR_UI = frozenset({'site/publication-colour-core.js','site/publication-colour-ui.js',
+ 'site/publication-colour.css','site/data/publication-colour-catalogue.json','scripts/test_publication_colour.cjs'})
 UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/market-understanding/market-understanding.css', 'scripts/build_report_additions.py',
  'scripts/test_research_register.py', 'site/v4-tools.js',
@@ -31,7 +33,7 @@ UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'scripts/test_sol_ui.cjs', 'scripts/test_saved_refresh.cjs',
  'scripts/test_market_snapshot.cjs','site/research-feed.js','site/research-feed.css',
  'site/research-register.js','site/content-source.js','site/reuters-read-up.js',
- 'scripts/test_read_up_reader.cjs'}) | ASTRA_DESK_UI
+ 'scripts/test_read_up_reader.cjs'}) | ASTRA_DESK_UI | PUBLICATION_COLOUR_UI
 
 class Rejected(ValueError): pass
 

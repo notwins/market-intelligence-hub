@@ -29,6 +29,8 @@ jobs:
           fetch-depth: 0
       - name: Preserve legacy publications and independent delivery contract
         run: python3 scripts/independent_delivery_guard.py
+      - name: Test automatic publication colours
+        run: node scripts/test_publication_colour.cjs
       - name: Select publication path before source restore
         id: publication_path
         run: |

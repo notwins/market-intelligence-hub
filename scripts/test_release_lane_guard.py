@@ -1,6 +1,6 @@
 import json,subprocess,unittest,os
 from pathlib import Path
-from release_lane_guard import validate, Rejected, REGISTER, UI, ASTRA_DESK_UI, ASTRA_RELEASE_INFRA
+from release_lane_guard import validate, Rejected, REGISTER, UI, ASTRA_DESK_UI, ASTRA_RELEASE_INFRA, PUBLICATION_COLOUR_UI
 SHA='a'*40
 NEW='b'*40
 class GuardTests(unittest.TestCase):
@@ -78,7 +78,13 @@ class GuardTests(unittest.TestCase):
    'site/global-search.js','site/search-query.js','site/search.html','site/favicon.ico',
    'scripts/test_sol_ui.cjs','scripts/test_saved_refresh.cjs','scripts/test_market_snapshot.cjs',
    'site/research-feed.js','site/research-feed.css','site/research-register.js',
-   'site/content-source.js','site/reuters-read-up.js','scripts/test_read_up_reader.cjs'}) | ASTRA_DESK_UI)
+   'site/content-source.js','site/reuters-read-up.js','scripts/test_read_up_reader.cjs'}) | ASTRA_DESK_UI | PUBLICATION_COLOUR_UI)
+ def test_publication_colour_ownership_keeps_adjacent_and_source_paths_out(self):
+  for path in PUBLICATION_COLOUR_UI:
+   validate(self.base,{**self.base,path:'reviewed-colour-source'},lane='ui',expected_sha=SHA,current_sha=SHA)
+  for path in ['site/publication-colour-private.js','site/data/publication-colour-policy.json','scripts/submit_research.py','site/research/new/index.html']:
+   with self.subTest(path=path),self.assertRaises(Rejected):
+    validate(self.base,{**self.base,path:'unowned'},lane='ui',expected_sha=SHA,current_sha=SHA)
  def test_desk_source_and_release_infrastructure_ownership_is_explicit(self):
   self.assertEqual(ASTRA_DESK_UI, frozenset({'site/index.html','site/legacy-redirect.js',
    'site/desk.html','site/desk.css','site/desk.js','site/desk-news.js','site/data/desk-config.json',
