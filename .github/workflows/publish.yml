@@ -85,6 +85,9 @@ jobs:
           node scripts/test_bos_equity.cjs
           node scripts/test_share_prices.cjs
           node scripts/test_share_charts.cjs
+          node scripts/test_share_enrichment.cjs
+          node scripts/test_beta_shares.cjs
+          node scripts/test_share_consumer_defaults.cjs
           node scripts/test_global_search.cjs
           node scripts/test_intel_quick_wins.cjs
           node scripts/test_ui_clutter_cleanup.cjs
@@ -147,6 +150,9 @@ jobs:
           node scripts/test_bos_equity.cjs
           node scripts/test_share_prices.cjs
           node scripts/test_share_charts.cjs
+          node scripts/test_share_enrichment.cjs
+          node scripts/test_beta_shares.cjs
+          node scripts/test_share_consumer_defaults.cjs
           node scripts/test_global_search.cjs
           node scripts/test_intel_quick_wins.cjs
           node scripts/test_ui_clutter_cleanup.cjs

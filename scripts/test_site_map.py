@@ -33,8 +33,8 @@ class SiteMapTests(unittest.TestCase):
         original = json.loads((ROOT / 'scripts/fixtures/site_map_destinations.json').read_text())
         current = [a['href'] for a in self.nodes]
         self.assertEqual(len(original), 40)
-        self.assertEqual(set(current), set(original) | {'v4.html#master', 'v4.html#history'})
-        self.assertEqual(len(current), 42)
+        self.assertEqual(set(current), set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta-shares'})
+        self.assertEqual(len(current), 44)
         self.assertEqual(len(set(current)), len(current))
         for href in current:
             path = ROOT / 'site' / href.split('#')[0]
@@ -72,7 +72,7 @@ class SiteMapTests(unittest.TestCase):
     def test_mapped_colours_and_contrast(self):
         tags = {t['id']: t for t in json.loads((ROOT / 'site/data/colour-templates-v3.json').read_text())['tags']}
         mapped = [a for t, a in self.parsed.tags if 'data-semantic-tag' in a]
-        self.assertEqual(len(mapped), 11)
+        self.assertEqual(len(mapped), 13)
         for attrs in mapped:
             tag = tags[attrs['data-semantic-tag']]
             self.assertEqual(attrs['style'], f'--accent:{tag["light"]};--soft:{tag["lightChip"]}')

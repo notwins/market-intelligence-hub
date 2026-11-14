@@ -12,7 +12,7 @@ class NavigationShortcutsTests(unittest.TestCase):
  def setUp(self):
   self.html=(ROOT/'v4.html').read_text();self.more=self.html.split('<dialog id="more">')[1].split('</dialog>')[0]
   names=re.search(r'const viewNames=\{(.*?)\};',self.html).group(1)
-  self.views=set(re.findall(r"(?:^|,)(\w+):",names));self.tabs={'history':{'yield','fx','curves','spx','si'},'master':{'explore','watchlists','screens','pivot','review'}}
+  self.views=set(re.findall(r"(?:^|,)(\w+):",names));self.tabs={'history':{'yield','shares','beta-shares','fx','curves','spx','si'},'master':{'explore','watchlists','screens','pivot','review'}}
  def valid_route(self,route):
   parts=route.split('/');self.assertIn(parts[0],self.views)
   if len(parts)>1:self.assertIn(parts[1],self.tabs[parts[0]])

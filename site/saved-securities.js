@@ -6,7 +6,7 @@
     return keys.map(saved => {
       const [type, ...parts] = String(saved).split(':'), identifier = parts.join(':');
       const record = type === 'stock' ? (data.stocks || []).find(x => x.ticker === identifier) : type === 'bond' ? (data.bonds || []).find(x => x.id === identifier) : null;
-      return {key:saved,type,identifier,description:record?.name || 'Reference not found in the current directory',url:record?.url || ''};
+      return {key:saved,type,identifier,description:record?.name || 'Reference not found in the current directory',url:record?.url || '',isin:record?.isin || '',currency:record?.currency || ''};
     });
   }
   function csv(rows) {
@@ -28,9 +28,12 @@
     let data = {}, available = true;
     try { const response = await fetch('data/securities.json',{cache:'no-store'}); if (!response.ok) throw Error(); data = await response.json(); }
     catch { available = false; }
-    const items = rows(keys,data);
+    const sourceItems = rows(keys,data);let items=sourceItems;
+    function paint(){const stocks=root.ShareEnrichment?.sortShares(sourceItems.filter(x=>x.type==='stock'),x=>({ticker:x.identifier,name:x.description,isin:x.isin,currency:x.currency}))||sourceItems.filter(x=>x.type==='stock');let index=0;items=sourceItems.map(x=>x.type==='stock'?stocks[index++]:x);
     $('saved-status').textContent = `${items.length} saved securities.` + (!available ? ' The directory could not load; saved keys are still available for export.' : items.length ? ' Original reference links are shown below.' : ' Save stocks or bonds in the research directory to build a shortlist.');
     $('saved-list').innerHTML = items.length ? '<div class="table-wrap"><table><thead><tr><th>Type / identifier</th><th>Description</th><th>Research</th></tr></thead><tbody>' + items.map(x => `<tr><td>${esc(x.type)} · ${esc(x.identifier || x.key)}</td><td>${esc(x.description)}</td><td>${/^https?:\/\//.test(x.url) ? `<a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">Original reference</a>` : 'Reference unavailable'}</td></tr>`).join('') + '</tbody></table></div>' : '';
+    }
+    paint();document.addEventListener('share-enrichment-updated',paint);root.ShareEnrichment?.load?.().catch(()=>{});
     $('export-shortlist').disabled = false;
     $('export-shortlist').addEventListener('click',() => download('my-market-research-shortlist.csv',csv(items),'text/csv;charset=utf-8'));
   }
