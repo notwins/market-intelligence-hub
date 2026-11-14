@@ -1228,6 +1228,24 @@
       "assets": [],
       "published_date": "2026-11-14",
       "sha256": "a2514285f0d4c260562c00b2c4bd64741d14532d622e3551590f21aac3ae2357"
+    },
+    {
+      "id": "research-spx-collar-public-companion-2026-11-14",
+      "title": "SPX collar: one-page public companion",
+      "href": "research/spx-collar-public-companion-2026-11-14/",
+      "date": "2026-11-14",
+      "date_label": "Companion publication",
+      "state": "published",
+      "edition": "One-page public companion",
+      "section": "Research",
+      "tags": [
+        "asset.options_derivatives",
+        "asset.equities_shares"
+      ],
+      "summary": "An educational illustration of downside protection and limited upside, with historical aggregate results and explicit costs and scope limitations.",
+      "assets": [],
+      "published_date": "2026-11-14",
+      "sha256": "c14e0dd8f69a5ba57cc2314228b9e5b3241fd799417b202a0f53dacfd9c598f7"
     }
   ]
 }

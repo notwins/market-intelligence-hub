@@ -76,7 +76,11 @@ class ResearchRegisterTests(unittest.TestCase):
   let r=api.select(d.entries,opts,tags);assert(r.every(x=>x.state==='published'));
   for(let i=1;i<r.length;i++)assert(r[i-1].date>=r[i].date);
   r=api.select(d.entries,{...opts,state:'pending'},tags);assert(r.length>0&&r.every(x=>x.state==='pending'));
-  r=api.select(d.entries,{...opts,query:'SPX collar'},tags);assert.equal(r.length,1);
+  r=api.select(d.entries,{...opts,query:'SPX collar'},tags);
+  assert.deepEqual(r.map(x=>x.href).sort(),[
+   'market-understanding/spx-collars-2026-11-06/',
+   'research/spx-collar-public-companion-2026-11-14/'
+  ]);
   r=api.select(d.entries,{...opts,tag:'asset.gold'},tags);assert(r.length>=3&&r.every(x=>x.tags.includes('asset.gold')));
   r=api.select(d.entries,{...opts,order:'oldest'},tags);for(let i=1;i<r.length;i++)assert(r[i-1].date<=r[i].date);
   assert(!api.validPath('javascript:alert(1)'));assert(!api.validPath('//other.test/'));assert(!api.validPath('research/../../secret'));assert(api.validPath('research/googl/'));

@@ -23,7 +23,12 @@ async function main(){
  assert.equal(selectors[0].value,'pending');assert.equal(nodes['[data-research-pending-note]'].hidden,false);
  buttons[0].events.click();assert(results.querySelectorAll('details').every(d=>d.open));assert.equal(buttons[0].attributes['aria-pressed'],'true');
  buttons[1].events.click();assert.equal(selectors[0].value,'published');assert.equal(results.children.length,data.entries.filter(x=>x.state==='published').length);assert(nodes['[data-research-pending-note]'].hidden);
- query.value='SPX collar';query.events.input();assert.equal(results.children.length,1);
+ query.value='SPX collar';query.events.input();
+ assert.equal(results.children.length,2);
+ assert.deepEqual(results.querySelectorAll('h3').flatMap(h=>h.querySelectorAll('a')).map(a=>a.href).sort(),[
+  'https://example.test/hub/market-understanding/spx-collars-2026-11-06/',
+  'https://example.test/hub/research/spx-collar-public-companion-2026-11-14/'
+ ]);
  const tags=results.querySelectorAll('button');assert(tags.length>0);assert(/^#[0-9a-f]{6}$/i.test(tags[0].attributes['--tag-text']));
  tags[0].events.click();assert(selectors[1].focused);assert(selectors[1].value);
  query.value='<script>';query.events.input();assert.equal(results.children[0].className,'rr-empty');
