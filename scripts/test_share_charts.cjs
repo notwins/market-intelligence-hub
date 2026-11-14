@@ -34,3 +34,30 @@ assert(snapshot.comparison(mixed,'days',2).reason,'older weekly labels cannot im
 assert.equal(snapshot.comparison(mixed,'years',2).percent,100);
 assert.match(snapshot.comparison(mixed,'years',2).basis,/period label/);
 console.log('Multi-share common-date normalization, calendar earnings markers, six series and empty/flat chart checks passed.');
+
+// Exercise the mounted workbench with a preferred quote different from history.
+// Neither source selection nor a later BOS event may change the plotted series.
+(async()=>{
+ const vm=require('node:vm'),listeners={},result={innerHTML:'',removeAttribute:()=>{}},el={dataset:{shareWorkbench:'history'},innerHTML:'',isConnected:true,querySelector:()=>result};
+ const item={id:'aapl',ticker:'AAPL',name:'Apple',currency:'USD',unit:'USD per share',history_url:'https://finance.yahoo.com/quote/AAPL/history/'};
+ const daily=[['2026-11-12',100],['2026-11-13',120]],before=JSON.stringify(daily),plots=[];
+ let generation=1,preferred={close:500,date:'2026-11-14',sourceLabel:'BOS <checked>',sourceUrl:'https://productgroup.bankofsingapore.com/coverage.pdf',current:true};
+ const stub={version:()=>String(generation),instruments:()=>[item],series:async()=>({item,quote:{close:120,date:'2026-11-13'},base:{daily,weekly:[],monthly:[],period_note:'Actual sessions'},daily}),selectPoints:prices.selectPoints,earnings:async()=>[],resolve:()=>item,displayUnit:prices.displayUnit,sourceUrl:prices.sourceUrl,priceBasis:prices.priceBasis,quoteStatus:()=> 'Daily closing price',currentQuote:()=>preferred,currentDetails:()=>'<p>Forward P/E: 15 · published valuation</p>',svg:lines=>{plots.push(JSON.parse(JSON.stringify(lines)));return '<svg></svg>';}};
+ const context={URL,Date,console,document:{addEventListener:(name,fn)=>(listeners[name]??=[]).push(fn),querySelectorAll:()=>[el]},MarketPrices:stub};context.window=context;vm.createContext(context);vm.runInContext(fs.readFileSync('site/share-chart-workbench.js','utf8'),context);
+ const settle=()=>new Promise(resolve=>setImmediate(resolve));
+ context.MarketShareCharts.mount();await settle();
+ assert(result.innerHTML.includes('500.00'),'selected BOS quote is displayed above chart');
+ assert(result.innerHTML.includes('BOS &lt;checked&gt;'),'source labels are escaped');
+ assert(result.innerHTML.includes('Forward P/E: 15'));
+ assert(result.innerHTML.includes('Historical feed close'));
+ assert(result.innerHTML.includes('120.00 USD'),'historical endpoint remains the original close');
+ assert(result.innerHTML.indexOf('Selected prices')<result.innerHTML.indexOf('mp-comparison-dates'));
+ assert.deepEqual(plots.at(-1)[0].points,daily);
+ assert(result.innerHTML.includes('+20.00%'),'chart return remains 120 / 100 - 1');
+ assert.equal(JSON.stringify(daily),before);
+ preferred={...preferred,close:600,date:'2026-11-15',sourceLabel:'BOS refreshed'};generation++;
+ listeners['market-prices-updated'][0]();await settle();
+ assert(result.innerHTML.includes('600.00'));assert(result.innerHTML.includes('BOS refreshed'));
+ assert.deepEqual(plots.at(-1)[0].points,daily);assert(result.innerHTML.includes('+20.00%'));
+ console.log('PASS preferred quote and valuation repaint above unchanged historical chart, closes and returns');
+})().catch(e=>{console.error(e);process.exitCode=1;});
