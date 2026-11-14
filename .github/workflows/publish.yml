@@ -82,6 +82,7 @@ jobs:
           node scripts/test_content_delivery.cjs
           node scripts/test_read_up_reader.cjs
           node scripts/test_si_pricing.cjs
+          node scripts/test_bos_equity.cjs
           node scripts/test_share_prices.cjs
           node scripts/test_share_charts.cjs
           node scripts/test_global_search.cjs
@@ -143,6 +144,7 @@ jobs:
           node scripts/test_policy_report_visuals.cjs
           node scripts/test_news_reading.cjs
           node scripts/test_si_pricing.cjs
+          node scripts/test_bos_equity.cjs
           node scripts/test_share_prices.cjs
           node scripts/test_share_charts.cjs
           node scripts/test_global_search.cjs
