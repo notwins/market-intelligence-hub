@@ -36,7 +36,7 @@ async function fetchSavedFeed(feed, previous, read = json) {
       throw new Error('Saved timestamp unavailable');
     }
 
-    return [data, false, health, false];
+    return [data, false, data.delivery_error?null:health, !!data.delivery_error];
   } catch {
     const usable =
       previous?.[1] === false &&
@@ -103,7 +103,7 @@ const api = {
 if(!root.document)return;
 let saved=new Map(),current='overview',lastFetch=0,pending=null;
 function paint(){const slot=document.getElementById('feed-freshness');if(!slot)return;const shown=feeds.filter(f=>current==='feeds'||f.views.includes(current));slot.hidden=!shown.length;slot.innerHTML=shown.length?'<p>Saved feed timestamps · Singapore time. Preparation, retrieval and verification are labelled separately from source publication or observation dates. Checked at describes the saved check, not a new observation.</p><div class="feed-freshness-list">'+shown.map(f=>saved.has(f.id)?row(f,...saved.get(f.id)):'<div class="feed-freshness-item"><a href="'+f.href+'">'+E(f.label)+'</a><span>Loading saved timestamp…</span></div>').join('')+'</div>':'';}
-async function json(path){const r=await fetch(path,{cache:'no-store'});if(!r.ok)throw Error('Unavailable');return r.json();}
+async function json(path){const r=await fetch(path,{cache:'no-store'});if(!r.ok)throw Error('Unavailable');const data=await r.json();return path==='data/hourly-news.json'&&root.ContentDelivery?root.ContentDelivery.hourly(data):data;}
 async function load(force=false){
   if (pending || (!force && Date.now() - lastFetch < 300000)) {
     return pending;

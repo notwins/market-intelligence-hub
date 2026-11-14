@@ -87,7 +87,7 @@ function init(){
   loading=(async()=>{try{
    const [catalogue,colours]=await Promise.all([fetch('data/site-search.json',{cache:'no-store'}).then(async r=>{if(!r.ok)throw Error('Catalogue unavailable');const d=await r.json();if(!Array.isArray(d.entries))throw Error('Invalid catalogue');return d.entries;}),fetch('data/search-colour-standard.json').then(r=>r.ok?r.json():null).catch(()=>null)]);
    standard=validStandard(colours)?colours:null;
-   const entries=[...catalogue],targets=new Set(entries.filter(e=>['Section','Subsection'].includes(e.kind)).map(e=>e.href));for(const entry of navigation())if(!targets.has(entry.href)){entries.push(entry);targets.add(entry.href);}
+   const entries=root.ContentDelivery?await root.ContentDelivery.search(catalogue):[...catalogue],targets=new Set(entries.filter(e=>['Section','Subsection'].includes(e.kind)).map(e=>e.href));for(const entry of navigation())if(!targets.has(entry.href)){entries.push(entry);targets.add(entry.href);}
    prepared=prepare(entries);render();
   }catch{status.textContent='The search catalogue could not load. Open full search or close and reopen to try again.';}finally{loading=null;}})();return loading;
  }

@@ -62,7 +62,7 @@ function render(){
 function addTag(tag){try{Q.parse($('q').value);}catch(e){error('Fix the current rule before adding a tag. '+e.message);$('q').focus();return;}$('q').value=Q.appendTag($('q').value,tag,$('join').value);offset=0;render();}
 function fromURL(){const q=new URLSearchParams(location.search);$('q').value=q.get('q')||'';$('kind').value=q.get('kind')||'';$('scope').value=q.get('scope')==='articles'?'articles':'all';$('sort').value=q.get('sort')==='relevance'?'relevance':'newest';}
 async function init(){try{
- const r=await fetch('data/site-search.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);data=await r.json();if(!Array.isArray(data.entries))throw Error('Invalid catalogue');
+ const r=await fetch('data/site-search.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);data=await r.json();if(!Array.isArray(data.entries))throw Error('Invalid catalogue');if(root.ContentDelivery)data.entries=await root.ContentDelivery.search(data.entries);
  try{const colours=await fetch('data/search-colour-standard.json');if(colours.ok)standard=await colours.json();}catch{}
  try{const resourceResponse=await fetch('data/watchlist/company-resources.json',{cache:'no-store'});if(resourceResponse.ok){const metadata=await resourceResponse.json();if(metadata&&typeof metadata.companies==='object')companyResources=metadata;}}catch{}
  $('kind').innerHTML='<option value="">All groups</option>'+Object.keys(data.counts).map(k=>'<option value="'+E(k)+'">'+E(k)+' ('+data.counts[k]+')</option>').join('');

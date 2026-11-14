@@ -27,6 +27,8 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - name: Preserve legacy publications and independent delivery contract
+        run: python3 scripts/independent_delivery_guard.py
       - name: Select publication path before source restore
         id: publication_path
         run: |
@@ -74,6 +76,7 @@ jobs:
           node scripts/test_external_sources_interactions.cjs
           node scripts/test_research_context.cjs
           node scripts/test_research_feed.cjs
+          node scripts/test_content_delivery.cjs
           node scripts/test_si_pricing.cjs
           node scripts/test_global_search.cjs
           node scripts/test_intel_quick_wins.cjs
@@ -154,6 +157,7 @@ jobs:
           node scripts/test_external_sources_interactions.cjs
           node scripts/test_research_context.cjs
           node scripts/test_research_feed.cjs
+          node scripts/test_content_delivery.cjs
       - name: Build public publication timeline
         run: |
           python3 scripts/build_publication_timeline.py

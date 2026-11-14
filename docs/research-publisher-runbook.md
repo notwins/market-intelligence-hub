@@ -1,8 +1,10 @@
 # Publish a complete report without editing the UI
 
-This is the shared process for automated and standalone research. Report producers
-own complete public report files and a small metadata record. The existing Pages
-build owns cards, search and the combined deployment. No new service is required.
+Deployment destination changed on 14 November 2026: run this publication process
+in `notwins/market-intelligence-content`, not the Hub UI repository. Read that
+repository's README and `docs/independent-content-deployment.md` here. Its own
+Pages workflow publishes new reports, feed and search without any UI release.
+The Hub keeps existing articles and URLs. Do not migrate or reissue them.
 
 ## Channels
 

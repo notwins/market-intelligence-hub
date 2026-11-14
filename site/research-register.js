@@ -1,6 +1,6 @@
 (function (root) {
   'use strict';
-  const validPath = value => typeof value === 'string' && /^(?:research|market-understanding)\/[a-z0-9/_\.\-]+$/.test(value) && !value.includes('..');
+  const validPath = value => typeof value==='string' && /^https:\/\/notwins\.github\.io\/market-intelligence-content\/research\/[a-z0-9-]+\/index\.html$/.test(value) || typeof value === 'string' && /^(?:research|market-understanding)\/[a-z0-9/_\.\-]+$/.test(value) && !value.includes('..');
   const searchable = (entry, tags) => [entry.title, entry.edition, entry.summary, entry.section, ...(entry.tags || []).map(id => tags.get(id)?.label || '')].join(' ').toLocaleLowerCase();
   function select(entries, options, tags) {
     const words = options.query.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean);
@@ -27,6 +27,7 @@
     const entries = data.entries;
     function mergeFeed(feed) {
       if (!root.ResearchFeed || !feed) return;
+      for(const [id,tag] of Object.entries(feed.tags||{}))if(!tags.has(id))tags.set(id,tag);
       const known=new Set(entries.map(x=>x.id));
       root.ResearchFeed.libraryEntries(feed).forEach(row=>{if(!known.has(row.id)){entries.push(row);known.add(row.id);}});
     }

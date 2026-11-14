@@ -341,9 +341,9 @@ window.HubFullReportEditions=(()=>{
    f.kind==='complete-source-edition'&&f.completeness_verified===true&&f.verification==='original-document-completeness-reviewed'&&
    !/\b(?:abstract|extract|abridged|summary|compilation|reference|atlas|snapshot)\b/i.test(row.edition||'')&&
    typeof f.cutoff==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/.test(f.cutoff)&&Number.isFinite(Date.parse(f.cutoff))&&
-   typeof root==='string'&&/^(?:research|market-understanding)\/[a-z0-9][a-z0-9-]*\/$/.test(root)&&
+   typeof root==='string'&&/^(?:https:\/\/notwins\.github\.io\/market-intelligence-content\/)?(?:research|market-understanding)\/[a-z0-9][a-z0-9-]*\/$/.test(root)&&
    typeof f.document==='string'&&f.document.startsWith(root)&&!f.document.includes('..')&&
-   /^(?:research|market-understanding)\/[a-z0-9][a-z0-9-]*\/[A-Za-z0-9_.-]+\.(?:html|pdf)$/.test(f.document)&&
+   /^(?:https:\/\/notwins\.github\.io\/market-intelligence-content\/)?(?:research|market-understanding)\/[a-z0-9][a-z0-9-]*\/[A-Za-z0-9_.-]+\.(?:html|pdf)$/.test(f.document)&&
    (f.document===root+'index.html'||Array.isArray(row.assets)&&row.assets.includes(f.document))&&/^[a-f0-9]{64}$/.test(f.sha256||''));
  }
  function setRegistry(data){entries=Array.isArray(data?.entries)?data.entries:[];}

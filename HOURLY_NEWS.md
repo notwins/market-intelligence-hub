@@ -1,3 +1,5 @@
+> Independent publication: new hourly editions now belong in `notwins/market-intelligence-content`. Use its baseline-aware importer and own Pages workflow. The historical Hub feed and archives below are frozen; do not write new editions here.
+
 # Hourly Reuters publication
 
 The hourly report feed is separate from the daily headline-discovery job and the 09:00 daily full-report importer. V2 and V3 read `site/data/hourly-news.json` without a page build. The overview, desktop navigation and phone More menu link to `#hourly`. Page refresh checks stored data every five minutes; it does not collect Reuters news.
