@@ -1,0 +1,14 @@
+/* Colour is limited to semantic chips and selected words. No article layout overrides. */
+article:is(.mu-writeup,.report-card,.archive-card,.news-card)[data-mih-primary-tag]{border-top-color:var(--mih-card-accent)}
+.mih-colour-chip,.mih-colour-term{color:var(--tag-text)!important}
+.mih-colour-chip{display:inline-flex;align-items:center;min-height:28px;padding:3px 9px;border:1px solid currentColor;border-radius:999px;background:var(--tag-bg)!important;font-size:.85em;line-height:1.5;text-decoration:none;max-width:100%;overflow-wrap:anywhere}
+.mih-colour-term{text-decoration:underline;text-underline-offset:.18em;background:transparent!important}
+.mih-colour-chip:hover,.mih-colour-term:hover{text-decoration:underline}
+.mih-colour-chip:focus-visible,.mih-colour-term:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+[data-mih-auto-row],.mih-colour-tags{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.mih-more-tags{display:inline-block;font-size:.85em}.mih-more-tags>summary{cursor:pointer}.mih-more-tags[open]{display:block;flex-basis:100%}
+[data-theme="dark"] .mih-colour-chip,[data-theme="dark"] .mih-colour-term{color:var(--tag-dark-text)!important}
+[data-theme="dark"] .mih-colour-chip{background:var(--tag-dark-bg)!important}
+.daily-grid>.report-card:first-child .mih-colour-chip,.daily-grid>.report-card:first-child .mih-colour-term{color:var(--tag-dark-text)!important}
+.daily-grid>.report-card:first-child .mih-colour-chip{background:var(--tag-dark-bg)!important}
+@media print{.mih-colour-chip{border-color:currentColor}.mih-more-tags{display:none}}
