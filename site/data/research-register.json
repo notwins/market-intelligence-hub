@@ -1246,6 +1246,34 @@
       "assets": [],
       "published_date": "2026-11-14",
       "sha256": "c14e0dd8f69a5ba57cc2314228b9e5b3241fd799417b202a0f53dacfd9c598f7"
+    },
+    {
+      "id": "research-bond-credit-full-2026-11-14",
+      "title": "Global Markets & Credit Research · 14 November 2026",
+      "href": "research/bond-credit-full-2026-11-14/",
+      "date": "2026-11-14",
+      "date_label": "Research cutoff (SGT)",
+      "state": "published",
+      "edition": "Full dashboard",
+      "section": "Research",
+      "tags": [
+        "asset.fixed_income_bonds",
+        "asset.us_treasuries",
+        "macro.ig_hy_credit_spreads"
+      ],
+      "summary": "Ten analytical sections on rates, bond issuance, credit and illustrative stress scenarios, with dated source links and coverage notes.",
+      "assets": [],
+      "published_date": "2026-11-14",
+      "sha256": "84f3669819d9a598af96b2e0ca70842bd2e15788604ddada7b2b68a8b6c8e864",
+      "full_edition": {
+        "channel": "credit",
+        "kind": "complete-source-edition",
+        "completeness_verified": true,
+        "cutoff": "2026-11-14T08:00:00+08:00",
+        "document": "research/bond-credit-full-2026-11-14/index.html",
+        "sha256": "84f3669819d9a598af96b2e0ca70842bd2e15788604ddada7b2b68a8b6c8e864",
+        "verification": "original-document-completeness-reviewed"
+      }
     }
   ]
 }
