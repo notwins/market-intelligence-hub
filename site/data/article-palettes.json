@@ -927,6 +927,42 @@
         "#7E22CE"
       ],
       "source_sha256": "97c474a04743d66939d1a694d51e534bec3bacf2fa207e1b998c9028fd2f1800"
+    },
+    {
+      "id": "research-ocbc-home-loans-2026-11-13",
+      "title": "OCBC Home Loans",
+      "href": "research/ocbc-home-loans-2026-11-13/",
+      "date": "2026-11-13",
+      "edition": "One-pager",
+      "recommended_theme": "06",
+      "declared_theme": "06",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#5A654E",
+        "#8A9B78",
+        "#047857",
+        "#FFFEFD",
+        "#FFFFFF"
+      ],
+      "source_sha256": "1e6e53ede7a5c14255f184f3c40fb58e8cf4b439dae5496bb44ee9cef6ea96e4"
+    },
+    {
+      "id": "research-ocbc-premier-welcome-2026-11-13",
+      "title": "OCBC Premier welcome rewards",
+      "href": "research/ocbc-premier-welcome-2026-11-13/",
+      "date": "2026-11-13",
+      "edition": "One-pager",
+      "recommended_theme": "06",
+      "declared_theme": "06",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#5A654E",
+        "#8A9B78",
+        "#047857",
+        "#FFFEFD",
+        "#FFFFFF"
+      ],
+      "source_sha256": "e0e8a5b51ad95f8273c682a1c8421f653e0e4646e730f725f657860c97fdbbb7"
     }
   ]
 }
