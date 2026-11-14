@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "edition": "gold-xau-v2-one-pager-2026-11-14",
+  "html_sha256": "c8f0059040d10227702a44a81f192654c8bb25ba2b091a2a76323b32de5db73d",
+  "assets": [
+    {
+      "path": "XAU_Client_One_Pager.pdf",
+      "sha256": "82238451968689c1cefaddc8087c407358ff9f2368fbfe65f7c8c4c33dfd6fc5",
+      "bytes": 54197
+    }
+  ]
+}

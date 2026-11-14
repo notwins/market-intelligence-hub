@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "edition": "diversification-one-pager-2026-11-14",
+  "html_sha256": "69293cab8651fbf0942fef6972ce16e827f583af2d3ebef123b613705fdbedba",
+  "assets": [
+    {
+      "path": "Diversification_One_Pager.pdf",
+      "sha256": "d1d94775c2e252ca0637f1236e51c78b47d8bc61e2b9e2da9da8dbace3a4e2ca",
+      "bytes": 56663
+    }
+  ]
+}

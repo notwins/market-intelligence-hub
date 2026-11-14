@@ -1077,6 +1077,69 @@
       "assets": [],
       "published_date": "2026-11-13",
       "sha256": "e0e8a5b51ad95f8273c682a1c8421f653e0e4646e730f725f657860c97fdbbb7"
+    },
+    {
+      "id": "research-diversification-one-pager-2026-11-14",
+      "title": "Diversification, made simple: one-page brief",
+      "href": "research/diversification-one-pager-2026-11-14/",
+      "date": "2026-11-14",
+      "date_label": "Brief edition",
+      "state": "published",
+      "edition": "One-pager",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "One-page guide to diversification, when it helps, and where it can still fall short.",
+      "assets": [
+        "research/diversification-one-pager-2026-11-14/Diversification_One_Pager.pdf"
+      ],
+      "published_date": "2026-11-14",
+      "sha256": "69293cab8651fbf0942fef6972ce16e827f583af2d3ebef123b613705fdbedba"
+    },
+    {
+      "id": "research-gold-xau-v2-one-pager-2026-11-14",
+      "title": "Gold / XAU V2: one-page brief",
+      "href": "research/gold-xau-v2-one-pager-2026-11-14/",
+      "date": "2026-11-14",
+      "date_label": "Brief edition",
+      "state": "published",
+      "edition": "One-pager",
+      "section": "Research",
+      "tags": [
+        "asset.gold",
+        "asset.usd_sgd"
+      ],
+      "summary": "A one-page summary of the dated gold research, including central-bank buying, SGD currency exposure and downside risks.",
+      "assets": [
+        "research/gold-xau-v2-one-pager-2026-11-14/XAU_Client_One_Pager.pdf"
+      ],
+      "published_date": "2026-11-14",
+      "sha256": "c8f0059040d10227702a44a81f192654c8bb25ba2b091a2a76323b32de5db73d"
+    },
+    {
+      "id": "research-bis-ai-financing-loop-2026-11-13",
+      "title": "AI’s financing loop: funding and shared credit risk",
+      "href": "research/bis-ai-financing-loop-2026-11-13/",
+      "date": "2026-11-13",
+      "date_label": "Research cutoff date",
+      "state": "published",
+      "edition": "Standalone 20-page research and one-page brief",
+      "section": "Research",
+      "tags": [
+        "sector.artificial_intelligence",
+        "macro.ig_hy_credit_spreads",
+        "geo.united_states"
+      ],
+      "summary": "The distinct 13 November study and one-page brief on circular funding, issuer backstops and cash generation.",
+      "assets": [
+        "research/bis-ai-financing-loop-2026-11-13/AI_Circular_Financing_One_Pager_2026-11-13.pdf",
+        "research/bis-ai-financing-loop-2026-11-13/AI_Circular_Financing_One_Pager_2026-11-13.png",
+        "research/bis-ai-financing-loop-2026-11-13/AI_Circular_Financing_Research_2026-11-13.pdf"
+      ],
+      "published_date": "2026-11-14",
+      "sha256": "e7886dfa8577a4396db0a8729e890de7eec329066c628a95d45a6946cffe2e6c"
     }
   ]
 }

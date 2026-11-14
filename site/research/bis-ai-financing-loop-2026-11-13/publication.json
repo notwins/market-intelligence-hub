@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "edition": "bis-ai-financing-loop-2026-11-13",
+  "html_sha256": "e7886dfa8577a4396db0a8729e890de7eec329066c628a95d45a6946cffe2e6c",
+  "assets": [
+    {
+      "path": "AI_Circular_Financing_One_Pager_2026-11-13.pdf",
+      "sha256": "b4a1a51c0d5de7d00854733ecadbb0053348602177ab9d2286faace4163b235d",
+      "bytes": 112402
+    },
+    {
+      "path": "AI_Circular_Financing_One_Pager_2026-11-13.png",
+      "sha256": "8411d0a3f8d3eb029321ab0525c018b3edc946412b21af5f7b330caa1dd3f37f",
+      "bytes": 534026
+    },
+    {
+      "path": "AI_Circular_Financing_Research_2026-11-13.pdf",
+      "sha256": "0f872291242d99c1c2aeef5afa2914ddbad09a2ed45fe16f1c80fe1305a1abc1",
+      "bytes": 187695
+    }
+  ]
+}
