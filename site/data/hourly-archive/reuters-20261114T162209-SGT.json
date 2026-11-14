@@ -1,0 +1,92 @@
+{
+  "id": "reuters-20261114T162209-SGT",
+  "report_at": "2026-11-14T16:28:09+08:00",
+  "window_start": "2026-11-14T12:22:09+08:00",
+  "cutoff": "2026-11-14T16:22:09+08:00",
+  "coverage": "partial",
+  "summary": "Three newly added, reviewed Reuters stories cover China-US trade discussions, Tesla customer invitations and China's diabetes-drug reimbursement. This is a partial catch-up update, not a complete scan.",
+  "limitations": [
+    "Targeted Reuters coverage only. The most recent fully completed scan remains unverified, and this update does not fill the historical publication backlog.",
+    "Only publication dates are verified for these sources. Exact original publication and development times are unknown; inclusion does not establish that events occurred inside this report window. Stories are conservatively labelled catch-up.",
+    "Two source follow-ups, on Bank of England policy and US air-traffic disruption, are held because their earlier versions are absent from the retained public history.",
+    "No market-price reaction attributable to these reports was independently established."
+  ],
+  "original_url": null,
+  "sources": [
+    {
+      "url": "https://www.reuters.com/world/china/china-us-discuss-tariffs-farm-trade-first-trade-council-meeting-2026-11-14/",
+      "title": "China and US hold first trade-council discussions",
+      "published_at": null,
+      "published_date": "2026-11-14",
+      "publication_precision": "date",
+      "verification_url": "https://www.investing.com/news/economy-news/china-us-discuss-tariffs-farm-trade-at-first-trade-council-meeting-5027183"
+    },
+    {
+      "url": "https://www.reuters.com/business/autos-transportation/tesla-invites-select-customers-buy-cybercab-personal-use-2026-11-14/",
+      "title": "Tesla invites selected customers to buy Cybercab",
+      "published_at": null,
+      "published_date": "2026-11-14",
+      "publication_precision": "date",
+      "verification_url": "https://www.devdiscourse.com/article/international/4006921-tesla-invites-select-customers-to-buy-cybercab-for-personal-use"
+    },
+    {
+      "url": "https://www.reuters.com/business/healthcare-pharmaceuticals/china-adds-first-car-t-cancer-therapy-national-health-insurance-scheme-2026-11-14/",
+      "title": "China adds Pfizer and Innovent diabetes drugs to reimbursement",
+      "published_at": null,
+      "published_date": "2026-11-14",
+      "publication_precision": "date",
+      "verification_url": "https://ca.marketscreener.com/news/pfizer-innovent-glp-1-drugs-added-to-china-national-insurance-for-diabetes-ce785ededb8aff2d"
+    }
+  ],
+  "stories": [
+    {
+      "story_id": "R-20261114-CHINA-US-FIRST-TRADE-COUNCIL-TARIFF-AGRICULTURE",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "China / US / Trade",
+      "headline": "China and US hold first trade-council discussions",
+      "body": "China's commerce ministry said the countries held their first trade-council meeting by video on Friday. The discussion covered tariffs, agricultural trade and earlier economic commitments. The report did not announce a completed agreement.",
+      "analysis": "A new negotiating forum could affect trade-sensitive businesses. Discussions alone do not establish tariff relief or new purchases.",
+      "watch_next": "Published terms and subsequent official statements.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/world/china/china-us-discuss-tariffs-farm-trade-first-trade-council-meeting-2026-11-14/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261114-TESLA-CYBERCAB-SELECT-CUSTOMER-PURCHASE-OFFER",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "US / Tesla / Vehicles",
+      "headline": "Tesla invites selected customers to buy Cybercab",
+      "body": "Reuters reported that Tesla said on Friday it was inviting selected customers to buy Cybercab for personal use.",
+      "analysis": "Invitations may open a further route to customers, but they do not establish completed deliveries or recognised revenue.",
+      "watch_next": "Confirmed deliveries and the final terms offered to customers.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/autos-transportation/tesla-invites-select-customers-buy-cybercab-personal-use-2026-11-14/"
+      ],
+      "development_at": null
+    },
+    {
+      "story_id": "R-20261114-CHINA-DIABETES-GLP1-INSURANCE-REIMBURSEMENT",
+      "version": 1,
+      "status": "new",
+      "freshness": "catch-up",
+      "topic": "China / Healthcare",
+      "headline": "China adds Pfizer and Innovent diabetes drugs to reimbursement",
+      "body": "Reuters reported that Pfizer's ecnoglutide and Innovent's mazdutide will join China's state health-insurance scheme for type 2 diabetes from January 1.",
+      "analysis": "Reimbursement could broaden access and treatment volumes; the commercial effect also depends on pricing and uptake.",
+      "watch_next": "Reimbursement terms, patient uptake and company sales disclosures.",
+      "earlier": "",
+      "source_urls": [
+        "https://www.reuters.com/business/healthcare-pharmaceuticals/china-adds-first-car-t-cancer-therapy-national-health-insurance-scheme-2026-11-14/"
+      ],
+      "development_at": null
+    }
+  ],
+  "source_report_key": "a4533b2a710f1a34af0e4190b0a7f70c392116f4b4c853b6582d71c9e8f1c859"
+}
