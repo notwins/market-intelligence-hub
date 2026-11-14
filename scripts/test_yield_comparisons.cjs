@@ -16,6 +16,24 @@ vm.createContext(context);vm.runInContext(code,context);const app=context.window
  await change('history-period','5');assert.equal(x.historyPeriod,'5');assert.equal(x.end,'2026-10-01');assert.equal(x.start,'2021-10-01');await change('history-start','2020-01-01');assert.equal(x.historyPeriod,'custom');await change('history-events-2',undefined,false);assert.equal(x.events,false);await change('history-events',undefined,true);assert.equal(x.events,true);await change('history-scenario-2','50');await change('history-horizon-2','24');assert.equal(x.scenario2,50);assert.equal(x.horizon2,24);assert.equal(x.scenario,0);await click('history-remove');assert.equal(x.historySecond,false);await click('history-add');await click('history-add');assert.equal((app.historyView().match(/id="history-comparison-2"/g)||[]).length,1);assert(renders>10);
  // Verify collision-free SVG marker boxes at narrow width and large type, without a browser.
  for(const width of [280,390,900])for(const scale of [1,2]){context.window.MarketLayout={chartWidth:()=>width};context.document.documentElement.style.getPropertyValue=()=>scale;x.start='2006-10-01';x.end='2026-10-01';const chart=api.lineChart(api.timeData().lines,{period:api.historyChartPeriod()}),boxes=[...chart.matchAll(/<a class="event-marker-link"[\s\S]*?<rect x="([^"]+)" y="([^"]+)" width="([^"]+)" height="([^"]+)"/g)].map(m=>m.slice(1).map(Number));for(let i=0;i<boxes.length;i++){const[a,b,w,h]=boxes[i];assert(a>=0&&a+w<=width);for(const[c,d,k,l]of boxes.slice(i+1))assert(a+w<=c||c+k<=a||b+h<=d||d+l<=b);}assert(!chart.includes('NaN'));}
+ // Phone labels must not consume the plot; full event context and official links remain available.
+ const eventSnapshot=JSON.parse(source.match(/const events=(\[.*?\]);/s)[1]),observationsBefore=JSON.stringify(x.history),originalMatchMedia=context.matchMedia;
+ x.events=true;x.eventSelection=null;x.start='2006-10-01';x.end='2026-10-01';
+ for(const width of [280,320,390])for(const scale of [1,2]){
+  context.window.MarketLayout={chartWidth:()=>width};context.document.documentElement.style.getPropertyValue=()=>scale;
+  context.matchMedia=()=>({matches:false});const desktop=api.lineChart(api.timeData().lines,{period:api.historyChartPeriod()});
+  context.matchMedia=()=>({matches:true});const mobile=api.lineChart(api.timeData().lines,{period:api.historyChartPeriod()}),svg=mobile.split('</svg>')[0];
+  const height=html=>Number(html.match(/viewBox="0 0 [\d.]+ ([\d.]+)"/)[1]);assert(height(mobile)<height(desktop),`${width}/${scale}: shorter event stack`);
+  assert.match(mobile,/<details class="section history-event-details"><summary>Events in this chart \(12\)<\/summary>/);assert(!mobile.includes('history-event-details" open'));
+  assert(!svg.includes('10 COVID'),'phone marker is numbered');assert.match(svg,/>10<\/tspan>/);
+  for(const ev of eventSnapshot){assert(mobile.includes(ev.url));assert(mobile.includes(ev.label));assert(mobile.includes(ev.date));assert(svg.includes(ev.shortName+' · '+ev.label+' · '+ev.date+' · official source'));}
+  assert.equal((mobile.match(/class="event-marker-link"/g)||[]).length,12);assert(!mobile.includes('NaN'));
+ }
+ context.matchMedia=()=>({matches:true});context.document.documentElement.style.getPropertyValue=()=>1;
+ let panel=app.historyView().split('id="history-comparison-2"')[0];assert(panel.indexOf('id="history-events"')<panel.indexOf('<svg class="v3-chart"'),'event control precedes plot');
+ x.eventSelection=['event-2020-03-15'];let filtered=api.lineChart(api.timeData().lines,{period:api.historyChartPeriod()});assert.match(filtered,/Events in this chart \(1\)/);assert.equal((filtered.match(/class="event-marker-link"/g)||[]).length,1);
+ x.events=false;filtered=api.lineChart(api.timeData().lines,{period:api.historyChartPeriod()});assert(!filtered.includes('event-marker-link'));assert(!filtered.includes('history-event-details'));
+ x.events=true;x.eventSelection=null;context.matchMedia=originalMatchMedia;assert.equal(JSON.stringify(x.history),observationsBefore,'display changes preserve observations');
  // Empty primary with available comparison must not construct an invalid hypothetical path.
  x.start='2000-01-01';x.end='2100-01-01';x.history.series.find(s=>s.id===x.historyA).points=[];x.scenario=25;assert.doesNotThrow(()=>app.historyView());
  console.log('PASS independent yield comparison, shared period, full-width single card, named sourced markers, unique controls, source switching, FX preservation and empty-series scenario');
