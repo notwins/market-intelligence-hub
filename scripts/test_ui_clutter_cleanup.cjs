@@ -5,7 +5,7 @@ for(const label of ['10Y TREASURY','30Y TREASURY','YOUR SCHEDULES','VERIFIED ISS
 assert(overview.includes('The bond desk'));assert(overview.includes('Your scheduled editions'));assert(overview.includes('treasuryCard()'));assert(overview.includes('spreadCard()'));assert(overview.includes('toolsSection()'));
 assert(!earnings.includes('class="ed-intro"'));assert(!earnings.includes('Twelve companies. The facts that matter.'));
 assert(earnings.includes('<details class="ed-data-notes">'));assert(earnings.includes('esc(data.coverage)'));assert(earnings.includes('esc(data.consensus)'));
-assert(earnings.includes('fcfChart()'));assert(earnings.includes('data.companies.filter'));assert(earnings.includes('history(c)'));
+assert(earnings.includes('fcfChart()'));assert(earnings.includes("orderedCompanies().filter(c=>selected==='all'||selected===c.ticker).map(card)"));assert(earnings.includes('history(c)'));
 assert(html.includes('earnings-desk.js?v=20261106.clean-intro1'));
 for(const [,script]of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi))if(script.trim())new vm.Script(script);
 new vm.Script(earnings);

@@ -18,4 +18,9 @@ function callsContext(payload){
  console.log('PASS dated Calls reviews, ETF instruments, safe static report links, empty state and HTML escaping');
 })().catch(e=>{console.error(e);process.exitCode=1;});
 
-assertCalls(fsCalls.readFileSync('site/v4.html','utf8').includes('src="watchlist.js?v=20261106.si-reference1&prices=20261114.public2"'),'Calls and price-chart publication must update the browser asset version');
+const watchlistAsset=fsCalls.readFileSync('site/v4.html','utf8').match(/src="(watchlist\.js\?[^\"]+)"/)?.[1];
+assertCalls(watchlistAsset,'Calls publication includes the current watchlist module');
+const watchlistVersion=new URL(watchlistAsset,'https://example.com/').searchParams;
+assertCalls.equal(watchlistVersion.get('v'),'20261106.si-reference1');
+assertCalls.equal(watchlistVersion.get('prices'),'20261114.public2');
+assertCalls.equal(watchlistVersion.get('beta'),'20261115.1','Historical enrichment must update the browser asset version');

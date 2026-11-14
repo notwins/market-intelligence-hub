@@ -3,7 +3,7 @@
  const routes=['overview','earnings','credit','hourly','policy','headlines','research','master','history','ust','reports','directory','feeds'];
  if(document.querySelector('.rail [data-view="tools"]'))routes.push('tools');
  if(document.querySelector('.rail [data-view="watchlist"]'))routes.splice(1,0,'watchlist','calls');
- const names={calls:['Calls & Full Reports','观点与完整报告','觀點與完整報告'],watchlist:['Bonds & shares watchlist','债券与股票观察','債券與股票觀察'],policy:['Central Banks / US Admin','央行与美国政府','央行與美國政府'],overview:['Daily Briefing','每日简报','每日簡報'],earnings:['US Earnings','美国财报','美國財報'],credit:['Bonds & Credit','债券与信贷','債券與信貸'],hourly:['Hourly News','每小时新闻','每小時新聞'],headlines:['Reuters Coverage','路透报道','路透報導'],research:['Research Papers','研究报告','研究報告'],master:['Master','证券主档','證券主檔'],history:['History','历史数据','歷史數據'],ust:['UST','美国国债','美國國債'],reports:['Scheduled Reports','定期报告','定期報告'],directory:['Research Directory','研究目录','研究目錄'],feeds:['Data & Uploads','数据与上传','資料與上傳'],tools:['Tools & Simulators','工具与模拟器','工具與模擬器']};
+ const names={'master/pivot':['Master Pivot','主档透视','主檔樞紐'],calls:['Calls & Full Reports','观点与完整报告','觀點與完整報告'],watchlist:['Bonds & shares watchlist','债券与股票观察','債券與股票觀察'],policy:['Central Banks / US Admin','央行与美国政府','央行與美國政府'],overview:['Daily Briefing','每日简报','每日簡報'],earnings:['US Earnings','美国财报','美國財報'],credit:['Bonds & Credit','债券与信贷','債券與信貸'],hourly:['Hourly News','每小时新闻','每小時新聞'],headlines:['Reuters Coverage','路透报道','路透報導'],research:['Research Papers','研究报告','研究報告'],master:['Master','证券主档','證券主檔'],history:['History','历史数据','歷史數據'],ust:['UST','美国国债','美國國債'],reports:['Scheduled Reports','定期报告','定期報告'],directory:['Research Directory','研究目录','研究目錄'],feeds:['Data & Uploads','数据与上传','資料與上傳'],tools:['Tools & Simulators','工具与模拟器','工具與模擬器']};
  const next=document.createElement('button');next.className='section-next';next.type='button';
  const prefix=document.createElement('span');prefix.className='section-next-prefix';
  const destination=document.createElement('span');destination.className='section-next-name';
@@ -44,7 +44,7 @@
 (()=>{'use strict';
  const menu=document.querySelector('#more .more-grid');if(!menu)return;
  const themes={stocks:['#233840','#E7F1F5','#F1F7FA','#D9E6EB'],bonds:['#26382F','#E7F1EA','#F1F7F3','#D8E5DC'],macro:['#302D3C','#EBE6F3','#F5F2FA','#E2DAEA'],research:['#182822','#EAF0EC','#F2F6F4','#DCE6E0']};
- const themeFor=route=>/^(?:watchlist|calls|earnings|master|history\/si)/.test(route)?'stocks':/^(?:credit|ust|history\/(?:yield|curves))/.test(route)?'bonds':/^(?:policy|history)/.test(route)?'macro':'research';
+ const themeFor=route=>/^(?:watchlist|calls|earnings|master|history\/(?:si|shares|beta-shares))/.test(route)?'stocks':/^(?:credit|ust|history\/(?:yield|curves))/.test(route)?'bonds':/^(?:policy|history)/.test(route)?'macro':'research';
  function label(node){if(node.querySelector('.nav-level'))return;const route=node.dataset.view||'';const sub=route.includes('/');node.dataset.navLevel=sub?'subsection':'main';
   const span=document.createElement('small');span.className='nav-level';span.textContent=sub?'Subsection':'Main section';node.append(span);
   const colours=themes[themeFor(route)];node.style.setProperty('--menu-ink',colours[0]);node.style.setProperty('--menu-bg',colours[sub?2:1]);node.style.setProperty('--menu-border',colours[3]);
