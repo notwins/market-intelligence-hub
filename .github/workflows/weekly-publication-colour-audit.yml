@@ -1,0 +1,42 @@
+name: Weekly publication colour and tagging check
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/weekly-publication-colour-audit.yml'
+      - 'scripts/check_publication_colours.cjs'
+  schedule:
+    # Saturday 04:00 UTC = Saturday 12:00 Asia/Singapore. Starts may be delayed.
+    - cron: '0 4 * * 6'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: publication-colour-weekly-audit
+  cancel-in-progress: false
+jobs:
+  sample-live-site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install pinned browser tooling in disposable runner storage
+        run: |
+          npm install --prefix "$RUNNER_TEMP/colour-audit" --no-save --package-lock=false --ignore-scripts playwright@1.65.1
+          "$RUNNER_TEMP/colour-audit/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Sample live colours, font emphasis and linked tags
+        env:
+          NODE_PATH: ${{ runner.temp }}/colour-audit/node_modules
+          AUDIT_OUTPUT: ${{ runner.temp }}/publication-colour-audit
+        run: node scripts/check_publication_colours.cjs
+      - name: Save the sampling report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: publication-colour-audit-${{ github.run_id }}
+          path: ${{ runner.temp }}/publication-colour-audit/
+          if-no-files-found: warn
+          retention-days: 30
