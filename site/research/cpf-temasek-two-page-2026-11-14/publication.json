@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "edition": "cpf-temasek-two-page-2026-11-14",
+  "html_sha256": "645946be53cd0c89b9bf37fa2894139e197b86beafb1dd363bfb1d2fc857cbe8",
+  "assets": [
+    {
+      "path": "CPF-OA-vs-Temasek-2070-Summary-Type-Two-Page-Report-14-Nov-11.15.pdf",
+      "sha256": "844872bbc9a3741206e532cf9529cfefac1f9f7e7bd5386736fa536ad82606e8",
+      "bytes": 61956
+    }
+  ]
+}

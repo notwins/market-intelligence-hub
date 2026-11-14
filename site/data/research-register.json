@@ -1140,6 +1140,48 @@
       ],
       "published_date": "2026-11-14",
       "sha256": "e7886dfa8577a4396db0a8729e890de7eec329066c628a95d45a6946cffe2e6c"
+    },
+    {
+      "id": "research-mas-snb-one-page-2026-11-14",
+      "title": "MAS and SNB: one-page policy brief",
+      "href": "research/mas-snb-one-page-2026-11-14/",
+      "date": "2026-11-14",
+      "date_label": "Brief edition",
+      "state": "published",
+      "edition": "One-pager",
+      "section": "Research",
+      "tags": [
+        "institution.monetary_authority_of_singapore",
+        "institution.swiss_national_bank",
+        "asset.foreign_exchange"
+      ],
+      "summary": "A dated summary of Singapore and Swiss monetary policy and what it means for CHF borrowing and SGD currency risk.",
+      "assets": [
+        "research/mas-snb-one-page-2026-11-14/MAS_SNB_Client_One_Pager.pdf"
+      ],
+      "published_date": "2026-11-14",
+      "sha256": "525c8fb77e1cae706eff71b6a4ba2a9a5ce52f4e7c2aba9ca477b2a8d7fc2a23"
+    },
+    {
+      "id": "research-cpf-temasek-two-page-2026-11-14",
+      "title": "CPF OA and Temasek 2070: two-page summary",
+      "href": "research/cpf-temasek-two-page-2026-11-14/",
+      "date": "2026-11-14",
+      "date_label": "Brief edition",
+      "state": "published",
+      "edition": "Two-page summary",
+      "section": "Research",
+      "tags": [
+        "institution.cpf_board_cpf_life",
+        "institution.temasek",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "Two-page explanation of a historical CPF OA and Temasek 2070 bond illustration, with USD/SGD scenarios and assumptions.",
+      "assets": [
+        "research/cpf-temasek-two-page-2026-11-14/CPF-OA-vs-Temasek-2070-Summary-Type-Two-Page-Report-14-Nov-11.15.pdf"
+      ],
+      "published_date": "2026-11-14",
+      "sha256": "645946be53cd0c89b9bf37fa2894139e197b86beafb1dd363bfb1d2fc857cbe8"
     }
   ]
 }

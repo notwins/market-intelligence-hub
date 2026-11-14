@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "edition": "mas-snb-one-page-2026-11-14",
+  "html_sha256": "525c8fb77e1cae706eff71b6a4ba2a9a5ce52f4e7c2aba9ca477b2a8d7fc2a23",
+  "assets": [
+    {
+      "path": "MAS_SNB_Client_One_Pager.pdf",
+      "sha256": "120e46ca1175c9bd90c593548e49c973bccc7cfba59755332b640ecc89fa4419",
+      "bytes": 57772
+    }
+  ]
+}
