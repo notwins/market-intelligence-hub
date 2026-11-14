@@ -31,9 +31,9 @@ function search(local,remote){
  if(!remote||remote.schema_version!==1||!Array.isArray(remote.entries)||remote.entries.length>50000)throw Error('Invalid content catalogue');
  const key=e=>[e.kind,e.title,new URL(e.href,HUB).href,String(e.date).slice(0,10)].join('|'),known=new Set(local.map(key)),rows=[...local];
  for(const e of remote.entries){
-  if(!e||!['Research edition','Hourly story'].includes(e.kind)||typeof e.title!=='string'||typeof e.text!=='string'||!Array.isArray(e.tags)||!e.tags.every(x=>typeof x==='string')||typeof e.href!=='string')throw Error('Invalid content search entry');
+  if(!e||!['Research edition','Hourly story','Reuters Read-Up'].includes(e.kind)||typeof e.title!=='string'||typeof e.text!=='string'||!Array.isArray(e.tags)||!e.tags.every(x=>typeof x==='string')||typeof e.href!=='string')throw Error('Invalid content search entry');
   const u=new URL(e.href);
-  if(!((u.href.startsWith(CONTENT+'research/')&&/^https:\/\/notwins\.github\.io\/market-intelligence-content\/research\/[a-z0-9-]+\/index\.html$/.test(u.href))||u.href===HUB+'v4.html#hourly'))throw Error('Unexpected content destination');
+  if(!((u.href.startsWith(CONTENT+'research/')&&/^https:\/\/notwins\.github\.io\/market-intelligence-content\/research\/[a-z0-9-]+\/index\.html$/.test(u.href))||(e.kind==='Reuters Read-Up'&&/^https:\/\/notwins\.github\.io\/market-intelligence-content\/read-ups\/read-up-[a-f0-9]{24}\/r[1-9][0-9]*\.html$/.test(u.href))||u.href===HUB+'v4.html#hourly'))throw Error('Unexpected content destination');
   if(e.location?.href!==e.href)throw Error('Search destination mismatch');
   if(!known.has(key(e))){rows.push(e);known.add(key(e));}
  }

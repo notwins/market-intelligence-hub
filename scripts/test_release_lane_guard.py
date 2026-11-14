@@ -77,7 +77,8 @@ class GuardTests(unittest.TestCase):
    'site/feed-freshness.js','site/research-shortcuts.css','site/market-snapshot.js',
    'site/global-search.js','site/search-query.js','site/search.html','site/favicon.ico',
    'scripts/test_sol_ui.cjs','scripts/test_saved_refresh.cjs','scripts/test_market_snapshot.cjs',
-   'site/research-feed.js','site/research-feed.css','site/research-register.js'}))
+   'site/research-feed.js','site/research-feed.css','site/research-register.js',
+   'site/content-source.js','site/reuters-read-up.js','scripts/test_read_up_reader.cjs'}))
  def test_reviewed_astra_paths_are_accepted_individually_without_wildcards(self):
   for path in ['site/feed-freshness.js','site/research-shortcuts.css','site/market-snapshot.js',
    'site/global-search.js','site/search-query.js','site/search.html','site/favicon.ico',

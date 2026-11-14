@@ -18,7 +18,8 @@ UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/global-search.js', 'site/search-query.js', 'site/search.html', 'site/favicon.ico',
  'scripts/test_sol_ui.cjs', 'scripts/test_saved_refresh.cjs',
  'scripts/test_market_snapshot.cjs','site/research-feed.js','site/research-feed.css',
- 'site/research-register.js'})
+ 'site/research-register.js','site/content-source.js','site/reuters-read-up.js',
+ 'scripts/test_read_up_reader.cjs'})
 
 class Rejected(ValueError): pass
 

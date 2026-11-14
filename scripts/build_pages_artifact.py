@@ -17,7 +17,9 @@ def build(output, repo=ROOT):
     output.mkdir(parents=True)
     # Include the unchanged validators and documentation so all existing tests can
     # run against the FINAL site bytes with their normal relative paths.
-    for folder in ('site', 'scripts', 'docs', '.github'):
+    for folder in ('site', 'scripts', 'docs', '.github', 'owner'):
+        if not (repo / folder).exists():
+            continue
         shutil.copytree(repo / folder, output / folder, ignore=shutil.ignore_patterns('__pycache__', '*.pyc'))
     for source in repo.glob('*.md'):
         shutil.copyfile(source, output / source.name)

@@ -77,6 +77,7 @@ jobs:
           node scripts/test_research_context.cjs
           node scripts/test_research_feed.cjs
           node scripts/test_content_delivery.cjs
+          node scripts/test_read_up_reader.cjs
           node scripts/test_si_pricing.cjs
           node scripts/test_global_search.cjs
           node scripts/test_intel_quick_wins.cjs
@@ -158,6 +159,7 @@ jobs:
           node scripts/test_research_context.cjs
           node scripts/test_research_feed.cjs
           node scripts/test_content_delivery.cjs
+          node scripts/test_read_up_reader.cjs
       - name: Build public publication timeline
         run: |
           python3 scripts/build_publication_timeline.py

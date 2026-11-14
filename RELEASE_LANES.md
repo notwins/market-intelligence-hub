@@ -81,3 +81,7 @@ Truly independent deployment under unchanged origin/paths requires a verified ho
 `python -m unittest discover -s scripts -p 'test_release_lane_*.py'`
 
 Tests use portable fixtures and temporary local Git repositories, including both release orders, UI-only revert, stale rejection, exact tree/blob binding, dirty-worktree exclusion, ownership, deletion, history/register retention and generated-output overlap. No remote repository is contacted. These tests are release-safety checks, not browser QA.
+
+### Reuters Read-Up integration — 14 November 2026
+The user's completed-UI integration request authorizes this bounded final assembly. UI ownership adds exactly site/content-source.js, site/reuters-read-up.js and scripts/test_read_up_reader.cjs. Current Research Explained and its generator retain their existing ownership. Owner source, typed read-up contract/publisher, build/test and documentation changes are separately reviewed infrastructure, not UI-owned wildcards. Public read-up records belong to the independent content repository. Existing report/history protections and expected-base writes remain mandatory.
+

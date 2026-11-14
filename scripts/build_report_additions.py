@@ -103,6 +103,8 @@ def main_research_cards(page, register, standard, site=SITE):
     tags={x['id']:x for x in standard['tags']}
     by_href={x['href']:x for x in rows.values()}
     seen=set();brief_urls=set();brief_images={}
+    read_up=re.search(r'<!-- reuters-read-up:start -->.*?<!-- reuters-read-up:end -->',page,re.S)
+    page=re.sub(r'<!-- reuters-read-up:start -->.*?<!-- reuters-read-up:end -->','',page,flags=re.S)
     page=re.sub(r'<!-- main-research-cards:start -->.*?<!-- main-research-cards:end -->','',page,flags=re.S)
     def local(href):
         u=urlsplit(urljoin('https://hub.invalid/market-understanding/',html.unescape(href)))
@@ -171,6 +173,7 @@ def main_research_cards(page, register, standard, site=SITE):
     script=script.replace("if(!(pdf&&matchMedia('(max-width:620px)').matches)){","if(pdf&&images[path]){const image=document.createElement('img');image.src=images[path];image.alt='One-page preview of the 13 November AI financing brief. Open brief PDF for the original document.';content.append(image);}else if(!(pdf&&matchMedia('(max-width:620px)').matches)){")
     script=script.replace('__BRIEF_URLS__',json.dumps(sorted(brief_urls),ensure_ascii=True)).replace('__BRIEF_IMAGES__',json.dumps(brief_images,ensure_ascii=True))
     new='<!-- main-research-cards:start --><link rel="stylesheet" href="market-understanding.css?v=20261114.cards1">'+block+script+'<!-- main-research-cards:end -->'
+    if read_up:new=read_up.group()+new
     icon='<!-- research-favicon --><link rel="icon" href="../favicon.ico" sizes="32x32">'
     if '<!-- research-favicon -->' not in page:page=page.replace('</head>',icon+'</head>',1)
     return page.replace('<!-- publication-audit-20261106:start -->','<!-- publication-audit-20261106:start -->'+new,1)
@@ -248,6 +251,7 @@ def make():
 def strip_additions(text):
  text=re.sub(r'<!-- automated-research:assets -->.*?<!-- automated-research:assets-end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-favicon --><link[^>]+>','',text)
+ text=re.sub(r'<!-- reuters-read-up:start -->.*?<!-- reuters-read-up:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-shortcuts:start -->.*?<!-- research-shortcuts:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- my-research-register:start -->.*?<!-- my-research-register:end -->','',text,flags=re.S)
  text=re.sub(r'<!-- my-research-register:style --><link[^>]+>','',text)
@@ -299,6 +303,8 @@ def main():
   if shortcuts:output=output.replace('</header>','</header>'+shortcuts.group(),1)
   if register_style:output=output.replace('</head>',register_style.group()+'</head>',1)
   if register_script:output=output.replace('</body>',register_script.group()+'</body>',1)
+  read_up=re.search(r'<!-- reuters-read-up:start -->.*?<!-- reuters-read-up:end -->',current,re.S)
+  if read_up:output=output.replace('<!-- main-research-cards:start -->',read_up.group()+'<!-- main-research-cards:start -->',1) if '<!-- main-research-cards:start -->' in output else output.replace('<!-- publication-audit-20261106:start -->','<!-- publication-audit-20261106:start -->'+read_up.group(),1)
   feed_assets=re.search(r'<!-- automated-research:assets -->.*?<!-- automated-research:assets-end -->',current,re.S)
   if feed_assets:output=output.replace('<!-- my-research-register:script -->',feed_assets.group()+'<!-- my-research-register:script -->',1)
   if path=='market-understanding/index.html' and register_path.exists():

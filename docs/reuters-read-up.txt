@@ -1,0 +1,120 @@
+REUTERS READ-UP — OWNER AND RELEASE GUIDE
+
+Public subsection: https://notwins.github.io/market-intelligence-hub/market-understanding/#reuters-read-up
+Public content index: https://notwins.github.io/market-intelligence-content/data/reuters-read-ups.json
+Public direct-link fallback: https://notwins.github.io/market-intelligence-content/read-ups/
+
+SETUP
+Run Start-Reuters-Read-Up.ps1 in this checkout, then open http://127.0.0.1:8794/.
+The server binds only to loopback. It is not an online authenticated workspace.
+Python and the existing Git installation are sufficient; no package, key, paid
+service, recurring task or new account is added.
+
+Choose Enable saving to this computer to persist under
+%LOCALAPPDATA%/ReutersReadUpOwner. Runtime SQLite, outbox, notes, evidence and
+review receipts stay outside this checkout and OneDrive. Before opting in,
+the desk is session-only. Stop the server with Ctrl+C. Do not run multiple owner
+servers against the same database. Multiple tabs use optimistic draft versions;
+conflicts remain available in My drafts rather than overwriting either edit.
+
+CLICK FLOW
+1. Refresh from Hub to read recent already-published Reuters headline metadata.
+   SGT date/time, topic tags and original/Google News links are labelled. The
+   bundled snapshot is the startup fallback; a successful opted-in refresh survives
+   restart. Invalid refresh leaves the last good snapshot. Saved articles retain
+   their metadata when they leave the recent feed.
+2. Save creates only a bookmark. Create read-up starts one exact-selection draft.
+   Or tick several, review the selected count/titles, remove any, optionally add an
+   angle, and Create read-up from selected. No unrelated stories are added.
+3. Research is assisted. Download the exact research request, use this chat to
+   check actual Reuters articles lawfully, then import the returned JSON into the
+   same selection. Alternatively write the verified brief in the editor. No model
+   API is connected. A headline or snippet does not verify an article.
+4. Record the resolved original Reuters ARTICLE URL, actual access URL, verification
+   time and evidence notes. Unavailable stories remain named and hold publication.
+   Cite [S1] etc beside each factual paragraph; useful primary sources use [P1] etc.
+   Use a title, one-sentence takeaway, What happened, Why it matters (starting Our
+   interpretation:) and What to watch (starting Our watch points:). Single target
+   200-350 words, bundle 350-600 total; no padding. Above-limit drafts are held.
+5. Review and preview. Text autosaves after a short pause; confirm Saved before
+   closing. A crash before the save acknowledges may lose those unsaved keystrokes.
+6. Enable local saving if needed, choose public revision 1 for a new original
+   article set, and Prepare review bundle. An intentional correction uses the next
+   revision for that same article set, preserving all old public revision URLs.
+7. Inspect the EXACT outbox record/evidence and actual sources. In owner/read-up:
+   python approve.py --job JOB_ID --reviewer YOUR_NAME --approve
+   This explicit trusted local action attests facts, exact selection, editorial
+   quality, privacy and rights. It is never exposed through an owner HTTP route.
+   Pattern/citation checks are structural checks, not proof of factual accuracy.
+8. Return to the desk, tick the review confirmation, Publish reviewed brief.
+   Existing local Git authorization submits the immutable public record to the
+   content repository. If Git access is missing, the job stays retry-needed; use
+   the existing authorized publisher in this chat with the retained bundle.
+   Do not create credentials or widen permissions to work around access failure.
+9. Refresh My drafts to inspect attempts: queued, committed, awaiting live
+   verification, retry-needed or live-verified. A commit is not live success.
+   Retrying the same reviewed job never repeats research. A changed draft needs
+   new review. Pending jobs survive restart; explicitly click Publish to resume.
+
+PUBLICATION CONTRACT
+scripts/read_ups.py defines the typed short-brief contract; it does not weaken
+the complete-report contract. scripts/submit_read_up.py accepts only a validated
+public record plus matching PRIVATE evidence and review receipt. It submits a
+single new site/data/read-up-records/<id>-r<N>.json. Same ID/revision/same record
+is a no-op; conflicting content is held. The approval hashes exact public content
+and private evidence. No receipt identity or evidence note enters the public record.
+
+The brief ID hashes the canonical resolved Reuters article set. Source order is
+pinned by the draft. Changed angles do not evade duplicate protection; use an
+intentional reviewed revision. Article updates must be researched and reviewed as
+an explicit revision, never silently substituted into an earlier brief.
+
+The content assembler derives data/reuters-read-ups.json from the union of immutable
+records and generates stable read-ups/<id>/r<N>.html destinations and a static list.
+The public Hub loads only validated completed records. It shows one card for the
+latest revision of each brief, with title, SGT date, takeaway and Read full brief.
+Earlier URLs remain available. Complete malformed/failed responses never replace
+the in-memory last-good render. On cold-load failure, an honest unavailable state
+and Refresh control appear. No public browser storage is used.
+
+INTEGRATION AND CURRENT CONTROLS
+Existing Open in Hub/Open section/Open saved page links navigate to saved public
+content. Added to Hub records publication provenance; it is not a Save bookmark or
+research action. The public headline feed is unchanged. Reused components include
+Research Explained's card styles, the existing separate content deployment,
+current Git authorization, non-force isolated submission patterns, exact review
+hash binding and staged/live destination checks.
+
+This release follows the CURRENT independent-content split. Hub UI and content
+are two separate GitHub Pages deployments. New read-ups use the content deployment
+without changing Hub UI. Legacy Hub headline/market/Fed jobs remain on their own
+existing schedules. Neither workflow checks out/deploys the other repository.
+The earlier prototype prompt's shared-artifact description predates that cutover.
+
+The signed-in owner alternative needs real server authorization, private durable
+storage and trusted research execution. A background research queue also needs
+durable jobs, leasing and recovery. Those are not provided by a hidden public UI
+or by GitHub Pages. This release uses the supported private local/assisted setup.
+Owner-initiated auto-publication remains disabled. A later mode would require
+explicit opt-in and the same source, exact-selection, factual, editorial, privacy,
+rights, revision and live verification gates, holding all uncertain cases.
+
+RELEASE AND RECOVERY
+Run the required Hub source suites and final Pages artifact validator. The final
+staging root contains owner SOURCE only so its tests run; only site/ is uploaded.
+No owner source/API, SQLite, draft, private notes, review receipt, fixture card or
+outbox enters either public artifact. Content tests run independently and its
+content_release.py validates history before staging. New read-up records are
+immutable under its preservation guard. Fresh-base non-force submission retries
+reapply one record and rebuild the union, preserving competing submissions.
+
+Before deployment failures retain the previous public artifact. After commit or
+deployment, keep the exact bundle until live index and HTML bytes read back. If
+readback fails, publication may already have occurred: reconcile first, then retry
+idempotently. Never claim a rollback happened merely because an acknowledgement
+failed. Fix code on current main; do not redeploy old whole-site artifacts or remove
+newer reports. For a content correction publish a reviewed next revision. A legal
+retraction needs an explicit separately designed record-selection policy.
+
+No real brief is published with this feature release. Public empty state is
+intentional until the owner approves and publishes a real selected-story brief.
