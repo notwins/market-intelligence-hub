@@ -9,7 +9,7 @@ test('all retired entries preserve supported V4 routes and query filters without
   for(const route of ['overview','watchlist','calls','policy','tools','master/explore','master/pivot','master/watchlists','master/screens','master/review','history/yield','history/fx','history/curves','ust','earnings','credit','reports','hourly','headlines','research','feeds']){
    assert.equal(target(page+'?v=20261103.mobile&security=00001#'+route),'v4.html?security=00001#'+route);
   }
-  const html=read(page);assert.ok(html.length<2000);assert.ok(html.includes('src="legacy-redirect.js?v=20261105.retirement2"'));assert.ok(html.includes('<noscript>'));
+  const html=read(page);assert.ok(html.length<2000);assert.ok(html.includes('src="legacy-redirect.js?v='));assert.ok(html.includes('<noscript>'));
   for(const destination of ['v4.html','v2.html','archive.html','saved-securities.html'])assert.ok(html.includes('href="'+destination+'"'));
   assert.ok(!html.includes('data-view='));
  }

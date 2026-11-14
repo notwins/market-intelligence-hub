@@ -22,6 +22,10 @@
     }
     if (requested === 'archive') return 'archive.html' + suffix();
     if (requested === 'saved') return 'saved-securities.html' + suffix();
+    const home = /(?:^|\/)index\.html$/.test(location.pathname) || location.pathname.endsWith('/');
+    if (home && (!requested || /^(briefing|markets|featured|reading|pulse|daily|yields|company-[A-Za-z0-9.]+)$/.test(requested))) {
+      return 'desk.html' + suffix() + (requested ? '#' + requested : '');
+    }
     const route = aliases[requested] || requested;
     const fallback = /v3-settings-preview\.html$/.test(location.pathname) ? 'feeds' : 'overview';
     return 'v4.html' + suffix() + '#' + (validRoute(route) ? route : fallback);
