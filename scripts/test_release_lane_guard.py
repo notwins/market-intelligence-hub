@@ -1,6 +1,6 @@
 import json,subprocess,unittest,os
 from pathlib import Path
-from release_lane_guard import validate, Rejected, REGISTER, UI
+from release_lane_guard import validate, Rejected, REGISTER, UI, ASTRA_DESK_UI, ASTRA_RELEASE_INFRA
 SHA='a'*40
 NEW='b'*40
 class GuardTests(unittest.TestCase):
@@ -78,7 +78,66 @@ class GuardTests(unittest.TestCase):
    'site/global-search.js','site/search-query.js','site/search.html','site/favicon.ico',
    'scripts/test_sol_ui.cjs','scripts/test_saved_refresh.cjs','scripts/test_market_snapshot.cjs',
    'site/research-feed.js','site/research-feed.css','site/research-register.js',
-   'site/content-source.js','site/reuters-read-up.js','scripts/test_read_up_reader.cjs'}))
+   'site/content-source.js','site/reuters-read-up.js','scripts/test_read_up_reader.cjs'}) | ASTRA_DESK_UI)
+ def test_desk_source_and_release_infrastructure_ownership_is_explicit(self):
+  self.assertEqual(ASTRA_DESK_UI, frozenset({'site/index.html','site/legacy-redirect.js',
+   'site/desk.html','site/desk.css','site/desk.js','site/desk-news.js','site/data/desk-config.json',
+   'scripts/build_desk_data.py','scripts/test_desk_data.py','scripts/test_desk_ui.cjs',
+   'scripts/test_desk_release.cjs','scripts/test_legacy_retirement.cjs'}))
+  self.assertEqual(ASTRA_RELEASE_INFRA, frozenset({'.github/workflows/publish.yml',
+   'scripts/release_lane_guard.py','scripts/test_release_lane_guard.py','docs/astra-desk-release.md'}))
+  for path in ASTRA_DESK_UI:
+   with self.subTest(path=path):
+    candidate={**self.base,path:'reviewed-astra-change'}
+    self.assertEqual(validate(self.base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)['changed_paths'],[path])
+ def test_ordinary_ui_cannot_authorize_infrastructure(self):
+  for path in ASTRA_RELEASE_INFRA:
+   with self.subTest(path=path), self.assertRaisesRegex(Rejected,'ownership'):
+    validate(self.base,{**self.base,'site/desk.html':'desk',path:'unreviewed-policy'},lane='ui',expected_sha=SHA,current_sha=SHA)
+ def test_explicit_infrastructure_lane_accepts_only_reviewed_named_paths(self):
+  for paths in [(p,) for p in ASTRA_RELEASE_INFRA]+[tuple(ASTRA_RELEASE_INFRA)]:
+   with self.subTest(paths=paths):
+    candidate={**self.base,**{p:'reviewed-infrastructure' for p in paths}}
+    result=validate(self.base,candidate,lane='astra-infrastructure',expected_sha=SHA,current_sha=SHA)
+    self.assertEqual(result['changed_paths'],sorted(paths))
+    self.assertFalse(result['publication_verified'])
+ def test_infrastructure_lane_rejects_ui_content_updaters_and_unknown_workflows(self):
+  for path in ['site/desk.html','site/v4.html',REGISTER,'site/research/new-study/index.html',
+   'scripts/update_news.py','scripts/update_fed_history.py','.github/workflows/other.yml',
+   'owner/desk-editor.html','scripts/release_lane_guard_extra.py']:
+   with self.subTest(path=path), self.assertRaisesRegex(Rejected,'ownership'):
+    candidate={**self.base,'scripts/release_lane_guard.py':'reviewed-policy',path:'unowned'}
+    validate(self.base,candidate,lane='astra-infrastructure',expected_sha=SHA,current_sha=SHA)
+ def test_infrastructure_lane_rejects_stale_base_and_deletion(self):
+  candidate={**self.base,'scripts/release_lane_guard.py':'reviewed-policy'}
+  with self.assertRaisesRegex(Rejected,'stale'):
+   validate(self.base,candidate,lane='astra-infrastructure',expected_sha=SHA,current_sha=NEW)
+  existing={**self.base,'scripts/release_lane_guard.py':'old-policy'}
+  with self.assertRaisesRegex(Rejected,'deletion'):
+   validate(existing,self.base,lane='astra-infrastructure',expected_sha=SHA,current_sha=SHA)
+ def test_desk_metadata_is_assembler_owned_in_every_lane(self):
+  for lane in ['report','ui','astra-infrastructure']:
+   candidate={**self.base,'site/data/desk-data.json':'stale-build'}
+   with self.subTest(lane=lane), self.assertRaisesRegex(Rejected,'assembler'):
+    validate(self.base,candidate,lane=lane,expected_sha=SHA,current_sha=SHA)
+ def test_desk_release_does_not_admit_owner_data_other_workflows_or_adjacent_paths(self):
+  forbidden=['site/desk-extra.js','site/data/desk-config-private.json','owner/desk-editor.html',
+   '.github/workflows/content.yml','.github/workflows/other.yml','scripts/update_news.py',
+   'scripts/update_fed_history.py','site/research/new-study/index.html',REGISTER]
+  for path in forbidden:
+   with self.subTest(path=path), self.assertRaisesRegex(Rejected,'ownership'):
+    validate(self.base,{**self.base,'site/desk.html':'desk',path:'unowned'},lane='ui',expected_sha=SHA,current_sha=SHA)
+ def test_desk_build_follows_reconciliation_and_precedes_catalogue_and_stage(self):
+  workflow=(Path(__file__).resolve().parents[1]/'.github/workflows/publish.yml').read_text(encoding='utf-8')
+  reconciled=workflow.split('      - name: Revalidate reconciled source and rebuild deployment catalogue',1)[1]
+  self.assertLess(reconciled.index('python3 scripts/build_desk_data.py'),reconciled.index('python3 scripts/build_site_search.py'))
+  self.assertLess(reconciled.index('python3 scripts/build_desk_data.py'),reconciled.index('python3 scripts/build_pages_artifact.py'))
+  for check in ['test_desk_ui.cjs','test_desk_release.cjs']:
+   self.assertIn('node scripts/'+check,reconciled)
+  self.assertIn("- cron: '0 0 * * *'",workflow)
+  self.assertIn("- cron: '17 6 * * 6'",workflow)
+  self.assertIn('permissions:\n  contents: read',workflow)
+  self.assertIn('      pages: write\n      id-token: write',workflow)
  def test_reviewed_astra_paths_are_accepted_individually_without_wildcards(self):
   for path in ['site/feed-freshness.js','site/research-shortcuts.css','site/market-snapshot.js',
    'site/global-search.js','site/search-query.js','site/search.html','site/favicon.ico',
@@ -99,8 +158,8 @@ class GuardTests(unittest.TestCase):
    'site/v4-tools-extra.js','scripts/test_yield_comparisons_browser.cjs',
    'site/research/old-edition/index.html','site/research/new-edition/index.html',REGISTER,
    'site/data/history-fed.json','site/data/history-v3.json','site/data/history-events-v1.json',
-   '.github/workflows/publish.yml','scripts/update_news.py','scripts/update_fed_history.py',
-   'scripts/release_lane_guard.py','RELEASE_LANES.md']
+   '.github/workflows/publish.yml','.github/workflows/other.yml','scripts/update_news.py','scripts/update_fed_history.py',
+   'scripts/release_lane_guard.py','scripts/release_lane_guard_extra.py','RELEASE_LANES.md']
   for path in forbidden:
    with self.subTest(path=path):
     base=self.chartbase();candidate={**base,'site/v4-tools.js':'reviewed-change',path:'unowned-change'}

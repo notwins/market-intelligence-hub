@@ -8,8 +8,20 @@ from pathlib import PurePosixPath
 
 DERIVED = frozenset({'site/data/site-search.json', 'site/data/external-sources.json',
  'site/data/article-palettes.json', 'site/data/publication-timeline.json',
- 'site/data/research-feed.json','site/data/research-feed-bootstrap.js','site/research-feed.html'})
+ 'site/data/research-feed.json','site/data/research-feed-bootstrap.js','site/research-feed.html',
+ 'site/data/desk-data.json'})
 REGISTER = 'site/data/research-register.json'
+# Reviewed Astra source ownership. Generated desk metadata is deliberately absent.
+ASTRA_DESK_UI = frozenset({'site/index.html', 'site/legacy-redirect.js',
+ 'site/desk.html', 'site/desk.css', 'site/desk.js', 'site/desk-news.js',
+ 'site/data/desk-config.json', 'scripts/build_desk_data.py',
+ 'scripts/test_desk_data.py', 'scripts/test_desk_ui.cjs', 'scripts/test_desk_release.cjs',
+ 'scripts/test_legacy_retirement.cjs'})
+# Infrastructure requires its own explicit lane and separately reviewed commit.
+# Ordinary UI changes cannot authorize changes to this guard or the workflow.
+ASTRA_RELEASE_INFRA = frozenset({'.github/workflows/publish.yml',
+ 'scripts/release_lane_guard.py', 'scripts/test_release_lane_guard.py',
+ 'docs/astra-desk-release.md'})
 UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/market-understanding/market-understanding.css', 'scripts/build_report_additions.py',
  'scripts/test_research_register.py', 'site/v4-tools.js',
@@ -19,7 +31,7 @@ UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'scripts/test_sol_ui.cjs', 'scripts/test_saved_refresh.cjs',
  'scripts/test_market_snapshot.cjs','site/research-feed.js','site/research-feed.css',
  'site/research-register.js','site/content-source.js','site/reuters-read-up.js',
- 'scripts/test_read_up_reader.cjs'})
+ 'scripts/test_read_up_reader.cjs'}) | ASTRA_DESK_UI
 
 class Rejected(ValueError): pass
 
@@ -31,7 +43,7 @@ def canonical(path):
 def validate(base, candidate, *, lane, expected_sha, current_sha, register_before=None, register_after=None):
  if not re.fullmatch('[a-f0-9]{40}', expected_sha or '') or expected_sha != current_sha:
   raise Rejected('stale or invalid base; reconcile and rerun all checks')
- if lane not in ('report','ui'): raise Rejected('unknown lane')
+ if lane not in ('report','ui','astra-infrastructure'): raise Rejected('unknown lane')
  for path in set(base) | set(candidate): canonical(path)
  removed = set(base)-set(candidate)
  if removed: raise Rejected('deletion prohibited: '+', '.join(sorted(removed)))
@@ -40,6 +52,8 @@ def validate(base, candidate, *, lane, expected_sha, current_sha, register_befor
  if not changed: raise Rejected('empty release')
  if lane=='ui':
   if changed-UI: raise Rejected('UI lane exceeds explicit path ownership')
+ elif lane=='astra-infrastructure':
+  if changed-ASTRA_RELEASE_INFRA: raise Rejected('Astra infrastructure lane exceeds explicit path ownership')
  else:
   for path in changed-{REGISTER}:
    # Narrow pilot: new standalone report editions only, not existing revisions,
@@ -97,7 +111,7 @@ def main():
  parser.add_argument('--repo',required=True);parser.add_argument('--base-commit',required=True)
  parser.add_argument('--candidate',required=True,help='Existing local commit/tree; never stages working files')
  parser.add_argument('--current-main-sha',required=True,help='Fresh full SHA obtained by connected GitHub reader; not fetched here')
- parser.add_argument('--lane',required=True,choices=['report','ui']);args=parser.parse_args()
+ parser.add_argument('--lane',required=True,choices=['report','ui','astra-infrastructure']);args=parser.parse_args()
  try:
   if not re.fullmatch('[a-f0-9]{40}',args.base_commit): raise Rejected('full base commit SHA required')
   actual=subprocess.check_output(['git','-C',args.repo,'rev-parse','--verify',args.base_commit+'^{commit}'],stderr=subprocess.PIPE).decode().strip()

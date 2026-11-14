@@ -46,6 +46,7 @@ jobs:
         if: steps.publication_path.outputs.fast != 'true'
         run: |
           python3 scripts/build_article_palettes.py
+          python3 scripts/build_desk_data.py
           python3 scripts/build_site_search.py
           python3 scripts/build_external_sources.py
           python3 scripts/validate_research_contracts.py
@@ -96,6 +97,8 @@ jobs:
           node scripts/test_tag_map.cjs
           node scripts/test_tag_family_tree.cjs
           node scripts/test_bond_watchlist.cjs
+          node scripts/test_desk_ui.cjs
+          node scripts/test_desk_release.cjs
       - name: Refresh Reuters headline metadata
         id: update
         if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * *'
@@ -118,6 +121,7 @@ jobs:
       - name: Revalidate reconciled source and rebuild deployment catalogue
         run: |
           python3 scripts/build_article_palettes.py
+          python3 scripts/build_desk_data.py
           python3 scripts/build_site_search.py
           python3 scripts/build_external_sources.py
           python3 scripts/validate_research_contracts.py
@@ -164,6 +168,8 @@ jobs:
           node scripts/test_research_feed.cjs
           node scripts/test_content_delivery.cjs
           node scripts/test_read_up_reader.cjs
+          node scripts/test_desk_ui.cjs
+          node scripts/test_desk_release.cjs
       - name: Build public publication timeline
         run: |
           python3 scripts/build_publication_timeline.py
