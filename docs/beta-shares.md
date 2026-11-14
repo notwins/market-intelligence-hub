@@ -27,6 +27,17 @@ verified local-currency, gross-dividend total return. It keeps the BOS row's
 price observation date separately from the PDF publication date. Values
 retain source precision, including reported zeroes.
 
+A single visible note below the results explains the 2026 dividend basis;
+it is not repeated on every Beta card. The 13 November 2026 BOS PDF's
+table footnotes and end disclosures do not confirm dividend reinvestment.
+A DBS/UOB cross-check against Morningstar price and "with dividends"
+charts is consistent with dividend inclusion, allowing for the different
+12/13 November observation dates and BOS whole-percentage rounding.
+This supports only an inference; it does not verify reinvestment or change
+the shared API's unconfirmed-methodology status. Morningstar's current
+stock total-return glossary includes cash dividends without reinvestment;
+that glossary is not treated as a chart-specific or BOS definition.
+
 `ShareEnrichment.ytdFor(item, year=2026)` returns a period descriptor with
 the value, source, observation/report dates, basis and availability. It uses
 the same exact listing and currency guards as BOS valuations. Missing,
