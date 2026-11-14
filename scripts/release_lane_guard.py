@@ -11,7 +11,8 @@ DERIVED = frozenset({'site/data/site-search.json', 'site/data/external-sources.j
 REGISTER = 'site/data/research-register.json'
 UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/market-understanding/market-understanding.css', 'scripts/build_report_additions.py',
- 'scripts/test_research_register.py'})
+ 'scripts/test_research_register.py', 'site/v4-tools.js',
+ 'scripts/test_yield_comparisons.cjs'})
 
 class Rejected(ValueError): pass
 

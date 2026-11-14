@@ -16,6 +16,26 @@ Use `--lane ui` for an explicitly owned UI patch. The command reads immutable Gi
 - UI pilot: only the explicit paths in `UI` within the guard. Being path-authorized does not prove internal sections were preserved; content and interaction tests remain mandatory.
 - Derived search, external-source, palette and timeline outputs belong to the final assembler, not either submitted lane. The register is report-owned; register-derived page additions must be rebuilt once after reconciliation with the selected UI, never overwritten from an old full-file copy.
 
+### History-chart ownership extension (proposal for coordinator review)
+Reviewed chart tree: `56764f7807ae2a64927a7fd1a680a233a787e946`, based on
+`185474ebeab62ace55ec62cb7aca11be197c318e`; this proposal does not activate a release.
+The proposed extension adds exactly `site/v4-tools.js` and
+`scripts/test_yield_comparisons.cjs`; it adds no patterns, overrides or bypasses.
+The reviewed chart batch changes only phone event-label presentation, an event
+disclosure with the existing official links, and the event-checkbox position in
+`lineChart`/`timePanel`. The test file verifies that presentation and preservation.
+The existing `site/v4.html` edit only refreshes the shared module's cache key.
+An empty event-legend wrapper is also omitted when the selected range has no events.
+
+`v4-tools.js` also contains financial, source, report and other tool behavior.
+Path acceptance does not authorize changes to those sections or certify semantics:
+each future edit still needs explicit scope/content review. Financial observations,
+formulas, scenarios/horizons, sources, report functions and schedules remain outside
+this chart batch. Existing deletion, stale-base, report-lane and derived-data checks
+remain mandatory. Guard/policy files themselves do not become UI-owned; this policy
+proposal requires separate coordinator review before the chart release can use it.
+Do not move or duplicate chart functions into HTML to evade ownership checks.
+
 ## Final release requirements
 Reconcile against fresh main, regenerate derived catalogues, run existing source/final-artifact suites, complete required genuine rendered QA and preserve earlier editions. Content evidence, privacy, rights and publication checks are not replaced by this tool. Publish only through the established guarded writer, then verify the actual deployed commit and live bytes. Reconcile stale candidates and repeat checks rather than dropping the guard.
 

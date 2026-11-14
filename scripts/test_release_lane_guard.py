@@ -1,6 +1,6 @@
 import json,subprocess,unittest,os
 from pathlib import Path
-from release_lane_guard import validate, Rejected, REGISTER
+from release_lane_guard import validate, Rejected, REGISTER, UI
 SHA='a'*40
 NEW='b'*40
 class GuardTests(unittest.TestCase):
@@ -68,4 +68,53 @@ class GuardTests(unittest.TestCase):
  def test_noncanonical_path_rejected(self):
   self.report['site/research/../v4.html']='bad'
   with self.assertRaisesRegex(Rejected,'noncanonical'):self.reportcheck()
+ def chartbase(self):
+  return {**self.base,'site/v4-tools.js':'old-tools','scripts/test_yield_comparisons.cjs':'old-test'}
+ def test_ui_ownership_is_exact_existing_set_plus_two_chart_paths(self):
+  self.assertEqual(UI,frozenset({'site/v4.html','site/market-understanding/index.html',
+   'site/market-understanding/market-understanding.css','scripts/build_report_additions.py',
+   'scripts/test_research_register.py','site/v4-tools.js','scripts/test_yield_comparisons.cjs'}))
+ def test_chart_paths_are_accepted_individually_and_together(self):
+  for paths in [('site/v4-tools.js',),('scripts/test_yield_comparisons.cjs',),
+   ('site/v4-tools.js','scripts/test_yield_comparisons.cjs','site/v4.html')]:
+   with self.subTest(paths=paths):
+    base=self.chartbase();candidate=dict(base)
+    for path in paths:candidate[path]='reviewed-change'
+    result=validate(base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)
+    self.assertEqual(result['changed_paths'],sorted(paths))
+ def test_chart_paths_do_not_admit_other_ui_report_data_or_schedule_paths(self):
+  forbidden=['site/history-context.css','site/v4.css','site/global-search.js',
+   'site/v4-tools-extra.js','scripts/test_yield_comparisons_browser.cjs',
+   'site/research/old-edition/index.html','site/research/new-edition/index.html',REGISTER,
+   'site/data/history-fed.json','site/data/history-v3.json','site/data/history-events-v1.json',
+   '.github/workflows/publish.yml','scripts/update_news.py','scripts/update_fed_history.py',
+   'scripts/release_lane_guard.py','RELEASE_LANES.md']
+  for path in forbidden:
+   with self.subTest(path=path):
+    base=self.chartbase();candidate={**base,'site/v4-tools.js':'reviewed-change',path:'unowned-change'}
+    with self.assertRaisesRegex(Rejected,'ownership'):
+     validate(base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)
+ def test_chart_paths_do_not_admit_any_assembler_output(self):
+  for path in ['site/data/site-search.json','site/data/external-sources.json',
+   'site/data/article-palettes.json','site/data/publication-timeline.json']:
+   with self.subTest(path=path):
+    base=self.chartbase();candidate={**base,'site/v4-tools.js':'reviewed-change',path:'derived-change'}
+    with self.assertRaisesRegex(Rejected,'assembler'):
+     validate(base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)
+ def test_chart_path_deletion_and_stale_base_remain_rejected(self):
+  for path in ['site/v4-tools.js','scripts/test_yield_comparisons.cjs']:
+   with self.subTest(path=path):
+    base=self.chartbase();candidate=dict(base);del candidate[path]
+    with self.assertRaisesRegex(Rejected,'deletion'):
+     validate(base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)
+    candidate={**base,path:'reviewed-change'}
+    with self.assertRaisesRegex(Rejected,'stale'):
+     validate(base,candidate,lane='ui',expected_sha=SHA,current_sha=NEW)
+ def test_chart_paths_remain_outside_report_lane(self):
+  for path in ['site/v4-tools.js','scripts/test_yield_comparisons.cjs']:
+   with self.subTest(path=path):
+    base=self.chartbase();candidate={**base,**self.report,path:'unowned-change'}
+    with self.assertRaisesRegex(Rejected,'report pilot'):
+     validate(base,candidate,lane='report',expected_sha=SHA,current_sha=SHA,
+      register_before=self.old,register_after=self.new)
 if __name__=='__main__':unittest.main(verbosity=2)
