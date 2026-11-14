@@ -1,0 +1,56 @@
+name: Daily closing prices (data only)
+on:
+  workflow_dispatch:
+  schedule:
+    # 08:30 Singapore, after the US close and provider finalization buffer.
+    - cron: '30 0 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: market-closing-price-writer
+  cancel-in-progress: false
+jobs:
+  prices:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: code
+      - uses: actions/checkout@v6
+        with:
+          ref: market-prices
+          path: feed
+      - name: Test price importer and client mathematics
+        working-directory: code
+        run: |
+          python3 -m unittest discover -s scripts -p 'test_share_prices.py'
+          node scripts/test_share_prices.cjs
+          node scripts/test_share_charts.cjs
+      - name: Fetch completed closes and retain gaps explicitly
+        run: python3 code/scripts/share_prices.py update --feed-dir feed
+      - name: Validate saved feed
+        run: python3 code/scripts/share_prices.py validate --feed-dir feed --public
+      - name: Publish only the data branch
+        working-directory: feed
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manifest.json latest
+          if [ -d updates ]; then git add updates; fi
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update daily closing-price feed'
+            git push origin HEAD:market-prices
+          fi
+      - name: Report provider failures after publishing retained-price status
+        run: |
+          python3 - <<'PY'
+          import json, pathlib
+          root = pathlib.Path('feed')
+          manifest = json.loads((root/'manifest.json').read_text())
+          latest = json.loads((root/manifest['latest']['path']).read_text())
+          failures = {k:v['status'] for k,v in latest['quotes'].items() if v['status'] in ('fetch_failed','basis_review')}
+          print('Exceptions:', failures)
+          if failures:
+              raise SystemExit('Some instruments need attention; prior valid closes were retained with their actual dates.')
+          PY
