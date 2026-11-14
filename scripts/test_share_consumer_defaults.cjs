@@ -72,7 +72,7 @@ function cut(file,first,next){const text=read(file);return text.slice(text.index
   function detailFor(html,id){const card=html.indexOf('id="'+id+'"');assert(card>=0,'card exists: '+id);const start=html.indexOf('<details class="share-enrichment-details">',card);assert(start>=0,'return detail exists: '+id);return html.slice(start,html.indexOf('</details>',start)+10);}
   for(const [ticker,value]of [['AAPL','+31.00%'],['NVDA','-11.00%'],['TSLA','-12.00%']]){
     const detail=detailFor(realHtml,ticker);assert(detail.includes('2026 YTD · BOS: '+value+' as of 12 Nov 2026; PDF 13 Nov 2026'));
-    assert(detail.includes('dividend and currency return methodology are not specified'));
+    assert(detail.includes('BOS YTD return with dividends reinvested (site assumption)'));
   }
   assert.match(realHtml,/\+38\.92%/,'derived NVDA calendar return reaches the current card');
   assert.ok(realHtml.indexOf('id="AAPL"')<realHtml.indexOf('id="NVDA"'));

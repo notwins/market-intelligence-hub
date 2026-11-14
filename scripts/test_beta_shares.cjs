@@ -13,7 +13,7 @@ const original=JSON.stringify(rows);
 const caps=new Map(rows.map((r,n)=>[r.id,n===1?null:(n+1)*100]));
 let quoteGeneration=1,ytdDate='2026-11-12',ytdReport='2026-11-13',ytdCurrent=true;
 const ytdValues=new Map(rows.map((r,n)=>[r.id,n===1?null:n===0?45.5:n-10]));
-function bosYtd(r){return {year:2026,label:'2026 YTD · BOS',value:ytdValues.get(r.id)??null,source:'Bank of Singapore',sourceId:'bos',sourceUrl:'https://example.com/bos-coverage.pdf',asOf:ytdDate,endDate:ytdDate,reportDate:ytdReport,basis:'BOS YTD gain; dividend/currency return methodology not specified',periodType:'ytd_gain',derived:false,current:ytdCurrent};}
+function bosYtd(r){return {year:2026,label:'2026 YTD · BOS',value:ytdValues.get(r.id)??null,source:'Bank of Singapore',sourceId:'bos',sourceUrl:'https://example.com/bos-coverage.pdf',asOf:ytdDate,endDate:ytdDate,reportDate:ytdReport,basis:'BOS YTD return with dividends reinvested (site assumption)',periodType:'ytd_gain',derived:false,current:ytdCurrent};}
 const shared={
  load:async()=>rows,records:()=>rows.slice(),metadata:()=>({returnCutoff:'2026-09-19'}),
  returnsFor:r=>years.map(y=>y==='2026'?bosYtd(r):({year:Number(y),label:y,value:r.returns.calendar[y],derived:true})),
@@ -47,12 +47,12 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
  assert(host.innerHTML.includes('BOS &lt;verified&gt;'),'current quote source is escaped');
  assert(host.innerHTML.includes('Current prices and market caps have their own dates.'));
  assert(host.innerHTML.includes('((1 + older holding-period return / 100) / (1 + following-year holding-period return / 100) − 1) × 100'),'displayed methodology explicitly converts source percentage inputs');
- assert(host.innerHTML.includes('2026 BOS year-to-date gain'),'BOS source and partial year are explicit in sorting label');
+ assert(host.innerHTML.includes('2026 BOS year-to-date return'),'BOS source and partial year are explicit in sorting label');
  assert(host.innerHTML.includes('aria-label="Select NVIDIA Corp (NVDA US) for comparison"'));
  assert(host.innerHTML.includes('BOS unavailable'),'missing BOS is explicit despite a finite historical CSV YTD');
  assert(host.innerHTML.includes('As of 2026-11-12'),'BOS date is visible beside observations');
  assert(host.innerHTML.includes('BOS YTD as of<strong>2026-11-12</strong>'),'header refers to current BOS date');
- assert(host.innerHTML.includes('dividend/currency return methodology is not specified'));
+ assert(host.innerHTML.includes('total return with dividends reinvested (site assumption)'));
  assert(!host.innerHTML.includes('YTD · 19 Sep')&&!host.innerHTML.includes('YTD ends 19 Sep'),'frozen cutoff is not used as current2026 label');
  assert.equal(B.periods(rows[0]).at(-1).value,45.5,'2026 comes from BOS, not historical19.45891');
  assert.equal(B.periods(rows[1]).at(-1).value,null,'unavailable BOS does not fall back to finite CSV');
@@ -72,7 +72,7 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
  assert.equal(B.identity(rows[0]).id,'ticker.nvidia_nvda');
  assert.notEqual(B.identity({...rows[4],industry:'Computer Hardware'}).id,'sector.semiconductors','broad IT is not mislabeled semiconductors');
  const bounds=B.axis([rows[0]]);assert(bounds.min<0&&bounds.max>0,'negative and positive returns share a visible zero');
- const svg=B.chartSvg(rows[0],bounds);assert(svg.includes('2022: -50.3%'));assert(svg.includes('2026 BOS YTD gain: +45.5% · as of 2026-11-12'));assert(svg.includes('BOS YTD</text>'));assert(host.innerHTML.includes('<strong>2026 BOS YTD gain: +45.5%</strong>'),'chart shows gain and source outside the tooltip');
+ const svg=B.chartSvg(rows[0],bounds);assert(svg.includes('2022: -50.3%'));assert(svg.includes('2026 BOS YTD return: +45.5% · as of 2026-11-12'));assert(svg.includes('BOS YTD</text>'));assert(host.innerHTML.includes('<strong>2026 BOS YTD return: +45.5%</strong>'),'chart shows gain and source outside the tooltip');
  const yearXs=[...svg.matchAll(/class="bs-year" x="([0-9.]+)"/g)].map(m=>Number(m[1]));assert.equal(yearXs.length,8);assert(yearXs.every((x,i)=>i===0||x-yearXs[i-1]>4*24*.6),'mobile 24px year labels have distinct horizontal space');
  const extremeSvg=B.chartSvg(rows[0],{min:-200,max:1000,step:200}),leftAxis=[...extremeSvg.matchAll(/<text x="([0-9.]+)" y="[0-9.]+" text-anchor="end">([^<]+)<\/text>/g)];assert(leftAxis.length>1);assert(leftAxis.every(m=>Number(m[1])-m[2].length*22*.6>=0),'mobile percentage labels fit the reserved left axis margin');
  dispatch('input',{betaSearch:''},{value:'TEST31'});assert(host.innerHTML.includes('1–1 of 1 shares'));assert.equal((host.innerHTML.match(/class="bs-chart-card"/g)||[]).length,6,'search preserves comparison selection');

@@ -15,6 +15,7 @@ import json
 import math
 import os
 from pathlib import Path
+import re
 import tempfile
 import urllib.error
 import urllib.parse
@@ -27,6 +28,8 @@ SOURCE_HOST = "productgroup.bankofsingapore.com"
 SGT = ZoneInfo("Asia/Singapore")
 MAX_PDF_BYTES = 25 * 1024 * 1024
 TIMEOUT_SECONDS = 20
+VALUATION_RETENTION = 5
+PRICE_SOURCE_ID = "bos-equity-prices"
 NUMERIC_FIELDS = ("price", "marketCapUsdBillions", "fairValueOrTargetPrice",
                   "upsidePct", "dividendYieldPct", "pe", "pb", "epsGrowthPct",
                   "roePct", "ytdGainPct")
@@ -104,6 +107,7 @@ def read_json(path):
 
 
 def read_ref(root, ref):
+    validate_ref(ref)
     relative = Path(ref["path"])
     path = (root / relative).resolve()
     if relative.is_absolute() or not path.is_relative_to(root.resolve()):
@@ -112,6 +116,245 @@ def read_ref(root, ref):
     if sha256(raw) != ref["sha256"] or len(raw) != ref["bytes"]:
         raise ValueError("Feed reference checksum mismatch")
     return json.loads(raw)
+
+
+def validate_ref(ref, namespace=None):
+    if (not isinstance(ref, dict) or not isinstance(ref.get("path"), str)
+            or not re.fullmatch(r"[a-zA-Z0-9_./-]+", ref["path"])
+            or ".." in ref["path"] or ref["path"].startswith("/")
+            or not isinstance(ref.get("sha256"), str)
+            or not re.fullmatch(r"[a-f0-9]{64}", ref["sha256"])
+            or type(ref.get("bytes")) is not int or ref["bytes"] <= 0):
+        raise ValueError("Invalid immutable feed reference")
+    if namespace and not ref["path"].startswith(namespace + "/"):
+        raise ValueError("Unexpected feed reference directory")
+
+
+def finite(value):
+    return type(value) in (int, float) and math.isfinite(value)
+
+
+def validate_stored_edition(data, ref):
+    """Recheck archived public input before migration or fallback retention."""
+    validate_ref(ref, "editions")
+    report_date, as_of = iso_date(data.get("reportDate")), iso_date(data.get("priceAsOf"))
+    if (data.get("schemaVersion") != 1 or data.get("sourceId") != SOURCE_ID
+            or as_of > report_date or data.get("sourceUrl") != source_url(report_date)
+            or not re.fullmatch(r"[a-f0-9]{64}", str(data.get("sourceSha256", "")))
+            or any(data.get(key) != ref.get(key) for key in ("reportDate", "priceAsOf", "sourceSha256", "sourceUrl"))
+            or not isinstance(data.get("records"), list) or not data["records"]):
+        raise ValueError("Invalid stored BOS edition identity/dates")
+    ids = set()
+    for row in data["records"]:
+        if (not isinstance(row.get("instrumentId"), str) or not row["instrumentId"]
+                or row["instrumentId"] in ids or row.get("instrumentType") not in ("equity", "index")
+                or not isinstance(row.get("ticker"), str) or not row["ticker"]
+                or not isinstance(row.get("currency"), str) or not row["currency"]
+                or row.get("priceAsOf") != data["priceAsOf"]
+                or type(row.get("sourcePage")) is not int or row["sourcePage"] < 1
+                or type(row.get("sourceRow")) is not int or row["sourceRow"] < 1
+                or not isinstance(row.get("raw"), dict) or not isinstance(row["raw"].get("price"), str)
+                or "esgRating" in row or "esgRating" in row["raw"]):
+            raise ValueError("Invalid stored BOS listing")
+        ids.add(row["instrumentId"])
+        for key in NUMERIC_FIELDS:
+            if key not in row or row[key] is not None and not finite(row[key]):
+                raise ValueError("Invalid stored BOS numeric field")
+        if (row["price"] is None and row["instrumentType"] == "equity") or (row["price"] is not None and row["price"] <= 0):
+            raise ValueError("Invalid stored BOS price")
+    return data
+
+
+def load_feed(root):
+    path = root / "manifest.json"
+    if not path.exists():
+        return None, None, {}
+    raw = path.read_bytes()
+    manifest = json.loads(raw)
+    if (manifest.get("schemaVersion") != 1 or manifest.get("sourceId") != SOURCE_ID
+            or not isinstance(manifest.get("editions"), list) or not manifest["editions"]):
+        raise ValueError("Existing feed identity/schema mismatch")
+    stored, hashes = {}, set()
+    for ref in manifest["editions"]:
+        validate_ref(ref, "editions")
+        if ref["path"] in stored or ref.get("sourceSha256") in hashes:
+            raise ValueError("Duplicate stored edition")
+        stored[ref["path"]] = validate_stored_edition(read_ref(root, ref), ref)
+        hashes.add(ref["sourceSha256"])
+        validate_ref(ref.get("csv"), "editions")
+        csv_path = (root / ref["csv"]["path"]).resolve()
+        if not csv_path.is_relative_to(root.resolve()):
+            raise ValueError("CSV reference escapes its directory")
+        csv_raw = csv_path.read_bytes()
+        if len(csv_raw) != ref["csv"]["bytes"] or sha256(csv_raw) != ref["csv"]["sha256"]:
+            raise ValueError("Stored CSV checksum mismatch")
+    if not any(ref == manifest.get("latest") for ref in manifest["editions"]):
+        raise ValueError("Latest edition is not in the retained set")
+    return manifest, raw, stored
+
+
+def validate_price_chunk(chunk, month):
+    if (not re.fullmatch(r"\d{4}-\d{2}", month) or iso_date(month + "-01").strftime("%Y-%m") != month
+            or set(chunk) != {"schemaVersion", "sourceId", "month", "priceKind", "sources", "series"}
+            or chunk["schemaVersion"] != 1 or chunk["sourceId"] != PRICE_SOURCE_ID
+            or chunk["month"] != month or chunk["priceKind"] != "published_reference_price"
+            or not isinstance(chunk["sources"], list) or not chunk["sources"]
+            or not isinstance(chunk["series"], dict)):
+        raise ValueError("Invalid BOS monthly price schema")
+    hashes, observations = set(), set()
+    for source in chunk["sources"]:
+        if (set(source) != {"sourceSha256", "reportDate", "priceAsOf", "sourceUrl"}
+                or not re.fullmatch(r"[a-f0-9]{64}", str(source.get("sourceSha256", "")))
+                or source["sourceSha256"] in hashes
+                or iso_date(source["priceAsOf"]) > iso_date(source["reportDate"])
+                or source["priceAsOf"][:7] != month
+                or source["sourceUrl"] != source_url(iso_date(source["reportDate"]))):
+            raise ValueError("Invalid BOS price provenance")
+        hashes.add(source["sourceSha256"])
+    used_sources = set()
+    for identity, series in chunk["series"].items():
+        if (not isinstance(identity, str) or not identity
+                or set(series) != {"currency", "instrumentType", "ticker", "points"}
+                or not isinstance(series["currency"], str) or not series["currency"]
+                or series["instrumentType"] not in ("equity", "index")
+                or not isinstance(series["ticker"], str) or not series["ticker"]
+                or not isinstance(series["points"], list) or not series["points"]):
+            raise ValueError("Invalid BOS price listing")
+        ordered = []
+        for point in series["points"]:
+            if (not isinstance(point, list) or len(point) != 6 or not finite(point[1]) or point[1] <= 0
+                    or type(point[2]) is not int or not 0 <= point[2] < len(chunk["sources"])
+                    or not isinstance(point[3], str)
+                    or type(point[4]) is not int or point[4] < 1
+                    or type(point[5]) is not int or point[5] < 1):
+                raise ValueError("Invalid BOS price observation")
+            iso_date(point[0])
+            source = chunk["sources"][point[2]]
+            key = (identity, source["sourceSha256"])
+            if point[0] != source["priceAsOf"] or point[0][:7] != month or key in observations:
+                raise ValueError("Duplicate or inconsistent BOS price observation")
+            observations.add(key)
+            used_sources.add(point[2])
+            ordered.append((point[0], point[2]))
+        if ordered != sorted(ordered):
+            raise ValueError("BOS price observations are not ordered")
+    if used_sources != set(range(len(chunk["sources"]))):
+        raise ValueError("BOS price provenance has no observations")
+    return chunk
+
+
+def price_history_index(manifest):
+    history = manifest.get("priceHistory") if manifest else None
+    if history is None:
+        return {"schemaVersion": 1, "sourceId": PRICE_SOURCE_ID, "months": {}, "sourceHashes": []}
+    if (set(history) != {"schemaVersion", "sourceId", "months", "sourceHashes"}
+            or history["schemaVersion"] != 1 or history["sourceId"] != PRICE_SOURCE_ID
+            or not isinstance(history["months"], dict) or not isinstance(history["sourceHashes"], list)
+            or any(not isinstance(h, str) or not re.fullmatch(r"[a-f0-9]{64}", h) for h in history["sourceHashes"])
+            or len(set(history["sourceHashes"])) != len(history["sourceHashes"])):
+        raise ValueError("Invalid BOS price-history index")
+    for month, ref in history["months"].items():
+        iso_date(month + "-01")
+        validate_ref(ref, "prices")
+    return {**history, "months": dict(history["months"]), "sourceHashes": list(history["sourceHashes"])}
+
+
+def validate_price_history(root, history):
+    chunks, hashes = {}, set()
+    for month, ref in history["months"].items():
+        chunk = validate_price_chunk(read_ref(root, ref), month)
+        for source in chunk["sources"]:
+            if source["sourceSha256"] in hashes:
+                raise ValueError("Price-history source occurs in more than one month")
+            hashes.add(source["sourceSha256"])
+        chunks[month] = chunk
+    if hashes != set(history["sourceHashes"]):
+        raise ValueError("Price-history source hash index does not reconcile")
+    return chunks
+
+
+def price_history_plan(root, manifest, snapshots):
+    history = price_history_index(manifest)
+    existing_chunks = validate_price_history(root, history)
+    months, hashes = history["months"], set(history["sourceHashes"])
+    changed, originals, writes, obsolete = {}, {}, {}, []
+    for data in snapshots:
+        source_hash, month = data["sourceSha256"], data["priceAsOf"][:7]
+        if source_hash in hashes:
+            # Retained snapshots are checked against the index, including no-op runs.
+            if month not in months:
+                raise ValueError("Price-history hash is missing its month")
+            chunk = changed.get(month)
+            if chunk is None:
+                chunk = existing_chunks[month]
+            if not any(s["sourceSha256"] == source_hash for s in chunk["sources"]):
+                raise ValueError("Price-history hash is missing its source")
+            verify_source_prices(chunk, data)
+            continue
+        if month not in changed:
+            if month in months:
+                chunk = existing_chunks[month]
+                originals[month] = json.loads(canonical(chunk))
+            else:
+                chunk = {"schemaVersion": 1, "sourceId": PRICE_SOURCE_ID, "month": month,
+                         "priceKind": "published_reference_price", "sources": [], "series": {}}
+            changed[month] = chunk
+        chunk = changed[month]
+        source_index = len(chunk["sources"])
+        chunk["sources"].append({key: data[key] for key in ("sourceSha256", "reportDate", "priceAsOf", "sourceUrl")})
+        for row in data["records"]:
+            if row["price"] is None:
+                continue
+            identity = row["instrumentId"]
+            identity_fields = {key: row[key] for key in ("currency", "instrumentType", "ticker")}
+            series = chunk["series"].setdefault(identity, {**identity_fields, "points": []})
+            if any(series[key] != value for key, value in identity_fields.items()):
+                raise ValueError("BOS price history listing currency/type changed")
+            series["points"].append([row["priceAsOf"], row["price"], source_index,
+                                     row["raw"]["price"], row["sourcePage"], row["sourceRow"]])
+            series["points"].sort(key=lambda point: (point[0], point[2]))
+        hashes.add(source_hash)
+        verify_source_prices(chunk, data)
+    for month, chunk in changed.items():
+        validate_price_chunk(chunk, month)
+        old = originals.get(month)
+        if old:
+            if chunk["sources"][:len(old["sources"])] != old["sources"]:
+                raise ValueError("Price-history source provenance would change")
+            for identity, series in old["series"].items():
+                if any(point not in chunk["series"][identity]["points"] for point in series["points"]):
+                    raise ValueError("Original price observations would change")
+        raw = canonical(chunk)
+        path = "prices/" + month + "-" + sha256(raw)[:16] + ".json"
+        writes[path] = raw
+        if month in months and months[month]["path"] != path:
+            obsolete.append(months[month]["path"])
+        months[month] = reference(path, raw)
+    history["months"] = dict(sorted(months.items()))
+    history["sourceHashes"] = sorted(hashes)
+    return history, writes, obsolete
+
+
+def verify_source_prices(chunk, data):
+    indices = [i for i, source in enumerate(chunk["sources"]) if source["sourceSha256"] == data["sourceSha256"]]
+    if len(indices) != 1:
+        raise ValueError("Ambiguous price-history source identity")
+    index = indices[0]
+    if chunk["sources"][index] != {key: data[key] for key in ("sourceSha256", "reportDate", "priceAsOf", "sourceUrl")}:
+        raise ValueError("Price-history source metadata differs")
+    actual = {identity: [point for point in series["points"] if point[2] == index]
+              for identity, series in chunk["series"].items()}
+    actual = {key: value for key, value in actual.items() if value}
+    expected = {}
+    for row in data["records"]:
+        if row["price"] is None:
+            continue
+        identity = row["instrumentId"]
+        if identity not in chunk["series"] or any(chunk["series"][identity][key] != row[key] for key in ("currency", "instrumentType", "ticker")):
+            raise ValueError("Price-history listing identity differs")
+        expected[identity] = [[row["priceAsOf"], row["price"], index, row["raw"]["price"], row["sourcePage"], row["sourceRow"]]]
+    if actual != expected:
+        raise ValueError("Price-history observations differ from the original edition")
 
 
 def group_counts(records):
@@ -276,6 +519,8 @@ def atomic_manifest(path, value):
     with tempfile.NamedTemporaryFile(dir=path.parent, prefix=".bos-manifest-", delete=False) as handle:
         temp_path = Path(handle.name)
         handle.write(raw)
+        handle.flush()
+        os.fsync(handle.fileno())
     try:
         os.replace(temp_path, path)
     finally:
@@ -284,6 +529,154 @@ def atomic_manifest(path, value):
 
 def reference(relative, raw):
     return {"path": relative, "sha256": sha256(raw), "bytes": len(raw)}
+
+
+def retain_editions(editions, latest):
+    """Keep the selected latest plus four newest successful observations.
+
+    Same-date revisions count separately. Acceptance time breaks date ties;
+    legacy ties keep their existing order, with latest always retained.
+    """
+    ordered = sorted(editions, key=lambda ref: (ref["priceAsOf"], ref["reportDate"], ref.get("acceptedAt", "")), reverse=True)
+    retained = [latest] + [ref for ref in ordered if ref["path"] != latest["path"]][:VALUATION_RETENTION - 1]
+    return sorted(retained, key=lambda ref: (ref["reportDate"], ref["priceAsOf"], ref.get("acceptedAt", "")), reverse=True)
+
+
+def safe_public_path(root, relative):
+    if not isinstance(relative, str) or not re.fullmatch(r"(?:editions|prices)/[a-zA-Z0-9_.-]+\.(?:json|csv)", relative):
+        raise ValueError("Unexpected immutable data path")
+    path = (root / relative).resolve()
+    if not path.is_relative_to(root.resolve()) or path == root.resolve():
+        raise ValueError("Immutable data path escapes BOS directory")
+    return path
+
+
+def publish_plan(root, expected_manifest, manifest, writes, obsolete):
+    """Install verified immutable files, then atomically switch one pointer.
+
+    A failed write/swap removes only newly created files. A local lock and
+    manifest compare-and-swap reject concurrent writers. Git publication must
+    still use a normal non-force push/reviewed expected-head update.
+    """
+    paths = {relative: safe_public_path(root, relative) for relative in writes}
+    removals = [safe_public_path(root, relative) for relative in set(obsolete) - set(writes)]
+    for relative, path in paths.items():
+        if path.exists() and path.read_bytes() != writes[relative]:
+            raise ValueError("Conflicting immutable data file")
+    root.mkdir(parents=True, exist_ok=True)
+    lock = root / ".bos-ingest.lock"
+    try:
+        fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    except FileExistsError as error:
+        raise ValueError("Another BOS writer holds the local lock; retry after it finishes") from error
+    os.close(fd)
+    created, warnings = [], []
+    manifest_path = root / "manifest.json"
+    try:
+        current = manifest_path.read_bytes() if manifest_path.exists() else None
+        if current != expected_manifest:
+            raise ValueError("BOS manifest changed concurrently; reload and retry")
+        try:
+            for relative, path in paths.items():
+                if not path.exists():
+                    created.append(path)
+                immutable_write(path, writes[relative])
+                if path.read_bytes() != writes[relative]:
+                    raise ValueError("Written BOS data failed readback validation")
+            # All referenced outputs are complete before the only mutable pointer.
+            atomic_manifest(manifest_path, manifest)
+        except BaseException:
+            for path in reversed(created):
+                path.unlink(missing_ok=True)
+            raise
+        # Old full editions and superseded monthly versions are removed only
+        # after all original observations are safely in the promoted history.
+        for path in removals:
+            try:
+                path.unlink(missing_ok=True)
+            except OSError as error:
+                warnings.append("Could not remove obsolete BOS data: " + path.name + ": " + str(error))
+    finally:
+        lock.unlink(missing_ok=True)
+    return warnings
+
+
+def update_plan(root, manifest, stored, incoming=None, now=None):
+    """Pure plan: migration, history preservation and retention precede writes."""
+    editions = list(manifest["editions"]) if manifest else []
+    writes = {}
+    if incoming is not None:
+        stem = incoming["reportDate"] + "-" + incoming["sourceSha256"][:16]
+        raw_json, raw_csv = canonical(incoming), csv_bytes(incoming)
+        json_path, csv_path = "editions/" + stem + ".json", "editions/" + stem + ".csv"
+        edition = {**reference(json_path, raw_json), "reportDate": incoming["reportDate"],
+                   "priceAsOf": incoming["priceAsOf"], "sourceSha256": incoming["sourceSha256"],
+                   "sourceUrl": incoming["sourceUrl"], "csv": reference(csv_path, raw_csv),
+                   "acceptedAt": now.isoformat()}
+        editions.append(edition)
+        stored = {**stored, json_path: incoming}
+        writes.update({json_path: raw_json, csv_path: raw_csv})
+    latest = manifest["latest"] if manifest else edition
+    if incoming is not None and (edition["priceAsOf"], edition["reportDate"]) >= (latest["priceAsOf"], latest["reportDate"]):
+        latest = edition
+    # Oldest first produces stable provenance indices during a legacy migration.
+    ordered = sorted(editions, key=lambda ref: (ref["reportDate"], ref.get("acceptedAt", "")))
+    snapshots = [stored[ref["path"]] for ref in ordered]
+    history, history_writes, obsolete = price_history_plan(root, manifest, snapshots)
+    retained = retain_editions(editions, latest)
+    retained_paths = {ref["path"] for ref in retained}
+    for ref in editions:
+        if ref["path"] not in retained_paths:
+            obsolete.extend([ref["path"], ref["csv"]["path"]])
+            writes.pop(ref["path"], None)
+            writes.pop(ref["csv"]["path"], None)
+    writes.update(history_writes)
+    next_manifest = {**(manifest or {}), "schemaVersion": 1, "sourceId": SOURCE_ID,
+                     "latest": latest, "editions": retained, "valuationRetention": VALUATION_RETENTION,
+                     "priceHistory": history}
+    if incoming is not None:
+        next_manifest.update(status="ok", checkedAt=now.isoformat())
+    return next_manifest, writes, obsolete
+
+
+def maintain(feed_dir):
+    """Migrate existing successful editions without a download or new dates."""
+    root = Path(feed_dir).resolve() / "bos"
+    manifest, raw, stored = load_feed(root)
+    if manifest is None:
+        raise ValueError("No existing BOS feed to maintain")
+    next_manifest, writes, obsolete = update_plan(root, manifest, stored)
+    if canonical(next_manifest) == raw and not writes and not obsolete:
+        return {"status": "unchanged", "records": len(stored[manifest["latest"]["path"]]["records"])}
+    warnings = publish_plan(root, raw, next_manifest, writes, obsolete)
+    return {"status": "maintained", "latestReportDate": next_manifest["latest"]["reportDate"],
+            "valuationEditions": len(next_manifest["editions"]), "priceMonths": len(next_manifest["priceHistory"]["months"]),
+            "priceSources": len(next_manifest["priceHistory"]["sourceHashes"]), "warnings": warnings}
+
+
+def validate_feed(feed_dir):
+    """Read-only validation of every referenced valuation and price chunk."""
+    root = Path(feed_dir).resolve() / "bos"
+    manifest, _, stored = load_feed(root)
+    if manifest is None or manifest.get("valuationRetention") != VALUATION_RETENTION or not 1 <= len(manifest["editions"]) <= VALUATION_RETENTION or "priceHistory" not in manifest:
+        raise ValueError("BOS feed requires bounded-retention maintenance")
+    history = price_history_index(manifest)
+    chunks = validate_price_history(root, history)
+    for data in stored.values():
+        month = data["priceAsOf"][:7]
+        if month not in chunks:
+            raise ValueError("Retained valuation has no price history")
+        verify_source_prices(chunks[month], data)
+    referenced = {ref["path"] for ref in manifest["editions"]}
+    referenced.update(ref["csv"]["path"] for ref in manifest["editions"])
+    referenced.update(ref["path"] for ref in history["months"].values())
+    actual = {path.relative_to(root).as_posix() for folder in ("editions", "prices")
+              for path in (root / folder).rglob("*") if path.is_file()}
+    if actual != referenced:
+        raise ValueError("Unreferenced BOS data files remain; review cleanup before publication")
+    return {"status": "valid", "valuationEditions": len(manifest["editions"]),
+            "priceMonths": len(chunks), "priceSources": len(history["sourceHashes"]),
+            "priceObservations": sum(len(series["points"]) for chunk in chunks.values() for series in chunk["series"].values())}
 
 
 def validated_mappings(mappings, records, require_present=False):
@@ -319,10 +712,8 @@ def ingest(data, pdf_bytes, feed_dir, private_dir, now=None, public=False,
     if private.is_relative_to(Path(feed_dir).resolve()) or private.is_relative_to(Path(__file__).resolve().parents[1]):
         raise ValueError("Private source directory must be outside the public data checkout")
     manifest_path = root / "manifest.json"
-    manifest = read_json(manifest_path) if manifest_path.exists() else None
-    if manifest and (manifest.get("schemaVersion") != 1 or manifest.get("sourceId") != SOURCE_ID):
-        raise ValueError("Existing feed identity/schema mismatch")
-    previous = read_ref(root, manifest["latest"]) if manifest else None
+    manifest, previous_manifest_bytes, stored = load_feed(root)
+    previous = stored[manifest["latest"]["path"]] if manifest else None
     groups = validate_snapshot(data, pdf_bytes, now.astimezone(SGT).date(), expected_date,
                                previous, allow_count_drop)
     prior_mappings = manifest.get("verifiedMappings", []) if manifest else []
@@ -332,10 +723,16 @@ def ingest(data, pdf_bytes, feed_dir, private_dir, now=None, public=False,
         mappings = validated_mappings(mappings, data["records"], require_present=True)
         if manifest and mappings != prior_mappings:
             raise ValueError("Changing existing verified mappings requires a separate reviewed migration")
-    if manifest and any(item["sourceSha256"] == data["sourceSha256"] for item in manifest["editions"]):
+    known_hashes = set(price_history_index(manifest)["sourceHashes"])
+    if manifest:
+        known_hashes.update(item["sourceSha256"] for item in manifest["editions"])
+    if data["sourceSha256"] in known_hashes:
+        if public:
+            result = maintain(feed_dir)
+            result.update(reportDate=data["reportDate"], records=len(data["records"]))
+            return result
         return {"status": "unchanged", "reportDate": data["reportDate"], "records": len(data["records"])}
     public_data = public_snapshot(data, groups)
-    raw_json, raw_csv = canonical(public_data), csv_bytes(public_data)
     stem = data["reportDate"] + "-" + data["sourceSha256"][:16]
     # Full extraction, including restricted columns, is retained outside public trees.
     immutable_write(private / "pdf" / (stem + ".pdf"), pdf_bytes)
@@ -343,41 +740,41 @@ def ingest(data, pdf_bytes, feed_dir, private_dir, now=None, public=False,
     if not public:
         return {"status": "prepared_private", "reportDate": data["reportDate"],
                 "records": len(data["records"]), "publicFeedChanged": False}
-    json_path, csv_path = "editions/" + stem + ".json", "editions/" + stem + ".csv"
-    edition = {**reference(json_path, raw_json), "reportDate": data["reportDate"],
-               "priceAsOf": data["priceAsOf"], "sourceSha256": data["sourceSha256"],
-               "sourceUrl": data["sourceUrl"], "csv": reference(csv_path, raw_csv)}
-    editions = list(manifest["editions"]) if manifest else []
-    editions.append(edition)
-    # Same-date revisions become latest; older backfills cannot replace a newer as-of.
-    latest = manifest["latest"] if manifest else edition
-    if (edition["priceAsOf"], edition["reportDate"]) >= (latest["priceAsOf"], latest["reportDate"]):
-        latest = edition
-    next_manifest = {
-        "schemaVersion": 1, "sourceId": SOURCE_ID, "status": "ok", "checkedAt": now.isoformat(),
-        "latest": latest, "editions": sorted(editions, key=lambda item: (item["reportDate"], item["path"]), reverse=True),
-        "publicDisplayApproved": True,
-        "verifiedMappings": mappings,
-        "publicDisplayBasis": "User requested public Hub integration of BOS equity coverage numeric/reference data. MSCI ESG is omitted. This records user publication scope, not a provider licence verification.",
-    }
-    immutable_write(root / json_path, raw_json)
-    immutable_write(root / csv_path, raw_csv)
-    atomic_manifest(manifest_path, next_manifest)
+    next_manifest, writes, obsolete = update_plan(root, manifest, stored, public_data, now)
+    next_manifest.update(publicDisplayApproved=True, verifiedMappings=mappings,
+                         publicDisplayBasis="User requested public Hub integration of BOS equity coverage numeric/reference data. MSCI ESG is omitted. This records user publication scope, not a provider licence verification.")
+    warnings = publish_plan(root, previous_manifest_bytes, next_manifest, writes, obsolete)
     return {"status": "accepted", "reportDate": data["reportDate"], "priceAsOf": data["priceAsOf"],
-            "records": len(data["records"]), "latestReportDate": latest["reportDate"],
-            "manifest": str(manifest_path), "omittedFields": ["MSCI ESG rating"]}
+            "records": len(data["records"]), "latestReportDate": next_manifest["latest"]["reportDate"],
+            "manifest": str(manifest_path), "omittedFields": ["MSCI ESG rating"],
+            "valuationEditions": len(next_manifest["editions"]), "priceMonths": len(next_manifest["priceHistory"]["months"]),
+            "priceSources": len(next_manifest["priceHistory"]["sourceHashes"]), "warnings": warnings}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--feed-dir", required=True, type=Path)
-    parser.add_argument("--private-dir", required=True, type=Path)
+    parser.add_argument("--private-dir", type=Path)
     parser.add_argument("--pdf", type=Path, help="Use a supplied PDF instead of discovering online")
     parser.add_argument("--date", help="Expected source report date for a supplied PDF")
     parser.add_argument("--public", action="store_true", help="Write the reviewed numeric feed, excluding MSCI ESG")
     parser.add_argument("--allow-count-drop", action="store_true", help="Use only following explicit coverage-drop review")
     parser.add_argument("--mappings", type=Path, help="Reviewed initial listing mappings JSON list")
+    parser.add_argument("--maintain", action="store_true", help="Migrate/compact existing BOS data without downloading or changing source/check dates; requires --public")
+    parser.add_argument("--validate", action="store_true", help="Read-only validation of every retained valuation and monthly price reference")
     args = parser.parse_args()
+    if args.validate:
+        if args.maintain or args.pdf or args.date or args.mappings or args.allow_count_drop:
+            parser.error("--validate cannot be combined with import/maintenance options")
+        print(json.dumps(validate_feed(args.feed_dir), indent=2))
+        return
+    if args.maintain:
+        if not args.public or args.pdf or args.date or args.mappings or args.allow_count_drop:
+            parser.error("--maintain requires --public and cannot be combined with source/import overrides")
+        print(json.dumps(maintain(args.feed_dir), indent=2))
+        return
+    if not args.private_dir:
+        parser.error("--private-dir is required for PDF ingestion")
     from parse_bos_equity import parse_pdf
     now = dt.datetime.now(dt.timezone.utc)
     if args.pdf:
