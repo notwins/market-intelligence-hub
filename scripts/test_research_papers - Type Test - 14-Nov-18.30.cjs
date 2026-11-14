@@ -1,0 +1,17 @@
+const assert=require('node:assert/strict'),fs=require('node:fs');
+const api=require('../site/Research Papers - Type Library - 14-Nov-18.30.js');
+const data=JSON.parse(fs.readFileSync('site/data/Research Papers - Type Catalogue - 14-Nov-18.30.json','utf8'));
+const rows=data.records;
+assert.equal(new Set(rows.map(r=>r.url)).size,rows.length);
+assert(rows.length>800);assert(rows.every(r=>api.safeURL(r.url)&&r.references.length&&r.access));
+assert(!/chatgpt\.com\/c\/|codex-file-preview|C:\\\\Users|"threadId"/.test(JSON.stringify(data)));
+const base={query:'',publisher:'',collection:'',type:'',sort:'publisher'};
+const banking=api.select(rows,{...base,query:'Scenarios future banking'});assert(banking.length>=1);assert(banking.some(r=>r.collections.includes('Daily / Friday bond debrief')));
+const bonds=api.select(rows,{...base,collection:'Daily / Friday bond debrief'});assert(bonds.length>100);assert(bonds.every(r=>r.references.some(x=>x.collection==='Daily / Friday bond debrief')));
+assert(api.select(rows,{...base,query:'no-such-paper-xxxyyy'}).length===0);
+assert(api.select(rows,{...base,type:'Research papers & reports'}).some(r=>r.title.includes('Sharpe')));
+const jpm=rows.filter(r=>r.url.includes('/mi-guide-to-the-markets-us.pdf'));assert.equal(jpm.length,1);assert(jpm[0].access.includes('4Q 2026')&&jpm[0].access.includes('3Q 2026'));
+assert.equal(api.safeURL('javascript:alert(1)'),null);assert.equal(api.safeURL('https://name:password@example.com'),null);
+const attack={...rows[0],title:'=HYPERLINK("x")'};assert(api.csv([attack]).includes('"\'=HYPERLINK(""x"")"'));
+const html=fs.readFileSync('site/v4.html','utf8');assert(html.includes('id="research-papers-catalogue"'));assert(html.includes('content-source.js'));assert(html.includes('Research Papers - Type Library - 14-Nov-18.30.js'));
+console.log(`PASS research catalogue: ${rows.length} distinct source URLs, citation provenance, collection/search filters, rolling-edition limits, safe links and CSV escaping`);
