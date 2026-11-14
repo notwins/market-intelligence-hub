@@ -1,0 +1,86 @@
+{
+  "app": "Market Intel",
+  "specification": "Supplied Main UI V2.4",
+  "rollout": {
+    "minimumDataRows": 51,
+    "columnThreshold": null,
+    "basis": "complete permitted logical source before paging; current host filters remain locked scope"
+  },
+  "tables": [
+    {
+      "app": "Market Intel",
+      "route": "v4.html#master/pivot",
+      "owner": "site/v4-tools.js / mountGroupingPivots",
+      "provider": "master-v3.json records",
+      "grain": "source security",
+      "snapshotRows": 8466,
+      "mode": "two-axis",
+      "metrics": [
+        "count"
+      ],
+      "verified": "real source + DOM + Chromium"
+    },
+    {
+      "app": "Market Intel",
+      "route": "v4.html#ust",
+      "owner": "site/v4-tools.js",
+      "provider": "ust-v3.json rows / ustRows()",
+      "grain": "source observation",
+      "snapshotRows": 356,
+      "mode": "two-axis",
+      "metrics": [
+        "count"
+      ],
+      "limits": "Unverified identity/time/raw price convention retained."
+    },
+    {
+      "app": "Market Intel",
+      "route": "v4.html#history/si",
+      "owner": "site/si-pricing.js",
+      "provider": "si-pricing-reference.json / filtered()",
+      "grain": "whole basket source record",
+      "snapshotRows": 225,
+      "mode": "two-axis",
+      "metrics": [
+        "count"
+      ],
+      "limits": "Basket counted once; source CPN/tenor qualifications retained."
+    },
+    {
+      "app": "Market Intel",
+      "route": "external-sources.html",
+      "owner": "site/external-sources.js",
+      "provider": "full records before pager",
+      "grain": "source link metadata",
+      "snapshotRows": 3030,
+      "mode": "two-axis",
+      "metrics": [
+        "count"
+      ],
+      "limits": "Multi-tag axes excluded; source access status is dated metadata."
+    },
+    {
+      "app": "Market Intel",
+      "route": "v4.html#history/fx or #history/yield",
+      "owner": "site/v4-tools.js / registerHistoryPivot",
+      "provider": "original selected series levels before rebasing",
+      "grain": "observation month",
+      "verifiedFilteredFXRows": 241,
+      "mode": "one-axis or typed pair where useful",
+      "metrics": [
+        "count"
+      ],
+      "limits": "Year and month are variants of one date field; no rate/index summation."
+    }
+  ],
+  "limits": [
+    "50 or fewer source data rows receive no rollout panel.",
+    "Frozen research pages, historical archives, static exported reports/PDFs and existing dedicated heat maps retain their original owners.",
+    "Identifiers and unsupported/multi-valued fields are not automatic grouping suggestions.",
+    "No new financial formula, FX conversion, network service, user data migration, schedule or hosting audience change."
+  ],
+  "rollback": {
+    "baseline": "acc9b6f46d656c24cbaf97a4e6258d7c6c864f5e",
+    "rule": "Restore only the explicit UI/test paths on latest main; retain schema-1 independent content reader and all content."
+  }
+}

@@ -1,6 +1,6 @@
 /* Pure-model and real-source coverage: no browser/network dependency. */
 const assert=require('node:assert/strict'),fs=require('node:fs'),P=require('../site/grouping-pivot.js');
-assert(!P.eligible(50,6));assert(!P.eligible(51,5));assert(P.eligible(51,6));
+assert(!P.eligible(50,6));assert(P.eligible(51,5));assert(P.eligible(51,2));assert(P.eligible(51,6));
 const rows=Array.from({length:90},(_,i)=>({id:i,currency:i%3===0?'SGD':i%3===1?'AUD':'USD',type:i%2?'Shares':'Bonds',n:i===0?null:i-50}));
 const y=P.dimension({key:'type',label:'Type'},rows),x=P.dimension({key:'currency',label:'Currency'},rows);
 assert.deepEqual(x.groups.map(g=>g.label),['SGD','AUD','USD']);
@@ -21,3 +21,5 @@ const dates=P.dimension({key:'date',type:'year'},[{date:'2025-11-01'},{date:'202
 for(const [file,key,columns]of[['master-v3.json','records',20],['ust-v3.json','rows',6],['si-pricing-reference.json','rows',10]]){const data=JSON.parse(fs.readFileSync('site/data/'+file)),source=data[key];assert(P.eligible(source.length,columns));const before=JSON.stringify(source),currency=P.dimension({key:'currency'},source),m=P.countMatrix(source,currency);assert.equal(m.total,source.length);assert.equal([...m.rowTotals.values()].reduce((a,b)=>a+b,0),source.length);assert.equal(JSON.stringify(source),before);}
 const html=fs.readFileSync('site/v4.html','utf8'),tools=fs.readFileSync('site/v4-tools.js','utf8'),si=fs.readFileSync('site/si-pricing.js','utf8');assert(html.includes('grouping-pivot.js'));assert(tools.includes('sourceRows:X.master.records'));assert(tools.includes('rows:ustRows()'));assert(si.includes('sourceRows:data.rows,rows:filtered()'));assert(si.includes('tenor units')||si.includes('Tenor units'));assert(tools.includes('mountGroupingPivots();translateDOM();'));
 console.log('Grouping pivot: strict thresholds, stable ranges, totals, missing/zero, complete-source adapters and non-mutation checks passed.');
+
+require('./Verify Universal Navigator - Type Test - 14-Nov-22.07.cjs');
