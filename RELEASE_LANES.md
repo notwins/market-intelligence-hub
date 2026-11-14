@@ -1,5 +1,10 @@
 # UI and report release-lane preflight
 
+Current full-report publishing uses `scripts/research_release_guard.py` and
+`docs/research-publisher-runbook.md`: new dated report files plus one immutable
+record, with no legacy-register edit. The older register-based pilot described
+below is historical; do not use it for new automated or standalone full reports.
+
 Status: optional read-only operational tool, not enabled in CI or the publisher.
 
 ## Purpose
