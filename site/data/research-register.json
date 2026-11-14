@@ -1210,6 +1210,24 @@
         "sha256": "1cfe5dca685064420e6206e656c0dc47a851c44cea6adc64a26d16f6dbf62962",
         "verification": "original-document-completeness-reviewed"
       }
+    },
+    {
+      "id": "research-pimco-public-companion-2026-11-14",
+      "title": "PIMCO Income, UST and Temasek: one-page public companion",
+      "href": "research/pimco-public-companion-2026-11-14/",
+      "date": "2026-11-14",
+      "date_label": "Companion publication",
+      "state": "published",
+      "edition": "One-page public companion",
+      "section": "Research",
+      "tags": [
+        "ticker.pimco",
+        "asset.fixed_income_bonds"
+      ],
+      "summary": "A plain-language comparison of a managed income fund and direct bonds, linked to the public research adaptation. No current price or yield.",
+      "assets": [],
+      "published_date": "2026-11-14",
+      "sha256": "a2514285f0d4c260562c00b2c4bd64741d14532d622e3551590f21aac3ae2357"
     }
   ]
 }
