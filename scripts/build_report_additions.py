@@ -65,6 +65,115 @@ def validate_full_editions(register, site=SITE):
         require(hashlib.sha256(path.read_bytes()).hexdigest() == full['sha256'], 'document hash mismatch')
         verified.append(row)
     return verified
+# Explicit public relationships; never inferred from similar titles.
+CARD_REVISIONS = {
+ 'research-cpf-life-yield-2026-11-05':'research-cpf-life-explained-2026-11-06-v2',
+ 'research-pimco-income-bonds-2026-11-06':'pending-pimco-v2',
+ 'research-snb-mas-policy-2026-11-05':'pending-snb-mas-v2',
+ 'market-understanding-howard-marks-2026-11-05':'market-understanding-howard-marks-2026-11-06-v2',
+ 'market-understanding-mas-snb-2026-11-05':'pending-mas-snb-v2',
+ 'market-understanding-creditworthiness-2026-11-05':'market-understanding-creditworthiness-2026-11-06-v2',
+ 'market-understanding-spx-floor-cap-2026-11-05':'market-understanding-spx-collars-2026-11-06',
+ 'market-understanding-ai-tech-2026-11-05':'pending-ai-tech-v2',
+}
+CARD_BRIEFS = {
+ 'research-xau-gold-outlook-2026-11-06-v2':'research-gold-xau-v2-one-pager-2026-11-14',
+ 'research-diversification-made-simple-2026-11-06':'research-diversification-one-pager-2026-11-14',
+ 'pending-pimco-v2':'research-pimco-public-companion-2026-11-14',
+ 'market-understanding-spx-collars-2026-11-06':'research-spx-collar-public-companion-2026-11-14',
+ 'pending-mas-snb-v2':'research-mas-snb-one-page-2026-11-14',
+ 'research-cpf-oa-temasek-2070-2026-11-04':'research-cpf-temasek-two-page-2026-11-14',
+ 'research-bis-ai-financing-loop-2026-11-13':'research/bis-ai-financing-loop-2026-11-13/AI_Circular_Financing_One_Pager_2026-11-13.pdf',
+}
+# Explicit archived readings/companion formats, still present in My research.
+CARD_ARCHIVE = set(CARD_REVISIONS) | {
+ 'research-xau-gold-outlook-2026-11-06',
+ 'pending-gold-v2-pdf','pending-spx-pdf','pending-cpf-source-pdf','pending-wealth-source-pdf',
+ 'global-credit-public-2026-11-07',
+ 'research-ocbc-home-loans-2026-11-13','research-ocbc-premier-welcome-2026-11-13',
+} | {v for v in CARD_BRIEFS.values() if '/' not in v}
+
+def main_research_cards(page, register, standard, site=SITE):
+    """Server-render public cards, preserving groups, anchors and earlier links.
+
+    Full-report and brief anchors work without JavaScript or a runtime register.
+    """
+    from urllib.parse import urljoin, urlsplit
+    rows={x['id']:x for x in register['entries'] if x['state']=='published'}
+    tags={x['id']:x for x in standard['tags']}
+    by_href={x['href']:x for x in rows.values()}
+    seen=set();brief_urls=set();brief_images={}
+    page=re.sub(r'<!-- main-research-cards:start -->.*?<!-- main-research-cards:end -->','',page,flags=re.S)
+    def local(href):
+        u=urlsplit(urljoin('https://hub.invalid/market-understanding/',html.unescape(href)))
+        return u.path.lstrip('/') if u.netloc=='hub.invalid' else None
+    def public_path(path):
+        return isinstance(path,str) and bool(re.fullmatch(r'(?:research|market-understanding)/[A-Za-z0-9_./-]+',path)) and '..' not in path and (Path(site)/path).exists()
+    def render(row,attrs='',prior=()):
+        if row['id'] in seen:raise ValueError('Duplicate main card: '+row['id'])
+        seen.add(row['id'])
+        if not public_path(row['href']):raise ValueError('Invalid main card path')
+        chips=[]
+        for key in row['tags']:
+            tag=tags[key]
+            values=[tag[k] for k in ['text','background','dark_text','dark_background']]
+            if not all(re.fullmatch('#[A-Fa-f0-9]{6}',v) for v in values):raise ValueError('Invalid semantic palette')
+            style=';'.join(k+':'+v for k,v in zip(['--tag-text','--tag-bg','--tag-dark-text','--tag-dark-bg'],values))
+            chips.append('<span class="mu-card-tag" style="'+style+'">'+esc(tag['label'])+'</span>')
+        date=datetime.fromisoformat(row['date']).strftime('%d %b %Y').lstrip('0')
+        target=row['href'].removeprefix('market-understanding/') if row['href'].startswith('market-understanding/') else '../'+row['href']
+        body='<p class="mu-eyebrow"><time datetime="'+esc(row['date'])+'">'+date+'</time> · '+esc(row['edition'])+'</p><h3>'+esc(row['title'])+'</h3><p>'+esc(row['summary'])+'</p>'
+        if row['id']=='pending-ai-tech-v2':body+='<p class="mu-note">My thoughts · dated research interpretation.</p>'
+        body+='<div class="mu-card-tags">'+''.join(chips)+'</div><div class="mu-card-actions"><a href="'+esc(target)+'">Read full report →</a>'
+        brief=CARD_BRIEFS.get(row['id'])
+        if brief:
+            if brief in rows:
+                b=rows[brief];brief=b['href'];label=b['title']
+            elif brief.endswith('.pdf') and brief in row['assets']:
+                label=row['title']+' · one-page PDF brief'
+            else:raise ValueError('Unpublished or unregistered brief pairing')
+            if not public_path(brief):raise ValueError('Missing brief artifact')
+            brief_urls.add('../'+brief)
+            if row['id']=='research-bis-ai-financing-loop-2026-11-13':
+                image='research/bis-ai-financing-loop-2026-11-13/AI_Circular_Financing_One_Pager_2026-11-13.png'
+                if image not in row['assets'] or not public_path(image):raise ValueError('Missing registered BIS brief preview')
+                brief_images['../'+brief]='../'+image
+            body+='<button type="button" class="mu-quick-read" hidden data-quick-read="../'+esc(brief)+'" data-brief-title="'+esc(label)+'">Quick read</button><a class="mu-open-brief" href="../'+esc(brief)+'" target="_blank" rel="noopener">Open brief'+(' PDF' if brief.endswith('.pdf') else '')+' ↗</a>'
+        body+='</div>'
+        links=[];used={row['href'],brief}
+        for href,label in prior:
+            normalized=urlsplit(urljoin('https://hub.invalid/market-understanding/',html.unescape(href)))
+            identity=normalized.path.lstrip('/')+('?' + normalized.query if normalized.query else '')+('#'+normalized.fragment if normalized.fragment else '')
+            if identity in used:continue
+            used.add(identity);links.append('<a href="'+esc(html.unescape(href))+'">'+label+'</a>')
+        if links:body+='<details class="mu-card-previous"><summary>Earlier edition &amp; downloads</summary>'+''.join(links)+'</details>'
+        return '<article class="mu-writeup"'+attrs+' data-main-research="'+esc(row['id'])+'">'+body+'</article>'
+    def replace(match):
+        attrs,body=match.groups()
+        links=re.findall(r'<a\b[^>]*href="([^"]+)"[^>]*>(.*?)</a>',body,re.S)
+        primary=next((by_href[local(h)] for h,_ in links if local(h) in by_href),None)
+        if not primary:return match.group()
+        primary=rows[CARD_REVISIONS.get(primary['id'],primary['id'])]
+        attrs=re.sub(r' data-main-research="[^"]+"','',attrs)
+        return render(primary,attrs,links)
+    # Rewrite only existing removable card inserts. All explainer chapters survive.
+    for marker in ['publication-audit-20261106','research-readings','published-writeups']:
+        pattern=r'(<!-- '+marker+r':start -->)(.*?)(<!-- '+marker+r':end -->)'
+        page=re.sub(pattern,lambda m:m[1]+re.sub(r'<article class="mu-writeup"([^>]*)>(.*?)</article>',replace,m[2],flags=re.S)+m[3],page,flags=re.S)
+    remaining=sorted((x for x in rows.values() if x['id'] not in seen|CARD_ARCHIVE),key=lambda x:(x['date'],x['id']),reverse=True)
+    cards=''.join(render(row) for row in remaining)
+    block='<section class="mu-writeups" id="main-published-research" aria-labelledby="main-research-title"><div class="mu-writeups-heading"><div><p class="mu-eyebrow">Published full articles</p><h2 id="main-research-title">Research to read in full</h2><p>Each card opens its dated public report. A Quick read is available only when a matching published brief exists. Earlier editions and all companion formats remain in My research.</p></div><a href="#my-research">Search all editions ↓</a></div><div class="mu-writeups-grid">'+cards+'</div></section>'
+    script=r'''
+<dialog id="research-quick-read" class="mu-brief-dialog" aria-labelledby="research-brief-title"><div class="mu-brief-bar"><h2 id="research-brief-title">Quick read</h2><button type="button" data-close-brief>Close quick read</button></div><p><a data-open-brief target="_blank" rel="noopener">Open brief in a new tab ↗</a></p><p data-brief-help></p><div data-brief-content></div></dialog>
+<script type="module" id="research-quick-read-script">(()=>{'use strict';const allowed=__BRIEF_URLS__,dialog=document.getElementById('research-quick-read');if(!dialog||typeof dialog.showModal!=='function')return;const content=dialog.querySelector('[data-brief-content]'),link=dialog.querySelector('[data-open-brief]'),title=dialog.querySelector('h2'),help=dialog.querySelector('[data-brief-help]');let opener;document.querySelectorAll('[data-quick-read]').forEach(button=>{if(!allowed.includes(button.dataset.quickRead))return;button.hidden=false;button.addEventListener('click',()=>{const path=button.dataset.quickRead;if(!allowed.includes(path))return;opener=button;title.textContent=button.dataset.briefTitle;link.href=path;content.replaceChildren();const pdf=path.endsWith('.pdf');help.textContent=pdf?'This is the matching published PDF brief. If the viewer is unavailable, use Open brief above.':'The exact matching published brief appears below. Open brief provides a separate reading window.';if(!(pdf&&matchMedia('(max-width:620px)').matches)){const frame=document.createElement('iframe');frame.title=button.dataset.briefTitle;frame.src=path;frame.addEventListener('load',()=>{try{frame.contentDocument.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();dialog.close();}},true);}catch{}});content.append(frame);}dialog.showModal();dialog.querySelector('[data-close-brief]').focus();});});dialog.querySelector('[data-close-brief]').addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{content.replaceChildren();opener?.focus();});})();</script>
+'''
+    script=script.replace('const allowed=__BRIEF_URLS__,dialog=', 'const images=__BRIEF_IMAGES__,allowed=__BRIEF_URLS__,dialog=')
+    script=script.replace("if(!(pdf&&matchMedia('(max-width:620px)').matches)){","if(pdf&&images[path]&&matchMedia('(max-width:620px)').matches){const image=document.createElement('img');image.src=images[path];image.alt='One-page preview of the 13 November AI financing brief. Open brief PDF for the original document.';content.append(image);}else if(!(pdf&&matchMedia('(max-width:620px)').matches)){")
+    script=script.replace('__BRIEF_URLS__',json.dumps(sorted(brief_urls),ensure_ascii=True)).replace('__BRIEF_IMAGES__',json.dumps(brief_images,ensure_ascii=True))
+    new='<!-- main-research-cards:start --><link rel="stylesheet" href="market-understanding.css?v=20261114.cards1">'+block+script+'<!-- main-research-cards:end -->'
+    return page.replace('<!-- publication-audit-20261106:start -->','<!-- publication-audit-20261106:start -->'+new,1)
+
+
 def money(v, digits=0): return f'{v:,.{digits}f}'
 def table(caption, headers, rows):
     return '<details class="ra-data" open><summary>Read the values and calculation</summary><p class="ra-note">On a small screen, swipe the table horizontally. Keyboard: focus the table, then use the arrow keys.</p><div class="ra-table" tabindex="0" role="region" aria-label="'+esc(caption)+'"><table><caption>'+esc(caption)+'</caption><thead><tr>'+''.join('<th scope="col">'+esc(x)+'</th>' for x in headers)+'</tr></thead><tbody>'+''.join('<tr>'+''.join(('<th scope="row">' if i==0 else '<td>')+esc(c)+('</th>' if i==0 else '</td>') for i,c in enumerate(row))+'</tr>' for row in rows)+'</tbody></table></div></details>'
@@ -186,6 +295,8 @@ def main():
   if shortcuts:output=output.replace('</header>','</header>'+shortcuts.group(),1)
   if register_style:output=output.replace('</head>',register_style.group()+'</head>',1)
   if register_script:output=output.replace('</body>',register_script.group()+'</body>',1)
+  if path=='market-understanding/index.html' and register_path.exists():
+   output=main_research_cards(output,json.loads(register_path.read_text()),json.loads((SITE/'data/external-source-standard.json').read_text()),SITE)
   p.write_text(output)
  manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
  print('Built 5 additive report companions; original content retained apart from listed presentation-copy corrections.')

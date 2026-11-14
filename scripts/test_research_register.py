@@ -31,6 +31,75 @@ class ResearchRegisterTests(unittest.TestCase):
  def test_registered_full_edition_documents_are_bound_to_reviewed_bytes(self):
   from build_report_additions import validate_full_editions
   validate_full_editions(self.data,SITE)
+ def test_main_cards_cover_published_articles_without_brief_or_archive_duplicates(self):
+  from build_report_additions import CARD_ARCHIVE,CARD_BRIEFS
+  page=(SITE/'market-understanding/index.html').read_text()
+  cards=re.findall(r'<article class="mu-writeup"[^>]*data-main-research="([^"]+)"[^>]*>(.*?)</article>',page,re.S)
+  ids=[key for key,_ in cards];self.assertEqual(len(ids),len(set(ids)))
+  expected={r['id'] for r in self.data['entries'] if r['state']=='published'}-CARD_ARCHIVE
+  self.assertEqual(set(ids),expected)
+  rows={r['id']:r for r in self.data['entries']};by_id=dict(cards)
+  for key,body in cards:
+   import html
+   row=rows[key];self.assertIn('<h3>'+html.escape(row['title'])+'</h3>',body)
+   target=row['href'].removeprefix('market-understanding/') if row['href'].startswith('market-understanding/') else '../'+row['href']
+   self.assertIn('datetime="'+row['date']+'"',body);self.assertIn(target+'">Read full report',body)
+   for tag in row['tags']:self.assertIn(html.escape(self.tags[tag]['label']),body)
+  ai=by_id['research-ai-circular-financing-2026-11-10']
+  self.assertNotIn('data-quick-read',ai);self.assertNotIn('2026-11-13',ai)
+  for key,brief in CARD_BRIEFS.items():
+   href=rows[brief]['href'] if brief in rows else brief
+   self.assertIn('data-quick-read="../'+href+'"',by_id[key])
+   self.assertIn('href="../'+href+'" target="_blank"',by_id[key])
+  self.assertIn('pending-mas-snb-v2',by_id);self.assertIn('pending-snb-mas-v2',by_id)
+  self.assertNotIn('data-quick-read',by_id['pending-snb-mas-v2'])
+ def test_card_rebuild_is_idempotent_and_preserves_source_links(self):
+  from build_report_additions import main_research_cards
+  standard=json.loads((SITE/'data/external-source-standard.json').read_text())
+  page=(SITE/'market-understanding/index.html').read_text()
+  self.assertEqual(main_research_cards(page,self.data,standard,SITE),page)
+  rebuilt=main_research_cards(page,self.data,standard,SITE)
+  self.assertEqual(rebuilt.count('id="research-quick-read"'),1)
+  self.assertEqual(rebuilt.count('id="main-published-research"'),1)
+  self.assertLess(rebuilt.index('id="main-published-research"'),rebuilt.index('id="my-research"'))
+  self.assertIn('<!-- research-shortcuts:start -->',rebuilt)
+ def test_quick_read_has_independent_links_and_strict_public_targets(self):
+  page=(SITE/'market-understanding/index.html').read_text()
+  script=re.search(r'<script type="module" id="research-quick-read-script">(.*?)</script>',page,re.S).group(1)
+  self.assertIn("allowed.includes(path)",script);self.assertIn("dialog.showModal()",script)
+  self.assertIn("dialog.close()",script);self.assertIn("opener?.focus()",script)
+  self.assertIn("content.replaceChildren()",script)
+  self.assertIn("pdf&&matchMedia('(max-width:620px)').matches",script)
+  self.assertNotIn('fetch(',script)
+  buttons=re.findall(r'<button[^>]*data-quick-read="([^"]+)"[^>]*>',page)
+  self.assertEqual(len(buttons),7)
+  for path in buttons:
+   self.assertTrue(path.startswith('../research/'))
+   self.assertNotIn('..',path[3:]);self.assertTrue((SITE/path[3:]).exists())
+  self.assertIn('aria-labelledby="research-brief-title"',page)
+ def test_quick_read_escape_in_frame_returns_focus_and_rejects_other_origins(self):
+  code=r"""
+  const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+  const page=fs.readFileSync('site/market-understanding/index.html','utf8');
+  const script=page.match(/<script type="module" id="research-quick-read-script">([\s\S]*?)<\/script>/)[1];
+  let active;
+  class E{constructor(){this.events={};this.children=[];this.hidden=true;}
+   addEventListener(k,v){this.events[k]=v;}append(e){this.children.push(e);}replaceChildren(){this.children=[];}focus(){active=this;}}
+  const close=new E(),content=new E(),link=new E(),title=new E(),help=new E(),dialog=new E();
+  dialog.querySelector=q=>({'[data-brief-content]':content,'[data-open-brief]':link,'h2':title,'[data-brief-help]':help,'[data-close-brief]':close})[q];
+  dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.events.close();};
+  const valid=new E(),invalid=new E();valid.dataset={quickRead:'../research/gold-xau-v2-one-pager-2026-11-14/',briefTitle:'Exact Gold brief'};invalid.dataset={quickRead:'https://other.invalid/private',briefTitle:'Wrong'};
+  const doc={getElementById:()=>dialog,querySelectorAll:()=>[valid,invalid],createElement:()=>{const frame=new E();frame.contentDocument=new E();return frame;}};
+  vm.runInNewContext(script,{document:doc,matchMedia:()=>({matches:false})});
+  assert.equal(valid.hidden,false);assert.equal(invalid.hidden,true);assert(!invalid.events.click);
+  valid.events.click();assert(dialog.open);assert.equal(active,close);assert.equal(link.href,valid.dataset.quickRead);
+  const frame=content.children[0];frame.events.load();let prevented=false;
+  frame.contentDocument.events.keydown({key:'Escape',preventDefault(){prevented=true;},stopPropagation(){}});
+  assert(prevented);assert.equal(dialog.open,false);assert.equal(content.children.length,0);assert.equal(active,valid);
+  valid.events.click();close.events.click();assert.equal(dialog.open,false);assert.equal(active,valid);
+  """
+  p=subprocess.run(['node','-e',code],cwd=ROOT,text=True,capture_output=True)
+  self.assertEqual(p.returncode,0,p.stdout+p.stderr)
  def test_full_edition_publication_gate_rejects_extracts_and_bad_documents(self):
   import copy,tempfile
   from build_report_additions import validate_full_editions
