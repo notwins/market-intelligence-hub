@@ -1,0 +1,23 @@
+name: Research and UI ownership
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  ownership:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Check immutable research and separate release paths
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python3 scripts/research_release_guard.py --base "$BASE_SHA" --head "$HEAD_SHA"
+      - name: Validate accepted records and public files
+        run: |
+          python3 scripts/research_feed.py
+          python3 scripts/validate_research_contracts.py
+          node scripts/test_research_feed.cjs

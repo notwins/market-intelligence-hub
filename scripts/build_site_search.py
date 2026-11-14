@@ -68,6 +68,10 @@ def reading_sections(record,kind):
  return [dict(label=label,text=re.sub(r'https?://\S+','',record[key]).strip()) for label,key in fields if isinstance(record.get(key),str) and record[key].strip()]
 
 def build():
+ from research_feed import build as build_feed
+ feed=build_feed(ROOT)
+ import subprocess
+ subprocess.run(['node',str(ROOT.parent/'scripts/build_research_feed.cjs'),str(ROOT)],check=True)
  rows=[];seen=set()
  def add(kind,title,text,href,date=None,source=None,status='Dated saved content',tags=None,location=None,reading=None):
   key=(kind,title,href,str(date),str(text))
@@ -143,8 +147,16 @@ def build():
    if not self.skip:self.out.append(d)
  # Catalogues all public HTML pages, excludes code and transient UI preferences.
  research_metadata={r['href']+'index.html' if r['href'].endswith('/') else r['href']:r for r in read('data/research-register.json')['entries'] if r.get('href') and r.get('state')=='published'}
+ automated_pages=set()
+ for record in feed['records']:
+  report=record['full_report_url'];parsed=Text();parsed.feed((ROOT/report).read_text(encoding='utf-8'))
+  add('Research edition',record['title'],record['summary']+' '+' '.join(parsed.out),report,record['cutoff_sgt'],None,'Verified complete dated research',
+      [feed['tags'][t]['label'] for t in record['tags']],{'label':'Research Explained → '+record['title'],'href':report,'exact':True})
+  rows[-1]['display_date']=record['cutoff_sgt'];rows[-1]['date_label']='Research cutoff (SGT)'
+  automated_pages.update('research/'+record['id']+'/'+name for name in record['assets'] if name.endswith('.html'))
  registered_pages={r['href']+'index.html' if r['href'].endswith('/') else r['href'] for r in read('data/research-register.json')['entries'] if r.get('href') and r.get('state')=='published'}
  for file in sorted(ROOT.rglob('*.html')):
+  if file.relative_to(ROOT).as_posix() in automated_pages or file.name=='research-feed.html':continue
   if file.name in ['search.html','tag-map.html','index.html','v1.html','v3.html','v3-backup.html','v3-settings-preview.html','saved-securities.html'] and file.relative_to(ROOT).as_posix() not in registered_pages and file.relative_to(ROOT).as_posix() not in ['market-understanding/us-earnings-cash-flow-2026-11-06/index.html','market-understanding/bond-research-review-2026-11-06/index.html','market-understanding/ai-selloff-2026-11-06/index.html','market-understanding/treasuries-chf-gold-2026-11-06/index.html','market-understanding/mas-snb-2026-11-05/index.html','market-understanding/ai-tech-2026-11-05/index.html','market-understanding/ai-data-centres-2026-11-05/index.html','market-understanding/structured-investment-hypothetical/index.html','market-understanding/spx-floor-cap-2026-11-05/index.html','research/nvda-2026-11-05/index.html','research/tsm-2026-11-05/index.html','research/diversification-made-simple-2026-11-06/index.html','research/sti-banks-2026-11-06/index.html','market-understanding/spx-collars-2026-11-06/index.html','market-understanding/creditworthiness-2026-11-06-v2/index.html','research/cpf-life-explained-2026-11-06-v2/index.html','research/sti-banks-part2-2026-11-06/index.html','market-understanding/howard-marks-2026-11-06-v2/index.html','research/anthropic-ipo-2026-11-05/index.html','research/jpm-price-growth-2026-11-05/index.html','research/xau-central-banks-2026-11-05/index.html','research/xau-gold-outlook-2026-11-06/index.html','research/xau-gold-outlook-2026-11-06-v2/index.html','research/historical-market-events-2026-11-05/index.html','research/cpf-life-yield-2026-11-05/index.html','research/pimco-income-bonds-2026-11-06/index.html','research/electricity-infrastructure-2026-11-05/index.html','research/oaktree-rates-wayne-dahl-2026-11-05/index.html','research/snb-mas-policy-2026-11-05/index.html']:continue
   p=Text();p.feed(file.read_text());title=re.search(r'<title>(.*?)</title>',file.read_text(),re.S)
   add('Page',re.sub('<[^>]+>','',title.group(1)) if title else file.stem,' '.join(p.out),file.relative_to(ROOT).as_posix(),None,None,'Public page text; JavaScript-only content indexed separately where supported')

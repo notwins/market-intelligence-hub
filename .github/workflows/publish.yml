@@ -21,6 +21,7 @@ jobs:
     outputs:
       update_outcome: ${{ steps.update.outcome }}
       history_outcome: ${{ steps.history.outcome }}
+      source_sha: ${{ steps.publication_revision.outputs.sha }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -72,6 +73,7 @@ jobs:
           node scripts/test_external_sources.cjs
           node scripts/test_external_sources_interactions.cjs
           node scripts/test_research_context.cjs
+          node scripts/test_research_feed.cjs
           node scripts/test_si_pricing.cjs
           node scripts/test_global_search.cjs
           node scripts/test_intel_quick_wins.cjs
@@ -151,6 +153,7 @@ jobs:
           node scripts/test_external_sources.cjs
           node scripts/test_external_sources_interactions.cjs
           node scripts/test_research_context.cjs
+          node scripts/test_research_feed.cjs
       - name: Build public publication timeline
         run: |
           python3 scripts/build_publication_timeline.py
@@ -172,6 +175,9 @@ jobs:
         with:
           name: pages-integrity-audit
           path: ${{ runner.temp }}/pages-integrity-audit.json
+      - name: Record the exact source revision for live verification
+        id: publication_revision
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-pages-artifact@v4
         with:
           path: ${{ runner.temp }}/mih-pages/site
@@ -179,17 +185,25 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.build.outputs.source_sha }}
       - uses: actions/configure-pages@v5
       - uses: actions/deploy-pages@v4
         id: deployment
         with:
           timeout: 1200000
+      - name: Verify accepted report destinations on the public site
+        env:
+          PAGES_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python3 scripts/verify_research_destinations.py --base-url "$PAGES_URL"
       - name: Flag feed failure after publishing visible health status
         if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure'
         run: |

@@ -7,7 +7,8 @@ import re
 from pathlib import PurePosixPath
 
 DERIVED = frozenset({'site/data/site-search.json', 'site/data/external-sources.json',
- 'site/data/article-palettes.json', 'site/data/publication-timeline.json'})
+ 'site/data/article-palettes.json', 'site/data/publication-timeline.json',
+ 'site/data/research-feed.json','site/data/research-feed-bootstrap.js','site/research-feed.html'})
 REGISTER = 'site/data/research-register.json'
 UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/market-understanding/market-understanding.css', 'scripts/build_report_additions.py',
@@ -16,7 +17,8 @@ UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/feed-freshness.js', 'site/research-shortcuts.css', 'site/market-snapshot.js',
  'site/global-search.js', 'site/search-query.js', 'site/search.html', 'site/favicon.ico',
  'scripts/test_sol_ui.cjs', 'scripts/test_saved_refresh.cjs',
- 'scripts/test_market_snapshot.cjs'})
+ 'scripts/test_market_snapshot.cjs','site/research-feed.js','site/research-feed.css',
+ 'site/research-register.js'})
 
 class Rejected(ValueError): pass
 

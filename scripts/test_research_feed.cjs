@@ -1,0 +1,14 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),R=require('../site/research-feed.js');
+const id='test-alpha-2026-11-14',hash='a'.repeat(64),tag={label:'Bonds',text:'#166534',background:'#F0FDF4',dark_text:'#86EFAC',dark_background:'#052E16'};
+const r={id,title:'Alpha <study>',summary:'Complete synthetic research',category:'Credit',tags:['bond'],kind:'complete-report',cutoff_sgt:'2026-11-14T08:00:00+08:00',verified_at_sgt:'2026-11-14T09:00:00+08:00',full_report_url:`research/${id}/index.html`,full_report_sha256:hash,assets:{'index.html':hash},quick_read:null};
+const f={schema_version:1,generation:1,revision:hash,verified_at_sgt:r.verified_at_sgt,records:[r],tags:{bond:tag}};
+R.validate(f);assert.equal(R.selected(f.records,'alpha bonds',f.tags).length,1);assert.equal(R.selected(f.records,'unknown',f.tags).length,0);
+const html=R.cards(f.records,f.tags,'../');assert(html.includes('Alpha &lt;study&gt;'));assert(html.includes('../research/'+id+'/index.html'));assert(!html.includes('Quick read'));
+assert.equal(R.libraryEntries(f)[0].href,r.full_report_url);
+for(const candidate of [{...f,records:[r,r],generation:2},{...f,records:[],generation:0},{...f,records:[{...r,full_report_url:'javascript:evil'}]},{...f,records:[{...r,quick_read:{edition_id:'other'}}]}])assert.throws(()=>R.retain(f,candidate));
+const brief={...r,assets:{...r.assets,'brief.html':'b'.repeat(64)},quick_read:{edition_id:id,full_report_sha256:hash,url:`research/${id}/brief.html`,sha256:'b'.repeat(64)}};
+const bf={...f,records:[brief]};R.validate(bf);const card=R.cards(bf.records,bf.tags);assert(card.includes('Quick read'));assert(card.includes('Open brief'));
+const source=fs.readFileSync('site/market-understanding/index.html','utf8');assert.equal((source.match(/id="automated-research"/g)||[]).length,1);assert(source.includes('research-feed-bootstrap.js'));
+R.validate(JSON.parse(fs.readFileSync('site/data/research-feed.json','utf8')));
+console.log('PASS feed schema, exact edition briefs, safe shared card renderer, search, last-good retention and page mount');

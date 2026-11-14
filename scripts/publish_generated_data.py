@@ -8,7 +8,8 @@ def publish(root, attempts=3):
   return subprocess.run(['git',*args],cwd=root,text=True,capture_output=True,check=check)
  # Derived catalogue is rebuilt for the Pages artifact after reconciliation.
  # Never create a repository commit merely because its build timestamp changed.
- indexes=['site/data/site-search.json','site/data/external-sources.json']
+ indexes=['site/data/site-search.json','site/data/external-sources.json',
+          'site/data/research-feed.json','site/data/research-feed-bootstrap.js','site/research-feed.html']
  for index in indexes:
   if git('ls-files','--error-unmatch',index,check=False).returncode==0:
    git('restore','--staged','--worktree','--',index)

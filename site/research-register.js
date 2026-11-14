@@ -25,6 +25,12 @@
     if (data.schema_version !== 1 || standard.version !== data.standard_version) throw new Error('Research standard mismatch');
     const tags = new Map(standard.tags.map(tag => [tag.id, tag]));
     const entries = data.entries;
+    function mergeFeed(feed) {
+      if (!root.ResearchFeed || !feed) return;
+      const known=new Set(entries.map(x=>x.id));
+      root.ResearchFeed.libraryEntries(feed).forEach(row=>{if(!known.has(row.id)){entries.push(row);known.add(row.id);}});
+    }
+    try { mergeFeed(root.MIH_RESEARCH_FEED); } catch { /* Existing verified library remains available. */ }
     const controls = host.querySelector('[data-research-controls]');
     const results = host.querySelector('[data-research-results]');
     const count = host.querySelector('[data-research-count]');
@@ -87,6 +93,15 @@
     descriptions.addEventListener('click',()=>{expanded=!expanded;descriptions.textContent=expanded?'Hide descriptions':'Show descriptions';descriptions.setAttribute('aria-pressed',String(expanded));results.querySelectorAll('details').forEach(details=>{details.open=expanded;});});
     reset.addEventListener('click',()=>{state.value='published';query.value='';category.value='';order.value='newest';render();});
     host.querySelector('[data-research-loading]').hidden=true;controls.hidden=false;render();
+    root.addEventListener('mih-research-feed-updated',event=>{
+      try {
+        mergeFeed(event.detail);
+        host.querySelector('[data-research-totals]').textContent=entries.filter(x=>x.state==='published').length+' published editions · '+entries.filter(x=>x.state==='pending').length+' pending files or revisions';
+        const existing=new Set(Array.from(category.options,x=>x.value));
+        [...new Set(entries.flatMap(x=>x.tags))].filter(id=>!existing.has(id)&&tags.has(id)).forEach(id=>{const option=element('option',tags.get(id).label);option.value=id;category.append(option);});
+        render();
+      } catch { /* Keep the prior verified library. */ }
+    });
   }
   start().catch(()=>{host.querySelector('[data-research-loading]').textContent='The research register could not be loaded. The existing research library and article links remain available below.';});
 })(typeof window !== 'undefined' ? window : globalThis);

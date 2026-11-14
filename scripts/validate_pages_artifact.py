@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 from audit_pages_artifact import audit, ROOT
 from validate_research_contracts import validate_site
+from verify_research_destinations import verify_staged
 
 
 def validate(artifact_root, report):
@@ -24,8 +25,10 @@ def validate(artifact_root, report):
     for name in checks:
         subprocess.run(['node', 'scripts/' + name], cwd=artifact_root, check=True)
     research_contracts = validate_site(artifact_root/'site')
+    served_research = verify_staged(artifact_root/'site')
     result = audit(ROOT/'site', artifact_root/'site')
     result['research_contracts'] = research_contracts
+    result['served_research_destinations'] = served_research
     result['source_git_commit'] = subprocess.check_output(
         ['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     result['final_validation'] = {'python': "unittest discover -s scripts -p test_*.py", 'javascript': checks}
