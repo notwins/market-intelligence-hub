@@ -2,6 +2,8 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),C=require('../site/publication-colour-core.js');
 const cat=JSON.parse(fs.readFileSync('site/data/publication-colour-catalogue.json','utf8')),tags=C.index(cat);
 assert.equal(Object.keys(tags).length,437);
+assert(!C.infer('Reconstruction funds and a well-funded military',cat).includes('sector.asset_management'));
+assert(C.infer('Asset management industry',cat).includes('sector.asset_management'));
 assert.equal(cat.explicit_company_tokens.NVDA,'ticker.nvidia_nvda');
 assert.deepEqual(C.infer('NVDA DE GOOG',cat),[]); // Metadata lookup does not relax prose guards.
 for(const text of ['Feed FedEx USD BOC DE NOW on a table','apple fruit and shell commands'])assert.deepEqual(C.infer(text,cat),[]);
