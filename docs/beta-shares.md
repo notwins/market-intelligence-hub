@@ -1,9 +1,10 @@
 # Beta Shares
 
 The V4 Historical charts section includes `#history/beta-shares`. Its chart,
-card and heatmap table views compare selected shares using the same dated
-Bloomberg return snapshot. Current earnings and watchlist cards expose the
-same returns in an expandable detail section.
+card and heatmap table views compare selected shares using a dated Bloomberg
+return snapshot for 2019–2025 and the latest available BOS YTD gain for 2026.
+Current earnings and watchlist cards expose the same figures in an expandable
+detail section, with their different sources and methods labelled.
 
 ## Return basis
 
@@ -18,10 +19,27 @@ derived from adjacent cumulative holding-period factors:
 
 `year y return = ((1 + HPR(y) / 100) / (1 + HPR(y+1) / 100) - 1) * 100`
 
-The 2026 value is the supplied holding-period return from 1 January 2026 to
-the inferred cutoff. It is labelled YTD and is not annualised. Missing periods
-remain missing. Charts do not interpolate unavailable years or mix these
-returns into the existing historical closing-price series.
+The default calendar display takes 2026 from the existing BOS feed's
+`ytdGainPct` field, labelled **2026 YTD · BOS**. The PDF calls it “YTD Gains
+(%)”; it does not specify whether dividends are included or the currency
+return methodology. This figure is therefore a **BOS YTD gain**, not a
+verified local-currency, gross-dividend total return. It keeps the BOS row's
+price observation date separately from the PDF publication date. Values
+retain source precision, including reported zeroes.
+
+`ShareEnrichment.ytdFor(item, year=2026)` returns a period descriptor with
+the value, source, observation/report dates, basis and availability. It uses
+the same exact listing and currency guards as BOS valuations. Missing,
+nonfinite, wrong-year and future-dated values stay unavailable; the frozen
+19 September value is never substituted. An older valid same-year BOS
+observation may remain as an explicitly dated reference. A reviewed BOS-only
+listing can show 2026 while its earlier returns and credit remain unavailable.
+
+The original snapshot's 2026 holding-period return to the inferred cutoff is
+preserved in the immutable JSON. The holding-period and annualised display
+modes continue to use that snapshot for every start year. Completed calendar
+years are unchanged. Charts do not interpolate unavailable years or mix these
+figures into the existing historical closing-price series.
 
 The return cutoff does not establish an effective date for each credit rating,
 fundamental reporting period or old CSV price. Ratings retain agency, scope
@@ -32,6 +50,8 @@ periods prevent use of raw CSV monetary fields for cross-market comparisons.
 
 Existing BOS/current-price selection and Yahoo fallback remain authoritative.
 The enrichment snapshot never replaces a current quote or scheduled feed.
+The 2026 display reads the existing daily BOS feed and refreshes when its
+`bos-equity-updated` event arrives; it does not create another scheduled task.
 
 Default share-list sorting uses comparable BOS market capitalisation in USD.
 Missing capitalisations sort last with deterministic ties. Explicit alternative

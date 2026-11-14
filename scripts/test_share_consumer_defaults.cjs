@@ -59,14 +59,21 @@ function cut(file,first,next){const text=read(file);return text.slice(text.index
   const actual=context({ShareEnrichment:undefined,CustomEvent:class{constructor(type){this.type=type;}}});
   actual.ctx.document.dispatchEvent=event=>{for(const fn of actual.listeners[event.type]||[])fn(event);};
   const reviewed=require('../site/bos-equity.js').reviewedListings;
-  const bosValues={'AAPL US':5157.2,'NVDA US':4005.2,'MSFT US':3000,'BRK/B US':900};
-  actual.ctx.BOSEquity={reviewedListings:reviewed,version:()=> 'fixture',panel:()=>'',facts:()=>'',mount:()=>{},valuationById:id=>id in bosValues?{row:{instrumentId:id,instrumentType:'equity',currency:'USD',marketCapUsdBillions:bosValues[id],priceAsOf:'2026-11-12'},reportDate:'2026-11-13',current:true}:null};
+  const bosValues={'AAPL US':5157.2,'NVDA US':4005.2,'MSFT US':3000,'BRK/B US':900,'TSLA US':800};
+  // Source YTD Gains from the 13 November BOS PDF, prices as of 12 November.
+  const bosYtd={'AAPL US':31,'NVDA US':-11,'MSFT US':9,'BRK/B US':17,'TSLA US':-12};
+  actual.ctx.BOSEquity={reviewedListings:reviewed,version:()=> 'fixture',panel:()=>'',facts:()=>'',mount:()=>{},valuationById:id=>id in bosValues?{row:{instrumentId:id,instrumentType:'equity',currency:'USD',marketCapUsdBillions:bosValues[id],ytdGainPct:bosYtd[id],priceAsOf:'2026-11-12'},reportDate:'2026-11-13',current:true}:null};
   vm.runInContext(read('share-enrichment.js'),actual.ctx);await actual.ctx.ShareEnrichment.load();
   vm.runInContext(read('watchlist-report-links.js'),actual.ctx);vm.runInContext(read('watchlist.js'),actual.ctx);
   actual.ctx.MarketWatchlist.connect(()=>{});await tick();await tick();
   const realHtml=actual.ctx.MarketWatchlist.view();
   assert.equal((realHtml.match(/class="share-enrichment-details"/g)||[]).length,12);
-  assert.equal((realHtml.match(/No matched historical return or credit data/g)||[]).length,1,'TSLA remains explicitly unmatched');
+  assert.equal((realHtml.match(/No matched historical return or credit data/g)||[]).length,1,'TSLA prior-year history remains explicitly unmatched');
+  function detailFor(html,id){const card=html.indexOf('id="'+id+'"');assert(card>=0,'card exists: '+id);const start=html.indexOf('<details class="share-enrichment-details">',card);assert(start>=0,'return detail exists: '+id);return html.slice(start,html.indexOf('</details>',start)+10);}
+  for(const [ticker,value]of [['AAPL','+31.00%'],['NVDA','-11.00%'],['TSLA','-12.00%']]){
+    const detail=detailFor(realHtml,ticker);assert(detail.includes('2026 YTD · BOS: '+value+' as of 12 Nov 2026; PDF 13 Nov 2026'));
+    assert(detail.includes('dividend and currency return methodology are not specified'));
+  }
   assert.match(realHtml,/\+38\.92%/,'derived NVDA calendar return reaches the current card');
   assert.ok(realHtml.indexOf('id="AAPL"')<realHtml.indexOf('id="NVDA"'));
   assert.ok(realHtml.indexOf('id="NVDA"')<realHtml.indexOf('id="MSFT"'));
@@ -80,5 +87,12 @@ function cut(file,first,next){const text=read(file);return text.slice(text.index
   assert.equal((actual.nodes['earnings-desk'].innerHTML.match(/class="share-enrichment-details"/g)||[]).length,12);
   assert.equal((actual.nodes['earnings-desk'].innerHTML.match(/No matched historical return or credit data/g)||[]).length,1);
   assert.match(actual.nodes['earnings-desk'].innerHTML,/gross dividends reinvested/);
-  console.log('PASS actual enrichment schema, exact listing mappings, 11 matched plus one missing current card, and derived calendar values');
+  for(const [ticker,value]of [['AAPL','+31.00%'],['NVDA','-11.00%'],['TSLA','-12.00%'],['BRK.B','+17.00%']])assert(detailFor(actual.nodes['earnings-desk'].innerHTML,'earnings-'+ticker).includes('2026 YTD · BOS: '+value));
+  actual.nodes['watchlist-results']={innerHTML:''};bosYtd['AAPL US']=null;
+  actual.ctx.document.dispatchEvent(new actual.ctx.CustomEvent('bos-equity-updated'));
+  for(const [html,id]of [[actual.nodes['watchlist-results'].innerHTML,'AAPL'],[actual.nodes['earnings-desk'].innerHTML,'earnings-AAPL']]){
+    const detail=detailFor(html,id);assert(detail.includes('2026 YTD · BOS is unavailable'));assert(detail.includes('No frozen snapshot value is substituted.'));assert(!detail.includes('2026 YTD · BOS: +31.00%'));
+    assert.match(detail,/<td class="return-missing"[^>]*>Unavailable<\/td><\/tr>/,'2026 cell stays missing without BOS');
+  }
+  console.log('PASS actual current cards keep derived prior years, exact BOS YTD values/dates, BOS-only TSLA, alias guards and no frozen 2026 fallback');
 })().catch(error=>{console.error(error);process.exitCode=1;});
