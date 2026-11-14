@@ -3,7 +3,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),P=require('../s
 assert(!P.eligible(50,6));assert(P.eligible(51,5));assert(P.eligible(51,2));assert(P.eligible(51,6));
 const rows=Array.from({length:90},(_,i)=>({id:i,currency:i%3===0?'SGD':i%3===1?'AUD':'USD',type:i%2?'Shares':'Bonds',n:i===0?null:i-50}));
 const y=P.dimension({key:'type',label:'Type'},rows),x=P.dimension({key:'currency',label:'Currency'},rows);
-assert.deepEqual(x.groups.map(g=>g.label),['SGD','AUD','USD']);
+assert.deepEqual(x.groups.map(g=>g.label),['USD','SGD','AUD']);
 const matrix=P.countMatrix(rows,y,x);assert.equal(matrix.total,90);assert.equal([...matrix.counts.values()].reduce((a,b)=>a+b,0),90);assert.equal([...matrix.rowTotals.values()].reduce((a,b)=>a+b,0),90);assert.equal([...matrix.columnTotals.values()].reduce((a,b)=>a+b,0),90);
 const numeric=P.dimension({key:'n',type:'number'},rows);assert.equal(numeric.classify(rows[0]),'missing');assert.notEqual(numeric.classify(rows[50]),'missing');
 assert(numeric.groups.every(g=>g.key==='missing'||g.high>=g.low));

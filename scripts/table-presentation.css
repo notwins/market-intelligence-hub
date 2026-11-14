@@ -1,0 +1,30 @@
+/* V3 Earth & Slate surfaces; exact approved semantic label colours. */
+.gp-root,.portfolioPivot{--tp-paper:#FEFDFB;--tp-card:#FFFFFF;--tp-panel:#F4F5F1;--tp-focus:#EBF4F6;--tp-line:#D8E9EE;--tp-ink:#222D31;--tp-muted:#45535A;color:var(--tp-ink);background:var(--tp-paper);border-color:var(--tp-line)}
+.gp-root .gp-explorer,.portfolioPivot{border:1px solid var(--tp-line);border-top:3px solid #007190;border-radius:12px;box-shadow:0 2px 8px #222d3108}
+.gp-root .gp-explorer>summary,.portfolioPivot>summary{color:var(--tp-ink);background:var(--tp-focus);padding:15px 16px;min-height:50px}
+.gp-root .gp-explorer>summary>span,.portfolioPivot>summary>span:last-child{color:var(--tp-muted)}
+.gp-root .gp-content,.portfolioPivot .pivotBody{background:var(--tp-paper);color:var(--tp-ink);border-color:var(--tp-line)}
+.gp-root .gp-scroll,.portfolioPivot .pivotScroll{border:1px solid var(--tp-line);background:var(--tp-card);border-radius:8px;scrollbar-width:thin}
+.gp-root table,.portfolioPivot table{font-family:inherit;font-size:14px;font-variant-numeric:tabular-nums}
+.gp-root th,.gp-root td,.portfolioPivot .pivotScroll th,.portfolioPivot .pivotScroll td{color:var(--tp-ink);border-color:var(--tp-line);background:var(--tp-card)}
+.gp-root thead th,.gp-root tfoot th,.gp-root tfoot td,.gp-root .gp-total,.portfolioPivot thead th,.portfolioPivot tfoot th,.portfolioPivot tfoot td{background:var(--tp-panel);font-weight:650}
+.gp-root thead th,.portfolioPivot thead th{position:sticky;top:0;z-index:2}
+.gp-root tbody th:first-child,.portfolioPivot tbody th:first-child{position:sticky;left:0;z-index:1;text-align:left;background:var(--tp-card);font-weight:600}
+.gp-root thead th:first-child,.portfolioPivot thead th:first-child{left:0;z-index:3}
+.gp-root .tp-label,.portfolioPivot .tp-label,.tp-label{color:var(--tp-label)!important;background:var(--tp-chip);font-weight:600;border-radius:4px;padding:2px 5px;display:inline;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.tp-number,.gp-root td[data-tp-value],.portfolioPivot td[data-tp-value]{text-align:right!important;font-variant-numeric:tabular-nums}
+.tp-heat,.gp-root .tp-heat,.portfolioPivot .pivotScroll .tp-heat{background-color:var(--tp-heat)!important}
+.gp-root td button,.portfolioPivot .pivotScroll td>button,.portfolioPivot .pivotScroll th>button{text-align:right;min-height:38px;padding:6px 9px;background:transparent;color:inherit}
+.gp-root td button:hover,.portfolioPivot .pivotScroll td>button:hover{outline:1px solid #007190;outline-offset:-1px;background:#0071900b}
+.gp-root .tp-legend,.portfolioPivot .tp-legend{font-size:12px;line-height:1.6;color:var(--tp-muted);padding:10px 12px;background:var(--tp-panel);border-radius:6px;margin:10px 0}
+.gp-root .tn-nav,.portfolioPivot .tn-nav{border-color:var(--tp-line);background:var(--tp-card)}
+.gp-root .tn-modes button[aria-pressed=true],.portfolioPivot .tn-modes button[aria-pressed=true]{background:var(--tp-focus);border-color:#007190;text-decoration:none;box-shadow:inset 0 -2px #007190}
+.gp-root button:focus-visible,.gp-root select:focus-visible,.portfolioPivot button:focus-visible,.portfolioPivot select:focus-visible{outline:3px solid #007190;outline-offset:2px}
+.portfolioPivot .pivotScope{font-weight:600}.portfolioPivot .pivotControls select,.portfolioPivot button{color:var(--tp-ink);border-color:var(--tp-line);background:var(--tp-card)}
+html[data-theme=dark] .gp-root,html[data-theme=night] .gp-root,html[data-theme=charcoal] .gp-root,.dark .portfolioPivot,[data-theme=dark] .portfolioPivot,[data-theme=night] .portfolioPivot,[data-theme=charcoal] .portfolioPivot{--tp-paper:#1D2525;--tp-card:#1D2525;--tp-panel:#26302F;--tp-focus:#253B40;--tp-line:#486065;--tp-ink:#EEF2EF;--tp-muted:#BDC8C3}
+.dark .tp-label,[data-theme=dark] .tp-label,[data-theme=night] .tp-label,[data-theme=charcoal] .tp-label{color:var(--tp-label-dark)!important;background:var(--tp-chip-dark)}
+.dark .tp-heat,[data-theme=dark] .tp-heat,[data-theme=night] .tp-heat,[data-theme=charcoal] .tp-heat,.dark .portfolioPivot .pivotScroll .tp-heat,[data-theme=dark] .portfolioPivot .pivotScroll .tp-heat,[data-theme=night] .portfolioPivot .pivotScroll .tp-heat,[data-theme=charcoal] .portfolioPivot .pivotScroll .tp-heat,html[data-theme=dark] .gp-root .tp-heat,html[data-theme=night] .gp-root .tp-heat,html[data-theme=charcoal] .gp-root .tp-heat{background-color:var(--tp-heat-dark)!important}
+.dark .portfolioPivot .pivotScroll td,.dark .portfolioPivot .pivotScroll th,[data-theme=dark] .portfolioPivot .pivotScroll td,[data-theme=dark] .portfolioPivot .pivotScroll th{color:var(--tp-ink);background-color:var(--tp-card)}
+@media(max-width:700px){.gp-root,.portfolioPivot{font-size:14px}.gp-root .gp-content,.portfolioPivot .pivotBody{padding-left:10px;padding-right:10px}.gp-root .tn-modes button,.portfolioPivot .tn-modes button{flex:1 1 90px;font-size:14px}.gp-root .gp-explorer>summary,.portfolioPivot>summary{padding:12px}.gp-root .tp-legend,.portfolioPivot .tp-legend{font-size:12px}.gp-root .gp-scroll,.portfolioPivot .pivotScroll{max-height:420px}.gp-root td button,.portfolioPivot .pivotScroll td>button{min-height:44px}}
+@media(forced-colors:active){.tp-label{background:Canvas;color:CanvasText!important;border:1px solid CanvasText}.tp-heat{background:Canvas!important}.tp-number{color:CanvasText}}
+@media print{[data-auto-explorer]{display:none!important}}
