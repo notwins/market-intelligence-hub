@@ -7,18 +7,19 @@ function fixture(fail=false){
  const listeners={},events=[];let calls=0;
  const mappings=[['NVDA','USD','NVDA US'],['AAPL','USD','AAPL US'],['TSM','USD','TSM US'],['D05.SI','SGD','DBS SP'],['VOD.L','GBp','VOD LN'],['TSLA','USD','TSLA US'],['BRK-B','USD','BRK/B US']].map(([ticker,currency,instrumentId])=>({ticker,currency,instrumentId,listingId:ticker.toLowerCase(),verified:true}));
  const values=new Map([
-  ['NVDA US',{currency:'USD',marketCapUsdBillions:4005.2}],
-  ['AAPL US',{currency:'USD',marketCapUsdBillions:5157.2}],
+  ['NVDA US',{currency:'USD',marketCapUsdBillions:4005.2,ytdGainPct:27}],
+  ['AAPL US',{currency:'USD',marketCapUsdBillions:5157.2,ytdGainPct:31}],
   ['TSM US',{currency:'USD',marketCapUsdBillions:2103.1}],
-  ['DBS SP',{currency:'SGD',marketCapUsdBillions:156.9}],
+  ['DBS SP',{currency:'SGD',marketCapUsdBillions:156.9,ytdGainPct:32}],
   ['VOD LN',{currency:'GBp',marketCapUsdBillions:36.2}],
-  ['TSLA US',{currency:'USD',marketCapUsdBillions:900}],
+  ['TSLA US',{currency:'USD',marketCapUsdBillions:900,ytdGainPct:15}],
   ['BRK/B US',{currency:'USD',marketCapUsdBillions:1256}],
  ]);
  const now=Date.parse('2026-11-15T00:00:00Z');class FixedDate extends Date{constructor(...a){super(...(a.length?a:[now]));}static now(){return now;}}
- const context={Date:FixedDate,console,CustomEvent:class{constructor(type){this.type=type;}},document:{addEventListener:(type,fn)=>(listeners[type]??=[]).push(fn),dispatchEvent:event=>{events.push(event.type);for(const fn of listeners[event.type]||[])fn(event);}},fetch:async path=>{calls++;assert.equal(path,'data/beta-shares.json');if(fail)throw Error('offline');return {ok:true,json:async()=>structuredClone(snapshot)};},BOSEquity:{reviewedListings:mappings,version:()=> 'bos-v1',valuationById:id=>{const row=values.get(id);return row?{row:{...row,instrumentId:id,instrumentType:'equity',priceAsOf:'2026-11-12',price:123},reportDate:'2026-11-13',sourceUrl:'https://example.com/bos.pdf',current:id!=='DBS SP'}:null;},selectCurrent:(row,fallback,options)=>({close:row.price,date:row.priceAsOf,current:options.available,sourceLabel:'Bank of Singapore',sourceId:'bos'})},MarketPrices:{currentQuote:item=>({close:222,date:'2026-11-13',current:true,sourceId:'bos',sourceLabel:'Bank of Singapore'})}};
+ const feed={version:'bos-v1',reportDate:'2026-11-13'};
+ const context={Date:FixedDate,console,CustomEvent:class{constructor(type){this.type=type;}},document:{addEventListener:(type,fn)=>(listeners[type]??=[]).push(fn),dispatchEvent:event=>{events.push(event.type);for(const fn of listeners[event.type]||[])fn(event);}},fetch:async path=>{calls++;assert.equal(path,'data/beta-shares.json');if(fail)throw Error('offline');return {ok:true,json:async()=>structuredClone(snapshot)};},BOSEquity:{reviewedListings:mappings,version:()=>feed.version,valuationById:id=>{const row=values.get(id);return row?{row:{instrumentId:id,instrumentType:'equity',priceAsOf:'2026-11-12',price:123,...row},reportDate:feed.reportDate,sourceUrl:'https://example.com/bos.pdf',current:feed.current??id!=='DBS SP'}:null;},selectCurrent:(row,fallback,options)=>({close:row.price,date:row.priceAsOf,current:options.available,sourceLabel:'Bank of Singapore',sourceId:'bos'})},MarketPrices:{currentQuote:item=>({close:222,date:'2026-11-13',current:true,sourceId:'bos',sourceLabel:'Bank of Singapore'})}};
  context.window=context;vm.createContext(context);vm.runInContext(source,context);
- return {api:context.ShareEnrichment,context,events,values,calls:()=>calls};
+ return {api:context.ShareEnrichment,context,events,values,feed,calls:()=>calls};
 }
 (async()=>{
  const f=fixture(),api=f.api;
@@ -37,8 +38,28 @@ function fixture(fail=false){
  assert.equal(api.find({ticker:'NVDA',asset_type:'index'}),null);
  assert.equal(api.find('TSLA'),null,'ticker-only source stub does not become data');
  const nvda=api.find('NVDA');assert(Object.isFrozen(nvda)&&Object.isFrozen(nvda.returns.calendar));
- const years=api.returnsFor(nvda);assert.equal(years.length,8);assert.equal(years[6].year,2025);assert.equal(years[6].derived,true);assert(Math.abs(years[6].value-38.91569075927448)<1e-10);assert.equal(years[7].label,'2026 YTD');assert.equal(years[7].derived,false);assert.equal(years[7].value,19.45891);
+ const years=api.returnsFor(nvda);assert.equal(years.length,8);assert.equal(years[6].year,2025);assert.equal(years[6].derived,true);assert(Math.abs(years[6].value-38.91569075927448)<1e-10);assert.equal(years[7].label,'2026 YTD · BOS');assert.equal(years[7].derived,false);assert.equal(years[7].value,27);
+ assert.equal(nvda.returns.ytd['2026'],19.45891,'immutable source snapshot retains its original YTD');
  assert.equal(api.returnsFor(nvda,'annualized')[6].value,34.35603);assert.equal(api.returnsFor(nvda,'holding')[6].value,65.94717);
+ const ytd=api.ytdFor(nvda);assert.equal(ytd.sourceId,'bos');assert.equal(ytd.periodType,'ytd_gain');assert.equal(ytd.asOf,'2026-11-12');assert.equal(ytd.reportDate,'2026-11-13');assert.equal(ytd.endDate,ytd.asOf);assert.equal(ytd.current,true);assert.equal(ytd.cutoffInferred,false);assert.equal(ytd.basis,'BOS YTD gain; dividend/currency return methodology not specified');
+ assert.equal(api.ytdFor('AAPL').value,31);assert.equal(api.ytdFor('DBS SP').value,32);assert.equal(api.ytdFor('DBS SP').current,false);assert.equal(api.ytdFor('DBS SP').dated,true);
+ assert.equal(api.ytdFor('NVDA',2025).value,null,'a different requested year cannot use 2026 YTD');
+ assert.equal(api.ytdFor('NVDA','2026').value,null,'year is a number, not coerced input');
+ for(const item of [{ticker:'TSM',currency:'TWD'},{ticker:'NVDA',isin:'US8740391003'},{ticker:'NVDA',asset_type:'index'},{name:'NVIDIA Corp'}])assert.equal(api.ytdFor(item).value,null,'identity and currency conflicts cannot borrow BOS YTD');
+ const tslaPoints=api.returnsFor('TSLA');assert.equal(tslaPoints.length,8);assert(tslaPoints.slice(0,7).every(p=>p.value===null));assert.equal(tslaPoints[7].value,15);assert.equal(api.returnsFor('TSLA','holding').length,0);
+ const beforeSnapshot=JSON.stringify(api.records()),beforeCompleted=JSON.stringify(years.slice(0,7)),beforeHolding=JSON.stringify(api.returnsFor(nvda,'holding')),beforeAnnualized=JSON.stringify(api.returnsFor(nvda,'annualized'));
+ const nvdaRow=f.values.get('NVDA US'),originalRow={...nvdaRow},beforeFeedVersion=api.version(),beforeRefreshEvents=f.events.filter(x=>x==='share-enrichment-updated').length;
+ nvdaRow.ytdGainPct=28;nvdaRow.priceAsOf='2026-11-13';f.feed.reportDate='2026-11-14';f.feed.version='bos-v2';f.context.document.dispatchEvent(new f.context.CustomEvent('bos-equity-updated'));
+ assert.equal(api.returnsFor('NVDA')[7].value,28);assert.equal(api.ytdFor('NVDA').asOf,'2026-11-13');assert.notEqual(api.version(),beforeFeedVersion);assert.equal(f.events.filter(x=>x==='share-enrichment-updated').length,beforeRefreshEvents+1);
+ assert.equal(JSON.stringify(api.returnsFor(nvda).slice(0,7)),beforeCompleted);assert.equal(JSON.stringify(api.returnsFor(nvda,'holding')),beforeHolding);assert.equal(JSON.stringify(api.returnsFor(nvda,'annualized')),beforeAnnualized);assert.equal(JSON.stringify(api.records()),beforeSnapshot);
+ nvdaRow.ytdGainPct=0;assert.equal(api.ytdFor('NVDA').value,0);assert.equal(api.ytdFor('NVDA').available,true);assert(api.detailHtml('NVDA').includes('0.00%'));
+ for(const value of [null,undefined,NaN,Infinity,'27']){nvdaRow.ytdGainPct=value;assert.equal(api.ytdFor('NVDA').value,null);assert.equal(api.returnsFor('NVDA')[7].value,null,'missing or invalid BOS never falls back to frozen 19Sep return');}
+ nvdaRow.ytdGainPct=28;
+ for(const [key,value] of [['instrumentId','TSM US'],['instrumentType','index'],['currency','SGD'],['priceAsOf','2026-02-30'],['priceAsOf','2026-11-15'],['priceAsOf','2025-12-31']]){const old=nvdaRow[key];nvdaRow[key]=value;assert.equal(api.ytdFor('NVDA').value,null,key+' validation');if(old===undefined)delete nvdaRow[key];else nvdaRow[key]=old;}
+ f.feed.reportDate='2026-11-16';nvdaRow.priceAsOf='2026-11-16';assert.equal(api.ytdFor('NVDA').value,null,'future report and observation rejected');
+ f.feed.reportDate='2025-11-13';nvdaRow.priceAsOf='2025-11-12';assert.equal(api.ytdFor('NVDA').value,null,'a prior-year edition cannot fill 2026');
+ f.feed.reportDate='2026-10-13';nvdaRow.priceAsOf='2026-10-12';f.feed.current=false;assert.equal(api.ytdFor('NVDA').value,28);assert.equal(api.ytdFor('NVDA').current,false);assert(api.detailHtml('NVDA').includes('dated reference'));
+ f.values.set('NVDA US',originalRow);f.feed.reportDate='2026-11-13';delete f.feed.current;
  assert.equal(api.marketCapFor(nvda).value,4005200,'BOS billions explicitly converted to millions');
  assert.equal(api.marketCapFor('DBS SP').value,156900);assert.equal(api.marketCapFor('DBS SP').dated,true);
  assert.equal(api.marketCapFor('MSFT US'),null,'unknown CSV market-cap currency is never used');

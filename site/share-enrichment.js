@@ -1,4 +1,4 @@
-/* Immutable historical enrichment. Never changes the daily quote/history services. */
+/* Immutable historical enrichment plus dated BOS YTD gains. Never changes quote/history services. */
 (function(root){'use strict';
 const YEARS=Object.freeze([2019,2020,2021,2022,2023,2024,2025,2026]);
 const E=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -98,6 +98,7 @@ function valuation(item){
  const value=root.BOSEquity?.valuationById?.(identity)||(mapped?root.BOSEquity?.valuationFor?.(mapped):null);
  const row=value?.row;
  if(!row||row.instrumentType!=='equity'||row.instrumentId!==identity||!validDate(row.priceAsOf)||!validDate(value.reportDate)||row.priceAsOf>value.reportDate||value.reportDate>isoToday())return null;
+ if(mapped&&mapped.currency!==row.currency)return null;
  if(item&&typeof item==='object'&&item.currency&&item.currency!==row.currency)return null;
  return value;
 }
@@ -105,6 +106,16 @@ function marketCapFor(item){
  const value=valuation(item),billions=value?.row?.marketCapUsdBillions;
  if(!finite(billions)||billions<0||!finite(billions*1000))return null;
  return {value:billions*1000,marketCapUsdMillions:billions*1000,unit:'USD millions',asOf:value.row.priceAsOf,reportDate:value.reportDate,source:'Bank of Singapore',sourceId:'bos',sourceUrl:value.sourceUrl,current:value.current===true,dated:value.current!==true};
+}
+function ytdFor(item,year=2026){
+ const point={year,label:`${year} YTD · BOS`,value:null,source:'Bank of Singapore',sourceId:'bos',sourceUrl:null,asOf:null,endDate:null,reportDate:null,basis:'BOS YTD gain; dividend/currency return methodology not specified',periodType:'ytd_gain',derived:false,startDate:`${year}-01-01`,endExclusive:false,current:false,dated:true,available:false,cutoffInferred:false};
+ if(!Number.isInteger(year)||year<1900||year>9999)return point;
+ const value=valuation(item),row=value?.row;
+ // The source says "YTD Gains", not total return. A prior year's edition
+ // cannot fill the requested year; report and observation dates stay distinct.
+ if(!row||row.priceAsOf.slice(0,4)!==String(year)||value.reportDate.slice(0,4)!==String(year))return point;
+ const available=finite(row.ytdGainPct);
+ return {...point,value:available?row.ytdGainPct:null,sourceUrl:value.sourceUrl||null,asOf:row.priceAsOf,endDate:row.priceAsOf,reportDate:value.reportDate,current:available&&value.current===true,dated:!available||value.current!==true,available};
 }
 function quoteFor(item){
  const mapped=priceItemFor(item),value=valuation(item);
@@ -116,17 +127,23 @@ function stableName(item){const r=find(item);return String(r?.name||item?.name||
 function compareMarketCap(a,b){const av=marketCapFor(a)?.value,bv=marketCapFor(b)?.value;if(finite(av)&&finite(bv)&&av!==bv)return bv-av;if(finite(av)!==finite(bv))return finite(av)?-1:1;return stableName(a).localeCompare(stableName(b),'en',{sensitivity:'base'})||String(identityFor(a)||isinOf(a)).localeCompare(String(identityFor(b)||isinOf(b)));}
 function sortShares(rows,identityFn=x=>x){return rows.map((row,index)=>({row,index,identity:identityFn(row)})).sort((a,b)=>compareMarketCap(a.identity,b.identity)||a.index-b.index).map(x=>x.row);}
 function returnsFor(item,mode='calendar'){
- const r=find(item);if(!r)return [];
  if(!['calendar','holding','annualized'].includes(mode))throw Error('Unsupported return display mode.');
- return YEARS.map(year=>{const partial=mode==='calendar'&&year===2026;return {year,label:mode==='calendar'?(partial?'2026 YTD':String(year)):`Since Jan ${year}`,value:mode==='calendar'?(partial?r.returns.ytd[year]:r.returns.calendar[year]):r.returns[mode][year],derived:mode==='calendar'&&!partial,periodType:mode==='calendar'?(partial?'partial_year':'calendar_year'):mode,startDate:`${year}-01-01`,endDate:mode==='calendar'&&!partial?`${year+1}-01-01`:data.returnCutoff,endExclusive:mode==='calendar'&&!partial,basis:'Local currency · gross dividends reinvested',returnCutoff:data.returnCutoff,cutoffInferred:true};});
+ const r=find(item),ytd=mode==='calendar'?ytdFor(item):null;if(!r&&!ytd?.available)return [];
+ return YEARS.map(year=>{
+  if(mode==='calendar'&&year===2026)return ytd;
+  return {year,label:mode==='calendar'?String(year):`Since Jan ${year}`,value:r?(mode==='calendar'?r.returns.calendar[year]:r.returns[mode][year]):null,derived:mode==='calendar',periodType:mode==='calendar'?'calendar_year':mode,startDate:`${year}-01-01`,endDate:mode==='calendar'?`${year+1}-01-01`:data.returnCutoff,endExclusive:mode==='calendar',basis:'Local currency · gross dividends reinvested',returnCutoff:data?.returnCutoff||null,cutoffInferred:true};
+ });
 }
 function detailHtml(item){
- const r=find(item);if(!r)return data?'<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">No matched historical return or credit data is available in this snapshot. Daily prices and BOS valuations remain separate.</p></details>':error?'<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">The historical shares snapshot could not be loaded. Return and credit data are unavailable.</p></details>':'';
- const points=returnsFor(r),grades=r.credit.filter(c=>c.raw),outlook=r.creditOutlook?.value;
- return `<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">Local-currency total returns with gross dividends reinvested. Common endpoint ${E(label(data.returnCutoff))} is inferred from the supplied return pairs. Completed calendar years are derived; 2026 is partial-year.</p><div class="share-enrichment-scroll" tabindex="0" role="region" aria-label="Historical total returns"><table class="share-enrichment-returns"><caption>Historical total returns · %</caption><thead><tr>${points.map(p=>`<th scope="col">${E(p.label)}</th>`).join('')}</tr></thead><tbody><tr>${points.map(p=>`<td class="${finite(p.value)?p.value>0?'return-positive':p.value<0?'return-negative':'return-flat':'return-missing'}" title="${p.derived?'Derived calendar-year total return':'Source partial-year holding-period return'}">${E(pct(p.value))}</td>`).join('')}</tr></tbody></table></div><p class="mp-muted">Credit ratings below retain the source agency and scope. Rating observation dates were not supplied.</p>${grades.length?`<dl class="share-enrichment-credit">${grades.map(c=>`<div><dt>${E(c.agency)} · ${E(c.scope)}</dt><dd>${E(c.raw)}${c.status==='withdrawn'?' · withdrawn':c.status==='not_rated'?' · not rated':''}</dd></div>`).join('')}</dl>`:'<p>No credit rating is available in this historical snapshot.</p>'}${outlook?`<p class="mp-muted">S&amp;P outlook: ${E(outlook)}. Outlook is separate from the credit grade.</p>`:''}<p class="mp-muted">Source: supplied Bloomberg historical snapshot, row ${r.sourceRow}. Daily prices and BOS valuations remain separate.</p></details>`;
+ const r=find(item),ytd=ytdFor(item);
+ if(!r&&!ytd.available)return data?'<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">No matched historical return or credit data is available in this snapshot. The 2026 BOS YTD gain is unavailable. Daily prices and BOS valuations remain separate.</p></details>':error?'<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">The historical shares snapshot could not be loaded. Return and credit data are unavailable. The 2026 BOS YTD gain is unavailable.</p></details>':'';
+ const points=returnsFor(item),grades=r?.credit.filter(c=>c.raw)||[],outlook=r?.creditOutlook?.value;
+ const historyNote=r?`2019–2025: local-currency total returns with gross dividends reinvested. Completed calendar years are derived from the historical snapshot; its common endpoint ${E(label(data.returnCutoff))} is inferred from the supplied return pairs.`:'No matched historical return or credit data is available in this snapshot. Earlier calendar years remain unavailable.';
+ const ytdNote=ytd.available?`2026 YTD · BOS: ${E(pct(ytd.value))} as of ${E(label(ytd.asOf))}; PDF ${E(label(ytd.reportDate))}${ytd.current?'':' · dated reference'}.`:'2026 YTD · BOS is unavailable for this listing. No frozen snapshot value is substituted.';
+ return `<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">${historyNote}</p><p class="mp-muted">${ytdNote} BOS labels this figure “YTD Gains”; dividend and currency return methodology are not specified. It is not a verified total-return figure.</p><div class="share-enrichment-scroll" tabindex="0" role="region" aria-label="Historical total returns and BOS YTD gain"><table class="share-enrichment-returns"><caption>Historical total returns (2019–2025) &amp; BOS YTD gain (2026) · %</caption><thead><tr>${points.map(p=>`<th scope="col">${E(p.label)}</th>`).join('')}</tr></thead><tbody><tr>${points.map(p=>`<td class="${finite(p.value)?p.value>0?'return-positive':p.value<0?'return-negative':'return-flat':'return-missing'}" title="${E(p.periodType==='ytd_gain'?`${p.basis}${p.asOf?' · '+p.asOf:''}`:'Derived calendar-year total return')}">${E(pct(p.value))}</td>`).join('')}</tr></tbody></table></div><p class="mp-muted">Credit ratings below retain the source agency and scope. Rating observation dates were not supplied.</p>${grades.length?`<dl class="share-enrichment-credit">${grades.map(c=>`<div><dt>${E(c.agency)} · ${E(c.scope)}</dt><dd>${E(c.raw)}${c.status==='withdrawn'?' · withdrawn':c.status==='not_rated'?' · not rated':''}</dd></div>`).join('')}</dl>`:'<p>No credit rating is available in this historical snapshot.</p>'}${outlook?`<p class="mp-muted">S&amp;P outlook: ${E(outlook)}. Outlook is separate from the credit grade.</p>`:''}<p class="mp-muted">${r?`2019–2025 and credit source: supplied Bloomberg historical snapshot, row ${r.sourceRow}. `:''}2026 YTD gain source: Bank of Singapore. Daily prices and BOS valuations remain separate.</p></details>`;
 }
 function version(){return [data?.snapshotId||'unloaded',data?.sourceSha256||'',error,root.BOSEquity?.version?.()||'',root.MarketPrices?.version?.()||''].join('|');}
 if(root.document?.addEventListener)for(const event of ['bos-equity-updated','market-prices-updated'])root.document.addEventListener(event,announce);
-const api={load,records,metadata,find,returnsFor,detailHtml,marketCapFor,compareMarketCap,sortShares,priceItemFor,quoteFor,version,validate,status:()=>({loaded:!!data,error})};
+const api={load,records,metadata,find,returnsFor,ytdFor,detailHtml,marketCapFor,compareMarketCap,sortShares,priceItemFor,quoteFor,version,validate,status:()=>({loaded:!!data,error})};
 root.ShareEnrichment=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

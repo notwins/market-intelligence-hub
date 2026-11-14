@@ -6,15 +6,18 @@ const colours=require('../site/publication-colour-core.js');
 const catalogue=JSON.parse(fs.readFileSync('site/data/publication-colour-catalogue.json','utf8'));
 const snapshot=JSON.parse(fs.readFileSync('site/data/beta-shares.json','utf8'));
 const years=['2019','2020','2021','2022','2023','2024','2025','2026'];
-const rows=Array.from({length:32},(_,n)=>({id:'id'+n,bbTicker:'TEST'+n+' US',name:'Company '+String(n).padStart(2,'0'),isin:'ISIN'+n,sector:n%2?'Financials':'Information Technology',industry:n%2?'Banks':'Software',snapshot:{marketCap:n===1?1e20:3},returns:{calendar:Object.fromEntries(years.slice(0,-1).map(y=>[y,n-5])),ytd:{'2026':n===1?null:n-3}},credit:[]}));
+const rows=Array.from({length:32},(_,n)=>({id:'id'+n,bbTicker:'TEST'+n+' US',name:'Company '+String(n).padStart(2,'0'),isin:'ISIN'+n,sector:n%2?'Financials':'Information Technology',industry:n%2?'Banks':'Software',snapshot:{marketCap:n===1?1e20:3},returns:{calendar:Object.fromEntries(years.slice(0,-1).map(y=>[y,n-5])),ytd:{'2026':n-3}},credit:[]}));
 Object.assign(rows[0],{bbTicker:'NVDA US',name:'NVIDIA Corp',industry:'Semiconductors & Semiconductor',returns:structuredClone(snapshot.records.find(r=>r.bbTicker==='NVDA US').returns),credit:[{agency:'Fitch',scope:'Senior unsecured debt',raw:'WD',status:'withdrawn'}]});
 rows[2].name='<img src=x onerror=alert(1)>';
 const original=JSON.stringify(rows);
 const caps=new Map(rows.map((r,n)=>[r.id,n===1?null:(n+1)*100]));
-let quoteGeneration=1;
+let quoteGeneration=1,ytdDate='2026-11-12',ytdReport='2026-11-13',ytdCurrent=true;
+const ytdValues=new Map(rows.map((r,n)=>[r.id,n===1?null:n===0?45.5:n-10]));
+function bosYtd(r){return {year:2026,label:'2026 YTD · BOS',value:ytdValues.get(r.id)??null,source:'Bank of Singapore',sourceId:'bos',sourceUrl:'https://example.com/bos-coverage.pdf',asOf:ytdDate,endDate:ytdDate,reportDate:ytdReport,basis:'BOS YTD gain; dividend/currency return methodology not specified',periodType:'ytd_gain',derived:false,current:ytdCurrent};}
 const shared={
  load:async()=>rows,records:()=>rows.slice(),metadata:()=>({returnCutoff:'2026-09-19'}),
- returnsFor:r=>years.map(y=>({year:Number(y),label:y==='2026'?'2026 YTD':y,value:y==='2026'?r.returns.ytd[y]:r.returns.calendar[y],derived:y!=='2026'})),
+ returnsFor:r=>years.map(y=>y==='2026'?bosYtd(r):({year:Number(y),label:y,value:r.returns.calendar[y],derived:true})),
+ ytdFor:bosYtd,
  marketCapFor:r=>caps.get(r.id)===null?null:{value:caps.get(r.id),marketCapUsdMillions:caps.get(r.id),asOf:'2026-11-12',current:true},
  compareMarketCap:(a,b)=>{const x=caps.get(a.id),y=caps.get(b.id);return x===null?y===null?0:1:y===null?-1:y-x;},
  quoteFor:r=>({close:quoteGeneration*500,date:quoteGeneration===1?'2026-11-13':'2026-11-14',currency:'USD',sourceLabel:'BOS <verified>',sourceUrl:'https://example.com/coverage.pdf',current:true})
@@ -44,9 +47,19 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
  assert(host.innerHTML.includes('BOS &lt;verified&gt;'),'current quote source is escaped');
  assert(host.innerHTML.includes('Current prices and market caps have their own dates.'));
  assert(host.innerHTML.includes('((1 + older holding-period return / 100) / (1 + following-year holding-period return / 100) − 1) × 100'),'displayed methodology explicitly converts source percentage inputs');
- assert(host.innerHTML.includes('2026 year-to-date'),'partial year is explicit in sorting label');
+ assert(host.innerHTML.includes('2026 BOS year-to-date gain'),'BOS source and partial year are explicit in sorting label');
  assert(host.innerHTML.includes('aria-label="Select NVIDIA Corp (NVDA US) for comparison"'));
- assert(host.innerHTML.includes('bs-unavailable" title="2026 YTD: unavailable">—'),'missing is a dash, not zero');
+ assert(host.innerHTML.includes('BOS unavailable'),'missing BOS is explicit despite a finite historical CSV YTD');
+ assert(host.innerHTML.includes('As of 2026-11-12'),'BOS date is visible beside observations');
+ assert(host.innerHTML.includes('BOS YTD as of<strong>2026-11-12</strong>'),'header refers to current BOS date');
+ assert(host.innerHTML.includes('dividend/currency return methodology is not specified'));
+ assert(!host.innerHTML.includes('YTD · 19 Sep')&&!host.innerHTML.includes('YTD ends 19 Sep'),'frozen cutoff is not used as current2026 label');
+ assert.equal(B.periods(rows[0]).at(-1).value,45.5,'2026 comes from BOS, not historical19.45891');
+ assert.equal(B.periods(rows[1]).at(-1).value,null,'unavailable BOS does not fall back to finite CSV');
+ const historicalBefore=JSON.stringify(B.periods(rows[0]).slice(0,7));
+ assert.equal(B.periods(rows[0],{}).at(-1).value,null,'missing API does not reveal frozen YTD');
+ const legacy={returnsFor:r=>years.map(y=>({year:Number(y),value:y==='2026'?r.returns.ytd[y]:r.returns.calendar[y]}))};
+ assert.equal(B.periods(rows[0],legacy).at(-1).value,null,'an old cached adapter cannot masquerade as BOS');
  for(let i=0;i<6;i++)dispatch('change',{betaSelect:'id'+i},{checked:true});
  assert(host.innerHTML.includes('<b>6 / 6 selected</b>'));
  dispatch('change',{betaSelect:'id6'},{checked:true});assert(host.innerHTML.includes('Six shares are already selected'));
@@ -59,7 +72,7 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
  assert.equal(B.identity(rows[0]).id,'ticker.nvidia_nvda');
  assert.notEqual(B.identity({...rows[4],industry:'Computer Hardware'}).id,'sector.semiconductors','broad IT is not mislabeled semiconductors');
  const bounds=B.axis([rows[0]]);assert(bounds.min<0&&bounds.max>0,'negative and positive returns share a visible zero');
- const svg=B.chartSvg(rows[0],bounds);assert(svg.includes('2022: -50.3%'));assert(svg.includes('2026 YTD through 19 Sep: +19.5%'));
+ const svg=B.chartSvg(rows[0],bounds);assert(svg.includes('2022: -50.3%'));assert(svg.includes('2026 BOS YTD gain: +45.5% · as of 2026-11-12'));assert(svg.includes('BOS YTD</text>'));assert(host.innerHTML.includes('<strong>2026 BOS YTD gain: +45.5%</strong>'),'chart shows gain and source outside the tooltip');
  const yearXs=[...svg.matchAll(/class="bs-year" x="([0-9.]+)"/g)].map(m=>Number(m[1]));assert.equal(yearXs.length,8);assert(yearXs.every((x,i)=>i===0||x-yearXs[i-1]>4*24*.6),'mobile 24px year labels have distinct horizontal space');
  const extremeSvg=B.chartSvg(rows[0],{min:-200,max:1000,step:200}),leftAxis=[...extremeSvg.matchAll(/<text x="([0-9.]+)" y="[0-9.]+" text-anchor="end">([^<]+)<\/text>/g)];assert(leftAxis.length>1);assert(leftAxis.every(m=>Number(m[1])-m[2].length*22*.6>=0),'mobile percentage labels fit the reserved left axis margin');
  dispatch('input',{betaSearch:''},{value:'TEST31'});assert(host.innerHTML.includes('1–1 of 1 shares'));assert.equal((host.innerHTML.match(/class="bs-chart-card"/g)||[]).length,6,'search preserves comparison selection');
@@ -69,13 +82,22 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
  dispatch('input',{betaSearch:''},{value:'NVDA'});assert(host.innerHTML.includes('Fitch · Senior unsecured debt'));assert(host.innerHTML.includes('WD · withdrawn'));assert(host.innerHTML.includes('Rating dates were not supplied'));
  const returnsBefore=host.innerHTML.match(/<dl class="bs-card-returns">(.*?)<\/dl>/s)[1];
  quoteGeneration=2;documentListeners['market-prices-updated'][0]();assert(host.innerHTML.includes('1,000'));assert(host.innerHTML.includes('2026-11-14'));assert.equal(host.innerHTML.match(/<dl class="bs-card-returns">(.*?)<\/dl>/s)[1],returnsBefore,'quote refresh leaves historical returns intact');
+ ytdValues.set('id0',66);ytdDate='2026-11-16';ytdReport='2026-11-17';documentListeners['bos-equity-updated'][0]();
+ assert(host.innerHTML.includes('<dd>+66%</dd>'),'BOS update changes current2026 cell');assert(host.innerHTML.includes('As of 2026-11-16'),'BOS update changes visible date');
+ assert.equal(JSON.stringify(B.periods(rows[0]).slice(0,7)),historicalBefore,'BOS changes never recalculate completed calendar years');
+ ytdCurrent=false;documentListeners['bos-equity-updated'][0]();assert(host.innerHTML.includes('Dated reference'),'stale BOS remains explicitly dated');
+ ytdValues.set('id0',null);documentListeners['bos-equity-updated'][0]();assert(host.innerHTML.includes('BOS unavailable'));assert(!host.innerHTML.match(/<dl class="bs-card-returns">(.*?)<\/dl>/s)[1].includes('19.5%'),'missing feed does not resurrect frozen CSV YTD');
+ ytdValues.set('id0',0);ytdCurrent=true;documentListeners['bos-equity-updated'][0]();assert(host.innerHTML.includes('<dd>0%</dd>'),'zero BOS gain is available data');
+ ytdValues.set('id0',66);documentListeners['bos-equity-updated'][0]();
+
  dispatch('input',{betaSearch:''},{value:'no-match'});assert(host.innerHTML.includes('No shares match these filters'));
  dispatch('click',{betaAction:'reset'});dispatch('change',{betaSector:''},{value:'Financials'});assert(host.innerHTML.includes('1–16 of 16 shares'));assert.equal((host.innerHTML.match(/class="bs-card"/g)||[]).length,16);
  dispatch('change',{betaSector:''},{value:''});dispatch('change',{betaSort:''},{value:'cap-asc'});assert(host.innerHTML.indexOf('Select NVIDIA Corp')<host.innerHTML.indexOf('Select Company 31'));assert(host.innerHTML.indexOf('Select Company 31')<host.innerHTML.indexOf('Select Company 01'),'ascending cap still leaves missing last');
  dispatch('click',{betaView:'table'});dispatch('click',{betaSortYear:'2025'});assert(host.innerHTML.includes('aria-sort="descending"'));assert(host.innerHTML.indexOf('Select NVIDIA Corp')<host.innerHTML.indexOf('Select Company 31'),'year sort uses annual returns globally');
  dispatch('click',{betaSortYear:'2025'});assert(host.innerHTML.includes('aria-sort="ascending"'));
+ dispatch('click',{betaSortYear:'2026'});assert(host.innerHTML.indexOf('Select NVIDIA Corp')<host.innerHTML.indexOf('Select Company 31'),'2026 global sort uses BOS66 versus21, not frozen CSV');assert(host.innerHTML.indexOf('Select Company 31')<host.innerHTML.indexOf('Select Company 01'),'missing BOS sorts last');
  assert.equal(JSON.stringify(rows),original,'render, sorting, selection and quotes do not mutate source records');
  B.unmount();
  const failure=environment({load:async()=>{throw Error('Snapshot offline');},records:()=>[]});failure.ctx.BetaShares.mount(failure.host);await settle();assert(failure.host.innerHTML.includes('role="alert">Snapshot offline'));assert(failure.host.innerHTML.includes('Retry snapshot'));
- console.log('PASS Beta Shares global cap/year sorting, full filter pagination, six-share selection, chart/card/table interactions, semantic colours, missing returns, scoped credit, safe text and separate live quotes.');
+ console.log('PASS Beta Shares global cap/year sorting, full filter pagination, six-share selection, chart/card/table interactions, semantic colours, missing returns, scoped credit, safe text, separate quotes and current BOS YTD with immutable calendar history.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
