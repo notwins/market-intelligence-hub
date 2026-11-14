@@ -1182,6 +1182,34 @@
       ],
       "published_date": "2026-11-14",
       "sha256": "645946be53cd0c89b9bf37fa2894139e197b86beafb1dd363bfb1d2fc857cbe8"
+    },
+    {
+      "id": "research-us-earnings-full-2026-11-13",
+      "title": "US Earnings Command Centre · 13 November 2026",
+      "href": "research/us-earnings-full-2026-11-13/",
+      "date": "2026-11-13",
+      "date_label": "Research cutoff (SGT)",
+      "state": "published",
+      "edition": "Full dashboard",
+      "section": "Research",
+      "tags": [
+        "asset.equities_shares",
+        "macro.corporate_earnings_metrics",
+        "event.earnings_release"
+      ],
+      "summary": "All nine analytical sections, actual-versus-consensus charts, guidance and dated Reuters source links.",
+      "assets": [],
+      "published_date": "2026-11-14",
+      "sha256": "1cfe5dca685064420e6206e656c0dc47a851c44cea6adc64a26d16f6dbf62962",
+      "full_edition": {
+        "channel": "earnings",
+        "kind": "complete-source-edition",
+        "completeness_verified": true,
+        "cutoff": "2026-11-13T09:03:00+08:00",
+        "document": "research/us-earnings-full-2026-11-13/index.html",
+        "sha256": "1cfe5dca685064420e6206e656c0dc47a851c44cea6adc64a26d16f6dbf62962",
+        "verification": "original-document-completeness-reviewed"
+      }
     }
   ]
 }
