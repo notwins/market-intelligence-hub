@@ -1,6 +1,6 @@
 import json,subprocess,unittest,os
 from pathlib import Path
-from release_lane_guard import validate, Rejected, REGISTER, UI, ASTRA_DESK_UI, ASTRA_RELEASE_INFRA, PUBLICATION_COLOUR_UI
+from release_lane_guard import validate, Rejected, REGISTER, UI, ASTRA_DESK_UI, ASTRA_RELEASE_INFRA, PUBLICATION_COLOUR_UI, PUBLICATION_MAINTENANCE
 SHA='a'*40
 NEW='b'*40
 class GuardTests(unittest.TestCase):
@@ -96,6 +96,24 @@ class GuardTests(unittest.TestCase):
    with self.subTest(path=path):
     candidate={**self.base,path:'reviewed-astra-change'}
     self.assertEqual(validate(self.base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)['changed_paths'],[path])
+ def test_weekly_maintenance_lane_is_limited_to_its_two_read_only_check_paths(self):
+  self.assertEqual(PUBLICATION_MAINTENANCE,frozenset({'.github/workflows/weekly-publication-colour-audit.yml','scripts/check_publication_colours.cjs'}))
+  candidate={**self.base,**{p:'reviewed-cloud-sampling-check' for p in PUBLICATION_MAINTENANCE}}
+  self.assertEqual(validate(self.base,candidate,lane='publication-maintenance',expected_sha=SHA,current_sha=SHA)['changed_paths'],sorted(PUBLICATION_MAINTENANCE))
+  for path in ['site/desk.js',REGISTER,'site/research/new/index.html','.github/workflows/publish.yml','.github/workflows/share-prices.yml','scripts/update_news.py','scripts/release_lane_guard.py']:
+   with self.subTest(path=path),self.assertRaisesRegex(Rejected,'ownership'):
+    validate(self.base,{**candidate,path:'unowned'},lane='publication-maintenance',expected_sha=SHA,current_sha=SHA)
+ def test_weekly_maintenance_still_rejects_deletion_stale_bases_and_derived_data(self):
+  candidate={**self.base,'scripts/check_publication_colours.cjs':'audit'}
+  with self.assertRaisesRegex(Rejected,'stale'):validate(self.base,candidate,lane='publication-maintenance',expected_sha=SHA,current_sha=NEW)
+  removed=dict(candidate);del removed['site/v4.html']
+  with self.assertRaisesRegex(Rejected,'deletion'):validate(self.base,removed,lane='publication-maintenance',expected_sha=SHA,current_sha=SHA)
+  with self.assertRaisesRegex(Rejected,'assembler'):validate(self.base,{**candidate,'site/data/site-search.json':'derived'},lane='publication-maintenance',expected_sha=SHA,current_sha=SHA)
+ def test_weekly_workflow_only_schedules_and_reads_public_site(self):
+  root=Path(__file__).resolve().parents[1];workflow=(root/'.github/workflows/weekly-publication-colour-audit.yml').read_text(encoding='utf-8')
+  self.assertIn("cron: '0 4 * * 6'",workflow);self.assertIn('contents: read',workflow)
+  self.assertNotIn('contents: write',workflow);self.assertNotIn('pages: write',workflow);self.assertNotIn('deploy-pages',workflow)
+  self.assertIn('node scripts/check_publication_colours.cjs',workflow);self.assertIn('if: always()',workflow)
  def test_ordinary_ui_cannot_authorize_infrastructure(self):
   for path in ASTRA_RELEASE_INFRA:
    with self.subTest(path=path), self.assertRaisesRegex(Rejected,'ownership'):

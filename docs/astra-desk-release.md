@@ -78,3 +78,26 @@ The filter adds canonical links and limited emphasis, reuses the existing news
 badge position, and creates no modal. Existing report URLs and original bytes
 remain protected. Content preparation and publication still belong to the
 independent content repository.
+
+## Weekly cloud publication-colour sampling
+
+The user requested a cloud maintenance check every Saturday at noon in
+Asia/Singapore. `weekly-publication-colour-audit.yml` schedules 04:00 UTC on
+Saturday, with manual dispatch for verification. GitHub-hosted Linux executes a
+read-only browser sampling script; the user's computer is not required. GitHub
+may delay scheduled starts. No credentials beyond the read-only checkout token
+are used, and no articles, source feeds or publishing schedules are edited.
+
+The check samples the daily/featured/archive desk, Research Explained and hourly
+stories at desktop and mobile widths. It verifies canonical computed font
+colours, linked tags and actual search results, limited inline emphasis, unique
+tag rows, existing overlay identities and repeated-filter behavior. It also
+samples up to three newest independent full HTML reports, when available, and
+checks the current versioned preparation filter. Missing report samples and
+transient retries are disclosed. Reports and screenshots stay in Actions
+artifacts for 30 days and the run summary; failures produce a failed workflow.
+
+The explicit `publication-maintenance` release lane owns exactly the new weekly
+workflow and `scripts/check_publication_colours.cjs`. Its guard amendment and
+this documentation are reviewed first through the existing infrastructure lane.
+Ordinary UI and content publication ownership remain unchanged.

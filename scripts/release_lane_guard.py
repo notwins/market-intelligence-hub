@@ -24,6 +24,8 @@ ASTRA_RELEASE_INFRA = frozenset({'.github/workflows/publish.yml',
  'docs/astra-desk-release.md'})
 PUBLICATION_COLOUR_UI = frozenset({'site/publication-colour-core.js','site/publication-colour-ui.js',
  'site/publication-colour.css','site/data/publication-colour-catalogue.json','scripts/test_publication_colour.cjs'})
+PUBLICATION_MAINTENANCE = frozenset({'.github/workflows/weekly-publication-colour-audit.yml',
+ 'scripts/check_publication_colours.cjs'})
 UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/market-understanding/market-understanding.css', 'scripts/build_report_additions.py',
  'scripts/test_research_register.py', 'site/v4-tools.js',
@@ -45,7 +47,7 @@ def canonical(path):
 def validate(base, candidate, *, lane, expected_sha, current_sha, register_before=None, register_after=None):
  if not re.fullmatch('[a-f0-9]{40}', expected_sha or '') or expected_sha != current_sha:
   raise Rejected('stale or invalid base; reconcile and rerun all checks')
- if lane not in ('report','ui','astra-infrastructure'): raise Rejected('unknown lane')
+ if lane not in ('report','ui','astra-infrastructure','publication-maintenance'): raise Rejected('unknown lane')
  for path in set(base) | set(candidate): canonical(path)
  removed = set(base)-set(candidate)
  if removed: raise Rejected('deletion prohibited: '+', '.join(sorted(removed)))
@@ -56,6 +58,8 @@ def validate(base, candidate, *, lane, expected_sha, current_sha, register_befor
   if changed-UI: raise Rejected('UI lane exceeds explicit path ownership')
  elif lane=='astra-infrastructure':
   if changed-ASTRA_RELEASE_INFRA: raise Rejected('Astra infrastructure lane exceeds explicit path ownership')
+ elif lane=='publication-maintenance':
+  if changed-PUBLICATION_MAINTENANCE: raise Rejected('Publication maintenance lane exceeds explicit path ownership')
  else:
   for path in changed-{REGISTER}:
    # Narrow pilot: new standalone report editions only, not existing revisions,
@@ -113,7 +117,7 @@ def main():
  parser.add_argument('--repo',required=True);parser.add_argument('--base-commit',required=True)
  parser.add_argument('--candidate',required=True,help='Existing local commit/tree; never stages working files')
  parser.add_argument('--current-main-sha',required=True,help='Fresh full SHA obtained by connected GitHub reader; not fetched here')
- parser.add_argument('--lane',required=True,choices=['report','ui','astra-infrastructure']);args=parser.parse_args()
+ parser.add_argument('--lane',required=True,choices=['report','ui','astra-infrastructure','publication-maintenance']);args=parser.parse_args()
  try:
   if not re.fullmatch('[a-f0-9]{40}',args.base_commit): raise Rejected('full base commit SHA required')
   actual=subprocess.check_output(['git','-C',args.repo,'rev-parse','--verify',args.base_commit+'^{commit}'],stderr=subprocess.PIPE).decode().strip()
