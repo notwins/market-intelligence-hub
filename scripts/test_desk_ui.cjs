@@ -53,5 +53,13 @@ test('hourly revisions retain latest version and unsafe/private source URLs are 
  const rows=DeskNews.fromHourly({editions:[{stories:[base,{...base,version:2,headline:'Corrected Nvidia update'},{...base,story_id:'private',source_urls:['https://chatgpt.com/c/private']}],sources:[{url:'https://www.reuters.com/nvidia',published_date:'2026-11-14'}]}]},[{ticker:'NVDA',name:'Nvidia'}]);
  assert.equal(rows.length,1);assert.equal(rows[0].version,2);assert.equal(rows[0].published_at,'2026-11-14');
 });
+test('current desk quotes follow shared BOS/Yahoo selection without loading chart history',()=>{
+ let q={close:250,date:'2026-11-12',sourceLabel:'Bank of Singapore',current:true};
+ const market={resolve:()=>({currency:'USD'}),currentQuote:()=>q,displayUnit:i=>i.currency,series:()=>{throw Error('History must be lazy');}};
+ assert.equal(Desk.selectedPrice('AAPL',market).value,250);assert.equal(Desk.selectedPrice('AAPL',market).status_label,'Bank of Singapore');
+ q={close:240,date:'2026-11-13',sourceLabel:'Yahoo Finance',current:true};assert.equal(Desk.selectedPrice('AAPL',market).status_label,'Yahoo Finance');assert.equal(Desk.selectedPrice('AAPL',market).as_of,'2026-11-13');
+ q={...q,current:false};assert(Desk.selectedPrice('AAPL',market).status_label.includes('dated observation'));
+ q={...q,close:null};assert.equal(Desk.selectedPrice('AAPL',market),null);
+});
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

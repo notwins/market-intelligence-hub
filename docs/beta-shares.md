@@ -2,7 +2,7 @@
 
 The V4 Historical charts section includes `#history/beta-shares`. Its chart,
 card and heatmap table views compare selected shares using a dated Bloomberg
-return snapshot for 2019–2025 and the latest available BOS YTD gain for 2026.
+return snapshot for 2019–2025 and the latest available BOS YTD return for 2026.
 Current earnings and watchlist cards expose the same figures in an expandable
 detail section, with their different sources and methods labelled.
 
@@ -20,23 +20,23 @@ derived from adjacent cumulative holding-period factors:
 `year y return = ((1 + HPR(y) / 100) / (1 + HPR(y+1) / 100) - 1) * 100`
 
 The default calendar display takes 2026 from the existing BOS feed's
-`ytdGainPct` field, labelled **2026 YTD · BOS**. The PDF calls it “YTD Gains
-(%)”; it does not specify whether dividends are included or the currency
-return methodology. This figure is therefore a **BOS YTD gain**, not a
-verified local-currency, gross-dividend total return. It keeps the BOS row's
-price observation date separately from the PDF publication date. Values
-retain source precision, including reported zeroes.
+`ytdGainPct` field, labelled **2026 YTD · BOS**.
 
-A single visible note below the results explains the 2026 dividend basis;
-it is not repeated on every Beta card. The 13 November 2026 BOS PDF's
-table footnotes and end disclosures do not confirm dividend reinvestment.
-A DBS/UOB cross-check against Morningstar price and "with dividends"
-charts is consistent with dividend inclusion, allowing for the different
-12/13 November observation dates and BOS whole-percentage rounding.
-This supports only an inference; it does not verify reinvestment or change
-the shared API's unconfirmed-methodology status. Morningstar's current
-stock total-return glossary includes cash dividends without reinvestment;
-that glossary is not treated as a chart-specific or BOS definition.
+### BOS dividend-reinvestment rule
+
+From 15 November 2026, the owner's explicit site rule is to treat all BOS
+YTD observations as **total returns with dividends reinvested**. This is a
+**site assumption**, not a statement that BOS has confirmed its calculation.
+The raw source field remains “YTD Gains (%)”. Use the published percentage
+unchanged: do not add dividends, compound it again or recompute past years.
+This rule does not introduce a gross/net tax or common-currency assumption.
+
+The same basis applies to Beta tables, charts and cards, and to current
+earnings/watchlist return details through the shared enrichment module.
+One visible note below Beta results states the rule; it is not repeated
+on every Beta card. The expanded methodology and shared descriptor retain
+the assumption status. Source observation/PDF dates, precision, zeroes,
+missing-value handling and original historical data remain unchanged.
 
 `ShareEnrichment.ytdFor(item, year=2026)` returns a period descriptor with
 the value, source, observation/report dates, basis and availability. It uses

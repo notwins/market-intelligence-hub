@@ -41,7 +41,8 @@ function fixture(fail=false){
  const years=api.returnsFor(nvda);assert.equal(years.length,8);assert.equal(years[6].year,2025);assert.equal(years[6].derived,true);assert(Math.abs(years[6].value-38.91569075927448)<1e-10);assert.equal(years[7].label,'2026 YTD · BOS');assert.equal(years[7].derived,false);assert.equal(years[7].value,27);
  assert.equal(nvda.returns.ytd['2026'],19.45891,'immutable source snapshot retains its original YTD');
  assert.equal(api.returnsFor(nvda,'annualized')[6].value,34.35603);assert.equal(api.returnsFor(nvda,'holding')[6].value,65.94717);
- const ytd=api.ytdFor(nvda);assert.equal(ytd.sourceId,'bos');assert.equal(ytd.periodType,'ytd_gain');assert.equal(ytd.asOf,'2026-11-12');assert.equal(ytd.reportDate,'2026-11-13');assert.equal(ytd.endDate,ytd.asOf);assert.equal(ytd.current,true);assert.equal(ytd.cutoffInferred,false);assert.equal(ytd.basis,'BOS YTD gain; dividend/currency return methodology not specified');
+ const ytd=api.ytdFor(nvda);assert.equal(ytd.sourceId,'bos');assert.equal(ytd.periodType,'ytd_gain');assert.equal(ytd.asOf,'2026-11-12');assert.equal(ytd.reportDate,'2026-11-13');assert.equal(ytd.endDate,ytd.asOf);assert.equal(ytd.current,true);assert.equal(ytd.cutoffInferred,false);assert.equal(ytd.basis,'BOS YTD return with dividends reinvested (site assumption)');assert.equal(ytd.dividendReinvestment,'assumed');assert.equal(ytd.basisStatus,'site_assumption');
+ f.values.get('NVDA US').dividendYieldPct=5.5;assert.equal(api.ytdFor(nvda).value,f.values.get('NVDA US').ytdGainPct,'site assumption never adds dividends to the published YTD value');
  assert.equal(api.ytdFor('AAPL').value,31);assert.equal(api.ytdFor('DBS SP').value,32);assert.equal(api.ytdFor('DBS SP').current,false);assert.equal(api.ytdFor('DBS SP').dated,true);
  assert.equal(api.ytdFor('NVDA',2025).value,null,'a different requested year cannot use 2026 YTD');
  assert.equal(api.ytdFor('NVDA','2026').value,null,'year is a number, not coerced input');
@@ -83,7 +84,7 @@ function fixture(fail=false){
  const eventCount=f.events.filter(x=>x==='share-enrichment-updated').length;f.context.document.dispatchEvent(new f.context.CustomEvent('market-prices-updated'));assert.equal(f.events.filter(x=>x==='share-enrichment-updated').length,eventCount+1);
  assert.equal(api.priceItemFor('NVDA'),registered,'keep real quote provider and registry metadata');
  assert.deepEqual(Array.from(api.sortShares(['MSFT US','DBS SP','NVDA','AAPL'])),['AAPL','NVDA','DBS SP','MSFT US']);
- const html=api.detailHtml('NVDA');assert(html.includes('gross dividends reinvested'));assert(html.includes('inferred'));assert(html.includes('Senior unsecured debt'));assert(!html.includes('2026 verified'));
+ const html=api.detailHtml('NVDA');assert(html.includes('gross dividends reinvested'));assert(html.includes('inferred'));assert(html.includes('Senior unsecured debt'));assert(!html.includes('2026 verified'));assert(html.includes('BOS YTD return with dividends reinvested (site assumption)'));assert(!html.includes('dividend and currency return methodology are not specified'));
  assert(api.detailHtml('TSLA').includes('No matched historical return or credit data'),'missing historical record is explicit after load');
  const invalid=structuredClone(snapshot);invalid.records[0].returns.calendar['2025']=65.94717;assert.throws(()=>api.validate(invalid),/reconcile/);
  const duplicate=structuredClone(snapshot);duplicate.records.push(duplicate.records[0]);assert.throws(()=>api.validate(duplicate),/duplicate/);
