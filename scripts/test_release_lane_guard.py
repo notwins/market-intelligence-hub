@@ -70,10 +70,20 @@ class GuardTests(unittest.TestCase):
   with self.assertRaisesRegex(Rejected,'noncanonical'):self.reportcheck()
  def chartbase(self):
   return {**self.base,'site/v4-tools.js':'old-tools','scripts/test_yield_comparisons.cjs':'old-test'}
- def test_ui_ownership_is_exact_existing_set_plus_two_chart_paths(self):
+ def test_ui_ownership_is_exact_existing_set_plus_reviewed_astra_paths(self):
   self.assertEqual(UI,frozenset({'site/v4.html','site/market-understanding/index.html',
    'site/market-understanding/market-understanding.css','scripts/build_report_additions.py',
-   'scripts/test_research_register.py','site/v4-tools.js','scripts/test_yield_comparisons.cjs'}))
+   'scripts/test_research_register.py','site/v4-tools.js','scripts/test_yield_comparisons.cjs',
+   'site/feed-freshness.js','site/research-shortcuts.css','site/market-snapshot.js',
+   'site/global-search.js','site/search-query.js','site/search.html','site/favicon.ico',
+   'scripts/test_sol_ui.cjs','scripts/test_saved_refresh.cjs','scripts/test_market_snapshot.cjs'}))
+ def test_reviewed_astra_paths_are_accepted_individually_without_wildcards(self):
+  for path in ['site/feed-freshness.js','site/research-shortcuts.css','site/market-snapshot.js',
+   'site/global-search.js','site/search-query.js','site/search.html','site/favicon.ico',
+   'scripts/test_sol_ui.cjs','scripts/test_saved_refresh.cjs','scripts/test_market_snapshot.cjs']:
+   with self.subTest(path=path):
+    base={**self.base,path:'old'};candidate={**base,path:'reviewed-change'}
+    self.assertEqual(validate(base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)['changed_paths'],[path])
  def test_chart_paths_are_accepted_individually_and_together(self):
   for paths in [('site/v4-tools.js',),('scripts/test_yield_comparisons.cjs',),
    ('site/v4-tools.js','scripts/test_yield_comparisons.cjs','site/v4.html')]:
@@ -83,7 +93,7 @@ class GuardTests(unittest.TestCase):
     result=validate(base,candidate,lane='ui',expected_sha=SHA,current_sha=SHA)
     self.assertEqual(result['changed_paths'],sorted(paths))
  def test_chart_paths_do_not_admit_other_ui_report_data_or_schedule_paths(self):
-  forbidden=['site/history-context.css','site/v4.css','site/global-search.js',
+  forbidden=['site/history-context.css','site/v4.css','site/global-search-extra.js',
    'site/v4-tools-extra.js','scripts/test_yield_comparisons_browser.cjs',
    'site/research/old-edition/index.html','site/research/new-edition/index.html',REGISTER,
    'site/data/history-fed.json','site/data/history-v3.json','site/data/history-events-v1.json',

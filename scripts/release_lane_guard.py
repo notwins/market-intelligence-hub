@@ -12,7 +12,11 @@ REGISTER = 'site/data/research-register.json'
 UI = frozenset({'site/v4.html', 'site/market-understanding/index.html',
  'site/market-understanding/market-understanding.css', 'scripts/build_report_additions.py',
  'scripts/test_research_register.py', 'site/v4-tools.js',
- 'scripts/test_yield_comparisons.cjs'})
+ 'scripts/test_yield_comparisons.cjs',
+ 'site/feed-freshness.js', 'site/research-shortcuts.css', 'site/market-snapshot.js',
+ 'site/global-search.js', 'site/search-query.js', 'site/search.html', 'site/favicon.ico',
+ 'scripts/test_sol_ui.cjs', 'scripts/test_saved_refresh.cjs',
+ 'scripts/test_market_snapshot.cjs'})
 
 class Rejected(ValueError): pass
 

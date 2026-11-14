@@ -36,6 +36,32 @@ remain mandatory. Guard/policy files themselves do not become UI-owned; this pol
 proposal requires separate coordinator review before the chart release can use it.
 Do not move or duplicate chart functions into HTML to evade ownership checks.
 
+### Astra UI ownership assignment — 14 November 2026
+
+The final assembler owns the user-requested Astra push/deployment on top of the
+completed research-card release. The previous research writer reported its slot
+clear; the parallel research-feed prototype is isolated and has no publishing scope.
+This assignment adds only these exact paths to the UI lane:
+
+- `site/feed-freshness.js`
+- `site/research-shortcuts.css`
+- `site/market-snapshot.js`
+- `site/global-search.js`
+- `site/search-query.js`
+- `site/search.html`
+- `site/favicon.ico`
+- `scripts/test_sol_ui.cjs`
+- `scripts/test_saved_refresh.cjs`
+- `scripts/test_market_snapshot.cjs`
+
+The existing card-page, generator and register-test ownership covers the bounded
+Quick read delayed-close correction. Reports, brief assets, register metadata and
+financial observations remain outside UI ownership. No wildcard, deletion, stale-base
+override, derived-output exception or workflow change is introduced. Guard/policy
+files are a separate coordinator policy change; they do not become UI-owned.
+The final assembler must regenerate indexes after reconciliation and verify all
+published reports/briefs remain intact before the expected-SHA update of main.
+
 ## Final release requirements
 Reconcile against fresh main, regenerate derived catalogues, run existing source/final-artifact suites, complete required genuine rendered QA and preserve earlier editions. Content evidence, privacy, rights and publication checks are not replaced by this tool. Publish only through the established guarded writer, then verify the actual deployed commit and live bytes. Reconcile stale candidates and repeat checks rather than dropping the guard.
 
