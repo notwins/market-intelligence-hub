@@ -1,0 +1,47 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),crypto=require('node:crypto');
+const api=require('../site/bos-equity.js');
+const row={instrumentId:'AAPL US',instrumentType:'equity',name:'Apple Inc.',ticker:'AAPL US',region:'North America',marketGroup:'North America',sector:'Technology',currency:'USD',price:250,priceAsOf:'2026-11-12',marketCapUsdBillions:3700,rating:'Hold',moat:'Wide',fairValueOrTargetPrice:220,upsidePct:-12,dividendYieldPct:.4,pe:30,pb:40,epsGrowthPct:8,roePct:100,riskRating:3,ytdGainPct:5,analystReportMonth:'2026-10',analystOrUncertainty:'Medium',researchProvider:'Morningstar',researchReportUrl:'https://productgroup.bankofsingapore.com/report.pdf',sourcePage:3,sourceRow:1,raw:{name:'Apple Inc.',price:'250.00',pe:'30.0',pb:'40.0',ytdGainPct:'5.0'}};
+const data={schemaVersion:1,sourceId:'bos-equity-coverage',reportDate:'2026-11-13',priceAsOf:'2026-11-12',sourceUrl:'https://productgroup.bankofsingapore.com/equities_research/2026-11-13_equity_coverage_universe.pdf',sourceSha256:'a'.repeat(64),metricBasis:'Consensus forward estimates; period not specified',columns:[{key:'price',sourceLabel:'Price (12-Nov-2026)'}],records:[row]};
+const bytes=Buffer.from(JSON.stringify(data)),sha=crypto.createHash('sha256').update(bytes).digest('hex');
+const ref={path:'snapshots/2026/2026-11-13-test.json',sha256:sha,bytes:bytes.length};
+const manifest={schemaVersion:1,sourceId:'bos-equity-coverage',latest:ref,editions:[{...ref,reportDate:data.reportDate,priceAsOf:data.priceAsOf}],publicDisplayApproved:true,verifiedMappings:[{ticker:'AAPL',currency:'USD',instrumentId:'AAPL US',verified:true}]};
+assert.equal(api.validateEdition(data),data);
+assert.equal(api.validateManifest(manifest),manifest);
+assert.throws(()=>api.validateEdition({...data,records:[row,row]}),/duplicate/);
+assert.throws(()=>api.validateEdition({...data,priceAsOf:'2026-11-14'}),/snapshot/);
+assert.throws(()=>api.validateEdition({...data,records:[{...row,price:Infinity}]}),/numeric/);
+assert.throws(()=>api.validateEdition({...data,records:[{...row,raw:{price:250}}]}),/raw/);
+assert.throws(()=>api.validateManifest({...manifest,latest:{...ref,path:'../secret.json'}}),/manifest/);
+assert.throws(()=>api.validateManifest({...manifest,editions:[...manifest.editions,{...ref,path:'snapshots/new.json',reportDate:'2026-11-14',priceAsOf:'2026-11-13'}]}),/older/);
+assert.equal(api.matchingRecord(data,manifest,'AAPL','USD'),row);
+assert.equal(api.matchingRecord(data,manifest,'AAPL','SGD'),null);
+assert.equal(api.matchingRecord(data,{...manifest,verifiedMappings:[]},'AAPL','USD'),null);
+assert.equal(api.matchingRecord(data,{...manifest,verifiedMappings:[...manifest.verifiedMappings,...manifest.verifiedMappings]},'AAPL','USD'),null);
+assert.equal(api.valuationLabel(row),'Morningstar fair value');
+assert.equal(api.valuationLabel({...row,researchProvider:'OCBC'}),'OCBC target price');
+assert.equal(api.safeUrl('javascript:alert(1)'),'');
+assert.equal(api.safeUrl('https://user:pass@example.com'),'');
+assert.equal(api.filtered(data,{query:'apple',group:'sector'}).length,1);
+assert.equal(api.filtered(data,{query:'zzzz',group:'sector'}).length,0);
+assert.equal(api.filtered(data,{query:'',currency:'HKD',group:'sector'}).length,0);
+assert(api.csv({...data,records:[{...row,raw:{price:'=HYPERLINK("bad")'}}]}).includes("'=HYPERLINK"));
+assert(api.panel('master').includes('data-bos-panel="master"'));
+const source=fs.readFileSync('site/bos-equity.js','utf8');
+function browser(options={}){
+ const panel={dataset:{bosPanel:'history'},innerHTML:'',isConnected:true},fact={dataset:{bosTicker:'AAPL',bosCurrency:'USD'},innerHTML:''};
+ let fail=false,requests=0;
+ const context={URL,Date,Number,JSON,TextDecoder,Uint8Array,Intl,Set,Map,Promise,console,setTimeout,crypto:crypto.webcrypto,location:{hostname:options.hostname||'notwins.github.io'},localStorage:{getItem:()=>null,setItem:()=>{throw Error('unexpected save');}},document:{addEventListener:()=>{},querySelectorAll:selector=>selector==='[data-bos-panel]'?[panel]:selector==='[data-bos-ticker]'?[fact]:[]},fetch:async url=>{requests++;if(fail)throw Error('offline');if(url.endsWith('manifest.json'))return{ok:true,json:async()=>options.manifest||manifest};return{ok:true,arrayBuffer:async()=>options.bytes||bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength)};}};
+ context.window=context;vm.createContext(context);vm.runInContext(source,context);return{api:context.BOSEquity,panel,fact,fail:()=>fail=true,requests:()=>requests};
+}
+(async()=>{
+ const b=browser();await b.api.refresh(true);assert(b.panel.innerHTML.includes('Prices: 12 Nov 2026'));assert(b.panel.innerHTML.includes('PDF: 13 Nov 2026'));assert(b.panel.innerHTML.includes('Price (12-Nov-2026)'));assert(b.panel.innerHTML.includes('Morningstar fair value'));assert(b.panel.innerHTML.includes('Published data (JSON)'));assert(b.panel.innerHTML.includes('MSCI ESG fields'));assert(b.fact.innerHTML.includes('250'));assert(!b.panel.innerHTML.includes('real-time'));assert(!b.panel.innerHTML.includes('Complete raw JSON'));
+ b.fail();await b.api.refresh(true);assert(b.panel.innerHTML.includes('previously loaded edition'));assert(b.panel.innerHTML.includes('Prices: 12 Nov 2026'));assert(b.fact.innerHTML.includes('Feed refresh unavailable'));
+ const denied=browser({manifest:{...manifest,publicDisplayApproved:false}});await denied.api.refresh(true);assert(denied.panel.innerHTML.includes('awaiting publication approval'));assert.equal(denied.requests(),1);assert.equal(denied.fact.innerHTML,'');
+ const local=browser({hostname:'127.0.0.1',manifest:{...manifest,publicDisplayApproved:false}});await local.api.refresh(true);assert(local.panel.innerHTML.includes('Prices: 12 Nov 2026'));
+ const restrictedData={...data,records:[{...row,esgRating:'BBB',raw:{...row.raw,esgRating:'BBB'}}]},restrictedBytes=Buffer.from(JSON.stringify(restrictedData)),restrictedHash=crypto.createHash('sha256').update(restrictedBytes).digest('hex'),restrictedRef={...ref,sha256:restrictedHash};const restricted=browser({manifest:{...manifest,latest:restrictedRef,editions:[{...manifest.editions[0],sha256:restrictedHash}]},bytes:restrictedBytes.buffer.slice(restrictedBytes.byteOffset,restrictedBytes.byteOffset+restrictedBytes.byteLength)});await restricted.api.refresh(true);assert(restricted.panel.innerHTML.includes('excluded ESG fields'));assert.equal(restricted.fact.innerHTML,'');
+ const broken=browser({bytes:new TextEncoder().encode('corrupt').buffer});await broken.api.refresh(true);assert(broken.panel.innerHTML.includes('integrity check failed'));assert.equal(broken.fact.innerHTML,'');
+ for(const file of ['watchlist.js','v4-tools.js'])assert(fs.readFileSync('site/'+file,'utf8').includes('BOSEquity'),file+' includes BOS overlay');
+ const html=fs.readFileSync('site/v4.html','utf8');assert(html.includes('bos-equity.js'));assert(html.includes('bos-equity.css'));assert(html.includes('window.BOSEquity?.mount()'));
+ assert(!/MarketPrices\s*=|\.records\s*=|\.raw\[.*\]\s*=/.test(source),'overlay does not overwrite price service or master records');
+ console.log('PASS BOS dates, forward labels, explicit mapping, source integrity, public gate, stale retention, raw download and route integration');
+})().catch(e=>{console.error(e);process.exitCode=1;});
