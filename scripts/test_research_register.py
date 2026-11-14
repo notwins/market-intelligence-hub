@@ -106,6 +106,31 @@ class ResearchRegisterTests(unittest.TestCase):
   """
   p=subprocess.run(['node','-e',code],cwd=ROOT,text=True,capture_output=True)
   self.assertEqual(p.returncode,0,p.stdout+p.stderr)
+ def test_ai_pdf_uses_registered_image_on_desktop_and_phone(self):
+  code=r"""
+  const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+  const page=fs.readFileSync('site/market-understanding/index.html','utf8');
+  const script=page.match(/<script type="module" id="research-quick-read-script">([\s\S]*?)<\/script>/)[1];
+  for(const phone of [false,true]){
+   let active;
+   class E{constructor(tag='div'){this.tagName=tag;this.events={};this.children=[];this.hidden=true;}
+    addEventListener(k,v){this.events[k]=v;}append(e){this.children.push(e);}replaceChildren(){this.children=[];}focus(){active=this;}}
+   const close=new E(),content=new E(),link=new E(),title=new E(),help=new E(),dialog=new E(),button=new E();
+   const pdf='../research/bis-ai-financing-loop-2026-11-13/AI_Circular_Financing_One_Pager_2026-11-13.pdf';
+   button.dataset={quickRead:pdf,briefTitle:'AI financing brief'};
+   dialog.querySelector=q=>({'[data-brief-content]':content,'[data-open-brief]':link,'h2':title,'[data-brief-help]':help,'[data-close-brief]':close})[q];
+   dialog.showModal=()=>dialog.open=true;dialog.close=()=>{dialog.open=false;dialog.events.close();};
+   const document={getElementById:()=>dialog,querySelectorAll:()=>[button],createElement:tag=>new E(tag)};
+   vm.runInNewContext(script,{document,matchMedia:()=>({matches:phone})});button.events.click();
+   assert(dialog.open);assert.equal(link.href,pdf);assert.equal(active,close);
+   assert.equal(content.children.length,1);assert.equal(content.children[0].tagName,'img');
+   assert.equal(content.children[0].src,'../research/bis-ai-financing-loop-2026-11-13/AI_Circular_Financing_One_Pager_2026-11-13.png');
+   assert(help.textContent.includes('Image preview'));assert(content.children[0].alt.includes('13 November'));
+   close.events.click();assert.equal(content.children.length,0);assert.equal(active,button);
+  }
+  """
+  p=subprocess.run(['node','-e',code],cwd=ROOT,text=True,capture_output=True)
+  self.assertEqual(p.returncode,0,p.stdout+p.stderr)
  def test_full_edition_publication_gate_rejects_extracts_and_bad_documents(self):
   import copy,tempfile
   from build_report_additions import validate_full_editions
