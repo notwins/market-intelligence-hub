@@ -26,8 +26,48 @@ class ResearchRegisterTests(unittest.TestCase):
   text=(SITE/'data/research-register.json').read_text().lower()
   for secret in ['chatgpt.com/c/','chatgpt.com/g/','conversation_id','thread_id','file_id','onedrive','winston','account ending','client name','short put ledger','tastytrade','lee seong','file-service','sediment://']:
    self.assertNotIn(secret,text)
-  for row in self.data['entries']:
-   self.assertEqual(set(row)-{'id','title','href','date','date_label','state','edition','section','tags','summary','assets','published_date','sha256'},set())
+   for row in self.data['entries']:
+    self.assertEqual(set(row)-{'id','title','href','date','date_label','state','edition','section','tags','summary','assets','published_date','sha256','full_edition'},set())
+ def test_registered_full_edition_documents_are_bound_to_reviewed_bytes(self):
+  from build_report_additions import validate_full_editions
+  validate_full_editions(self.data,SITE)
+ def test_full_edition_publication_gate_rejects_extracts_and_bad_documents(self):
+  import copy,tempfile
+  from build_report_additions import validate_full_editions
+  with tempfile.TemporaryDirectory() as directory:
+   site=Path(directory);root='research/verified-2026-11-01/';document=root+'report.pdf'
+   (site/root).mkdir(parents=True);payload=b'%PDF-1.4\npublic source fixture\n%%EOF\n';(site/document).write_bytes(payload)
+   row={'id':'verified-2026-11-01','state':'published','date':'2026-11-01','href':root,'edition':'Verified full original edition','assets':[document],
+        'full_edition':{'channel':'credit','kind':'complete-source-edition','completeness_verified':True,'cutoff':'2026-11-01T08:00:00+08:00','document':document,'sha256':hashlib.sha256(payload).hexdigest(),'verification':'original-document-completeness-reviewed'}}
+   self.assertEqual(validate_full_editions({'entries':[row]},site),[row])
+   for field,value in [('kind','extract'),('completeness_verified',False),('completeness_verified','true'),('verification','length checked'),('channel','chart-data'),('cutoff','2026-11-01'),('document','https://chatgpt.com/c/private'),('document','research/verified-2026-11-01/../private.pdf'),('sha256','0'*64)]:
+    bad=copy.deepcopy(row);bad['full_edition'][field]=value
+    with self.subTest(field=field,value=value),self.assertRaises(ValueError):validate_full_editions({'entries':[bad]},site)
+   for edition in ['Verified extract','Abstract','Public abridged summary','Historical research atlas','Compilation','Snapshot']:
+    bad=copy.deepcopy(row);bad['edition']=edition
+    with self.subTest(edition=edition),self.assertRaises(ValueError):validate_full_editions({'entries':[bad]},site)
+   bad=copy.deepcopy(row);bad['full_edition']['private_source']='secret'
+   with self.assertRaises(ValueError):validate_full_editions({'entries':[bad]},site)
+   (site/document).write_bytes(payload+b'changed')
+   with self.assertRaises(ValueError):validate_full_editions({'entries':[row]},site)
+ def test_full_slots_ignore_newer_extracts_and_keep_historical_references_separate(self):
+  code=r"""
+  const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+  const source=fs.readFileSync('site/v4-tools.js','utf8').split('/* full-report-destinations:start */')[1].split('/* full-report-destinations:end */')[0],ctx={window:{},Date};
+  vm.createContext(ctx);vm.runInContext(source,ctx);const api=ctx.window.HubFullReportEditions;
+  const full={id:'old-full',title:'Dated complete source',state:'published',date:'2026-11-01',href:'research/verified-2026-11-01/',edition:'Verified full original edition',assets:['research/verified-2026-11-01/report.pdf'],full_edition:{channel:'credit',kind:'complete-source-edition',completeness_verified:true,cutoff:'2026-11-01T08:00:00+08:00',document:'research/verified-2026-11-01/report.pdf',sha256:'a'.repeat(64),verification:'original-document-completeness-reviewed'}};
+  const newer={id:'new-extract',channel:'credit',date:'2026-11-14',cutoff:'08:00 SGT',title:'New extract',status:'Verified extract',full_text:'long text '.repeat(10000)};
+  api.setRegistry({entries:[{...newer,state:'published',edition:'Verified extract'}]});assert.equal(api.select('credit').length,0);
+  let html=api.panel('credit',[newer]);assert(html.includes('No verified full edition available'));assert(!html.includes('Read verified full edition'));assert(html.includes('Read dated extract'));assert(html.includes('Historical research reference'));assert(html.includes('2026-11-06'));
+  const before=JSON.stringify(full);api.setRegistry({entries:[full,newer]});assert.equal(api.select('credit')[0].id,'old-full');html=api.panel('credit',[newer]);assert(html.includes('research/verified-2026-11-01/report.pdf'));assert(html.indexOf('Read verified full edition')<html.indexOf('Latest saved extract'));assert.equal(JSON.stringify(full),before);
+  for(const change of [{edition:'Abstract'},{edition:'Verified extract'},{full_edition:{...full.full_edition,kind:'summary'}},{full_edition:{...full.full_edition,completeness_verified:false}},{full_edition:{...full.full_edition,document:'https://chatgpt.com/c/private'}},{full_edition:{...full.full_edition,sha256:'missing'}},{state:'pending'}]){api.setRegistry({entries:[{...full,...change}]});assert.equal(api.select('credit').length,0);}
+  api.setRegistry({entries:[full]});assert.equal(api.select('earnings').length,0);assert.equal(api.select('weekly-fx').length,0);html=api.panel('weekly-fx',[]);assert(html.includes('not weekly narrative editions'));assert(html.includes('2026-11-05'));assert(html.includes('historical-market-events-2026-11-05'));assert(!html.includes('Read verified full edition'));
+  const six=Array.from({length:6},(_,i)=>({...full,id:'full-'+i,date:'2026-11-0'+(i+1),full_edition:{...full.full_edition,cutoff:'2026-11-0'+(i+1)+'T08:00:00+08:00'}}));api.setRegistry({entries:six.reverse()});assert.equal(api.select('credit')[0].id,'full-5');assert.equal((api.panel('credit',[]).match(/rel="noopener noreferrer"/g)||[]).length,5);
+  assert(!api.library([newer]).includes('chatgpt.com'));api.setRegistry(null);assert.equal(api.select('credit').length,0);
+  const page=fs.readFileSync('site/v4.html','utf8');assert(!page.includes('Read the full scheduled edition'));assert(!page.includes('Read latest credit report'));assert(page.includes("['researchRegister','data/research-register.json']"));assert(page.includes('HubFullReportEditions.readerNotice(r)'));
+  """
+  result=subprocess.run(['node','-e',code],cwd=ROOT,text=True,capture_output=True)
+  self.assertEqual(result.returncode,0,result.stdout+result.stderr)
  def test_filter_sort_search_and_invalid_links(self):
   code="""
   const assert=require('node:assert/strict'),fs=require('node:fs'),api=require('./site/research-register.js');

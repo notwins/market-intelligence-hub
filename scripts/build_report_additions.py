@@ -7,6 +7,7 @@ reversal of the explicitly listed presentation-copy corrections.
 from pathlib import Path
 from decimal import Decimal as D
 import hashlib, html, json, re, subprocess
+from datetime import datetime
 from research_presentation import correct_copy, original_copy
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
@@ -15,6 +16,55 @@ END = '<!-- research-additions:end -->'
 ASSET = '<!-- research-additions:style -->'
 JUMP = '<!-- research-additions:jump -->'
 def esc(v): return html.escape(str(v))
+
+FULL_EDITION_FIELDS = {'channel', 'kind', 'completeness_verified', 'cutoff', 'document', 'sha256', 'verification'}
+
+def validate_full_editions(register, site=SITE):
+    """Validate optional public full_edition declarations at the publication gate.
+
+    A recovered complete original is registered as a new immutable edition.
+    Its public register row may carry exactly FULL_EDITION_FIELDS below, with
+    kind='complete-source-edition', completeness_verified=True and verification=
+    'original-document-completeness-reviewed'. This is an explicit source-review
+    attestation, never a conclusion drawn from length, page count, title or date.
+    document must be an owned public HTML/PDF and sha256 must bind its exact bytes.
+    Source identifiers, private URLs and reviewer identities do not belong here.
+    The existing source and final-artifact unittest gates call this validator.
+    """
+    verified = []
+    for row in register.get('entries', []):
+        if 'full_edition' not in row:
+            continue
+        full = row['full_edition']
+        def require(ok, message):
+            if not ok:
+                raise ValueError('Invalid full edition '+str(row.get('id', ''))+': '+message)
+        require(isinstance(full, dict) and set(full) == FULL_EDITION_FIELDS, 'explicit declaration required')
+        require(row.get('state') == 'published', 'unpublished edition')
+        require(full['channel'] in {'credit', 'earnings', 'weekly-fx'}, 'unknown lane')
+        require(full['kind'] == 'complete-source-edition' and full['completeness_verified'] is True,
+                'abstracts, extracts and unverified text cannot occupy a full slot')
+        require(full['verification'] == 'original-document-completeness-reviewed', 'source completeness review missing')
+        require(not re.search(r'\b(?:abstract|extract|abridged|summary|compilation|reference|atlas|snapshot)\b',
+                              str(row.get('edition', '')), re.I), 'non-full edition label')
+        require(isinstance(full['cutoff'], str) and bool(re.fullmatch(r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})', full['cutoff'])),
+                'exact dated cutoff with timezone required')
+        cutoff = datetime.fromisoformat(full['cutoff'].replace('Z', '+00:00'))
+        require(cutoff.tzinfo is not None, 'cutoff timezone missing')
+        root = row.get('href', '')
+        document = full['document']
+        require(isinstance(root, str) and bool(re.fullmatch(r'(?:research|market-understanding)/[a-z0-9][a-z0-9-]*/', root)),
+                'owned public edition folder required')
+        require(isinstance(document, str) and document.startswith(root) and
+                bool(re.fullmatch(r'(?:research|market-understanding)/[a-z0-9][a-z0-9-]*/[A-Za-z0-9_.-]+\.(?:html|pdf)', document)) and '..' not in document,
+                'public owned HTML/PDF path required')
+        require(document == root+'index.html' or document in row.get('assets', []), 'document not registered')
+        require(isinstance(full['sha256'], str) and bool(re.fullmatch('[a-f0-9]{64}', full['sha256'])), 'document hash required')
+        path = Path(site)/document
+        require(path.is_file() and path.resolve().is_relative_to(Path(site).resolve()), 'document missing or outside site')
+        require(hashlib.sha256(path.read_bytes()).hexdigest() == full['sha256'], 'document hash mismatch')
+        verified.append(row)
+    return verified
 def money(v, digits=0): return f'{v:,.{digits}f}'
 def table(caption, headers, rows):
     return '<details class="ra-data" open><summary>Read the values and calculation</summary><p class="ra-note">On a small screen, swipe the table horizontally. Keyboard: focus the table, then use the arrow keys.</p><div class="ra-table" tabindex="0" role="region" aria-label="'+esc(caption)+'"><table><caption>'+esc(caption)+'</caption><thead><tr>'+''.join('<th scope="col">'+esc(x)+'</th>' for x in headers)+'</tr></thead><tbody>'+''.join('<tr>'+''.join(('<th scope="row">' if i==0 else '<td>')+esc(c)+('</th>' if i==0 else '</td>') for i,c in enumerate(row))+'</tr>' for row in rows)+'</tbody></table></div></details>'
@@ -101,6 +151,8 @@ def strip_additions(text):
  return original_copy(text)
 
 def main():
+ register_path=SITE/'data/research-register.json'
+ if register_path.exists():validate_full_editions(json.loads(register_path.read_text()),SITE)
  manifest_path=ROOT/'scripts/report_additions_manifest.json'
  manifest=json.loads(manifest_path.read_text()) if manifest_path.exists() else {'baseline_commit':'44af7a59a721021b2ecb56048fb06a3c98e1ff37','reports':{}}
  for path, content in make().items():

@@ -133,7 +133,7 @@ function timeData(second=false){const fx=X.historyTab==='fx',a=X.history.series.
  if(fx&&X.fxMode==='index'){const common=sets.length>1?sets[0].points.filter(p=>C.finite(p[1])&&sets[1].points.some(q=>q[0]===p[0]&&C.finite(q[1])))[0]?.[0]:sets[0].points.find(p=>C.finite(p[1]))?.[0];sets=sets.map(s=>{const base=s.points.find(p=>p[0]===common)?.[1];return{...s,points:base?s.points.filter(p=>p[0]>=common).map(p=>[p[0],C.finite(p[1])?p[1]/base*100:null]):[]};});}
  return{a,b,lines:sets};
 }
-function historyView(){const intro=head('History & context','Historical charts',t('Explore historical yields and FX, with rounded SI reference terms in a separate section.'));const tabs=subnav([['yield','Yield history'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']],X.historyTab,'historyTab');if(X.historyTab==='si')return '<div class="history-page">'+intro+tabs+(window.MarketSI?.view()||'<p>SI reference unavailable.</p>')+'</div>';if(!X.history)return intro+tabs+loading('history');return '<div class="history-page">'+intro+tabs+(X.historyTab!=='fx'&&X.historyTab!=='spx'?bondWatchPanel('history'):'')+historyControls()+contextControls()+(X.historyTab==='spx'?(window.HistoryContext?.spxView()||'SPX source unavailable'):X.historyTab==='curves'?curveView():timeView())+(X.historyTab!=='spx'?(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):'')+'</div>';}
+function historyView(){const intro=head('History & context','Historical charts',t('Explore historical yields and FX, with rounded SI reference terms in a separate section.'))+(X.historyTab!=='si'&&window.HubFullReportEditions?'<article class="card section">'+window.HubFullReportEditions.panel('weekly-fx')+'</article>':'');const tabs=subnav([['yield','Yield history'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']],X.historyTab,'historyTab');if(X.historyTab==='si')return '<div class="history-page">'+intro+tabs+(window.MarketSI?.view()||'<p>SI reference unavailable.</p>')+'</div>';if(!X.history)return intro+tabs+loading('history');return '<div class="history-page">'+intro+tabs+(X.historyTab!=='fx'&&X.historyTab!=='spx'?bondWatchPanel('history'):'')+historyControls()+contextControls()+(X.historyTab==='spx'?(window.HistoryContext?.spxView()||'SPX source unavailable'):X.historyTab==='curves'?curveView():timeView())+(X.historyTab!=='spx'?(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):'')+'</div>';}
 function historyPeriodControls(){return `<div class="tool-controls history-period-controls" role="group" aria-label="${e(t('Shared period'))}">${label('Period',select('history-period',[['all','All history'],['5','5 years'],['10','10 years'],['20','20 years'],['custom','Custom dates']],X.historyPeriod))}${label('From',input('history-start',X.start,'date'))}${label('To',input('history-end',X.end,'date'))}</div>`;}
 function addHistoryComparison(){if(X.historySecond)return;const pool=X.history.series.filter(s=>s.family!=='fx').map(s=>s.id),unused=pool.filter(id=>![X.historyA,X.historyB].includes(id)),preferred=['UST 2Y','UST 30Y',...unused].filter((id,i,a)=>unused.includes(id)&&a.indexOf(id)===i);X.historyA2=preferred[0]||pool.find(id=>id!==X.historyA)||pool[0]||'';X.historyB2=preferred[1]||'';X.historySecond=true;}
 function historyChartPeriod(){const pool=X.history.series.filter(s=>X.historyTab==='fx'?s.family==='fx':s.family!=='fx'),dates=pool.flatMap(s=>s.points.filter(p=>p[0]>=X.start&&p[0]<=X.end).map(p=>p[0])).sort();return dates.length?[dates[0],dates.at(-1)]:null;}
@@ -318,6 +318,47 @@ function routeSuffix(view){return view==='history'?'/'+X.historyTab:view==='mast
 function applyRoute(view,tab){const k=view==='history'?'historyTab':view==='master'?'masterTab':null;const valid=view==='history'?['yield','fx','curves','spx','si']:['explore','watchlists','screens','pivot','review'];if(k&&valid.includes(tab))X[k]=tab;}
 return{routeSuffix,applyRoute,connect,afterRender,masterView,historyView,ustView,feedsView,welcome};
 })();
+
+/* full-report-destinations:start */
+/* Completeness is an explicit reviewed-source declaration, never a date/length
+   heuristic. The publisher tests bind each declared public document to its hash.
+   Extracts and chart-data refreshes are independent of this registry. */
+window.HubFullReportEditions=(()=>{
+ const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const lanes={credit:'Bond & credit',earnings:'US earnings','weekly-fx':'Weekly FX & yield history'};
+ const fields=['channel','kind','completeness_verified','cutoff','document','sha256','verification'];
+ const references={
+  credit:{date:'2026-11-06',title:'Three risks. One bond portfolio.',href:'market-understanding/bond-research-review-2026-11-06/'},
+  earnings:{date:'2026-11-06',title:'US earnings: the cash-flow test',href:'market-understanding/us-earnings-cash-flow-2026-11-06/'},
+  'weekly-fx':{date:'2026-11-05',title:'Historical market events: mechanisms and consequences',href:'research/historical-market-events-2026-11-05/'}
+ };
+ let entries=[];
+ const day=value=>new Date(value+'T12:00:00+08:00').toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Singapore'});
+ function valid(row,channel){
+  const f=row?.full_edition,root=row?.href;
+  return !!(f&&typeof f==='object'&&!Array.isArray(f)&&Object.keys(f).length===fields.length&&fields.every(k=>Object.hasOwn(f,k))&&
+   row.state==='published'&&/^\d{4}-\d{2}-\d{2}$/.test(row.date||'')&&lanes[channel]&&f.channel===channel&&
+   f.kind==='complete-source-edition'&&f.completeness_verified===true&&f.verification==='original-document-completeness-reviewed'&&
+   !/\b(?:abstract|extract|abridged|summary|compilation|reference|atlas|snapshot)\b/i.test(row.edition||'')&&
+   typeof f.cutoff==='string'&&/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/.test(f.cutoff)&&Number.isFinite(Date.parse(f.cutoff))&&
+   typeof root==='string'&&/^(?:research|market-understanding)\/[a-z0-9][a-z0-9-]*\/$/.test(root)&&
+   typeof f.document==='string'&&f.document.startsWith(root)&&!f.document.includes('..')&&
+   /^(?:research|market-understanding)\/[a-z0-9][a-z0-9-]*\/[A-Za-z0-9_.-]+\.(?:html|pdf)$/.test(f.document)&&
+   (f.document===root+'index.html'||Array.isArray(row.assets)&&row.assets.includes(f.document))&&/^[a-f0-9]{64}$/.test(f.sha256||''));
+ }
+ function setRegistry(data){entries=Array.isArray(data?.entries)?data.entries:[];}
+ function select(channel){return entries.filter(r=>valid(r,channel)).slice().sort((a,b)=>Date.parse(b.full_edition.cutoff)-Date.parse(a.full_edition.cutoff)||String(a.id).localeCompare(String(b.id)));}
+ function fullLink(row,label){return `<a class="button" href="${escape(row.full_edition.document)}" target="_blank" rel="noopener noreferrer">${escape(label)}</a><p class="body-note"><time datetime="${escape(row.date)}">${escape(day(row.date))}</time> · Research cutoff: <time datetime="${escape(row.full_edition.cutoff)}">${escape(row.full_edition.cutoff)}</time></p>`;}
+ function panel(channel,reports=[]){
+  if(!lanes[channel])return '';
+  const full=select(channel),reference=references[channel],latest=reports.filter(r=>r.channel===channel&&r.status!=='Source unavailable').slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(a.id).localeCompare(String(b.id)))[0];
+  return `<section class="full-edition-panel" data-full-edition-lane="${escape(channel)}" aria-label="${escape(lanes[channel])} full editions" style="flex:1 1 100%;min-width:0;overflow-wrap:anywhere"><p class="eyebrow">${escape(lanes[channel])} · verified full editions</p>${full.length?`<h3 style="color:inherit">${escape(full[0].title)}</h3>${fullLink(full[0],'Read verified full edition')}${full.length>1?`<details><summary>Previous verified full editions</summary>${full.slice(1,5).map(r=>fullLink(r,r.title)).join('')}</details>`:''}`:'<h3 style="color:inherit">No verified full edition available</h3><p class="body-note">A saved extract or a newer update does not establish a complete source edition.</p>'}<p class="body-note">Historical research reference · <time datetime="${reference.date}">${escape(day(reference.date))}</time>: <a href="${reference.href}" style="text-decoration:underline">${escape(reference.title)}</a> · This reference is separate from the dated scheduled editions.</p>${channel==='weekly-fx'?'<p class="body-note">Chart-data refreshes are observations, not weekly narrative editions. The 5 November atlas is a historical reference.</p>':''}${latest?`<details><summary>Latest saved extract · ${escape(day(latest.date))}</summary><p>${escape(latest.title)}</p><p class="body-note">${escape(latest.cutoff)} · ${escape(latest.status)}. Not a verified full source edition.</p><button class="button ghost" data-report="${escape(latest.id)}">Read dated extract</button></details>`:''}</section>`;
+ }
+ function library(reports){return '<section class="section"><h2>Full editions and dated extracts</h2><p>Only explicitly verified complete source documents receive a full-edition link. Historical references and saved extracts retain their own dates and coverage.</p><div class="grid three">'+Object.keys(lanes).map(ch=>'<article class="card">'+panel(ch,reports)+'</article>').join('')+'</div></section>';}
+ function readerNotice(r){return ['credit','earnings'].includes(r?.channel)?'<p class="notice" role="note">Saved dated extract or imported text · completeness is not verified as an original full edition. The original reader, reporting cutoff and coverage notes are retained.</p>':'';}
+ return Object.freeze({setRegistry,select,valid,panel,library,readerNotice});
+})();
+/* full-report-destinations:end */
 
 
 
