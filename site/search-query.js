@@ -64,7 +64,7 @@ function match(node,entry){
 }
 const articleKinds=new Set(['Headline','Hourly story','Hourly edition','Report','Research edition','Research library','Earnings card','Watchlist research','Public diary','External research PDF']);
 function isArticle(entry){return articleKinds.has(entry.kind)||(entry.kind==='Page'&&/^(research\/|data\/watchlist\/reports\/)/.test(entry.href||''));}
-// Content priority is only a relevance tie-breaker, never a match or score boost.
+// Rank matched content by intent; exact titles and security identifiers remain direct destinations.
 const securityKinds=new Set(['Security master','Stock directory','Bond directory','UST reference']);
 const researchKinds=new Set(['Report','Research edition','Research library','White Papers & Research Papers','Watchlist research','Public diary','External research PDF']);
 function exactSecurity(entry,query){
@@ -77,13 +77,14 @@ function exactSecurity(entry,query){
 }
 function relevancePriority(entry,query){
  if(!String(query||'').trim())return 1;
+ if(String(entry.title||'').trim().toLowerCase()===String(query).trim().toLowerCase())return -2;
  if(exactSecurity(entry,query))return -1;
  if(researchKinds.has(entry.kind)||(entry.kind==='Page'&&/^(research\/|data\/watchlist\/reports\/)/.test(entry.href||'')))return 0;
  return securityKinds.has(entry.kind)?2:1;
 }
 function search(entries,query,kind='',scope='all'){
  const parsed=parse(query);
- return entries.filter(e=>(!kind||e.kind===kind)&&(scope!=='articles'||isArticle(e))&&match(parsed.tree,e)).map(e=>({e,score:parsed.terms.reduce((n,t)=>n+(contains(e.title||'',t.value,t.phrase)?5:0),0)})).sort((a,b)=>b.score-a.score||relevancePriority(a.e,query)-relevancePriority(b.e,query)||String(b.e.date||'').localeCompare(String(a.e.date||''))||String(a.e.title).localeCompare(String(b.e.title))).map(x=>x.e);
+ return entries.filter(e=>(!kind||e.kind===kind)&&(scope!=='articles'||isArticle(e))&&match(parsed.tree,e)).map(e=>({e,score:parsed.terms.reduce((n,t)=>n+(contains(e.title||'',t.value,t.phrase)?5:0),0)})).sort((a,b)=>relevancePriority(a.e,query)-relevancePriority(b.e,query)||b.score-a.score||String(b.e.date||b.e.display_date||'').localeCompare(String(a.e.date||a.e.display_date||''))||String(a.e.title).localeCompare(String(b.e.title))).map(x=>x.e);
 }
 function quote(value){return '"'+String(value).replace(/\\/g,'\\\\').replace(/"/g,'\\"')+'"';}
 function appendTag(query,tag,operator='AND'){const term='tag:'+quote(canonical(tag));return query.trim()?'('+query.trim()+') '+(operator==='OR'?'OR':'AND')+' '+term:term;}

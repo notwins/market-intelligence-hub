@@ -21,17 +21,108 @@ function healthInfo(feed,health){
  const success=feed.successLabel||'Latest check succeeded';
  return {state:result,label:partialCoverage?success+'; reporting coverage partial':{ok:success,failed:'Latest check failed',partial:'Latest check has partial coverage',unknown:'Latest check status unknown'}[result]};
 }
-function row(feed,data,error=false,health=null){
- const raw=value(data,feed.field),has=!error&&M.dateInfo(raw).precision!=='unknown',info=healthInfo(feed,health);
- const checked=health?.[feed.checkedField],hasCheck=M.dateInfo(checked).precision!=='unknown';
- const healthHTML=info?' · '+E(info.label)+' · Checked at: '+(hasCheck?M.dateHTML(checked):'Date not supplied'):'';
- return '<div class="feed-freshness-item" data-feed="'+feed.id+'"'+(!has?' data-unavailable="true"':'')+(info?' data-health="'+info.state+'"':'')+'><a href="'+feed.href+'">'+E(feed.label)+'</a><span>'+E(feed.basis)+': '+(error?'Unavailable':has?M.dateHTML(raw):'Date not supplied')+healthHTML+'</span></div>';
+async function fetchSavedFeed(feed, previous, read = json) {
+  try {
+    const [data, health] = await Promise.all([
+      read(feed.file),
+      feed.statusFile
+        ? read(feed.statusFile).catch(() => null)
+        : null
+    ]);
+
+    if (
+      M.dateInfo(value(data, feed.field)).precision === 'unknown'
+    ) {
+      throw new Error('Saved timestamp unavailable');
+    }
+
+    return [data, false, health, false];
+  } catch {
+    const usable =
+      previous?.[1] === false &&
+      M.dateInfo(
+        value(previous[0], feed.field)
+      ).precision !== 'unknown';
+
+    // Keep the original timestamp, but clear the old success badge.
+    return usable
+      ? [previous[0], false, null, true]
+      : [null, true, null, false];
+  }
 }
-const api={feeds,value,row,healthInfo};if(typeof module!=='undefined'&&module.exports)module.exports=api;
+
+function row(
+  feed,
+  data,
+  error = false,
+  health = null,
+  retained = false
+) {
+  const raw = value(data, feed.field);
+  const has =
+    !error && M.dateInfo(raw).precision !== 'unknown';
+  const info = healthInfo(feed, health);
+
+  const checked = health?.[feed.checkedField];
+  const hasCheck =
+    M.dateInfo(checked).precision !== 'unknown';
+
+  const healthHTML = info
+    ? ' · ' + E(info.label) + ' · Checked at: ' +
+      (hasCheck ? M.dateHTML(checked) : 'Date not supplied')
+    : '';
+
+  const note = retained
+    ? '<span>Refresh failed; showing the last successful saved timestamp.</span>'
+    : '';
+
+  return (
+    '<div class="feed-freshness-item" data-feed="' +
+    feed.id + '"' +
+    (!has ? ' data-unavailable="true"' : '') +
+    (info ? ' data-health="' + info.state + '"' : '') +
+    '><a href="' + feed.href + '">' +
+    E(feed.label) + '</a><span>' +
+    E(feed.basis) + ': ' +
+    (error
+      ? 'Unavailable'
+      : has
+        ? M.dateHTML(raw)
+        : 'Date not supplied') +
+    healthHTML + '</span>' + note + '</div>'
+  );
+}
+
+const api = {
+  feeds,
+  value,
+  row,
+  healthInfo,
+  fetchSavedFeed
+};if(typeof module!=='undefined'&&module.exports)module.exports=api;
 if(!root.document)return;
 let saved=new Map(),current='overview',lastFetch=0,pending=null;
 function paint(){const slot=document.getElementById('feed-freshness');if(!slot)return;const shown=feeds.filter(f=>current==='feeds'||f.views.includes(current));slot.hidden=!shown.length;slot.innerHTML=shown.length?'<p>Saved feed timestamps · Singapore time. Preparation, retrieval and verification are labelled separately from source publication or observation dates. Checked at describes the saved check, not a new observation.</p><div class="feed-freshness-list">'+shown.map(f=>saved.has(f.id)?row(f,...saved.get(f.id)):'<div class="feed-freshness-item"><a href="'+f.href+'">'+E(f.label)+'</a><span>Loading saved timestamp…</span></div>').join('')+'</div>':'';}
 async function json(path){const r=await fetch(path,{cache:'no-store'});if(!r.ok)throw Error('Unavailable');return r.json();}
-async function load(){if(pending||Date.now()-lastFetch<300000)return pending;pending=Promise.all(feeds.map(async f=>{try{const [d,h]=await Promise.all([json(f.file),f.statusFile?json(f.statusFile).catch(()=>null):null]);saved.set(f.id,[d,false,h]);}catch{saved.set(f.id,[null,true,null]);}paint();})).finally(()=>{lastFetch=Date.now();pending=null;});return pending;}
-root.FeedFreshness={mount(view){current=view;paint();load();}};
+async function load(force=false){
+  if (pending || (!force && Date.now() - lastFetch < 300000)) {
+    return pending;
+  }
+
+  pending = Promise.all(
+    feeds.map(async feed => {
+      saved.set(
+        feed.id,
+        await fetchSavedFeed(feed, saved.get(feed.id))
+      );
+      paint();
+    })
+  ).finally(() => {
+    lastFetch = Date.now();
+    pending = null;
+  });
+
+  return pending;
+}
+root.FeedFreshness={mount(view){current=view;paint();return load();},refresh(){return load(true);}};
 })(typeof window!=='undefined'?window:globalThis);

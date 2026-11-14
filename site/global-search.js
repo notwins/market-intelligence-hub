@@ -23,13 +23,14 @@ function suggest(prepared,query,limit=14){
  const prefix=(hay,needles)=>needles.every(w=>hay.some(t=>t.startsWith(w)));
  const scored=[];
  for(const row of prepared){
-  const top=prefix(row.words,words)||prefix(row.words,terms),body=top||prefix(row.body,words)||prefix(row.body,terms);
+  const navigation=['Section','Subsection'].includes(row.entry.kind),alias=canonical&&norm(canonical)!==norm(query);
+  const top=navigation?(/^[A-Z]{2,3}$/.test(query.trim())?terms.every(w=>row.words.includes(w)):((!alias&&prefix(row.words,words))||prefix(row.words,terms))):(prefix(row.words,words)||prefix(row.words,terms)),body=top||(!navigation&&(prefix(row.body,words)||prefix(row.body,terms)));
   if(!body)continue;
   const entry=row.entry,level=entry.kind==='Section'?0:entry.kind==='Subsection'?1:2;
   const score=(norm(query)&&row.title.startsWith(norm(query))?30:0)+(top?10:0);
   scored.push({entry,level,score});
  }
- scored.sort((a,b)=>a.level-b.level||b.score-a.score||Q.relevancePriority(a.entry,query)-Q.relevancePriority(b.entry,query)||String(b.entry.date||'').localeCompare(String(a.entry.date||''))||String(a.entry.title).localeCompare(String(b.entry.title)));
+ scored.sort((a,b)=>a.level-b.level||Q.relevancePriority(a.entry,query)-Q.relevancePriority(b.entry,query)||b.score-a.score||String(b.entry.date||b.entry.display_date||'').localeCompare(String(a.entry.date||a.entry.display_date||''))||String(a.entry.title).localeCompare(String(b.entry.title)));
  // Reserve room for saved papers/pages even when many navigation rows match.
  const chosen=[],counts=[0,0,0];for(const x of scored){const max=words.length?[4,3,10][x.level]:[12,2,0][x.level];if(counts[x.level]>=max)continue;chosen.push(x.entry);counts[x.level]++;if(chosen.length>=limit)break;}
  return {entries:chosen,total:scored.length};

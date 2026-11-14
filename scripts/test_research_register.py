@@ -97,6 +97,12 @@ class ResearchRegisterTests(unittest.TestCase):
   frame.contentDocument.events.keydown({key:'Escape',preventDefault(){prevented=true;},stopPropagation(){}});
   assert(prevented);assert.equal(dialog.open,false);assert.equal(content.children.length,0);assert.equal(active,valid);
   valid.events.click();close.events.click();assert.equal(dialog.open,false);assert.equal(active,valid);
+  let pendingClose;
+  dialog.close=()=>{dialog.open=false;pendingClose=dialog.events.close;};
+  valid.events.click();dialog.close();valid.events.click();
+  const reopened=content.children[0];assert(dialog.open);assert.equal(active,close);
+  pendingClose();assert(dialog.open);assert.equal(content.children[0],reopened);assert.equal(active,close);
+  dialog.close();pendingClose();assert.equal(content.children.length,0);assert.equal(active,valid);
   """
   p=subprocess.run(['node','-e',code],cwd=ROOT,text=True,capture_output=True)
   self.assertEqual(p.returncode,0,p.stdout+p.stderr)
