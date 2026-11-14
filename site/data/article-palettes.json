@@ -963,6 +963,150 @@
         "#FFFFFF"
       ],
       "source_sha256": "e0e8a5b51ad95f8273c682a1c8421f653e0e4646e730f725f657860c97fdbbb7"
+    },
+    {
+      "id": "research-diversification-one-pager-2026-11-14",
+      "title": "Diversification, made simple: one-page brief",
+      "href": "research/diversification-one-pager-2026-11-14/",
+      "date": "2026-11-14",
+      "edition": "One-pager",
+      "recommended_theme": "03",
+      "declared_theme": "03",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#334155",
+        "#45535A",
+        "#222222",
+        "#F1F5F9",
+        "#FFFFFF"
+      ],
+      "source_sha256": "69293cab8651fbf0942fef6972ce16e827f583af2d3ebef123b613705fdbedba"
+    },
+    {
+      "id": "research-gold-xau-v2-one-pager-2026-11-14",
+      "title": "Gold / XAU V2: one-page brief",
+      "href": "research/gold-xau-v2-one-pager-2026-11-14/",
+      "date": "2026-11-14",
+      "edition": "One-pager",
+      "recommended_theme": "09",
+      "declared_theme": "09",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#92400E",
+        "#323551",
+        "#62554D",
+        "#24302D",
+        "#52605B"
+      ],
+      "source_sha256": "c8f0059040d10227702a44a81f192654c8bb25ba2b091a2a76323b32de5db73d"
+    },
+    {
+      "id": "research-bis-ai-financing-loop-2026-11-13",
+      "title": "AI’s financing loop: funding and shared credit risk",
+      "href": "research/bis-ai-financing-loop-2026-11-13/",
+      "date": "2026-11-13",
+      "edition": "Standalone 20-page research and one-page brief",
+      "recommended_theme": "07",
+      "declared_theme": "07",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#122B57",
+        "#1C4286",
+        "#456078",
+        "#F9FAFC",
+        "#F0F9F8"
+      ],
+      "source_sha256": "e7886dfa8577a4396db0a8729e890de7eec329066c628a95d45a6946cffe2e6c"
+    },
+    {
+      "id": "research-mas-snb-one-page-2026-11-14",
+      "title": "MAS and SNB: one-page policy brief",
+      "href": "research/mas-snb-one-page-2026-11-14/",
+      "date": "2026-11-14",
+      "edition": "One-pager",
+      "recommended_theme": "08",
+      "declared_theme": "08",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#505B65",
+        "#334155",
+        "#20272C",
+        "#F1F5F9",
+        "#DCE1E6"
+      ],
+      "source_sha256": "525c8fb77e1cae706eff71b6a4ba2a9a5ce52f4e7c2aba9ca477b2a8d7fc2a23"
+    },
+    {
+      "id": "research-cpf-temasek-two-page-2026-11-14",
+      "title": "CPF OA and Temasek 2070: two-page summary",
+      "href": "research/cpf-temasek-two-page-2026-11-14/",
+      "date": "2026-11-14",
+      "edition": "Two-page summary",
+      "recommended_theme": "06",
+      "declared_theme": "06",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#265777",
+        "#CCCCCC",
+        "#FFFEFD",
+        "#26382F",
+        "#FFFFFF"
+      ],
+      "source_sha256": "645946be53cd0c89b9bf37fa2894139e197b86beafb1dd363bfb1d2fc857cbe8"
+    },
+    {
+      "id": "research-us-earnings-full-2026-11-13",
+      "title": "US Earnings Command Centre · 13 November 2026",
+      "href": "research/us-earnings-full-2026-11-13/",
+      "date": "2026-11-13",
+      "edition": "Full dashboard",
+      "recommended_theme": "04",
+      "declared_theme": "04",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#263849",
+        "#547076",
+        "#46545F",
+        "#8D3040",
+        "#286151"
+      ],
+      "source_sha256": "1cfe5dca685064420e6206e656c0dc47a851c44cea6adc64a26d16f6dbf62962"
+    },
+    {
+      "id": "research-pimco-public-companion-2026-11-14",
+      "title": "PIMCO Income, UST and Temasek: one-page public companion",
+      "href": "research/pimco-public-companion-2026-11-14/",
+      "date": "2026-11-14",
+      "edition": "One-page public companion",
+      "recommended_theme": "03",
+      "declared_theme": "03",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#007190",
+        "#45535A",
+        "#D8E9EE",
+        "#FEFDFB",
+        "#222D31"
+      ],
+      "source_sha256": "a2514285f0d4c260562c00b2c4bd64741d14532d622e3551590f21aac3ae2357"
+    },
+    {
+      "id": "research-spx-collar-public-companion-2026-11-14",
+      "title": "SPX collar: one-page public companion",
+      "href": "research/spx-collar-public-companion-2026-11-14/",
+      "date": "2026-11-14",
+      "edition": "One-page public companion",
+      "recommended_theme": "05",
+      "declared_theme": "05",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#0C2233",
+        "#12354E",
+        "#4A5C67",
+        "#FDFCFA",
+        "#FFFFFF"
+      ],
+      "source_sha256": "c14e0dd8f69a5ba57cc2314228b9e5b3241fd799417b202a0f53dacfd9c598f7"
     }
   ]
 }
