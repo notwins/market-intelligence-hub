@@ -46,6 +46,9 @@
     if (loaded) return;
     if (loading) return loading;
     const content = dialog.querySelector('.hub-map-content');
+    const recoverFocus = content.contains(document.activeElement);
+    const shouldRecoverFocus = () => recoverFocus && dialog.open &&
+      (document.activeElement === document.body || document.activeElement === dialog);
     content.innerHTML = '<p role="status">Loading the site map…</p>';
     loading = (async () => {
       const controller = new AbortController();
@@ -70,16 +73,14 @@
           copy.querySelectorAll('details').forEach(n => { n.open = false; });
           fragment.append(copy);
         }
-        const restoreFocus = content.contains(document.activeElement);
         content.replaceChildren(fragment);
         HubSiteMap.mount({querySelector:s=>content.querySelector(s),getElementById:id=>content.querySelector('#'+id)});
         loaded = true;
-        if (restoreFocus && dialog.open) content.querySelector('#map-search').focus();
+        if (shouldRecoverFocus()) content.querySelector('#map-search').focus();
       } catch {
-        const restoreFocus = content.contains(document.activeElement);
         content.innerHTML = '<p role="status">The map could not load. Try again, or open the full-page map below.</p><button type="button" class="hub-map-retry">Try again</button>';
         content.querySelector('button').addEventListener('click', () => load());
-        if (restoreFocus && dialog.open) content.querySelector('button').focus();
+        if (shouldRecoverFocus()) content.querySelector('button').focus();
       } finally { clearTimeout(timeout); loading = null; }
     })();
     return loading;
