@@ -85,6 +85,7 @@ jobs:
           node scripts/test_bos_equity.cjs
           node scripts/test_share_prices.cjs
           node scripts/test_share_charts.cjs
+          node scripts/test_equity_research.cjs
           node scripts/test_share_enrichment.cjs
           node scripts/test_beta_shares.cjs
           node scripts/test_share_consumer_defaults.cjs
@@ -150,6 +151,7 @@ jobs:
           node scripts/test_bos_equity.cjs
           node scripts/test_share_prices.cjs
           node scripts/test_share_charts.cjs
+          node scripts/test_equity_research.cjs
           node scripts/test_share_enrichment.cjs
           node scripts/test_beta_shares.cjs
           node scripts/test_share_consumer_defaults.cjs
