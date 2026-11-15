@@ -40,3 +40,21 @@ console.log('PASS 30 pinned bonds, 29 raw UST source values and price conversion
 for(const r of D.rows.filter(r=>r.issuerType==='ust'))assert.equal(r.modifiedDuration,Number(r.raw.Mduration));
 assert.equal(B._test.yieldBand(null),'missing');assert.equal(B._test.yieldBand(-.01),'negative');assert.equal(B._test.yieldBand(B._test.yieldRange.min),'0');assert.equal(B._test.yieldBand(B._test.yieldRange.max),'4');
 const heatBefore=B._test.yieldBand(D.rows[0].reportedYield);s.query=D.rows[0].isin;assert(B._test.table(s).includes('Modified<br>duration'));assert(B._test.table(s).includes('5.84'));assert.equal(B._test.yieldBand(D.rows[0].reportedYield),heatBefore);for(const id of B._test.verifiedBSM)assert(B._test.bondLink(D.rows.find(r=>r.isin===id)).includes('/bond-factsheet/'+id));
+
+// The daily list is separate from the retained undated reference and has all 34 identities.
+const daily=require('../site/Bond Prices - Type JS - 16-Nov-03.10.js');
+const prices=JSON.parse(fs.readFileSync('site/data/Bond Prices - Type JSON - 16-Nov-03.10.json','utf8'));
+assert.equal(prices.instruments.length,34);assert.equal(new Set(prices.instruments.map(r=>r.id)).size,34);
+assert.equal(prices.instruments.filter(r=>r.source==='WSJ').length,29);
+assert.equal(prices.instruments.filter(r=>r.source==='Bondsupermart').length,5);
+assert.equal(prices.instruments.filter(r=>r.id==='US87973RAW07').length,1);
+const dailyHTML=daily.render(prices);assert(dailyHTML.includes('7:00 am Singapore'));assert(dailyHTML.includes('Bid / Ask price'));assert(dailyHTML.includes('Asked yield')||dailyHTML.includes('Ask '));
+for(const r of prices.instruments)assert(dailyHTML.includes(r.id));
+assert(!dailyHTML.includes('NaN'));assert(!dailyHTML.includes('undefined'));
+const days=daily.lastDays([{date:'2026-11-12',bid:1},{date:'2026-11-13',bid:2},{date:'2026-11-13',bid:3}]);
+assert.equal(days.length,2);assert.equal(days[0].bid,3);
+const unsafe=structuredClone(prices);unsafe.instruments[0].name='<script>bad</script>';unsafe.instruments[0].source_url='javascript:bad';
+assert(!daily.render(unsafe).includes('<script>'));assert(!daily.render(unsafe).includes('javascript:bad'));
+assert(fs.readFileSync('site/desk.html','utf8').includes('id="bonds" data-daily-bonds'));
+assert(fs.readFileSync('.github/workflows/publish.yml','utf8').includes("cron: '0 23 * * *'"));
+console.log('PASS daily bond list: 34 distinct identities, source labels, accessible dated prices/history, escaped text and 7am cloud schedule');

@@ -6,6 +6,8 @@ on:
   schedule:
     # Midnight UTC is 08:00 Asia/Singapore. GitHub may delay scheduled jobs.
     - cron: '0 0 * * *'
+    # Daily bond shortlist: 07:00 Asia/Singapore. GitHub may delay starts.
+    - cron: '0 23 * * *'
     # Weekly check of monthly Fed FX and benchmark yields. UTC; may be delayed.
     - cron: '17 6 * * 6'
 permissions:
@@ -21,6 +23,7 @@ jobs:
     outputs:
       update_outcome: ${{ steps.update.outcome }}
       history_outcome: ${{ steps.history.outcome }}
+      bond_outcome: ${{ steps.bonds.outcome }}
       source_sha: ${{ steps.publication_revision.outputs.sha }}
     steps:
       - uses: actions/checkout@v6
@@ -110,6 +113,15 @@ jobs:
           node scripts/test_bond_watchlist.cjs
           node scripts/test_desk_ui.cjs
           node scripts/test_desk_release.cjs
+      - name: Test bond quote conversion, identity and retention
+        run: python3 "scripts/Bond Prices Tests - Type Test - 16-Nov-03.10.py"
+      - name: Refresh watched bond prices and yields
+        id: bonds
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 23 * * *'
+        continue-on-error: true
+        run: python3 "scripts/Bond Prices - Type Script - 16-Nov-03.10.py"
+      - name: Validate saved bond quotes and history
+        run: python3 "scripts/Bond Prices - Type Script - 16-Nov-03.10.py" --validate
       - name: Refresh Reuters headline metadata
         id: update
         if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * *'
@@ -239,7 +251,7 @@ jobs:
           PAGES_URL: ${{ steps.deployment.outputs.page_url }}
         run: python3 scripts/verify_research_destinations.py --base-url "$PAGES_URL"
       - name: Flag feed failure after publishing visible health status
-        if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure'
+        if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure' || needs.build.outputs.bond_outcome == 'failure'
         run: |
           echo 'A feed failed. Previous valid data and visible failure status were published.'
           exit 1

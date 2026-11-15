@@ -14,6 +14,8 @@ def validate(artifact_root, report):
     artifact_root = Path(artifact_root).resolve()
     subprocess.run([sys.executable, '-m', 'unittest', 'discover', '-s', 'scripts', '-p', 'test_*.py'],
                    cwd=artifact_root, check=True)
+    subprocess.run([sys.executable, 'scripts/Bond Prices Tests - Type Test - 16-Nov-03.10.py'],
+                   cwd=artifact_root, check=True)
     # Use the workflow's complete JS suite, once each, in its listed order. This
     # keeps the final artifact gate in sync when a publisher adds a source check.
     workflow = (ROOT/'.github/workflows/publish.yml').read_text(encoding='utf-8')
