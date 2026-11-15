@@ -30,4 +30,3 @@ const ctx={window:null,console,fetch:async()=>({ok:!broken,json:async()=>payload
  assert(v4.includes('si-pricing.js?v=20261106.grouping-pivot1'));assert(v4.includes('si-pricing.css?v=20261106.compact-ui1'));assert(v4.includes('MarketSI.connect('));assert(watch.includes('href="#history/si"'));assert.equal((v4.match(/data-view="history\/si"/g)||[]).length,2,'desktop and More-menu SI shortcuts');assert(tools.includes("['si','▧ SI Pricing']"));assert(tools.includes("['yield','shares','beta-shares','beta2-shares','fx','curves','spx','si']"));assert(tools.indexOf("if(X.historyTab==='si')")<tools.indexOf("if(!X.history)return intro+tabs+loading('history')"));
  console.log('PASS SI225 allowlist, unverified historical terms, unit/basis limits, filters/reset, safe data, failure retention and Historical charts integration');
 })().catch(e=>{console.error(e);process.exitCode=1;});
-
