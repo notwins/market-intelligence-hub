@@ -1,0 +1,69 @@
+/* Wide-screen trading desk: preserve readable data, remove repeated labels,
+   and give the twelve chart panels most of the first desktop screen. */
+@media (min-width:1600px){
+  .masthead{height:45px;padding-inline:22px;gap:34px}
+  .brand-symbol{width:24px;height:24px}
+  .brand small{font-size:10px;margin-top:2px}
+  .masthead-tools button{padding:5px 9px}
+  .masthead-nav a{font-size:11px}
+  main{padding:12px 22px 10px}
+  .workspace-heading{margin-bottom:10px;min-height:43px}
+  .page-heading{display:grid;grid-template-columns:auto auto;column-gap:22px;align-items:end}
+  .page-heading .eyebrow{grid-column:1/-1;font-size:9px;letter-spacing:1.25px;margin-bottom:2px}
+  .page-heading h1{font-size:23px;margin:0;letter-spacing:-.65px}
+  .page-heading p{font-size:11px;padding-bottom:2px}
+  .workspace-meta{gap:6px}
+  .snapshot-date{font-size:10px}
+  .controlbar{padding:6px 11px;gap:20px;margin-bottom:10px;min-height:36px}
+  .range-control label,.heat-key>span,.method-button{font-size:10px}
+  .range-control select{font-size:11px;padding-block:3px}
+  .method-button{padding-block:3px}
+  .section-line{margin-bottom:6px;min-height:13px}
+  .section-line>span,.section-line #summary-count,.section-line .chart-hint{font-size:10px}
+  .metric-grid{gap:8px;grid-template-columns:repeat(8,minmax(0,1fr))}
+  .headline-metrics .metric-card{padding:9px 11px 7px}
+  .headline-metrics .metric-top{min-height:18px;font-size:11px;line-height:1.25}
+  .headline-metrics .zbadge{font-size:10px;padding:1px 4px}
+  .headline-metrics .metric-value{font-size:27px;margin:3px 0 2px;line-height:1.12}
+  .headline-metrics .metric-change{font-size:10px;min-height:13px;line-height:1.25}
+  .headline-metrics .metric-date{font-size:10px;margin-top:3px;line-height:1.2}
+  .headline-metrics .sparkline{height:17px;margin:3px 0 0}
+  .chart-section{margin-top:11px}
+  .chart-grid{gap:8px;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .chart-card{padding:8px 11px 7px;border-top-width:2px;border-radius:8px}
+  .chart-head{min-height:17px;align-items:center}
+  .chart-head h3{font-size:12px;line-height:1.25}
+  .chart-head small{font-size:10px}
+  .panel-selector{margin:1px 0 2px;min-height:20px}
+  .panel-selector select{font-size:10px;min-height:20px;padding-block:1px}
+  .panel-selector small{font-size:10px}
+  .chart-card .chart-values{display:none}
+  .chart-card .chart-svg{height:95px;margin-top:1px}
+  .chart-svg text{font-size:11px}
+  .chart-legend{gap:1px 12px;margin-top:2px;min-height:22px;align-content:start}
+  .chart-legend button{min-height:19px;font-size:10px;line-height:1.35;padding:1px 0}
+  .chart-legend b{font-size:11px;font-weight:650;color:var(--ink)}
+  .chart-note{font-size:10px;line-height:1.3;min-height:17px;margin-top:4px;padding-top:4px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+  .holder-bars{height:95px;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-flow:row;align-content:center;column-gap:14px;row-gap:2px;padding:1px 0}
+  .holder-row{grid-template-columns:90px minmax(15px,1fr) 31px;gap:4px;font-size:10px;line-height:12px}
+  .holder-track{height:6px}
+  .attention-strip{padding:8px 11px;margin:10px 0 0;gap:16px;min-height:46px}
+  .attention-heading{min-width:175px}
+  .attention-heading p{font-size:10px}
+  #attention-list{gap:8px}
+  #attention-list>.attention-item{padding:5px 8px;font-size:10px}
+  #attention-list .attention-item small{font-size:10px!important;margin-top:1px;line-height:1.2}
+  #attention-list .attention-item b{font-size:11px}
+  .universe-panel{margin-top:8px}
+  .universe-panel>summary{padding:10px 13px;min-height:38px}
+  .universe-panel summary strong{font-size:10px}
+  .universe-panel summary small,.drawer-label{font-size:10px}
+  .page-footer{margin-top:8px;font-size:10px;line-height:1.35}
+  .footer-badge{font-size:9px;letter-spacing:.8px}
+  /* Expanded chart dialogs intentionally remain spacious. */
+  dialog .chart-values{display:flex}
+  dialog .chart-svg{height:auto;min-height:240px}
+  dialog .holder-bars{height:auto;grid-template-columns:1fr;gap:12px}
+  dialog .holder-row{grid-template-columns:180px 1fr 60px;font-size:12px;line-height:1.4}
+  dialog .chart-note{white-space:normal;overflow:visible}
+}

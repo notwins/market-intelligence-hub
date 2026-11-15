@@ -102,6 +102,10 @@ def build():
  for x in read('data/reports.json').get('reports',[]):
   target='archive.html?report='+quote(x['id'],safe='')+'#report-'+quote(x['id'],safe='')
   add('Report',x.get('title',x['id']),strings(x),target,x.get('date'),None,x.get('status','Saved edition'),location={'label':'Research archive → '+str(x.get('date','Unknown edition')),'href':target,'exact':True})
+ # Index source metadata, not the large historical observation arrays.
+ if (ROOT/'data/fred/catalog.json').is_file():
+  for x in read('data/fred/catalog.json').get('datasets',[]):
+   add('Macro dataset',x['id']+' · '+x['title'],strings([x['provider'],x['group'],x['unit'],x['frequency']]),'fred/data.html#'+quote(x['id'],safe=''),x['last'],x['source_url'],'Saved macro archive · '+x['first']+' to '+x['last'],tags=[x['group'],x['provider']])
  # Parse the public JSON payload, never index executable JavaScript text.
  legacy=json.loads((ROOT/'v2-data.js').read_text().split('=',1)[1].strip().rstrip(';'))
  for x in legacy.get('reports',[]):add('Research edition',x.get('title',x.get('id','Research edition')),strings(x),'v4.html#reports',x.get('date'),None,'Original imported edition; not refreshed by search')
