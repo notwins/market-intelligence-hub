@@ -119,6 +119,7 @@ def write_views(snapshot):
         page = page.replace('LOCAL RESEARCH PREVIEW', 'FRED OBSERVATORY').replace('Local research preview', 'FRED Observatory')
         start = page.index('>', page.index('<body')) + 1
         page = page[:start] + '<nav class="fred-hub-links" aria-label="FRED navigation"><a href="../desk.html">← Market Intel</a><a href="index.html">FRED Observatory</a><a href="market-desk.html">Market Desk</a><a href="risk-observatory.html">Risk Observatory</a><a href="data.html">Data archive · 74 datasets</a></nav>' + page[start:]
+        page = '\n'.join(line if line.strip() else '' for line in page.split('\n'))
         (views / filename).write_text(page, encoding='utf-8')
 
 
