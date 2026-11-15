@@ -4,3 +4,5 @@
 .mih-legal-footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:7px 17px}
 .mih-legal-footer a{color:#155e75;text-decoration:underline;text-underline-offset:3px}
 .mih-legal-footer a:first-child{font-weight:600}
+
+.mih-blueprint-nav{margin-top:12px}.mih-blueprint-nav a{font-weight:650}@media(max-width:700px){body:has(.bottom-nav) .mih-legal-footer{padding-bottom:110px}}

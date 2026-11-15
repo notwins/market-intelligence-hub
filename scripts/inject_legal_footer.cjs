@@ -4,6 +4,9 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
+const accessFile = path.join(root, 'data/blueprint-access.json');
+const access = fs.existsSync(accessFile) ? JSON.parse(fs.readFileSync(accessFile, 'utf8')) : null;
+if(access){const owner=new URL(access.owner_url);if(access.schema_version!==1||owner.protocol!=='https:'||owner.username||owner.password||owner.search||owner.hash||!owner.hostname.endsWith('.chatgpt.site'))throw Error('Invalid blueprint access destination');}
 const links = [
   ['index.html', 'Legal &amp; transparency'], ['disclaimer.html', 'Disclaimer'],
   ['privacy.html', 'Privacy'], ['terms.html', 'Terms'],
@@ -15,18 +18,20 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   if (protectedPaths.has(relative)) { preserved++; continue; }
   if (relative.startsWith('legal/')) { legal++; continue; }
   let content = fs.readFileSync(filename, 'utf8');
-  if (content.includes(marker)) { unchanged++; continue; }
   const directory = path.posix.dirname(relative);
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
+  const bootstrap=path.posix.relative(directory,'blueprint-access.js');
+  if(access&&!content.includes('id="mih-blueprint-access"'))content=content.replace(/<\/head\s*>/i,'<script id="mih-blueprint-access" src="'+bootstrap+'" defer></script></head>');
   if (!/<\/head\s*>/i.test(content)) throw new Error('Cannot attach footer stylesheet: ' + relative);
-  content = content.replace(/<\/head\s*>/i, '<link rel="stylesheet" href="' + css + '"></head>');
+  if(!content.includes('<link rel="stylesheet" href="'+css+'">'))content = content.replace(/<\/head\s*>/i, '<link rel="stylesheet" href="' + css + '"></head>');
   const footer = marker + '\n<footer class="mih-legal-footer" role="contentinfo"><div>' +
     '<p>Market Intelligence Hub · Independent educational research · Not personalised financial advice. ' +
     'Market data and simulations may be delayed, hypothetical or incomplete.</p>' +
     '<nav aria-label="Legal and disclosure information">' +
     links.map(([file, title]) => '<a href="' + legalBase + file + '">' + title + '</a>').join(' ') +
-    '</nav></div></footer>';
+    '</nav>'+(access?'<nav class="mih-blueprint-nav" aria-label="Blueprint navigation" data-blueprint-footer><a href="'+path.posix.relative(directory,'blueprint.html')+'" target="_blank" rel="noopener noreferrer">◈ System Atlas</a><a href="'+access.owner_url+'" target="_blank" rel="noopener noreferrer">🔒 Private owner blueprint · password required</a></nav>':'')+'</div></footer>';
+  if(content.includes(marker)){const start=content.lastIndexOf(marker),end=content.indexOf('</footer>',start);if(end<0)throw Error('Existing footer is incomplete');content=content.slice(0,start)+footer+content.slice(end+9);fs.writeFileSync(filename,content,'utf8');unchanged++;continue;}
   const bodies = [...content.matchAll(/<\/body\s*>/gi)], endings = [...content.matchAll(/<\/html\s*>/gi)];
   if (!bodies.length && !endings.length) throw new Error('Cannot place footer at document end: ' + relative);
   const at = bodies.length ? bodies.at(-1).index : endings.at(-1).index;

@@ -1,0 +1,11 @@
+# Blueprint access
+
+The Hub links to its public System Atlas and the separately hosted password-only owner blueprint. `site/data/blueprint-access.json` contains only public entry URLs and descriptive access metadata. No password, signing secret, private task IDs or owner overlay belongs in this repository.
+
+`scripts/inject_legal_footer.cjs` adds two plain HTML footer links and the shared `blueprint-access.js` bootstrap to every eligible current page in the final artifact. Repeated injection replaces only the existing standard footer and is idempotent. The six native legal pages carry the same links in their source footer. The bootstrap adds a compact pair beside existing Site map controls, with named icon links on narrow screens. The System Atlas's native footer gains an owner-entry link too.
+
+The existing `site-navigation.js` loader also enables the shared access bar on protected research landings that already load it, without changing original HTML bytes. Protected historical reports that have no shared loader remain unchanged: the publication contract freezes those bytes and hashes, and source discovery found 71 protected HTML pages without an external script. This is a deliberate archive exception, not a claim of universal injection into every old report file.
+
+The private Site is a Worker-only server gate. It holds the password, signing key and four-node dated owner overlay as hosted secrets. Source and deployment artifacts contain the public fallback map and gate code only. After authentication it reads the latest fixed-origin public blueprint, validates schema 1 and overlays private configuration. UI releases therefore propagate on opening/reloading the owner map; independent reports refresh through the existing public content reader. Failed UI retrieval retains a dated fallback with a visible warning. Local source-task configuration is a dated snapshot and does not imply a completed run.
+
+No scheduler, report, market-price job, account permission or existing content pipeline is changed by this UI release. The new password-only Site access was explicitly requested separately. The shared footer tests verify the actual current-page footer destinations; the architecture test rejects credentials/query strings in the public entry metadata. Complete Pages integrity tests retain every protected report hash.

@@ -132,8 +132,13 @@ class PagesArtifactTests(unittest.TestCase):
             page = self.site/relative
             text = page.read_text(encoding='utf-8')
             parser = Links(); parser.feed(text.split('<!-- MIH_LEGAL_FOOTER_V1 -->')[1])
-            self.assertEqual(len(parser.links), 6)
+            access_file=self.site/'data/blueprint-access.json'
+            access=json.loads(access_file.read_text()) if access_file.exists() else None
+            self.assertEqual(len(parser.links), 8 if access else 6)
             for link in parser.links:
+                if link.startswith('https://'):
+                    self.assertEqual(link,access['owner_url'],'Only the protected owner entry may leave this site')
+                    continue
                 self.assertTrue((page.parent/link).resolve().is_relative_to(self.site.resolve()))
                 self.assertTrue((page.parent/link).is_file(), relative + ': ' + link)
 

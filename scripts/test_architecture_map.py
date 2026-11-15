@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import tempfile
 import unittest
+from urllib.parse import urlsplit
 from build_architecture_map import ROOT, HUB, build_graph, owner_graph, render, build, cron_in_singapore, workflow_refresh
 
 
@@ -116,6 +117,15 @@ class ArchitectureMapTests(unittest.TestCase):
 
     def test_owner_output_cannot_enter_public_repository(self):
         with self.assertRaises(ValueError):build(output=Path(tempfile.gettempdir())/'atlas-test-public.html',owner_output=ROOT/'site/private-owner.html',automation_dir=Path(tempfile.gettempdir()))
+
+    def test_hosted_owner_entry_contains_only_public_access_metadata(self):
+        path=ROOT/'site/data/blueprint-access.json'
+        if not path.exists(): self.skipTest('Owner hosting not installed in this fixture')
+        access=json.loads(path.read_text(encoding='utf-8'))
+        self.assertEqual(set(access),{'schema_version','public_url','owner_url','owner_access','owner_metadata'})
+        u=urlsplit(access['owner_url']);self.assertEqual(u.scheme,'https');self.assertFalse(u.username or u.password or u.query or u.fragment)
+        self.assertEqual(access['owner_access'],'server-password');self.assertEqual(self.nodes['app:owner-blueprint']['url'],access['owner_url'])
+        self.assertIn(access['owner_url'],(ROOT/'site/blueprint-access.js').read_text(encoding='utf-8'))
 
 
 if __name__=='__main__':unittest.main()

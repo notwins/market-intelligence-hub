@@ -1,4 +1,4 @@
-import re,unittest
+import re,unittest,json
 from pathlib import Path
 from html.parser import HTMLParser
 ROOT=Path(__file__).resolve().parents[1]/'site'
@@ -24,7 +24,10 @@ class NavigationShortcutsTests(unittest.TestCase):
   self.assertGreaterEqual(self.more.count('more-group-title'),5)
  def test_map_targets_exist_and_match_live_route_tabs(self):
   p=Links();p.feed((ROOT/'site-map.html').read_text())
+  config=ROOT/'data/blueprint-access.json';owner=json.loads(config.read_text())['owner_url'] if config.exists() else None
   for href in p.links:
+   if href.startswith('https://'):
+    self.assertEqual(href,owner,'Only the configured protected owner entry may be external');continue
    path,_,anchor=href.partition('#');self.assertTrue((ROOT/path).exists(),href)
    if path=='v4.html' and anchor:self.valid_route(anchor)
   tools=(ROOT/'v4-tools.js').read_text()
