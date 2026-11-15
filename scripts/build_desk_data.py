@@ -312,9 +312,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, default=ROOT)
     parser.add_argument('--output', type=Path)
+    parser.add_argument('--sgs-only', action='store_true', help='Refresh only the saved daily SGS rows; preserve all other desk fields')
     args = parser.parse_args()
     target = args.output or args.root / 'site/data/desk-data.json'
-    payload = build(args.root)
+    if args.sgs_only:
+        payload = read(target)
+        rows = sgs_yield_rows(read(args.root / 'site/data/sgs-daily-snapshot.json'))
+        original = payload['yields']
+        payload['yields'] = [r for r in original if not r['id'].startswith('sgs-')] + rows
+    else:
+        payload = build(args.root)
     target.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({'output': str(target), 'reports': len(payload['reports']),
                       'watchlist': len(payload['watchlist']), 'news': len(payload['news']), 'calls': len(payload['calls'])}))

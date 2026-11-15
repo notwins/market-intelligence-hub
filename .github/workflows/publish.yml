@@ -97,6 +97,7 @@ jobs:
           node scripts/test_section_jump.cjs
           node scripts/test_watchlist.cjs
           node scripts/test_market_snapshot.cjs
+          node scripts/test_sgs_daily.cjs
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
           node scripts/test_dashboard_readability.cjs
@@ -163,6 +164,7 @@ jobs:
           node scripts/test_section_jump.cjs
           node scripts/test_watchlist.cjs
           node scripts/test_market_snapshot.cjs
+          node scripts/test_sgs_daily.cjs
           node scripts/test_watchlist_reading.cjs
           node scripts/test_credit_issues.cjs
           node scripts/test_dashboard_readability.cjs

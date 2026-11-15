@@ -1,21 +1,23 @@
 {
   "schema_version": 1,
   "frequency": "daily",
-  "source": "Monetary Authority of Singapore, Daily SGS Prices \u2014 Closing Levels",
-  "source_url": "https://eservices.mas.gov.sg/Statistics/fdanet/SgsBenchmarkIssuePrices.aspx",
+  "source": "Monetary Authority of Singapore, Daily SGS Prices — Closing Levels",
+  "source_url": "https://eservices.mas.gov.sg/statistics/fdanet/SgsBenchmarkIssuePrices.aspx",
   "license_url": "https://www.mas.gov.sg/Terms-of-Use.aspx",
-  "checked_at": "2026-11-04T11:40:43Z",
+  "checked_at": "2026-11-15T16:45:01Z",
   "observed_time": null,
   "time_precision": "date_only",
   "basis": "SGS benchmark closing bid yields quoted by primary dealers, percent per annum. Bills are quoted in yield terms; bond prices are clean SGD per 100 principal. These are benchmark issues, not constant-maturity par estimates.",
-  "source_scope": "Six dated closing rows shown on the official page when checked; no earlier daily history inferred. Issue identifiers and clean prices describe the latest source table, 4 November 2026.",
-  "attribution": "Contains information from Daily SGS Prices accessed on 4 November 2026 from the Monetary Authority of Singapore, made available under the Monetary Authority of Singapore Terms of Use of Datasets. MAS does not endorse this website.",
+  "source_scope": "Append-preserved source-dated daily yields; prices and issue headers retained only where observed. Missing history is not inferred. Issue headers are saved as displayed by MAS at retrieval.",
+  "attribution": "Contains information from Daily SGS Prices accessed on 2026-11-15 from the Monetary Authority of Singapore. Made available under MAS dataset terms. MAS does not endorse this website.",
   "tenors": [
     {
       "label": "6M",
       "issue_code": "BS26122V",
       "maturity": "2027-05-11",
       "coupon_percent": null,
+      "instrument_type": "treasury_bill",
+      "name": "Singapore Treasury Bill BS26122V",
       "latest_clean_price_sgd_per_100": null
     },
     {
@@ -23,6 +25,8 @@
       "issue_code": "BY26103X",
       "maturity": "2027-10-19",
       "coupon_percent": null,
+      "instrument_type": "treasury_bill",
+      "name": "Singapore Treasury Bill BY26103X",
       "latest_clean_price_sgd_per_100": null
     },
     {
@@ -30,49 +34,63 @@
       "issue_code": "N523100W",
       "maturity": "2028-08-01",
       "coupon_percent": 2.875,
-      "latest_clean_price_sgd_per_100": 101.78
+      "instrument_type": "bond",
+      "name": "Singapore Government Bond N523100W",
+      "latest_clean_price_sgd_per_100": 101.46
     },
     {
       "label": "5Y",
       "issue_code": "N526100H",
       "maturity": "2031-11-01",
-      "coupon_percent": 2,
-      "latest_clean_price_sgd_per_100": 100.11
+      "coupon_percent": 2.0,
+      "instrument_type": "bond",
+      "name": "Singapore Government Bond N526100H",
+      "latest_clean_price_sgd_per_100": 99.48
     },
     {
       "label": "10Y",
       "issue_code": "NZ16100X",
       "maturity": "2036-08-01",
       "coupon_percent": 2.25,
-      "latest_clean_price_sgd_per_100": 100.62
+      "instrument_type": "bond",
+      "name": "Singapore Government Bond NZ16100X",
+      "latest_clean_price_sgd_per_100": 99.28
     },
     {
       "label": "15Y",
       "issue_code": "NY25200N",
       "maturity": "2040-07-01",
       "coupon_percent": 2.25,
-      "latest_clean_price_sgd_per_100": 100.4
+      "instrument_type": "bond",
+      "name": "Singapore Government Bond NY25200N",
+      "latest_clean_price_sgd_per_100": 98.58
     },
     {
       "label": "20Y",
       "issue_code": "NZ26300E",
       "maturity": "2046-08-01",
       "coupon_percent": 2.375,
-      "latest_clean_price_sgd_per_100": 103.08
+      "instrument_type": "bond",
+      "name": "Singapore Government Bond NZ26300E",
+      "latest_clean_price_sgd_per_100": 100.15
     },
     {
       "label": "30Y",
       "issue_code": "NA24300E",
       "maturity": "2054-06-01",
       "coupon_percent": 3.25,
-      "latest_clean_price_sgd_per_100": 121.41
+      "instrument_type": "bond",
+      "name": "Singapore Government Bond NA24300E",
+      "latest_clean_price_sgd_per_100": 117.01
     },
     {
       "label": "50Y",
       "issue_code": "NC22300W",
       "maturity": "2072-08-01",
-      "coupon_percent": 3,
-      "latest_clean_price_sgd_per_100": 115.86
+      "coupon_percent": 3.0,
+      "instrument_type": "bond",
+      "name": "Singapore Government Bond NC22300W",
+      "latest_clean_price_sgd_per_100": 110.22
     }
   ],
   "observations": [
@@ -158,7 +176,675 @@
         2.18,
         2.21,
         2.42
-      ]
+      ],
+      "prices": [
+        null,
+        null,
+        101.78,
+        100.11,
+        100.62,
+        100.4,
+        103.08,
+        121.41,
+        115.86
+      ],
+      "issues": [
+        {
+          "label": "6M",
+          "issue_code": "BS26122V",
+          "maturity": "2027-05-11",
+          "coupon_percent": null
+        },
+        {
+          "label": "1Y",
+          "issue_code": "BY26103X",
+          "maturity": "2027-10-19",
+          "coupon_percent": null
+        },
+        {
+          "label": "2Y",
+          "issue_code": "N523100W",
+          "maturity": "2028-08-01",
+          "coupon_percent": 2.875
+        },
+        {
+          "label": "5Y",
+          "issue_code": "N526100H",
+          "maturity": "2031-11-01",
+          "coupon_percent": 2
+        },
+        {
+          "label": "10Y",
+          "issue_code": "NZ16100X",
+          "maturity": "2036-08-01",
+          "coupon_percent": 2.25
+        },
+        {
+          "label": "15Y",
+          "issue_code": "NY25200N",
+          "maturity": "2040-07-01",
+          "coupon_percent": 2.25
+        },
+        {
+          "label": "20Y",
+          "issue_code": "NZ26300E",
+          "maturity": "2046-08-01",
+          "coupon_percent": 2.375
+        },
+        {
+          "label": "30Y",
+          "issue_code": "NA24300E",
+          "maturity": "2054-06-01",
+          "coupon_percent": 3.25
+        },
+        {
+          "label": "50Y",
+          "issue_code": "NC22300W",
+          "maturity": "2072-08-01",
+          "coupon_percent": 3
+        }
+      ],
+      "issue_metadata_basis": "Original saved snapshot latest table header"
+    },
+    {
+      "date": "2026-11-05",
+      "values": [
+        1.86,
+        1.88,
+        1.82,
+        1.96,
+        2.15,
+        2.18,
+        2.15,
+        2.18,
+        2.39
+      ],
+      "prices": [
+        null,
+        null,
+        101.79,
+        100.2,
+        100.87,
+        100.78,
+        103.58,
+        122.04,
+        116.8
+      ],
+      "issues": [
+        {
+          "label": "6M",
+          "issue_code": "BS26122V",
+          "maturity": "2027-05-11",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BS26122V"
+        },
+        {
+          "label": "1Y",
+          "issue_code": "BY26103X",
+          "maturity": "2027-10-19",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BY26103X"
+        },
+        {
+          "label": "2Y",
+          "issue_code": "N523100W",
+          "maturity": "2028-08-01",
+          "coupon_percent": 2.875,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N523100W"
+        },
+        {
+          "label": "5Y",
+          "issue_code": "N526100H",
+          "maturity": "2031-11-01",
+          "coupon_percent": 2.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N526100H"
+        },
+        {
+          "label": "10Y",
+          "issue_code": "NZ16100X",
+          "maturity": "2036-08-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ16100X"
+        },
+        {
+          "label": "15Y",
+          "issue_code": "NY25200N",
+          "maturity": "2040-07-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NY25200N"
+        },
+        {
+          "label": "20Y",
+          "issue_code": "NZ26300E",
+          "maturity": "2046-08-01",
+          "coupon_percent": 2.375,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ26300E"
+        },
+        {
+          "label": "30Y",
+          "issue_code": "NA24300E",
+          "maturity": "2054-06-01",
+          "coupon_percent": 3.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NA24300E"
+        },
+        {
+          "label": "50Y",
+          "issue_code": "NC22300W",
+          "maturity": "2072-08-01",
+          "coupon_percent": 3.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NC22300W"
+        }
+      ],
+      "issue_metadata_basis": "MAS table header as displayed when retrieved"
+    },
+    {
+      "date": "2026-11-06",
+      "values": [
+        1.86,
+        1.87,
+        1.81,
+        1.89,
+        2.09,
+        2.13,
+        2.1,
+        2.14,
+        2.35
+      ],
+      "prices": [
+        null,
+        null,
+        101.81,
+        100.51,
+        101.39,
+        101.46,
+        104.45,
+        123.09,
+        118.06
+      ],
+      "issues": [
+        {
+          "label": "6M",
+          "issue_code": "BS26122V",
+          "maturity": "2027-05-11",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BS26122V"
+        },
+        {
+          "label": "1Y",
+          "issue_code": "BY26103X",
+          "maturity": "2027-10-19",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BY26103X"
+        },
+        {
+          "label": "2Y",
+          "issue_code": "N523100W",
+          "maturity": "2028-08-01",
+          "coupon_percent": 2.875,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N523100W"
+        },
+        {
+          "label": "5Y",
+          "issue_code": "N526100H",
+          "maturity": "2031-11-01",
+          "coupon_percent": 2.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N526100H"
+        },
+        {
+          "label": "10Y",
+          "issue_code": "NZ16100X",
+          "maturity": "2036-08-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ16100X"
+        },
+        {
+          "label": "15Y",
+          "issue_code": "NY25200N",
+          "maturity": "2040-07-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NY25200N"
+        },
+        {
+          "label": "20Y",
+          "issue_code": "NZ26300E",
+          "maturity": "2046-08-01",
+          "coupon_percent": 2.375,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ26300E"
+        },
+        {
+          "label": "30Y",
+          "issue_code": "NA24300E",
+          "maturity": "2054-06-01",
+          "coupon_percent": 3.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NA24300E"
+        },
+        {
+          "label": "50Y",
+          "issue_code": "NC22300W",
+          "maturity": "2072-08-01",
+          "coupon_percent": 3.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NC22300W"
+        }
+      ],
+      "issue_metadata_basis": "MAS table header as displayed when retrieved"
+    },
+    {
+      "date": "2026-11-10",
+      "values": [
+        1.86,
+        1.87,
+        1.83,
+        1.92,
+        2.12,
+        2.16,
+        2.15,
+        2.19,
+        2.4
+      ],
+      "prices": [
+        null,
+        null,
+        101.76,
+        100.38,
+        101.1,
+        101.02,
+        103.62,
+        121.87,
+        116.62
+      ],
+      "issues": [
+        {
+          "label": "6M",
+          "issue_code": "BS26122V",
+          "maturity": "2027-05-11",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BS26122V"
+        },
+        {
+          "label": "1Y",
+          "issue_code": "BY26103X",
+          "maturity": "2027-10-19",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BY26103X"
+        },
+        {
+          "label": "2Y",
+          "issue_code": "N523100W",
+          "maturity": "2028-08-01",
+          "coupon_percent": 2.875,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N523100W"
+        },
+        {
+          "label": "5Y",
+          "issue_code": "N526100H",
+          "maturity": "2031-11-01",
+          "coupon_percent": 2.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N526100H"
+        },
+        {
+          "label": "10Y",
+          "issue_code": "NZ16100X",
+          "maturity": "2036-08-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ16100X"
+        },
+        {
+          "label": "15Y",
+          "issue_code": "NY25200N",
+          "maturity": "2040-07-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NY25200N"
+        },
+        {
+          "label": "20Y",
+          "issue_code": "NZ26300E",
+          "maturity": "2046-08-01",
+          "coupon_percent": 2.375,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ26300E"
+        },
+        {
+          "label": "30Y",
+          "issue_code": "NA24300E",
+          "maturity": "2054-06-01",
+          "coupon_percent": 3.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NA24300E"
+        },
+        {
+          "label": "50Y",
+          "issue_code": "NC22300W",
+          "maturity": "2072-08-01",
+          "coupon_percent": 3.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NC22300W"
+        }
+      ],
+      "issue_metadata_basis": "MAS table header as displayed when retrieved"
+    },
+    {
+      "date": "2026-11-11",
+      "values": [
+        1.87,
+        1.87,
+        1.93,
+        2.01,
+        2.21,
+        2.25,
+        2.24,
+        2.28,
+        2.49
+      ],
+      "prices": [
+        null,
+        null,
+        101.59,
+        99.95,
+        100.35,
+        100.02,
+        102.18,
+        119.79,
+        113.91
+      ],
+      "issues": [
+        {
+          "label": "6M",
+          "issue_code": "BS26122V",
+          "maturity": "2027-05-11",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BS26122V"
+        },
+        {
+          "label": "1Y",
+          "issue_code": "BY26103X",
+          "maturity": "2027-10-19",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BY26103X"
+        },
+        {
+          "label": "2Y",
+          "issue_code": "N523100W",
+          "maturity": "2028-08-01",
+          "coupon_percent": 2.875,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N523100W"
+        },
+        {
+          "label": "5Y",
+          "issue_code": "N526100H",
+          "maturity": "2031-11-01",
+          "coupon_percent": 2.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N526100H"
+        },
+        {
+          "label": "10Y",
+          "issue_code": "NZ16100X",
+          "maturity": "2036-08-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ16100X"
+        },
+        {
+          "label": "15Y",
+          "issue_code": "NY25200N",
+          "maturity": "2040-07-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NY25200N"
+        },
+        {
+          "label": "20Y",
+          "issue_code": "NZ26300E",
+          "maturity": "2046-08-01",
+          "coupon_percent": 2.375,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ26300E"
+        },
+        {
+          "label": "30Y",
+          "issue_code": "NA24300E",
+          "maturity": "2054-06-01",
+          "coupon_percent": 3.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NA24300E"
+        },
+        {
+          "label": "50Y",
+          "issue_code": "NC22300W",
+          "maturity": "2072-08-01",
+          "coupon_percent": 3.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NC22300W"
+        }
+      ],
+      "issue_metadata_basis": "MAS table header as displayed when retrieved"
+    },
+    {
+      "date": "2026-11-12",
+      "values": [
+        1.87,
+        1.87,
+        1.95,
+        2.04,
+        2.25,
+        2.29,
+        2.28,
+        2.32,
+        2.53
+      ],
+      "prices": [
+        null,
+        null,
+        101.56,
+        99.79,
+        100.0,
+        99.54,
+        101.54,
+        118.93,
+        112.75
+      ],
+      "issues": [
+        {
+          "label": "6M",
+          "issue_code": "BS26122V",
+          "maturity": "2027-05-11",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BS26122V"
+        },
+        {
+          "label": "1Y",
+          "issue_code": "BY26103X",
+          "maturity": "2027-10-19",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BY26103X"
+        },
+        {
+          "label": "2Y",
+          "issue_code": "N523100W",
+          "maturity": "2028-08-01",
+          "coupon_percent": 2.875,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N523100W"
+        },
+        {
+          "label": "5Y",
+          "issue_code": "N526100H",
+          "maturity": "2031-11-01",
+          "coupon_percent": 2.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N526100H"
+        },
+        {
+          "label": "10Y",
+          "issue_code": "NZ16100X",
+          "maturity": "2036-08-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ16100X"
+        },
+        {
+          "label": "15Y",
+          "issue_code": "NY25200N",
+          "maturity": "2040-07-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NY25200N"
+        },
+        {
+          "label": "20Y",
+          "issue_code": "NZ26300E",
+          "maturity": "2046-08-01",
+          "coupon_percent": 2.375,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ26300E"
+        },
+        {
+          "label": "30Y",
+          "issue_code": "NA24300E",
+          "maturity": "2054-06-01",
+          "coupon_percent": 3.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NA24300E"
+        },
+        {
+          "label": "50Y",
+          "issue_code": "NC22300W",
+          "maturity": "2072-08-01",
+          "coupon_percent": 3.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NC22300W"
+        }
+      ],
+      "issue_metadata_basis": "MAS table header as displayed when retrieved"
+    },
+    {
+      "date": "2026-11-13",
+      "values": [
+        1.87,
+        1.87,
+        2.0,
+        2.11,
+        2.33,
+        2.37,
+        2.37,
+        2.4,
+        2.62
+      ],
+      "prices": [
+        null,
+        null,
+        101.46,
+        99.48,
+        99.28,
+        98.58,
+        100.15,
+        117.01,
+        110.22
+      ],
+      "issues": [
+        {
+          "label": "6M",
+          "issue_code": "BS26122V",
+          "maturity": "2027-05-11",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BS26122V"
+        },
+        {
+          "label": "1Y",
+          "issue_code": "BY26103X",
+          "maturity": "2027-10-19",
+          "coupon_percent": null,
+          "instrument_type": "treasury_bill",
+          "name": "Singapore Treasury Bill BY26103X"
+        },
+        {
+          "label": "2Y",
+          "issue_code": "N523100W",
+          "maturity": "2028-08-01",
+          "coupon_percent": 2.875,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N523100W"
+        },
+        {
+          "label": "5Y",
+          "issue_code": "N526100H",
+          "maturity": "2031-11-01",
+          "coupon_percent": 2.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond N526100H"
+        },
+        {
+          "label": "10Y",
+          "issue_code": "NZ16100X",
+          "maturity": "2036-08-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ16100X"
+        },
+        {
+          "label": "15Y",
+          "issue_code": "NY25200N",
+          "maturity": "2040-07-01",
+          "coupon_percent": 2.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NY25200N"
+        },
+        {
+          "label": "20Y",
+          "issue_code": "NZ26300E",
+          "maturity": "2046-08-01",
+          "coupon_percent": 2.375,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NZ26300E"
+        },
+        {
+          "label": "30Y",
+          "issue_code": "NA24300E",
+          "maturity": "2054-06-01",
+          "coupon_percent": 3.25,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NA24300E"
+        },
+        {
+          "label": "50Y",
+          "issue_code": "NC22300W",
+          "maturity": "2072-08-01",
+          "coupon_percent": 3.0,
+          "instrument_type": "bond",
+          "name": "Singapore Government Bond NC22300W"
+        }
+      ],
+      "issue_metadata_basis": "MAS table header as displayed when retrieved"
     }
   ]
 }
