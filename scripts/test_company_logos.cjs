@@ -1,0 +1,25 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const L=require('../site/company-logos.js'),data=require('../site/assets/company-logos/company-logos.json');
+const infer=input=>L.infer(input,data);
+assert.equal(data.companies.length,150);assert.equal(new Set(data.companies.map(c=>c.ticker)).size,150);
+assert.deepEqual(infer({title:'STI banks: NIM and dividends'}),['D05.SI','O39.SI','U11.SI']);
+assert.deepEqual(infer({title:'Singapore banks earnings'}),['D05.SI','O39.SI','U11.SI']);
+assert.deepEqual(infer({title:'STI index outlook'}),[],'STI alone is not evidence of three bank subjects');
+assert.deepEqual(infer({title:'Nvidia and Microsoft report results'}),['NVDA','MSFT']);
+assert.deepEqual(infer({title:'US CPI rises; sea trade and investment strategy remain uncertain'}),[],'no short-ticker/ambiguous-word matches');
+assert.deepEqual(infer({title:'FedEx is not the Fed; USD is not US; securities rise'}),[]);
+assert.deepEqual(infer({title:'Corporate update',tickers:['GOOGL','GOOG','BRK.B','BRK_B']}),['GOOG','BRK-B']);
+assert.deepEqual(infer({title:'Bank update',tags:['ticker.dbs_d05','OCBC / O39','UOB']}),['D05.SI','O39.SI','U11.SI']);
+assert.deepEqual(infer({title:'$C reports; Unity Software (U) follows'}),['C','U']);
+assert.deepEqual(infer({title:'C class, U curve and MA trend'}),[]);
+assert.equal(L.resolve('NOT_A_TICKER',data),null);assert.equal(L.html(['NOT_A_TICKER'],data),'');
+const out=L.html(['NVDA','NVDA','MSFT'],data);assert.equal((out.match(/data-logo-company=/g)||[]).length,2);assert(out.includes('loading="lazy"'));assert(out.includes('width="64"'));assert(!out.includes('http'));
+for(const c of data.companies){assert(/^[A-Z0-9.-]+\.webp$/.test(c.file));const b=fs.readFileSync(path.join(__dirname,'../site/assets/company-logos',c.file));assert.equal(b.length,c.bytes);assert.equal(crypto.createHash('sha256').update(b).digest('hex'),c.sha256);assert.equal(b.toString('ascii',8,12),'WEBP');}
+for(const p of ['desk.html','v4.html','v2.html','market-understanding/index.html','watchlist-report.html','archive.html','search.html'])assert(fs.readFileSync(path.join(__dirname,'../site',p),'utf8').includes('company-logos.js'));
+global.Desk=require('../site/desk.js');const news=require('../site/company-news-cards.js');
+const item={id:'test',title:'Nvidia results',source:'Reuters',published_at:'2026-11-13T14:30:00Z',tickers:['NVDA'],href:'https://www.reuters.com/test',writeup:{}};
+const render=published_at=>news.render([{...item,published_at}],[{ticker:'NVDA',name:'NVIDIA'}]);
+assert(render(item.published_at).includes('22:30 SGT'));assert(render('2026-11-13').includes('time not supplied'));assert(render(null).includes('Publication date/time unavailable'));
+assert(render(item.published_at).includes('data-mih-tickers="[&quot;NVDA&quot;]"'));assert(!render(item.published_at).includes('href="https://www.reuters.com/test"'),'original link still belongs inside dialog');
+console.log('PASS 150 unchanged WebP assets; exact aliases; bank groups; title/tag inference; false-positive exclusions; dated Reuters metadata; entry pages.');
