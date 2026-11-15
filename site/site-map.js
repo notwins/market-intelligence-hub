@@ -1,6 +1,7 @@
 /* The tree and every destination work without JavaScript. Enhancement adds only
    filtering and disclosure controls; no navigation or browser storage is changed. */
-(() => {
+(function(root) {
+ function mount(document) {
   'use strict';
   const tree = document.querySelector('.family-tree');
   if (!tree) return;
@@ -43,7 +44,7 @@
       family.querySelectorAll('.map-node').forEach(node => {
         let text = label + ' ' + ownText.get(node);
         let parent = node.parentElement.closest('.map-node');
-        while (parent) { text += ' ' + ownText.get(parent); parent = parent.parentElement.closest('.map-node'); }
+        while (parent) { text += ' ' + normalize(parent.querySelector(':scope > .map-link').querySelector('.map-title').textContent); parent = parent.parentElement.closest('.map-node'); }
         const matched = words.every(word => text.includes(word));
         node.hidden = !matched;
         if (matched) matches++;
@@ -78,4 +79,7 @@
   let beforePrint = null;
   addEventListener('beforeprint', () => { beforePrint = disclosures.map(node => node.open); disclosures.forEach(node => { node.open = true; }); });
   addEventListener('afterprint', () => { if (beforePrint) restore(beforePrint); beforePrint = null; });
-})();
+ }
+ root.HubSiteMap={mount};
+ if(root.document)mount(root.document);
+})(globalThis);

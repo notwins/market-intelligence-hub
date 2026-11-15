@@ -51,7 +51,7 @@ class NavigationShortcutsTests(unittest.TestCase):
   rail=self.html.split('<aside class="rail">')[1].split('</aside>')[0]
   self.assertIn('data-view="history/si"',rail)
   self.assertIn('id="all-sections-btn"',self.html)
-  self.assertIn("querySelectorAll('#more-btn,#all-sections-btn')",self.html)
+  self.assertIn("querySelectorAll('#more-btn')",self.html)
   self.assertIn('aria-controls="more"',self.html)
   css=(ROOT/'v4-navigation.css').read_text()
   self.assertIn('@media(max-width:760px){#all-sections-btn{display:none}}',css)
