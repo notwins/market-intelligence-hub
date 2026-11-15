@@ -15,17 +15,17 @@ function validateEvidence() {
   api.validateEarnings(earnings);
   assert.equal(valuation.coverage.complete, false);
   assert.equal(valuation.coverage.edition_count, 6);
-  assert.equal(valuation.coverage.listing_count, 6);
-  assert.equal(valuation.observations.length, 36);
+  assert.equal(valuation.coverage.listing_count, 14);
+  assert.equal(valuation.observations.length, 83);
   assert.deepEqual(valuation.coverage.report_dates, ['2021-12-01','2022-11-01','2023-11-01','2024-11-01','2025-11-03','2026-11-02']);
   const expectedDates = {'2021-12-01':'2021-11-30','2022-11-01':'2022-10-31','2023-11-01':'2023-10-31','2024-11-01':'2024-10-31','2025-11-03':'2025-10-31','2026-11-02':'2026-10-30'};
-  const expectedCurrencies = {'D05.SI':'SGD','U11.SI':'SGD',NVDA:'USD',MSFT:'USD',AAPL:'USD',TSM:'USD'};
+  const expectedCurrencies = {'D05.SI':'SGD','U11.SI':'SGD',NVDA:'USD',MSFT:'USD',AAPL:'USD',TSM:'USD',GOOGL:'USD',AMZN:'USD',META:'USD','BRK-B':'USD',AMD:'USD',AVGO:'USD',MU:'USD',TSLA:'USD'};
   const fields = ['dividend_yield_pct','eps_growth_pct','fair_value_or_target','market_cap_usd_bn','pb','pe','price','roe_pct'];
   for (const listing of valuation.listings) {
     const rows = valuation.observations.filter(row => row.symbol === listing.symbol);
-    assert.equal(rows.length, 6, 'Every pilot has one observation per supplied edition');
+    assert.equal(rows.length, listing.symbol === 'META' ? 5 : 6, 'Only exact source listings enter the supplied editions');
     assert.equal(listing.currency, expectedCurrencies[listing.symbol]);
-    assert.equal(new Set(rows.map(row => row.report_date)).size, 6);
+    assert.equal(new Set(rows.map(row => row.report_date)).size, rows.length);
   }
   for (const row of valuation.observations) {
     assert.equal(row.price_date, expectedDates[row.report_date]);
@@ -37,7 +37,7 @@ function validateEvidence() {
     assert.deepEqual(Object.keys(row.source_values).sort(), fields);
     for (const field of fields) {
       const exact = row.source_values[field];
-      const value = Number(exact.replaceAll(',', '').replace(/^\((.*)\)$/, '-$1'));
+      const value = ['','NA','N/A','N.M.','NM','-','—'].includes(exact.trim().toUpperCase()) ? null : Number(exact.replaceAll(',', '').replace(/^\((.*)\)$/, '-$1'));
       assert.equal(row[field], value, 'Numeric rendering retains the checked source value: '+field);
     }
   }
@@ -53,6 +53,9 @@ function validateEvidence() {
   assert.equal(observation('NVDA','2026-11-02').pe, 14.3);
   assert.equal(observation('TSM','2021-12-01').source_values.pb, '0.0');
   assert(observation('TSM','2021-12-01').quality_flags.includes('pb_nonmeaningful_for_range'));
+  assert.equal(observation('META','2021-12-01'), undefined, 'Historical ticker changes are not inferred');
+  assert.equal(observation('MU','2023-11-01').pe, 0);
+  assert(observation('MU','2023-11-01').quality_flags.includes('pe_nonmeaningful_for_range'));
   assert.equal(valuation.methodology.percentiles_available, false);
 
   const forbiddenKeys = /^(?:raw_text|raw_cells_json|ar|moa|ar_pct|fixed_ar|advance_rate|holdings|borrowing|client|client_id|account|facility|concentration|risk_rating|esg_rating)$/i;
@@ -74,12 +77,115 @@ function validateEvidence() {
     copy => copy.observations[0].forecast_horizon = 'FY1',
     copy => copy.observations[0].pe = '28.6',
     copy => copy.observations.push(clone(copy.observations[0])),
+    copy => copy.coverage.report_dates.reverse(),
+    copy => copy.coverage.report_dates[0] = '2021-11-01',
+    copy => copy.coverage.first_report_date = '2016-12-01',
+    copy => copy.coverage.last_report_date = '2026-11-13',
+    copy => Object.values(copy.sources)[0].price_dates = ['2026-11-13'],
+    copy => Object.values(copy.sources)[0].report_date = '2026-02-30',
+    copy => copy.sources.duplicate = clone(Object.values(copy.sources)[0]),
+    copy => copy.listings[0].report_dates = [],
+    copy => copy.listings[0].first_report_date = '2016-12-01',
+    copy => copy.listings[0].last_report_date = '2026-11-13',
+    copy => copy.listings.find(row=>row.symbol==='META').missing_editions = [],
   ]) {
     const copy = clone(valuation); mutate(copy);
     assert.throws(() => api.validateValuation(copy));
   }
   assert.equal(api.validDate('2026-02-30'), false);
   assert.equal(api.validDate('2024-02-29'), true);
+}
+
+function validateRangeEvidence() {
+  const before = JSON.stringify(bundle);
+  const tsm = api.observedRange('TSM', bundle, 'pb');
+  assert.equal(tsm.edition_count, 6);
+  assert.equal(tsm.observation_count, 6);
+  assert.equal(tsm.missing_count, 0);
+  assert.equal(tsm.latest_status, 'valid');
+  assert.equal(tsm.latest_observation.source_values.pb, '6.8');
+  assert.equal(tsm.latest_observation.report_date, '2026-11-02');
+  assert.equal(tsm.min_observations.length, 1);
+  assert.equal(tsm.min_observations[0].source_values.pb, '3.0');
+  assert.equal(tsm.excluded_observations[0].source_values.pb, '0.0');
+  assert.equal(tsm.excluded_observations[0].exclusion_reason, 'nonmeaningful');
+  assert.equal(tsm.excluded_observations[0].report_date, '2021-12-01');
+  assert.equal(tsm.min_observations[0].source.report_date, tsm.min_observations[0].report_date);
+  const yieldRange = api.observedRange('NVDA', bundle, 'dividend_yield_pct');
+  assert.equal(yieldRange.min, 0, 'A supplied zero dividend yield is a valid observation');
+  assert.equal(yieldRange.count, 6);
+  assert.equal(yieldRange.excluded_count, 0);
+  const negativeYield = clone(bundle), yieldRow = negativeYield.valuation.observations.find(row=>row.symbol==='NVDA'&&row.report_date==='2026-11-02');
+  yieldRow.dividend_yield_pct = -1; yieldRow.source_values.dividend_yield_pct = '-1.0';
+  const yieldReview = api.observedRange('NVDA', negativeYield, 'dividend_yield_pct');
+  assert.equal(yieldReview.latest, null);
+  assert.equal(yieldReview.latest_status, 'nonmeaningful');
+  assert.equal(yieldReview.excluded_observations[0].source_values.dividend_yield_pct, '-1.0');
+  assert.equal(yieldReview.count, 5, 'Negative yield is retained as source evidence but excluded from the meaningful range');
+  const meta = api.coverageFor('META', bundle);
+  assert.equal(meta.observation_count, 5);
+  assert.equal(meta.edition_count, 6);
+  assert.equal(meta.missing_count, 1);
+  assert.deepEqual(meta.missing_report_dates, ['2021-12-01']);
+  assert.equal(meta.editions[0].observation, null);
+  assert.equal(meta.first_report_date, '2021-12-01');
+  assert.equal(meta.first_observation_date, '2022-11-01');
+  const mu = api.observedRange('MU', bundle, 'pe');
+  assert.equal(mu.excluded_count, 1);
+  assert.equal(mu.excluded_observations[0].report_date, '2023-11-01');
+
+  const omittedLatest = clone(bundle);
+  omittedLatest.valuation.observations = omittedLatest.valuation.observations.filter(row=>!(row.symbol==='MSFT'&&row.report_date==='2026-11-02'));
+  const missingRow = api.observedRange('MSFT', omittedLatest, 'pe');
+  assert.equal(missingRow.latest_date, '2026-11-02');
+  assert.equal(missingRow.latest, null, 'A missing row in the newest global edition must not carry forward a prior multiple');
+  assert.equal(missingRow.latest_observation, null);
+  assert.equal(missingRow.latest_status, 'missing_observation');
+  assert.equal(missingRow.most_recent_observation.report_date, '2025-11-03');
+  assert.equal(missingRow.excluded_count, 0, 'A missing listing row is distinct from an excluded numeric observation');
+  assert.equal(missingRow.missing_count, 1);
+  assert.deepEqual(missingRow.missing_report_dates, ['2026-11-02']);
+
+  const missingValue = clone(bundle), latest = missingValue.valuation.observations.find(row=>row.symbol==='MSFT'&&row.report_date==='2026-11-02');
+  latest.pe = null; latest.source_values.pe = 'N/A';
+  const absent = api.observedRange('MSFT', missingValue, 'pe');
+  assert.equal(absent.latest, null);
+  assert.equal(absent.latest_status, 'missing_value');
+  assert.equal(absent.latest_observation.source_values.pe, 'N/A');
+  assert.equal(absent.excluded_count, 1);
+  assert.equal(absent.missing_count, 0);
+  latest.pe = 0; latest.source_values.pe = '0.0';
+  assert.equal(api.observedRange('MSFT', missingValue, 'pe').latest_status, 'nonmeaningful');
+  const tied = clone(bundle);
+  for (const row of tied.valuation.observations.filter(row=>row.symbol==='AAPL')) { row.pe=30; row.source_values.pe='30.0'; }
+  const ties = api.observedRange('AAPL', tied, 'pe');
+  assert.equal(ties.min_observations.length, 6, 'Every tied extreme retains its original report date');
+  assert.equal(ties.max_observations.length, 6);
+  assert.equal(ties.min, ties.max);
+  assert.equal(ties.percentile, null);
+  assert(!Object.hasOwn(ties,'position'), 'No percentile-like normalized range score is exposed');
+
+  const windowed = api.observedRange('META', bundle, 'pe', {from:'2022-01-01',to:'2024-11-01'});
+  assert.equal(windowed.edition_count, 3);
+  assert.equal(windowed.count, 3);
+  assert.equal(windowed.latest_date, '2024-11-01');
+  assert.equal(windowed.missing_count, 0);
+  const empty = api.observedRange('MSFT', bundle, 'pe', {from:'2026-11-03',to:'2026-11-14'});
+  assert.equal(empty.edition_count, 0);
+  assert.equal(empty.latest_date, null);
+  assert.equal(empty.most_recent_observation, null);
+  assert.equal(empty.min, null);
+  for (const input of ['2330.TW', {ticker:'TSM',currency:'TWD'}, {ticker:'NVDA',asset_type:'index'}]) {
+    const unavailable = api.observedRange(input, bundle, 'pe');
+    assert.equal(unavailable.count, 0);
+    assert.equal(unavailable.latest, null);
+    assert.equal(unavailable.min_observations.length, 0);
+    assert.equal(api.coverageFor(input,bundle).status, 'unavailable');
+  }
+  const unavailable = api.observedRange('MSFT', {valuation:null}, 'pe');
+  assert.equal(unavailable.edition_count, 0);
+  assert.deepEqual(unavailable.report_dates, []);
+  assert.equal(JSON.stringify(bundle), before, 'Coverage and range projections do not alter source evidence');
 }
 
 function validateFinancialSemantics() {
@@ -313,13 +419,13 @@ function validateRendering() {
   assert(!beforeCashflow.includes('18.633'),'A fiscal period end does not make subsequently published FCF available earlier');
   const afterCashflow=ui.renderContent(bundle,{symbols:['MSFT'],from:'2026-01-01',to:'2026-10-28'},{window:'chart'},api);
   assert(afterCashflow.includes('18.633'));
-  const compare=ui.renderContent(bundle,{symbols:['NVDA','GOOGL']},{mode:'comparison',edition:'2026-11-02'},api);
+  const compare=ui.renderContent(bundle,{symbols:['NVDA','JNJ']},{mode:'comparison',edition:'2026-11-02'},api);
   assert(compare.includes('900 USD'),'Comparison uses selected quote service directly');
   assert(compare.includes('Separate selected quote'));
   assert(compare.includes('2026-11-13'));
   assert(compare.includes('14.3'),'Separate dated forward P/E is not recalculated from a newer quote');
   assert(compare.includes('1 of 2 selected shares have valuation evidence'));
-  assert(compare.includes('Unavailable: GOOGL'));
+  assert(compare.includes('Unavailable: JNJ'));
   assert(compare.includes('2026-11-02'));
   assert(!compare.includes('eligible market value'));
   const noData=ui.renderContent({valuation:null,earnings:null,status:{valuation:{state:'unavailable',message:'Could not load'},earnings:{state:'unavailable',message:'Could not load'}}},{symbols:['MSFT']},{},api);
@@ -339,6 +445,54 @@ function validateRendering() {
   assert(!/localStorage|sessionStorage|indexedDB/.test(moduleSource),'View does not add a watchlist or private-input persistence store');
 }
 
+function validateRangeRendering() {
+  const ui = uiFixture().api;
+  const ranges = ui.renderContent(bundle, {symbols:['TSM','META','JNJ']}, {mode:'ranges',metric:'pb'}, api);
+  assert(ranges.includes('data-er-mode="ranges" aria-pressed="true"'));
+  assert(ranges.includes('<option value="pb" selected>'));
+  assert.equal((ranges.match(/class="er-range-card"/g)||[]).length, 3, 'Every selected share remains visible, including an unavailable listing');
+  assert(ranges.includes('<b>5 valid</b> · 1 excluded · 0 missing rows'));
+  assert(ranges.includes('<b>5 valid</b> · 0 excluded · 1 missing rows'));
+  assert(ranges.includes('<b>0 valid</b> · 0 excluded · 6 missing rows'));
+  assert(ranges.includes('0.0<small>Excluded from range'));
+  assert(ranges.includes('No exact row'));
+  assert(ranges.includes('no historical ticker alias is inferred'));
+  assert(ranges.includes('Forecast horizon') || ranges.includes('forecast horizon unspecified'));
+  assert(ranges.includes('do not measure completeness of the monthly archive'));
+  assert(ranges.includes('Historical valuation percentiles are unavailable'));
+  assert(!/NaN|Infinity|undefined/.test(ranges));
+  assert.equal((ranges.match(/class="er-range-latest"/g)||[]).length, 2, 'Unavailable listing has no plotted latest observation');
+  const yieldHtml = ui.renderContent(bundle, {symbols:['NVDA']}, {mode:'ranges',metric:'dividend_yield_pct'}, api);
+  assert(yieldHtml.includes('0.0–0.5'), 'Ranges preserve source precision even for valid zero yield');
+  assert(yieldHtml.includes('<b>6 valid</b> · 0 excluded'));
+  assert(yieldHtml.includes('Zero yield is a valid supplied value'));
+  const zeroLatest = clone(bundle), row = zeroLatest.valuation.observations.find(point=>point.symbol==='NVDA'&&point.report_date==='2026-11-02');
+  row.dividend_yield_pct = 0; row.source_values.dividend_yield_pct = '0.0';
+  assert(ui.renderContent(zeroLatest,{symbols:['NVDA']},{mode:'ranges',metric:'dividend_yield_pct'},api).includes('class="er-range-latest"'), 'A valid zero latest yield still gets a marker');
+  const omittedLatest = clone(bundle);
+  omittedLatest.valuation.observations = omittedLatest.valuation.observations.filter(point=>!(point.symbol==='MSFT'&&point.report_date==='2026-11-02'));
+  const missing = ui.renderContent(omittedLatest,{symbols:['MSFT']},{mode:'ranges',metric:'pe'},api);
+  assert(missing.includes('<dd>Unavailable<small>2026-11-02 · No exact listing row in this edition'));
+  assert(!missing.includes('class="er-range-latest"'), 'Missing newest global edition cannot display an older marker');
+  const tied = clone(bundle);
+  for(const point of tied.valuation.observations.filter(point=>point.symbol==='AAPL')) { point.pe=30; point.source_values.pe='30.0'; }
+  const tiedHtml = ui.renderContent(tied,{symbols:['AAPL']},{mode:'ranges',metric:'pe'},api);
+  assert(tiedHtml.includes('30.0–30.0'));
+  assert(!/NaN|Infinity/.test(tiedHtml),'Flat supplied ranges have finite plot geometry');
+  assert(tiedHtml.includes(valuation.coverage.report_dates.join(' · ')), 'Every tied low/high date stays visible');
+  const empty = ui.renderContent(bundle,{symbols:['MSFT'],from:'2026-11-03',to:'2026-11-14'},{mode:'ranges',metric:'pe',window:'chart'},api);
+  assert(empty.includes('No supplied edition in this window'));
+  assert(!empty.includes('class="er-range-latest"'));
+  const unavailable = ui.renderContent({valuation:null,earnings:null},{symbols:['MSFT']},{mode:'ranges'},api);
+  assert(unavailable.includes('Valuation coverage is currently unavailable'));
+  assert(!/NaN|Infinity|undefined/.test(unavailable));
+  const hostile = clone(bundle);
+  hostile.valuation.listings.find(point=>point.symbol==='META').missing_editions[0].note='<img src=x onerror=alert(1)>';
+  const safe = ui.renderContent(hostile,{symbols:['META']},{mode:'ranges'},api);
+  assert(safe.includes('&lt;img src=x onerror=alert(1)&gt;'));
+  assert(!safe.includes('<img src=x'));
+}
+
 async function validateUiLifecycle() {
   const ui=uiFixture().api,first=uiContainer();
   const mounted=await ui.mount(first,{symbols:['MSFT'],range:'6M',selectionKey:'history'});
@@ -355,6 +509,15 @@ async function validateUiLifecycle() {
   await ui.mount(replacement,{symbols:['MSFT','NVDA'],selectionKey:'history'});
   assert.equal(replacement.listeners.click.length,1,'Repeated mounts do not accumulate listeners');
   assert.equal(replacement.listeners.change.length,1);
+  for(const listener of replacement.listeners.click)listener({target:{closest:selector=>selector==='[data-er-mode]'?{dataset:{erMode:'ranges'}}:null}});
+  for(const listener of replacement.listeners.change)listener({target:{value:'dividend_yield_pct',matches:selector=>selector==='[data-er-metric]'}});
+  assert(replacement.innerHTML.includes('class="er-valuation-ranges"'));
+  assert(replacement.innerHTML.includes('<option value="dividend_yield_pct" selected>'));
+  const rangeReplacement=uiContainer();
+  await ui.mount(rangeReplacement,{symbols:['NVDA'],selectionKey:'history'});
+  assert(rangeReplacement.innerHTML.includes('data-er-mode="ranges" aria-pressed="true"'), 'Range view survives a workbench repaint');
+  assert(rangeReplacement.innerHTML.includes('<option value="dividend_yield_pct" selected>'), 'Range metric survives a workbench repaint');
+  assert.equal((rangeReplacement.innerHTML.match(/class="er-range-card"/g)||[]).length,1,'Parent selection replaces range cards without a second selection store');
   ui.unmount(replacement);
   assert.equal(replacement.listeners.click.length,0);
   assert.equal(replacement.listeners.change.length,0);
@@ -373,10 +536,12 @@ async function validateUiLifecycle() {
 (async () => {
   validateEvidence();
   validateFinancialSemantics();
+  validateRangeEvidence();
   await validateLoading();
   validateRegistryIdentity();
   await validateWorkbenchIntegration();
   validateRendering();
+  validateRangeRendering();
   await validateUiLifecycle();
   console.log('PASS public sparse equity evidence, exact listing/currency, no look-ahead, FCF definitions, privacy and retry behavior');
 })().catch(error => {console.error(error); process.exitCode = 1;});
