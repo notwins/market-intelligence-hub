@@ -61,23 +61,27 @@ function render(){
 }
 function addTag(tag){try{Q.parse($('q').value);}catch(e){error('Fix the current rule before adding a tag. '+e.message);$('q').focus();return;}$('q').value=Q.appendTag($('q').value,tag,$('join').value);offset=0;render();}
 function fromURL(){const q=new URLSearchParams(location.search);$('q').value=q.get('q')||'';$('kind').value=q.get('kind')||'';$('scope').value=q.get('scope')==='articles'?'articles':'all';$('sort').value=q.get('sort')==='relevance'?'relevance':'newest';}
+// Accept a query immediately; loading the catalogue must not reset typing or submit the page.
+let ready=false,pendingKind=new URLSearchParams(location.search).get('kind')||'';
+fromURL();
+$('q').addEventListener('input',()=>{offset=0;clearTimeout(timer);if(ready)timer=setTimeout(render,120);});
+$('search-form').addEventListener('submit',e=>{e.preventDefault();clearTimeout(timer);offset=0;if(ready)render();});
+$('clear').onclick=()=>{$('q').value='';$('kind').value='';pendingKind='';$('scope').value='all';$('sort').value='newest';offset=0;if(ready)render();$('q').focus();};
 async function init(){try{
  const r=await fetch('data/site-search.json',{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);data=await r.json();if(!Array.isArray(data.entries))throw Error('Invalid catalogue');if(root.ContentDelivery)data.entries=await root.ContentDelivery.search(data.entries);
  try{const colours=await fetch('data/search-colour-standard.json');if(colours.ok)standard=await colours.json();}catch{}
  try{const resourceResponse=await fetch('data/watchlist/company-resources.json',{cache:'no-store'});if(resourceResponse.ok){const metadata=await resourceResponse.json();if(metadata&&typeof metadata.companies==='object')companyResources=metadata;}}catch{}
  $('kind').innerHTML='<option value="">All groups</option>'+Object.keys(data.counts).map(k=>'<option value="'+E(k)+'">'+E(k)+' ('+data.counts[k]+')</option>').join('');
  const tags=[...new Set(data.entries.flatMap(e=>Q.record(e).tags))].sort((a,b)=>a.localeCompare(b));$('tag-options').innerHTML=tags.map(t=>'<option value="'+E(t)+'"></option>').join('');
- fromURL();tagChoices();$('limits').textContent=data.limits;$('built').textContent='Catalogue built: '+data.built_at+'. This is an indexing timestamp, not a market-data cutoff.';$('counts').innerHTML=Object.entries(data.counts).map(([k,v])=>'<span class="badge">'+E(k)+': '+v+'</span>').join('');
- $('q').addEventListener('input',()=>{offset=0;clearTimeout(timer);timer=setTimeout(render,120);});for(const id of ['kind','scope','sort'])$(id).addEventListener('change',()=>{offset=0;render();});
- $('search-form').addEventListener('submit',e=>{e.preventDefault();clearTimeout(timer);offset=0;render();});
+ $('kind').value=pendingKind;tagChoices();$('limits').textContent=data.limits;$('built').textContent='Catalogue built: '+data.built_at+'. This is an indexing timestamp, not a market-data cutoff.';$('counts').innerHTML=Object.entries(data.counts).map(([k,v])=>'<span class="badge">'+E(k)+': '+v+'</span>').join('');
+ for(const id of ['kind','scope','sort'])$(id).addEventListener('change',()=>{offset=0;render();});
  $('add-tag').onclick=()=>{const tag=$('tag-value').value.trim();if(!tag)return;if(!tags.some(t=>t.toLowerCase()===Q.canonical(tag).toLowerCase())){$('tag-help').textContent='Choose one of the saved tags, or enter this as a text rule above.';return;}$('tag-help').textContent='';addTag(tag);$('tag-value').value='';};
  $('join').addEventListener('change',activeFilters);
  $('tag-value').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('add-tag').onclick();}});
- $('clear').onclick=()=>{$('q').value='';$('kind').value='';$('scope').value='all';$('sort').value='newest';offset=0;render();$('q').focus();};
  document.addEventListener('pointerdown',e=>{if(e.target.closest('[data-insert]'))e.preventDefault();});
  document.addEventListener('click',e=>{const insert=e.target.closest('[data-insert]'),quick=e.target.closest('[data-append-rule]');if(insert){const input=$('q'),next=insertRule(input.value,input.selectionStart,input.selectionEnd,insert.dataset.insert,$('join').value);input.value=next.query;offset=0;render();input.focus();input.setSelectionRange(next.caret,next.caret);return;}if(quick){appendRule(quick.dataset.appendRule);return;}const reset=e.target.closest('[data-clear-filter]'),open=e.target.closest('[data-open-tags]');if(reset){const id=reset.dataset.clearFilter;if(['q','scope','kind'].includes(id)){$(id).value=id==='scope'?'all':'';offset=0;render();$('q').focus();}return;}if(open){$('tag-builder-panel').open=true;$('join').focus();return;}const tag=e.target.closest('[data-tag]'),example=e.target.closest('[data-query]');if(tag)addTag(tag.dataset.tag);if(example){$('q').value=example.dataset.query;offset=0;render();}});
  $('prev').onclick=()=>{offset=Math.max(0,offset-size);render();$('status').scrollIntoView({block:'nearest'});};$('next').onclick=()=>{offset+=size;render();$('status').scrollIntoView({block:'nearest'});};
- root.addEventListener('popstate',()=>{fromURL();offset=0;render();});render();
-}catch(e){$('status').textContent='Search catalogue unavailable. Open V4 or the tag map using the links above. '+e.message;}}
+ root.addEventListener('popstate',()=>{fromURL();offset=0;render();});ready=true;render();
+}catch(e){$('status').textContent='Search could not load. Use Home or Site map above to find a report. Reload to try again.';}}
 init();
 })(typeof window!=='undefined'?window:globalThis);

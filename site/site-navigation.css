@@ -1,0 +1,38 @@
+/* Shared, light-only navigation. Category accents are not financial signals. */
+.hub-map-trigger{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:9px 13px;border:1px solid #cbc7d4;border-radius:9px;background:#faf9fc;color:#635e72!important;text-decoration:none;font:650 14px/1.3 "Segoe UI",Arial,sans-serif;white-space:nowrap}
+.hub-map-trigger svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;flex:none}
+.hub-map-trigger:hover{background:#eeebf3}.hub-map-trigger:focus-visible{outline:3px solid #1e40af;outline-offset:3px}
+.hub-page-nav,.mast-actions{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.mast-actions{justify-content:flex-end}
+.hub-extra-links{margin:10px 0 16px;border-bottom:1px solid #d6dfde}.hub-extra-links>summary{cursor:pointer;min-height:44px;padding:12px 0;color:#52646e;font-size:14px}
+.hub-map-open{overflow:hidden}
+#hub-map-dialog{box-sizing:border-box;width:min(960px,calc(100% - 32px));max-width:none;height:min(800px,calc(100dvh - 32px));max-height:calc(100dvh - 32px);padding:0;border:1px solid #cbc7d4;border-radius:16px;background:#fefdfb;color:#222d31;font:15px/1.5 "Segoe UI",Arial,sans-serif;overflow:hidden;box-shadow:0 20px 80px #172e3b30;color-scheme:light}
+#hub-map-dialog[open]{display:flex;flex-direction:column}#hub-map-dialog::backdrop{background:#172e3b66}
+#hub-map-dialog *{box-sizing:border-box}#hub-map-dialog [hidden]{display:none!important}
+#hub-map-dialog a:focus-visible,#hub-map-dialog button:focus-visible,#hub-map-dialog summary:focus-visible,#hub-map-dialog input:focus-visible{outline:3px solid #1e40af;outline-offset:3px}
+#hub-map-dialog .hub-map-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 24px;border-bottom:1px solid #d6dfde;flex:none;background:#faf9fc}
+#hub-map-dialog h2{font-size:23px;line-height:1.3;margin:0;color:#222d31}#hub-map-dialog .hub-map-head p{font-size:14px;color:#52646e;margin:4px 0 0}
+#hub-map-dialog button{min-height:44px;min-width:44px;border:1px solid #aeb9be;border-radius:8px;background:#fff;color:#263b46;padding:8px 12px;cursor:pointer;font:600 13px/1.4 "Segoe UI",Arial,sans-serif}
+#hub-map-dialog .hub-map-head>button{font-size:24px;padding:2px;flex:none}
+#hub-map-dialog .hub-map-content{overflow:auto;overscroll-behavior:contain;min-height:0;padding:20px 24px;flex:1}
+#hub-map-dialog .hub-map-foot{margin:0;padding:12px 24px;background:#fff;border-top:1px solid #d6dfde;flex:none;font-size:14px}#hub-map-dialog a{color:#21578c;text-underline-offset:3px}
+#hub-map-dialog .map-controls{margin-bottom:18px}#hub-map-dialog label{display:block;font-weight:650;font-size:14px;margin-bottom:5px}
+#hub-map-dialog .search-input{display:flex;align-items:center;gap:8px}#hub-map-dialog .search-input>svg{display:none}#hub-map-dialog input{min-width:0;width:100%;min-height:44px;padding:10px;border:1px solid #8496ae;border-radius:8px;font:inherit;background:#fff;color:#222d31}
+#hub-map-dialog .map-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}#hub-map-dialog .map-status{font-size:12px;color:#52646e;margin:10px 0}
+#hub-map-dialog #site-tree{padding:0;margin:0;max-width:none}#hub-map-dialog .tree-root a{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid #bfcdd3;border-radius:10px;background:#edf3f8;text-decoration:none;margin-bottom:14px}
+#hub-map-dialog .root-title{font-weight:700;display:block}#hub-map-dialog .root-description{font-size:12px;display:block;color:#52646e}#hub-map-dialog .tree-root>a>span:last-child{margin-left:auto}#hub-map-dialog .tree-help{display:none}
+#hub-map-dialog .family-tree{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0;padding:0;list-style:none}
+#hub-map-dialog .family-branch{min-width:0;align-self:start}#hub-map-dialog .family-group{border:1px solid #d6dfde;border-radius:10px;overflow:clip;background:#fff}
+#hub-map-dialog summary{cursor:pointer;min-height:44px}#hub-map-dialog .family-group>summary{display:flex;align-items:center;gap:10px;padding:13px;background:var(--soft,#edf3f8);color:var(--accent,#21578c);list-style:none}
+#hub-map-dialog summary::-webkit-details-marker{display:none}#hub-map-dialog .branch-copy{min-width:0;flex:1}#hub-map-dialog .branch-title{display:block;font-size:15px;font-weight:700}#hub-map-dialog .branch-count{display:block;font-size:11px;color:#52646e}
+#hub-map-dialog svg{display:block;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#hub-map-dialog .family-icon,#hub-map-dialog .node-icon{display:flex;align-items:center;justify-content:center;flex:none;width:34px;height:34px;border:1px solid currentColor;border-radius:8px;color:var(--accent,#21578c);background:var(--soft,#edf3f8)}
+#hub-map-dialog .node-icon{width:28px;height:28px}#hub-map-dialog .node-icon svg{width:18px;height:18px}#hub-map-dialog .node-arrow{display:none}
+#hub-map-dialog .child-nodes{list-style:none;margin:0;padding:4px 10px 10px 17px}#hub-map-dialog .map-node{border-left:1px solid #ccd6d9;padding:5px 0 0 9px;min-width:0}
+#hub-map-dialog .map-link{display:flex;align-items:flex-start;gap:8px;border:1px solid #dce4e5;border-radius:7px;text-decoration:none;padding:10px;min-height:44px;color:var(--accent,#21578c)}#hub-map-dialog .map-link:hover{background:var(--soft,#edf3f8)}
+#hub-map-dialog .node-copy{min-width:0}#hub-map-dialog .map-title{display:block;font-size:14px;font-weight:700;overflow-wrap:anywhere}#hub-map-dialog .map-type{display:none}#hub-map-dialog .map-description{display:block;font-size:12px;color:#52646e;margin-top:3px;overflow-wrap:anywhere}
+#hub-map-dialog .sub-branch>summary{display:flex;align-items:center;gap:8px;padding:8px;color:var(--accent,#21578c);font-size:12px}#hub-map-dialog .sub-branch .child-nodes{padding-left:0}
+#hub-map-dialog .chevron{width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);margin-left:auto;flex:none}#hub-map-dialog details[open]>summary>.chevron{transform:rotate(45deg)}
+#hub-map-dialog .empty-state{border:1px dashed #8496ae;border-radius:8px;padding:16px;color:#52646e}
+@media(max-width:650px){#hub-map-dialog{width:calc(100% - 16px);height:calc(100dvh - 16px);max-height:calc(100dvh - 16px);border-radius:12px}#hub-map-dialog .hub-map-head,#hub-map-dialog .hub-map-content,#hub-map-dialog .hub-map-foot{padding:14px}#hub-map-dialog h2{font-size:20px}#hub-map-dialog .family-tree{grid-template-columns:1fr}#hub-map-dialog .map-actions button{font-size:12px;padding:8px}#hub-map-dialog .map-link .node-icon{display:none}.hub-map-trigger{font-size:13px;padding:8px 10px}.mast-actions{gap:10px}}
+@media(prefers-reduced-motion:reduce){#hub-map-dialog *{scroll-behavior:auto;transition:none}}
+@media print{.hub-map-trigger,#hub-map-dialog{display:none!important}}
