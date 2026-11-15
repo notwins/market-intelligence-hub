@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 let scroll=0;const listeners={},frame={style:{},contentWindow:{},dataset:{},addEventListener(){}};
 const ctx={window:{scrollBy:(x,y)=>scroll+=y,addEventListener:(n,f)=>listeners[n]=f},setTimeout:()=>1,clearTimeout:()=>{},document:{querySelector:()=>null,getElementById:id=>id==='beta2-frame'?frame:null}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('site/beta2-shares.js','utf8'),ctx);
-const B=ctx.window.Beta2Shares;assert(B.view().includes('standalone-beta2-share-events-2026-11-15-r4/index.html'));assert(B.view().includes('title="Beta 2 Shares'));B.mount();assert.equal(frame.dataset.bound,'1');
+const B=ctx.window.Beta2Shares;assert(B.view().includes('standalone-beta2-share-events-2026-11-15-r4/index.html'));assert(B.view().includes('title="Event studies'));B.mount();assert.equal(frame.dataset.bound,'1');
 for(const origin of ['https://evil.example','null'])listeners.message({origin,source:frame.contentWindow,data:{type:'beta2-study-height',height:4000}});assert.equal(frame.style.height,undefined);
 listeners.message({origin:'https://notwins.github.io',source:{},data:{type:'beta2-study-height',height:4000}});assert.equal(frame.style.height,undefined);
 listeners.message({origin:'https://notwins.github.io',source:frame.contentWindow,data:{type:'beta2-study-height',height:4000}});assert.equal(frame.style.height,'4008px');

@@ -249,6 +249,7 @@ def make():
  return out
 
 def strip_additions(text):
+ text=re.sub(r'<!-- research-library:assets -->.*?<!-- research-library:assets-end -->','',text,flags=re.S)
  text=re.sub(r'<!-- automated-research:assets -->.*?<!-- automated-research:assets-end -->','',text,flags=re.S)
  text=re.sub(r'<!-- research-favicon --><link[^>]+>','',text)
  text=re.sub(r'<!-- reuters-read-up:start -->.*?<!-- reuters-read-up:end -->','',text,flags=re.S)
@@ -309,6 +310,8 @@ def main():
   if feed_assets:output=output.replace('<!-- my-research-register:script -->',feed_assets.group()+'<!-- my-research-register:script -->',1)
   if path=='market-understanding/index.html' and register_path.exists():
    output=main_research_cards(output,json.loads(register_path.read_text()),json.loads((SITE/'data/external-source-standard.json').read_text()),SITE)
+  library_assets=re.search(r'<!-- research-library:assets -->.*?<!-- research-library:assets-end -->',current,re.S)
+  if library_assets:output=output.replace('</head>',library_assets.group()+'</head>',1)
   p.write_text(output)
  manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
  print('Built 5 additive report companions; original content retained apart from listed presentation-copy corrections.')
