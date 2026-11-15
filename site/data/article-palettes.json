@@ -1107,6 +1107,24 @@
         "#FFFFFF"
       ],
       "source_sha256": "c14e0dd8f69a5ba57cc2314228b9e5b3241fd799417b202a0f53dacfd9c598f7"
+    },
+    {
+      "id": "research-bond-credit-full-2026-11-14",
+      "title": "Global Markets & Credit Research · 14 November 2026",
+      "href": "research/bond-credit-full-2026-11-14/",
+      "date": "2026-11-14",
+      "edition": "Full dashboard",
+      "recommended_theme": "03",
+      "declared_theme": "03",
+      "status": "contract-declared",
+      "source_css_samples": [
+        "#D8E9EE",
+        "#45535A",
+        "#007190",
+        "#FEFDFB",
+        "#222D31"
+      ],
+      "source_sha256": "84f3669819d9a598af96b2e0ca70842bd2e15788604ddada7b2b68a8b6c8e864"
     }
   ]
 }
