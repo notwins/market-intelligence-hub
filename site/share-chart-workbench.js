@@ -20,6 +20,15 @@ function normalize(series){
  return {from,to,lines:series.map(s=>{const base=s.points.find(p=>p[0]===from)[1];return {...s,base,points:s.points.filter(p=>p[0]>=from&&p[0]<=to).map(p=>[p[0],100*(p[1]/base-1)])};})};
 }
 function shell(key){return `<section class="mp-workbench" data-share-workbench="${esc(key)}" aria-label="Share performance comparison"><p role="status">Loading shared price history…</p></section>`;}
+function researchShell(key){return key==='history'?'<section data-equity-research aria-label="Company valuation and earnings"></section>':'';}
+function mountResearch(el,s,key,dates={}){
+ if(key!=='history'||!root.EquityResearch)return;
+ const host=el.querySelector('[data-equity-research]');if(!host)return;
+ // Research evidence loads independently: a missing price feed must not hide
+ // supplied valuation observations, and a failed research load must not alter prices.
+ try{Promise.resolve(root.EquityResearch.mount(host,{symbols:s.symbols.slice(),range:s.range,selectionKey:key,...dates})).catch(()=>{if(host.isConnected)host.innerHTML='<p class="mp-warning">Valuation and earnings evidence could not load. Reload this view to retry.</p>';});}
+ catch{host.innerHTML='<p class="mp-warning">Valuation and earnings evidence could not load. Reload this view to retry.</p>';}
+}
 function panel(){return `<section class="card section mp-history" id="mp-history"><div class="section-title"><div><h2>Share prices &amp; historical charts</h2><p data-price-status>Daily closes · one shared price history</p></div><button class="button ghost" data-price-refresh>Check for price update</button></div>${shell('history')}</section>`;}
 function select(symbol){const s=state('history');s.symbols=[symbol];s.mode='price';s.revision++;}
 function options(items,s){return items.filter(x=>!s.symbols.includes(x.ticker)).map(x=>`<option value="${esc(x.ticker)}" ${x.ticker===s.pending?'selected':''}>${esc(x.name)} [${esc(x.ticker)}] · ${esc(x.currency||x.unit)}</option>`).join('');}
@@ -32,8 +41,8 @@ async function render(el,force=false){
  if(!force&&el.dataset.chartVersion===version)return;
  el.dataset.chartVersion=version;const token=String((Number(el.dataset.chartToken)||0)+1);el.dataset.chartToken=token;
  const items=api.instruments().slice().sort((a,b)=>a.name.localeCompare(b.name));
- if(!items.length){el.innerHTML='<p role="status">The closing-price feed is not available. Use “Check for price update” to retry.</p>';return;}
- el.innerHTML=controls(key,s,items);
+ if(!items.length){el.innerHTML='<p role="status">The closing-price feed is not available. Use “Check for price update” to retry.</p>'+researchShell(key);mountResearch(el,s,key);return;}
+ el.innerHTML=controls(key,s,items)+researchShell(key);mountResearch(el,s,key);
  try{
   const data=await Promise.all(s.symbols.map(t=>api.series(t)));
   const end=data.map(d=>d.quote.date).sort().at(-1),requestedFrom=daysAgo(end,ranges[s.range]);
@@ -44,6 +53,7 @@ async function render(el,force=false){
   let events=[],eventError='';
   if(s.events){try{events=(await api.earnings()).filter(e=>data.some(d=>d.item.id===api.resolve(e.ticker)?.id)&&e.date>=from&&e.date<=to);}catch{eventError='Earnings dates could not load; prices remain available.';}}
   if(!el.isConnected||el.dataset.chartToken!==token)return;
+  mountResearch(el,s,key,{from:requestedFrom,to:end});
   const result=el.querySelector('.mp-workbench-result');result.removeAttribute('role');
   result.innerHTML=currentSelection(data,api)+`<p class="mp-comparison-dates"><b>${esc(from)} → ${esc(to)}</b> · ${percentage?'Percentage change · common start = 0%':esc(data[0].item.unit)}${from>requestedFrom?' · available history determines the start':''}</p><div class="mp-legend">${lines.map((line,i)=>`<span style="--share-color:${colors[i]}"><i></i>${esc(line.name)} <b>${percentage?pct(line.points.at(-1)[1]):pct((line.points.at(-1)[1]/line.points[0][1]-1)*100)}</b></span>`).join('')}</div>${api.svg(lines,[],events,{percent:percentage,expanded:true,colors})}<div class="mp-table-scroll"><table class="mp-comparison-table"><caption>Historical feed closes · chart changes use the displayed window above</caption><thead><tr><th>Share</th><th>Historical feed close</th><th>Historical price date</th><th>Chart change</th></tr></thead><tbody>${orderedShares(data).map(d=>{const i=data.indexOf(d);return `<tr><th scope="row">${esc(d.item.ticker)}</th><td>${money(d.quote.close)} ${esc(api.displayUnit(d.item))}</td><td>${esc(d.quote.date)}</td><td>${percentage?pct(lines[i].points.at(-1)[1]):pct((lines[i].points.at(-1)[1]/lines[i].points[0][1]-1)*100)}</td></tr>`;}).join('')}</tbody></table></div>${data.filter(d=>api.quoteStatus(d.quote)!=='Daily closing price').map(d=>`<p class="mp-warning">${esc(d.item.ticker)} · ${esc(api.quoteStatus(d.quote))}</p>`).join('')}${eventError?`<p class="mp-warning">${eventError}</p>`:s.events?eventDetails(events):''}<details class="mp-values"><summary>Price bases and available observations</summary><p>Older weekly/monthly baseline dates are period labels. Daily dates are actual available sessions. No missing sessions or price values are filled.</p>${data.map(d=>`<p><b>${esc(d.item.ticker)}</b> · ${esc(api.priceBasis(d.item))} ${esc(d.base.period_note)} <a href="${esc(api.sourceUrl(d.item.history_url))}" target="_blank" rel="noopener noreferrer">Price source ↗</a></p>`).join('')}</details>`;
  }catch(e){if(el.isConnected&&el.dataset.chartToken===token){el.querySelector('.mp-workbench-result').innerHTML=`<p class="mp-warning">${esc(e.message)}</p>`;delete el.dataset.chartVersion;}}
