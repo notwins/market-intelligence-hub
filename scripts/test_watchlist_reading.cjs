@@ -79,7 +79,8 @@ for(const [tickers,light,dark,lightChip,darkChip] of tickerPalettes){
  assert(contrast(light,lightChip)>=4.5);assert(contrast(dark,darkChip)>=4.5);
 }
 assert.equal((tickerCSS.match(/--ticker-light:/g)||[]).length,4,'No inferred assignments');
-for(const selector of ['.watchlist-card[data-ticker] .watchlist-company h3','.watchlist-scope[data-theme="dark"]','.watchlist-scope[data-theme="system"]','@media(prefers-color-scheme:dark)'])assert(tickerCSS.includes(selector));
+for(const selector of ['.watchlist-card[data-ticker] .watchlist-company h3','.watchlist-scope[data-disabled-dark-theme]','.watchlist-scope[data-theme="system"]','@media not all'])assert(tickerCSS.includes(selector));
+assert(!tickerCSS.includes('@media(prefers-color-scheme:dark)'),'device dark mode must not change the site');
 assert(tickerCSS.includes('min-height:44px;max-width:100%'));assert(tickerCSS.includes('border:1px solid currentColor'));
 for(const file of ['v4.html','watchlist-report.html'])assert(fs.readFileSync('site/'+file,'utf8').includes('watchlist.css?v=20261107.ticker1'));
 console.log('PASS exact approved ticker colours: 12 names, light/dark AA contrast, scoped selectors, visible controls and cache version');

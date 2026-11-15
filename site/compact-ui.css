@@ -1,0 +1,9 @@
+/* Compact share cards; use six columns only when the content itself fits. */
+.beta-shares{container-type:inline-size;container-name:share-review}
+.beta-shares .bs-card{padding:14px}.beta-shares .bs-cards{gap:12px}
+.beta-shares .bs-card h3{font-size:15px;margin:6px 0 8px}
+.beta-shares .bs-card-current{gap:8px;margin-top:10px;padding-top:10px}
+.beta-shares .bs-card-returns{margin:12px 0 6px;gap:4px}
+.beta-shares .bs-card-returns>div{padding:7px 4px}
+@container share-review (min-width:1100px){.bs-cards{grid-template-columns:repeat(3,minmax(0,1fr))}.bs-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container share-review (min-width:1680px){.bs-cards,.bs-chart-grid{grid-template-columns:repeat(6,minmax(0,1fr))}.bs-chart-card header{padding:12px 10px 0}.bs-chart-card h3{font-size:15px}.bs-chart-current{padding-left:10px;padding-right:10px}}

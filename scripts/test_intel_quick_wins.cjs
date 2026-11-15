@@ -27,7 +27,7 @@ for(const [token,values] of Object.entries({bg:['#f4f6f5','#101915'],ink:['#1828
 }
 assert(article.includes('h1 em{font-family:Georgia,serif;font-weight:500;color:var(--sg)}'));
 assert(featureCSS.includes('h2 em{font-family:Georgia,serif;font-weight:500;color:var(--sti-sg)}'));
-assert(featureCSS.includes('@media(prefers-color-scheme:dark){.featured-research--sti'));
+assert(featureCSS.includes('@media not all{.featured-research--sti'));
 assert(featureCSS.includes('@media(forced-colors:active)'));
 console.log('PASS scoped STI article-matched light/dark palette and mixed title fonts');
 

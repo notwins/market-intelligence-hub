@@ -31,6 +31,8 @@ jobs:
         run: python3 scripts/independent_delivery_guard.py
       - name: Test automatic publication colours
         run: node scripts/test_publication_colour.cjs
+      - name: Verify light-only appearance and muted purple
+        run: node scripts/test_light_mode.cjs
       - name: Select publication path before source restore
         id: publication_path
         run: |

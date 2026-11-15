@@ -221,6 +221,6 @@ class ResearchRegisterTests(unittest.TestCase):
   page=(SITE/'market-understanding/index.html').read_text();js=(SITE/'research-register.js').read_text();css=(SITE/'research-register.css').read_text()
   self.assertEqual(page.count('id="my-research"'),1);self.assertIn('research-register.js',page);self.assertIn('research-register.css',page)
   self.assertIn('aria-live="polite"',page);self.assertIn('aria-pressed',js);self.assertIn('textContent',js);self.assertNotIn('innerHTML',js)
-  self.assertIn('max-width:560px',css);self.assertIn('prefers-color-scheme:dark',css);self.assertIn('focus-visible',css)
+  self.assertIn('max-width:560px',css);self.assertIn('@media not all',css);self.assertNotIn('@media(prefers-color-scheme:dark)',css);self.assertIn('focus-visible',css)
   self.assertIn('market-understanding/#my-research',(SITE/'v4.html').read_text())
 if __name__=='__main__':unittest.main()
