@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "source": "The Wall Street Journal \u2014 U.S. Treasury Quotes",
+  "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+  "as_of": "2026-11-13",
+  "time_precision": "date_only",
+  "verified_on_sgt": "2026-11-16",
+  "basis": "WSJ Asked yield column, percent per annum, for six individually quoted Treasury securities. Not auction rates, executable quotes or constant-maturity par estimates. Bill Bid/Asked discount-rate columns are not used as yields.",
+  "selection_note": "Illustrative maturity samples, not a claim that issues are on-the-run or exact constant maturities. About-one-year bill is the longest available bill in this saved table (28 October 2027). Each maturity and coupon is retained below. No interpolation or invented current quotes.",
+  "quotes": [
+    {
+      "term": "6M",
+      "kind": "bill",
+      "maturity": "2027-05-13",
+      "coupon_percent": null,
+      "asked_yield_percent": 4.449
+    },
+    {
+      "term": "~1Y",
+      "kind": "bill",
+      "maturity": "2027-10-28",
+      "coupon_percent": null,
+      "asked_yield_percent": 4.605
+    },
+    {
+      "term": "2Y",
+      "kind": "note",
+      "maturity": "2028-11-15",
+      "coupon_percent": 3.5,
+      "asked_yield_percent": 4.866
+    },
+    {
+      "term": "5Y",
+      "kind": "note",
+      "maturity": "2031-11-15",
+      "coupon_percent": 1.375,
+      "asked_yield_percent": 4.999
+    },
+    {
+      "term": "10Y",
+      "kind": "note",
+      "maturity": "2036-11-15",
+      "coupon_percent": 5,
+      "asked_yield_percent": 5.146
+    },
+    {
+      "term": "~30Y",
+      "kind": "bond",
+      "maturity": "2056-08-15",
+      "coupon_percent": 5.125,
+      "asked_yield_percent": 5.48
+    }
+  ]
+}

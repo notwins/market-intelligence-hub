@@ -62,7 +62,7 @@
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 10000);
       try {
-        const response = await fetch(mapURL.href, {signal:controller.signal});
+        const response = await fetch(mapURL.href, {signal:controller.signal,cache:'no-cache'});
         if (!response.ok) throw Error('Map unavailable');
         const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
         const controls = doc.querySelector('.map-controls'), tree = doc.querySelector('#site-tree');

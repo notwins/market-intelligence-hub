@@ -20,8 +20,11 @@ class VisitorNavigation(unittest.TestCase):
         self.assertEqual(len(ids), len(set(ids)))
         links = [a['href'] for tag, a in Page('site-map.html').nodes
                  if tag == 'a' and a.get('href', '').startswith('desk.html#')]
-        self.assertEqual(len(links), 6)
-        self.assertEqual(len(set(links)), 6)
+        self.assertEqual(len(links), 3)
+        self.assertEqual(len(set(links)), 3)
+        all_links = [a.get('href') for tag, a in Page('site-map.html').nodes if tag == 'a']
+        for destination in ('market-understanding/', 'v4.html#calls', 'v4.html#history'):
+            self.assertIn(destination, all_links)
         for href in links:
             self.assertIn(href.split('#')[1], ids)
 
