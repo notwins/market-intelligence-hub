@@ -17,7 +17,7 @@ These are selected observations, not a complete monthly archive.
 The third research view, **Valuation ranges**, uses the existing chart selection.
 Choose P/E, P/B or dividend yield to inspect the latest supplied edition against
 the observed minimum and maximum. Each value retains its source precision and
-report date. A neutral range marker is a visual position between those endpoints,
+report date. A range marker is a visual position between those endpoints,
 not a percentile, score or investment recommendation. The expandable edition
 matrix distinguishes valid values, missing listing rows, missing metric values
 and values excluded from the meaningful range.
@@ -72,6 +72,29 @@ The public additions contain cleaned numerical observations only. Raw uploaded
 files, lending terms, MOA/AR fields, holdings, borrowing, account details and
 private source paths are excluded. Financing calculations require separately
 verified definitions and facility terms and are outside this release.
+
+## Presentation alignment
+
+The research views reuse the Hub's V1.2 Merged company-colour catalogue and
+publication-colour helpers. Exact company tokens, reviewed registry aliases and
+unambiguous company names supply the identity colour; an unresolved identity
+stays neutral. The optional colour catalogue loads independently of financial
+evidence, so unavailable styling metadata cannot block a research view.
+
+Company chips, restrained card accents and observation markers use the approved
+light/dark colours. Numeric values, range endpoints and axes stay neutral.
+Labels and distinct observation, release-event and latest-value shapes preserve
+meaning without colour. Identity colour does not indicate investment quality,
+price direction or financing eligibility.
+
+Cards, controls and tables inherit the existing Hub font, text/chart scale,
+surface, contrast and density settings. Tables scroll within their panels on
+small screens. This is a dashboard presentation update: the existing price-chart
+palette, source precision, selection state and financial calculations continue
+to use their established contracts.
+
+The existing published-fundamentals filters also shrink within their grid at
+larger text sizes, preventing a long region option from widening the mobile page.
 
 ## Maintaining the sample
 

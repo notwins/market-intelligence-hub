@@ -5,6 +5,8 @@ const vm = require('node:vm');
 const dataSource = fs.readFileSync('site/equity-research-data.js', 'utf8');
 const valuation = JSON.parse(fs.readFileSync('site/data/equity-valuation-history.json', 'utf8'));
 const earnings = JSON.parse(fs.readFileSync('site/data/earnings-history.json', 'utf8'));
+const colourCatalogue = JSON.parse(fs.readFileSync('site/data/publication-colour-catalogue.json', 'utf8'));
+const publicationColour = require('../site/publication-colour-core.js');
 const api = require('../site/equity-research-data.js');
 const bundle = {valuation, earnings};
 const clone = value => structuredClone(value);
@@ -371,9 +373,9 @@ async function validateWorkbenchIntegration() {
   assert.match(result.innerHTML,/fixture price outage/);
 }
 
-function uiFixture(load=async()=>bundle) {
-  const context={Date,URL,console,EquityResearchData:{...api,load},document:{activeElement:null},MarketPrices:{
-    resolve:symbol=>({id:symbol.toLowerCase(),ticker:symbol,currency:symbol.endsWith('.SI')?'SGD':'USD'}),
+function uiFixture(load=async()=>bundle,{fetch,colourCore=publicationColour}={}) {
+  const context={Date,URL,console,fetch,PublicationColour:colourCore,EquityResearchData:{...api,load},document:{activeElement:null},MarketPrices:{
+    resolve:symbol=>({id:symbol.toLowerCase(),ticker:symbol,aliases:symbol==='BRK-B'?['BRK.B']:[],currency:symbol.endsWith('.SI')?'SGD':'USD'}),
     currentQuote:()=>({close:900,date:'2026-11-13',sourceLabel:'Separate selected quote',current:true})
   }};
   context.window=context;vm.createContext(context);
@@ -388,6 +390,88 @@ function uiContainer() {
     removeEventListener:(type,fn)=>listeners[type]=(listeners[type]||[]).filter(item=>item!==fn),
     setAttribute:(key,value)=>attrs[key]=value
   };
+}
+
+function validateCompanyColours() {
+  const {api:ui,context}=uiFixture();
+  const expected={
+    'D05.SI':'ticker.dbs_d05','U11.SI':'ticker.uob_u11',
+    NVDA:'ticker.nvidia_nvda',MSFT:'ticker.microsoft_msft',AAPL:'ticker.apple_aapl',TSM:'ticker.tsmc_tsm',
+    GOOGL:'ticker.alphabet_googl',AMZN:'ticker.amazon_amzn',META:'ticker.meta_meta','BRK-B':'ticker.berkshire_hathaway_brk',
+    AMD:'ticker.amd',AVGO:'ticker.broadcom_avgo',MU:'ticker.micron_mu',TSLA:'ticker.tesla_tsla'
+  };
+  const approved=publicationColour.index(colourCatalogue);
+  for(const listing of valuation.listings){
+    const identity=ui.companyIdentity(listing.symbol,listing,colourCatalogue);
+    assert(identity,`${listing.symbol} resolves its approved company identity`);
+    assert.equal(identity.id,expected[listing.symbol]);
+    assert.equal(identity.style,publicationColour.style(approved[identity.id]),'Both display modes use the compiled catalogue, not a new colour map');
+  }
+  assert.equal(ui.companyIdentity('BRK-B',null,colourCatalogue)?.id,expected['BRK-B'],'The existing registry alias resolves the class-B listing');
+  context.MarketPrices.resolve=symbol=>({ticker:symbol});
+  assert.equal(ui.companyIdentity('BRK-B',null,colourCatalogue),null,'A missing registry alias is not replaced by automatic punctuation rewriting');
+  for(const symbol of ['UNLISTED','NVDA-WARRANT','US']){
+    assert.equal(ui.companyIdentity(symbol,null,colourCatalogue),null,'Unknown listings and region tokens remain neutral');
+  }
+  assert.equal(ui.companyIdentity('UNLISTED',{symbol:'AAPL',name:'Apple'},colourCatalogue),null,'A different listing cannot lend its company identity to an unknown symbol');
+  for(const malformed of [null,{version:2,tags:colourCatalogue.tags},{version:1,tags:null}]){
+    assert.equal(ui.companyIdentity('AAPL',valuation.listings.find(row=>row.symbol==='AAPL'),malformed),null,'Unavailable or unsupported rules cannot block a financial view');
+  }
+  for(const field of ['text','background','dark_text','dark_background']){
+    const invalid=clone(colourCatalogue);
+    invalid.tags.find(tag=>tag.id===expected.AAPL)[field]='#123456;--injected:unsafe';
+    assert.equal(ui.companyIdentity('AAPL',null,invalid),null,`${field} must be a validated hex value before entering inline CSS`);
+  }
+  assert.equal(uiFixture(undefined,{colourCore:null}).api.companyIdentity('AAPL',null,colourCatalogue),null,'The optional colour helper can be unavailable');
+}
+
+async function validateColourLoading() {
+  const settle=()=>new Promise(resolve=>setImmediate(resolve));
+  let resolveColours;
+  const fixture=uiFixture(undefined,{fetch:()=>new Promise(resolve=>{resolveColours=resolve;})});
+  const ui=fixture.api,host=uiContainer();
+  let mounted=false;
+  const pending=ui.mount(host,{symbols:['AAPL'],selectionKey:'colour-race'}).then(result=>{mounted=true;return result;});
+  await settle();
+  assert.equal(mounted,true,'An unresolved optional palette request must not delay the financial data');
+  assert.equal((await pending).ok,true);
+  assert(host.innerHTML.includes('Apple'));
+  await ui.mount(host,{symbols:['MSFT'],selectionKey:'colour-race'});
+  for(const listener of host.listeners.click)listener({target:{closest:selector=>selector==='[data-er-mode]'?{dataset:{erMode:'ranges'}}:null}});
+  const detached=uiContainer();
+  await ui.mount(detached,{symbols:['NVDA'],selectionKey:'detached-colours'});
+  ui.unmount(detached);
+  const detachedHtml=detached.innerHTML;
+  assert.equal(typeof resolveColours,'function','Mount starts the optional catalogue request');
+  resolveColours({ok:true,json:async()=>clone(colourCatalogue)});
+  await settle();
+  assert(host.innerHTML.includes('Microsoft'));
+  assert(!host.innerHTML.includes('Apple'),'A late palette result cannot restore the previous selection');
+  assert(host.innerHTML.includes('class="er-valuation-ranges"'),'A late palette result retains the user’s current view');
+  assert.equal(detached.innerHTML,detachedHtml,'A late palette result does not repaint an unmounted panel');
+  assert.equal(ui.companyIdentity('MSFT',api.listingFor('MSFT',bundle))?.id,'ticker.microsoft_msft','A successful optional response becomes available to current views');
+  const chipIdentity=(html,symbol)=>{
+    const chip=[...html.matchAll(/<a\b([^>]*)>([^<]*)<\/a>/g)].find(([,attrs,text])=>/class="[^"]*\ber-company-chip\b[^"]*"/.test(attrs)&&text===symbol);
+    assert(chip,`${symbol} has a readable ticker chip`);
+    return {id:chip[1].match(/data-mih-tag="([^"]*)"/)?.[1],style:chip[1].match(/style="([^"]*)"/)?.[1]};
+  };
+  const original=ui.renderContent(bundle,{symbols:['META','NVDA']},{mode:'comparison'},api);
+  const reordered=ui.renderContent(bundle,{symbols:['NVDA','META']},{mode:'comparison'},api);
+  for(const [symbol,id] of [['META','ticker.meta_meta'],['NVDA','ticker.nvidia_nvda']]){
+    const identity=chipIdentity(original,symbol);
+    assert.deepEqual(identity,{id,style:publicationColour.style(publicationColour.index(colourCatalogue)[id])});
+    assert.deepEqual(chipIdentity(reordered,symbol),identity,'Reordering the shared selection does not change a company identity colour');
+  }
+
+  const failed=uiFixture(undefined,{fetch:async()=>{throw Error('fixture palette unavailable');}}).api;
+  const fallback=uiContainer();
+  assert.equal((await failed.mount(fallback,{symbols:['MSFT']})).ok,true);
+  await settle();
+  for(const mode of ['timeline','ranges','comparison']){
+    const html=failed.renderContent(bundle,{symbols:['MSFT']},{mode},api);
+    assert(html.includes('Microsoft'),`${mode} remains available without optional colour data`);
+    assert(!html.includes('--tag-text:'),'Missing colour data leaves financial content neutral');
+  }
 }
 
 function validateRendering() {
@@ -530,7 +614,7 @@ async function validateUiLifecycle() {
   const current=racing.mount(host,{symbols:['MSFT'],selectionKey:'race'});
   resolvers[0](bundle);assert.equal((await old).stale,true);
   resolvers[1](bundle);assert.equal((await current).ok,true);
-  assert(host.innerHTML.includes('Microsoft <small>MSFT</small>'),'Outdated async result cannot replace current selected company');
+  assert(host.innerHTML.includes('Microsoft')&&host.innerHTML.includes('>MSFT</a>')&&!host.innerHTML.includes('Apple'),'Outdated async result cannot replace current selected company');
 }
 
 (async () => {
@@ -540,8 +624,10 @@ async function validateUiLifecycle() {
   await validateLoading();
   validateRegistryIdentity();
   await validateWorkbenchIntegration();
+  validateCompanyColours();
   validateRendering();
   validateRangeRendering();
   await validateUiLifecycle();
-  console.log('PASS public sparse equity evidence, exact listing/currency, no look-ahead, FCF definitions, privacy and retry behavior');
+  await validateColourLoading();
+  console.log('PASS public sparse equity evidence, exact listing/currency, no look-ahead, FCF definitions, privacy, retry behavior and stable approved company colours');
 })().catch(error => {console.error(error); process.exitCode = 1;});
