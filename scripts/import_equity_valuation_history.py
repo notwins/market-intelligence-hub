@@ -13,13 +13,23 @@ import re
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
-PILOTS = (
+# Exact relationships already reviewed in site/bos-equity.js and the shared
+# price register. This projection does not add historical ticker aliases.
+LISTINGS = (
     ("D05.SI", "DBS SP", "SGD", "DBS Group"),
     ("U11.SI", "UOB SP", "SGD", "United Overseas Bank"),
     ("NVDA", "NVDA US", "USD", "NVIDIA"),
     ("MSFT", "MSFT US", "USD", "Microsoft"),
     ("AAPL", "AAPL US", "USD", "Apple"),
     ("TSM", "TSM US", "USD", "TSMC ADR"),
+    ("GOOGL", "GOOGL US", "USD", "Alphabet Class A"),
+    ("AMZN", "AMZN US", "USD", "Amazon"),
+    ("META", "META US", "USD", "Meta Platforms"),
+    ("BRK-B", "BRK/B US", "USD", "Berkshire Hathaway Class B"),
+    ("AMD", "AMD US", "USD", "AMD"),
+    ("AVGO", "AVGO US", "USD", "Broadcom"),
+    ("MU", "MU US", "USD", "Micron Technology"),
+    ("TSLA", "TSLA US", "USD", "Tesla"),
 )
 FIELDS = {
     "market_cap_usd_bn": 1, "price": 4, "fair_value_or_target": 5,
@@ -57,9 +67,13 @@ def parse_file(path):
         raise ValueError("An input must contain exactly one report date")
     report_date = report_dates.pop()
     report = dt.date.fromisoformat(report_date)
-    page_dates, forward_pages = {}, set()
+    page_dates, forward_pages, parsed_rows = {}, set(), []
     for row in rows:
         page, text = int(row["source_page"]), row["raw_text"]
+        cells = json.loads(row["raw_cells_json"])
+        if not isinstance(cells, list) or not all(isinstance(cell, str) for cell in cells):
+            raise ValueError("Raw cells must be an array of text values")
+        parsed_rows.append((row, cells))
         if "Consensus Forward Estimates" in text:
             forward_pages.add(page)
         if "Company Name" in text and "Cncy" in text:
@@ -70,24 +84,34 @@ def parse_file(path):
                 price_date = dt.date(year, month, int(match[1]))
                 if price_date > report:
                     raise ValueError("Price observation follows the report date")
+                if page in page_dates and page_dates[page] != price_date.isoformat():
+                    raise ValueError("Conflicting price dates on a source page")
                 page_dates[page] = price_date.isoformat()
 
     observations = []
-    for symbol, source_ticker, currency, _ in PILOTS:
+    for symbol, source_ticker, currency, _ in LISTINGS:
         candidates = []
-        for row in rows:
-            cells = json.loads(row["raw_cells_json"])
-            if source_ticker in cells and len(cells) >= 17:
+        for row, cells in parsed_rows:
+            # Short description appendix rows are not valuations. A short row
+            # on a valuation page is malformed and must not become a data gap.
+            page = int(row["source_page"])
+            if source_ticker in cells and (len(cells) > 4 or page in forward_pages or page in page_dates):
                 candidates.append((row, cells))
-        if len(candidates) != 1:
+        if not candidates:
+            continue
+        if len(candidates) > 1:
             raise ValueError(f"Expected one exact row for {source_ticker} in {report_date}")
         row, cells = candidates[0]
         ticker_index = cells.index(source_ticker)
         page = int(row["source_page"])
-        if ticker_index not in (1, 2) or cells[ticker_index + 3] != currency:
+        if cells.count(source_ticker) != 1 or ticker_index not in (1, 2) or len(cells) != ticker_index + 17:
+            raise ValueError(f"Unsupported valuation row layout for {source_ticker}")
+        if cells[ticker_index + 3] != currency:
             raise ValueError(f"Listing/currency mismatch for {source_ticker}")
         if page not in page_dates or page not in forward_pages:
             raise ValueError(f"Missing price date or forward-estimate heading on page {page}")
+        if page < 1 or int(row["page_row"]) < 1:
+            raise ValueError("Invalid source page or row")
         rating = cells[ticker_index + 2]
         if rating not in {"Buy", "Hold", "Sell", "Closed", "UR", "Restricted"}:
             raise ValueError("Unrecognised rating position; review the source layout")
@@ -112,6 +136,8 @@ def parse_file(path):
             "source_id": "bos_" + report_date, "source_page": page,
             "source_row": int(row["page_row"]), "quality_flags": flags,
         })
+    if not observations:
+        raise ValueError("No supported valuation rows found in this edition")
     source = {
         "title": "BOS Equity Coverage Universe · " + report_date,
         "publisher": "Bank of Singapore", "report_date": report_date,
@@ -136,10 +162,23 @@ def build(paths):
         raise ValueError("No editions supplied")
     report_dates = sorted(source["report_date"] for source in sources.values())
     observations.sort(key=lambda row: (row["symbol"], row["report_date"]))
+    listings = []
+    for symbol, ticker, currency, name in LISTINGS:
+        dates = [row["report_date"] for row in observations if row["symbol"] == symbol]
+        listings.append({
+            "symbol": symbol, "source_ticker": ticker, "currency": currency,
+            "name": name, "observation_count": len(dates), "report_dates": dates,
+            "first_report_date": dates[0] if dates else None,
+            "last_report_date": dates[-1] if dates else None,
+            "missing_editions": [{
+                "report_date": date, "reason": "exact_source_ticker_unmatched",
+                "note": f"No exact {ticker} valuation row in this supplied extract; no historical ticker alias is inferred.",
+            } for date in report_dates if date not in dates],
+        })
     return {
         "schema_version": 1, "kind": "selected_equity_valuation_history",
         "coverage": {
-            "complete": False, "edition_count": len(sources), "listing_count": len(PILOTS),
+            "complete": False, "edition_count": len(sources), "listing_count": len(listings),
             "observation_count": len(observations), "report_dates": report_dates,
             "first_report_date": report_dates[0], "last_report_date": report_dates[-1],
             "label": f"{len(sources)} supplied editions; incomplete archive. No historical percentiles.",
@@ -155,9 +194,7 @@ def build(paths):
             "range_basis": "Minima and maxima describe only the supplied observations, not a continuous historical valuation range or trading signal.",
             "use": "Descriptive comparison only; no historical strategy test or consensus-surprise series is established.",
         },
-        "listings": [{"symbol": symbol, "source_ticker": ticker, "currency": currency,
-                      "name": name, "observation_count": len(sources)}
-                     for symbol, ticker, currency, name in PILOTS],
+        "listings": listings,
         "sources": {key: sources[key] for key in sorted(sources)},
         "observations": observations,
     }

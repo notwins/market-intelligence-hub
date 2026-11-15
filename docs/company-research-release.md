@@ -7,10 +7,25 @@ dataset. The full coverage table remains on the same page below the chart tools.
 
 ## Coverage and interpretation
 
-The initial valuation sample contains 36 observations: six supplied editions for
-`D05.SI`, `U11.SI`, `NVDA`, `MSFT`, `AAPL` and `TSM`. The editions are dated
+The valuation sample contains 83 observations across 14 exact listings:
+`D05.SI`, `U11.SI`, `NVDA`, `MSFT`, `AAPL`, `TSM`, `GOOGL`, `AMZN`,
+`META`, `BRK-B`, `AMD`, `AVGO`, `MU` and `TSLA`. This covers the existing
+12-company earnings dataset plus DBS and UOB. The six supplied editions are dated
 2021-12-01, 2022-11-01, 2023-11-01, 2024-11-01, 2025-11-03 and 2026-11-02.
 These are selected observations, not a complete monthly archive.
+
+The third research view, **Valuation ranges**, uses the existing chart selection.
+Choose P/E, P/B or dividend yield to inspect the latest supplied edition against
+the observed minimum and maximum. Each value retains its source precision and
+report date. A neutral range marker is a visual position between those endpoints,
+not a percentile, score or investment recommendation. The expandable edition
+matrix distinguishes valid values, missing listing rows, missing metric values
+and values excluded from the meaningful range.
+
+Thirteen listings have observations in all six editions. META has five: the
+2021 extract does not contain the exact `META US` ticker, and this import does
+not infer a historical ticker alias. `BRK-B` uses the existing reviewed BOS
+mapping to `BRK/B US` and the existing registry alias for earnings ticker `BRK.B`.
 
 - P/E, P/B and dividend yield retain the source's consensus-forward heading.
   The forecast year or rolling horizon is unspecified. No trailing multiple is
@@ -22,8 +37,13 @@ These are selected observations, not a complete monthly archive.
 - Fair values and analyst targets are not market prices. Where the extracted
   row does not establish the provider or concept, the reference stays unresolved.
 - Zero or negative multiples remain in the source evidence, with a review note,
-  and are excluded from meaningful valuation ranges. TSM's 2021 P/B is such a
-  source observation.
+  and are excluded from meaningful valuation ranges. TSM's 2021 P/B and MU's
+  2023 P/E are such observations. A supplied dividend yield of zero is valid;
+  a missing yield is not converted to zero.
+- The latest value refers to the newest supplied report edition in the selected
+  window. A missing listing row or metric in that edition stays missing; an
+  older valid observation never replaces it. Minimum and maximum ties retain
+  all their report dates.
 - Observed minima and maxima describe only the supplied sample. Historical
   percentiles and strategy signals remain unavailable. Backtesting requires a
   separate point-in-time dataset, including publication availability, corporate
@@ -44,6 +64,10 @@ independently so a failed dataset cannot replace the price chart or its returns.
 previously loaded valid dataset when a refresh fails, and permits retry. Exact
 listing and currency matching is required. A missing observation remains missing.
 
+The three views are Company timeline, Valuation ranges and Compare selected.
+They remain inside the existing Shares navigation, with detailed tables in
+expandable sections and horizontal table scrolling on small screens.
+
 The public additions contain cleaned numerical observations only. Raw uploaded
 files, lending terms, MOA/AR fields, holdings, borrowing, account details and
 private source paths are excluded. Financing calculations require separately
@@ -55,6 +79,9 @@ verified definitions and facility terms and are outside this release.
 schema via `--input` and writes the cleaned projection via `--output`. Inputs
 remain outside the repository. The importer rejects duplicate editions,
 ambiguous listing rows, shifted unknown layouts and invalid source dates.
+An absent exact ticker is recorded as a listing gap, distinct from a malformed
+or ambiguous row. Global and per-listing coverage metadata reconcile to the
+actual observations, including the report-date list and its endpoints.
 It is a manual source import, not a new scheduled feed.
 
 The dedicated importer and browser-module tests run with the existing Pages
