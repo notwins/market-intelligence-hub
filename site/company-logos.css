@@ -21,3 +21,14 @@
 .latest-quick-card>.mih-company-logos{pointer-events:none}
 @media(max-width:600px){.mih-company-avatar{--company-logo-size:32px!important}.watch-mini>.mih-company-avatar{--company-logo-size:24px!important}.mih-company-logos{gap:5px}.mih-logo-metadata{gap:5px 8px}.company-news-card>header{flex-wrap:wrap}.company-news-card>header>.company-share-link{margin-left:0}.mih-company-logo{padding:2px}}
 @media print{.mih-company-logo{break-inside:avoid;border-color:#bbb;box-shadow:none}}
+
+/* Compact marks on timeline, discovery, explorer and issuer cards. */
+.company-top>.mih-company-avatar,.bs-card>header>.mih-company-avatar,.sl-series-card>header>.mih-company-avatar{align-self:flex-start;margin-top:2px}
+.company-top>div,.bs-card>header>div{flex:1;min-width:0}
+.publication-meta>.mih-company-logos,.gs-date>.mih-company-logos{--company-logo-size:20px!important}
+.publication-entry .mih-logo-metadata,.gs-result .mih-logo-metadata{gap:5px 8px}
+.ci-identity>.mih-company-avatar,.sec-name>.mih-company-avatar,.security>div>.mih-company-avatar,.sl-card>header>.mih-company-avatar{float:left;margin:2px 8px 4px 0}
+.watchlist-teaser>.mih-article-logos{gap:5px;margin:0 0 12px}
+.watchlist-teaser .mih-company-logo{--company-logo-size:24px!important}
+tr[data-logo-ticker] .mih-company-avatar{vertical-align:middle;margin:0 7px 0 0}
+.gs-result .mih-company-logo{padding:2px}

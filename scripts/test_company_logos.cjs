@@ -13,6 +13,8 @@ assert.deepEqual(infer({title:'Corporate update',tickers:['GOOGL','GOOG','BRK.B'
 assert.deepEqual(infer({title:'Bank update',tags:['ticker.dbs_d05','OCBC / O39','UOB']}),['D05.SI','O39.SI','U11.SI']);
 assert.deepEqual(infer({title:'$C reports; Unity Software (U) follows'}),['C','U']);
 assert.deepEqual(infer({title:'C class, U curve and MA trend'}),[]);
+assert.deepEqual(infer({title:'Quarterly update',tags:['Microsoft','Nvidia']}),['MSFT','NVDA'],'plain company labels in search tags are exact identities');
+assert.deepEqual(infer({title:'Quarterly update',tags:['sea','strategy','AI']}),[],'generic subject tags do not identify companies');
 assert.equal(L.resolve('NOT_A_TICKER',data),null);assert.equal(L.html(['NOT_A_TICKER'],data),'');
 const out=L.html(['NVDA','NVDA','MSFT'],data);assert.equal((out.match(/data-logo-company=/g)||[]).length,2);assert(out.includes('loading="lazy"'));assert(out.includes('width="64"'));assert(!out.includes('http'));
 for(const c of data.companies){assert(/^[A-Z0-9.-]+\.webp$/.test(c.file));const b=fs.readFileSync(path.join(__dirname,'../site/assets/company-logos',c.file));assert.equal(b.length,c.bytes);assert.equal(crypto.createHash('sha256').update(b).digest('hex'),c.sha256);assert.equal(b.toString('ascii',8,12),'WEBP');}

@@ -39,3 +39,18 @@ not the active publisher and its old path list is not broadened by this change.
 Rollback: restore only the changed UI entry pages and renderer lines on current
 main; remove the logo module/style references. Do not reset main, redeploy an old
 complete artifact, or roll back any separately published report/feed.
+
+## Extended card sweep — 16 November 2026
+
+The second release covers plain article cards, the overview watchlist teaser,
+standalone price cards, publication-timeline entries, Reuters discovery stories,
+full-page and quick search results, share-return/explorer cards, issuer cards,
+research edition lists and saved stock rows. Cards use their own headings,
+explicit identities and exact company tags; a parent never inherits a nested
+article's subjects. Repeated price/valuation badges inside company cards are
+suppressed. Existing chart, filter, source and navigation behaviour is retained.
+
+Browser regression checks cover nested-card ownership, tag-only bank identity,
+STI triple badges, changing identities, replacing headers, cleared identities,
+missing-image fallback, phone overflow and existing news/report links. Unchanged
+cards reuse their identity result during asynchronous price/data refreshes.
