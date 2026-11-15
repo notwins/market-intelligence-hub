@@ -13,5 +13,5 @@
 .featured-research--sti .featured-date{color:var(--sti-muted)}
 .featured-research--sti .links a{color:var(--sti-link)}
 .featured-research--sti a:focus-visible{outline-color:var(--sti-link)}
-@media(prefers-color-scheme:dark){.featured-research--sti{--sti-bg:#101915;--sti-ink:#f0f4f1;--sti-muted:#c1cec7;--sti-line:#415349;--sti-sg:#6ee7b7;--sti-link:#7dd3fc}}
+@media not all{.featured-research--sti{--sti-bg:#101915;--sti-ink:#f0f4f1;--sti-muted:#c1cec7;--sti-line:#415349;--sti-sg:#6ee7b7;--sti-link:#7dd3fc}}
 @media(forced-colors:active){.search-tag,.featured-research{background:Canvas;color:CanvasText;border:1px solid CanvasText}.featured-research--sti{--sti-ink:CanvasText;--sti-muted:CanvasText;--sti-sg:CanvasText;--sti-link:LinkText}}

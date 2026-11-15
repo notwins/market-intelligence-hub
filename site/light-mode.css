@@ -1,0 +1,8 @@
+
+/* Owner-approved V3 muted purple display; original tag IDs remain stable. */
+:root{color-scheme:light!important}
+[style*="--tag-text:#6D28D9" i]{--tag-text:#635E72!important;--tag-bg:#FAF9FC!important}
+:is([data-mih-tag],[data-mih-semantic],[data-colour-id])[style*="#6D28D9" i],:is([data-mih-tag],[data-mih-semantic],[data-colour-id])[style*="#6d28d9" i]{--tag-text:#635E72!important;--tag-bg:#FAF9FC!important;--accent:#635E72!important;--soft:#FAF9FC!important}
+.mih-colour-chip,.mih-colour-term{color:var(--tag-text)!important}
+.daily-grid>.report-card:first-child .mih-colour-chip,.daily-grid>.report-card:first-child .mih-colour-term{color:var(--tag-text)!important}
+.daily-grid>.report-card:first-child .mih-colour-chip{background:var(--tag-bg)!important}

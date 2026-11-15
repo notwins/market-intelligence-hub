@@ -5,7 +5,7 @@
   "edition": "public adaptation",
   "profiles": 40,
   "svg_visuals": 6,
-  "html_sha256": "9888a1c57286e82e57194655606dff7d8c18a6f4b208dc434456a8aa7cf74bf3",
+  "html_sha256": "5322da74ba0156a2c63b720010b97045b1be1b16b5b0685afc3c2fa7feff6cfa",
   "omissions": [
     "Third-party analyst valuation and rating dataset",
     "Chart derived from analyst fair-value estimates",

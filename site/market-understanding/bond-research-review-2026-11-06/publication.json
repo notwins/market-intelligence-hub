@@ -4,7 +4,7 @@
   "edition": "2026-11-06 public edition",
   "category": "Original Hub research",
   "as_of": "6 November 2026 review; Treasury observations through 5 November; historical shared chart through October 2026",
-  "html_sha256": "0bbb30050b9fbaf7d79608fc7d03fa9230d0500cee59793010b8ae824d2d9cc4",
+  "html_sha256": "94e8ca45801f1de4ff463e4bb60389f753a93dbb4dc858941ce06f1b8d503a3d",
   "audit_changes": [
     "Removed licensed ICE spread observations and dependent change.",
     "Retained original educational spread explanation and provider source link.",

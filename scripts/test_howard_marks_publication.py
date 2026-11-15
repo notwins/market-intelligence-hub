@@ -42,6 +42,9 @@ class HowardMarksPublication(unittest.TestCase):
   original=re.sub(r'<!-- publication-print:start -->.*?<!-- publication-print:end -->','',original,flags=re.S)
   original=re.sub(r'\n/\* Market Intel publication context; original report styles retained\. \*/.*?(?=</style>)','',original,flags=re.S)
   original=re.sub(r'<meta name="description" content="[^"]*">','',original,count=1)
+  # Owner-authorized light-only appearance migration; the original report body remains frozen.
+  original=re.sub(r'<link rel="stylesheet" href="../../light-mode.css[^"]*"><script src="../../light-mode.js[^"]*"></script>','',original)
+  original=original.replace('@media not all','@media(prefers-color-scheme:dark)')
   self.assertEqual(hashlib.sha256(original.encode()).hexdigest(),self.record['html_text_and_layout_sha256'])
  def test_all_sections_charts_sources_and_links(self):
   for i in range(1,19):self.assertIn(f'section-{i:02d}',self.page.ids)
