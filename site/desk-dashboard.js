@@ -31,9 +31,9 @@ async function loadCurves(){
  }).join('');
 }
 async function loadFX(){try{
- const d=await loadJSON('data/history-fed.json');$('#dashboard-fx').innerHTML=['USD/SGD','CHF/SGD'].map(id=>{
-  const s=d.series.find(s=>s.id===id),p=s?.points?.slice(-60)||[],last=p.at(-1);if(!last)return `<article class="dashboard-card"><h3>${id}</h3><p class="empty">Saved FX observations unavailable.</p></article>`;
-  return `<article class="dashboard-card"><div class="eyebrow">FX · MONTHLY HISTORY</div><h3>${id}</h3><p class="dashboard-value">${number(last[1],4)} <small>${E(s.unit)}</small></p><p class="observation-date">Observation month: ${E(last[0].slice(0,7))}</p>${D.spark(p,s.unit)}<p class="fine">${E(s.aggregation||'Derived cross-rate from same-month USD/SGD and USD/CHF averages.')} Monthly averages, not live spot rates. ${s.derived?'This is a cross-rate of monthly averages, not an average of daily cross-rates.':''}</p>${link(s.source_url||'v4.html#history/fx','Source and full FX history →')}</article>`;
+ const d=await loadJSON('data/fred-daily.json').catch(()=>loadJSON('data/history-fed.json'));$('#dashboard-fx').innerHTML=['USD/SGD','CHF/SGD'].map(id=>{
+  const s=d.series.find(s=>s.id===id),p=s?.points?.slice(s.frequency==='daily'?-260:-60)||[],last=p.at(-1);if(!last)return `<article class="dashboard-card"><h3>${id}</h3><p class="empty">Saved FX observations unavailable.</p></article>`;
+  return `<article class="dashboard-card"><div class="eyebrow">FX · ${s.frequency==='daily'?'DAILY REFERENCE':'MONTHLY HISTORY'}</div><h3>${id}</h3><p class="dashboard-value">${number(last[1],4)} <small>${E(s.unit)}</small></p><p class="observation-date">${s.frequency==='daily'?'Observation date: '+E(date(last[0])):'Observation month: '+E(last[0].slice(0,7))}</p>${D.spark(p,s.unit)}<p class="fine">${E(s.frequency==='daily'?(s.formula||s.basis):s.aggregation||'Ratio of monthly averages.')} ${s.frequency==='daily'?'Daily reference observations published weekly; not a live quote. Retrieved '+E(d.retrieved_at):'Monthly averages, not live spot rates.'}</p>${link('fred-feed.html','Daily FX history & CSV →')} · ${link(s.source_url||s.source_urls?.[0]||'v4.html#history/fx','Source ↗')}</article>`;
  }).join('');
  }catch{$('#dashboard-fx').innerHTML='<p class="empty">Saved FX file unavailable. No spot rates inferred.</p>';}}
 async function loadIndices(){await root.MarketPrices.refresh();for(const [ticker,title] of [['SPY','SPY · S&P 500 ETF'],['QQQ','QQQ · Nasdaq-100 ETF'],['^STI','STI · Straits Times Index']]){

@@ -64,7 +64,7 @@ function historyControls(){
  else if(historyStatus?.last_success)html+='<p class="source-line">Last successful Fed retrieval: <time class="history-date">'+e(historyStatus.last_success)+'</time></p>';
  else html+=notice(e('Fed refresh has not yet been verified in this browser.'));
  if(historyStatus?.last_success&&Date.now()-Date.parse(historyStatus.last_success)>10*86400000)html+=notice(e('Fed refresh is overdue. Observation dates below remain the data dates.'));
- return html;
+ return html+'<p class="source-line"><a class="button ghost" href="fred-feed.html">Daily FRED FX &amp; US yield feed · exact history and CSV ↗</a></p>';
 }
 function loading(type){if(errors[type])return notice(e(t('This snapshot could not load.','此快照无法加载。','此快照無法載入。'))+' '+e(errors[type]))+button('Retry',`data-tool="retry" data-type="${type}"`);return`<div class="card" role="status">${e(t('Loading supplied snapshot…','正在加载用户提供快照…','正在載入使用者提供快照…'))}</div>`;}
 function workspaceNote(){return dbFailed?notice(e(t('Browser snapshot storage is unavailable. Imports work for this session; download a backup.','本浏览器无法保存快照，导入只在本次会话有效，请下载备份。','本瀏覽器無法儲存快照，匯入只在本次工作階段有效，請下載備份。'))):'';}

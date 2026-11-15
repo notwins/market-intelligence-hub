@@ -65,6 +65,7 @@ jobs:
           if [ -f scripts/test_v3.cjs ]; then
             node scripts/test_v3.cjs
           fi
+          node scripts/test_fred_daily.cjs
           node scripts/test_fed_history_ui.cjs
           node scripts/test_history_context.cjs
           node scripts/test_yield_comparisons.cjs
@@ -151,6 +152,7 @@ jobs:
           python3 scripts/validate_research_contracts.py
           python3 -m unittest discover -s scripts -p 'test_*.py'
           node scripts/test_v3.cjs
+          node scripts/test_fred_daily.cjs
           node scripts/test_fed_history_ui.cjs
           node scripts/test_history_context.cjs
           node scripts/test_yield_comparisons.cjs

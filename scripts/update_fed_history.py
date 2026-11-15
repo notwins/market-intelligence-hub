@@ -257,9 +257,19 @@ def refresh(data_dir=DATA, fetch=download, now=None, recession_fetch=None):
 
 
 if __name__ == '__main__':
+    failed = False
+    try:
+        from update_fred_daily import refresh as refresh_daily
+        daily = refresh_daily()
+        print('Validated', len(daily['series']), 'daily FRED FX/yield series')
+    except Exception as error:
+        failed = True
+        print('Daily FRED update failed:', type(error).__name__, str(error), file=sys.stderr)
     try:
         dataset = refresh(recession_fetch=lambda: download_group(['USREC']))
         print('Validated', len(dataset['series']), 'monthly series;', dataset['revision_count_this_refresh'], 'revisions')
     except Exception as error:
         print('Fed history update failed:', type(error).__name__, str(error), file=sys.stderr)
+        failed = True
+    if failed:
         sys.exit(1)
