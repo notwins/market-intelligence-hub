@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" data-version="desk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Market Desk — Market Intelligence</title>
+  <!--STYLES-->
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the market desk</a>
+  <header class="masthead">
+    <a class="brand" href="#main" aria-label="Market Intelligence home">
+      <span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span><strong>MARKET INTELLIGENCE</strong><small>Research &amp; market monitoring</small></span>
+    </a>
+    <nav class="masthead-nav" aria-label="Page sections">
+      <a href="#overview" class="active">Overview</a>
+      <a href="#chart-section">Chart wall</a>
+      <a href="#universe">Data universe</a>
+    </nav>
+    <div class="masthead-tools"><span class="snapshot"><i aria-hidden="true"></i> Snapshot · not live</span><button id="fullscreen" type="button" title="Expand the monitor">Full screen <span aria-hidden="true">⛶</span></button></div>
+  </header>
+  <main id="main">
+    <section class="workspace-heading" id="overview" aria-labelledby="page-title">
+      <div class="page-heading"><div class="eyebrow">MACRO MONITOR <span>/</span> 01 · MARKET DESK</div><h1 id="page-title">The market, in context.</h1><p>Rates, credit, households and banks. One connected view.</p></div>
+      <div class="workspace-meta"><a href="02-risk-observatory.html" class="version-link">Compare Risk Observatory <span aria-hidden="true">↗</span></a><div class="snapshot-date">Data snapshot <strong>16 NOV 2026</strong></div></div>
+    </section>
+    <section class="controlbar" aria-label="Monitor controls">
+      <div class="range-control"><label for="range">Chart history</label><select id="range"><option value="1">1 year</option><option value="5">5 years</option><option value="10">10 years</option><option value="20" selected>20 years</option></select></div>
+      <div class="range-control"><label for="baseline">Heat baseline</label><select id="baseline"><option value="5" selected>5 years</option><option value="10">10 years</option><option value="20">20 years</option></select></div>
+      <div class="range-control"><label for="heat-mode">Heat measures</label><select id="heat-mode"><option value="level" selected>Level deviation</option><option value="change">Change deviation</option></select></div>
+      <div class="heat-key" aria-label="Heat scale"><span><i class="key-normal"></i> Within 1σ</span><span><i class="key-warm"></i> Beyond 1σ</span><span><i class="key-hot"></i> Beyond 2σ</span></div>
+      <button id="methodology" type="button" class="method-button">How to read this <span aria-hidden="true">ⓘ</span></button>
+    </section>
+    <section class="headline-metrics" aria-labelledby="headline-label"><div class="section-line"><h2 id="headline-label">AT A GLANCE</h2><span>Actual observation dates shown on every card</span><strong id="summary-count" aria-live="polite"></strong></div><div id="heat-cards" class="metric-grid"></div></section>
+    <section id="chart-section" class="chart-section" aria-labelledby="chart-label">
+      <div class="section-line"><h2 id="chart-label">THE CHART WALL</h2><span>Open any chart for a closer look</span><span class="chart-hint">Native units · linked time range</span></div>
+      <div id="charts" class="chart-grid"></div>
+    </section>
+    <section class="attention-strip" aria-labelledby="attention-label"><div class="attention-heading"><span class="attention-mark" aria-hidden="true">!</span><h2 id="attention-label">Worth a closer look</h2><p>Largest absolute deviations</p></div><div id="attention-list"></div></section>
+    <details id="universe" class="universe-panel">
+      <summary><span><strong>THE FULL DATA UNIVERSE</strong><small>Explore all 69 FRED series, observations and heat signals</small></span><span class="drawer-label">Expand universe <b aria-hidden="true">＋</b></span></summary>
+      <div class="universe-toolbar"><label for="search">Find a series</label><input id="search" type="search" placeholder="Search Treasury, credit, mortgage, FX or a FRED ID…" autocomplete="off"><span class="universe-note">Colour reflects distance from history, not a buy or sell signal.</span></div>
+      <div id="all-series" class="all-series-grid"></div>
+    </details>
+    <footer class="page-footer"><div><span class="footer-badge">LOCAL RESEARCH PREVIEW</span><span id="coverage"></span></div><span>Heat = absolute standard-deviation distance · underlying units retained</span></footer>
+  </main>
+  <!--DATA-->
+  <!--ENGINE-->
+</body>
+</html>
