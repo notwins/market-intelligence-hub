@@ -54,3 +54,7 @@ Browser regression checks cover nested-card ownership, tag-only bank identity,
 STI triple badges, changing identities, replacing headers, cleared identities,
 missing-image fallback, phone overflow and existing news/report links. Unchanged
 cards reuse their identity result during asynchronous price/data refreshes.
+
+## Compact price-card visibility fix
+
+The old `.mp-compact .mp-quote span` rule also hid every logo span. Scope it to the direct company-name text only. Verify loaded images have nonzero visible dimensions after asynchronous price rendering, alongside desktop/mobile screenshots.
