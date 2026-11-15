@@ -1,0 +1,8 @@
+/* Permanent event study: independent content owns the article and dated data. */
+(function(root){'use strict';
+const url='https://notwins.github.io/market-intelligence-content/research/standalone-beta2-share-events-2026-11-15/index.html';
+function view(){return '<section class="beta2-study" aria-label="Beta 2 Shares historical event study" data-table-controls="off"><div class="page-head"><div><span class="eyebrow">History · fixed event cohorts</span><h1>▤ Beta 2 Shares</h1><p>Share prices before and after major events. <a href="'+url+'" target="_blank" rel="noopener">Open the full study in a separate tab ↗</a></p></div></div><p id="beta2-loading" role="status">Loading the permanent event study. If it is unavailable here, use the full-study link above.</p><iframe id="beta2-frame" title="Beta 2 Shares: events, country heat maps and share-price charts" src="'+url+'" style="display:block;width:100%;height:1400px;border:0;border-radius:12px" loading="eager" referrerpolicy="strict-origin-when-cross-origin"></iframe></section>'}
+function mount(){const f=document.getElementById('beta2-frame');if(!f||f.dataset.bound)return;f.dataset.bound='1';f.addEventListener('load',()=>{const n=document.getElementById('beta2-loading');if(n)n.textContent='Permanent historical study. Daily live-price updates do not rewrite these event snapshots.';});}
+root.addEventListener('message',ev=>{const f=document.getElementById('beta2-frame');if(!f||ev.origin!=='https://notwins.github.io'||ev.source!==f.contentWindow||ev.data?.type!=='beta2-study-height')return;const h=ev.data.height;if(Number.isFinite(h)&&h>=300&&h<=100000)f.style.height=Math.ceil(h+8)+'px';});
+root.Beta2Shares={view,mount,url};
+})(window);

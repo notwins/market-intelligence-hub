@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const listeners={},frame={style:{},contentWindow:{},dataset:{},addEventListener(){}};
+const ctx={window:{addEventListener:(n,f)=>listeners[n]=f},document:{getElementById:id=>id==='beta2-frame'?frame:null}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('site/beta2-shares.js','utf8'),ctx);
+const B=ctx.window.Beta2Shares;assert(B.view().includes('standalone-beta2-share-events-2026-11-15/index.html'));assert(B.view().includes('title="Beta 2 Shares'));B.mount();assert.equal(frame.dataset.bound,'1');
+for(const origin of ['https://evil.example','null'])listeners.message({origin,source:frame.contentWindow,data:{type:'beta2-study-height',height:4000}});assert.equal(frame.style.height,undefined);
+listeners.message({origin:'https://notwins.github.io',source:{},data:{type:'beta2-study-height',height:4000}});assert.equal(frame.style.height,undefined);
+listeners.message({origin:'https://notwins.github.io',source:frame.contentWindow,data:{type:'beta2-study-height',height:4000}});assert.equal(frame.style.height,'4008px');
+listeners.message({origin:'https://notwins.github.io',source:frame.contentWindow,data:{type:'beta2-study-height',height:Infinity}});assert.equal(frame.style.height,'4008px');
+for(const f of ['site/v4-tools.js','site/v4.html'])assert(fs.readFileSync(f,'utf8').includes('beta2-shares'));
+console.log('PASS Beta 2 independent article route, accessible frame, fallback link, origin/source checks and bounded resizing');
