@@ -1471,176 +1471,176 @@
   },
   "checks": {
     "US91282CJJ18": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US91282CJZ59": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US91282CMM00": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810FT08": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810PT97": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810PU60": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810PX00": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QC53": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QE10": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QN19": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QQ40": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TC27": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "unavailable",
       "message": "Exact coupon/maturity match unavailable; no substitute bond used"
     },
     "US912810QW18": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TM09": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TW80": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TZ12": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RJ97": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RK60": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810UL07": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RM27": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RP57": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RQ31": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810UV88": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SA79": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SD19": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SF66": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SL35": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SZ21": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TL26": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US87973RAW07": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "AU000XCLWAP3": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "NC22300W": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "NZ13100V": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "NX24100T": {
-      "checked_at": "2026-11-15T19:15:45Z",
+      "checked_at": "2026-11-15T23:42:18Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     }
   },
-  "checked_at": "2026-11-15T19:15:45Z",
+  "checked_at": "2026-11-15T23:42:18Z",
   "status": "partial"
 }

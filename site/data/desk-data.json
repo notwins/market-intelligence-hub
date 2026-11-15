@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "source_commit": "91eb597b7087b2a1399cc22bc5fd74583a4f0021",
-  "built_at": "2026-11-15T00:54:50.778547+00:00",
+  "source_commit": "3596ee6c07647c7f66bf0687464e4ebb2a2eefe0",
+  "built_at": "2026-11-15T23:41:15.742867+00:00",
   "coverage": {
     "archive": "All legacy published research HTML in this checkout; companion assets remain attached. New independent editions are merged by ContentDelivery in the browser.",
     "chronology": "First added to the public repository; not a verified Pages upload time. Unknown introduction dates sort last. Source/research dates remain separate.",
@@ -12,7 +12,11 @@
   "featured_ids": [
     "research-cpf-oa-temasek-2070-2026-11-04",
     "research-sti-banks-v2-2026-11-09",
-    "research-bis-ai-financing-loop-2026-11-13"
+    "research-bis-ai-financing-loop-2026-11-13",
+    "research-ai-circular-financing-2026-11-10",
+    "pending-us-cre-remake",
+    "research-historical-market-events-2026-11-05",
+    "market-understanding-creditworthiness-2026-11-06-v2"
   ],
   "reports": [
     {
@@ -2175,7 +2179,9 @@
         }
       ],
       "news_ids": [
+        "521e8ca42b44ac93ffed",
         "0827794c9fb5f04af380",
+        "9d585bec51cbc9703244",
         "3681c6c6d49c0bed28e2"
       ],
       "research_href": "search.html?q=MSFT"
@@ -3777,29 +3783,31 @@
         }
       ],
       "news_ids": [
-        "9cb1cf434cdd2a605396",
         "0827794c9fb5f04af380",
-        "c4e6490162f40ad075e4",
-        "72ba00461dea0e290e52",
-        "9e76abe1f107edaa8d99",
         "446fdd0ea7b9eb590949",
         "61c54fc35375c20428f8",
         "44d473e7d75738f2d75c",
+        "c4e6490162f40ad075e4",
+        "72ba00461dea0e290e52",
+        "9cb1cf434cdd2a605396",
         "66596e3e3744696dce21",
+        "1b49dc6d68ff53511690",
         "81ec744b3e075a844906",
         "2adc2531d2518cb5ad59",
         "8be381abd8082b422c7e",
         "04b404fb2362a220c43d",
         "0254a25fecd66be175b1",
         "6385bd63608cf9fc49d5",
+        "108e3937ead9871f6f4f",
+        "4e5137ac8a9e11d94099",
         "9f81163019318f68a30e",
         "bf09fd363f64e779febd",
+        "b6b76dcf86da5a86e143",
         "162817eabb9e4336c797",
+        "5a6ab426d4f822399e7e",
+        "509e03f18042e222f03f",
         "797b2beb7bbe52dc933b",
-        "4e5137ac8a9e11d94099",
         "d37479c485d8b5ffc86c",
-        "1b49dc6d68ff53511690",
-        "a5fb5d7c2c0024cffe63",
         "9e0167d99329e8330207"
       ],
       "research_href": "search.html?q=NVDA"
@@ -5170,8 +5178,10 @@
         }
       ],
       "news_ids": [
+        "95ea5bf7ac1a0d7d8c65",
         "daff3b77d192228113e6",
-        "12e059c9adebdbc33517"
+        "4070bf898d70a3525877",
+        "20974cae8e2f6667033c"
       ],
       "research_href": "search.html?q=GOOGL"
     },
@@ -6040,7 +6050,9 @@
           "additional_review": false
         }
       ],
-      "news_ids": [],
+      "news_ids": [
+        "08c03789f419ab7ae6cf"
+      ],
       "research_href": "search.html?q=AMZN"
     },
     {
@@ -9224,6 +9236,7 @@
         }
       ],
       "news_ids": [
+        "7a7a6fc02d39e972fc30",
         "57816f3dd9623112f494"
       ],
       "research_href": "search.html?q=TSLA"
@@ -9769,7 +9782,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS2",
       "source_series": "DGS2",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-14T08:52:53+08:00",
+      "last_attempt": "2026-11-15T08:55:41+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -9906,7 +9919,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS5",
       "source_series": "DGS5",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-14T08:52:53+08:00",
+      "last_attempt": "2026-11-15T08:55:41+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10043,7 +10056,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS10",
       "source_series": "DGS10",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-14T08:52:53+08:00",
+      "last_attempt": "2026-11-15T08:55:41+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10180,7 +10193,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS30",
       "source_series": "DGS30",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-14T08:52:53+08:00",
+      "last_attempt": "2026-11-15T08:55:41+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10447,12 +10460,24 @@
   ],
   "news": [
     {
-      "id": "9cb1cf434cdd2a605396",
-      "title": "Colette Kress, the CFO who challenged Huang's bets, is Nvidia's interim CEO",
-      "href": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNWnRLUFljeVFkcXJzT2xiV3lQWnlaMENnaUNHVlZNdWtscEZSVnRIaWZYSERpb0hTVEc2cmVZaEw4Q1FBX3B6VmNvMnhaSm5GV1RvQ2pwNExEazBSNWRRejMyTU5NZU5RXzdhdU5xMDZZUHFWekdwZG9wWEJOeV9HQnVwLTR4b2FXc1FfWDRPVTd2Tm1JVkRCYk5aUjFROWhqR1pRay1oWVFjdnpnSTRHdzd3?oc=5",
-      "published_at": "2026-11-13T23:33:25+00:00",
+      "id": "7a7a6fc02d39e972fc30",
+      "title": "Tesla invites select customers to buy Cybercab for personal use",
+      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOWE9RSGUwWDAzVms5ZGZVZlpvTFhDUno1ay0tOTVIT1VNbjBWVkhsdzRTRWtaSWhjeF9mUFlsNTVQLTVPVEt1RGVlZzFDcDJZU0lQdTQwREtrOTkxanBwSnhMcTBNYzV4UHlacWZXZUpMTVNvMEYtMm5lWDR4UFVOZUJHcXV6TmJ0R2NrelM0Q1Y1OVVCbUNlT3dLdnUwZnZvSzhnWk1lVDlzLXhBVnBqMFZJdDVtaFVrOWl5bUtYbw?oc=5",
+      "published_at": "2026-11-14T08:02:12+00:00",
       "tickers": [
-        "NVDA"
+        "TSLA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "521e8ca42b44ac93ffed",
+      "title": "Microsoft says consumer products services recovered; still monitoring enterprise services",
+      "href": "https://news.google.com/rss/articles/CBMixAFBVV95cUxObkxxbE1VclJTQkp3R3ZZR3M4b0UtTUNMMmIzb09GSzlZQU1kUDQzN3ZKRXhleXhXV1BUd1lEMXVSMnZBUDN3WEwwdUM0QVhydk5mZWwxZnRndlJHd2FEQUpWUnRaeG5raGFMY2Z2M1RHRlZYLThiVktPTVVsYVFFS0dkMHlyNmtPNWRlQ3NsYjNRY0dxZVdQaFhRUlRpMTNjdlZqbDBZcVg3Q0tRV3ZFWlQ1bTJIZHl3WXFDV2FJbFVocm8w?oc=5",
+      "published_at": "2026-11-14T05:40:00+00:00",
+      "tickers": [
+        "MSFT"
       ],
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
@@ -10472,36 +10497,12 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "c4e6490162f40ad075e4",
-      "title": "Wall St Week Ahead: Nvidia results, Anthropic IPO pose tests for tumultuous AI trade",
-      "href": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQVkhwN0xoWW41NzBTZjRFMi1RV0tnYW84ak1zMGU3UHpxTkZ2UHNqako1QWh6NDRkRG5Eb1kwY0RCS0hydXVzTkg2clUwTXNBRUthM1R0SUg0azdDZkhaZlpFNzMtSDdNa09jZW9yb3N4UzdWUHpiTUl0cXl3dTQwb2M2V2R0Q1lSUFppUVVVaWYzejdsZk9GeWc4dE5oNGM2LS0yVFhkX2lpODlBMFZnVlJlVGJMb21XNE02c3BMa1U?oc=5",
-      "published_at": "2026-11-13T21:39:06+00:00",
+      "id": "08c03789f419ab7ae6cf",
+      "title": "EXCLUSIVE: Amazon’s plan to own the world’s product data and fight AI shopping agents",
+      "href": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQY2FJOXhDLWZqYzRxQ3BNVGRyeDNGWGZYU0VwNm5PV09tWGVwRklHdGFQaDRGWEQwM3pBZ1g2X0lYQVFGUU9RdHhyVk9kSnhrcWxob3o2ZUVNTE5SWW5OSWtkZEVlZm83ZUdrZHJ6X1N6bjhqT2F2WWxpWXVaUGhBZldsU0N5MEhjS19yR1pJcFlDN2N4ekpfWDZmR1FPT3k4eGY0bkdEQldjVnVZX21BYlVXX0h4d1JwbFVSaQ?oc=5",
+      "published_at": "2026-11-13T17:28:57+00:00",
       "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "72ba00461dea0e290e52",
-      "title": "S&P 500, Nasdaq end lower as Nvidia uncertainty weighs on tech shares",
-      "href": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPa0xIRkJ1T2xEOU9abUNDYi1vTlpmRWJzd0MyQkFqa2NSb1BkMEdUNDROMmVmaXo3bDVRdThuRDFRaWZySXAyRjN5d1NDNjhCclFJUDVxdG9CQ1dyWWpDbUEwVHVRaHpNWUg5SjdreUtMeHNHXy1feGNBVkFLN3Z4cGNTcGtyYXg2bXFHdlpZQWtneFJDSWVreFROZ09oamc?oc=5",
-      "published_at": "2026-11-13T21:34:31+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "9e76abe1f107edaa8d99",
-      "title": "Bessent blames Commerce Dept over lack of export controls for Nvidia partner Megaspeed",
-      "href": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNLTRNS3BqaXcwNDJlOTNLZDU2NkdSbmtHUFFPNFJTRFBvdXVselAtVGkyU25RR3Q0Q1djS0N1TDM0VnpNRXNHWmxiVE15bVduU3BUMUlONURZUC1EbTNIa1FqX3liOHBiOUk2S0xKSDMtS0lnZjg3ajVZdTVtTnl3NC1vTWNDM0M4SEFKV3d4N3dieXdvaWhNdEtYc2pvdy0xcVI3VDBGQXM4N00?oc=5",
-      "published_at": "2026-11-13T18:29:18+00:00",
-      "tickers": [
-        "NVDA"
+        "AMZN"
       ],
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
@@ -10532,6 +10533,18 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "9d585bec51cbc9703244",
+      "title": "Faxes, phones and Bluetooth: Microsoft outage forces businesses to find fixes",
+      "href": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNWTd4RWIwQ1RNZXNmZzVFT3czU0dhcjBGNlBvV0RmNkQtdExIaWdNeEpZQ2NzR2MwS3J4R0g0MTdxaDVUSGlyRG1LZGxuNTNsb3pLTTBfZzhLZ1l2amJKdnhLLUhJUXp5NXdUalNCSHd4LWJMc05zbDBaeUI2TGhsN0ZDNVdwdTJxV0NDeG5qejNtcUxDWTRfU0ExQ19QeEFtZGJhd05oVUI3WG54WmxvbmlQYXNUSGs1NmlGLUhB?oc=5",
+      "published_at": "2026-11-13T15:15:07+00:00",
+      "tickers": [
+        "MSFT"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "44d473e7d75738f2d75c",
       "title": "China's $3 billion-plus pipeline of Nvidia-powered AI data centres",
       "href": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOdkFHQnE4ZWppRXAxMGVYOUZXa1F1YnhLeUdVbVNlWTNQZjNyWnJCX05YbVVrT3AtNUxaVGUyYW1hVUNHanBNc2Q5ZmpnOXo0Y2lmeHBXOVRVQ3Fna21VWi1ScEQ5WGlmTEoyZ2Q5cGlobEMtQzhQclEwLWtJVzZvS1NXYU9GaFlHeFVhaW1Zc1RaRGlkSC1qZXowTXljV0Via1Y3V25wQkliTmN0bHpqZHdNQU1BV2tZ?oc=5",
@@ -10544,10 +10557,82 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "c4e6490162f40ad075e4",
+      "title": "Wall St Week Ahead: Nvidia results, Anthropic IPO pose tests for tumultuous AI trade",
+      "href": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxQVkhwN0xoWW41NzBTZjRFMi1RV0tnYW84ak1zMGU3UHpxTkZ2UHNqako1QWh6NDRkRG5Eb1kwY0RCS0hydXVzTkg2clUwTXNBRUthM1R0SUg0azdDZkhaZlpFNzMtSDdNa09jZW9yb3N4UzdWUHpiTUl0cXl3dTQwb2M2V2R0Q1lSUFppUVVVaWYzejdsZk9GeWc4dE5oNGM2LS0yVFhkX2lpODlBMFZnVlJlVGJMb21XNE02c3BMa1U?oc=5",
+      "published_at": "2026-11-13T11:10:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "72ba00461dea0e290e52",
+      "title": "S&P 500, Nasdaq end lower as Nvidia uncertainty weighs on tech shares",
+      "href": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPa0xIRkJ1T2xEOU9abUNDYi1vTlpmRWJzd0MyQkFqa2NSb1BkMEdUNDROMmVmaXo3bDVRdThuRDFRaWZySXAyRjN5d1NDNjhCclFJUDVxdG9CQ1dyWWpDbUEwVHVRaHpNWUg5SjdreUtMeHNHXy1feGNBVkFLN3Z4cGNTcGtyYXg2bXFHdlpZQWtneFJDSWVreFROZ09oamc?oc=5",
+      "published_at": "2026-11-13T10:35:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "95ea5bf7ac1a0d7d8c65",
+      "title": "South Korea says Google has removed Korean coordinates from maps under export permit",
+      "href": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQeUpMbFNmT29BbW5JbGN1ZUxPZFV6ZmNTUnJJeHF3RE5YRHZzbFZoYzdWM2pjdFU2Q1VacjNTN214cURoN3FsTUFkdUhVcm9aTkdRcHRjdEdqTTd0cm55MDNDaUwxeS1QUEx5akdmanpEZGZudGRlbGQtNktuNWlfZThFd29ENDJMVnE1VENTQXlFb3lnMEZSN2xVUXRMcER0bHFVZHE5TVJiVXNnbWV5M2lTZnJYcUVObUEtZ0lR?oc=5",
+      "published_at": "2026-11-13T03:18:00+00:00",
+      "tickers": [
+        "GOOGL"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "9cb1cf434cdd2a605396",
+      "title": "Colette Kress, the CFO who challenged Huang's bets, is Nvidia's interim CEO",
+      "href": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNWnRLUFljeVFkcXJzT2xiV3lQWnlaMENnaUNHVlZNdWtscEZSVnRIaWZYSERpb0hTVEc2cmVZaEw4Q1FBX3B6VmNvMnhaSm5GV1RvQ2pwNExEazBSNWRRejMyTU5NZU5RXzdhdU5xMDZZUHFWekdwZG9wWEJOeV9HQnVwLTR4b2FXc1FfWDRPVTd2Tm1JVkRCYk5aUjFROWhqR1pRay1oWVFjdnpnSTRHdzd3?oc=5",
+      "published_at": "2026-11-13T02:11:25+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "66596e3e3744696dce21",
-      "title": "Stocks fall with tech, Nvidia concerns; US dollar climbs",
+      "title": "Stocks mostly ease with tech, Nvidia concerns; airline shares fall late in session",
       "href": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOZ0cyVmdPTTRkWGt3UlMtUFRyOGhvdDNlM1FYVy1MSVN0elpQZHgtWXctVEE1M2RjQm9IcmwzUGU4cEhEQnhsQWlOX2RhUFk1NzBXeFkwM3lMek16ajB1ZmozdGpLR0cwQ2JTcGVlTTJwMEc2ZFZ3bklxeTk4eElFaHZLaw?oc=5",
       "published_at": "2026-11-13T01:55:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "daff3b77d192228113e6",
+      "title": "Alphabet raises $3.8 billion in first Hong Kong, Singapore dollar bonds",
+      "href": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQSkZJZGdvOEZWNkZuZ3pSWXU4QUktR01VVWpXc1I3OWtjQnFYaEtRMHVjdUJCblRxdDh2Wm0tbmJQN0gtWVN6b3dnVFlMVGM1Qk8ydHgtb0tndU5xblJGOTVxRWFFYjdjdDJIQkcwckZqMnNDUkZlNE56dzVGd0dMMVFaZUMydjZPaTVkcmRGQU1sZXlscUx0UkRINlpVZk9QYXFiZElNSlc1cG5JTHYwTVplbzM5b0FLOHZLelZZWnlxcGpEdEstNi0zSFprUQ?oc=5",
+      "published_at": "2026-11-13T00:50:53+00:00",
+      "tickers": [
+        "GOOGL"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "1b49dc6d68ff53511690",
+      "title": "Wall Street ends lower as Nvidia CEO resigns; US yields up",
+      "href": "https://news.google.com/rss/articles/CBMie0FVX3lxTFA1ODl5LXpyQ0RZanVjSnZGS1NjS1ljMjZvdW9xY3ZSSUxvNkY2Z3dCMThiSjdKNHI1TFRCZnBIRHdYY0UxTGh0QjRZX3Y2S25sY0k4M0dKN3VZdGNMSGk5N0tPUmVJa3ozWXRCcmluOWxVVjVfblRLdmttMA?oc=5",
+      "published_at": "2026-11-12T23:52:10+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -10616,6 +10701,30 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "4070bf898d70a3525877",
+      "title": "OpenAI, Google, Anthropic hit with lawsuit seeking halt to frontier AI development",
+      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPWTR4ak5BdnRmV3hzYTZOcVhBYklWU01YRmtLak03b2hmeC1PMTd5blRQWUkxR2Q1ZXZWRC0xNkNxVDVoN2VOdTVlX1hFMXgwS1Y5TW1fUGt4NThQaEhRVFdna1YxUDhLTnBYUFJ6WTlFajlLM1BZTTRwNk5sWFMydkZtMlJNUnU4MWlDcUN6QmNtVHdUT1pLNXd6QXc4QVk0WmMtM1JxWU5XVC1PUGRIMVJNY2wzN1Z1d2N6WWJkbw?oc=5",
+      "published_at": "2026-11-12T20:35:49+00:00",
+      "tickers": [
+        "GOOGL"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "20974cae8e2f6667033c",
+      "title": "Warby Parker bets on Google AI glasses for growth, but privacy fears still loom",
+      "href": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQdEZUUGlzOUZwcFdtamtJMHBhWUVzaGNtV2ZDX052OU11RkVnRENCbmxnQlpPem5PTG1EYnR4RTRWM0wtcDB2MG1GTHI0akxGMUJZRUFRdzFtUW1hM0ZxOTRFcndMN0dUQnk4Q2pkS0s1aFR3UVk2bWdZcUt2OUE2OXhpVkM1NzZGWi1XYjNfaTFER2NqaThfY28tNjBaejd1NXlLOFc3R0hDal84LWc1WDJyS3FsVXpqOVJfZ3pwVXNoTFBjdzZz?oc=5",
+      "published_at": "2026-11-12T20:16:11+00:00",
+      "tickers": [
+        "GOOGL"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "0254a25fecd66be175b1",
       "title": "Retail buyers limit Nvidia stock rout",
       "href": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPVHdDV1ltYXhSMVY3dUtMMGxkZHdxRld0cThBSlQzUmt2NE9fTENSM2NZWHowSk9wZS1ObXpTVFZqNlZ2dUQxam5NVC0yYXNBcW41amRsbXFMbEFfblNLWXNkSUhnOGcwOWFocUlyQllReDBwSjdzakJMZTNkYUpDN3FMY0QxaWVSeGRtNVEyOEJFNlRjb1ZXMFJmTXIxeUU?oc=5",
@@ -10641,11 +10750,35 @@
     },
     {
       "id": "3681c6c6d49c0bed28e2",
-      "title": "Microsoft Outlook, Teams outage eases after over a day; recovery timeline uncertain",
+      "title": "Microsoft restores service to Outlook and Teams after global outage",
       "href": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPQWpWeUZnbllhcFk4WktZS0s3T1N6T3k3Vnhhd3pfSE9SWF9iRmRIQUljdHZXN0UtWS1uZS1rbUNZSlVPd1NXLXRtVUVtc3NQNTgxMVFMWjVnT3pPb09EX1g1YUx3WkF2VHk0bUMwWlhkRHdpT0JFRE5SQ3pQRkdmSnpUOHNXLUo1dXNSY3lFdkpSdU5laDdwSlhWRDVnNjBFcUh2Y0FwMXNldE8tSFpPaw?oc=5",
       "published_at": "2026-11-12T18:32:00+00:00",
       "tickers": [
         "MSFT"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "108e3937ead9871f6f4f",
+      "title": "Instant view: Nvidia CEO Jensen Huang steps down",
+      "href": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNZC1uZTVNUkdPM3M1UzkxWjJDbmNFa1RwZm9iVmFuZ0FUMW1Sa1p4NlYxY3AxbE91d3VyN0J6aHM4UWpqTHpPZkdWbS04OEFyM3JqSzdoUUxhVWlTMlBReUZvQnRQbVhxdXhFMG8yenFBeUw1aVNxR0tzMWdMSzNlME80eW1ZZWlGcXJFUg?oc=5",
+      "published_at": "2026-11-12T16:21:53+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "4e5137ac8a9e11d94099",
+      "title": "Investors worry the AI trade might lose Nvidia's largesse after Huang",
+      "href": "https://news.google.com/rss/articles/CBMirwFBVV95cUxORTQxQmd6S0RyU3VwcVFwd3NWQzVfMndsUURvbG1QMDh5bkZwVEszT2d4XzNpR3V0N0NuQVpfN1RWVFk3OGNrcThCSHlxM0VIWTdkeVhSbldrVmNGTEFFT1RSWmxmTzh1V2FVcXp2dnVldjJsQ3VSZU1ORW84RnF1bVFpMFR0NTcxVDBKYjhXak1uelp3UThtVkEwX1dWbmQ5ZTBCVGxYMHk0elFCNktZ?oc=5",
+      "published_at": "2026-11-12T16:06:41+00:00",
+      "tickers": [
+        "NVDA"
       ],
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
@@ -10676,10 +10809,46 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "b6b76dcf86da5a86e143",
+      "title": "China's access to some Nvidia chips in doubt as curbs gain traction in US Congress",
+      "href": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQOFBGZG9jUFFjX0tFY2tXSEVILWxGWU1rMzBvT1pTcUpqa2tEdEV0QWRybENzel9tU3hIQVhmTngyY3VGRGZZeGtCWDhEWm1oRXBzVWlGRnhwRzJrd0Z5bGZhUi1STHFLdFdLVnhoRUxMOW42MkNSSjNZX3JQR0o3OVpBSE10bE1kekw3OVVXYXVub0NzekN5NE4zb1JpRzB6Zjl2V1pTWFEteUQ1Q0hxd2lhLV9JLXloLVJqbWhUQ1pmN21H?oc=5",
+      "published_at": "2026-11-12T14:35:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "162817eabb9e4336c797",
       "title": "Who is Nvidia interim CEO Colette Kress?",
       "href": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOX1JRcXNDUmNTX3hYTkxSOC12bE1PajdrdjByNkRpa3dpY0hsc2FqR3NEeTROdVFDVFRMWTYxSHduZGxoQVl0QkJIckk5MTdJaWxBZTVQLVFwWTY5TXZKS0NlTy0wYmNNa0NpUGJIWlFkQ3VsNGxEMVB3eFhSaExUVllwdVBkWE1SMl9kR2pXbw?oc=5",
       "published_at": "2026-11-12T14:16:56+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "5a6ab426d4f822399e7e",
+      "title": "Who would be next CEO at Nvidia? Top engineer and CFO favored as candidates",
+      "href": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQd3NpblFpU0lCLW5JVWoxVkNRNldBNDY1c0xmakdfaHhXYkJmbFlHUDlyYmk2OVlRZDcwWXBxTFZnTEF5OUU4d2hnVXVReTcyMzdKOW1qVWxpc3dOb3NTMHQ4VG1ZczdiQ2tETEN6SENYMkdtbkxKQ0psUjIyY19FRWF2QjJNdUJaSEFnUzJXU09TZFFSMERPSXI2Z0dib1pSNjNnYzBmOUtpN0FhODBqd3dB?oc=5",
+      "published_at": "2026-11-12T12:42:37+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "509e03f18042e222f03f",
+      "title": "Nvidia board weighs CEO Huang's future as leadership crisis deepens",
+      "href": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPTlA5REZDN0pJYkxyUXM4YjE1Q1BLN0tKNENxM3NsV3RKblNhbWpsdEFUUVRieUtNckY4S3YwdkFUdjhvZVk4Nm1Ga1JNUmZkRzMtaEhHazhHNmZDX3Z1WUNzZnJmdEpLeVRmcngzdEMwM2N3b1I1ckQ1Q2N2a2NRNWtfa0ZTTkhYaXlqc1NqbklwWUxIdktqdzZvS0M2cGhSYkE?oc=5",
+      "published_at": "2026-11-12T11:50:34+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -10700,58 +10869,10 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "4e5137ac8a9e11d94099",
-      "title": "Investors worry the AI trade might lose Nvidia's largesse after Huang",
-      "href": "https://news.google.com/rss/articles/CBMirwFBVV95cUxORTQxQmd6S0RyU3VwcVFwd3NWQzVfMndsUURvbG1QMDh5bkZwVEszT2d4XzNpR3V0N0NuQVpfN1RWVFk3OGNrcThCSHlxM0VIWTdkeVhSbldrVmNGTEFFT1RSWmxmTzh1V2FVcXp2dnVldjJsQ3VSZU1ORW84RnF1bVFpMFR0NTcxVDBKYjhXak1uelp3UThtVkEwX1dWbmQ5ZTBCVGxYMHk0elFCNktZ?oc=5",
-      "published_at": "2026-11-12T06:26:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "d37479c485d8b5ffc86c",
       "title": "Morning Bid: Jensen hangs on as Nvidia tumbles",
       "href": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQQUNBZ1ptWWtYYURvcjJIZE44TjJYblFDYjNDUHlVRHVKaGhpNGZHMDZrVnlob3RtN05VaFJsVXZiR3VxZ2dkaGduSHNPYi15YUJNSFh3ZXRxRDlzd3kxcVVzMDNZMXpzc01ZY2RIOGRsM2pmZExNZ1FUT1FUemd3U3hGNkgxVUkxQnl5U2FqU0o?oc=5",
       "published_at": "2026-11-12T05:37:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "daff3b77d192228113e6",
-      "title": "Alphabet raises $3.8 billion in first Hong Kong, Singapore dollar bonds",
-      "href": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQSkZJZGdvOEZWNkZuZ3pSWXU4QUktR01VVWpXc1I3OWtjQnFYaEtRMHVjdUJCblRxdDh2Wm0tbmJQN0gtWVN6b3dnVFlMVGM1Qk8ydHgtb0tndU5xblJGOTVxRWFFYjdjdDJIQkcwckZqMnNDUkZlNE56dzVGd0dMMVFaZUMydjZPaTVkcmRGQU1sZXlscUx0UkRINlpVZk9QYXFiZElNSlc1cG5JTHYwTVplbzM5b0FLOHZLelZZWnlxcGpEdEstNi0zSFprUQ?oc=5",
-      "published_at": "2026-11-12T02:57:00+00:00",
-      "tickers": [
-        "GOOGL"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "1b49dc6d68ff53511690",
-      "title": "Wall Street ends lower as Nvidia CEO resigns; US yields up",
-      "href": "https://news.google.com/rss/articles/CBMie0FVX3lxTFA1ODl5LXpyQ0RZanVjSnZGS1NjS1ljMjZvdW9xY3ZSSUxvNkY2Z3dCMThiSjdKNHI1TFRCZnBIRHdYY0UxTGh0QjRZX3Y2S25sY0k4M0dKN3VZdGNMSGk5N0tPUmVJa3ozWXRCcmluOWxVVjVfblRLdmttMA?oc=5",
-      "published_at": "2026-11-12T01:53:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "a5fb5d7c2c0024cffe63",
-      "title": "Instant View: Nvidia board meets to decide CEO Huang's future, source says",
-      "href": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxPcVJVTG1XNEk2Rm4xZFpXdXh2czIzSnZpdXMzaEpWN1RsZFJpRy1TeFNXZHBzei0tRGNSZ2JSd2ZtTnN1N3A2Q0IzTHNrelNxS2NOWVNSbjhWTlNfc012cHRHc3g0U2gzOXJ4MjRKWjNuWm9NaGt2S2ZhbHp6dmtjenFGTWstWllrYmdLcG8tOXR4b0FCcHR1Zjd2RU52REVFM2E2YmZkX0N0QQ?oc=5",
-      "published_at": "2026-11-11T23:19:00+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -10770,21 +10891,9 @@
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "12e059c9adebdbc33517",
-      "title": "Alphabet eyes $3 billion Hong Kong, Singapore bond sale, sources say",
-      "href": "https://news.google.com/rss/articles/CBMiswFBVV95cUxQekxJWlNsQXlpSG80TzJHMDNiREl6ZC0zWEQ0S0FWVWZPXzJpQk5maC1NTFhXQjIyRmk5QlU1QnFxZ2VHZUNkVUNjOWo4azhLVzlHelE3dFk1UUU3UHllNUdiVzVaODFKSHJEZHQ4Q1d2a0FrLUJiYjM3bUlwZ01wODltVlYyY2YyM3dZV1piYjFmTFRlaVZNcVp3V0RMSlM2SHdPbllBTnQzNllPbGw5YWRERQ?oc=5",
-      "published_at": "2026-11-11T17:09:22+00:00",
-      "tickers": [
-        "GOOGL"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     }
   ],
-  "news_generated_at": "2026-11-14T08:52:53+08:00",
+  "news_generated_at": "2026-11-15T08:55:41+08:00",
   "news_status": "ok",
   "calls": [
     {
