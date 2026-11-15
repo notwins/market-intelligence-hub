@@ -3,13 +3,14 @@
   'use strict';
   if (!document.querySelector('[data-site-map]') || !window.HTMLDialogElement) return;
   const mapURL = new URL('site-map.html', document.currentScript.src);
+  const blueprintURL = new URL('blueprint.html', mapURL);
   let dialog, opener, loading, loaded = false, followingLink = false;
   function close() { dialog.close(); }
   function create() {
     dialog = document.createElement('dialog');
     dialog.id = 'hub-map-dialog';
     dialog.setAttribute('aria-labelledby', 'hub-map-title');
-    dialog.innerHTML = '<header class="hub-map-head"><div><h2 id="hub-map-title">Where do you want to go?</h2><p>Open a section, or search for a page.</p></div><button type="button" aria-label="Close site map">×</button></header><div class="hub-map-content"><p role="status">Loading the site map…</p></div><footer class="hub-map-foot"><a href="' + mapURL.href + '">Open map as a full page →</a></footer>';
+    dialog.innerHTML = '<header class="hub-map-head"><div><h2 id="hub-map-title">Where do you want to go?</h2><p>Open a section, or search for a page.</p></div><button type="button" aria-label="Close site map">×</button></header><div class="hub-map-content"><p role="status">Loading the site map…</p></div><footer class="hub-map-foot"><a href="' + mapURL.href + '">Open map as a full page →</a><a class="hub-blueprint-link" href="' + blueprintURL.href + '">Website blueprint →</a></footer>';
     document.body.append(dialog);
     dialog.querySelector('button').addEventListener('click', close);
     dialog.addEventListener('keydown', e => {
