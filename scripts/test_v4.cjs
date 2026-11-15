@@ -1,4 +1,6 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+require('./test_v4_share_lab.cjs');
+require('./test_share_lab_data.cjs');
 const root=path.join(__dirname,'../site'),read=f=>fs.readFileSync(path.join(root,f),'utf8');let count=0;
 function test(name,fn){fn();count++;console.log('PASS '+name);}
 const html=read('v4.html');

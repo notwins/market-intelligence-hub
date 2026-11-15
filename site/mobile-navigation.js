@@ -44,7 +44,7 @@
 (()=>{'use strict';
  const menu=document.querySelector('#more .more-grid');if(!menu)return;
  const themes={stocks:['#233840','#E7F1F5','#F1F7FA','#D9E6EB'],bonds:['#26382F','#E7F1EA','#F1F7F3','#D8E5DC'],macro:['#302D3C','#EBE6F3','#F5F2FA','#E2DAEA'],research:['#182822','#EAF0EC','#F2F6F4','#DCE6E0']};
- const themeFor=route=>/^(?:watchlist|calls|earnings|master|history\/(?:si|shares|beta-shares|beta2-shares))/.test(route)?'stocks':/^(?:credit|ust|history\/(?:yield|curves))/.test(route)?'bonds':/^(?:policy|history)/.test(route)?'macro':'research';
+ const themeFor=route=>/^(?:watchlist|calls|earnings|master|history\/(?:si|shares|beta-shares|beta2-shares|beta3-shares|beta4-shares))/.test(route)?'stocks':/^(?:credit|ust|history\/(?:yield|curves))/.test(route)?'bonds':/^(?:policy|history)/.test(route)?'macro':'research';
  function label(node){if(node.querySelector('.nav-level'))return;const route=node.dataset.view||'';const sub=route.includes('/');node.dataset.navLevel=sub?'subsection':'main';
   const span=document.createElement('small');span.className='nav-level';span.textContent=sub?'Subsection':'Main section';node.append(span);
   const colours=themes[themeFor(route)];node.style.setProperty('--menu-ink',colours[0]);node.style.setProperty('--menu-bg',colours[sub?2:1]);node.style.setProperty('--menu-border',colours[3]);
