@@ -37,6 +37,14 @@
     dialog.addEventListener('click', e => {
       const a = e.target.closest('a[href]');
       if (a && !e.ctrlKey && !e.metaKey && !e.shiftKey && a.target !== '_blank') {
+        // A repeated fragment does not emit hashchange. Reopen a collapsed
+        // destination explicitly before native anchor navigation takes over.
+        const destination = new URL(a.href, location.href);
+        if (destination.origin === location.origin && destination.pathname === location.pathname && destination.search === location.search) {
+          let target;
+          try { target = document.getElementById(decodeURIComponent(destination.hash.slice(1))); } catch {}
+          for (let node=target; node; node=node.parentElement) if (node.tagName==='DETAILS') node.open=true;
+        }
         followingLink = true;
         close();
       }
