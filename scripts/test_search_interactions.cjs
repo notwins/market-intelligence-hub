@@ -36,5 +36,12 @@ releaseCatalogue();
  assert(nodes['top-tags'].innerHTML.includes('Top tags'));assert(nodes['top-tags'].innerHTML.includes('Google'));assert(nodes['quick-text'].innerHTML.includes('Inflation'));assert(nodes['quick-text'].innerHTML.includes('Employment'));assert(nodes['quick-text'].innerHTML.includes('USA'));nodes.q.value='Google';nodes.q.selectionStart=6;nodes.q.selectionEnd=6;nodes.join.value='AND';click({insert:'AND'},'insert');assert.equal(nodes.q.value,'Google AND ');assert.equal(nodes.q.selectionStart,11);assert(nodes.q.focused);click({insert:'text:'},'insert');assert.equal(nodes.q.value,'Google AND text:');nodes.q.value='Google';click({appendRule:'text:earnings'},'append-rule');assert.equal(nodes.q.value,'(Google) AND (text:earnings)');assert(nodes.status.textContent.startsWith('93 matches'));
  for(const ticker of ['NVDA','AMD','GOOGL','MSFT','AAPL','META','AMZN','TSLA','BRK.B','AVGO','MU','TSM']){nodes.q.value=ticker;nodes.q.listeners.input();assert(nodes['company-hub'].innerHTML.includes(context.MorningstarLinks.resolve(ticker).url),'Shared verified chart URL for '+ticker);}
  assert(fs.readFileSync('site/search.html','utf8').includes('<body data-no-ticker-links>'),'Search keeps explicit filter buttons without automatic ticker text links');
+ // Compact tags preserve distinct filters, collapse aliases and escape saved labels.
+ const metadata=require('../site/search-metadata.js');
+ const compact=metadata.compactTagsHTML(['Google','GOOGL','Microsoft','Bonds','Extra','<script>'],null,context.MarketSearchQuery.canonical);
+ assert.equal((compact.match(/data-tag=/g)||[]).length,5);
+ assert(compact.includes('More tags (2)'));
+ assert.equal((compact.split('<details')[0].match(/data-tag=/g)||[]).length,3);
+ assert(compact.includes('&lt;script&gt;'));assert(!compact.includes('<script>'));
  console.log('PASS DOM-contract interactions: URL restore, 93-result pagination, malformed query recovery, repeated tag clicks, clear, examples, picker validation, Back/Forward restore, submit, source/location links and XSS escaping');
 })().catch(e=>{console.error(e);process.exitCode=1;});

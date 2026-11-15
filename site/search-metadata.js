@@ -25,6 +25,13 @@ function tagsHTML(labels,standard,{button=false,limit=6}={}){
  const tags=[...new Set((labels||[]).filter(t=>typeof t==='string'&&t.trim()))];
  return tags.slice(0,limit).map(t=>button?'<button class="tag-button search-tag" type="button" data-tag="'+E(t)+'"'+tagStyle(t,standard)+' title="Add '+E(t)+' using the selected AND / OR rule">'+E(t)+'</button>':'<span class="search-tag"'+tagStyle(t,standard)+'>'+E(t)+'</span>').join('')+(tags.length>limit?'<span class="search-tag-more">+'+(tags.length-limit)+' more tags</span>':'');
 }
-const api={dateInfo,dateHTML,sourceDate,dateLabel,mapped,tagStyle,tagsHTML};
+// Limit visual repetition without removing any searchable saved metadata.
+function compactTagsHTML(labels,standard,key=norm){
+ const seen=new Set(),unique=(labels||[]).filter(t=>{if(typeof t!=='string'||!t.trim())return false;const k=norm(key(t));if(seen.has(k))return false;seen.add(k);return true;});
+ if(!unique.length)return '';
+ const visible=unique.slice(0,3),rest=unique.slice(3);
+ return '<div class="result-tags" aria-label="Add a tag to your rule">'+tagsHTML(visible,standard,{button:true,limit:visible.length})+'</div>'+(rest.length?'<details class="result-more-tags"><summary>More tags ('+rest.length+')</summary><div class="result-tags">'+tagsHTML(rest,standard,{button:true,limit:rest.length})+'</div></details>':'');
+}
+const api={compactTagsHTML,dateInfo,dateHTML,sourceDate,dateLabel,mapped,tagStyle,tagsHTML};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;root.SearchMetadata=api;
 })(typeof window!=='undefined'?window:globalThis);

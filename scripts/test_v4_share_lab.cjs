@@ -23,7 +23,7 @@ function environment({dataFailure=false,batch=false,bosFailure=false,mobile=fals
 (async()=>{
  const env=environment(),{ctx,host,dispatch,listeners}=env,B=ctx.ShareLab;
  B.mount(host,{view:'beta3'});await tick();await tick();
- assert.match(host.innerHTML,/Beta 3 · Share comparison/);assert.match(host.innerHTML,/data-table-controls="off"/);
+ assert.match(host.innerHTML,/Share explorer/);assert.match(host.innerHTML,/data-table-controls="off"/);
  assert.equal((host.innerHTML.match(/data-sl-pick=/g)||[]).length,25);
  assert(host.innerHTML.indexOf('Company 31')<host.innerHTML.indexOf('Company 30'),'global current cap descending default');
  assert.match(host.innerHTML,/BOS &lt;current&gt;/);assert(!host.innerHTML.includes('<img src=x'));
@@ -45,7 +45,7 @@ function environment({dataFailure=false,batch=false,bosFailure=false,mobile=fals
  const calls=historyCalls;dispatch('click',{slDetail:'pe'});await tick();assert.equal(historyCalls,calls,'metric switching reuses a parsed per-listing history');
  dispatch('click',{slMode:'cards'});assert.equal((host.innerHTML.match(/class="sl-card"/g)||[]).length,32);assert(host.innerHTML.includes('<dt>Market cap · USD millions</dt>'),'card cap keeps its comparable currency and scale');
  dispatch('input',{slSearch:''},{value:'NVDA'});assert.match(host.innerHTML,/1–1 of 1 shares/);assert.equal(B.selected().length,6,'filter keeps selections');
- B.mount(host,{view:'beta4'});await tick();assert.match(host.innerHTML,/Beta 4 · Time matrix/);assert.match(host.innerHTML,/value="NVDA"/,'search shared across routes');assert.match(host.innerHTML,/6 \/ 6 selected/);assert.match(host.innerHTML,/2017-07/);assert.match(host.innerHTML,/2017-06-30/);
+ B.mount(host,{view:'beta4'});await tick();assert.match(host.innerHTML,/History pivot/);assert.match(host.innerHTML,/value="NVDA"/,'search shared across routes');assert.match(host.innerHTML,/6 \/ 6 selected/);assert.match(host.innerHTML,/2017-07/);assert.match(host.innerHTML,/2017-06-30/);
  assert.match(host.innerHTML,/actual observation date is printed/);assert.match(host.innerHTML,/Latest BOS/);assert.match(host.innerHTML,/data-sl-mode="table" aria-pressed="true"/,'distinct default matrix view');
  dispatch('change',{slYear:''},{value:'2017'});let header=host.innerHTML.match(/<thead><tr>(.*?)<\/tr><\/thead>/s)[1];assert.equal([...header.matchAll(/data-sl-sort="([^"]+)"/g)][1][1],'date:month:2017-07','chosen year starts at the first visible metric column');assert(host.innerHTML.includes('<option value="2017" selected>2017</option>'),'year selector retains the first visible historical year');dispatch('click',{slAction:'newer'});assert(host.innerHTML.includes('<option value="2018" selected>2018</option>'),'Newer updates the year selector to the first visible historical period');
  dispatch('click',{slAction:'reset'});assert.equal((host.innerHTML.match(/data-sl-pick=/g)||[]).length,25);dispatch('click',{slSort:'date:month:2017-07'});assert(host.innerHTML.indexOf('NVIDIA Corp')<host.innerHTML.indexOf('Company 31'),'historical header sort uses the full universe');
