@@ -61,5 +61,21 @@ test('current desk quotes follow shared BOS/Yahoo selection without loading char
  q={...q,current:false};assert(Desk.selectedPrice('AAPL',market).status_label.includes('dated observation'));
  q={...q,close:null};assert.equal(Desk.selectedPrice('AAPL',market),null);
 });
+test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
+ const cards=require('../site/company-news-cards.js');
+ const story={story_id:'nvda',headline:'Nvidia update',topic:'US / Nvidia',source_urls:['https://www.reuters.com/nvidia'],version:1,body:'Saved facts',analysis:'Saved analysis',watch_next:'Next disclosure',earlier:''};
+ const rows=DeskNews.fromHourly({editions:[{cutoff:'2026-11-14T16:00:00+08:00',coverage:'partial',stories:[story],sources:[]}]},[{ticker:'NVDA',name:'Nvidia'}]);
+ assert.deepEqual(cards.reading(rows[0]).map(p=>p[1]),['Saved facts','Saved analysis','Next disclosure']);
+ assert.equal(cards.reading({title:'Metadata only'}).length,0,'no invented write-up for a headline');
+ const html=cards.render(rows,[{ticker:'NVDA',name:'Nvidia'},{ticker:'AAPL',name:'Apple'}],'all');
+ assert.equal((html.match(/class="company-news-card"/g)||[]).length,2);
+ assert(html.includes('data-company-news="0"'));assert(!html.includes('href="https://www.reuters.com/nvidia"'));
+ assert(html.includes('v4.html?company=NVDA#earnings'));
+ const unsafe=cards.render([{...rows[0],title:'<img src=x onerror=evil()>'}],[{ticker:'NVDA',name:'Nvidia'}],'all');assert(!unsafe.includes('<img'));
+});
+test('home chart shortcuts preserve all real historical destinations and accessible icons',()=>{
+ const nav=require('../site/history-navigation.js'),html=nav.html();
+ assert.equal(nav.items.length,10);assert(html.includes('v4.html#history/beta3-shares'));assert(html.includes('aria-hidden="true"'));assert(!html.includes('javascript:'));
+});
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

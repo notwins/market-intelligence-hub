@@ -6,7 +6,7 @@ assert(overview.includes('The bond desk'));assert(overview.includes('Your schedu
 assert(!earnings.includes('class="ed-intro"'));assert(!earnings.includes('Twelve companies. The facts that matter.'));
 assert(earnings.includes('<details class="ed-data-notes">'));assert(earnings.includes('esc(data.coverage)'));assert(earnings.includes('esc(data.consensus)'));
 assert(earnings.includes('fcfChart()'));assert(earnings.includes("orderedCompanies().filter(c=>selected==='all'||selected===c.ticker).map(card)"));assert(earnings.includes('history(c)'));
-assert(html.includes('earnings-desk.js?v=20261106.clean-intro1'));
+assert(html.includes('earnings-desk.js?v=20261116.collated1'));
 for(const [,script]of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi))if(script.trim())new vm.Script(script);
 new vm.Script(earnings);
 const css=fs.readFileSync('site/publication-timeline.css','utf8');assert(css.includes('.publication-source-research{color:#1E40AF;background:#DBEAFE}'));assert(html.includes('publication-timeline.css?v=20261106.navy1'));

@@ -134,6 +134,7 @@ function returnsFor(item,mode='calendar'){
   return {year,label:mode==='calendar'?String(year):`Since Jan ${year}`,value:r?(mode==='calendar'?r.returns.calendar[year]:r.returns[mode][year]):null,derived:mode==='calendar',periodType:mode==='calendar'?'calendar_year':mode,startDate:`${year}-01-01`,endDate:mode==='calendar'?`${year+1}-01-01`:data.returnCutoff,endExclusive:mode==='calendar',basis:'Local currency · gross dividends reinvested',returnCutoff:data?.returnCutoff||null,cutoffInferred:true};
  });
 }
+function returnBoxes(item){const points=returnsFor(item),ytd=ytdFor(item);if(!points.length)return '<section class="earnings-return-boxes"><h4>Historical total returns &amp; BOS YTD</h4><p class="mp-muted">No matched return data available for this listing.</p></section>';return `<section class="earnings-return-boxes" aria-label="Historical annual total returns and separate BOS YTD"><h4>Historical total returns · 2019–2025</h4><div class="earnings-return-grid">${points.map(p=>`<div class="${finite(p.value)?p.value>0?'return-positive':p.value<0?'return-negative':'return-flat':'return-missing'}${p.periodType==='ytd_gain'?' return-ytd':''}"><small>${E(p.label)}</small><strong>${E(pct(p.value))}</strong></div>`).join('')}</div><p class="mp-muted">2019–2025: local-currency total returns with gross dividends reinvested, derived from the dated historical snapshot. 2026 YTD · BOS is a separate incomplete year, with dividends reinvested by site assumption.${ytd.available?' BOS as of '+E(label(ytd.asOf))+'; PDF '+E(label(ytd.reportDate))+'.':' BOS YTD unavailable; no substitute value.'}</p></section>`;}
 function detailHtml(item){
  const r=find(item),ytd=ytdFor(item);
  if(!r&&!ytd.available)return data?'<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">No matched historical return or credit data is available in this snapshot. The 2026 BOS YTD return is unavailable. Daily prices and BOS valuations remain separate.</p></details>':error?'<details class="share-enrichment-details"><summary>Returns &amp; credit</summary><p class="mp-muted">The historical shares snapshot could not be loaded. Return and credit data are unavailable. The 2026 BOS YTD return is unavailable.</p></details>':'';
@@ -144,6 +145,6 @@ function detailHtml(item){
 }
 function version(){return [data?.snapshotId||'unloaded',data?.sourceSha256||'',error,root.BOSEquity?.version?.()||'',root.MarketPrices?.version?.()||''].join('|');}
 if(root.document?.addEventListener)for(const event of ['bos-equity-updated','market-prices-updated'])root.document.addEventListener(event,announce);
-const api={load,records,metadata,find,returnsFor,ytdFor,detailHtml,marketCapFor,compareMarketCap,sortShares,priceItemFor,quoteFor,version,validate,status:()=>({loaded:!!data,error})};
+const api={load,records,metadata,find,returnsFor,ytdFor,returnBoxes,detailHtml,marketCapFor,compareMarketCap,sortShares,priceItemFor,quoteFor,version,validate,status:()=>({loaded:!!data,error})};
 root.ShareEnrichment=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

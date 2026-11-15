@@ -15,6 +15,7 @@ function fromHourly(feed,watchlist){
   const row={id:story.story_id,title:story.headline,href,published_at:source?.published_at||source?.published_date||null,
    edition_cutoff:edition.cutoff||null,tickers,source:'Reuters · saved hourly edition',
    match_basis:explicit.length?'Explicit company ticker or exact company topic label':'Exact company label in the saved topic field',
+   writeup:{body:typeof story.body==='string'?story.body:'',analysis:typeof story.analysis==='string'?story.analysis:'',watch_next:typeof story.watch_next==='string'?story.watch_next:'',earlier:typeof story.earlier==='string'?story.earlier:''},
    coverage:edition.coverage||'Coverage not recorded',freshness:story.freshness||null,version:Number(story.version)||0};
   const previous=rows.get(story.story_id);
   if(!previous||row.version>previous.version)rows.set(story.story_id,row);

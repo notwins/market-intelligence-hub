@@ -34,8 +34,8 @@ def featured_selection(config, local_ids):
     if not isinstance(approved, list) or len(approved) > 4 or any(not isinstance(x, str) or not re.fullmatch(pattern, x) for x in approved):
         raise ValueError('Invalid independent research identity')
     chosen = config.get('featured_ids', DEFAULT_FEATURED)
-    if not isinstance(chosen, list) or not all(isinstance(x, str) for x in chosen) or not 1 <= len(chosen) <= 4 or len(chosen) != len(set(chosen)) or any(x not in local_ids and x not in approved for x in chosen) or any(x not in chosen for x in approved):
-        raise ValueError('Featured research must contain one to four unique reviewed report IDs')
+    if not isinstance(chosen, list) or not all(isinstance(x, str) for x in chosen) or not 1 <= len(chosen) <= 12 or len(chosen) != len(set(chosen)) or any(x not in local_ids and x not in approved for x in chosen) or any(x not in chosen for x in approved):
+        raise ValueError('Featured research must contain one to twelve unique reviewed report IDs')
     return chosen
 
 
