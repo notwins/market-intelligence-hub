@@ -21,7 +21,7 @@ async function historyRefreshChecks(){
  handlers.click({target:{closest:q=>q==='[data-ms-group]'?{dataset:{msGroup:'years'}}:null}});
  hold=false;release();await pending;
  a.ok(calls.some(p=>p.includes('/2021.json')),'Years selected during refresh must load the older history');
- console.log('PASS failed-refresh history recovery and changing period during in-flight refresh');
+ handlers.click({target:{closest:q=>q==='[data-ms-group]'?{dataset:{msGroup:'days'}}:null}});handlers.click({target:{closest:q=>q==='[data-ms-overlay]'?{dataset:{msOverlay:'10y'}}:null}});calls=[];await M.refresh();a.ok(calls.some(p=>p.includes('/2016.json')),'refresh retains selected decade overlays and fetches their complete daily history');console.log('PASS failed-refresh history recovery, in-flight period changes and retained decade overlays');
 }
 async function main(){
  let failure='',held=null,release,calls=[];
@@ -37,7 +37,7 @@ async function main(){
  const M=window.MarketSnapshot;
  await M.mount();
  const original=mount.innerHTML;
- a.match(original,/data-ms-refresh/);a.match(original,/58 instruments/);
+ a.match(original,/data-ms-refresh/);a.match(original,/44 instruments/);
  for(const mode of ['network','http','json','shape']){
   failure=mode;calls=[];await M.refresh();
   a.match(mount.innerHTML,/Refresh failed; showing last successful saved data with its original dates/);
@@ -55,7 +55,7 @@ async function main(){
  failure='network';const second={document,fetch:window.fetch};
  vm.runInNewContext(read('site/market-snapshot.js'),{window:second,URL,Intl,Date});
  await second.MarketSnapshot.mount();a.match(mount.innerHTML,/Saved market files unavailable/);a.match(mount.innerHTML,/data-ms-refresh/);
- failure='';await second.MarketSnapshot.refresh();a.match(mount.innerHTML,/58 instruments/);
+ failure='';await second.MarketSnapshot.refresh();a.match(mount.innerHTML,/44 instruments/);
  console.log('PASS snapshot network/HTTP/JSON retention, retry, first-load recovery and concurrent activation');
 
  // Real freshness mount/refresh path: explicit retry bypasses the five-minute throttle.

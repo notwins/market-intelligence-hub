@@ -101,3 +101,10 @@ const settle=()=>new Promise(resolve=>setImmediate(resolve));
  const failure=environment({load:async()=>{throw Error('Snapshot offline');},records:()=>[]});failure.ctx.BetaShares.mount(failure.host);await settle();assert(failure.host.innerHTML.includes('role="alert">Snapshot offline'));assert(failure.host.innerHTML.includes('Retry snapshot'));
  console.log('PASS Beta Shares global cap/year sorting, full filter pagination, six-share selection, chart/card/table interactions, semantic colours, missing returns, scoped credit, safe text, separate quotes and current BOS YTD with immutable calendar history.');
 })().catch(e=>{console.error(e);process.exitCode=1;});
+
+{
+ const controls={window:{}};vm.runInNewContext(fs.readFileSync('site/event-study-controls.js','utf8'),controls);const chosen=controls.window.EventStudyControls.selectedRows;
+ const rows=[{key:'A',cap:10,rankEligible:true,values:Array(25).fill(0)},{key:'B',cap:20,rankEligible:true,values:Array(25).fill(1)},{key:'C',cap:30,rankEligible:false,values:Array(25).fill(99)}];
+ const study={pool:()=>[...rows].sort((a,b)=>b.cap-a.cap),rank:a=>({best:a.filter(r=>r.rankEligible).sort((a,b)=>b.values[24]-a.values[24]),worst:a.filter(r=>r.rankEligible).sort((a,b)=>a.values[24]-b.values[24])})};
+ assert.equal(chosen(study,{},['USA'],'cap5')[0].key,'C');assert.equal(chosen(study,{},['USA'],'best5')[0].key,'B');assert.equal(chosen(study,{},['USA'],'worst5')[0].key,'A');assert.equal(chosen(study,{},['USA'],'all'),null);console.log('PASS event presentation filters preserve native cap and eligible +12-month ranking semantics');
+}

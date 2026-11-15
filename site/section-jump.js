@@ -29,7 +29,7 @@
     const bar = doc.createElement('nav');
     bar.id = 'section-jump'; bar.hidden = true;
     bar.setAttribute('aria-label', 'Subsection navigation');
-    bar.innerHTML = '<div class="section-jump-toolbar"><button type="button" id="section-jump-toggle" aria-label="Choose subsection" title="Choose subsection" aria-expanded="false" aria-controls="section-jump-panel"><span aria-hidden="true">☰</span></button><span class="section-jump-divider" aria-hidden="true"></span><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection"><span aria-hidden="true">↑</span></button><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection"><span aria-hidden="true">↓</span></button></div><div id="section-jump-panel" hidden><div class="section-jump-heading">On this page <button type="button" class="section-jump-close" aria-label="Close sections">×</button></div><div class="section-jump-controls"><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection">↑</button><label class="section-jump-label" for="section-jump-select">Jump to subsection</label><select id="section-jump-select" aria-label="Jump to subsection"></select><span class="section-jump-progress" aria-hidden="true"></span><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection">↓</button></div><ol class="section-jump-list" aria-label="Page sections"></ol></div><span class="section-jump-status" role="status" aria-live="polite" aria-atomic="true"></span>';
+    bar.innerHTML = '<div class="section-jump-toolbar"><button type="button" id="section-jump-toggle" aria-label="Choose subsection" title="Choose subsection" aria-expanded="false" aria-controls="section-jump-panel"><span aria-hidden="true">☰</span></button><span class="section-jump-divider" aria-hidden="true"></span><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection"><span aria-hidden="true">↑</span></button><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection"><span aria-hidden="true">↓</span></button></div><div id="section-jump-panel" hidden><div class="section-jump-heading">On this page <button type="button" class="section-jump-close" aria-label="Close sections">×</button></div><div class="section-jump-controls"><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection">↑ Previous</button><label class="section-jump-label" for="section-jump-select">Jump to subsection</label><select id="section-jump-select" aria-label="Jump to subsection"></select><span class="section-jump-progress" aria-hidden="true"></span><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection">↓ Next</button></div><ol class="section-jump-list" aria-label="Page sections"></ol></div><span class="section-jump-status" role="status" aria-live="polite" aria-atomic="true"></span>';
     const spacer = doc.createElement('div'); spacer.className = 'section-jump-spacer'; spacer.hidden = true; spacer.setAttribute('aria-hidden', 'true');
     doc.body.append(bar, spacer);
     const previous = [...bar.querySelectorAll('.section-jump-prev')], next = [...bar.querySelectorAll('.section-jump-next')];
@@ -60,6 +60,7 @@
         if (hadFocus) (docked ? picker : toggle).focus({ preventScroll: true });
       }
     }
+    let highlightTimer; function highlight(){bar.classList.remove('sj-highlight');void bar.offsetWidth;bar.classList.add('sj-highlight');root.clearTimeout(highlightTimer);highlightTimer=root.setTimeout(()=>bar.classList.remove('sj-highlight'),1000);}
     let targets = [], current = -1, anchor = null, pending = null, offset = 16, refreshFrame = 0, positionFrame = 0, settle = 0;
     function offsets() {
       layout();
@@ -90,7 +91,9 @@
       const tops = targets.map(item => item.node.getBoundingClientRect().top);
       const atEnd = root.scrollY > 0 && root.scrollY + root.innerHeight >= doc.documentElement.scrollHeight - 2;
       const chosenVisibleAtEnd = atEnd && anchored !== -1 && tops[anchored] >= offset - 12 && tops[anchored] < root.innerHeight - bar.getBoundingClientRect().height;
+      const oldCurrent=current;
       current = (pending || chosenVisibleAtEnd) && anchored !== -1 ? anchored : indexAt(tops, offset, anchored);
+      if(oldCurrent>=0&&oldCurrent!==current)highlight();
       picker.value = String(current);
       progress.textContent = 'Section ' + (current + 1) + ' of ' + targets.length;
       picker.title = targets[current]?.label || 'Jump to subsection';
@@ -145,7 +148,7 @@
       refresh();
       const target = targets[index];
       if (!target || bar.hidden) return;
-      anchor = pending = target.node; current = index;
+      anchor = pending = target.node; current = index;highlight();
       if (!docked) setExpanded(false, expanded && !focusHeading);
       if (focusHeading) {
         if (!target.node.hasAttribute('tabindex')) target.node.setAttribute('tabindex', '-1');
