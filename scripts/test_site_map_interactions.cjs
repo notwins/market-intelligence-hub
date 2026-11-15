@@ -45,8 +45,8 @@ const input = ids.get('map-search'), status = ids.get('map-status'), families = 
 const nodes = root.querySelectorAll('.map-node');
 const click = id => ids.get(id).events.click();
 const search = value => {input.value = value; input.events.input();};
-assert(status.textContent.startsWith('53 destinations'));
-assert.equal(details.filter(d => d.open).length, 7);
+assert(status.textContent.startsWith('57 destinations'));
+assert.equal(details.filter(d => d.open).length, 8);
 assert.equal(root.querySelector('.map-controls').hidden, false);
 click('collapse-all'); assert(details.every(d => !d.open));
 search('CPF'); assert(status.textContent.startsWith('3 matching destinations'));
@@ -61,10 +61,10 @@ assert(!target.hidden); assert(!target.parentElement.closest('.map-node').hidden
 assert(target.parentElement.closest('details').open);
 search('  ＣＰＦ  '); assert(status.textContent.startsWith('3 matching destinations'));
 search('<script>alert(1)</script>'); assert(status.textContent.startsWith('0 matching destinations')); assert.equal(ids.get('no-results').hidden, false);
-search('zzzzzz'); click('reset-map'); assert(nodes.every(n => !n.hidden)); assert.equal(details.filter(d => d.open).length, 7);
+search('zzzzzz'); click('reset-map'); assert(nodes.every(n => !n.hidden)); assert.equal(details.filter(d => d.open).length, 8);
 search('search'); assert(families.some(n => !n.hidden));
 let prevented = false; input.events.keydown({key: 'Escape', preventDefault() { prevented = true; }}); assert(prevented); assert.equal(input.value, '');
 click('collapse-all'); globals.beforeprint(); assert(details.every(d => d.open)); globals.afterprint(); assert(details.every(d => !d.open));
 search('CPF'); click('expand-all'); assert.equal(input.value, ''); assert(nodes.every(n => !n.hidden)); assert(details.every(d => d.open));
-click('reset-map'); assert.equal(details.filter(d => d.open).length, 7);
-console.log('PASS sitemap: all 53 links, search/ancestor reveal, no-match recovery, Unicode, repeat/reset, keyboard clear, restore disclosure state, print restoration and visible-branch connectors.');
+click('reset-map'); assert.equal(details.filter(d => d.open).length, 8);
+console.log('PASS sitemap: all 57 links, search/ancestor reveal, no-match recovery, Unicode, repeat/reset, keyboard clear, restore disclosure state, print restoration and visible-branch connectors.');

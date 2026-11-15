@@ -62,7 +62,7 @@
         "#536176",
         "#A5B2C1"
       ],
-      "source_sha256": "3ef14d613c99fbcd908f5b99ce5f87017f6038e4b2294442f54451470ef437e9"
+      "source_sha256": "5d63651acb5ef2fa02978b5a6d5677e13667e70a65ca5772cc61c83f181dac63"
     },
     {
       "id": "research-cpf-life-after-55-2026-11-04",
@@ -242,7 +242,7 @@
         "#6D28D9",
         "#0F172A"
       ],
-      "source_sha256": "3b9161bd206b5026436e8aebaee8f43049c6d827934556589af41051a63f4a88"
+      "source_sha256": "1d6fb97444e85b192b9d3a0ed1a926d6ffa57d55e9146df99997a4dbe5c3ed01"
     },
     {
       "id": "research-oaktree-rates-wayne-dahl-2026-11-05",
@@ -314,7 +314,7 @@
         "#0369A1",
         "#7E22CE"
       ],
-      "source_sha256": "6ebde1eeafd9b2d9fe2ef5aec972a97240bb3d7131834be6ec78405916a86664"
+      "source_sha256": "0c79f5ebc2f5d0ef4f68fb19f1ba30ddf4608e40895204e50f755abe62d06d17"
     },
     {
       "id": "research-sti-banks-part2-2026-11-06",
@@ -332,7 +332,7 @@
         "#0369A1",
         "#7E22CE"
       ],
-      "source_sha256": "d1fe458d29c8b3d5f46eca91357cf2572f4aecc23a8d65c70c6bd1ac6401819c"
+      "source_sha256": "c3bd201358f7f11e662c67f64341c7e72756d8ca32d2993e4233c38d16996b1e"
     },
     {
       "id": "research-tsm-2026-11-05",
@@ -458,7 +458,7 @@
         "#0E7490",
         "#0F172A"
       ],
-      "source_sha256": "1d478498320548ee39c15b660e9a5cd1e7b5b2c7539a7cd2d06e86b28e939622"
+      "source_sha256": "81ca3ce8ec9387a9673e737dede84c255d915797f4da1a996b474d8cebf7657b"
     },
     {
       "id": "market-understanding-ai-selloff-2026-11-06",
@@ -476,7 +476,7 @@
         "#1E40AF",
         "#DBEAFE"
       ],
-      "source_sha256": "5cd41923ae29716b93f4a8ffcd9a771f6bf7496a332db9d870f9711471603bfb"
+      "source_sha256": "128e165c69ed59ab7931aab781d1c628a4966de4987ef4e82ed8b84d8f96c7ac"
     },
     {
       "id": "market-understanding-ai-tech-2026-11-05",
@@ -494,7 +494,7 @@
         "#334155",
         "#0F172A"
       ],
-      "source_sha256": "9888a1c57286e82e57194655606dff7d8c18a6f4b208dc434456a8aa7cf74bf3"
+      "source_sha256": "5322da74ba0156a2c63b720010b97045b1be1b16b5b0685afc3c2fa7feff6cfa"
     },
     {
       "id": "market-understanding-bond-research-review-2026-11-06",
@@ -512,7 +512,7 @@
         "#92400E",
         "#0369A1"
       ],
-      "source_sha256": "0bbb30050b9fbaf7d79608fc7d03fa9230d0500cee59793010b8ae824d2d9cc4"
+      "source_sha256": "94e8ca45801f1de4ff463e4bb60389f753a93dbb4dc858941ce06f1b8d503a3d"
     },
     {
       "id": "market-understanding-creditworthiness-2026-11-05",
@@ -566,7 +566,7 @@
         "#B4D6BE",
         "#315440"
       ],
-      "source_sha256": "d1517beac46563485c4cbbbe944a8e7a9f0b3493a92a68a52a9deaf18397d535"
+      "source_sha256": "53dc39790077804f87137116bf47742ec9c752b654a0fa40f00e514b82fa2c49"
     },
     {
       "id": "market-understanding-howard-marks-2026-11-06-v2",
@@ -584,7 +584,7 @@
         "#166534",
         "#92400E"
       ],
-      "source_sha256": "9eeff6b23f349c32f794ac8544f9c98a6bfe58bd7b3ac9d95a3effa48bdfdbf5"
+      "source_sha256": "d9c85e14a43ad7be5129485b4721be80afde496c763d74904a4fd37f0829bf00"
     },
     {
       "id": "market-understanding-mas-snb-2026-11-05",
@@ -908,7 +908,7 @@
         "#0369A1",
         "#7E22CE"
       ],
-      "source_sha256": "ed786f2975ba6e539d860202dba9f0782e3ca82ef21ecd16dafded1c33a67afb"
+      "source_sha256": "b42780e6598e3e83a9ce1a5609aa3c0e403fa5993b402d064f63067d1ce5fb5e"
     },
     {
       "id": "research-ai-circular-financing-2026-11-10",

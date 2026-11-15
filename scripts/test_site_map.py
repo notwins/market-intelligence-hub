@@ -33,8 +33,8 @@ class SiteMapTests(unittest.TestCase):
         original = json.loads((ROOT / 'scripts/fixtures/site_map_destinations.json').read_text())
         current = [a['href'] for a in self.nodes]
         self.assertEqual(len(original), 40)
-        self.assertEqual(set(current), {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta-shares','v4.html#history/beta2-shares','v4.html#history/beta3-shares','v4.html#history/beta4-shares'})
-        self.assertEqual(len(current), 53)
+        self.assertEqual(set(current), {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta-shares','v4.html#history/beta2-shares','v4.html#history/beta3-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/data.html'})
+        self.assertEqual(len(current), 57)
         self.assertEqual(len(set(current)), len(current) - 3)  # Main shortcuts intentionally share the real destination.
         for href in current:
             path = ROOT / 'site' / href.split('#')[0]
@@ -49,9 +49,9 @@ class SiteMapTests(unittest.TestCase):
 
     def test_native_tree_and_accessible_controls(self):
         details = [a for t, a in self.parsed.tags if t == 'details']
-        self.assertEqual(len(details), 9)
-        self.assertEqual(sum('open' in a for a in details), 7)
-        self.assertEqual(sum(t == 'summary' for t, a in self.parsed.tags), 9)
+        self.assertEqual(len(details), 10)
+        self.assertEqual(sum('open' in a for a in details), 8)
+        self.assertEqual(sum(t == 'summary' for t, a in self.parsed.tags), 10)
         ids = [a['id'] for t, a in self.parsed.tags if 'id' in a]
         self.assertEqual(len(ids), len(set(ids)))
         for ident in [f'map-{i}' for i in range(6)] + ['map-search', 'site-tree', 'expand-all', 'collapse-all', 'reset-map', 'map-status']:
