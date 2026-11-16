@@ -76,7 +76,9 @@ P/E, matched-change correlation and all 74 immutable raw adapters.
 The browser suite expects a static preview at `http://127.0.0.1:8798`, override
 with `HF_PREVIEW_URL`. It uses Playwright and Edge; `HF_BROWSER_CHANNEL` and
 `PLAYWRIGHT_MODULE` can override local defaults. Screenshots are outside `site/`;
-override their destination with `HF_SCREENSHOT_DIR`. Checks cover all views at
+override their destination with `HF_SCREENSHOT_DIR`. Screenshots capture the viewport
+by default; `HF_FULL_PAGE=1` requests full-page images when local graphics memory
+allows them. Checks cover all views at
 1600×1000 and 390×844, 2008/2020/March 2023/2024 episodes, no body overflow,
 share chips/baskets/logo failure, source loading failure, matrices, exact Sunday
 quote dates, TIC/auction controls, CSV, persistent view state and console errors.
