@@ -58,7 +58,7 @@
     if(valid.length<2) return '<small>History unavailable for this metric</small>';
     const values=valid.map(row=>row.value),lo=Math.min(...values),hi=Math.max(...values),span=hi-lo || 1;
     const path=linePath(shown,(_row,i)=>2+i/(shown.length-1)*166,value=>27-(value-lo)/span*24,row=>row.value);
-    return `<svg class="sparkline" viewBox="0 0 170 30" role="img" aria-label="Last ${shown.length} native-frequency heat observations, missing values shown as gaps"><path d="${path}" fill="none" stroke="#607e75" stroke-width="1.4"/></svg>`;
+    return `<svg class="sparkline" viewBox="0 0 170 30" preserveAspectRatio="none" role="img" aria-label="Last ${shown.length} native-frequency heat observations, missing values shown as gaps"><path d="${path}" fill="none" stroke="#607e75" stroke-width="1.4"/></svg>`;
   }
   function overviewCalculations() {
     const years=Number($('overview-baseline').value);
@@ -87,8 +87,18 @@
       if(missingA||missingB) return Number(missingA)-Number(missingB);
       return state.direction*(typeof av==='number' && typeof bv==='number'?av-bv:String(av).localeCompare(String(bv))) || a.entry.id.localeCompare(b.entry.id);
     });
-    $('dataset-rows').innerHTML=shown.map(({entry:e,metric,mode,rows,latest:r}) => `<tr data-dataset="${E(e.id)}" class="${state.selected?.id===e.id?'selected':''}"><td><button type="button" class="dataset-open" data-open="${E(e.id)}">${E(e.name || e.title)}</button><small>${E(e.id)} · ${E(e.provider)} · ${E(e.group)}</small>${e.series_count>1?`<small>${integer(e.series_count)} series · default: ${E(e.default_series?.label || e.default_group)}</small>`:''}</td><td class="numeric">${number(r.raw)}<small>${E(metric.unit || e.unit)}</small></td><td>${E(r.date || e.last || 'Unavailable')}<small>${E(e.frequency)}${e.last && r.date && e.last!==r.date?` · source table through ${E(e.last)}`:''}</small></td><td class="numeric">${integer(e.rows)}<small>${integer(e.observations)} nonmissing native records</small></td><td><span class="numeric">${number(r.value)}</span> <small>${E(metric.label || metric.field)} · ${E(transformName(mode))}</small>${sparkline(rows)}</td><td>${badge(r)}<small>${finite(r.z)?`N=${integer(r.n)} · prior ${$('overview-baseline').value}Y`:E(r.reason || 'Unavailable')}</small></td><td><a href="${E(FredArchive.resolve(e.csv_url))}" download>CSV ↓</a><a href="${E(FredArchive.resolve(e.json_url))}">JSON</a>${safeSource(e.source_url)?`<a href="${E(safeSource(e.source_url))}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:''}<button class="cite" data-cite="${E(e.id)}" type="button">Copy citation</button></td></tr>`).join('') || '<tr><td colspan="7" class="empty-row">No datasets match these filters. Try a broader search or another σ band.</td></tr>';
-    document.querySelectorAll('[data-sort]').forEach(button=> { const active=button.dataset.sort===state.sort;button.closest('th').setAttribute('aria-sort',active?(state.direction===1?'ascending':'descending'):'none'); });
+    $('dataset-rows').innerHTML=shown.map(({entry:e,metric,mode,rows,latest:r}) => {
+      const band=FredSigma.band(r.z),direction=finite(r.z)?r.z>0?'positive':r.z<0?'negative':'':'';
+      return `<article role="listitem" aria-labelledby="card-title-${E(e.id)}" data-dataset="${E(e.id)}" class="dataset-card ${band} ${direction} ${state.selected?.id===e.id?'selected':''}">
+        <div class="dataset-card-heading"><div class="card-heading-copy"><h2 id="card-title-${E(e.id)}"><button type="button" class="dataset-open" data-open="${E(e.id)}">${E(e.name || e.title)}</button></h2><p class="card-id">${E(e.id)} · ${E(e.provider)} · ${E(e.group)}</p></div><div class="card-sigma">${badge(r)}<small>${finite(r.z)?`N=${integer(r.n)} · prior ${$('overview-baseline').value}Y`:E(r.reason || 'Unavailable')}</small></div></div>
+        ${e.series_count>1?`<p class="card-series">${integer(e.series_count)} series · default: ${E(e.default_series?.label || e.default_group)}</p>`:''}
+        <div class="card-value"><span>Latest native value</span><strong class="numeric">${number(r.raw)}</strong><small>${E(metric.unit || e.unit)}</small></div>
+        <dl class="card-facts"><div><dt>Observation date</dt><dd>${E(r.date || e.last || 'Unavailable')}<small>${E(e.frequency)}${e.last && r.date && e.last!==r.date?` · source table through ${E(e.last)}`:''}</small></dd></div><div><dt>Native records</dt><dd>${integer(e.rows)}<small>${integer(e.observations)} nonmissing</small></dd></div></dl>
+        <div class="card-heat"><div><span>Heat metric</span><strong class="numeric">${number(r.value)} <small>${E(unitFor(metric,mode))}</small></strong></div><p>${E(metric.label || metric.field)} · ${E(transformName(mode))}</p>${sparkline(rows)}</div>
+        <div class="card-links"><a href="${E(FredArchive.resolve(e.csv_url))}" download>CSV ↓</a><a href="${E(FredArchive.resolve(e.json_url))}">JSON</a>${safeSource(e.source_url)?`<a href="${E(safeSource(e.source_url))}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:''}<button class="cite" data-cite="${E(e.id)}" type="button">Copy citation</button></div>
+      </article>`;
+    }).join('') || '<p class="empty-row">No datasets match these filters. Try a broader search or another σ band.</p>';
+    document.querySelectorAll('[data-sort]').forEach(button=> { const active=button.dataset.sort===state.sort;button.setAttribute('aria-pressed',String(active));button.title=active?`${state.direction===1?'Ascending':'Descending'}; select again to reverse`:'Select to sort';button.querySelector('.sort-direction').textContent=active?(state.direction===1?'↑':'↓'):'↕'; });
     text('catalog-status',`${shown.length} of ${state.entries.length} datasets · latest dated observations in each default series · recommended heat metric · prior ${$('overview-baseline').value}-year baseline`);
   }
   function fillOptions(id,values) {
