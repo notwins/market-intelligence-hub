@@ -95,11 +95,14 @@ function shell(){return `<section class="market-snapshot section" id="market-sna
 function paint(){
  const e=root.document?.getElementById('market-snapshot-body');if(!e)return;
  const active=root.document.activeElement,focus=active?.matches?.('[data-ms-refresh]')?'[data-ms-refresh]':active?.matches?.('[data-ms-asset]')?'[data-ms-asset]':active?.dataset?.msGroup?`[data-ms-group="${active.dataset.msGroup}"]`:active?.dataset?.msOverlay?`[data-ms-overlay="${active.dataset.msOverlay}"]`:active?.dataset?.msWeek!==undefined?`[data-ms-curve-key="${active.dataset.msCurveKey}"][data-ms-week="${active.dataset.msWeek}"]`:null;
+ const detailFocus=active?.closest?.('[data-ms-detail]')?.dataset?.msDetail;
  const open=new Set([...(e.querySelectorAll?.('[data-ms-detail][open]')||[])].map(d=>d.dataset.msDetail));
  for(const d of e.querySelectorAll?.('[data-ms-curve-values]')||[])state.curveDetails[d.dataset.msCurveValues]=d.open;
  e.innerHTML=body();for(const d of e.querySelectorAll?.('[data-ms-detail]')||[])if(open.has(d.dataset.msDetail))d.open=true;
  for(const d of e.querySelectorAll?.('[data-ms-curve-values]')||[])if(state.curveDetails[d.dataset.msCurveValues])d.open=true;
  if(focus)e.querySelector?.(focus)?.focus({preventScroll:true});
+ root.CompanyContext?.decorateSnapshot?.(e);
+ if(detailFocus)for(const d of e.querySelectorAll?.('[data-ms-detail]')||[])if(d.dataset.msDetail===detailFocus)d.querySelector('summary')?.focus({preventScroll:true});
 }
 function showYield(point){if(!point)return;const chart=point.closest('[data-ms-curve]'),output=chart?.querySelector('.ms-curve-value');if(output)output.textContent=point.dataset.msPoint;chart?.querySelectorAll('[data-ms-point]').forEach(p=>p.classList.toggle('ms-point-active',p===point));}
 async function get(path){if(!cache[path])cache[path]=root.fetch(path,{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('Saved source unavailable');return r.json();});return cache[path];}
