@@ -24,6 +24,7 @@
  function sync(){frame=0;const source=view.querySelector('.subnav');
   const next=source?source.innerHTML+'|'+source.getAttribute('aria-label'):'';
   view.querySelectorAll('.subnav').forEach(n=>n.classList.toggle('subnav-in-topbar',n===source));
+  tabs.classList.toggle('history-menu-toolbar',!!source?.classList.contains('history-menu'));
   if(next===signature)return;signature=next;
   const focused=tabs.contains(document.activeElement)?document.activeElement?.dataset.tab:null;
   tabs.replaceChildren();tabs.hidden=!source;bar.classList.toggle('has-top-subsections',!!source);
@@ -32,7 +33,7 @@
   tabs.setAttribute('aria-label',(source.getAttribute('aria-label')||'Section')+' subsections');
   for(const child of source.children)tabs.append(child.cloneNode(true));
   const active=tabs.querySelector('.active');
-  if(active){const left=active.offsetLeft-tabs.offsetLeft;if(left<tabs.scrollLeft||left+active.offsetWidth>tabs.scrollLeft+tabs.clientWidth)tabs.scrollLeft=Math.max(0,left-16);}
+  if(active&&!tabs.classList.contains('history-menu-toolbar')){const left=active.offsetLeft-tabs.offsetLeft;if(left<tabs.scrollLeft||left+active.offsetWidth>tabs.scrollLeft+tabs.clientWidth)tabs.scrollLeft=Math.max(0,left-16);}
   if(focused)tabs.querySelector('[data-tab="'+CSS.escape(focused)+'"]')?.focus({preventScroll:true});
  }
  const schedule=()=>{if(!frame)frame=requestAnimationFrame(sync);};

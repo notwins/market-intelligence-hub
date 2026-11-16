@@ -1,1 +1,66 @@
 .history-shortcuts{display:flex;flex-wrap:wrap;gap:9px;margin:18px 0}.history-shortcuts a,.history-tabs button.history-coloured{display:inline-flex;gap:8px;align-items:center;justify-content:center;min-height:44px;border:1px solid var(--history-ink);border-radius:9px;background:var(--history-soft);color:var(--history-ink);padding:10px 13px;font:650 14px/1.3 "Segoe UI",Arial,sans-serif;text-decoration:none}.history-shortcuts a:hover,.history-tabs button.history-coloured:hover{box-shadow:0 2px 8px #163a4a20}.history-tabs button.history-coloured.active{background:var(--history-ink);color:#fff;border-color:var(--history-ink);box-shadow:inset 0 -3px 0 #0002}.history-shortcuts a:focus-visible{outline:3px solid #1e40af;outline-offset:3px}.history-icon,.history-shortcuts a>span{font-size:19px}.history-tabs{gap:8px!important}.earnings-return-boxes{margin:20px 0}.earnings-return-boxes h4{margin:0 0 10px;font-size:16px}.earnings-return-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px}.earnings-return-grid>div{border:1px solid #cbd6dc;border-radius:9px;background:#f1f4f6;padding:12px 8px;min-width:0;text-align:center}.earnings-return-grid strong{display:block;font-size:18px;font-variant-numeric:tabular-nums;margin-top:5px}.earnings-return-grid small{font-size:12px;color:inherit}.earnings-return-grid .return-positive{background:#e6f2ed;color:#075f59;border-color:#aacfc4}.earnings-return-grid .return-negative{background:#fcebef;color:#9d253e;border-color:#e2b6c0}.earnings-return-grid .return-ytd{border-width:2px;border-style:dashed}.earnings-history-link{display:inline-flex;gap:8px;padding:12px 16px;border:1px solid #21578c;border-radius:9px;background:#edf3f8;color:#21578c!important;font-size:15px;font-weight:700;text-decoration:none;margin:14px 0}.ed-company:target,.ed-company.company-jump{outline:3px solid #21578c;outline-offset:5px;scroll-margin-top:95px}@media(max-width:1000px){.earnings-return-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:600px){.earnings-return-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.earnings-return-grid strong{white-space:nowrap}.history-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.history-shortcuts a{justify-content:flex-start;font-size:13px}.earnings-return-grid strong{font-size:16px}.earnings-return-grid>div{padding:10px 5px}}
+.history-nav-icon{display:block;flex:0 0 18px;width:18px;height:18px}
+/* History is a directory with three visible categories, at every screen size. */
+.history-shortcuts.history-directory{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.history-directory .history-directory-group{padding:14px;border:1px solid #d5e0e2;border-radius:10px;background:#f7faf9;min-width:0}
+.history-directory .history-directory-group h3{display:flex;align-items:center;gap:8px;margin:0 0 10px;font:650 14px/1.4 system-ui,sans-serif;color:#304d58}
+.history-directory-group>div{display:grid;gap:5px}
+.history-directory a.history-nav-item{justify-content:flex-start;gap:8px;padding:8px 10px;min-height:44px;border:0;border-radius:6px;background:#fff;color:#35515e;font:500 13px/1.35 system-ui,sans-serif}
+.history-directory a>.history-link-label{font-size:inherit}
+.history-directory a:hover{background:#e7f0ef;box-shadow:none}
+/* Same type and geometry for links and buttons: neither inherits article sizing. */
+.rail nav .rail-group :is(a,button){box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;min-height:40px;padding:9px 10px;margin:0;border:1px solid transparent;border-radius:7px;background:transparent;color:#c7d5df;text-align:left;text-decoration:none;font:500 calc(13px * clamp(1,var(--text-scale,1),1.25))/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:0;overflow-wrap:normal;word-break:normal}
+.rail nav .rail-group :is(a,button)>span:not(.nav-glyph){min-width:0;font:inherit;color:inherit}
+.rail nav .rail-group .nav-glyph{display:inline-grid;place-items:center;flex:0 0 18px;width:18px;font:16px/1 system-ui,sans-serif;color:#94b4c4}
+.rail nav .rail-group :is(a,button):hover{background:#ffffff0b;color:#fff}
+.rail nav .rail-group :is(a,button).active,.rail nav .rail-group a[aria-current=page]{background:#294f61;color:#fff;border-color:#466979}
+.rail nav .rail-group .rail-group-label{margin:0;padding:7px 10px;color:#9fb7c6;font:700 10px/1.4 system-ui,sans-serif;letter-spacing:.13em;text-transform:uppercase}
+.rail nav .rail-history{padding-block:10px}
+.rail nav .rail-history:first-child{padding-top:0;margin-top:0}
+.rail-history .rail-history-section{margin:3px 0 6px;padding:0;border:0;background:transparent}
+.rail-history .rail-history-section>summary{display:flex;align-items:center;gap:8px;min-height:34px;margin:0;padding:7px 10px;border:0;color:#a9c2ce;font:650 11px/1.4 system-ui,sans-serif;letter-spacing:.02em;list-style:none;cursor:pointer}
+.rail-history .rail-history-section>summary::-webkit-details-marker{display:none}
+.rail-history-section>summary>span:first-of-type{flex:1}
+.rail-history-section>summary .rail-history-count{font:10px/1.3 system-ui,sans-serif;color:#8ba9ba}
+.rail-history-section[open]>summary .history-menu-chevron{transform:rotate(180deg)}
+.rail-history .rail-history-section>summary>.history-nav-icon{width:15px;height:15px;flex-basis:15px}
+.rail nav .rail-history .history-nav-item{padding-left:16px}
+.rail nav .rail-history [data-history-group=fred]{padding-top:6px;border-top:1px solid #57738455}
+.rail nav .rail-history [data-history-group=fred]>summary{color:#c4bbdc}
+.rail .brand{gap:10px}.rail .brand b{font:750 15px/1.25 system-ui,sans-serif}.rail .brand small{font:500 9px/1.5 system-ui,sans-serif;letter-spacing:.12em}.rail .brand-icon{width:34px;height:36px;border-radius:10px;font-size:22px}
+.rail .rail-foot{font:11px/1.5 system-ui,sans-serif}
+/* Calm three-button history toolbar; the full FRED list is always one click away. */
+.topbar .top-subsections.history-menu-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;overflow:visible;padding:0;scrollbar-width:none;min-width:340px;flex:1 1 440px}
+.history-menu-group{position:relative;min-width:0;margin:0;padding:0;border:0;background:transparent;color:#344e5b;font:500 13px/1.35 system-ui,sans-serif}
+.history-menu-group>summary::after,.rail-history-section>summary::after{content:none!important}
+.history-menu-group>summary{display:flex;align-items:center;gap:7px;min-height:44px;padding:8px 10px;border:1px solid #d4dfe3;border-radius:7px;background:#f5f8f9;color:#3a5360;list-style:none;cursor:pointer;font:600 12px/1.25 system-ui,sans-serif;letter-spacing:0}
+.history-menu-group>summary::-webkit-details-marker{display:none}
+.history-menu-group>summary>span{flex:1;min-width:0}
+.history-menu-group[data-active-group]>summary{background:#e5f0ef;border-color:#95b9b5;color:#235b5c}
+.history-menu-group[data-history-group=fred]>summary{background:#f0edf5;border-color:#ccc4db;color:#5a4c73}
+.history-menu-group[open]>summary{border-color:#6c8e9e;box-shadow:0 0 0 2px #dce8ec}
+.history-menu-chevron{flex:0 0 12px;width:12px;height:12px}.history-menu-group[open] .history-menu-chevron{transform:rotate(180deg)}
+@media(max-width:760px){.topbar .top-subsections.history-menu-toolbar{position:relative}.topbar .history-menu-group{position:static}.topbar .history-menu-group .history-menu-links{left:0;right:0;top:calc(100% + 7px);width:auto;max-width:none;transform:none}}
+.history-menu-links{position:absolute;top:calc(100% + 7px);left:0;z-index:100;width:248px;max-width:calc(100vw - 24px);padding:6px;border:1px solid #cfdbdf;border-radius:10px;background:#fff;box-shadow:0 10px 28px #17394b26}
+.history-menu-group:last-child .history-menu-links{left:auto;right:0}
+.topbar .history-menu-links :is(a.history-nav-item,button.history-nav-item){display:flex;align-items:center;gap:9px;width:100%;min-height:44px;margin:0;padding:9px 10px;border:0;border-radius:6px;background:#fff;color:#35515e;text-decoration:none;white-space:normal;font:500 13px/1.35 system-ui,sans-serif;text-align:left}
+.topbar .history-menu-links .history-nav-item:hover{background:#edf4f4}
+.topbar .history-menu-links .history-nav-item.active{background:#dfedeb;color:#1e5b56;font-weight:650}
+.history-menu-group>summary:focus-visible,.history-menu-links .history-nav-item:focus-visible{outline:3px solid #7186ba;outline-offset:2px}
+/* Utility controls use the same scale as the menus. */
+.topbar{column-gap:12px}.topbar b{font:650 14px/1.3 system-ui,sans-serif;letter-spacing:0}
+.topbar .top-controls{gap:6px}
+.topbar #global-search-button,.topbar #all-sections-btn,.topbar .display-open,.topbar .bp-access-settings>summary{min-height:40px;padding:7px 10px;font:600 12px/1.25 system-ui,sans-serif;letter-spacing:0;border-radius:7px}
+.topbar #global-search-button>span[aria-hidden]{font-size:18px}.topbar #all-sections-btn svg{width:18px;height:18px}
+.topbar time{font:11px/1.3 system-ui,sans-serif}
+/* Keep the in-page helper subordinate to the actual site navigation. */
+.rail #section-jump.section-jump-docked{margin-top:8px;font:12px/1.35 system-ui,sans-serif}
+.rail #section-jump.section-jump-docked .section-jump-heading{font-size:11px}
+.rail #section-jump.section-jump-docked select{font:12px/1.3 system-ui,sans-serif;min-height:36px}
+.rail #section-jump.section-jump-docked .section-jump-controls>button{font:600 11px/1.3 system-ui,sans-serif;min-height:34px}
+@media(min-width:761px){.rail{width:260px;padding:16px 12px}.rail>nav[aria-label="Desktop navigation"]{flex:1;min-height:120px}.rail .brand{margin:0 7px 14px}.rail .rail-foot{padding:9px 7px}.topbar.has-top-subsections{flex-wrap:wrap}.topbar.has-top-subsections>div:first-child{flex:0 0 auto}}
+@media(min-width:761px) and (max-height:850px){.rail nav .rail-group :is(a,button){min-height:36px;padding-block:7px}.rail nav .rail-group .rail-group-label{padding-block:5px}.rail-history .rail-history-section{margin-bottom:3px}}
+@media(min-width:761px) and (max-height:850px){.rail #section-jump.section-jump-docked .section-jump-controls{grid-template-columns:32px minmax(0,1fr) 32px}.rail #section-jump.section-jump-docked select{grid-column:2;grid-row:1}.rail #section-jump.section-jump-docked .section-jump-controls>button{grid-row:1;width:32px;min-width:32px;padding:0;font-size:0}.rail #section-jump.section-jump-docked .section-jump-prev{grid-column:1}.rail #section-jump.section-jump-docked .section-jump-next{grid-column:3}.rail #section-jump.section-jump-docked .section-jump-prev::before{content:'↑';font-size:16px}.rail #section-jump.section-jump-docked .section-jump-next::before{content:'↓';font-size:16px}}
+@media(max-width:1180px) and (min-width:761px){.topbar.has-top-subsections{display:grid;grid-template-columns:minmax(0,1fr) auto}.topbar .top-subsections.history-menu-toolbar{grid-column:1/-1;grid-row:2;width:100%}}
+@media(max-width:760px){.history-shortcuts.history-directory{grid-template-columns:1fr}.topbar .top-subsections.history-menu-toolbar{min-width:0;width:100%;gap:4px;grid-column:1;grid-row:3}.history-menu-group>summary{min-height:48px;padding:7px 6px;gap:4px;font-size:11px}.history-menu-group>summary .history-nav-icon{width:15px;height:15px;flex-basis:15px}.history-menu-chevron{width:10px;height:10px;flex-basis:10px}.history-menu-group:nth-child(2) .history-menu-links{left:50%;transform:translateX(-50%)}.topbar #global-search-button{width:40px;min-width:40px}.topbar b{font-size:14px}}
+@media(forced-colors:active){.history-menu-group>summary,.history-menu-links,.topbar .history-menu-links :is(a.history-nav-item,button.history-nav-item){background:Canvas;color:CanvasText;border-color:CanvasText}.history-menu-group[data-active-group]>summary,.topbar .history-menu-links .history-nav-item.active{background:Highlight;color:HighlightText}}
