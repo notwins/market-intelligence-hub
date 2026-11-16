@@ -1,0 +1,65 @@
+/* Private, browser-local SI drafts. Price levels are illustrations, never a payoff engine. */
+(function(root){'use strict';
+const W=800,H=1132,navy='#122b43',blue='#3879ad',muted='#526477',border='#ccd6df';
+const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>v===''||v===null||v===undefined?null:Number.isFinite(Number(v))?Number(v):null;
+const fmt=(v,d=2)=>num(v)===null?'Not supplied':Number(v).toLocaleString('en-US',{maximumFractionDigits:d});
+const pct=v=>num(v)===null?'Not supplied':fmt(v,4)+'%';
+const clean=(v,n=160)=>String(v??'').trim().slice(0,n);
+function symbol(v){v=clean(v,30).toUpperCase();if(/^\d{1,4}\s+HK$/.test(v))return v.split(/\s/)[0].padStart(4,'0')+'.HK';return v.replace(/\s+(?:UQ|UN|US)$/,'');}
+function blank(){return {id:'',shares:[],ko:null,ki:null,strike:null,step:null,months:null,coupon:null,currency:'SGD',tenorUnit:'months',couponBasis:'per_annum',kiType:'European at maturity',firstStep:2,date:'',issuer:'',notes:'',source:null};}
+function fromReference(r){return {...blank(),shares:r.shares.map(t=>({symbol:t,fixing:null,name:'',description:''})),ko:r.ko_pct,ki:r.ki_pct,strike:r.strike_pct,months:r.tenor_source_value,coupon:r.coupon_pct,currency:r.currency,tenorUnit:r.tenor_unit||'unconfirmed',couponBasis:r.coupon_basis||'unconfirmed',kiType:'Unconfirmed',source:{reference:r.reference,date:r.source_date||'',rounded:true,review:!!r.additional_review},date:''};}
+function validate(p){const issues=[];if(!p||typeof p!=='object')return ['Invalid page'];if(!Array.isArray(p.shares)||p.shares.length<1||p.shares.length>4)issues.push('Enter one to four shares.');
+ const shares=p.shares||[];if(shares.some(s=>!s||!/^[-A-Z0-9.^ ]{1,30}$/.test(s.symbol||'')))issues.push('Use a valid ticker for each share.');if(new Set(shares.map(s=>symbol(s.symbol))).size!==shares.length)issues.push('Each share should appear once.');
+ for(const [key,label,lo,hi] of [['ko','KO',0.01,200],['ki','KI',0.01,200],['strike','Strike',0.01,200],['coupon','Coupon',0,100],['months','Months / tenor',1,120]])if(num(p[key])===null||p[key]<lo||p[key]>hi)issues.push(`${label} must be between ${lo} and ${hi}.`);
+ if(num(p.months)!==null&&!Number.isInteger(Number(p.months)))issues.push('Enter a whole number of months / tenor units.');
+ if(p.step!==null&&(num(p.step)===null||p.step<0||p.step>100))issues.push('Step-down must be blank or between 0 and 100 percentage points.');
+ if(!Number.isInteger(p.firstStep)||p.firstStep<1||p.firstStep>120)issues.push('First step-down month must be between 1 and 120.');
+ if(finalKO(p)!==null&&finalKO(p)<=0)issues.push('The step-down makes the final KO zero or negative.');
+ if(shares.some(s=>s.fixing!==null&&(num(s.fixing)===null||s.fixing<=0)))issues.push('Manual reference prices must be positive.');
+ if(!['months','unconfirmed'].includes(p.tenorUnit)||!['per_annum','per_month','total','unconfirmed'].includes(p.couponBasis))issues.push('Select a supported tenor unit and coupon basis.');
+ if(!/^[A-Z]{3}$/.test(p.currency||''))issues.push('Select a currency.');
+ if(p.date&&(!/^\d{4}-\d{2}-\d{2}$/.test(p.date)||!Number.isFinite(Date.parse(p.date))||new Date(p.date).toISOString().slice(0,10)!==p.date))issues.push('Choose a valid reference date.');return issues;}
+function finalKO(p){return p.tenorUnit==='months'&&[p.ko,p.step,p.months,p.firstStep].every(v=>num(v)!==null)?p.ko-p.step*Math.max(0,p.months-p.firstStep+1):null;}
+function levels(p,reference){return Object.fromEntries(['ko','ki','strike'].map(k=>[k,num(reference)!==null&&num(p[k])!==null?reference*p[k]/100:null]));}
+function reference(p,share,data){if(num(share.fixing)!==null)return {value:Number(share.fixing),date:p.date||'Date not supplied',basis:'Manual reference'};if(p.date){const v=data?.daily?.find(x=>x[0]===p.date);return {value:v?.[1]??null,date:p.date,basis:'Exact daily close'};}return {value:data?.quote?.close??null,date:data?.quote?.date||'',basis:'Latest saved close'};}
+function wrap(value,max){const words=clean(value,1800).split(/\s+/),lines=[];let line='';for(let word of words){while(word.length>max){if(line){lines.push(line);line='';}lines.push(word.slice(0,max));word=word.slice(max);}if((line+' '+word).trim().length>max){lines.push(line);line=word;}else line=(line+' '+word).trim();}if(line)lines.push(line);return lines;}
+function svg(p,enrichment={},page=1,total=1){const out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
+ out.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Structured investment one-pager for ${escape(p.shares.map(s=>s.symbol).join(', '))}">`);rect(0,0,W,H,'#fff','#fff');
+ text(28,39,'FOR REFERENCE ONLY',17,navy,true);text(772,38,'MARKET INTEL  /  SI BETA 2',11,muted,true,'end');
+ text(28,58,'Indicative terms. Capital is at risk. Refer to the issuer’s final terms for conditions and observation rules.',9,muted);
+ rect(28,74,744,32,navy,navy);text(42,96,'Structured investment',18,'#fff',true);text(758,95,`${page} / ${total}`,11,'#fff',true,'end');
+ text(28,126,p.shares.map(s=>s.symbol).join('  +  '),15,navy,true);text(772,125,p.source?`Based on ${p.source.reference}`:'Manually entered terms',10,muted,false,'end');
+ const left=28,top=143,tableWidth=365,columns=[left,left+110,left+181,left+242,left+303,left+365];
+ rect(left,top,tableWidth,23,blue,blue);['Underlying','Reference','KO','KI','Strike'].forEach((v,i)=>text(columns[i]+5,top+15,v,9,'#fff',true));
+ const count=Math.max(p.shares.length,2);for(let i=0;i<count;i++){const y=top+23+i*24,s=p.shares[i];rect(left,y,tableWidth,24,i%2?'#f5f8fb':'#fff');if(!s)continue;const r=reference(p,s,enrichment[s.symbol]),l=levels(p,r.value);[s.symbol,fmt(r.value,4),fmt(l.ko,4),fmt(l.ki,4),fmt(l.strike,4)].forEach((v,j)=>text(columns[j]+5,y+16,v==='Not supplied'?'—':v,9,j===2?'#497c31':j===3?'#ae3b49':j===4?'#7652a3':navy,j===0));}
+ paragraph(28,top+23+count*24+16,'Reference prices are indicative closing prices unless manually entered. Barrier levels = reference price × percentage.',70,2,9);
+ const basis={per_annum:'p.a.',per_month:'per month',total:'total',unconfirmed:'basis unconfirmed'}[p.couponBasis];
+ const pairs=[['Tenor',`${fmt(p.months)} ${p.tenorUnit==='months'?'months':'(unit unconfirmed)'}`,'Coupon',`${pct(p.coupon)} ${basis}`],['Currency',p.currency,'Initial KO',pct(p.ko)],['KI',pct(p.ki),'Strike',pct(p.strike)],['Monthly step',num(p.step)===null?'Not supplied':fmt(p.step,4)+' pp','Final KO',finalKO(p)===null?'Not calculated':pct(finalKO(p))]];
+ pairs.forEach((row,i)=>{const y=143+i*30;rect(408,y,364,30,i%2?'#fff':'#f5f8fb');text(414,y+11,row[0],8,muted);text(414,y+24,row[1],10,navy,true);text(590,y+11,row[2],8,muted);text(590,y+24,row[3],10,navy,true);});
+ text(408,280,`KI: ${p.kiType||'Not supplied'}`,9,muted);text(408,294,`Issuer: ${p.issuer||'Not supplied'}`,9,muted);text(28,313,p.step!==null?`Step-down illustration: monthly, from month ${p.firstStep}; final KO is not an execution or redemption forecast.`:'Step-down schedule not supplied. Initial KO is shown as a reference line.',9,muted);
+ const start=330,available=664,gap=12,block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length);
+ p.shares.forEach((s,i)=>{const d=enrichment[s.symbol]||{},y=start+i*(block+gap),r=reference(p,s,d),ls=levels(p,r.value),name=s.name||d.name||s.symbol;
+ rect(28,y,744,block,'#fff');rect(28,y,744,23,navy,navy);text(37,y+16,clean(name,69),11,'#fff',true);text(762,y+16,s.symbol,10,'#fff',false,'end');
+ const chartX=36,chartY=y+31,chartW=388,chartH=block-63,plotLeft=chartX+40,plotRight=chartX+chartW-9,plotTop=chartY+17,plotBottom=chartY+chartH-28,pts=(d.points||[]).filter(x=>Array.isArray(x)&&Number.isFinite(x[1])&&x[1]>0);
+ text(chartX+4,chartY+7,`1-year price history${d.currency?' · '+d.currency:''}`,9,navy,true);
+ if(pts.length>1){const bars=[['KO',ls.ko,'#699645'],['KI',ls.ki,'#b94a57'],['Strike',ls.strike,'#8261a8']].filter(x=>x[1]!==null),values=pts.map(x=>x[1]).concat(bars.map(x=>x[1]));let low=Math.min(...values),high=Math.max(...values),pad=(high-low||high*.05)*.12;low-=pad;high+=pad;const t0=Date.parse(pts[0][0]),t1=Date.parse(pts.at(-1)[0]),px=date=>plotLeft+(Date.parse(date)-t0)/(t1-t0||1)*(plotRight-plotLeft),py=v=>plotBottom-(v-low)/(high-low)*(plotBottom-plotTop);
+ for(let j=0;j<3;j++){const v=low+(high-low)*j/2,yy=py(v);line(plotLeft,yy,plotRight,yy);text(plotLeft-5,yy+3,fmt(v,1),8,muted,false,'end');}
+ bars.forEach(([label,v,c])=>line(plotLeft,py(v),plotRight,py(v),c,'5 3'));
+ out.push(`<polyline fill="none" stroke="${blue}" stroke-width="1.4" points="${pts.map(x=>px(x[0]).toFixed(2)+','+py(x[1]).toFixed(2)).join(' ')}"/>`);
+ text(plotLeft,plotBottom+14,pts[0][0],8,muted);text(plotRight,plotBottom+14,pts.at(-1)[0],8,muted,false,'end');
+ }else{rect(plotLeft,plotTop,plotRight-plotLeft,Math.max(10,plotBottom-plotTop),'#f5f8fb');text((plotLeft+plotRight)/2,(plotTop+plotBottom)/2,'Price history unavailable',11,muted,false,'middle');}
+ const legendY=y+block-18;[['Price',blue],['Initial KO','#699645'],['KI','#b94a57'],['Strike','#8261a8']].forEach(([label,color],j)=>{line(45+j*86,legendY,59+j*86,legendY,color,j?'4 2':'');text(63+j*86,legendY+3,label,8,muted);});
+ const rx=442,rw=320,small=p.shares.length>=3,description=s.description||d.description||'Company description not supplied. Add a short description in share details.';
+ paragraph(rx,y+39,description,small?61:57,small?2:5,small?8.5:10);
+ const my=y+(small?68:116),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Shown high / low',pts.length?`${fmt(Math.max(...pts.map(x=>x[1])))} / ${fmt(Math.min(...pts.map(x=>x[1])))}`:'Unavailable'],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)]];
+ metrics.forEach(([k,v],j)=>{const col=small?j%2:0,row=small?Math.floor(j/2):j,x=rx+col*164,yy=my+row*(small?15:18);if(!small||j<8){text(x,yy,k,small?7.6:9,muted);text(x+(small?152:rw),yy,clean(v,small?22:45),small?7.6:9,navy,true,'end');}});
+ const source=`${d.provider||'Price feed unavailable'}${d.metricsDate?' · BOS metrics '+d.metricsDate:''}`;text(rx,y+block-17,clean(source,65),8,muted);if(d.sourceUrl)text(rx,y+block-6,clean(d.sourceUrl.replace(/^https:\/\//,''),78),7,muted);if(!small)paragraph(rx,y+block-48,d.metricsBasis||'Valuations unavailable. No estimates are inferred.',61,2,8,muted);
+ });
+ const foot=1010;line(28,foot,772,foot);paragraph(28,foot+15,p.notes||'Indicative reference only. This sheet is not an issuer term sheet, offer or investment recommendation.',140,2,9,navy);
+ paragraph(28,foot+44,p.source?`Draft based on ${p.source.reference}, source date ${p.source.date||'not shown'}. Imported levels are rounded and photo-unverified; edited terms require verification. Coupon basis and tenor units remain as labelled.`:'Manual terms are user-entered and unverified. Confirm coupon basis, KO observations, step-down timing, KI conditions, settlement and issuer terms.',155,2,8);
+ paragraph(28,foot+71,'Price charts use available source closes, exclude reinvested dividends and do not show product returns. Barrier lines are illustrative; capital loss is possible. Missing data stays unavailable.',155,2,8);
+ out.push('</svg>');return out.join('');}
+async function pdfFromImages(images,PDFLib){if(!images.length)throw Error('Create a page first.');const doc=await PDFLib.PDFDocument.create();doc.setTitle('Structured investment one-pagers');doc.setProducer('Market Intel SI beta 2');for(const bytes of images){const img=await doc.embedPng(bytes);const page=doc.addPage([595.28,841.89]);page.drawImage(img,{x:0,y:0,width:595.28,height:841.89});}return doc.save();}
+const api={blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+})(typeof window!=='undefined'?window:globalThis);
