@@ -63,7 +63,7 @@ jobs:
         with:
           timeout: 1200000
       - name: Verify the published FRED collection
-        run: python scripts/sync_fred_observatory.py --verify-only --expected-version "$(python -c "import json,os;print(json.load(open(os.environ['RUNNER_TEMP']+'/fred-refresh/refresh-report.json'))['archive_version'])")"
+        run: python scripts/sync_fred_observatory.py --verify-only --expected-version-file "$RUNNER_TEMP/fred-refresh/refresh-report.json"
       - name: Preserve the refresh receipt
         if: always()
         uses: actions/upload-artifact@v4

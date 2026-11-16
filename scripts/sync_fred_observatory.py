@@ -51,8 +51,10 @@ def sync(destination=None,expected=None,require_current_month=False):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--destination',type=Path);parser.add_argument('--verify-only',action='store_true');parser.add_argument('--expected-version');parser.add_argument('--require-current-month',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--destination',type=Path);parser.add_argument('--verify-only',action='store_true');parser.add_argument('--expected-version');parser.add_argument('--expected-version-file',type=Path);parser.add_argument('--require-current-month',action='store_true');args=parser.parse_args()
     if not args.verify_only and not args.destination:parser.error('Choose --verify-only or --destination')
+    if args.expected_version_file:
+        args.expected_version=json.loads(args.expected_version_file.read_text(encoding='utf-8'))['archive_version']
     for attempt in range(6):
         try:
             sync(args.destination,args.expected_version,args.require_current_month);break
