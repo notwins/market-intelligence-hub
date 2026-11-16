@@ -9,6 +9,8 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict');
  await page.waitForSelector('#earnings-GOOGL .earnings-return-grid strong');
  await page.waitForSelector('#earnings-AMZN .earnings-return-grid strong');
  await page.waitForSelector('#earnings-TSM .earnings-return-grid strong');
+ await page.evaluate(async()=>{await Promise.all([window.ShareEnrichment.load(),window.BOSEquity.refresh()]);await window.EarningsDesk.mount();});
+ const layoutStyle=await page.addStyleTag({content:'.ed-companies{grid-template-columns:repeat(var(--test-card-columns,3),minmax(0,1fr))!important}'});
  const tickers=['GOOGL','AMZN','TSM'];
  const baseline=await page.evaluate(tickers=>tickers.map(t=>[...document.getElementById('earnings-'+t).querySelectorAll('.earnings-return-grid strong')].map(n=>n.textContent)),tickers);
  async function inspect(label){
@@ -38,13 +40,13 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict');
   for(const columns of [1,2,3])for(const scale of [1,1.5,2]){
    await page.evaluate(({columns,scale})=>{
     document.documentElement.style.setProperty('--text-scale',String(scale));
-    document.querySelector('.ed-companies').style.gridTemplateColumns='repeat('+columns+',minmax(0,1fr))';
+    document.documentElement.style.setProperty('--test-card-columns',String(columns));
    },{columns,scale});
    await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
    await inspect(width+'px / '+columns+' cards / '+scale+' text');
   }
  }
- await page.evaluate(()=>document.querySelector('.ed-companies').style.removeProperty('grid-template-columns'));
+ await layoutStyle.evaluate(node=>node.remove());
  for(const width of [320,390])for(const scale of [1,2]){
   await page.setViewportSize({width,height:960});
   await page.evaluate(scale=>document.documentElement.style.setProperty('--text-scale',String(scale)),scale);
