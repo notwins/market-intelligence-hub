@@ -4,6 +4,7 @@
   FredArchive.catalog().then(catalog => {
     const saved = new Date(catalog.snapshot + 'T00:00:00Z').toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
     document.querySelectorAll('[data-fred-date]').forEach(node => { node.textContent = saved; });
+    document.querySelectorAll('[data-fred-count]').forEach(node => { const key=node.dataset.fredCount;node.textContent=(key==='external_count'?catalog.dataset_count-catalog.fred_count:catalog[key])?.toLocaleString('en-US') ?? '—'; });
     document.querySelectorAll('[data-fred-link]').forEach(node => {
       const path = catalog[node.dataset.fredLink];
       if (path) node.href = FredArchive.resolve(path);
@@ -18,7 +19,7 @@
     const summary = catalog.refresh;
     if (summary) {
       const checked = new Date(catalog.checked_at).toLocaleString('en-SG',{timeZone:'Asia/Singapore',day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false});
-      status.textContent = `Monthly refresh · ${checked} SGT · ${summary.checked_count}/${catalog.dataset_count} datasets checked · ${summary.matched ?? '—'} matched · ${summary.added} added · ${summary.revised} revised · 3-month overlap`;
+      status.textContent = summary.kind==='local_import' ? `Shared archive · ${catalog.dataset_count} datasets · ${catalog.record_count.toLocaleString('en-US')} source records · ${summary.imported_count} new files imported ${checked} SGT · monthly overlap refresh on the 1st` : `Monthly refresh · ${checked} SGT · ${summary.checked_count}/${catalog.dataset_count} datasets checked · ${summary.matched ?? '—'} matched · ${summary.added} added · ${summary.revised} revised · 3-month overlap`;
       if (summary.failed_count) {
         status.style.background = '#f7e8d9';
         status.textContent += ` · ${summary.failed_count} source checks failed; previous verified values retained.`;

@@ -23,17 +23,17 @@ def get(relative):
 
 def sync(destination=None,expected=None,require_current_month=False):
     catalog=json.loads(get('catalog.json'));version=catalog.get('archive_version',catalog['snapshot'])
-    if catalog['schema_version']!=1 or len(catalog['datasets'])!=74:raise ValueError('Unexpected archive schema or dataset count')
+    if catalog['schema_version']!=1 or len(catalog['datasets'])!=catalog['dataset_count'] or len({e['id'] for e in catalog['datasets']})!=catalog['dataset_count']:raise ValueError('Unexpected archive schema or duplicate dataset')
     if expected and version!=expected:raise ValueError('Expected archive has not reached the public site')
     if require_current_month and str(catalog.get('checked_at',''))[:7]!=dt.datetime.now(dt.timezone(dt.timedelta(hours=8))).strftime('%Y-%m'):
         raise ValueError('The cloud archive has not been checked this Singapore calendar month')
     monitor=json.loads(get(catalog['monitor_url']))
-    if monitor['snapshot']!=catalog['snapshot'] or len(monitor['fredIds'])!=69:raise ValueError('Monitor/catalogue mismatch')
+    if monitor['snapshot']!=catalog['snapshot'] or len(monitor['fredIds'])!=catalog['fred_count']:raise ValueError('Monitor/catalogue mismatch')
     raw=get(catalog['archive_url'])
     with tempfile.TemporaryDirectory() as directory:
         work=Path(directory);(work/'raw/External sources').mkdir(parents=True)
         with zipfile.ZipFile(io.BytesIO(raw)) as bundle:
-            if len([name for name in bundle.namelist() if name.startswith('csv/')])!=74:raise ValueError('CSV bundle incomplete')
+            if len([name for name in bundle.namelist() if name.startswith('csv/')])!=catalog['dataset_count']:raise ValueError('CSV bundle incomplete')
             for row in catalog['datasets']:
                 filename=row['filename']
                 if Path(filename).name!=filename or not filename.endswith('.csv'):raise ValueError('Invalid dataset filename')
@@ -46,7 +46,7 @@ def sync(destination=None,expected=None,require_current_month=False):
         report=json.loads((work/'refresh-report.json').read_text(encoding='utf-8'))
         if report['archive_version']!=version:raise ValueError('Bundle/refresh identity mismatch')
         if destination:sync_local(work,destination)
-    result=dict(result='passed',archive_version=version,datasets=74,checked_at=catalog.get('checked_at'),refresh=catalog.get('refresh'),local_sync=bool(destination))
+    result=dict(result='passed',archive_version=version,datasets=catalog['dataset_count'],checked_at=catalog.get('checked_at'),refresh=catalog.get('refresh'),local_sync=bool(destination))
     print(json.dumps(result,indent=2));return result
 
 

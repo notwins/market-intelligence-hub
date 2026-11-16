@@ -57,14 +57,14 @@ class FullHistoryTests(unittest.TestCase):
             sid=entry['id']
             if sid=='BAMLC0A0CM':raise ValueError('Simulated provider outage')
             old=refresh.parse_csv(original[sid])[1]
-            keys=['competitiveAuctionCloseDate','cusip'] if sid=='AUCTION' else ['observation_date','country_or_aggregate'] if sid=='TIC' else ['observation_date']
+            keys=refresh.observation_keys(entry)
             rows=[dict(old[-1])]
             if sid=='DGS10':
                 rows[0][sid]='0';rows.append({'observation_date':'2099-01-01','DGS10':'4.123456789'})
             return dict(fields=fields,rows=rows,keys=keys,source_url=entry['source_url'],query_start='2026-08-16',response_sha256='a'*64)
         with tempfile.TemporaryDirectory() as folder:
             work,report=refresh.run(Path(folder)/'candidate',now=dt.datetime(2099,1,2,tzinfo=refresh.SGT),fetcher=source)
-            self.assertEqual(report['checked_count'],73);self.assertEqual(report['failed_count'],1)
+            self.assertEqual(report['checked_count'],len(entries)-1);self.assertEqual(report['failed_count'],1)
             self.assertEqual(report['added'],1);self.assertEqual(report['revised'],1)
             failed=entries['BAMLC0A0CM'];self.assertEqual((work/'raw'/failed['filename']).read_bytes(),original['BAMLC0A0CM'])
             new=refresh.parse_csv((work/'raw/DGS10.csv').read_bytes())[1]

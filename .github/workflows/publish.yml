@@ -30,6 +30,11 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install macro workbook and archived-table readers
+        run: python -m pip install openpyxl==3.1.5 pypdf==6.21.4
       - name: Preserve legacy publications and independent delivery contract
         run: python3 scripts/independent_delivery_guard.py
       - name: Test automatic publication colours
@@ -69,6 +74,7 @@ jobs:
           node scripts/test_fed_history_ui.cjs
           node scripts/test_history_context.cjs
           node scripts/test_historical_fred.cjs
+          node scripts/test_fred_sigma.cjs
           node scripts/test_yield_comparisons.cjs
           node scripts/test_history_layout.cjs
           node scripts/test_v4.cjs
@@ -158,6 +164,7 @@ jobs:
           node scripts/test_fed_history_ui.cjs
           node scripts/test_history_context.cjs
           node scripts/test_historical_fred.cjs
+          node scripts/test_fred_sigma.cjs
           node scripts/test_yield_comparisons.cjs
           node scripts/test_history_layout.cjs
           node scripts/test_v4.cjs
