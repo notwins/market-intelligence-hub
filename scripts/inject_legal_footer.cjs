@@ -26,8 +26,9 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   }
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
-  const bootstrap=path.posix.relative(directory,'blueprint-access.js?v=20261116.settings2');
+  const bootstrap=path.posix.relative(directory,'blueprint-access.js?v=20261116.settings3');
   if(access&&!content.includes('id="mih-blueprint-access"'))content=content.replace(/<\/head\s*>/i,'<script id="mih-blueprint-access" src="'+bootstrap+'" defer></script></head>');
+  if(access)content=content.replace(/(<script\b[^>]*\bid="mih-blueprint-access"[^>]*\bsrc="[^"]*blueprint-access\.js)(?:\?[^"]*)?"/g,'$1?v=20261116.settings3"');
   if (!/<\/head\s*>/i.test(content)) throw new Error('Cannot attach footer stylesheet: ' + relative);
   if(!content.includes('<link rel="stylesheet" href="'+css+'">'))content = content.replace(/<\/head\s*>/i, '<link rel="stylesheet" href="' + css + '"></head>');
   const footer = marker + '\n<footer class="mih-legal-footer" role="contentinfo"><div>' +

@@ -6,7 +6,7 @@
     ['Home', 'desk.html', '⌂'], ['FRED', 'fred/', '⌁'],
     ['Master Pivot', 'v4.html#master/pivot', '▦'],
     ['Historical charts', 'v4.html#history/shares', '↗'],
-    ['Write-ups', 'market-understanding/', '▤'], ['Markets', 'desk.html#markets', '◫']
+    ['My Blog', 'market-understanding/', '▤'], ['Markets', 'desk.html#markets', '◫']
   ];
   const moreLinks = [
     ['Daily briefing', 'v4.html#overview'], ['Calls & full reports', 'v4.html#calls'],
@@ -59,7 +59,7 @@
   document.documentElement.classList.add('hub-primary-ready');
   function active() {
     const relative = location.pathname.slice(base.pathname.length);
-    const key = relative.startsWith('fred/') ? 'FRED' : relative.startsWith('market-understanding/') ? 'Write-ups'
+    const key = relative.startsWith('fred/') ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || /^(?:historical-fred|fred-[123])\.html$/.test(relative) ? 'Historical charts'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
     scroll.querySelectorAll('a').forEach(a => {
