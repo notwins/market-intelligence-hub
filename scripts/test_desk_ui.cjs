@@ -75,7 +75,7 @@ test('company cards group exact tickers, open saved reading and keep source link
 });
 test('home chart shortcuts preserve all real historical destinations and accessible icons',()=>{
  const nav=require('../site/history-navigation.js'),html=nav.html();
- assert.equal(nav.items.length,10);assert(html.includes('v4.html#history/beta3-shares'));assert(html.includes('aria-hidden="true"'));assert(!html.includes('javascript:'));
+ assert.equal(nav.items.length,10);for(const route of ['historical-fred.html','fred-1.html','fred-2.html','fred-3.html'])assert(html.includes(route));assert(html.includes('v4.html#history/beta3-shares'));assert(html.includes('aria-hidden="true"'));assert(!html.includes('javascript:'));
 });
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

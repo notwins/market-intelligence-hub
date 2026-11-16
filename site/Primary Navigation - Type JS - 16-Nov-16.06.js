@@ -12,7 +12,10 @@
     ['Daily briefing', 'v4.html#overview'], ['Calls & full reports', 'v4.html#calls'],
     ['US earnings', 'v4.html#earnings'], ['Bonds & credit', 'v4.html#credit'],
     ['Hourly news', 'v4.html#hourly'], ['Event studies', 'v4.html#history/beta2-shares'],
-    ['Share explorer', 'v4.html#history/beta3-shares'], ['FRED Market Desk', 'fred/market-desk.html'],
+    ['Share explorer', 'v4.html#history/beta3-shares'],
+    ['Historical FRED and Prices', 'historical-fred.html'], ['Fred-1 · Event Replay', 'fred-1.html'],
+    ['Fred-2 · Response Matrix', 'fred-2.html'], ['Fred-3 · Transmission Desk', 'fred-3.html'],
+    ['FRED Market Desk', 'fred/market-desk.html'],
     ['Risk Observatory', 'fred/risk-observatory.html'], ['Search library', 'search.html'],
     ['Site map', 'site-map.html']
   ];
@@ -34,7 +37,14 @@
     menu = document.createElement('dialog'); menu.id = 'hub-sections';
     menu.innerHTML = '<div class="dialog-head"><h2 id="hub-sections-title">Explore Market Intel</h2><button type="button" aria-label="Close menu">×</button></div><div class="more-grid"></div>';
     menu.setAttribute('aria-labelledby', 'hub-sections-title'); document.body.append(menu);
-    moreLinks.forEach(([name, href]) => menu.querySelector('.more-grid').append(link(name, href)));
+    moreLinks.forEach(([name, href]) => {
+      const grid = menu.querySelector('.more-grid');
+      if (href === 'historical-fred.html' || href === 'fred/market-desk.html') {
+        const heading = document.createElement('h3'); heading.className = 'more-group-title';
+        heading.textContent = href === 'historical-fred.html' ? 'Historical Datas' : 'FRED Observatory'; grid.append(heading);
+      }
+      grid.append(link(name, href));
+    });
     menu.querySelector('button').addEventListener('click', () => menu.close());
     more.addEventListener('click', () => menu.showModal());
   }
@@ -50,7 +60,7 @@
   function active() {
     const relative = location.pathname.slice(base.pathname.length);
     const key = relative.startsWith('fred/') ? 'FRED' : relative.startsWith('market-understanding/') ? 'Write-ups'
-      : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) ? 'Historical charts'
+      : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || /^(?:historical-fred|fred-[123])\.html$/.test(relative) ? 'Historical charts'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
     scroll.querySelectorAll('a').forEach(a => {
       const selected = a.textContent.endsWith(key) && !!key;

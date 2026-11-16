@@ -1,0 +1,438 @@
+{
+  "schema_version": 1,
+  "interpretation": "Sourced event dates; latest revised observations; retrospective analysis.",
+  "events": [
+    {
+      "date": "2008-11-25",
+      "label": "Fed agency/MBS purchases announced",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20081125b.htm",
+      "id": "event-2008-11-25",
+      "group": "fed-qe",
+      "dateKind": "announcement",
+      "context": "Purchase announcement during financial stress.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "T10Y2Y",
+        "STLFSI4",
+        "NFCI",
+        "WALCL",
+        "UNRATE",
+        "ICSA",
+        "DRALACBS",
+        "DRSFRMACBS",
+        "HOUST",
+        "PERMIT",
+        "MORTGAGE30US",
+        "DRTSCILM"
+      ],
+      "rationale": "Separate policy action, stress and later economic outcomes. Early saved OAS and dated P/E are unavailable.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "date": "2008-12-16",
+      "label": "Fed target range cut to 0\u20130.25%",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20081216b.htm",
+      "id": "event-2008-12-16",
+      "group": "fed-rates",
+      "dateKind": "announcement",
+      "context": "Target range cut to 0\u20130.25%.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "T10Y2Y",
+        "STLFSI4",
+        "NFCI",
+        "WALCL",
+        "UNRATE",
+        "ICSA",
+        "DRALACBS",
+        "DRSFRMACBS"
+      ],
+      "rationale": "Front-end rates, curve and stress are separate observations; subsequent labour outcomes are slower context.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "date": "2010-11-03",
+      "label": "Fed Treasury purchases announced (QE2)",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20101103a.htm",
+      "id": "event-2010-11-03",
+      "group": "fed-qe",
+      "dateKind": "announcement",
+      "context": "Additional Treasury purchases announced.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "WALCL",
+        "DGS10",
+        "DFII10",
+        "T10YIE",
+        "THREEFYTP10",
+        "WRESBAL",
+        "M2SL",
+        "MONTHLY:USD/SGD",
+        "UNRATE",
+        "HOUST"
+      ],
+      "rationale": "Balance-sheet expansion, real yields and inflation compensation are separate hypothesized channels.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "date": "2012-09-13",
+      "label": "Fed MBS purchases expanded (QE3)",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20120913a.htm",
+      "id": "event-2012-09-13",
+      "group": "fed-qe",
+      "dateKind": "announcement",
+      "context": "Expanded MBS purchase programme announced.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "WALCL",
+        "DGS10",
+        "DFII10",
+        "T10YIE",
+        "THREEFYTP10",
+        "WRESBAL",
+        "M2SL",
+        "MONTHLY:USD/SGD",
+        "UNRATE",
+        "HOUST"
+      ],
+      "rationale": "Concurrent changes do not identify a policy effect; monthly averages are not intraday quotes.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "date": "2013-12-18",
+      "label": "Fed asset-purchase taper announced",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20131218a.htm",
+      "id": "event-2013-12-18",
+      "group": "fed-qe",
+      "dateKind": "announcement",
+      "context": "Reduced purchase pace announced in December.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "DGS10",
+        "DFII10",
+        "T10YIE",
+        "THREEFYTP10",
+        "WALCL",
+        "T10Y2Y",
+        "DTWEXBGS",
+        "MONTHLY:USD/SGD",
+        "MORTGAGE30US"
+      ],
+      "rationale": "This is the December taper announcement, distinct from the May taper-tantrum episode.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "id": "snb-2015",
+      "group": "snb",
+      "date": "2015-01-15",
+      "label": "SNB ends EUR/CHF minimum exchange rate",
+      "url": "https://www.snb.ch/en/publications/communication/press-releases/2015/pre_20150115",
+      "dateKind": "announcement",
+      "context": "SNB discontinues the EUR/CHF minimum exchange rate.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "MONTHLY:USD/CHF",
+        "MONTHLY:CHF/SGD",
+        "DEXSZUS",
+        "DEXSIUS",
+        "DGS10",
+        "DTWEXBGS"
+      ],
+      "rationale": "FX quote direction is explicit. Monthly averages cannot measure the intraday shock. Swiss ordinary-listing candidates are research suggestions only; absent exact saved listing history stays unavailable.",
+      "suggestedShareBasket": [
+        "NESN SW",
+        "NOVN SW",
+        "UBSG SW"
+      ]
+    },
+    {
+      "date": "2015-12-16",
+      "label": "Fed raises target range",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20151216a.htm",
+      "id": "event-2015-12-16",
+      "group": "fed-rates",
+      "dateKind": "announcement",
+      "context": "Fed raises the target range after the zero-bound period.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "T10Y2Y",
+        "DTWEXBGS",
+        "MONTHLY:USD/SGD",
+        "DPSACBW027SBOG",
+        "DRTSCILM"
+      ],
+      "rationale": "Compare front-end yields, curve and currency; higher rates do not automatically benefit bank shares.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "date": "2017-09-20",
+      "label": "Fed balance-sheet runoff announced",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20170920a.htm",
+      "id": "event-2017-09-20",
+      "group": "fed-qe",
+      "dateKind": "announcement",
+      "context": "Balance-sheet normalization programme announced.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "WALCL",
+        "WRESBAL",
+        "RRPONTSYD",
+        "WTREGEN",
+        "DGS10",
+        "THREEFYTP10",
+        "EFFR",
+        "SOFR",
+        "DPSACBW027SBOG"
+      ],
+      "rationale": "Announcement and subsequent runoff are distinct; balance-sheet components retain their original units.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "id": "tariffs-2018",
+      "group": "trade",
+      "date": "2018-07-06",
+      "label": "Initial U.S. Section 301 China tariffs take effect",
+      "url": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products",
+      "dateKind": "effective",
+      "context": "Initial Section 301 China tariffs take effect.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "DTWEXBGS",
+        "MONTHLY:USD/CNY",
+        "INDPRO",
+        "PAYEMS",
+        "DGS10",
+        "NFCI"
+      ],
+      "rationale": "Trade-sensitive indicators supply context; no causal tariff model or fixed sector composite is implied.",
+      "suggestedShareBasket": [
+        "BABA US",
+        "AAPL US",
+        "CAT US"
+      ]
+    },
+    {
+      "date": "2020-03-15",
+      "label": "Fed pandemic rate cut and purchases",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200315a.htm",
+      "id": "event-2020-03-15",
+      "group": "fed-rates",
+      "dateKind": "announcement",
+      "context": "Emergency easing and asset purchases announced on Sunday.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "WALCL",
+        "ICSA",
+        "STLFSI4",
+        "NFCI",
+        "UNRATE",
+        "PAYEMS",
+        "GDPC1",
+        "M2SL",
+        "DPSACBW027SBOG"
+      ],
+      "rationale": "Previous and first following quote dates matter. Labour, GDP and money series have different reporting grains. Bank, technology and cyclical listing suggestions describe hypotheses, not established company effects.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "MSFT US",
+        "CAT US"
+      ]
+    },
+    {
+      "date": "2022-03-16",
+      "label": "Fed raises target range",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm",
+      "id": "event-2022-03-16",
+      "group": "fed-rates",
+      "dateKind": "announcement",
+      "context": "Policy-rate hiking cycle begins.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "DFII10",
+        "T10YIE",
+        "CPIAUCSL",
+        "CPILFESL",
+        "PCEPILFE",
+        "MORTGAGE30US",
+        "HOUST",
+        "T10Y2Y"
+      ],
+      "rationale": "Inflation indices are transformed using exact matching 12-month periods; charts label the transformation. Growth and bank candidates allow separate discount-rate and financing hypotheses.",
+      "suggestedShareBasket": [
+        "MSFT US",
+        "AAPL US",
+        "JPM US",
+        "BAC US"
+      ]
+    },
+    {
+      "id": "event-2022-06-15",
+      "date": "2022-06-15",
+      "label": "75bp inflation hike",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220615a.htm",
+      "group": "fed-rates",
+      "dateKind": "announcement",
+      "context": "Fed announces a 75 basis-point increase.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "DFII10",
+        "T10YIE",
+        "CPIAUCSL",
+        "CPILFESL",
+        "PCEPILFE",
+        "MORTGAGE30US",
+        "HOUST",
+        "T10Y2Y"
+      ],
+      "rationale": "Nominal yields, real yields and inflation compensation should be read separately. Growth and bank candidates allow separate discount-rate and financing hypotheses.",
+      "suggestedShareBasket": [
+        "MSFT US",
+        "AAPL US",
+        "JPM US",
+        "BAC US"
+      ]
+    },
+    {
+      "id": "btfp-2023",
+      "date": "2023-03-12",
+      "label": "Fed announces Bank Term Funding Program",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230312a.htm",
+      "group": "bank-funding",
+      "dateKind": "announcement",
+      "context": "Bank Term Funding Program announced on Sunday.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "DPSACBW027SBOG",
+        "WRESBAL",
+        "WALCL",
+        "STLFSI4",
+        "NFCI",
+        "DRTSCILM",
+        "CREACBM027SBOG",
+        "DRCRELEXFACBS",
+        "DRCRELEXFOBS",
+        "DRCRELEXFT100S"
+      ],
+      "rationale": "Sector data cannot identify an individual bank exposure. Saved OAS coverage begins November 2023. Available US large-bank listings are not regional-bank proxies.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "C US"
+      ]
+    },
+    {
+      "id": "event-2023-07-26",
+      "date": "2023-07-26",
+      "label": "Rates reach 5.25\u20135.50%",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20230726a.htm",
+      "group": "fed-rates",
+      "dateKind": "announcement",
+      "context": "Target range reaches 5.25\u20135.50%.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "T10Y2Y",
+        "DFII10",
+        "CPILFESL",
+        "UNRATE",
+        "SAHMREALTIME",
+        "TDSP",
+        "NY_Auto",
+        "NY_Student_Loan",
+        "NY_HELOC"
+      ],
+      "rationale": "Household and CRE observations are quarterly context, not an immediate market response.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    },
+    {
+      "date": "2024-09-18",
+      "label": "Fed cuts target range by 0.50 pp",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20240918a.htm",
+      "id": "event-2024-09-18",
+      "group": "fed-rates",
+      "dateKind": "announcement",
+      "context": "Fed announces a 50 basis-point rate cut.",
+      "mechanismHypothesis": "Policy and financial conditions may influence financing, valuations and later activity; these are hypotheses, not causal estimates.",
+      "indicatorIds": [
+        "EFFR",
+        "DGS2",
+        "DGS10",
+        "DFII10",
+        "T10Y2Y",
+        "BAMLH0A0HYM2",
+        "BAMLC0A0CM",
+        "UNRATE",
+        "SAHMREALTIME",
+        "TDSP",
+        "DRCRELEXFACBS"
+      ],
+      "rationale": "Separate yield movements, credit-spread changes and subsequent equity price changes.",
+      "suggestedShareBasket": [
+        "JPM US",
+        "BAC US",
+        "MSFT US",
+        "AAPL US"
+      ]
+    }
+  ]
+}
