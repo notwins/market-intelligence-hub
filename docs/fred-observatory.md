@@ -27,9 +27,9 @@ remain null in chart points. TIC's complete historical country/aggregate table
 is available in its raw rows; the current chart uses only its latest dated
 cross-section. The archive README records the omitted January 2007–2011 columns.
 
-Both monitor views fetch the exact same dated `monitor.json`. They do not
+Both monitor views fetch the latest catalogue and the same dated `monitor.json` it names. They do not
 fetch data from FRED in visitors' browsers, change the separate daily FRED FX
-feed, or imply an automatic refresh of the full collection. Load failures are
+feed, and the monthly collection refresh is documented in [fred-monthly-refresh.md](fred-monthly-refresh.md). Load failures are
 visible and do not switch to demonstration histories.
 
 For future browser charts:
@@ -64,3 +64,8 @@ nonmissing observations. Trending measures use labelled growth transforms.
 Fixed current-baseline chart bands are descriptive rather than rolling
 backtests. Both signs receive attention at absolute z >=1 and >=2.
 Observation dates, limited histories and provider definitions are shown.
+
+The full collection now refreshes monthly with a three-month overlap. Older
+observations and dated snapshots are retained; corrected overlap rows replace
+duplicate identities. Source checks, failures and revisions are recorded in the
+current catalogue and refresh receipt.
