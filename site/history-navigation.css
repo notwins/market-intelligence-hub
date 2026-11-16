@@ -15,6 +15,7 @@
 .rail nav .rail-group :is(a,button):hover{background:#ffffff0b;color:#fff}
 .rail nav .rail-group :is(a,button).active,.rail nav .rail-group a[aria-current=page]{background:#294f61;color:#fff;border-color:#466979}
 .rail nav .rail-group .rail-group-label{margin:0;padding:7px 10px;color:#9fb7c6;font:700 10px/1.4 system-ui,sans-serif;letter-spacing:.13em;text-transform:uppercase}
+.rail nav .rail-group-label a,.rail nav .rail-group-label a.active{display:inline-flex;width:auto;min-height:20px;padding:0;border:0;border-radius:0;background:transparent;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit}
 .rail nav .rail-history{padding-block:10px}
 .rail nav .rail-history:first-child{padding-top:0;margin-top:0}
 .rail-history .rail-history-section{margin:3px 0 6px;padding:0;border:0;background:transparent}

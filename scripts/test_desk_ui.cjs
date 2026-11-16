@@ -82,7 +82,7 @@ test('history directory shares three groups and all14 routes across rail, toolba
  const all=nav.groups.flatMap(g=>g.items);assert.equal(all.length,14);assert.equal(new Set(all.map(i=>i[0])).size,14);
  const rail=nav.sidebar(),menu=nav.toolbar('yield'),home=nav.html();
  for(const item of all){assert(rail.includes('data-history-id="'+item[0]+'"'));assert(menu.includes(item[3]?'href="'+item[3]+'"':'data-tab="'+item[0]+'"'));assert(home.includes(item[3]||'v4.html#history/'+item[0]));}
- assert(menu.includes('data-active-group="true"'));assert(menu.includes('data-tab="yield" aria-pressed="true"'));assert(menu.includes('focusable="false"'));assert(rail.includes('id="rail-group-history">History'));
+ assert(menu.includes('data-active-group="true"'));assert(menu.includes('data-tab="yield" aria-pressed="true"'));assert(menu.includes('focusable="false"'));assert(rail.includes('id="rail-group-history"><a href="#history" data-view="history">History</a>'));
  const html=fs.readFileSync('site/v4.html','utf8');assert(html.includes(rail));assert(!html.includes('class="rail-subsection"><span>Fred-'));
  for(const p of ['v4.html','desk.html'])assert(fs.readFileSync('site/'+p,'utf8').includes('menu=20261116.groups1'));
 });
