@@ -33,6 +33,15 @@ downloadable PDF, one SI per page. Exports are image-based for layout and Unicod
 fidelity. No external PDF service or user upload is involved. Maximum collection:
 30 pages. Unsaved editor changes disable export until applied.
 
+The review area provides Apply/Discard controls, a missing-data summary and a
+fit/enlarge preview toggle. Full entered company descriptions are retained in
+four-share exports. Downloads have persistent Download/Open links (including a
+phone Save to Files hint); changing terms invalidates the previously generated
+file. Restored pages wait for enrichment before export, with bounded data-load
+and exporter waits. A missing feed leaves explicit unavailable values and allows
+manual terms to export. New-page, reference-add, backup and import actions protect
+unapplied edits. The reference table keeps Add page visible during sideways scroll.
+
 Run `node scripts/test_si_beta2.cjs`, existing SI/content/navigation checks and
 the full Pages artifact validation. Visually inspect exported two/four-share
 pages and confirm selected/multipage counts before publication. Roll back only

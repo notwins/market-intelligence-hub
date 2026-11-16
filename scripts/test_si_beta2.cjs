@@ -8,4 +8,8 @@ assert.equal(C.reference({...p,date:'2026-11-01'},{fixing:null},{daily:[['2026-1
 assert.equal(C.reference(p,{fixing:null},{quote:{close:30,date:'2026-11-02'}}).value,30);
 const svg=C.svg({...p,issuer:'<script>alert(1)</script>',notes:'<img onerror=alert(1)>',shares:[{symbol:'TEST',fixing:null,name:'A & B',description:''}]});assert(!svg.includes('<script>'));assert(!svg.includes('<img'));assert(svg.includes('A &amp; B'));assert(svg.includes('Price history unavailable'));assert(svg.includes('88.06%'));assert(C.svg({...p,date:'2026-11-12'}).includes('Reference date: 2026-11-12'));assert(svg.includes('Capital is at risk'));assert(!svg.includes('NaN'));assert(!svg.includes('Bloomberg'));
 const html=fs.readFileSync('site/si-beta2.html','utf8'),app=fs.readFileSync('site/si-beta2.js','utf8');for(const id of ['si-form','page-tabs','pdf-one','pdf-all','library-rows','restore-pages'])assert(html.includes('id="'+id+'"'));assert(app.includes("market-si-beta2-v1"));assert(!app.includes('method:\'POST\''));assert(app.includes('structuredClone(selected)'));assert(app.includes('C.validate(p)'));assert(html.includes('si-beta2.css'));assert(fs.existsSync('site/vendor/pdf-lib-LICENSE.md'));
-console.log('PASS SI beta 2: precise barriers, step-down schedule, missing dates/terms, preserved references, escaping, blank defaults and PDF controls');
+const description='A complete company description should survive the four-share PDF layout. '.repeat(3)+'ENDINGCHECK';
+const four=C.svg({...p,shares:['ONE','TWO','THREE','FOUR'].map(symbol=>({...p.shares[0],symbol,description}))});
+assert.equal((four.match(/ENDINGCHECK/g)||[]).length,4,'All four descriptions must retain the ending');assert(!four.includes('…'),'Descriptions must not be silently truncated');
+console.log('PASS SI beta 2: precise barriers, step-down schedule, missing dates/terms, preserved references, escaping, complete descriptions and PDF controls');
+require('./test_si_beta2_state.cjs');
