@@ -41,7 +41,7 @@ for (const n of all(root)) if (n.attrs.id) ids.set(n.attrs.id, n);
 const doc = {querySelector: s => root.querySelector(s), getElementById: id => ids.get(id)};
 const globals = {};
 vm.runInNewContext(fs.readFileSync('site/site-map.js', 'utf8'), {document: doc, addEventListener: (name, fn) => {globals[name] = fn;}});
-const input = ids.get('map-search'), status = ids.get('map-status'), families = root.querySelectorAll('.family-branch'), details = root.querySelectorAll('details');
+const input = ids.get('map-search'), status = ids.get('map-status'), families = root.querySelectorAll('.family-branch'), details = ids.get('site-tree').querySelectorAll('details');
 const nodes = root.querySelectorAll('.map-node');
 const click = id => ids.get(id).events.click();
 const search = value => {input.value = value; input.events.input();};

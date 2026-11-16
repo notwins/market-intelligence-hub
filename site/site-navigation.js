@@ -3,7 +3,7 @@
   'use strict';
   // Reuse this existing loader on current research landings without rewriting
   // their hash-locked original HTML bytes.
-  try{if(document.head&&!document.getElementById('mih-blueprint-access')){const script=document.createElement('script');script.id='mih-blueprint-access';script.src=new URL('blueprint-access.js',document.currentScript.src).href;script.defer=true;document.head.append(script);}}catch{}
+  try{if(document.head&&!document.getElementById('mih-blueprint-access')){const script=document.createElement('script');script.id='mih-blueprint-access';script.src=new URL('blueprint-access.js?v=20261116.settings2',document.currentScript.src).href;script.defer=true;document.head.append(script);}}catch{}
   if (!document.querySelector('[data-site-map]') || !window.HTMLDialogElement) return;
   const mapURL = new URL('site-map.html', document.currentScript.src);
   const blueprintURL = new URL('blueprint.html', mapURL);

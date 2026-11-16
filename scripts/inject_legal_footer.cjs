@@ -26,7 +26,7 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   }
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
-  const bootstrap=path.posix.relative(directory,'blueprint-access.js');
+  const bootstrap=path.posix.relative(directory,'blueprint-access.js?v=20261116.settings2');
   if(access&&!content.includes('id="mih-blueprint-access"'))content=content.replace(/<\/head\s*>/i,'<script id="mih-blueprint-access" src="'+bootstrap+'" defer></script></head>');
   if (!/<\/head\s*>/i.test(content)) throw new Error('Cannot attach footer stylesheet: ' + relative);
   if(!content.includes('<link rel="stylesheet" href="'+css+'">'))content = content.replace(/<\/head\s*>/i, '<link rel="stylesheet" href="' + css + '"></head>');
@@ -35,7 +35,7 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
     'Market data and simulations may be delayed, hypothetical or incomplete.</p>' +
     '<nav aria-label="Legal and disclosure information">' +
     links.map(([file, title]) => '<a href="' + legalBase + file + '">' + title + '</a>').join(' ') +
-    '</nav>'+(access?'<nav class="mih-blueprint-nav" aria-label="Blueprint navigation" data-blueprint-footer><a href="'+path.posix.relative(directory,'blueprint.html')+'" target="_blank" rel="noopener noreferrer">◈ System Atlas</a><a href="'+access.owner_url+'" target="_blank" rel="noopener noreferrer">🔒 Private owner blueprint · password required</a></nav>':'')+'</div></footer>';
+    '</nav>'+(access?'<details class="mih-blueprint-nav" data-blueprint-footer><summary>Settings</summary><nav aria-label="Site tools"><a href="'+path.posix.relative(directory,'blueprint.html')+'" target="_blank" rel="noopener noreferrer">◈ System Atlas</a><a href="'+access.owner_url+'" target="_blank" rel="noopener noreferrer">🔒 Private owner blueprint · password required</a></nav></details>':'')+'</div></footer>';
   if(content.includes(marker)){const start=content.lastIndexOf(marker),end=content.indexOf('</footer>',start);if(end<0)throw Error('Existing footer is incomplete');content=content.slice(0,start)+footer+content.slice(end+9);fs.writeFileSync(filename,content,'utf8');unchanged++;continue;}
   const bodies = [...content.matchAll(/<\/body\s*>/gi)], endings = [...content.matchAll(/<\/html\s*>/gi)];
   if (!bodies.length && !endings.length) throw new Error('Cannot place footer at document end: ' + relative);

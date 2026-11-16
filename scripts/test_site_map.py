@@ -26,7 +26,8 @@ class SiteMapTests(unittest.TestCase):
         cls.html = (ROOT / 'site/site-map.html').read_text()
         cls.css = (ROOT / 'site/site-map.css').read_text()
         cls.js = (ROOT / 'site/site-map.js').read_text()
-        cls.parsed = HTML(cls.html)
+        # Footer Settings is a separate disclosure from the map tree.
+        cls.parsed = HTML(cls.html.split('<!-- MIH_LEGAL_FOOTER_V1 -->')[0])
         cls.nodes = [attrs for tag, attrs in cls.parsed.tags if tag == 'a' and attrs.get('class') == 'map-link']
 
     def test_original_destinations_and_true_parent_routes(self):
