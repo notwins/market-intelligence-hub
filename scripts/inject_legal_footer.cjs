@@ -19,6 +19,11 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   if (relative.startsWith('legal/')) { legal++; continue; }
   let content = fs.readFileSync(filename, 'utf8');
   const directory = path.posix.dirname(relative);
+  // Shared navigation belongs to mutable UI shells, never frozen reports.
+  if (/^(?:desk\.html|v4\.html|fred\/(?:index|market-desk|risk-observatory|data)\.html|market-understanding\/index\.html)$/.test(relative) && !content.includes('id="hub-primary-assets"')) {
+    const asset = type => path.posix.relative(directory, 'Primary Navigation - Type ' + type + ' - 16-Nov-16.06.' + type.toLowerCase());
+    content = content.replace(/<\/head\s*>/i, '<link id="hub-primary-assets" rel="stylesheet" href="' + asset('CSS') + '"><script defer src="' + asset('JS') + '"></script><script defer src="' + path.posix.relative(directory, 'Mobile Charts - Type JS - 16-Nov-16.06.js') + '"></script></head>');
+  }
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
   const bootstrap=path.posix.relative(directory,'blueprint-access.js');

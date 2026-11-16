@@ -51,7 +51,7 @@ console.log('Multi-share common-date normalization, calendar earnings markers, s
  assert(result.innerHTML.includes('Forward P/E: 15'));
  assert(result.innerHTML.includes('Historical feed close'));
  assert(result.innerHTML.includes('120.00 USD'),'historical endpoint remains the original close');
- assert(result.innerHTML.indexOf('Selected prices')<result.innerHTML.indexOf('mp-comparison-dates'));
+ assert(result.innerHTML.indexOf('mp-comparison-dates')<result.innerHTML.indexOf('Selected prices'), 'The historical chart precedes detailed valuation cards');
  assert.deepEqual(plots.at(-1)[0].points,daily);
  assert(result.innerHTML.includes('+20.00%'),'chart return remains 120 / 100 - 1');
  assert.equal(JSON.stringify(daily),before);
@@ -59,5 +59,16 @@ console.log('Multi-share common-date normalization, calendar earnings markers, s
  listeners['market-prices-updated'][0]();await settle();
  assert(result.innerHTML.includes('600.00'));assert(result.innerHTML.includes('BOS refreshed'));
  assert.deepEqual(plots.at(-1)[0].points,daily);assert(result.innerHTML.includes('+20.00%'));
- console.log('PASS preferred quote and valuation repaint above unchanged historical chart, closes and returns');
+ console.log('PASS chart before quote detail; preferred source, historical closes and returns retained');
 })().catch(e=>{console.error(e);process.exitCode=1;});
+
+// The phone plot preserves both endpoint dates and every original observation.
+for(const width of [280,308,375,680]){
+ const mobile=prices.svg(compared.lines,[],events,{percent:true,expanded:true,width});
+ assert(mobile.includes(`viewBox="0 0 ${width} 326"`));
+ assert.equal((mobile.match(/class="mp-point /g)||[]).length,compared.lines.reduce((n,l)=>n+l.points.length,0));
+ const points=[...mobile.matchAll(/<polyline[^>]*points="([^"]+)"/g)].map(m=>m[1].split(' ').map(p=>p.split(',').map(Number)));
+ for(const line of points){assert.equal(line[0][0],width<480?52:68);assert.equal(line.at(-1)[0],width-30);}
+ assert(mobile.includes('2026-10-31'));
+}
+console.log('PASS responsive share charts preserve dates, points and endpoints at four widths');
