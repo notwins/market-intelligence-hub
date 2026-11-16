@@ -2,10 +2,10 @@
   "schema_version": 1,
   "classification": "rounded_historical_reference",
   "live_quotes": false,
-  "source_capture_date": "2026-11-05",
+  "source_capture_date": "2026-11-13",
   "source_date_range": [
     "2026-10-30",
-    "2026-11-05"
+    "2026-11-13"
   ],
   "source_verification": "photo_transcribed_unverified",
   "tenor_unit": "unconfirmed",
@@ -17,8 +17,8 @@
     "ki": "up",
     "coupon": "down"
   },
-  "record_count": 225,
-  "additional_review_count": 13,
+  "record_count": 246,
+  "additional_review_count": 23,
   "rows": [
     {
       "reference": "SI-001",
@@ -3658,6 +3658,384 @@
       "ko_pct": 98,
       "ki_pct": 60,
       "additional_review": false
+    },
+    {
+      "reference": "SI-226",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 71,
+      "ko_pct": 100,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-227",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 72,
+      "ko_pct": 99,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-228",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 73,
+      "ko_pct": 98,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-229",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 75,
+      "ko_pct": 97,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-230",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 76,
+      "ko_pct": 96,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-231",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 78,
+      "ko_pct": 95,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-232",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 80,
+      "ko_pct": 94,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-233",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 82,
+      "ko_pct": 93,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-234",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 85,
+      "ko_pct": 92,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-235",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 89,
+      "ko_pct": 91,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-236",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": "2026-11-13",
+      "currency": "USD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 94,
+      "ko_pct": 90,
+      "ki_pct": 70,
+      "additional_review": false,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-237",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 78,
+      "ko_pct": 100,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-238",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 79,
+      "ko_pct": 99,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-239",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 81,
+      "ko_pct": 98,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-240",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 82,
+      "ko_pct": 97,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-241",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 84,
+      "ko_pct": 96,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-242",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 86,
+      "ko_pct": 95,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-243",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 89,
+      "ko_pct": 94,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-244",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 92,
+      "ko_pct": 93,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-245",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 96,
+      "ko_pct": 92,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
+    },
+    {
+      "reference": "SI-246",
+      "shares": [
+        "NVDA",
+        "TSM"
+      ],
+      "source_date": null,
+      "currency": "SGD",
+      "tenor_source_value": 11,
+      "coupon_pct": 8,
+      "strike_pct": 101,
+      "ko_pct": 91,
+      "ki_pct": 75,
+      "additional_review": true,
+      "source_kind": "indicative_pricing",
+      "tenor_unit": "months",
+      "coupon_basis": "per_annum"
     }
   ]
 }
