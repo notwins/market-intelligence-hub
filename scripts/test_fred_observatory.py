@@ -24,7 +24,7 @@ class FredArchiveTests(unittest.TestCase):
         self.assertEqual(len({row['id'] for row in self.catalog['datasets']}), 74)
         for row in self.catalog['datasets']:
             for key in ['csv_url', 'json_url']:
-                self.assertTrue(row[key].startswith(self.catalog['snapshot'] + '/'))
+                self.assertTrue(row[key].startswith(self.catalog.get('archive_version', self.catalog['snapshot']) + '/'))
                 self.assertNotIn('..', row[key])
                 self.assertTrue((BASE / row[key]).is_file())
             self.assertIn(self.catalog['snapshot'], row['citation'])
@@ -63,12 +63,41 @@ class FredArchiveTests(unittest.TestCase):
     def test_both_views_use_same_archive_and_offer_return_paths(self):
         for filename in ['market-desk.html', 'risk-observatory.html']:
             text = (ROOT / 'site/fred' / filename).read_text(encoding='utf-8')
-            self.assertIn("fetch('../data/fred/" + self.catalog['monitor_url'] + "')", text)
+            self.assertIn("FredArchive.catalog()", text)
+            self.assertIn("FredArchive.resolve(catalog.monitor_url)", text)
             self.assertIn('href="../desk.html"', text)
             self.assertIn('href="data.html"', text)
             self.assertNotIn('C:\\Users', text)
             self.assertNotIn('The Market Intelligence Hub has not been modified', text)
             self.assertIn('window.MONITOR=', text)
+
+    def test_refresh_preserves_prior_rows_and_accounts_for_every_correction(self):
+        if not self.catalog.get('refresh_report_url'):
+            self.skipTest('Initial, pre-refresh archive')
+        report=json.loads((BASE/self.catalog['refresh_report_url']).read_text(encoding='utf-8'))
+        previous_path=BASE/report['previous_archive']/'catalog.json'
+        self.assertEqual(hashlib.sha256(previous_path.read_bytes()).hexdigest(),report['previous_catalog_sha256'])
+        previous=json.loads(previous_path.read_text(encoding='utf-8'))
+        revisions=json.loads((BASE/self.catalog['revisions_url']).read_text(encoding='utf-8'))
+        self.assertEqual(len(revisions),report['revised'])
+        stats={row['id']:row for row in report['datasets']}
+        current={row['id']:row for row in self.catalog['datasets']}
+        for old in previous['datasets']:
+            raw=(BASE/old['csv_url']).read_bytes()
+            self.assertEqual(hashlib.sha256(raw).hexdigest(),old['sha256'])
+            new=current[old['id']]
+            keys=['competitiveAuctionCloseDate','cusip'] if old['id']=='AUCTION' else ['observation_date','country_or_aggregate'] if old['id']=='TIC' else ['observation_date']
+            identify=lambda row:tuple(row[name][:10] if name=='competitiveAuctionCloseDate' else row[name] for name in keys)
+            before={identify(row):row for row in csv.DictReader(io.StringIO(raw.decode('utf-8-sig')))}
+            after={identify(row):row for row in csv.DictReader(io.StringIO((BASE/new['csv_url']).read_text(encoding='utf-8-sig')))}
+            self.assertTrue(before.keys()<=after.keys(),old['id'])
+            changed={tuple(row['key']):row for row in revisions if row['id']==old['id']}
+            self.assertEqual(len(after)-len(before),stats[old['id']].get('added',0))
+            for identity,row in before.items():
+                if identity in changed:
+                    self.assertEqual(changed[identity]['previous'],row)
+                    self.assertEqual(changed[identity]['replacement'],after[identity])
+                else:self.assertEqual(row,after[identity])
 
 
 if __name__ == '__main__':

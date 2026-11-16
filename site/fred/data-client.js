@@ -4,7 +4,7 @@
   const base = new URL('../data/fred/', document.currentScript.src);
   let pending;
   async function json(url) {
-    const response = await fetch(url);
+    const response = await fetch(url,{cache:'no-store'});
     if (!response.ok) throw Error('Archive HTTP ' + response.status);
     return response.json();
   }

@@ -27,12 +27,15 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, separators=(',', ':'), allow_nan=False) + '\n', encoding='utf-8')
 
 
-def build(raw, packed):
+def build(raw, packed, views=True):
     raw = Path(raw).resolve()
     monitor = json.loads(Path(packed).read_text(encoding='utf-8'))
     snapshot = monitor['snapshot']
+    version = monitor.get('archiveVersion', snapshot)
+    if not version.startswith(snapshot) or any(c not in '0123456789-T' for c in version):
+        raise ValueError('Invalid dated archive version')
     base = ROOT / 'site/data/fred'
-    dated = base / snapshot
+    dated = base / version
     if dated.exists():
         raise ValueError('Snapshot already exists; publish a new dated snapshot rather than replacing cited files')
     (dated / 'csv').mkdir(parents=True)
@@ -71,8 +74,9 @@ def build(raw, packed):
         entries.append((entry, source, headers, rows))
     datasets = []
     for entry, source, headers, rows in entries:
-        entry['csv_url'] = f'{snapshot}/csv/{source.name}'
-        entry['json_url'] = f'{snapshot}/series/{entry["id"]}.json'
+        entry.update(monitor.get('sourceMetadata', {}).get(entry['id'], {}))
+        entry['csv_url'] = f'{version}/csv/{source.name}'
+        entry['json_url'] = f'{version}/series/{entry["id"]}.json'
         entry['citation'] = f'{entry["provider"]}, {entry["title"]} ({entry["id"]}), observations {entry["first"]} to {entry["last"]}, saved {snapshot}. Original source: {entry["source_url"]}'
         shutil.copyfile(source, dated / 'csv' / source.name)
         # Raw strings preserve every CSV field; numeric points are a separate convenience view.
@@ -84,11 +88,11 @@ def build(raw, packed):
     for source in [raw / 'FRED_Download_Inventory.csv', raw / 'External sources/External_Download_Inventory.csv', raw / 'README.txt']:
         shutil.copyfile(source, dated / source.name)
     write_json(dated / 'monitor.json', monitor)
-    catalog = dict(schema_version=1, snapshot=snapshot, status='Saved snapshot; observation dates vary by series',
+    catalog = dict(schema_version=1, snapshot=snapshot, archive_version=version, checked_at=monitor.get('checkedAt'), refresh=monitor.get('refreshSummary'), status='Saved snapshot; observation dates vary by series',
                    dataset_count=len(datasets), fred_count=len(inventory), datasets=datasets,
-                   monitor_url=f'{snapshot}/monitor.json', archive_url=f'{snapshot}/raw-data.zip',
-                   fred_inventory_url=f'{snapshot}/FRED_Download_Inventory.csv',
-                   external_inventory_url=f'{snapshot}/External_Download_Inventory.csv', notes_url=f'{snapshot}/README.txt')
+                   monitor_url=f'{version}/monitor.json', archive_url=f'{version}/raw-data.zip',
+                   fred_inventory_url=f'{version}/FRED_Download_Inventory.csv',
+                   external_inventory_url=f'{version}/External_Download_Inventory.csv', notes_url=f'{version}/README.txt')
     write_json(dated / 'catalog.json', catalog)
     write_json(base / 'catalog.json', catalog)
     with zipfile.ZipFile(dated / 'raw-data.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
@@ -96,8 +100,9 @@ def build(raw, packed):
             archive.write(source, 'csv/' + source.name)
         for name in ['FRED_Download_Inventory.csv', 'External_Download_Inventory.csv', 'README.txt', 'catalog.json']:
             archive.write(dated / name, name)
-    write_views(snapshot)
-    print(f'Packaged {len(datasets)} datasets, {sum(d["rows"] for d in datasets):,} rows; snapshot {snapshot}')
+    if views: write_views(snapshot)
+    print(f'Packaged {len(datasets)} datasets, {sum(d["rows"] for d in datasets):,} rows; snapshot {version}')
+    return catalog
 
 
 def write_views(snapshot):
@@ -111,7 +116,7 @@ def write_views(snapshot):
         css += '\n.fred-hub-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:7px 22px;background:#e8eeeb;border-bottom:1px solid #d6e0dc;font:12px/1.5 system-ui;color:#284652}.fred-hub-links a{color:inherit}.fred-load-error{padding:30px;max-width:760px;margin:20px auto;background:#fbecdf;color:#6b4029;border:1px solid #ceab88;border-radius:8px}'
         engine = (TEMPLATE / 'engine.js').read_text(encoding='utf-8')
         engine = engine.replace("const DATA=JSON.parse(document.getElementById('dataset').textContent), S=DATA.series;", 'const S=DATA.series;')
-        hosted = "(async()=>{try{const response=await fetch('../data/fred/" + snapshot + "/monitor.json');if(!response.ok)throw Error('Data HTTP '+response.status);const DATA=await response.json();if(DATA.snapshot!=='" + snapshot + "'||DATA.fredIds.length!==69)throw Error('Unexpected archive snapshot');\n" + engine + "\n}catch(error){const note=document.createElement('p');note.className='fred-load-error';note.setAttribute('role','alert');note.textContent='The FRED snapshot could not load. Reload this page or open the Data archive. '+error.message;document.body.prepend(note);}})();"
+        hosted = "(async()=>{try{const catalog=await FredArchive.catalog();if(catalog.schema_version!==1||!catalog.monitor_url||catalog.monitor_url.includes('..'))throw Error('Invalid archive catalogue');const response=await fetch(FredArchive.resolve(catalog.monitor_url));if(!response.ok)throw Error('Data HTTP '+response.status);const DATA=await response.json();if(DATA.snapshot!==catalog.snapshot||DATA.fredIds.length!==69)throw Error('Unexpected archive snapshot');\n" + engine + "\n}catch(error){const note=document.createElement('p');note.className='fred-load-error';note.setAttribute('role','alert');note.textContent='The FRED snapshot could not load. Reload this page or open the Data archive. '+error.message;document.body.prepend(note);}})();"
         page = page.replace('<!--STYLES-->', '<style>' + css + '</style>').replace('<!--DATA-->', '').replace('<!--ENGINE-->', '<script>' + hosted + '</script>')
         page = page.replace('01-market-desk.html', 'market-desk.html').replace('02-risk-observatory.html', 'risk-observatory.html')
         page = page.replace('Level deviation', 'Metric deviation').replace('Latest level</option>', 'Latest metric</option>')
@@ -119,6 +124,8 @@ def write_views(snapshot):
         page = page.replace('LOCAL RESEARCH PREVIEW', 'FRED OBSERVATORY').replace('Local research preview', 'FRED Observatory')
         start = page.index('>', page.index('<body')) + 1
         page = page[:start] + '<nav class="fred-hub-links" aria-label="FRED navigation"><a href="../desk.html">← Market Intel</a><a href="index.html">FRED Observatory</a><a href="market-desk.html">Market Desk</a><a href="risk-observatory.html">Risk Observatory</a><a href="data.html">Data archive · 74 datasets</a></nav>' + page[start:]
+        page = page.replace('</head>', '<script src="data-client.js"></script><script defer src="snapshot.js"></script></head>')
+        page = page.replace('16 NOV 2026', '<span data-fred-date>Loading…</span>').replace('16 Nov 2026', '<span data-fred-date>Loading…</span>')
         page = '\n'.join(line if line.strip() else '' for line in page.split('\n'))
         (views / filename).write_text(page, encoding='utf-8')
 
