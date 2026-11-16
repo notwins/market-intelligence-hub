@@ -25,7 +25,7 @@ def commit(work):
     if any(line.startswith('D') for line in git('diff','--cached','--name-status').splitlines()):raise ValueError('A refresh must not delete prior data')
     subprocess.run(['git','config','user.name','github-actions[bot]'],cwd=ROOT,check=True)
     subprocess.run(['git','config','user.email','41898282+github-actions[bot]@users.noreply.github.com'],cwd=ROOT,check=True)
-    subprocess.run(['git','commit','-m',f'Refresh FRED Observatory: {report["checked_count"]}/74 checked, {report["added"]} added, {report["revised"]} revised'],cwd=ROOT,check=True)
+    subprocess.run(['git','commit','-m',f'Refresh FRED Observatory: {report["checked_count"]}/{catalog["dataset_count"]} checked, {report["added"]} added, {report["revised"]} revised'],cwd=ROOT,check=True)
     print(git('rev-parse','HEAD'))
 
 

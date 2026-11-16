@@ -18,6 +18,10 @@ Observation identities are:
 - FRED and NY Fed: native observation date.
 - Treasury auctions: auction calendar date plus CUSIP.
 - TIC: month plus the exact country/aggregate label.
+- Fed Treasury tables: quarter-end date plus source series code.
+- Census: source month plus exact country code.
+- Debt-to-the-Penny: record date; MSPD: month-end plus source line number.
+- OFS archived table: quarter-end; OFS API: holding date, publication record date and owner.
 
 New explicit source rows replace duplicate identities, including a source's
 explicit missing value. Missing rows do not delete older history. Numbers retain
@@ -64,11 +68,15 @@ and flagged in the job result after publication.
 ## Local mirror
 
 The companion monthly Codex heartbeat runs at 09:00 Singapore on the first.
-It verifies the public catalogue and ZIP, checks all 74 checksums and syncs the
+It verifies the public catalogue and ZIP, checks every catalogue-defined checksum and syncs the
 full CSVs, inventories, notes and receipts to the owner's configured raw folder.
 It uses `scripts/sync_fred_observatory.py --destination RAW_FOLDER`; prior local
 files are backed up before replacement. It does not create another source-refresh
 schedule or publish UI. A stale/partial cloud result must be reported as such.
+
+The expanded 155-file collection and single-page record/sigma viewer are described
+in [fred-all-datasets.md](fred-all-datasets.md). Unchanged objects can reuse an
+earlier immutable dated URL; every bundle still contains all current full CSVs.
 
 The public verifier can also run independently:
 

@@ -34,7 +34,7 @@ def digest(value):
 def fetch(url):
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(urllib.request.Request(url), timeout=40) as response:
+            with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'}), timeout=40) as response:
                 return response.read()
         except Exception:
             if attempt == 2:
@@ -105,6 +105,18 @@ def merge_rows(old, new, keys):
             unchanged += 1
         current[identity] = row
     return [current[k] for k in sorted(current)], dict(added=added, revised=len(changes), unchanged=unchanged), changes
+
+
+def observation_keys(entry):
+    sid=entry['id']
+    if sid=='AUCTION':return ['competitiveAuctionCloseDate','cusip']
+    if sid=='TIC':return ['observation_date','country_or_aggregate']
+    if sid.startswith('FED_TREASURY_'):return ['observation_date','series_code']
+    if sid=='CENSUS_GOODS_TRADE_COUNTRIES':return ['observation_date','country_code']
+    if sid.startswith('TREASURY_MSPD_'):return ['record_date','src_line_nbr']
+    if sid=='TREASURY_DEBT_PENNY':return ['record_date']
+    if sid=='TREASURY_OFS2_PUBLICATIONS':return ['observation_date','record_date','securities_owner']
+    return ['observation_date']
 
 
 class Tables(HTMLParser):
@@ -257,7 +269,8 @@ def run(work, now=None, fetcher=None):
         if entry['provider']=='FRED': return fred(entry,today)
         if entry['id']=='AUCTION': return treasury(entry,today,old_data[entry['id']][0])
         if entry['id']=='TIC': return tic(entry,today,old_data[entry['id']][0])
-        raise ValueError('Unknown source')
+        from refresh_fred_extra_sources import fetch_dataset
+        return fetch_dataset(entry,today,old_data[entry['id']][0],fetch,query_start)
     jobs = [entry for entry in entries.values() if not entry['id'].startswith('NY_')]
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
         tasks = {pool.submit(source,entry):entry['id'] for entry in jobs}
@@ -265,7 +278,7 @@ def run(work, now=None, fetcher=None):
             sid = tasks[task]
             try: incoming[sid] = task.result()
             except Exception as error: failures[sid] = f'{type(error).__name__}: {error}'
-            if (len(incoming)+len(failures))%10==0: print(f'Checked {len(incoming)+len(failures)}/71 source exports',flush=True)
+            if (len(incoming)+len(failures))%10==0: print(f'Checked {len(incoming)+len(failures)}/{len(jobs)} source exports',flush=True)
     try:
         if fetcher:
             for sid in ['NY_Auto','NY_Student_Loan','NY_HELOC']: incoming[sid] = fetcher(entries[sid],today,old_data[sid][0])
@@ -299,7 +312,7 @@ def run(work, now=None, fetcher=None):
                                 download_url=result['source_url'],sha256=digest(dest.read_bytes()),transformation='Native source values; overlap merged by observation date; newest explicit source row wins')
                     for name in ['source_updated_date','source_updated_time']:
                         if result.get(name): meta[name]=result[name]
-                if sid in monitor['series']:
+                if sid in monitor['series'] and (entry['provider']=='FRED' or sid.startswith('NY_') or sid=='AUCTION'):
                     series=monitor['series'][sid]
                     date_key,value_key=('competitiveAuctionCloseDate','bidToCoverRatio') if sid=='AUCTION' else ('observation_date',sid if sid in fred_meta else 'value')
                     series['points']=[[row[date_key][:10],float(row[value_key]) if row[value_key] not in ('','.') else None] for row in merged]
@@ -329,7 +342,9 @@ def run(work, now=None, fetcher=None):
                 match=next((entry for entry in entries.values() if entry['filename']==row.get('filename')),None)
                 if match:
                     records=parse_csv((raw_dir/'External sources'/row['filename']).read_bytes())[1];date_key='competitiveAuctionCloseDate' if match['id']=='AUCTION' else 'observation_date'
+                    date_key='record_date' if match['id'].startswith('TREASURY_MSPD_') or match['id']=='TREASURY_DEBT_PENNY' else date_key
                     dates=sorted(r[date_key][:10] for r in records);row.update(first_observation=dates[0],last_observation=dates[-1],rows=str(len(records)))
+                    if source_meta[match['id']]['refresh_status']=='checked':row.update(retrieved_at=now.isoformat(),sha256=digest((raw_dir/'External sources'/row['filename']).read_bytes()))
         dest=raw_dir/('FRED_Download_Inventory.csv' if key=='fred_inventory_url' else 'External sources/External_Download_Inventory.csv');dest.write_bytes(csv_bytes(fields,rows))
     note='\n\nMONTHLY REFRESH '+now.isoformat()+'\nLatest three calendar months fetched; lagged latest source periods included. Native values merged by observation date, TIC date/country, auction date/CUSIP. Fresh explicit rows replace duplicates, including source-missing values. Older observations remain. Prior published snapshots are unchanged. See refresh-report.json for source outcomes and revisions.json for corrected rows.\n'
     baseline=(raw_dir/'README.txt').read_text(encoding='utf-8').split('\nINITIAL DOWNLOAD NOTES\n',1)[-1].split('\n\nMONTHLY REFRESH',1)[0]
@@ -357,7 +372,7 @@ def sync_local(work, destination):
 
 
 def package(work):
-    from build_fred_observatory import build, write_json
+    from build_fred_observatory import build, write_json, write_bundle
     work=Path(work).resolve();report=json.loads((work/'refresh-report.json').read_text(encoding='utf-8'))
     report['matched']=sum(row.get('unchanged',0) for row in report['datasets'])
     monitor=json.loads((work/'monitor.json').read_text(encoding='utf-8'));monitor['refreshSummary']['matched']=report['matched']
@@ -377,10 +392,7 @@ def package(work):
                    status='Monthly overlap refresh; previous source values retained for any failed checks')
     write_json(dated/'catalog.json',catalog)
     # Rebuild the small bundle so its catalogue and reviewable revisions agree.
-    import zipfile
-    with zipfile.ZipFile(dated/'raw-data.zip','w',zipfile.ZIP_DEFLATED) as bundle:
-        for path in sorted((dated/'csv').glob('*.csv')):bundle.write(path,'csv/'+path.name)
-        for name in ['FRED_Download_Inventory.csv','External_Download_Inventory.csv','README.txt','catalog.json','refresh-report.json','revisions.json']:bundle.write(dated/name,name)
+    write_bundle(base,catalog,['refresh-report.json','revisions.json'])
     write_json(base/'catalog.json',catalog)
     return catalog
 

@@ -6,7 +6,9 @@
   async function json(url) {
     const response = await fetch(url,{cache:'no-store'});
     if (!response.ok) throw Error('Archive HTTP ' + response.status);
-    return response.json();
+    const data=await response.json();
+    if(Array.isArray(data.columns)&&Array.isArray(data.values)&&!Array.isArray(data.rows))data.rows=data.values.map(values=>Object.fromEntries(data.columns.map((name,i)=>[name,values[i]])));
+    return data;
   }
   function resolve(relative) {
     const url = new URL(relative, base);
