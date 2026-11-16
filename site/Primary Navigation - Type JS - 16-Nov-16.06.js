@@ -3,7 +3,7 @@
   'use strict';
   const base = new URL('./', document.currentScript.src);
   const sections = [
-    ['Home', 'desk.html', '⌂'], ['FRED', 'fred/', '⌁'],
+    ['Home', 'desk.html', '⌂'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
     ['Master Pivot', 'v4.html#master/pivot', '▦'],
     ['Historical charts', 'v4.html#history/shares', '↗'],
     ['My Blog', 'market-understanding/', '▤'], ['Markets', 'desk.html#markets', '◫']
