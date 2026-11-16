@@ -86,5 +86,14 @@ test('history directory shares three groups and all14 routes across rail, toolba
  const html=fs.readFileSync('site/v4.html','utf8');assert(html.includes(rail));assert(!html.includes('class="rail-subsection"><span>Fred-'));
  for(const p of ['v4.html','desk.html'])assert(fs.readFileSync('site/'+p,'utf8').includes('menu=20261116.groups1'));
 });
+test('main news leads the sidebar and contains Calls and My Blog once',()=>{
+ const fs=require('node:fs'),html=fs.readFileSync('site/v4.html','utf8'),rail=html.slice(html.indexOf('<nav aria-label="Desktop navigation">'),html.indexOf('</nav><div class="rail-foot">'));
+ assert(rail.startsWith('<nav aria-label="Desktop navigation"><div class="rail-group" role="group" aria-labelledby="rail-group-1">'));
+ const main=rail.slice(0,rail.indexOf('<div class="rail-group rail-history"'));
+ for(const view of ['overview','earnings','credit','policy','calls'])assert(main.includes('data-view="'+view+'"'));
+ assert(main.includes('href="market-understanding/"'));assert(main.includes('My Blog'));
+ assert.equal((rail.match(/data-view="calls"/g)||[]).length,1);assert.equal((rail.match(/href="market-understanding\/"/g)||[]).length,1);
+ assert(!rail.includes('Research Explained'));
+});
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
