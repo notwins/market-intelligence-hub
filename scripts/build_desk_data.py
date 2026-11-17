@@ -144,6 +144,8 @@ def matched_news(data, tickers):
     result, seen = [], set()
     for item in data.get('items', []):
         matched = sorted(set(item.get('tickers', [])) & set(tickers))
+        if 'AMZN' in matched and re.search(r'rainforest|deforestation|tribal|pope|amazon (?:basin|river|region)', item.get('title', ''), re.I) and not re.search(r'Amazon Web Services|AWS|Bezos|Jassy|Amazon\.com', item.get('title', ''), re.I):
+            matched.remove('AMZN')
         href = public_href(item.get('url'))
         if not matched or not href:
             continue
