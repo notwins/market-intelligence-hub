@@ -1,0 +1,22 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),S=require('../site/share-static.js'),C=require('../site/si-beta2-core.js');
+const data=JSON.parse(fs.readFileSync('site/data/share-static.json','utf8')),before=JSON.stringify(data);
+global.fetch=async()=>({ok:true,json:async()=>structuredClone(data)});
+(async()=>{
+ await S.load();assert.equal(S.records().length,774);
+ for(const ticker of ['MSFT','MSFT UQ','MSFT US','XNAS:MSFT'])assert.equal(S.find(ticker).id,'MSFT US');
+ assert.equal(S.find('MSFT UN'),null,'Do not invent a NYSE listing for a Nasdaq company');
+ for(const ticker of ['939 HK','0939 HK','0939.HK','939.HK'])assert.equal(S.find(ticker).id,'939 HK');
+ for(const ticker of ['BRK-B','600519 CH','HEN GY','MPACT SP','939','UNKNOWN'])assert.equal(S.find(ticker),null);
+ assert.equal(S.find({ticker:'BABA',currency:'HKD'}),null);assert.equal(S.find({ticker:'MSFT',asset_type:'bond'}),null);assert.equal(S.find({bbTicker:'MSFT US',ticker:'NVDA'}),null);assert.equal(S.find({ticker:'NVDA',identityStatus:'conflict'}),null);
+ global.ShareEnrichment={records:()=>[{isin:'TESTISIN',bbTicker:'NVDA US'}]};assert.equal(S.find({ticker:'MSFT',isin:'TESTISIN'}),null);delete global.ShareEnrichment;
+ const base={ticker:'MSFT',name:'Existing name',description:'User description',employees:0,price:999,marketCap:123};const enriched=S.enrich(base);assert.equal(enriched.description,base.description);assert.equal(enriched.employees,0);assert.equal(enriched.price,999);assert.equal(enriched.marketCap,123);assert.equal(enriched.name,base.name);assert.equal(S.enrich({ticker:'MSFT',description:''}).description,S.find('MSFT').description);assert(!base.staticProfile);
+ assert.equal(JSON.stringify(data),before);assert(Object.isFrozen(S.find('MSFT')));assert(S.summary('PANW').length<=280);assert(S.summary('PANW').includes('cybersecurity'));
+ const profile=S.find('MSFT'),p={...C.blank(),shares:[{symbol:'MSFT',fixing:100,name:'',description:''}],ko:97,ki:75,strike:88.06,step:1.5,months:11,coupon:8};const svg=C.svg(p,{MSFT:{description:S.summary(profile),staticProfile:profile}});assert(svg.includes('223,000'));assert(svg.includes('shortened excerpts'));assert(svg.includes('Microsoft Corporation'));
+ assert.match(S.html('TSM'),/currency unconfirmed/);assert.match(S.html('MSFT'),/observation dates not supplied/);assert(S.html('MSFT').includes('<dd>1993</dd>'),'Do not format years with thousands separators');
+ p.shares[0].description='My manual company description';assert(C.svg(p,{MSFT:{description:S.summary(profile),staticProfile:profile}}).includes('My manual company description')); 
+ const bad=structuredClone(data);bad.records[0].aliases.push('MSFT');assert.throws(()=>S.validate(bad),/Ambiguous/);global.fetch=async()=>({ok:true,json:async()=>bad});await S.load(true);assert.equal(S.find('MSFT').id,'MSFT US','Keep last validated snapshot on failed refresh');assert(S.status().error);
+ const unsafe=structuredClone(data);unsafe.records.find(r=>r.id==='MSFT US').description='<img src=x onerror=alert(1)>';global.fetch=async()=>({ok:true,json:async()=>unsafe});await S.load(true);assert(S.html('MSFT').includes('&lt;img'));assert(!S.html('MSFT').includes('<img'));
+ for(const file of ['si-beta2.html','v4.html','desk.html','stocks-beta.html'])assert(fs.readFileSync('site/'+file,'utf8').includes('share-static.js'),file);
+ for(const file of ['si-beta2.js','share-prices.js','beta-shares.js','v4-share-lab.js','company-dashboard.js','stocks-beta.js'])assert(fs.readFileSync('site/'+file,'utf8').includes('ShareStaticData'),file);
+ console.log('PASS shared static profiles: exact listing/currency identities, rejected mismatches, preserved current data and overrides, SI excerpts, safe HTML, last-good refresh and current card integrations');
+})().catch(e=>{console.error(e);process.exitCode=1;});
