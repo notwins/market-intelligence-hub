@@ -3,7 +3,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      sgs_only:
+        description: 'Refresh and publish MAS SGS only (preserve other source schedules)'
+        type: boolean
+        required: false
+        default: false
   schedule:
+    # Daily MAS SGS closing levels: 19:00 Asia/Singapore. GitHub may delay starts.
+    - cron: '0 11 * * *'
     # Midnight UTC is 08:00 Asia/Singapore. GitHub may delay scheduled jobs.
     - cron: '0 0 * * *'
     # Daily bond shortlist: 07:00 Asia/Singapore. GitHub may delay starts.
@@ -24,6 +32,8 @@ jobs:
       update_outcome: ${{ steps.update.outcome }}
       history_outcome: ${{ steps.history.outcome }}
       bond_outcome: ${{ steps.bonds.outcome }}
+      sgs_failed: ${{ steps.sgs.outputs.source_failed }}
+      sgs_requested: ${{ steps.sgs_mode.outputs.enabled }}
       source_sha: ${{ steps.publication_revision.outputs.sha }}
     steps:
       - uses: actions/checkout@v6
@@ -54,6 +64,9 @@ jobs:
           if [ ! -f site/index.html ]; then
             unzip -oq Reuters_Market_Intelligence_Hub_Restored.zip
           fi
+      - name: Select daily SGS cloud refresh
+        id: sgs_mode
+        run: python3 scripts/sgs_github_refresh.py --select
       - name: Test publisher validation and archive retention
         if: steps.publication_path.outputs.fast != 'true'
         run: |
@@ -127,26 +140,45 @@ jobs:
         run: python3 "scripts/Bond Prices Tests - Type Test - 16-Nov-03.10.py"
       - name: Refresh watched bond prices and yields
         id: bonds
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 23 * * *'
+        if: steps.sgs_mode.outputs.enabled != 'true' && (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 23 * * *')
         continue-on-error: true
         run: python3 "scripts/Bond Prices - Type Script - 16-Nov-03.10.py"
       - name: Validate saved bond quotes and history
         run: python3 "scripts/Bond Prices - Type Script - 16-Nov-03.10.py" --validate
       - name: Refresh Reuters headline metadata
         id: update
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * *'
+        if: steps.sgs_mode.outputs.enabled != 'true' && (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 0 * * *')
         continue-on-error: true
         run: python3 scripts/update_news.py
       - name: Refresh weekly Fed FX and Treasury benchmark history
         id: history
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 6 * * 6' || hashFiles('site/data/history-fed.json') == ''
+        if: steps.sgs_mode.outputs.enabled != 'true' && (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 6 * * 6' || hashFiles('site/data/history-fed.json') == '')
         continue-on-error: true
         timeout-minutes: 8
         run: python3 scripts/update_fed_history.py
+      - name: Refresh and save daily MAS SGS closing levels
+        id: sgs
+        if: steps.sgs_mode.outputs.enabled == 'true'
+        timeout-minutes: 5
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          set +e
+          python3 scripts/sgs_github_refresh.py
+          sgs_code=$?
+          set -e
+          if [ "$sgs_code" -eq 10 ]; then
+            echo 'source_failed=true' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$sgs_code" -ne 0 ]; then
+            exit "$sgs_code"
+          fi
+          echo 'source_failed=false' >> "$GITHUB_OUTPUT"
       - name: Rebuild public site search catalogue
         run: python3 scripts/build_site_search.py
       - name: Commit new headlines, archives and update status
-        if: steps.publication_path.outputs.fast != 'true'
+        if: steps.publication_path.outputs.fast != 'true' && steps.sgs_mode.outputs.enabled != 'true'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
@@ -265,8 +297,13 @@ jobs:
         env:
           PAGES_URL: ${{ steps.deployment.outputs.page_url }}
         run: python3 scripts/verify_research_destinations.py --base-url "$PAGES_URL"
+      - name: Verify live SGS data and historical chart readers
+        if: needs.build.outputs.sgs_requested == 'true'
+        env:
+          PAGES_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python3 scripts/verify_sgs_daily.py --base-url "$PAGES_URL"
       - name: Flag feed failure after publishing visible health status
-        if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure' || needs.build.outputs.bond_outcome == 'failure'
+        if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure' || needs.build.outputs.bond_outcome == 'failure' || needs.build.outputs.sgs_failed == 'true'
         run: |
           echo 'A feed failed. Previous valid data and visible failure status were published.'
           exit 1

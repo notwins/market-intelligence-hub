@@ -45,9 +45,19 @@ class ArchitectureMapTests(unittest.TestCase):
         self.assertFalse(refresh['private_automations']['rechecked_by_public_build'])
         self.assertFalse(refresh['private_automations']['live_status'])
         self.assertEqual(refresh['research']['mode'],'browser_open_and_manual')
-        for id in ['daily','hourly','sgs','bos']:
+        for id in ['daily','hourly','bos']:
             self.assertIn('not rechecked',self.nodes['job:'+id]['schedule_basis'])
             self.assertNotIn('owner',self.nodes['job:'+id])
+
+    def test_sgs_cloud_schedule_and_software_owner_follow_public_workflow(self):
+        job = self.nodes['job:sgs']
+        self.assertIn('19:00 SGT', job['schedule'])
+        self.assertIn('GitHub Actions', job['schedule'])
+        self.assertIn('.github/workflows/publish.yml', job['schedule_basis'])
+        pairs = {(e['source'], e['target']) for e in self.graph['edges']}
+        self.assertIn(('app:github', 'job:sgs'), pairs)
+        self.assertNotIn(('app:codex', 'job:sgs'), pairs)
+        self.assertNotIn('private enabled state', job['status'])
 
     def test_workflow_change_updates_graph_cadence_without_new_schedule(self):
         with tempfile.TemporaryDirectory() as d:
