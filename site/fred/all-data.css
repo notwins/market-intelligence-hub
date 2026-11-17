@@ -30,10 +30,10 @@ h1{font-size:30px;line-height:1.12;margin:2px 0 4px}
 .cards-wrap{max-height:max(470px,calc(100vh - 350px));overflow:auto;scrollbar-gutter:stable;padding:4px 6px 6px 2px}
 .dataset-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:stretch}
 .dataset-card{display:flex;flex-direction:column;min-width:0;padding:16px;border:1px solid #d3dfd7;border-top:3px solid #c2d2c7;border-radius:10px;background:#fbfcf8;color:var(--ink);box-shadow:0 2px 4px #29483b05}
-.dataset-card.positive.soft{background:#faf4ed;border-color:#dfcbbd}
-.dataset-card.negative.soft{background:#f0f4f7;border-color:#cbd8e2}
-.dataset-card.positive.strong{background:#f5e9dd;border-color:#bc8a6d;border-top-color:#ad7358}
-.dataset-card.negative.strong{background:#e8eff5;border-color:#8da5b9;border-top-color:#6d879d}
+.dataset-card.positive.soft{border-color:#dfcbbd}
+.dataset-card.negative.soft{border-color:#cbd8e2}
+.dataset-card.positive.strong{border-color:#bc8a6d;border-top-color:#ad7358}
+.dataset-card.negative.strong{border-color:#8da5b9;border-top-color:#6d879d}
 .dataset-card.selected{outline:2px solid #718f83;outline-offset:1px}
 .dataset-card-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(76px,105px);gap:12px;align-items:start}
 .dataset-card h2{font-size:14px;line-height:1.35;letter-spacing:0;margin:0}
@@ -68,3 +68,39 @@ h1{font-size:30px;line-height:1.12;margin:2px 0 4px}
 .dataset-grid>.empty-row{grid-column:1/-1}
 @media(max-width:1100px){.dataset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.dataset-grid{grid-template-columns:minmax(0,1fr);gap:12px}.dataset-card{padding:14px}.cards-wrap{max-height:720px;padding-right:4px}.card-value strong{font-size:24px}}
+
+/* Group controls and neutral charts beneath sigma-shaded headers. */
+.dataset-card{padding:0;overflow:hidden;background:#fcfdf9}
+.dataset-card h3{font-size:14px;line-height:1.35;letter-spacing:0;margin:0}
+.card-top{padding:14px 16px 12px;flex:1}
+.sigma-heat{background:#f2f6f0}
+.sigma-heat.positive.soft{background:#faf0e6}
+.sigma-heat.negative.soft{background:#edf2f7}
+.sigma-heat.positive.strong{background:#f2dfcd}
+.sigma-heat.negative.strong{background:#dde7f0}
+.sigma-heat.unavailable{background:#f1f3ef}
+.card-topic{font-size:9px;color:var(--muted);margin:2px 0 0;line-height:1.4}
+.card-top .card-facts{margin-bottom:0}
+.card-heat{padding:10px 16px 7px;margin:0;background:#fcfdf9}
+.dataset-card .sparkline{height:92px;max-width:none;width:100%;margin-top:4px}
+.card-links{padding:8px 16px;margin:0;background:#fcfdf9}
+.chart-limit{font-size:9px;line-height:1.45;color:var(--muted);margin:6px 0 0}
+.dataset-group-section{margin-bottom:22px}
+.dataset-group-heading{display:flex;align-items:baseline;gap:10px;position:sticky;top:0;z-index:2;margin:0 0 12px;padding:8px 12px;border:1px solid #d1ddd4;border-radius:6px;background:#e7eee7;font-size:15px;letter-spacing:0;color:#355d50}
+.dataset-group-heading span{font-size:10px;font-weight:400;color:#65796d}
+.overview-sorting .grouping-choice{display:inline-flex;align-items:center;gap:7px;margin-left:auto;padding:4px 7px;font-size:11px;color:#405e50}
+.grouping-choice input{width:14px;height:14px;min-height:14px;accent-color:#557b68;margin:0}
+.sort-note{font-size:11px;color:var(--muted);margin:0 0 6px;min-height:17px}
+.mini-chart-key{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin:0 0 10px}
+.mini-chart-key span:not(:last-child):before{content:'';display:inline-block;width:18px;border-top:2px solid #3f6c64;vertical-align:middle;margin-right:5px}
+.mini-chart-key .mini-mean:before{border-color:#9a8062!important;border-top-style:dashed!important}
+.mini-chart-key .mini-one:before{border-color:#879a8b!important;border-top-style:dotted!important}
+.mini-chart-key .mini-two:before{border-color:#95a3b1!important;border-top-style:dashed!important}
+.chart-panel{padding:0;overflow:hidden;background:#fcfdf9}
+.chart-heading{padding:13px 16px;border-bottom:1px solid #d9e1d9}
+.chart-heading h3{margin:0 0 4px}
+.chart-sigma{text-align:right;white-space:nowrap}
+.chart-sigma small{display:block;font-size:10px;color:var(--muted);margin-top:4px}
+#detail-chart{padding:8px 12px 0;background:#fcfdf9}
+.chart-legend{padding:8px 16px 12px;margin:0;background:#fcfdf9}
+@media(max-width:700px){.overview-sorting .grouping-choice{margin-left:0}.card-top{padding:13px 14px}.card-heat{padding:9px 14px 6px}.card-links{padding:8px 14px}.mini-chart-key{gap:9px}.chart-heading{flex-direction:row;align-items:start;gap:10px}.chart-heading h3{font-size:12px}.chart-sigma .sigma-badge{font-size:10px}.chart-heading .fine{font-size:10px}.dataset-group-heading{font-size:14px}}

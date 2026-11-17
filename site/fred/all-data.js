@@ -9,7 +9,7 @@
   const signed = value => finite(value) ? `${value>0?'+':value<0?'−':''}${Math.abs(value).toFixed(2)}σ` : 'Unavailable';
   const safeSource = value => { try { const u=new URL(value);return /^https?:$/.test(u.protocol)?u.href:'';}catch{return '';} };
   const text = (id,value) => { $(id).textContent=value ?? ''; };
-  const state = {entries:[],overview:[],sort:'name',direction:1,selected:null,groups:null,groupKey:null,records:[],recordPage:0,raw:null,nativePage:0,nativeCache:new Map(),nativeToken:0,selectionToken:0};
+  const state = {entries:[],overview:[],sort:'group',direction:1,selected:null,groups:null,groupKey:null,records:[],recordPage:0,raw:null,nativePage:0,nativeCache:new Map(),nativeToken:0,selectionToken:0};
   const PAGE=50;
   const transformName = mode => ({level:'Native level',yoy:'Year-over-year change (%)',year_change:'Change from year ago (native units)'}[mode] || mode);
   const metricFor = (entry,field) => (entry.metrics || []).find(metric => metric.field===field) || {field:field || entry.default_field,label:entry.unit || 'Native value',unit:entry.unit || '',transform:'level'};
@@ -55,10 +55,19 @@
   }
   function sparkline(rows) {
     const shown=rows.slice(-60),valid=shown.filter(row=>finite(row.value));
-    if(valid.length<2) return '<small>History unavailable for this metric</small>';
-    const values=valid.map(row=>row.value),lo=Math.min(...values),hi=Math.max(...values),span=hi-lo || 1;
-    const path=linePath(shown,(_row,i)=>2+i/(shown.length-1)*166,value=>27-(value-lo)/span*24,row=>row.value);
-    return `<svg class="sparkline" viewBox="0 0 170 30" preserveAspectRatio="none" role="img" aria-label="Last ${shown.length} native-frequency heat observations, missing values shown as gaps"><path d="${path}" fill="none" stroke="#607e75" stroke-width="1.4"/></svg>`;
+    if(valid.length<2)return '<p class="chart-limit">Not enough observations for a chart or SD guides.</p>';
+    const guides=new Map(shown.map(row=>[row,FredOverview.guides(row)])),values=valid.map(row=>row.value);
+    for(const guide of guides.values())if(guide)values.push(guide.lower2,guide.upper2);
+    let lo=Math.min(...values),hi=Math.max(...values),span=hi-lo||Math.max(Math.abs(hi)*.1,1);lo-=span*.07;hi+=span*.07;
+    const w=340,h=92,p={left:38,right:8,top:8,bottom:17},first=Date.parse(shown[0].date),duration=Date.parse(shown.at(-1).date)-first||1;
+    const x=row=>p.left+(Date.parse(row.date)-first)/duration*(w-p.left-p.right),y=value=>h-p.bottom-(value-lo)/(hi-lo)*(h-p.top-p.bottom);
+    const chunks=[];let chunk=[];
+    for(const row of shown){if(guides.get(row))chunk.push(row);else if(chunk.length){chunks.push(chunk);chunk=[];}}if(chunk.length)chunks.push(chunk);
+    const bands=chunks.map(part=>`<path class="sd-band" d="${part.map((row,i)=>`${i?'L':'M'}${x(row).toFixed(2)},${y(guides.get(row).upper1).toFixed(2)}`).join(' ')} ${part.slice().reverse().map(row=>`L${x(row).toFixed(2)},${y(guides.get(row).lower1).toFixed(2)}`).join(' ')} Z" fill="#edf1ed"/>`).join('');
+    const path=(field,color,dash,sd)=>`<path ${sd?`data-sd="${sd}"`:''} d="${linePath(shown,x,y,row=>guides.get(row)?.[field])}" fill="none" stroke="${color}" stroke-width="1" vector-effect="non-scaling-stroke" stroke-dasharray="${dash}"/>`;
+    let grid='';for(let i=0;i<3;i++){const value=lo+(hi-lo)*i/2,yy=y(value),label=value.toLocaleString('en-US',{notation:'compact',maximumFractionDigits:1});grid+=`<line x1="${p.left}" y1="${yy}" x2="${w-p.right}" y2="${yy}" stroke="#e3e9e2"/><text x="${p.left-5}" y="${yy+3}" text-anchor="end" fill="#6b7d75" font-size="7.8">${E(label)}</text>`;}
+    const available=chunks.length>0;
+    return `<svg class="sparkline" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" data-sd-guides="${available?'available':'unavailable'}" aria-label="Last ${shown.length} native-frequency heat observations with rolling prior mean, plus and minus one and two sample standard deviations; prior ${$('overview-baseline').value} years. Missing observations and unavailable baselines leave gaps.">${grid}${bands}${path('lower2','#95a3b1','3 3',2)}${path('upper2','#95a3b1','3 3',2)}${path('lower1','#879a8b','2 2',1)}${path('upper1','#879a8b','2 2',1)}${path('mean','#9a8062','5 3',0)}<path class="metric-line" d="${linePath(shown,x,y,row=>row.value)}" fill="none" stroke="#3f6c64" stroke-width="1.7" vector-effect="non-scaling-stroke"/><text x="${p.left}" y="${h-2}" fill="#6b7d75" font-size="7.5">${E(shown[0].date)}</text><text x="${w-p.right}" y="${h-2}" text-anchor="end" fill="#6b7d75" font-size="7.5">${E(shown.at(-1).date)}</text></svg>${available?'':'<p class="chart-limit">SD guides unavailable in this window: insufficient or constant prior history.</p>'}`;
   }
   function overviewCalculations() {
     const years=Number($('overview-baseline').value);
@@ -76,30 +85,28 @@
     return !filter || (filter==='positive'?finite(z)&&z>0:filter==='negative'?finite(z)&&z<0:FredSigma.band(z)===filter);
   }
   function renderOverview() {
-    const words=$('dataset-search').value.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
-    const shown=state.overview.filter(item => {
+    const words=$('dataset-search').value.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean),grouped=$('keep-grouping').checked;
+    const filtered=state.overview.filter(item=>{
       const e=item.entry;
-      return (!$('dataset-source').value || e.provider===$('dataset-source').value) && (!$('dataset-group').value || e.group===$('dataset-group').value) && (!$('dataset-frequency').value || e.frequency===$('dataset-frequency').value) && filterSigma(item) && words.every(word=>[e.id,e.name,e.title,e.provider,e.group,e.unit,e.frequency].join(' ').toLocaleLowerCase().includes(word));
+      return (!$('dataset-source').value||e.provider===$('dataset-source').value)&&(!$('dataset-group').value||e.main_group===$('dataset-group').value)&&(!$('dataset-frequency').value||e.frequency===$('dataset-frequency').value)&&filterSigma(item)&&words.every(word=>[e.id,e.name,e.title,e.provider,e.main_group,e.group,e.unit,e.frequency].join(' ').toLocaleLowerCase().includes(word));
     });
-    const sortValue=item=>({name:item.entry.name || item.entry.title,latest:item.latest.raw,date:item.latest.date,rows:item.entry.rows,z:item.latest.z}[state.sort]);
-    shown.sort((a,b) => {
-      const av=sortValue(a),bv=sortValue(b),missingA=av===null||av===undefined||av==='',missingB=bv===null||bv===undefined||bv==='';
-      if(missingA||missingB) return Number(missingA)-Number(missingB);
-      return state.direction*(typeof av==='number' && typeof bv==='number'?av-bv:String(av).localeCompare(String(bv))) || a.entry.id.localeCompare(b.entry.id);
-    });
-    $('dataset-rows').innerHTML=shown.map(({entry:e,metric,mode,rows,latest:r}) => {
-      const band=FredSigma.band(r.z),direction=finite(r.z)?r.z>0?'positive':r.z<0?'negative':'':'';
-      return `<article role="listitem" aria-labelledby="card-title-${E(e.id)}" data-dataset="${E(e.id)}" class="dataset-card ${band} ${direction} ${state.selected?.id===e.id?'selected':''}">
-        <div class="dataset-card-heading"><div class="card-heading-copy"><h2 id="card-title-${E(e.id)}"><button type="button" class="dataset-open" data-open="${E(e.id)}">${E(e.name || e.title)}</button></h2><p class="card-id">${E(e.id)} · ${E(e.provider)} · ${E(e.group)}</p></div><div class="card-sigma">${badge(r)}<small>${finite(r.z)?`N=${integer(r.n)} · prior ${$('overview-baseline').value}Y`:E(r.reason || 'Unavailable')}</small></div></div>
-        ${e.series_count>1?`<p class="card-series">${integer(e.series_count)} series · default: ${E(e.default_series?.label || e.default_group)}</p>`:''}
-        <div class="card-value"><span>Latest native value</span><strong class="numeric">${number(r.raw)}</strong><small>${E(metric.unit || e.unit)}</small></div>
-        <dl class="card-facts"><div><dt>Observation date</dt><dd>${E(r.date || e.last || 'Unavailable')}<small>${E(e.frequency)}${e.last && r.date && e.last!==r.date?` · source table through ${E(e.last)}`:''}</small></dd></div><div><dt>Native records</dt><dd>${integer(e.rows)}<small>${integer(e.observations)} nonmissing</small></dd></div></dl>
-        <div class="card-heat"><div><span>Heat metric</span><strong class="numeric">${number(r.value)} <small>${E(unitFor(metric,mode))}</small></strong></div><p>${E(metric.label || metric.field)} · ${E(transformName(mode))}</p>${sparkline(rows)}</div>
+    const shown=FredOverview.order(filtered,{sort:state.sort,direction:state.direction,grouped});
+    const card=({entry:e,metric,mode,rows,latest:r})=>{
+      const band=FredSigma.band(r.z),direction=finite(r.z)?r.z>0?'positive':r.z<0?'negative':'':'',heading=grouped?'h3':'h2';
+      return `<article role="listitem" aria-labelledby="card-title-${E(e.id)}" data-dataset="${E(e.id)}" data-main-group="${E(e.main_group)}" data-z="${finite(r.z)?r.z:''}" class="dataset-card ${band} ${direction} ${state.selected?.id===e.id?'selected':''}">
+        <div class="card-top sigma-heat ${band} ${direction}"><div class="dataset-card-heading"><div class="card-heading-copy"><${heading} id="card-title-${E(e.id)}"><button type="button" class="dataset-open" data-open="${E(e.id)}">${E(e.name||e.title)}</button></${heading}><p class="card-id">${E(e.id)} · ${E(e.provider)} · ${E(e.main_group)}</p>${e.group!==e.main_group?`<p class="card-topic">${E(e.group)}</p>`:''}</div><div class="card-sigma">${badge(r)}<small>${finite(r.z)?`N=${integer(r.n)} · prior ${$('overview-baseline').value}Y`:E(r.reason||'Unavailable')}</small></div></div>
+        ${e.series_count>1?`<p class="card-series">${integer(e.series_count)} series · default: ${E(e.default_series?.label||e.default_group)}</p>`:''}
+        <div class="card-value"><span>Latest native value</span><strong class="numeric">${number(r.raw)}</strong><small>${E(metric.unit||e.unit)}</small></div>
+        <dl class="card-facts"><div><dt>Observation date</dt><dd>${E(r.date||e.last||'Unavailable')}<small>${E(e.frequency)}${e.last&&r.date&&e.last!==r.date?` · source table through ${E(e.last)}`:''}</small></dd></div><div><dt>Native records</dt><dd>${integer(e.rows)}<small>${integer(e.observations)} nonmissing</small></dd></div></dl></div>
+        <div class="card-heat"><div><span>Heat metric</span><strong class="numeric">${number(r.value)} <small>${E(unitFor(metric,mode))}</small></strong></div><p>${E(metric.label||metric.field)} · ${E(transformName(mode))}</p>${sparkline(rows)}</div>
         <div class="card-links"><a href="${E(FredArchive.resolve(e.csv_url))}" download>CSV ↓</a><a href="${E(FredArchive.resolve(e.json_url))}">JSON</a>${safeSource(e.source_url)?`<a href="${E(safeSource(e.source_url))}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:''}<button class="cite" data-cite="${E(e.id)}" type="button">Copy citation</button></div>
       </article>`;
-    }).join('') || '<p class="empty-row">No datasets match these filters. Try a broader search or another σ band.</p>';
-    document.querySelectorAll('[data-sort]').forEach(button=> { const active=button.dataset.sort===state.sort;button.setAttribute('aria-pressed',String(active));button.title=active?`${state.direction===1?'Ascending':'Descending'}; select again to reverse`:'Select to sort';button.querySelector('.sort-direction').textContent=active?(state.direction===1?'↑':'↓'):'↕'; });
-    text('catalog-status',`${shown.length} of ${state.entries.length} datasets · latest dated observations in each default series · recommended heat metric · prior ${$('overview-baseline').value}-year baseline`);
+    };
+    $('dataset-rows').innerHTML=!shown.length?'<p class="empty-row">No datasets match these filters. Try a broader search or another σ band.</p>':grouped?FredOverview.partition(shown).map((group,i)=>`<section class="dataset-group-section" aria-labelledby="main-group-${i}"><h2 class="dataset-group-heading" id="main-group-${i}">${E(group.name)} <span>${integer(group.items.length)} ${group.items.length===1?'dataset':'datasets'}</span></h2><div class="dataset-grid" role="list" aria-label="${E(group.name)} datasets">${group.items.map(card).join('')}</div></section>`).join(''):`<div class="dataset-grid" role="list" aria-label="All saved datasets">${shown.map(card).join('')}</div>`;
+    document.querySelectorAll('[data-sort]').forEach(button=>{const active=button.dataset.sort===state.sort;button.setAttribute('aria-pressed',String(active));button.title=active?(state.sort==='extreme'?'Most extreme absolute sigma first':`${state.direction===1?'Ascending':'Descending'}; select again to reverse`):'Select to sort';button.querySelector('.sort-direction').textContent=active?(state.direction===1?'↑':'↓'):'↕';});
+    const orderNote=state.sort==='extreme'?'Most extreme |σ| first, positive or negative':state.sort==='z'?`${state.direction===1?'Lowest':'Highest'} signed σ first`:'Ordered by the selected field';
+    text('sort-note',`${orderNote}${grouped?' within each main group.':' across all main groups.'}`);
+    text('catalog-status',`${shown.length} of ${state.entries.length} datasets · ${grouped?'main groups retained':'one combined list'} · recommended heat metric · prior ${$('overview-baseline').value}-year SD baseline`);
   }
   function fillOptions(id,values) {
     const select=$(id);
@@ -147,6 +154,9 @@
   function renderChart(rows,metric,mode) {
     const label=`${metric.label || metric.field} · ${transformName(mode)} (${unitFor(metric,mode)})`;
     text('chart-title',label);
+    const latest=rows.at(-1),z=latest?.z,band=FredSigma.band(z),direction=finite(z)?z>0?'positive':z<0?'negative':'':'';
+    $('detail-chart-heading').className=`chart-heading sigma-heat ${band} ${direction}`;
+    $('chart-sigma').innerHTML=badge(latest)+`<small>Prior ${$('detail-baseline').value}Y · N=${integer(latest?.n)}</small>`;
     const finiteRows=rows.filter(row=>finite(row.value));
     if(!finiteRows.length){$('detail-chart').innerHTML='<p class="fine">No valid observations for this heat calculation. Try native level or another series.</p>';return;}
     const shown=sample(rows),allValues=[];
@@ -154,13 +164,13 @@
     let lo=Infinity,hi=-Infinity;for(const v of allValues){lo=Math.min(lo,v);hi=Math.max(hi,v);}const span=hi-lo || Math.max(Math.abs(hi)*.1,1);lo-=span*.06;hi+=span*.06;
     const w=1000,h=290,p={left:72,right:18,top:15,bottom:35},start=Date.parse(rows[0].date),end=Date.parse(rows.at(-1).date),duration=end-start || 1;
     const x=row=>p.left+(Date.parse(row.date)-start)/duration*(w-p.left-p.right),y=value=>h-p.bottom-(value-lo)/(hi-lo)*(h-p.top-p.bottom);
-    const eligible=row=>row.n>=12 && finite(row.sd) && row.sd>0 && finite(row.mean);
+    const eligible=row=>!!FredOverview.guides(row);
     const getBand=(row,k)=>eligible(row)?row.mean+k*row.sd:null;
     const line=(get,stroke,dash='')=>`<path d="${linePath(shown,x,y,get)}" fill="none" stroke="${stroke}" stroke-width="1.3" ${dash?`stroke-dasharray="${dash}"`:''}/>`;
     const chunks=[];let chunk=[];shown.forEach(row=>{if(eligible(row)){chunk.push(row);}else if(chunk.length){chunks.push(chunk);chunk=[];}});if(chunk.length)chunks.push(chunk);
     const bands=chunks.map(part=>`<path d="${part.map((row,i)=>`${i?'L':'M'}${x(row).toFixed(2)},${y(row.mean+row.sd).toFixed(2)}`).join(' ')} ${part.slice().reverse().map(row=>`L${x(row).toFixed(2)},${y(row.mean-row.sd).toFixed(2)}`).join(' ')} Z" fill="#e3e9e0" opacity=".8"/>`).join('');
     let grid='';for(let i=0;i<5;i++){const value=lo+(hi-lo)*i/4,yy=y(value);grid+=`<line x1="${p.left}" y1="${yy}" x2="${w-p.right}" y2="${yy}" stroke="#e0e6df"/><text x="${p.left-8}" y="${yy+4}" text-anchor="end" fill="#6b7d75" font-size="11">${E(number(value))}</text>`;}
-    $('detail-chart').innerHTML=`<svg class="detail-chart-svg" viewBox="0 0 ${w} ${h}" role="img" aria-labelledby="history-chart-title history-chart-desc"><title id="history-chart-title">${E(label)}</title><desc id="history-chart-desc">${rows.length} native-frequency observations, ${E(rows[0].date)} through ${E(rows.at(-1).date)}. Green line: selected heat metric. Shaded band: prior mean plus or minus one sample standard deviation. Dotted lines: plus or minus two. Missing observations and unavailable baselines create gaps. Full values are in the records table below.</desc>${grid}${bands}${line(row=>getBand(row,-2),'#9cabb4','3 4')}${line(row=>getBand(row,2),'#9cabb4','3 4')}${line(row=>eligible(row)?row.mean:null,'#9a8062','6 4')}${line(row=>row.value,'#3f6c64')}<text x="${p.left}" y="${h-10}" fill="#6b7d75" font-size="11">${E(rows[0].date)}</text><text x="${w-p.right}" y="${h-10}" text-anchor="end" fill="#6b7d75" font-size="11">${E(rows.at(-1).date)}</text></svg>`;
+    $('detail-chart').innerHTML=`<svg class="detail-chart-svg" viewBox="0 0 ${w} ${h}" role="img" aria-labelledby="history-chart-title history-chart-desc"><title id="history-chart-title">${E(label)}</title><desc id="history-chart-desc">${rows.length} native-frequency observations, ${E(rows[0].date)} through ${E(rows.at(-1).date)}. Green line: selected heat metric. Shaded band: prior mean plus or minus one sample standard deviation. Dotted lines: plus or minus two. Missing observations and unavailable baselines create gaps. Full values are in the records table below.</desc>${grid}${bands}${line(row=>getBand(row,-1),'#879a8b','2 3')}${line(row=>getBand(row,1),'#879a8b','2 3')}${line(row=>getBand(row,-2),'#9cabb4','3 4')}${line(row=>getBand(row,2),'#9cabb4','3 4')}${line(row=>eligible(row)?row.mean:null,'#9a8062','6 4')}${line(row=>row.value,'#3f6c64')}<text x="${p.left}" y="${h-10}" fill="#6b7d75" font-size="11">${E(rows[0].date)}</text><text x="${w-p.right}" y="${h-10}" text-anchor="end" fill="#6b7d75" font-size="11">${E(rows.at(-1).date)}</text></svg>`;
   }
   function renderDetail() {
     if(!state.groups || !state.selected) return;
@@ -237,13 +247,16 @@
     const open=event.target.closest('[data-open]'),cite=event.target.closest('[data-cite]'),sort=event.target.closest('[data-sort]');
     if(open){if(location.hash===`#${encodeURIComponent(open.dataset.open)}`)selectDataset(open.dataset.open);else location.hash=encodeURIComponent(open.dataset.open);}
     if(cite)copyCitation(cite.dataset.cite);
-    if(sort){state.direction=state.sort===sort.dataset.sort?-state.direction:sort.dataset.sort==='name'?1:-1;state.sort=sort.dataset.sort;renderOverview();}
+    if(sort){const key=sort.dataset.sort,previous=state.sort;state.direction=key==='extreme'?-1:state.sort===key?-state.direction:['name','group'].includes(key)?1:-1;state.sort=key;if(key==='group')$('keep-grouping').checked=true;else if((key==='extreme'||key==='z')&&key!==previous)$('keep-grouping').checked=false;renderOverview();}
   });
   for(const id of ['dataset-search','dataset-source','dataset-group','dataset-frequency','dataset-sigma']) $(id).addEventListener('input',renderOverview);
-  $('overview-baseline').addEventListener('change',overviewCalculations);
+  $('keep-grouping').addEventListener('change',renderOverview);
+  function changeBaseline(value){$('overview-baseline').value=value;$('detail-baseline').value=value;overviewCalculations();if(state.selected&&state.groups)renderDetail();}
+  $('overview-baseline').addEventListener('change',()=>changeBaseline($('overview-baseline').value));
+  $('detail-baseline').addEventListener('change',()=>changeBaseline($('detail-baseline').value));
   $('detail-series-search').addEventListener('input',renderGroupOptions);
   $('detail-series').addEventListener('change',()=>{state.groupKey=$('detail-series').value;renderDetail();});
-  for(const id of ['detail-field','detail-transform','detail-baseline']) $(id).addEventListener('change',renderDetail);
+  for(const id of ['detail-field','detail-transform']) $(id).addEventListener('change',renderDetail);
   for(const key of ['series','native']) {
     $(key+'-tab').addEventListener('click',()=>setTab(key));
     $(key+'-tab').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const next=event.key==='Home'?'series':event.key==='End'?'native':key==='native'?'series':'native';setTab(next);$(next+'-tab').focus();}});
@@ -256,11 +269,11 @@
     if(!catalog.analytics_url)throw Error('This snapshot has no analytical index');
     const index=await loadJSON(catalog.analytics_url);
     if(index.schema_version!==1 || !Array.isArray(index.datasets))throw Error('Unsupported analytical index');
-    state.entries=index.datasets;
+    state.entries=index.datasets.map(entry=>({...entry,main_group:FredOverview.mainGroup(entry)}));
     text('snapshot-date',index.snapshot || catalog.snapshot);
     const total=index.record_count ?? state.entries.reduce((sum,entry)=>sum+(entry.rows || 0),0),providers=new Set(state.entries.map(entry=>entry.provider));
     $('collection-facts').innerHTML=`<span><b>${integer(state.entries.length)}</b> datasets</span><span><b>${integer(total)}</b> native records</span><span><b>${integer(providers.size)}</b> sources</span><span>Full supporting histories · native frequencies</span>`;
-    for(const [id,key] of [['dataset-source','provider'],['dataset-group','group'],['dataset-frequency','frequency']])fillOptions(id,[...new Set(state.entries.map(entry=>entry[key]))]);
+    for(const [id,key] of [['dataset-source','provider'],['dataset-group','main_group'],['dataset-frequency','frequency']])fillOptions(id,[...new Set(state.entries.map(entry=>entry[key]))]);
     for(const [id,key] of [['archive-download','archive_url'],['coverage-link','notes_url']])if(catalog[key]){$(id).href=FredArchive.resolve(catalog[key]);$(id).hidden=false;}
     overviewCalculations();readHash();
   }).catch(error=>{text('catalog-status',`The collection could not load: ${error.message}. Reload or use the JSON catalogue to find the native files.`);$('catalog-status').setAttribute('role','alert');});
