@@ -1,0 +1,53 @@
+/* Run against an isolated, locally served candidate; never requires deployment. */
+const {chromium}=require('playwright'),assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{}),args:['--no-sandbox']});
+ const base=process.env.SITE_URL||'http://127.0.0.1:8789/',edition='watchlist-20261108T000000Z';
+ for(const width of [320,390,1440]){
+  const page=await browser.newPage({viewport:{width,height:960}}),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(base+'v4.html#overview');
+  const details=page.locator('.ms-shares [data-ms-detail="AAPL"]'),summary=details.locator(':scope > summary');
+  await summary.waitFor();await summary.locator('img').waitFor();
+  const closed=await details.locator('xpath=ancestor::th').boundingBox();
+  await summary.focus();await page.keyboard.press('Enter');
+  await page.waitForFunction(()=>document.querySelector('.ms-shares [data-ms-detail="AAPL"]').open);
+  const opened=await details.locator('xpath=ancestor::th').boundingBox();
+  assert(opened.width>closed.width,'opening should widen the ticker column at '+width);
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'page overflow at '+width);
+  await summary.click();assert.equal(await details.getAttribute('open'),null);
+  await summary.locator('img').evaluate(img=>{img.src='missing-company-logo-fixture.png';});
+  await page.waitForFunction(()=>document.querySelector('.ms-shares [data-ms-detail="AAPL"] summary').textContent.includes('ⓘ'));
+  await page.goto(base+'watchlist-report.html?edition='+edition+'#AAPL');
+  const workspace=page.locator('#AAPL .cc-workspace');await workspace.waitFor();
+  assert.match(await workspace.innerText(),/separate from the archived edition/);
+  await page.waitForFunction(()=>!document.querySelector('[data-cc-chart-status]').textContent.includes('Loading'),{},{timeout:45000});
+  assert.equal(await workspace.locator('svg').count(),1);
+  assert(await workspace.locator('.cc-news li').count()<=10);
+  assert(await workspace.locator('[data-cc-earnings]').innerText());
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'reader overflow at '+width);
+  await page.evaluate(()=>document.documentElement.style.setProperty('--text-scale','2'));
+  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'200% reader overflow at '+width);
+  await page.evaluate(()=>document.documentElement.style.setProperty('--text-scale','1'));
+  await page.screenshot({path:'/tmp/company-context-'+width+'.png',fullPage:false});
+  await workspace.getByRole('link',{name:'Earnings card →'}).click();
+  await page.waitForSelector('#earnings-AAPL');
+  assert.equal(await page.locator('#ed-company-filter').inputValue(),'AAPL');
+  await page.goBack();await page.waitForSelector('#AAPL .cc-workspace');
+  await page.locator('#AAPL .cc-workspace').getByRole('link',{name:'Historical · Shares →'}).click();
+  await page.waitForSelector('.mp-share-chips');
+  assert.deepEqual(await page.locator('.mp-share-chips b').allTextContents(),['AAPL']);
+  await page.goBack();await page.waitForSelector('#AAPL .cc-workspace');
+  await page.locator('#AAPL .cc-workspace').getByRole('link',{name:'SI Pricing →'}).click();
+  await page.waitForSelector('#si-query');
+  assert.equal(await page.locator('#si-query').inputValue(),'AAPL');
+  assert.match(await page.locator('#si-rows').innerText(),/No matching saved SI references/);
+  await page.goto(base+'watchlist-report.html?edition='+edition+'#BRK.B');
+  await page.waitForSelector('.cc-workspace[data-ticker="BRK.B"]');
+  assert.equal(await page.locator('.cc-workspace').getByRole('link',{name:'Earnings card →'}).getAttribute('href'),'v4.html?company=BRK.B#earnings');
+  assert.equal(errors.length,0,errors.join('\n'));
+  await page.close();
+ }
+ await browser.close();
+ console.log('PASS logo/fallback, keyboard expansion, width, archived reader, company routes, 320/390/1440 and 200% text');
+})().catch(e=>{console.error(e);process.exit(1);});
