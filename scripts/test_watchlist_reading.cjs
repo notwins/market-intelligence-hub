@@ -84,3 +84,6 @@ assert(!tickerCSS.includes('@media(prefers-color-scheme:dark)'),'device dark mod
 assert(tickerCSS.includes('min-height:44px;max-width:100%'));assert(tickerCSS.includes('border:1px solid currentColor'));
 for(const file of ['v4.html','watchlist-report.html'])assert(fs.readFileSync('site/'+file,'utf8').includes('watchlist.css?v=20261107.ticker1'));
 console.log('PASS exact approved ticker colours: 12 names, light/dark AA contrast, scoped selectors, visible controls and cache version');
+
+// Keep company-context logic in the existing watchlist release gate.
+require('./test_company_context.cjs');
