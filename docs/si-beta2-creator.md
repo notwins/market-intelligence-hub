@@ -57,3 +57,8 @@ Step-down pages include the final KO price line using reference × final KO / 10
 The existing first-step month controls the inclusive monthly step count.
 Matched company descriptions come from ShareStaticData; full source profiles
 remain in company cards, while the A4 sheet uses readable excerpts.
+
+Barrier labels occupy a dedicated rail outside the price plot. The renderer
+automatically spreads close or coincident levels and connects them to their
+unchanged price levels with leaders. Label backgrounds never mask data, and
+the price path is painted above barrier lines at every crossing.
