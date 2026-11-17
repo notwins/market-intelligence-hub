@@ -47,3 +47,13 @@ the full Pages artifact validation. Visually inspect exported two/four-share
 pages and confirm selected/multipage counts before publication. Roll back only
 the creator's files and navigation additions on current main; preserve data and
 the independent report reader.
+
+The PDF uses a compact inline terms table and tenor in months (confirmed by the
+owner on 18 November 2026). Restored draft tenor units are normalized to months;
+original reference JSON remains unchanged. Coupon basis remains as entered.
+Charts share an external legend, use five evenly spaced rounded price ticks and
+five month-year date ticks with grid lines, and label distinct barrier patterns.
+Step-down pages include the final KO price line using reference × final KO / 100.
+The existing first-step month controls the inclusive monthly step count.
+Matched company descriptions come from ShareStaticData; full source profiles
+remain in company cards, while the A4 sheet uses readable excerpts.
