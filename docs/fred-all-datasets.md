@@ -16,7 +16,7 @@ debt. Census country trade is goods-only and not seasonally adjusted.
 
 Heat uses the specified native level, YoY percentage change or year-ago native
 change. Each observation is compared only with earlier usable observations in
-the selected 5/10/20 calendar-year window. The sample SD uses N-1, with at least
+the selected 5/10/15/20 calendar-year window. The sample SD uses N-1, with at least
 12 prior observations and nonzero variance. Missing source markers remain
 missing; nonpositive YoY bases do not produce percentage changes. Daily/weekly
 year-ago comparisons are at or before the target and no more than ten days old;
@@ -70,3 +70,22 @@ reports, provider credentials or hosting permissions changed.
 Checks: `test_fred_observatory.py`, `test_refresh_fred_observatory.py`,
 `test_refresh_fred_extra_sources.py`, `test_fred_archive_analysis.py` and
 `test_fred_sigma.cjs`, followed by the normal complete Pages artifact gate.
+
+
+## Grouping, ranking and guides
+
+The overview defaults to broad main groups (Treasury, equities, inflation, trade,
+credit, banking, housing, liquidity, currencies, commodities and the economy).
+These display categories are derived from the existing source topics and IDs;
+native catalogue metadata is not rewritten. Extreme sigma sorts by descending
+absolute finite z across all groups; unavailable scores remain last. Keep main
+groups restores sections and ranks extremes within each section. Signed sigma
+continues to order by the signed value.
+
+Both the global and expanded-chart SD selectors offer 5, 10, 15 and 20 calendar
+years and stay synchronized; the initial window is 5 years. Every eligible mini
+chart and expanded chart shows rolling prior mean, plus/minus one and two sample
+SD. Missing and constant baselines are labelled instead of inventing guides.
+Heat tint applies to the card top and expanded chart heading. Plot areas retain
+a neutral background. `test_fred_overview.cjs` checks ranking, parent groups,
+missing scores, current dataset coverage, guide eligibility and 15-year bounds.
