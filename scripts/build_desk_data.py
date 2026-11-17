@@ -270,6 +270,16 @@ def build(root=ROOT, now=None):
                                    'verification': 'immutable-record-and-exact-asset-validation'}
     reports.sort(key=chronology, reverse=True)
     watch = read(data / 'watchlist/latest.json')
+    membership = read(data / 'watchlist/membership.json')
+    by_ticker = {r['ticker']: r for r in watch['rows']}
+    watch['rows'] = [by_ticker.get(r['ticker'], r) for r in membership['members']]
+    # Generated synchronous membership adapter; saved research editions stay frozen.
+    members_json = json.dumps(membership['members'], ensure_ascii=False, separators=(',', ':'))
+    (site / 'watchlist-membership.js').write_text(
+        '/* Generated from data/watchlist/membership.json by build_desk_data.py. */\n'
+        + '(function(root){\"use strict\";const members=' + members_json + ';'
+        + 'function merge(rows){const by=new Map((rows||[]).map(r=>[r.ticker,r]));return members.map(m=>by.get(m.ticker)||{...m,price:{currency:m.currency||\"USD\"},returns:[],research:[],sources:[],gaps:[\"Added to the current watchlist on \"+m.membership_added+\"; no prior research-edition returns are inferred.\"]});}'
+        + 'const api={members,merge};root.WatchlistMembership=api;if(typeof module!==\"undefined\")module.exports=api;})(typeof window!==\"undefined\"?window:globalThis);\n', encoding='utf-8')
     earnings = read(data / 'earnings-history.json')
     earning_by_ticker = {x['ticker']: x for x in earnings.get('companies', [])}
     si = read(data / 'si-pricing-reference.json')

@@ -1,6 +1,6 @@
 /* Dated hourly metadata only. Uses the established ContentDelivery reader. */
 (function(root){'use strict';
-const aliases={GOOGL:['Google','Alphabet'],META:['Meta','Meta Platforms'],BRK_B:['Berkshire','Berkshire Hathaway'],'BRK.B':['Berkshire','Berkshire Hathaway'],TSM:['TSMC','Taiwan Semiconductor'],NVDA:['Nvidia','NVIDIA']};
+const aliases={BABA:['Alibaba','Alibaba Group','Alibaba Group Holding Limited'],GOOGL:['Google','Alphabet'],META:['Meta','Meta Platforms'],BRK_B:['Berkshire','Berkshire Hathaway'],'BRK.B':['Berkshire','Berkshire Hathaway'],TSM:['TSMC','Taiwan Semiconductor'],NVDA:['Nvidia','NVIDIA']};
 function safeURL(value){try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password&&!['chatgpt.com','chat.openai.com'].includes(u.hostname)&&!/[\\\x00-\x20]/.test(value)?u.href:'';}catch{return '';}}
 const canonical=value=>{const url=safeURL(value);return url?url.split('#')[0]:'';};
 function fromHourly(feed,watchlist){

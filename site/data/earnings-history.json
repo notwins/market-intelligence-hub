@@ -88,6 +88,11 @@
       "url": "https://investor.tsmc.com/english/encrypt/files/encrypt_file/reports/2026-10/f83780000ddc0c3b48e57a87eab6814c4ab35058/3Q26%20ManagementReport.pdf",
       "published_at": "2026-10-15",
       "kind": "issuer"
+    },
+    "baba_june2026": {
+      "title": "Alibaba June quarter 2026 results",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/fa5d65fc-9b3e-4e82-a8fc-4ce1c3e2c407/Alibaba%20Group%20Announces%20June%20Quarter%202026%20Results.pdf",
+      "published_at": "2026-08-20"
     }
   },
   "companies": [
@@ -143,7 +148,7 @@
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share",
+      "eps_basis": "GAAP diluted \u00b7 US$/share",
       "additional_reports": [
         {
           "period": "FY2026 Q3",
@@ -229,7 +234,7 @@
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "NVDA",
@@ -286,12 +291,12 @@
         },
         {
           "label": "Outlook",
-          "text": "Q3 revenue guidance was US$108bn ±2%, excluding China data-center compute revenue. Forecast, not actual.",
+          "text": "Q3 revenue guidance was US$108bn \u00b12%, excluding China data-center compute revenue. Forecast, not actual.",
           "kind": "outlook"
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "GOOGL",
@@ -339,12 +344,12 @@
         },
         {
           "label": "Cash investment",
-          "text": "US$42.290bn operating cash flow less US$51.355bn capex produced −US$9.065bn FCF.",
+          "text": "US$42.290bn operating cash flow less US$51.355bn capex produced \u2212US$9.065bn FCF.",
           "kind": "caution"
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "AMZN",
@@ -392,12 +397,12 @@
         },
         {
           "label": "Cash-flow period",
-          "text": "The headline −US$42.4bn FCF covers twelve months. The cash-flow comparison derives the quarter separately.",
+          "text": "The headline \u2212US$42.4bn FCF covers twelve months. The cash-flow comparison derives the quarter separately.",
           "kind": "caution"
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "META",
@@ -435,22 +440,22 @@
         },
         {
           "label": "Litigation charge",
-          "text": "A US$9.89bn charge reduced EPS by US$3.57; the issuer’s excluding-charge EPS is US$7.40.",
+          "text": "A US$9.89bn charge reduced EPS by US$3.57; the issuer\u2019s excluding-charge EPS is US$7.40.",
           "kind": "caution"
         },
         {
           "label": "Cash-flow basis",
-          "text": "Company FCF was −US$2.120bn and deducts finance-lease principal as well as capex.",
+          "text": "Company FCF was \u2212US$2.120bn and deducts finance-lease principal as well as capex.",
           "kind": "caution"
         },
         {
           "label": "Outlook",
-          "text": "Q4 revenue guidance: US$73bn–US$76bn. This is a forecast.",
+          "text": "Q4 revenue guidance: US$73bn\u2013US$76bn. This is a forecast.",
           "kind": "outlook"
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "BRK.B",
@@ -490,7 +495,7 @@
         },
         {
           "label": "Operating earnings",
-          "text": "The issuer’s non-GAAP measure was US$12.983bn, versus US$11.160bn.",
+          "text": "The issuer\u2019s non-GAAP measure was US$12.983bn, versus US$11.160bn.",
           "kind": "fact"
         },
         {
@@ -505,7 +510,7 @@
         }
       ],
       "coverage": "Q2 results and prior-year comparison. Revenue and later quarters are not indexed here; not zero.",
-      "eps_basis": "GAAP · US$/average equivalent Class B share"
+      "eps_basis": "GAAP \u00b7 US$/average equivalent Class B share"
     },
     {
       "ticker": "AMD",
@@ -562,12 +567,12 @@
         },
         {
           "label": "Outlook",
-          "text": "Q4 revenue forecast US$17bn ±3%; non-GAAP gross margin about 55%. Forecasts, not results.",
+          "text": "Q4 revenue forecast US$17bn \u00b13%; non-GAAP gross margin about 55%. Forecasts, not results.",
           "kind": "outlook"
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "AVGO",
@@ -620,7 +625,7 @@
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "MU",
@@ -682,7 +687,7 @@
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "TSLA",
@@ -752,7 +757,7 @@
         },
         {
           "label": "Free cash flow",
-          "text": "US$1.531bn, versus −US$1.092bn in Q2 and US$3.990bn a year earlier.",
+          "text": "US$1.531bn, versus \u2212US$1.092bn in Q2 and US$3.990bn a year earlier.",
           "kind": "fact"
         },
         {
@@ -762,7 +767,7 @@
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "GAAP diluted · US$/share"
+      "eps_basis": "GAAP diluted \u00b7 US$/share"
     },
     {
       "ticker": "TSM",
@@ -822,12 +827,64 @@
         },
         {
           "label": "Outlook",
-          "text": "Q4 revenue guidance: US$52.3bn–US$54.3bn. Forecast, not actual.",
+          "text": "Q4 revenue guidance: US$52.3bn\u2013US$54.3bn. Forecast, not actual.",
           "kind": "outlook"
         }
       ],
       "coverage": "Selected quarters; not a complete earnings archive.",
-      "eps_basis": "TIFRS diluted · US$/ADR unit (issuer conversion)"
+      "eps_basis": "TIFRS diluted \u00b7 US$/ADR unit (issuer conversion)"
+    },
+    {
+      "ticker": "BABA",
+      "name": "Alibaba Group",
+      "history": [
+        {
+          "period": "Q1 FY2027",
+          "period_end": "2026-06-30",
+          "revenue_usd_bn": 39.639,
+          "eps": 0.55,
+          "source": "baba_june2026",
+          "report_date": "2026-08-20",
+          "evidence_basis": "Issuer convenience USD translation; GAAP diluted earnings per ADS",
+          "precision_note": "RMB268.953bn revenue; issuer USD translation, not a new FX conversion."
+        }
+      ],
+      "eps_basis": "GAAP diluted \u00b7 US$/ADS; 8 ordinary shares per ADS",
+      "coverage": "Latest reported June 2026 quarter; selected actuals, not a complete archive. CNY is the reporting currency.",
+      "takeaways": [
+        {
+          "label": "Revenue",
+          "text": "RMB268.953bn (US$39.639bn), up 9% year on year.",
+          "kind": "fact"
+        },
+        {
+          "label": "AI cloud",
+          "text": "AI Cloud Compute revenue grew 45% to RMB48.437bn.",
+          "kind": "fact"
+        },
+        {
+          "label": "Profit",
+          "text": "Adjusted EBITA fell 30% to RMB27.329bn; GAAP diluted EPS was RMB3.71 (US$0.55) per ADS.",
+          "kind": "fact"
+        },
+        {
+          "label": "Cash flow",
+          "text": "Operating cash flow was RMB22.945bn; issuer-defined free cash flow was negative RMB44.670bn after qualifying capital investment and fund adjustments.",
+          "kind": "caution"
+        },
+        {
+          "label": "Next report",
+          "text": "September-quarter results are confirmed for 19 November 2026 before the US open; earnings call 20:00 SGT.",
+          "kind": "outlook"
+        }
+      ],
+      "next_earnings": {
+        "date": "2026-11-19",
+        "timing": "Before US market open",
+        "confirmed": true,
+        "conference_call_sgt": "2026-11-19T20:00:00+08:00",
+        "source": "https://www.alibabagroup.com/en-US/document-2054756418245885952"
+      }
     }
   ],
   "fcf": {
@@ -858,7 +915,7 @@
         "fcf_usd_bn": -9.065,
         "definition": "Operating cash flow less purchases of property and equipment.",
         "source": "googl",
-        "note": "Issuer non-GAAP FCF reconciliation; earlier −9.07bn display was rounded.",
+        "note": "Issuer non-GAAP FCF reconciliation; earlier \u22129.07bn display was rounded.",
         "basis": "standard"
       },
       {
@@ -910,7 +967,7 @@
         "fcf_usd_bn": -33.456,
         "definition": "Operating cash flow less property/equipment purchases, plus property/equipment sales and incentives.",
         "source": "amzn",
-        "note": "Derived quarterly value; adds back US$1.381bn sales/incentives. The −US$42.4bn TTM headline is excluded.",
+        "note": "Derived quarterly value; adds back US$1.381bn sales/incentives. The \u2212US$42.4bn TTM headline is excluded.",
         "basis": "different"
       }
     ],

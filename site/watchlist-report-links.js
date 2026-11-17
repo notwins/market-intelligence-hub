@@ -1,7 +1,7 @@
 /* Links use only the public archive indexes. Never add private report metadata here. */
 window.MarketWatchlistReports = (() => {
   'use strict';
-  const tickers = new Set(['AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'BRK.B', 'AMD', 'AVGO', 'MU', 'TSLA', 'TSM']);
+  const tickers = new Set(['BABA','AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'BRK.B', 'AMD', 'AVGO', 'MU', 'TSLA', 'TSM']);
   const editionId = /^watchlist-\d{8}T\d{6}Z(?:-r[1-9][0-9]*)?$/;
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
   const date = value => {const p=Object.fromEntries(new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Singapore',day:'2-digit',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true}).formatToParts(new Date(value)).map(x=>[x.type,x.value]));return `${p.day} ${p.month.slice(0,3)} ${p.year} · ${Number(p.hour)}:${p.minute} ${p.dayPeriod.toUpperCase()} SGT`;};

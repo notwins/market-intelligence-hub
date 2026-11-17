@@ -97,6 +97,12 @@
       "report_date": "2026-10-13",
       "report_as_of_utc": "13 Oct 2026 19:16, UTC",
       "label": "BOS-hosted research PDF"
+    },
+    "BABA": {
+      "author": "Morningstar",
+      "url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Nov/0P00013K81_20261110_RT.pdf",
+      "report_date": "2026-11-10",
+      "checked_on": "2026-11-17"
     }
   }
 }

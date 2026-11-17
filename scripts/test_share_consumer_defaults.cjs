@@ -84,7 +84,7 @@ function cut(file,first,next){const text=read(file);return text.slice(text.index
   assert.equal((actual.nodes['earnings-desk'].innerHTML.match(/No matched historical return or credit data/g)||[]).length,2,'unavailable registry must not guess BRK.B alias');
   registryReady=true;actual.ctx.document.dispatchEvent(new actual.ctx.CustomEvent('market-prices-updated'));
   assert.equal(actual.ctx.ShareEnrichment.marketCapFor({ticker:'BRK.B',currency:'USD'}).value,900000,'validated registry alias inherits the exact BOS listing cap');
-  assert.equal((actual.nodes['earnings-desk'].innerHTML.match(/class="share-enrichment-details"/g)||[]).length,12);
+  assert.equal((actual.nodes['earnings-desk'].innerHTML.match(/class="share-enrichment-details"/g)||[]).length,13);
   assert.equal((actual.nodes['earnings-desk'].innerHTML.match(/No matched historical return or credit data/g)||[]).length,1);
   assert.match(actual.nodes['earnings-desk'].innerHTML,/gross dividends reinvested/);
   for(const [ticker,value]of [['AAPL','+31.00%'],['NVDA','-11.00%'],['TSLA','-12.00%'],['BRK.B','+17.00%']])assert(detailFor(actual.nodes['earnings-desk'].innerHTML,'earnings-'+ticker).includes('2026 YTD · BOS: '+value));

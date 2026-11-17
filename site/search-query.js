@@ -1,7 +1,7 @@
 /* Pure, bounded Boolean search. No eval, network requests or private storage. */
 (function(root){
 'use strict';
-const companies=[['Google','Alphabet','GOOG','GOOGL'],['Microsoft','MSFT'],['Amazon','AMZN'],['Nvidia','NVDA'],['Apple','AAPL'],['Meta','Meta Platforms','META'],['Tesla','TSLA'],['Berkshire Hathaway','Berkshire','BRK.B','BRK-B'],['AMD','Advanced Micro Devices'],['Broadcom','AVGO'],['Micron','Micron Technology','MU'],['TSMC','Taiwan Semiconductor','Taiwan Semiconductor Manufacturing','TSM']];
+const companies=[['Alibaba','Alibaba Group','BABA'],['Google','Alphabet','GOOG','GOOGL'],['Microsoft','MSFT'],['Amazon','AMZN'],['Nvidia','NVDA'],['Apple','AAPL'],['Meta','Meta Platforms','META'],['Tesla','TSLA'],['Berkshire Hathaway','Berkshire','BRK.B','BRK-B'],['AMD','Advanced Micro Devices'],['Broadcom','AVGO'],['Micron','Micron Technology','MU'],['TSMC','Taiwan Semiconductor','Taiwan Semiconductor Manufacturing','TSM']];
 const canonical=value=>{const v=String(value).trim().toLowerCase();return companies.find(a=>a.some(x=>x.toLowerCase()===v))?.[0]||String(value).trim();};
 const variants=value=>companies.find(a=>a.some(x=>x.toLowerCase()===String(value).toLowerCase()))||[String(value)];
 const escapeRE=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');

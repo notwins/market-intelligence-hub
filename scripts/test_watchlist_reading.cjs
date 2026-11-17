@@ -3,7 +3,7 @@ const read=path=>JSON.parse(fs.readFileSync('site/'+path,'utf8'));
 const clone=value=>JSON.parse(JSON.stringify(value));
 function reader(overrides={}){
  const context={URL,Date,Intl,Number,console,setInterval:()=>{},localStorage:{getItem:()=>null},document:{hidden:false,addEventListener:()=>{},getElementById:()=>null,querySelector:()=>null,querySelectorAll:()=>[]},fetch:async path=>({ok:true,json:async()=>Object.hasOwn(overrides,path)?clone(overrides[path]):read(path)})};context.window=context;vm.createContext(context);
- for(const f of ['watchlist-report-links.js','watchlist.js'])vm.runInContext(fs.readFileSync('site/'+f,'utf8'),context);
+ for(const f of ['watchlist-membership.js','watchlist-report-links.js','watchlist.js'])vm.runInContext(fs.readFileSync('site/'+f,'utf8'),context);
  return context;
 }
 const context=reader();
@@ -68,7 +68,8 @@ const tickerPalettes=[
  [['AAPL','MSFT','GOOGL','AMZN','TSLA'],'#0369A1','#7DD3FC','#F0F9FF','#082F49'],
  [['NVDA','AMD','AVGO','MU','TSM'],'#6D28D9','#DDD6FE','#F5F3FF','#2E1065'],
  [['META'],'#86198F','#F0ABFC','#FDF4FF','#4A044E'],
- [['BRK.B'],'#1E40AF','#BFDBFE','#DBEAFE','#172554']
+ [['BRK.B'],'#1E40AF','#BFDBFE','#DBEAFE','#172554'],
+ [['BABA'],'#0E7490','#67E8F9','#ECFEFF','#083344']
 ];
 const luminance=hex=>hex.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0);
 const contrast=(a,b)=>(Math.max(luminance(a),luminance(b))+.05)/(Math.min(luminance(a),luminance(b))+.05);
@@ -78,7 +79,7 @@ for(const [tickers,light,dark,lightChip,darkChip] of tickerPalettes){
  for(const t of tickers)assert(rule.includes(`.watchlist-card[data-ticker="${t}"]`),'Exact ticker mapping: '+t);
  assert(contrast(light,lightChip)>=4.5);assert(contrast(dark,darkChip)>=4.5);
 }
-assert.equal((tickerCSS.match(/--ticker-light:/g)||[]).length,4,'No inferred assignments');
+assert.equal((tickerCSS.match(/--ticker-light:/g)||[]).length,5,'Only verified V1.2 assignments');
 for(const selector of ['.watchlist-card[data-ticker] .watchlist-company h3','.watchlist-scope[data-disabled-dark-theme]','.watchlist-scope[data-theme="system"]','@media not all'])assert(tickerCSS.includes(selector));
 assert(!tickerCSS.includes('@media(prefers-color-scheme:dark)'),'device dark mode must not change the site');
 assert(tickerCSS.includes('min-height:44px;max-width:100%'));assert(tickerCSS.includes('border:1px solid currentColor'));

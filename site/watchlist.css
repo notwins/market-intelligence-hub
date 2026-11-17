@@ -28,3 +28,5 @@
 .watchlist-card[data-ticker] .watchlist-company:hover h3,.watchlist-card[data-ticker] .watchlist-company:focus-visible h3{text-decoration:underline;text-underline-offset:3px}
 .watchlist-scope[data-disabled-dark-theme] .watchlist-card[data-ticker] .watchlist-company h3{color:var(--ticker-dark,var(--w-link));background:var(--ticker-chip-dark,var(--w-card))}
 @media not all{.watchlist-scope[data-theme="system"] .watchlist-card[data-ticker] .watchlist-company h3{color:var(--ticker-dark,var(--w-link));background:var(--ticker-chip-dark,var(--w-card))}}
+
+.watchlist-card[data-ticker="BABA"]{--ticker-light:#0E7490;--ticker-dark:#67E8F9;--ticker-chip-light:#ECFEFF;--ticker-chip-dark:#083344}

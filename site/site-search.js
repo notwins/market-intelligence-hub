@@ -24,7 +24,7 @@ let data=null,companyResources=null,standard=null,offset=0,results=[],size=40,ti
 function link(href,label){const u=safe(href);return u?'<a href="'+E(u)+'"'+(u.startsWith('https:')?' target="_blank" rel="noopener noreferrer"':'')+'>'+E(label)+'</a>':E(label);}
 function snippet(entry){const text=String(entry.text||'');let at=-1;for(const term of Q.parse($('q').value).terms){const pos=text.toLowerCase().indexOf(term.value.toLowerCase());if(pos>=0&&(at<0||pos<at))at=pos;}const start=Math.max(0,at-80);return (start?'…':'')+text.slice(start,start+300)+(text.length>start+300?'…':'');}
 function companyHub(){
- const tree=Q.parse($('q').value).tree, names={Google:'GOOGL',Microsoft:'MSFT',Amazon:'AMZN',Nvidia:'NVDA',Apple:'AAPL',Meta:'META',Tesla:'TSLA','Berkshire Hathaway':'BRK.B',AMD:'AMD',Broadcom:'AVGO',Micron:'MU',TSMC:'TSM'};
+ const tree=Q.parse($('q').value).tree, names={Alibaba:'BABA',Google:'GOOGL',Microsoft:'MSFT',Amazon:'AMZN',Nvidia:'NVDA',Apple:'AAPL',Meta:'META',Tesla:'TSLA','Berkshire Hathaway':'BRK.B',AMD:'AMD',Broadcom:'AVGO',Micron:'MU',TSMC:'TSM'};
  const name=tree?.type==='term'&&tree.field!=='text'?Q.canonical(tree.value):null,ticker=names[name],slot=$('company-hub');
  if(!slot)return;
  if($('search-intro'))$('search-intro').hidden=!!ticker;

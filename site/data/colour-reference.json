@@ -5082,6 +5082,15 @@
     {
       "surface": "Headline tags",
       "group": "Share ticker",
+      "label": "BABA",
+      "description": "Alibaba Group Holding Ltd ADR · NYSE. Directory membership does not imply current coverage or a recommendation.",
+      "colour": "#175d68",
+      "background": "#e6f7fa",
+      "href": "search.html?q=BABA"
+    },
+    {
+      "surface": "Headline tags",
+      "group": "Share ticker",
       "label": "AMZN",
       "description": "Amazon.com Inc · NASDAQ. Directory membership does not imply current coverage or a recommendation.",
       "colour": "#175d68",

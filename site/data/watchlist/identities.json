@@ -149,6 +149,18 @@
       "exchange_evidence": "Existing SEC submissions snapshot fetched 2026-11-04; ticker and exchange arrays independently inspected.",
       "verified_on": "2026-11-04",
       "note": "NYSE ADR, not Taiwan ordinary share. Citi explicitly lists US ISIN, ADR type, NYSE and 5 ordinary shares per 1 ADR."
+    },
+    {
+      "ticker": "BABA",
+      "company_name": "Alibaba Group Holding Limited",
+      "share_class": "American depositary shares \u00b7 8 ordinary shares per ADS",
+      "isin": "US01609W1027",
+      "us_listing_exchange": "NYSE",
+      "confidence": "high",
+      "isin_source_url": "https://productgroup.bankofsingapore.com/apollo/assets/reports/morningstar/apollo/2026/Nov/0P00013K81_20261110_RT.pdf",
+      "exchange_source_url": "https://www.alibabagroup.com/en-US/document-2026456290057781248",
+      "exchange_evidence": "Issuer identifies NYSE BABA and eight ordinary shares per ADS; Morningstar ADS identity checked 17 Nov 2026.",
+      "verified_on": "2026-11-17"
     }
   ]
 }
