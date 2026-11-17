@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "source_commit": "7874a757146494c54085eadae6520a3cfcea828b",
-  "built_at": "2026-11-16T01:12:44.168108+00:00",
+  "source_commit": "89548d78f9e33178bf416ea23ab64743a447d4f3",
+  "built_at": "2026-11-17T00:57:00.726428+00:00",
   "coverage": {
     "archive": "All legacy published research HTML in this checkout; companion assets remain attached. New independent editions are merged by ContentDelivery in the browser.",
     "chronology": "First added to the public repository; not a verified Pages upload time. Unknown introduction dates sort last. Source/research dates remain separate.",
@@ -2179,10 +2179,8 @@
         }
       ],
       "news_ids": [
-        "521e8ca42b44ac93ffed",
-        "0827794c9fb5f04af380",
-        "9d585bec51cbc9703244",
-        "3681c6c6d49c0bed28e2"
+        "3681c6c6d49c0bed28e2",
+        "9d585bec51cbc9703244"
       ],
       "research_href": "search.html?q=MSFT"
     },
@@ -3780,35 +3778,403 @@
           "ko_pct": 98,
           "ki_pct": 60,
           "additional_review": false
+        },
+        {
+          "reference": "SI-226",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 71,
+          "ko_pct": 100,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-227",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 72,
+          "ko_pct": 99,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-228",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 73,
+          "ko_pct": 98,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-229",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 75,
+          "ko_pct": 97,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-230",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 76,
+          "ko_pct": 96,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-231",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 78,
+          "ko_pct": 95,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-232",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 80,
+          "ko_pct": 94,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-233",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 82,
+          "ko_pct": 93,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-234",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 85,
+          "ko_pct": 92,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-235",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 89,
+          "ko_pct": 91,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-236",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 94,
+          "ko_pct": 90,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-237",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 78,
+          "ko_pct": 100,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-238",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 79,
+          "ko_pct": 99,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-239",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 81,
+          "ko_pct": 98,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-240",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 82,
+          "ko_pct": 97,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-241",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 84,
+          "ko_pct": 96,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-242",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 86,
+          "ko_pct": 95,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-243",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 89,
+          "ko_pct": 94,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-244",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 92,
+          "ko_pct": 93,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-245",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 96,
+          "ko_pct": 92,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-246",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 101,
+          "ko_pct": 91,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
         }
       ],
       "news_ids": [
-        "0827794c9fb5f04af380",
+        "45c9e2f5ca91beb4a0e9",
+        "f06ce62a1dc325b583f0",
+        "c509f2f1f7a53af47e0c",
+        "04b404fb2362a220c43d",
+        "66596e3e3744696dce21",
+        "9e76abe1f107edaa8d99",
         "446fdd0ea7b9eb590949",
         "61c54fc35375c20428f8",
-        "44d473e7d75738f2d75c",
+        "b6b76dcf86da5a86e143",
         "c4e6490162f40ad075e4",
         "72ba00461dea0e290e52",
-        "9cb1cf434cdd2a605396",
-        "66596e3e3744696dce21",
+        "c38b0a4b14a0f1b7f8d7",
         "1b49dc6d68ff53511690",
         "81ec744b3e075a844906",
         "2adc2531d2518cb5ad59",
-        "8be381abd8082b422c7e",
-        "04b404fb2362a220c43d",
-        "0254a25fecd66be175b1",
-        "6385bd63608cf9fc49d5",
-        "108e3937ead9871f6f4f",
-        "4e5137ac8a9e11d94099",
-        "9f81163019318f68a30e",
-        "bf09fd363f64e779febd",
-        "b6b76dcf86da5a86e143",
-        "162817eabb9e4336c797",
-        "5a6ab426d4f822399e7e",
-        "509e03f18042e222f03f",
-        "797b2beb7bbe52dc933b",
-        "d37479c485d8b5ffc86c",
-        "9e0167d99329e8330207"
+        "8be381abd8082b422c7e"
       ],
       "research_href": "search.html?q=NVDA"
     },
@@ -5178,10 +5544,7 @@
         }
       ],
       "news_ids": [
-        "95ea5bf7ac1a0d7d8c65",
-        "daff3b77d192228113e6",
-        "4070bf898d70a3525877",
-        "20974cae8e2f6667033c"
+        "daff3b77d192228113e6"
       ],
       "research_href": "search.html?q=GOOGL"
     },
@@ -6051,6 +6414,8 @@
         }
       ],
       "news_ids": [
+        "69fd2cef73bbf948f492",
+        "b3d94f76c4b0813786ca",
         "08c03789f419ab7ae6cf"
       ],
       "research_href": "search.html?q=AMZN"
@@ -9236,8 +9601,7 @@
         }
       ],
       "news_ids": [
-        "7a7a6fc02d39e972fc30",
-        "57816f3dd9623112f494"
+        "7a7a6fc02d39e972fc30"
       ],
       "research_href": "search.html?q=TSLA"
     },
@@ -9762,6 +10126,384 @@
           "ko_pct": 97,
           "ki_pct": 65,
           "additional_review": false
+        },
+        {
+          "reference": "SI-226",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 71,
+          "ko_pct": 100,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-227",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 72,
+          "ko_pct": 99,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-228",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 73,
+          "ko_pct": 98,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-229",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 75,
+          "ko_pct": 97,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-230",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 76,
+          "ko_pct": 96,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-231",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 78,
+          "ko_pct": 95,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-232",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 80,
+          "ko_pct": 94,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-233",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 82,
+          "ko_pct": 93,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-234",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 85,
+          "ko_pct": 92,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-235",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 89,
+          "ko_pct": 91,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-236",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": "2026-11-13",
+          "currency": "USD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 94,
+          "ko_pct": 90,
+          "ki_pct": 70,
+          "additional_review": false,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-237",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 78,
+          "ko_pct": 100,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-238",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 79,
+          "ko_pct": 99,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-239",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 81,
+          "ko_pct": 98,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-240",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 82,
+          "ko_pct": 97,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-241",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 84,
+          "ko_pct": 96,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-242",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 86,
+          "ko_pct": 95,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-243",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 89,
+          "ko_pct": 94,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-244",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 92,
+          "ko_pct": 93,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-245",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 96,
+          "ko_pct": 92,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
+        },
+        {
+          "reference": "SI-246",
+          "shares": [
+            "NVDA",
+            "TSM"
+          ],
+          "source_date": null,
+          "currency": "SGD",
+          "tenor_source_value": 11,
+          "coupon_pct": 8,
+          "strike_pct": 101,
+          "ko_pct": 91,
+          "ki_pct": 75,
+          "additional_review": true,
+          "source_kind": "indicative_pricing",
+          "tenor_unit": "months",
+          "coupon_basis": "per_annum"
         }
       ],
       "news_ids": [],
@@ -9782,7 +10524,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS2",
       "source_series": "DGS2",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-15T08:55:41+08:00",
+      "last_attempt": "2026-11-16T09:13:25+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -9919,7 +10661,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS5",
       "source_series": "DGS5",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-15T08:55:41+08:00",
+      "last_attempt": "2026-11-16T09:13:25+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10056,7 +10798,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS10",
       "source_series": "DGS10",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-15T08:55:41+08:00",
+      "last_attempt": "2026-11-16T09:13:25+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10193,7 +10935,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS30",
       "source_series": "DGS30",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-15T08:55:41+08:00",
+      "last_attempt": "2026-11-16T09:13:25+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10468,6 +11210,78 @@
   ],
   "news": [
     {
+      "id": "69fd2cef73bbf948f492",
+      "title": "Pope Leo urges stop to Amazon deforestation, decries 'murders' of tribal leaders",
+      "href": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPdVhUQ25wVWFVVnBuNEtoNVJCMFctMUloMU9PUXJzTU9LQ3NpX1hnUnF1ZHhsOF9ud05yNThxVkJrQUxtc21zUDQ2WExaUDRabFlHaHlfSldWR0JjeE5NMXlpOUFieTJFakFURGN0aTJYd1FNdjBFaUZtMVBJRnlmXzkxZm1uWW5hVWNqd3hsZldtc1hCTVFaWUduLTBhRmI2SVhYUA?oc=5",
+      "published_at": "2026-11-15T21:49:38+00:00",
+      "tickers": [
+        "AMZN"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "45c9e2f5ca91beb4a0e9",
+      "title": "Jensen Huang discusses comeback as Nvidia CEO with allies, FT reports",
+      "href": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOMjJiT3lpV1Ezamlva2NQWFNtWlB6VnRkdXhSOVBselpmQUk5Y2x0RGUyajctclFfY19VMW0wc1Z1VFBhZkdUM2QyUHE3ZC15MUUxVkk4VkJJM25jTFhlM2RaTkFZaGF0UXNUTlp3aFBfckxCaURVUWZMNVBIQ0hZU2FxWThpQldRUjM2RERqalRRNFhGaWJlZFkzWFZkRnFDRzBHamc3ZDZFLWtVdGFuZDEwUQ?oc=5",
+      "published_at": "2026-11-15T21:22:37+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "b3d94f76c4b0813786ca",
+      "title": "Rocket from Boeing-Lockheed firm fails mid-flight, destroys payload of Amazon satellites",
+      "href": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNRENJR2FvRjB1WmJfWk56alNqNHBwRHExSk0tdU91LV9wSUMzVm9PZEtRdHc0Y1JaMW44OVBJc3puTENpMXNBY3VmSVNjSTZIazlYRGh4aUxVaW9GdXNBamZla29sRzJnajdMdU1yQU9xekdPcUwyRXdaRzF4TXhiZXV6RDZIN21yVS15bGpNVUJFZUpnWU1ZTFJqbm94OXhjamR3SXFRV3F0YWZWSnA5ei1Gd2o4UW1PSnlrTnFtMENUb2V1VjVDc09XSFJNN0JaWXc?oc=5",
+      "published_at": "2026-11-15T20:26:00+00:00",
+      "tickers": [
+        "AMZN"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "f06ce62a1dc325b583f0",
+      "title": "Musk says Nvidia will lose 'critical' deals without Jensen Huang",
+      "href": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPOGo3V2tuZ3lONm9hUHl3ZkE3RUF0NHAxSEFDZEt0MklYQm9zVWVVcHJtTEtiTm1VdTFFU1AzeUNXNHF1NWtNS1B5bWxLak80LUR6bWdJal9LOGExcjFPV0o5OTVLZXRzdDBMckJFdGt5eTlBQVBkb3Z5SU9fd1UwYjJvUnhkMEp1ejI1R0tzTkdveGwzQnNXMlZEdmk5eVFJN3ZaSjhBQ3FKTGc?oc=5",
+      "published_at": "2026-11-14T15:08:32+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "c509f2f1f7a53af47e0c",
+      "title": "EXCLUSIVE: Ex-Nvidia CEO misled top lawyer on affair with Chinese businesswoman, sources say",
+      "href": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxONzdHUzc1NjBCWjJNbldoNEhWS3RkQzJNdHJGTXFfX0h0YWR5QjhHbjdkd3NENnU2eXZpMktjMWRzT216Y2tMbnB0dS04T25QZEtxQmNpZzQ2SjNXRHNwQ2h4ckdOdkJ3d19IRDBYaUs5dzZzc2o2WmliV3hnRjNSN3VyM0trT1hxMEh4M2ppd3RBQ2RXTVUtWE40MmI0S2Z1d0ZBVjZGV2FSa2tDVEpDWU02WXR0QjBOdHRmTHJRV09faXc?oc=5",
+      "published_at": "2026-11-14T13:11:58+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "04b404fb2362a220c43d",
+      "title": "US Democratic senator wants assessment of whether Nvidia is 'too big to fail'",
+      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQU1VaSFhwajh0clNVbElvWjVHcHZGaDBibjRzNjhwMU5RSVJ2bkVwRjczMzhrdmZUTXlmc190QjlELUQzYzRkSW9LX0NjXzA1cXQ0OTNxYWRRQVJLaV9WYXVyWGZ5QlIwZ2IxN0FxQi00TTJwcW84ZlFJMlVsQ1h1dmZXUjNtZGczampObE9GNVR3TzQyZlFIamc0bThDOUdEdE1ScEVtNDhJZmdiSFpwc1BZR2pzcENKLXZESlJOZw?oc=5",
+      "published_at": "2026-11-14T08:46:21+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "7a7a6fc02d39e972fc30",
       "title": "Tesla invites select customers to buy Cybercab for personal use",
       "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxOWE9RSGUwWDAzVms5ZGZVZlpvTFhDUno1ay0tOTVIT1VNbjBWVkhsdzRTRWtaSWhjeF9mUFlsNTVQLTVPVEt1RGVlZzFDcDJZU0lQdTQwREtrOTkxanBwSnhMcTBNYzV4UHlacWZXZUpMTVNvMEYtMm5lWDR4UFVOZUJHcXV6TmJ0R2NrelM0Q1Y1OVVCbUNlT3dLdnUwZnZvSzhnWk1lVDlzLXhBVnBqMFZJdDVtaFVrOWl5bUtYbw?oc=5",
@@ -10480,10 +11294,10 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "521e8ca42b44ac93ffed",
-      "title": "Microsoft says consumer products services recovered; still monitoring enterprise services",
-      "href": "https://news.google.com/rss/articles/CBMixAFBVV95cUxObkxxbE1VclJTQkp3R3ZZR3M4b0UtTUNMMmIzb09GSzlZQU1kUDQzN3ZKRXhleXhXV1BUd1lEMXVSMnZBUDN3WEwwdUM0QVhydk5mZWwxZnRndlJHd2FEQUpWUnRaeG5raGFMY2Z2M1RHRlZYLThiVktPTVVsYVFFS0dkMHlyNmtPNWRlQ3NsYjNRY0dxZVdQaFhRUlRpMTNjdlZqbDBZcVg3Q0tRV3ZFWlQ1bTJIZHl3WXFDV2FJbFVocm8w?oc=5",
-      "published_at": "2026-11-14T05:40:00+00:00",
+      "id": "3681c6c6d49c0bed28e2",
+      "title": "Microsoft restores service to Outlook and Teams after global outage",
+      "href": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPQWpWeUZnbllhcFk4WktZS0s3T1N6T3k3Vnhhd3pfSE9SWF9iRmRIQUljdHZXN0UtWS1uZS1rbUNZSlVPd1NXLXRtVUVtc3NQNTgxMVFMWjVnT3pPb09EX1g1YUx3WkF2VHk0bUMwWlhkRHdpT0JFRE5SQ3pQRkdmSnpUOHNXLUo1dXNSY3lFdkpSdU5laDdwSlhWRDVnNjBFcUh2Y0FwMXNldE8tSFpPaw?oc=5",
+      "published_at": "2026-11-14T07:24:34+00:00",
       "tickers": [
         "MSFT"
       ],
@@ -10492,12 +11306,23 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "0827794c9fb5f04af380",
-      "title": "PODCAST: FAA issues ground stop, Nvidia and Microsoft latest, Pope returns home in Peru (Updated)",
-      "href": "https://news.google.com/rss/articles/CBMipAFBVV95cUxNRWJ3V2hTUXNWcFdGRV9VLUt5WjFuYjV2T1g4QVJKbmVmNXYxSXZnV0tDWWh6RWdpVnJVa0tjMGJ3UHJOaXg3T2diS1J1RTBMQTVhV2lENG40WDZPRzA4S3B2YWxBTW92Y3VqQ28tZTJsTUpLcW5mbVNWZ1JmQW9oNHE3bDFRaFVlOElVRVNjb3hDQk5fSEU4SFhDem9SSnVmcElxSQ?oc=5",
-      "published_at": "2026-11-13T23:09:58+00:00",
+      "id": "66596e3e3744696dce21",
+      "title": "Stocks mostly ease with tech, Nvidia concerns; airline shares fall late in session",
+      "href": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOZ0cyVmdPTTRkWGt3UlMtUFRyOGhvdDNlM1FYVy1MSVN0elpQZHgtWXctVEE1M2RjQm9IcmwzUGU4cEhEQnhsQWlOX2RhUFk1NzBXeFkwM3lMek16ajB1ZmozdGpLR0cwQ2JTcGVlTTJwMEc2ZFZ3bklxeTk4eElFaHZLaw?oc=5",
+      "published_at": "2026-11-14T04:59:36+00:00",
       "tickers": [
-        "MSFT",
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "9e76abe1f107edaa8d99",
+      "title": "Bessent blames Commerce Dept over lack of export controls for Nvidia partner Megaspeed",
+      "href": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNLTRNS3BqaXcwNDJlOTNLZDU2NkdSbmtHUFFPNFJTRFBvdXVselAtVGkyU25RR3Q0Q1djS0N1TDM0VnpNRXNHWmxiVE15bVduU3BUMUlONURZUC1EbTNIa1FqX3liOHBiOUk2S0xKSDMtS0lnZjg3ajVZdTVtTnl3NC1vTWNDM0M4SEFKV3d4N3dieXdvaWhNdEtYc2pvdy0xcVI3VDBGQXM4N00?oc=5",
+      "published_at": "2026-11-13T18:29:18+00:00",
+      "tickers": [
         "NVDA"
       ],
       "source": "Reuters",
@@ -10553,10 +11378,10 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "44d473e7d75738f2d75c",
-      "title": "China's $3 billion-plus pipeline of Nvidia-powered AI data centres",
-      "href": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOdkFHQnE4ZWppRXAxMGVYOUZXa1F1YnhLeUdVbVNlWTNQZjNyWnJCX05YbVVrT3AtNUxaVGUyYW1hVUNHanBNc2Q5ZmpnOXo0Y2lmeHBXOVRVQ3Fna21VWi1ScEQ5WGlmTEoyZ2Q5cGlobEMtQzhQclEwLWtJVzZvS1NXYU9GaFlHeFVhaW1Zc1RaRGlkSC1qZXowTXljV0Via1Y3V25wQkliTmN0bHpqZHdNQU1BV2tZ?oc=5",
-      "published_at": "2026-11-13T13:00:03+00:00",
+      "id": "b6b76dcf86da5a86e143",
+      "title": "China's access to some Nvidia chips in doubt as curbs gain traction in US Congress",
+      "href": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQOFBGZG9jUFFjX0tFY2tXSEVILWxGWU1rMzBvT1pTcUpqa2tEdEV0QWRybENzel9tU3hIQVhmTngyY3VGRGZZeGtCWDhEWm1oRXBzVWlGRnhwRzJrd0Z5bGZhUi1STHFLdFdLVnhoRUxMOW42MkNSSjNZX3JQR0o3OVpBSE10bE1kekw3OVVXYXVub0NzekN5NE4zb1JpRzB6Zjl2V1pTWFEteUQ1Q0hxd2lhLV9JLXloLVJqbWhUQ1pmN21H?oc=5",
+      "published_at": "2026-11-13T14:07:48+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -10589,34 +11414,10 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "95ea5bf7ac1a0d7d8c65",
-      "title": "South Korea says Google has removed Korean coordinates from maps under export permit",
-      "href": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQeUpMbFNmT29BbW5JbGN1ZUxPZFV6ZmNTUnJJeHF3RE5YRHZzbFZoYzdWM2pjdFU2Q1VacjNTN214cURoN3FsTUFkdUhVcm9aTkdRcHRjdEdqTTd0cm55MDNDaUwxeS1QUEx5akdmanpEZGZudGRlbGQtNktuNWlfZThFd29ENDJMVnE1VENTQXlFb3lnMEZSN2xVUXRMcER0bHFVZHE5TVJiVXNnbWV5M2lTZnJYcUVObUEtZ0lR?oc=5",
-      "published_at": "2026-11-13T03:18:00+00:00",
-      "tickers": [
-        "GOOGL"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "9cb1cf434cdd2a605396",
-      "title": "Colette Kress, the CFO who challenged Huang's bets, is Nvidia's interim CEO",
-      "href": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNWnRLUFljeVFkcXJzT2xiV3lQWnlaMENnaUNHVlZNdWtscEZSVnRIaWZYSERpb0hTVEc2cmVZaEw4Q1FBX3B6VmNvMnhaSm5GV1RvQ2pwNExEazBSNWRRejMyTU5NZU5RXzdhdU5xMDZZUHFWekdwZG9wWEJOeV9HQnVwLTR4b2FXc1FfWDRPVTd2Tm1JVkRCYk5aUjFROWhqR1pRay1oWVFjdnpnSTRHdzd3?oc=5",
-      "published_at": "2026-11-13T02:11:25+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "66596e3e3744696dce21",
-      "title": "Stocks mostly ease with tech, Nvidia concerns; airline shares fall late in session",
-      "href": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOZ0cyVmdPTTRkWGt3UlMtUFRyOGhvdDNlM1FYVy1MSVN0elpQZHgtWXctVEE1M2RjQm9IcmwzUGU4cEhEQnhsQWlOX2RhUFk1NzBXeFkwM3lMek16ajB1ZmozdGpLR0cwQ2JTcGVlTTJwMEc2ZFZ3bklxeTk4eElFaHZLaw?oc=5",
-      "published_at": "2026-11-13T01:55:00+00:00",
+      "id": "c38b0a4b14a0f1b7f8d7",
+      "title": "South Korea says Nvidia will keep GPU pledges after Huang's resignation",
+      "href": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQM2dkY0l2QVQ3TnJ2X1RqSkV6Mml6dTJXcWpkUmpGWGxSclBNeUs4SUZGeV8xRlJDWGJ5VExHOXpHUGdjRXYwRGQ2a2J6Zzh0WGZpMkFfRkF0ZTRQdVR1LTlwYkl1U0FwUllsODlPUGo4Ull0czA3aHNnRkdfZGJ3R2pSUlBWUi0wblJtcGpDdmsxTTVTTTliZmw1QXZaWUN6VFRXWExkc2RLZlZHUVlPcHhCXzBMT3A3LUluR1dmSVp1bTQ?oc=5",
+      "published_at": "2026-11-13T10:07:27+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -10661,18 +11462,6 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "57816f3dd9623112f494",
-      "title": "SpaceX, Tesla merger talks progress, Bloomberg News reports",
-      "href": "https://news.google.com/rss/articles/CBMiswFBVV95cUxOSDRsb3FNV0VLZW5Hb01MamhyMnpOS3NEZl9jT2czVGFTQ3JOdjF0WXdQNHh3SVFJVmhKTVBIb3hhT0UxTlBlOG9lY1AzVnVTY1hjZlItN1Q4X1YzVjMwVTVyVF9keUh4UnRGTnBWeGItejZObzU4QVVOeEF2ZGxuTmFfSDVyQllsRlJNNXV3N1V3ai1sMWx2RTEzR3pNNXpVRWtOTjJDQzg5YVJjT3FBM1BhRQ?oc=5",
-      "published_at": "2026-11-12T21:15:43+00:00",
-      "tickers": [
-        "TSLA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "2adc2531d2518cb5ad59",
       "title": "Nvidia PE falls to 14-year low, but CEO exit and AI worries cloud the bargain",
       "href": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxNN1pCSzVXOGZaWVZyWTl6OXJiSk40TnNaMmhDUXJuN3BsdnNzZU8tSmg0bVkycVVmSG1UNGV6N0lNZ0lqRjdZZXZmQW1USXdvMWJ6MGRCUVotRmpvQTdxVWRmcjdPZmRrLVhPSDFmcjZRMFNWSk9EQjVIaDRINVl5d182b3BJb0hmTEJ0RTJrZ0dRWFBITWtMdW9ET2g4b2hCLWRoQnc5ODZvZw?oc=5",
@@ -10695,213 +11484,9 @@
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "04b404fb2362a220c43d",
-      "title": "US Democratic senator wants assessment of whether Nvidia is 'too big to fail'",
-      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQU1VaSFhwajh0clNVbElvWjVHcHZGaDBibjRzNjhwMU5RSVJ2bkVwRjczMzhrdmZUTXlmc190QjlELUQzYzRkSW9LX0NjXzA1cXQ0OTNxYWRRQVJLaV9WYXVyWGZ5QlIwZ2IxN0FxQi00TTJwcW84ZlFJMlVsQ1h1dmZXUjNtZGczampObE9GNVR3TzQyZlFIamc0bThDOUdEdE1ScEVtNDhJZmdiSFpwc1BZR2pzcENKLXZESlJOZw?oc=5",
-      "published_at": "2026-11-12T20:54:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "4070bf898d70a3525877",
-      "title": "OpenAI, Google, Anthropic hit with lawsuit seeking halt to frontier AI development",
-      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPWTR4ak5BdnRmV3hzYTZOcVhBYklWU01YRmtLak03b2hmeC1PMTd5blRQWUkxR2Q1ZXZWRC0xNkNxVDVoN2VOdTVlX1hFMXgwS1Y5TW1fUGt4NThQaEhRVFdna1YxUDhLTnBYUFJ6WTlFajlLM1BZTTRwNk5sWFMydkZtMlJNUnU4MWlDcUN6QmNtVHdUT1pLNXd6QXc4QVk0WmMtM1JxWU5XVC1PUGRIMVJNY2wzN1Z1d2N6WWJkbw?oc=5",
-      "published_at": "2026-11-12T20:35:49+00:00",
-      "tickers": [
-        "GOOGL"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "20974cae8e2f6667033c",
-      "title": "Warby Parker bets on Google AI glasses for growth, but privacy fears still loom",
-      "href": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQdEZUUGlzOUZwcFdtamtJMHBhWUVzaGNtV2ZDX052OU11RkVnRENCbmxnQlpPem5PTG1EYnR4RTRWM0wtcDB2MG1GTHI0akxGMUJZRUFRdzFtUW1hM0ZxOTRFcndMN0dUQnk4Q2pkS0s1aFR3UVk2bWdZcUt2OUE2OXhpVkM1NzZGWi1XYjNfaTFER2NqaThfY28tNjBaejd1NXlLOFc3R0hDal84LWc1WDJyS3FsVXpqOVJfZ3pwVXNoTFBjdzZz?oc=5",
-      "published_at": "2026-11-12T20:16:11+00:00",
-      "tickers": [
-        "GOOGL"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "0254a25fecd66be175b1",
-      "title": "Retail buyers limit Nvidia stock rout",
-      "href": "https://news.google.com/rss/articles/CBMinwFBVV95cUxPVHdDV1ltYXhSMVY3dUtMMGxkZHdxRld0cThBSlQzUmt2NE9fTENSM2NZWHowSk9wZS1ObXpTVFZqNlZ2dUQxam5NVC0yYXNBcW41amRsbXFMbEFfblNLWXNkSUhnOGcwOWFocUlyQllReDBwSjdzakJMZTNkYUpDN3FMY0QxaWVSeGRtNVEyOEJFNlRjb1ZXMFJmTXIxeUU?oc=5",
-      "published_at": "2026-11-12T20:10:35+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "6385bd63608cf9fc49d5",
-      "title": "Nvidia options traders bank on longer-term stock recovery",
-      "href": "https://news.google.com/rss/articles/CBMioAFBVV95cUxNOWEyZG5xanFDejdGbHAzNGdaMTh5d2tpR2dPWVB0eFVTNnRkcmJJbm1US3FlV3NzaGJsdE5kQ2h6TmswQjlHQ2V6akZkeWlHSFF3OGlybk9COXNPOGlZTFhvMVhUMW1EOUdFLTc0WDc0LWliQ0VETnRmNUJWU3hOdloyOE82ejcyYUlXWlJMT0tEeHpyOEowZnZFcF8yX3By?oc=5",
-      "published_at": "2026-11-12T18:38:45+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "3681c6c6d49c0bed28e2",
-      "title": "Microsoft restores service to Outlook and Teams after global outage",
-      "href": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPQWpWeUZnbllhcFk4WktZS0s3T1N6T3k3Vnhhd3pfSE9SWF9iRmRIQUljdHZXN0UtWS1uZS1rbUNZSlVPd1NXLXRtVUVtc3NQNTgxMVFMWjVnT3pPb09EX1g1YUx3WkF2VHk0bUMwWlhkRHdpT0JFRE5SQ3pQRkdmSnpUOHNXLUo1dXNSY3lFdkpSdU5laDdwSlhWRDVnNjBFcUh2Y0FwMXNldE8tSFpPaw?oc=5",
-      "published_at": "2026-11-12T18:32:00+00:00",
-      "tickers": [
-        "MSFT"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "108e3937ead9871f6f4f",
-      "title": "Instant view: Nvidia CEO Jensen Huang steps down",
-      "href": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNZC1uZTVNUkdPM3M1UzkxWjJDbmNFa1RwZm9iVmFuZ0FUMW1Sa1p4NlYxY3AxbE91d3VyN0J6aHM4UWpqTHpPZkdWbS04OEFyM3JqSzdoUUxhVWlTMlBReUZvQnRQbVhxdXhFMG8yenFBeUw1aVNxR0tzMWdMSzNlME80eW1ZZWlGcXJFUg?oc=5",
-      "published_at": "2026-11-12T16:21:53+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "4e5137ac8a9e11d94099",
-      "title": "Investors worry the AI trade might lose Nvidia's largesse after Huang",
-      "href": "https://news.google.com/rss/articles/CBMirwFBVV95cUxORTQxQmd6S0RyU3VwcVFwd3NWQzVfMndsUURvbG1QMDh5bkZwVEszT2d4XzNpR3V0N0NuQVpfN1RWVFk3OGNrcThCSHlxM0VIWTdkeVhSbldrVmNGTEFFT1RSWmxmTzh1V2FVcXp2dnVldjJsQ3VSZU1ORW84RnF1bVFpMFR0NTcxVDBKYjhXak1uelp3UThtVkEwX1dWbmQ5ZTBCVGxYMHk0elFCNktZ?oc=5",
-      "published_at": "2026-11-12T16:06:41+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "9f81163019318f68a30e",
-      "title": "NEWSLETTER: Drama at Nvidia: Pricing AI in a maelstrom",
-      "href": "https://news.google.com/rss/articles/CBMidkFVX3lxTE5kdDZPcWlBY18tQ0xnVmFqeUczM2JoUGh0eTRUX0hVSWFLcWlSX0lyZENTdEZWSUxyZkp4WHo1TFVKZjJsWUpkSnRXandoWEtrUWo0SGJxZjRVbDl0dmdPalRYUnlCeEVSOHBfc3hoLXJBN29jRnc?oc=5",
-      "published_at": "2026-11-12T15:20:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "bf09fd363f64e779febd",
-      "title": "COMMENTARY: Wall Street withstands AI blues. What about Nvidia shock?",
-      "href": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOSU9MUk9vWldOQkxjOU9sRk1tTEhqR1BfM21hYkk4SnF6RUVta3k0MzJjWXlteU5mMkZNcUlCdmItZmVFOEgtNmJsTmJaME1WdmJIQktKa3AzY0VNcGU0YmdHV1Z1eGl1eUEyckhwVDNtSzI5eldTbVRVX01FLUUyczB0OHdMakM5aFFpcU5jd0ZOTld6djlUdXRTVk5Iblo5UTY5QnoxTlNjY1FYcGIyUXJFeEpiNFFfS19xWGZoQzQ5MnJPWVp5NS1HR21MZw?oc=5",
-      "published_at": "2026-11-12T14:59:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "b6b76dcf86da5a86e143",
-      "title": "China's access to some Nvidia chips in doubt as curbs gain traction in US Congress",
-      "href": "https://news.google.com/rss/articles/CBMixAFBVV95cUxQOFBGZG9jUFFjX0tFY2tXSEVILWxGWU1rMzBvT1pTcUpqa2tEdEV0QWRybENzel9tU3hIQVhmTngyY3VGRGZZeGtCWDhEWm1oRXBzVWlGRnhwRzJrd0Z5bGZhUi1STHFLdFdLVnhoRUxMOW42MkNSSjNZX3JQR0o3OVpBSE10bE1kekw3OVVXYXVub0NzekN5NE4zb1JpRzB6Zjl2V1pTWFEteUQ1Q0hxd2lhLV9JLXloLVJqbWhUQ1pmN21H?oc=5",
-      "published_at": "2026-11-12T14:35:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "162817eabb9e4336c797",
-      "title": "Who is Nvidia interim CEO Colette Kress?",
-      "href": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOX1JRcXNDUmNTX3hYTkxSOC12bE1PajdrdjByNkRpa3dpY0hsc2FqR3NEeTROdVFDVFRMWTYxSHduZGxoQVl0QkJIckk5MTdJaWxBZTVQLVFwWTY5TXZKS0NlTy0wYmNNa0NpUGJIWlFkQ3VsNGxEMVB3eFhSaExUVllwdVBkWE1SMl9kR2pXbw?oc=5",
-      "published_at": "2026-11-12T14:16:56+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "5a6ab426d4f822399e7e",
-      "title": "Who would be next CEO at Nvidia? Top engineer and CFO favored as candidates",
-      "href": "https://news.google.com/rss/articles/CBMisgFBVV95cUxQd3NpblFpU0lCLW5JVWoxVkNRNldBNDY1c0xmakdfaHhXYkJmbFlHUDlyYmk2OVlRZDcwWXBxTFZnTEF5OUU4d2hnVXVReTcyMzdKOW1qVWxpc3dOb3NTMHQ4VG1ZczdiQ2tETEN6SENYMkdtbkxKQ0psUjIyY19FRWF2QjJNdUJaSEFnUzJXU09TZFFSMERPSXI2Z0dib1pSNjNnYzBmOUtpN0FhODBqd3dB?oc=5",
-      "published_at": "2026-11-12T12:42:37+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "509e03f18042e222f03f",
-      "title": "Nvidia board weighs CEO Huang's future as leadership crisis deepens",
-      "href": "https://news.google.com/rss/articles/CBMiogFBVV95cUxPTlA5REZDN0pJYkxyUXM4YjE1Q1BLN0tKNENxM3NsV3RKblNhbWpsdEFUUVRieUtNckY4S3YwdkFUdjhvZVk4Nm1Ga1JNUmZkRzMtaEhHazhHNmZDX3Z1WUNzZnJmdEpLeVRmcngzdEMwM2N3b1I1ckQ1Q2N2a2NRNWtfa0ZTTkhYaXlqc1NqbklwWUxIdktqdzZvS0M2cGhSYkE?oc=5",
-      "published_at": "2026-11-12T11:50:34+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "797b2beb7bbe52dc933b",
-      "title": "Equities close lower as Nvidia drop outweighs energy gains",
-      "href": "https://news.google.com/rss/articles/CBMingFBVV95cUxQY01YWkJBY3Roa2hlWkVsbHhpcHplMm5NX09pWEJlMC1rWTY1ZDJoTUh0elc0WTZvdmpDOXJhS04tN2J5Y0N4NmZPdGk0aUhKdVZLT2RMSTk4S2EyZEJMYzY3WnpMMklfRjF3ZEJXZzU3d1VBTmlWS3Y1cllaYURseVQ4Nl93RFVLOXB4M1J6bnM1YVQ5QXBaSDZCOXEwUQ?oc=5",
-      "published_at": "2026-11-12T09:37:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "d37479c485d8b5ffc86c",
-      "title": "Morning Bid: Jensen hangs on as Nvidia tumbles",
-      "href": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQQUNBZ1ptWWtYYURvcjJIZE44TjJYblFDYjNDUHlVRHVKaGhpNGZHMDZrVnlob3RtN05VaFJsVXZiR3VxZ2dkaGduSHNPYi15YUJNSFh3ZXRxRDlzd3kxcVVzMDNZMXpzc01ZY2RIOGRsM2pmZExNZ1FUT1FUemd3U3hGNkgxVUkxQnl5U2FqU0o?oc=5",
-      "published_at": "2026-11-12T05:37:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "9e0167d99329e8330207",
-      "title": "CoreWeave sparks AI cloud stock rally, lifts Nvidia as results ease bubble fears",
-      "href": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPaTZzT256WkU3aE4zUnA1UXBqX05FOENKeXI4MFZtUDQtc28zeDBLWEE2UGdydUU0OXI0LVotdWEwUVBJeDB0bVh6Z1BrN0dQbHFRa0RwZ2xEdDlBaS12T3ZSQXlzcHNSTHAxN2FBUjFXTTlaTmRUWWVJdFZmaXBDZTJteWlWQ2d0MDYzRHRyLWV3Y0xiMU5ndjRMdlBOaDR0T25uVVFNZS12ZDhjWkRMRzBDc2EzN2RyR0dvTnZqWlgxZw?oc=5",
-      "published_at": "2026-11-11T20:54:06+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     }
   ],
-  "news_generated_at": "2026-11-15T08:55:41+08:00",
+  "news_generated_at": "2026-11-16T09:13:25+08:00",
   "news_status": "ok",
   "calls": [
     {
@@ -11031,10 +11616,10 @@
   "si_basis": {
     "classification": "rounded_historical_reference",
     "live_quotes": false,
-    "source_capture_date": "2026-11-05",
+    "source_capture_date": "2026-11-13",
     "source_date_range": [
       "2026-10-30",
-      "2026-11-05"
+      "2026-11-13"
     ],
     "tenor_unit": "unconfirmed",
     "coupon_basis": "unconfirmed",

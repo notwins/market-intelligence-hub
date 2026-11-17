@@ -1,0 +1,21 @@
+/* Financial boundary checks: exact identities, source-consistent previous price and honest overlays. */
+const assert=require('node:assert/strict');
+const S=require('../site/stocks-beta.js');
+assert.equal(S.previousQuote({sourceId:'bos',date:'2026-11-13',close:162.85},{daily:[['2026-11-12',999]]},{points:[['2026-11-12',166.19],['2026-11-13',162.85]]}).value,166.19);
+assert.equal(S.previousQuote({sourceId:'bos',date:'2026-11-13',close:162.85},{daily:[['2026-11-12',999]]},null),null,'Never compare a BOS quote with an unrelated prior source');
+assert.equal(S.previousQuote({sourceId:'yahoo',date:'2026-11-13',close:110},{daily:[['2026-11-12',100],['2026-11-13',110]]},null).pct,10.000000000000009);
+const records=[{id:'US',ticker:'TEST',bbTicker:'TEST US',currency:'USD'},{id:'SG',ticker:'TEST',bbTicker:'TEST SP',currency:'SGD'}];
+assert.equal(S.findRecord(records,{ticker:'TEST',currency:'USD'},null,null).id,'US');
+assert.equal(S.findRecord([...records,records[0]],{ticker:'TEST',currency:'USD'},null,null),null,'Ambiguous identity must not silently match');
+assert.equal(S.findRecord(records,{ticker:'TEST',currency:'HKD'},null,null),null);
+const vals=S.valuationPoints([{date:'2026-01-01',value:20,reportDate:'2026-01-02'},{date:'2026-01-01',value:21,reportDate:'2026-01-03'},{date:'2026-02-01',value:0},{date:'2026-03-01',value:-1}], 'pe',{row:{priceAsOf:'2026-11-13',pe:11.2},reportDate:'2026-11-16'});
+assert.deepEqual(vals.map(p=>p.value),[21,11.2]);
+let r=S.rebase([{name:'price',points:[['2026-01-01',50],['2026-02-01',100],['2026-03-01',150]]},{name:'pe',points:[['2026-02-01',10],['2026-03-01',15]],dots:true}]);
+assert.equal(r.date,'2026-02-01');assert.deepEqual(r.series.map(s=>s.points),[[['2026-02-01',100],['2026-03-01',150]],[['2026-02-01',100],['2026-03-01',150]]]);
+assert.equal(S.rebase([{points:[['2026-01-01',2]]},{points:[['2026-02-01',3]]}]).series.length,0,'No interpolation to manufacture a common base');
+const news=Array.from({length:14},(_,i)=>({id:String(i),tickers:['NVDA'],href:'https://example.com/'+i,published_at:'2026-11-'+String(i+1).padStart(2,'0')}));
+news.push({...news[13],writeup:{body:'Saved explanation'}});news.push({id:'bad',tickers:['NVDA'],href:'javascript:alert(1)'});news.push({id:'other',tickers:['NVDA2'],href:'https://example.com/other'});
+const latest=S.newsFor(news,'NVDA');assert.equal(latest.length,10);assert.equal(latest[0].id,'13');assert.equal(latest[0].writeup.body,'Saved explanation');assert(!latest.some(n=>['bad','other'].includes(n.id)));
+const svg=S.plot([{name:'P/E',points:[['2026-01-01',20],['2026-03-01',30]],dots:true,color:'#123456'}],{from:'2026-01-01',to:'2026-03-01',title:'P/E',unit:'times'});
+assert(!svg.includes('<polyline'),'Sparse valuations must stay dots, without filling missing editions');assert(!svg.includes('NaN'));
+console.log('Stocks BETA: source, identity, news, sparse valuation and overlay boundary checks passed.');

@@ -55,7 +55,7 @@ assert.equal(families.filter(n => !n.hidden)[1].classes.has('right-branch'), tru
 assert(families.filter(n => !n.hidden).every(n => n.querySelector('details').open));
 click('clear-search'); assert(input.focused); assert.equal(input.value, ''); assert(details.every(d => !d.open)); assert(nodes.every(n => !n.hidden));
 click('expand-all'); assert(details.every(d => d.open));
-search('225'); assert(status.textContent.startsWith('1 matching destination'));
+search('structured-investment references'); assert(status.textContent.startsWith('1 matching destination'));
 const target = nodes.find(n => n.querySelector(':scope > .map-link').attrs.href === 'v4.html#history/si');
 assert(!target.hidden); assert(!target.parentElement.closest('.map-node').hidden);
 assert(target.parentElement.closest('details').open);

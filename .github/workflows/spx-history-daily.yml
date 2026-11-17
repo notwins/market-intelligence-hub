@@ -1,0 +1,32 @@
+name: S&P 500 completed-session history
+# Data collection only. The existing 08:00 Singapore publish.yml schedule
+# deploys current main after this 07:15 collector; bot pushes do not dispatch it.
+on:
+  workflow_dispatch:
+  schedule:
+    # After the completed US regular session, 07:15 Singapore Tue-Sat.
+    - cron: '15 23 * * 1-5'
+permissions:
+  contents: write
+concurrency:
+  group: spx-history-refresh
+  cancel-in-progress: false
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s scripts -p test_spx_history.py
+      - run: python scripts/update_spx_history.py
+      - name: Commit only the index observations
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add site/data/spx
+          git commit -m 'Refresh completed S&P 500 session history'
+          git push origin HEAD:main
