@@ -1,7 +1,10 @@
 # Daily MAS SGS curve and prices
 
-The owner's daily Codex automation runs at **19:00 Asia/Singapore**. It uses the
-public MAS Daily SGS Prices **Closing Levels** table:
+The GitHub-hosted **Market data, weekly Fed history and Pages** workflow
+(`.github/workflows/publish.yml`) schedules SGS at **19:00 Asia/Singapore**,
+equivalent to **11:00 UTC every day**. It runs while the owner's computer is off.
+The duplicate Codex schedule must remain disabled after the verified cloud
+handoff. It uses the public MAS Daily SGS Prices **Closing Levels** table:
 https://eservices.mas.gov.sg/statistics/fdanet/SgsBenchmarkIssuePrices.aspx
 
 The writer is `python scripts/update_sgs_daily.py`. No credentials or dependencies
@@ -36,31 +39,69 @@ has a selectable daily series and accessible values. `sgs-daily-status.json`
 records the actual source check and last verified date. Non-trading days add no
 fake observations. A successful source check is not a claim of a new market date.
 
-## Daily publication procedure
+## Cloud publication procedure
 
-Use a fresh isolated checkout of current `notwins/market-intelligence-hub` main.
-Clone with `git -c core.autocrlf=false clone` to preserve exact reference bytes.
-Read AGENTS.md. Run the writer, then `python scripts/build_desk_data.py --sgs-only` and the
-relevant Python and JS tests. If the writer fails, publish only the new error
-status while keeping the last good snapshot and history; do not fabricate data
-or claim success. Run the normal Pages artifact build/validation before pushing.
+The 19:00 SGS schedule selects `scripts/sgs_github_refresh.py`. The existing
+08:00 headline, 07:00 bond and weekly Fed schedules retain their previous timing
+and source boundaries. An SGS run does not refresh those other sources or use
+the generic whole-tree generated-data publisher.
 
-Commit only `site/data/sgs-daily-snapshot.json`, `site/data/sgs-daily-status.json`
-and derived `site/data/desk-data.json` for a routine run. Preserve unrelated paths,
-source schedules and all report/news archives. Use the authorized GitHub route
-with latest-main ancestry and a non-force expected-head check. If main advances,
-rerun the update and checks on the new main. Do not restore an old site snapshot.
+A manual **Run workflow** with **sgs_only** enabled runs the identical SGS path.
+Leaving that option off retains the previous general manual workflow behavior.
+The installation push also performs one cloud handoff while
+`sgs-daily-status.json` has no `refresh_runner: github_actions` marker. A
+successful cloud status commit prevents ordinary UI pushes from fetching MAS.
 
-Wait for the normal Hub Pages workflow to succeed. Read back the exact live
-snapshot/status and confirm the new last observation and matching values, prices,
-metadata and retained prior dates. Do not call a commit or a saved schedule a
-successful refresh. A failed/blocked publication retains last-good live data.
+The cloud writer preserves earlier derived build changes in the isolated
+runner's Git stash, fetches current main, and invokes the current owning writer
+and SGS checks. It replaces only SGS rows in the desk adapter. A routine data
+commit is limited to these three paths:
 
-Local Codex schedules require the local environment to be available. The source
-itself requires no logged-in browser. Routine SGS updates do not write to the
-independent research/content repository or change other source schedules.
+- `site/data/sgs-daily-snapshot.json`
+- `site/data/sgs-daily-status.json`
+- `site/data/desk-data.json`
 
-Checks: `python -m unittest discover -s scripts -p test_sgs_daily.py`,
+Pushes are non-force. If main advances, the writer starts from that new main
+and fetches MAS again, preserving concurrent observations and unrelated edits.
+Authentication/network errors do not become force pushes. A bounded retry
+exhaustion or fatal publication error stops the build; last-good live data stays
+available. No new credentials, personal token, hosting service or permission
+increase is required; the existing repository-scoped Actions token is used.
+
+The SAME workflow then rebuilds and validates the full Pages artifact and
+deploys it. It does not depend on its bot-authored data push starting a second
+workflow. GitHub documents this token behavior at
+https://docs.github.com/en/actions/concepts/security/github_token.
+
+MAS access, layout, conflict or SGS-check failure restores the previous snapshot
+and desk bytes. Only a dated failure status is saved. The normal release gates
+still apply before displaying it; after a safe health publication the workflow
+is marked failed. Failure details belong in Actions logs, not public JSON.
+
+The cloud status identifies `refresh_runner: github_actions`, its real source
+check time and the original MAS observation date. The Actions summary names the
+direct MAS source; there is no source AI chat. GitHub scheduling can start late;
+the configured cadence remains 19:00 Singapore time.
+
+## Verification and recovery
+
+Check the Actions run and its **Daily MAS SGS refresh** summary. A successful
+run requires both build/validation and Pages deployment, followed by live
+`scripts/verify_sgs_daily.py` snapshot/status, adapter and reader readback. The homepage, Prices and Historical Charts continue
+to read the same shared daily dataset. A commit or saved schedule alone is not
+verification of publication.
+
+For owner recovery, use a fresh isolated checkout with
+`git -c core.autocrlf=false clone`. Read AGENTS.md. The original local
+`python scripts/update_sgs_daily.py` plus
+`python scripts/build_desk_data.py --sgs-only` remains available for a deliberate
+manual recovery; it is not a second recurring scheduler. Routine recovery must
+preserve the same three-file scope, histories and non-force publication rules.
+
+Checks: `python -m unittest discover -s scripts -p test_sgs_github_refresh.py`,
+`python -m unittest discover -s scripts -p test_sgs_daily.py`,
 `node scripts/test_sgs_daily.cjs`, `node scripts/test_market_snapshot.cjs`,
-`python -m unittest discover -s scripts -p test_desk_data.py`, and the full final
-Pages artifact suite required by AGENTS.md.
+`node scripts/test_content_delivery.cjs`, and the complete final Pages artifact
+suite required by AGENTS.md. Cloud publication tests cover source-failure
+retention, the allowlist, concurrent main/SGS updates, non-concurrency push
+failures, schedule selection and the one-time cloud handoff.

@@ -252,10 +252,20 @@ def build_graph(root=ROOT):
         ('colour-audit','Publication colour audit','Scheduled public colour/tagging audit; report-only, not a research source.','Saturday 12:00 SGT · GitHub workflow','.github/workflows/weekly-publication-colour-audit.yml'),
     ]
     for id,title,desc,schedule,evidence in jobs: node('job:'+id,title,'automation','automation',description=desc,schedule=schedule,status='Configuration mapped; runtime not monitored',evidence=[evidence.strip()],parent='group:automation')
-    for id in ['daily', 'hourly', 'sgs', 'bos']:
+    sgs_cloud = ((root / 'scripts/sgs_github_refresh.py').is_file() and
+                 any(item['cron_utc'] == '0 11 * * *' for item in refresh['architecture']['triggers']['schedules']))
+    for id in ['daily', 'hourly', 'bos'] + ([] if sgs_cloud else ['sgs']):
         nodes['job:' + id]['schedule_basis'] = 'Declared configuration; not rechecked by the public build'
         nodes['job:' + id]['status'] = 'Declared cadence; private enabled state and latest execution not inspected'
         nodes['job:' + id]['confidence'] = 'reviewed'
+    if sgs_cloud:
+        nodes['job:sgs'].update({
+            'schedule': '19:00 SGT daily · GitHub Actions',
+            'schedule_basis': 'Read from .github/workflows/publish.yml and scripts/sgs_github_refresh.py',
+            'status': 'Cloud configuration mapped; inspect Actions for execution',
+            'confidence': 'source',
+            'url': 'https://github.com/notwins/market-intelligence-hub/actions/workflows/publish.yml',
+            'evidence': ['.github/workflows/publish.yml', 'scripts/sgs_github_refresh.py', 'SGS_DAILY.md']})
     node('process:blueprint-build','Blueprint generator','process','software',description='scripts/build_architecture_map.py inventories the UI source and reads its public workflow triggers. The existing UI build runs it; no additional schedule is installed.',evidence=['scripts/build_architecture_map.py','.github/workflows/publish.yml'],parent='group:software')
     node('app:blueprint','Website Blueprint','software','software',url=HUB+'blueprint.html',description='Self-contained map generated with the UI artifact. Opening it online or manually refreshing checks the independent research index. Private task status is not monitored.',evidence=['scripts/blueprint-template.html','site/blueprint.js','site/research-feed.js'],parent='group:software')
     edge('job:hub-build','process:blueprint-build','data','runs existing generator',evidence='.github/workflows/publish.yml')
@@ -292,7 +302,7 @@ def build_graph(root=ROOT):
         ('data:prices','page:desk.html'),('data:prices','route:earnings'),('data:prices','route:history/shares'),('data:bos','page:desk.html'),('data:bos','route:history/beta3-shares'),('data:bos','route:earnings'),
         ('data:share-history.csv','route:history/beta3-shares'),('data:share-history.csv','route:history/beta4-shares'),('data:earnings-history.json','route:earnings'),('data:desk-data.json','page:desk.html'),('data:site-search.json','page:search.html'),('data:ust-curves-daily.json','route:history/curves'),
         ('data:beta-shares.json','route:earnings'),('data:beta-shares.json','route:history/beta-shares'),('data:master-v3.json','route:master'),('data:master-v3.json','route:master/pivot'),('data:master-v3.json','route:watchlist'),
-        ('app:codex','job:daily'),('app:codex','job:hourly'),('app:codex','job:sgs'),('app:codex','job:bos'),('app:github','job:prices'),('app:github','job:hub-build'),('app:github','job:content-build'),('app:github','job:colour-audit'),('app:pages-hub','page:desk.html'),('app:pages-hub','page:v4.html')]
+        ('app:codex','job:daily'),('app:codex','job:hourly'),('app:github' if sgs_cloud else 'app:codex','job:sgs'),('app:codex','job:bos'),('app:github','job:prices'),('app:github','job:hub-build'),('app:github','job:content-build'),('app:github','job:colour-audit'),('app:pages-hub','page:desk.html'),('app:pages-hub','page:v4.html')]
     for a,b in pairs:
         if a in nodes and b in nodes:
             label='manual saved observation' if a=='source:wsj' else 'feeds / enables'
