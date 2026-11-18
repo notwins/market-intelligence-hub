@@ -58,7 +58,8 @@ The existing first-step month controls the inclusive monthly step count.
 Matched company descriptions come from ShareStaticData; full source profiles
 remain in company cards, while the A4 sheet uses readable excerpts.
 
-Barrier labels occupy a dedicated rail outside the price plot. The renderer
-automatically spreads close or coincident levels and connects them to their
-unchanged price levels with leaders. Label backgrounds never mask data, and
-the price path is painted above barrier lines at every crossing.
+Barrier words sit inside clear sections of their own dashed lines. Placement tests
+every price-path segment against the label box plus four pixels of clearance,
+and avoids other labels. Close barriers use separate horizontal gaps. The price
+path is painted last. Only when no clear gap exists anywhere on a barrier does
+that label use the outside rail; coincident price data is never obscured.

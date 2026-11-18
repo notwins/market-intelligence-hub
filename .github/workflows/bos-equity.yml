@@ -1,0 +1,53 @@
+name: Daily BOS equity coverage (data only)
+on:
+  workflow_dispatch:
+  schedule:
+    # 10:00 Asia/Singapore. GitHub schedule delivery is best effort.
+    - cron: '0 2 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: bos-equity-data-writer
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          path: code
+          sparse-checkout: |
+            scripts
+            docs
+            .github
+      - uses: actions/checkout@v6
+        with:
+          ref: market-prices
+          path: feed
+          sparse-checkout: bos
+      - uses: actions/checkout@v6
+        with:
+          repository: notwins/market-intelligence-private-sources
+          ref: main
+          path: private-archive
+          ssh-key: ${{ secrets.BOS_ARCHIVE_SSH_KEY }}
+          sparse-checkout: bos
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install reviewed parser dependencies
+        run: python -m pip install pdfplumber==0.11.9 pypdf==6.21.4
+      - name: Focused parser and importer tests
+        working-directory: code
+        run: |
+          python -m unittest discover -s scripts -p test_parse_bos_equity.py
+          python -m unittest discover -s scripts -p test_bos_equity_feed.py
+          python -m unittest discover -s scripts -p test_run_bos_equity.py
+      - name: Refresh, privately archive, validate and publish BOS data
+        run: >-
+          python code/scripts/run_bos_equity.py
+          --feed-dir feed --archive-dir private-archive
+          --work-dir "${{ runner.temp }}/bos-run"
+      # Never upload PDFs, full extraction or private receipts as public artifacts.

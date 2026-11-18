@@ -2,10 +2,57 @@
 
 The Bank of Singapore coverage task updates the Hub's prices and valuations
 without rebuilding or deploying the website. The existing Codex task is
-`refresh-bos-equity-prices-and-valuations`, scheduled daily at 10:00 Singapore
-time with `gpt-6.1-sol` and high reasoning. Keep that task, its schedule and its
-project assignment. Local scheduled runs need the computer and Codex app
-running. A configured schedule is not evidence that an unattended run succeeded.
+`refresh-bos-equity-prices-and-valuations`, now the 10:30 Singapore fallback
+with `gpt-6.1-sol` and high reasoning in the same project. The primary is
+`.github/workflows/bos-equity.yml`, a GitHub-hosted Python job at 10:00 Singapore
+(`0 2 * * *` UTC), with a manual Run workflow control. GitHub can start it while
+the owner's computer is off; scheduled delivery can be delayed. The local
+fallback still needs the computer and Codex app running. A configured schedule
+is not evidence that an unattended run succeeded.
+
+The owner explicitly authorised this primary/fallback setup on 18 November
+2026. Keep the Yahoo 08:30 and all unrelated schedules unchanged. Cloud runs
+execute deterministic Python, without a model/API call. The parser and importer
+remain unchanged. Routine refreshes may only publish `bos/` on `market-prices`.
+
+## Cloud runner and private archive
+
+`scripts/run_bos_equity.py` discovers the dated PDF, parses it once with the
+reviewed parser, and uses the same importer/validation functions below. It runs
+the focused checks, holds publication on cleanup warnings, checks every Git
+index reference against its manifest checksum (including CRLF CSV bytes), and
+proves the root tree outside `bos/` is unchanged. Public branch contention causes
+fresh isolated worktrees and re-ingestion against the fetched head, at most
+three publication attempts. A repeat source remains a public byte-identical
+no-op. Full source and monthly archive retention rules below still apply.
+
+Original PDFs, full ESG-inclusive extraction and private run receipts are saved
+before public promotion in **private** repository
+`notwins/market-intelligence-private-sources`, under `bos/`. They are not subject
+to public snapshot or Actions artifact expiry. The runner checks that this
+archive is not anonymously accessible. A write-enabled deploy key restricted to
+that archive is held in the Hub's `BOS_ARCHIVE_SSH_KEY` Actions secret. The
+ordinary workflow token only writes the Hub data branch. No full source files
+or private receipts are uploaded as public Actions artifacts or printed in logs.
+Archive failure holds publication. Read-back failure after a successful push
+fails the run and is not reported as verified success.
+
+The workflow uses its own non-cancelling concurrency group. Other writers,
+including the local fallback and Yahoo, are protected by expected-head checks
+and normal non-force pushes rather than relying on this workflow-only lock.
+All retained valuation JSON/CSV and monthly price files are read back from the
+remote raw URLs; the runner allows for GitHub's raw-file cache to expire.
+
+The local 10:30 fallback first fetches the private archive and looks for a
+same-Singapore-day `bos/receipts/*-complete.json` receipt with remote verification.
+It validates the current public feed and downloads the corresponding original
+PDF/full extraction into the established local private source directory. A
+verified cloud completion ends the fallback without another source parse or
+public commit. If absent, failed, or unverified, perform the normal independent
+local refresh below. Preserve all existing local sources and private receipts.
+After a local refresh, archive only its validated immutable source files and
+private receipt to the private repository using ordinary non-force updates.
+Do not treat a no-new-edition run as fresh market prices.
 
 Use the reviewed importer and parser from current `main` in
 `notwins/market-intelligence-hub`. Read the repository instructions first. Work
