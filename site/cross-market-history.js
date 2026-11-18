@@ -2,6 +2,11 @@
   'use strict';
   const D = window.HistoricalFredData, M = window.CrossMarketModel, notes = window.CrossMarketNotes;
   const status = document.querySelector('#market-status');
+  const guide = document.querySelector('#reading-guide');
+  const guideButton = document.querySelector('#open-reading-guide');
+  guideButton.hidden = false;
+  guideButton.addEventListener('click', () => guide.showModal());
+  guide.querySelectorAll('[data-guide-jump]').forEach(anchor => anchor.addEventListener('click', () => guide.close()));
   const colors = ['#114fa9', '#087e72', '#6843a6', '#b66a08', '#b63d56', '#676f87', '#233044'];
   const equityColors = ['#086b58', '#197443', '#00727e', '#ab3929', '#a02d64', '#986005'];
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));

@@ -6,12 +6,12 @@
   <meta name="description" content="Study Singapore government bonds, US Treasury yields, the S&P 500, shares and economic data around major events.">
   <title>UST, SGS &amp; Stock Market Beta · Market Intel</title>
   <link rel="icon" href="favicon.ico">
-  <link rel="stylesheet" href="cross-market-history.css">
+  <link rel="stylesheet" href="cross-market-history.css?v=20261118.guide">
   <script src="share-lab-data.js" defer></script>
   <script src="historical-fred-data.js" defer></script>
   <script src="cross-market-model.js" defer></script>
   <script src="cross-market-context.js" defer></script>
-  <script src="cross-market-history.js" defer></script>
+  <script src="cross-market-history.js?v=20261118.guide" defer></script>
 </head>
 <body>
   <header class="masthead">
@@ -27,8 +27,28 @@
       <div class="eyebrow">Historical data <span>Beta</span></div>
       <h1 id="page-title">UST, SGS &amp; Stock Market</h1>
       <p><strong>See how Singapore yields, US rates and stocks moved through the same events.</strong> Start with current conditions, then scroll back through the timeline.</p>
-      <div class="hero-links"><a href="#current">Current market ↓</a><a href="#sgs-report">Read the SGS research report ↓</a></div>
+      <div class="hero-links">
+        <button type="button" id="open-reading-guide" aria-haspopup="dialog" hidden>How to read this page</button>
+        <a href="#current">Current market ↓</a>
+        <a href="#sgs-report">Read the SGS research report ↓</a>
+      </div>
     </section>
+    <dialog id="reading-guide" aria-labelledby="guide-title">
+      <div class="guide-head">
+        <h2 id="guide-title" tabindex="-1" autofocus>How to read this page</h2>
+        <form method="dialog"><button type="submit" class="guide-close" aria-label="Close reading guide">×</button></form>
+      </div>
+      <ol>
+        <li><strong>Start with Current or jump to an episode.</strong> Check each source’s observation date. The numbered event lines mark the same dates across every chart in a historical card.</li>
+        <li><strong>Compare the same bond maturity.</strong> Select 2Y, 5Y or 10Y. In the event table, a positive spread change means the US Treasury yield rose more or fell less than the SGS yield. A basis point (bp) is 0.01 percentage point.</li>
+        <li><strong>Read stocks from a common starting point.</strong> A line at 110 is 10% above its base of 100. The top and bottom shares come from the available archive. Open the valuation comparison to line up a share’s price with its P/E and P/B.</li>
+        <li><strong>Check what looks unusual.</strong> In the FRED panels, ±2σ flags a reading to investigate against its own historical baseline. Check its date and unit. Lines moving around the same event can suggest a connection, but timing alone cannot establish a cause.</li>
+      </ol>
+      <div class="guide-actions">
+        <a href="#event-2024-09-18" data-guide-jump>Try the September 2024 example ↓</a>
+        <a href="#methods" data-guide-jump>Sources and methods ↓</a>
+      </div>
+    </dialog>
     <p id="market-status" role="status">Loading the saved market and economic series…</p>
     <nav id="episode-index" aria-label="Jump to an episode"></nav>
     <div id="market-episodes"></div>
