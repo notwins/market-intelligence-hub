@@ -26,6 +26,12 @@
     'Commodities':['DCOILWTICO','DGS10','DTWEXBGS','SPX']
   };
   const defaultMarkets = ['DGS2','DGS10','SPX','DEXSIUS'];
+  const researchDates = [
+    {date:'2024-10-31',label:'Bank of Japan maintained its overnight-rate guideline near 0.25%',url:'https://www.boj.or.jp/en/mopo/mpmdeci/state_2024/k241031a.htm'},
+    {date:'2026-09-16',label:'Fed raised the funds target range by 25 bp',url:'https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm'},
+    {date:'2026-10-28',label:'Fed held the funds range at 3.75–4.00%',url:'https://www.federalreserve.gov/newsevents/pressreleases/monetary20261028a.htm'},
+    {date:'2026-11-10',label:'New York Fed released Q3 household debt and credit data',url:'https://www.newyorkfed.org/newsevents/news/research/2026/20261110'}
+  ];
   const notes = {
     'Credit & bonds':'Read spreads and yields alongside bond total-return growth. A wider spread, higher yield and slower total-return growth are three different measures.',
     'Banks & lending':'Compare delinquency, charge-offs and lending balances at their published frequencies. Quarterly household data represents a period.',
@@ -307,7 +313,8 @@
     if(state.index.archive_version!==catalog.archive_version)throw Error('Archive version mismatch');
     state.markets=state.index.datasets.filter(e=>Object.hasOwn(marketNames,e.id)).map(market);
     const [spx,chronology,sgs]=await Promise.all(['spx/history.json','historical-fred-events.json','sgs-daily-snapshot.json'].map(file=>local(file).catch(()=>null)));
-    state.historicalEvents=Array.isArray(chronology?.events)?chronology.events:[];
+    state.historicalEvents=[...(Array.isArray(chronology?.events)?chronology.events:[]),...researchDates]
+      .sort((a,b)=>a.date.localeCompare(b.date));
     if(spx?.id==='SPX'&&spx.symbol==='^GSPC')state.markets.push({id:'SPX',name:'S&P 500',unit:'index points',kind:'price',source:spx.source_url,basis:'Saved S&P 500 price-index close',points:B.points(spx.points)});
     const sgsTenor=sgs?.tenors?.findIndex(t=>t.label==='10Y') ?? -1;
     if(sgsTenor>=0&&Array.isArray(sgs.observations))state.markets.push({id:'SGS10',name:'Singapore SGS 10Y',unit:'%',kind:'yield',source:sgs.source_url,basis:'MAS benchmark closing bid yield',points:B.points(sgs.observations.map(p=>[p.date,p.values[sgsTenor]]))});
