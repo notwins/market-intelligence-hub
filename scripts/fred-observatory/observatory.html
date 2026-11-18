@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="A quiet, information-rich macro risk observatory for the Market Intelligence Hub. Historical FRED data, unusual readings and cross-market charts in one view.">
-  <title>Risk Observatory · Market Intelligence</title>
+  <title>V2 Risk Observatory · Federal Reserve Economic Data</title>
   <!--STYLES-->
 </head>
 <body class="observatory">
@@ -12,18 +12,18 @@
   <header class="masthead">
     <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><div><b>MARKET INTELLIGENCE</b><span>Research, in perspective.</span></div></div>
     <nav class="section-links" aria-label="Page sections"><a class="selected" href="#workspace">Observatory</a><a href="#charts">Chart wall</a><a href="#series-library">Series library</a><a href="#data-coverage">Sources</a></nav>
-    <div class="masthead-end"><a class="version-link" href="01-market-desk.html">Explore Market Desk <span aria-hidden="true">↗</span></a><button type="button" id="fullscreen" class="icon-button" aria-label="Toggle fullscreen" title="Toggle fullscreen">⛶</button></div>
+    <div class="masthead-end"><a class="version-link" href="01-market-desk.html">Explore V1 Market Desk <span aria-hidden="true">↗</span></a><button type="button" id="fullscreen" class="icon-button" aria-label="Toggle fullscreen" title="Toggle fullscreen">⛶</button></div>
   </header>
 
   <section class="page-intro" aria-labelledby="page-title">
-    <div class="intro-title"><span class="eyebrow">FRED / MACRO &amp; CREDIT</span><h1 id="page-title">Risk observatory<span class="edition">02</span></h1><p>Read the market through rates, credit and repayment stress.</p></div>
+    <div class="intro-title"><span class="eyebrow">FEDERAL RESERVE ECONOMIC DATA</span><h1 id="page-title">V2 Risk Observatory</h1><p>Read the market through rates, credit and repayment stress.</p></div>
     <div class="snapshot"><span class="snapshot-dot" aria-hidden="true"></span><div><b>Snapshot · not live</b><span>Downloaded 16 Nov 2026 · SGT</span></div></div>
   </section>
 
   <section class="command-bar" aria-label="Dashboard controls">
     <div class="control-cluster">
       <label for="range"><span>Chart history</span><select id="range"><option value="1">1 year</option><option value="5">5 years</option><option value="10">10 years</option><option value="20" selected>20 years / available</option></select></label>
-      <label for="baseline"><span>Heat baseline</span><select id="baseline"><option value="5" selected>Trailing 5 years</option><option value="10">Trailing 10 years</option><option value="20">Trailing 20 years</option></select></label>
+      <label for="baseline"><span>Heat baseline</span><select id="baseline"><option value="5" selected>Trailing 5 years</option><option value="10">Trailing 10 years</option><option value="15">Trailing 15 years</option><option value="20">Trailing 20 years</option></select></label>
       <label for="heat-mode"><span>Compare</span><select id="heat-mode"><option value="level" selected>Latest level</option><option value="change">Latest change</option></select></label>
     </div>
     <div class="heat-key" aria-label="Heat scale"><span><i class="key-normal"></i>Within 1σ</span><span><i class="key-warm"></i>1–2σ · watch</span><span><i class="key-hot"></i>≥2σ · focus</span><button id="methodology" type="button" class="text-button">How to read σ <span aria-hidden="true">ⓘ</span></button></div>
@@ -38,7 +38,7 @@
         <div class="statistical-note"><span aria-hidden="true">↗</span><p>Heat shows unusual readings in either direction. It does not assign a buy or sell signal.</p></div>
       </section>
       <section id="series-library" class="series-panel">
-        <div class="rail-heading"><div><span class="eyebrow">COMPLETE WATCHLIST</span><h2>Series library</h2></div><span class="series-total">69</span></div>
+        <div class="rail-heading"><div><span class="eyebrow">COMPLETE WATCHLIST</span><h2>Series library</h2></div><span class="series-total" id="series-total"></span></div>
         <label class="search-wrap" for="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Find a name or FRED ID" aria-label="Search FRED series"></label>
         <div class="library-caption"><span>Latest value / signed σ</span><span>Click to inspect</span></div>
         <div id="all-series" class="series-heatmap"></div>
@@ -54,10 +54,14 @@
         <div class="section-heading chart-section-heading"><h2><span class="section-index">02</span>Follow the connections</h2><div class="chart-hint"><span class="mini-line" aria-hidden="true"></span>Hover charts · click a card for detail</div></div>
         <div id="charts" class="chart-wall"></div>
       </section>
+      <section class="archive-metrics" aria-labelledby="expanded-heat-title">
+        <div class="section-heading"><h2 id="expanded-heat-title">From the expanded archive</h2></div>
+        <div id="expanded-heat-cards" class="archive-metric-grid"></div>
+      </section>
       <section id="data-coverage" class="coverage-panel" aria-labelledby="coverage-title"><div><span class="eyebrow">OBSERVATIONS &amp; PROVENANCE</span><h2 id="coverage-title">The date matters as much as the number.</h2></div><div id="coverage"></div></section>
     </div>
   </main>
-  <footer class="page-footer"><span><b>MARKET INTELLIGENCE</b> / Risk observatory</span><span>Native frequencies · Original units · Observation dates on every card</span><a href="#page-title">Back to top ↑</a></footer>
+  <footer class="page-footer"><span><b>MARKET INTELLIGENCE</b> / V2 Risk Observatory</span><span>Native frequencies · Original units · Observation dates on every card</span><a href="#page-title">Back to top ↑</a></footer>
   <!--DATA-->
   <!--ENGINE-->
 </body>

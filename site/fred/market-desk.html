@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light">
-  <title>Market Desk — Market Intelligence</title>
+  <title>V1 Market Desk · Federal Reserve Economic Data</title>
   <style>:root{--bg:#f3f4f4;--paper:#fffefd;--ink:#17243c;--muted:#687587;--line:#dce2e5;--purple:#8274cf;--blue:#527a9d;--mint:#6b9a8b;--peach:#c68e72;--normal:#f6f7f6;--warm:#f4e5c8;--hot:#f1d0c4;--hot-ink:#963e31;--radius:10px;--font:Inter,"Aptos",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:78px}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:13px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}button,input,select{font:inherit}button,select{cursor:pointer}button,a,select,input,summary{-webkit-tap-highlight-color:transparent}button{color:inherit}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,.metric-card:focus-visible,.chart-card:focus-visible{outline:3px solid #8f81b9;outline-offset:3px}button{background:none;border:1px solid var(--line);border-radius:7px}button:hover{background:#eceaf3;border-color:#c6bfd7}.skip-link{position:fixed;left:12px;top:-70px;z-index:100;background:#17243c;color:#fff;padding:12px}.skip-link:focus{top:12px}
 .masthead{height:65px;display:flex;align-items:center;gap:44px;padding:0 28px;background:#fafaf9;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;flex-shrink:0}.brand-symbol{height:29px;width:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:3px;transform:rotate(-6deg)}.brand-symbol i{border-radius:3px;background:#8b80b5}.brand-symbol i:nth-child(2){background:#b0b6d0}.brand-symbol i:nth-child(3){background:#a7c1b8}.brand-symbol i:nth-child(4){background:#c7adb1}.brand strong{display:block;font-size:11px;letter-spacing:1.5px;font-weight:750}.brand small{display:block;color:var(--muted);font-size:10px;margin-top:4px;letter-spacing:.25px}.masthead-nav{display:flex;align-self:stretch;gap:28px}.masthead-nav a{display:flex;align-items:center;position:relative;color:var(--muted);font-size:12px}.masthead-nav a.active{font-weight:650;color:#554776}.masthead-nav a.active:after{position:absolute;content:"";bottom:0;left:0;right:0;height:3px;background:#8e7fba;border-radius:2px 2px 0 0}.masthead-tools{margin-left:auto;display:flex;align-items:center;gap:20px}.snapshot{font-size:11px;color:var(--muted)}.snapshot i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#a9b5bd;vertical-align:middle;margin-right:6px}.masthead-tools button{padding:8px 10px;font-size:11px}.masthead-tools button span{margin-left:9px;font-size:15px}
@@ -28,6 +28,20 @@ dialog{border:1px solid var(--line);border-radius:14px;max-width:min(1100px,94vw
 .metric-card.heat-warm,.metric-card.heat-warm:hover{background:linear-gradient(120deg,#f9efdd,#f9f4e9);border-color:#dec796}
 @media(min-width:1500px){.chart-values{min-height:33px}.chart-card .chart-svg{height:148px}.chart-head h3{font-size:13px}.chart-legend button{font-size:10px}.chart-values span{font-size:10px}}
 @media(max-width:600px){.method-grid{grid-template-columns:1fr}.detail-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-metrics strong{font-size:18px}.chart-values{min-height:20px}dialog .chart-svg{min-height:150px}.chart-card .chart-svg{height:170px}.holder-row{grid-template-columns:110px 1fr 40px}.dialog-head h2{font-size:18px}dialog .holder-row{grid-template-columns:120px 1fr 40px}.page-footer{overflow-wrap:anywhere}}
+
+/* New archive metrics sit below the original chart wall. */
+.archive-metrics{margin:20px 0 14px}
+.archive-metrics .section-heading{margin-bottom:8px}
+.archive-metric-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.archive-metric-grid>.metric-card{min-width:0;padding:12px}
+.archive-metric-grid .metric-top>span:first-child{overflow-wrap:anywhere}
+.archive-metric-grid .metric-value{font-size:clamp(18px,2.2vw,27px)}
+.archive-metric-grid .metric-top{font-size:12px;line-height:1.25;min-height:28px}
+.archive-metric-grid .metric-date{font-size:9px}
+.archive-metric-grid .metric-change{font-size:10px}
+.archive-metric-grid .sparkline{height:21px}
+@media(max-width:1100px){.archive-metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:540px){.archive-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-metric-grid>.metric-card{padding:10px}.archive-metric-grid .metric-top{font-size:11px}}
 
 /* Wide-screen trading desk: preserve readable data, remove repeated labels,
    and give the twelve chart panels most of the first desktop screen. */
@@ -99,9 +113,9 @@ dialog{border:1px solid var(--line);border-radius:14px;max-width:min(1100px,94vw
   dialog .chart-note{white-space:normal;overflow:visible}
 }
 
-.fred-hub-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:7px 22px;background:#e8eeeb;border-bottom:1px solid #d6e0dc;font:12px/1.5 system-ui;color:#284652}.fred-hub-links a{color:inherit}.fred-load-error{padding:30px;max-width:760px;margin:20px auto;background:#fbecdf;color:#6b4029;border:1px solid #ceab88;border-radius:8px}</style>
+.fred-hub-links{display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;padding:7px 14px;background:#e8eeeb;border-bottom:1px solid #d6e0dc;font:12px/1.45 system-ui;color:#284652}.fred-hub-links a{color:inherit;padding:5px 7px;border-radius:4px}.fred-hub-links a[aria-current]{background:#cbdbd2;font-weight:700}.fred-load-error{padding:30px;max-width:760px;margin:20px auto;background:#fbecdf;color:#6b4029;border:1px solid #ceab88;border-radius:8px}</style>
 <script src="data-client.js"></script><script defer src="snapshot.js"></script></head>
-<body><nav class="fred-hub-links" aria-label="FRED navigation"><a href="../desk.html">← Market Intel</a><a href="index.html">FRED Observatory</a><a href="market-desk.html">Market Desk</a><a href="risk-observatory.html">Risk Observatory</a><a href="data.html">All datasets &amp; records · σ</a></nav>
+<body><nav class="fred-hub-links" aria-label="FRED navigation"><a href="../desk.html">← Market Intel</a><a href="index.html">Federal Reserve Economic Data (DASHBOARD)</a><a href="market-desk.html" aria-current="page">V1 Market Desk</a><a href="risk-observatory.html">V2 Risk Observatory</a><a href="signal-review.html">V3 Signal Review</a><a href="cross-market-replay.html">V4 Cross-Market Replay</a><a href="data.html">All datasets &amp; records · σ</a></nav>
   <a class="skip-link" href="#main">Skip to the market desk</a>
   <header class="masthead">
     <a class="brand" href="#main" aria-label="Market Intelligence home">
@@ -117,12 +131,12 @@ dialog{border:1px solid var(--line);border-radius:14px;max-width:min(1100px,94vw
   </header>
   <main id="main">
     <section class="workspace-heading" id="overview" aria-labelledby="page-title">
-      <div class="page-heading"><div class="eyebrow">MACRO MONITOR <span>/</span> 01 · MARKET DESK</div><h1 id="page-title">The market, in context.</h1><p>Rates, credit, households and banks. One connected view.</p></div>
-      <div class="workspace-meta"><a href="risk-observatory.html" class="version-link">Compare Risk Observatory <span aria-hidden="true">↗</span></a><div class="snapshot-date">Data snapshot <strong><span data-fred-date>Loading…</span></strong></div></div>
+      <div class="page-heading"><div class="eyebrow">FEDERAL RESERVE ECONOMIC DATA</div><h1 id="page-title">V1 Market Desk</h1><p>Rates, credit, households and banks. The market, in context.</p></div>
+      <div class="workspace-meta"><a href="risk-observatory.html" class="version-link">Compare V2 Risk Observatory <span aria-hidden="true">↗</span></a><div class="snapshot-date">Data snapshot <strong><span data-fred-date>Loading…</span></strong></div></div>
     </section>
     <section class="controlbar" aria-label="Monitor controls">
       <div class="range-control"><label for="range">Chart history</label><select id="range"><option value="1">1 year</option><option value="5">5 years</option><option value="10">10 years</option><option value="20" selected>20 years</option></select></div>
-      <div class="range-control"><label for="baseline">Heat baseline</label><select id="baseline"><option value="5" selected>5 years</option><option value="10">10 years</option><option value="20">20 years</option></select></div>
+      <div class="range-control"><label for="baseline">Heat baseline</label><select id="baseline"><option value="5" selected>5 years</option><option value="10">10 years</option><option value="15">15 years</option><option value="20">20 years</option></select></div>
       <div class="range-control"><label for="heat-mode">Heat measures</label><select id="heat-mode"><option value="level" selected>Metric deviation</option><option value="change">Change deviation</option></select></div>
       <div class="heat-key" aria-label="Heat scale"><span><i class="key-normal"></i> Within 1σ</span><span><i class="key-warm"></i> Beyond 1σ</span><span><i class="key-hot"></i> Beyond 2σ</span></div>
       <button id="methodology" type="button" class="method-button">How to read this <span aria-hidden="true">ⓘ</span></button>
@@ -133,8 +147,12 @@ dialog{border:1px solid var(--line);border-radius:14px;max-width:min(1100px,94vw
       <div id="charts" class="chart-grid"></div>
     </section>
     <section class="attention-strip" aria-labelledby="attention-label"><div class="attention-heading"><span class="attention-mark" aria-hidden="true">!</span><h2 id="attention-label">Worth a closer look</h2><p>Largest absolute deviations</p></div><div id="attention-list"></div></section>
+    <section class="archive-metrics" aria-labelledby="expanded-heat-title">
+      <div class="section-line"><h2 id="expanded-heat-title">FROM THE EXPANDED ARCHIVE</h2><span>Prices, trade and federal borrowing</span></div>
+      <div id="expanded-heat-cards" class="archive-metric-grid"></div>
+    </section>
     <details id="universe" class="universe-panel">
-      <summary><span><strong>THE FULL DATA UNIVERSE</strong><small>Explore all 69 FRED series, observations and heat signals</small></span><span class="drawer-label">Expand universe <b aria-hidden="true">＋</b></span></summary>
+      <summary><span><strong>THE FULL DATA UNIVERSE</strong><small>Explore the archived series, source tables and heat readings</small></span><span class="drawer-label">Expand universe <b aria-hidden="true">＋</b></span></summary>
       <div class="universe-toolbar"><label for="search">Find a series</label><input id="search" type="search" placeholder="Search Treasury, credit, mortgage, FX or a FRED ID…" autocomplete="off"><span class="universe-note">Colour reflects distance from history, not a buy or sell signal.</span></div>
       <div id="all-series" class="all-series-grid"></div>
     </details>
@@ -152,38 +170,85 @@ const sign=(v,d=2)=>(v>0?'+':'')+num(v,d);
 const time=d=>Date.parse(d+'T00:00:00Z');
 const ago=(d,y)=>{let x=new Date(time(d));x.setUTCFullYear(x.getUTCFullYear()-y);return x.toISOString().slice(0,10)};
 const cache={};
-function period(id,date){let f=S[id]?.frequency||'';if(f.startsWith('Quarterly'))return date.slice(0,4)+' Q'+(Math.floor((+date.slice(5,7)-1)/3)+1);if(f.startsWith('Monthly'))return new Date(time(date)).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'});return new Date(time(date)).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});}
-function valid(id){return S[id].points.filter(p=>p[1]!=null)}
+const seriesIds=Array.from(new Set([...DATA.fredIds,...Object.keys(S)]));
+const expandedIds=['BAMLC0A4CBBBEY','SP500','PCEPI','BOPGSTB','TREASURY_MSPD_SUMMARY','FED_TREASURY_STOCKS'];
+const shortNames={
+  SP500:'S&P 500', DJIA:'Dow', NASDAQ100:'Nasdaq-100',
+  CENSUS_GOODS_TRADE_COUNTRIES:'Singapore goods balance',
+  TREASURY_DEBT_PENNY:'Gross federal debt · daily',
+  TREASURY_MSPD_SUMMARY:'Gross federal debt · month end',
+  FED_TREASURY_STOCKS:'Fed Z.1 · all-sector holdings',
+  FED_TREASURY_TRANSACTIONS_NSA:'Fed Z.1 · all-sector net purchases',
+  FED_TREASURY_TRANSACTIONS_SAAR:'Fed Z.1 · all-sector net purchases',
+  TREASURY_OFS2_20Y_ARCHIVE:'Treasury OFS-2 · total public debt'
+};
+const shortName=id=>shortNames[id]||S[id]?.name||id;
+function period(id,date){if(!date)return 'No observation';let f=S[id]?.frequency||'';if(f.startsWith('Quarterly'))return date.slice(0,4)+' Q'+(Math.floor((+date.slice(5,7)-1)/3)+1);if(f.startsWith('Monthly'))return new Date(time(date)).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'});return new Date(time(date)).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});}
+function valid(id){return (S[id]?.points||[]).filter(p=>Number.isFinite(p[1]))}
+function dollarScale(id,kind){
+  const units=S[id]?.unit||'';
+  const power=/millions/i.test(units)?6:/billions/i.test(units)?9:/^USD$/i.test(units)?0:null;
+  return power===null?null:10**((kind==='tn'?12:9)-power);
+}
 function transform(id,kind='level'){
- let key=id+':'+kind;if(cache[key])return cache[key];let p=S[id].points;
+ let key=id+':'+kind;if(cache[key])return cache[key];let p=S[id]?.points||[];
  if(kind==='level')return p;
  if(kind==='yoy'||kind==='year_change'){
   let freq=S[id].frequency,map=new Map(p.map(v=>[v[0],v[1]])),validp=valid(id),offset=/^(Quarterly|Monthly|Annual)/.test(freq);
   return cache[key]=p.map(([d,v],i)=>{let prev=null;if(offset)prev=map.get(ago(d,1));else{let target=time(ago(d,1));let lo=0,hi=validp.length;while(lo<hi){let m=(lo+hi)>>1;if(time(validp[m][0])<=target)lo=m+1;else hi=m;}let q=validp[lo-1];if(q&&target-time(q[0])<=10*DAY)prev=q[1];}return[d,v!=null&&prev!=null?(kind==='year_change'?v-prev:prev>0?100*(v/prev-1):null):null]});
  }
  if(kind==='bp')return cache[key]=p.map(([d,v])=>[d,v==null?null:v*100]);
- if(kind==='tn')return cache[key]=p.map(([d,v])=>[d,v==null?null:v/(S[id].unit.includes('Millions')?1e6:1e3)]);
+ if(kind==='tn'||kind==='bn'){
+  const scale=dollarScale(id,kind);
+  return cache[key]=p.map(([d,v])=>[d,!Number.isFinite(v)||!scale?null:v/scale]);
+ }
  if(kind==='thousands')return cache[key]=p.map(([d,v])=>[d,v==null?null:v/1000]);
  if(kind==='delta'){let last=null;return cache[key]=p.map(([d,v])=>{let value=v!=null&&last!=null?v-last:null;if(v!=null)last=v;return[d,value]})}
  return p;
 }
 function heatPoints(id){let p=transform(id,S[id].heatTransform).filter(p=>p[1]!=null);if(state.mode==='change')p=p.slice(1).map((q,i)=>[q[0],q[1]-p[i][1]]);return p}
-function stats(id){let p=heatPoints(id),latest=p.at(-1);if(!latest)return{};let prior=p.filter(q=>q[0]>=ago(latest[0],state.baseline)&&q[0]<latest[0]),n=prior.length;let mean=n?prior.reduce((a,q)=>a+q[1],0)/n:0;let sd=n>1?Math.sqrt(prior.reduce((a,q)=>a+(q[1]-mean)**2,0)/(n-1)):0;let z=n>=12&&sd>1e-10?(latest[1]-mean)/sd:null;return{p,latest,prior,n,mean,sd,z,years:n?(time(latest[0])-time(prior[0][0]))/DAY/365.25:0}}
-function unit(id,kind){if(kind==='yoy')return '% YoY';if(kind==='bp')return 'bp';if(kind==='tn')return 'USD tn';if(kind==='thousands')return '000s';if(kind==='index')return 'index';if(kind==='delta')return S[id].unit.includes('Thousands')?'000s':'change';if(id==='DEXSIUS')return 'SGD/USD';if(id==='DEXSZUS')return 'CHF/USD';let u=S[id].unit;return u==='Percent'?'%':u==='Times'?'×':u.includes('Percentage')?'pp':u.includes('Index')?'index':u.includes('Billions')?'USD bn':u.includes('Millions')?'USD mn':u.includes('Thousands')?'000s':u.includes('Dollars')?'FX':u.includes('Number')?'claims':u;}
+const statsCache=new Map();
+function stats(id){
+ if(statsCache.has(id))return statsCache.get(id);
+ const p=heatPoints(id),latest=p.at(-1),begin=latest?ago(latest[0],state.baseline):null;
+ const prior=latest?p.filter(([date])=>date>=begin&&date<latest[0]):[];
+ const n=prior.length,mean=n?prior.reduce((sum,row)=>sum+row[1],0)/n:null;
+ const constant=n>0&&prior.every(row=>row[1]===prior[0][1]);
+ const sd=n>1?constant?0:Math.sqrt(prior.reduce((sum,row)=>sum+(row[1]-mean)**2,0)/(n-1)):null;
+ const z=n>=12&&sd>0?(latest[1]-mean)/sd:null;
+ const result={p,latest,prior,n,mean,sd,z,years:n?(time(latest[0])-time(prior[0][0]))/DAY/365.25:0};
+ statsCache.set(id,result);
+ return result;
+}
+function unit(id,kind){
+ const source=S[id].unit;
+ const transformed={yoy:'% YoY',bp:'bp',tn:'USD tn',bn:'USD bn',thousands:'000s',index:'index',delta:/thousands/i.test(source)?'000s':'change'};
+ if(transformed[kind])return transformed[kind];
+ if(id==='DEXSIUS')return 'SGD/USD';
+ if(id==='DEXSZUS')return 'CHF/USD';
+ if(source==='Percent')return '%';
+ if(source==='Times')return '×';
+ if(/percentage/i.test(source))return 'pp';
+ if(/index/i.test(source))return 'index';
+ if(/billions/i.test(source))return 'USD bn';
+ if(/millions/i.test(source))return 'USD mn';
+ if(/thousands/i.test(source))return '000s';
+ return source;
+}
 function heatLabel(id){let t=S[id].heatTransform==='yoy'?'YoY growth':S[id].heatTransform==='year_change'?'12-month change':'Level';return state.mode==='change'?'Change in '+t.toLowerCase():t}
 function heatUnit(id){return state.mode==='change'?(S[id].heatTransform==='yoy'||S[id].unit==='Percent'?'pp':unit(id,S[id].heatTransform)):unit(id,S[id].heatTransform)}
 function fmt(v,u){return num(v,(u==='claims'||u==='000s'||Math.abs(v)>1000)?0:2)}
 function badge(z){return z==null?'n/a':sign(z,2)+'σ'}
 function heatClass(z){return z==null||Math.abs(z)<1?'heat-normal':Math.abs(z)<2?'heat-warm':'heat-hot'}
 function spark(p){p=p.filter(v=>v[1]!=null).slice(-70);if(p.length<2)return'';let a=Math.min(...p.map(q=>q[1])),b=Math.max(...p.map(q=>q[1]));return `<svg class="sparkline" viewBox="0 0 140 24" aria-hidden="true"><path d="${p.map((q,i)=>(i?'L':'M')+(i/(p.length-1)*140).toFixed(1)+','+(22-(q[1]-a)/(b-a||1)*20).toFixed(1)).join(' ')}" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`}
-function tile(id,compact=false){let m=S[id],v=stats(id),current=v.latest?.[1],p=v.p||[],delta=p.length>1?p.at(-1)[1]-p.at(-2)[1]:null,u=heatUnit(id),raw=valid(id).at(-1);let short=v.years<state.baseline-.15?` · ${num(v.years,1)}Y available`:'';
-return `<button class="metric-card ${heatClass(v.z)} ${compact?'compact-metric':''}" data-id="${id}" title="${esc(m.title)}. ${heatLabel(id)}; ${badge(v.z)}. Select for chart, source and statistics."><span class="metric-top"><span>${esc(m.name)}</span><span class="zbadge">${badge(v.z)}</span></span><span class="metric-value">${fmt(current,u)} <small>${u}</small></span><span class="metric-change">${heatLabel(id)}${state.mode==='level'&&delta!=null?' · Δ '+sign(delta,2):''}</span>${spark(p)}<span class="metric-date">${period(id,raw[0])}${short}</span></button>`}
+function tile(id,compact=false){let m=S[id],v=stats(id),current=v.latest?.[1],p=v.p||[],delta=p.length>1?p.at(-1)[1]-p.at(-2)[1]:null,u=heatUnit(id);let short=v.years<state.baseline-.15?` · ${num(v.years,1)}Y available`:'';
+return `<button class="metric-card ${heatClass(v.z)} ${compact?'compact-metric':''}" data-id="${id}" title="${esc(m.title)}. ${heatLabel(id)}; ${badge(v.z)}. Select for chart, source and statistics."><span class="metric-top"><span>${esc(shortName(id))}</span><span class="zbadge">${badge(v.z)}</span></span><span class="metric-value">${fmt(current,u)} <small>${esc(u)}</small></span><span class="metric-change">${heatLabel(id)}${state.mode==='level'&&delta!=null?' · Δ '+sign(delta,2):''}</span>${spark(p)}<span class="metric-date">${period(id,v.latest?.[0])}${short}</span></button>`}
 const r=(ids,title,unitName,kind='level',ref=null,note='')=>({ids:ids.split(' '),title,unit:unitName,kind,ref,note});
 const panels=[
- {title:'Treasury pricing',views:[r('DGS2 DGS10 DGS30','Nominal yields','%', 'level',null,'Treasury constant-maturity yields.'),r('DFII10 T10YIE THREEFYTP10','Real yield & compensation','%', 'level',0,'Term premium is the Kim–Wright model estimate.'),r('EFFR SOFR MORTGAGE30US','Policy & borrowing rates','%', 'level',null,'Different market tenors; native dates retained.')]},
+ {title:'Treasury pricing',views:[r('DGS2 DGS10 DGS30','Nominal yields','%', 'level',null,'Treasury constant-maturity yields.'),r('DFII10 T10YIE THREEFYTP10','Real yield & compensation','%', 'level',0,'Term premium is the Kim–Wright model estimate.'),r('EFFR SOFR MORTGAGE30US','Policy & borrowing rates','%', 'level',null,'Different market tenors; native dates retained.'),r('DGS1MO DGS3MO DGS6MO DGS1','Short maturities: 1M–1Y','%'),r('DGS3 DGS5 DGS7 DGS20','Additional maturities: 3Y–20Y','%'),r('IRLTLT01JPM156N IRLTLT01DEM156N IRLTLT01GBM156N IRLTLT01CHM156N','Global government 10Y yields','%','level',null,'Monthly benchmarks for Japan, Germany, the UK and Switzerland.')]},
  {title:'Credit risk premium',views:[r('BAMLC0A1CAAA BAMLC0A4CBBB BAMLH0A0HYM2 BAMLH0A3HYC','Credit spread ladder','bp','bp',null,'ICE history starts Nov 2023. Click legend to isolate a line.'),r('BAMLC0A1CAAA BAMLC0A2CAA BAMLC0A3CA BAMLC0A4CBBB','Investment-grade ratings','bp','bp'),r('BAMLH0A1HYBB BAMLH0A2HYB BAMLH0A3HYC','High-yield ratings','bp','bp')]},
  {title:'Yield curve',views:[r('T10Y2Y T10Y3M','Curve slopes','bp','bp',0,'Below zero = inverted curve. Positive = upward sloping.'),r('THREEFYTP10','10Y term premium','bp','bp',0,'Model estimate; zero is a sign reference, not a trading trigger.')]},
- {title:'Inflation pulse',views:[r('CPIAUCSL CPILFESL PCEPILFE','Headline & core inflation','% YoY','yoy',2,'2% is a guide; the Fed target applies to headline PCE, not all these lines.'),r('CPIAUCNS CPILFENS','CPI · not seasonally adjusted','% YoY','yoy',2,'Twelve-month change in unadjusted CPI indices.')]},
+ {title:'Inflation pulse',views:[r('CPIAUCSL CPILFESL PCEPILFE','Headline & core inflation','% YoY','yoy',2,'The Fed target applies to headline PCE. The 2% line is a comparison guide here.'),r('CPIAUCNS CPILFENS','CPI · not seasonally adjusted','% YoY','yoy',2,'Twelve-month change in unadjusted CPI indices.'),r('PCEPI PCEPILFE','Headline and core PCE','% YoY','yoy',2,'The Fed target applies to headline PCE.'),r('T5YIE T10YIE T5YIFR','Market inflation compensation','%','level',null,'5Y and 10Y breakevens and the 5Y forward rate include market risk and liquidity effects.')]},
  {title:'Repayment stress',views:[r('DRCCLACBS DRSFRMACBS DRCRELEXFACBS','Bank loan delinquencies','%','level',null,'Bank balances ≥30 days past due plus nonaccrual. Dates follow each source period.'),r('NY_Auto NY_Student_Loan NY_HELOC','Household balances · 90+ days','%','level',null,'NY Fed household credit, not bank-only data. Dates follow each source quarter.'),r('DRCRELEXFT100S DRCRELEXFOBS','CRE · bank size','%','level'),r('CORCCACBS CORCREXFACBS','Net charge-offs','%','level',null,'Annualised rates net of recoveries; separate from delinquency.')]},
  {title:'Banks & property',views:[r('SUBLPDRCSN SUBLPDRCSC SUBLPDRCSM','CRE lending standards','net %','level',0,'Above zero = more banks tightening than easing.'),r('CREACBM027SBOG CLDACBM027SBOG SMPACBM027SBOG SNFACBM027SBOG','CRE loan exposure','USD bn','level',null,'Total and categories overlap. Nonresidential includes more than offices.'),r('DRTSCILM','Business lending standards','net %','level',0)]},
  {title:'Labour & activity',views:[r('UNRATE','Unemployment rate','%','level',null,'Bands use prior native observations in the selected alert baseline.'),r('ICSA','Initial jobless claims','000s','thousands'),r('PAYEMS','Monthly payroll change','000s','delta',0),r('SAHMREALTIME','Sahm indicator','pp','level',.5,'0.5pp reference is an indicator threshold, not an official recession declaration.'),r('HOUST PERMIT','Housing starts & permits','000s','level',null,'Seasonally adjusted annual rates; monthly observations.')]},
@@ -191,22 +256,61 @@ const panels=[
  {title:'Dollar & financing FX',views:[r('DEXSIUS DEXSZUS DTWEXBGS','Relative FX performance','rebased 100','index',100,'Shared first available date = 100. Rising FX lines = stronger USD.'),r('DEXSIUS','SGD per USD','SGD / USD'),r('DEXSZUS','CHF per USD','CHF / USD')]},
  {title:'Financial conditions',views:[r('NFCI STLFSI4','Conditions & stress indices','index','level',0,'Different index constructions. Zero is each source’s historical norm.'),r('NFCI','Chicago Fed NFCI','index','level',0),r('STLFSI4','St. Louis financial stress','index','level',0)]},
  {title:'Treasury demand',views:[r('AUCTION','10Y auction bid-to-cover','×','level',null,'Regular-term nominal note auctions, including reopenings; not daily.'),{title:'Top holders + Singapore',bars:true,unit:'USD bn',note:'Dated TIC holdings · custodial locations. Singapore shown separately.'},r('FDHBFIN','Foreign-held federal debt','USD bn','level',null,'Quarterly aggregate; not the TIC country breakdown.')]},
- {title:'Fiscal & growth',views:[r('GFDEGDQ188S','Federal debt / GDP','%','level',null,'Long-run trend affects level z-scores. Dates follow each source period.'),r('GDP GDPC1','Nominal & real GDP growth','% YoY','yoy',0),{title:'Yield minus growth',gap:true,unit:'pp',ref:0,note:'Quarterly mean 10Y yield minus nominal GDP YoY. Latest common quarter.'}]}
-];
+ {title:'Fiscal & growth',views:[r('GFDEGDQ188S','Federal debt / GDP','%','level',null,'Long-run trend affects level z-scores. Dates follow each source period.'),r('GDP GDPC1','Nominal & real GDP growth','% YoY','yoy',0),{title:'Yield minus growth',gap:true,unit:'pp',ref:0,note:'Quarterly mean 10Y yield minus nominal GDP YoY. Latest common quarter.'}]},
+ {title:'Corporate bond markets',views:[
+   r('BAMLC0A0CMEY BAMLC0A4CBBBEY BAMLH0A0HYM2EY','Effective yields','%','level',null,'ICE investment-grade, BBB and high-yield effective yields. Coverage begins November 2023.'),
+   r('BAMLCC0A0CMTRIV BAMLHYH0A0HYM2TRIV','IG and HY total return','rebased 100','index',100,'ICE total return indices use the first shared valid close in the visible window as 100.'),
+   r('BAMLH0A1HYBBEY BAMLEMCBPIEY','BB and emerging-market yields','%','level',null,'Different index universes. Each observation retains its source date.')
+ ]},
+ {title:'Equity prices & volatility',views:[
+   r('SP500 DJIA NASDAQ100','US equity price indices','rebased 100','index',100,'The first shared valid close in the visible window is 100. S&P 500 and Dow coverage begins in November 2016.'),
+   r('VIXCLS VXVCLS','1M and 3M implied volatility','index points','level',null,'VIX and 3M VIX use different maturities.'),
+   r('NASDAQ100 NASDAQXNDX','Nasdaq-100 price and total return','rebased 100','index',100,'The rebased total return series includes distributions.')
+ ]},
+ {title:'International trade',views:[
+   r('BOPTEXP BOPTIMP','US goods and services flows','USD bn','bn',null,'Monthly aggregate exports and imports.'),
+   r('BOPGSTB','US goods and services balance','USD bn','bn',0,'Monthly balance. A negative reading is a deficit.'),
+   r('CENSUS_GOODS_TRADE_COUNTRIES','US goods balance with Singapore','USD bn','bn',0,'Census goods-only balance for Singapore, not seasonally adjusted. The archive includes the other trading partners.'),
+   r('IEABC','US current-account balance','USD bn','bn',0,'Quarterly coverage includes goods, services, income and transfers.')
+ ]},
+ {title:'Federal debt',views:[
+   r('TREASURY_DEBT_PENNY TREASURY_MSPD_SUMMARY','Gross debt at daily and month end dates','USD tn','tn',null,'Debt to the Penny and the Monthly Statement of the Public Debt cover the same gross concept at different dates.'),
+   r('GFDEBTN FYGFDPUN','Gross debt and debt held by the public','USD tn','tn',null,'Debt held by the public is part of gross debt. Quarterly figures have their own observation dates.'),
+   r('TREASURY_OFS2_20Y_ARCHIVE','Treasury bulletin total public debt','USD tn','tn',null,'Archived Treasury bulletin series. Detailed ownership tables are in the archive.')
+ ]},
+ {title:'Treasury ownership',views:[
+   r('FDHBFRBN FDHBPIN','Fed and private investor holdings','USD tn','tn',null,'Quarterly Treasury source categories. Private investors include some foreign holders.'),
+   r('FED_TREASURY_STOCKS','Federal Reserve Z.1 holdings','USD tn','tn',null,'All-sector Treasury securities assets. The dataset view includes each holder sector.'),
+   r('FED_TREASURY_TRANSACTIONS_NSA','Net transactions · unadjusted','USD bn','bn',0,'All-sector transactions for each quarter, before seasonal adjustment.'),
+   r('FED_TREASURY_TRANSACTIONS_SAAR','Net transactions · annual rate','USD bn','bn',0,'All-sector seasonally adjusted annual rate. Holdings are a separate measure.')
+ ]},
+ {title:'Federal receipts & outlays',views:[
+   r('MTSR133FMS MTSO133FMS','Monthly receipts and outlays','USD bn','bn',null,'Monthly Treasury budget flows. Seasonal payment patterns can move month-to-month readings.'),
+   r('MTSDS133FMS','Monthly surplus or deficit','USD bn','bn',0,'A negative balance indicates a deficit.'),
+   r('FYOINT','Annual federal interest outlays','USD bn','bn',null,'Fiscal year values. Short baselines may lack the 12 prior observations needed for a score.')
+ ]}
+].map(panel=>({...panel,views:panel.views.filter(view=>!view.ids||view.ids.every(id=>S[id]?.points?.length))}))
+ .filter(panel=>panel.views.length);
 function buildLines(view){
  if(view.gap){let g=transform('GDP','yoy'),groups={};valid('DGS10').forEach(([d,v])=>{let key=d.slice(0,4)+'-'+String(Math.floor((+d.slice(5,7)-1)/3)*3+1).padStart(2,'0')+'-01';(groups[key]??=[]).push(v)});return[{id:'GDP',name:'10Y yield − nominal growth',points:g.map(([d,v])=>[d,v!=null&&groups[d]?groups[d].reduce((a,b)=>a+b,0)/groups[d].length-v:null])}]}
- let lines=view.ids.map(id=>({id,name:S[id].name,points:transform(id,view.kind)}));
- if(view.kind==='index'){let start=ago(DATA.snapshot,state.range),maps=lines.map(l=>new Map(l.points.filter(p=>p[1]!=null&&p[0]>=start))),shared=[...maps[0].keys()].find(d=>maps.every(m=>m.has(d)));if(shared)lines=lines.map((l,i)=>({...l,points:l.points.filter(p=>p[0]>=shared).map(([d,v])=>[d,v==null?null:100*v/maps[i].get(shared)])}));}
+ let lines=view.ids.map(id=>({id,name:shortName(id),points:transform(id,view.kind)}));
+ if(view.kind==='index'){
+   const start=ago(DATA.snapshot,state.range);
+   const maps=lines.map(line=>new Map(line.points.filter(([date,value])=>Number.isFinite(value)&&value>0&&date>=start)));
+   const shared=[...maps[0].keys()].find(date=>maps.every(map=>map.has(date)));
+   if(!shared)return lines.map(line=>({...line,points:[]}));
+   lines=lines.map((line,i)=>({...line,points:line.points.filter(([date])=>date>=shared).map(([date,value])=>[date,value==null?null:100*value/maps[i].get(shared)])}));
+ }
  return lines;
 }
 function thin(points,max=400){if(points.length<=max)return points;let step=Math.ceil(points.length/(max/2)),out=[];for(let i=0;i<points.length;i+=step){let b=points.slice(i,i+step),v=b.filter(p=>p[1]!=null);if(!v.length){out.push(b[0]);continue}let lo=v.reduce((a,b)=>a[1]<b[1]?a:b),hi=v.reduce((a,b)=>a[1]>b[1]?a:b);out.push(...[lo,hi].sort((a,b)=>a[0].localeCompare(b[0])));if(b.some(p=>p[1]==null))out.push([b.at(-1)[0],null]);}return out;}
-function bandStats(points){let p=points.filter(q=>q[1]!=null),last=p.at(-1);if(!last)return null;let a=p.filter(q=>q[0]>=ago(last[0],state.baseline)&&q[0]<last[0]);if(a.length<12)return null;let mean=a.reduce((s,q)=>s+q[1],0)/a.length,sd=Math.sqrt(a.reduce((s,q)=>s+(q[1]-mean)**2,0)/(a.length-1));return{mean,sd,n:a.length}}
+function bandStats(points){let p=points.filter(q=>Number.isFinite(q[1])),last=p.at(-1);if(!last)return null;let a=p.filter(q=>q[0]>=ago(last[0],state.baseline)&&q[0]<last[0]);if(a.length<12||a.every(q=>q[1]===a[0][1]))return null;let mean=a.reduce((s,q)=>s+q[1],0)/a.length,sd=Math.sqrt(a.reduce((s,q)=>s+(q[1]-mean)**2,0)/(a.length-1));return Number.isFinite(sd)&&sd>0?{mean,sd,n:a.length}:null}
 function chartSVG(lines,view,{large=false,bands=false}={}){
  let W=large?1080:520,H=large?330:178,L=48,R=12,T=14,B=25;
  let from=time(ago(DATA.snapshot,state.range)),to=time(DATA.snapshot),all=lines.flatMap(l=>l.points.filter(p=>p[1]!=null&&time(p[0])>=from).map(p=>p[1]));
  let band=bands&&lines.length===1?bandStats(lines[0].points):null;
- if(view.ref!=null)all.push(view.ref);if(band)all.push(band.mean-2*band.sd,band.mean+2*band.sd);
  if(!all.length)return '<p class="no-data">No observations in this range.</p>';
+ if(view.ref!=null)all.push(view.ref);if(band)all.push(band.mean-2*band.sd,band.mean+2*band.sd);
  let low=Math.min(...all),high=Math.max(...all),pad=(high-low)*.1||1;low-=pad;high+=pad;
  const x=d=>L+(time(d)-from)/(to-from)*(W-L-R),y=v=>T+(high-v)/(high-low)*(H-T-B);
  let svg=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(view.title)} history, ${state.range} years. ${esc(view.unit)}" data-from="${from}" data-to="${to}" data-width="${W}" data-left="${L}" data-right="${R}"><title>${esc(view.title)} · ${esc(view.unit)}</title>`;
@@ -226,24 +330,28 @@ function panelHTML(panel,index){let vi=state.views[index]||0,v=panel.views[vi],h
 return `<article class="chart-card" id="panel-${index}"><div class="chart-head"><h3>${String(index+1).padStart(2,'0')} <span>${panel.title}</span></h3><button class="expand-chart" data-panel="${index}" aria-label="Expand ${panel.title}">↗</button></div><div class="panel-selector"><select data-view="${index}" aria-label="Chart view for ${panel.title}">${panel.views.map((o,i)=>`<option value="${i}" ${i===vi?'selected':''}>${o.title}</option>`).join('')}</select><small>${v.unit}</small></div><div class="chart-values">${values}</div><div class="plot-wrap" data-plot="${index}">${v.bars?barChart():chartSVG(lines,v,{bands:lines.length===1})}<div class="chart-tooltip" hidden></div></div><div class="chart-legend">${all.map((l,i)=>`<button data-line="${l.id}" data-chart="${index}" class="${hidden.includes(l.id)?'line-off':''}" style="--series-color:${COLORS[i]}"><i></i>${esc(l.name)} <b>${num(l.points.filter(p=>p[1]!=null).at(-1)?.[1],v.unit==='bp'?0:2)}</b></button>`).join('')}</div><div class="chart-note" title="${esc(v.note)}">${esc(v.note||'Native source frequency. Select a line or expand for detail.')}${lines.length===1?' · μ / ±1σ / ±2σ': ''}</div></article>`;
 }
 function render(){
+ statsCache.clear();
  ['range','baseline','heat-mode'].forEach(id=>{let el=document.getElementById(id);if(el)el.value=String(id==='heat-mode'?state.mode:state[id])});
  document.getElementById('heat-cards').innerHTML=['DGS10','DFII10','THREEFYTP10','BAMLH0A3HYC','BAMLC0A4CBBB','DRCRELEXFACBS','PCEPILFE','UNRATE'].map(id=>tile(id)).join('');
+ const additional=document.getElementById('expanded-heat-cards');
+ if(additional)additional.innerHTML=expandedIds.filter(id=>S[id]?.points?.length).map(id=>tile(id)).join('');
+ const total=document.getElementById('series-total');if(total)total.textContent=seriesIds.length;
  document.getElementById('charts').innerHTML=panels.map(panelHTML).join('');
- renderUniverse();let ranked=DATA.fredIds.map(id=>({id,...stats(id)})).filter(v=>v.z!=null).sort((a,b)=>Math.abs(b.z)-Math.abs(a.z));
+ renderUniverse();let ranked=seriesIds.map(id=>({id,...stats(id)})).filter(v=>Number.isFinite(v.z)).sort((a,b)=>Math.abs(b.z)-Math.abs(a.z));
  let hot=ranked.filter(v=>Math.abs(v.z)>=2),warm=ranked.filter(v=>Math.abs(v.z)>=1&&Math.abs(v.z)<2);
  let counter=document.getElementById('summary-count');if(counter)counter.textContent=`${hot.length} beyond 2σ · ${warm.length} beyond 1σ`;
- let att=document.getElementById('attention-list');if(att)att.innerHTML=ranked.slice(0,6).map(v=>`<button class="attention-item ${heatClass(v.z)}" data-id="${v.id}"><span>${esc(S[v.id].name)}<small>${heatLabel(v.id)} · ${period(v.id,v.latest[0])}</small></span><b>${badge(v.z)}</b></button>`).join('');
+ let att=document.getElementById('attention-list');if(att)att.innerHTML=ranked.slice(0,6).map(v=>`<button class="attention-item ${heatClass(v.z)}" data-id="${v.id}"><span>${esc(shortName(v.id))}<small>${heatLabel(v.id)} · ${period(v.id,v.latest[0])}</small></span><b>${badge(v.z)}</b></button>`).join('');
  let cov=document.getElementById('coverage');if(cov)cov.innerHTML=`${DATA.fredIds.length} FRED series · ${DATA.externalCount ?? 15} external datasets · 20Y chart window · ICE starts Nov 2023 · Native observation dates shown · <button class="text-button" data-coverage>Coverage notes</button>`;
  wirePlots();
 }
-function renderUniverse(){let query=(document.getElementById('search')?.value||'').toLowerCase(),ids=DATA.fredIds.filter(id=>(id+' '+S[id].name+' '+S[id].group).toLowerCase().includes(query));document.getElementById('all-series').innerHTML=ids.length?ids.map(id=>tile(id,true)).join(''):'<p>No matching series.</p>';}
+function renderUniverse(){let query=(document.getElementById('search')?.value||'').toLowerCase().trim(),ids=seriesIds.filter(id=>(id+' '+S[id].name+' '+S[id].group).toLowerCase().includes(query));document.getElementById('all-series').innerHTML=ids.length?ids.map(id=>tile(id,true)).join(''):'<p>No matching series.</p>';}
 function wirePlots(){document.querySelectorAll('[data-plot]').forEach(el=>{let index=el.dataset.plot,svg=el.querySelector('svg'),tip=el.querySelector('.chart-tooltip');if(!svg||!tip)return;el.addEventListener('pointermove',e=>{let r=svg.getBoundingClientRect(),frac=((e.clientX-r.left)/r.width*+svg.dataset.width-+svg.dataset.left)/(+svg.dataset.width-+svg.dataset.left-+svg.dataset.right);if(frac<0||frac>1){tip.hidden=true;return}let t=+svg.dataset.from+frac*(+svg.dataset.to-+svg.dataset.from),out=rendered[index];if(!out)return;let html=out.lines.map((line,i)=>{let p=line.points.filter(q=>q[1]!=null);let lo=0,hi=p.length-1;while(lo<hi){let m=(lo+hi)>>1;if(time(p[m][0])<t)lo=m+1;else hi=m;}let candidates=[p[lo],p[lo-1]].filter(Boolean),q=candidates.sort((a,b)=>Math.abs(time(a[0])-t)-Math.abs(time(b[0])-t))[0];if(!q||t<time(p[0][0])||t>time(p.at(-1)[0]))return `<div>${esc(line.name)}<small>No observation in this part of the range</small></div>`;let f=S[line.id].frequency,tolerance=f.startsWith('Quarterly')?60:f.startsWith('Monthly')?20:f.startsWith('Weekly')?8:f==='Auction'?50:6;if(Math.abs(time(q[0])-t)>tolerance*DAY)return `<div>${esc(line.name)}<small>No nearby observation</small></div>`;return `<div>${esc(line.name)} <b>${num(q[1],2)} ${out.view.unit}</b><small>${period(line.id,q[0])}</small></div>`}).join('');tip.innerHTML=html;tip.hidden=false;tip.style.left=Math.min(Math.max(0,e.clientX-el.getBoundingClientRect().left-100),Math.max(0,el.clientWidth-260))+'px';let cross=svg.querySelector('.crosshair');cross.setAttribute('x1',+svg.dataset.left+frac*(+svg.dataset.width-+svg.dataset.left-+svg.dataset.right));cross.setAttribute('x2',cross.getAttribute('x1'));cross.setAttribute('visibility','visible')});el.addEventListener('pointerleave',()=>{tip.hidden=true;svg.querySelector('.crosshair').setAttribute('visibility','hidden')})})}
 let dialog=document.createElement('dialog');dialog.id='detail-dialog';document.body.append(dialog);
 function show(title,html){dialog.innerHTML=`<div class="dialog-head"><h2>${title}</h2><button data-close aria-label="Close details">×</button></div><div class="dialog-content">${html}</div>`;if(!dialog.open)dialog.showModal();dialog.querySelector('[data-close]').onclick=()=>dialog.close();}
 function detail(id){let s=S[id],st=stats(id),u=heatUnit(id),raw=valid(id),last=raw.at(-1);let lines=[{id,name:s.name,points:st.p}],view={title:s.name+' · '+heatLabel(id),unit:u};
  show(esc(s.name),`<p class="detail-subtitle">${esc(s.title)}</p><div class="detail-metrics"><div><small>${heatLabel(id)}</small><strong>${fmt(st.latest?.[1],u)} ${u}</strong></div><div><small>Deviation</small><strong class="${heatClass(st.z)}">${badge(st.z)}</strong></div><div><small>Baseline mean</small><strong>${num(st.mean)} ${u}</strong></div><div><small>Sample SD</small><strong>${num(st.sd)} ${u}</strong></div></div>${chartSVG(lines,view,{large:true,bands:true})}<p class="band-key">Solid series · dotted mean μ · shaded ±1σ · dashed outer ±2σ. Bands are the current baseline, applied as fixed reference levels across the chart.</p><div class="detail-facts"><p><b>Original observation:</b> ${num(last[1])} ${esc(s.unit)} · ${period(id,last[0])}. <b>Available:</b> ${period(id,raw[0][0])}–${period(id,last[0])}.</p><p><b>Alert calculation:</b> ${heatLabel(id)}. ${st.n} prior observations over ${num(st.years,1)} years available within the selected ${state.baseline}Y window, ending before the latest observation. Sample standard deviation. A signed z-score shows above/below the mean; heat uses |z|.</p><p><b>Frequency:</b> ${esc(s.frequency)} · ${esc(s.adjustment)}. <b>Source updated:</b> ${esc(s.updated)}. <b>Retrieved:</b> ${esc(s.retrieved)}.</p><p><a href="${s.source}" target="_blank" rel="noopener">Open original source ↗</a> <a class="action-button" href="data.html#${id}">Original CSV &amp; citation →</a> <button class="action-button" data-export="${id}">Export chart inputs CSV</button></p></div>`);
 }
-function methodology(){show('How to read this monitor',`<div class="method-grid"><section><h3>Heat shows unusual readings</h3><p>Below 1σ stays quiet. From 1σ to below 2σ is soft amber. At 2σ and beyond, a terracotta border and stronger badge demand attention. The sign tells you above or below the mean; neither direction alone implies good, bad, buy or sell.</p><p><b>z = (latest − prior mean) / prior sample SD.</b> The latest observation is excluded. A minimum of 12 prior observations and nonzero variance is required. The selected 5Y / 10Y / 20Y baseline uses calendar years ending at the latest available observation for each series. Shorter histories are disclosed.</p></section><section><h3>Compare like with like</h3><p>Rates, spreads, arrears and stress indicators use levels. Price indices, GDP, payrolls, lending, money and balance-sheet totals use YoY growth for their heat cards. The tile states its transformation. FX pairs use source quote levels; the broad dollar heat card uses YoY growth.</p><p>“Change” scores the most recent native-observation change in that heat metric against prior changes. Daily series use the previous nonmissing observation; monthly and quarterly series keep their release frequency. YoY weekly/daily comparisons use the last nonmissing observation on or before one year earlier, within ten days.</p></section><section><h3>Chart lines and reference levels</h3><p>Compact combo charts use clearly labelled units, distinct muted colours and clickable legends. Zero lines belong on curves, net tightening, growth and stress. Inflation’s 2% guide is not a target for every plotted price measure. Sahm’s 0.5pp line belongs only on that indicator.</p><p>Expanded single-series views show the baseline mean, ±1σ and ±2σ. These are fixed current reference bands, not rolling bands or backtest signals. Change mode affects heat cards, not combo-chart definitions.</p></section><section><h3>Dates and data limits</h3><p>This saved snapshot is dated ${esc(DATA.snapshot)}. It is not a streaming terminal. Observation dates differ by series. FRED histories can contain revisions; these are not point-in-time vintages. Distributional assumptions and changing regimes mean 2σ is not automatically a probability or investment signal.</p><p>Missing values remain missing. Dense charts use a min/max envelope for display; calculations use full observations. Hover shows the nearest available observation with its own date.</p></section></div><p><b>Use:</b> range selects chart history; baseline selects the alert comparison. Click any heat tile for calculation details and original CSV. Switch chart views with their selectors. Toggle a series in the legend. All controls operate locally without browser storage.</p>`)}
+function methodology(){show('How to read this monitor',`<div class="method-grid"><section><h3>Heat shows unusual readings</h3><p>Below 1σ stays quiet. From 1σ to below 2σ is soft amber. At 2σ and beyond, a terracotta border and stronger badge demand attention. The sign tells you above or below the mean; neither direction alone implies good, bad, buy or sell.</p><p><b>z = (latest − prior mean) / prior sample SD.</b> The latest observation is excluded. A minimum of 12 prior observations and nonzero variance is required. The selected 5Y / 10Y / 15Y / 20Y baseline ends at the latest usable heat reading. That observation date appears on the card. Signal Review scores the latest dated row, so a missing latest value can lead to different totals. Shorter histories are disclosed.</p></section><section><h3>Compare like with like</h3><p>Rates, spreads, arrears and stress indicators use levels. Price indices, GDP, payrolls, lending, money and balance-sheet totals use YoY growth for their heat cards. The tile states its transformation. FX pairs use source quote levels; the broad dollar heat card uses YoY growth.</p><p>“Change” scores the most recent native-observation change in that heat metric against prior changes. Daily series use the previous nonmissing observation; monthly and quarterly series keep their release frequency. YoY weekly/daily comparisons use the last nonmissing observation on or before one year earlier, within ten days.</p></section><section><h3>Chart lines and reference levels</h3><p>Compact combo charts use clearly labelled units, distinct muted colours and clickable legends. Zero lines belong on curves, net tightening, growth and stress. Inflation’s 2% guide is not a target for every plotted price measure. Sahm’s 0.5pp line belongs only on that indicator.</p><p>Expanded single-series views show the baseline mean, ±1σ and ±2σ. These are fixed current reference bands, not rolling bands or backtest signals. Change mode affects heat cards, not combo-chart definitions.</p></section><section><h3>Dates and data limits</h3><p>This saved snapshot is dated ${esc(DATA.snapshot)}. It is not a streaming terminal. Observation dates differ by series. FRED histories can contain revisions; these are not point-in-time vintages. Distributional assumptions and changing regimes mean 2σ is not automatically a probability or investment signal.</p><p>Missing values remain missing. Dense charts use a min/max envelope for display; calculations use full observations. Hover shows the nearest available observation with its own date.</p></section></div><p><b>Use:</b> range selects chart history; baseline selects the alert comparison. Click any heat tile for calculation details and original CSV. Switch chart views with their selectors. Toggle a series in the legend. All controls operate locally without browser storage.</p>`)}
 function coverage(){show('Data coverage',`<p>Shared snapshot: <b>${DATA.fredIds.length} FRED series and ${DATA.externalCount ?? 15} direct-source tables, including Treasury debt, ownership, security maturities, Fed sectors and Census trade.</b> The source archive spans up to 20 years.</p><ul><li>ICE OAS series start November 2023. Their charts leave earlier history empty. FRED / ICE attribution and source-use conditions apply.</li><li>Observation periods differ across daily, weekly, monthly and quarterly releases. Each metric detail shows its latest period and last successful source retrieval.</li><li>The country ranking uses ${esc(DATA.holdingsDate)} TIC. Singapore is shown separately even outside the top ten. This chart uses the latest cross-section; the full archived country history has five flagged January gaps.</li><li>Trepp office / multifamily CMBS histories and CME FedWatch history were not downloaded. They are not replaced with another measure.</li></ul><p>Series detail panels contain source links, source-update dates and exact available coverage. Both workspaces load the same dated archive. <a href="data.html">Browse every source CSV, JSON file and citation →</a></p><p><a href="https://fred.stlouisfed.org/series/BAMLH0A3HYC" target="_blank" rel="noopener">FRED / ICE source notes ↗</a> · <a href="https://www.newyorkfed.org/microeconomics/hhdc" target="_blank" rel="noopener">NY Fed ↗</a> · <a href="https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/slt_table5.html" target="_blank" rel="noopener">Treasury TIC ↗</a></p>`)}
 function expand(index){let v=panels[index].views[state.views[index]||0],out=rendered[index];show(panels[index].title+' · '+v.title,v.bars?barChart()+`<p>${v.note}</p>`:`<p>${esc(v.note)}</p>${chartSVG(out.lines,v,{large:true,bands:out.lines.length===1})}<div class="expanded-legend">${out.lines.map(l=>`<button class="action-button" data-id="${l.id}">${esc(l.name)} · source & statistics</button>`).join('')}</div><p>Chart range ${state.range} years. ${v.unit}. ${out.lines.length===1?'Reference bands use prior '+state.baseline+'Y observations, latest excluded.':'Select a series to view its heat metric and standard-deviation bands.'}</p>`)}
 document.addEventListener('change',e=>{if(e.target.id==='range'||e.target.id==='baseline'){state[e.target.id]=+e.target.value;render()}if(e.target.id==='heat-mode'){state.mode=e.target.value;render()}if(e.target.hasAttribute('data-view')){state.views[e.target.dataset.view]=+e.target.value;state.hidden[e.target.dataset.view]=[];render()}});
