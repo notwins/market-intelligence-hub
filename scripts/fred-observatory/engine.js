@@ -8,38 +8,85 @@ const sign=(v,d=2)=>(v>0?'+':'')+num(v,d);
 const time=d=>Date.parse(d+'T00:00:00Z');
 const ago=(d,y)=>{let x=new Date(time(d));x.setUTCFullYear(x.getUTCFullYear()-y);return x.toISOString().slice(0,10)};
 const cache={};
-function period(id,date){let f=S[id]?.frequency||'';if(f.startsWith('Quarterly'))return date.slice(0,4)+' Q'+(Math.floor((+date.slice(5,7)-1)/3)+1);if(f.startsWith('Monthly'))return new Date(time(date)).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'});return new Date(time(date)).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});}
-function valid(id){return S[id].points.filter(p=>p[1]!=null)}
+const seriesIds=Array.from(new Set([...DATA.fredIds,...Object.keys(S)]));
+const expandedIds=['BAMLC0A4CBBBEY','SP500','PCEPI','BOPGSTB','TREASURY_MSPD_SUMMARY','FED_TREASURY_STOCKS'];
+const shortNames={
+  SP500:'S&P 500', DJIA:'Dow', NASDAQ100:'Nasdaq-100',
+  CENSUS_GOODS_TRADE_COUNTRIES:'Singapore goods balance',
+  TREASURY_DEBT_PENNY:'Gross federal debt · daily',
+  TREASURY_MSPD_SUMMARY:'Gross federal debt · month end',
+  FED_TREASURY_STOCKS:'Fed Z.1 · all-sector holdings',
+  FED_TREASURY_TRANSACTIONS_NSA:'Fed Z.1 · all-sector net purchases',
+  FED_TREASURY_TRANSACTIONS_SAAR:'Fed Z.1 · all-sector net purchases',
+  TREASURY_OFS2_20Y_ARCHIVE:'Treasury OFS-2 · total public debt'
+};
+const shortName=id=>shortNames[id]||S[id]?.name||id;
+function period(id,date){if(!date)return 'No observation';let f=S[id]?.frequency||'';if(f.startsWith('Quarterly'))return date.slice(0,4)+' Q'+(Math.floor((+date.slice(5,7)-1)/3)+1);if(f.startsWith('Monthly'))return new Date(time(date)).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'});return new Date(time(date)).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});}
+function valid(id){return (S[id]?.points||[]).filter(p=>Number.isFinite(p[1]))}
+function dollarScale(id,kind){
+  const units=S[id]?.unit||'';
+  const power=/millions/i.test(units)?6:/billions/i.test(units)?9:/^USD$/i.test(units)?0:null;
+  return power===null?null:10**((kind==='tn'?12:9)-power);
+}
 function transform(id,kind='level'){
- let key=id+':'+kind;if(cache[key])return cache[key];let p=S[id].points;
+ let key=id+':'+kind;if(cache[key])return cache[key];let p=S[id]?.points||[];
  if(kind==='level')return p;
  if(kind==='yoy'||kind==='year_change'){
   let freq=S[id].frequency,map=new Map(p.map(v=>[v[0],v[1]])),validp=valid(id),offset=/^(Quarterly|Monthly|Annual)/.test(freq);
   return cache[key]=p.map(([d,v],i)=>{let prev=null;if(offset)prev=map.get(ago(d,1));else{let target=time(ago(d,1));let lo=0,hi=validp.length;while(lo<hi){let m=(lo+hi)>>1;if(time(validp[m][0])<=target)lo=m+1;else hi=m;}let q=validp[lo-1];if(q&&target-time(q[0])<=10*DAY)prev=q[1];}return[d,v!=null&&prev!=null?(kind==='year_change'?v-prev:prev>0?100*(v/prev-1):null):null]});
  }
  if(kind==='bp')return cache[key]=p.map(([d,v])=>[d,v==null?null:v*100]);
- if(kind==='tn')return cache[key]=p.map(([d,v])=>[d,v==null?null:v/(S[id].unit.includes('Millions')?1e6:1e3)]);
+ if(kind==='tn'||kind==='bn'){
+  const scale=dollarScale(id,kind);
+  return cache[key]=p.map(([d,v])=>[d,!Number.isFinite(v)||!scale?null:v/scale]);
+ }
  if(kind==='thousands')return cache[key]=p.map(([d,v])=>[d,v==null?null:v/1000]);
  if(kind==='delta'){let last=null;return cache[key]=p.map(([d,v])=>{let value=v!=null&&last!=null?v-last:null;if(v!=null)last=v;return[d,value]})}
  return p;
 }
 function heatPoints(id){let p=transform(id,S[id].heatTransform).filter(p=>p[1]!=null);if(state.mode==='change')p=p.slice(1).map((q,i)=>[q[0],q[1]-p[i][1]]);return p}
-function stats(id){let p=heatPoints(id),latest=p.at(-1);if(!latest)return{};let prior=p.filter(q=>q[0]>=ago(latest[0],state.baseline)&&q[0]<latest[0]),n=prior.length;let mean=n?prior.reduce((a,q)=>a+q[1],0)/n:0;let sd=n>1?Math.sqrt(prior.reduce((a,q)=>a+(q[1]-mean)**2,0)/(n-1)):0;let z=n>=12&&sd>1e-10?(latest[1]-mean)/sd:null;return{p,latest,prior,n,mean,sd,z,years:n?(time(latest[0])-time(prior[0][0]))/DAY/365.25:0}}
-function unit(id,kind){if(kind==='yoy')return '% YoY';if(kind==='bp')return 'bp';if(kind==='tn')return 'USD tn';if(kind==='thousands')return '000s';if(kind==='index')return 'index';if(kind==='delta')return S[id].unit.includes('Thousands')?'000s':'change';if(id==='DEXSIUS')return 'SGD/USD';if(id==='DEXSZUS')return 'CHF/USD';let u=S[id].unit;return u==='Percent'?'%':u==='Times'?'×':u.includes('Percentage')?'pp':u.includes('Index')?'index':u.includes('Billions')?'USD bn':u.includes('Millions')?'USD mn':u.includes('Thousands')?'000s':u.includes('Dollars')?'FX':u.includes('Number')?'claims':u;}
+const statsCache=new Map();
+function stats(id){
+ if(statsCache.has(id))return statsCache.get(id);
+ const p=heatPoints(id),latest=p.at(-1),begin=latest?ago(latest[0],state.baseline):null;
+ const prior=latest?p.filter(([date])=>date>=begin&&date<latest[0]):[];
+ const n=prior.length,mean=n?prior.reduce((sum,row)=>sum+row[1],0)/n:null;
+ const constant=n>0&&prior.every(row=>row[1]===prior[0][1]);
+ const sd=n>1?constant?0:Math.sqrt(prior.reduce((sum,row)=>sum+(row[1]-mean)**2,0)/(n-1)):null;
+ const z=n>=12&&sd>0?(latest[1]-mean)/sd:null;
+ const result={p,latest,prior,n,mean,sd,z,years:n?(time(latest[0])-time(prior[0][0]))/DAY/365.25:0};
+ statsCache.set(id,result);
+ return result;
+}
+function unit(id,kind){
+ const source=S[id].unit;
+ const transformed={yoy:'% YoY',bp:'bp',tn:'USD tn',bn:'USD bn',thousands:'000s',index:'index',delta:/thousands/i.test(source)?'000s':'change'};
+ if(transformed[kind])return transformed[kind];
+ if(id==='DEXSIUS')return 'SGD/USD';
+ if(id==='DEXSZUS')return 'CHF/USD';
+ if(source==='Percent')return '%';
+ if(source==='Times')return '×';
+ if(/percentage/i.test(source))return 'pp';
+ if(/index/i.test(source))return 'index';
+ if(/billions/i.test(source))return 'USD bn';
+ if(/millions/i.test(source))return 'USD mn';
+ if(/thousands/i.test(source))return '000s';
+ return source;
+}
 function heatLabel(id){let t=S[id].heatTransform==='yoy'?'YoY growth':S[id].heatTransform==='year_change'?'12-month change':'Level';return state.mode==='change'?'Change in '+t.toLowerCase():t}
 function heatUnit(id){return state.mode==='change'?(S[id].heatTransform==='yoy'||S[id].unit==='Percent'?'pp':unit(id,S[id].heatTransform)):unit(id,S[id].heatTransform)}
 function fmt(v,u){return num(v,(u==='claims'||u==='000s'||Math.abs(v)>1000)?0:2)}
 function badge(z){return z==null?'n/a':sign(z,2)+'σ'}
 function heatClass(z){return z==null||Math.abs(z)<1?'heat-normal':Math.abs(z)<2?'heat-warm':'heat-hot'}
 function spark(p){p=p.filter(v=>v[1]!=null).slice(-70);if(p.length<2)return'';let a=Math.min(...p.map(q=>q[1])),b=Math.max(...p.map(q=>q[1]));return `<svg class="sparkline" viewBox="0 0 140 24" aria-hidden="true"><path d="${p.map((q,i)=>(i?'L':'M')+(i/(p.length-1)*140).toFixed(1)+','+(22-(q[1]-a)/(b-a||1)*20).toFixed(1)).join(' ')}" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`}
-function tile(id,compact=false){let m=S[id],v=stats(id),current=v.latest?.[1],p=v.p||[],delta=p.length>1?p.at(-1)[1]-p.at(-2)[1]:null,u=heatUnit(id),raw=valid(id).at(-1);let short=v.years<state.baseline-.15?` · ${num(v.years,1)}Y available`:'';
-return `<button class="metric-card ${heatClass(v.z)} ${compact?'compact-metric':''}" data-id="${id}" title="${esc(m.title)}. ${heatLabel(id)}; ${badge(v.z)}. Select for chart, source and statistics."><span class="metric-top"><span>${esc(m.name)}</span><span class="zbadge">${badge(v.z)}</span></span><span class="metric-value">${fmt(current,u)} <small>${u}</small></span><span class="metric-change">${heatLabel(id)}${state.mode==='level'&&delta!=null?' · Δ '+sign(delta,2):''}</span>${spark(p)}<span class="metric-date">${period(id,raw[0])}${short}</span></button>`}
+function tile(id,compact=false){let m=S[id],v=stats(id),current=v.latest?.[1],p=v.p||[],delta=p.length>1?p.at(-1)[1]-p.at(-2)[1]:null,u=heatUnit(id);let short=v.years<state.baseline-.15?` · ${num(v.years,1)}Y available`:'';
+return `<button class="metric-card ${heatClass(v.z)} ${compact?'compact-metric':''}" data-id="${id}" title="${esc(m.title)}. ${heatLabel(id)}; ${badge(v.z)}. Select for chart, source and statistics."><span class="metric-top"><span>${esc(shortName(id))}</span><span class="zbadge">${badge(v.z)}</span></span><span class="metric-value">${fmt(current,u)} <small>${esc(u)}</small></span><span class="metric-change">${heatLabel(id)}${state.mode==='level'&&delta!=null?' · Δ '+sign(delta,2):''}</span>${spark(p)}<span class="metric-date">${period(id,v.latest?.[0])}${short}</span></button>`}
 const r=(ids,title,unitName,kind='level',ref=null,note='')=>({ids:ids.split(' '),title,unit:unitName,kind,ref,note});
 const panels=[
- {title:'Treasury pricing',views:[r('DGS2 DGS10 DGS30','Nominal yields','%', 'level',null,'Treasury constant-maturity yields.'),r('DFII10 T10YIE THREEFYTP10','Real yield & compensation','%', 'level',0,'Term premium is the Kim–Wright model estimate.'),r('EFFR SOFR MORTGAGE30US','Policy & borrowing rates','%', 'level',null,'Different market tenors; native dates retained.')]},
+ {title:'Treasury pricing',views:[r('DGS2 DGS10 DGS30','Nominal yields','%', 'level',null,'Treasury constant-maturity yields.'),r('DFII10 T10YIE THREEFYTP10','Real yield & compensation','%', 'level',0,'Term premium is the Kim–Wright model estimate.'),r('EFFR SOFR MORTGAGE30US','Policy & borrowing rates','%', 'level',null,'Different market tenors; native dates retained.'),r('DGS1MO DGS3MO DGS6MO DGS1','Short maturities: 1M–1Y','%'),r('DGS3 DGS5 DGS7 DGS20','Additional maturities: 3Y–20Y','%'),r('IRLTLT01JPM156N IRLTLT01DEM156N IRLTLT01GBM156N IRLTLT01CHM156N','Global government 10Y yields','%','level',null,'Monthly benchmarks for Japan, Germany, the UK and Switzerland.')]},
  {title:'Credit risk premium',views:[r('BAMLC0A1CAAA BAMLC0A4CBBB BAMLH0A0HYM2 BAMLH0A3HYC','Credit spread ladder','bp','bp',null,'ICE history starts Nov 2023. Click legend to isolate a line.'),r('BAMLC0A1CAAA BAMLC0A2CAA BAMLC0A3CA BAMLC0A4CBBB','Investment-grade ratings','bp','bp'),r('BAMLH0A1HYBB BAMLH0A2HYB BAMLH0A3HYC','High-yield ratings','bp','bp')]},
  {title:'Yield curve',views:[r('T10Y2Y T10Y3M','Curve slopes','bp','bp',0,'Below zero = inverted curve. Positive = upward sloping.'),r('THREEFYTP10','10Y term premium','bp','bp',0,'Model estimate; zero is a sign reference, not a trading trigger.')]},
- {title:'Inflation pulse',views:[r('CPIAUCSL CPILFESL PCEPILFE','Headline & core inflation','% YoY','yoy',2,'2% is a guide; the Fed target applies to headline PCE, not all these lines.'),r('CPIAUCNS CPILFENS','CPI · not seasonally adjusted','% YoY','yoy',2,'Twelve-month change in unadjusted CPI indices.')]},
+ {title:'Inflation pulse',views:[r('CPIAUCSL CPILFESL PCEPILFE','Headline & core inflation','% YoY','yoy',2,'The Fed target applies to headline PCE. The 2% line is a comparison guide here.'),r('CPIAUCNS CPILFENS','CPI · not seasonally adjusted','% YoY','yoy',2,'Twelve-month change in unadjusted CPI indices.'),r('PCEPI PCEPILFE','Headline and core PCE','% YoY','yoy',2,'The Fed target applies to headline PCE.'),r('T5YIE T10YIE T5YIFR','Market inflation compensation','%','level',null,'5Y and 10Y breakevens and the 5Y forward rate include market risk and liquidity effects.')]},
  {title:'Repayment stress',views:[r('DRCCLACBS DRSFRMACBS DRCRELEXFACBS','Bank loan delinquencies','%','level',null,'Bank balances ≥30 days past due plus nonaccrual. Dates follow each source period.'),r('NY_Auto NY_Student_Loan NY_HELOC','Household balances · 90+ days','%','level',null,'NY Fed household credit, not bank-only data. Dates follow each source quarter.'),r('DRCRELEXFT100S DRCRELEXFOBS','CRE · bank size','%','level'),r('CORCCACBS CORCREXFACBS','Net charge-offs','%','level',null,'Annualised rates net of recoveries; separate from delinquency.')]},
  {title:'Banks & property',views:[r('SUBLPDRCSN SUBLPDRCSC SUBLPDRCSM','CRE lending standards','net %','level',0,'Above zero = more banks tightening than easing.'),r('CREACBM027SBOG CLDACBM027SBOG SMPACBM027SBOG SNFACBM027SBOG','CRE loan exposure','USD bn','level',null,'Total and categories overlap. Nonresidential includes more than offices.'),r('DRTSCILM','Business lending standards','net %','level',0)]},
  {title:'Labour & activity',views:[r('UNRATE','Unemployment rate','%','level',null,'Bands use prior native observations in the selected alert baseline.'),r('ICSA','Initial jobless claims','000s','thousands'),r('PAYEMS','Monthly payroll change','000s','delta',0),r('SAHMREALTIME','Sahm indicator','pp','level',.5,'0.5pp reference is an indicator threshold, not an official recession declaration.'),r('HOUST PERMIT','Housing starts & permits','000s','level',null,'Seasonally adjusted annual rates; monthly observations.')]},
@@ -47,22 +94,61 @@ const panels=[
  {title:'Dollar & financing FX',views:[r('DEXSIUS DEXSZUS DTWEXBGS','Relative FX performance','rebased 100','index',100,'Shared first available date = 100. Rising FX lines = stronger USD.'),r('DEXSIUS','SGD per USD','SGD / USD'),r('DEXSZUS','CHF per USD','CHF / USD')]},
  {title:'Financial conditions',views:[r('NFCI STLFSI4','Conditions & stress indices','index','level',0,'Different index constructions. Zero is each source’s historical norm.'),r('NFCI','Chicago Fed NFCI','index','level',0),r('STLFSI4','St. Louis financial stress','index','level',0)]},
  {title:'Treasury demand',views:[r('AUCTION','10Y auction bid-to-cover','×','level',null,'Regular-term nominal note auctions, including reopenings; not daily.'),{title:'Top holders + Singapore',bars:true,unit:'USD bn',note:'Dated TIC holdings · custodial locations. Singapore shown separately.'},r('FDHBFIN','Foreign-held federal debt','USD bn','level',null,'Quarterly aggregate; not the TIC country breakdown.')]},
- {title:'Fiscal & growth',views:[r('GFDEGDQ188S','Federal debt / GDP','%','level',null,'Long-run trend affects level z-scores. Dates follow each source period.'),r('GDP GDPC1','Nominal & real GDP growth','% YoY','yoy',0),{title:'Yield minus growth',gap:true,unit:'pp',ref:0,note:'Quarterly mean 10Y yield minus nominal GDP YoY. Latest common quarter.'}]}
-];
+ {title:'Fiscal & growth',views:[r('GFDEGDQ188S','Federal debt / GDP','%','level',null,'Long-run trend affects level z-scores. Dates follow each source period.'),r('GDP GDPC1','Nominal & real GDP growth','% YoY','yoy',0),{title:'Yield minus growth',gap:true,unit:'pp',ref:0,note:'Quarterly mean 10Y yield minus nominal GDP YoY. Latest common quarter.'}]},
+ {title:'Corporate bond markets',views:[
+   r('BAMLC0A0CMEY BAMLC0A4CBBBEY BAMLH0A0HYM2EY','Effective yields','%','level',null,'ICE investment-grade, BBB and high-yield effective yields. Coverage begins November 2023.'),
+   r('BAMLCC0A0CMTRIV BAMLHYH0A0HYM2TRIV','IG and HY total return','rebased 100','index',100,'ICE total return indices use the first shared valid close in the visible window as 100.'),
+   r('BAMLH0A1HYBBEY BAMLEMCBPIEY','BB and emerging-market yields','%','level',null,'Different index universes. Each observation retains its source date.')
+ ]},
+ {title:'Equity prices & volatility',views:[
+   r('SP500 DJIA NASDAQ100','US equity price indices','rebased 100','index',100,'The first shared valid close in the visible window is 100. S&P 500 and Dow coverage begins in November 2016.'),
+   r('VIXCLS VXVCLS','1M and 3M implied volatility','index points','level',null,'VIX and 3M VIX use different maturities.'),
+   r('NASDAQ100 NASDAQXNDX','Nasdaq-100 price and total return','rebased 100','index',100,'The rebased total return series includes distributions.')
+ ]},
+ {title:'International trade',views:[
+   r('BOPTEXP BOPTIMP','US goods and services flows','USD bn','bn',null,'Monthly aggregate exports and imports.'),
+   r('BOPGSTB','US goods and services balance','USD bn','bn',0,'Monthly balance. A negative reading is a deficit.'),
+   r('CENSUS_GOODS_TRADE_COUNTRIES','US goods balance with Singapore','USD bn','bn',0,'Census goods-only balance for Singapore, not seasonally adjusted. The archive includes the other trading partners.'),
+   r('IEABC','US current-account balance','USD bn','bn',0,'Quarterly coverage includes goods, services, income and transfers.')
+ ]},
+ {title:'Federal debt',views:[
+   r('TREASURY_DEBT_PENNY TREASURY_MSPD_SUMMARY','Gross debt at daily and month end dates','USD tn','tn',null,'Debt to the Penny and the Monthly Statement of the Public Debt cover the same gross concept at different dates.'),
+   r('GFDEBTN FYGFDPUN','Gross debt and debt held by the public','USD tn','tn',null,'Debt held by the public is part of gross debt. Quarterly figures have their own observation dates.'),
+   r('TREASURY_OFS2_20Y_ARCHIVE','Treasury bulletin total public debt','USD tn','tn',null,'Archived Treasury bulletin series. Detailed ownership tables are in the archive.')
+ ]},
+ {title:'Treasury ownership',views:[
+   r('FDHBFRBN FDHBPIN','Fed and private investor holdings','USD tn','tn',null,'Quarterly Treasury source categories. Private investors include some foreign holders.'),
+   r('FED_TREASURY_STOCKS','Federal Reserve Z.1 holdings','USD tn','tn',null,'All-sector Treasury securities assets. The dataset view includes each holder sector.'),
+   r('FED_TREASURY_TRANSACTIONS_NSA','Net transactions · unadjusted','USD bn','bn',0,'All-sector transactions for each quarter, before seasonal adjustment.'),
+   r('FED_TREASURY_TRANSACTIONS_SAAR','Net transactions · annual rate','USD bn','bn',0,'All-sector seasonally adjusted annual rate. Holdings are a separate measure.')
+ ]},
+ {title:'Federal receipts & outlays',views:[
+   r('MTSR133FMS MTSO133FMS','Monthly receipts and outlays','USD bn','bn',null,'Monthly Treasury budget flows. Seasonal payment patterns can move month-to-month readings.'),
+   r('MTSDS133FMS','Monthly surplus or deficit','USD bn','bn',0,'A negative balance indicates a deficit.'),
+   r('FYOINT','Annual federal interest outlays','USD bn','bn',null,'Fiscal year values. Short baselines may lack the 12 prior observations needed for a score.')
+ ]}
+].map(panel=>({...panel,views:panel.views.filter(view=>!view.ids||view.ids.every(id=>S[id]?.points?.length))}))
+ .filter(panel=>panel.views.length);
 function buildLines(view){
  if(view.gap){let g=transform('GDP','yoy'),groups={};valid('DGS10').forEach(([d,v])=>{let key=d.slice(0,4)+'-'+String(Math.floor((+d.slice(5,7)-1)/3)*3+1).padStart(2,'0')+'-01';(groups[key]??=[]).push(v)});return[{id:'GDP',name:'10Y yield − nominal growth',points:g.map(([d,v])=>[d,v!=null&&groups[d]?groups[d].reduce((a,b)=>a+b,0)/groups[d].length-v:null])}]}
- let lines=view.ids.map(id=>({id,name:S[id].name,points:transform(id,view.kind)}));
- if(view.kind==='index'){let start=ago(DATA.snapshot,state.range),maps=lines.map(l=>new Map(l.points.filter(p=>p[1]!=null&&p[0]>=start))),shared=[...maps[0].keys()].find(d=>maps.every(m=>m.has(d)));if(shared)lines=lines.map((l,i)=>({...l,points:l.points.filter(p=>p[0]>=shared).map(([d,v])=>[d,v==null?null:100*v/maps[i].get(shared)])}));}
+ let lines=view.ids.map(id=>({id,name:shortName(id),points:transform(id,view.kind)}));
+ if(view.kind==='index'){
+   const start=ago(DATA.snapshot,state.range);
+   const maps=lines.map(line=>new Map(line.points.filter(([date,value])=>Number.isFinite(value)&&value>0&&date>=start)));
+   const shared=[...maps[0].keys()].find(date=>maps.every(map=>map.has(date)));
+   if(!shared)return lines.map(line=>({...line,points:[]}));
+   lines=lines.map((line,i)=>({...line,points:line.points.filter(([date])=>date>=shared).map(([date,value])=>[date,value==null?null:100*value/maps[i].get(shared)])}));
+ }
  return lines;
 }
 function thin(points,max=400){if(points.length<=max)return points;let step=Math.ceil(points.length/(max/2)),out=[];for(let i=0;i<points.length;i+=step){let b=points.slice(i,i+step),v=b.filter(p=>p[1]!=null);if(!v.length){out.push(b[0]);continue}let lo=v.reduce((a,b)=>a[1]<b[1]?a:b),hi=v.reduce((a,b)=>a[1]>b[1]?a:b);out.push(...[lo,hi].sort((a,b)=>a[0].localeCompare(b[0])));if(b.some(p=>p[1]==null))out.push([b.at(-1)[0],null]);}return out;}
-function bandStats(points){let p=points.filter(q=>q[1]!=null),last=p.at(-1);if(!last)return null;let a=p.filter(q=>q[0]>=ago(last[0],state.baseline)&&q[0]<last[0]);if(a.length<12)return null;let mean=a.reduce((s,q)=>s+q[1],0)/a.length,sd=Math.sqrt(a.reduce((s,q)=>s+(q[1]-mean)**2,0)/(a.length-1));return{mean,sd,n:a.length}}
+function bandStats(points){let p=points.filter(q=>Number.isFinite(q[1])),last=p.at(-1);if(!last)return null;let a=p.filter(q=>q[0]>=ago(last[0],state.baseline)&&q[0]<last[0]);if(a.length<12||a.every(q=>q[1]===a[0][1]))return null;let mean=a.reduce((s,q)=>s+q[1],0)/a.length,sd=Math.sqrt(a.reduce((s,q)=>s+(q[1]-mean)**2,0)/(a.length-1));return Number.isFinite(sd)&&sd>0?{mean,sd,n:a.length}:null}
 function chartSVG(lines,view,{large=false,bands=false}={}){
  let W=large?1080:520,H=large?330:178,L=48,R=12,T=14,B=25;
  let from=time(ago(DATA.snapshot,state.range)),to=time(DATA.snapshot),all=lines.flatMap(l=>l.points.filter(p=>p[1]!=null&&time(p[0])>=from).map(p=>p[1]));
  let band=bands&&lines.length===1?bandStats(lines[0].points):null;
- if(view.ref!=null)all.push(view.ref);if(band)all.push(band.mean-2*band.sd,band.mean+2*band.sd);
  if(!all.length)return '<p class="no-data">No observations in this range.</p>';
+ if(view.ref!=null)all.push(view.ref);if(band)all.push(band.mean-2*band.sd,band.mean+2*band.sd);
  let low=Math.min(...all),high=Math.max(...all),pad=(high-low)*.1||1;low-=pad;high+=pad;
  const x=d=>L+(time(d)-from)/(to-from)*(W-L-R),y=v=>T+(high-v)/(high-low)*(H-T-B);
  let svg=`<svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(view.title)} history, ${state.range} years. ${esc(view.unit)}" data-from="${from}" data-to="${to}" data-width="${W}" data-left="${L}" data-right="${R}"><title>${esc(view.title)} · ${esc(view.unit)}</title>`;
@@ -82,17 +168,21 @@ function panelHTML(panel,index){let vi=state.views[index]||0,v=panel.views[vi],h
 return `<article class="chart-card" id="panel-${index}"><div class="chart-head"><h3>${String(index+1).padStart(2,'0')} <span>${panel.title}</span></h3><button class="expand-chart" data-panel="${index}" aria-label="Expand ${panel.title}">↗</button></div><div class="panel-selector"><select data-view="${index}" aria-label="Chart view for ${panel.title}">${panel.views.map((o,i)=>`<option value="${i}" ${i===vi?'selected':''}>${o.title}</option>`).join('')}</select><small>${v.unit}</small></div><div class="chart-values">${values}</div><div class="plot-wrap" data-plot="${index}">${v.bars?barChart():chartSVG(lines,v,{bands:lines.length===1})}<div class="chart-tooltip" hidden></div></div><div class="chart-legend">${all.map((l,i)=>`<button data-line="${l.id}" data-chart="${index}" class="${hidden.includes(l.id)?'line-off':''}" style="--series-color:${COLORS[i]}"><i></i>${esc(l.name)} <b>${num(l.points.filter(p=>p[1]!=null).at(-1)?.[1],v.unit==='bp'?0:2)}</b></button>`).join('')}</div><div class="chart-note" title="${esc(v.note)}">${esc(v.note||'Native source frequency. Select a line or expand for detail.')}${lines.length===1?' · μ / ±1σ / ±2σ': ''}</div></article>`;
 }
 function render(){
+ statsCache.clear();
  ['range','baseline','heat-mode'].forEach(id=>{let el=document.getElementById(id);if(el)el.value=String(id==='heat-mode'?state.mode:state[id])});
  document.getElementById('heat-cards').innerHTML=['DGS10','DFII10','THREEFYTP10','BAMLH0A3HYC','BAMLC0A4CBBB','DRCRELEXFACBS','PCEPILFE','UNRATE'].map(id=>tile(id)).join('');
+ const additional=document.getElementById('expanded-heat-cards');
+ if(additional)additional.innerHTML=expandedIds.filter(id=>S[id]?.points?.length).map(id=>tile(id)).join('');
+ const total=document.getElementById('series-total');if(total)total.textContent=seriesIds.length;
  document.getElementById('charts').innerHTML=panels.map(panelHTML).join('');
- renderUniverse();let ranked=DATA.fredIds.map(id=>({id,...stats(id)})).filter(v=>v.z!=null).sort((a,b)=>Math.abs(b.z)-Math.abs(a.z));
+ renderUniverse();let ranked=seriesIds.map(id=>({id,...stats(id)})).filter(v=>Number.isFinite(v.z)).sort((a,b)=>Math.abs(b.z)-Math.abs(a.z));
  let hot=ranked.filter(v=>Math.abs(v.z)>=2),warm=ranked.filter(v=>Math.abs(v.z)>=1&&Math.abs(v.z)<2);
  let counter=document.getElementById('summary-count');if(counter)counter.textContent=`${hot.length} beyond 2σ · ${warm.length} beyond 1σ`;
- let att=document.getElementById('attention-list');if(att)att.innerHTML=ranked.slice(0,6).map(v=>`<button class="attention-item ${heatClass(v.z)}" data-id="${v.id}"><span>${esc(S[v.id].name)}<small>${heatLabel(v.id)} · ${period(v.id,v.latest[0])}</small></span><b>${badge(v.z)}</b></button>`).join('');
+ let att=document.getElementById('attention-list');if(att)att.innerHTML=ranked.slice(0,6).map(v=>`<button class="attention-item ${heatClass(v.z)}" data-id="${v.id}"><span>${esc(shortName(v.id))}<small>${heatLabel(v.id)} · ${period(v.id,v.latest[0])}</small></span><b>${badge(v.z)}</b></button>`).join('');
  let cov=document.getElementById('coverage');if(cov)cov.innerHTML=`${DATA.fredIds.length} FRED series · ${DATA.externalCount ?? 15} external datasets · 20Y chart window · ICE starts Nov 2023 · Native observation dates shown · <button class="text-button" data-coverage>Coverage notes</button>`;
  wirePlots();
 }
-function renderUniverse(){let query=(document.getElementById('search')?.value||'').toLowerCase(),ids=DATA.fredIds.filter(id=>(id+' '+S[id].name+' '+S[id].group).toLowerCase().includes(query));document.getElementById('all-series').innerHTML=ids.length?ids.map(id=>tile(id,true)).join(''):'<p>No matching series.</p>';}
+function renderUniverse(){let query=(document.getElementById('search')?.value||'').toLowerCase().trim(),ids=seriesIds.filter(id=>(id+' '+S[id].name+' '+S[id].group).toLowerCase().includes(query));document.getElementById('all-series').innerHTML=ids.length?ids.map(id=>tile(id,true)).join(''):'<p>No matching series.</p>';}
 function wirePlots(){document.querySelectorAll('[data-plot]').forEach(el=>{let index=el.dataset.plot,svg=el.querySelector('svg'),tip=el.querySelector('.chart-tooltip');if(!svg||!tip)return;el.addEventListener('pointermove',e=>{let r=svg.getBoundingClientRect(),frac=((e.clientX-r.left)/r.width*+svg.dataset.width-+svg.dataset.left)/(+svg.dataset.width-+svg.dataset.left-+svg.dataset.right);if(frac<0||frac>1){tip.hidden=true;return}let t=+svg.dataset.from+frac*(+svg.dataset.to-+svg.dataset.from),out=rendered[index];if(!out)return;let html=out.lines.map((line,i)=>{let p=line.points.filter(q=>q[1]!=null);let lo=0,hi=p.length-1;while(lo<hi){let m=(lo+hi)>>1;if(time(p[m][0])<t)lo=m+1;else hi=m;}let candidates=[p[lo],p[lo-1]].filter(Boolean),q=candidates.sort((a,b)=>Math.abs(time(a[0])-t)-Math.abs(time(b[0])-t))[0];if(!q||t<time(p[0][0])||t>time(p.at(-1)[0]))return `<div>${esc(line.name)}<small>No observation in this part of the range</small></div>`;let f=S[line.id].frequency,tolerance=f.startsWith('Quarterly')?60:f.startsWith('Monthly')?20:f.startsWith('Weekly')?8:f==='Auction'?50:6;if(Math.abs(time(q[0])-t)>tolerance*DAY)return `<div>${esc(line.name)}<small>No nearby observation</small></div>`;return `<div>${esc(line.name)} <b>${num(q[1],2)} ${out.view.unit}</b><small>${period(line.id,q[0])}</small></div>`}).join('');tip.innerHTML=html;tip.hidden=false;tip.style.left=Math.min(Math.max(0,e.clientX-el.getBoundingClientRect().left-100),Math.max(0,el.clientWidth-260))+'px';let cross=svg.querySelector('.crosshair');cross.setAttribute('x1',+svg.dataset.left+frac*(+svg.dataset.width-+svg.dataset.left-+svg.dataset.right));cross.setAttribute('x2',cross.getAttribute('x1'));cross.setAttribute('visibility','visible')});el.addEventListener('pointerleave',()=>{tip.hidden=true;svg.querySelector('.crosshair').setAttribute('visibility','hidden')})})}
 let dialog=document.createElement('dialog');dialog.id='detail-dialog';document.body.append(dialog);
 function show(title,html){dialog.innerHTML=`<div class="dialog-head"><h2>${title}</h2><button data-close aria-label="Close details">×</button></div><div class="dialog-content">${html}</div>`;if(!dialog.open)dialog.showModal();dialog.querySelector('[data-close]').onclick=()=>dialog.close();}

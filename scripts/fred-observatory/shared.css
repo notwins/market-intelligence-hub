@@ -4,3 +4,17 @@
 .metric-card.heat-warm,.metric-card.heat-warm:hover{background:linear-gradient(120deg,#f9efdd,#f9f4e9);border-color:#dec796}
 @media(min-width:1500px){.chart-values{min-height:33px}.chart-card .chart-svg{height:148px}.chart-head h3{font-size:13px}.chart-legend button{font-size:10px}.chart-values span{font-size:10px}}
 @media(max-width:600px){.method-grid{grid-template-columns:1fr}.detail-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.detail-metrics strong{font-size:18px}.chart-values{min-height:20px}dialog .chart-svg{min-height:150px}.chart-card .chart-svg{height:170px}.holder-row{grid-template-columns:110px 1fr 40px}.dialog-head h2{font-size:18px}dialog .holder-row{grid-template-columns:120px 1fr 40px}.page-footer{overflow-wrap:anywhere}}
+
+/* New archive metrics sit below the original chart wall. */
+.archive-metrics{margin:20px 0 14px}
+.archive-metrics .section-heading{margin-bottom:8px}
+.archive-metric-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.archive-metric-grid>.metric-card{min-width:0;padding:12px}
+.archive-metric-grid .metric-top>span:first-child{overflow-wrap:anywhere}
+.archive-metric-grid .metric-value{font-size:clamp(18px,2.2vw,27px)}
+.archive-metric-grid .metric-top{font-size:12px;line-height:1.25;min-height:28px}
+.archive-metric-grid .metric-date{font-size:9px}
+.archive-metric-grid .metric-change{font-size:10px}
+.archive-metric-grid .sparkline{height:21px}
+@media(max-width:1100px){.archive-metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:540px){.archive-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-metric-grid>.metric-card{padding:10px}.archive-metric-grid .metric-top{font-size:11px}}
