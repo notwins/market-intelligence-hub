@@ -18,7 +18,8 @@ const couponRate = new Intl.NumberFormat('en-SG',{maximumFractionDigits:3});
 const couponBand = coupon => !Number.isFinite(coupon) ? '' : coupon < 2 ? 'under-2' : coupon < 3 ? '2-to-3' : coupon <= 4 ? '3-to-4' : 'above-4';
 const displayedYield = q => q?.yield_basis === 'Asked yield' && Number.isFinite(q.yield_pct) ? Number(num(q.yield_pct,1).replaceAll(',','')) : null;
 
-function treasuryTable(rows, feed) {
+function treasuryTable(rows, feed, showIdentifiers) {
+  const identifierCell = showIdentifiers ? 'data-ust-identifier' : 'data-ust-identifier hidden';
   const levels = rows.map(r => displayedYield(feed.latest[r.id])).filter(Number.isFinite);
   const low = Math.min(...levels), high = Math.max(...levels);
   return `<div class="daily-bonds-scroll daily-ust-scroll" role="region" aria-label="US Treasury quotes" tabindex="0">
@@ -29,7 +30,7 @@ function treasuryTable(rows, feed) {
         <th role="columnheader" scope="col">Coupon</th>
         <th role="columnheader" scope="col">Price</th>
         <th role="columnheader" scope="col">Yield</th>
-        <th role="columnheader" scope="col" class="daily-ust-bond-heading">ISIN &amp; bond</th>
+        <th role="columnheader" scope="col" class="daily-ust-bond-heading" ${identifierCell}>ISIN &amp; source</th>
       </tr></thead>
       <tbody role="rowgroup">${rows.map(r => {
         const q = feed.latest[r.id];
@@ -40,15 +41,14 @@ function treasuryTable(rows, feed) {
         const coupon = Number.isFinite(r.coupon) ? couponRate.format(r.coupon) + '%' : '—';
         const stale = q && (feed.checks[r.id]?.status !== 'ok' || Date.now() - Date.parse(q.date + 'T23:59:59+08:00') > 4 * 86400000);
         const status = !q ? 'No quote' : stale ? 'Saved quote' : '';
-        const maturitySuffix = ' · ' + r.maturity;
-        const bondName = r.name.endsWith(maturitySuffix) ? r.name.slice(0,-maturitySuffix.length) : r.name;
+        const source = E(safe(r.source_url));
         return `<tr role="row">
           <th role="rowheader" scope="row" class="daily-ust-maturity">${E(maturityLabel)}</th>
-          <td role="cell" class="daily-ust-coupon" data-coupon-band="${couponBand(r.coupon)}">${E(coupon)}</td>
+          <td role="cell" class="daily-ust-coupon" data-coupon-band="${couponBand(r.coupon)}"><a href="${source}" target="_blank" rel="noopener noreferrer" title="${E(r.name)} · WSJ Treasury quotes">UST ${E(coupon)}</a></td>
           <td role="cell" class="daily-ust-price">${num(q?.ask,1)}</td>
-          <td role="cell" class="daily-ust-yield"><span data-yield-band="${band}">${yieldLevel === null ? '—' : num(q.yield_pct,1) + '%'}</span></td>
-          <td role="cell" class="daily-ust-bond"><span class="daily-ust-isin">${E(r.isin || r.id)}</span>
-            <a href="${E(safe(r.source_url))}" target="_blank" rel="noopener noreferrer" title="${E(r.name)} · WSJ Treasury quotes">${E(bondName)} <span aria-hidden="true">↗</span></a>
+          <td role="cell" class="daily-ust-yield"${status ? ` title="${status}"` : ''}><span data-yield-band="${band}">${yieldLevel === null ? '—' : num(q.yield_pct,1) + '%'}</span></td>
+          <td role="cell" class="daily-ust-bond" ${identifierCell}><span class="daily-ust-isin">${E(r.isin || r.id)}</span>
+            <a href="${source}" target="_blank" rel="noopener noreferrer" aria-label="WSJ quotes for ${E(r.isin || r.id)}">WSJ <span aria-hidden="true">↗</span></a>
             ${status ? `<span class="daily-ust-quote-status">${status}</span>` : ''}
           </td>
         </tr>`;
@@ -57,28 +57,56 @@ function treasuryTable(rows, feed) {
   </div>`;
 }
 
-function compactWatchlist(feed, checked) {
+function compactWatchlist(feed, checked, showIdentifiers) {
   const treasuries = feed.instruments.filter(r => r.source === 'WSJ');
   const otherBonds = feed.instruments.filter(r => r.source !== 'WSJ');
-  return `<h3 class="daily-ust-title">US Treasuries (UST)</h3>
-    ${treasuryTable(treasuries,feed)}
+  return `<div class="daily-ust-watch">
+      <div class="daily-ust-heading">
+        <h3 class="daily-ust-title">US Treasuries (UST)</h3>
+        <button type="button" class="outline" data-ust-identifiers aria-pressed="${showIdentifiers}">ISIN &amp; source</button>
+      </div>
+      ${treasuryTable(treasuries,feed,showIdentifiers)}
+    </div>
     <details class="daily-bonds-history daily-ust-evidence">
-      <summary>Full-precision Treasury quotes &amp; dates</summary>
+      <summary>Detailed Treasury quotes &amp; dates</summary>
       <p class="fine">Last check: ${E(checked)} SGT. The quote date is shown for each bond.</p>
       ${table(treasuries,feed,false,'Latest saved Treasury prices per 100 face value and yields % per year')}
     </details>
     <h3 class="daily-ust-title daily-ust-other">Other watched bonds</h3>
     ${table(otherBonds,feed,false,'Prices per 100 face value · yields % per year')}`;
 }
-function render(feed,{compactTreasuries=false}={}){
+function render(feed,{compactTreasuries=false,showIdentifiers=false}={}){
  if(feed?.schema_version!==1||!Array.isArray(feed.instruments)||feed.instruments.length!==34||!feed.latest||!feed.history||!feed.checks)return '<p class="fine">Bond price feed unavailable. Open the original source links in the full watchlist.</p>';
  const count=feed.instruments.filter(r=>feed.latest[r.id]).length,checked=feed.checked_at?new Date(feed.checked_at).toLocaleString('en-GB',{timeZone:'Asia/Singapore',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}):'Unavailable';
- return `<div class="section-head"><div>${compactTreasuries ? '' : '<p class="eyebrow">DAILY BOND WATCHLIST</p>'}<h2>Bond prices &amp; yields</h2></div><a href="v4.html#watchlist">Full watchlist →</a></div>${compactTreasuries ? `<p class="fine daily-ust-summary">${count}/34 have saved quotes · Daily check at 7:00 am Singapore time.</p>` : `<p class="fine">29 watched US Treasuries + five Bondsupermart bonds. Daily check scheduled for 7:00 am Singapore time; publication follows processing. ${count}/34 have saved quotes. Last check: ${E(checked)} SGT.</p>`}${compactTreasuries ? compactWatchlist(feed,checked) : table(feed.instruments,feed)}<details class="daily-bonds-history"><summary>Last few daily prices &amp; yields</summary><p class="fine">Only source-dated prices are saved. Repeated checks add no duplicate quote dates; weekends and holidays are not filled. Earlier undated UST shortlist values remain in the full watchlist and are excluded from daily history.</p>${table(feed.instruments,feed,true)}</details><p class="fine daily-bonds-basis">WSJ: Treasury prices converted from points and 32nds; yield is the asked yield. Bondsupermart: indicative full-lot bid/ask prices with bid yield to maturity (YTM) or worst (YTW), as labelled. Each row retains its own source date. <a href="${encodeURI(path)}" download>Download prices and full saved history (JSON)</a>.</p>`;
+ return `<div class="section-head"><div>${compactTreasuries ? '' : '<p class="eyebrow">DAILY BOND WATCHLIST</p>'}<h2>Bond prices &amp; yields</h2></div><a href="v4.html#watchlist">Full watchlist →</a></div>${compactTreasuries ? `<p class="fine daily-ust-summary">${count}/34 have saved quotes · Daily check at 7:00 am Singapore time.</p>` : `<p class="fine">29 watched US Treasuries + five Bondsupermart bonds. Daily check scheduled for 7:00 am Singapore time; publication follows processing. ${count}/34 have saved quotes. Last check: ${E(checked)} SGT.</p>`}${compactTreasuries ? compactWatchlist(feed,checked,showIdentifiers) : table(feed.instruments,feed)}<details class="daily-bonds-history"><summary>Last few daily prices &amp; yields</summary><p class="fine">Only source-dated prices are saved. Repeated checks add no duplicate quote dates; weekends and holidays are not filled. Earlier undated UST shortlist values remain in the full watchlist and are excluded from daily history.</p>${table(feed.instruments,feed,true)}</details><p class="fine daily-bonds-basis">WSJ: Treasury prices converted from points and 32nds; yield is the asked yield. Bondsupermart: indicative full-lot bid/ask prices with bid yield to maturity (YTM) or worst (YTW), as labelled. Each row retains its own source date. <a href="${encodeURI(path)}" download>Download prices and full saved history (JSON)</a>.</p>`;
 }
 let cached=null,pending=null,loadedAt=0;
 async function load(){if(cached&&Date.now()-loadedAt<300000)return cached;if(pending)return pending;pending=(async()=>{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);try{const response=await fetch(path,{cache:'no-cache',signal:controller.signal});if(!response.ok)throw Error('Unavailable');cached=await response.json();loadedAt=Date.now();return cached;}finally{clearTimeout(timer);pending=null;}})();return pending;}
-async function mount(){const hosts=[...document.querySelectorAll('[data-daily-bonds]')];if(!hosts.length)return;try{const feed=await load();for(const h of hosts)if(h.isConnected)h.innerHTML=render(feed,{compactTreasuries:h.dataset.dailyBonds==='compact-ust'});}catch{for(const h of hosts)if(h.isConnected)h.innerHTML='<h2>Bond prices &amp; yields</h2><p class="fine">Saved bond prices could not be loaded. <a href="v4.html#watchlist">Open the full bond watchlist →</a></p>';}}
+async function mount() {
+  const hosts = [...document.querySelectorAll('[data-daily-bonds]')];
+  if (!hosts.length) return;
+  try {
+    const feed = await load();
+    for (const host of hosts) {
+      if (!host.isConnected) continue;
+      const showIdentifiers = host.querySelector('[data-ust-identifiers]')?.getAttribute('aria-pressed') === 'true';
+      host.innerHTML = render(feed,{compactTreasuries:host.dataset.dailyBonds === 'compact-ust',showIdentifiers});
+    }
+  } catch {
+    for (const host of hosts) {
+      if (host.isConnected) host.innerHTML = '<h2>Bond prices &amp; yields</h2><p class="fine">Saved bond prices could not be loaded. <a href="v4.html#watchlist">Open the full bond watchlist →</a></p>';
+    }
+  }
+}
+
+function toggleIdentifiers(event) {
+  const button = event.target.closest('[data-ust-identifiers]');
+  if (!button) return;
+  const show = button.getAttribute('aria-pressed') !== 'true';
+  button.setAttribute('aria-pressed',String(show));
+  for (const cell of button.closest('.daily-ust-watch').querySelectorAll('[data-ust-identifier]')) cell.hidden = !show;
+}
 root.DailyBondPrices={mount,render,lastDays,yieldText};
 if(typeof module!=='undefined')module.exports=root.DailyBondPrices;
-if(typeof document!=='undefined'){if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();document.addEventListener('visibilitychange',()=>{if(!document.hidden)mount();});setInterval(()=>{if(!document.hidden)mount();},300000);}
+if(typeof document!=='undefined'){document.addEventListener('click',toggleIdentifiers);if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();document.addEventListener('visibilitychange',()=>{if(!document.hidden)mount();});setInterval(()=>{if(!document.hidden)mount();},300000);}
 })(typeof window!=='undefined'?window:globalThis);

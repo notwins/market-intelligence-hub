@@ -70,14 +70,18 @@ assert.match(ustTable,/Nov-2033/);
 assert.match(ustTable,/<td role="cell" class="daily-ust-price">97\.2<\/td>/);
 assert.match(ustTable,/data-yield-band="[0-4]">5\.0%/);
 assert.match(ustTable,/US912810TC27[\s\S]*?No quote/);
+assert.match(ustTable,/class="daily-ust-coupon"[^>]*><a href="https:\/\/www\.wsj\.com\/market-data\/bonds\/treasuries"[^>]*>UST 4\.5%<\/a>/);
+assert.equal((ustTable.match(/data-ust-identifier hidden/g)||[]).length,30);
+assert.match(compact,/data-ust-identifiers aria-pressed="false"/);
+assert.match(daily.render(prices,{compactTreasuries:true,showIdentifiers:true}),/data-ust-identifiers aria-pressed="true"/);
 assert.match(ustTable,/https:\/\/www\.wsj\.com\/market-data\/bonds\/treasuries/);
-assert.match(compact,/Full-precision Treasury quotes &amp; dates/);
+assert.match(compact,/Detailed Treasury quotes &amp; dates/);
 assert.match(compact,/Other watched bonds/);
 assert.doesNotMatch(dailyHTML,/class="daily-ust-table"/);
 for(const [index,coupon] of [1.875,2,3,4,4.125].entries()) {
   treasuries[index].coupon = coupon;
 }
 const bands = daily.render(unsafe,{compactTreasuries:true});
-for(const [band,coupon] of [["under-2","1.875"],["2-to-3","2"],["3-to-4","3"],["3-to-4","4"],["above-4","4.125"]]) assert(bands.includes('data-coupon-band="'+band+'">'+coupon+'%'));
+for(const [band,coupon] of [["under-2","1.875"],["2-to-3","2"],["3-to-4","3"],["3-to-4","4"],["above-4","4.125"]]) assert(new RegExp('data-coupon-band="'+band+'"><a [^>]+>UST '+coupon.replace('.','\\.')+'%<').test(bands));
 assert(!bands.includes('javascript:bad'));
 console.log('PASS compact daily Treasury quote: all 29 identities, exact coupon bands, rounded asked values, unavailable quote, full precision and source links');
