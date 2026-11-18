@@ -22,3 +22,10 @@ const collisionBox={left:40,right:60,top:40,bottom:60};assert(C.segmentHitsBox([
 const crossing=[[0,50],[50,50],[100,0],[200,50],[300,100],[400,50]],closeBars=[{label:'KO',y:50},{label:'KI',y:51},{label:'Strike',y:52},{label:'Final KO',y:50}];const placements=C.inlineBarrierLabels(closeBars,crossing,0,400);assert(placements.every(l=>l.inline),'Close barriers should find separate clear gaps along their own lines');for(let i=0;i<placements.length;i++){const l=placements[i];assert.equal(l.y,closeBars[i].y);assert(!C.priceHitsBox(crossing,l.box));for(const other of placements.slice(0,i))assert(!(l.box.left<other.box.right&&l.box.right>other.box.left&&l.box.top<other.box.bottom&&l.box.bottom>other.box.top));}
 assert.equal(C.inlineBarrierLabels([{label:'KI',y:50}],[[0,50],[400,50]],0,400)[0].inline,false,'A price path coinciding with the full barrier must never be hidden by forced text');
 assert(C.inlineBarrierLabels([{label:'KO',y:50},{label:'Final KO',y:50}],[[0,100],[0,0],[65,0],[65,50],[145,50],[145,0],[200,0]],0,200).every(p=>p.inline),'Small words must leave the only wide gap available for Final KO');
+const png='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jc0cAAAAASUVORK5CYII=';
+const logoPage={...p,shares:[{...p.shares[0],description:'Company description to read over the logo.'}]};
+const marked=C.svg(logoPage,{TEST:{logo:png}});
+assert.match(marked,/<image class="si-company-watermark" x="496"[^>]+opacity="0\.12"/);
+assert(marked.indexOf('si-company-watermark')<marked.indexOf('Company description to read'),'Artwork must sit behind the company text');
+assert(!C.svg(logoPage,{TEST:{logo:png}},1,1,{showWatermarks:false}).includes('si-company-watermark'));
+assert(!C.svg(logoPage,{TEST:{logo:'https://example.com/logo.png'}}).includes('si-company-watermark'),'PDF images must be self-contained');

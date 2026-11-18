@@ -1,8 +1,66 @@
 (function(){'use strict';
 const C=window.SIBetaCore,E=C.escape,$=id=>document.getElementById(id),form=$('si-form'),KEY='market-si-beta2-v1',LIMIT=30;
 let pages=[],watch=[],activeId='',dirty=false,list='all',assets={},loading=new Set(),revisions={},busy=false,removed=null,storageOK=true,pdfURL='';
+const WATERMARK_KEY='market-si-beta2-logo-watermark',LOGO_BASE='assets/company-logos/';
+let showWatermarks=true,logoIndexPromise;
+const logoImages=new Map();
+try{showWatermarks=localStorage.getItem(WATERMARK_KEY)!=='off';}catch{/* The toggle can still work for this session. */}
 const active=()=>pages.find(p=>p.id===activeId),id=()=>crypto.randomUUID(),notice=msg=>{$('app-status').textContent=msg;clearTimeout(notice.timer);notice.timer=setTimeout(()=>{$('app-status').textContent='';},9000);};
 function bounded(promise,message,ms=20000){let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error(message)),ms);})]).finally(()=>clearTimeout(timer));}
+function logoIndex(){
+ if(!logoIndexPromise){
+  logoIndexPromise=bounded(fetch(LOGO_BASE+'company-logos.json').then(async response=>{
+   if(!response.ok)throw Error('Logo library unavailable.');
+   const data=await response.json();
+   if(data.schema_version!==1||!Array.isArray(data.companies))throw Error('Invalid logo library.');
+   const index=new Map();
+   for(const {ticker,file} of data.companies){
+    if(typeof ticker==='string'&&typeof file==='string'&&/^[A-Za-z0-9][A-Za-z0-9.-]*\.webp$/.test(file))index.set(ticker,file);
+   }
+   for(const [alias,ticker] of Object.entries(data.aliases||{})){
+    if(!index.has(alias)&&index.has(ticker))index.set(alias,index.get(ticker));
+   }
+   return index;
+  }), 'Logo library timed out.', 5000).catch(()=>{logoIndexPromise=undefined;return new Map();});
+ }
+ return logoIndexPromise;
+}
+async function embedLogo(file){
+ const response=await fetch(LOGO_BASE+file);
+ if(!response.ok)throw Error('Company logo unavailable.');
+ const url=URL.createObjectURL(await response.blob());
+ try{
+  const img=new Image();
+  await bounded(new Promise((resolve,reject)=>{
+   img.onload=resolve;
+   img.onerror=reject;
+   img.src=url;
+  }), 'Company logo could not be read.', 5000);
+  // SVG is rasterized as an image for PDF export. Embed a PNG so the SVG has no external image dependency.
+  const canvas=document.createElement('canvas');
+  const scale=Math.min(1,320/Math.max(img.naturalWidth,img.naturalHeight));
+  canvas.width=Math.max(1,Math.round(img.naturalWidth*scale));
+  canvas.height=Math.max(1,Math.round(img.naturalHeight*scale));
+  canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+  return canvas.toDataURL('image/png');
+ }finally{URL.revokeObjectURL(url);}
+}
+async function companyLogo(...tickers){
+ if(typeof fetch!=='function')return '';
+ const index=await logoIndex();
+ const file=tickers.map(C.symbol).map(ticker=>index.get(ticker)).find(Boolean);
+ if(!file)return '';
+ if(!logoImages.has(file)){
+  logoImages.set(file,bounded(embedLogo(file),'Company logo timed out.',7000).catch(()=>{
+   logoImages.delete(file);
+   return '';
+  }));
+ }
+ return logoImages.get(file);
+}
+function renderPage(page,data,number,total,watermarks=showWatermarks){
+ return C.svg(page,data,number,total,{showWatermarks:watermarks});
+}
 function invalidatePDF(){if(pdfURL)URL.revokeObjectURL(pdfURL);pdfURL='';$('pdf-ready').hidden=true;for(const name of ['download-pdf','open-pdf'])$(name).removeAttribute('href');}
 function protectEdits(){if(busy)return true;if(!dirty)return false;notice('Apply or discard your changes in Review & export before continuing.');$('pending-edits').scrollIntoView({behavior:'smooth',block:'center'});return true;}
 function normalize(p){if(!p||typeof p!=='object'||!Array.isArray(p.shares)||p.shares.length>4)throw Error('Invalid collection page.');const b=C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])b[k]=C.num(p[k]);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])if(typeof p[k]==='string')b[k]=p[k].slice(0,k==='notes'?180:50);b.tenorUnit='months';b.firstStep=p.firstStep===undefined?2:Number(p.firstStep);b.id=typeof p.id==='string'?p.id.slice(0,80):id();b.shares=p.shares.map(s=>({symbol:C.symbol(s.symbol),fixing:C.num(s.fixing),name:String(s.name||'').slice(0,60),description:String(s.description||'').slice(0,280)}));if(p.source&&/^SI-\d{3,}$/.test(p.source.reference))b.source={reference:p.source.reference,date:/^\d{4}-\d{2}-\d{2}$/.test(p.source.date)?p.source.date:'',rounded:true,review:!!p.source.review};return b;}
@@ -12,11 +70,51 @@ $('share-inputs').innerHTML=Array.from({length:4},(_,i)=>`<label><span class="sh
 $('share-details').innerHTML=Array.from({length:4},(_,i)=>`<div class="share-detail"><strong>Share ${i+1} details</strong><label>Manual reference price<input name="fixing${i}" type="number" min="0.000001" step="any" placeholder="Use dated close"></label><label>Company name<input name="name${i}" maxlength="60" placeholder="From feed when available"></label><label>Company description<textarea name="description${i}" rows="2" maxlength="280" placeholder="Optional override; matched profile used when blank"></textarea></label></div>`).join('');
 function fill(p=C.blank()){for(const k of ['ko','ki','strike','step','months','coupon','currency','tenorUnit','couponBasis','kiType','firstStep','date','issuer','notes'])form.elements[k].value=p[k]??'';for(let i=0;i<4;i++){const s=p.shares[i]||{};form.elements['share'+i].value=s.symbol||'';form.elements['fixing'+i].value=s.fixing??'';form.elements['name'+i].value=s.name||'';form.elements['description'+i].value=s.description||'';}dirty=false;$('form-errors').textContent='';$('apply-page').textContent=active()?'Update one-pager':'Create one-pager';$('editor-title').textContent=active()?`Edit one-pager ${pages.indexOf(active())+1}`:'Create a one-pager';$('editor-note').textContent=p.source?`Based on ${p.source.reference}. Imported terms remain rounded and photo-unverified.`:'Start with one to four shares. All entered terms stay on this device.';}
 function read(){const p=active()?structuredClone(active()):C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])p[k]=C.num(form.elements[k].value);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])p[k]=form.elements[k].value.trim();p.firstStep=Number(form.elements.firstStep.value);p.shares=[];for(let i=0;i<4;i++){const s=form.elements['share'+i].value.trim();if(s)p.shares.push({symbol:C.symbol(s),fixing:C.num(form.elements['fixing'+i].value),name:form.elements['name'+i].value.trim(),description:form.elements['description'+i].value.trim()});}return p;}
-function buttons(){const p=active();$('pdf-one').disabled=!p||dirty||busy||loading.has(p?.id);$('pdf-all').disabled=!pages.length||dirty||busy||loading.size>0;for(const k of ['duplicate-page','remove-page','refresh-page'])$(k).disabled=!p||dirty||busy||(k==='refresh-page'&&loading.has(p?.id));for(const k of ['apply-page','apply-pending','discard-pending','new-page','undo-remove','backup-pages','restore-pages'])$(k).disabled=busy;$('pending-edits').hidden=!dirty;$('apply-pending').textContent=p?'Apply changes':'Create one-pager';$('page-count').textContent=pages.length;$('pdf-all').textContent=busy?'Creating PDF…':`↓ All pages PDF${pages.length?' ('+pages.length+')':''}`;}
+function buttons(){const p=active();
+ $('logo-watermark').disabled=busy;
+ $('logo-watermark').setAttribute('aria-pressed',String(showWatermarks));
+ $('logo-watermark-state').textContent=showWatermarks?'On':'Off';
+$('pdf-one').disabled=!p||dirty||busy||loading.has(p?.id);$('pdf-all').disabled=!pages.length||dirty||busy||loading.size>0;for(const k of ['duplicate-page','remove-page','refresh-page'])$(k).disabled=!p||dirty||busy||(k==='refresh-page'&&loading.has(p?.id));for(const k of ['apply-page','apply-pending','discard-pending','new-page','undo-remove','backup-pages','restore-pages'])$(k).disabled=busy;$('pending-edits').hidden=!dirty;$('apply-pending').textContent=p?'Apply changes':'Create one-pager';$('page-count').textContent=pages.length;$('pdf-all').textContent=busy?'Creating PDF…':`↓ All pages PDF${pages.length?' ('+pages.length+')':''}`;}
 function preflight(p){const messages=[];if(!p||loading.has(p.id)){$('data-check').hidden=true;return;}const data=assets[p.id]||{},missingPrice=[],missingHistory=[],missingDescription=[];for(const s of p.shares){const d=data[s.symbol]||{};if(C.reference(p,s,d).value===null)missingPrice.push(s.symbol);if((d.points||[]).length<2)missingHistory.push(s.symbol);if(!(s.description||d.description))missingDescription.push(s.symbol);}if(missingPrice.length)messages.push('Reference price unavailable: '+missingPrice.join(', ')+'. Enter a manual reference price or choose a date with a saved close.');if(missingHistory.length)messages.push('Price history unavailable: '+missingHistory.join(', ')+'.');if(missingDescription.length)messages.push('Company description not supplied: '+missingDescription.join(', ')+'. Add it in share details.');$('data-check').hidden=!messages.length;$('data-check-text').textContent=messages.join(' ')+' The PDF will retain these gaps.';}
-function render(){const p=active();$('page-tabs').innerHTML=pages.map((x,i)=>`<button role="tab" id="tab-${E(x.id)}" aria-controls="preview" aria-selected="${x.id===activeId}" tabindex="${x.id===activeId?0:-1}" data-page="${E(x.id)}" title="${E(x.shares.map(s=>s.symbol).join(' / '))}" aria-label="Page ${i+1}: ${E(x.shares.map(s=>s.symbol).join(' / '))}">${i+1}</button>`).join('');if(p){$('preview').innerHTML=C.svg(p,assets[p.id]||{},pages.indexOf(p)+1,pages.length);$('preview').setAttribute('aria-labelledby','tab-'+p.id);}else{$('preview').removeAttribute('aria-labelledby');$('preview').innerHTML='<div class="empty-preview"><span>▤</span><h3>Your first one-pager starts here</h3><p>Complete the terms above or choose “Add page” from the reference list below.</p></div>';}
+function render(){const p=active();$('page-tabs').innerHTML=pages.map((x,i)=>`<button role="tab" id="tab-${E(x.id)}" aria-controls="preview" aria-selected="${x.id===activeId}" tabindex="${x.id===activeId?0:-1}" data-page="${E(x.id)}" title="${E(x.shares.map(s=>s.symbol).join(' / '))}" aria-label="Page ${i+1}: ${E(x.shares.map(s=>s.symbol).join(' / '))}">${i+1}</button>`).join('');if(p){$('preview').innerHTML=renderPage(p,assets[p.id]||{},pages.indexOf(p)+1,pages.length);$('preview').setAttribute('aria-labelledby','tab-'+p.id);}else{$('preview').removeAttribute('aria-labelledby');$('preview').innerHTML='<div class="empty-preview"><span>▤</span><h3>Your first one-pager starts here</h3><p>Complete the terms above or choose “Add page” from the reference list below.</p></div>';}
  $('preview-status').classList.toggle('dirty',dirty);$('preview-status').textContent=dirty?'The preview shows the last applied terms. Apply changes below before exporting.':p?(loading.has(p.id)?'Loading dated share data…':`Page ${pages.indexOf(p)+1} of ${pages.length} · ${p.shares.map(s=>s.symbol).join(' + ')} · ${storageOK?'saved in this browser':'not saved; download a collection backup'}`):'No pages yet.';preflight(p);buttons();}
-async function enrich(p){if(!p)return;const revision=(revisions[p.id]||0)+1;revisions[p.id]=revision;loading.add(p.id);render();await window.ShareStaticData?.load();const result={};await Promise.all(p.shares.map(async s=>{const profile=window.ShareStaticData?.find(s.symbol),facts=profile?{name:profile.name,description:window.ShareStaticData.summary(profile),staticProfile:profile,profileImportedOn:window.ShareStaticData.metadata().importedOn}:{};try{const data=await bounded(window.MarketPrices.series(C.symbol(s.symbol)),'Share data timed out.'),q=data.quote,to=q.date,from=new Date(Date.parse(to+'T12:00:00Z')-366*86400000).toISOString().slice(0,10),points=window.MarketPrices.selectPoints(data.base,data.daily,from,to),valuation=window.BOSEquity?.valuationFor(data.item);result[s.symbol]={...facts,name:data.item.name||facts.name,currency:data.item.currency,provider:data.item.provider||'Shared historical price feed',quote:{close:q.close,date:q.date},daily:data.daily,points,metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||'',sourceUrl:window.MarketPrices.sourceUrl(data.item.history_url),basis:data.item.basis||''};}catch{result[s.symbol]={...facts,error:'Exact listing history unavailable. No substitute listing is used.'};}}));if(revisions[p.id]!==revision)return;loading.delete(p.id);if(pages.some(x=>x.id===p.id)){assets[p.id]=result;invalidatePDF();}render();}
+async function enrich(p){
+ if(!p)return;
+ const revision=(revisions[p.id]||0)+1;
+ revisions[p.id]=revision;
+ loading.add(p.id);
+ render();
+ await window.ShareStaticData?.load();
+ const result={};
+ await Promise.all(p.shares.map(async share=>{
+  const ticker=C.symbol(share.symbol);
+  const profile=window.ShareStaticData?.find(ticker);
+  const facts=profile?{name:profile.name,description:window.ShareStaticData.summary(profile),staticProfile:profile,profileImportedOn:window.ShareStaticData.metadata().importedOn}:{};
+  const logo=companyLogo(window.MarketPrices.resolve(ticker)?.ticker,profile?.publicTicker,ticker);
+  let market;
+  try{
+   const data=await bounded(window.MarketPrices.series(ticker),'Share data timed out.');
+   const quote=data.quote;
+   const from=new Date(Date.parse(quote.date+'T12:00:00Z')-366*86400000).toISOString().slice(0,10);
+   const valuation=window.BOSEquity?.valuationFor(data.item);
+   market={
+    name:data.item.name||facts.name,currency:data.item.currency,provider:data.item.provider||'Shared historical price feed',
+    quote:{close:quote.close,date:quote.date},daily:data.daily,
+    points:window.MarketPrices.selectPoints(data.base,data.daily,from,quote.date),
+    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||'',
+    sourceUrl:window.MarketPrices.sourceUrl(data.item.history_url),basis:data.item.basis||''
+   };
+  }catch{
+   market={error:'Exact listing history unavailable. No substitute listing is used.'};
+  }
+  result[share.symbol]={...facts,...market,logo:await logo};
+ }));
+ if(revisions[p.id]!==revision)return;
+ loading.delete(p.id);
+ if(pages.some(x=>x.id===p.id)){assets[p.id]=result;invalidatePDF();}
+ render();
+}
+
 function select(pageId){if(protectEdits())return;activeId=pageId;fill(active());persist();render();}
 function add(p){if(pages.length>=LIMIT){notice(`A collection can contain up to ${LIMIT} pages. Save it before starting another collection.`);return;}invalidatePDF();p.id=id();pages.push(p);activeId=p.id;loading.add(p.id);fill(p);persist();render();enrich(p);$('preview-title').scrollIntoView({behavior:'smooth',block:'start'});}
 function changed(){dirty=true;invalidatePDF();$('editor-note').textContent=active()?'Edited terms will apply when you choose Update one-pager.':'Complete the terms, then create your one-pager.';buttons();$('preview-status').textContent='The preview shows the last applied terms. Apply changes below before exporting.';$('preview-status').classList.add('dirty');}
@@ -26,6 +124,13 @@ $('apply-pending').addEventListener('click',()=>form.requestSubmit());
 $('discard-pending').addEventListener('click',()=>{fill(active());render();});
 $('edit-details').addEventListener('click',()=>{document.querySelector('.more-terms').open=true;$('share-details').scrollIntoView({behavior:'smooth',block:'start'});});
 $('zoom-preview').addEventListener('click',()=>{const zoom=$('preview').classList.toggle('actual-size');$('zoom-preview').setAttribute('aria-pressed',String(zoom));$('zoom-preview').textContent=zoom?'Fit page':'Enlarge preview';});
+$('logo-watermark').addEventListener('click',()=>{
+ if(busy)return;
+ showWatermarks=!showWatermarks;
+ try{localStorage.setItem(WATERMARK_KEY,showWatermarks?'on':'off');}catch{/* Use the current session setting. */}
+ invalidatePDF();
+ render();
+});
 $('new-page').addEventListener('click',()=>{if(protectEdits())return;activeId='';fill();render();$('editor-title').scrollIntoView({behavior:'smooth'});});
 $('page-tabs').addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b)select(b.dataset.page);});
 $('page-tabs').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;e.preventDefault();if(dirty)return;let index=pages.findIndex(p=>p.id===activeId);index=e.key==='Home'?0:e.key==='End'?pages.length-1:(index+(e.key==='ArrowRight'?1:-1)+pages.length)%pages.length;select(pages[index].id);document.getElementById('tab-'+activeId)?.focus();});
@@ -43,7 +148,7 @@ function download(bytes,type,name){const url=URL.createObjectURL(new Blob([bytes
 let pdfLibrary;
 async function getPDFLib(){if(window.PDFLib)return window.PDFLib;if(!pdfLibrary){const s=document.createElement('script');pdfLibrary=bounded(new Promise((resolve,reject)=>{s.src='vendor/pdf-lib-1.17.1.min.js';s.onload=()=>window.PDFLib?resolve(window.PDFLib):reject(Error('PDF exporter is unavailable.'));s.onerror=()=>reject(Error('PDF exporter could not load. Try again.'));document.head.append(s);}), 'PDF exporter timed out. Try again.').catch(e=>{pdfLibrary=null;s.remove();throw e;});}return pdfLibrary;}
 async function imageBytes(svg){const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob);try{const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(Error('Preview could not be converted to a PDF page.'));img.src=url;});const canvas=document.createElement('canvas');canvas.width=C.W*2;canvas.height=C.H*2;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);const png=await new Promise(ok=>canvas.toBlob(ok,'image/png'));if(!png)throw Error('PDF image creation failed.');return new Uint8Array(await png.arrayBuffer());}finally{URL.revokeObjectURL(url);}}
-async function exportPDF(all){if(busy||dirty)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets);invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[];for(let i=0;i<snapshot.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${snapshot.length}…`;images.push(await bounded(imageBytes(C.svg(snapshot[i],data[snapshot[i].id]||{},i+1,snapshot.length)),'This page could not render. Please try again.'));}const bytes=await C.pdfFromImages(images,lib),name=all?'SI-one-pagers.pdf':'SI-'+snapshot[0].shares.map(s=>s.symbol).join('-').replace(/[^A-Z0-9.-]/g,'-')+'.pdf';
+async function exportPDF(all){if(busy||dirty)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets),watermarks=showWatermarks;invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[];for(let i=0;i<snapshot.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${snapshot.length}…`;images.push(await bounded(imageBytes(renderPage(snapshot[i],data[snapshot[i].id]||{},i+1,snapshot.length,watermarks)),'This page could not render. Please try again.'));}const bytes=await C.pdfFromImages(images,lib),name=all?'SI-one-pagers.pdf':'SI-'+snapshot[0].shares.map(s=>s.symbol).join('-').replace(/[^A-Z0-9.-]/g,'-')+'.pdf';
  // Explicit links keep the generated file usable when a browser blocks automatic downloads.
  if(dirty){$('export-progress').textContent='Terms changed during export. Apply your changes and generate a new PDF.';return;}
  pdfURL=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));$('download-pdf').href=pdfURL;$('download-pdf').download=name;$('open-pdf').href=pdfURL;$('pdf-ready-text').textContent=`${snapshot.length}-page PDF ready · ${name}`;$('pdf-ready').hidden=false;$('export-progress').hidden=true;$('download-pdf').click();notice('PDF ready. Use Download PDF or Open PDF below if it did not save.');
