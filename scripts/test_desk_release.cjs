@@ -5,7 +5,7 @@ const desk=require('../site/desk.js');
 const target=s=>destination(new URL(s,'https://example.test/hub/'));
 assert.equal(target('index.html'),'desk.html');
 assert.equal(target('./'),'desk.html');
-for(const route of ['briefing','markets','full-history','featured','reading','yields','company-NVDA','company-BRK.B'])assert.equal(target('index.html#'+route),'desk.html#'+route);
+for(const route of ['briefing','markets','stock-moves','stock-prices','main-company-cards','market-rates','full-history','featured','reading','yields','company-NVDA','company-BRK.B'])assert.equal(target('index.html#'+route),'desk.html#'+route);
 for(const route of ['hourly','reports','history/fx','watchlist'])assert.equal(target('index.html#'+route),'v4.html#'+route);
 for(const page of ['v1.html','v3.html'])assert.equal(target(page),'v4.html#overview');
 assert.equal(target('index.html?view=archive&day=2026-11-14'),'archive.html?day=2026-11-14');

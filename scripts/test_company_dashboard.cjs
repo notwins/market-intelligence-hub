@@ -12,7 +12,14 @@ a.equal(dashboard.newsFor([{title:'Pope visits the Amazon rainforest',href:'http
 a.equal(news.length,1);a.equal(news[0].title,'New');
 const points=dashboard.valuationPoints([{date:'2026-11-01',value:null},{date:'2026-11-02',value:0},{date:'2026-11-03',value:12,reportDate:'2026-11-04'}],'pe',{row:{priceAsOf:'2026-11-16',pe:11},sourceUrl:'https://example.com',reportDate:'2026-11-17'});
 a.deepEqual(points.map(p=>[p.date,p.value]),[['2026-11-03',12],['2026-11-16',11]]);a.match(dashboard.chart(points,'Forward P/E','BABA'),/Dots show observed dates/);a.doesNotMatch(dashboard.chart(points,'Forward P/E','BABA'),/<polyline/);
-for(const page of ['desk.html','v4.html']){const html=fs.readFileSync('site/'+page,'utf8');a.match(html,/company-dashboard.js/);a.match(html,/CompanyDashboard.shell/);}
+for(const page of ['desk.html','v4.html']){const html=fs.readFileSync('site/'+page,'utf8');a.match(html,/company-dashboard.js/);a.match(page==='desk.html'?fs.readFileSync('site/desk.js','utf8'):html,/CompanyDashboard.shell/);}
 for(const page of ['historical-fred.html','fred-1.html','fred-2.html','fred-3.html','v4.html'])a.match(fs.readFileSync('site/'+page,'utf8'),/watchlist-membership.js/);
+const home=dashboard.shell({home:true});
+for(const ticker of ['JPM','WMT','V'])a.match(home,new RegExp('data-company="'+ticker+'"'));
+a.equal(dashboard.matches({title:'Plan V still applies',tags:[]},dashboard.homeAdditions[2]),false);
+const combined=dashboard.combinedChart(points,points,'BABA');
+a.equal((combined.match(/<svg/g)||[]).length,1);
+a.equal((combined.match(/<polyline/g)||[]).length,2);
+a.match(dashboard.combinedChart([],points,'BABA'),/Forward P\/E <strong>Unavailable/);
 const earnings=read('data/earnings-history.json').companies.find(c=>c.ticker==='BABA');a.equal(earnings.history[0].eps,.55);a.equal(earnings.history[0].revenue_usd_bn,39.639);a.match(earnings.eps_basis,/ADS/);a.equal(earnings.next_earnings.date,'2026-11-19');
 console.log('PASS six-card order, current BABA membership with immutable 12-name archives, exact ADS identity, earnings units, safe newest news and source-only valuation dots');

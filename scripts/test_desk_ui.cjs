@@ -61,6 +61,14 @@ test('current desk quotes follow shared BOS/Yahoo selection without loading char
  q={...q,current:false};assert(Desk.selectedPrice('AAPL',market).status_label.includes('dated observation'));
  q={...q,close:null};assert.equal(Desk.selectedPrice('AAPL',market),null);
 });
+test('stock moves use a daily close before the calendar cutoff and reject coverage gaps',()=>{
+ const daily=[['2025-10-22',25],['2026-03-30',50],['2026-04-23',80],['2026-04-30',100]];
+ assert.equal(Desk.priceMove(daily,'2026-04-30',{days:7}),25);
+ assert.equal(Desk.priceMove(daily,'2026-04-30',{months:1}),100);
+ assert.equal(Desk.priceMove(daily,'2026-04-30',{months:6}),null);
+ assert.equal(Desk.priceMove([...daily.slice(0,-1),['2026-05-31',100]],'2026-05-31',{months:1}),25);
+ assert.equal(Desk.priceMove(daily,'2026-05-01',{days:7}),null);
+});
 test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
  const cards=require('../site/company-news-cards.js');
  const story={story_id:'nvda',headline:'Nvidia update',topic:'US / Nvidia',source_urls:['https://www.reuters.com/nvidia'],version:1,body:'Saved facts',analysis:'Saved analysis',watch_next:'Next disclosure',earlier:''};
