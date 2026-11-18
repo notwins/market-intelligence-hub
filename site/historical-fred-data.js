@@ -6,6 +6,23 @@ function latestPoint(s,date){const p=s?.points.filter(p=>p.date<=date).at(-1);re
 function trailing(s,date,months){const end=latestPoint(s,date),target=end?addMonths(end.date,-months):null,base=target&&!(s.grain==='quarterly'&&months<3)?at(s,target):null;return {base,end,target,value:delta(s,base,end),unit:s.responseUnit||s.unit};}
 function before(s,event,months){const target=addMonths(event,-months),base=at(s,target),end=at(s,event,true);return {base,end,target,value:delta(s,base,end),unit:s.responseUnit||s.unit};}
 const watchlistPriority = new Map(['NVDA', 'TSM', 'BABA', 'GOOGL', 'AAPL', 'MSFT', 'AMZN'].map((ticker, index) => [ticker, index]));
+const comparisonBanks = [
+  {id: 'bb:DBS SP|SGD', ticker: 'DBS', marketTicker: 'D05.SI', bbTicker: 'DBS SP', isin: 'SG1L01001701', currency: 'SGD', name: 'DBS Group Holdings'},
+  {id: 'sgx:O39|SGD', ticker: 'OCBC', marketTicker: 'O39.SI', exchange: 'SGX O39', isin: 'SG1S04926220', currency: 'SGD', name: 'OCBC'}
+];
+function comparisonListings(records) {
+  const bankIds = new Set(comparisonBanks.map(bank => bank.id));
+  return [...records.filter(record => !bankIds.has(record.id)), ...comparisonBanks];
+}
+function defaultShareSet(watchlist, records, size) {
+  const priority = [...watchlistPriority.keys(), 'META'];
+  const preferred = priority.map(ticker =>
+    watchlist.find(row => row.ticker === ticker)?.record.id ||
+    records.find(record => record.bbTicker === ticker + ' US' && record.currency === 'USD')?.id
+  ).filter(Boolean);
+  const banks = comparisonBanks.map(bank => bank.id).filter(id => records.some(record => record.id === id));
+  return [...new Set([...preferred, ...banks, ...watchlist.map(row => row.record.id), ...records.map(record => record.id)])].slice(0, size);
+}
 function watchlistRecords(rows, identities, records) {
   const watchlist = rows.flatMap(row => {
     const identity = identities.find(entry => entry.ticker === row.ticker);
@@ -54,11 +71,52 @@ async function load(){if(!pending)pending=(async()=>{const [catalog,events,fed,s
   if (id in benchmarkNames) Object.assign(series[id], {
     kind: 'price', responseUnit: '%', transform: 'Price index close via FRED'
   });
-}for(const s of fed.series)series['MONTHLY:'+s.id]=adapt({...s,id:'MONTHLY:'+s.id,name:s.id+' · monthly average',source:s.source_url,group:'FX / monthly UST',retrieved:fed.retrieved_at,adjustment:s.aggregation||fed.period_label});for(const s of sgs.series.filter(x=>x.id.startsWith('SGD ')))series['SGS:'+s.id]=adapt({...s,id:'SGS:'+s.id,name:s.id+' · supplied snapshot',group:'SGS monthly',sourceFile:sgs.source_file,adjustment:sgs.period_label,sourceStatus:sgs.status});const records=root.ShareLabData.records().filter(r=>r.compareEligible===true&&['exact_ticker_currency','exact_provider_ticker_currency'].includes(r.identityStatus)&&r.currency);const watch=extra[0].value,identities=extra[1].value,spx=extra[2].value;if(spx?.id==='SPX'&&spx.symbol==='^GSPC')series.SPX={...adapt({...spx,frequency:'Daily',source:spx.source_url,retrieved:spx.retrieved_at}),kind:'price',responseUnit:'%',transform:spx.basis};return {catalog,events:events.events,series,records,shareStatus:!!shareStatus,watchlist:watch&&identities?watchlistRecords(root.WatchlistMembership?root.WatchlistMembership.merge(watch.rows):watch.rows,identities.identities,records):[],watchlistAsOf:watch?.as_of,spxStatus:spx?'ok':'S&P 500 history unavailable'};})().catch(e=>{pending=null;throw e;});return pending;}
-function current(record){const item=root.MarketPrices?.resolve(record.ticker)||root.BOSEquity?.itemFor(record.ticker);if(!item||item.currency!==record.currency||item.isin&&record.isin&&item.isin!==record.isin)return null;const quote=root.MarketPrices?.currentQuote(record.ticker),pe=root.BOSEquity?.valuationFor(item,'pe');return {quote,pe};}
-async function share(id){if(!shares.has(id))shares.set(id,root.ShareLabData.historyFor(id).then(h=>{const record=h.record;if(!record)return null;const make=(metric,kind,unit,g)=>({id:id+':'+metric,name:record.name,record,unit,grain:g,kind,responseUnit:kind==='price'?'%':unit,transform:metric==='globalPrice'?'Provider daily Close · local currency · raw price change':'BOS dated consensus-forward P/E',points:points(h.metrics[metric].filter(p=>p.currency===record.currency||kind==='pe'),g)});return {price:make('globalPrice','price',record.currency,'daily'),pe:make('pe','pe','turns','sparse')};}));return shares.get(id);}
+}for(const s of fed.series)series['MONTHLY:'+s.id]=adapt({...s,id:'MONTHLY:'+s.id,name:s.id+' · monthly average',source:s.source_url,group:'FX / monthly UST',retrieved:fed.retrieved_at,adjustment:s.aggregation||fed.period_label});for(const s of sgs.series.filter(x=>x.id.startsWith('SGD ')))series['SGS:'+s.id]=adapt({...s,id:'SGS:'+s.id,name:s.id+' · supplied snapshot',group:'SGS monthly',sourceFile:sgs.source_file,adjustment:sgs.period_label,sourceStatus:sgs.status});const records=comparisonListings(root.ShareLabData.records().filter(r=>r.compareEligible===true&&['exact_ticker_currency','exact_provider_ticker_currency'].includes(r.identityStatus)&&r.currency));const watch=extra[0].value,identities=extra[1].value,spx=extra[2].value;if(spx?.id==='SPX'&&spx.symbol==='^GSPC')series.SPX={...adapt({...spx,frequency:'Daily',source:spx.source_url,retrieved:spx.retrieved_at}),kind:'price',responseUnit:'%',transform:spx.basis};return {catalog,events:events.events,series,records,shareStatus:!!shareStatus,watchlist:watch&&identities?watchlistRecords(root.WatchlistMembership?root.WatchlistMembership.merge(watch.rows):watch.rows,identities.identities,records):[],watchlistAsOf:watch?.as_of,spxStatus:spx?'ok':'S&P 500 history unavailable'};})().catch(e=>{pending=null;throw e;});return pending;}
+function exactMarketListing(item, record) {
+  return item && item.currency === record.currency && (!item.isin || !record.isin || item.isin === record.isin);
+}
+function current(record) {
+  const ticker = record.marketTicker || record.ticker;
+  const item = root.MarketPrices?.resolve(ticker) || root.BOSEquity?.itemFor(ticker);
+  if (!exactMarketListing(item, record)) return null;
+  const quote = root.MarketPrices?.currentQuote(item);
+  const pe = root.BOSEquity?.valuationFor(item, 'pe');
+  return {quote, pe};
+}
+async function sharedClose(record) {
+  const ticker = record.marketTicker || record.ticker;
+  const item = root.MarketPrices?.resolve(ticker);
+  if (!exactMarketListing(item, record) || item.ticker !== ticker || item.basis !== 'source_close_not_total_return') return null;
+  try {
+    return await root.MarketPrices.series(ticker);
+  } catch {
+    return null;
+  }
+}
+async function share(id) {
+  if (!shares.has(id)) shares.set(id, (async () => {
+    const history = await root.ShareLabData.historyFor(id);
+    const record = comparisonBanks.find(bank => bank.id === id) || history.record;
+    if (!record) return null;
+    const make = (metric, kind, unit, grain, values, transform, source) => ({
+      id: id + ':' + metric, name: record.name, record, unit, grain, kind,
+      responseUnit: kind === 'price' ? '%' : unit, transform, source, points: points(values, grain)
+    });
+    const daily = history.metrics.globalPrice.filter(point => point.currency === record.currency);
+    const shared = await sharedClose(record);
+    const sharedPrice = shared?.daily.length ? make('marketClose', 'price', record.currency, 'daily', shared.daily,
+      'Shared daily Close · local currency', shared.item.history_url) : null;
+    const price = daily.length || !sharedPrice ? make('globalPrice', 'price', record.currency, 'daily', daily,
+      'Saved daily Close · local currency') : sharedPrice;
+    const periodPrice = shared?.base.monthly.length ? make('monthlyClose', 'price', record.currency, 'monthly', shared.base.monthly,
+      'Provider monthly Close · period end · local currency', shared.item.history_url) : null;
+    const pe = make('pe', 'pe', 'turns', 'sparse', history.metrics.pe, 'BOS dated consensus-forward P/E');
+    return {price, sharedPrice, periodPrice, pe};
+  })());
+  return shares.get(id);
+}
 async function raw(id){if(!native.has(id))native.set(id,root.FredArchive.load(id));return native.get(id);}
 function nativeSeries(data,field='bidToCoverRatio',country='All Other'){const m=data.metadata;if(m.id==='TIC')return adapt({...m,unit:'USD billions',name:country+' Treasury holdings',points:data.rows.filter(r=>r.country_or_aggregate===country).map(r=>[r.observation_date,number(r.holdings_usd_billions)])});if(m.id==='AUCTION')return adapt({...m,unit:field==='highYield'||field==='interestRate'?'Percent':field==='offeringAmount'?'USD':field==='bidToCoverRatio'?'Times':'Native field units',name:'10Y auction · '+field,points:data.rows.map(r=>[r.competitiveAuctionCloseDate.slice(0,10),number(r[field])])});if(data.series)return adapt(data.series,m);return adapt({...m,points:data.rows.map(r=>[r.observation_date,number(r[m.id]??r.value)])});}
 function number(v){return v!==''&&v!==null&&v!==undefined&&Number.isFinite(Number(v))?Number(v):null;}
-const api={addMonths,grain,periodEnd,points,at,delta,response,rebase,monthly,baseline,zscore,heat,yoy,changes,relationship,adapt,benchmarkPaths,load,share,raw,nativeSeries,finite,latestPoint,trailing,before,watchlistRecords,current};root.HistoricalFredData=api;if(typeof module!=='undefined')module.exports=api;
+const api={addMonths,grain,periodEnd,points,at,delta,response,rebase,monthly,baseline,zscore,heat,yoy,changes,relationship,adapt,benchmarkPaths,load,share,raw,nativeSeries,finite,latestPoint,trailing,before,watchlistRecords,comparisonListings,defaultShareSet,current};root.HistoricalFredData=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
