@@ -11,3 +11,4 @@
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 .hf-event-control>label{margin-bottom:4px}
 .hf-selected-shares > .hf-share-chip{min-height:38px;text-align:left}.hf-share-chip[aria-pressed="true"]{border-color:var(--hf-accent,#438e83);box-shadow:0 0 0 1px var(--hf-accent,#438e83);background:#eef5f1}
+.hf-matrix-main>header label{min-width:0;max-width:100%}.hf-matrix-main #hf-indicator{display:block;max-width:100%}
