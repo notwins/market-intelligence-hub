@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Study Singapore government bonds, US Treasury yields, the S&P 500, shares and economic data around major events.">
+  <title>UST, SGS &amp; Stock Market Beta · Market Intel</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="cross-market-history.css">
+  <script src="share-lab-data.js" defer></script>
+  <script src="historical-fred-data.js" defer></script>
+  <script src="cross-market-model.js" defer></script>
+  <script src="cross-market-context.js" defer></script>
+  <script src="cross-market-history.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="desk.html">Market Intel</a>
+    <nav aria-label="Historical workspaces">
+      <a href="v4.html#history/yield">Yield history</a>
+      <a href="v4.html#history/beta2-shares">Shares Historical</a>
+      <a href="historical-fred.html">Historical FRED</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <div class="eyebrow">Historical data <span>Beta</span></div>
+      <h1 id="page-title">UST, SGS &amp; Stock Market</h1>
+      <p><strong>See how Singapore yields, US rates and stocks moved through the same events.</strong> Start with current conditions, then scroll back through the timeline.</p>
+      <div class="hero-links"><a href="#current">Current market ↓</a><a href="#sgs-report">Read the SGS research report ↓</a></div>
+    </section>
+    <p id="market-status" role="status">Loading the saved market and economic series…</p>
+    <nav id="episode-index" aria-label="Jump to an episode"></nav>
+    <div id="market-episodes"></div>
+    <section id="sgs-report" class="research" aria-labelledby="report-title">
+      <div class="eyebrow">Research report</div>
+      <h2 id="report-title">When do Singapore bond yields follow US Treasuries?</h2>
+      <p><strong>Compare matched maturities and track the spread as well as the direction.</strong> A common move in the ten-year yields can coexist with a large change in the UST–SGS spread. Singapore runs monetary policy through the trade-weighted exchange rate, so SGD funding conditions, local bond supply and currency expectations can affect SGS alongside global yields. <a href="https://www.mas.gov.sg/monetary-policy/singapores-monetary-policy-framework">MAS policy framework</a></p>
+      <div id="report-evidence"></div>
+      <p><strong>Use these episodes to frame scenarios rather than to estimate the effect of a single announcement.</strong> Each year includes later policy decisions and other shocks. A higher yield points to lower prices for an otherwise identical bond, but the benchmark can change issues and omits the coupon income earned by an investor.</p>
+    </section>
+    <section id="methods" class="research" aria-labelledby="method-title">
+      <h2 id="method-title">How to read the comparisons</h2>
+      <p><strong>Each chart on a card uses the same calendar bounds and numbered event lines.</strong> Historical cards start 12 months before the first event and run through 12 months after the last. Consecutive events less than 12 calendar months apart share a card, so windows of separate cards can overlap. Current ends today in Singapore and covers the trailing year.</p>
+      <p><strong>Keep SGS month-end yields and daily closes distinct.</strong> The historical 2-, 5- and 10-year SGS series uses official month-end observations. UST month-end comparisons use the last available H.15 business-day reading within five calendar days of month end. The current chart adds daily MAS and UST closes separately. Blank periods are left open. <a href="https://data.gov.sg/datasets/d_5fe5a4bb4a1ecc4d8a56a095832e2b24/view">MAS via SingStat, M700071</a> · <a href="https://data.gov.sg/open-data-licence">Singapore Open Data Licence</a> · <a href="https://eservices.mas.gov.sg/statistics/fdanet/SgsBenchmarkIssuePrices.aspx">MAS daily closing levels</a> · <a href="https://www.federalreserve.gov/releases/h15/">Federal Reserve H.15</a></p>
+      <p><strong>Stock ranks come from comparable USD listings in Shares Historical.</strong> Rankings use the same two SPX session dates for every share in the selected cohort. Weekly provider closes or BOS monthly observations are used as separate sources. The longest cohort with at least six listings and four observations per listing qualifies. At least 90 days must separate the two rank dates. The raw price changes exclude dividends and FX. Prices with adjacent ratios below 0.60 or above 1.67 are screened out as possible corporate actions or extreme moves. Other corporate actions can still distort results. The archive is retrospective and has coverage and survivorship bias. <a href="v4.html#history/beta2-shares">Shares Historical</a> · <a href="v4.html#history/spx">SPX source and status</a></p>
+      <p><strong>FRED overlays use completed observation periods and revised data.</strong> CPI, PCE and payroll growth compare each month with the same month a year earlier. Quarterly CRE delinquency excludes farmland and covers domestic offices of US commercial banks. Data releases can lag the dates plotted. <a href="fred/data.html">Existing FRED archive and sources</a> · <a href="https://fred.stlouisfed.org/series/DRCRELEXFACBS">CRE definition</a></p>
+      <p><strong>Two standard deviations flags an observation for review.</strong> The two series with the largest absolute readings after the first event are shown from a fixed set of labor, inflation, credit and financial-stress measures. Each is measured against its own sample mean and standard deviation before the first event, or before the current window. The baseline uses up to 60 month-end values or 20 quarters, with minimums of 24 months or eight quarters. A large value measures distance from that baseline and is sensitive to how stable it was.</p>
+    </section>
+    <noscript><p>Enable JavaScript to render the charts. <a href="v4.html#history/yield">Open the existing yield history</a>.</p></noscript>
+  </main>
+  <footer><a href="desk.html">Market Intel</a><a href="v4.html#history">Historical Data</a><a href="#page-title">Back to top ↑</a></footer>
+</body>
+</html>
