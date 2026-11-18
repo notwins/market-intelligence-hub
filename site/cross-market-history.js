@@ -2,6 +2,13 @@
   'use strict';
   const D = window.HistoricalFredData, M = window.CrossMarketModel, notes = window.CrossMarketNotes;
   const status = document.querySelector('#market-status');
+  if (window.self !== window.top && new URLSearchParams(location.search).get('embed') === '1') {
+    document.body.classList.add('embedded-history');
+    document.querySelector('main').addEventListener('click', event => {
+      const link = event.target.closest('a[href]');
+      if (link && !link.getAttribute('href').startsWith('#')) link.target = '_top';
+    });
+  }
   const guide = document.querySelector('#reading-guide');
   const guideButton = document.querySelector('#open-reading-guide');
   guideButton.hidden = false;

@@ -92,6 +92,10 @@ td.flat { background: #f0f3f6; }
 .research p { margin: .65rem 0 0; max-width: 95ch; }
 .us { color: #114fa9; font-weight: 700; }
 .sg { color: var(--accent); font-weight: 700; }
+.embedded-history > :is(.masthead, footer) { display: none; }
+.embedded-history main { padding: .65rem; }
+.embedded-history .hero { padding: .85rem; }
+.embedded-history .hero > :is(.eyebrow, h1) { display: none; }
 @media (max-width: 720px) {
   main { padding: .7rem .6rem 1.6rem; }
   .macro, .event-notes { grid-template-columns: 1fr; }
