@@ -4,6 +4,7 @@
   const replay = document.body.dataset.breachView === 'replay';
   const E = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const number = (n, digits = 3) => Number.isFinite(n) ? n.toLocaleString('en-US', {maximumFractionDigits: digits}) : '—';
+  const axisNumber = new Intl.NumberFormat('en-US',{notation:'compact',maximumFractionDigits:2});
   const signed = (n, digits = 2) => Number.isFinite(n) ? (n > 0 ? '+' : n < 0 ? '−' : '') + Math.abs(n).toFixed(digits) : '—';
   const B = FredBreaches;
   const archive = FredArchive;
@@ -191,7 +192,7 @@
       if(!Number.isFinite(v)){connected=false;return '';}
       const cmd=(connected?'L':'M')+x(row.date).toFixed(2)+','+y(v).toFixed(2);connected=true;return cmd;
     }).join(' ');};
-    const grid=Array.from({length:4},(_,i)=>{const v=low+(high-low)*i/3,yy=y(v);return `<line x1="${l}" x2="${w-r}" y1="${yy}" y2="${yy}" class="chart-grid"/><text x="${l-5}" y="${yy+3}" text-anchor="end">${E(number(v,2))}</text>`;}).join('');
+    const grid=Array.from({length:4},(_,i)=>{const v=low+(high-low)*i/3,yy=y(v);return `<line x1="${l}" x2="${w-r}" y1="${yy}" y2="${yy}" class="chart-grid"/><text x="${l-5}" y="${yy+3}" text-anchor="end">${E(axisNumber.format(v))}</text>`;}).join('');
     const guides=sd?['lower2','upper2','lower1','upper1','mean'].map(key=>`<path class="guide ${key}" d="${path(row=>stats.get(row)?.[key])}"/>`).join(''):'';
     const marked=anchor && Date.parse(anchor)>=start && Date.parse(anchor)<=start+span;
     const nearest=marked?drawable.reduce((best,row,i)=>Math.abs(Date.parse(row.date)-Date.parse(anchor))<Math.abs(Date.parse(drawable[best].date)-Date.parse(anchor))?i:best,0):drawable.length-1;
@@ -239,9 +240,16 @@
     if (state.bond && state.bonds) {
       const bond=state.bonds.instruments.find(b=>b.id===state.bond);
       const history=state.bonds.history[state.bond]||[];
-      if(bond){
-        chosen.push({name:bond.name+' · asked yield',unit:'%',kind:'yield',basis:'Saved quoted yield · '+bond.id,source:bond.source_url,points:B.points(history.map(p=>[p.date,p.yield_pct]))});
-        chosen.push({name:bond.name+' · ask price',unit:bond.currency+' per 100',kind:'price',basis:'Saved ask price · '+bond.id,source:bond.source_url,points:B.points(history.map(p=>[p.date,p.ask]))});
+      if(bond&&history.length){
+        for(const basis of new Set(history.map(p=>p.yield_basis).filter(Boolean))){
+          const matching=history.filter(p=>p.yield_basis===basis);
+          const side=/^bid/i.test(basis)?'bid':/^ask/i.test(basis)?'ask':null;
+          const common={source:matching.at(-1).source_url||bond.source_url,basis:basis+' · '+bond.id};
+          chosen.push({...common,name:bond.name+' · '+basis.toLowerCase(),unit:'%',kind:'yield',points:B.points(matching.map(p=>[p.date,p.yield_pct]))});
+          if(side)chosen.push({...common,basis:'Saved '+side+' price · '+bond.id,name:bond.name+' · '+side+' price',unit:bond.currency+' per 100',kind:'price',points:B.points(matching.map(p=>[p.date,p[side]]))});
+        }
+      }else if(bond){
+        notes.push('No saved observations for '+bond.name+'.');
       }
     }
     if(state.share){

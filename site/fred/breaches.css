@@ -127,6 +127,8 @@ summary {cursor:pointer}
   .event strong {font-size:12px}
   .research-grid,.replay-page .research-grid,.market-grid,.replay-page .market-grid,.market-controls {grid-template-columns:minmax(0,1fr)}
   .selected-heading h2 {font-size:19px}
+  .interactive-chart svg text {font-size:16px}
+  .chart-read {font-size:12px}
   .chart-cursor {min-height:32px}
   .chart-cursor input {min-height:32px}
 }
