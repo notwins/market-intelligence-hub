@@ -89,6 +89,7 @@ jobs:
           node scripts/test_historical_fred.cjs
           node scripts/test_fred_sigma.cjs
           node scripts/test_fred_overview.cjs
+          node scripts/test_fred_breaches.cjs
           node scripts/test_yield_comparisons.cjs
           node scripts/test_history_layout.cjs
           node scripts/test_v4.cjs
@@ -200,6 +201,7 @@ jobs:
           node scripts/test_historical_fred.cjs
           node scripts/test_fred_sigma.cjs
           node scripts/test_fred_overview.cjs
+          node scripts/test_fred_breaches.cjs
           node scripts/test_yield_comparisons.cjs
           node scripts/test_history_layout.cjs
           node scripts/test_v4.cjs

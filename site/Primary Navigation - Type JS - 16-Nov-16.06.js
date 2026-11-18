@@ -15,8 +15,9 @@
     ['Share explorer', 'v4.html#history/beta3-shares'],
     ['Historical FRED and Prices', 'historical-fred.html'], ['Fred-1 · Event Replay', 'fred-1.html'],
     ['Fred-2 · Response Matrix', 'fred-2.html'], ['Fred-3 · Transmission Desk', 'fred-3.html'],
-    ['FRED Market Desk', 'fred/market-desk.html'],
-    ['Risk Observatory', 'fred/risk-observatory.html'], ['Search library', 'search.html'],
+    ['V1 Market Desk', 'fred/market-desk.html'],
+    ['V2 Risk Observatory', 'fred/risk-observatory.html'],
+    ['V3 Signal Review', 'fred/signal-review.html'], ['V4 Cross-Market Replay', 'fred/cross-market-replay.html'], ['Search library', 'search.html'],
     ['Site map', 'site-map.html']
   ];
   function link(label, href, icon) {
@@ -41,7 +42,7 @@
       const grid = menu.querySelector('.more-grid');
       if (href === 'historical-fred.html' || href === 'fred/market-desk.html') {
         const heading = document.createElement('h3'); heading.className = 'more-group-title';
-        heading.textContent = href === 'historical-fred.html' ? 'Historical Datas' : 'FRED Observatory'; grid.append(heading);
+        heading.textContent = href === 'historical-fred.html' ? 'Historical Datas' : 'Federal Reserve Economic Data (DASHBOARD)'; grid.append(heading);
       }
       grid.append(link(name, href));
     });

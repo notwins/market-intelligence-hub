@@ -34,8 +34,8 @@ class SiteMapTests(unittest.TestCase):
         original = json.loads((ROOT / 'scripts/fixtures/site_map_destinations.json').read_text())
         current = [a['href'] for a in self.nodes]
         self.assertEqual(len(original), 40)
-        self.assertEqual(set(current), {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta-shares','v4.html#history/beta2-shares','v4.html#history/beta3-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/data.html','historical-fred.html','fred-1.html','fred-2.html','fred-3.html'})
-        self.assertEqual(len(current), 61)
+        self.assertEqual(set(current), {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta-shares','v4.html#history/beta2-shares','v4.html#history/beta3-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html','historical-fred.html','fred-1.html','fred-2.html','fred-3.html'})
+        self.assertEqual(len(current), 63)
         self.assertEqual(len(set(current)), len(current) - 3)  # Main shortcuts intentionally share the real destination.
         for href in current:
             path = ROOT / 'site' / href.split('#')[0]

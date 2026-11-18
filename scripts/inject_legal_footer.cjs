@@ -20,7 +20,7 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   let content = fs.readFileSync(filename, 'utf8');
   const directory = path.posix.dirname(relative);
   // Shared navigation belongs to mutable UI shells, never frozen reports.
-  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|data)\.html|market-understanding\/index\.html)$/.test(relative) && !content.includes('id="hub-primary-assets"')) {
+  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html|market-understanding\/index\.html)$/.test(relative) && !content.includes('id="hub-primary-assets"')) {
     const asset = type => path.posix.relative(directory, 'Primary Navigation - Type ' + type + ' - 16-Nov-16.06.' + type.toLowerCase());
     content = content.replace(/<\/head\s*>/i, '<link id="hub-primary-assets" rel="stylesheet" href="' + asset('CSS') + '"><script defer src="' + asset('JS') + '"></script><script defer src="' + path.posix.relative(directory, 'Mobile Charts - Type JS - 16-Nov-16.06.js') + '"></script></head>');
   }

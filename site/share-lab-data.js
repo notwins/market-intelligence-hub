@@ -1,6 +1,6 @@
 /* Validated compact public history. No current quotes or portfolio state. */
 (function(root){'use strict';
-const CSV='data/share-history.csv',BASE_METRICS=['price','globalPrice','sourcePrice','pe','pb','dividendYield','impliedEps','trr'];
+const CSV=root.document?.currentScript?.dataset.shareHistory || 'data/share-history.csv',BASE_METRICS=['price','globalPrice','sourcePrice','pe','pb','dividendYield','impliedEps','trr'];
 const numeric=/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/;
 const date=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&Number.isFinite(Date.parse(v+'T00:00:00Z'))&&new Date(v+'T00:00:00Z').toISOString().slice(0,10)===v;
 let state=null,pending=null,error='';
