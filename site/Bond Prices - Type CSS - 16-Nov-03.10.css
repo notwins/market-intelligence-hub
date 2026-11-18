@@ -1,3 +1,88 @@
 .daily-bonds{margin:24px 0;padding:22px;border:1px solid #d9e1e8;border-radius:14px;background:#fff;color:#193342}.daily-bonds h2{font-size:1.35rem;margin:4px 0 12px}.daily-bonds .section-head{display:flex;justify-content:space-between;gap:14px;align-items:center}.daily-bonds .eyebrow{font-size:.72rem;letter-spacing:.1em;font-weight:700;color:#556778}.daily-bonds .fine{font-size:.84rem;line-height:1.55;color:#546372}.daily-bonds-scroll{max-width:100%;overflow:auto}.daily-bonds table{width:100%;border-collapse:collapse;min-width:710px;font-size:.86rem}.daily-bonds caption{text-align:left;padding:10px 0;color:#536575;font-size:.79rem}.daily-bonds th,.daily-bonds td{padding:10px 12px;border-bottom:1px solid #e4e9ee;text-align:left;vertical-align:top}.daily-bonds thead th{background:#f0f4f8;color:#334e60;white-space:nowrap}.daily-bonds tbody th{font-weight:600;min-width:240px}.daily-bonds a{color:#345b85;text-underline-offset:3px}.daily-bonds small{display:block;font-size:.73rem;font-weight:400;margin-top:4px;color:#586c7b}.daily-bonds .daily-bond-number{font-variant-numeric:tabular-nums;white-space:nowrap}.daily-bonds .daily-bond-notice{color:#83511b;max-width:330px}.daily-bonds-history{margin-top:16px;border-top:1px solid #d9e1e8;padding-top:12px}.daily-bonds-history summary{cursor:pointer;font-size:.9rem;font-weight:600}.daily-bonds-basis{margin-bottom:0}.daily-bonds a:focus-visible,.daily-bonds summary:focus-visible,.daily-bonds-scroll:focus-visible{outline:2px solid #537aa6;outline-offset:3px}@media(max-width:600px){.daily-bonds{padding:14px;margin:18px 0}.daily-bonds .section-head{align-items:flex-start;flex-direction:column}.daily-bonds th,.daily-bonds td{padding:9px}}
 
 .daily-bonds tbody th{text-transform:none;letter-spacing:normal}@media(max-width:600px){.daily-bonds table{min-width:0;display:block}.daily-bonds caption{display:block;font-size:.73rem;line-height:1.5}.daily-bonds thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.daily-bonds tbody{display:block}.daily-bonds tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #d9e1e8;padding:10px 0}.daily-bonds tbody th{grid-column:1/-1;min-width:0;background:transparent;padding:6px 0 9px}.daily-bonds td{padding:6px 0;border:0;font-size:.79rem}.daily-bonds td::before{content:attr(data-label);display:block;color:#60717d;font-size:.65rem;letter-spacing:.03em;font-weight:600;margin-bottom:3px}.daily-bonds tbody th{border:0}.daily-bonds small{font-size:.68rem}}
+
+/* Compact UST view on Home and Home Prices. */
+.daily-bonds[data-daily-bonds="compact-ust"] .daily-ust-title {
+  margin: 10px 0 0;
+  font-size: 1rem;
+}
+.daily-bonds[data-daily-bonds="compact-ust"] .daily-ust-other { margin-top: 22px; }
+.daily-ust-scroll { border: 1px solid #e1e8e9; border-radius: 8px; }
+.daily-bonds .daily-ust-table {
+  min-width: 0;
+  font-size: .79rem;
+  font-variant-numeric: tabular-nums;
+}
+.daily-bonds .daily-ust-table caption { padding: 7px 8px; }
+.daily-bonds .daily-ust-table :is(th,td) {
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+.daily-bonds .daily-ust-table thead th { font-size: .71rem; letter-spacing: normal; text-transform: none; }
+.daily-bonds .daily-ust-table tbody th { min-width: 0; background: transparent; }
+.daily-ust-table :is(.daily-ust-maturity,.daily-ust-coupon,.daily-ust-price,.daily-ust-yield) { white-space: nowrap; }
+.daily-bonds .daily-ust-table tbody :is(.daily-ust-coupon,.daily-ust-price,.daily-ust-yield),
+.daily-bonds .daily-ust-table thead th:nth-child(n+2):nth-child(-n+4) { text-align: right; }
+.daily-bonds .daily-ust-coupon { font-weight: 650; }
+.daily-bonds .daily-ust-coupon[data-coupon-band="under-2"] { color: #202428; font-weight: 400; }
+.daily-bonds .daily-ust-coupon[data-coupon-band="2-to-3"] { color: #245cad; }
+.daily-bonds .daily-ust-coupon[data-coupon-band="3-to-4"] { color: #257243; }
+.daily-bonds .daily-ust-coupon[data-coupon-band="above-4"] { color: #07545b; }
+.daily-ust-yield span {
+  display: inline-block;
+  min-width: 4ch;
+  border-radius: 4px;
+  padding-inline: 4px;
+}
+.daily-ust-yield [data-yield-band="0"] { background: #f0f6f8; }
+.daily-ust-yield [data-yield-band="1"] { background: #e9f3f5; }
+.daily-ust-yield [data-yield-band="2"] { background: #e1eff1; }
+.daily-ust-yield [data-yield-band="3"] { background: #d8eaed; }
+.daily-ust-yield [data-yield-band="4"] { background: #cfe5e8; }
+.daily-ust-isin { margin-right: .45em; white-space: nowrap; color: #536575; }
+.daily-ust-quote-status { margin-left: .3em; color: #83511b; white-space: nowrap; }
+.daily-bonds .daily-ust-summary { margin: 0 0 8px; }
+.daily-bonds .daily-ust-evidence { margin-top: 8px; padding-top: 6px; }
+
+@media (max-width: 600px) {
+  .daily-bonds[data-daily-bonds="compact-ust"] { padding: 11px; }
+  .daily-bonds[data-daily-bonds="compact-ust"] .section-head {
+    flex-direction: row;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-bottom: 6px;
+  }
+  .daily-bonds[data-daily-bonds="compact-ust"] .section-head h2 { margin-bottom: 0; }
+  .daily-bonds .daily-ust-table thead {
+    position: static;
+    display: block;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+  .daily-bonds .daily-ust-table :is(thead,tbody) tr {
+    display: grid;
+    grid-template-columns: minmax(0,1.14fr) repeat(3,minmax(0,1fr));
+    padding: 0;
+    border-bottom: 1px solid #e4e9ee;
+  }
+  .daily-bonds .daily-ust-table thead tr { background: #f0f4f8; border: 0; }
+  .daily-bonds .daily-ust-table tbody tr:last-child { border: 0; }
+  .daily-bonds .daily-ust-table tbody th { grid-column: auto; }
+  .daily-bonds .daily-ust-table :is(th,td) { padding: 3px 6px 1px; border: 0; font-size: .74rem; }
+  .daily-bonds .daily-ust-table thead th { padding-block: 4px; font-size: .67rem; }
+  .daily-bonds .daily-ust-table td::before { content: none; }
+  .daily-bonds .daily-ust-table .daily-ust-bond { grid-column: 1/-1; padding: 0 6px 3px; font-size: .67rem; }
+  .daily-bonds .daily-ust-table .daily-ust-bond a { white-space: nowrap; }
+  .daily-bonds .daily-ust-table .daily-ust-bond-heading {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}

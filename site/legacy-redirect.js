@@ -23,7 +23,7 @@
     if (requested === 'archive') return 'archive.html' + suffix();
     if (requested === 'saved') return 'saved-securities.html' + suffix();
     const home = /(?:^|\/)index\.html$/.test(location.pathname) || location.pathname.endsWith('/');
-    if (home && (!requested || /^(briefing|markets|stock-moves|stock-prices|main-company-cards|market-rates|full-history|featured|reading|pulse|daily|yields|company-[A-Za-z0-9.]+)$/.test(requested))) {
+    if (home && (!requested || /^(briefing|markets|stock-moves|stock-prices|main-company-cards|market-rates|market-bonds|full-history|featured|reading|pulse|daily|yields|company-[A-Za-z0-9.]+)$/.test(requested))) {
       return 'desk.html' + suffix() + (requested ? '#' + requested : '');
     }
     const route = aliases[requested] || requested;

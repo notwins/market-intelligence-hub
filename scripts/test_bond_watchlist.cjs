@@ -58,3 +58,26 @@ assert(!daily.render(unsafe).includes('<script>'));assert(!daily.render(unsafe).
 assert(fs.readFileSync('site/desk.html','utf8').includes('id="bonds" data-daily-bonds'));
 assert(fs.readFileSync('.github/workflows/publish.yml','utf8').includes("cron: '0 23 * * *'"));
 console.log('PASS daily bond list: 34 distinct identities, source labels, accessible dated prices/history, escaped text and 7am cloud schedule');
+
+const compactFixture = structuredClone(prices);
+compactFixture.latest[prices.instruments[0].id] = {ask:97.1640625,yield_pct:4.985,yield_basis:'Asked yield'};
+delete compactFixture.latest.US912810TC27;
+const compact = daily.render(compactFixture,{compactTreasuries:true});
+const treasuries = unsafe.instruments.filter(r=>r.source==='WSJ');
+const ustTable = compact.match(/<table class="daily-ust-table"[\s\S]*?<\/table>/)[0];
+assert.equal((ustTable.match(/class="daily-ust-maturity"/g)||[]).length,29);
+assert.match(ustTable,/Nov-2033/);
+assert.match(ustTable,/<td role="cell" class="daily-ust-price">97\.2<\/td>/);
+assert.match(ustTable,/data-yield-band="[0-4]">5\.0%/);
+assert.match(ustTable,/US912810TC27[\s\S]*?No quote/);
+assert.match(ustTable,/https:\/\/www\.wsj\.com\/market-data\/bonds\/treasuries/);
+assert.match(compact,/Full-precision Treasury quotes &amp; dates/);
+assert.match(compact,/Other watched bonds/);
+assert.doesNotMatch(dailyHTML,/class="daily-ust-table"/);
+for(const [index,coupon] of [1.875,2,3,4,4.125].entries()) {
+  treasuries[index].coupon = coupon;
+}
+const bands = daily.render(unsafe,{compactTreasuries:true});
+for(const [band,coupon] of [["under-2","1.875"],["2-to-3","2"],["3-to-4","3"],["3-to-4","4"],["above-4","4.125"]]) assert(bands.includes('data-coupon-band="'+band+'">'+coupon+'%'));
+assert(!bands.includes('javascript:bad'));
+console.log('PASS compact daily Treasury quote: all 29 identities, exact coupon bands, rounded asked values, unavailable quote, full precision and source links');
