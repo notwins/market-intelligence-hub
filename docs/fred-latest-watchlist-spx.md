@@ -16,9 +16,10 @@ The current public site watchlist supplies quick dropdown choices ahead of
 the full listing catalogue. USD listing and share class are preserved using the
 verified watchlist identities. When a history record lacks an ISIN, only its
 already-eligible exact US ticker/currency identity can match; no ISIN is invented.
-The existing four-share comparison limit remains visible. The existing basket
-button chooses the first four watchlist names in latest mode. Shared current
-quotes and dated BOS P/E are displayed separately from historical provider Close.
+The default comparison holds NVDA, TSM, BABA, GOOGL, AAPL, MSFT, AMZN, META, DBS and OCBC.
+Older links with fewer than ten listings open this set. Select a share chip to replace that listing,
+or reset to the main ten. The SGD comparison uses the existing shared feed for SGX D05 and O39.
+Daily and monthly price series keep their own date semantics and are not stitched together.
 
 S&P 500 is the actual Yahoo Finance ^GSPC price-index series. It excludes
 reinvested dividends. Its saved history begins 3 January 2006. Before-event
