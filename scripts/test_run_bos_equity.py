@@ -76,7 +76,11 @@ class RunnerTests(unittest.TestCase):
 
     def run_fixture(self, pdf=PDF, data=None):
         data=data or self.data
+        # Pages validates a staged artifact with no Git checkout. Use the
+        # fixture checkout for the runner revision recorded in the receipt.
+        code_file = str(self.seed / 'scripts' / 'run_bos_equity.py')
         with mock.patch.object(runner,'HUB',str(self.public_remote)), \
+             mock.patch.object(runner,'__file__',code_file), \
              mock.patch.object(runner,'require_private_archive'), \
              mock.patch.object(feed,'discover_pdf',return_value=(feed.iso_date(data['reportDate']),data['sourceUrl'],pdf)), \
              mock.patch.object(runner,'parse_pdf',return_value=data), \
