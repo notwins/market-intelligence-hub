@@ -66,3 +66,9 @@
 @media(max-width:1180px) and (min-width:761px){.topbar.has-top-subsections{display:grid;grid-template-columns:minmax(0,1fr) auto}.topbar .top-subsections.history-menu-toolbar{grid-column:1/-1;grid-row:2;width:100%}}
 @media(max-width:760px){.history-shortcuts.history-directory{grid-template-columns:1fr}.topbar .top-subsections.history-menu-toolbar{min-width:0;width:100%;gap:4px;grid-column:1;grid-row:3}.history-menu-group>summary{min-height:48px;padding:7px 6px;gap:4px;font-size:11px}.history-menu-group>summary .history-nav-icon{width:15px;height:15px;flex-basis:15px}.history-menu-chevron{width:10px;height:10px;flex-basis:10px}.history-menu-group:nth-child(2) .history-menu-links{left:50%;transform:translateX(-50%)}.topbar #global-search-button{width:40px;min-width:40px}.topbar b{font-size:14px}}
 @media(forced-colors:active){.history-menu-group>summary,.history-menu-links,.topbar .history-menu-links :is(a.history-nav-item,button.history-nav-item){background:Canvas;color:CanvasText;border-color:CanvasText}.history-menu-group[data-active-group]>summary,.topbar .history-menu-links .history-nav-item.active{background:Highlight;color:HighlightText}}
+.history-directory a.history-featured,.history-menu a.history-featured,.rail nav .rail-group a.history-featured,.dashboard-links a.history-featured {
+ display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 10px;border:1px solid #b7d6d0;border-radius:7px;background:#d9ede8;color:#104e49;font-weight:750;text-decoration:none;
+}
+.history-directory a.history-featured {grid-column:1/-1}
+.rail nav .rail-group a.history-featured {margin-bottom:5px}
+.history-menu a.history-featured {font-size:13px}

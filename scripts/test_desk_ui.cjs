@@ -81,6 +81,7 @@ test('history directory shares three groups and all15 routes across rail, toolba
  const fs=require('node:fs'),nav=require('../site/history-navigation.js');assert.deepEqual(nav.groups.map(g=>g.id),['bonds','shares','fred']);
  const all=nav.groups.flatMap(g=>g.items);assert.equal(all.length,15);assert.equal(new Set(all.map(i=>i[0])).size,15);
  const rail=nav.sidebar(),menu=nav.toolbar('yield'),home=nav.html();
+ for(const rendered of [rail,menu,home])assert(rendered.indexOf('href="cross-market-history.html"') < rendered.indexOf('data-history-group=') && rendered.includes('href="cross-market-history.html"'));
  for(const item of all){assert(rail.includes('data-history-id="'+item[0]+'"'));assert(menu.includes(item[3]?'href="'+item[3]+'"':'data-tab="'+item[0]+'"'));assert(home.includes(item[3]||'v4.html#history/'+item[0]));}
  assert(menu.includes('data-active-group="true"'));assert(menu.includes('data-tab="yield" aria-pressed="true"'));assert(menu.includes('focusable="false"'));assert(rail.includes('id="rail-group-history"><a href="#history" data-view="history">History</a>'));
  const html=fs.readFileSync('site/v4.html','utf8');assert(html.includes(rail));assert(!html.includes('class="rail-subsection"><span>Fred-'));
