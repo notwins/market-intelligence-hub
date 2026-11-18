@@ -25,6 +25,11 @@ ARCHIVE = "notwins/market-intelligence-private-sources"
 RAW = "https://raw.githubusercontent.com/notwins/market-intelligence-hub/market-prices/bos/"
 
 
+def same_origin(actual, expected):
+    # actions/checkout uses the exact GitHub URL without the optional .git suffix.
+    return actual.removesuffix(".git") == expected.removesuffix(".git")
+
+
 def git(repo, *args, check=True):
     result = subprocess.run(["git", "-C", str(repo), *args], capture_output=True)
     if check and result.returncode:
@@ -104,7 +109,8 @@ def push(repo, branch, expected):
 
 def require_private_archive(repo):
     origin = text(repo, "remote", "get-url", "origin")
-    if origin not in ("git@github.com:"+ARCHIVE+".git", "https://github.com/"+ARCHIVE+".git"):
+    if not any(same_origin(origin, allowed) for allowed in
+               ("git@github.com:"+ARCHIVE+".git", "https://github.com/"+ARCHIVE+".git")):
         raise ValueError("Unexpected archive destination")
     # Anonymous access must fail as private. Do not send any token here.
     try:
@@ -163,7 +169,7 @@ def verify_remote(repo, manifest, attempts=13, delay=30):
 
 def run(seed, archive, work):
     seed, archive, work = (Path(path).resolve() for path in (seed, archive, work))
-    if text(seed, "remote", "get-url", "origin") != HUB:
+    if not same_origin(text(seed, "remote", "get-url", "origin"), HUB):
         raise ValueError("Unexpected public destination")
     for repo in (seed, archive):
         if text(repo, "status", "--porcelain"):
