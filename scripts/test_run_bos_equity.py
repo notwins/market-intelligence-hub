@@ -69,6 +69,11 @@ class RunnerTests(unittest.TestCase):
             self.assertFalse(runner.push(self.seed,'market-prices','stale-head'))
             operation.assert_not_called()
 
+    def test_checkout_url_suffix_does_not_weaken_repository_guard(self):
+        self.assertTrue(runner.same_origin(runner.HUB.removesuffix('.git'),runner.HUB))
+        self.assertFalse(runner.same_origin(runner.HUB+'.evil',runner.HUB))
+        self.assertFalse(runner.same_origin('https://example.com/notwins/market-intelligence-hub',runner.HUB))
+
     def run_fixture(self, pdf=PDF, data=None):
         data=data or self.data
         with mock.patch.object(runner,'HUB',str(self.public_remote)), \
