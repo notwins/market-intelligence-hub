@@ -66,6 +66,8 @@ summary {cursor:pointer}
 .selected-heading p {margin:0;font-size:11px;color:#38574d}
 .selected-heading>.event-badge {font-size:18px;padding:5px 8px}
 .event-explanation {margin:0 0 7px;font-size:14px}
+.threshold-origin {display:flex;align-items:center;gap:6px;margin:0 0 8px;font-size:12px}
+.threshold-origin button {border:1px solid #b9cbbf;border-radius:5px;background:#eff5ee;color:#2e5d51;cursor:pointer;padding:4px 8px}
 .guide-key {display:flex;flex-wrap:wrap;gap:12px;margin:6px 0;font-size:11px;color:var(--muted)}
 .guide-key span:before {content:'';display:inline-block;width:18px;margin-right:4px;vertical-align:middle;border-top:2px solid #356f65}
 .guide-key span:nth-child(2):before {border-color:#916649;border-top-style:dashed}

@@ -73,8 +73,9 @@
       const item = {...entry,metric,mainGroup:FredOverview.mainGroup(entry),rows,latest:rows.at(-1)};
       const found = B.crossings(rows,entry.frequency,entry.id);
       item.crossing = found.active.get(B.tier(item.latest?.z)) || null;
+      item.activeCrossings = found.active;
       state.events.push(...found.events.filter(event => event.observed));
-      if (item.crossing) state.active.push(item.crossing);
+      if (item.crossing) state.active.push(...found.active.values());
       state.byId.set(item.id,item);
       return item;
     });
@@ -111,7 +112,7 @@
       ${replay ? '<div id="event-replay"></div><div id="grouped-signals"></div>' : '<div id="grouped-signals"></div><div id="event-replay"></div>'}
       <details class="panel method" id="method"><summary>How breaches and market windows are measured</summary>
         <p>Each native-frequency reading uses that dataset's recommended measure and the prior ${state.years} calendar years. Sigma is the distance from the prior mean divided by sample SD. The current reading is excluded from the baseline. At least 12 prior readings and a nonzero SD are required. A shorter available history can still contribute.</p>
-        <p>A crossing is entry into a threshold band or entry on the opposite side of the mean, compared with the last scorable observation. Missing observations widen that interval. A first scorable reading outside the band is marked separately. Current breach runs show the entry for the latest band. All saved crossings includes re-entries and the 1σ and 2σ steps of the same observation.</p>
+        <p>A crossing is entry into a threshold band or entry on the opposite side of the mean, compared with the last scorable observation. Missing observations widen that interval. A first scorable reading outside the band is marked separately. Current breach runs show where the latest 1σ and 2σ runs began. All saved crossings includes past entries, re-entries and both steps when a reading clears both thresholds together.</p>
         <p>The timeline labels source periods. Monthly and quarterly periods use their end date for alignment to daily markets. Fiscal-year observations use their labelled fiscal-year end. These dates represent the measured interval. Check official release dates before inferring a reaction or using revised histories to test a trading rule.</p>
         <p>Market comparisons use actual dates and source units. For monthly and quarterly readings the default window compares the first and last available market observations within that period. For daily observations the default is ten calendar days on each side. Earlier or later endpoints can be missing. Prices are in local currency, and stock price changes exclude dividends. Yield changes are in basis points. Nearby changes show context and cannot establish a cause.</p>
         <p>Read the <a href="data.html">complete dataset and record tables</a>, <a href="../historical-fred.html">historical market charts</a> and <a href="../v4.html#history">bond, FX and share workspaces</a>.</p>
@@ -214,12 +215,15 @@
     const dest = get('event-replay');
     if(!event){dest.innerHTML='<section class="panel"><p>No comparable breach in the saved archive for this baseline.</p></section>';return;}
     const item = state.byId.get(event.id), row=item.rows[event.index], prev=event.previous;
+    const firstThreshold = item.activeCrossings.get(1);
+    const twoThresholds = event.threshold===2&&item.crossing?.key===event.key&&firstThreshold;
     const extent = item.frequency.startsWith('Daily') ? 45 : item.frequency.startsWith('Weekly') ? 28 : 14;
     const displayRows=item.rows.slice(Math.max(0,event.index-extent),event.index+extent+1);
     const heatUnit = item.metric.transform==='yoy'?'% YoY':item.metric.unit;
     dest.innerHTML = `<section class="panel replay-panel" aria-labelledby="event-title">
       <div class="selected-heading heat-${event.threshold} ${event.z<0?'negative':'positive'}"><div><p>${E(event.period.label)} · ${E(eventLabel(event))}</p><h2 id="event-title" tabindex="-1">${E(item.name)}</h2><p>${E(item.mainGroup)} · ${E(metricName(item.metric))}</p></div>${badge(event.z,event.threshold)}</div>
       <div class="panel-body"><p class="event-explanation">The ${E(event.period.label)} observation was <strong>${number(row.value)} ${E(heatUnit)}</strong>, ${number(Math.abs(row.z),2)} SD ${row.z<0?'below':'above'} its prior mean of ${number(row.mean)}. The sample SD was ${number(row.sd)} from ${number(row.n,0)} prior readings.${prev?` Previous scorable reading: ${E(B.period(prev.date,item.frequency).label)} (${signed(prev.z)}σ).`:' This is the first scorable observation in the run.'} ${event.skipped?number(event.skipped,0)+' unscorable observations sit between the two dated readings.':''}</p>
+        ${twoThresholds?`<p class="threshold-origin">${badge(firstThreshold.z,1)} <button type="button" data-event="${E(firstThreshold.key)}">Replay the 1σ entry · ${E(firstThreshold.period.label)}</button></p>`:''}
         <p class="fine">Source observation date ${E(event.date)} · market alignment ${E(event.period.end)} · <a href="data.html#${encodeURIComponent(item.id)}">Full series and records ↗</a>${link(item.source_url)?' · <a href="'+E(link(item.source_url))+'">Official source ↗</a>':''}${!replay?' · <a href="cross-market-replay.html?event='+encodeURIComponent(event.key)+'&years='+state.years+'#event-replay">Open this event in V4 ↗</a>':''}</p>
         <div class="macro-chart"><div class="guide-key"><span>Metric</span><span>Prior mean</span><span>±1 SD</span><span>±2 SD</span></div>${chart(displayRows,{id:'macro',title:item.name,unit:heatUnit,anchor:event.date,sd:true})}</div>
         <div class="market-section"><h3>What markets were pricing</h3><p class="fine">${E(notes[item.mainGroup]||'Compare rates, equities and FX over the same dated window.')}</p>
