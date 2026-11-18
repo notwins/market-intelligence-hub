@@ -12,7 +12,7 @@ Its heat baseline precedes the displayed observation. Quarterly one-month
 changes are unavailable. Historical event baselines and missing-value rules
 remain separate.
 
-The current public site watchlist supplies 12 quick dropdown choices ahead of
+The current public site watchlist supplies quick dropdown choices ahead of
 the full listing catalogue. USD listing and share class are preserved using the
 verified watchlist identities. When a history record lacks an ISIN, only its
 already-eligible exact US ticker/currency identity can match; no ISIN is invented.
