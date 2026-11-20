@@ -4,7 +4,7 @@
  const MISSING='\u0000untagged',ALL='\u0000all',groups={country:'Country / region',person:'Political figures',bank:'Central banks / institutions',asset:'Asset classes / instruments',sector:'Sectors / themes',ticker:'Companies / tickers',macro:'Macro data / indicators',event:'Events / catalysts',status:'Editorial status'};
  const categories=new Map(Object.entries(groups).map(([k,v])=>[v,k]));
  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- let vocabulary=[],byId=new Map(),tagCache=new WeakMap(),identityCache=new Map(),loaded=false,loadError='';
+ let vocabulary=[],byId=new Map(),tagCache=new WeakMap(),identityCache=new Map(),loaded=false,loadError='',logoData;
  const normal=s=>String(s??'').normalize('NFKC').replace(/[’‘]/g,"'").replace(/[–—]/g,'-').replace(/\s+/g,' ').replace(/\b([A-Z]{3})[-/]([A-Z]{3})\b/g,'$1/$2').trim();
  const label=v=>v===MISSING?'Not tagged':byId.get(v)?.keyword_group||v;
  const literal=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
@@ -14,6 +14,8 @@
   if(!vocabulary.length)throw Error('Canonical tag reference has no valid mappings');byId=new Map(vocabulary.map(t=>[t.id,t]));tagCache=new WeakMap();identityCache=new Map();loaded=true;loadError='';
  }
  function canonicalTags(item){
+  const logos=root.CompanyLogos;
+  if(logos?.data!==logoData){logoData=logos?.data;tagCache=new WeakMap();identityCache=new Map();}
   if(tagCache.has(item))return tagCache.get(item);if(!loaded)return[];const signature=JSON.stringify([identity(item),item.title||item.headline,item.category||item.topic,item.tickers,item.status,item.freshness,item.version]);if(identityCache.has(signature)){const cached=identityCache.get(signature);tagCache.set(item,cached);return cached;}
   const title=normal(item.title||item.headline||''),context=title+' '+normal(item.category||item.topic||''),finance=/^(?:Markets|Earnings|Fixed income|Elections)$/i.test(String(item.category||''))||/\b(?:markets?|stocks?|shares?|equities|bonds?|treasur(?:y|ies)|yield|rates?|earnings|bank|economy|economic|inflation|policy|finance|credit|dollar|currency|trade|invest|revenue|profit|elections?|government|tech|chips?|AI|company|companies|gold|silver|oil|forex|FX|commodities|GDP|PMI|CPI|PPI|payrolls|employment|unemployment|exports|imports|manufacturing|spending)\b/i.test(context);
   const politics=/\b(?:president|minister|election|congress|policy|administration|government|tariffs?|parliament|politic|senate|chancellor|white house)\b/i.test(context);
@@ -51,7 +53,22 @@
   }
   hits.sort((a,b)=>(b.end-b.start)-(a.end-a.start)||(b.tag.priority||0)-(a.tag.priority||0)||a.start-b.start);const accepted=[];
   for(const hit of hits){if(hit.tag.matching_rule==='geo'&&hits.some(a=>a.tag.matching_rule==='ticker'&&a.start<=hit.start&&a.end>=hit.end&&(a.end-a.start)>(hit.end-hit.start)))continue;if(!accepted.some(a=>a.tag.group===hit.tag.group&&hit.start<a.end&&hit.end>a.start))accepted.push(hit);}
-  const result=[...new Map([...metadata,...accepted.map(h=>h.tag)].map(t=>[t.id,t])).values()];tagCache.set(item,result);identityCache.set(signature,result);if(identityCache.size>3000)identityCache.delete(identityCache.keys().next().value);return result;
+  const tags=[...metadata,...accepted.map(h=>h.tag)];
+  if(logoData){
+   const entities=logos.infer({title,tickers:item.tickers,tags:tags.map(t=>t.id),article:true},logoData);
+   const existing=new Set(tags.map(t=>logoData.tag_map[t.id]||logoData.label_map[t.keyword_group.toLowerCase()]));
+   for(const id of entities){
+    if(existing.has(id))continue;
+    const entity=logos.resolveBadge(id,logoData);
+    const group=entity.kind==='person'?'person':entity.kind==='currency'?'asset':'ticker';
+    const key=group+'.entity.'+id.toLowerCase().replace(/:/g,'.');
+    const tag={id:key,group,keyword_group:entity.kind==='currency'?entity.code:entity.name,
+      text_light:'#164e63',text_dark:'#a5f3fc',chip_bg_light:'#ecfeff',chip_bg_dark:'#164e63'};
+    byId.set(key,tag);
+    tags.push(tag);
+   }
+  }
+  const result=[...new Map(tags.map(t=>[t.id,t])).values()];tagCache.set(item,result);identityCache.set(signature,result);if(identityCache.size>3000)identityCache.delete(identityCache.keys().next().value);return result;
  }
  function identity(item){return item.story_id?'story:'+item.story_id:item.id?'id:'+item.id:item.url?'url:'+item.url:'record:'+String(item.published_at||'')+'|'+String(item.title||item.headline||'');}
  function unique(items){const seen=new Set();return(items||[]).filter(item=>{const id=identity(item);if(seen.has(id))return false;seen.add(id);return true;});}
@@ -82,6 +99,7 @@
  }
  function connect(callback){onChange=callback;if(!root.document)return;
   root.fetch?.('data/keyword-colour-standard.json').then(r=>{if(!r.ok)throw Error('Canonical tag reference could not load');return r.json();}).then(data=>{setStandard(data);onChange();}).catch(()=>{loadError='News tag reference is unavailable. Existing search and headline filters still work.';onChange();});
+  root.document.addEventListener('mih-logo-catalogue',()=>onChange());
   root.document.addEventListener('toggle',event=>{const panel=event.target.closest?.('[data-ntp-root]');if(panel&&event.target.parentElement===panel&&panel.isConnected)state(panel.dataset.ntpRoot).open=event.target.open;},true);
   root.document.addEventListener('click',event=>{const panel=event.target.closest('[data-ntp-root]');if(!panel)return;const key=panel.dataset.ntpRoot,s=state(key),button=event.target.closest('button');if(!button)return;
    if(button.hasAttribute('data-ntp-cell')){const next={...current(key)};if(button.dataset.y)next[button.dataset.yGroup]=button.dataset.y==='__untagged__'?MISSING:button.dataset.y;if(button.dataset.x&&button.dataset.xGroup)next[button.dataset.xGroup]=button.dataset.x==='__untagged__'?MISSING:button.dataset.x;apply(key,next);}

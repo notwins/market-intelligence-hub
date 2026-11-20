@@ -107,3 +107,38 @@ for(const item of ['Price','Final KO','P/E','P/B','MS fair value','BOS archive']
 assert(fourWithOverlays.includes('MOA margin source · manual entry'));
 assert(fourWithOverlays.includes('Full descriptions are on share cards.'));
 assert(!overlaySvg.includes('si-compact-legend'),'Single-share pages retain their original legend');
+const B=require('../site/si-bos-history.js');
+const privateFile={version:1,kind:'si-bos-monthly-history',listings:[['TEST US','USD',[
+ ['2024-01-05','S',200,'2024-01-04',250],
+ ['2025-09-30','B',null,null,null],
+ ['2026-02-01','H',110,'2025-09-30',90],
+]]]};
+const privateCalls=B.parse(JSON.stringify(privateFile)).listings.get(B.listingKey('TEST US','USD'));
+assert.equal(B.listingKey('TEST US','EUR'),'TEST US|EUR');
+assert.throws(()=>B.parse(JSON.stringify({...privateFile,listings:[...privateFile.listings,...privateFile.listings]})),/valid private BOS/);
+assert.throws(()=>B.parse(JSON.stringify({...privateFile,listings:[['TEST US','USD',[['2024-02-30','S',5,null,null]]]]})));
+const assembled=C.chartWindow({...sample,bosCalls:privateCalls},{...settings,years:5});
+assert.deepEqual(assembled.calls.map(p=>p.rating),['Sell','Buy','Hold','Hold']);
+assert(assembled.series.archive.some(p=>p.value===110));
+assert(!assembled.series.archive.some(p=>p.value===200),'Incompatible older targets stay out of the price axis');
+const withCalls=C.svg(p,{TEST:{...sample,bosCalls:privateCalls}},1,1,{chart:settings});
+assert.equal((withCalls.match(/class="si-bos-call"/g)||[]).length,4);
+assert.match(withCalls,/Calls: 4/);
+assert(!C.svg(p,{TEST:{...sample,bosCalls:privateCalls}}).includes('si-call-history'));
+
+const matches = C.parseMoa({version:1,source:'Test rates',records:[
+ {ticker:'0005 HK EQUITY',currency:'HKD',isin:'GB0005405286',moaPct:0},
+ {ticker:'TEST US',currency:'USD',isin:'US0378331005',moaPct:65},
+ {ticker:'LEGACY US',currency:'USD',moaPct:50},
+]});
+assert.equal(C.matchMoa(matches,'5 HK','HKD','GB0005405286'),0);
+assert.equal(C.matchMoa(matches,undefined,'HKD','GB0005405286'),0);
+assert.equal(C.matchMoa(matches,'TEST US','USD','US5949181045'),undefined);
+assert.equal(C.matchMoa(matches,'OTHER US','USD','US0378331005'),undefined);
+assert.equal(C.matchMoa(matches,'TEST US','EUR','US0378331005'),undefined);
+assert.equal(C.matchMoa(matches,'LEGACY US','USD'),50);
+assert.throws(()=>C.parseMoa({version:1,source:'Test rates',records:[
+ {ticker:'TEST US',currency:'USD',isin:'BAD',moaPct:65},
+]}),/invalid or duplicate listing/);
+const bands=[5.99,6,7.99,8,9.99,10,12,12.01].map(C.couponBand);
+assert.deepEqual(bands,['','6-8','6-8','8-10','8-10','10-12','10-12','above-12']);

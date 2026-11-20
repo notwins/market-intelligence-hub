@@ -1,1 +1,4395 @@
-{"schema_version":1,"version":"20261116.logos1","aliases":{"GOOGL":"GOOG","BRK.B":"BRK-B","BRK/B":"BRK-B","BRK_B":"BRK-B","BRK.A":"BRK-B","TSMC":"TSM","DBS":"D05.SI","D05":"D05.SI","OCBC":"O39.SI","O39":"O39.SI","UOB":"U11.SI","U11":"U11.SI"},"tag_map":{"ticker.apple_aapl":"AAPL","ticker.microsoft_msft":"MSFT","ticker.nvidia_nvda":"NVDA","ticker.alphabet_googl":"GOOG","ticker.amazon_amzn":"AMZN","ticker.tesla_tsla":"TSLA","ticker.tsmc_tsm":"TSM","ticker.broadcom_avgo":"AVGO","ticker.amd":"AMD","ticker.intel_intc":"INTC","ticker.micron_mu":"MU","ticker.oracle_orcl":"ORCL","ticker.palantir_pltr":"PLTR","ticker.netflix_nflx":"NFLX","ticker.berkshire_hathaway_brk":"BRK-B","ticker.jpmorgan_jpm":"JPM","ticker.goldman_sachs_gs":"GS","ticker.bank_of_america_bac":"BAC","ticker.citigroup_c":"C","ticker.blackrock_blk":"BLK","ticker.ocbc_o39":"O39.SI","ticker.dbs_d05":"D05.SI","ticker.uob_u11":"U11.SI","ticker.sea_limited_se":"SE","ticker.hsbc":"HSBC","company.abbv":"ABBV","company.abt":"ABT","company.alv_de":"ALV.DE","company.amat":"AMAT","company.amgn":"AMGN","company.anet":"ANET","company.asml":"ASML","company.axp":"AXP","company.azn":"AZN","company.baba":"BABA","company.bhp":"BHP","company.cat":"CAT","company.cba_ax":"CBA.AX","company.cost":"COST","company.csco":"CSCO","company.cvx":"CVX","company.dell":"DELL","company.dis":"DIS","company.ge":"GE","company.gev":"GEV","company.gild":"GILD","company.hd":"HD","company.ibm":"IBM","company.ihc_ae":"IHC.AE","company.itx_mc":"ITX.MC","company.jnj":"JNJ","company.ko":"KO","company.lin":"LIN","company.lly":"LLY","company.lrcx":"LRCX","company.ma":"MA","company.mc_pa":"MC.PA","company.mcd":"MCD","company.mrk":"MRK","company.ms":"MS","company.mufg":"MUFG","company.nee":"NEE","company.nesn_sw":"NESN.SW","company.nvs":"NVS","company.or_pa":"OR.PA","company.panw":"PANW","company.pep":"PEP","company.pg":"PG","company.pm":"PM","company.prx_as":"PRX.AS","company.ro_sw":"RO.SW","company.rtx":"RTX","company.ry":"RY","company.sap":"SAP","company.shel":"SHEL","company.shop":"SHOP","company.sie_de":"SIE.DE","company.spot":"SPOT","company.tcehy":"TCEHY","company.td":"TD","company.tm":"TM","company.tmo":"TMO","company.tte":"TTE","company.txn":"TXN","company.unh":"UNH","company.v":"V","company.vz":"VZ","company.wfc":"WFC","company.wmt":"WMT","company.xom":"XOM"},"label_map":{"apple / aapl":"AAPL","microsoft / msft":"MSFT","nvidia / nvda":"NVDA","alphabet / googl":"GOOG","amazon / amzn":"AMZN","tesla / tsla":"TSLA","tsmc / tsm":"TSM","broadcom / avgo":"AVGO","amd":"AMD","intel / intc":"INTC","micron / mu":"MU","oracle / orcl":"ORCL","palantir / pltr":"PLTR","netflix / nflx":"NFLX","berkshire hathaway / brk":"BRK-B","jpmorgan / jpm":"JPM","goldman sachs / gs":"GS","bank of america / bac":"BAC","citigroup / c":"C","blackrock / blk":"BLK","ocbc / o39":"O39.SI","dbs / d05":"D05.SI","uob / u11":"U11.SI","sea limited / se":"SE","hsbc":"HSBC","abbvie":"ABBV","abbott laboratories":"ABT","allianz":"ALV.DE","applied materials":"AMAT","amgen":"AMGN","arista networks":"ANET","asml":"ASML","american express":"AXP","astrazeneca":"AZN","alibaba":"BABA","bhp group":"BHP","caterpillar":"CAT","commonwealth bank of australia":"CBA.AX","costco":"COST","cisco":"CSCO","chevron":"CVX","dell technologies":"DELL","walt disney company":"DIS","ge aerospace":"GE","ge vernova":"GEV","gilead sciences":"GILD","home depot":"HD","ibm":"IBM","international holding company":"IHC.AE","inditex":"ITX.MC","johnson & johnson":"JNJ","coca-cola":"KO","linde":"LIN","eli lilly":"LLY","lam research":"LRCX","mastercard":"MA","lvmh":"MC.PA","mcdonald's":"MCD","merck & co.":"MRK","morgan stanley":"MS","mitsubishi ufj financial":"MUFG","nextera energy":"NEE","nestle":"NESN.SW","novartis":"NVS","l'oreal":"OR.PA","palo alto networks":"PANW","pepsico":"PEP","procter & gamble":"PG","philip morris international":"PM","prosus":"PRX.AS","roche":"RO.SW","rtx corporation":"RTX","royal bank of canada":"RY","sap":"SAP","shell":"SHEL","shopify":"SHOP","siemens":"SIE.DE","spotify":"SPOT","tencent":"TCEHY","toronto-dominion bank":"TD","toyota":"TM","thermo fisher scientific":"TMO","totalenergies":"TTE","texas instruments":"TXN","unitedhealth group":"UNH","visa":"V","verizon":"VZ","wells fargo":"WFC","walmart":"WMT","exxonmobil":"XOM"},"companies":[{"ticker":"AAPL","name":"Apple","file":"AAPL.webp","names":["Apple"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AAPL.webp","sha256":"37e915bf63c31841fe2fb008e7bf1d4c1aaa57484a1f40fad2e73881f6b98e50","bytes":650},{"ticker":"NVDA","name":"NVIDIA","file":"NVDA.webp","names":["NVIDIA"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/NVDA.webp","sha256":"85d8f5801a859e344e924e7184919f90deb0775ef44b526fbf0239eeadd59ff3","bytes":1090},{"ticker":"MSFT","name":"Microsoft","file":"MSFT.webp","names":["Microsoft"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MSFT.webp","sha256":"ae240a15c449fe80e8b6cb55ad00449f51d314274fbd724c32b0658c81c10801","bytes":104},{"ticker":"GOOG","name":"Alphabet (Google)","file":"GOOG.webp","names":["Alphabet","Google"],"aliases":["GOOGL"],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/GOOG.webp","sha256":"91143a9242b6759a40a71e137996bdeb2dc39f6c1f7e02537efea889781826b3","bytes":2722},{"ticker":"AMZN","name":"Amazon","file":"AMZN.webp","names":["Amazon"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AMZN.webp","sha256":"bd33c0b0ca295c499ae08d0c07fb86d1265483aa6c6c7e2dd1626212316a953c","bytes":1080},{"ticker":"TSM","name":"TSMC","file":"TSM.webp","names":["TSMC","Taiwan Semiconductor"],"aliases":["TSMC"],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TSM.webp","sha256":"307f70cb427e428984e6563060b7f28530b32fac0e581687a6d667d5873f7463","bytes":3722},{"ticker":"2222.SR","name":"Saudi Aramco","file":"2222.SR.webp","names":["Saudi Aramco"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/2222.SR.webp","sha256":"1ae639f7821f8c220f914ee1763c9b0b7821d0b13c9d52c93331d08c138f6c91","bytes":5044},{"ticker":"SPCX","name":"SpaceX","file":"SPCX.webp","names":["SpaceX"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/SPCX.webp","sha256":"ede74aea4c5beeccf86acf90a3baaecd8bc9dcfe83e91a76698aa2c5da5827ad","bytes":560},{"ticker":"META","name":"Meta Platforms (Facebook)","file":"META.webp","names":["Meta Platforms","Facebook"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/META.webp","sha256":"71ec68c2cdf267743280691890b470699df796700b58e36c6670fa8da031410f","bytes":1554},{"ticker":"AVGO","name":"Broadcom","file":"AVGO.webp","names":["Broadcom"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AVGO.webp","sha256":"4f68bcc4262e72dbff68b39defc680ef76fcfc6f544563cf9c72fccbb2d34cb5","bytes":1916},{"ticker":"TSLA","name":"Tesla","file":"TSLA.webp","names":["Tesla"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TSLA.webp","sha256":"0b2985fea15d42e4cd82e68a6837a4eb273b007ada66da3f200f7317af6b8b95","bytes":956},{"ticker":"BRK-B","name":"Berkshire Hathaway","file":"BRK-B.webp","names":["Berkshire Hathaway","Berkshire"],"aliases":["BRK.B","BRK/B","BRK_B","BRK.A"],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/BRK-B.webp","sha256":"55883919e3e6e351a1afd22135053864e9a86c0055b071a0647db1e940635233","bytes":540},{"ticker":"LLY","name":"Eli Lilly","file":"LLY.webp","names":["Eli Lilly"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/LLY.webp","sha256":"186619ccb1c54ed88b8048ab69c103128bb095ec63ab4d89ecf0195fb01820e2","bytes":1126},{"ticker":"WMT","name":"Walmart","file":"WMT.webp","names":["Walmart"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/WMT.webp","sha256":"1188415bbca022faa65914c6b7b1a5c4eda2993a90adfc185a6481cabca36f2d","bytes":904},{"ticker":"005930.KS","name":"Samsung","file":"005930.KS.webp","names":["Samsung"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/005930.KS.webp","sha256":"e52651569cde479cc3b21d5b4d71fc95eccc2f0bf924c1a717900520dae3d287","bytes":744},{"ticker":"JPM","name":"JPMorgan Chase","file":"JPM.webp","names":["JPMorgan Chase"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/JPM.webp","sha256":"69642e8d7b20139d874c479e89fc76d07cc6482b91dc156eedce180f566859ca","bytes":740},{"ticker":"V","name":"Visa","file":"V.webp","names":["Visa"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/V.webp","sha256":"f3824e573c9819f8cf8f41c6c3ca6678266b03037a8745f74d406e57bd4098f8","bytes":840},{"ticker":"MU","name":"Micron Technology","file":"MU.webp","names":["Micron Technology"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MU.webp","sha256":"19049fc5ccece0676f213c02c2ac8bc3d7341d5d99dda839677a7d12d5852c95","bytes":442},{"ticker":"XOM","name":"Exxon Mobil","file":"XOM.webp","names":["Exxon Mobil"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/XOM.webp","sha256":"a6a608075ae9fad6eafec8e88692094225e86e9556af930e06f2a21e0cee9742","bytes":946},{"ticker":"AMD","name":"AMD","file":"AMD.webp","names":["AMD"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AMD.webp","sha256":"d4be4681128918a9dbc69ebb3c65880413bb58b878260ba81444a1ece479d2cc","bytes":348},{"ticker":"JNJ","name":"Johnson & Johnson","file":"JNJ.webp","names":["Johnson & Johnson"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/JNJ.webp","sha256":"8404a4141314878b75f78a5413e6d70f77a547e7c128808d6762969fc400fc47","bytes":780},{"ticker":"000660.KS","name":"SK Hynix","file":"000660.KS.webp","names":["SK Hynix"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/000660.KS.webp","sha256":"ae830e03cd059801ee14b67865ec19f7e03fb039f76bab6e79a4c02949453cd1","bytes":1460},{"ticker":"MA","name":"Mastercard","file":"MA.webp","names":["Mastercard"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MA.webp","sha256":"a380230d5441752ce97aa922f951b53b71148b1b9aa2d954c7264c489949e221","bytes":994},{"ticker":"ASML","name":"ASML","file":"ASML.webp","names":["ASML"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/ASML.webp","sha256":"5cfc15144724e95e5eafe573186866ef2aa0adcf2020c378d455bd132102ee9d","bytes":848},{"ticker":"ABBV","name":"AbbVie","file":"ABBV.webp","names":["AbbVie"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/ABBV.webp","sha256":"b5ba61ea362893a935b0d3dce557c518e28040a12bcba05111c092c40b7bb1aa","bytes":768},{"ticker":"TCEHY","name":"Tencent","file":"TCEHY.webp","names":["Tencent"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TCEHY.webp","sha256":"04cd01de2e94b8e9ede9400957ece7e9198fa35461fbfb65bba21384d9fa6f84","bytes":530},{"ticker":"COST","name":"Costco","file":"COST.webp","names":["Costco"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/COST.webp","sha256":"4b2e3aead8899d548f4736aec164757c3d2c8770cbb0c905dcffe03c1fc2e1b2","bytes":2560},{"ticker":"601939.SS","name":"China Construction Bank","file":"601939.SS.webp","names":["China Construction Bank"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/601939.SS.webp","sha256":"1a0bdc04fa589ad1ccb2cfa4ca642e83da2a44eb34e121f6214ee89c1bc8107f","bytes":880},{"ticker":"688825.SS","name":"CXMT","file":"688825.SS.webp","names":["CXMT"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/688825.SS.webp","sha256":"4a4a5403078f137d7b1defcf361e49dfa7660e0587dff254a6a1e939ccbc727f","bytes":858},{"ticker":"CVX","name":"Chevron","file":"CVX.webp","names":["Chevron"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/CVX.webp","sha256":"428f8250dcee4c94597d4f2ded50cbb01299923de10ee97ff0a842f65acde407","bytes":1262},{"ticker":"KO","name":"Coca-Cola","file":"KO.webp","names":["Coca-Cola"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/KO.webp","sha256":"6d75924b7dad2c67fa8a22a0d676cfb674e6174021c4584b8d42dec04ccd4b8c","bytes":2264},{"ticker":"PG","name":"Procter & Gamble","file":"PG.webp","names":["Procter & Gamble"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/PG.webp","sha256":"2a70c96987ec2ca6a3615f6dc69b5f021a5f77fc6472ec719676ec18897a24ea","bytes":4414},{"ticker":"RO.SW","name":"Roche","file":"RO.SW.webp","names":["Roche"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/RO.SW.webp","sha256":"d905c988470b28b99918c70972fea6d60992a1844dce00f1310747249b1b6c90","bytes":992},{"ticker":"601288.SS","name":"Agricultural Bank of China","file":"601288.SS.webp","names":["Agricultural Bank of China"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/601288.SS.webp","sha256":"e447d5648ef1b479a757ffa483bc97664e737eb3f961cf936a977201cc302261","bytes":1136},{"ticker":"CSCO","name":"Cisco","file":"CSCO.webp","names":["Cisco"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/CSCO.webp","sha256":"613b9d83553f99ba707a9cebcb3960a30725e5cb502cbaaa1e4616a8007f4f7d","bytes":862},{"ticker":"PLTR","name":"Palantir","file":"PLTR.webp","names":["Palantir"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/PLTR.webp","sha256":"ed333a47b53336987051be756c1c5eb6296b443df73ce86a81eaf3704a7836b9","bytes":1052},{"ticker":"MRK","name":"Merck","file":"MRK.webp","names":["Merck"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MRK.webp","sha256":"55bd7b7efb73dc9db8c53b6b6131076533d37e8278b1a060c1dc022f3bf46cb6","bytes":812},{"ticker":"1398.HK","name":"ICBC","file":"1398.HK.webp","names":["ICBC"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/1398.HK.webp","sha256":"3143632c9035b4f1af9d37f002178652cd4599599e3300281952bb447b3f0b6e","bytes":990},{"ticker":"ORCL","name":"Oracle","file":"ORCL.webp","names":["Oracle"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/ORCL.webp","sha256":"07adc10f8765d311332d23195060d1c937ad12044f5f0f3eb585dff6a0385159","bytes":626},{"ticker":"UNH","name":"UnitedHealth","file":"UNH.webp","names":["UnitedHealth"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/UNH.webp","sha256":"5dfb9e70154479e93e146b8a5d9a9a3f7dfeda23bf5bdfacacbe8f298f6b0cd0","bytes":560},{"ticker":"HD","name":"Home Depot","file":"HD.webp","names":["Home Depot"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/HD.webp","sha256":"3e318df8dd3a5d00b0d804795a1ca1fa7f9f7d6590676e9c58ad9c57b54e793e","bytes":2988},{"ticker":"BAC","name":"Bank of America","file":"BAC.webp","names":["Bank of America"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/BAC.webp","sha256":"87165bfd724d871fcf57989139c02ee5a6304ff7d793f80d5162db708345571c","bytes":1070},{"ticker":"601988.SS","name":"Bank of China","file":"601988.SS.webp","names":["Bank of China"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/601988.SS.webp","sha256":"01240c04cd643d56934faa7c305b0e3c6c7dde968a561ea932380cb4f1ca971e","bytes":1080},{"ticker":"GE","name":"General Electric","file":"GE.webp","names":["General Electric"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/GE.webp","sha256":"3878852017900839a23031569ced87be1cff759b859636d7a3208b650b8edb88","bytes":3910},{"ticker":"PM","name":"Philip Morris International","file":"PM.webp","names":["Philip Morris International"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/PM.webp","sha256":"1ac9d46b9d92682367ac193ec3e33900bbae57bd235595477062f30d8666092d","bytes":2294},{"ticker":"NVS","name":"Novartis","file":"NVS.webp","names":["Novartis"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/NVS.webp","sha256":"24e229346f383537459280f48145b99c163029349eecf5543cc83ed7f389f6c7","bytes":1374},{"ticker":"HSBC","name":"HSBC","file":"HSBC.webp","names":["HSBC"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/HSBC.webp","sha256":"66d7eca6aab011439e4ba44027d8d224462bcf8e8fbdb20d56cedf7dd61a9cca","bytes":812},{"ticker":"AZN","name":"AstraZeneca","file":"AZN.webp","names":["AstraZeneca"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AZN.webp","sha256":"5d846e08390f6be532639d6758fc6208b1d55b2a952756812cb5250793cbed8d","bytes":1132},{"ticker":"MS","name":"Morgan Stanley","file":"MS.webp","names":["Morgan Stanley"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MS.webp","sha256":"3bf2816e0bff643e0693ca7f2431363b3a3ff05aae86999b7eb130054d180dd8","bytes":892},{"ticker":"SHEL","name":"Shell","file":"SHEL.webp","names":["Shell"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/SHEL.webp","sha256":"6905efde5d50c047dd94aa3bc03447e51a5ae9c4c38a1ff71b2d6f52653d131e","bytes":2800},{"ticker":"RY","name":"Royal Bank Of Canada","file":"RY.webp","names":["Royal Bank of Canada"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/RY.webp","sha256":"a97f3627c3132e22bb98bebcb46b799ed641aec9bd6ddd8cf7bd74b8ad31f9b1","bytes":4128},{"ticker":"SAP","name":"SAP","file":"SAP.webp","names":["SAP"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/SAP.webp","sha256":"488ca2de127ea3f7aaa89d25e041e52e2f6e466c2a17f70dec68464ab32d6e2f","bytes":1712},{"ticker":"INTC","name":"Intel","file":"INTC.webp","names":["Intel"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/INTC.webp","sha256":"e9df997d7416eecb849b7b02cb591b83e00d03542e9cdb8efb05827bea3c44d6","bytes":642},{"ticker":"NFLX","name":"Netflix","file":"NFLX.webp","names":["Netflix"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/NFLX.webp","sha256":"1ec9cd50ed002403daf3420559ae51833c8eb83e007501138f8b8546de94d293","bytes":854},{"ticker":"OR.PA","name":"L'Oréal","file":"OR.PA.webp","names":["L'Oréal"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/OR.PA.webp","sha256":"3682f01735acff18cb2ef0cd064462835fe7622c7a67f288f18c48c2cf1c4dcf","bytes":692},{"ticker":"NESN.SW","name":"Nestlé","file":"NESN.SW.webp","names":["Nestlé"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/NESN.SW.webp","sha256":"5d00f63a2eee8f1e883fbd84bb6876b356a3ac639415e7ae0f7a70dcb5624abe","bytes":2032},{"ticker":"600519.SS","name":"Kweichow Moutai","file":"600519.SS.webp","names":["Kweichow Moutai"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/600519.SS.webp","sha256":"ee31ccf6b2ddc52018d9932bd5362d513af5ab4a7aa774e467a8da090ede4b42","bytes":3684},{"ticker":"BABA","name":"Alibaba","file":"BABA.webp","names":["Alibaba"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/BABA.webp","sha256":"5a167b7e834978dba8d872d5346ad3b41cc53d475c5d138118971dc2aaf4fba7","bytes":950},{"ticker":"RTX","name":"RTX","file":"RTX.webp","names":["RTX"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/RTX.webp","sha256":"0ec87fab22feb39d4c77bcaaccf0468237403bc4605174ea4043cbe1db50ea40","bytes":1710},{"ticker":"PANW","name":"Palo Alto Networks","file":"PANW.webp","names":["Palo Alto Networks"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/PANW.webp","sha256":"fc008545bb52a1204bafc488d0d8b452ed3aecd6b7726480d0113bfe528ee19f","bytes":678},{"ticker":"TM","name":"Toyota","file":"TM.webp","names":["Toyota"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TM.webp","sha256":"9ae3f2aa2b30c737cd1dc2827ab02067148acb3de68d621fd4e8b03164b436d4","bytes":1336},{"ticker":"WFC","name":"Wells Fargo","file":"WFC.webp","names":["Wells Fargo"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/WFC.webp","sha256":"c565dea8f42490351401a8d580f5da64a097dd2663f8aa25056e02aaa39e6bd2","bytes":2108},{"ticker":"TXN","name":"Texas Instruments","file":"TXN.webp","names":["Texas Instruments"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TXN.webp","sha256":"ee770a3399a128ee6392d30f6c3a91d11a94b7865252cbacb3e47ac842a390cb","bytes":950},{"ticker":"AMAT","name":"Applied Materials","file":"AMAT.webp","names":["Applied Materials"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AMAT.webp","sha256":"d8638e4611c57339cf4dbfc46e8d5e473cb0dbdc913782d0d9d989bc2b5fba92","bytes":2332},{"ticker":"CAT","name":"Caterpillar","file":"CAT.webp","names":["Caterpillar"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/CAT.webp","sha256":"0b344a1d9ed2bf331827bbee1c27491176820697f49e1ca039d435a46bbe34b2","bytes":954},{"ticker":"TMO","name":"Thermo Fisher Scientific","file":"TMO.webp","names":["Thermo Fisher Scientific"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TMO.webp","sha256":"5c59b3a48d391a25143aa7bb91c3f2518ffb2519e95f18fd99caa410b53b53fc","bytes":118},{"ticker":"GS","name":"Goldman Sachs","file":"GS.webp","names":["Goldman Sachs"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/GS.webp","sha256":"8f85fc1ef31e3753092832004d4756ff53f7c45031cdb4834d8ab10e3a5601e3","bytes":1000},{"ticker":"AMGN","name":"Amgen","file":"AMGN.webp","names":["Amgen"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AMGN.webp","sha256":"9308a50e0f855fc810e423ec436fd3c5dd1113be5279e24fb10f55d2191b0fab","bytes":508},{"ticker":"0857.HK","name":"PetroChina","file":"0857.HK.webp","names":["PetroChina"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/0857.HK.webp","sha256":"eabd9be8d74129de30e8edb61dd80669ca37d8360c7f9bdece21f94644366d09","bytes":3074},{"ticker":"LIN","name":"Linde","file":"LIN.webp","names":["Linde"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/LIN.webp","sha256":"58f20e3766d7729a3e31636a8e6088bd48e0331bba2f436af3188ad9cc7c0a75","bytes":672},{"ticker":"MUFG","name":"Mitsubishi UFJ Financial","file":"MUFG.webp","names":["Mitsubishi UFJ Financial"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MUFG.webp","sha256":"8a8ae278e45ca69412117f6fe6d1d612aa40fd04caa4e0e53cc0d164287c5b67","bytes":960},{"ticker":"SIE.DE","name":"Siemens","file":"SIE.DE.webp","names":["Siemens"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/SIE.DE.webp","sha256":"4b284905ee240541b861bd29770fd1b480338d326407b4d8cfac7a12d345f248","bytes":792},{"ticker":"IBM","name":"IBM","file":"IBM.webp","names":["IBM"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/IBM.webp","sha256":"2eab9384b476b6ba58b9430c9c206cc73b0af3d53d7b301926703d32e6349b7c","bytes":630},{"ticker":"MC.PA","name":"LVMH","file":"MC.PA.webp","names":["LVMH"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MC.PA.webp","sha256":"da38a3f2279a33268277798980a9b51b320ee60b4c7938fb1236b92527f2dca9","bytes":604},{"ticker":"LRCX","name":"Lam Research","file":"LRCX.webp","names":["Lam Research"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/LRCX.webp","sha256":"c30b5a5cd4e12b2073d4cb30111a133446f4c4ed770b516c3a83fb036a42de4a","bytes":1022},{"ticker":"0941.HK","name":"China Mobile","file":"0941.HK.webp","names":["China Mobile"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/0941.HK.webp","sha256":"b08c8b7f51fdc32fdd72b3b61dab6a8f722cb215fb25a6bcc715b568c5bcfd65","bytes":2324},{"ticker":"CRWD","name":"CrowdStrike","file":"CRWD.webp","names":["CrowdStrike"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/CRWD.webp","sha256":"a45d170e16e1c76f2107695393c2e015c8473206d46c40d36aeafabe4f270301","bytes":980},{"ticker":"AXP","name":"American Express","file":"AXP.webp","names":["American Express"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/AXP.webp","sha256":"3fc5f05c24c7ca7cafc475a5c10f1045bb8a47efe473d0416d7e09d40fcac181","bytes":2382},{"ticker":"ITX.MC","name":"Inditex","file":"ITX.MC.webp","names":["Inditex"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/ITX.MC.webp","sha256":"fb18f29e555b2b35315151744905ad59fb12e5bc898dc1bb46f2da0f880798b4","bytes":510},{"ticker":"GILD","name":"Gilead Sciences","file":"GILD.webp","names":["Gilead Sciences"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/GILD.webp","sha256":"2e5236a977a243b79788cd14ca5c27d4569e42ef597b1babfaf8cc095f95c5c2","bytes":954},{"ticker":"GEV","name":"GE Vernova","file":"GEV.webp","names":["GE Vernova"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/GEV.webp","sha256":"ae1e4d86266d76c4cd70d2504f98915d339027602c0a332fcfc23b9104e0509a","bytes":2250},{"ticker":"DIS","name":"Walt Disney","file":"DIS.webp","names":["Walt Disney"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/DIS.webp","sha256":"a4e05417e5ce8806e6e48aaeefb561c1f3e8ef4d57650f99986c8d55dae72495","bytes":1096},{"ticker":"DELL","name":"Dell","file":"DELL.webp","names":["Dell"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/DELL.webp","sha256":"720d19c1ef685a03cce1e8c85eac6dde581563646a9ed041d4f04d83126223f8","bytes":640},{"ticker":"ANET","name":"Arista Networks","file":"ANET.webp","names":["Arista Networks"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/ANET.webp","sha256":"2ad582b5a21897c157020e25eaba94a0b70731de36d7186001be073e9192ef35","bytes":688},{"ticker":"TD","name":"Toronto Dominion Bank","file":"TD.webp","names":["Toronto Dominion Bank"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TD.webp","sha256":"6db8467dbe299ee0f40a12083ecafc0a366c8e8105237bcfd61a28ad7c57ebfe","bytes":558},{"ticker":"BHP","name":"BHP Group","file":"BHP.webp","names":["BHP Group"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/BHP.webp","sha256":"a7bf26c0664df5514a7376defbdb55cc08872cdac7b4ac1f2ce8c83e4b0a325f","bytes":534},{"ticker":"ALV.DE","name":"Allianz SE","file":"ALV.DE.webp","names":["Allianz SE"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/ALV.DE.webp","sha256":"02598b7bd2c3f0989561c25b58c0f9523b0bed34eeba59a5f84236e2b9d54f84","bytes":1146},{"ticker":"ABT","name":"Abbott Laboratories","file":"ABT.webp","names":["Abbott Laboratories"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/ABT.webp","sha256":"d8f0d65f51b54d03e205a3214f65195d794e7812e7069373cad8be6121b2f2bb","bytes":438},{"ticker":"IHC.AE","name":"International Holding Company","file":"IHC.AE.webp","names":["International Holding Company"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/IHC.AE.webp","sha256":"36d3799243b12c3c997478fa539be8772c5639dfbbef45764e0150fc0a6903f6","bytes":4524},{"ticker":"MCD","name":"McDonald","file":"MCD.webp","names":["McDonald’s","McDonald's"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/MCD.webp","sha256":"c2d80af4de3f2229eebbc2837f20b56f5186e8101c53808c33c8cda88e2ec947","bytes":1064},{"ticker":"CBA.AX","name":"Commonwealth Bank","file":"CBA.AX.webp","names":["Commonwealth Bank"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/CBA.AX.webp","sha256":"1fcc2cfcb24f8c73ff40878a6515b6d8b66ac5ebf9bf4d10043484d8fe552ae2","bytes":1742},{"ticker":"C","name":"Citigroup","file":"C.webp","names":["Citigroup"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/C.webp","sha256":"e25e9aee337a1ee8ae0b5b1ac9ff90696ecd7c1f362db3f065fc9de3be68de30","bytes":950},{"ticker":"TTE","name":"TotalEnergies","file":"TTE.webp","names":["TotalEnergies"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/TTE.webp","sha256":"e9a5d6738a3bfd8b8e3239a3fb2130beac4de04d28c07c90f70a600b40a97202","bytes":1834},{"ticker":"PEP","name":"Pepsico","file":"PEP.webp","names":["Pepsico"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/PEP.webp","sha256":"08828a4e7d8de7eb58949ba85a1ef645db053bb8e4f0167a36cd3c19396ef397","bytes":2232},{"ticker":"VZ","name":"Verizon","file":"VZ.webp","names":["Verizon"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/VZ.webp","sha256":"076e75596f0dda15a7b8f3ab6893dc0dcb6d6426cff18fa0ee9c751e739ef37d","bytes":1438},{"ticker":"BLK","name":"BlackRock","file":"BLK.webp","names":["BlackRock"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/BLK.webp","sha256":"77458093a1b7d1de6f0f69a1f9fc02ad21c5745e7862c14520914b47fc445957","bytes":494},{"ticker":"RELIANCE.NS","name":"Reliance Industries","file":"RELIANCE.NS.webp","names":["Reliance Industries"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/RELIANCE.NS.webp","sha256":"e9d8100fc502c5c2189cb09875c3d8ed9f99a1ff9c829e61dab65920839ff756","bytes":926},{"ticker":"PRX.AS","name":"Prosus","file":"PRX.AS.webp","names":["Prosus"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/PRX.AS.webp","sha256":"3ff2e51b184c1e5d989b42f2edb9d31994202fb0d39183c41d09e22d34418295","bytes":914},{"ticker":"NEE","name":"Nextera Energy","file":"NEE.webp","names":["Nextera Energy"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/NEE.webp","sha256":"064c5416093f58b5826efa771c4bbc8e659cc2db2e9ecbc015c85c899dc05a2b","bytes":1398},{"ticker":"SHOP","name":"Shopify","file":"SHOP.webp","names":["Shopify"],"aliases":[],"group":"workbook_top100","source":"https://companiesmarketcap.com/img/company-logos/64/SHOP.webp","sha256":"c2096b0d98146dbabe9a713e78b194be5677b8269707c318ee4b75100eb7a17e","bytes":1778},{"ticker":"CRWV","name":"CoreWeave","file":"CRWV.webp","names":["CoreWeave"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/CRWV.webp","sha256":"1164992a30b5a2a5865697341f8089bf29de0d8375b985024c9fd2e8d6387bb4","bytes":1064},{"ticker":"NBIS","name":"Nebius Group","file":"NBIS.webp","names":["Nebius Group"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/NBIS.webp","sha256":"ae6de19d178bad6cd6049f65130ef84e78c551508a113e8e604d82420dc4f4a9","bytes":1496},{"ticker":"SMCI","name":"Super Micro Computer","file":"SMCI.webp","names":["Super Micro Computer"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/SMCI.webp","sha256":"c0aca9695e7c4323c45f1518281275f3a7b48e17f55dccfd46e5e6c0ef25b902","bytes":2676},{"ticker":"MRVL","name":"Marvell Technology","file":"MRVL.webp","names":["Marvell Technology"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/MRVL.webp","sha256":"77e85dd20a5ab24ada24b0abee541365f31ed54ae401f0ea322907b86f033946","bytes":444},{"ticker":"SNOW","name":"Snowflake","file":"SNOW.webp","names":["Snowflake"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/SNOW.webp","sha256":"df0314ec652c4f246080e81feab73d36a4e81129556749a2fb699a37cdea1f06","bytes":1238},{"ticker":"DDOG","name":"Datadog","file":"DDOG.webp","names":["Datadog"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/DDOG.webp","sha256":"25042369146ab402c542028af18fc892be59503fc2ac3f55761fbdc1a2acbd9a","bytes":1748},{"ticker":"NET","name":"Cloudflare","file":"NET.webp","names":["Cloudflare"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/NET.webp","sha256":"9b27451c39ab2fe7f23730e3c564b28f282d0179def003223e109dbc80992af7","bytes":918},{"ticker":"ZS","name":"Zscaler","file":"ZS.webp","names":["Zscaler"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/ZS.webp","sha256":"cd16d18d8fcb87ce810aed8fca05e1f86648d6048061925c81349155696bbd54","bytes":872},{"ticker":"MDB","name":"MongoDB","file":"MDB.webp","names":["MongoDB"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/MDB.webp","sha256":"a0e8b5b258d16f7ec6d9768d0a3d2f86f7caaf6a2277b400870461cf73088e0c","bytes":572},{"ticker":"TTD","name":"The Trade Desk","file":"TTD.webp","names":["The Trade Desk"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/TTD.webp","sha256":"7592af528ad1ed4a329c0192dce09f73eacfec035fa2c57c1cfadeea69bc0963","bytes":726},{"ticker":"COIN","name":"Coinbase","file":"COIN.webp","names":["Coinbase"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/COIN.webp","sha256":"e73f86c295c46d83c5575b98ea332054acf5806d5f1d6fc4d77df4f1417b652f","bytes":960},{"ticker":"MSTR","name":"Strategy","file":"MSTR.webp","names":["MicroStrategy","Strategy (MSTR)"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/MSTR.webp","sha256":"41bce162813294a25cc7a60963ceaba45ff925479893d4f16e94a077326c8055","bytes":498},{"ticker":"HOOD","name":"Robinhood","file":"HOOD.webp","names":["Robinhood"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/HOOD.webp","sha256":"6911e034f8e305db5f4f55dce05b0f8614e1ac75d6086b4866bbfef86ad33b1e","bytes":974},{"ticker":"SOFI","name":"SoFi Technologies","file":"SOFI.webp","names":["SoFi Technologies"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/SOFI.webp","sha256":"b219ae6eae5368e60399e1f85004f7e9648d4cf2c977a32d766e234c99be4868","bytes":1734},{"ticker":"NU","name":"Nu Holdings","file":"NU.webp","names":["Nu Holdings"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/NU.webp","sha256":"3baa0e7335e76bb12e8e303800c6de9169778ec5bc80ce77c2dfbca6f847902b","bytes":564},{"ticker":"CRCL","name":"Circle","file":"CRCL.webp","names":["Circle Internet Group","Circle (CRCL)"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/CRCL.webp","sha256":"dcd52fb99485e1d3f685312526eb65d3f5ce12fc5e6143e25689ab82ce6fd175","bytes":2850},{"ticker":"PYPL","name":"PayPal","file":"PYPL.webp","names":["PayPal"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/PYPL.webp","sha256":"57423d9d7bf2a3bf32f5080a22e5c813f9d83c34eaafd5435ebb00400347a667","bytes":1326},{"ticker":"AFRM","name":"Affirm","file":"AFRM.webp","names":["Affirm Holdings","Affirm (AFRM)"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/AFRM.webp","sha256":"386c5122a17b4270d39507ac3b545877fb93f4a533d210dcec44eef9a0ce435c","bytes":1146},{"ticker":"RKLB","name":"Rocket Lab","file":"RKLB.webp","names":["Rocket Lab"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/RKLB.webp","sha256":"3edf41c4b2dbbd725a4a186e6f594a2770fa549c40fd20d2045d1f1654e0adcf","bytes":602},{"ticker":"ASTS","name":"AST SpaceMobile","file":"ASTS.webp","names":["AST SpaceMobile"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/ASTS.webp","sha256":"4dcc5476c1207294f56eeadfab58ed9af9005829b9d5bd627f640218dd600fb1","bytes":442},{"ticker":"IONQ","name":"IonQ","file":"IONQ.webp","names":["IonQ"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/IONQ.webp","sha256":"a870392c1f1a64f3e01053e39c1dd41074e0e85d2c38273abe76c821609d01d0","bytes":2346},{"ticker":"RGTI","name":"Rigetti Computing","file":"RGTI.webp","names":["Rigetti Computing"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/RGTI.webp","sha256":"2862ced3ce1dd011048d3c90c5a7f001cf4792295f3f6ae59b3288b91c990462","bytes":480},{"ticker":"QBTS","name":"D-Wave Quantum","file":"QBTS.webp","names":["D-Wave Quantum"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/QBTS.webp","sha256":"1b20f49e3696ab91552eab330d7752b8ea48b08ef7c1a993972ee70b1ffc3b39","bytes":676},{"ticker":"LUNR","name":"Intuitive Machines","file":"LUNR.webp","names":["Intuitive Machines"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/LUNR.webp","sha256":"ff2008869d2faf0b0d2486504c45cc3fd3b3d9d67b7665fb498dd83590c44d87","bytes":582},{"ticker":"RDW","name":"Redwire","file":"RDW.webp","names":["Redwire"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/RDW.webp","sha256":"58f74e1c8fb2f225cc3a2479289d79cacabdf8a29c1dd4e0ec46b47951f12a9a","bytes":1908},{"ticker":"BE","name":"Bloom Energy","file":"BE.webp","names":["Bloom Energy"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/BE.webp","sha256":"3012afd4dd21c7b312785ef597ee0075be863ad5840a33a520a2be14e6e9112f","bytes":1030},{"ticker":"OKLO","name":"Oklo","file":"OKLO.webp","names":["Oklo"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/OKLO.webp","sha256":"8be96aaf939d7c094d623065ccc3d615a942dd32579d4cb3c25b3798b2a4e03a","bytes":842},{"ticker":"SMR","name":"NuScale Power","file":"SMR.webp","names":["NuScale Power"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/SMR.webp","sha256":"5963849d11172fda91aba8c0536d71efca423412ef437071bfc8e16af389bbd8","bytes":1326},{"ticker":"IREN","name":"IREN","file":"IREN.webp","names":["IREN"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/IREN.webp","sha256":"6a7cb4038599ed4c0ebdea1c810697b6bfb78d95cb1f21b446fa9cba9a74935d","bytes":1252},{"ticker":"ENPH","name":"Enphase Energy","file":"ENPH.webp","names":["Enphase Energy"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/ENPH.webp","sha256":"e638a8c2c205c771677a1b7a9ce053167c1e37def3c30079f50ec87df4e665dd","bytes":944},{"ticker":"FSLR","name":"First Solar","file":"FSLR.webp","names":["First Solar"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/FSLR.webp","sha256":"ea5a757945f5235f412af3b0449f179fe183e02dc3f0a8b77d70b31d3a18a625","bytes":938},{"ticker":"HIMS","name":"Hims & Hers Health","file":"HIMS.webp","names":["Hims & Hers Health"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/HIMS.webp","sha256":"843d4eaa58874e80e7a7ae89b7000482a5b22641753720ee93794956d9940d49","bytes":826},{"ticker":"RDDT","name":"Reddit","file":"RDDT.webp","names":["Reddit"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/RDDT.webp","sha256":"1f0e4f3d1ca11bf1bc5856e20bc42ae7f2b867adc72917394fcd0e99028ded7c","bytes":3312},{"ticker":"DUOL","name":"Duolingo","file":"DUOL.webp","names":["Duolingo"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/DUOL.webp","sha256":"b92b80687e7a956ff89cc2fd36760c8be674fc3a0c5067b82df767a2df29f64f","bytes":2830},{"ticker":"RBLX","name":"Roblox","file":"RBLX.webp","names":["Roblox"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/RBLX.webp","sha256":"93c249a9c4ec23da7de2bb2f2cbe5b3114cbccecb7a3a94b0ddb4cd62fb9e95c","bytes":784},{"ticker":"ABNB","name":"Airbnb","file":"ABNB.webp","names":["Airbnb"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/ABNB.webp","sha256":"7b44ae1aaa5299b7c2aad06d4786ee045f834649335b1616149191fc7eabcdd5","bytes":1386},{"ticker":"SPOT","name":"Spotify","file":"SPOT.webp","names":["Spotify"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/SPOT.webp","sha256":"6fe0c583acf7a8c4fb9c0737fe037833d23606567938e4df4b6d3c27058d8559","bytes":1146},{"ticker":"SE","name":"Sea","file":"SE.webp","names":["Sea Limited","Sea Ltd"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/SE.webp","sha256":"d429c6611ed8e3e453583031eae36cafa240d12f5db97a50d95b2225368e5110","bytes":2250},{"ticker":"GRAB","name":"Grab","file":"GRAB.webp","names":["Grab"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/GRAB.webp","sha256":"bef98be422679f99e4a5f9a98821606012e6dc92d327956d0706e571d4123c42","bytes":1428},{"ticker":"NIO","name":"NIO","file":"NIO.webp","names":["NIO"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/NIO.webp","sha256":"20c6dc9a92d5635856422a1977b5b3405c345b9312519d56c06e18e67fd9123b","bytes":696},{"ticker":"XPEV","name":"XPeng","file":"XPEV.webp","names":["XPeng"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/XPEV.webp","sha256":"b25045b2f6ac321aecf10d1d0e0c85ee138b7445597493fd2c9c77832569a679","bytes":490},{"ticker":"BILI","name":"Bilibili","file":"BILI.webp","names":["Bilibili"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/BILI.webp","sha256":"530025c5288efd5a5755fbb4ab347dec3fb4bd2c7d691332e1c3e6b9c6e102a1","bytes":1256},{"ticker":"D05.SI","name":"DBS Group","file":"D05.SI.webp","names":["DBS","DBS Group"],"aliases":["DBS","D05"],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/D05.SI.webp","sha256":"9c2471e1fd69bc39922090630ad36d959b236cf55fc6eff5a25c46db91d451e4","bytes":1618},{"ticker":"O39.SI","name":"OCBC","file":"O39.SI.webp","names":["OCBC","Oversea-Chinese Banking"],"aliases":["OCBC","O39"],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/O39.SI.webp","sha256":"d18f9a9b1ece48b324de28e1f1ea2dd927fd98346c837a82e0033be2bace95bf","bytes":1310},{"ticker":"U11.SI","name":"UOB","file":"U11.SI.webp","names":["UOB","United Overseas Bank"],"aliases":["UOB","U11"],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/U11.SI.webp","sha256":"c9d294635504be5899e9e224a86b469b26cf60c67e7380a3b736499761dc989f","bytes":324},{"ticker":"TEM","name":"Tempus AI","file":"TEM.webp","names":["Tempus AI"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/TEM.webp","sha256":"b232b8028446e0de4f325da32f57c68b5233d51e662d35dca4f771995c762247","bytes":152},{"ticker":"RXRX","name":"Recursion Pharmaceuticals","file":"RXRX.webp","names":["Recursion Pharmaceuticals"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/RXRX.webp","sha256":"4b29df148b2edcf57e973d5e343d21ea8d54cb61c4bbab567407e698b9cea33f","bytes":3946},{"ticker":"RIVN","name":"Rivian","file":"RIVN.webp","names":["Rivian"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/RIVN.webp","sha256":"8295a68fc32f279ac92895cc825edb2408bbae00c036b87852d5b6d63014e3ec","bytes":974},{"ticker":"U","name":"Unity Software","file":"U.webp","names":["Unity Software"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/U.webp","sha256":"9fd3df4a913f53087657a0b8b09d49b0ecb8fc1aa59b5becf393c3040b87eaa4","bytes":910},{"ticker":"PATH","name":"UiPath","file":"PATH.webp","names":["UiPath"],"aliases":[],"group":"additional50","source":"https://companiesmarketcap.com/img/company-logos/64/PATH.webp","sha256":"7cae1ce5c2ccb30e3acc6bfce2273ff85364bf3229351d18530b8cdc858ba5b6","bytes":972}],"attribution":"Company logos belong to their respective owners. Source: CompaniesMarketCap / CompaniesLogo. Editorial company identification; no endorsement implied."}
+{
+  "schema_version": 1,
+  "version": "2026-11-21",
+  "aliases": {
+    "GOOGL": "GOOG",
+    "BRK.B": "BRK-B",
+    "BRK/B": "BRK-B",
+    "BRK_B": "BRK-B",
+    "BRK.A": "BRK-B",
+    "TSMC": "TSM",
+    "DBS": "D05.SI",
+    "D05": "D05.SI",
+    "OCBC": "O39.SI",
+    "O39": "O39.SI",
+    "UOB": "U11.SI",
+    "U11": "U11.SI",
+    "Z74": "Z74.SI",
+    "SGX:Z74": "Z74.SI",
+    "S63": "S63.SI",
+    "SGX:S63": "S63.SI",
+    "S68": "S68.SI",
+    "SGX:S68": "S68.SI",
+    "C6L": "C6L.SI",
+    "SGX:C6L": "C6L.SI",
+    "F34": "F34.SI",
+    "SGX:F34": "F34.SI",
+    "C38U": "C38U.SI",
+    "SGX:C38U": "C38U.SI",
+    "BN4": "BN4.SI",
+    "SGX:BN4": "BN4.SI",
+    "SGX:D05": "D05.SI",
+    "SGX:O39": "O39.SI",
+    "SGX:U11": "U11.SI"
+  },
+  "tag_map": {
+    "ticker.apple_aapl": "AAPL",
+    "ticker.microsoft_msft": "MSFT",
+    "ticker.nvidia_nvda": "NVDA",
+    "ticker.alphabet_googl": "GOOG",
+    "ticker.amazon_amzn": "AMZN",
+    "ticker.tesla_tsla": "TSLA",
+    "ticker.tsmc_tsm": "TSM",
+    "ticker.broadcom_avgo": "AVGO",
+    "ticker.amd": "AMD",
+    "ticker.intel_intc": "INTC",
+    "ticker.micron_mu": "MU",
+    "ticker.oracle_orcl": "ORCL",
+    "ticker.palantir_pltr": "PLTR",
+    "ticker.netflix_nflx": "NFLX",
+    "ticker.berkshire_hathaway_brk": "BRK-B",
+    "ticker.jpmorgan_jpm": "JPM",
+    "ticker.goldman_sachs_gs": "GS",
+    "ticker.bank_of_america_bac": "BAC",
+    "ticker.citigroup_c": "C",
+    "ticker.blackrock_blk": "BLK",
+    "ticker.ocbc_o39": "O39.SI",
+    "ticker.dbs_d05": "D05.SI",
+    "ticker.uob_u11": "U11.SI",
+    "ticker.sea_limited_se": "SE",
+    "ticker.hsbc": "HSBC",
+    "company.abbv": "ABBV",
+    "company.abt": "ABT",
+    "company.alv_de": "ALV.DE",
+    "company.amat": "AMAT",
+    "company.amgn": "AMGN",
+    "company.anet": "ANET",
+    "company.asml": "ASML",
+    "company.axp": "AXP",
+    "company.azn": "AZN",
+    "company.baba": "BABA",
+    "company.bhp": "BHP",
+    "company.cat": "CAT",
+    "company.cba_ax": "CBA.AX",
+    "company.cost": "COST",
+    "company.csco": "CSCO",
+    "company.cvx": "CVX",
+    "company.dell": "DELL",
+    "company.dis": "DIS",
+    "company.ge": "GE",
+    "company.gev": "GEV",
+    "company.gild": "GILD",
+    "company.hd": "HD",
+    "company.ibm": "IBM",
+    "company.ihc_ae": "IHC.AE",
+    "company.itx_mc": "ITX.MC",
+    "company.jnj": "JNJ",
+    "company.ko": "KO",
+    "company.lin": "LIN",
+    "company.lly": "LLY",
+    "company.lrcx": "LRCX",
+    "company.ma": "MA",
+    "company.mc_pa": "MC.PA",
+    "company.mcd": "MCD",
+    "company.mrk": "MRK",
+    "company.ms": "MS",
+    "company.mufg": "MUFG",
+    "company.nee": "NEE",
+    "company.nesn_sw": "NESN.SW",
+    "company.nvs": "NVS",
+    "company.or_pa": "OR.PA",
+    "company.panw": "PANW",
+    "company.pep": "PEP",
+    "company.pg": "PG",
+    "company.pm": "PM",
+    "company.prx_as": "PRX.AS",
+    "company.ro_sw": "RO.SW",
+    "company.rtx": "RTX",
+    "company.ry": "RY",
+    "company.sap": "SAP",
+    "company.shel": "SHEL",
+    "company.shop": "SHOP",
+    "company.sie_de": "SIE.DE",
+    "company.spot": "SPOT",
+    "company.tcehy": "TCEHY",
+    "company.td": "TD",
+    "company.tm": "TM",
+    "company.tmo": "TMO",
+    "company.tte": "TTE",
+    "company.txn": "TXN",
+    "company.unh": "UNH",
+    "company.v": "V",
+    "company.vz": "VZ",
+    "company.wfc": "WFC",
+    "company.wmt": "WMT",
+    "company.xom": "XOM"
+  },
+  "label_map": {
+    "apple / aapl": "AAPL",
+    "microsoft / msft": "MSFT",
+    "nvidia / nvda": "NVDA",
+    "alphabet / googl": "GOOG",
+    "amazon / amzn": "AMZN",
+    "tesla / tsla": "TSLA",
+    "tsmc / tsm": "TSM",
+    "broadcom / avgo": "AVGO",
+    "amd": "AMD",
+    "intel / intc": "INTC",
+    "micron / mu": "MU",
+    "oracle / orcl": "ORCL",
+    "palantir / pltr": "PLTR",
+    "netflix / nflx": "NFLX",
+    "berkshire hathaway / brk": "BRK-B",
+    "jpmorgan / jpm": "JPM",
+    "goldman sachs / gs": "GS",
+    "bank of america / bac": "BAC",
+    "citigroup / c": "C",
+    "blackrock / blk": "BLK",
+    "ocbc / o39": "O39.SI",
+    "dbs / d05": "D05.SI",
+    "uob / u11": "U11.SI",
+    "sea limited / se": "SE",
+    "hsbc": "HSBC",
+    "abbvie": "ABBV",
+    "abbott laboratories": "ABT",
+    "allianz": "ALV.DE",
+    "applied materials": "AMAT",
+    "amgen": "AMGN",
+    "arista networks": "ANET",
+    "asml": "ASML",
+    "american express": "AXP",
+    "astrazeneca": "AZN",
+    "alibaba": "BABA",
+    "bhp group": "BHP",
+    "caterpillar": "CAT",
+    "commonwealth bank of australia": "CBA.AX",
+    "costco": "COST",
+    "cisco": "CSCO",
+    "chevron": "CVX",
+    "dell technologies": "DELL",
+    "walt disney company": "DIS",
+    "ge aerospace": "GE",
+    "ge vernova": "GEV",
+    "gilead sciences": "GILD",
+    "home depot": "HD",
+    "ibm": "IBM",
+    "international holding company": "IHC.AE",
+    "inditex": "ITX.MC",
+    "johnson & johnson": "JNJ",
+    "coca-cola": "KO",
+    "linde": "LIN",
+    "eli lilly": "LLY",
+    "lam research": "LRCX",
+    "mastercard": "MA",
+    "lvmh": "MC.PA",
+    "mcdonald's": "MCD",
+    "merck & co.": "MRK",
+    "morgan stanley": "MS",
+    "mitsubishi ufj financial": "MUFG",
+    "nextera energy": "NEE",
+    "nestle": "NESN.SW",
+    "novartis": "NVS",
+    "l'oreal": "OR.PA",
+    "palo alto networks": "PANW",
+    "pepsico": "PEP",
+    "procter & gamble": "PG",
+    "philip morris international": "PM",
+    "prosus": "PRX.AS",
+    "roche": "RO.SW",
+    "rtx corporation": "RTX",
+    "royal bank of canada": "RY",
+    "sap": "SAP",
+    "shell": "SHEL",
+    "shopify": "SHOP",
+    "siemens": "SIE.DE",
+    "spotify": "SPOT",
+    "tencent": "TCEHY",
+    "toronto-dominion bank": "TD",
+    "toyota": "TM",
+    "thermo fisher scientific": "TMO",
+    "totalenergies": "TTE",
+    "texas instruments": "TXN",
+    "unitedhealth group": "UNH",
+    "visa": "V",
+    "verizon": "VZ",
+    "wells fargo": "WFC",
+    "walmart": "WMT",
+    "exxonmobil": "XOM",
+    "anthropic": "ANT",
+    "arm holdings": "ARM",
+    "cerebras": "CBRS",
+    "cerebras systems": "CBRS",
+    "sandisk": "SNDK",
+    "western digital": "WDC",
+    "seagate technology": "STX",
+    "seagate": "STX",
+    "lumentum": "LITE",
+    "coherent corp.": "COHR",
+    "coherent corp": "COHR",
+    "vertiv": "VRT",
+    "vertiv holdings": "VRT",
+    "astera labs": "ALAB",
+    "credo technology": "CRDO",
+    "monolithic power systems": "MPWR",
+    "nxp semiconductors": "NXPI",
+    "qualcomm": "QCOM",
+    "kla": "KLAC",
+    "analog devices": "ADI",
+    "amphenol": "APH",
+    "corning": "GLW",
+    "teradyne": "TER",
+    "on semiconductor": "ON",
+    "onsemi": "ON",
+    "rambus": "RMBS",
+    "amkor technology": "AMKR",
+    "celestica": "CLS",
+    "applied optoelectronics": "AAOI",
+    "applied digital": "APLD",
+    "applovin": "APP",
+    "servicenow": "NOW",
+    "salesforce": "CRM",
+    "intuit": "INTU",
+    "adobe": "ADBE",
+    "uber": "UBER",
+    "doordash": "DASH",
+    "mercadolibre": "MELI",
+    "take-two interactive": "TTWO",
+    "block inc": "XYZ",
+    "block": "XYZ",
+    "block, inc.": "XYZ",
+    "carvana": "CVNA",
+    "webull": "BULL",
+    "figma": "FIG",
+    "gitlab": "GTLB",
+    "samsara": "IOT",
+    "atlassian": "TEAM",
+    "hubspot": "HUBS",
+    "bill.com": "BILL",
+    "bill holdings": "BILL",
+    "rubrik": "RBRK",
+    "twilio": "TWLO",
+    "jd.com": "JD",
+    "jd logistics parent jd.com": "JD",
+    "pdd holdings": "PDD",
+    "meituan": "3690.HK",
+    "netease": "NTES",
+    "baidu": "BIDU",
+    "nike": "NKE",
+    "ross stores": "ROST",
+    "starbucks": "SBUX",
+    "lululemon athletica": "LULU",
+    "cava group": "CAVA",
+    "chipotle mexican grill": "CMG",
+    "target corporation": "TGT",
+    "target corp": "TGT",
+    "target": "TGT",
+    "royal caribbean group": "RCL",
+    "carnival corp": "CCL",
+    "carnival corporation": "CCL",
+    "carnival cruise": "CCL",
+    "united airlines holdings": "UAL",
+    "delta air lines": "DAL",
+    "booking.com": "BKNG",
+    "booking holdings": "BKNG",
+    "booking holdings (booking.com)": "BKNG",
+    "coupang": "CPNG",
+    "nintendo": "7974.T",
+    "sony": "SONY",
+    "moderna": "MRNA",
+    "biontech": "BNTX",
+    "novo nordisk": "NVO",
+    "viking therapeutics": "VKTX",
+    "crispr therapeutics": "CRSP",
+    "alnylam pharmaceuticals": "ALNY",
+    "insmed": "INSM",
+    "vertex pharmaceuticals": "VRTX",
+    "regeneron pharmaceuticals": "REGN",
+    "intuitive surgical": "ISRG",
+    "boeing": "BA",
+    "freeport-mcmoran": "FCX",
+    "deere & company (john deere)": "DE",
+    "deere & company": "DE",
+    "john deere": "DE",
+    "eaton": "ETN",
+    "cameco": "CCJ",
+    "constellation energy": "CEG",
+    "vistra energy": "VST",
+    "vistra corp": "VST",
+    "vistra": "VST",
+    "mp materials": "MP",
+    "archer aviation": "ACHR",
+    "joby aviation": "JOBY",
+    "aerovironment": "AVAV",
+    "kratos defense & security solutions": "KTOS",
+    "usa rare earth": "USAR",
+    "rolls-royce holdings": "RR.L",
+    "rolls-royce": "RR.L",
+    "bae systems": "BA.L",
+    "rheinmetall": "RHM.F",
+    "byd": "002594.SZ",
+    "byd company": "002594.SZ",
+    "interactive brokers": "IBKR",
+    "cboe global markets": "CBOE",
+    "cme group": "CME",
+    "futu holdings": "FUTU",
+    "futu": "FUTU",
+    "bitmine immersion": "BMNR",
+    "bitmine": "BMNR",
+    "bitmine immersion technologies": "BMNR",
+    "mara holdings": "MARA",
+    "bullish exchange": "BLSH",
+    "bullish global": "BLSH",
+    "bullish": "BLSH",
+    "opendoor technologies": "OPEN",
+    "opendoor": "OPEN",
+    "singapore telecommunications": "Z74.SI",
+    "singtel": "Z74.SI",
+    "singapore technologies engineering": "S63.SI",
+    "st engineering": "S63.SI",
+    "sgx group": "S68.SI",
+    "singapore exchange": "S68.SI",
+    "singapore airlines": "C6L.SI",
+    "wilmar international": "F34.SI",
+    "capitaland integrated commercial trust": "C38U.SI",
+    "cict": "C38U.SI",
+    "keppel group": "BN4.SI",
+    "keppel": "BN4.SI",
+    "keppel ltd": "BN4.SI",
+    "us dollar": "CURRENCY:USD",
+    "usd": "CURRENCY:USD",
+    "u.s. dollar": "CURRENCY:USD",
+    "united states dollar": "CURRENCY:USD",
+    "singapore dollar": "CURRENCY:SGD",
+    "sgd": "CURRENCY:SGD",
+    "japanese yen": "CURRENCY:JPY",
+    "jpy": "CURRENCY:JPY",
+    "yen": "CURRENCY:JPY",
+    "swiss franc": "CURRENCY:CHF",
+    "chf": "CURRENCY:CHF",
+    "jerome powell": "PERSON:JEROME-POWELL",
+    "kevin warsh": "PERSON:KEVIN-WARSH",
+    "christine lagarde": "PERSON:CHRISTINE-LAGARDE",
+    "kazuo ueda": "PERSON:KAZUO-UEDA",
+    "martin schlegel": "PERSON:MARTIN-SCHLEGEL",
+    "lawrence wong": "PERSON:LAWRENCE-WONG",
+    "donald trump": "PERSON:DONALD-TRUMP",
+    "xi jinping": "PERSON:XI-JINPING",
+    "elon musk": "PERSON:ELON-MUSK",
+    "jensen huang": "PERSON:JENSEN-HUANG",
+    "lisa su": "PERSON:LISA-SU",
+    "warren buffett": "PERSON:WARREN-BUFFETT"
+  },
+  "companies": [
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "file": "AAPL.webp",
+      "names": [
+        "Apple"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AAPL.webp",
+      "sha256": "37e915bf63c31841fe2fb008e7bf1d4c1aaa57484a1f40fad2e73881f6b98e50",
+      "bytes": 650
+    },
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "file": "NVDA.webp",
+      "names": [
+        "NVIDIA"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NVDA.webp",
+      "sha256": "85d8f5801a859e344e924e7184919f90deb0775ef44b526fbf0239eeadd59ff3",
+      "bytes": 1090
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "file": "MSFT.webp",
+      "names": [
+        "Microsoft"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MSFT.webp",
+      "sha256": "ae240a15c449fe80e8b6cb55ad00449f51d314274fbd724c32b0658c81c10801",
+      "bytes": 104
+    },
+    {
+      "ticker": "GOOG",
+      "name": "Alphabet (Google)",
+      "file": "GOOG.webp",
+      "names": [
+        "Alphabet",
+        "Google"
+      ],
+      "aliases": [
+        "GOOGL"
+      ],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GOOG.webp",
+      "sha256": "91143a9242b6759a40a71e137996bdeb2dc39f6c1f7e02537efea889781826b3",
+      "bytes": 2722
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "file": "AMZN.webp",
+      "names": [
+        "Amazon"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AMZN.webp",
+      "sha256": "bd33c0b0ca295c499ae08d0c07fb86d1265483aa6c6c7e2dd1626212316a953c",
+      "bytes": 1080
+    },
+    {
+      "ticker": "TSM",
+      "name": "TSMC",
+      "file": "TSM.webp",
+      "names": [
+        "TSMC",
+        "Taiwan Semiconductor"
+      ],
+      "aliases": [
+        "TSMC"
+      ],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TSM.webp",
+      "sha256": "307f70cb427e428984e6563060b7f28530b32fac0e581687a6d667d5873f7463",
+      "bytes": 3722
+    },
+    {
+      "ticker": "2222.SR",
+      "name": "Saudi Aramco",
+      "file": "2222.SR.webp",
+      "names": [
+        "Saudi Aramco"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/2222.SR.webp",
+      "sha256": "1ae639f7821f8c220f914ee1763c9b0b7821d0b13c9d52c93331d08c138f6c91",
+      "bytes": 5044
+    },
+    {
+      "ticker": "SPCX",
+      "name": "SpaceX",
+      "file": "SPCX.webp",
+      "names": [
+        "SpaceX"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SPCX.webp",
+      "sha256": "ede74aea4c5beeccf86acf90a3baaecd8bc9dcfe83e91a76698aa2c5da5827ad",
+      "bytes": 560
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms (Facebook)",
+      "file": "META.webp",
+      "names": [
+        "Meta Platforms",
+        "Facebook"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/META.webp",
+      "sha256": "71ec68c2cdf267743280691890b470699df796700b58e36c6670fa8da031410f",
+      "bytes": 1554
+    },
+    {
+      "ticker": "AVGO",
+      "name": "Broadcom",
+      "file": "AVGO.webp",
+      "names": [
+        "Broadcom"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AVGO.webp",
+      "sha256": "4f68bcc4262e72dbff68b39defc680ef76fcfc6f544563cf9c72fccbb2d34cb5",
+      "bytes": 1916
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "file": "TSLA.webp",
+      "names": [
+        "Tesla"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TSLA.webp",
+      "sha256": "0b2985fea15d42e4cd82e68a6837a4eb273b007ada66da3f200f7317af6b8b95",
+      "bytes": 956
+    },
+    {
+      "ticker": "BRK-B",
+      "name": "Berkshire Hathaway",
+      "file": "BRK-B.webp",
+      "names": [
+        "Berkshire Hathaway",
+        "Berkshire"
+      ],
+      "aliases": [
+        "BRK.B",
+        "BRK/B",
+        "BRK_B",
+        "BRK.A"
+      ],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BRK-B.webp",
+      "sha256": "55883919e3e6e351a1afd22135053864e9a86c0055b071a0647db1e940635233",
+      "bytes": 540
+    },
+    {
+      "ticker": "LLY",
+      "name": "Eli Lilly",
+      "file": "LLY.webp",
+      "names": [
+        "Eli Lilly"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/LLY.webp",
+      "sha256": "186619ccb1c54ed88b8048ab69c103128bb095ec63ab4d89ecf0195fb01820e2",
+      "bytes": 1126
+    },
+    {
+      "ticker": "WMT",
+      "name": "Walmart",
+      "file": "WMT.webp",
+      "names": [
+        "Walmart"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/WMT.webp",
+      "sha256": "1188415bbca022faa65914c6b7b1a5c4eda2993a90adfc185a6481cabca36f2d",
+      "bytes": 904
+    },
+    {
+      "ticker": "005930.KS",
+      "name": "Samsung",
+      "file": "005930.KS.webp",
+      "names": [
+        "Samsung"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/005930.KS.webp",
+      "sha256": "e52651569cde479cc3b21d5b4d71fc95eccc2f0bf924c1a717900520dae3d287",
+      "bytes": 744
+    },
+    {
+      "ticker": "JPM",
+      "name": "JPMorgan Chase",
+      "file": "JPM.webp",
+      "names": [
+        "JPMorgan Chase"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/JPM.webp",
+      "sha256": "69642e8d7b20139d874c479e89fc76d07cc6482b91dc156eedce180f566859ca",
+      "bytes": 740
+    },
+    {
+      "ticker": "V",
+      "name": "Visa",
+      "file": "V.webp",
+      "names": [
+        "Visa"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/V.webp",
+      "sha256": "f3824e573c9819f8cf8f41c6c3ca6678266b03037a8745f74d406e57bd4098f8",
+      "bytes": 840
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "file": "MU.webp",
+      "names": [
+        "Micron Technology"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MU.webp",
+      "sha256": "19049fc5ccece0676f213c02c2ac8bc3d7341d5d99dda839677a7d12d5852c95",
+      "bytes": 442
+    },
+    {
+      "ticker": "XOM",
+      "name": "Exxon Mobil",
+      "file": "XOM.webp",
+      "names": [
+        "Exxon Mobil"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/XOM.webp",
+      "sha256": "a6a608075ae9fad6eafec8e88692094225e86e9556af930e06f2a21e0cee9742",
+      "bytes": 946
+    },
+    {
+      "ticker": "AMD",
+      "name": "AMD",
+      "file": "AMD.webp",
+      "names": [
+        "AMD"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AMD.webp",
+      "sha256": "d4be4681128918a9dbc69ebb3c65880413bb58b878260ba81444a1ece479d2cc",
+      "bytes": 348
+    },
+    {
+      "ticker": "JNJ",
+      "name": "Johnson & Johnson",
+      "file": "JNJ.webp",
+      "names": [
+        "Johnson & Johnson"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/JNJ.webp",
+      "sha256": "8404a4141314878b75f78a5413e6d70f77a547e7c128808d6762969fc400fc47",
+      "bytes": 780
+    },
+    {
+      "ticker": "000660.KS",
+      "name": "SK Hynix",
+      "file": "000660.KS.webp",
+      "names": [
+        "SK Hynix"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/000660.KS.webp",
+      "sha256": "ae830e03cd059801ee14b67865ec19f7e03fb039f76bab6e79a4c02949453cd1",
+      "bytes": 1460
+    },
+    {
+      "ticker": "MA",
+      "name": "Mastercard",
+      "file": "MA.webp",
+      "names": [
+        "Mastercard"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MA.webp",
+      "sha256": "a380230d5441752ce97aa922f951b53b71148b1b9aa2d954c7264c489949e221",
+      "bytes": 994
+    },
+    {
+      "ticker": "ASML",
+      "name": "ASML",
+      "file": "ASML.webp",
+      "names": [
+        "ASML"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ASML.webp",
+      "sha256": "5cfc15144724e95e5eafe573186866ef2aa0adcf2020c378d455bd132102ee9d",
+      "bytes": 848
+    },
+    {
+      "ticker": "ABBV",
+      "name": "AbbVie",
+      "file": "ABBV.webp",
+      "names": [
+        "AbbVie"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ABBV.webp",
+      "sha256": "b5ba61ea362893a935b0d3dce557c518e28040a12bcba05111c092c40b7bb1aa",
+      "bytes": 768
+    },
+    {
+      "ticker": "TCEHY",
+      "name": "Tencent",
+      "file": "TCEHY.webp",
+      "names": [
+        "Tencent"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TCEHY.webp",
+      "sha256": "04cd01de2e94b8e9ede9400957ece7e9198fa35461fbfb65bba21384d9fa6f84",
+      "bytes": 530
+    },
+    {
+      "ticker": "COST",
+      "name": "Costco",
+      "file": "COST.webp",
+      "names": [
+        "Costco"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/COST.webp",
+      "sha256": "4b2e3aead8899d548f4736aec164757c3d2c8770cbb0c905dcffe03c1fc2e1b2",
+      "bytes": 2560
+    },
+    {
+      "ticker": "601939.SS",
+      "name": "China Construction Bank",
+      "file": "601939.SS.webp",
+      "names": [
+        "China Construction Bank"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/601939.SS.webp",
+      "sha256": "1a0bdc04fa589ad1ccb2cfa4ca642e83da2a44eb34e121f6214ee89c1bc8107f",
+      "bytes": 880
+    },
+    {
+      "ticker": "688825.SS",
+      "name": "CXMT",
+      "file": "688825.SS.webp",
+      "names": [
+        "CXMT"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/688825.SS.webp",
+      "sha256": "4a4a5403078f137d7b1defcf361e49dfa7660e0587dff254a6a1e939ccbc727f",
+      "bytes": 858
+    },
+    {
+      "ticker": "CVX",
+      "name": "Chevron",
+      "file": "CVX.webp",
+      "names": [
+        "Chevron"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CVX.webp",
+      "sha256": "428f8250dcee4c94597d4f2ded50cbb01299923de10ee97ff0a842f65acde407",
+      "bytes": 1262
+    },
+    {
+      "ticker": "KO",
+      "name": "Coca-Cola",
+      "file": "KO.webp",
+      "names": [
+        "Coca-Cola"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/KO.webp",
+      "sha256": "6d75924b7dad2c67fa8a22a0d676cfb674e6174021c4584b8d42dec04ccd4b8c",
+      "bytes": 2264
+    },
+    {
+      "ticker": "PG",
+      "name": "Procter & Gamble",
+      "file": "PG.webp",
+      "names": [
+        "Procter & Gamble"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PG.webp",
+      "sha256": "2a70c96987ec2ca6a3615f6dc69b5f021a5f77fc6472ec719676ec18897a24ea",
+      "bytes": 4414
+    },
+    {
+      "ticker": "RO.SW",
+      "name": "Roche",
+      "file": "RO.SW.webp",
+      "names": [
+        "Roche"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RO.SW.webp",
+      "sha256": "d905c988470b28b99918c70972fea6d60992a1844dce00f1310747249b1b6c90",
+      "bytes": 992
+    },
+    {
+      "ticker": "601288.SS",
+      "name": "Agricultural Bank of China",
+      "file": "601288.SS.webp",
+      "names": [
+        "Agricultural Bank of China"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/601288.SS.webp",
+      "sha256": "e447d5648ef1b479a757ffa483bc97664e737eb3f961cf936a977201cc302261",
+      "bytes": 1136
+    },
+    {
+      "ticker": "CSCO",
+      "name": "Cisco",
+      "file": "CSCO.webp",
+      "names": [
+        "Cisco"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CSCO.webp",
+      "sha256": "613b9d83553f99ba707a9cebcb3960a30725e5cb502cbaaa1e4616a8007f4f7d",
+      "bytes": 862
+    },
+    {
+      "ticker": "PLTR",
+      "name": "Palantir",
+      "file": "PLTR.webp",
+      "names": [
+        "Palantir"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PLTR.webp",
+      "sha256": "ed333a47b53336987051be756c1c5eb6296b443df73ce86a81eaf3704a7836b9",
+      "bytes": 1052
+    },
+    {
+      "ticker": "MRK",
+      "name": "Merck",
+      "file": "MRK.webp",
+      "names": [
+        "Merck"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MRK.webp",
+      "sha256": "55bd7b7efb73dc9db8c53b6b6131076533d37e8278b1a060c1dc022f3bf46cb6",
+      "bytes": 812
+    },
+    {
+      "ticker": "1398.HK",
+      "name": "ICBC",
+      "file": "1398.HK.webp",
+      "names": [
+        "ICBC"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/1398.HK.webp",
+      "sha256": "3143632c9035b4f1af9d37f002178652cd4599599e3300281952bb447b3f0b6e",
+      "bytes": 990
+    },
+    {
+      "ticker": "ORCL",
+      "name": "Oracle",
+      "file": "ORCL.webp",
+      "names": [
+        "Oracle"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ORCL.webp",
+      "sha256": "07adc10f8765d311332d23195060d1c937ad12044f5f0f3eb585dff6a0385159",
+      "bytes": 626
+    },
+    {
+      "ticker": "UNH",
+      "name": "UnitedHealth",
+      "file": "UNH.webp",
+      "names": [
+        "UnitedHealth"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/UNH.webp",
+      "sha256": "5dfb9e70154479e93e146b8a5d9a9a3f7dfeda23bf5bdfacacbe8f298f6b0cd0",
+      "bytes": 560
+    },
+    {
+      "ticker": "HD",
+      "name": "Home Depot",
+      "file": "HD.webp",
+      "names": [
+        "Home Depot"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/HD.webp",
+      "sha256": "3e318df8dd3a5d00b0d804795a1ca1fa7f9f7d6590676e9c58ad9c57b54e793e",
+      "bytes": 2988
+    },
+    {
+      "ticker": "BAC",
+      "name": "Bank of America",
+      "file": "BAC.webp",
+      "names": [
+        "Bank of America"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BAC.webp",
+      "sha256": "87165bfd724d871fcf57989139c02ee5a6304ff7d793f80d5162db708345571c",
+      "bytes": 1070
+    },
+    {
+      "ticker": "601988.SS",
+      "name": "Bank of China",
+      "file": "601988.SS.webp",
+      "names": [
+        "Bank of China"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/601988.SS.webp",
+      "sha256": "01240c04cd643d56934faa7c305b0e3c6c7dde968a561ea932380cb4f1ca971e",
+      "bytes": 1080
+    },
+    {
+      "ticker": "GE",
+      "name": "General Electric",
+      "file": "GE.webp",
+      "names": [
+        "General Electric"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GE.webp",
+      "sha256": "3878852017900839a23031569ced87be1cff759b859636d7a3208b650b8edb88",
+      "bytes": 3910
+    },
+    {
+      "ticker": "PM",
+      "name": "Philip Morris International",
+      "file": "PM.webp",
+      "names": [
+        "Philip Morris International"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PM.webp",
+      "sha256": "1ac9d46b9d92682367ac193ec3e33900bbae57bd235595477062f30d8666092d",
+      "bytes": 2294
+    },
+    {
+      "ticker": "NVS",
+      "name": "Novartis",
+      "file": "NVS.webp",
+      "names": [
+        "Novartis"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NVS.webp",
+      "sha256": "24e229346f383537459280f48145b99c163029349eecf5543cc83ed7f389f6c7",
+      "bytes": 1374
+    },
+    {
+      "ticker": "HSBC",
+      "name": "HSBC",
+      "file": "HSBC.webp",
+      "names": [
+        "HSBC"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/HSBC.webp",
+      "sha256": "66d7eca6aab011439e4ba44027d8d224462bcf8e8fbdb20d56cedf7dd61a9cca",
+      "bytes": 812
+    },
+    {
+      "ticker": "AZN",
+      "name": "AstraZeneca",
+      "file": "AZN.webp",
+      "names": [
+        "AstraZeneca"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AZN.webp",
+      "sha256": "5d846e08390f6be532639d6758fc6208b1d55b2a952756812cb5250793cbed8d",
+      "bytes": 1132
+    },
+    {
+      "ticker": "MS",
+      "name": "Morgan Stanley",
+      "file": "MS.webp",
+      "names": [
+        "Morgan Stanley"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MS.webp",
+      "sha256": "3bf2816e0bff643e0693ca7f2431363b3a3ff05aae86999b7eb130054d180dd8",
+      "bytes": 892
+    },
+    {
+      "ticker": "SHEL",
+      "name": "Shell",
+      "file": "SHEL.webp",
+      "names": [
+        "Shell"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SHEL.webp",
+      "sha256": "6905efde5d50c047dd94aa3bc03447e51a5ae9c4c38a1ff71b2d6f52653d131e",
+      "bytes": 2800
+    },
+    {
+      "ticker": "RY",
+      "name": "Royal Bank Of Canada",
+      "file": "RY.webp",
+      "names": [
+        "Royal Bank of Canada"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RY.webp",
+      "sha256": "a97f3627c3132e22bb98bebcb46b799ed641aec9bd6ddd8cf7bd74b8ad31f9b1",
+      "bytes": 4128
+    },
+    {
+      "ticker": "SAP",
+      "name": "SAP",
+      "file": "SAP.webp",
+      "names": [
+        "SAP"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SAP.webp",
+      "sha256": "488ca2de127ea3f7aaa89d25e041e52e2f6e466c2a17f70dec68464ab32d6e2f",
+      "bytes": 1712
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel",
+      "file": "INTC.webp",
+      "names": [
+        "Intel"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/INTC.webp",
+      "sha256": "e9df997d7416eecb849b7b02cb591b83e00d03542e9cdb8efb05827bea3c44d6",
+      "bytes": 642
+    },
+    {
+      "ticker": "NFLX",
+      "name": "Netflix",
+      "file": "NFLX.webp",
+      "names": [
+        "Netflix"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NFLX.webp",
+      "sha256": "1ec9cd50ed002403daf3420559ae51833c8eb83e007501138f8b8546de94d293",
+      "bytes": 854
+    },
+    {
+      "ticker": "OR.PA",
+      "name": "L'Oréal",
+      "file": "OR.PA.webp",
+      "names": [
+        "L'Oréal"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/OR.PA.webp",
+      "sha256": "3682f01735acff18cb2ef0cd064462835fe7622c7a67f288f18c48c2cf1c4dcf",
+      "bytes": 692
+    },
+    {
+      "ticker": "NESN.SW",
+      "name": "Nestlé",
+      "file": "NESN.SW.webp",
+      "names": [
+        "Nestlé"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NESN.SW.webp",
+      "sha256": "5d00f63a2eee8f1e883fbd84bb6876b356a3ac639415e7ae0f7a70dcb5624abe",
+      "bytes": 2032
+    },
+    {
+      "ticker": "600519.SS",
+      "name": "Kweichow Moutai",
+      "file": "600519.SS.webp",
+      "names": [
+        "Kweichow Moutai"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/600519.SS.webp",
+      "sha256": "ee31ccf6b2ddc52018d9932bd5362d513af5ab4a7aa774e467a8da090ede4b42",
+      "bytes": 3684
+    },
+    {
+      "ticker": "BABA",
+      "name": "Alibaba",
+      "file": "BABA.webp",
+      "names": [
+        "Alibaba"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BABA.webp",
+      "sha256": "5a167b7e834978dba8d872d5346ad3b41cc53d475c5d138118971dc2aaf4fba7",
+      "bytes": 950
+    },
+    {
+      "ticker": "RTX",
+      "name": "RTX",
+      "file": "RTX.webp",
+      "names": [
+        "RTX"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RTX.webp",
+      "sha256": "0ec87fab22feb39d4c77bcaaccf0468237403bc4605174ea4043cbe1db50ea40",
+      "bytes": 1710
+    },
+    {
+      "ticker": "PANW",
+      "name": "Palo Alto Networks",
+      "file": "PANW.webp",
+      "names": [
+        "Palo Alto Networks"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PANW.webp",
+      "sha256": "fc008545bb52a1204bafc488d0d8b452ed3aecd6b7726480d0113bfe528ee19f",
+      "bytes": 678
+    },
+    {
+      "ticker": "TM",
+      "name": "Toyota",
+      "file": "TM.webp",
+      "names": [
+        "Toyota"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TM.webp",
+      "sha256": "9ae3f2aa2b30c737cd1dc2827ab02067148acb3de68d621fd4e8b03164b436d4",
+      "bytes": 1336
+    },
+    {
+      "ticker": "WFC",
+      "name": "Wells Fargo",
+      "file": "WFC.webp",
+      "names": [
+        "Wells Fargo"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/WFC.webp",
+      "sha256": "c565dea8f42490351401a8d580f5da64a097dd2663f8aa25056e02aaa39e6bd2",
+      "bytes": 2108
+    },
+    {
+      "ticker": "TXN",
+      "name": "Texas Instruments",
+      "file": "TXN.webp",
+      "names": [
+        "Texas Instruments"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TXN.webp",
+      "sha256": "ee770a3399a128ee6392d30f6c3a91d11a94b7865252cbacb3e47ac842a390cb",
+      "bytes": 950
+    },
+    {
+      "ticker": "AMAT",
+      "name": "Applied Materials",
+      "file": "AMAT.webp",
+      "names": [
+        "Applied Materials"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AMAT.webp",
+      "sha256": "d8638e4611c57339cf4dbfc46e8d5e473cb0dbdc913782d0d9d989bc2b5fba92",
+      "bytes": 2332
+    },
+    {
+      "ticker": "CAT",
+      "name": "Caterpillar",
+      "file": "CAT.webp",
+      "names": [
+        "Caterpillar"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CAT.webp",
+      "sha256": "0b344a1d9ed2bf331827bbee1c27491176820697f49e1ca039d435a46bbe34b2",
+      "bytes": 954
+    },
+    {
+      "ticker": "TMO",
+      "name": "Thermo Fisher Scientific",
+      "file": "TMO.webp",
+      "names": [
+        "Thermo Fisher Scientific"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TMO.webp",
+      "sha256": "5c59b3a48d391a25143aa7bb91c3f2518ffb2519e95f18fd99caa410b53b53fc",
+      "bytes": 118
+    },
+    {
+      "ticker": "GS",
+      "name": "Goldman Sachs",
+      "file": "GS.webp",
+      "names": [
+        "Goldman Sachs"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GS.webp",
+      "sha256": "8f85fc1ef31e3753092832004d4756ff53f7c45031cdb4834d8ab10e3a5601e3",
+      "bytes": 1000
+    },
+    {
+      "ticker": "AMGN",
+      "name": "Amgen",
+      "file": "AMGN.webp",
+      "names": [
+        "Amgen"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AMGN.webp",
+      "sha256": "9308a50e0f855fc810e423ec436fd3c5dd1113be5279e24fb10f55d2191b0fab",
+      "bytes": 508
+    },
+    {
+      "ticker": "0857.HK",
+      "name": "PetroChina",
+      "file": "0857.HK.webp",
+      "names": [
+        "PetroChina"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/0857.HK.webp",
+      "sha256": "eabd9be8d74129de30e8edb61dd80669ca37d8360c7f9bdece21f94644366d09",
+      "bytes": 3074
+    },
+    {
+      "ticker": "LIN",
+      "name": "Linde",
+      "file": "LIN.webp",
+      "names": [
+        "Linde"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/LIN.webp",
+      "sha256": "58f20e3766d7729a3e31636a8e6088bd48e0331bba2f436af3188ad9cc7c0a75",
+      "bytes": 672
+    },
+    {
+      "ticker": "MUFG",
+      "name": "Mitsubishi UFJ Financial",
+      "file": "MUFG.webp",
+      "names": [
+        "Mitsubishi UFJ Financial"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MUFG.webp",
+      "sha256": "8a8ae278e45ca69412117f6fe6d1d612aa40fd04caa4e0e53cc0d164287c5b67",
+      "bytes": 960
+    },
+    {
+      "ticker": "SIE.DE",
+      "name": "Siemens",
+      "file": "SIE.DE.webp",
+      "names": [
+        "Siemens"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SIE.DE.webp",
+      "sha256": "4b284905ee240541b861bd29770fd1b480338d326407b4d8cfac7a12d345f248",
+      "bytes": 792
+    },
+    {
+      "ticker": "IBM",
+      "name": "IBM",
+      "file": "IBM.webp",
+      "names": [
+        "IBM"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/IBM.webp",
+      "sha256": "2eab9384b476b6ba58b9430c9c206cc73b0af3d53d7b301926703d32e6349b7c",
+      "bytes": 630
+    },
+    {
+      "ticker": "MC.PA",
+      "name": "LVMH",
+      "file": "MC.PA.webp",
+      "names": [
+        "LVMH"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MC.PA.webp",
+      "sha256": "da38a3f2279a33268277798980a9b51b320ee60b4c7938fb1236b92527f2dca9",
+      "bytes": 604
+    },
+    {
+      "ticker": "LRCX",
+      "name": "Lam Research",
+      "file": "LRCX.webp",
+      "names": [
+        "Lam Research"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/LRCX.webp",
+      "sha256": "c30b5a5cd4e12b2073d4cb30111a133446f4c4ed770b516c3a83fb036a42de4a",
+      "bytes": 1022
+    },
+    {
+      "ticker": "0941.HK",
+      "name": "China Mobile",
+      "file": "0941.HK.webp",
+      "names": [
+        "China Mobile"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/0941.HK.webp",
+      "sha256": "b08c8b7f51fdc32fdd72b3b61dab6a8f722cb215fb25a6bcc715b568c5bcfd65",
+      "bytes": 2324
+    },
+    {
+      "ticker": "CRWD",
+      "name": "CrowdStrike",
+      "file": "CRWD.webp",
+      "names": [
+        "CrowdStrike"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CRWD.webp",
+      "sha256": "a45d170e16e1c76f2107695393c2e015c8473206d46c40d36aeafabe4f270301",
+      "bytes": 980
+    },
+    {
+      "ticker": "AXP",
+      "name": "American Express",
+      "file": "AXP.webp",
+      "names": [
+        "American Express"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AXP.webp",
+      "sha256": "3fc5f05c24c7ca7cafc475a5c10f1045bb8a47efe473d0416d7e09d40fcac181",
+      "bytes": 2382
+    },
+    {
+      "ticker": "ITX.MC",
+      "name": "Inditex",
+      "file": "ITX.MC.webp",
+      "names": [
+        "Inditex"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ITX.MC.webp",
+      "sha256": "fb18f29e555b2b35315151744905ad59fb12e5bc898dc1bb46f2da0f880798b4",
+      "bytes": 510
+    },
+    {
+      "ticker": "GILD",
+      "name": "Gilead Sciences",
+      "file": "GILD.webp",
+      "names": [
+        "Gilead Sciences"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GILD.webp",
+      "sha256": "2e5236a977a243b79788cd14ca5c27d4569e42ef597b1babfaf8cc095f95c5c2",
+      "bytes": 954
+    },
+    {
+      "ticker": "GEV",
+      "name": "GE Vernova",
+      "file": "GEV.webp",
+      "names": [
+        "GE Vernova"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GEV.webp",
+      "sha256": "ae1e4d86266d76c4cd70d2504f98915d339027602c0a332fcfc23b9104e0509a",
+      "bytes": 2250
+    },
+    {
+      "ticker": "DIS",
+      "name": "Walt Disney",
+      "file": "DIS.webp",
+      "names": [
+        "Walt Disney"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/DIS.webp",
+      "sha256": "a4e05417e5ce8806e6e48aaeefb561c1f3e8ef4d57650f99986c8d55dae72495",
+      "bytes": 1096
+    },
+    {
+      "ticker": "DELL",
+      "name": "Dell",
+      "file": "DELL.webp",
+      "names": [
+        "Dell"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/DELL.webp",
+      "sha256": "720d19c1ef685a03cce1e8c85eac6dde581563646a9ed041d4f04d83126223f8",
+      "bytes": 640
+    },
+    {
+      "ticker": "ANET",
+      "name": "Arista Networks",
+      "file": "ANET.webp",
+      "names": [
+        "Arista Networks"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ANET.webp",
+      "sha256": "2ad582b5a21897c157020e25eaba94a0b70731de36d7186001be073e9192ef35",
+      "bytes": 688
+    },
+    {
+      "ticker": "TD",
+      "name": "Toronto Dominion Bank",
+      "file": "TD.webp",
+      "names": [
+        "Toronto Dominion Bank"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TD.webp",
+      "sha256": "6db8467dbe299ee0f40a12083ecafc0a366c8e8105237bcfd61a28ad7c57ebfe",
+      "bytes": 558
+    },
+    {
+      "ticker": "BHP",
+      "name": "BHP Group",
+      "file": "BHP.webp",
+      "names": [
+        "BHP Group"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BHP.webp",
+      "sha256": "a7bf26c0664df5514a7376defbdb55cc08872cdac7b4ac1f2ce8c83e4b0a325f",
+      "bytes": 534
+    },
+    {
+      "ticker": "ALV.DE",
+      "name": "Allianz SE",
+      "file": "ALV.DE.webp",
+      "names": [
+        "Allianz SE"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ALV.DE.webp",
+      "sha256": "02598b7bd2c3f0989561c25b58c0f9523b0bed34eeba59a5f84236e2b9d54f84",
+      "bytes": 1146
+    },
+    {
+      "ticker": "ABT",
+      "name": "Abbott Laboratories",
+      "file": "ABT.webp",
+      "names": [
+        "Abbott Laboratories"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ABT.webp",
+      "sha256": "d8f0d65f51b54d03e205a3214f65195d794e7812e7069373cad8be6121b2f2bb",
+      "bytes": 438
+    },
+    {
+      "ticker": "IHC.AE",
+      "name": "International Holding Company",
+      "file": "IHC.AE.webp",
+      "names": [
+        "International Holding Company"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/IHC.AE.webp",
+      "sha256": "36d3799243b12c3c997478fa539be8772c5639dfbbef45764e0150fc0a6903f6",
+      "bytes": 4524
+    },
+    {
+      "ticker": "MCD",
+      "name": "McDonald",
+      "file": "MCD.webp",
+      "names": [
+        "McDonald’s",
+        "McDonald's"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MCD.webp",
+      "sha256": "c2d80af4de3f2229eebbc2837f20b56f5186e8101c53808c33c8cda88e2ec947",
+      "bytes": 1064
+    },
+    {
+      "ticker": "CBA.AX",
+      "name": "Commonwealth Bank",
+      "file": "CBA.AX.webp",
+      "names": [
+        "Commonwealth Bank"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CBA.AX.webp",
+      "sha256": "1fcc2cfcb24f8c73ff40878a6515b6d8b66ac5ebf9bf4d10043484d8fe552ae2",
+      "bytes": 1742
+    },
+    {
+      "ticker": "C",
+      "name": "Citigroup",
+      "file": "C.webp",
+      "names": [
+        "Citigroup"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/C.webp",
+      "sha256": "e25e9aee337a1ee8ae0b5b1ac9ff90696ecd7c1f362db3f065fc9de3be68de30",
+      "bytes": 950
+    },
+    {
+      "ticker": "TTE",
+      "name": "TotalEnergies",
+      "file": "TTE.webp",
+      "names": [
+        "TotalEnergies"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TTE.webp",
+      "sha256": "e9a5d6738a3bfd8b8e3239a3fb2130beac4de04d28c07c90f70a600b40a97202",
+      "bytes": 1834
+    },
+    {
+      "ticker": "PEP",
+      "name": "Pepsico",
+      "file": "PEP.webp",
+      "names": [
+        "Pepsico"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PEP.webp",
+      "sha256": "08828a4e7d8de7eb58949ba85a1ef645db053bb8e4f0167a36cd3c19396ef397",
+      "bytes": 2232
+    },
+    {
+      "ticker": "VZ",
+      "name": "Verizon",
+      "file": "VZ.webp",
+      "names": [
+        "Verizon"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/VZ.webp",
+      "sha256": "076e75596f0dda15a7b8f3ab6893dc0dcb6d6426cff18fa0ee9c751e739ef37d",
+      "bytes": 1438
+    },
+    {
+      "ticker": "BLK",
+      "name": "BlackRock",
+      "file": "BLK.webp",
+      "names": [
+        "BlackRock"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BLK.webp",
+      "sha256": "77458093a1b7d1de6f0f69a1f9fc02ad21c5745e7862c14520914b47fc445957",
+      "bytes": 494
+    },
+    {
+      "ticker": "RELIANCE.NS",
+      "name": "Reliance Industries",
+      "file": "RELIANCE.NS.webp",
+      "names": [
+        "Reliance Industries"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RELIANCE.NS.webp",
+      "sha256": "e9d8100fc502c5c2189cb09875c3d8ed9f99a1ff9c829e61dab65920839ff756",
+      "bytes": 926
+    },
+    {
+      "ticker": "PRX.AS",
+      "name": "Prosus",
+      "file": "PRX.AS.webp",
+      "names": [
+        "Prosus"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PRX.AS.webp",
+      "sha256": "3ff2e51b184c1e5d989b42f2edb9d31994202fb0d39183c41d09e22d34418295",
+      "bytes": 914
+    },
+    {
+      "ticker": "NEE",
+      "name": "Nextera Energy",
+      "file": "NEE.webp",
+      "names": [
+        "Nextera Energy"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NEE.webp",
+      "sha256": "064c5416093f58b5826efa771c4bbc8e659cc2db2e9ecbc015c85c899dc05a2b",
+      "bytes": 1398
+    },
+    {
+      "ticker": "SHOP",
+      "name": "Shopify",
+      "file": "SHOP.webp",
+      "names": [
+        "Shopify"
+      ],
+      "aliases": [],
+      "group": "workbook_top100",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SHOP.webp",
+      "sha256": "c2096b0d98146dbabe9a713e78b194be5677b8269707c318ee4b75100eb7a17e",
+      "bytes": 1778
+    },
+    {
+      "ticker": "CRWV",
+      "name": "CoreWeave",
+      "file": "CRWV.webp",
+      "names": [
+        "CoreWeave"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CRWV.webp",
+      "sha256": "1164992a30b5a2a5865697341f8089bf29de0d8375b985024c9fd2e8d6387bb4",
+      "bytes": 1064
+    },
+    {
+      "ticker": "NBIS",
+      "name": "Nebius Group",
+      "file": "NBIS.webp",
+      "names": [
+        "Nebius Group"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NBIS.webp",
+      "sha256": "ae6de19d178bad6cd6049f65130ef84e78c551508a113e8e604d82420dc4f4a9",
+      "bytes": 1496
+    },
+    {
+      "ticker": "SMCI",
+      "name": "Super Micro Computer",
+      "file": "SMCI.webp",
+      "names": [
+        "Super Micro Computer"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SMCI.webp",
+      "sha256": "c0aca9695e7c4323c45f1518281275f3a7b48e17f55dccfd46e5e6c0ef25b902",
+      "bytes": 2676
+    },
+    {
+      "ticker": "MRVL",
+      "name": "Marvell Technology",
+      "file": "MRVL.webp",
+      "names": [
+        "Marvell Technology"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MRVL.webp",
+      "sha256": "77e85dd20a5ab24ada24b0abee541365f31ed54ae401f0ea322907b86f033946",
+      "bytes": 444
+    },
+    {
+      "ticker": "SNOW",
+      "name": "Snowflake",
+      "file": "SNOW.webp",
+      "names": [
+        "Snowflake"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SNOW.webp",
+      "sha256": "df0314ec652c4f246080e81feab73d36a4e81129556749a2fb699a37cdea1f06",
+      "bytes": 1238
+    },
+    {
+      "ticker": "DDOG",
+      "name": "Datadog",
+      "file": "DDOG.webp",
+      "names": [
+        "Datadog"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/DDOG.webp",
+      "sha256": "25042369146ab402c542028af18fc892be59503fc2ac3f55761fbdc1a2acbd9a",
+      "bytes": 1748
+    },
+    {
+      "ticker": "NET",
+      "name": "Cloudflare",
+      "file": "NET.webp",
+      "names": [
+        "Cloudflare"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NET.webp",
+      "sha256": "9b27451c39ab2fe7f23730e3c564b28f282d0179def003223e109dbc80992af7",
+      "bytes": 918
+    },
+    {
+      "ticker": "ZS",
+      "name": "Zscaler",
+      "file": "ZS.webp",
+      "names": [
+        "Zscaler"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ZS.webp",
+      "sha256": "cd16d18d8fcb87ce810aed8fca05e1f86648d6048061925c81349155696bbd54",
+      "bytes": 872
+    },
+    {
+      "ticker": "MDB",
+      "name": "MongoDB",
+      "file": "MDB.webp",
+      "names": [
+        "MongoDB"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MDB.webp",
+      "sha256": "a0e8b5b258d16f7ec6d9768d0a3d2f86f7caaf6a2277b400870461cf73088e0c",
+      "bytes": 572
+    },
+    {
+      "ticker": "TTD",
+      "name": "The Trade Desk",
+      "file": "TTD.webp",
+      "names": [
+        "The Trade Desk"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TTD.webp",
+      "sha256": "7592af528ad1ed4a329c0192dce09f73eacfec035fa2c57c1cfadeea69bc0963",
+      "bytes": 726
+    },
+    {
+      "ticker": "COIN",
+      "name": "Coinbase",
+      "file": "COIN.webp",
+      "names": [
+        "Coinbase"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/COIN.webp",
+      "sha256": "e73f86c295c46d83c5575b98ea332054acf5806d5f1d6fc4d77df4f1417b652f",
+      "bytes": 960
+    },
+    {
+      "ticker": "MSTR",
+      "name": "Strategy",
+      "file": "MSTR.webp",
+      "names": [
+        "MicroStrategy",
+        "Strategy (MSTR)"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MSTR.webp",
+      "sha256": "41bce162813294a25cc7a60963ceaba45ff925479893d4f16e94a077326c8055",
+      "bytes": 498
+    },
+    {
+      "ticker": "HOOD",
+      "name": "Robinhood",
+      "file": "HOOD.webp",
+      "names": [
+        "Robinhood"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/HOOD.webp",
+      "sha256": "6911e034f8e305db5f4f55dce05b0f8614e1ac75d6086b4866bbfef86ad33b1e",
+      "bytes": 974
+    },
+    {
+      "ticker": "SOFI",
+      "name": "SoFi Technologies",
+      "file": "SOFI.webp",
+      "names": [
+        "SoFi Technologies"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SOFI.webp",
+      "sha256": "b219ae6eae5368e60399e1f85004f7e9648d4cf2c977a32d766e234c99be4868",
+      "bytes": 1734
+    },
+    {
+      "ticker": "NU",
+      "name": "Nu Holdings",
+      "file": "NU.webp",
+      "names": [
+        "Nu Holdings"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NU.webp",
+      "sha256": "3baa0e7335e76bb12e8e303800c6de9169778ec5bc80ce77c2dfbca6f847902b",
+      "bytes": 564
+    },
+    {
+      "ticker": "CRCL",
+      "name": "Circle",
+      "file": "CRCL.webp",
+      "names": [
+        "Circle Internet Group",
+        "Circle (CRCL)"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CRCL.webp",
+      "sha256": "dcd52fb99485e1d3f685312526eb65d3f5ce12fc5e6143e25689ab82ce6fd175",
+      "bytes": 2850
+    },
+    {
+      "ticker": "PYPL",
+      "name": "PayPal",
+      "file": "PYPL.webp",
+      "names": [
+        "PayPal"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PYPL.webp",
+      "sha256": "57423d9d7bf2a3bf32f5080a22e5c813f9d83c34eaafd5435ebb00400347a667",
+      "bytes": 1326
+    },
+    {
+      "ticker": "AFRM",
+      "name": "Affirm",
+      "file": "AFRM.webp",
+      "names": [
+        "Affirm Holdings",
+        "Affirm (AFRM)"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AFRM.webp",
+      "sha256": "386c5122a17b4270d39507ac3b545877fb93f4a533d210dcec44eef9a0ce435c",
+      "bytes": 1146
+    },
+    {
+      "ticker": "RKLB",
+      "name": "Rocket Lab",
+      "file": "RKLB.webp",
+      "names": [
+        "Rocket Lab"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RKLB.webp",
+      "sha256": "3edf41c4b2dbbd725a4a186e6f594a2770fa549c40fd20d2045d1f1654e0adcf",
+      "bytes": 602
+    },
+    {
+      "ticker": "ASTS",
+      "name": "AST SpaceMobile",
+      "file": "ASTS.webp",
+      "names": [
+        "AST SpaceMobile"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ASTS.webp",
+      "sha256": "4dcc5476c1207294f56eeadfab58ed9af9005829b9d5bd627f640218dd600fb1",
+      "bytes": 442
+    },
+    {
+      "ticker": "IONQ",
+      "name": "IonQ",
+      "file": "IONQ.webp",
+      "names": [
+        "IonQ"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/IONQ.webp",
+      "sha256": "a870392c1f1a64f3e01053e39c1dd41074e0e85d2c38273abe76c821609d01d0",
+      "bytes": 2346
+    },
+    {
+      "ticker": "RGTI",
+      "name": "Rigetti Computing",
+      "file": "RGTI.webp",
+      "names": [
+        "Rigetti Computing"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RGTI.webp",
+      "sha256": "2862ced3ce1dd011048d3c90c5a7f001cf4792295f3f6ae59b3288b91c990462",
+      "bytes": 480
+    },
+    {
+      "ticker": "QBTS",
+      "name": "D-Wave Quantum",
+      "file": "QBTS.webp",
+      "names": [
+        "D-Wave Quantum"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/QBTS.webp",
+      "sha256": "1b20f49e3696ab91552eab330d7752b8ea48b08ef7c1a993972ee70b1ffc3b39",
+      "bytes": 676
+    },
+    {
+      "ticker": "LUNR",
+      "name": "Intuitive Machines",
+      "file": "LUNR.webp",
+      "names": [
+        "Intuitive Machines"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/LUNR.webp",
+      "sha256": "ff2008869d2faf0b0d2486504c45cc3fd3b3d9d67b7665fb498dd83590c44d87",
+      "bytes": 582
+    },
+    {
+      "ticker": "RDW",
+      "name": "Redwire",
+      "file": "RDW.webp",
+      "names": [
+        "Redwire"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RDW.webp",
+      "sha256": "58f74e1c8fb2f225cc3a2479289d79cacabdf8a29c1dd4e0ec46b47951f12a9a",
+      "bytes": 1908
+    },
+    {
+      "ticker": "BE",
+      "name": "Bloom Energy",
+      "file": "BE.webp",
+      "names": [
+        "Bloom Energy"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BE.webp",
+      "sha256": "3012afd4dd21c7b312785ef597ee0075be863ad5840a33a520a2be14e6e9112f",
+      "bytes": 1030
+    },
+    {
+      "ticker": "OKLO",
+      "name": "Oklo",
+      "file": "OKLO.webp",
+      "names": [
+        "Oklo"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/OKLO.webp",
+      "sha256": "8be96aaf939d7c094d623065ccc3d615a942dd32579d4cb3c25b3798b2a4e03a",
+      "bytes": 842
+    },
+    {
+      "ticker": "SMR",
+      "name": "NuScale Power",
+      "file": "SMR.webp",
+      "names": [
+        "NuScale Power"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SMR.webp",
+      "sha256": "5963849d11172fda91aba8c0536d71efca423412ef437071bfc8e16af389bbd8",
+      "bytes": 1326
+    },
+    {
+      "ticker": "IREN",
+      "name": "IREN",
+      "file": "IREN.webp",
+      "names": [
+        "IREN"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/IREN.webp",
+      "sha256": "6a7cb4038599ed4c0ebdea1c810697b6bfb78d95cb1f21b446fa9cba9a74935d",
+      "bytes": 1252
+    },
+    {
+      "ticker": "ENPH",
+      "name": "Enphase Energy",
+      "file": "ENPH.webp",
+      "names": [
+        "Enphase Energy"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ENPH.webp",
+      "sha256": "e638a8c2c205c771677a1b7a9ce053167c1e37def3c30079f50ec87df4e665dd",
+      "bytes": 944
+    },
+    {
+      "ticker": "FSLR",
+      "name": "First Solar",
+      "file": "FSLR.webp",
+      "names": [
+        "First Solar"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/FSLR.webp",
+      "sha256": "ea5a757945f5235f412af3b0449f179fe183e02dc3f0a8b77d70b31d3a18a625",
+      "bytes": 938
+    },
+    {
+      "ticker": "HIMS",
+      "name": "Hims & Hers Health",
+      "file": "HIMS.webp",
+      "names": [
+        "Hims & Hers Health"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/HIMS.webp",
+      "sha256": "843d4eaa58874e80e7a7ae89b7000482a5b22641753720ee93794956d9940d49",
+      "bytes": 826
+    },
+    {
+      "ticker": "RDDT",
+      "name": "Reddit",
+      "file": "RDDT.webp",
+      "names": [
+        "Reddit"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RDDT.webp",
+      "sha256": "1f0e4f3d1ca11bf1bc5856e20bc42ae7f2b867adc72917394fcd0e99028ded7c",
+      "bytes": 3312
+    },
+    {
+      "ticker": "DUOL",
+      "name": "Duolingo",
+      "file": "DUOL.webp",
+      "names": [
+        "Duolingo"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/DUOL.webp",
+      "sha256": "b92b80687e7a956ff89cc2fd36760c8be674fc3a0c5067b82df767a2df29f64f",
+      "bytes": 2830
+    },
+    {
+      "ticker": "RBLX",
+      "name": "Roblox",
+      "file": "RBLX.webp",
+      "names": [
+        "Roblox"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RBLX.webp",
+      "sha256": "93c249a9c4ec23da7de2bb2f2cbe5b3114cbccecb7a3a94b0ddb4cd62fb9e95c",
+      "bytes": 784
+    },
+    {
+      "ticker": "ABNB",
+      "name": "Airbnb",
+      "file": "ABNB.webp",
+      "names": [
+        "Airbnb"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ABNB.webp",
+      "sha256": "7b44ae1aaa5299b7c2aad06d4786ee045f834649335b1616149191fc7eabcdd5",
+      "bytes": 1386
+    },
+    {
+      "ticker": "SPOT",
+      "name": "Spotify",
+      "file": "SPOT.webp",
+      "names": [
+        "Spotify"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SPOT.webp",
+      "sha256": "6fe0c583acf7a8c4fb9c0737fe037833d23606567938e4df4b6d3c27058d8559",
+      "bytes": 1146
+    },
+    {
+      "ticker": "SE",
+      "name": "Sea",
+      "file": "SE.webp",
+      "names": [
+        "Sea Limited",
+        "Sea Ltd"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SE.webp",
+      "sha256": "d429c6611ed8e3e453583031eae36cafa240d12f5db97a50d95b2225368e5110",
+      "bytes": 2250
+    },
+    {
+      "ticker": "GRAB",
+      "name": "Grab",
+      "file": "GRAB.webp",
+      "names": [
+        "Grab"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GRAB.webp",
+      "sha256": "bef98be422679f99e4a5f9a98821606012e6dc92d327956d0706e571d4123c42",
+      "bytes": 1428
+    },
+    {
+      "ticker": "NIO",
+      "name": "NIO",
+      "file": "NIO.webp",
+      "names": [
+        "NIO"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NIO.webp",
+      "sha256": "20c6dc9a92d5635856422a1977b5b3405c345b9312519d56c06e18e67fd9123b",
+      "bytes": 696
+    },
+    {
+      "ticker": "XPEV",
+      "name": "XPeng",
+      "file": "XPEV.webp",
+      "names": [
+        "XPeng"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/XPEV.webp",
+      "sha256": "b25045b2f6ac321aecf10d1d0e0c85ee138b7445597493fd2c9c77832569a679",
+      "bytes": 490
+    },
+    {
+      "ticker": "BILI",
+      "name": "Bilibili",
+      "file": "BILI.webp",
+      "names": [
+        "Bilibili"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BILI.webp",
+      "sha256": "530025c5288efd5a5755fbb4ab347dec3fb4bd2c7d691332e1c3e6b9c6e102a1",
+      "bytes": 1256
+    },
+    {
+      "ticker": "D05.SI",
+      "name": "DBS Group",
+      "file": "D05.SI.webp",
+      "names": [
+        "DBS",
+        "DBS Group"
+      ],
+      "aliases": [
+        "DBS",
+        "D05"
+      ],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/D05.SI.webp",
+      "sha256": "9c2471e1fd69bc39922090630ad36d959b236cf55fc6eff5a25c46db91d451e4",
+      "bytes": 1618
+    },
+    {
+      "ticker": "O39.SI",
+      "name": "OCBC",
+      "file": "O39.SI.webp",
+      "names": [
+        "OCBC",
+        "Oversea-Chinese Banking"
+      ],
+      "aliases": [
+        "OCBC",
+        "O39"
+      ],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/O39.SI.webp",
+      "sha256": "d18f9a9b1ece48b324de28e1f1ea2dd927fd98346c837a82e0033be2bace95bf",
+      "bytes": 1310
+    },
+    {
+      "ticker": "U11.SI",
+      "name": "UOB",
+      "file": "U11.SI.webp",
+      "names": [
+        "UOB",
+        "United Overseas Bank"
+      ],
+      "aliases": [
+        "UOB",
+        "U11"
+      ],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/U11.SI.webp",
+      "sha256": "c9d294635504be5899e9e224a86b469b26cf60c67e7380a3b736499761dc989f",
+      "bytes": 324
+    },
+    {
+      "ticker": "TEM",
+      "name": "Tempus AI",
+      "file": "TEM.webp",
+      "names": [
+        "Tempus AI"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TEM.webp",
+      "sha256": "b232b8028446e0de4f325da32f57c68b5233d51e662d35dca4f771995c762247",
+      "bytes": 152
+    },
+    {
+      "ticker": "RXRX",
+      "name": "Recursion Pharmaceuticals",
+      "file": "RXRX.webp",
+      "names": [
+        "Recursion Pharmaceuticals"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RXRX.webp",
+      "sha256": "4b29df148b2edcf57e973d5e343d21ea8d54cb61c4bbab567407e698b9cea33f",
+      "bytes": 3946
+    },
+    {
+      "ticker": "RIVN",
+      "name": "Rivian",
+      "file": "RIVN.webp",
+      "names": [
+        "Rivian"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RIVN.webp",
+      "sha256": "8295a68fc32f279ac92895cc825edb2408bbae00c036b87852d5b6d63014e3ec",
+      "bytes": 974
+    },
+    {
+      "ticker": "U",
+      "name": "Unity Software",
+      "file": "U.webp",
+      "names": [
+        "Unity Software"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/U.webp",
+      "sha256": "9fd3df4a913f53087657a0b8b09d49b0ecb8fc1aa59b5becf393c3040b87eaa4",
+      "bytes": 910
+    },
+    {
+      "ticker": "PATH",
+      "name": "UiPath",
+      "file": "PATH.webp",
+      "names": [
+        "UiPath"
+      ],
+      "aliases": [],
+      "group": "additional50",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PATH.webp",
+      "sha256": "7cae1ce5c2ccb30e3acc6bfce2273ff85364bf3229351d18530b8cdc858ba5b6",
+      "bytes": 972
+    },
+    {
+      "ticker": "ANT",
+      "name": "Anthropic",
+      "names": [
+        "Anthropic"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ANT.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ANT.webp",
+      "sha256": "272f80936e80e40d9d19d1f23c5b0ef888bf33971cfc6254a1deccfea992292e",
+      "bytes": 934,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ARM",
+      "name": "Arm Holdings",
+      "names": [
+        "Arm Holdings"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ARM.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ARM.webp",
+      "sha256": "9b9ad4fadb3d69d7baa06de7d4030d9738b8644f215c4479051ce14a72ae7b77",
+      "bytes": 648,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CBRS",
+      "name": "Cerebras Systems",
+      "names": [
+        "Cerebras"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CBRS.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CBRS.webp",
+      "sha256": "c4bcaf3e8cc5326533278730346d224f403ba5727cc08871cf3827efe0cf662f",
+      "bytes": 2498,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "SNDK",
+      "name": "SanDisk",
+      "names": [
+        "Sandisk"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "SNDK.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SNDK.webp",
+      "sha256": "fdb42f79bb02b195d8b8a3c01d4015036047862b066fd0fbb560b5062789dd4e",
+      "bytes": 584,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "WDC",
+      "name": "Western Digital",
+      "names": [
+        "Western Digital"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "WDC.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/WDC.webp",
+      "sha256": "1540908cd714fa71b030995e4dd1476847b37ad3c22d0f2891f1026498d65a52",
+      "bytes": 964,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "STX",
+      "name": "Seagate Technology",
+      "names": [
+        "Seagate"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "STX.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/STX.webp",
+      "sha256": "235efb603f29f0d66b86682c3345b88d854f6bfe822156f035bba177ed38d6bb",
+      "bytes": 1366,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "LITE",
+      "name": "Lumentum",
+      "names": [
+        "Lumentum"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "LITE.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/LITE.webp",
+      "sha256": "b0d8c196ae3eef50ee86ef469a897ed5b37b40e74be1f99059555d3ea5999226",
+      "bytes": 1204,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "COHR",
+      "name": "Coherent Corp.",
+      "names": [
+        "Coherent Corp"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "COHR.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/COHR.webp",
+      "sha256": "1743e7a31cee9714bb02bdb0b6df924c836802b5f092952359f28cc9bbf729d8",
+      "bytes": 2110,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "VRT",
+      "name": "Vertiv Holdings",
+      "names": [
+        "Vertiv"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "VRT.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/VRT.webp",
+      "sha256": "3a8d2dcf1e5ffe34533da2a816576c1cb3086df194c1bb82c2b5ef7f5823102d",
+      "bytes": 844,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ALAB",
+      "name": "Astera Labs",
+      "names": [
+        "Astera Labs"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ALAB.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ALAB.webp",
+      "sha256": "4e51adc7814ae3ab1c7f81310d7778bc5c2d58556e980b337bf403ef083c6452",
+      "bytes": 1096,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CRDO",
+      "name": "Credo Technology",
+      "names": [
+        "Credo Technology"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CRDO.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CRDO.webp",
+      "sha256": "4de5167d4d750fd3d04d43e82bdda624109221510d85f7c8ff935b8309a05db4",
+      "bytes": 1392,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "MPWR",
+      "name": "Monolithic Power Systems",
+      "names": [
+        "Monolithic Power Systems"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "MPWR.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MPWR.webp",
+      "sha256": "4288e4bab39aa8ef41006af7f5e39796779799f53dc4a2c5486ffc21a4af422a",
+      "bytes": 386,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "NXPI",
+      "name": "NXP Semiconductors",
+      "names": [
+        "NXP Semiconductors"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "NXPI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NXPI.webp",
+      "sha256": "e4e548f5969049ebf0fe847a91f60a8e5193385c70263f63cce11ad20c16c3f6",
+      "bytes": 954,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "QCOM",
+      "name": "Qualcomm",
+      "names": [
+        "Qualcomm"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "QCOM.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/QCOM.webp",
+      "sha256": "419c135579a08816afa567b758e5b9cd099577db3742c7e4b5fe1168f434270d",
+      "bytes": 990,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "KLAC",
+      "name": "KLA",
+      "names": [
+        "KLA"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "KLAC.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/KLAC.webp",
+      "sha256": "d48042d15c9ab1802409013ead16568d2a16e1d3b5dbdd2019da006cb330602a",
+      "bytes": 208,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ADI",
+      "name": "Analog Devices",
+      "names": [
+        "Analog Devices"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ADI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ADI.webp",
+      "sha256": "dd2b48ddb4a91616a1cb1ffe30e6c5eb6bdc9379ff08d825148703d507b6eff0",
+      "bytes": 548,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "APH",
+      "name": "Amphenol",
+      "names": [
+        "Amphenol"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "APH.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/APH.webp",
+      "sha256": "5b05cbe6721eb589fdd465989decc5352a57089a42f48b25dd4c41e09a1cbb85",
+      "bytes": 728,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "GLW",
+      "name": "Corning",
+      "names": [
+        "Corning"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "GLW.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GLW.webp",
+      "sha256": "a0e9093f853b1c1b6bbab3517bcf55828b9e36ed171dd9b230668c7086aa63c3",
+      "bytes": 862,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "TER",
+      "name": "Teradyne",
+      "names": [
+        "Teradyne"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "TER.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TER.webp",
+      "sha256": "9720b0b006bff35a9da80a9419b6024b2484fd962cb8c7c8764261ce644fe156",
+      "bytes": 396,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ON",
+      "name": "onsemi",
+      "names": [
+        "onsemi",
+        "ON Semiconductor"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ON.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ON.webp",
+      "sha256": "93c9b9663e37943ddcc4856bef7d847d5844a4ce1b86944754c005e8ff2aaee0",
+      "bytes": 738,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "RMBS",
+      "name": "Rambus",
+      "names": [
+        "Rambus"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "RMBS.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RMBS.webp",
+      "sha256": "e3e0c31cd8b2f1bd335ee41afd081147b53b359dd662b82d79acad4b7d380fc1",
+      "bytes": 802,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "AMKR",
+      "name": "Amkor Technology",
+      "names": [
+        "Amkor Technology"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "AMKR.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AMKR.webp",
+      "sha256": "652cc3dd3e975aa3a872f6510b52f422ec80f5f932a6c9e306d30c3dc81cf9b4",
+      "bytes": 886,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CLS",
+      "name": "Celestica",
+      "names": [
+        "Celestica"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CLS.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CLS.webp",
+      "sha256": "979df0633976b8ddab335161a5d2152040b0a5092c4e70139017215a415ebe7e",
+      "bytes": 1914,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "AAOI",
+      "name": "Applied Optoelectronics",
+      "names": [
+        "Applied Optoelectronics"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "AAOI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AAOI.webp",
+      "sha256": "ed1ab982d7547bab765adf15a4cefc1b0d5cddf4bf06b0e6c9253b94afdcf4a8",
+      "bytes": 932,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "APLD",
+      "name": "Applied Digital",
+      "names": [
+        "Applied Digital"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "APLD.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/APLD.webp",
+      "sha256": "b591b1b23ebb73016cf3aa0cfbe6e110bdb38d8deb30a2cf370367d9afcd11ca",
+      "bytes": 186,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "APP",
+      "name": "AppLovin",
+      "names": [
+        "AppLovin"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "APP.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/APP.webp",
+      "sha256": "59c2ef4b914a22b5a21fec38befe154bb0cbd1fea0c13573dd9ed7db669abc12",
+      "bytes": 1056,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "NOW",
+      "name": "ServiceNow",
+      "names": [
+        "ServiceNow"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "NOW.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NOW.webp",
+      "sha256": "a23f0d5a0f5d810fdbfb46d71ed34ec73e4c666f7bc159f16e1cc22f4d7d4540",
+      "bytes": 852,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CRM",
+      "name": "Salesforce",
+      "names": [
+        "Salesforce"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CRM.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CRM.webp",
+      "sha256": "5added3f4963afc6813ddc511da5973df05711826f05a7a6b4c48144ebe80b2b",
+      "bytes": 1634,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "INTU",
+      "name": "Intuit",
+      "names": [
+        "Intuit"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "INTU.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/INTU.webp",
+      "sha256": "afea1b518559ea48a281a5a7d64e51ad32700abeebddb20f5a133e86855f922a",
+      "bytes": 358,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ADBE",
+      "name": "Adobe",
+      "names": [
+        "Adobe"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ADBE.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ADBE.webp",
+      "sha256": "82fcfae1f752dbfe137f1c2abd8e989abccb658a4335a90797648f0e0c63f47b",
+      "bytes": 708,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "UBER",
+      "name": "Uber",
+      "names": [
+        "Uber"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "UBER.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/UBER.webp",
+      "sha256": "63cb3c4003b5c7c5448759223cec12ae684ebe80ea3d8c3887398bfc3d4d0091",
+      "bytes": 718,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "DASH",
+      "name": "DoorDash",
+      "names": [
+        "DoorDash"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "DASH.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/DASH.webp",
+      "sha256": "66104433cbbf2e04b7b729b7546268b5947c94770e9e7570d595cef9ffe6f21f",
+      "bytes": 386,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "MELI",
+      "name": "MercadoLibre",
+      "names": [
+        "MercadoLibre"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "MELI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MELI.webp",
+      "sha256": "25d360309a48e12353e5874f200ce21a6bc0baf09de840f630f541a1b686280d",
+      "bytes": 3480,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "TTWO",
+      "name": "Take-Two Interactive",
+      "names": [
+        "Take-Two Interactive"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "TTWO.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TTWO.webp",
+      "sha256": "79b4750bb15de3c40a7bdfeb25231faa33efc455be8e20a21cf0f4c2d3f50063",
+      "bytes": 580,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "XYZ",
+      "name": "Block",
+      "names": [
+        "Block Inc",
+        "Block, Inc."
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "XYZ.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/XYZ.webp",
+      "sha256": "c3b1e4259af8698b014d6100fba15be1c91f785cd1a287102274ac6c497977ff",
+      "bytes": 5318,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CVNA",
+      "name": "Carvana",
+      "names": [
+        "Carvana"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CVNA.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CVNA.webp",
+      "sha256": "8e7286d6c5ff1242b9fd4f06e081b477e885befdd00ec840e0bcd51e5ac14c62",
+      "bytes": 1692,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BULL",
+      "name": "Webull",
+      "names": [
+        "Webull"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BULL.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BULL.webp",
+      "sha256": "b3bd3642bb4de470cd447a843d3d245ecc2b4f96fd783f8ee1a0b9b73ad7d71e",
+      "bytes": 516,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "FIG",
+      "name": "Figma",
+      "names": [
+        "Figma"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "FIG.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/FIG.webp",
+      "sha256": "9f480dfcf27a562cd2035149982e26a190effe24631ab9565b9a74a9b03ae895",
+      "bytes": 1104,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "GTLB",
+      "name": "GitLab",
+      "names": [
+        "GitLab"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "GTLB.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/GTLB.webp",
+      "sha256": "49783b13903280bcd970a48c82f8a5887035a100c8f18bca622ec58e4427af99",
+      "bytes": 1388,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "IOT",
+      "name": "Samsara",
+      "names": [
+        "Samsara"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "IOT.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/IOT.webp",
+      "sha256": "61f450885b2b8a1eae4718483396098e9cf39421b732c7534adc8ff51d7d69c7",
+      "bytes": 1480,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "TEAM",
+      "name": "Atlassian",
+      "names": [
+        "Atlassian"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "TEAM.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TEAM.webp",
+      "sha256": "bc33fa243e682d373ac7a699f0a20759320e6825258d35fcbbddb957356aece7",
+      "bytes": 1274,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "HUBS",
+      "name": "HubSpot",
+      "names": [
+        "HubSpot"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "HUBS.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/HUBS.webp",
+      "sha256": "8ba4c57fdefc544daa1cb5346dc9c6cfb7ac4c0ef969888407832ff82060c342",
+      "bytes": 1284,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BILL",
+      "name": "BILL Holdings",
+      "names": [
+        "BILL Holdings",
+        "Bill.com"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BILL.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BILL.webp",
+      "sha256": "55f618b3df0d00d459913faa936b2c8f5d46c5f6f6763786da0420e072ab2053",
+      "bytes": 548,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "RBRK",
+      "name": "Rubrik",
+      "names": [
+        "Rubrik"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "RBRK.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RBRK.webp",
+      "sha256": "821b3db7f0ffd85d8ea782344e480404afad5e4131b4704ac1070adb83578bc2",
+      "bytes": 1050,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "TWLO",
+      "name": "Twilio",
+      "names": [
+        "Twilio"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "TWLO.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TWLO.webp",
+      "sha256": "dc54b6d1fab152697bc378f66813d250773db3e5162e7d7639efdf891141cc25",
+      "bytes": 1024,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "JD",
+      "name": "JD.com",
+      "names": [
+        "JD.com",
+        "JD Logistics parent JD.com"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "JD.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/JD.webp",
+      "sha256": "cc28a75747b143911d9403458ce94603bc2905e11f4dcb4522e063f361cd43f2",
+      "bytes": 644,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "PDD",
+      "name": "PDD Holdings",
+      "names": [
+        "PDD Holdings"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "PDD.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/PDD.webp",
+      "sha256": "004b779f366b4434a45efd1bcacb4b296f6a9bf78ff949e88004dd72e3033465",
+      "bytes": 2096,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "3690.HK",
+      "name": "Meituan",
+      "names": [
+        "Meituan"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "3690.HK.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/3690.HK.webp",
+      "sha256": "77af756b82ff00bd1b7c21ff8770daf89584d1180adabff74e3c649cf27f849b",
+      "bytes": 1526,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "NTES",
+      "name": "NetEase",
+      "names": [
+        "NetEase"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "NTES.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NTES.webp",
+      "sha256": "992fcb6aff061a07936362d1affb9e69ead848b8de67cd47a24c599ee3d9221e",
+      "bytes": 1346,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BIDU",
+      "name": "Baidu",
+      "names": [
+        "Baidu"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BIDU.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BIDU.webp",
+      "sha256": "9287b46ea7b66cff02cbcaab6d4da954d38839adb5254e9411bb2527f419b3dd",
+      "bytes": 1244,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "NKE",
+      "name": "Nike",
+      "names": [
+        "Nike"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "NKE.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NKE.webp",
+      "sha256": "7375eb96f3ccd31f2c120e24a48d76589de2d69e4ca4292edbd260d2affa7680",
+      "bytes": 454,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ROST",
+      "name": "Ross Stores",
+      "names": [
+        "Ross Stores"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ROST.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ROST.webp",
+      "sha256": "95a76cc47fb7a8bf849da37415fb8998a89c5f0234a496a057bb8f874233a8c9",
+      "bytes": 638,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "SBUX",
+      "name": "Starbucks",
+      "names": [
+        "Starbucks"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "SBUX.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SBUX.webp",
+      "sha256": "1ac9a344411548a40caf6d92c57da0b9abf80d4b07263e9523265bc9eebfeb2c",
+      "bytes": 5348,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "LULU",
+      "name": "lululemon athletica",
+      "names": [
+        "lululemon athletica"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "LULU.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/LULU.webp",
+      "sha256": "188d64a24477ef422033aacbc95d8b27e6d0889b11de2406d8bb4b55db48e1cf",
+      "bytes": 1222,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CAVA",
+      "name": "CAVA Group",
+      "names": [
+        "Cava Group"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CAVA.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CAVA.webp",
+      "sha256": "e1ca11589978806426ce89e719dc521cfba91941d5900f3c752c46071fae1a4c",
+      "bytes": 894,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CMG",
+      "name": "Chipotle Mexican Grill",
+      "names": [
+        "Chipotle Mexican Grill"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CMG.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CMG.webp",
+      "sha256": "c1b0c9fe17a291d9ae9dfa8727b04ec312b5540c6caac44463579ace91df0ae6",
+      "bytes": 4766,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "TGT",
+      "name": "Target",
+      "names": [
+        "Target Corp",
+        "Target Corporation"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "TGT.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/TGT.webp",
+      "sha256": "21766282b7b5cacf3a68c544568002b3cd7952658389df0b48cc44a23c89127b",
+      "bytes": 948,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "RCL",
+      "name": "Royal Caribbean Group",
+      "names": [
+        "Royal Caribbean Group"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "RCL.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RCL.webp",
+      "sha256": "a6835ed353e5afcd594b200bafa4728e77259ddb2ac8ee141c517ec1a5bb4b42",
+      "bytes": 980,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CCL",
+      "name": "Carnival Corporation",
+      "names": [
+        "Carnival Corp",
+        "Carnival Cruise"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CCL.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CCL.webp",
+      "sha256": "2f33877862aa522b0d67107793373af67ab38ff546784df2a2a9daa06162d042",
+      "bytes": 1996,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "UAL",
+      "name": "United Airlines Holdings",
+      "names": [
+        "United Airlines Holdings"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "UAL.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/UAL.webp",
+      "sha256": "a1394526d948ca55eb52d4ea17e45d3de889f6597fa585c0970a9ebb9fed28f5",
+      "bytes": 2200,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "DAL",
+      "name": "Delta Air Lines",
+      "names": [
+        "Delta Air Lines"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "DAL.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/DAL.webp",
+      "sha256": "b2d21e5124f79192abc75033caaec50437e92b5e06c371652c41f17d7d5312d7",
+      "bytes": 1032,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BKNG",
+      "name": "Booking Holdings (Booking.com)",
+      "names": [
+        "Booking Holdings",
+        "Booking.com"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BKNG.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BKNG.webp",
+      "sha256": "76b2ecfee062f86f1e8185973b47da834993e638a1d9662ceab4c31264c348ac",
+      "bytes": 2318,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CPNG",
+      "name": "Coupang",
+      "names": [
+        "Coupang"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CPNG.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CPNG.webp",
+      "sha256": "b9e6a2faac07b186e2b37a43a4ee6a376f26857f80afff1016bb47c666b844ac",
+      "bytes": 804,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "7974.T",
+      "name": "Nintendo",
+      "names": [
+        "Nintendo"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "7974.T.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/7974.T.webp",
+      "sha256": "b42c3f9bdec22f049764336eab895efca8567ece72b37b911610bf002e7488c2",
+      "bytes": 1256,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "SONY",
+      "name": "Sony",
+      "names": [
+        "Sony"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "SONY.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/SONY.webp",
+      "sha256": "c0fde0473d1881f1de54cbc960c7c651ab537c4c2173dde3124bf1981290a324",
+      "bytes": 980,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "MRNA",
+      "name": "Moderna",
+      "names": [
+        "Moderna"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "MRNA.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MRNA.webp",
+      "sha256": "bd129108ed2d85f109138bb64d77e00d46c9c4f458fa4a39cdbb7a618ff549d3",
+      "bytes": 872,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BNTX",
+      "name": "BioNTech",
+      "names": [
+        "BioNTech"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BNTX.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BNTX.webp",
+      "sha256": "49b822a2ba781e757028939ef9c59c2fa514d604c2ada54b153461420a7657f7",
+      "bytes": 452,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "NVO",
+      "name": "Novo Nordisk",
+      "names": [
+        "Novo Nordisk"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "NVO.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/NVO.webp",
+      "sha256": "985c1d6b2b699c791fc86377865fa5f50fe75beebcbf63bf26ad539868cfc2a6",
+      "bytes": 1596,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "VKTX",
+      "name": "Viking Therapeutics",
+      "names": [
+        "Viking Therapeutics"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "VKTX.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/VKTX.webp",
+      "sha256": "39f75f4268999128c979dffe973870065bce7dd344a2c7393333952d82600a48",
+      "bytes": 884,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CRSP",
+      "name": "CRISPR Therapeutics",
+      "names": [
+        "CRISPR Therapeutics"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CRSP.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CRSP.webp",
+      "sha256": "312727a5380886432a11cde4fefa54d2d2a858af65e9eba20041edbb15b1fe50",
+      "bytes": 1480,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ALNY",
+      "name": "Alnylam Pharmaceuticals",
+      "names": [
+        "Alnylam Pharmaceuticals"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ALNY.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ALNY.webp",
+      "sha256": "4be8e061a345f85aa20e6fdddc7d69d3ff24ac12e760790513ec324616d253e5",
+      "bytes": 1464,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "INSM",
+      "name": "Insmed",
+      "names": [
+        "Insmed"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "INSM.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/INSM.webp",
+      "sha256": "e9cb2f0b4ab9b5f1530ad6676589e0968fd1be9704b4911ba2237fee9dfdada2",
+      "bytes": 636,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "VRTX",
+      "name": "Vertex Pharmaceuticals",
+      "names": [
+        "Vertex Pharmaceuticals"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "VRTX.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/VRTX.webp",
+      "sha256": "72f17bcefb84bc4c385557640c53c3e4c44d8b5347766e045c3c79217d6ffeb2",
+      "bytes": 418,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "REGN",
+      "name": "Regeneron Pharmaceuticals",
+      "names": [
+        "Regeneron Pharmaceuticals"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "REGN.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/REGN.webp",
+      "sha256": "c8e25e5e40c7b30bef44737303d6f2e3ada62b8238fabbcf8bf050818f8f1a48",
+      "bytes": 788,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ISRG",
+      "name": "Intuitive Surgical",
+      "names": [
+        "Intuitive Surgical"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ISRG.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ISRG.webp",
+      "sha256": "b802079cf36bf0722eaf19137f10e45450c7732c6cc21ef0bd1313c4f5bd90af",
+      "bytes": 376,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BA",
+      "name": "Boeing",
+      "names": [
+        "Boeing"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BA.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BA.webp",
+      "sha256": "0c864d64e4c2dc7110623b6ee00c19abbb1cf6ab6045640564521c2e744c6db5",
+      "bytes": 1070,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "FCX",
+      "name": "Freeport-McMoRan",
+      "names": [
+        "Freeport-McMoRan"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "FCX.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/FCX.webp",
+      "sha256": "e1b0dc8e938e30a6a51b793cbbc3a13aeb891600acf0760e0bde5ef2504aa530",
+      "bytes": 622,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "DE",
+      "name": "Deere & Company (John Deere)",
+      "names": [
+        "John Deere",
+        "Deere & Company"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "DE.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/DE.webp",
+      "sha256": "32856569e4b5c6d6a0f82f87702126fe0e6f081306d4eefcfac20be25e007445",
+      "bytes": 4192,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ETN",
+      "name": "Eaton",
+      "names": [
+        "Eaton"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ETN.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ETN.webp",
+      "sha256": "87a162ff58146e12ac375026e1d8a29ce4b756b79a9b24e1064cbe8d18c1ec34",
+      "bytes": 294,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CCJ",
+      "name": "Cameco",
+      "names": [
+        "Cameco"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CCJ.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CCJ.webp",
+      "sha256": "ac475164f8dd842c9c7adb0db12445e2d53e854970f706088ad597921c928dba",
+      "bytes": 1204,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CEG",
+      "name": "Constellation Energy",
+      "names": [
+        "Constellation Energy"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CEG.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CEG.webp",
+      "sha256": "b1b9c594c939e921f45c5a2947cce3f516e0e448a479cf8e5c2569cefcc1b52a",
+      "bytes": 1738,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "VST",
+      "name": "Vistra",
+      "names": [
+        "Vistra Energy",
+        "Vistra Corp",
+        "Vistra"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "VST.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/VST.webp",
+      "sha256": "6fe2898cc9db8041832b7497fa3dd467ed7a42e2d2c7b865b7ee4f8997239c0d",
+      "bytes": 1012,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "MP",
+      "name": "MP Materials",
+      "names": [
+        "MP Materials"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "MP.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MP.webp",
+      "sha256": "2eeb4dd43fb5431b4acb5444c816d34e36dd8b24ee07848070372d7c2fe121bd",
+      "bytes": 1390,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "ACHR",
+      "name": "Archer Aviation",
+      "names": [
+        "Archer Aviation"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "ACHR.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/ACHR.webp",
+      "sha256": "52a3dd8eea0244c975ed1672f0a005f9987a261f0260709de1e35bb85a90de08",
+      "bytes": 762,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "JOBY",
+      "name": "Joby Aviation",
+      "names": [
+        "Joby Aviation"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "JOBY.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/JOBY.webp",
+      "sha256": "5fb3fe8985cf06fc495be545ff8cdb5312bb0af4260fcc3c38cad15b83b319dd",
+      "bytes": 926,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "AVAV",
+      "name": "AeroVironment",
+      "names": [
+        "AeroVironment"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "AVAV.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/AVAV.webp",
+      "sha256": "2887777f1200db2f6b1394257da746af0f927648073eb83ba5dc6af2a0f9c4a2",
+      "bytes": 1338,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "KTOS",
+      "name": "Kratos Defense & Security Solutions",
+      "names": [
+        "Kratos Defense & Security Solutions"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "KTOS.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/KTOS.webp",
+      "sha256": "08b8fe8ad4aaa07252f65abda75590704bbe1c10ae77d6b903a8046688f2a562",
+      "bytes": 994,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "USAR",
+      "name": "USA Rare Earth",
+      "names": [
+        "USA Rare Earth"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "USAR.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/USAR.webp",
+      "sha256": "5eeeb0bf2b2536a90a11a796f88a57713f516b872fa42c735b89c6384fde6043",
+      "bytes": 1876,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "RR.L",
+      "name": "Rolls-Royce Holdings",
+      "names": [
+        "Rolls-Royce Holdings",
+        "Rolls-Royce"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "RR.L.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RR.L.webp",
+      "sha256": "a99955858396239eb3b96872b19250c41298be6c43d2859a2be1f70213608263",
+      "bytes": 1172,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BA.L",
+      "name": "BAE Systems",
+      "names": [
+        "BAE Systems"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BA.L.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BA.L.webp",
+      "sha256": "6bf8e33738c95e86992682d019aa99d928d58b7eabed8ddaa5be16f4e8513b44",
+      "bytes": 684,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "RHM.F",
+      "name": "Rheinmetall",
+      "names": [
+        "Rheinmetall"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "RHM.F.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/RHM.F.webp",
+      "sha256": "c31b195acdd26ed75f28f1ce3570700817cc76a4d4bdd08c6998f8bf47a885a5",
+      "bytes": 906,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "002594.SZ",
+      "name": "BYD Company",
+      "names": [
+        "BYD"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "002594.SZ.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/002594.SZ.webp",
+      "sha256": "f7af6b2a972b136f6e0833c70d70b9c6c25571ca5ecbf5563da33f27dfe9c400",
+      "bytes": 502,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "IBKR",
+      "name": "Interactive Brokers",
+      "names": [
+        "Interactive Brokers"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "IBKR.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/IBKR.webp",
+      "sha256": "b436a810917865cb93fa6ee3194a6ce814b5aa07f33deea3becc0a3e4965756a",
+      "bytes": 964,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CBOE",
+      "name": "Cboe Global Markets",
+      "names": [
+        "Cboe Global Markets"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CBOE.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CBOE.webp",
+      "sha256": "d4a6fa3b3f88d92cbd2aa6b1425d0948b5cbd2959397412e6363e4772b45e96a",
+      "bytes": 1070,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "CME",
+      "name": "CME Group",
+      "names": [
+        "CME Group"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "CME.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/CME.webp",
+      "sha256": "828a13aba4e574032cef674be63ebe6a61763af5f99bb440b8181124f93ef6c0",
+      "bytes": 1106,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "FUTU",
+      "name": "Futu Holdings",
+      "names": [
+        "Futu Holdings",
+        "Futu"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "FUTU.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/FUTU.webp",
+      "sha256": "034887515c2c65cf86a844be448cc3a14f1791bc437d132202a82b0afe95e3e8",
+      "bytes": 536,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BMNR",
+      "name": "Bitmine Immersion Technologies",
+      "names": [
+        "Bitmine Immersion",
+        "Bitmine"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BMNR.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BMNR.webp",
+      "sha256": "f7b67c6300c1e4094d116e98556ec83c6ae2d821bb115fa97b2e9c182a9238c7",
+      "bytes": 2202,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "MARA",
+      "name": "MARA Holdings",
+      "names": [
+        "MARA Holdings"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "MARA.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/MARA.webp",
+      "sha256": "f048fca377b7f1a9f837b1c4415d66a2a56b95d16cdb5111f5e34d56187d21cf",
+      "bytes": 606,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BLSH",
+      "name": "Bullish",
+      "names": [
+        "Bullish exchange",
+        "Bullish Global"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "BLSH.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BLSH.webp",
+      "sha256": "0a83b9128c19ebeed653017eec326087a4464732f9362331b616522a378a10b3",
+      "bytes": 736,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "OPEN",
+      "name": "Opendoor Technologies",
+      "names": [
+        "Opendoor"
+      ],
+      "aliases": [],
+      "group": "additional100",
+      "explicit_ticker": true,
+      "file": "OPEN.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/OPEN.webp",
+      "sha256": "4b6b1f5fd14d9069892d68668dfa45b950658f68fab05e706924d48c655110c3",
+      "bytes": 810,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "Z74.SI",
+      "name": "Singtel",
+      "names": [
+        "Singtel",
+        "Singapore Telecommunications"
+      ],
+      "aliases": [
+        "Z74",
+        "SGX:Z74"
+      ],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "Z74.SI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/Z74.SI.webp",
+      "sha256": "89547dc42baadfdf53b8f702837d49d8ab2aa722a2108ef02b9c7409f9317ff4",
+      "bytes": 900,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "S63.SI",
+      "name": "ST Engineering",
+      "names": [
+        "ST Engineering",
+        "Singapore Technologies Engineering"
+      ],
+      "aliases": [
+        "S63",
+        "SGX:S63"
+      ],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "S63.SI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/S63.SI.webp",
+      "sha256": "1e428c5e5af00eaec00bd4a3a8e8d723b856a818998291d7b3f9c5602121f87a",
+      "bytes": 2036,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "S68.SI",
+      "name": "Singapore Exchange",
+      "names": [
+        "Singapore Exchange",
+        "SGX Group"
+      ],
+      "aliases": [
+        "S68",
+        "SGX:S68"
+      ],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "S68.SI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/S68.SI.webp",
+      "sha256": "88e2c41c99cf596d440ba827b0864dea719d9a44bdb05b3d71345bdd93ef9826",
+      "bytes": 118,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "C6L.SI",
+      "name": "Singapore Airlines",
+      "names": [
+        "Singapore Airlines"
+      ],
+      "aliases": [
+        "C6L",
+        "SGX:C6L"
+      ],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "C6L.SI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/C6L.SI.webp",
+      "sha256": "b2baf0672d9c32a9471096dd913641ff461870587264a9f89c928b53b8cba424",
+      "bytes": 1198,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "F34.SI",
+      "name": "Wilmar International",
+      "names": [
+        "Wilmar International"
+      ],
+      "aliases": [
+        "F34",
+        "SGX:F34"
+      ],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "F34.SI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/F34.SI.webp",
+      "sha256": "978d3731902b946c6c305dd158fdec63a0c4eef39ae2d4197c068e69670d6ea7",
+      "bytes": 844,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "C38U.SI",
+      "name": "CapitaLand Integrated Commercial Trust",
+      "names": [
+        "CapitaLand Integrated Commercial Trust",
+        "CICT"
+      ],
+      "aliases": [
+        "C38U",
+        "SGX:C38U"
+      ],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "C38U.SI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/C38U.SI.webp",
+      "sha256": "ab7352c49a294277d469c89a05484e0011b3608467ea7d0497f3857e12465ee0",
+      "bytes": 914,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BN4.SI",
+      "name": "Keppel",
+      "names": [
+        "Keppel Ltd",
+        "Keppel Group",
+        "Keppel"
+      ],
+      "aliases": [
+        "BN4",
+        "SGX:BN4"
+      ],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "BN4.SI.webp",
+      "source": "https://companiesmarketcap.com/img/company-logos/64/BN4.SI.webp",
+      "sha256": "ffb5f46eaa118106122f1fe88b128e7b8aaf2f430899a7386cdb2546cad1c391",
+      "bytes": 1080,
+      "width": 64,
+      "height": 64
+    },
+    {
+      "ticker": "BS6.SI",
+      "name": "Yangzijiang Shipbuilding",
+      "names": [
+        "Yangzijiang Shipbuilding"
+      ],
+      "aliases": [],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "BS6.SI.webp",
+      "source": "https://links.sgx.com/FileOpen/YZJSH_1H2025%20Results%20Presentation_Final.ashx?App=Announcement&FileID=854458",
+      "sha256": "264ee02a8690d89b578b0cd7833db2d62f9057345f0591f24761ee7d73eac895",
+      "bytes": 4418,
+      "width": 64,
+      "height": 64
+    }
+  ],
+  "attribution": "Company logos belong to their respective owners. Source: CompaniesMarketCap / CompaniesLogo. Editorial company identification; no endorsement implied. Currency flags from Flagpedia. People badges are original initials.",
+  "badges": [
+    {
+      "ticker": "CURRENCY:USD",
+      "name": "US dollar",
+      "kind": "currency",
+      "label": "USD · United States flag",
+      "code": "USD",
+      "names": [
+        "US dollar",
+        "U.S. dollar",
+        "United States dollar"
+      ],
+      "file": "currency-usd.webp",
+      "source": "https://flagcdn.com/w160/us.webp",
+      "sha256": "753a4a438aaef2603a7d9c35de696af386b15ddf60a724c34bb1c9a337fe9978",
+      "bytes": 570,
+      "width": 160,
+      "height": 84
+    },
+    {
+      "ticker": "CURRENCY:SGD",
+      "name": "Singapore dollar",
+      "kind": "currency",
+      "label": "SGD · Singapore flag",
+      "code": "SGD",
+      "names": [
+        "Singapore dollar"
+      ],
+      "file": "currency-sgd.webp",
+      "source": "https://flagcdn.com/w160/sg.webp",
+      "sha256": "822ddaa9fbc2a9b74240e8bd0a6e926a6a1d653d7ff3176865ed7472ce0561f1",
+      "bytes": 516,
+      "width": 160,
+      "height": 107
+    },
+    {
+      "ticker": "CURRENCY:JPY",
+      "name": "Japanese yen",
+      "kind": "currency",
+      "label": "JPY · Japan flag",
+      "code": "JPY",
+      "names": [
+        "Japanese yen",
+        "yen"
+      ],
+      "file": "currency-jpy.webp",
+      "source": "https://flagcdn.com/w160/jp.webp",
+      "sha256": "cf2f08dd404b597afab4e9cf16bb2063d4dbe3d8cb430fd62d60adea89e01f25",
+      "bytes": 436,
+      "width": 160,
+      "height": 107
+    },
+    {
+      "ticker": "CURRENCY:CHF",
+      "name": "Swiss franc",
+      "kind": "currency",
+      "label": "CHF · Switzerland flag",
+      "code": "CHF",
+      "names": [
+        "Swiss franc"
+      ],
+      "file": "currency-chf.webp",
+      "source": "https://flagcdn.com/w160/ch.webp",
+      "sha256": "e94e660ed0ef10a2c926feb235d28d43503d06c117846e8e7d8b6840e0780631",
+      "bytes": 68,
+      "width": 160,
+      "height": 160
+    },
+    {
+      "ticker": "PERSON:JEROME-POWELL",
+      "name": "Jerome Powell",
+      "kind": "person",
+      "label": "Jerome Powell",
+      "code": "JP",
+      "names": [
+        "Jerome Powell"
+      ],
+      "file": "person-jerome-powell.webp",
+      "source": null,
+      "sha256": "b6eeb0de01fc306fe7b12e77abe454ae5530065070f304b32ee8bb18e5c1e55c",
+      "bytes": 590,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:KEVIN-WARSH",
+      "name": "Kevin Warsh",
+      "kind": "person",
+      "label": "Kevin Warsh",
+      "code": "KW",
+      "names": [
+        "Kevin Warsh"
+      ],
+      "file": "person-kevin-warsh.webp",
+      "source": null,
+      "sha256": "cfb209fe68910fc4246f1c4e8cea2bef04cd7398bb7d96e1bff976f5fe5e5c31",
+      "bytes": 1162,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:CHRISTINE-LAGARDE",
+      "name": "Christine Lagarde",
+      "kind": "person",
+      "label": "Christine Lagarde",
+      "code": "CL",
+      "names": [
+        "Christine Lagarde"
+      ],
+      "file": "person-christine-lagarde.webp",
+      "source": null,
+      "sha256": "abb775bf5e8d66baee6cab039c04a2c5c67c5822e742be6c303301b93d64a2b4",
+      "bytes": 614,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:KAZUO-UEDA",
+      "name": "Kazuo Ueda",
+      "kind": "person",
+      "label": "Kazuo Ueda",
+      "code": "KU",
+      "names": [
+        "Kazuo Ueda"
+      ],
+      "file": "person-kazuo-ueda.webp",
+      "source": null,
+      "sha256": "26ebeeb508fffd39b619bfc28a410293528f60530d9a08e223a35251486d1aaf",
+      "bytes": 730,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:MARTIN-SCHLEGEL",
+      "name": "Martin Schlegel",
+      "kind": "person",
+      "label": "Martin Schlegel",
+      "code": "MS",
+      "names": [
+        "Martin Schlegel"
+      ],
+      "file": "person-martin-schlegel.webp",
+      "source": null,
+      "sha256": "638468b45a273c91543da670ff978df0dd56801b2bc6891668aa2333674558c1",
+      "bytes": 1020,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:LAWRENCE-WONG",
+      "name": "Lawrence Wong",
+      "kind": "person",
+      "label": "Lawrence Wong",
+      "code": "LW",
+      "names": [
+        "Lawrence Wong"
+      ],
+      "file": "person-lawrence-wong.webp",
+      "source": null,
+      "sha256": "bf993dd59b184ef447dc8fb93a44ac80837e9d10738ac6093a0a9e9fd766eb98",
+      "bytes": 938,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:DONALD-TRUMP",
+      "name": "Donald Trump",
+      "kind": "person",
+      "label": "Donald Trump",
+      "code": "DT",
+      "names": [
+        "Donald Trump"
+      ],
+      "file": "person-donald-trump.webp",
+      "source": null,
+      "sha256": "9df04319cdd6b4ac7c65f2980c1a6a2553e3642f240ab8ba9df1cd9a66ceabde",
+      "bytes": 566,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:XI-JINPING",
+      "name": "Xi Jinping",
+      "kind": "person",
+      "label": "Xi Jinping",
+      "code": "XJ",
+      "names": [
+        "Xi Jinping"
+      ],
+      "file": "person-xi-jinping.webp",
+      "source": null,
+      "sha256": "3905c3f7c1633566e10ecd8585e1edfd5cf6aebe6cafb963ddae4e87b40acec9",
+      "bytes": 822,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:ELON-MUSK",
+      "name": "Elon Musk",
+      "kind": "person",
+      "label": "Elon Musk",
+      "code": "EM",
+      "names": [
+        "Elon Musk"
+      ],
+      "file": "person-elon-musk.webp",
+      "source": null,
+      "sha256": "5f164df31edc958ea471c0bac5ab108f0119ce108fe53770f057789dd6c41369",
+      "bytes": 682,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:JENSEN-HUANG",
+      "name": "Jensen Huang",
+      "kind": "person",
+      "label": "Jensen Huang",
+      "code": "JH",
+      "names": [
+        "Jensen Huang"
+      ],
+      "file": "person-jensen-huang.webp",
+      "source": null,
+      "sha256": "6edc6db224b06bb1790dd403599563f17f53b7be19dcd5fd687149947888966d",
+      "bytes": 402,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:LISA-SU",
+      "name": "Lisa Su",
+      "kind": "person",
+      "label": "Lisa Su",
+      "code": "LS",
+      "names": [
+        "Lisa Su"
+      ],
+      "file": "person-lisa-su.webp",
+      "source": null,
+      "sha256": "4a590c6ce80b1b221e132c236c6883e44e5af96c0675e566939f0b3b689a93cc",
+      "bytes": 670,
+      "width": 128,
+      "height": 128
+    },
+    {
+      "ticker": "PERSON:WARREN-BUFFETT",
+      "name": "Warren Buffett",
+      "kind": "person",
+      "label": "Warren Buffett",
+      "code": "WB",
+      "names": [
+        "Warren Buffett"
+      ],
+      "file": "person-warren-buffett.webp",
+      "source": null,
+      "sha256": "99fea01f78332b9c3f1debf0d76e48737c6a073ba9f9088453dc918c7857b20a",
+      "bytes": 1192,
+      "width": 128,
+      "height": 128
+    }
+  ]
+}
