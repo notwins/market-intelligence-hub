@@ -212,6 +212,11 @@ function openPrices() {
   }
 }
 const deskTabs = [...document.querySelectorAll('.modebar [role="tab"][data-mode]')];
+function describeDeskTab(tab = deskTabs.find(tab => tab.getAttribute('aria-selected') === 'true')) {
+  for (const candidate of deskTabs) {
+    document.getElementById(candidate.getAttribute('aria-describedby')).hidden = candidate !== tab;
+  }
+}
 function mode(selected) {
   for (const tab of deskTabs) {
     const active = tab.dataset.mode === selected;
@@ -219,7 +224,7 @@ function mode(selected) {
     tab.setAttribute('aria-selected', String(active));
     tab.tabIndex = active ? 0 : -1;
   }
-  $('#load-status').hidden = selected !== 'briefing';
+  describeDeskTab();
   if (selected === 'markets' && data) openPrices();
   if (selected === 'full-history') {
     const frame = $('#full-history-frame');
@@ -241,7 +246,15 @@ function route() {
   target?.scrollIntoView({block:'start'});
 }
 function setupDeskTabs() {
-  for (const tab of deskTabs) tab.addEventListener('click', () => { location.hash = tab.dataset.mode; });
+  for (const tab of deskTabs) {
+    tab.addEventListener('click', () => { location.hash = tab.dataset.mode; });
+    tab.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse') describeDeskTab(tab);
+    });
+    tab.addEventListener('pointerleave', event => {
+      if (event.pointerType === 'mouse') describeDeskTab();
+    });
+  }
   $('.modebar [role="tablist"]').addEventListener('keydown', e => {
     const index = deskTabs.indexOf(e.target);
     if (index < 0) return;
@@ -266,7 +279,12 @@ function setupDeskTabs() {
 function renderCalls(){const shares=reports.filter(r=>['research-googl','research-tsm-2026-11-05','research-nvda-2026-11-05'].includes(r.id));const table=(rows,label)=>`<div class="table-wrap" tabindex="0" role="region" aria-label="${E(label)}"><table><caption>${E(label)}</caption><thead><tr><th>Date</th><th>Company / instrument</th><th>Research / call</th><th>Status</th></tr></thead><tbody>${rows.map(c=>`<tr><td>${E(date(c.date))}</td><td><b>${E(c.ticker)}</b></td><td>${link(c.href,c.title)}</td><td>${E(c.type)}</td></tr>`).join('')}</tbody></table></div>`;const shareRows=shares.map(r=>({date:r.research_date,ticker:r.href.includes('googl')?'GOOGL':r.href.includes('nvda')?'NVDA':'TSM',title:r.title,href:r.href,type:'Published company research · not a confirmed trade or personal call'}));$('#calls-table').innerHTML='<h3>Share calls &amp; research</h3><p class="fine">Available public company write-ups. No buy/sell call or executed trade is inferred.</p>'+table(shareRows,'Shares · public company research')+'<h3 class="options-table-title">Options calls &amp; trade reviews</h3>'+table(data.calls,'Options · historical calls and reviews');}
 
 async function json(path){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);try{const r=await fetch(path,{cache:'no-store',signal:controller.signal});if(!r.ok)throw Error('Unavailable');return await r.json();}finally{clearTimeout(timer);}}
-async function remoteResearch(){try{const local=await json('data/research-feed.json');const next=await root.ContentDelivery.research(root.ResearchFeed.validate(local));feed=root.ResearchFeed.retain(feed,next);const extra=feed.records.map(r=>({id:r.id,title:r.title,summary:r.summary,href:root.ResearchFeed.destination(r,r.full_report_url),research_date:r.cutoff_sgt,uploaded_at:null,added_at:null,recorded_publication_date:null,kind:r.category,independent:!!r.delivery_base,tags:r.tags.map(t=>feed.tags[t].label),briefs:r.quick_read?[{title:'Matching brief',href:root.ResearchFeed.destination(r,r.quick_read.url),summary:'Verified companion for this exact report edition',format:r.quick_read.url.endsWith('.pdf')?'PDF':'HTML'}]:[],full_edition:/^(us-earnings-full|bond-credit-full)-/.test(r.id)?{completeness_verified:true,channel:r.id.startsWith('us-earnings')?'earnings':'credit',cutoff:r.cutoff_sgt}:null}));reports=mergeReports(reports,extra);updateWatchlistReport(extra);renderReports();renderCalls();$('#load-status').textContent=`${reports.length} reports and articles · dates shown on each item`; }catch{$('#load-status').textContent='Independent content refresh unavailable. Showing the dated local library; use Research Explained to retry.';}}
+function showDeskError(message) {
+  const status = $('#load-status');
+  status.hidden = false;
+  status.textContent = message;
+}
+async function remoteResearch(){try{const local=await json('data/research-feed.json');const next=await root.ContentDelivery.research(root.ResearchFeed.validate(local));feed=root.ResearchFeed.retain(feed,next);const extra=feed.records.map(r=>({id:r.id,title:r.title,summary:r.summary,href:root.ResearchFeed.destination(r,r.full_report_url),research_date:r.cutoff_sgt,uploaded_at:null,added_at:null,recorded_publication_date:null,kind:r.category,independent:!!r.delivery_base,tags:r.tags.map(t=>feed.tags[t].label),briefs:r.quick_read?[{title:'Matching brief',href:root.ResearchFeed.destination(r,r.quick_read.url),summary:'Verified companion for this exact report edition',format:r.quick_read.url.endsWith('.pdf')?'PDF':'HTML'}]:[],full_edition:/^(us-earnings-full|bond-credit-full)-/.test(r.id)?{completeness_verified:true,channel:r.id.startsWith('us-earnings')?'earnings':'credit',cutoff:r.cutoff_sgt}:null}));reports=mergeReports(reports,extra);updateWatchlistReport(extra);renderReports();renderCalls();}catch{showDeskError('Independent content refresh unavailable. Showing the dated local library; use Research Explained to retry.');}}
 function updateWatchlistReport(reports){
  const edition=reports.filter(r=>r.independent&&/^standalone-watchlist-end-day-\d{4}-\d{2}-\d{2}(?:-r\d+)?$/.test(r.id))
    .sort((a,b)=>b.research_date.localeCompare(a.research_date)||b.id.localeCompare(a.id,'en',{numeric:true}))[0];
@@ -277,10 +295,10 @@ function picker(){if(!editing)return;opener=document.activeElement;const dailyId
 function chosen(){return [...document.querySelectorAll('#picker-options input:checked')].map(x=>x.value);}
 function validSelection(ids){if(ids.length>12||ids.length<1){$('#picker-status').textContent='Choose between one and twelve reports.';return false;}return true;}
 async function refreshNews(){try{const local=await json('data/hourly-news.json'),result=await root.DeskNews.load(local,data.watchlist);data.news=[...result.news,...data.news];renderNews();$('#news-status').textContent=result.delivery_error?'Independent news refresh unavailable; showing saved matched headlines with original dates.':'Matched to explicit company/topic metadata. Publisher dates stay separate from edition cutoffs.';}catch{$('#news-status').textContent='Independent news unavailable; showing the dated saved headline matches.';}}
-async function init(){try{if(matchMedia('(max-width:760px)').matches)document.querySelectorAll('.rail details').forEach(d=>d.open=false);data=await json('data/desk-data.json');if(data.schema_version!==1||!['reports','watchlist','yields','news','calls'].every(k=>Array.isArray(data[k])))throw Error('Invalid desk data');reports=mergeReports(data.reports,[]);featured=[...data.featured_ids];$('#choose-reports').hidden=!editing;buildMarkets();root.DeskDashboard?.mount();renderReports();renderCalls();$('#news-company').innerHTML='<option value="all">All watchlist companies</option>'+data.watchlist.map(r=>`<option value="${E(r.ticker)}">${E(r.ticker)} · ${E(r.name)}</option>`).join('');renderNews();$('#load-status').textContent=`${reports.length} reports and articles · checking for newer editions…`;
+async function init(){try{if(matchMedia('(max-width:760px)').matches)document.querySelectorAll('.rail details').forEach(d=>d.open=false);data=await json('data/desk-data.json');if(data.schema_version!==1||!['reports','watchlist','yields','news','calls'].every(k=>Array.isArray(data[k])))throw Error('Invalid desk data');reports=mergeReports(data.reports,[]);featured=[...data.featured_ids];$('#choose-reports').hidden=!editing;buildMarkets();root.DeskDashboard?.mount();renderReports();renderCalls();$('#news-company').innerHTML='<option value="all">All watchlist companies</option>'+data.watchlist.map(r=>`<option value="${E(r.ticker)}">${E(r.ticker)} · ${E(r.name)}</option>`).join('');renderNews();
 document.addEventListener('click',e=>{const anchor=e.target.closest('a[href="#archive"]');if(anchor)$('#archive').open=true;const d=e.target.closest('[data-detail]');if(d)detail(d.dataset.ticker,d.dataset.detail);const p=e.target.closest('[data-period]');if(p)detail(p.dataset.ticker,'history',Number(p.dataset.period));});
 document.addEventListener('market-prices-updated',()=>{seriesCache.clear();if(pricesStarted)refreshPrices();});
-$('#archive-query').addEventListener('input',()=>{limit=12;renderArchive();});$('#archive-more').addEventListener('click',()=>{limit+=12;renderArchive();});$('#news-company').addEventListener('change',renderNews);$('#refresh-prices').addEventListener('click',()=>refreshPrices(true));$('#choose-reports').addEventListener('click',picker);$('[data-close-picker]').addEventListener('click',()=>$('#report-picker').close());$('#report-picker').addEventListener('close',()=>opener?.focus());$('#picker-form').addEventListener('submit',e=>{e.preventDefault();const ids=chosen();if(!validSelection(ids))return;featured=ids;renderReports();$('#report-picker').close();});$('#export-selection').addEventListener('click',()=>{const ids=chosen();if(!validSelection(ids))return;const blob=new Blob([JSON.stringify({schema_version:1,featured_ids:ids,independent_featured_ids:ids.filter(id=>reports.find(r=>r.id===id)?.independent)},null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='desk-config.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('#picker-status').textContent='Selection exported for the publishing handoff. Shared site settings are unchanged until published.';});if(!$('#markets').hidden)route();remoteResearch();refreshNews();}catch{$('#load-status').textContent='The desk data could not be loaded. Open the full workspace or Research Explained using the navigation links.';}}
+$('#archive-query').addEventListener('input',()=>{limit=12;renderArchive();});$('#archive-more').addEventListener('click',()=>{limit+=12;renderArchive();});$('#news-company').addEventListener('change',renderNews);$('#refresh-prices').addEventListener('click',()=>refreshPrices(true));$('#choose-reports').addEventListener('click',picker);$('[data-close-picker]').addEventListener('click',()=>$('#report-picker').close());$('#report-picker').addEventListener('close',()=>opener?.focus());$('#picker-form').addEventListener('submit',e=>{e.preventDefault();const ids=chosen();if(!validSelection(ids))return;featured=ids;renderReports();$('#report-picker').close();});$('#export-selection').addEventListener('click',()=>{const ids=chosen();if(!validSelection(ids))return;const blob=new Blob([JSON.stringify({schema_version:1,featured_ids:ids,independent_featured_ids:ids.filter(id=>reports.find(r=>r.id===id)?.independent)},null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='desk-config.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('#picker-status').textContent='Selection exported for the publishing handoff. Shared site settings are unchanged until published.';});if(!$('#markets').hidden)route();remoteResearch();refreshNews();}catch{showDeskError('The desk data could not be loaded. Open the full workspace or Research Explained using the navigation links.');}}
 function boot(){setupDeskTabs();void init();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })(typeof window!=='undefined'?window:globalThis);
