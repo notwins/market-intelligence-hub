@@ -2,7 +2,7 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const L=require('../site/company-logos.js'),data=require('../site/assets/company-logos/company-logos.json');
 const infer=input=>L.infer(input,data);
-assert.equal(data.companies.length,257);assert.equal(new Set(data.companies.map(c=>c.ticker)).size,257);
+assert.equal(data.companies.length,258);assert.equal(new Set(data.companies.map(c=>c.ticker)).size,258);
 assert.deepEqual(infer({title:'STI banks: NIM and dividends'}),['D05.SI','O39.SI','U11.SI']);
 assert.deepEqual(infer({title:'Singapore banks earnings'}),['D05.SI','O39.SI','U11.SI']);
 assert.deepEqual(infer({title:'STI index outlook'}),[],'STI alone is not evidence of three bank subjects');
@@ -37,4 +37,4 @@ const item={id:'test',title:'Nvidia results',source:'Reuters',published_at:'2026
 const render=published_at=>news.render([{...item,published_at}],[{ticker:'NVDA',name:'NVIDIA'}]);
 assert(render(item.published_at).includes('22:30 SGT'));assert(render('2026-11-13').includes('time not supplied'));assert(render(null).includes('Publication date/time unavailable'));
 assert(render(item.published_at).includes('data-mih-tickers="[&quot;NVDA&quot;]"'));assert(!render(item.published_at).includes('href="https://www.reuters.com/test"'),'original link still belongs inside dialog');
-console.log('PASS 273 WebP assets; exact aliases; bank groups; title/tag inference; false-positive exclusions; dated Reuters metadata; entry pages.');
+console.log('PASS 274 WebP assets; exact aliases; bank groups; title/tag inference; false-positive exclusions; dated Reuters metadata; entry pages.');
