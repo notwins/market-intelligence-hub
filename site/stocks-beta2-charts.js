@@ -127,13 +127,14 @@
     return { value, provider: brief.provider, date: brief.date };
   }
 
-  function targetGapLabel(price, target) {
+  function targetGapLabel(price, target, reference) {
     if (!Number.isFinite(price) || price <= 0 || !Number.isFinite(target) || target <= 0) return '';
     const gap = (target - price) / price;
     if (!Number.isFinite(gap)) return '';
-    if (gap === 0) return 'At the BOS coverage target';
+    if (gap === 0) return 'At ' + (reference || 'fair value');
     const amount = Math.abs(gap) < .0005 ? 'Less than 0.1%' : signedPercent.format(gap);
-    return amount + (gap > 0 ? ' upside' : ' downside') + ' to the latest BOS target';
+    const direction = gap > 0 ? ' upside' : ' downside';
+    return amount + direction + (reference ? ' to ' + reference : '');
   }
 
   function targetBand(value, [upper2, upper1, , lower1, lower2]) {
@@ -429,9 +430,12 @@
         call.dataset.rating = analyst[2];
         setText('[data-analyst-call]', analyst[2]);
         setText('[data-analyst-value]', numbers.format(analyst[1]) + ' ' + company.currency);
+        const analystGap = targetGapLabel(point?.value, analyst[1]);
+        get('[data-analyst-gap]').hidden = !analystGap;
+        setText('[data-analyst-gap]', analystGap);
       }
       const latestTarget = card.researchTarget;
-      const gap = metric === 'price' ? targetGapLabel(point?.value, latestTarget?.value) : '';
+      const gap = metric === 'price' ? targetGapLabel(point?.value, latestTarget?.value, 'the latest BOS target') : '';
       const gapField = get('[data-bos-target-gap]');
       gapField.hidden = !gap;
       setText('[data-bos-target-gap]', gap);
