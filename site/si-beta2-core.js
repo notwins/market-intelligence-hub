@@ -64,7 +64,32 @@ function finalKO(p){return p.tenorUnit==='months'&&[p.ko,p.step,p.months,p.first
 function levels(p,reference){return Object.fromEntries(['ko','ki','strike'].map(k=>[k,num(reference)!==null&&num(p[k])!==null?reference*p[k]/100:null]));}
 function reference(p,share,data){if(num(share.fixing)!==null)return {value:Number(share.fixing),date:p.date||'Date not supplied',basis:'Manual reference'};if(p.date){const v=data?.daily?.find(x=>x[0]===p.date);return {value:v?.[1]??null,date:p.date,basis:'Exact daily close'};}return {value:data?.quote?.close??null,date:data?.quote?.date||'',basis:'Latest saved close'};}
 function wrap(value,max){const words=clean(value,1800).split(/\s+/),lines=[];let line='';for(let word of words){while(word.length>max){if(line){lines.push(line);line='';}lines.push(word.slice(0,max));word=word.slice(max);}if((line+' '+word).trim().length>max){lines.push(line);line=word;}else line=(line+' '+word).trim();}if(line)lines.push(line);return lines;}
-function axisTicks(values){let lo=Math.min(...values),hi=Math.max(...values);const span=hi-lo||Math.max(Math.abs(hi)*.1,1),raw=span/3.6,power=10**Math.floor(Math.log10(raw));let step=[1,2,2.5,5,10].map(n=>n*power).find(n=>n>=raw)||10*power;for(let n=0;n<20;n++){const low=Math.floor((lo-span*.025)/step)*step;if(low+4*step>=hi+span*.025)return Array.from({length:5},(_,i)=>Number((low+i*step).toPrecision(12)));step=step===power?2*power:step*1.25;step=[1,2,2.5,5,10,20,25,50,100].map(n=>n*power).find(n=>n>=step)||step;}return Array.from({length:5},(_,i)=>lo+i*span/4);}
+function axisScale(values){
+ const min=Math.min(...values),max=Math.max(...values);
+ const spread=max-min;
+ const padding=spread?Math.max(spread*.035,max*1e-12):max*.05||.05;
+ const low=Math.max(0,min-padding),high=max+padding;
+ // Choose rounded interior grid positions without using them as the domain edges.
+ const raw=(high-low)/5.25,unit=10**Math.floor(Math.log10(raw))/2;
+ const step=Math.floor(raw/unit)*unit;
+ const center=Math.round((low+(high-low)/2)/step);
+ const ticks=Array.from({length:5},(_,i)=>Number(((center+i-2)*step).toPrecision(15)));
+ return {low,high,ticks};
+}
+function priceExtrema(prices){
+ if(!prices.length)return null;
+ let high=0,low=0;
+ for(let i=1;i<prices.length;i++){
+  if(prices[i][1]>prices[high][1])high=i;
+  if(prices[i][1]<prices[low][1])low=i;
+ }
+ return {high,low};
+}
+function extremaLabel(value,spread){
+ const separation=spread>0?-Math.floor(Math.log10(spread)):0;
+ const decimals=Math.min(10,Math.max(2,1-Math.floor(Math.log10(value)),separation));
+ return fmt(value,decimals);
+}
 const monthLabel=ms=>new Date(ms).toLocaleDateString('en-US',{month:'short',year:'numeric',timeZone:'UTC'}).replace(' ','-');
 // Labels live in a separate rail; only their leaders enter that rail.
 // Spread coincident barriers vertically without moving the actual barrier levels.
@@ -219,33 +244,39 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  if(validMoa(margin))marginSources.add(validMoa(s.moaPct)?'manual entry':d.moaSource||'private lookup');
  fitted(635,y+16,'MOA margin '+(validMoa(margin)?pct(margin):'—'),132,9,'#fff',true,'end');
  const {end,from,selected,series,prices:pts,calls:ratingHistory,incompatibleArchive}=chartWindow(d,chart);
- const chartX=36,chartY=y+29,plotLeft=chartX+35,plotTop=chartY+13,plotBottom=y+block-(ratingHistory.length?46:hasOverlays?32:22);
+ const bounds=priceExtrema(pts);
+ const chartX=36,chartY=y+29,plotLeft=chartX+17,plotTop=chartY+13,plotBottom=y+block-(ratingHistory.length?46:hasOverlays?32:22);
  const ratios=[...(series.pe||[]),...(series.pb||[])].map(p=>p.value);
  const plotRight=ratios.length?417:427;
  text(chartX+4,chartY+4,`${chart.years}-year price history${d.currency?' · '+d.currency:''}`,8,navy,true);
  if(pts.length>1){
   const fk=finalKO(p),bars=[['KO',ls.ko,'#699645','7 3'],['KI',ls.ki,'#b94a57','3 3'],['Strike',ls.strike,'#8261a8','9 3 2 3'],...(p.step>0&&fk!==null?[['Final KO',num(r.value)===null?null:r.value*fk/100,'#c07821','2 3']]:[])].filter(x=>x[1]!==null);
-  const values=[...pts.map(p=>p[1]),...bars.map(b=>b[1]),...(series.target||[]).map(p=>p.value),...(series.archive||[]).map(p=>p.value)];
-  let ticks=axisTicks(values);
-  if(ticks[0]<0){
-   const raw=Math.max(...values)/4,power=10**Math.floor(Math.log10(raw));
-   const step=[1,2,2.5,5,10].map(n=>n*power).find(n=>n>=raw);
-   ticks=Array.from({length:5},(_,i)=>Number((i*step).toPrecision(12)));
-  }
-  const low=ticks[0],high=ticks[4],t0=ms(from),t1=ms(end);
+  const priceHigh=pts[bounds.high][1],priceLow=pts[bounds.low][1],spread=priceHigh-priceLow;
+  const values=[priceLow,priceHigh,...bars.map(b=>b[1]),...(series.target||[]).map(p=>p.value),...(series.archive||[]).map(p=>p.value)];
+  const {low,high,ticks}=axisScale(values),t0=ms(from),t1=ms(end);
+  out.push('<g class="si-price-extrema" aria-label="Highest and lowest displayed closes">');
+  fitted(plotRight-82,chartY+4,'High '+extremaLabel(priceHigh,spread),74,8,navy,true,'end');
+  fitted(plotRight-4,chartY+4,'Low '+extremaLabel(priceLow,spread),70,8,navy,true,'end');
+  out.push('</g>');
   const px=date=>plotLeft+(ms(date)-t0)/(t1-t0)*(plotRight-plotLeft);
   const py=v=>plotBottom-(v-low)/(high-low)*(plotBottom-plotTop);
   const pricePoints=pts.map(([date,value])=>[px(date),py(value)]),pointList=points=>points.map(p=>p.map(n=>n.toFixed(2)).join(',')).join(' ');
   if(hasOverlays)out.push(`<polygon class="si-price-area" fill="#dceaf7" points="${pricePoints[0][0]},${plotBottom} ${pointList(pricePoints)} ${pricePoints.at(-1)[0]},${plotBottom}"/>`);
-  ticks.forEach(v=>{const yy=py(v);line(plotLeft,yy,plotRight,yy,'#dde3e9');text(plotLeft-5,yy+3,fmt(v,6),7.5,muted,false,'end');});
+  out.push('<g class="si-price-grid">');
+  for(const tick of ticks)line(plotLeft,py(tick),plotRight,py(tick),'#dde3e9');
+  out.push('</g>');
   for(let j=0;j<5;j++){const epoch=t0+(t1-t0)*j/4,xx=plotLeft+(plotRight-plotLeft)*j/4;line(xx,plotTop,xx,plotBottom,'#edf0f3');text(xx,y+block-(hasOverlays?19:9),monthLabel(epoch),7.5,muted,false,j===0?'start':j===4?'end':'middle');}
   let ry=py;
   if(ratios.length){
-   const rt=axisTicks(ratios),base=Math.max(0,rt[0]),top=rt.at(-1);
-   ry=v=>plotBottom-(v-base)/(top-base)*(plotBottom-plotTop);
+   const scale=axisScale(ratios);
+   ry=v=>plotBottom-(v-scale.low)/(scale.high-scale.low)*(plotBottom-plotTop);
    line(plotRight,plotTop,plotRight,plotBottom,'#9caec0');
    text(plotRight+3,chartY+4,'Ratios ×',7,muted,true);
-   rt.filter(v=>v>=base).forEach(v=>{line(plotRight,ry(v),plotRight+3,ry(v),'#9caec0');text(plotRight+5,ry(v)+2,fmt(v,4),6.5,muted);});
+   for(const tick of scale.ticks){
+    const yy=ry(tick);
+    line(plotRight,yy,plotRight+3,yy,'#9caec0');
+    text(plotRight+5,yy+2,fmt(tick,6),6.5,muted);
+   }
   }
   const overlayPaths=[];
   for(const key of selected){
@@ -269,6 +300,10 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   bars.forEach(([label,v,c,dash],j)=>{const yy=py(v),placement=labels[j];line(plotLeft,yy,plotRight,yy,c,dash);if(placement.inline){out.push(`<g class="si-inline-barrier-label" data-clearance="4">`);rect(placement.x-placement.width/2,yy-5,placement.width,10,'#fff','#fff');text(placement.x,yy+2.5,label,7,c,true,'middle');out.push('</g>');}else{const labelY=fallback[fallbackIndex++].y;out.push(`<path d="M ${plotRight+rail} ${yy} L ${plotRight+rail+4} ${yy} L ${plotRight+rail+8} ${labelY} L ${plotRight+rail+11} ${labelY}" fill="none" stroke="${c}" stroke-width="0.7"/>`);text(plotRight+rail+14,labelY+2.5,label,7,c,true);}});
   out.push('</g>');
   out.push(`<polyline class="si-price-line" fill="none" stroke="${blue}" stroke-width="1.5" points="${pointList(pricePoints)}"/>`);
+  for(const [index,label] of bounds.high===bounds.low?[[bounds.high,'High and low']]:[[bounds.high,'High'],[bounds.low,'Low']]){
+   const [xx,yy]=pricePoints[index], [date,price]=pts[index];
+   out.push(`<circle class="si-price-extreme" cx="${xx.toFixed(2)}" cy="${yy.toFixed(2)}" r="2.2" fill="#fff" stroke="${blue}" stroke-width="1.1"><title>${escape(label+' · '+date+' · '+extremaLabel(price,spread))}</title></circle>`);
+  }
   if(ratingHistory.length){
    const tracks={B:[plotBottom+5,'#006955'],H:[plotBottom+10,'#536d8c'],S:[plotBottom+15,'#a63445']};
    out.push('<g class="si-call-history" aria-label="BOS Buy, Hold and Sell observations">');
@@ -300,7 +335,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  const descriptionLines=wrap(description.length> (small?340:500)?description.slice(0,small?337:497).replace(/\s+\S*$/,'')+'…':description,small?60:49),descriptionHeight=small?65:90,descriptionSize=Math.min(small?8.5:10,descriptionHeight/descriptionLines.length-1.5);
  descriptionLines.slice(0,small?6:9).forEach((value,j)=>fitted(rx,y+37+j*(descriptionSize+1.5),value+(j===(small?5:8)&&descriptionLines.length>(small?6:9)?"…":""),rw,Math.max(7.5,descriptionSize),muted));
  const research=bosResearch(d.metrics),compact=small&&!!research;
- const my=y+(compact?97:small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Shown high / low',pts.length?`${fmt(Math.max(...pts.map(x=>x[1])))} / ${fmt(Math.min(...pts.map(x=>x[1])))}`:'Unavailable'],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
+ const my=y+(compact?97:small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
  metrics.forEach(([k,v],j)=>{const col=small?j%2:0,row=small?Math.floor(j/2):j,x=rx+col*137,yy=my+row*(compact?9:small?10:16);fitted(x,yy,k,small?64:125,small?7:9,muted);fitted(x+(small?129:rw),yy,v,small?62:130,small?7:9,navy,true,'end');});
  if(research){
   const yy=my+(compact?50:small?56:162),size=small?7.5:9,x=rx+(small?59:70);
@@ -356,5 +391,5 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
  }
  return doc.save();
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,couponBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,couponBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

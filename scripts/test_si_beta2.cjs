@@ -13,9 +13,24 @@ const four=C.svg({...p,shares:['ONE','TWO','THREE','FOUR'].map(symbol=>({...p.sh
 assert.equal((four.match(/ENDINGCHECK/g)||[]).length,4,'All four descriptions must retain the ending');assert(!four.includes('…'),'Descriptions must not be silently truncated');
 console.log('PASS SI beta 2: precise barriers, step-down schedule, missing dates/terms, preserved references, escaping, complete descriptions and PDF controls');
 require('./test_si_beta2_state.cjs');
-for(const values of [[62.5,258.2],[.0001,.0004],[100,100],[100000,10000000]]){const ticks=C.axisTicks(values);assert.equal(ticks.length,5);assert(ticks[0]<=Math.min(...values));assert(ticks[4]>=Math.max(...values));for(let i=2;i<5;i++)assert(Math.abs((ticks[i]-ticks[i-1])-(ticks[1]-ticks[0]))<1e-8);}
+for(const values of [[62.5,258.2],[.0001,.0004],[100,100],[100000,10000000],[100.04,100.08],[0,70]]){
+ const {low,high,ticks}=C.axisScale(values),min=Math.min(...values),max=Math.max(...values);
+ assert(low<=min&&high>max&&low>=0);
+ assert(ticks.length===5&&ticks[0]>low&&ticks.at(-1)<high,'Rounded grid lines stay strictly inside the plot');
+ for(let i=2;i<ticks.length;i++)assert(Math.abs((ticks[i]-ticks[i-1])-(ticks[1]-ticks[0]))<1e-8);
+ if(max>min)assert(high-low<=(max-min)*1.071,'The axis uses only tight padding around its plotted range');
+}
 assert.equal(C.monthLabel(Date.parse('2026-11-13T12:00Z')),'Nov-2026');
-const chart=C.svg(p,{TEST:{points:[['2025-11-01',100],['2026-11-01',110]]}});assert(chart.includes('Final KO'));assert(chart.includes('7%PA'));assert(!chart.includes('2025-11-01</text>'));
+const chart=C.svg(p,{TEST:{points:[['2025-11-01',100],['2026-11-01',110]]}});assert(chart.includes('Final KO'));
+assert.match(chart,/class="si-price-extrema"[^>]*>[\s\S]*?>High 110<\/text>[\s\S]*?>Low 100<\/text>/);
+const grid=chart.match(/class="si-price-grid">([^<]*(?:<line[^>]+>[^<]*)*)<\/g>/)?.[1];
+assert.equal((grid.match(/<line/g)||[]).length,5);
+assert(!chart.includes('Shown high / low'),'Only one set of displayed extrema');
+assert.equal((chart.match(/class="si-price-extreme"/g)||[]).length,2);
+const flat=C.svg(p,{TEST:{points:[['2025-11-01',.00091],['2026-11-01',.00091]]}});
+assert.match(flat,/>High 0\.00091<\/text>/);
+assert.equal((flat.match(/class="si-price-extreme"/g)||[]).length,1);
+assert(chart.includes('7%PA'));assert(!chart.includes('2025-11-01</text>'));
 for(const positions of [[50,50,50,50],[0,1,2,3],[98,99,100,100],[90,10,50,51]]){const labels=C.barrierLabels(positions,5,95);assert.deepEqual(labels.map(x=>x.target),positions);const sorted=labels.map(x=>x.y).sort((a,b)=>a-b);assert(sorted[0]>=5&&sorted.at(-1)<=95);for(let i=1;i<sorted.length;i++)assert(sorted[i]-sorted[i-1]>=11);}
 assert(chart.includes('class="si-inline-barrier-label"'),'Labels should stay within clear sections of their barrier lines');assert(chart.indexOf('class="si-price-line"')>chart.lastIndexOf('class="si-inline-barrier-label"'),'Price is painted above every barrier');
 const collisionBox={left:40,right:60,top:40,bottom:60};assert(C.segmentHitsBox([0,0],[100,100],collisionBox),'Check the line between observations, not only its endpoints');assert(!C.segmentHitsBox([0,0],[100,0],collisionBox));
