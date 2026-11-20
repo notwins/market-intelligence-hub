@@ -57,6 +57,8 @@
 .sb2-cone-info { margin-top:8px; padding:8px 9px; background:#eff4fc; border-radius:6px; }
 .sb2-cone-info p { margin:0 0 3px; font-size:.82rem; color:#284867; }
 .sb2-cone-info p:empty { display:none; }
+.sb2-cone-info [data-cone-research-target] { color:#914913; }
+.sb2-cone-info [data-cone-research-target]::before { content:""; display:inline-block; width:16px; margin-right:5px; vertical-align:middle; border-top:1px dashed currentColor; }
 .sb2-cone-info details { margin-top:3px; font-size:.81rem; }
 .sb2-cone-info details p { margin-top:5px; }
 @container (min-width:765px) {
