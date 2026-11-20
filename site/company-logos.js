@@ -84,12 +84,17 @@ function enhance(card){
  for(const node of own(card,'.ticker,.bs-identity,.er-company-chip,[data-quote]'))tickers.push(node.dataset.quote||node.textContent.trim());
  if(card.classList.contains('ed-company')&&card.id.startsWith('earnings-'))tickers.push(card.id.slice(9));
  const companyCard=card.matches('.watchlist-card[data-ticker],.ed-company,.company-news-card,.company-card,.instrument[data-company],.watch-mini,.er-company,.bs-card,.sl-card,.sl-series-card,.catalog-row,.security-row,.mp-card,.ci-row,.er-range-card,tr[data-logo-ticker]');
+ const newsWatermark=card.matches('#news-cards > .company-news-card');
  const target=companyCard?(own(card,'.watchlist-card-head,header,.company-top,.er-company-heading,.security>div,.sec-name,.mp-quote>div,.ci-identity,:scope > td:first-child')[0]||heading?.parentElement||card):
    own(card,':scope > .meta,:scope > .mu-eyebrow,:scope > .featured-date,:scope > .date,:scope > small,:scope > time,:scope > .eyebrow,:scope > .watchlist-label,.company-news-meta,.publication-meta,.gs-date,.result-date,.sr-card-top')[0]||null;
- const fingerprint=JSON.stringify([tickers,tags,heading?.textContent||'',companyCard]);
+ const fingerprint=JSON.stringify([tickers,tags,heading?.textContent||'',companyCard,newsWatermark]);
  const prior=fingerprints.get(card);
  if(prior?.fingerprint===fingerprint&&prior.target===target&&(!prior.group||prior.group.isConnected))return;
- let names=infer({tickers,tags,title:heading?.textContent||'',article:!companyCard},data);
+ if(newsWatermark){
+  const logo=resolve(tickers[0],data);
+  card.style.setProperty('--watermark-image',logo?`url("${new URL(logo.file,assetBase).href}")`:'');
+ }
+ let names=newsWatermark?[]:infer({tickers,tags,title:heading?.textContent||'',article:!companyCard},data);
  // A chart embedded in an already identified company card needs no repeated badge.
  if(card.matches('.mp-card,.er-range-card')&&card.parentElement?.closest('.watchlist-card,.company-card,.ed-company,.instrument,.er-company'))names=[];
  // Remove only badge groups owned by this card.
