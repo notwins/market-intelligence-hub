@@ -282,6 +282,11 @@
     element.dataset.slot = String(slot);
     paintHeading(entry);
     element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.more(company) || '';
+    const credit = element.querySelector('[data-credit-listing]');
+    if (credit) {
+      credit.dataset.creditListing = company.ticker;
+      root.CompanyCredit?.paintCard(credit);
+    }
     const observed = company.observations.length;
     element.querySelector('.sb2-coverage').textContent = observed + ' of ' + data.months.length + ' monthly editions';
     if (existing) {
