@@ -13,7 +13,7 @@
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <script defer src="stocks-beta2-charts.js?v=20261121.bonds1"></script>
   <script defer src="bonds-beta-data.js?v=1"></script>
-  <script defer src="bonds-beta.js?v=1"></script>
+  <script defer src="bonds-beta.js?v=2"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to bond charts</a>
@@ -29,9 +29,9 @@
     <header class="sb2-intro bb-intro">
       <div><h1>Bonds BETA</h1><p>Compare bond prices and yields for Temasek, U.S. Treasuries and your bond watchlist.</p></div>
       <div class="bb-file-actions">
-        <button id="bb-open" type="button">Open history CSV</button>
+        <button id="bb-open" type="button">Open and remember CSV</button>
         <input id="bb-file" type="file" accept=".csv,text/csv" hidden>
-        <button id="bb-clear" type="button" hidden>Clear imported history</button>
+        <button id="bb-clear" type="button" hidden>Forget history on this browser</button>
       </div>
     </header>
     <p class="bb-source" id="bb-status" role="status" aria-live="polite">Loading the bond watchlist…</p>
@@ -50,7 +50,7 @@
           <button type="button" data-group="temasek" aria-pressed="false">Temasek</button>
           <button type="button" data-group="other" aria-pressed="false">Other bonds</button>
         </div>
-        <label>Range<select id="bb-range"><option value="all">Full history</option><option value="12">1 year</option><option value="36" selected>3 years</option><option value="60">5 years</option><option value="1">1 month</option></select></label>
+        <label>Range<select id="bb-range"><option value="all">Full history</option><option value="12">1 year</option><option value="36">3 years</option><option value="60">5 years</option><option value="1">1 month</option></select></label>
         <label>Cards per row<select id="bb-columns"><option value="auto">Auto</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label>
         <button id="bb-reset" type="button">Reset watchlist</button>
       </div>
@@ -65,7 +65,7 @@
       <summary>Price, yield and return definitions</summary>
       <p>Bid prices are quoted per 100 face value in the bond currency. BOS and OCBC history uses the printed report date and reported yield to maturity. WSJ uses asked yields. Bondsupermart uses bid yields to maturity or to worst as labelled. A point represents the source observation only.</p>
       <p>Yearly price change uses the first and last available bid in each calendar year within your selected range. It excludes coupons, accrued interest, fees and FX. ACE Fixed AR is the workbook snapshot percentage and has no historical time series.</p>
-      <p>Imported CSV data stays in this tab for the session.</p>
+      <p>Choose your history CSV once to load its price, yield and ACE data automatically on later visits in this browser. Use “Forget history on this browser” to remove the saved copy.</p>
     </details>
     <footer><b>Market Intelligence Hub</b><p><a href="desk.html">Home</a> · <a href="legal/index.html">Legal &amp; transparency</a></p></footer>
   </main>
