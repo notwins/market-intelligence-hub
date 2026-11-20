@@ -65,7 +65,7 @@ delete compactFixture.latest.US912810TC27;
 const compact = daily.render(compactFixture,{compactTreasuries:true});
 const treasuries = unsafe.instruments.filter(r=>r.source==='WSJ');
 const ustTable = compact.match(/<table class="daily-ust-table"[\s\S]*?<\/table>/)[0];
-assert.equal((ustTable.match(/class="daily-ust-maturity"/g)||[]).length,29);
+assert.equal((ustTable.match(/role="rowheader" scope="row" class="daily-ust-maturity"/g)||[]).length,29);
 assert.match(ustTable,/Nov-2033/);
 assert.match(ustTable,/<td role="cell" class="daily-ust-price">97\.2<\/td>/);
 assert.match(ustTable,/data-yield-band="[0-4]">5\.0%/);
@@ -78,6 +78,19 @@ assert.match(ustTable,/https:\/\/www\.wsj\.com\/market-data\/bonds\/treasuries/)
 assert.match(compact,/Detailed Treasury quotes &amp; dates/);
 assert.match(compact,/Other watched bonds/);
 assert.doesNotMatch(dailyHTML,/class="daily-ust-table"/);
+const fixtureDate = '2026-06-01';
+const withHistory = daily.render(prices,{compactTreasuries:true,curves:{
+  1:{date:fixtureDate,source:'U.S. Treasury',points:[{years:10,yieldPct:5.122},{years:20,yieldPct:5.122}]},
+  12:{date:'2025-11-19',source:'U.S. Treasury',points:[{years:10,yieldPct:5},{years:30,yieldPct:5}]},
+}});
+const historyTable = withHistory.match(/<table class="daily-ust-table"[\s\S]*?<\/table>/)[0];
+assert(historyTable.includes('Estimated clean prices'));
+const distinctDates = [...new Set(prices.instruments.filter(r=>r.source==='WSJ').flatMap(r=>prices.history[r.id].map(q=>q.date)))].sort().reverse().slice(0,5);
+for (const observed of distinctDates) assert.match(historyTable,new RegExp(`<time datetime="${observed}"`));
+assert.equal((historyTable.match(/<td role="cell" class="daily-ust-observed"/g)||[]).length,29*Math.max(1,distinctDates.length));
+const may2046 = historyTable.match(/<tr role="row">[^]*?US912810UV88[^]*?<\/tr>/)[0].split('<tr role="row">').at(-1);
+assert.match(may2046,/5\.122% benchmark yield">98\.5<\/td>/); // Official auction price was 98.481099 at this yield.
+assert.match(may2046,/First issued 01 Jun 2026">—<\/td>/);
 for(const [index,coupon] of [1.875,2,3,4,4.125].entries()) {
   treasuries[index].coupon = coupon;
 }
