@@ -42,13 +42,13 @@
   }
   const old = document.querySelector('.bottom-nav');
   const bar = old || document.createElement('nav');
-  const more = document.getElementById('more-btn') || document.createElement('button');
+  const more = old?.querySelector('button#more-btn') || document.createElement('button');
   bar.className = 'bottom-nav hub-primary'; bar.setAttribute('aria-label', 'Main sections');
   const scroll = document.createElement('div'); scroll.className = 'hub-primary-scroll';
   sections.forEach(([name, href, icon]) => scroll.append(link(name, href, icon)));
   more.type = 'button'; more.classList.add('hub-primary-more'); more.textContent = 'Jump to';
   more.setAttribute('aria-haspopup', 'dialog');
-  let menu = document.getElementById('more');
+  let menu = document.querySelector('dialog#more:has(.more-grid)');
   if (!menu) {
     menu = document.createElement('dialog'); menu.id = 'hub-sections';
     menu.innerHTML = '<div class="dialog-head"><h2 id="hub-sections-title">Explore Market Intel</h2><button type="button" aria-label="Close menu">×</button></div><div class="more-grid"></div>';
