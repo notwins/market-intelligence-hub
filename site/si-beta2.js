@@ -58,8 +58,8 @@ async function companyLogo(...tickers){
  }
  return logoImages.get(file);
 }
-function renderPage(page,data,number,total,watermarks=showWatermarks){
- return C.svg(page,data,number,total,{showWatermarks:watermarks});
+function renderPage(page,data,number,total,watermarks=showWatermarks,links){
+ return C.svg(page,data,number,total,{showWatermarks:watermarks,links});
 }
 function invalidatePDF(){if(pdfURL)URL.revokeObjectURL(pdfURL);pdfURL='';$('pdf-ready').hidden=true;for(const name of ['download-pdf','open-pdf'])$(name).removeAttribute('href');}
 function protectEdits(){if(busy)return true;if(!dirty)return false;notice('Apply or discard your changes in Review & export before continuing.');$('pending-edits').scrollIntoView({behavior:'smooth',block:'center'});return true;}
@@ -90,24 +90,26 @@ async function enrich(p){
   const ticker=C.symbol(share.symbol);
   const profile=window.ShareStaticData?.find(ticker);
   const facts=profile?{name:profile.name,description:window.ShareStaticData.summary(profile),staticProfile:profile,profileImportedOn:window.ShareStaticData.metadata().importedOn}:{};
-  const logo=companyLogo(window.MarketPrices.resolve(ticker)?.ticker,profile?.publicTicker,ticker);
-  let market;
+  const item=window.MarketPrices.resolve(ticker)||window.BOSEquity?.itemFor(ticker);
+  const logo=companyLogo(item?.ticker,profile?.publicTicker,ticker);
+  let market,valuation=window.BOSEquity?.valuationFor(item);
   try{
    const data=await bounded(window.MarketPrices.series(ticker),'Share data timed out.');
    const quote=data.quote;
    const from=new Date(Date.parse(quote.date+'T12:00:00Z')-366*86400000).toISOString().slice(0,10);
-   const valuation=window.BOSEquity?.valuationFor(data.item);
+   valuation=window.BOSEquity?.valuationFor(data.item)||valuation;
    market={
     name:data.item.name||facts.name,currency:data.item.currency,provider:data.item.provider||'Shared historical price feed',
     quote:{close:quote.close,date:quote.date},daily:data.daily,
     points:window.MarketPrices.selectPoints(data.base,data.daily,from,quote.date),
-    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||'',
     sourceUrl:window.MarketPrices.sourceUrl(data.item.history_url),basis:data.item.basis||''
    };
   }catch{
    market={error:'Exact listing history unavailable. No substitute listing is used.'};
   }
-  result[share.symbol]={...facts,...market,logo:await logo};
+  result[share.symbol]={...facts,...market,logo:await logo,
+   metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
+  };
  }));
  if(revisions[p.id]!==revision)return;
  loading.delete(p.id);
@@ -151,7 +153,7 @@ function download(bytes,type,name){const url=URL.createObjectURL(new Blob([bytes
 let pdfLibrary;
 async function getPDFLib(){if(window.PDFLib)return window.PDFLib;if(!pdfLibrary){const s=document.createElement('script');pdfLibrary=bounded(new Promise((resolve,reject)=>{s.src='vendor/pdf-lib-1.17.1.min.js';s.onload=()=>window.PDFLib?resolve(window.PDFLib):reject(Error('PDF exporter is unavailable.'));s.onerror=()=>reject(Error('PDF exporter could not load. Try again.'));document.head.append(s);}), 'PDF exporter timed out. Try again.').catch(e=>{pdfLibrary=null;s.remove();throw e;});}return pdfLibrary;}
 async function imageBytes(svg){const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob);try{const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(Error('Preview could not be converted to a PDF page.'));img.src=url;});const canvas=document.createElement('canvas');canvas.width=C.W*2;canvas.height=C.H*2;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);const png=await new Promise(ok=>canvas.toBlob(ok,'image/png'));if(!png)throw Error('PDF image creation failed.');return new Uint8Array(await png.arrayBuffer());}finally{URL.revokeObjectURL(url);}}
-async function exportPDF(all){if(busy||dirty)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets),watermarks=showWatermarks;invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[];for(let i=0;i<snapshot.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${snapshot.length}…`;images.push(await bounded(imageBytes(renderPage(snapshot[i],data[snapshot[i].id]||{},i+1,snapshot.length,watermarks)),'This page could not render. Please try again.'));}const bytes=await C.pdfFromImages(images,lib),name=all?'SI-one-pagers.pdf':'SI-'+snapshot[0].shares.map(s=>s.symbol).join('-').replace(/[^A-Z0-9.-]/g,'-')+'.pdf';
+async function exportPDF(all){if(busy||dirty)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets),watermarks=showWatermarks;invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[],linksByPage=[];for(let i=0;i<snapshot.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${snapshot.length}…`;const links=[];linksByPage.push(links);images.push(await bounded(imageBytes(renderPage(snapshot[i],data[snapshot[i].id]||{},i+1,snapshot.length,watermarks,links)),'This page could not render. Please try again.'));}const bytes=await C.pdfFromImages(images,lib,linksByPage),name=all?'SI-one-pagers.pdf':'SI-'+snapshot[0].shares.map(s=>s.symbol).join('-').replace(/[^A-Z0-9.-]/g,'-')+'.pdf';
  // Explicit links keep the generated file usable when a browser blocks automatic downloads.
  if(dirty){$('export-progress').textContent='Terms changed during export. Apply your changes and generate a new PDF.';return;}
  pdfURL=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));$('download-pdf').href=pdfURL;$('download-pdf').download=name;$('open-pdf').href=pdfURL;$('pdf-ready-text').textContent=`${snapshot.length}-page PDF ready · ${name}`;$('pdf-ready').hidden=false;$('export-progress').hidden=true;$('download-pdf').click();notice('PDF ready. Use Download PDF or Open PDF below if it did not save.');

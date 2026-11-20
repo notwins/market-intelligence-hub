@@ -35,8 +35,23 @@ function inlineBarrierLabels(bars,points,left,right){const overlap=(a,b)=>a.left
  // Fit the most constrained words first and backtrack to leave room for the others.
  function fit(i,placed){if(i===rows.length)return true;if(++attempts>20000)return false;const row=rows[i];for(const option of row.options){if(placed.some(p=>overlap(option.box,p.box)))continue;result[row.index]=option;if(fit(i+1,[...placed,option]))return true;}return false;}
  if(fit(0,[]))return result;const placed=[];for(const row of rows){const option=row.options.find(o=>!placed.some(p=>overlap(o.box,p.box)));result[row.index]=option||{inline:false,y:row.y,width:row.width};if(option)placed.push(option);}return result;}
-function svg(p,enrichment={},page=1,total=1,{showWatermarks=true}={}){const out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
- out.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Structured investment one-pager for ${escape(p.shares.map(s=>s.symbol).join(', '))}">`);rect(0,0,W,H,'#fff','#fff');
+function bosReportUrl(raw){
+ try{
+  const url=new URL(raw);
+  return url.origin==='https://productgroup.bankofsingapore.com'&&!url.username&&!url.password&&/\.pdf$/i.test(url.pathname)?url.href:'';
+ }catch{return '';}
+}
+function bosResearch(row){
+ const rating=clean(row?.rating,12).toUpperCase();
+ const call=['BUY','SELL','HOLD'].includes(rating)?rating:'';
+ const value=row?.fairValueOrTargetPrice;
+ const target=Number.isFinite(value)&&value>0
+  ? [row.fairValueOrTargetKind==='fair_value'||row.researchProvider==='Morningstar'?'Fair value':row.fairValueOrTargetKind==='target_price'?'Target price':'Fair value / target',clean(row.currency,4),fmt(value,4)].join(' ')
+  : '';
+ return call||target?{call,target,provider:clean(row.researchProvider,45),url:call?bosReportUrl(row.researchReportUrl):''}:null;
+}
+function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links}={}){const out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
+ out.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Structured investment one-pager for ${escape(p.shares.map(s=>s.symbol).join(', '))}">`);rect(0,0,W,H,'#fff','#fff');
  text(28,39,'FOR REFERENCE ONLY',17,navy,true);text(772,38,'MARKET INTEL  /  SI BETA 2',11,muted,true,'end');
  text(28,58,'Indicative terms. Capital is at risk. Refer to the issuer’s final terms for conditions and observation rules.',9,muted);
  rect(28,74,744,32,navy,navy);text(42,96,'Structured investment',18,'#fff',true);text(758,95,`${page} / ${total}`,11,'#fff',true,'end');
@@ -77,14 +92,48 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true}={}){const out=
  // Show the complete entered description, including on four-share pages.
  const descriptionLines=wrap(description.length> (small?340:500)?description.slice(0,small?337:497).replace(/\s+\S*$/,'')+'…':description,small?60:49),descriptionHeight=small?65:90,descriptionSize=Math.min(small?8.5:10,descriptionHeight/descriptionLines.length-1.5);
  descriptionLines.slice(0,small?6:9).forEach((value,j)=>fitted(rx,y+37+j*(descriptionSize+1.5),value+(j===(small?5:8)&&descriptionLines.length>(small?6:9)?"…":""),rw,Math.max(7.5,descriptionSize),muted));
- const my=y+(small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Shown high / low',pts.length?`${fmt(Math.max(...pts.map(x=>x[1])))} / ${fmt(Math.min(...pts.map(x=>x[1])))}`:'Unavailable'],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
- metrics.forEach(([k,v],j)=>{const col=small?j%2:0,row=small?Math.floor(j/2):j,x=rx+col*137,yy=my+row*(small?10:16);fitted(x,yy,k,small?64:125,small?7:9,muted);fitted(x+(small?129:rw),yy,v,small?62:130,small?7:9,navy,true,'end');});
+ const research=bosResearch(d.metrics),compact=small&&!!research;
+ const my=y+(compact?97:small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Shown high / low',pts.length?`${fmt(Math.max(...pts.map(x=>x[1])))} / ${fmt(Math.min(...pts.map(x=>x[1])))}`:'Unavailable'],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
+ metrics.forEach(([k,v],j)=>{const col=small?j%2:0,row=small?Math.floor(j/2):j,x=rx+col*137,yy=my+row*(compact?9:small?10:16);fitted(x,yy,k,small?64:125,small?7:9,muted);fitted(x+(small?129:rw),yy,v,small?62:130,small?7:9,navy,true,'end');});
+ if(research){
+  const yy=my+(compact?50:small?56:162),size=small?7.5:9,x=rx+59;
+  text(rx,yy,'BOS research',size,muted,true);
+  if(research.url){
+   const box={left:x-2,top:yy-size-2,right:x+33,bottom:yy+3};
+   links?.push({...box,url:research.url});
+   out.push(`<a class="si-bos-report" href="${escape(research.url)}" target="_blank" rel="noopener noreferrer" aria-label="${escape(`Open ${name} research PDF, ${research.call}`)}"><rect x="${box.left}" y="${box.top}" width="${box.right-box.left}" height="${box.bottom-box.top}" fill="transparent"/>`);
+   text(x,yy,research.call,size,'#174e88',true);
+   line(x,yy+1,x+research.call.length*size*.64,yy+1,'#174e88');out.push('</a>');
+  }else if(research.call){text(x,yy,research.call,size,navy,true);}
+  const label=[research.provider,research.target].filter(Boolean).join(' · ');
+  fitted(rx+rw,yy,label,rw-96,size,navy,true,'end');
+ }
  const source=`${d.provider||'Price feed unavailable'}${d.metricsDate?' · BOS metrics '+d.metricsDate:''}`;text(rx,y+block-17,clean(source,65),8,muted);if(d.sourceUrl)text(rx,y+block-6,clean(d.sourceUrl.replace(/^https:\/\//,''),78),7,muted);if(!small)paragraph(rx,y+block-48,d.metricsBasis||'Valuations unavailable. No estimates are inferred.',61,2,8,muted);
  });
  const foot=1010;line(28,foot,772,foot);paragraph(28,foot+15,p.notes||'Indicative reference only. This sheet is not an issuer term sheet, offer or investment recommendation.',140,2,9,navy);
  paragraph(28,foot+44,p.source?`Draft based on ${p.source.reference}, source date ${p.source.date||'not shown'}. Imported levels are rounded and photo-unverified; edited terms require verification. Coupon basis and tenor units remain as labelled.`:'Manual terms are user-entered and unverified. Confirm coupon basis, KO observations, step-down timing, KI conditions, settlement and issuer terms.',155,2,8);
  paragraph(28,foot+71,'Charts show source closes, not product returns. Barriers are illustrative; capital loss is possible. Company profiles are shortened excerpts from supplied Excel snapshot; observation date unavailable. Full descriptions are on share cards.',155,2,8);
  out.push('</svg>');return out.join('');}
-async function pdfFromImages(images,PDFLib){if(!images.length)throw Error('Create a page first.');const doc=await PDFLib.PDFDocument.create();doc.setTitle('Structured investment one-pagers');doc.setProducer('Market Intel SI beta 2');for(const bytes of images){const img=await doc.embedPng(bytes);const page=doc.addPage([595.28,841.89]);page.drawImage(img,{x:0,y:0,width:595.28,height:841.89});}return doc.save();}
+async function pdfFromImages(images,PDFLib,linksByPage=[]){
+ if(!images.length)throw Error('Create a page first.');
+ const doc=await PDFLib.PDFDocument.create(),width=595.28,height=841.89;
+ doc.setTitle('Structured investment one-pagers');doc.setProducer('Market Intel SI beta 2');
+ for(const [index,bytes] of images.entries()){
+  const img=await doc.embedPng(bytes),page=doc.addPage([width,height]);
+  page.drawImage(img,{x:0,y:0,width,height});
+  for(const {left,top,right,bottom,url} of linksByPage[index]||[]){
+   const uri=bosReportUrl(url);
+   if(!uri)continue;
+   // The preview uses a top-left origin. PDF annotation coordinates start at the bottom left.
+   const annotation=doc.context.obj({
+    Type:'Annot',Subtype:'Link',Border:[0,0,0],
+    Rect:[left/W*width,(H-bottom)/H*height,right/W*width,(H-top)/H*height],
+    A:{Type:'Action',S:'URI',URI:PDFLib.PDFString.of(uri)},
+   });
+   page.node.addAnnot(doc.context.register(annotation));
+  }
+ }
+ return doc.save();
+}
 const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

@@ -29,3 +29,36 @@ assert.match(marked,/<image class="si-company-watermark" x="496"[^>]+opacity="0\
 assert(marked.indexOf('si-company-watermark')<marked.indexOf('Company description to read'),'Artwork must sit behind the company text');
 assert(!C.svg(logoPage,{TEST:{logo:png}},1,1,{showWatermarks:false}).includes('si-company-watermark'));
 assert(!C.svg(logoPage,{TEST:{logo:'https://example.com/logo.png'}}).includes('si-company-watermark'),'PDF images must be self-contained');
+const PDFLib=require('../site/vendor/pdf-lib-1.17.1.min.js');
+const report='https://productgroup.bankofsingapore.com/apollo/assets/reports/example.pdf?a=1&b=2';
+const bos={rating:'Buy',researchProvider:'Morningstar',fairValueOrTargetKind:'fair_value',currency:'USD',fairValueOrTargetPrice:250,researchReportUrl:report};
+const researchLinks=[];
+const researchSvg=C.svg(p,{TEST:{metrics:bos}},1,1,{links:researchLinks});
+assert.match(researchSvg,/<a class="si-bos-report" href="[^"]+example\.pdf\?a=1&amp;b=2"/);
+assert.match(researchSvg,/Morningstar · Fair value USD 250/);
+assert.match(researchSvg,/>BUY<\/text>/);
+assert.equal(researchLinks.length,1);
+assert.equal(researchLinks[0].url,report);
+const target=C.svg(p,{TEST:{metrics:{...bos,rating:'Sell',researchProvider:'OCBC',fairValueOrTargetKind:'target_price',currency:'SGD',researchReportUrl:'javascript:alert(1)'}}});
+assert.match(target,/OCBC · Target price SGD 250/);
+assert.match(target,/>SELL<\/text>/);
+assert(!target.includes('si-bos-report'),'An invalid destination leaves the call unlinked');
+assert(!C.svg(p,{TEST:{metrics:{...bos,researchReportUrl:'https://example.com/report.pdf'}}}).includes('si-bos-report'));
+assert(!C.svg(p).includes('BOS research'),'No research fields are invented for an unmatched listing');
+
+async function checkPDFLinks(){
+ const pixel=Buffer.from(png.split(',')[1],'base64');
+ const bytes=await C.pdfFromImages([pixel,pixel],PDFLib,[[],researchLinks]);
+ const pdf=await PDFLib.PDFDocument.load(bytes),key=PDFLib.PDFName.of;
+ assert.equal(pdf.getPage(0).node.Annots()?.size()??0,0);
+ const annotations=pdf.getPage(1).node.Annots();
+ assert.equal(annotations.size(),1);
+ const link=pdf.context.lookup(annotations.get(0));
+ assert.equal(link.get(key('Subtype')).toString(),'/Link');
+ const action=link.get(key('A'));
+ assert.equal(action.get(key('S')).toString(),'/URI');
+ assert.equal(action.get(key('URI')).decodeText(),report);
+ const [left,bottom,right,top]=link.get(key('Rect')).asArray().map(v=>v.asNumber());
+ assert(left>400&&right>left&&top>bottom&&top<842,'The call has a usable rectangle on its PDF page');
+}
+checkPDFLinks().catch(error=>{console.error(error);process.exitCode=1;});
