@@ -79,9 +79,39 @@ function protectEdits(){if(busy)return true;if(!dirty)return false;notice('Apply
 function normalize(p){if(!p||typeof p!=='object'||!Array.isArray(p.shares)||p.shares.length>4)throw Error('Invalid collection page.');const b=C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])b[k]=C.num(p[k]);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])if(typeof p[k]==='string')b[k]=p[k].slice(0,k==='notes'?180:50);b.tenorUnit='months';b.firstStep=p.firstStep===undefined?2:Number(p.firstStep);b.id=typeof p.id==='string'?p.id.slice(0,80):id();b.shares=p.shares.map(s=>({symbol:C.symbol(s.symbol),fixing:C.num(s.fixing),moaPct:C.num(s.moaPct),name:String(s.name||'').slice(0,60),description:String(s.description||'').slice(0,280)}));if(p.source&&/^SI-\d{3,}$/.test(p.source.reference))b.source={reference:p.source.reference,date:/^\d{4}-\d{2}-\d{2}$/.test(p.source.date)?p.source.date:'',rounded:true,review:!!p.source.review};return b;}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({version:1,pages,watch,activeId}));storageOK=true;}catch{storageOK=false;notice('Browser storage is unavailable. Use Save collection to keep these pages.');}}
 function restore(){try{const raw=localStorage.getItem(KEY);if(!raw)return;if(raw.length>500000)throw Error();const s=JSON.parse(raw);if(s.version!==1||!Array.isArray(s.pages)||s.pages.length>LIMIT)throw Error();pages=s.pages.map(normalize);if(new Set(pages.map(p=>p.id)).size!==pages.length)throw Error();watch=Array.isArray(s.watch)?s.watch.filter(r=>/^SI-\d{3,}$/.test(r)).slice(0,3000):[];activeId=pages.some(p=>p.id===s.activeId)?s.activeId:pages[0]?.id||'';}catch{pages=[];notice('Saved collection could not be read. It has not been overwritten; you can load a collection backup.');}}
-$('share-inputs').innerHTML=Array.from({length:4},(_,i)=>`<label><span class="share-number">SHARE ${i+1}${i?' · OPTIONAL':''}</span><input name="share${i}" list="share-suggestions" autocomplete="off" maxlength="30" placeholder="${['NVDA','MSFT','939 HK','AMZN'][i]}" aria-label="Share ${i+1}"></label>`).join('');
+$('share-inputs').innerHTML=Array.from({length:4},(_,i)=>`<div class="share-picker">
+ <label class="share-number" for="si-share-${i}">Share ${i+1}${i?' · Optional':''}</label>
+ <div class="share-picker-field">
+  <input id="si-share-${i}" name="share${i}" role="combobox" aria-label="Share ${i+1}" aria-autocomplete="list" aria-expanded="false" aria-controls="si-share-options-${i}" autocomplete="off" maxlength="30" placeholder="${['NVDA','MSFT','939 HK','AMZN'][i]}">
+  <button type="button" aria-label="Show share ${i+1} suggestions" aria-controls="si-share-options-${i}" tabindex="-1"><span aria-hidden="true"></span></button>
+ </div>
+ <div id="si-share-options-${i}" class="share-picker-list" role="listbox" aria-label="Share ${i+1} suggestions" hidden></div>
+</div>`).join('');
+const picker=window.SISharePicker?.mount($('share-inputs'),{escape:E,logoBase:LOGO_BASE});
+let pickerLogos=new Map();
+function updateSharePicker(){
+ if(!picker)return;
+ const prices=window.MarketPrices;
+ const bos=window.BOSEquity;
+ picker.update(window.SISharePicker.groups({
+  instruments:prices.instruments()||[],profiles:window.ShareStaticData?.records()||[],
+  watchlist:window.WatchlistMembership?.members||[],resolve:ticker=>prices.resolve(ticker),
+  symbol:C.symbol,logos:pickerLogos,
+  marketCap(item,profile){
+   const match=item&&bos?.recordFor(item);
+   const byId=profile&&bos?.valuationById(profile.bbTicker)?.row;
+   return match?.marketCapUsdBillions??(byId?.currency===profile?.currency?byId?.marketCapUsdBillions:null);
+  }
+ }));
+}
+if(picker){
+ updateSharePicker();
+ logoIndex().then(index=>{pickerLogos=index;updateSharePicker();});
+ for(const event of ['market-prices-updated','bos-equity-updated','share-static-updated'])
+  document.addEventListener(event,updateSharePicker);
+}
 $('share-details').innerHTML=Array.from({length:4},(_,i)=>`<div class="share-detail"><strong>Share ${i+1} details</strong><label>Manual reference price<input name="fixing${i}" type="number" min="0.000001" step="any" placeholder="Use dated close"></label><label>MOA margin (%)<input name="moa${i}" type="number" min="0" max="100" step="any" placeholder="Use matched private rate"></label><label>Company name<input name="name${i}" maxlength="60" placeholder="From feed when available"></label><label>Company description<textarea name="description${i}" rows="2" maxlength="280" placeholder="Optional override; matched profile used when blank"></textarea></label></div>`).join('');
-function fill(p=C.blank()){for(const k of ['ko','ki','strike','step','months','coupon','currency','tenorUnit','couponBasis','kiType','firstStep','date','issuer','notes'])form.elements[k].value=p[k]??'';for(let i=0;i<4;i++){const s=p.shares[i]||{};form.elements['share'+i].value=s.symbol||'';form.elements['fixing'+i].value=s.fixing??'';form.elements['moa'+i].value=s.moaPct??'';form.elements['name'+i].value=s.name||'';form.elements['description'+i].value=s.description||'';}dirty=false;$('form-errors').textContent='';$('apply-page').textContent=active()?'Update one-pager':'Create one-pager';$('editor-title').textContent=active()?`Edit one-pager ${pages.indexOf(active())+1}`:'Create a one-pager';$('editor-note').textContent=p.source?`Based on ${p.source.reference}. Imported terms remain rounded and photo-unverified.`:'Start with one to four shares. All entered terms stay on this device.';}
+function fill(p=C.blank()){picker?.close();for(const k of ['ko','ki','strike','step','months','coupon','currency','tenorUnit','couponBasis','kiType','firstStep','date','issuer','notes'])form.elements[k].value=p[k]??'';for(let i=0;i<4;i++){const s=p.shares[i]||{};form.elements['share'+i].value=s.symbol||'';form.elements['fixing'+i].value=s.fixing??'';form.elements['moa'+i].value=s.moaPct??'';form.elements['name'+i].value=s.name||'';form.elements['description'+i].value=s.description||'';}dirty=false;$('form-errors').textContent='';$('apply-page').textContent=active()?'Update one-pager':'Create one-pager';$('editor-title').textContent=active()?`Edit one-pager ${pages.indexOf(active())+1}`:'Create a one-pager';$('editor-note').textContent=p.source?`Based on ${p.source.reference}. Imported terms remain rounded and photo-unverified.`:'Start with one to four shares. All entered terms stay on this device.';}
 function read(){const p=active()?structuredClone(active()):C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])p[k]=C.num(form.elements[k].value);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])p[k]=form.elements[k].value.trim();p.firstStep=Number(form.elements.firstStep.value);p.shares=[];for(let i=0;i<4;i++){const s=form.elements['share'+i].value.trim();if(s)p.shares.push({symbol:C.symbol(s),fixing:C.num(form.elements['fixing'+i].value),moaPct:C.num(form.elements['moa'+i].value),name:form.elements['name'+i].value.trim(),description:form.elements['description'+i].value.trim()});}return p;}
 function buttons(){const p=active();
  $('logo-watermark').disabled=busy;
@@ -168,12 +198,15 @@ async function enrich(p){
 
 function select(pageId){if(protectEdits())return;activeId=pageId;fill(active());persist();render();}
 function add(p){if(pages.length>=LIMIT){notice(`A collection can contain up to ${LIMIT} pages. Save it before starting another collection.`);return;}invalidatePDF();p.id=id();pages.push(p);activeId=p.id;loading.add(p.id);fill(p);persist();render();enrich(p);$('preview-title').scrollIntoView({behavior:'smooth',block:'start'});}
-function changed(event){if(event?.target?.id==='load-moa')return;dirty=true;invalidatePDF();$('editor-note').textContent=active()?'Edited terms will apply when you choose Update one-pager.':'Complete the terms, then create your one-pager.';buttons();$('preview-status').textContent='The preview shows the last applied terms. Apply changes below before exporting.';$('preview-status').classList.add('dirty');}
-form.addEventListener('input',event=>{
- const slot=event?.target?.name?.match(/^share([0-3])$/)?.[1],prior=active()?.shares[slot];
- if(prior&&C.symbol(event.target.value)!==prior.symbol)form.elements['moa'+slot].value='';
- changed(event);
-});form.addEventListener('change',changed);
+function changed(event){
+ const field=event?.target;
+ if(field?.id==='load-moa')return;
+ const slot=field?.name?.match(/^share([0-3])$/)?.[1],prior=active()?.shares[slot];
+ if(prior&&C.symbol(field.value)!==prior.symbol)form.elements['moa'+slot].value='';
+ dirty=true;invalidatePDF();$('editor-note').textContent=active()?'Edited terms will apply when you choose Update one-pager.':'Complete the terms, then create your one-pager.';buttons();$('preview-status').textContent='The preview shows the last applied terms. Apply changes below before exporting.';$('preview-status').classList.add('dirty');
+}
+form.addEventListener('input',changed);
+form.addEventListener('change',changed);
 form.addEventListener('submit',e=>{e.preventDefault();if(busy)return;const p=read(),errors=C.validate(p);if(errors.length){$('form-errors').textContent=errors.join(' ');$('form-errors').scrollIntoView({behavior:'smooth',block:'center'});return;}invalidatePDF();if(active()){const index=pages.findIndex(x=>x.id===activeId);p.id=activeId;pages[index]=p;loading.add(p.id);fill(p);persist();render();enrich(p);}else add(p);});
 $('apply-pending').addEventListener('click',()=>form.requestSubmit());
 $('discard-pending').addEventListener('click',()=>{fill(active());render();});
@@ -268,6 +301,6 @@ $('pdf-one').addEventListener('click',()=>exportPDF(false));$('pdf-all').addEven
 $('backup-pages').addEventListener('click',()=>{if(protectEdits())return;download(JSON.stringify({version:1,pages,watch},null,2),'application/json','SI-beta2-collection.json');});
 $('restore-pages').addEventListener('click',e=>{if(protectEdits())e.preventDefault();});
 $('restore-pages').addEventListener('change',async e=>{try{if(protectEdits())return;const file=e.target.files?.[0];if(!file)return;if(file.size>500000)throw Error('Collection file is too large.');const input=JSON.parse(await file.text());if(protectEdits())return;if(input.version!==1||!Array.isArray(input.pages)||pages.length+input.pages.length>LIMIT)throw Error('Invalid collection or too many pages.');const added=input.pages.map(normalize);if(added.some(p=>C.validate(p).length))throw Error('Collection includes invalid terms. No pages were imported.');invalidatePDF();for(const p of added){p.id=id();pages.push(p);loading.add(p.id);}watch=[...new Set([...watch,...(Array.isArray(input.watch)?input.watch.filter(x=>/^SI-\d{3,}$/.test(x)):[])])];activeId=added[0]?.id||activeId;fill(active());persist();render();renderLibrary();added.forEach(enrich);notice(`Added ${added.length} pages. Your existing collection was preserved.`);}catch(error){notice(error.message||'Collection could not be loaded.');}finally{e.target.value='';}});
-restore();pages.forEach(p=>loading.add(p.id));fill(active());render();window.MarketSI.connect(renderLibrary);bounded(Promise.all([window.MarketPrices.refresh(),window.BOSEquity?.refresh(),window.ShareStaticData?.load()]),'Initial data load timed out.').catch(()=>notice('Some share data is unavailable. You can use manual prices and retry Refresh data.')).finally(()=>{$('share-suggestions').innerHTML=[...(window.MarketPrices.instruments()||[]),...(window.ShareStaticData?.records()||[]).map(r=>({ticker:r.publicTicker,name:r.name||r.bbTicker}))].filter((x,i,a)=>a.findIndex(v=>v.ticker===x.ticker)===i).map(x=>`<option value="${E(x.ticker)}">${E(x.name)}</option>`).join('');renderLibrary();pages.forEach(enrich);});
+restore();pages.forEach(p=>loading.add(p.id));fill(active());render();window.MarketSI.connect(renderLibrary);bounded(Promise.all([window.MarketPrices.refresh(),window.BOSEquity?.refresh(),window.ShareStaticData?.load()]),'Initial data load timed out.').catch(()=>notice('Some share data is unavailable. You can use manual prices and retry Refresh data.')).finally(()=>{updateSharePicker();renderLibrary();pages.forEach(enrich);});
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 })();
