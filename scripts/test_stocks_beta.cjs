@@ -18,6 +18,25 @@ news.push({...news[13],writeup:{body:'Saved explanation'}});news.push({id:'bad',
 const latest=S.newsFor(news,'NVDA');assert.equal(latest.length,10);assert.equal(latest[0].id,'13');assert.equal(latest[0].writeup.body,'Saved explanation');assert(!latest.some(n=>['bad','other'].includes(n.id)));
 const svg=S.plot([{name:'P/E',points:[['2026-01-01',20],['2026-03-01',30]],dots:true,color:'#123456'}],{from:'2026-01-01',to:'2026-03-01',title:'P/E',unit:'times'});
 assert(!svg.includes('<polyline'),'Sparse valuations must stay dots, without filling missing editions');assert(!svg.includes('NaN'));
+assert(!svg.includes('sb-price-curve'));
+const priceSvg = S.plot([{
+  name: 'Price', color: '#126c66',
+  points: [['2026-01-01', 10], ['2026-01-02', 24], ['2026-01-08', 25], ['2026-01-09', 8], ['2026-01-20', 8]],
+}], { from: '2026-01-01', to: '2026-01-20', title: 'Price', unit: 'USD' });
+const pathCommands = priceSvg.match(/class="sb-price-curve"[^>]* d="([^"]+)"/)[1].split(/ (?=[MC])/);
+const priceDots = [...priceSvg.matchAll(/<circle cx="([^"]+)" cy="([^"]+)"/g)]
+  .map(([, x, y]) => [Number(x), Number(y)].map(value => Number(value.toFixed(2))));
+assert.equal(pathCommands.length, priceDots.length);
+for (const [index, command] of pathCommands.entries()) {
+  const coordinates = command.slice(1).split(' ').map(pair => pair.split(',').map(Number));
+  assert.deepEqual(coordinates.at(-1), priceDots[index]);
+  if (index === 0) continue;
+  assert.equal(command[0], 'C');
+  const [[, firstY], [, secondY]] = coordinates;
+  const startY = priceDots[index - 1][1], endY = priceDots[index][1];
+  assert([firstY, secondY].every(y => y >= Math.min(startY, endY) && y <= Math.max(startY, endY)),
+    'The price curve must stay between adjacent observed prices');
+}
 console.log('Stocks BETA: source, identity, news, sparse valuation and overlay boundary checks passed.');
 
 const watchlist = ['NVDA','TSM','BABA','GOOGL','AAPL','MSFT','AMZN','META','D05.SI','U11.SI'];
