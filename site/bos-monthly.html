@@ -11,7 +11,7 @@
   <script defer src="bos-equity.js"></script>
   <script defer src="v3-source-engine.js?v=20261121-ace"></script>
   <script defer src="ace-listing-match.js?v=20261121"></script>
-  <script defer src="bos-monthly.js?v=20261121-ace"></script>
+  <script defer src="bos-monthly.js?v=20261121-ace-lookup"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to BOS observations</a>
@@ -23,14 +23,14 @@
     <header class="sb2-intro">
       <div>
         <h1>BOS monthly archive</h1>
-        <p>Compare the original share price, implied EPS, call and price target by listing and month.</p>
+        <p>Compare monthly prices, implied EPS, calls and targets. Select a listing to see its saved ACE match.</p>
       </div>
       <button type="button" id="bos-retry" hidden>Retry loading archive</button>
     </header>
     <p id="sb2-status" role="status" aria-live="polite">Loading BOS monthly history…</p>
     <details class="sb2-method bos-ace-import" id="ace-import" hidden>
-      <summary>Match an ACE workbook</summary>
-      <p id="ace-file-hint">Choose an .xlsx file with ISIN and currency columns. The file is read in this browser tab.</p>
+      <summary>Load a different ACE workbook</summary>
+      <p id="ace-file-hint">Choose an .xlsx with ISIN and currency columns to use your own matches in this tab.</p>
       <div class="bos-ace-actions">
         <label for="ace-file">ACE workbook</label>
         <input type="file" id="ace-file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="ace-file-hint">
@@ -69,7 +69,7 @@
     <details class="sb2-method">
       <summary>Dates and listing matches</summary>
       <p>Month identifies the archive report. Price date is the date of the quote. The target is from the same report and uses the same quote unit. The gap percentage divides the gap by that share price. GBp is UK pence.</p>
-      <p>Bloomberg identities refer to a snapshot with an unverified quote date. BOS Daily retains its own report and price dates. Historical observations keep their original ticker and quote unit. ACE matches require a verified ISIN and the same currency. GBp and GBX identify GBP for matching, with the original quote units shown.</p>
+      <p>Bloomberg identities refer to a snapshot with an unverified quote date. BOS Daily retains its own report and price dates. Historical observations keep their original ticker and quote unit. Saved ACE matches are from the 13 October 2026 workbook. ACE matches require a verified ISIN and the same currency. GBp and GBX identify GBP for matching, with the original quote units shown.</p>
     </details>
   </main>
 </body>
