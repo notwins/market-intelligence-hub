@@ -153,7 +153,12 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  if(pts.length>1){
   const fk=finalKO(p),bars=[['KO',ls.ko,'#699645','7 3'],['KI',ls.ki,'#b94a57','3 3'],['Strike',ls.strike,'#8261a8','9 3 2 3'],...(p.step>0&&fk!==null?[['Final KO',num(r.value)===null?null:r.value*fk/100,'#c07821','2 3']]:[])].filter(x=>x[1]!==null);
   const values=[...pts.map(p=>p[1]),...bars.map(b=>b[1]),...(series.target||[]).map(p=>p.value),...(series.archive||[]).map(p=>p.value)];
-  const rounded=axisTicks(values),ticks=rounded[0]<0?rounded.map(v=>v-rounded[0]):rounded;
+  let ticks=axisTicks(values);
+  if(ticks[0]<0){
+   const raw=Math.max(...values)/4,power=10**Math.floor(Math.log10(raw));
+   const step=[1,2,2.5,5,10].map(n=>n*power).find(n=>n>=raw);
+   ticks=Array.from({length:5},(_,i)=>Number((i*step).toPrecision(12)));
+  }
   const low=ticks[0],high=ticks[4],t0=ms(from),t1=ms(end);
   const px=date=>plotLeft+(ms(date)-t0)/(t1-t0)*(plotRight-plotLeft);
   const py=v=>plotBottom-(v-low)/(high-low)*(plotBottom-plotTop);
@@ -224,7 +229,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   const label=[research.provider,research.target].filter(Boolean).join(' · ');
   fitted(rx+rw,yy,label,rx+rw-x-39,size,navy,true,'end');
  }
- const source=`${d.provider||'Price feed unavailable'}${d.metricsDate?' · BOS metrics '+d.metricsDate:''}`;text(rx,y+block-17,clean(source,65),8,muted);if(d.sourceUrl)text(rx,y+block-6,clean(d.sourceUrl.replace(/^https:\/\//,''),78),7,muted);if(!small)paragraph(rx,y+block-48,d.metricsBasis||'Valuations unavailable. No estimates are inferred.',61,2,8,muted);
+ const source=`${d.provider||'Price feed unavailable'}${d.metricsDate?' · BOS metrics '+d.metricsDate:''}`;text(rx,y+block-17,clean(source,65),8,muted);if(d.sourceUrl)text(rx,y+block-6,clean(d.sourceUrl.replace(/^https:\/\//,''),78),7,muted);if(!small)paragraph(rx,y+block-(hasOverlays?40:48),d.metricsBasis||'Valuations unavailable. No estimates are inferred.',61,2,8,muted);
  });
  const foot=1010;line(28,foot,772,foot);paragraph(28,foot+15,p.notes||'Indicative reference only. This sheet is not an issuer term sheet, offer or investment recommendation.',140,2,9,navy);
  paragraph(28,foot+44,p.source?`Draft based on ${p.source.reference}, source date ${p.source.date||'not shown'}. Imported levels are rounded and photo-unverified; edited terms require verification. Coupon basis and tenor units remain as labelled.`:'Manual terms are user-entered and unverified. Confirm coupon basis, KO observations, step-down timing, KI conditions, settlement and issuer terms.',155,2,8);
