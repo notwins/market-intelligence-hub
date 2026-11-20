@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "source_commit": "1bc086d9bf35e655b410a777a6065c7d7acd4ed8",
-  "built_at": "2026-11-20T00:56:17.736135+00:00",
+  "source_commit": "6cc5457fd31d7114306339be8d3e4441f8e6fff3",
+  "built_at": "2026-11-20T23:44:22.255468+00:00",
   "coverage": {
     "archive": "All legacy published research HTML in this checkout; companion assets remain attached. New independent editions are merged by ContentDelivery in the browser.",
     "chronology": "First added to the public repository; not a verified Pages upload time. Unknown introduction dates sort last. Source/research dates remain separate.",
@@ -2178,9 +2178,7 @@
           "additional_review": false
         }
       ],
-      "news_ids": [
-        "2cbfb9aa78e09e9e1b0c"
-      ],
+      "news_ids": [],
       "research_href": "search.html?q=MSFT"
     },
     {
@@ -4158,26 +4156,28 @@
         }
       ],
       "news_ids": [
+        "6c047043739eff38aff0",
+        "616cb535d7c1ade4ec28",
+        "6312ccf741b5adfb5cd7",
+        "0fdbe0ac98ebbf1dc7f2",
+        "1998fba16cf604e8a98f",
         "217af01994c8f912f3b5",
         "33d2adfa6988a1d7edc0",
-        "7f01b54b108b9bdc90b7",
-        "0fdbe0ac98ebbf1dc7f2",
+        "a33ea31bfe419115cec1",
         "8a12dd98c22cc8c74546",
+        "ab34b997b65c752bd362",
         "454fc3279b2411bff0b1",
+        "fbd547d495c774205229",
         "739ba3dabf39fa4a60b3",
         "225cb78e11981e0b6025",
-        "fbd547d495c774205229",
         "68747d0ced900516a6f3",
-        "7f0f439281678c47ff97",
         "ea9e655445ee0fb75ec2",
+        "6d3c459e67c1cb2e16eb",
         "2135ee92a4f7f7eb4888",
-        "d0515b9c405d904b29c7",
-        "d1dd0d66e21ea685f96e",
-        "37ecf955f95832127bcd",
-        "a33ea31bfe419115cec1",
+        "1a65d49c69576c1ea549",
         "044af602f0446369eb8b",
-        "72d77434332eb22b79c9",
-        "2345bca740b0837c152d"
+        "b3400d037c95124cdd89",
+        "d0515b9c405d904b29c7"
       ],
       "research_href": "search.html?q=NVDA"
     },
@@ -5547,7 +5547,7 @@
         }
       ],
       "news_ids": [
-        "73e2d13ef0e9ceff53a4"
+        "6e15159f7ee64c5d6a70"
       ],
       "research_href": "search.html?q=GOOGL"
     },
@@ -6417,8 +6417,8 @@
         }
       ],
       "news_ids": [
-        "072f49483ffddc23f111",
-        "73e2d13ef0e9ceff53a4"
+        "000b60673a7c0042b2af",
+        "072f49483ffddc23f111"
       ],
       "research_href": "search.html?q=AMZN"
     },
@@ -9602,7 +9602,9 @@
           "additional_review": false
         }
       ],
-      "news_ids": [],
+      "news_ids": [
+        "03a90e77a8184d84f935"
+      ],
       "research_href": "search.html?q=TSLA"
     },
     {
@@ -10515,10 +10517,10 @@
       "group": "Platforms",
       "price": {
         "value": null,
-        "currency": null,
+        "currency": "USD",
         "as_of": null,
         "change_pct": null,
-        "basis": "USD regular-session closes for 6 Nov 2026, the latest completed US session at cutoff. Fresh Yahoo Finance query2 daily series were retrieved 8 Nov 00:04:00–00:04:47 UTC. Exact regularMarketTime quote timestamps are 6 Nov 21:00:00–21:00:02 UTC for eleven names and 21:03:23 UTC for BRK.B, each matching the completed daily bar. Daily changes compare Nov 6 with Nov 5 ordinary closes. Adjusted closes are separate cumulative-return endpoints. Daily-bar timestamps label sessions and are not substituted quote times. Postmarket observations are excluded. TSM is the US-listed USD ADR. Prices are saved observations, not live.",
+        "basis": null,
         "source_url": null
       },
       "earnings": {
@@ -10626,7 +10628,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS2",
       "source_series": "DGS2",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-19T09:03:31+08:00",
+      "last_attempt": "2026-11-20T08:58:03+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10763,7 +10765,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS5",
       "source_series": "DGS5",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-19T09:03:31+08:00",
+      "last_attempt": "2026-11-20T08:58:03+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -10900,7 +10902,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS10",
       "source_series": "DGS10",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-19T09:03:31+08:00",
+      "last_attempt": "2026-11-20T08:58:03+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -11037,7 +11039,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS30",
       "source_series": "DGS30",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-19T09:03:31+08:00",
+      "last_attempt": "2026-11-20T08:58:03+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -11344,34 +11346,22 @@
   ],
   "news": [
     {
-      "id": "2cbfb9aa78e09e9e1b0c",
-      "title": "US lawmakers seek Microsoft briefing on reported AI deal talks with ByteDance",
-      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNdEpRTFc4Q3Nsa085U2xoZldyY1BXSmlhSy0yT00tRzF4eU5QekdiUENlSTQyajA0eU5PVWl0MUpoejlXdXJMVVFPbHRVaGFlZmxoWFA5SHN5VXBpWHJvLUFLMjZISk96bVRuWWs0V3NSblpmWTM3VVZNQ3VHQVNpQTNUOFM5VzdwZ0ZOcHlFX3hmcEJ5ZDhRVXlCS0dCZEwxbXZ3Z09zVjB4N1FGMHo4Qkc4WWEwTG5LdHNWbk14NA?oc=5",
-      "published_at": "2026-11-18T23:13:48+00:00",
+      "id": "000b60673a7c0042b2af",
+      "title": "Amazon warns NYC delivery bill could add up to $5 per order",
+      "href": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPNkFtMjlFYVZtVmJXQWlvMGtSdGNFZm5xd3JHSlJPaGR4ektBbEZUdWltOGhnbGpPTmNRblVaRFFnSU5KTWxZREdqVmpwTGREOTF0ajFtWkVMcURwY19tX1FkWndWOFlkMVYxTm85N2tjbno0TTNhWDV3VmRqSnJLSWdtUnRFOWxNYWFlWmRxelI2VjhPNkxxaWhIQ1JtYzJaZ0dQNmlxREd4dDY3S0o5N28zbkk0NXM?oc=5",
+      "published_at": "2026-11-19T18:43:01+00:00",
       "tickers": [
-        "MSFT"
+        "AMZN"
       ],
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "217af01994c8f912f3b5",
-      "title": "Nvidia retreats as strong outlook fails to dispel uncertainty",
-      "href": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNNlVnb2FaQlk2WUUtQ3dtaUlBRF9oSnFadkhYVUNwSzRKdnFQNENDUmgyMXBFV1NKaDhUcXJYTGF3Z21LM1F0OEZMVTJZU0lhWHlhOHBCb0t5WVRmMVRMU1ZCRTlJRUpYRlFCZ3RBYVV4WlF0Nms2Q1NvbkVjU0p5NVVQbmFrdzdfZmdLdVgxZnZBUkRGbkpZMTNR?oc=5",
-      "published_at": "2026-11-18T22:17:53+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "33d2adfa6988a1d7edc0",
-      "title": "Wall Street ends mixed after Nvidia earnings, Fed minutes",
-      "href": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNLUw0WGdCZWFQMDBna01NRTEzWEQxbHlSU2RHS2FFX0dIdDc5Si1kQjdzRVFpSTRLeThVQ1V5NG01UG1HSGtJNFZOYjI0OHpIbHRvWjdNOFNjZWhhYzFTWVJJVklORUV4YmJoOWhjd1Nhc1hULXVVYncyUmZUQjJwMFh4RGJsSFhhcjlwc2NpVUhNUEdfQXdsekQ1c3AzZVlZcUdSN3ZlTDJUQ3g4WjRlNHhydEJ2OVJTeHpj?oc=5",
-      "published_at": "2026-11-18T21:46:43+00:00",
+      "id": "6c047043739eff38aff0",
+      "title": "Trump bought up to $265,000 of Nvidia stock in September, disclosure shows",
+      "href": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxNaEEyX3UxZFhLMmpFRWRWYzlUdTBRMnB1VmFiczhiYWwtZXFPeGd1dTJhMU14SXMyLWZPRGJyQjlkTlFva1hTS3FyVUtCMDhJZnJOU0ZiRzJlV3ctc05uM3ltMzh2UVdGQzlXQ05nOXRKT1ZfRUZvQjY4ak4wWFZmODlDa1MwRnFQTFBLcDYwNWZZQURaWkgtNEN0cVg3a19aQ2dwMGdjelNRLUU?oc=5",
+      "published_at": "2026-11-19T18:37:35+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -11380,10 +11370,46 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "7f01b54b108b9bdc90b7",
-      "title": "PODCAST: Nvidia: Good earnings, bad timing?",
-      "href": "https://news.google.com/rss/articles/CBMinAFBVV95cUxOLWszQjV4MEI3dzlQNjVKY2tVVWxGMUxodG80YUJiMHBDZXg0cDBhU21NLWdEWTZaS1B0bWpST1Y0NzdBSFRneHh0Z1QwRXNvOTFXMHVia3pDc3MzV1FRREFHbVpVTnZCdXJYeW5WcVJ3NjJlRzI1Y0pYMUppTURzZnBta1FaV3k0Ni1Dc25Kak5xZkp6b2NrVTNFaU0?oc=5",
-      "published_at": "2026-11-18T14:41:09+00:00",
+      "id": "6e15159f7ee64c5d6a70",
+      "title": "Google picks Bezos' Blue Origin to launch AI computing satellites in 2029",
+      "href": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxNN3VqbnV1MzJhUTVfQzlfY2kyX2gzdk1FU0lyNU15dWhzVk40ZGNtRFlPaUFlS0hYeEhZQ0trUkdMUV9OQmIwZTE5aWliLVVYX0Faa2cxUUpjdWw2TFE5OTBCSnh6d3BqWnA0Znc1MV82SnpMdGZVQzRPXzVXcDV5X0hrckZ0TklGQlJmTTdiOFdob19wajZDT2dnUnlhNEZtVkhKMllQZ3R0U3VhOHdOQTl6WU5kRTNieHZqWVIyQlRERms?oc=5",
+      "published_at": "2026-11-19T14:22:37+00:00",
+      "tickers": [
+        "GOOGL"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "03a90e77a8184d84f935",
+      "title": "Musk pledges higher Tesla output at China plant, Chinese state media says",
+      "href": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNdWFYaDFsNUdtRG82OWFZZUU4MGNKRDVSOW91aTk5N3Zuel9uMHBmSDdGckl3UmhaMVl0TkxTZ0tURE5KQjBzZlM5ZkFCaEdES1l2TzRiV2JfX0xlbzB2NGhLY0U2Y0V5N1NURHdGTVFMckg2VFlxR3F4aUtKVmg1eUo1RDg2RENHYlctRm45aVdELUQzLUwtU01FWExleGNfaEdMM0EyeTBreUJnLXlXVjFQdndBNlBHdWYxVkdpLXZYVHRqRTJjeWhKS0xKakY5?oc=5",
+      "published_at": "2026-11-19T05:34:00+00:00",
+      "tickers": [
+        "TSLA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "616cb535d7c1ade4ec28",
+      "title": "Trump says he referred to ex-Nvidia boss Huang's situation 'briefly' in talk with Xi",
+      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQZGVNM0xjMGtxNjE0aEFnRWU2QURJZy1TSzZGSkFXNVk0eTM0bkhOZWF4cXJjWGhyZEVfZjNuWjZxVVlqUWh5cDUzckE2QTdISldZeThRZG9sZTB3dzdIU1ZOX2RJV0FMQXJ4V2dKS0U3V0t1YWNpcXE4R2FuZVVRVFJaUUNnYmZkS1pQXzluQ25WaUROQ2NVQk5wNHpPa2NheXhUZFFiQ3o5cjNxcHFWUWRVS3FCNm1meTltX0xiMA?oc=5",
+      "published_at": "2026-11-19T01:46:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "6312ccf741b5adfb5cd7",
+      "title": "China seeks advanced Nvidia chips for AI weapons despite US curbs, report says",
+      "href": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNN0Vsd0FkMFJLZl8zbklveDFFQW9XSEc3Q3dHMEZ6NjJFZ0dyYUIzOVdkam50a0lSYy00NEt5OGpCaG8wQTZ4RDlyTGVvaU1VMTlGNjk3aTdiZHVXcnloamEyTUZqbEhJWTlHbFJqTHNDWmVGN2JBT2FYTG44bWRIVXFfQ1E3LVdmeGRlczZETDFIUXlUSy04RXk0bDBlTHlIVm1ld2V3TnltenZZSXdBTm1ZV3NxUFVnTTRZWWRn?oc=5",
+      "published_at": "2026-11-18T12:25:43+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -11404,10 +11430,70 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "1998fba16cf604e8a98f",
+      "title": "PODCAST: Nvidia snubs Huang, Chinese AI, and GTA VI",
+      "href": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQblNXdmx2N2hvUWRFSlQ2VU5GNDNfUnNBS2VXbFlJUlpDWk5MZkljZGRLSVA3SkNqZW5QbU8zcjk5MVZ3bW1NYzl5algtYVlJajZuck93NUtXZ0k0R0JwY1VxYWoxcG1iLWYyLXJRWlVrdWhYa1JZak9CQlhma0llbWxOcnRvVEZD?oc=5",
+      "published_at": "2026-11-18T11:18:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "217af01994c8f912f3b5",
+      "title": "Nvidia retreats as strong outlook fails to dispel uncertainty",
+      "href": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNNlVnb2FaQlk2WUUtQ3dtaUlBRF9oSnFadkhYVUNwSzRKdnFQNENDUmgyMXBFV1NKaDhUcXJYTGF3Z21LM1F0OEZMVTJZU0lhWHlhOHBCb0t5WVRmMVRMU1ZCRTlJRUpYRlFCZ3RBYVV4WlF0Nms2Q1NvbkVjU0p5NVVQbmFrdzdfZmdLdVgxZnZBUkRGbkpZMTNR?oc=5",
+      "published_at": "2026-11-18T11:12:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "33d2adfa6988a1d7edc0",
+      "title": "Wall Street ends mixed after Nvidia earnings, Fed minutes",
+      "href": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNLUw0WGdCZWFQMDBna01NRTEzWEQxbHlSU2RHS2FFX0dIdDc5Si1kQjdzRVFpSTRLeThVQ1V5NG01UG1HSGtJNFZOYjI0OHpIbHRvWjdNOFNjZWhhYzFTWVJJVklORUV4YmJoOWhjd1Nhc1hULXVVYncyUmZUQjJwMFh4RGJsSFhhcjlwc2NpVUhNUEdfQXdsekQ1c3AzZVlZcUdSN3ZlTDJUQ3g4WjRlNHhydEJ2OVJTeHpj?oc=5",
+      "published_at": "2026-11-18T10:28:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "a33ea31bfe419115cec1",
+      "title": "Nvidia says 'no' to rehiring Huang",
+      "href": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQTTFHVE42V3FIZzBXbWhKLVR3bWRrZ3dRWGpCRm45dlktYkpveDBveW1IRFc1aDltUERHLURBUFdSUW5KMVVaZ2w2NGRuQVhmZmtyb2ZpUGZuZncyVXR3cFYxX2FUcmFyQVRBSHVnbWFsVFFTQ1lPS0lTdmZUMDktbTBUbndQdzhxc2JnWVctSF96QXdVb2JUeUpqYURha25FMEZhU3VqbWFTZDA0Q3lqanRUaGdMQ2M?oc=5",
+      "published_at": "2026-11-18T09:40:35+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "8a12dd98c22cc8c74546",
       "title": "Nvidia's numbers impress but investors fret over CEO succession",
       "href": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQbldlWEozckRZVFhNcGlyNVhJSkxoQ1E2UFduQ3ZaNHFBT0RKMW12eTNJV1BhNzZVMENXWFk0OWE1Z1RWRlUwMW82a2RhYm9kQjlIcmlUb1dzNVBUU25hVHQ5eEdVckRac3B5cUlFMjZkUUlJUFYyZFdjVW95R1ZiT0JZdnFSM0RvMG8tdkxOY21uNFRuOGRTdFJqMzBySXgtTDQ2T2ZzUDdzb1UxbGtfeA?oc=5",
       "published_at": "2026-11-18T08:33:31+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "ab34b997b65c752bd362",
+      "title": "Nvidia rules out Huang comeback as campaign for his return grows",
+      "href": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQWnJmVHNCR2NpOGp0dlZibjRKMHA2S0hJM21UQTlDUmpTdXJwekFtbWxwdGVEZDVSRm0tUjZyWHQ3dGZVSmdBQkdCMHgwS0E1MU1MczV4c0p1cjRZT2I0dFpvWEZQU3VDSXNPZ1hKZHhQenJ6RVNpbFhIUm5KeVFSdHgxNGx5U2dHd0hsanhrMW1vWEUybU9maXg0cUJNUlpzcnp6NG9LS25kcjllZ3REY0o3Z3R1blU?oc=5",
+      "published_at": "2026-11-18T06:53:38+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -11428,8 +11514,20 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "fbd547d495c774205229",
+      "title": "'Business as usual': Nvidia's Kress passes first test as board slams door on Huang",
+      "href": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPU1hUb0ZMNTdVdlRaU3NVMXlUODNRZmhzZjVNRFVocktEWXJ4ZkF5eTVmVXBQcXRMOWFpdHZMQ2hxeUE1OER5TkpmRTlLV0JBdGV5RWVDVTl2TWtZamNmMXBTV2Y4eTVXdFpBdmZNSlFtZklNQnBLWHNDU251eElyd191OGs4ajktX2NvRVpNQ1M1cDNEU0ZzYnpWMmpnQ1E1d3NuUzhMSXZfdEowVWN6QWZldW0?oc=5",
+      "published_at": "2026-11-18T05:22:00+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "739ba3dabf39fa4a60b3",
-      "title": "Stocks slip with Nvidia, dollar ticks higher",
+      "title": "Stocks slip with eyes on Anthropic and Nvidia, oil prices slide",
       "href": "https://news.google.com/rss/articles/CBMie0FVX3lxTFB6allzaTc1SU8zUmVIeXRZRkU2dE9reVo1MXBLSllnX0lsb1FmemdwR2RnNzZvQ0tqSzR6cTgzVHI2bGlYWWxxLTJWY3V4OXBrczR5OXF5ZkdNQnBfak1tYUs1NlVOQVVSLTdacXdnaEt0Y2VHVmM4NEN2WQ?oc=5",
       "published_at": "2026-11-18T01:46:00+00:00",
       "tickers": [
@@ -11464,34 +11562,10 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "fbd547d495c774205229",
-      "title": "'Business as usual': Nvidia's Kress passes first test as board slams door on Huang",
-      "href": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPU1hUb0ZMNTdVdlRaU3NVMXlUODNRZmhzZjVNRFVocktEWXJ4ZkF5eTVmVXBQcXRMOWFpdHZMQ2hxeUE1OER5TkpmRTlLV0JBdGV5RWVDVTl2TWtZamNmMXBTV2Y4eTVXdFpBdmZNSlFtZklNQnBLWHNDU251eElyd191OGs4ajktX2NvRVpNQ1M1cDNEU0ZzYnpWMmpnQ1E1d3NuUzhMSXZfdEowVWN6QWZldW0?oc=5",
-      "published_at": "2026-11-18T00:47:16+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "68747d0ced900516a6f3",
       "title": "Instant view: Nvidia earnings beat estimates; attention turns to call",
       "href": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQaWVjeHRTNkRreHFmNVBsYkdQeFJjc1htLXA4enJfTEV5clpxOHZRRGdGZXNkZGFzY2FPWUtTMkdCSGZYZXFHMmE5OVFzUDJuc2ZjRGJybkF2MG1pTkxhMFBRam5wdjFNdG5sRGJaaEN5bE1keENqTkJGb2lPeFJQM2Y2NDAtQ3JvSG9pRXExTFpwSE9iandZTFMtcEEtX21xUXM0?oc=5",
       "published_at": "2026-11-17T23:34:04+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "7f0f439281678c47ff97",
-      "title": "Trading Day: AI trade unwind continues, but Nvidia beats",
-      "href": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPcldwM3FPR2tvZGxyV19iWTV3c2w3T0QtU2NSMmJRX0RLc1VkcjBqREw5czZtZ0YyOFp1bmNsdmNsX2tmNEUyZ2FrV1hXQnZBUEJKMVVKUENoQldwZ1VtemhRWTg1Y3dVZFNOVlFXWEI4bXZtMVJzVVBaaDE3MlV4d2RvSWhGd1ZXWnFzVC1PS05wNl9URHVYNmUySy1xUWZacTV0WWNR?oc=5",
-      "published_at": "2026-11-17T22:00:00+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -11512,6 +11586,18 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "6d3c459e67c1cb2e16eb",
+      "title": "Nvidia's insurance protects board but not company coffers from litigation",
+      "href": "https://news.google.com/rss/articles/CBMirAFBVV95cUxPdU9PZWl4NWx6T0xLbFo5OHV4THh2STNtRWpkeE16alJLSWpkOF9FM045cl9CallmaVRfQzVtRWYyeE4tUUlXb1hxRmpVR2JoR2VBYU9zLVJSdTdkMWFBYllRQUVrbFRUNXFfVm5CNnVjTm5OcUFEcVo0VDNMLWpkTkhHcmdvTWlSWThVTzFNWU1pNFo1MU9pdEdwRzdWUTM0WTdjZVc3d3RJUW5V?oc=5",
+      "published_at": "2026-11-17T20:58:04+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "2135ee92a4f7f7eb4888",
       "title": "Nvidia shares set for $335 billion swing after earnings, options show",
       "href": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQcVgtN05zY1JHMFRsZlg2WkdkdGNRMDV4bFl4RllkcWFvVEVyd0QxTUhZWERjUmhIWTlOTkxiNHpxQjJpQTV1ZU45dGNmT2M5MDd4ZkRZeHNxSGNjaTFPdHUyRXJEdHlrSGRuWUlaX0VDRkpWNG9CS2UySmxFajBDQ1NjU0JMcUl6NFNmbFZoOXYyY19GMExQSkZva2VWMWUtUGpLRG93TkRhWHRU?oc=5",
@@ -11524,13 +11610,36 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "73e2d13ef0e9ceff53a4",
-      "title": "EXCLUSIVE: Trump's China data center curb advances despite Amazon, Google, Meta lobbying",
-      "href": "https://news.google.com/rss/articles/CBMitwFBVV95cUxPamZVTFBIMlk1aHp5ZUZ3ME56bnZlV3NPODhQY3JKcnI2dUtIT0FqSHFveTRSem1Rby14eXY4dnhCci1WWmNJdEZnTnNnOUJldUROSXFWc1I5SmExVXZ2dWlhMWhQSkpqTFJIN1R2aTJsX2tJQ1l6cnhRY2JWdTNpVjNKZFhuelREd1A1S29BYUhDRHlTNWxncUJ3aHFobUU1NFZNTVlkbkxLUWExUFVjWHpOSHo3aE0?oc=5",
-      "published_at": "2026-11-17T20:24:05+00:00",
+      "id": "1a65d49c69576c1ea549",
+      "title": "UK's FTSE 100 logs worst day in eight months on nerves ahead of Nvidia results",
+      "href": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNYlctZUJBbkJVek5qZEV4aFlDcm92RjZBd0ZQZU9LUnh4bkhDZWxabjh0QjNFMUowRE44RExiZmZLMnMtanZlSW1tbHN0THVrN1hQc3NPQjhKdnd0eEh5cGpfYjh6V284dW9ZZ3JVd0JSYU45cElUN01IMEl5SC1wNkRYT3hDVEhicXVhQTRoTUpPNzE2RjZuX1dBVUZDYmZ1ZnNUQU5kRkFmZnREU0w5SUQ1azJUV2lvaEZuTmU3Yw?oc=5",
+      "published_at": "2026-11-17T17:31:23+00:00",
       "tickers": [
-        "AMZN",
-        "GOOGL"
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "044af602f0446369eb8b",
+      "title": "Stocks fall but Nvidia rebound lifts sentiment",
+      "href": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQbHY5U3ZMUmhWeEViMkJTbW9ObHlQYWRWbmdxWDhXMUdaWFRvLVdRY01oaTJJb3lmOFBiaWpQMEFlTFk5R2ttRnBaT18zaF9Jbk9od2Rza0cyMXJ6Z3JlalJDdG9neTVhQ3pJRG05SE9NQUYxZkFvQmQ5bnVfTi13amFNOA?oc=5",
+      "published_at": "2026-11-17T16:50:41+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "b3400d037c95124cdd89",
+      "title": "Breakingviews - COMMENTARY: Nine questions for Nvidia’s stand-in CEO",
+      "href": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNOXF5elJxdEdtU1JRcnlCNFdSU2VfNmQ5Z3AzbnU2bzlxdEdqYWVtSGU3LXYtQkVqczVfM0JXWVN6UWZNZHVEZm5yanlNa08zT3pWOTFMZm9SUlhnRFhMaWpUUE9hRjVwZkQwd1R3dEVrTGZYWF9obm9jWGtwcEdMMnVqd01QSkk4M19FUGdqR3JqU0NpdkEyckJ5SHE?oc=5",
+      "published_at": "2026-11-17T15:51:00+00:00",
+      "tickers": [
+        "NVDA"
       ],
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
@@ -11547,81 +11656,9 @@
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "d1dd0d66e21ea685f96e",
-      "title": "Nvidia set to deliver first life-after-Huang briefing",
-      "href": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQSUUza3ZRN2NNQUpGVUY5X09sVHVOSFVBamhPQklHQ1dFbjV1X1hKaWVPQTBjSmxyM0c3QUtqcmlaSndRaW5OdkJ2WW80WHhQcVJ1YWhpdFVxVzRiTmFBZENZS3AtS3hfeW1pYkRtWW81TXlzT0E4d2FQU3FDQ2Q3U08yYXVJNlFFdEoySTZGeC0wWUdqd0xlMlRFOA?oc=5",
-      "published_at": "2026-11-17T11:06:47+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "37ecf955f95832127bcd",
-      "title": "Wall Street ends lower ahead of Nvidia results, focus turns to Anthropic debut",
-      "href": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOemNySVhGbms1VkxVYXFsTFdtdVh1MjNQQk16Y1ZfNGFHMFhDRWUtZldZRzJzSWxpNlBLWVpTenJnU2FHZndaVUlEclFtQVNvTzJBWTNpM1p0N3dmWjlyMEFKbkowZkpSanhVcEVLUjZfOWxNcW5OZVFuLTNFNF93ZDd4b0wxX1VzNlJPODdqc0xob1ZrR0xuQkJ6bExvNDdQMk5saFVSdkVBZw?oc=5",
-      "published_at": "2026-11-17T10:51:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "a33ea31bfe419115cec1",
-      "title": "Nvidia says 'no' to rehiring Huang",
-      "href": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQTTFHVE42V3FIZzBXbWhKLVR3bWRrZ3dRWGpCRm45dlktYkpveDBveW1IRFc1aDltUERHLURBUFdSUW5KMVVaZ2w2NGRuQVhmZmtyb2ZpUGZuZncyVXR3cFYxX2FUcmFyQVRBSHVnbWFsVFFTQ1lPS0lTdmZUMDktbTBUbndQdzhxc2JnWVctSF96QXdVb2JUeUpqYURha25FMEZhU3VqbWFTZDA0Q3lqanRUaGdMQ2M?oc=5",
-      "published_at": "2026-11-17T10:22:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "044af602f0446369eb8b",
-      "title": "Stocks fall but Nvidia rebound lifts sentiment",
-      "href": "https://news.google.com/rss/articles/CBMigwFBVV95cUxQbHY5U3ZMUmhWeEViMkJTbW9ObHlQYWRWbmdxWDhXMUdaWFRvLVdRY01oaTJJb3lmOFBiaWpQMEFlTFk5R2ttRnBaT18zaF9Jbk9od2Rza0cyMXJ6Z3JlalJDdG9neTVhQ3pJRG05SE9NQUYxZkFvQmQ5bnVfTi13amFNOA?oc=5",
-      "published_at": "2026-11-17T01:22:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "72d77434332eb22b79c9",
-      "title": "Wall Street ends sharply lower on AI jitters ahead of Nvidia results, Anthropic IPO",
-      "href": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOZEJobHpHMl90WUdVbnpzSGxLb1l3bi1BczhrN29iVW9rUzBtQWE4aFNuM2ZGS1RIQThLdEZPWmZjeExVaHhRaXBubkdqR3R3TXJYTlRqUmRYcXZxYS1pV1lyRlExUDdEUWJ3cTg4aktJVWcxbkg5UW9oeVRXLXhCZjdRQmFNeFJlLXhpWTRMM1lEUVlodGwxVHNCSE9ONTlnem0yekw1dDNraElYZGc?oc=5",
-      "published_at": "2026-11-16T23:45:50+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "2345bca740b0837c152d",
-      "title": "Nvidia's AI financing machine may survive Huang, but with less risk appetite",
-      "href": "https://news.google.com/rss/articles/CBMixAFBVV95cUxPd2JkdDdXVFVDWWplOU5DRUtSZ0tQS25DanRfRl92ZUU5WVNDQnBwUUhhM3RRdDRSdEdISTNwa002U05EdkRlSlFXNE1PZ1RSVElZUjU5ZnRvT2RqQjZjaVRidXJRQ2dtb3FuRG9GQ0hrMm1ialRwSkN3U0VLTkZoNUhpUTYwakJUUUlOR0FMWWVMdUI0MUlkdVdYdUZOYzc5YVNtYk5wMjlHYlRKaG1RUWNOMGtnM1dCZEJpUEw4cThSc1Js?oc=5",
-      "published_at": "2026-11-16T17:23:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     }
   ],
-  "news_generated_at": "2026-11-19T09:03:31+08:00",
+  "news_generated_at": "2026-11-20T08:58:03+08:00",
   "news_status": "ok",
   "calls": [
     {
