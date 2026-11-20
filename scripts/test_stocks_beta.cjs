@@ -19,3 +19,14 @@ const latest=S.newsFor(news,'NVDA');assert.equal(latest.length,10);assert.equal(
 const svg=S.plot([{name:'P/E',points:[['2026-01-01',20],['2026-03-01',30]],dots:true,color:'#123456'}],{from:'2026-01-01',to:'2026-03-01',title:'P/E',unit:'times'});
 assert(!svg.includes('<polyline'),'Sparse valuations must stay dots, without filling missing editions');assert(!svg.includes('NaN'));
 console.log('Stocks BETA: source, identity, news, sparse valuation and overlay boundary checks passed.');
+
+const watchlist = ['NVDA','TSM','BABA','GOOGL','AAPL','MSFT','AMZN','META','D05.SI','U11.SI'];
+const listings = ['JPM', ...watchlist.slice().reverse(), 'WMT'].map(ticker => ({ticker}));
+const select = query => S.startingSelection(new URLSearchParams(query), listings);
+assert.deepEqual(select(''), watchlist);
+assert.deepEqual(select('columns=2'), watchlist);
+assert.deepEqual(select('companies=U11.SI,NVDA,U11.SI,DBA,D05.SI'), ['U11.SI','NVDA','D05.SI']);
+assert.deepEqual(select('company=MSFT'), ['MSFT']);
+assert.deepEqual(select('companies='), []);
+assert.deepEqual(select('companies='+[...watchlist,'JPM','WMT'].join(',')), watchlist);
+console.log('Stocks BETA: ten-card default, SGD listings last, explicit selections and card limit passed.');
