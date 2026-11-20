@@ -82,3 +82,31 @@
 .si-library-share img,.si-library-logo-fallback{display:inline-block;width:20px;height:20px;flex:none;object-fit:contain;border-radius:4px;background:#fff}
 .si-library-logo-fallback{border:1px solid #e0e7ec}
 .library table{min-width:990px}
+
+/* Compact reference filter, with two share selectors per desktop row. */
+.library{--si-ink:var(--ink);--si-muted:var(--muted);--si-line:var(--line)}
+.library .library-controls{margin:12px 0;gap:10px}
+.library .library-controls .segmented{width:auto}
+.library .library-controls>label{flex:1 1 220px;min-width:0}
+.library .library-controls input{min-height:34px;height:34px;padding:6px 9px}
+.library .library-controls button{min-height:34px;padding:6px 9px}
+.library .si-quick{padding:10px;margin:10px 0;font-size:.875rem}
+.library .si-quick .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.si-quick-simple .si-quick-grid{grid-template-columns:minmax(0,1fr)}
+.si-quick-simple .si-quick-shares{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(34px,auto));padding-top:0;gap:6px 16px}
+.si-quick-simple .si-quick-optional,.si-quick-simple .si-search,.si-quick-simple .si-review-check{display:none}
+.library .si-quick-simple .si-share-filter{grid-template-columns:44px 58px minmax(110px,1fr) 105px}
+.library .si-quick-simple .si-quick-heading{margin-bottom:7px}
+.library .si-quick-simple .si-quick-bottom{margin-top:6px}
+.library .si-quick-simple .si-filter-note{margin-top:5px}
+@media(max-width:1000px){
+ .library .si-quick-simple .si-share-filter{grid-template-columns:44px 56px minmax(100px,1fr)}
+ .library .si-quick-simple .si-filter-price{display:none}
+}
+@media(max-width:640px){
+ .si-quick-simple .si-quick-shares{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(4,minmax(34px,auto));gap:5px}
+ .library .si-quick-simple .si-share-filter{grid-template-columns:42px 56px minmax(100px,1fr)}
+ .library .si-quick .si-quick-top{gap:7px}
+ .library .si-quick .si-quick-heading>strong{font-size:.94rem}
+ .library .si-quick .si-quick-heading [role=status]{font-size:.78rem}
+}

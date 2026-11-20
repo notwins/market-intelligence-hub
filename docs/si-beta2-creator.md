@@ -2,6 +2,14 @@
 
 `si-beta2.html` sits beside SI Pricing in the shared History navigation. Both views use the shared historical SI reference data.
 
+The reference list shares SI Pricing's quick filter: four logo/name/ticker
+selectors with AND/OR joins, currency, tenor 1–11 and inclusive coupon min/max.
+The selectors occupy two rows on desktop and four compact rows on phones.
+Filters intersect the Full list or SI watchlist and the reference search, without
+writing to drafts or favourites. Coupon ranges use confirmed p.a. labels unless
+the user includes unconfirmed coupon basis. Reset clears filters and search
+while retaining the selected Full list or SI watchlist view.
+
 The page has manual entry for one to four shares, initial KO, KI, strike,
 monthly step-down in percentage points, tenor and coupon. Extra controls expose
 coupon basis, tenor units, the first step-down month, KI observation type,
