@@ -83,7 +83,7 @@ function card(c) {
   <div class="cd-charts">${chart(d.pe||[],'Forward P/E',c.ticker)}${chart(d.pb||[],'Forward P/B',c.ticker)}</div>
   <p class="cd-note">${r.priceAsOf?'BOS consensus estimates · '+E(day(r.priceAsOf))+'. Forecast horizon unspecified.':'Valuation source unavailable.'} Dots show source observations; missing dates are not filled.</p>
   ${valuationEvidence(c.ticker,d,'Chart values &amp; sources')}${reading(c,false)}
-  <nav class="cd-actions" aria-label="${c.ticker} shortcuts"><a href="stocks-beta.html?companies=${c.ticker}">Price · P/E · P/B charts →</a><a href="v4.html?si=${c.ticker}#history/si">SI pricing →</a><a href="v4.html?company=${c.ticker}#earnings">Earnings</a><a href="search.html?q=${c.ticker}">All news &amp; research</a></nav></article>`;
+  <nav class="cd-actions" aria-label="${c.ticker} shortcuts"><a href="stocks-beta.html?companies=${c.ticker}">Price · P/E · P/B charts →</a><a href="v4.html?si=${c.ticker}#history/si">SI pricing →</a><a href="v4.html?company=${c.ticker}#earnings">Earnings</a><a href="search.html?q=${c.ticker}">All news &amp; research</a></nav>${root.NvdaArticle?.link(c.ticker) || ''}</article>`;
 }
 function paintHome(host) {
   if (!state.loaded || state.loading) return;

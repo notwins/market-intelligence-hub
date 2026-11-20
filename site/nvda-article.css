@@ -1,0 +1,58 @@
+.nvda-article-banner {
+  margin: 0 0 2rem;
+  border: 1px solid #d8e9ee;
+  border-inline-start: .35rem solid #007190;
+  border-radius: 1rem;
+  background: #f5f6f6;
+  color: #222d31;
+}
+
+.nvda-article-banner > div {
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.nvda-article-banner h2 {
+  margin: .65rem 0 .4rem;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.2;
+}
+
+.nvda-article-banner p {
+  max-width: 42ch;
+  margin: 0 0 .65rem;
+}
+
+.nvda-article-tag {
+  display: inline-block;
+  padding: .2rem .65rem;
+  border-radius: 1rem;
+  background: #f5f3ff;
+  color: #6d28d9;
+  font-size: .875rem;
+  font-weight: 700;
+}
+
+.nvda-article-related {
+  margin: .5rem 0 0;
+}
+
+.nvda-article-banner small,
+.nvda-article-related small {
+  display: block;
+  font-size: .875rem;
+}
+
+.nvda-article-banner a,
+.nvda-article-related a {
+  display: inline-block;
+  padding-block: .4rem;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.nvda-article-banner a:focus-visible,
+.nvda-article-related a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: .2em;
+}

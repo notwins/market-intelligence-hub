@@ -1,4 +1,4 @@
-/* Navigation only: move existing nodes, retaining report URLs, IDs and handlers. */
+/* Research library navigation and reading links. */
 (()=>{'use strict';
 const root=document.querySelector('.market-understanding');
 if(!root||root.dataset.libraryReady)return;
@@ -35,6 +35,30 @@ document.addEventListener('click',event=>{
 });
 window.addEventListener('hashchange',()=>reveal(location.hash,true));
 reveal(location.hash,Boolean(location.hash));
+
+function addNvidiaReading() {
+ const link=window.NvdaArticle.link('NVDA');
+ const section=document.createElement('section');
+ section.className='mu-writeups';
+ section.id='my-thoughts';
+ section.setAttribute('aria-labelledby','my-thoughts-title');
+ section.innerHTML=`
+  <div class="mu-writeups-heading"><div><h2 id="my-thoughts-title">My thoughts</h2></div></div>
+  <div class="mu-writeups-grid">
+   <article class="mu-writeup">
+    <p class="mu-eyebrow"><time datetime="2026-11-18">18 Nov 2026</time> · Video review</p>
+    <h3>The risk inside the jacket</h3>
+    <p>A personal reading of Patrick Boyle’s Nvidia episode, covering disclosure, chip export controls, succession and financing.</p>
+    ${link}
+   </article>
+  </div>`;
+ latest.after(section);
+ root.querySelector('[data-main-research="research-nvda-2026-11-05"]')?.insertAdjacentHTML('beforeend',link);
+ if(location.hash==='#my-thoughts')reveal(location.hash,true);
+}
+
+import('./nvda-article.js?v=20261121').then(addNvidiaReading).catch(error=>console.error('Could not load Nvidia reading link',error));
+
 // Print the complete dated material, then restore the reader's choices.
 let printState=[];window.addEventListener('beforeprint',()=>{printState=Array.from(root.querySelectorAll('details.library-group')).map(node=>[node,node.open]);printState.forEach(([node])=>node.open=true);});window.addEventListener('afterprint',()=>printState.forEach(([node,open])=>node.open=open));
 })();

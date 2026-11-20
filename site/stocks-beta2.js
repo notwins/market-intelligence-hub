@@ -111,6 +111,7 @@
     get('sb2-table').innerHTML = '<thead><tr><th scope="col">Report date</th><th scope="col">Price date</th>'
       + '<th scope="col">Source ticker</th>' + headers + '</tr></thead><tbody>' + values + '</tbody>';
     get('sb2-table').parentElement.scrollTo(0, 0);
+    get('sb2-related-reading').innerHTML = root.NvdaArticle?.link(selected.ticker) || '';
   }
 
   function showGroup(group) {

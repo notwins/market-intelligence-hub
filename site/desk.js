@@ -114,6 +114,7 @@ function stockCard(r) {
         <p class="fine">${link(destination, 'Company workspace →')} · ${link(r.research_href, 'Search research →')}</p>
       </details>
       <div data-company-research></div>
+      ${root.NvdaArticle?.link(r.ticker) || ''}
     </div>
   </article>`;
 }
@@ -126,7 +127,7 @@ function buildMarkets(){
   priceWatchlist = [...data.watchlist, ...newStocks.filter(stock => !data.watchlist.some(r => r.ticker === stock.ticker))];
   $('#watch-strip').innerHTML = priceWatchlist.map(r => `<div class="watch-mini" data-ticker="${E(r.ticker)}">
     <header>${link('#company-' + encodeURIComponent(r.ticker), r.ticker)}</header>
-    <span data-quote="${E(r.ticker)}">${quote(r)}</span>${moveStats()}
+    <span data-quote="${E(r.ticker)}">${quote(r)}</span>${moveStats()}${root.NvdaArticle?.link(r.ticker) || ''}
   </div>`).join('');
   $('#main-company-cards').innerHTML = root.CompanyDashboard.shell({home: true, cards: priceWatchlist.map(stockCard).join('')});
   $('#yield-rows').innerHTML=data.yields.map(y=>{const points=(y.history||[]).map(p=>[p.date,p.value]);return `<details class="instrument" open><summary><span><strong>${E(y.label)}</strong><small>${E(y.basis)}</small></span><span class="quote"><b>${num(y.value)}%</b><small>${E(date(y.as_of))}</small></span></summary><div class="detail-body"><p class="fine">${E(y.basis)}</p>${y.status==='error'?`<p class="warning">${E(y.message||'Refresh failed; retaining the dated saved observation.')}</p>`:''}${spark(points,'% p.a.')}${valuesTable(points,'% p.a.')}${link(y.source_url,'Open original source ↗')}${y.attribution?'<p class="fine">'+E(y.attribution)+' '+link(y.license_url,'Dataset terms')+'</p>':''}</div></details>`;}).join('');}
