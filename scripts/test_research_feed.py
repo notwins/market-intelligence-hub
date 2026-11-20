@@ -1,7 +1,7 @@
 import copy,json,shutil,subprocess,tempfile,threading,unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from research_feed import ROOT,canonical,digest,read,build,compile_feed,collect,validate_report,validate_review
+from research_feed import ROOT,canonical,digest,read,build,collect,validate_report,validate_review
 from submit_research import accept,submit,git
 from research_release_guard import guard,restore_ui
 from test_research_contracts import fixture,render,STANDARD
@@ -98,7 +98,23 @@ class ResearchFeedTests(unittest.TestCase):
         git(self.repo,'add','.');git(self.repo,'commit','-m','UI rollback');self.assertEqual(guard(self.repo,head,git(self.repo,'rev-parse','HEAD').stdout.strip())['lane'],'ui-or-maintenance')
         (self.repo/'site/v4.html').write_text('Mixed UI');git(self.repo,'add','.');git(self.repo,'commit','-m','Mixed')
         with self.assertRaises(ValueError):guard(self.repo,base,git(self.repo,'rev-parse','HEAD').stdout.strip())
-    def test_published_source_feed_is_consistent(self):
-        expected=compile_feed(ROOT/'site');self.assertEqual(read(ROOT/'site/data/research-feed.json'),expected)
+    def test_hub_fallback_and_bootstrap_match_independent_delivery_contract(self):
+        # The independent content site owns new editions. Recompiling the Hub
+        # from its frozen record directory would reissue legacy content.
+        data = ROOT / "site/data"
+        fallback = read(data / "research-feed.json")
+        expected = {
+            "schema_version": 1,
+            "generation": 0,
+            "revision": digest(canonical([])),
+            "verified_at_sgt": None,
+            "records": [],
+            "tags": {},
+        }
+        self.assertEqual(fallback, expected)
+        bootstrap = (data / "research-feed-bootstrap.js").read_text(encoding="utf-8")
+        self.assertEqual(
+            bootstrap, "window.MIH_RESEARCH_FEED=" + canonical(expected).decode().rstrip() + ";\n"
+        )
 
 if __name__=='__main__':unittest.main()

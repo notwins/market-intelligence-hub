@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BOS monthly archive · Market Intel</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="stocks-beta.css">
+  <link rel="stylesheet" href="stocks-beta2.css?v=20261121">
+  <script defer src="bos-equity.js"></script>
+  <script defer src="bos-monthly.js?v=20261121"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to BOS observations</a>
+  <header class="sb-mast sb2-mast">
+    <a href="desk.html"><b>M.</b> MARKET INTEL</a>
+    <nav aria-label="Stocks"><a href="stocks-beta2.html">Stocks BETA 2</a></nav>
+  </header>
+  <main id="main">
+    <header class="sb2-intro">
+      <div>
+        <h1>BOS monthly archive</h1>
+        <p>Compare the original share price, implied EPS, call and price target by listing and month.</p>
+      </div>
+      <button type="button" id="bos-retry" hidden>Retry loading archive</button>
+    </header>
+    <p id="sb2-status" role="status" aria-live="polite">Loading BOS monthly history…</p>
+    <div class="sb2-workspace" id="bos-history" hidden>
+      <section class="sb2-panel sb2-picker" aria-label="Choose a listing">
+        <label for="bos-search">Find a ticker or quote unit</label>
+        <input type="search" id="bos-search" autocomplete="off">
+        <ul id="sb2-securities" aria-label="BOS listings"></ul>
+        <p id="bos-empty" hidden>No listings match.</p>
+      </section>
+      <section class="sb2-panel sb2-detail" aria-labelledby="bos-listing">
+        <header class="sb2-company-heading"><h2 id="bos-listing"></h2></header>
+        <div class="sb2-coverage">
+          <p id="bos-month-count"></p>
+          <ul id="bos-links"></ul>
+        </div>
+        <div class="sb2-table" role="region" tabindex="0" aria-label="Monthly observations. Scroll horizontally for more columns.">
+          <table aria-labelledby="bos-listing">
+            <thead><tr>
+              <th scope="col">Month</th><th scope="col">Price date</th><th scope="col">Share price</th>
+              <th scope="col">Implied forward EPS</th><th scope="col">BOS call</th>
+              <th scope="col">Target</th><th scope="col">Target − price</th><th scope="col">Gap %</th>
+            </tr></thead>
+            <tbody id="bos-observations"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+    <details class="sb2-method">
+      <summary>Dates and listing matches</summary>
+      <p>Month identifies the archive report. Price date is the date of the quote. The target is from the same report and uses the same quote unit. The gap percentage divides the gap by that share price. GBp is UK pence.</p>
+      <p>Bloomberg identities refer to a snapshot with an unverified quote date. BOS Daily retains its own report and price dates. Historical observations keep their original ticker and quote unit.</p>
+    </details>
+  </main>
+</body>
+</html>
