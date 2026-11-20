@@ -10,11 +10,14 @@
   const body = byId('bos-observations');
   const details = byId('bos-links');
   const equity = window.BOSEquity;
+  const aceEndpoint = 'https://market-intel-ace-lookup.vercel.app/api/match';
   const aceFile = byId('ace-file');
   const aceStatus = byId('ace-status');
   const aceClear = byId('ace-clear');
   const aceFilter = byId('ace-matches-only');
   let ace, aceResults = new Map(), aceRequest = 0;
+  const savedAce = new Map();
+  let aceLookup;
 
   const number = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 10 });
   const percent = new Intl.NumberFormat('en-GB', {
@@ -103,26 +106,79 @@
         menu.querySelector('[aria-pressed="true"]')?.setAttribute('aria-pressed', 'false');
         button.setAttribute('aria-pressed', 'true');
         paintTable();
+        loadSavedAce();
       });
       node.append(button);
       return node;
     }));
   }
 
+  function validateSavedAce(result, isin, currency) {
+    const valid = result?.isin === isin && result.currency === currency && date(result.workbookDate)
+      && typeof result.sheet === 'string' && result.sheet.length <= 64;
+    if (!valid) throw Error('ACE identity could not be verified.');
+    if (result.state === 'missing') return result;
+    if (result.state === 'currency' && Array.isArray(result.currencies)
+        && result.currencies.every(unit => /^[A-Z]{3}$/.test(unit))) return result;
+    if (result.state === 'matched' && Array.isArray(result.rows) && result.rows.length
+        && result.rows.every(row => typeof row.name === 'string' && typeof row.type === 'string'
+        && typeof row.currency === 'string' && Number.isInteger(row.row) && row.row > 0)) return result;
+    throw Error('Invalid saved ACE match.');
+  }
+
+  async function loadSavedAce() {
+    aceLookup?.abort();
+    if (ace || !selected) return;
+    const listing = selected;
+    const [, unit, , isin] = listing;
+    const previous = savedAce.get(listing);
+    if (!isin || previous && previous.state !== 'error') {
+      paintSources();
+      return;
+    }
+    savedAce.delete(listing);
+    const currency = unit.toUpperCase() === 'GBX' ? 'GBP' : unit.toUpperCase();
+    const url = new URL(aceEndpoint);
+    url.searchParams.set('isin', isin);
+    url.searchParams.set('currency', currency);
+    const request = new AbortController();
+    aceLookup = request;
+    const timer = setTimeout(() => request.abort('timeout'), 10000);
+    paintSources();
+    try {
+      const response = await fetch(url, { signal: request.signal, credentials: 'omit' });
+      if (!response.ok) throw Error('ACE match is unavailable.');
+      const match = validateSavedAce(await response.json(), isin, currency);
+      savedAce.set(listing, match);
+    } catch {
+      if (aceLookup === request && (!request.signal.aborted || request.signal.reason === 'timeout')) {
+        savedAce.set(listing, { state: 'error' });
+      }
+    } finally {
+      clearTimeout(timer);
+      if (aceLookup === request && !ace && selected === listing) paintSources();
+    }
+  }
+
   function aceDetail() {
-    const result = aceResults.get(selected);
-    if (!result) return [];
+    const [,,, isin] = selected;
+    const result = ace ? aceResults.get(selected) : !isin ? { state: 'unverified' } : savedAce.get(selected);
+    if (!result) return [item('li', 'ACE · Looking up saved match…')];
+    if (result.state === 'error') {
+      return [item('li', 'ACE · Saved lookup unavailable. Select the listing again to retry.')];
+    }
     if (result.state === 'unverified') return [item('li', 'ACE · No verified ISIN for this listing')];
     if (result.state === 'missing') return [item('li', 'ACE · ISIN absent from this workbook')];
     if (result.state === 'currency') {
       return [item('li', 'ACE · ISIN found in ' + result.currencies.join(', ') + ' · currency differs')];
     }
-    const [,,, isin] = selected;
+    const sheet = ace?.sheet ?? result.sheet;
     const heading = item('li', 'ACE · Matched ' + isin + ' · '
-      + result.rows.length + (result.rows.length === 1 ? ' workbook row' : ' workbook rows'));
+      + result.rows.length + (result.rows.length === 1 ? ' workbook row' : ' workbook rows')
+      + (result.workbookDate ? ' · saved ' + result.workbookDate : ''));
     const records = item('ul', '');
     for (const row of result.rows) {
-      const description = [row.name, row.type, row.currency, ace.sheet + ' row ' + row.row].filter(Boolean);
+      const description = [row.name, row.type, row.currency, sheet + ' row ' + row.row].filter(Boolean);
       records.append(item('li', description.join(' · ')));
     }
     heading.append(records);
@@ -150,6 +206,7 @@
         return [listing, window.AceListingMatch.match(workbook, isin, unit)];
       }));
       const total = [...results.values()].filter(result => result.state === 'matched').length;
+      aceLookup?.abort();
       ace = workbook;
       aceResults = results;
       aceFilter.checked = false;
@@ -218,6 +275,7 @@
       byId('ace-import').hidden = false;
       paintList();
       paintTable();
+      loadSavedAce();
     } catch {
       status.textContent = 'BOS monthly archive could not load.';
       retry.hidden = false;
@@ -236,8 +294,9 @@
     aceFilter.checked = false;
     byId('ace-filter').hidden = true;
     aceClear.hidden = true;
-    aceStatus.textContent = 'ACE workbook cleared.';
+    aceStatus.textContent = 'Local workbook cleared. Showing saved matches.';
     repaintAce();
+    loadSavedAce();
   });
   aceFilter.addEventListener('change', () => {
     if (aceFilter.checked && aceResults.get(selected)?.state !== 'matched') {

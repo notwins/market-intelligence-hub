@@ -55,6 +55,7 @@ const context = {
   },
 };
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../site/ace-listing-match.js'), 'utf8'), context);
+assert.match(fs.readFileSync(path.join(__dirname, '../site/stocks-beta2.html'), 'utf8'), /href="bos-monthly\.html"/);
 const ace = context.AceListingMatch.open(new ArrayBuffer(0));
 const lookup = (isin, unit) => context.AceListingMatch.match(ace, isin, unit);
 assert.deepEqual(Array.from(lookup('SG1L01001701', 'SGD').rows, row => row.row), [2, 3]);
