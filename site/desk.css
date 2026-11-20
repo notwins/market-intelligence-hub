@@ -112,10 +112,12 @@
 #briefing > #daily { margin-top: 4px; }
 
 @media (min-width: 761px) {
+  html { scroll-padding-top: calc(var(--hub-primary-height, 0px) + 6rem); }
   .modebar { top: var(--hub-primary-height, 0px); }
 }
 
 @media (max-width: 760px) {
+  html { scroll-padding-top: 7rem; }
   .mast { column-gap: 8px; }
   .mast .overview-switch > a { padding-inline: 7px; }
   .mast .mast-actions { gap: 8px; }
