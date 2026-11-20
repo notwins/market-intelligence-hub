@@ -291,9 +291,9 @@ def build(root=ROOT, now=None):
     for original in watch['rows']:
         ticker, price = original['ticker'], original.get('price') or {}
         watchlist.append({'ticker': ticker, 'name': original['name'], 'group': original.get('group'),
-                          'price': {'value': price.get('close'), 'currency': price.get('currency'),
+                          'price': {'value': price.get('close'), 'currency': price.get('currency') or original.get('currency'),
                                     'as_of': price.get('as_of'), 'change_pct': price.get('change_pct'),
-                                    'basis': watch.get('price_basis'),
+                                    'basis': watch.get('price_basis') if price else None,
                                     'source_url': public_href(price.get('source_url'))},
                           'earnings': earning_by_ticker.get(ticker),
                           'si': [r for r in si.get('rows', []) if ticker in r.get('shares', [])],

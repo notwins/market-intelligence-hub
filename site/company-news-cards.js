@@ -1,7 +1,7 @@
 /* Company reading cards; saved site write-ups, with original links inside the dialog. */
 (function(root){'use strict';
 const E=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const earningsHref=t=>'v4.html?company='+encodeURIComponent(t)+'#earnings';
+const earningsHref=t=>['D05.SI','U11.SI'].includes(t)?'stocks-beta.html?companies='+encodeURIComponent(t):'v4.html?company='+encodeURIComponent(t)+'#earnings';
 const date=s=>{if(!s||!Number.isFinite(Date.parse(s)))return 'Publication date/time unavailable';const day=new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Singapore'});return /^\d{4}-\d{2}-\d{2}$/.test(s)?day+' · time not supplied':new Date(s).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'Asia/Singapore'})+' SGT';};
 function group(news,companies,filter='all'){return companies.filter(c=>filter==='all'||c.ticker===filter).map(c=>({...c,news:root.Desk.matchNews(news,c.ticker)}));}
 function reading(n){const p=n.writeup||{};return [['What happened',p.body],['Earlier context',p.earlier],['Why it matters · analysis',p.analysis],['Watch next',p.watch_next]].filter(([,text])=>typeof text==='string'&&text.trim());}

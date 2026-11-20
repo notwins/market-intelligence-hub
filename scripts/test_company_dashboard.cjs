@@ -3,8 +3,11 @@ const dashboard=require('../site/company-dashboard.js'),membership=require('../s
 const read=p=>JSON.parse(fs.readFileSync('site/'+p,'utf8'));
 const old=read('data/watchlist/latest.json'),snapshot=JSON.stringify(old),rows=membership.merge(old.rows);
 a.deepEqual(dashboard.companies.map(c=>c.ticker),['GOOGL','BABA','TSM','NVDA','AAPL','AMZN']);
-a.equal(rows.length,13);a.equal(JSON.stringify(old),snapshot);a.equal(old.rows.length,12);
-const baba=rows.find(r=>r.ticker==='BABA');a.equal(baba.currency,'USD');a.equal(baba.bbTicker,'BABA US');a.deepEqual(baba.returns,[]);a.equal(baba.price.close,undefined);a.equal(membership.merge(rows).length,13);
+a.equal(rows.length,15);a.equal(JSON.stringify(old),snapshot);a.equal(old.rows.length,12);
+const baba=rows.find(r=>r.ticker==='BABA');a.equal(baba.currency,'USD');a.equal(baba.bbTicker,'BABA US');a.deepEqual(baba.returns,[]);a.equal(baba.price.close,undefined);a.equal(membership.merge(rows).length,15);
+for(const [ticker,bbTicker] of [['D05.SI','DBS SP'],['U11.SI','UOB SP']]){
+  const bank=rows.find(r=>r.ticker===ticker);a.equal(bank.price.currency,'SGD');a.equal(bank.bbTicker,bbTicker);a.deepEqual(bank.returns,[]);
+}
 a.equal(dashboard.matches({title:'Alibaba funding',tags:[]},dashboard.companies[1]),true);
 a.equal(dashboard.matches({title:'Babaco market',tags:[]},dashboard.companies[1]),false);
 const news=dashboard.newsFor([{title:'Old',href:'https://www.reuters.com/x',tickers:['BABA'],published_at:'2026-11-10'},{title:'New',href:'https://www.reuters.com/x',tickers:['BABA'],published_at:'2026-11-16'},{title:'Wrong company',href:'https://www.reuters.com/y',tickers:['GOOGL'],published_at:'2026-11-17'},{title:'Unsafe',href:'javascript:alert(1)',tickers:['BABA'],published_at:'2026-11-17'}],'BABA');

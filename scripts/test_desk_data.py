@@ -95,8 +95,10 @@ class DeskDataTests(unittest.TestCase):
     def test_generated_contract_has_only_existing_destinations_and_precise_fallbacks(self):
         payload = json.loads((ROOT/'site/data/desk-data.json').read_text(encoding='utf-8'))
         self.assertEqual(payload['schema_version'], 1)
-        self.assertEqual(len(payload['watchlist']), 13)
+        self.assertEqual(len(payload['watchlist']), 15)
         self.assertIn('BABA', [r['ticker'] for r in payload['watchlist']])
+        self.assertEqual({r['ticker']: r['price']['currency'] for r in payload['watchlist'][-2:]},
+                         {'D05.SI': 'SGD', 'U11.SI': 'SGD'})
         self.assertEqual(len(payload['reports']), len({canonical_href(r['href']) for r in payload['reports']}))
         self.assertEqual(payload['reports'], sorted(payload['reports'], key=chronology, reverse=True))
         self.assertTrue(all(r['uploaded_at'] is None for r in payload['reports']))

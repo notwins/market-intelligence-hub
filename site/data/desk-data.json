@@ -10576,6 +10576,40 @@
       "si": [],
       "news_ids": [],
       "research_href": "search.html?q=BABA"
+    },
+    {
+      "ticker": "D05.SI",
+      "name": "DBS Group Holdings",
+      "group": "Banks",
+      "price": {
+        "value": null,
+        "currency": "SGD",
+        "as_of": null,
+        "change_pct": null,
+        "basis": null,
+        "source_url": null
+      },
+      "earnings": null,
+      "si": [],
+      "news_ids": [],
+      "research_href": "search.html?q=D05.SI"
+    },
+    {
+      "ticker": "U11.SI",
+      "name": "United Overseas Bank",
+      "group": "Banks",
+      "price": {
+        "value": null,
+        "currency": "SGD",
+        "as_of": null,
+        "change_pct": null,
+        "basis": null,
+        "source_url": null
+      },
+      "earnings": null,
+      "si": [],
+      "news_ids": [],
+      "research_href": "search.html?q=U11.SI"
     }
   ],
   "yields": [

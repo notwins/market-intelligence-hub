@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_on": "2026-11-17",
+  "updated_on": "2026-11-20",
   "basis": "Current watchlist membership; does not revise dated research editions.",
   "members": [
     {
@@ -72,6 +72,24 @@
       "bbTicker": "BABA US",
       "share_class": "American depositary shares \u00b7 8 ordinary shares per ADS",
       "membership_added": "2026-11-17"
+    },
+    {
+      "ticker": "D05.SI",
+      "name": "DBS Group Holdings",
+      "group": "Banks",
+      "currency": "SGD",
+      "isin": "SG1L01001701",
+      "bbTicker": "DBS SP",
+      "membership_added": "2026-11-20"
+    },
+    {
+      "ticker": "U11.SI",
+      "name": "United Overseas Bank",
+      "group": "Banks",
+      "currency": "SGD",
+      "isin": "SG1M31001969",
+      "bbTicker": "UOB SP",
+      "membership_added": "2026-11-20"
     }
   ]
 }
