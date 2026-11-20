@@ -27,13 +27,13 @@ for(const values of [[62.5,258.2],[.0001,.0004],[100,100],[100000,10000000],[100
 }
 assert.equal(C.monthLabel(Date.parse('2026-11-13T12:00Z')),'Nov-2026');
 const chart=C.svg(p,{TEST:{points:[['2025-11-01',100],['2026-11-01',110]]}});assert(chart.includes('Final KO'));
-assert.match(chart,/class="si-price-extrema"[^>]*>[\s\S]*?>High 110<\/text>[\s\S]*?>Low 100<\/text>/);
+assert.match(chart,/class="si-price-extrema"[^>]*>[\s\S]*?>High: 110<\/text>[\s\S]*?>Low: 100<\/text>/);
 const grid=chart.match(/class="si-price-grid">([^<]*(?:<line[^>]+>[^<]*)*)<\/g>/)?.[1];
 assert.equal((grid.match(/<line/g)||[]).length,5);
 assert(!chart.includes('Shown high / low'),'Only one set of displayed extrema');
 assert.equal((chart.match(/class="si-price-extreme"/g)||[]).length,2);
 const flat=C.svg(p,{TEST:{points:[['2025-11-01',.00091],['2026-11-01',.00091]]}});
-assert.match(flat,/>High 0\.00091<\/text>/);
+assert.match(flat,/>High \/ Low: 0\.00091<\/text>/);
 assert.equal((flat.match(/class="si-price-extreme"/g)||[]).length,1);
 assert(chart.includes('7%PA'));assert(!chart.includes('2025-11-01</text>'));
 for(const positions of [[50,50,50,50],[0,1,2,3],[98,99,100,100],[90,10,50,51]]){const labels=C.barrierLabels(positions,5,95);assert.deepEqual(labels.map(x=>x.target),positions);const sorted=labels.map(x=>x.y).sort((a,b)=>a-b);assert(sorted[0]>=5&&sorted.at(-1)<=95);for(let i=1;i<sorted.length;i++)assert(sorted[i]-sorted[i-1]>=11);}
@@ -110,6 +110,14 @@ assert(overlaySvg.includes('8-year price history'));
 assert(overlaySvg.includes('class="si-price-area"'));
 assert(overlaySvg.includes('Ratios ×'));
 assert(overlaySvg.includes('Morningstar fair value')&&overlaySvg.includes('1 archive off scale'));
+const leftAxis=overlaySvg.match(/<g class="si-price-axis">([\s\S]*?)<\/g>/)[1];
+assert.equal([...leftAxis.matchAll(/fill="#122b43"[^>]*>[\d,]+<\/text>/g)].length,5,'Price ticks have whole-number navy labels');
+const rightAxis=overlaySvg.match(/<g class="si-ratio-axis">([\s\S]*?)<\/g>/)[1];
+assert.match(rightAxis,/fill="#14532d"[^>]*>[\d.]+<\/text>/,'P/E tick labels are dark green');
+const extrema=overlaySvg.match(/<g class="si-price-extrema"[^>]*>([\s\S]*?)<\/g>/)[1];
+assert.match(extrema,/>High: \$105<\/text>[\s\S]*>Low: \$20<\/text>/);
+const guides=[...extrema.matchAll(/<line x1="([^"]+)"[^>]* x2="([^"]+)"[^>]*stroke-dasharray="2 2"/g)];
+assert(guides.length>=2&&guides.every(([,start,end])=>Number(end)-Number(start)<=18),'Extrema guides are local to the marker');
 assert(!overlaySvg.includes('class="si-overlay si-overlay-pe"'),'Long observation gaps are rendered as separate points');
 assert(!C.svg(p,{TEST:sample}).includes('class="si-price-area"'));
 assert.match(overlaySvg,/<g class="si-pe-label"[^>]*>[\s\S]*?>P\/E<\/text>/);

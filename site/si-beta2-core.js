@@ -64,14 +64,15 @@ function finalKO(p){return p.tenorUnit==='months'&&[p.ko,p.step,p.months,p.first
 function levels(p,reference){return Object.fromEntries(['ko','ki','strike'].map(k=>[k,num(reference)!==null&&num(p[k])!==null?reference*p[k]/100:null]));}
 function reference(p,share,data){if(num(share.fixing)!==null)return {value:Number(share.fixing),date:p.date||'Date not supplied',basis:'Manual reference'};if(p.date){const v=data?.daily?.find(x=>x[0]===p.date);return {value:v?.[1]??null,date:p.date,basis:'Exact daily close'};}return {value:data?.quote?.close??null,date:data?.quote?.date||'',basis:'Latest saved close'};}
 function wrap(value,max){const words=clean(value,1800).split(/\s+/),lines=[];let line='';for(let word of words){while(word.length>max){if(line){lines.push(line);line='';}lines.push(word.slice(0,max));word=word.slice(max);}if((line+' '+word).trim().length>max){lines.push(line);line=word;}else line=(line+' '+word).trim();}if(line)lines.push(line);return lines;}
-function axisScale(values){
+function axisScale(values,{wholeTicks=false}={}){
  const min=Math.min(...values),max=Math.max(...values);
  const spread=max-min;
  const padding=spread?Math.max(spread*.035,max*1e-12):max*.05||.05;
  const low=Math.max(0,min-padding),high=max+padding;
  // Choose rounded interior grid positions without using them as the domain edges.
  const raw=(high-low)/5.25,unit=10**Math.floor(Math.log10(raw))/2;
- const step=Math.floor(raw/unit)*unit;
+ const rounded=Math.floor(raw/unit)*unit;
+ const step=wholeTicks&&rounded>=1?Math.floor(rounded):rounded;
  const center=Math.round((low+(high-low)/2)/step);
  const ticks=Array.from({length:5},(_,i)=>Number(((center+i-2)*step).toPrecision(15)));
  return {low,high,ticks};
@@ -111,6 +112,25 @@ function peLabelPosition(points,{left,right,top,bottom},paths,barriers){
  }
  return null;
 }
+function priceFlagPosition([px,py],half,{left,right,top,bottom},paths,barriers,occupied){
+ const fit=x=>Math.max(left+half+2,Math.min(right-half-2,x));
+ const centers=[...new Set([half+12,-half-12,0,half+27,-half-27,half+42,-half-42].map(dx=>fit(px+dx)))];
+ const edges=[top,...barriers.map(bar=>bar.y).sort((a,b)=>a-b),bottom];
+ const gaps=edges.slice(1).map((edge,i)=>(edges[i]+edge)/2).filter(y=>Math.abs(y-py)<=36);
+ const rows=[py,py-12,py+12,py-22,py+22,py-33,py+33,...gaps].sort((a,b)=>Math.abs(a-py)-Math.abs(b-py));
+ for(const row of rows){
+  const y=Math.max(top+7,Math.min(bottom-7,row));
+  if(barriers.some(bar=>Math.abs(bar.y-y)<8))continue;
+  for(const x of centers){
+   const box={left:x-half,right:x+half,top:y-6,bottom:y+6};
+   if(x-half<left||x+half>right||paths.some(path=>priceHitsBox(path,box)))continue;
+   if(occupied.some(a=>a.left<box.right&&a.right>box.left&&a.top<box.bottom&&a.bottom>box.top))continue;
+   return {x,y,box};
+  }
+ }
+ return null;
+}
+const priceCurrencyMarks={USD:'$',SGD:'S$',HKD:'HK$',AUD:'A$',CAD:'C$',JPY:'¥',CNY:'CN¥',EUR:'€',GBP:'£'};
 const overlayKeys=['pe','pb','target'];
 const overlayColors={pe:'#006c61',pb:'#a04f13',target:'#744299',archive:'#586779'};
 const overlayNames={pe:'Fwd P/E',pb:'Fwd P/B',target:'Morningstar fair value',archive:'BOS fair value / target'};
@@ -264,16 +284,13 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  const chartX=36,chartY=y+29-shift,plotLeft=chartX+17,plotTop=chartY+13;
  const plotBottom=y+block-(showCoverage?32:22)-(ratingHistory.length?14:0);
  const plotRight=ratioAxis?417:427;
- text(chartX+4,chartY+4,`${chart.years}-year price history${d.currency?' · '+d.currency:''}`,8,navy,true);
+ text(plotLeft-5,chartY+4,'Price',7,navy,true,'end');
+ text(plotLeft+5,chartY+4,`${chart.years}-year price history${d.currency?' · '+d.currency:''}`,8,navy,true);
  if(pts.length>1){
   const fk=finalKO(p),bars=[['KO',ls.ko,'#699645','7 3'],['KI',ls.ki,'#b94a57','3 3'],['Strike',ls.strike,'#8261a8','9 3 2 3'],...(p.step>0&&fk!==null?[['Final KO',num(r.value)===null?null:r.value*fk/100,'#c07821','2 3']]:[])].filter(x=>x[1]!==null);
   const priceHigh=pts[bounds.high][1],priceLow=pts[bounds.low][1],spread=priceHigh-priceLow;
   const values=[priceLow,priceHigh,...bars.map(b=>b[1]),...(series.target||[]).map(p=>p.value),...(series.archive||[]).map(p=>p.value)];
-  const {low,high,ticks}=axisScale(values),t0=ms(from),t1=ms(end);
-  out.push('<g class="si-price-extrema" aria-label="Highest and lowest displayed closes">');
-  fitted(plotRight-82,chartY+4,'High '+extremaLabel(priceHigh,spread),74,8,navy,true,'end');
-  fitted(plotRight-4,chartY+4,'Low '+extremaLabel(priceLow,spread),70,8,navy,true,'end');
-  out.push('</g>');
+  const {low,high,ticks}=axisScale(values,{wholeTicks:true}),t0=ms(from),t1=ms(end);
   const px=date=>plotLeft+(ms(date)-t0)/(t1-t0)*(plotRight-plotLeft);
   const py=v=>plotBottom-(v-low)/(high-low)*(plotBottom-plotTop);
   const pricePoints=pts.map(([date,value])=>[px(date),py(value)]),pointList=points=>points.map(p=>p.map(n=>n.toFixed(2)).join(',')).join(' ');
@@ -281,22 +298,28 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   out.push('<g class="si-price-grid">');
   for(const tick of ticks)line(plotLeft,py(tick),plotRight,py(tick),'#dde3e9');
   out.push('</g>');
+  out.push('<g class="si-price-axis">');
+  for(const tick of ticks)fitted(plotLeft-5,py(tick)+2.5,fmt(tick,6),19,7.5,navy,true,'end');
+  out.push('</g>');
   for(let j=0;j<5;j++){const epoch=t0+(t1-t0)*j/4,xx=plotLeft+(plotRight-plotLeft)*j/4;line(xx,plotTop,xx,plotBottom,'#edf0f3');text(xx,y+block-(showCoverage?19:9),monthLabel(epoch),7.5,muted,false,j===0?'start':j===4?'end':'middle');}
   let ry=py;
   if(ratioAxis){
    // Keep multiples inside the vertical range occupied by the visible closes.
    const scale=axisScale(ratios),ratioTop=py(priceHigh),ratioBottom=py(priceLow);
    ry=v=>ratioBottom-(v-scale.low)/(scale.high-scale.low)*(ratioBottom-ratioTop);
+   const ratioInk=series.pe?.length?'#14532d':muted;
    line(plotRight,ratioTop,plotRight,ratioBottom,'#9caec0');
-   text(plotRight+3,chartY+4,series.pe?.length&&!series.pb?.length?'P/E ×':'Ratios ×',7,muted,true);
+   out.push('<g class="si-ratio-axis">');
+   text(plotRight+3,chartY+4,series.pe?.length&&!series.pb?.length?'P/E ×':'Ratios ×',7,ratioInk,true);
    let previous=Infinity;
    for(const tick of scale.ticks){
     const yy=ry(tick);
     if(previous-yy<9)continue;
     line(plotRight,yy,plotRight+3,yy,'#9caec0');
-    text(plotRight+5,yy+2,fmt(tick,6),6.5,muted);
+    text(plotRight+5,yy+2,fmt(tick,6),6.5,ratioInk,true);
     previous=yy;
    }
+   out.push('</g>');
   }
   const overlayPaths=[];
   for(const key of selected){
@@ -324,19 +347,44 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   bars.forEach(([label,v,c,dash],j)=>{const yy=py(v),placement=labels[j];line(plotLeft,yy,plotRight,yy,c,dash);if(placement.inline){out.push(`<g class="si-inline-barrier-label" data-clearance="4">`);rect(placement.x-placement.width/2,yy-5,placement.width,10,'#fff','#fff');text(placement.x,yy+2.5,label,7,c,true,'middle');out.push('</g>');}else{const labelY=fallback[fallbackIndex++].y;out.push(`<path d="M ${plotRight+rail} ${yy} L ${plotRight+rail+4} ${yy} L ${plotRight+rail+8} ${labelY} L ${plotRight+rail+11} ${labelY}" fill="none" stroke="${c}" stroke-width="0.7"/>`);text(plotRight+rail+14,labelY+2.5,label,7,c,true);}});
   out.push('</g>');
   out.push(`<polyline class="si-price-line" fill="none" stroke="${blue}" stroke-width="1.5" points="${pointList(pricePoints)}"/>`);
-  for(const [index,label] of bounds.high===bounds.low?[[bounds.high,'High and low']]:[[bounds.high,'High'],[bounds.low,'Low']]){
-   const [xx,yy]=pricePoints[index], [date,price]=pts[index];
-   out.push(`<circle class="si-price-extreme" cx="${xx.toFixed(2)}" cy="${yy.toFixed(2)}" r="2.2" fill="#fff" stroke="${blue}" stroke-width="1.1"><title>${escape(label+' · '+date+' · '+extremaLabel(price,spread))}</title></circle>`);
+  const plot={left:plotLeft,right:plotRight,top:plotTop,bottom:plotBottom};
+  const paths=[pricePoints,...overlayPaths],occupied=[];
+  const peMark=ratioAxis&&series.pe?.length?
+   peLabelPosition(series.pe.map(point=>[px(point.date),ry(point.value)]),plot,paths,barriers):null;
+  if(peMark)occupied.push({left:peMark.x-12,right:peMark.x+12,top:peMark.y-7,bottom:peMark.y+7});
+  out.push('<g class="si-price-extrema" aria-label="Highest and lowest displayed closes">');
+  const flags=flatPrice?[[bounds.high,'High / Low']]:[[bounds.high,'High'],[bounds.low,'Low']];
+  for(const [index,label] of flags){
+   const xy=pricePoints[index],[xx,yy]=xy,[date,price]=pts[index];
+   const amount=extremaLabel(price,spread),caption=label+': '+(priceCurrencyMarks[d.currency]||'')+amount;
+   const half=Math.max(24,caption.length*2.25+10);
+   const flag=priceFlagPosition(xy,half,plot,paths,barriers,occupied);
+   if(flag){
+    const {x,y,box}=flag,edge=xx<x?x-half:x+half;
+    const end=xx>=box.left&&xx<=box.right?[xx,yy<y?box.top:box.bottom]:[edge,y];
+    line(xx,yy,...end,'#617a95');
+    rect(box.left,box.top,2*half,box.bottom-box.top,'#fff','#fff');
+    line(x-half,y,x-half+8,y,navy,'2 2');
+    line(x+half-8,y,x+half,y,navy,'2 2');
+    text(x,y+2.5,caption,7.5,navy,true,'middle');
+    occupied.push(box);
+   }else{
+    const end=plotRight-(label==='High'?82:3),headY=chartY+1.5;
+    line(end-74,headY,end-68,headY,navy,'2 2');
+    fitted(end-37,chartY+4,caption,57,7.5,navy,true,'middle');
+    line(end-6,headY,end,headY,navy,'2 2');
+    line(Math.max(plotLeft,xx-9),yy,Math.min(plotRight,xx+9),yy,navy,'2 2');
+   }
+   out.push(`<circle class="si-price-extreme" cx="${xx.toFixed(2)}" cy="${yy.toFixed(2)}" r="2.2" fill="#fff" stroke="${blue}" stroke-width="1.1"><title>${escape(label+' · '+date+' · '+amount)}</title></circle>`);
   }
+  out.push('</g>');
   if(ratioAxis&&series.pe?.length){
-   const points=series.pe.map(point=>[px(point.date),ry(point.value)]);
-   const mark=peLabelPosition(points,{left:plotLeft,right:plotRight,top:plotTop,bottom:plotBottom},[pricePoints,...overlayPaths],barriers);
    const color=overlayColors.pe;
    out.push('<g class="si-pe-label" aria-label="Forward P/E on the right axis">');
-   if(mark){
-    line(mark.px,mark.py,mark.x,mark.y+(mark.y<mark.py?5:-5),color);
-    rect(mark.x-10,mark.y-5,20,10,'#fff','#fff');
-    text(mark.x,mark.y+2.5,'P/E',7.5,color,true,'middle');
+   if(peMark){
+    line(peMark.px,peMark.py,peMark.x,peMark.y+(peMark.y<peMark.py?5:-5),color);
+    rect(peMark.x-10,peMark.y-5,20,10,'#fff','#fff');
+    text(peMark.x,peMark.y+2.5,'P/E',7.5,color,true,'middle');
    }else{
     line(chartX+145,chartY+1,chartX+155,chartY+1,color);
     text(chartX+159,chartY+4,'P/E',7.5,color,true);
