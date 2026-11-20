@@ -85,7 +85,7 @@ market-fundamentals:empty { display: none; }
   font-size: .86rem;
   font-variant-numeric: tabular-nums;
 }
-.fund-line-col { width: var(--fund-label-width); }
+.fund-table:not([data-tc-sized]) thead th:first-child { width: var(--fund-label-width); }
 .fund-table-hint { margin-bottom: .4rem; }
 .fund-table tr { --fund-cell: #fff; }
 .fund-table tr:nth-child(even) { --fund-cell: #f8fbfc; }

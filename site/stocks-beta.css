@@ -4,3 +4,20 @@
 .sb-identity>div{display:grid;grid-template-columns:auto 1fr;column-gap:14px}.sb-identity .sb-ticker,.sb-identity h2,.sb-identity p{grid-column:2}.sb-identity .mih-article-logos{grid-column:1;grid-row:1/4;align-self:center;margin:0;--company-logo-size:42px!important}.sb-identity h2{grid-row:2}.sb-identity p{grid-row:3}.sb-identity .sb-ticker{grid-row:1}
 
 .sb-reading-grid>div,.sb-details>div{min-width:0;max-width:100%;overflow-wrap:anywhere}.sb-chart{min-height:0!important}.sb-cards[data-columns="2"] .sb-reading-grid{grid-template-columns:minmax(0,1fr)}@media(max-width:650px){.sb-reading-grid{grid-template-columns:minmax(0,1fr)}}
+
+.sb-card[data-sector-tone]{--sb-sector:#0e6071;--sb-sector-soft:#e9f5f7;border-top-color:var(--sb-sector)}
+.sb-card[data-sector-tone="technology"]{--sb-sector:#594782;--sb-sector-soft:#f1edf8}
+.sb-card[data-sector-tone="finance"]{--sb-sector:#214b79;--sb-sector-soft:#edf4fc}
+.sb-card[data-sector-tone="health"]{--sb-sector:#126653;--sb-sector-soft:#e9f6f0}
+.sb-card[data-sector-tone="industry"]{--sb-sector:#76531c;--sb-sector-soft:#fbf3e3}
+.sb-card[data-sector-tone="consumer"]{--sb-sector:#855071;--sb-sector-soft:#f8eef4}
+.sb-card[data-sector-tone] .sb-card-head{background:linear-gradient(115deg,var(--sb-sector-soft),#fff 77%)}
+.sb-card[data-sector-tone] .sb-ticker,.sb-card[data-sector-tone] .sb-card-head h2{color:var(--sb-sector)}
+.sb-card[data-sector-tone] .sb-metrics>div{background:color-mix(in srgb,var(--sb-sector-soft) 45%,white)}
+.sb-card[data-sector-tone] .sb-identity > .mih-company-logos{flex:none}
+.sb-stock-mark{display:grid;place-items:center;flex:none;width:40px;aspect-ratio:1;background:white;color:var(--sb-sector);border:1px solid var(--line);border-radius:8px;font-size:.76rem;font-weight:750}
+.sb-currency{color:#526577;font-size:.75rem;font-weight:650;letter-spacing:.04em}
+.sb-comparison-identity{display:inline-flex;align-items:center;gap:8px}
+.sb-chip .mih-company-logos{flex:none}
+.sb-watchlist-table .sb-table-wrap{max-height:min(66vh,540px)}
+.sb-watchlist-table thead th:first-child{z-index:3}

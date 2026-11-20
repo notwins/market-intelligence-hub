@@ -88,7 +88,7 @@
   }
 
   function headers(columns, controls = () => '') {
-    return columns.map(field => `<th scope="col" class="ssc-header" data-snapshot-column="${field.key}">${E(field.label)}<small>BBG${field.unit ? ' · ' + E(field.unit) : ''}</small>${controls(field)}</th>`).join('');
+    return columns.map(field => `<th scope="col" class="ssc-header" data-tc-key="${field.key}" data-table-unit="${E(field.unit||'')}" data-snapshot-column="${field.key}">${E(field.label)}<small>BBG${field.unit ? ' · ' + E(field.unit) : ''}</small>${controls(field)}</th>`).join('');
   }
 
   function cells(item, columns) {
@@ -98,7 +98,7 @@
       const raw = value(record, field);
       const description = raw === null ? record ? 'Field unavailable in the Bloomberg snapshot' : 'No exact listing match in the Bloomberg snapshot' :
         [String(raw) + (field.unit && field.unit !== amounts ? field.unit : ''), provenance, field.unit === amounts ? sourceUnits : '', field.detail].filter(Boolean).join(' · ');
-      return `<td class="ssc-cell" data-snapshot-value="${field.key}" title="${E(description)}">${E(format(raw, field))}</td>`;
+      return `<td class="ssc-cell" data-snapshot-value="${field.key}" data-tc-value="${E(raw??'')}" title="${E(description)}">${E(format(raw, field))}</td>`;
     }).join('');
   }
 

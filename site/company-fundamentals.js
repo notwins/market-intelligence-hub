@@ -19,9 +19,10 @@
   const currency = value => /^(GBX|GBp)$/.test(value) ? 'GBP' : value;
   const fields = ['bbTicker', 'instrumentId', 'ticker', 'publicTicker', 'symbol', 'id'];
   const doc = root.document;
-  let directoryRequest, databaseRequest, memory, dialog, active;
+  let directoryRequest, databaseRequest, loadRequest, memory, dialog, active;
   let statement = 'income';
-  let temporary = false;
+  let temporary = false, writing = false;
+  const importPanels = new Set();
 
   function aliases([id, mic, symbol]) {
     const names = [id, mic + ':' + symbol];
@@ -102,9 +103,54 @@
   }
 
   async function load() {
-    if (temporary) return memory;
-    try { memory = await stored('get'); } catch { /* Imports still work for this page. */ }
-    return memory;
+    return loadRequest ??= stored('get').then(value => { memory = value; }).catch(() => {});
+  }
+
+  function importMessage() {
+    const companies = Object.values(memory?.companies || {});
+    const captured = [...new Set(companies.map(item => item.capturedAt.slice(0, 10)))].sort().at(-1);
+    return captured ? companies.length + ' listings loaded ' + (temporary ? 'for this page' : 'in this browser')
+      + '. Latest capture ' + new Date(captured + 'T00:00:00Z').toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Singapore'
+      }) + ' SGT.' : 'Choose your Fundamentals JSON to load annual statements.';
+  }
+
+  function updateImportPanels() {
+    for (const panel of importPanels) {
+      panel.querySelector('.fund-state').textContent = importMessage();
+      const clear = panel.querySelector('[data-fund-clear]');
+      if (clear) clear.hidden = !memory;
+    }
+    if (dialog?.open) paint();
+  }
+
+  function bindImport(panel) {
+    if (!panel) return;
+    importPanels.add(panel);
+    load().then(updateImportPanels);
+    panel.addEventListener('change', async event => {
+      const input = event.target;
+      const file = input.matches('[data-fund-file]') && input.files[0];
+      if (!file || writing) return;
+      const status = panel.querySelector('.fund-state');
+      writing = true;
+      input.disabled = true;
+      status.textContent = 'Reading the local file…';
+      try {
+        if (file.size > 12e6) throw new Error('The file exceeds the 12 MB import limit.');
+        const next = unpack(JSON.parse(await file.text()), await directory());
+        await load();
+        try { await stored('put', next); temporary = false; } catch { temporary = true; }
+        memory = next;
+        updateImportPanels();
+      } catch (error) {
+        status.textContent = error instanceof SyntaxError ? 'This file is not valid JSON.' : error.message;
+      } finally {
+        writing = false;
+        input.value = '';
+        input.disabled = false;
+      }
+    });
   }
 
   function directory() {
@@ -146,12 +192,13 @@
       .sort((left, right) => Number(right.label === 'TTM') - Number(left.label === 'TTM') || right.label.localeCompare(left.label));
   }
 
-  function table(report) {
+  function table(report, layout) {
     const columns = periods(report);
-    return '<div class="fund-table-wrap" role="region" aria-label="Financial statement table" tabindex="0"><table class="fund-table" style="--fund-periods:' + columns.length + '">'
-      + '<colgroup><col class="fund-line-col"><col span="' + columns.length + '"></colgroup>'
+    return '<div class="fund-table-wrap" role="region" aria-label="Financial statement table" tabindex="0"><table class="fund-table"'
+      + (layout ? ' data-tc-layout="annual-statement-' + esc(layout) + '" data-tc-fixed-rows' : '')
+      + ' style="--fund-periods:' + columns.length + '">'
       + '<thead><tr><th scope="col">Reported line item</th>' + columns.map(({ label }) => (
-        '<th scope="col"' + (label === 'TTM' ? ' class="fund-ttm"' : '') + '>' + esc(label) + '</th>'
+        '<th scope="col" data-table-kind="mixed"' + (label === 'TTM' ? ' class="fund-ttm"' : '') + '>' + esc(label) + '</th>'
       )).join('') + '</tr></thead><tbody>'
       + report.rows.map(([depth, label, values], index) => {
         const parent = report.rows[index + 1]?.[0] > depth;
@@ -202,9 +249,7 @@
     const count = Object.keys(memory?.companies || {}).length;
     const listing = active.id + ' · ' + active.mic;
     dialog.querySelector('.fund-listing').textContent = listing;
-    dialog.querySelector('.fund-state').textContent = count
-      ? count + ' listings loaded ' + (temporary ? 'for this page' : 'in this browser') + '.'
-      : 'Load your Fundamentals JSON to view statements and charts in this browser.';
+    dialog.querySelector('.fund-state').textContent = importMessage();
     dialog.querySelector('[data-fund-clear]').hidden = !count;
     if (!report) {
       content.innerHTML = '<p class="fund-note">' + (count ? 'The saved import has no statements for this listing.'
@@ -223,7 +268,7 @@
         '<option value="' + i + '"' + (i === defaultRow.i ? ' selected' : '') + '>' + esc(row[1]) + '</option>'
       )).join('') + '</select></label><div data-fund-chart>' + chart(report, defaultRow.i) + '</div>' : '')
       + '<p class="fund-note fund-table-hint">Select a line item to chart it. Scroll across for earlier periods.</p>'
-      + table(report) + '<p class="fund-note">Morningstar export captured ' + esc(captured)
+      + table(report, statement) + '<p class="fund-note">Morningstar export captured ' + esc(captured)
       + ' (SGT). Blank cells indicate no reported value.</p>';
   }
 
@@ -242,6 +287,7 @@
         + '<button type="button" data-fund-clear hidden>Clear browser copy</button>'
         + '<a target="_blank" rel="noopener noreferrer" data-fund-source>Morningstar Financials</a></div></footer>';
       doc.body.append(dialog);
+      bindImport(dialog.querySelector('.fund-import'));
       dialog.addEventListener('click', async event => {
         const tab = event.target.closest('[data-fund-statement]');
         const metric = event.target.closest('[data-fund-row]');
@@ -254,32 +300,20 @@
           field.value = metric.dataset.fundRow;
           draw(field.value);
           field.focus();
-        } else if (event.target.closest('[data-fund-clear]')) {
+        } else if (event.target.closest('[data-fund-clear]') && !writing) {
+          writing = true;
           try {
             if (!temporary) await stored('delete');
             memory = null;
             temporary = false;
-            paint();
+            updateImportPanels();
           } catch { dialog.querySelector('.fund-state').textContent = 'The browser copy could not be cleared.'; }
+          finally { writing = false; }
         }
       });
       dialog.addEventListener('change', async event => {
         const input = event.target;
-        if (input.matches('[data-fund-series]')) { draw(input.value); return; }
-        const file = input.matches('[data-fund-file]') && input.files[0];
-        if (!file) return;
-        const status = dialog.querySelector('.fund-state');
-        input.disabled = true;
-        status.textContent = 'Reading the local file…';
-        try {
-          if (file.size > 12e6) throw new Error('The file exceeds the 12 MB import limit.');
-          const next = unpack(JSON.parse(await file.text()), await directory());
-          try { await stored('put', next); temporary = false; } catch { temporary = true; }
-          memory = next;
-          paint();
-        } catch (error) {
-          status.textContent = error instanceof SyntaxError ? 'This file is not valid JSON.' : error.message;
-        } finally { input.value = ''; input.disabled = false; }
+        if (input.matches('[data-fund-series]')) draw(input.value);
       });
     }
     dialog.querySelector('[data-fund-source]').href = 'https://www.morningstar.com/stocks/'
@@ -299,6 +333,7 @@
   root.CompanyFundamentals = api;
   if (typeof module !== 'undefined') module.exports = api;
   if (!doc || !root.customElements) return;
+  bindImport(doc.querySelector('[data-fund-import-panel]'));
 
   root.customElements.define('market-fundamentals', class extends root.HTMLElement {
     connectedCallback() {

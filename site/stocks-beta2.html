@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="company-fundamentals.css?v=1">
-  <script defer src="company-fundamentals.js?v=1"></script>
+  <link rel="stylesheet" href="company-fundamentals.css?v=2">
+  <script defer src="company-fundamentals.js?v=2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Monthly price, market capitalisation and valuation history for 110 stock listings in the Bank of Singapore coverage archive.">
   <title>Stocks BETA 2 · Monthly market history · Market Intel</title>
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
-  <link rel="stylesheet" href="stocks-beta2.css?v=20261121">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.7">
-  <script defer src="company-logos.js"></script>
+  <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.8">
+  <script defer src="company-logos.js?v=20261121.layout1"></script>
   <script defer src="stocks-beta2-charts.js?v=20261121.8"></script>
-  <script defer src="stocks-beta2.js?v=20261121.7&amp;fundamentals=1"></script>
+  <script defer src="stocks-beta2.js?v=20261121.8"></script>
+  <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
+  <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.layout1"></script>
+  <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
+  <script defer src="table-controls.js?v=20261121.layout1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to market history</a>
@@ -36,6 +40,12 @@
       <button type="button" id="sb2-download" disabled>Download compact CSV</button>
     </header>
     <p id="sb2-status" role="status" aria-live="polite">Loading monthly market history…</p>
+    <details class="sb2-fund-import" data-fund-import-panel>
+      <summary>Morningstar annual statements</summary>
+      <p>Load a Fundamentals JSON file to see the annual income statement, balance sheet and cash flow on company cards. The file is saved in this browser. Quick data shows the research snapshot with its own report date.</p>
+      <label class="sb2-file-label">Load fundamentals JSON<input type="file" accept=".json,application/json" data-fund-file></label>
+      <p class="fund-state" role="status"></p>
+    </details>
     <button type="button" id="sb2-retry" hidden>Retry loading history</button>
     <nav class="sb2-view-links" aria-label="Chart sections">
       <a href="#sb2-detail">Company history</a>
@@ -70,8 +80,10 @@
           <button type="button" data-group="global" aria-pressed="true">Global top 100</button>
           <button type="button" data-group="singapore" aria-pressed="false">Singapore top 10</button>
         </div>
-        <label for="sb2-search">Find a company</label>
-        <input type="search" id="sb2-search" placeholder="Name or ticker" autocomplete="off">
+        <div class="sb2-find">
+          <label for="sb2-search">Find a company<input type="search" id="sb2-search" placeholder="Name or ticker across both lists" autocomplete="off"></label>
+          <span id="sb2-result-count" role="status"></span>
+        </div>
         <ul id="sb2-securities" aria-label="Securities by market capitalisation"></ul>
         <p id="sb2-empty" hidden>No companies match this search.</p>
       </section>

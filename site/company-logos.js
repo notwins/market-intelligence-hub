@@ -74,6 +74,7 @@ let data,observer,scheduled=false;const fingerprints=new WeakMap();
 const values=(node,key)=>{try{const v=JSON.parse(node.dataset[key]||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[];}catch{return [];}};
 function own(card,query){return Array.from(card.querySelectorAll(query)).filter(n=>n.closest(selector)===card&&!n.closest('[data-logo-group]'));}
 function enhance(card){
+ if(card.hasAttribute('data-company-logo-manual'))return;
  const heading=own(card,'h1,h2,h3,h4,h5,h6,.company-news-title,.gs-copy>strong,.security-title,.security b,.sl-share strong,.mp-quote>div>strong,.ci-identity>b,.instrument-head strong')[0]||own(card,':scope > a')[0];
  const tags=[...values(card,'mihTags'),card.dataset.mihTag||''];
  for(const node of own(card,'.mu-card-tags [data-mih-tag],.tags [data-mih-tag],.result-tags [data-mih-tag],.search-tags [data-mih-tag],.bs-identity[data-mih-tag],.er-company-chip[data-mih-tag]'))tags.push(node.dataset.mihTag);

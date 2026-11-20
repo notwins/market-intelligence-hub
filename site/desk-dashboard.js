@@ -1,6 +1,7 @@
 /* Open dashboard: existing saved sources only; no new quote feed or schedule. */
 (function(root){'use strict';
-const D=root.Desk||(typeof require==='function'?require('./desk.js'):null),$=s=>document.querySelector(s),E=D.E,link=(url,label)=>D.safeHref(url)?`<a href="${E(url)}">${E(label)}</a>`:'';
+let D=root.Desk||(typeof require==='function'?require('./desk.js'):null);
+const $=s=>document.querySelector(s),E=value=>D.E(value),link=(url,label)=>D.safeHref(url)?`<a href="${E(url)}">${E(label)}</a>`:'';
 const number=(n,d=2)=>Number.isFinite(n)?n.toLocaleString('en-US',{maximumFractionDigits:d}):'Unavailable';
 const date=s=>s?new Date(s+'T12:00:00Z').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}):'Date unavailable';
 function curve(labels,values,title,maturityYears){
@@ -42,6 +43,6 @@ async function loadIndices(){await root.MarketPrices.refresh();for(const [ticker
  el.innerHTML=`<div class="eyebrow">ETF / INDEX · PRICE HISTORY</div><h3>${E(title)}</h3><p class="dashboard-value">${number(s.quote.close)} <small>${E(unit)}</small></p><p class="observation-date">${E(date(s.quote.date))} · ${E(root.MarketPrices.quoteStatus(s.quote))}</p>${D.spark(points,unit)}<p class="fine">${E(root.MarketPrices.priceBasis(s.item))}</p>${link(s.item.history_url,'Original price source ↗')} · ${link('v4.html#history/shares','Open full share history →')}`;
  }catch{el.innerHTML=`<h3>${E(title)}</h3><p class="empty">This exact listing is unavailable in the saved feed. No ETF or index is substituted.</p>`;}
  }}
-async function mount(){if(!$('#dashboard-curves'))return;await Promise.allSettled([loadCurves(),loadFX(),loadIndices()]);}
+async function mount(){D??=root.Desk;if(!D||!$('#dashboard-curves'))return;await Promise.allSettled([loadCurves(),loadFX(),loadIndices()]);}
 root.DeskDashboard={mount,curve};if(typeof module!=='undefined')module.exports={curve};
 })(typeof window!=='undefined'?window:globalThis);

@@ -137,10 +137,11 @@
 
   function paintList() {
     if (!data) return;
-    const terms = search.value.trim().toLowerCase().split(/\s+/);
+    const query = search.value.trim().toLowerCase();
+    const terms = query.split(/\s+/);
     const results = data.securities.filter(security => {
       const label = [security.name, security.ticker, security.logo, ...security.previous.map(item => item[0])].join(' ').toLowerCase();
-      return security.group === collection && terms.every(term => label.includes(term));
+      return (query || security.group === collection) && terms.every(term => label.includes(term));
     });
     list.innerHTML = results.map(security => (
       '<li><button type="button" class="sb2-security" data-security="' + e(security.ticker)
@@ -149,6 +150,8 @@
       + e(security.name) + '<span class="sb2-company-ticker">' + e(security.ticker) + '</span></span></button></li>'
     )).join('');
     get('sb2-empty').hidden = results.length > 0;
+    get('sb2-result-count').textContent = results.length + (results.length === 1 ? ' listing' : ' listings')
+      + (query ? ' across both lists' : '');
   }
 
   function paintHeading({ element, company, slot }) {
@@ -159,7 +162,8 @@
   function paintMonthlyTable({ element, company }, { from, to }) {
     const points = company.observations.filter(point => point[0] >= from && point[0] <= to);
     const headers = data.metrics.map(([, label, unit]) => (
-      '<th scope="col">' + e(label + ' (' + (unit === 'quote' ? company.currency : unit) + ')') + '</th>'
+      '<th scope="col" data-tc-key="' + e(label) + '" data-table-unit="' + e(unit === 'quote' ? company.currency : unit)
+      + '">' + e(label + ' (' + (unit === 'quote' ? company.currency : unit) + ')') + '</th>'
     )).join('');
     const values = [...points].reverse().map(point => {
       const [, reportDate, priceDate] = data.months[point[0]];
@@ -171,10 +175,12 @@
         + '<td class="sb2-ticker"' + title + '>' + e(ticker) + (prior ? '<br><small>' + e(relationLabel[prior[1]]) + '</small>' : '') + '</td>'
         + point.slice(1, data.metrics.length + 1).map(value => (
           value === null ? '<td class="sb2-missing" aria-label="Unavailable">–</td>'
-            : '<td>' + e(format.format(value)) + '</td>'
+            : '<td data-tc-value="' + e(value) + '">' + e(format.format(value)) + '</td>'
         )).join('') + '</tr>';
     }).join('');
     const table = element.querySelector('.sb2-history-table table');
+    table.dataset.tcLayout = 'beta2-monthly-history';
+    table.dataset.tcPinFirst = '';
     table.innerHTML = '<thead><tr><th scope="col">Report date</th><th scope="col">Price date</th>'
       + '<th scope="col">Source ticker</th>' + headers + '</tr></thead><tbody>' + values + '</tbody>';
     table.parentElement.scrollTo(0, 0);
@@ -377,6 +383,12 @@
   search.addEventListener('input', () => {
     list.scrollTop = 0;
     paintList();
+  });
+  search.addEventListener('keydown', event => {
+    const only = list.children.length === 1 && list.querySelector('[data-security]');
+    if (event.key !== 'Enter' || !only) return;
+    event.preventDefault();
+    chooseCompany(only.dataset.security, search);
   });
   list.addEventListener('click', event => {
     const choice = event.target.closest('button[data-security]');
