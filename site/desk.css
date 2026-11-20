@@ -122,3 +122,42 @@
   .mast .overview-switch > a { padding-inline: 7px; }
   .mast .mast-actions { gap: 8px; }
 }
+
+/* Decorative marks for the NVIDIA feature and Alphabet news card. */
+.nvda-article-banner {
+  --watermark-image: url("assets/company-logos/NVDA.webp");
+  --watermark-size: clamp(8rem, 28vw, 16rem);
+  --watermark-position: right clamp(1rem, 6vw, 5rem) center;
+}
+
+#news-cards > .company-news-card[data-mih-tickers='["GOOGL"]'] {
+  --watermark-image: url("assets/company-logos/GOOG.webp");
+  --watermark-size: clamp(7rem, 15vw, 11rem);
+  --watermark-position: right 1.25rem center;
+}
+
+:is(.nvda-article-banner, #news-cards > .company-news-card[data-mih-tickers='["GOOGL"]']) {
+  position: relative;
+  isolation: isolate;
+}
+
+:is(.nvda-article-banner, #news-cards > .company-news-card[data-mih-tickers='["GOOGL"]'])::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--watermark-image) var(--watermark-position) / var(--watermark-size) no-repeat;
+  opacity: .15;
+  pointer-events: none;
+}
+
+#news-cards > .company-news-card[data-mih-tickers='["GOOGL"]'] > header > .mih-company-avatar {
+  display: none;
+}
+
+#news-cards > .company-news-card[data-mih-tickers='["GOOGL"]'] > header > div > .tag {
+  display: inline-flex;
+  color: #0369a1;
+  background: #f0f9ff;
+}
