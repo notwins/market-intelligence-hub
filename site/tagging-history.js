@@ -97,6 +97,9 @@
       const next = await fetchJSON(id + '.json');
       if (id !== run.value) return;
       report = next;
+      const linkToRun = new URL(location.href);
+      linkToRun.searchParams.set('run', id);
+      history.replaceState(null, '', linkToRun);
       limit = batch;
       status.textContent = next.checkedAt.replace('T',' ').replace('+08:00',' SGT') + ' · ' +
         next.checked + ' checked · ' + next.changes.length + ' changed · ' + next.comparison;
@@ -104,7 +107,9 @@
       byId('download').download = id + '-tagging-report.json';
       byId('download').hidden = false;
       byId('csv').disabled = false;
-      const totals = next.sections.map(row => {
+      const ordered = [...next.sections].sort((a, b) =>
+        a.section.localeCompare(b.section) || a.subsection.localeCompare(b.subsection));
+      const totals = ordered.map(row => {
         const tr = document.createElement('tr');
         for (const key of ['section', 'subsection', 'checked', 'changed', 'tags', 'colour', 'logos']) tr.append(el('td', row[key]));
         return tr;
@@ -112,7 +117,7 @@
       byId('summary').replaceChildren(...totals);
       const all = el('option', 'All sections');
       all.value = '';
-      section.replaceChildren(all, ...[...new Set(next.sections.map(row => row.section))].map(name => {
+      section.replaceChildren(all, ...[...new Set(ordered.map(row => row.section))].map(name => {
         const option = el('option', name);
         option.value = name;
         return option;
@@ -180,6 +185,8 @@
       option.value = item.id;
       run.append(option);
     }
+    const requested = new URLSearchParams(location.search).get('run');
+    if (index.runs.some(item => item.id === requested)) run.value = requested;
     run.disabled = false;
     selectRun();
   }).catch(() => { status.textContent = 'Sweep history could not load. Refresh to try again.'; });
