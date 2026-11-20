@@ -17,6 +17,11 @@ window.MarketSI=(()=>{'use strict';
    const quote=r.source_kind==='indicative_pricing',allowed=quote?[...fields,...quoteFields]:fields;
    return Object.keys(r).length===allowed.length&&allowed.every(k=>Object.hasOwn(r,k))&&(!quote||(r.tenor_unit==='months'&&r.coupon_basis==='per_annum'))&&/^SI-\d{3,}$/.test(r.reference)&&Array.isArray(r.shares)&&r.shares.length>=2&&r.shares.length<=4&&r.shares.every(t=>/^[A-Z0-9]{1,8}$/.test(t))&&((r.source_date===null&&quote&&r.additional_review===true)||(validDate(r.source_date)&&d.source_date_range[0]<=r.source_date&&r.source_date<=d.source_date_range[1]))&&/^[A-Z]{3}$/.test(r.currency)&&Number.isInteger(r.tenor_source_value)&&r.tenor_source_value>0&&['coupon_pct','strike_pct','ko_pct','ki_pct'].every(k=>Number.isInteger(r[k])&&r[k]>=0&&r[k]<=200)&&typeof r.additional_review==='boolean';
   }))return false;
+  const steps=d.ko_step_down_pp;
+  if(steps!==undefined){
+   const indicative=new Set(d.rows.filter(r=>r.source_kind==='indicative_pricing').map(r=>r.reference));
+   if(!steps||typeof steps!=='object'||Array.isArray(steps)||!Object.entries(steps).every(([reference,value])=>indicative.has(reference)&&Number.isFinite(value)&&value>=0&&value<=100))return false;
+  }
   const dates=d.rows.map(r=>r.source_date).filter(Boolean).sort();
   return new Set(d.rows.map(r=>r.reference)).size===d.record_count&&d.rows.filter(r=>r.additional_review).length===d.additional_review_count&&dates[0]===d.source_date_range[0]&&dates.at(-1)===d.source_date_range[1];
  }
@@ -47,5 +52,5 @@ window.MarketSI=(()=>{'use strict';
  });}
  function partial(){const rows=filtered(),target=document.getElementById('si-rows'),count=document.getElementById('si-count');if(target)target.innerHTML=body(rows);if(count)count.textContent=`${rows.length} of ${data.rows.length} historical source records`;mountPivot();}
  function connect(fn){render=fn;document.addEventListener('input',e=>{if(e.target.id==='si-query'){query=e.target.value;requestedCompany='';partial();}});document.addEventListener('change',e=>{if(e.target.id==='si-currency'){currency=e.target.value;partial();}if(e.target.id==='si-review-only'){reviewOnly=e.target.checked;partial();}});document.addEventListener('toggle',e=>{if(e.target.matches?.('[data-si-panel]')&&e.target.isConnected)opened=e.target.open;},true);document.addEventListener('click',e=>{if(e.target.closest('[data-si-retry]'))refresh();if(e.target.closest('[data-si-reset]')){query='';requestedCompany='';currency='All';reviewOnly=false;for(const[id,value]of[['si-query',''],['si-currency','All']]){const el=document.getElementById(id);if(el)el.value=value;}const check=document.getElementById('si-review-only');if(check)check.checked=false;partial();}});refresh();}
- return{view,panel,connect,refresh,acceptable,filtered,mountPivot,currencySegments,records:()=>data?.rows||[]};
+ return{view,panel,connect,refresh,acceptable,filtered,mountPivot,currencySegments,records:()=>data?.rows||[],stepDown:reference=>data?.ko_step_down_pp?.[reference]??null};
 })();

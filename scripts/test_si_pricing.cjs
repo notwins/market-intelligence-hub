@@ -7,6 +7,12 @@ const ctx={window:null,console,fetch:async()=>({ok:!broken,json:async()=>payload
  assert(si.acceptable(payload));assert.equal(payload.rows.length,246);assert.equal(payload.rows.filter(r=>r.additional_review).length,23);
  assert.deepEqual(payload.rows[0],{reference:'SI-001',shares:['NVDA','AMD','NOW','MRVL'],source_date:'2026-11-05',currency:'SGD',tenor_source_value:9,coupon_pct:15,strike_pct:90,ko_pct:100,ki_pct:50,additional_review:false});
  si.connect(()=>renders++);await new Promise(r=>setTimeout(r,0));assert(renders);
+ assert.equal(si.stepDown('SI-226'),1.5);assert.equal(si.stepDown('SI-246'),1.5);
+ assert.equal(si.stepDown('SI-225'),null);
+ const legacy=structuredClone(payload);delete legacy.ko_step_down_pp;assert(si.acceptable(legacy));
+ for(const steps of [null,[],{'SI-225':1.5},{'SI-247':1.5},{'SI-226':'1.50'},{'SI-226':-1}]){
+  assert.equal(si.acceptable({...payload,ko_step_down_pp:steps}),false);
+ }
  let html=si.view();for(const text of ['SI Pricing','Historical charts','Not live prices','Basis unconfirmed','Unit unconfirmed','whole percentage points','not a verified annual yield','not a verified 11-month term','issuer terms','23 additional-review rows'])assert(html.includes(text),text);
  assert.equal((html.match(/<tr>/g)||[]).length,247);assert(html.includes('p.a. (screen)'));assert(html.includes('Months (screen)'));assert(html.includes('Date not shown'));assert(html.includes('2026-11-13'));assert(html.includes('Indicative · Photo unverified'));assert(!html.includes('source_excel_row'));assert(!html.includes('IMG_609'));assert(html.includes('tabindex="0" role="region"'));assert(html.includes('scope="col"'));assert(html.includes('scope="row"'));assert(html.includes('data-si-reference-table'));
  listeners.input[0]({target:{id:'si-query',value:'NVDA'}});assert(si.filtered().length>0&&si.filtered().length<246);assert(si.filtered().every(r=>r.shares.includes('NVDA')));assert(nodes['si-count'].textContent.includes('of 246'));assert(!nodes['si-rows'].innerHTML.includes('colspan'));

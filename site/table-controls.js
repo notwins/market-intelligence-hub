@@ -46,7 +46,7 @@
   const header=table.tHead;if(!header)return null;
   const rows=[...header.rows],grid=[],columns=[];
   for(let y=0;y<rows.length;y++){grid[y]??=[];let x=0;for(const cell of cells(rows[y])){while(grid[y][x])x++;for(let dy=0;dy<cell.rowSpan;dy++){grid[y+dy]??=[];for(let dx=0;dx<cell.colSpan;dx++)grid[y+dy][x+dx]=cell;}x+=cell.colSpan;}}
-  const leaf=grid[grid.length-1]||[];leaf.forEach((cell,index)=>{if(cell?.tagName==='TH'&&cell.colSpan===1)columns.push({cell,index});});
+  const leaf=grid[grid.length-1]||[];leaf.forEach((cell,index)=>{if(cell?.tagName==='TH'&&cell.colSpan===1&&!cell.hasAttribute('data-tc-skip'))columns.push({cell,index});});
   return {count:leaf.length,columns,rows:[...table.tBodies].flatMap(body=>[...body.rows]),merged:[...table.tBodies].some(body=>[...body.rows].some(row=>cells(row).some(c=>c.rowSpan>1)))};
  }
  // Article comparisons are reading aids, not spreadsheet workspaces. Count all
@@ -80,7 +80,7 @@
    if(!button){button=doc.createElement('button');button.type='button';button.className='tc-column-button';button.dataset.tcUi='';button.dataset.tcButton='';button.innerHTML='<svg class="tc-triangle" viewBox="0 0 12 8" aria-hidden="true" focusable="false"><path d="M1.5 1.5h9L6 6.5z"/></svg>';button.setAttribute('aria-haspopup','dialog');button.addEventListener('click',event=>{event.stopPropagation();open(state,index,button);});button.addEventListener('keydown',event=>{if(event.key==='ArrowDown'){event.preventDefault();event.stopPropagation();open(state,index,button);}});cell.append(button);}
    const clone=cell.cloneNode(true);clone.querySelectorAll('[data-tc-ui]').forEach(n=>n.remove());const label=clone.textContent.replace(/\s+/g,' ').trim()||'Column '+(index+1);
    button.setAttribute('aria-label','Column options: '+label);button.title='Sort, filter and display '+label;
-   const previous=state.configs.get(index)||{filter:'',heat:false,font:'original',percent:false};
+   const previous=state.configs.get(index)||{filter:'',heat:cell.hasAttribute('data-tc-default-heat'),font:'original',percent:false};
    const values=state.rows.map(row=>sourceText(row.cells[index])),info=profile(values,{label,kind:cell.dataset.tableKind,unit:cell.dataset.tableUnit});
    state.configs.set(index,{...previous,label,header:cell,button,info,originalSort:previous.header===cell?previous.originalSort:cell.getAttribute('aria-sort')});
   }
@@ -93,11 +93,11 @@
   const {table,rows,model}=state;
   for(const [index,config]of state.configs){
    const values=rows.map(row=>scalar(sourceText(row.cells[index]))?.value).filter(Number.isFinite),min=values.length?Math.min(...values):0,max=values.length?Math.max(...values):0;
-   config.range={min,max};if(!config.info.numeric)config.heat=false;if(!config.info.percent)config.percent=false;
-   config.button.dataset.active=String(!!(config.filter||config.heat||config.font!=='original'||config.percent||state.focus===index||state.sort?.index===index));
+   config.range={min,max};const heat=config.heat&&config.info.numeric;if(!config.info.percent)config.percent=false;
+   config.button.dataset.active=String(!!(config.filter||heat||config.font!=='original'||config.percent||state.focus===index||state.sort?.index===index));
    for(const row of rows){const cell=row.cells[index];const raw=sourceText(cell),value=scalar(raw)?.value;
-    cell.classList.toggle('tc-heat',config.heat&&Number.isFinite(value));cell.classList.toggle('tc-focus',state.focus===index);
-    if(config.heat&&Number.isFinite(value)){const bound=Math.max(Math.abs(min),Math.abs(max));cell.dataset.tcBand=String(heatBand(value,config.info.change?-bound:min,config.info.change?bound:max));cell.dataset.tcScale=config.info.change?'change':'level';}else{delete cell.dataset.tcBand;delete cell.dataset.tcScale;}
+    cell.classList.toggle('tc-heat',heat&&Number.isFinite(value));cell.classList.toggle('tc-focus',state.focus===index);
+    if(heat&&Number.isFinite(value)){const bound=Math.max(Math.abs(min),Math.abs(max));cell.dataset.tcBand=String(heatBand(value,config.info.change?-bound:min,config.info.change?bound:max));cell.dataset.tcScale=config.info.change?'change':'level';}else{delete cell.dataset.tcBand;delete cell.dataset.tcScale;}
     if(config.font==='original')delete cell.dataset.tcFont;else cell.dataset.tcFont=config.font;
     let original=cell.querySelector('[data-tc-original]'),formatted=cell.querySelector('[data-tc-formatted]');
     // Only explicitly typed, plain scalar percentage changes may be reformatted.
@@ -120,8 +120,8 @@
   doc.body.append(dialog);dialog.addEventListener('close',()=>{active=null;trigger?.focus({preventScroll:true});trigger=null;});
   dialog.addEventListener('click',event=>{const button=event.target.closest('button');if(!active||!button)return;const {state,index}=active,config=state.configs.get(index);
    if(button.hasAttribute('data-tc-sort')){const direction=button.dataset.tcSort;state.restoreOrder=direction==='none';state.sort=direction==='none'?null:{index,descending:direction==='desc'};}
-   else if(button.id==='tc-reset'){Object.assign(config,{filter:'',heat:false,font:'original',percent:false});if(state.sort?.index===index){state.sort=null;state.restoreOrder=true;}if(state.focus===index)state.focus=null;}
-   else if(button.id==='tc-reset-table'){state.sort=null;state.restoreOrder=true;state.focus=null;for(const c of state.configs.values())Object.assign(c,{filter:'',heat:false,font:'original',percent:false});}
+   else if(button.id==='tc-reset'){Object.assign(config,{filter:'',heat:config.header.hasAttribute('data-tc-default-heat'),font:'original',percent:false});if(state.sort?.index===index){state.sort=null;state.restoreOrder=true;}if(state.focus===index)state.focus=null;}
+   else if(button.id==='tc-reset-table'){state.sort=null;state.restoreOrder=true;state.focus=null;for(const c of state.configs.values())Object.assign(c,{filter:'',heat:c.header.hasAttribute('data-tc-default-heat'),font:'original',percent:false});}
    else if(button.id==='tc-done'){close();return;}else return;
    mutate(()=>{apply(state);sync();});
   });
@@ -135,7 +135,7 @@
   query('tc-filter').value=config.filter;query('tc-filter').disabled=state.model.merged;
   dialog.querySelectorAll('[data-tc-sort]').forEach(button=>{button.disabled=state.model.merged;button.setAttribute('aria-pressed',String(button.dataset.tcSort==='none'?!state.sort:state.sort?.index===index&&state.sort.descending===(button.dataset.tcSort==='desc')));});
   query('tc-structure').textContent=state.model.merged?'Sorting and filtering are unavailable because body cells span rows. Their relationships are preserved.':'';
-  query('tc-heat').checked=config.heat;query('tc-heat').disabled=!config.info.numeric;
+  query('tc-heat').checked=config.heat&&config.info.numeric;query('tc-heat').disabled=!config.info.numeric;
   const bound=Math.max(Math.abs(config.range.min),Math.abs(config.range.max));query('tc-heat-note').textContent=config.info.numeric?(config.info.change?'Purple (negative) ← 0 → Blue (positive). Symmetric range: '+(-bound)+' to '+bound:'Low → high. Blue intensity shows magnitude. Range: '+config.range.min+' to '+config.range.max)+(config.info.unit?' '+config.info.unit:'')+'. Range uses all loaded rows before column filters. Colors do not show investment merit. Missing values are uncolored.':'Heat scale needs single numeric values with consistent units. Mixed text, identifiers and missing-only columns are not scaled.';
   query('tc-font').value=config.font;query('tc-focus').checked=state.focus===index;query('tc-percent-label').hidden=!config.info.percent;query('tc-percent').checked=config.percent;
  }

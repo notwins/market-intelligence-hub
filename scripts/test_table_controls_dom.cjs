@@ -30,6 +30,14 @@ qa('#large [data-tc-button]')[1].click();input('#tc-filter','8');assert.equal(qa
 q('#large tbody tr:last-child').remove();await wait();assert(!q('#tc-dialog').open);assert.equal(qa('#large [data-tc-button]').length,0);assert.equal(qa('#large .tc-filtered, #large .tc-heat, #large .tc-focus').length,0);assert(!q('#large').classList.contains('tc-table'));
 q('#large tbody').insertAdjacentHTML('beforeend','<tr><td>Restored</td><td>9</td></tr>');await wait();assert.equal(qa('#large [data-tc-button]').length,2);
 article.dataset.tableControls='off';await wait();assert.equal(qa('#reading [data-tc-button]').length,0);article.removeAttribute('data-table-controls');await wait();assert.equal(qa('#large [data-tc-button]').length,2);assert.equal(qa('#explicit [data-tc-button]').length,2);assert.equal(qa('#small [data-tc-button]').length,0);
+// An initially empty table keeps its declared default as rows arrive and are replaced.
+d.body.insertAdjacentHTML('beforeend','<table id="defaults"><thead><tr><th data-tc-skip>Add</th><th data-tc-default-heat>Strike</th></tr></thead><tbody></tbody></table>');
+await wait();assert.equal(qa('#defaults [data-tc-button]').length,1);
+q('#defaults tbody').innerHTML='<tr><td>Add</td><td>100%</td></tr><tr><td>Add</td><td>70%</td></tr>';await wait();
+assert.deepEqual(qa('#defaults .tc-heat').map(c=>c.dataset.tcBand),['4','0']);
+click('#defaults [data-tc-button]');assert(q('#tc-heat').checked);
+change('#tc-heat',false);assert.equal(qa('#defaults .tc-heat').length,0);
+click('#tc-reset-table');assert(q('#tc-heat').checked);click('#tc-done');
 // Real SI renderer remains explicitly opted out; existing search and source notes survive.
 const payload=JSON.parse(fs.readFileSync('site/data/si-pricing-reference.json','utf8'));w.fetch=async()=>({ok:true,json:async()=>payload});w.eval(fs.readFileSync('site/si-pricing.js','utf8'));w.MarketSI.connect(()=>{d.body.innerHTML=w.MarketSI.view();});await wait();await wait();const sourceRows=qa('#si-rows tr').length;assert(sourceRows>=225);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,0);assert(!q('.si-records').open);q('.si-records').open=true;
 input('#si-query','NVDA');await wait();assert(qa('#si-rows tr').length<sourceRows);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,0);assert(q('.si-notice').textContent.includes('not a verified 11-month term'));click('[data-si-reset]');await wait();assert.equal(qa('#si-rows tr').length,sourceRows);

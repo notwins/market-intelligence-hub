@@ -29,6 +29,9 @@ transcription and both photos are retained locally outside the repository.
 New rows carry only three additional allowlisted fields: source_kind
 (indicative_pricing), tenor_unit (months), and coupon_basis (per_annum).
 The original dataset defaults remain unconfirmed and apply to legacy rows.
-Counts and known date ranges are validated against the data rather than a
-fixed 225-record limit. The SI table, grouping detail and matching desk cards
+The optional top-level `ko_step_down_pp` map records the 1.50 percentage-point
+step shown for those 21 records. SI beta 2 displays it in the reference list.
+Rows without a captured step stay blank. The map does not supply the first
+step-down month or change the schedule in a draft. Counts and known date ranges
+are validated against the data rather than a fixed 225-record limit. The SI table, grouping detail and matching desk cards
 retain the distinction between screen labels and independently verified terms.

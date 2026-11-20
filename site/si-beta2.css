@@ -5,3 +5,5 @@
 
 [hidden]{display:none!important}.review-box{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;margin:12px 0;border:1px solid var(--line);border-radius:9px;font-size:.84rem}.review-box button,.review-box a{font-size:.8rem}.review-box p{flex:1;min-width:200px;margin:0;line-height:1.6}.pending{background:#fff7e8;border-color:#dfc99c}.pending span{flex:1}.data-check{background:#f8fafb;color:var(--muted)}.pdf-ready{background:#eaf5f0;border-color:#b4d5c8}.pdf-ready strong{flex-basis:100%}.pdf-ready small{flex-basis:100%;color:var(--muted);line-height:1.6}.pdf-ready a.primary{color:white}.preview-section #preview.actual-size svg{width:800px;min-width:800px;max-width:none}#export-progress{padding:12px;background:#e4eff2;border-radius:8px;font-size:.85rem}td:last-child{position:sticky;right:0;background:#fff;border-left:1px solid var(--line)}th:last-child{right:0;z-index:2}tbody tr:nth-child(even) td:last-child{background:#fafcfd}
 @media print{#preview.actual-size svg{width:100%!important;min-width:0!important}}
+
+.library th{white-space:nowrap}

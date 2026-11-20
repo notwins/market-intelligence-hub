@@ -37,6 +37,9 @@ class SIReferenceTests(unittest.TestCase):
    self.assertEqual(r['shares'],['NVDA','TSM']);self.assertEqual(r['coupon_pct'],8)
    self.assertEqual(r['tenor_source_value'],11);self.assertEqual(r['tenor_unit'],'months')
    self.assertEqual(r['coupon_basis'],'per_annum');self.assertEqual(r['source_kind'],'indicative_pricing')
+ def test_step_down_metadata_matches_pricing_screen_rows(self):
+  d=json.loads((ROOT/'site/data/si-pricing-reference.json').read_text(encoding='utf-8'))
+  self.assertEqual(d['ko_step_down_pp'],{f'SI-{i:03d}':1.5 for i in range(226,247)})
  def test_placement_and_original_exclusion(self):
   tools=(ROOT/'site/v4-tools.js').read_text();self.assertIn("['si','▧ SI Pricing']",tools)
   self.assertIn("if(X.historyTab==='si')",tools)
