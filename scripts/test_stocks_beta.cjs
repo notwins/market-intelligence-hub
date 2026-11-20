@@ -66,7 +66,7 @@ assert.equal(lookup(null, 'SGD').state, 'unverified');
 assert.equal(lookup('SG1L01001702', 'SGD').state, 'missing');
 console.log('BOS ACE matching: validates ISINs, keeps source rows and checks currencies.');
 
-const { historyPoints, priceLabel, probabilityCone } = require('../site/stocks-beta2-charts.js');
+const { historyPoints, priceLabel, probabilityCone, researchConeTarget, targetBand } = require('../site/stocks-beta2-charts.js');
 const history = require('../site/data/stocks-beta2-monthly-history.json');
 const { briefs } = require('../site/data/stocks-beta2-research-briefs.json');
 assert.deepEqual(Object.keys(briefs).sort(), history.securities.map(item => item.ticker).sort());
@@ -93,4 +93,15 @@ assert.equal(coneFor('NVDA US').splits, 1);
 assert.equal(coneFor('INTC US').splits, 0, 'Genuine moves with matching market-cap changes stay in the sample');
 assert.equal(coneFor('AAPL US', 0).points, undefined, 'An early range cannot use later months to fit a cone');
 assert.deepEqual([8, 9.86, 10.1, 290.47].map(priceLabel), ['8.0', '9.9', '10', '290']);
+assert.equal(researchConeTarget(briefs['AAPL US'], 'USD').value, 290);
+assert.equal(researchConeTarget(briefs['DBS SP'], 'SGD').value, 78);
+assert.equal(researchConeTarget(briefs['DBS SP'], 'USD'), null);
+assert.equal(researchConeTarget({ target: { value: '1,094.50', currency: 'GBp' } }, 'GBp').value, 1094.5);
+assert.equal(researchConeTarget({ target: { value: 'N/A', currency: 'USD' } }, 'USD'), null);
+assert.equal(researchConeTarget(undefined, 'USD'), null);
+const limits = [160, 130, 100, 80, 60];
+assert.deepEqual([170, 160, 130, 80, 75, 60, 50].map(value => targetBand(value, limits)), [
+  'Above +2 SD', 'Between +1 and +2 SD', 'Within ±1 SD', 'Within ±1 SD',
+  'Between −1 and −2 SD', 'Between −1 and −2 SD', 'Below −2 SD',
+]);
 console.log('Stocks BETA 2: listing research, price precision, and dated volatility cones passed.');

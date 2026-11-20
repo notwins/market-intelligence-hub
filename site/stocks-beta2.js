@@ -209,6 +209,7 @@
         status.textContent = 'No research brief for this listing.';
         return;
       }
+      history.setResearchTarget(element, brief);
       const { financials, close, target } = brief;
       const targetLabel = brief.provider === 'Haitong International' ? 'Target price' : 'Fair value';
       const amount = metric => metric ? metric.currency + ' ' + root.StocksBeta2Charts.priceLabel(

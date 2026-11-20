@@ -106,8 +106,24 @@
   const ratioColors = ['#326d9f', '#8554a1'];
 
   const coneLabels = ['+2 SD', '+1 SD', '0 SD', '−1 SD', '−2 SD'];
+  const researchTargetColor = '#914913';
 
-  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, isPrice } = {}) {
+  function researchConeTarget(brief, currency) {
+    const target = brief?.target;
+    if (!target || target.currency !== currency) return null;
+    const value = Number(String(target.value).replaceAll(',', ''));
+    if (!Number.isFinite(value) || value <= 0) return null;
+    return { value, provider: brief.provider, date: brief.date };
+  }
+
+  function targetBand(value, [upper2, upper1, , lower1, lower2]) {
+    if (value > upper2) return 'Above +2 SD';
+    if (value >= lower1 && value <= upper1) return 'Within ±1 SD';
+    if (value < lower2) return 'Below −2 SD';
+    return value > upper1 ? 'Between +1 and +2 SD' : 'Between −1 and −2 SD';
+  }
+
+  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, researchTarget, isPrice } = {}) {
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return null;
     const scale = Math.min(root.devicePixelRatio || 1, 2);
@@ -118,6 +134,7 @@
     ctx.font = '12px "Segoe UI", Arial, sans-serif';
     const values = series.flatMap(line => line.points.map(point => point.value));
     if (cone) values.push(...cone.points.at(-1));
+    if (researchTarget) values.push(researchTarget.value);
     if (series.some(line => line.area)) values.push(0);
     const low = Math.min(...values), high = Math.max(...values);
     const pad = low === high ? Math.max(Math.abs(low) / 10, .1) : 0;
@@ -128,8 +145,15 @@
     const first = time(dates[from][2]), last = time(cone?.anchor.quote || dates[to][2]);
     const labelValue = isPrice ? priceLabel : axisNumber;
     const left = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width))) + 10;
-    const endpointLabels = cone?.points.at(-1).map((value, i) => coneLabels[i] + '  ' + priceLabel(value));
-    const labelRoom = endpointLabels ? Math.max(...endpointLabels.map(label => ctx.measureText(label).width)) + 13 : 0;
+    const endpoints = cone?.points.at(-1).map((value, i) => ({
+      value, label: coneLabels[i] + '  ' + priceLabel(value), color: '#284867', stroke: '#688bb5'
+    })) ?? [];
+    if (researchTarget) {
+      const { value } = researchTarget;
+      endpoints.push({ value, label: 'Target  ' + priceLabel(value), color: researchTargetColor, stroke: researchTargetColor });
+      endpoints.sort((a, b) => b.value - a.value);
+    }
+    const labelRoom = endpoints.length ? Math.max(...endpoints.map(item => ctx.measureText(item.label).width)) + 13 : 0;
     const right = width - 12 - labelRoom, top = 11, bottom = height - 28;
     const historicalRight = cone ? (first === last ? left : right - (right - left) * .38) : right;
     const x = instant => first === last ? (left + historicalRight) / 2 : left + (instant - first) / (last - first) * (historicalRight - left);
@@ -197,18 +221,22 @@
       band(1, 3, '#b8d0ed', '#446f9f');
       ctx.setLineDash([3, 3]);
       tick(historicalRight, y(cone.anchor.value), right, y(cone.anchor.value), '#2c597d');
+      if (researchTarget) {
+        ctx.setLineDash([6, 3]);
+        tick(historicalRight, y(researchTarget.value), right, y(researchTarget.value), researchTargetColor);
+      }
       ctx.setLineDash([]);
       ctx.fillStyle = '#284867';
       ctx.textAlign = 'center';
       ctx.fillText('12 mo', right - 6, height - 10);
       if (right - historicalRight > 86) ctx.fillText('6 mo', futureX(6), height - 10);
       ctx.textAlign = 'left';
-      const end = cone.points.at(-1);
       let labelY = top - 14;
-      end.forEach((value, i) => {
-        const spaced = Math.max(labelY + 14, Math.min(bottom - 14 * (end.length - 1 - i), y(value)));
-        tick(right, y(value), right + 7, spaced, '#688bb5');
-        ctx.fillText(endpointLabels[i], right + 9, spaced);
+      endpoints.forEach(({ value, label, color, stroke }, i) => {
+        const spaced = Math.max(labelY + 14, Math.min(bottom - 14 * (endpoints.length - 1 - i), y(value)));
+        tick(right, y(value), right + 7, spaced, stroke);
+        ctx.fillStyle = color;
+        ctx.fillText(label, right + 9, spaced);
         labelY = spaced;
       });
     }
@@ -300,6 +328,7 @@
       }
       const projection = activeCone && anchor ? card.projection : null;
       const cone = projection?.points ? projection : null;
+      const researchTarget = cone ? card.researchTarget : null;
       const targetRows = metric === 'price' && card.target ? targets?.[company.ticker] ?? [] : [];
       const targetLines = Object.entries(targetColors).map(([rating, color]) => ({
         name: rating, color, points: targetRows.filter(row => row[0] >= from && row[0] <= (cone?.anchor.index ?? to) && row[2] === rating)
@@ -332,8 +361,9 @@
       }
       show('price', primary, unit, label + ' by price date'
         + (targetRows.length ? ' with Morningstar fair value' : '')
-        + (cone ? ' and a 12-month cone with one and two standard deviation bands' : ''),
-      { cone, isPrice: metric === 'price' });
+        + (cone ? ' and a 12-month cone with one and two standard deviation bands' : '')
+        + (researchTarget ? ' and the latest research target' : ''),
+      { cone, researchTarget, isPrice: metric === 'price' });
       show('valuation', ratios, '×', 'forward P/E and P/B by price date');
       const slider = get('input[type=range]');
       slider.min = String(from);
@@ -353,7 +383,14 @@
           + cone.count + ' monthly returns' + (cone.splits ? ' · ' + cone.splits + ' split-like move' + (cone.splits === 1 ? '' : 's') + ' skipped' : '')
         : 'Cone unavailable · ' + (anchor ? projection.count + ' usable monthly returns. At least 12 are needed.' : 'No positive price in this range.');
       if (get('[data-cone-summary]').textContent !== summary) get('[data-cone-summary]').textContent = summary;
-      get('[data-cone-levels]').textContent = cone ? cone.points.at(-1).map((value, i) => coneLabels[i] + ' ' + priceLabel(value)).join(' · ') : '';
+      const end = cone?.points.at(-1);
+      get('[data-cone-levels]').textContent = end ? end.map((value, i) => coneLabels[i] + ' ' + priceLabel(value)).join(' · ') : '';
+      get('[data-cone-research-target]').textContent = researchTarget
+        ? 'Target ' + priceLabel(researchTarget.value) + ' ' + unit + ' · '
+          + targetBand(researchTarget.value, end) + ' at 12 months · '
+          + researchTarget.provider + ' report, ' + dateFormat.format(time(researchTarget.date))
+          + (researchTarget.date > anchor.quote ? ' (after chart anchor)' : '')
+        : '';
     }
     function syncRange() {
       from.value = String(state.from);
@@ -465,7 +502,14 @@
       const { metric, target, cone } = cards.get(element);
       return { metric, target, cone };
     }
-    return { add, settings, cardSettings, range: () => state, remove(element) { resize.unobserve(element); cards.delete(element); } };
+    function setResearchTarget(element, brief) {
+      const card = cards.get(element);
+      if (!card) return;
+      card.researchTarget = researchConeTarget(brief, card.company.currency);
+      if (card.cone) repaint();
+    }
+    return { add, settings, cardSettings, setResearchTarget, range: () => state,
+      remove(element) { resize.unobserve(element); cards.delete(element); } };
   }
 
   function mountRankings(data, { logo, chooseCompany }) {
@@ -581,7 +625,7 @@
     return { renderBars };
   }
 
-  const api = { historyPoints, peRankings, mountRankings, mountHistory, priceLabel, probabilityCone };
+  const api = { historyPoints, peRankings, mountRankings, mountHistory, priceLabel, probabilityCone, researchConeTarget, targetBand };
   if (typeof module !== 'undefined') module.exports = api;
   root.StocksBeta2Charts = api;
 })(typeof window !== 'undefined' ? window : globalThis);
