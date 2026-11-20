@@ -99,3 +99,11 @@ assert.match(C.svg(p,localMargin),/MOA margin 37\.125%/,'Old drafts can use a ma
 assert.match(C.svg(p,localMargin),/MOA margin source · Local snapshot/);
 assert.match(C.svg(p),/MOA margin \u2014/,'Absent values stay unset');
 assert(C.validate({...marginPage,shares:[{...p.shares[0],moaPct:101}]}).some(error=>error.includes('MOA margin')));
+const fourWithOverlays=C.svg({ ...p, shares:['NVDA','TSM','GOOGL','AVGO'].map(symbol=>({...p.shares[0],symbol,moaPct:50})) },{},1,1,{chart:settings});
+const fourLegend=fourWithOverlays.match(/<g class="si-compact-legend">([\s\S]*?)<\/g>/)?.[1];
+assert(fourLegend,'Four-share pages use the single shared legend');
+assert.deepEqual([...new Set([...fourLegend.matchAll(/<text[^>]+ y="(\d+)"/g)].map(match=>match[1]))],['207']);
+for(const item of ['Price','Final KO','P/E','P/B','MS fair value','BOS archive'])assert(fourLegend.includes(item));
+assert(fourWithOverlays.includes('MOA margin source · manual entry'));
+assert(fourWithOverlays.includes('Full descriptions are on share cards.'));
+assert(!overlaySvg.includes('si-compact-legend'),'Single-share pages retain their original legend');

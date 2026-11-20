@@ -114,37 +114,52 @@ function bosResearch(row){
   : '';
  return call||target?{call,target,provider:clean(row.researchProvider,45),url:call?bosReportUrl(row.researchReportUrl):''}:null;
 }
-function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:options}={}){const chart=chartOptions(options),out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
+function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:options}={}){const chart=chartOptions(options),four=p.shares.length===4,out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
  out.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Structured investment one-pager for ${escape(p.shares.map(s=>s.symbol).join(', '))}">`);rect(0,0,W,H,'#fff','#fff');
- text(28,39,'FOR REFERENCE ONLY',17,navy,true);text(772,38,'MARKET INTEL  /  SI BETA 2',11,muted,true,'end');
- text(28,58,'Indicative terms. Capital is at risk. Refer to the issuer’s final terms for conditions and observation rules.',9,muted);
- rect(28,74,744,32,navy,navy);text(42,96,'Structured investment',18,'#fff',true);text(758,95,`${page} / ${total}`,11,'#fff',true,'end');
+ text(28,four?31:39,'FOR REFERENCE ONLY',17,navy,true);text(772,four?30:38,'MARKET INTEL  /  SI BETA 2',11,muted,true,'end');
+ text(28,four?45:58,'Indicative terms. Capital is at risk. Refer to the issuer’s final terms for conditions and observation rules.',9,muted);
+ rect(28,four?54:74,744,four?26:32,navy,navy);text(42,four?72:96,'Structured investment',18,'#fff',true);text(758,four?71:95,`${page} / ${total}`,11,'#fff',true,'end');
  const fitted=(x,y,value,width,size=10,color=navy,bold=false,anchor='start')=>{const valueText=String(value??'');const estimated=valueText.length*size*.56;text(x,y,valueText,size,color,bold,anchor);if(estimated>width)out[out.length-1]=out.at(-1).replace('<text ',`<text textLength="${width}" lengthAdjust="spacingAndGlyphs" `);};
- fitted(28,126,p.shares.map(s=>s.symbol).join('  +  '),535,15,navy,true);text(772,125,p.source?`Based on ${p.source.reference}`:'Manually entered terms',10,muted,false,'end');
- const left=28,top=139,tableWidth=365,columns=[left,left+105,left+176,left+239,left+302,left+365];
- rect(left,top,tableWidth,19,blue,blue);['Underlying','Reference','KO','KI','Strike'].forEach((v,i)=>text(columns[i]+5,top+13,v,9,'#fff',true));
- const count=Math.max(p.shares.length,2);for(let i=0;i<count;i++){const y=top+19+i*19,s=p.shares[i];rect(left,y,tableWidth,19,i%2?'#f5f8fb':'#fff');if(!s)continue;const r=reference(p,s,enrichment[s.symbol]),l=levels(p,r.value);[s.symbol,fmt(r.value,4),fmt(l.ko,4),fmt(l.ki,4),fmt(l.strike,4)].forEach((v,j)=>fitted(columns[j]+5,y+13,v==='Not supplied'?'—':v,columns[j+1]-columns[j]-10,9,j===2?'#497c31':j===3?'#ae3b49':j===4?'#7652a3':navy,j===0));}
+ fitted(28,four?98:126,p.shares.map(s=>s.symbol).join('  +  '),535,15,navy,true);text(772,four?97:125,p.source?`Based on ${p.source.reference}`:'Manually entered terms',10,muted,false,'end');
+ const left=28,top=four?107:139,rowHeight=four?15:19,rowText=four?11:13,tableWidth=365,columns=[left,left+105,left+176,left+239,left+302,left+365];
+ rect(left,top,tableWidth,rowHeight,blue,blue);['Underlying','Reference','KO','KI','Strike'].forEach((v,i)=>text(columns[i]+5,top+rowText,v,9,'#fff',true));
+ const count=Math.max(p.shares.length,2);for(let i=0;i<count;i++){const y=top+(i+1)*rowHeight,s=p.shares[i];rect(left,y,tableWidth,rowHeight,i%2?'#f5f8fb':'#fff');if(!s)continue;const r=reference(p,s,enrichment[s.symbol]),l=levels(p,r.value);[s.symbol,fmt(r.value,4),fmt(l.ko,4),fmt(l.ki,4),fmt(l.strike,4)].forEach((v,j)=>fitted(columns[j]+5,y+rowText,v==='Not supplied'?'—':v,columns[j+1]-columns[j]-10,9,j===2?'#497c31':j===3?'#ae3b49':j===4?'#7652a3':navy,j===0));}
  const basis={per_annum:'PA',per_month:' per month',total:' total',unconfirmed:' (basis unconfirmed)'}[p.couponBasis];
  const pairs=[['Tenor',`${fmt(p.months)} months`,'Coupon',`${pct(p.coupon)}${basis}`],['Currency',p.currency,'Initial KO',pct(p.ko)],['KI',pct(p.ki),'Strike',pct(p.strike)],['Monthly step',num(p.step)===null?'Not supplied':fmt(p.step,4)+'%','Final KO',finalKO(p)===null?'Not calculated':pct(finalKO(p))]];
- pairs.forEach((row,i)=>{const y=139+i*19;rect(408,y,364,19,i%2?'#fff':'#f5f8fb');text(414,y+13,row[0]+':',9,muted);fitted(487,y+13,row[1],96,9,navy,true);text(590,y+13,row[2]+':',9,muted);fitted(655,y+13,row[3],111,9,navy,true);});
- text(408,228,`KI: ${p.kiType||'Not supplied'}${p.issuer?' · Issuer: '+p.issuer:''}`,8,muted);
- text(28,244,p.date?`Reference: ${p.date}; manual prices override closes.`:'Reference: saved close or manual price. Levels = reference × %.',8,muted);
+ pairs.forEach((row,i)=>{const y=top+i*rowHeight;rect(408,y,364,rowHeight,i%2?'#fff':'#f5f8fb');text(414,y+rowText,row[0]+':',9,muted);fitted(487,y+rowText,row[1],96,9,navy,true);text(590,y+rowText,row[2]+':',9,muted);fitted(655,y+rowText,row[3],111,9,navy,true);});
+ fitted(408,four?176:228,`KI: ${p.kiType||'Not supplied'}${p.issuer?' · Issuer: '+p.issuer:''}`,364,8,muted);
+ const referenceNote=p.date?`Reference: ${p.date}; manual prices override closes.`:'Reference: saved close or manual price. Levels = reference × %.';
+ fitted(28,four?193:244,referenceNote,365,8,muted);
  const stepNote=p.step!==null?`Monthly step-down: ${fmt(p.step,4)} percentage points from month ${p.firstStep}; final KO ${pct(finalKO(p))}.`:'Step-down not supplied; initial KO shown.';
- text(28,257,stepNote,8,muted);
- // One shared legend outside every chart releases space for the price plots.
- [['Price',blue,''],['Initial KO','#699645','7 3'],['KI','#b94a57','3 3'],['Strike','#8261a8','9 3 2 3'],...(p.step>0?[['Final KO','#c07821','2 3']]:[])].forEach(([label,color,dash],j)=>{line(410+j*73,255,423+j*73,255,color,dash);text(427+j*73,258,label,7.5,muted);});
- const hasOverlays=overlayKeys.some(key=>chart[key]);
- if(hasOverlays){
-  const entries=overlayKeys.filter(key=>chart[key]).flatMap(key=>key==='target'?['target','archive']:[key]);
-  let lx=31;
-  for(const key of entries){
-   line(lx,272,lx+13,272,overlayColors[key],key==='archive'?'2 2':'');
-   text(lx+17,275,overlayNames[key],8,muted);
-   lx+=key==='target'||key==='archive'?133:74;
+ fitted(four?408:28,four?193:257,stepNote,four?364:370,8,muted);
+ const levelsLegend=[['Price',blue,''],[four?'KO':'Initial KO','#699645','7 3'],['KI','#b94a57','3 3'],['Strike','#8261a8','9 3 2 3'],...(p.step>0?[['Final KO','#c07821','2 3']]:[])];
+ const seriesLegend=overlayKeys.filter(key=>chart[key]).flatMap(key=>key==='target'?['target','archive']:[key]);
+ const hasOverlays=seriesLegend.length>0;
+ const ratingLegend='B/H/S = Buy/Hold/Sell · archive shown where share basis matches';
+ if(four){
+  const short={pe:'P/E',pb:'P/B',target:'MS fair value',archive:'BOS archive'};
+  let x=28;
+  out.push('<g class="si-compact-legend">');
+  for(const [label,color,dash] of [...levelsLegend,...seriesLegend.map(key=>[short[key],overlayColors[key],key==='archive'?'2 2':key==='pb'?'4 2':''])]){
+   line(x,204,x+11,204,color,dash);
+   text(x+15,207,label,7.5,muted);
+   x+=24+label.length*4.4;
   }
-  if(chart.target)text(lx,275,'B/H/S = Buy/Hold/Sell · archive shown where share basis matches',8,muted);
+  if(chart.target)fitted(x,207,ratingLegend,772-x,7.5,muted);
+  out.push('</g>');
+ }else{
+  levelsLegend.forEach(([label,color,dash],j)=>{line(410+j*73,255,423+j*73,255,color,dash);text(427+j*73,258,label,7.5,muted);});
+  if(hasOverlays){
+   let x=31;
+   for(const key of seriesLegend){
+    line(x,272,x+13,272,overlayColors[key],key==='archive'?'2 2':'');
+    text(x+17,275,overlayNames[key],8,muted);
+    x+=key==='target'||key==='archive'?133:74;
+   }
+   if(chart.target)text(x,275,ratingLegend,8,muted);
+  }
  }
- const start=hasOverlays?287:270,available=998-start,gap=8,block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length);
+ const start=four?216:hasOverlays?287:270,foot=four?1037:1010,available=(four?foot-8:998)-start,gap=four?7:8,block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length);
  const marginSources=new Set();
  p.shares.forEach((s,i)=>{const d=enrichment[s.symbol]||{},y=start+i*(block+gap),r=reference(p,s,d),ls=levels(p,r.value),name=s.name||d.name||s.symbol;
  rect(28,y,744,block,'#fff');rect(28,y,744,23,navy,navy);fitted(37,y+16,clean(name,69),445,11,'#fff',true);fitted(762,y+16,s.symbol,110,10,'#fff',false,'end');
@@ -237,10 +252,23 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  }
  const source=`${d.provider||'Price feed unavailable'}${d.metricsDate?' · BOS metrics '+d.metricsDate:''}`;text(rx,y+block-17,clean(source,65),8,muted);if(d.sourceUrl)text(rx,y+block-6,clean(d.sourceUrl.replace(/^https:\/\//,''),78),7,muted);if(!small)paragraph(rx,y+block-(hasOverlays?40:48),d.metricsBasis||'Valuations unavailable. No estimates are inferred.',61,2,8,muted);
  });
- const foot=1010;line(28,foot,772,foot);paragraph(28,foot+15,p.notes||'Indicative reference only. This sheet is not an issuer term sheet, offer or investment recommendation.',140,2,9,navy);
- paragraph(28,foot+44,p.source?`Draft based on ${p.source.reference}, source date ${p.source.date||'not shown'}. Imported levels are rounded and photo-unverified; edited terms require verification. Coupon basis and tenor units remain as labelled.`:'Manual terms are user-entered and unverified. Confirm coupon basis, KO observations, step-down timing, KI conditions, settlement and issuer terms.',155,2,8);
- paragraph(28,foot+71,'Charts show source closes, not product returns. Barriers are illustrative; capital loss is possible. Company profiles are shortened excerpts from supplied Excel snapshot; observation date unavailable. Full descriptions are on share cards.',155,2,8);
- if(marginSources.size)paragraph(28,foot+94,'MOA margin source · '+[...marginSources].join(' / '),155,2,8);
+ line(28,foot,772,foot);
+ const footerCopy=[
+  p.notes||'Indicative reference only. This sheet is not an issuer term sheet, offer or investment recommendation.',
+  p.source?`Draft based on ${p.source.reference}, source date ${p.source.date||'not shown'}. Imported levels are rounded and photo-unverified; edited terms require verification. Coupon basis and tenor units remain as labelled.`:'Manual terms are user-entered and unverified. Confirm coupon basis, KO observations, step-down timing, KI conditions, settlement and issuer terms.',
+  'Charts show source closes, not product returns. Barriers are illustrative; capital loss is possible. Company profiles are shortened excerpts from supplied Excel snapshot; observation date unavailable. Full descriptions are on share cards.',
+ ];
+ if(marginSources.size)footerCopy.push('MOA margin source · '+[...marginSources].join(' / '));
+ if(four){
+  let y=foot+12;
+  for(const [i,copy] of footerCopy.entries()){
+   const lines=wrap(copy,163);
+   for(const lineText of lines){text(28,y,lineText,8,i===0?navy:muted);y+=10;}
+   y+=3;
+  }
+ }else{
+  [15,44,71,94].slice(0,footerCopy.length).forEach((offset,i)=>paragraph(28,foot+offset,footerCopy[i],i===0?140:155,2,i===0?9:8,i===0?navy:muted));
+ }
  out.push('</svg>');return out.join('');}
 async function pdfFromImages(images,PDFLib,linksByPage=[]){
  if(!images.length)throw Error('Create a page first.');
