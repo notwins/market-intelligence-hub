@@ -1,7 +1,6 @@
 # SI beta 2 one-pager creator
 
-`si-beta2.html` sits beside SI Pricing in the shared History navigation. The
-original SI list, prices, watchlists and reference bytes remain unchanged.
+`si-beta2.html` sits beside SI Pricing in the shared History navigation. Both views use the shared historical SI reference data.
 
 The page has manual entry for one to four shares, initial KO, KI, strike,
 monthly step-down in percentage points, tenor and coupon. Extra controls expose
@@ -12,7 +11,9 @@ step times the number of months from the first step month through maturity,
 inclusive. This is an explicitly labelled illustration, not a payoff engine.
 
 Each page is a private copy. Imported records retain rounded/photo-unverified
-provenance, unknown coupon basis/tenor units and missing step-down. Source dates
+provenance and source-specific coupon basis and tenor labels. A supplied KO
+step-down copies into the new draft in percentage points. Blank source cells
+remain blank. New reference imports use the default first step-down month of 2. Source dates
 are not silently treated as issuer initial-fixing dates. Exact supplied manual
 percentages are retained. Barrier prices use reference times percentage/100.
 An exact daily reference close is required for a selected date; no nearest-date

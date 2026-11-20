@@ -4,6 +4,11 @@ assert.deepEqual(C.validate(p),[]);assert.equal(C.finalKO(p),80);assert.equal(C.
 const l=C.levels(p,431.95);assert(Math.abs(l.strike-380.37517)<1e-9);assert.equal(C.levels(p,null).strike,null);assert(C.validate({...p,step:15}).length);assert(C.validate({...p,shares:[p.shares[0],p.shares[0]]}).length);assert(C.validate({...p,coupon:null}).length);assert(C.validate({...p,date:'2026-02-31'}).length);
 assert.equal(C.symbol('MSFT UQ'),'MSFT');assert.equal(C.symbol('939 HK'),'0939.HK');assert.equal(C.symbol('6146'),'6146');
 const original=JSON.parse(fs.readFileSync('site/data/si-pricing-reference.json','utf8')),before=JSON.stringify(original),imported=C.fromReference(original.rows[0]);assert.equal(imported.couponBasis,'unconfirmed');assert.equal(imported.tenorUnit,'months');assert.equal(imported.step,null);assert.equal(imported.date,'');assert.equal(imported.source.reference,'SI-001');assert.equal(JSON.stringify(original),before);
+const si006=original.rows.find(row=>row.reference==='SI-006');
+const stepped=C.fromReference(si006,original.ko_step_down_pp[si006.reference]);
+assert.equal(stepped.step,2);assert.equal(C.finalKO(stepped),80);
+assert.equal(C.fromReference(si006).step,null,'A missing source value remains blank.');
+
 assert.equal(C.reference({...p,date:'2026-11-01'},{fixing:null},{daily:[['2026-10-30',20]],quote:{close:30,date:'2026-11-02'}}).value,null);
 assert.equal(C.reference(p,{fixing:null},{quote:{close:30,date:'2026-11-02'}}).value,30);
 const svg=C.svg({...p,issuer:'<script>alert(1)</script>',notes:'<img onerror=alert(1)>',shares:[{symbol:'TEST',fixing:null,name:'A & B',description:''}]});assert(!svg.includes('<script>'));assert(!svg.includes('<img'));assert(svg.includes('A &amp; B'));assert(svg.includes('Price history unavailable'));assert(svg.includes('88.06%'));assert(C.svg({...p,date:'2026-11-12'}).includes('Reference: 2026-11-12'));assert(svg.includes('Capital is at risk'));assert(!svg.includes('NaN'));assert(!svg.includes('Bloomberg'));

@@ -39,7 +39,14 @@ class SIReferenceTests(unittest.TestCase):
    self.assertEqual(r['coupon_basis'],'per_annum');self.assertEqual(r['source_kind'],'indicative_pricing')
  def test_step_down_metadata_matches_pricing_screen_rows(self):
   d=json.loads((ROOT/'site/data/si-pricing-reference.json').read_text(encoding='utf-8'))
-  self.assertEqual(d['ko_step_down_pp'],{f'SI-{i:03d}':1.5 for i in range(226,247)})
+  steps=d['ko_step_down_pp']
+  self.assertEqual(len(steps),224)
+  self.assertEqual({k:v for k,v in steps.items() if int(k[3:])>=226},{f'SI-{i:03d}':1.5 for i in range(226,247)})
+  self.assertLessEqual(set(steps),{r['reference'] for r in d['rows']})
+  self.assertTrue(all(type(v) in (int,float) and 0<v<=8 for v in steps.values()))
+  self.assertEqual([steps[f'SI-{i:03d}'] for i in (1,6,12,50,100,141,190,225)],[5,2,1,3.5,4.5,8,1.5,2])
+  self.assertNotIn('SI-017',steps)
+  self.assertNotIn('SI-075',steps)
  def test_placement_and_original_exclusion(self):
   tools=(ROOT/'site/v4-tools.js').read_text();self.assertIn("['si','▧ SI Pricing']",tools)
   self.assertIn("if(X.historyTab==='si')",tools)
