@@ -20,8 +20,9 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   let content = fs.readFileSync(filename, 'utf8');
   const directory = path.posix.dirname(relative);
   // Shared navigation belongs to mutable UI shells, never frozen reports.
-  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html|market-understanding\/index\.html)$/.test(relative)) {
-    const dependencies = content.replace(/%20/gi, ' ');
+  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html)$/.test(relative)
+      || relative === 'blueprint.html' || relative === 'research-feed.html') {
+    const dependencies = content.slice(0, content.search(/<\/head\s*>/i)).replace(/%20/gi, ' ');
     const navigationCSS = 'Primary Navigation - Type CSS - 16-Nov-16.06.css';
     const navigationJS = 'Primary Navigation - Type JS - 16-Nov-16.06.js';
     const mobileCharts = 'Mobile Charts - Type JS - 16-Nov-16.06.js';
@@ -30,7 +31,7 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
     let assets = '';
     if (!dependencies.includes(navigationCSS)) assets += '<link id="hub-primary-assets" rel="stylesheet" href="' + addPath(navigationCSS) + '?v=20261121.layout1">';
     if (!dependencies.includes(navigationJS)) assets += addScript(navigationJS + '?v=20261121.layout1');
-    if (!dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
+    if (relative !== 'blueprint.html' && relative !== 'research-feed.html' && !dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
     if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   }
   const legalBase = path.posix.relative(directory, 'legal') + '/';

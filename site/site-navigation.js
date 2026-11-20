@@ -1,6 +1,17 @@
 /* The existing public map is the single source of destinations. Load it on demand. */
 (() => {
   'use strict';
+  const sharedBase = new URL('./', document.currentScript.src);
+  const page = location.pathname.slice(sharedBase.pathname.length);
+  if (page === 'market-understanding/' || page === 'market-understanding/index.html') {
+    // The preserved blog HTML already loads this script. Give it the shared bar without rewriting the page.
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = new URL('Primary Navigation - Type CSS - 16-Nov-16.06.css?v=20261121.layout1', sharedBase);
+    const js = document.createElement('script');
+    js.src = new URL('Primary Navigation - Type JS - 16-Nov-16.06.js?v=20261121.layout1', sharedBase);
+    document.head.append(css, js);
+  }
   // Reuse this existing loader on current research landings without rewriting
   // their hash-locked original HTML bytes.
   try{if(document.head&&!document.getElementById('mih-blueprint-access')){const script=document.createElement('script');script.id='mih-blueprint-access';script.src=new URL('blueprint-access.js?v=20261116.settings2',document.currentScript.src).href;script.defer=true;document.head.append(script);}}catch{}
