@@ -1,6 +1,7 @@
 /* Shared UI navigation. URLs remain native links, including Back/Forward. */
 (() => {
   'use strict';
+  if (document.documentElement.classList.contains('hub-primary-ready')) return;
   const base = new URL('./', document.currentScript.src);
   const sections = [
     ['Home', 'desk.html', '⌂'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['Stocks BETA 2', 'stocks-beta2.html', '▥'], ['FRED', 'fred/', '⌁'],

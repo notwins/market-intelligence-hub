@@ -8,6 +8,9 @@ let count=0,legal=0,preserved=0;
 for(const filename of walk(root).filter(p=>p.toLowerCase().endsWith('.html'))){
   const rel=path.relative(root,filename).replace(/\\/g,'/'),s=fs.readFileSync(filename,'utf8');
   if(protectedPaths.has(rel)){preserved++;continue}
+  const navigation=(s.replace(/%20/gi,' ').match(/src="[^"]*Primary Navigation - Type JS - 16-Nov-16\.06\.js(?:\?[^"]*)?"/g)||[]).length;
+  assert(navigation<=1,rel+' duplicate primary navigation');
+  if(rel==='market-understanding/index.html')assert.equal(navigation,1,rel+' missing primary navigation');
   if(rel.startsWith('legal/')){
     assert.equal((s.match(/<footer\b[^>]*class="footer"/g)||[]).length,1,rel+' native footer count');
     assert(/<footer\b[^>]*class="footer"[\s\S]*<\/footer>\s*<\/body>\s*<\/html>\s*$/i.test(s),rel+' native footer must be last');

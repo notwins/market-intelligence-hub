@@ -20,9 +20,18 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   let content = fs.readFileSync(filename, 'utf8');
   const directory = path.posix.dirname(relative);
   // Shared navigation belongs to mutable UI shells, never frozen reports.
-  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html|market-understanding\/index\.html)$/.test(relative) && !content.includes('id="hub-primary-assets"')) {
-    const asset = type => path.posix.relative(directory, 'Primary Navigation - Type ' + type + ' - 16-Nov-16.06.' + type.toLowerCase());
-    content = content.replace(/<\/head\s*>/i, '<link id="hub-primary-assets" rel="stylesheet" href="' + asset('CSS') + '"><script defer src="' + asset('JS') + '"></script><script defer src="' + path.posix.relative(directory, 'Mobile Charts - Type JS - 16-Nov-16.06.js') + '"></script></head>');
+  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html|market-understanding\/index\.html)$/.test(relative)) {
+    const dependencies = content.replace(/%20/gi, ' ');
+    const navigationCSS = 'Primary Navigation - Type CSS - 16-Nov-16.06.css';
+    const navigationJS = 'Primary Navigation - Type JS - 16-Nov-16.06.js';
+    const mobileCharts = 'Mobile Charts - Type JS - 16-Nov-16.06.js';
+    const addPath = filename => path.posix.relative(directory, filename);
+    const addScript = filename => '<script defer src="' + addPath(filename) + '"></script>';
+    let assets = '';
+    if (!dependencies.includes(navigationCSS)) assets += '<link id="hub-primary-assets" rel="stylesheet" href="' + addPath(navigationCSS) + '?v=20261121.layout1">';
+    if (!dependencies.includes(navigationJS)) assets += addScript(navigationJS + '?v=20261121.layout1');
+    if (!dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
+    if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   }
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
