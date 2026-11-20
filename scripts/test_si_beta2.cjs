@@ -107,3 +107,21 @@ for(const item of ['Price','Final KO','P/E','P/B','MS fair value','BOS archive']
 assert(fourWithOverlays.includes('MOA margin source · manual entry'));
 assert(fourWithOverlays.includes('Full descriptions are on share cards.'));
 assert(!overlaySvg.includes('si-compact-legend'),'Single-share pages retain their original legend');
+const B=require('../site/si-bos-history.js');
+const privateFile={version:1,kind:'si-bos-monthly-history',listings:[['TEST US','USD',[
+ ['2024-01-05','S',200,'2024-01-04',250],
+ ['2025-09-30','B',null,null,null],
+ ['2026-02-01','H',110,'2025-09-30',90],
+]]]};
+const privateCalls=B.parse(JSON.stringify(privateFile)).listings.get(B.listingKey('TEST US','USD'));
+assert.equal(B.listingKey('TEST US','EUR'),'TEST US|EUR');
+assert.throws(()=>B.parse(JSON.stringify({...privateFile,listings:[...privateFile.listings,...privateFile.listings]})),/valid private BOS/);
+assert.throws(()=>B.parse(JSON.stringify({...privateFile,listings:[['TEST US','USD',[['2024-02-30','S',5,null,null]]]]})));
+const assembled=C.chartWindow({...sample,bosCalls:privateCalls},{...settings,years:5});
+assert.deepEqual(assembled.calls.map(p=>p.rating),['Sell','Buy','Hold','Hold']);
+assert(assembled.series.archive.some(p=>p.value===110));
+assert(!assembled.series.archive.some(p=>p.value===200),'Incompatible older targets stay out of the price axis');
+const withCalls=C.svg(p,{TEST:{...sample,bosCalls:privateCalls}},1,1,{chart:settings});
+assert.equal((withCalls.match(/class="si-bos-call"/g)||[]).length,4);
+assert.match(withCalls,/Calls: 4/);
+assert(!C.svg(p,{TEST:{...sample,bosCalls:privateCalls}}).includes('si-call-history'));

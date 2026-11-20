@@ -5,6 +5,8 @@ const WATERMARK_KEY='market-si-beta2-logo-watermark',LOGO_BASE='assets/company-l
 let showWatermarks=true,logoIndexPromise,chart=C.chartOptions();
 const CHART_KEY='market-si-beta2-chart',MOA_KEY='market-si-beta2-moa-v1';
 let moaLibrary=null;
+const bosFiles=window.SIBosHistory;
+let bosArchive=null,bosWorking=!!bosFiles,bosTemporary=false;
 function moaListing(ticker,currency){
  const id=String(ticker||'').trim().toUpperCase().replace(/\s+EQUITY$/,'').replace(/\s+/g,' ').replace(/^0+(\d+ HK)$/,'$1');
  return /^[A-Z0-9.\/-]{1,16} [A-Z]{2}$/.test(id)&&/^[A-Z]{3}$/.test(currency||'')?id+'|'+currency:'';
@@ -78,11 +80,14 @@ async function companyLogo(...tickers){
  return logoImages.get(file);
 }
 function renderPage(page,data,number,total,watermarks=showWatermarks,links){
- const withMoa=Object.fromEntries(page.shares.map(s=>{
+ const withPrivateData=Object.fromEntries(page.shares.map(s=>{
   const info=data[s.symbol]||{};
-  return [s.symbol,moaLibrary?{...info,moaPct:moaLibrary.rates.get(info.moaKey),moaSource:moaLibrary.label}:info];
+  return [s.symbol,{...info,
+   ...(moaLibrary?{moaPct:moaLibrary.rates.get(info.moaKey),moaSource:moaLibrary.label}:{}),
+   bosCalls:bosArchive?.listings.get(info.bosKey)
+  }];
  }));
- return C.svg(page,withMoa,number,total,{showWatermarks:watermarks,links,chart});
+ return C.svg(page,withPrivateData,number,total,{showWatermarks:watermarks,links,chart});
 }
 function invalidatePDF(){if(pdfURL)URL.revokeObjectURL(pdfURL);pdfURL='';$('pdf-ready').hidden=true;for(const name of ['download-pdf','open-pdf'])$(name).removeAttribute('href');}
 function protectEdits(){if(busy)return true;if(!dirty)return false;notice('Apply or discard your changes in Review & export before continuing.');$('pending-edits').scrollIntoView({behavior:'smooth',block:'center'});return true;}
@@ -100,11 +105,17 @@ function buttons(){const p=active();
  $('clear-moa').hidden=!moaLibrary;
  $('moa-status').textContent=moaLibrary?`${moaLibrary.rates.size} rates loaded · ${moaLibrary.label} · private to this browser.`:'Load your private MOA file once, or enter a margin on any share.';
  $('chart-display').disabled=busy;
+ $('load-bos-history').disabled=bosWorking;
+ $('clear-bos-history').hidden=!bosArchive;
+ $('clear-bos-history').disabled=bosWorking;
+ $('bos-history-status').textContent=bosWorking?'Reading private BOS history…':bosArchive?
+  `${bosArchive.count.toLocaleString()} dated calls · ${bosTemporary?'this session':'this browser'}.`:
+  'Load the private BOS archive for monthly calls and targets.';
  $('chart-years').value=String(chart.years);
  for(const key of C.overlayKeys)$('chart-'+key).checked=chart[key];
  $('logo-watermark').setAttribute('aria-pressed',String(showWatermarks));
  $('logo-watermark-state').textContent=showWatermarks?'On':'Off';
-$('pdf-one').disabled=!p||dirty||busy||loading.has(p?.id);$('pdf-all').disabled=!pages.length||dirty||busy||loading.size>0;for(const k of ['duplicate-page','remove-page','refresh-page'])$(k).disabled=!p||dirty||busy||(k==='refresh-page'&&loading.has(p?.id));for(const k of ['apply-page','apply-pending','discard-pending','new-page','undo-remove','backup-pages','restore-pages'])$(k).disabled=busy;$('pending-edits').hidden=!dirty;$('apply-pending').textContent=p?'Apply changes':'Create one-pager';$('page-count').textContent=pages.length;$('pdf-all').textContent=busy?'Creating PDF…':`↓ All pages PDF${pages.length?' ('+pages.length+')':''}`;}
+$('pdf-one').disabled=!p||dirty||busy||bosWorking||loading.has(p?.id);$('pdf-all').disabled=!pages.length||dirty||busy||bosWorking||loading.size>0;for(const k of ['duplicate-page','remove-page','refresh-page'])$(k).disabled=!p||dirty||busy||(k==='refresh-page'&&loading.has(p?.id));for(const k of ['apply-page','apply-pending','discard-pending','new-page','undo-remove','backup-pages','restore-pages'])$(k).disabled=busy;$('pending-edits').hidden=!dirty;$('apply-pending').textContent=p?'Apply changes':'Create one-pager';$('page-count').textContent=pages.length;$('pdf-all').textContent=busy?'Creating PDF…':`↓ All pages PDF${pages.length?' ('+pages.length+')':''}`;}
 function preflight(p){const messages=[];if(!p||loading.has(p.id)){$('data-check').hidden=true;return;}const data=assets[p.id]||{},missingPrice=[],missingHistory=[],missingDescription=[];for(const s of p.shares){const d=data[s.symbol]||{};if(C.reference(p,s,d).value===null)missingPrice.push(s.symbol);if(C.chartWindow(d,chart).prices.length<2)missingHistory.push(s.symbol);if(!(s.description||d.description))missingDescription.push(s.symbol);}if(missingPrice.length)messages.push('Reference price unavailable: '+missingPrice.join(', ')+'. Enter a manual reference price or choose a date with a saved close.');if(missingHistory.length)messages.push('Price history unavailable: '+missingHistory.join(', ')+'.');if(missingDescription.length)messages.push('Company description not supplied: '+missingDescription.join(', ')+'. Add it in share details.');$('data-check').hidden=!messages.length;$('data-check-text').textContent=messages.join(' ')+' The PDF will retain these gaps.';}
 function render(){const p=active();$('page-tabs').innerHTML=pages.map((x,i)=>`<button role="tab" id="tab-${E(x.id)}" aria-controls="preview" aria-selected="${x.id===activeId}" tabindex="${x.id===activeId?0:-1}" data-page="${E(x.id)}" title="${E(x.shares.map(s=>s.symbol).join(' / '))}" aria-label="Page ${i+1}: ${E(x.shares.map(s=>s.symbol).join(' / '))}">${i+1}</button>`).join('');if(p){$('preview').innerHTML=renderPage(p,assets[p.id]||{},pages.indexOf(p)+1,pages.length);$('preview').setAttribute('aria-labelledby','tab-'+p.id);}else{$('preview').removeAttribute('aria-labelledby');$('preview').innerHTML='<div class="empty-preview"><span>▤</span><h3>Your first one-pager starts here</h3><p>Complete the terms above or choose “Add page” from the reference list below.</p></div>';}
  $('preview-status').classList.toggle('dirty',dirty);$('preview-status').textContent=dirty?'The preview shows the last applied terms. Apply changes below before exporting.':p?(loading.has(p.id)?'Loading dated share data…':`Page ${pages.indexOf(p)+1} of ${pages.length} · ${p.shares.map(s=>s.symbol).join(' + ')} · ${storageOK?'saved in this browser':'not saved; download a collection backup'}`):'No pages yet.';preflight(p);buttons();}
@@ -159,6 +170,7 @@ async function enrich(p){
   const listing=valuation?.row||reviewedListing(item);
   const moaKey=moaListing(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency);
   result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,moaKey,
+   bosKey:bosFiles?.listingKey(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency),
    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
   };
  }));
@@ -198,6 +210,32 @@ $('clear-moa').addEventListener('click',()=>{
  try{localStorage.removeItem(MOA_KEY);}catch{notice('The private MOA file could not be cleared.');return;}
  moaLibrary=null;invalidatePDF();render();
 });
+$('load-bos-history').addEventListener('change',async event=>{
+ const input=event.target,file=input.files?.[0];
+ if(!file||busy||bosWorking)return;
+ bosWorking=true;buttons();
+ try{
+  if(file.size>16000000)throw Error('Choose a private BOS file under 16 MB.');
+  const raw=await file.text(),parsed=bosFiles.parse(raw);
+  bosTemporary=false;
+  try{await bosFiles.save(raw);}catch{bosTemporary=true;}
+  bosArchive=parsed;invalidatePDF();
+ }catch(e){notice(e.message||'The private BOS history could not be loaded.');}
+ finally{input.value='';bosWorking=false;render();}
+});
+$('clear-bos-history').addEventListener('click',async()=>{
+ if(busy||bosWorking)return;
+ bosWorking=true;buttons();
+ try{
+  try{await bosFiles.clear();}catch(error){if(!bosTemporary)throw error;}
+  bosArchive=null;bosTemporary=false;invalidatePDF();
+ }
+ catch{notice('The private BOS history could not be cleared from this browser.');}
+ finally{bosWorking=false;render();}
+});
+bosFiles?.read().then(raw=>{
+ if(raw){bosArchive=bosFiles.parse(raw);invalidatePDF();}
+}).catch(()=>{}).finally(()=>{bosWorking=false;render();});
 $('chart-display').addEventListener('change',()=>{
  if(busy)return;
  const wasEnabled=C.overlayKeys.some(key=>chart[key]);
@@ -234,7 +272,7 @@ function download(bytes,type,name){const url=URL.createObjectURL(new Blob([bytes
 let pdfLibrary;
 async function getPDFLib(){if(window.PDFLib)return window.PDFLib;if(!pdfLibrary){const s=document.createElement('script');pdfLibrary=bounded(new Promise((resolve,reject)=>{s.src='vendor/pdf-lib-1.17.1.min.js';s.onload=()=>window.PDFLib?resolve(window.PDFLib):reject(Error('PDF exporter is unavailable.'));s.onerror=()=>reject(Error('PDF exporter could not load. Try again.'));document.head.append(s);}), 'PDF exporter timed out. Try again.').catch(e=>{pdfLibrary=null;s.remove();throw e;});}return pdfLibrary;}
 async function imageBytes(svg){const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob);try{const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(Error('Preview could not be converted to a PDF page.'));img.src=url;});const canvas=document.createElement('canvas');canvas.width=C.W*2;canvas.height=C.H*2;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);const png=await new Promise(ok=>canvas.toBlob(ok,'image/png'));if(!png)throw Error('PDF image creation failed.');return new Uint8Array(await png.arrayBuffer());}finally{URL.revokeObjectURL(url);}}
-async function exportPDF(all){if(busy||dirty)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets),watermarks=showWatermarks;invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[],linksByPage=[];for(let i=0;i<snapshot.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${snapshot.length}…`;const links=[];linksByPage.push(links);images.push(await bounded(imageBytes(renderPage(snapshot[i],data[snapshot[i].id]||{},i+1,snapshot.length,watermarks,links)),'This page could not render. Please try again.'));}const bytes=await C.pdfFromImages(images,lib,linksByPage),name=all?'SI-one-pagers.pdf':'SI-'+snapshot[0].shares.map(s=>s.symbol).join('-').replace(/[^A-Z0-9.-]/g,'-')+'.pdf';
+async function exportPDF(all){if(busy||dirty||bosWorking)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets),watermarks=showWatermarks;invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[],linksByPage=[];for(let i=0;i<snapshot.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${snapshot.length}…`;const links=[];linksByPage.push(links);images.push(await bounded(imageBytes(renderPage(snapshot[i],data[snapshot[i].id]||{},i+1,snapshot.length,watermarks,links)),'This page could not render. Please try again.'));}const bytes=await C.pdfFromImages(images,lib,linksByPage),name=all?'SI-one-pagers.pdf':'SI-'+snapshot[0].shares.map(s=>s.symbol).join('-').replace(/[^A-Z0-9.-]/g,'-')+'.pdf';
  // Explicit links keep the generated file usable when a browser blocks automatic downloads.
  if(dirty){$('export-progress').textContent='Terms changed during export. Apply your changes and generate a new PDF.';return;}
  pdfURL=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));$('download-pdf').href=pdfURL;$('download-pdf').download=name;$('open-pdf').href=pdfURL;$('pdf-ready-text').textContent=`${snapshot.length}-page PDF ready · ${name}`;$('pdf-ready').hidden=false;$('export-progress').hidden=true;$('download-pdf').click();notice('PDF ready. Use Download PDF or Open PDF below if it did not save.');
