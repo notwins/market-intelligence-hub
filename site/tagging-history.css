@@ -1,0 +1,32 @@
+:root { color-scheme: light; font: 100%/1.5 system-ui,sans-serif; color: #153344; background: #f3f6f6; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+header { padding: 1.25rem max(1rem, calc((100% - 82rem)/2)) 1.7rem; color: #fff; background: #143345; }
+header nav { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; }
+header a { color: #bfe9df; }
+h1 { font-size: clamp(1.85rem, 5vw, 2.7rem); margin: .7rem 0 .2rem; line-height: 1.15; }
+header p { margin: 0; color: #e1eded; }
+main { max-width: 84rem; margin: auto; padding: 1rem; }
+section { margin-block: 1.4rem 2rem; }
+h2 { margin: 0 0 .75rem; font-size: 1.22rem; }
+a { color: #00635b; text-underline-offset: 3px; }
+.controls { display: flex; align-items: end; flex-wrap: wrap; gap: .75rem; }
+.controls label { display: grid; gap: .25rem; font-weight: 600; }
+.controls a { padding: .48rem 0; }
+select,input,button { min-height: 2.45rem; max-width: 100%; padding: .36rem .52rem; font: inherit; color: inherit; background: white; border: 1px solid #98b0bc; border-radius: .38rem; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid #177d6e; outline-offset: 3px; }
+header :focus-visible { outline-color: #ffe09c; }
+.table-scroll { overflow: auto; background: white; border: 1px solid #cbd9de; border-radius: .5rem; }
+table { width: 100%; border-collapse: collapse; font-size: .91rem; }
+th,td { text-align: left; padding: .62rem .72rem; vertical-align: top; border-bottom: 1px solid #dbe5e8; }
+thead { background: #e5efee; }
+.articles { min-width: 64rem; }
+.articles th:nth-child(3) { width: 23%; }
+.articles th:nth-child(n+4) { width: 29%; }
+.state,.key { display: block; overflow-wrap: anywhere; }
+.key { margin-top: .25rem; color: #4c6370; font-size: .77rem; }
+.swatch { display: inline-block; width: .8rem; height: .8rem; border: 1px solid #687b84; border-radius: .15rem; margin-inline-end: .25rem; }
+#article-count { display: block; margin: .65rem 0; }
+#more { margin-top: .65rem; }
+@media (max-width: 600px) { main { padding-inline: .72rem; } th,td { padding-inline: .5rem; } }

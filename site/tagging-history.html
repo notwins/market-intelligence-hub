@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tagging version history · Market Intelligence Hub</title>
+  <link rel="stylesheet" href="tagging-history.css">
+  <script defer src="tagging-history.js"></script>
+</head>
+<body>
+  <header>
+    <nav aria-label="Site navigation"><a href="desk.html">Market Intelligence Hub</a><a href="desk.html#archive">Archive</a><a href="site-map.html">Site map</a></nav>
+    <h1>Tagging version history</h1>
+    <p>Compare the tags, colours and logos selected by each sweep.</p>
+  </header>
+  <main>
+    <div class="controls">
+      <label>Sweep <select id="run" disabled></select></label>
+      <a id="download" hidden>Download report JSON</a>
+      <button id="csv" type="button" disabled>Download table CSV</button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Loading sweep history…</p>
+    <section aria-labelledby="summary-heading">
+      <h2 id="summary-heading">Sections and subsections</h2>
+      <div class="table-scroll" role="region" aria-labelledby="summary-heading" tabindex="0">
+        <table>
+          <thead><tr><th scope="col">Section</th><th scope="col">Subsection</th><th scope="col">Checked</th><th scope="col">Changed</th><th scope="col">Tags</th><th scope="col">Colours</th><th scope="col">Logos</th></tr></thead>
+          <tbody id="summary"></tbody>
+        </table>
+      </div>
+    </section>
+    <section aria-labelledby="articles-heading">
+      <h2 id="articles-heading">Articles with changes</h2>
+      <div class="controls">
+        <label>Section <select id="section"><option value="">All sections</option></select></label>
+        <label>Find in changes <input type="search" id="query" placeholder="Article, tag or ticker"></label>
+      </div>
+      <output id="article-count" aria-live="polite"></output>
+      <div class="table-scroll" role="region" aria-labelledby="articles-heading" tabindex="0">
+        <table class="articles">
+          <thead><tr><th scope="col">Section</th><th scope="col">Subsection</th><th scope="col">Article</th><th scope="col">Before</th><th scope="col">After</th></tr></thead>
+          <tbody id="articles"></tbody>
+        </table>
+      </div>
+      <button type="button" id="more" hidden>Show more articles</button>
+    </section>
+    <section aria-labelledby="revert-heading">
+      <h2 id="revert-heading">Revert reference</h2>
+      <p id="revert"></p>
+      <p>Use the article key and the Before column for a targeted correction. The complete JSON keeps the previous and new values together.</p>
+    </section>
+  </main>
+</body>
+</html>
