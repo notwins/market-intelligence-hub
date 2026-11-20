@@ -211,11 +211,11 @@
       const { briefs, coverageDate } = await getResearch();
       if (!element.isConnected) return;
       const brief = briefs[company.ticker];
+      history.setResearchTarget(element, brief);
       if (!brief) {
         status.textContent = 'No research brief for this listing.';
         return;
       }
-      history.setResearchTarget(element, brief);
       const { financials, close, target } = brief;
       const targetLabel = brief.provider === 'Haitong International' ? 'Target price' : 'Fair value';
       const amount = metric => metric ? metric.currency + ' ' + root.StocksBeta2Charts.priceLabel(
@@ -250,6 +250,7 @@
       body.hidden = false;
     } catch {
       if (!element.isConnected) return;
+      history.setResearchTarget(element, null);
       const retryResearch = doc.createElement('button');
       retryResearch.type = 'button';
       retryResearch.textContent = 'Retry research';

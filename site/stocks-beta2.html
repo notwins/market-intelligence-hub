@@ -11,10 +11,10 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.8">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.9">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261121.8"></script>
-  <script defer src="stocks-beta2.js?v=20261121.8"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.9"></script>
+  <script defer src="stocks-beta2.js?v=20261121.9"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.layout1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -106,8 +106,15 @@
                 <button type="button" data-metric="price" aria-pressed="true">Price</button>
                 <button type="button" data-metric="market_cap_usd_bn" aria-pressed="false">Market cap</button>
                 <button type="button" data-metric="dividend_yield_pct" aria-pressed="false">Dividend yield</button>
+              </div>
+              <div class="sb2-metric-toggle sb2-overlay-controls" role="group" aria-label="Price chart overlays">
                 <button type="button" data-target aria-pressed="false">Morningstar price target</button>
                 <button type="button" data-cone aria-pressed="false">12-month probability cone</button>
+                <button type="button" data-bos-target aria-pressed="false">BOS coverage target</button>
+              </div>
+              <div class="sb2-metric-toggle sb2-overlay-controls" data-cone-bands role="group" aria-label="Probability cone bands" hidden>
+                <button type="button" data-cone-band="1" aria-pressed="true">±1 SD</button>
+                <button type="button" data-cone-band="2" aria-pressed="true">±2 SD</button>
               </div>
               <p class="sb2-chart-window"></p>
               <div class="sb2-target-legend" hidden>
@@ -124,10 +131,10 @@
                 </figcaption>
               </figure>
               <p class="sb2-chart-empty" data-price-empty hidden>No values for this metric in the selected range.</p>
+              <p class="sb2-bos-target-note" data-bos-target-note role="status"></p>
               <div class="sb2-cone-info" hidden>
                 <p data-cone-summary role="status"></p>
                 <p data-cone-levels></p>
-                <p data-cone-research-target></p>
                 <details data-cone-method hidden>
                   <summary>Cone assumptions</summary>
                   <p>The cone uses the sample standard deviation of consecutive monthly log returns over the 36 months up to the last price in the selected range. It needs at least 12 usable returns. It skips missing months, predecessor transitions and split-like moves flagged using market cap.</p>

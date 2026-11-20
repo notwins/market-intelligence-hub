@@ -106,6 +106,14 @@
   const ratioColors = ['#326d9f', '#8554a1'];
 
   const coneLabels = ['+2 SD', '+1 SD', '0 SD', '−1 SD', '−2 SD'];
+  const allBands = [1, 2];
+
+  function coneLevels(cone, bands) {
+    return cone?.points.at(-1).flatMap((value, i) => {
+      const band = Math.abs(2 - i);
+      return band === 0 || bands.includes(band) ? [{ value, label: coneLabels[i] + ' ' + priceLabel(value) }] : [];
+    }) ?? [];
+  }
   const researchTargetColor = '#914913';
 
   function researchConeTarget(brief, currency) {
@@ -123,7 +131,7 @@
     return value > upper1 ? 'Between +1 and +2 SD' : 'Between −1 and −2 SD';
   }
 
-  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, researchTarget, isPrice } = {}) {
+  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice } = {}) {
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return null;
     const scale = Math.min(root.devicePixelRatio || 1, 2);
@@ -132,8 +140,9 @@
     const ctx = canvas.getContext('2d');
     ctx.scale(scale, scale);
     ctx.font = '12px "Segoe UI", Arial, sans-serif';
+    const levels = coneLevels(cone, bands);
     const values = series.flatMap(line => line.points.map(point => point.value));
-    if (cone) values.push(...cone.points.at(-1));
+    values.push(...levels.map(level => level.value));
     if (researchTarget) values.push(researchTarget.value);
     if (series.some(line => line.area)) values.push(0);
     const low = Math.min(...values), high = Math.max(...values);
@@ -145,12 +154,10 @@
     const first = time(dates[from][2]), last = time(cone?.anchor.quote || dates[to][2]);
     const labelValue = isPrice ? priceLabel : axisNumber;
     const left = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width))) + 10;
-    const endpoints = cone?.points.at(-1).map((value, i) => ({
-      value, label: coneLabels[i] + '  ' + priceLabel(value), color: '#284867', stroke: '#688bb5'
-    })) ?? [];
+    const endpoints = levels.map(level => ({ ...level, color: '#284867', stroke: '#688bb5' }));
     if (researchTarget) {
       const { value } = researchTarget;
-      endpoints.push({ value, label: 'Target  ' + priceLabel(value), color: researchTargetColor, stroke: researchTargetColor });
+      endpoints.push({ value, label: 'BOS ' + numbers.format(value), color: researchTargetColor, stroke: researchTargetColor });
       endpoints.sort((a, b) => b.value - a.value);
     }
     const labelRoom = endpoints.length ? Math.max(...endpoints.map(item => ctx.measureText(item.label).width)) + 13 : 0;
@@ -217,28 +224,15 @@
         ctx.lineWidth = 1;
         ctx.stroke();
       }
-      band(0, 4, '#d9e5f7', '#688bb5');
-      band(1, 3, '#b8d0ed', '#446f9f');
+      if (bands.includes(2)) band(0, 4, '#d9e5f7', '#688bb5');
+      if (bands.includes(1)) band(1, 3, '#b8d0ed', '#446f9f');
       ctx.setLineDash([3, 3]);
       tick(historicalRight, y(cone.anchor.value), right, y(cone.anchor.value), '#2c597d');
-      if (researchTarget) {
-        ctx.setLineDash([6, 3]);
-        tick(historicalRight, y(researchTarget.value), right, y(researchTarget.value), researchTargetColor);
-      }
       ctx.setLineDash([]);
       ctx.fillStyle = '#284867';
       ctx.textAlign = 'center';
       ctx.fillText('12 mo', right - 6, height - 10);
       if (right - historicalRight > 86) ctx.fillText('6 mo', futureX(6), height - 10);
-      ctx.textAlign = 'left';
-      let labelY = top - 14;
-      endpoints.forEach(({ value, label, color, stroke }, i) => {
-        const spaced = Math.max(labelY + 14, Math.min(bottom - 14 * (endpoints.length - 1 - i), y(value)));
-        tick(right, y(value), right + 7, spaced, stroke);
-        ctx.fillStyle = color;
-        ctx.fillText(label, right + 9, spaced);
-        labelY = spaced;
-      });
     }
     for (const line of series) {
       const runs = [];
@@ -275,6 +269,20 @@
         }
       }
     }
+    if (researchTarget) {
+      ctx.setLineDash([6, 3]);
+      tick(left, y(researchTarget.value), right, y(researchTarget.value), researchTargetColor);
+      ctx.setLineDash([]);
+    }
+    ctx.textAlign = 'left';
+    let labelY = top - 14;
+    endpoints.forEach(({ value, label, color, stroke }, i) => {
+      const spaced = Math.max(labelY + 14, Math.min(bottom - 14 * (endpoints.length - 1 - i), y(value)));
+      tick(right, y(value), right + 7, spaced, stroke);
+      ctx.fillStyle = color;
+      ctx.fillText(label, right + 9, spaced);
+      labelY = spaced;
+    });
     return { forIndex: index => x(time(dates[index][2])), coneStart: cone ? historicalRight : Infinity };
   }
 
@@ -342,7 +350,8 @@
       }
       const projection = activeCone && anchor ? card.projection : null;
       const cone = projection?.points ? projection : null;
-      const researchTarget = cone ? card.researchTarget : null;
+      const targetEnabled = metric === 'price' && card.bosTarget;
+      const researchTarget = targetEnabled ? card.researchTarget : null;
       const targetRows = metric === 'price' && card.target ? targets?.[company.ticker] ?? [] : [];
       const targetLines = Object.entries(targetColors).map(([rating, color]) => ({
         name: rating, color, points: targetRows.filter(row => row[0] >= from && row[0] <= (cone?.anchor.index ?? to) && row[2] === rating)
@@ -359,7 +368,7 @@
       const quote = dateFormat.format(time(data.months[cursor][2]));
       function show(kind, lines, unitText, description, options) {
         const canvas = get('[data-' + kind + '-chart]');
-        const available = lines.some(line => line.points.length);
+        const available = Boolean(options?.researchTarget) || lines.some(line => line.points.length);
         canvas.closest('figure').hidden = !available;
         get('[data-' + kind + '-empty]').hidden = available;
         canvas.setAttribute('aria-label', company.name + ' ' + description);
@@ -375,9 +384,9 @@
       }
       show('price', primary, unit, label + ' by price date'
         + (targetRows.length ? ' with Morningstar fair value' : '')
-        + (cone ? ' and a 12-month cone with one and two standard deviation bands' : '')
-        + (researchTarget ? ' and the latest research target' : ''),
-      { cone, researchTarget, isPrice: metric === 'price' });
+        + (cone ? ' and a 12-month cone with ' + card.bands.map(band => '±' + band + ' SD').join(' and ') : '')
+        + (researchTarget ? ' and a BOS coverage target at ' + numbers.format(researchTarget.value) + ' ' + unit : ''),
+      { cone, bands: card.bands, researchTarget, isPrice: metric === 'price' });
       show('valuation', ratios, '×', 'forward P/E and P/B by price date');
       const slider = get('input[type=range]');
       slider.min = String(from);
@@ -391,20 +400,33 @@
           : targetLines.some(line => line.points.length) ? '' : 'No identified Morningstar fair values in this range.') : '';
       get('.sb2-cone-info').hidden = !activeCone;
       get('[data-cone]').setAttribute('aria-pressed', String(activeCone));
+      get('[data-cone-bands]').hidden = !activeCone;
+      element.querySelectorAll('[data-cone-band]').forEach(button => {
+        button.setAttribute('aria-pressed', String(card.bands.includes(Number(button.dataset.coneBand))));
+      });
+      get('[data-bos-target]').setAttribute('aria-pressed', String(targetEnabled));
       get('[data-cone-method]').hidden = !activeCone;
       const summary = !activeCone ? '' : cone
         ? '12 months from ' + dateFormat.format(time(anchor.quote)) + ' · ' + unit + ' · '
           + cone.count + ' monthly returns' + (cone.splits ? ' · ' + cone.splits + ' split-like move' + (cone.splits === 1 ? '' : 's') + ' skipped' : '')
         : 'Cone unavailable · ' + (anchor ? projection.count + ' usable monthly returns. At least 12 are needed.' : 'No positive price in this range.');
       if (get('[data-cone-summary]').textContent !== summary) get('[data-cone-summary]').textContent = summary;
-      const end = cone?.points.at(-1);
-      get('[data-cone-levels]').textContent = end ? end.map((value, i) => coneLabels[i] + ' ' + priceLabel(value)).join(' · ') : '';
-      get('[data-cone-research-target]').textContent = researchTarget
-        ? 'Target ' + priceLabel(researchTarget.value) + ' ' + unit + ' · '
-          + targetBand(researchTarget.value, end) + ' at 12 months · '
-          + researchTarget.provider + ' report, ' + dateFormat.format(time(researchTarget.date))
-          + (researchTarget.date > anchor.quote ? ' (after chart anchor)' : '')
-        : '';
+      get('[data-cone-levels]').textContent = coneLevels(cone, card.bands).map(level => level.label).join(' · ');
+      const note = get('[data-bos-target-note]');
+      note.toggleAttribute('data-line', Boolean(researchTarget));
+      let targetNote = '';
+      if (researchTarget) {
+        const bandNote = cone && card.bands.length === allBands.length
+          ? ' · ' + targetBand(researchTarget.value, cone.points.at(-1)) + ' at 12 months' : '';
+        targetNote = 'BOS coverage target ' + numbers.format(researchTarget.value) + ' ' + unit
+          + ' · ' + researchTarget.provider + ' · ' + dateFormat.format(time(researchTarget.date))
+          + (researchTarget.date > (anchor?.quote ?? data.months[to][2]) ? ' (after last price date)' : '') + bandNote;
+      } else if (targetEnabled) {
+        targetNote = card.researchTargetFailed ? 'BOS coverage target could not load. Retry in Quick data.'
+          : card.researchTarget === undefined
+          ? 'Loading BOS coverage target…' : 'No BOS coverage target in the listing currency.';
+      }
+      if (note.textContent !== targetNote) note.textContent = targetNote;
     }
     function syncRange() {
       from.value = String(state.from);
@@ -444,9 +466,12 @@
     }));
     const resize = new ResizeObserver(repaint);
     function add(element, company, settings) {
+      const bands = allBands.filter(band => Array.isArray(settings?.bands) && settings.bands.includes(band));
       const card = {
         element, company, positions: {}, metric: 'price',
-        target: settings?.target === true, cone: settings?.cone === true
+        target: settings?.target === true, cone: settings?.cone === true,
+        bands: bands.length ? bands : allBands,
+        bosTarget: (settings?.bosTarget ?? settings?.cone) === true
       };
       cards.set(element, card);
       const choices = [...element.querySelectorAll('[data-metric]')];
@@ -463,6 +488,23 @@
       element.querySelector('[data-cone]').addEventListener('click', () => {
         card.cone = card.metric !== 'price' || !card.cone;
         if (card.cone) setMetric('price');
+        else repaint();
+        save();
+      });
+      element.querySelectorAll('[data-cone-band]').forEach(button => button.addEventListener('click', () => {
+        const band = Number(button.dataset.coneBand);
+        card.bands = card.bands.includes(band) ? card.bands.filter(value => value !== band) : [...card.bands, band];
+        if (!card.bands.length) {
+          card.cone = false;
+          card.bands = allBands;
+          element.querySelector('[data-cone]').focus();
+        }
+        repaint();
+        save();
+      }));
+      element.querySelector('[data-bos-target]').addEventListener('click', () => {
+        card.bosTarget = card.metric !== 'price' || !card.bosTarget;
+        if (card.bosTarget) setMetric('price');
         else repaint();
         save();
       });
@@ -520,14 +562,15 @@
       return result;
     }
     function cardSettings(element) {
-      const { metric, target, cone } = cards.get(element);
-      return { metric, target, cone };
+      const { metric, target, cone, bands, bosTarget } = cards.get(element);
+      return { metric, target, cone, bands, bosTarget };
     }
     function setResearchTarget(element, brief) {
       const card = cards.get(element);
       if (!card) return;
       card.researchTarget = researchConeTarget(brief, card.company.currency);
-      if (card.cone) repaint();
+      card.researchTargetFailed = brief === null;
+      if (card.bosTarget) repaint();
     }
     return { add, settings, cardSettings, setResearchTarget, range: () => state,
       remove(element) { resize.unobserve(element); cards.delete(element); } };
