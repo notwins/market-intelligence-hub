@@ -47,7 +47,8 @@ function relatedReview(card, names) {
  }
  if (footer) return;
  if (card.parentElement?.closest('article[data-company="NVDA"],article[data-ticker="NVDA"],article[data-stock="NVDA"]')) return;
- if ([...card.querySelectorAll('a[href]')].some(a => a.href.replace(/index\.html$/, '') === jacketReview)) return;
+ const listing = !card.matches('[data-stock],[data-company],[data-ticker],[data-price-symbol],.company-news-card,.watchlist-card');
+ if (listing && [...card.querySelectorAll('a[href]')].some(a => a.href.replace(/index\.html$/, '') === jacketReview)) return;
  const box = doc.createElement('div');
  box.className = 'mih-related-review';
  const a = doc.createElement('a');
