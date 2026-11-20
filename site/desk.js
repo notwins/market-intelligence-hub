@@ -89,23 +89,31 @@ function quoteDetails(r) {
 function stockCard(r) {
   const ticker = encodeURIComponent(r.ticker);
   const destination = r.earnings ? 'v4.html?company=' + ticker + '#earnings' : 'stocks-beta.html?companies=' + ticker;
-  return `<article class="instrument" id="company-${E(r.ticker)}" data-company="${E(r.ticker)}">
+  return `<article class="instrument" id="company-${E(r.ticker)}" data-company="${E(r.ticker)}" aria-labelledby="stock-title-${E(r.ticker)}">
     <header class="instrument-head">
-      <span><strong>${link(destination, r.ticker)}</strong><small>${E(r.name)} · ${E(r.group)}</small></span>
+      <div><h3 id="stock-title-${E(r.ticker)}">${E(r.name)}</h3><small>${E(r.ticker)} · ${E(r.group)}</small></div>
       <span class="quote" data-quote="${E(r.ticker)}">${quote(r)}</span>
     </header>
     <div class="detail-body">
       <div class="detail-tabs" role="group" aria-label="${E(r.ticker)} details">
-        <button data-detail="history" data-ticker="${E(r.ticker)}" aria-pressed="true">Price history</button>
+        <button data-detail="history" data-ticker="${E(r.ticker)}" aria-pressed="true">Price &amp; valuation</button>
         <button data-detail="earnings" data-ticker="${E(r.ticker)}" aria-pressed="false">Earnings</button>
         ${r.si ? `<button data-detail="si" data-ticker="${E(r.ticker)}" aria-pressed="false">SI references (${r.si.length})</button>` : ''}
       </div>
+      <div data-stock-periods>
+        <h4>Price history</h4>
+        <div class="chart-controls" role="group" aria-label="${E(r.ticker)} price history period">
+          ${[[31,'1M'],[93,'3M'],[366,'1Y'],[1830,'5Y']].map(([days,label])=>`<button class="outline" data-period="${days}" data-ticker="${E(r.ticker)}" aria-pressed="${days===93}">${label}</button>`).join('')}
+        </div>
+      </div>
       <div class="detail-content" aria-live="polite"></div>
+      <div class="stock-valuation" data-company-valuation="${E(r.ticker)}"><p class="fine">Loading valuation history…</p></div>
       <details class="stock-card-info">
         <summary>Quote source &amp; links</summary>
         <div data-quote-info="${E(r.ticker)}">${quoteDetails(r)}</div>
         <p class="fine">${link(destination, 'Company workspace →')} · ${link(r.research_href, 'Search research →')}</p>
       </details>
+      <div data-company-research></div>
     </div>
   </article>`;
 }
@@ -120,11 +128,33 @@ function buildMarkets(){
     <header>${link('#company-' + encodeURIComponent(r.ticker), r.ticker)}</header>
     <span data-quote="${E(r.ticker)}">${quote(r)}</span>${moveStats()}
   </div>`).join('');
-  $('#market-rows').innerHTML = priceWatchlist.map(stockCard).join('');
+  $('#main-company-cards').innerHTML = root.CompanyDashboard.shell({home: true, cards: priceWatchlist.map(stockCard).join('')});
   $('#yield-rows').innerHTML=data.yields.map(y=>{const points=(y.history||[]).map(p=>[p.date,p.value]);return `<details class="instrument" open><summary><span><strong>${E(y.label)}</strong><small>${E(y.basis)}</small></span><span class="quote"><b>${num(y.value)}%</b><small>${E(date(y.as_of))}</small></span></summary><div class="detail-body"><p class="fine">${E(y.basis)}</p>${y.status==='error'?`<p class="warning">${E(y.message||'Refresh failed; retaining the dated saved observation.')}</p>`:''}${spark(points,'% p.a.')}${valuesTable(points,'% p.a.')}${link(y.source_url,'Open original source ↗')}${y.attribution?'<p class="fine">'+E(y.attribution)+' '+link(y.license_url,'Dataset terms')+'</p>':''}</div></details>`;}).join('');}
 async function series(ticker){if(!seriesCache.has(ticker))seriesCache.set(ticker,root.MarketPrices.series(ticker).catch(e=>{seriesCache.delete(ticker);throw e;}));return seriesCache.get(ticker);}
-async function detail(ticker,kind='history',days=93){const row=priceWatchlist.find(r=>r.ticker===ticker),host=document.getElementById('company-'+ticker),target=host?.querySelector('.detail-content');if(!row||!target)return;target.dataset.kind=kind;if(kind==='history')target.dataset.days=String(days);const ticket=String(Number(target.dataset.ticket||0)+1);target.dataset.ticket=ticket;for(const b of host.querySelectorAll('[data-detail]'))b.setAttribute('aria-pressed',String(b.dataset.detail===kind));
-if(kind==='history'){target.innerHTML='<p class="fine">Loading verified shared price history…</p>';try{const s=await series(ticker);if(target.dataset.ticket!==ticket)return;const cutoff=new Date(Date.parse(s.quote.date+'T12:00:00Z')-days*86400000).toISOString().slice(0,10);const points=root.MarketPrices.selectPoints(s.base,s.daily,cutoff,s.quote.date);const unit=root.MarketPrices.displayUnit(s.item);target.innerHTML=`<div class="chart-controls">${[[31,'1M'],[93,'3M'],[366,'1Y'],[1830,'5Y']].map(([n,t])=>`<button class="outline" data-period="${n}" data-ticker="${E(ticker)}" aria-pressed="${n===days}">${t}</button>`).join('')}</div><p class="fine">${E(ticker)} · ${E(unit)} · ${E(root.MarketPrices.quoteStatus(s.quote))}</p>${spark(points,unit,true)}${valuesTable(points,unit,`<p class="fine">${E(root.MarketPrices.priceBasis(s.item))} ${E(s.base.period_note||'')} ${link(s.item.history_url,'Original price source ↗')}</p>`)}`;}catch{if(target.dataset.ticket===ticket)target.innerHTML='<p class="empty">Shared history unavailable. See quote details for the available close.</p>';}}
+async function detail(ticker,kind='history',days){
+ const row=priceWatchlist.find(r=>r.ticker===ticker),host=document.getElementById('company-'+ticker),target=host?.querySelector('.detail-content');
+ if(!row||!target)return;
+ days ??= Number(target.dataset.days || 93);
+ const showCharts = kind === 'history';
+ target.dataset.kind=kind;
+ host.querySelector('[data-company-valuation]').hidden = !showCharts;
+ host.querySelector('[data-stock-periods]').hidden = !showCharts;
+ const ticket=String(Number(target.dataset.ticket||0)+1);
+ target.dataset.ticket=ticket;
+ for(const b of host.querySelectorAll('[data-detail]'))b.setAttribute('aria-pressed',String(b.dataset.detail===kind));
+ if(showCharts){
+   target.dataset.days = String(days);
+   for (const button of host.querySelectorAll('[data-period]')) button.setAttribute('aria-pressed', String(Number(button.dataset.period) === days));
+   target.innerHTML='<p class="fine">Loading verified shared price history…</p>';
+   try{
+     const s=await series(ticker);
+     if(target.dataset.ticket!==ticket)return;
+     const cutoff=new Date(Date.parse(s.quote.date+'T12:00:00Z')-days*86400000).toISOString().slice(0,10);
+     const points=root.MarketPrices.selectPoints(s.base,s.daily,cutoff,s.quote.date);
+     const unit=root.MarketPrices.displayUnit(s.item);
+     target.innerHTML=`<p class="fine stock-price-basis">${E(unit)} · ${E(root.MarketPrices.quoteStatus(s.quote))}</p>${spark(points,unit,true)}${valuesTable(points,unit,`<p class="fine">${E(root.MarketPrices.priceBasis(s.item))} ${E(s.base.period_note||'')} ${link(s.item.history_url,'Original price source ↗')}</p>`)}`;
+   }catch{if(target.dataset.ticket===ticket)target.innerHTML='<p class="empty">Shared history unavailable. See quote details for the available close.</p>';}
+ }
 else if(kind==='earnings'){const c=row.earnings;target.innerHTML=c?`<h3>${E(c.name)} earnings</h3><p class="fine">${E(c.coverage)} · EPS: ${E(c.eps_basis)}</p><ul>${c.takeaways.map(t=>`<li><b>${E(t.label)}</b> ${E(t.text)}</li>`).join('')}</ul><div class="table-wrap" tabindex="0" role="region" aria-label="${E(ticker)} earnings history"><table><caption>Selected reported quarters, not forecasts</caption><thead><tr><th>Period</th><th>Revenue US$bn</th><th>EPS</th><th>Source</th></tr></thead><tbody>${c.history.map(h=>`<tr><td>${E(h.period)}<small>Ended ${E(date(h.period_end))}</small></td><td>${num(h.revenue_usd_bn,3)}</td><td>${num(h.eps,3)}</td><td>${link(data.earnings_sources[h.source]?.url,'Issuer release')}<small>${E(date(h.report_date))}</small></td></tr>`).join('')}</tbody></table></div>`:`<p class="empty">Verified issuer history is unavailable here.</p>${link('stocks-beta.html?companies='+encodeURIComponent(ticker),'Open the company workspace →')}`;}
 else if(kind==='si'){target.innerHTML=`<h3>${E(ticker)} · matching SI references</h3><p class="warning">Rounded historical references, not live quotes. Screen labels are shown where supplied; earlier coupon bases and tenor units remain unconfirmed.</p>${row.si.length?`<div class="table-wrap" tabindex="0" role="region" aria-label="${E(ticker)} matching SI records"><table><thead><tr><th>Reference / date</th><th>Underlyings</th><th>Strike / KO / KI</th><th>Coupon</th></tr></thead><tbody>${row.si.map(s=>`<tr><td>${E(s.reference)}<small>${E(s.source_date||"Date not shown")}</small>${s.additional_review?'<small>Additional review required</small>':''}</td><td>${E((s.shares||[]).join(' / '))}</td><td>${num(s.strike_pct)} / ${num(s.ko_pct)} / ${num(s.ki_pct)}%</td><td>${num(s.coupon_pct)}%${s.coupon_basis==='per_annum'?'<small>p.a. (screen)</small>':'<small>Basis unconfirmed</small>'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">No exact matching underlying in the saved SI references.</p>'}${link('v4.html#history/si','Open the complete SI reference desk →')}`;}}
 async function refreshPrices(force = false) {
@@ -175,12 +205,10 @@ async function warmCharts() {
 }
 
 function openPrices() {
-  const host = $('#main-company-cards');
-  if (!host.hasChildNodes()) {
-    host.innerHTML = root.CompanyDashboard.shell({home: true});
+  if (!pricesStarted) {
     root.CompanyDashboard.mount();
+    refreshPrices();
   }
-  if (!pricesStarted) refreshPrices();
 }
 const deskTabs = [...document.querySelectorAll('.modebar [role="tab"][data-mode]')];
 function mode(selected) {

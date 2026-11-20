@@ -66,18 +66,35 @@
 #price-status { margin: 10px 0 2px; }
 .stock-heat-basis, .stock-card-info { font-size: 12px; color: var(--muted); }
 .stock-heat-basis summary, .stock-card-info summary { cursor: pointer; }
-#market-rows .instrument-head { justify-content: start; }
-#market-rows .instrument-head > :nth-last-child(2) { flex: 1; min-width: 0; }
+#market-rows { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#market-rows .instrument-head { justify-content: flex-start; align-items: center; }
+#market-rows .instrument-head > div { flex: 1; min-width: 0; }
+#market-rows .instrument-head h3 { margin: 0 0 4px; }
 #market-rows .instrument-head .quote { flex: 0 0 auto; }
 #market-rows .instrument-head .quote b small { display: inline; }
+#market-rows .chart-controls button { min-width: 44px; }
 #market-rows .chart-controls [aria-pressed="true"] { background: var(--teal-soft); border-color: var(--teal); color: var(--teal); }
+#market-rows h4 { margin: 0 0 8px; font-size: 13px; }
+#market-rows .stock-price-basis { margin: 0; }
+#market-rows .chart { display: block; min-height: 0; }
+.stock-valuation { margin-top: 12px; }
+#market-rows .cd-evidence, #market-rows .cd-company-research { font-size: 12px; color: var(--muted); }
+#market-rows .cd-evidence summary, #market-rows .cd-company-research summary {
+  padding: 8px 0;
+  cursor: pointer;
+}
+#market-rows .cd-evidence summary { min-height: 36px; }
+#market-rows .detail-content details { margin: 0; }
+#market-rows .detail-content details summary { min-height: 32px; }
 .stock-card-info { margin-top: 10px; }
 .stock-card-info p { margin: 6px 0; }
 
+@media (max-width: 980px) {
+  #market-rows { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 760px) {
   #watch-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #market-rows { grid-template-columns: minmax(0, 1fr); }
   #market-rows .instrument-head { display: flex; }
+  #market-rows .instrument-head h3 { font-size: 18px; }
   #market-rows .instrument-head .quote { text-align: right; margin-top: 0; }
-  #market-rows .chart { min-height: 0; }
 }

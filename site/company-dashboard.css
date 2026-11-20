@@ -3,6 +3,10 @@
 [data-home-companies] .cd-status:empty { display: none; }
 [data-home-companies] .share-static-profile { margin-block: 12px; }
 [data-home-companies] .cd-evidence { margin-top: 8px; }
+[data-home-companies] .cd-heading { flex-wrap: wrap; gap: 8px 20px; }
+[data-home-companies] .cd-heading h2 { font-size: clamp(23px, 2vw, 28px); margin: 0; }
+.cd-heading-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 16px; font-size: 13px; }
+.cd-heading-actions a { font-weight: 650; }
 .cd-combined { margin-top: 4px; }
 .cd-combined figcaption { justify-content: flex-start; flex-wrap: wrap; gap: 6px 16px; }
 .cd-combined figcaption span { display: inline-flex; align-items: center; gap: 5px; }
