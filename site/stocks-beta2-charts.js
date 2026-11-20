@@ -288,6 +288,12 @@
     if (end < 0) end = maximum;
     if (start > end) [start, end] = [0, maximum];
     const state = { from: start, to: end, cursor: end, axis: saved?.axis === 'quarter' ? 'quarter' : 'year' };
+    const savedIndex = data.months.findIndex(([month]) => month === saved?.month);
+    let selectedIndex;
+    if (savedIndex >= 0) {
+      selectedIndex = clampMonth(savedIndex);
+      state.cursor = selectedIndex;
+    }
     const cards = new Map();
     const choices = data.months.map(([month], i) => '<option value="' + i + '">' + monthLabel(month) + '</option>').join('');
     from.innerHTML = to.innerHTML = choices;
@@ -307,8 +313,16 @@
       if (frame !== undefined) return;
       frame = root.requestAnimationFrame(() => { frame = undefined; cards.forEach(drawCard); });
     }
-    function setCursor(value) {
-      const next = Math.max(state.from, Math.min(state.to, value));
+    function clampMonth(index) {
+      return Math.min(state.to, Math.max(state.from, index));
+    }
+    function setCursor(value, remember = false) {
+      const next = clampMonth(value);
+      // Chart hover previews a month without replacing the last selection.
+      if (remember && next !== selectedIndex) {
+        selectedIndex = next;
+        save();
+      }
       if (next === state.cursor) return;
       state.cursor = next;
       repaint();
@@ -401,7 +415,8 @@
     function updateRange() {
       state.from = Number(from.value);
       state.to = Number(to.value);
-      state.cursor = Math.min(state.to, Math.max(state.from, state.cursor));
+      if (selectedIndex !== undefined) selectedIndex = clampMonth(selectedIndex);
+      state.cursor = selectedIndex ?? clampMonth(state.cursor);
       syncRange();
       changeRange(state);
       save();
@@ -412,6 +427,7 @@
     doc.getElementById('sb2-all-dates').addEventListener('click', () => {
       from.value = '0';
       to.value = String(maximum);
+      selectedIndex = undefined;
       state.cursor = maximum;
       updateRange();
     });
@@ -468,7 +484,7 @@
         save();
       });
       const slider = element.querySelector('input[type=range]');
-      slider.addEventListener('input', () => setCursor(Number(slider.value)));
+      slider.addEventListener('input', () => setCursor(Number(slider.value), true));
       for (const kind of ['price', 'valuation']) {
         const canvas = element.querySelector('[data-' + kind + '-chart]');
         const inspect = event => {
@@ -480,7 +496,7 @@
           for (let index = state.from + 1; index <= state.to; index++) {
             if (Math.abs(position.forIndex(index) - x) < Math.abs(position.forIndex(nearest) - x)) nearest = index;
           }
-          setCursor(nearest);
+          setCursor(nearest, event.type === 'click');
         };
         canvas.addEventListener('pointermove', event => { if (event.pointerType !== 'touch') inspect(event); });
         canvas.addEventListener('click', inspect);
@@ -488,15 +504,20 @@
           const value = {ArrowLeft: state.cursor - 1, ArrowRight: state.cursor + 1, Home: state.from, End: state.to}[event.key];
           if (value === undefined) return;
           event.preventDefault();
-          setCursor(value);
+          setCursor(value, true);
         });
       }
       resize.observe(element);
     }
     function settings() {
       const { from, to, axis } = state;
-      if (from === 0 && to === maximum) return { axis };
-      return { from: data.months[from][0], to: data.months[to][0], axis };
+      const result = { axis };
+      if (from !== 0 || to !== maximum) {
+        result.from = data.months[from][0];
+        result.to = data.months[to][0];
+      }
+      if (selectedIndex !== undefined) result.month = data.months[selectedIndex][0];
+      return result;
     }
     function cardSettings(element) {
       const { metric, target, cone } = cards.get(element);
