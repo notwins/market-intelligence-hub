@@ -100,6 +100,17 @@ function inlineBarrierLabels(bars,points,left,right,overlays=[]){const overlap=(
  // Fit the most constrained words first and backtrack to leave room for the others.
  function fit(i,placed){if(i===rows.length)return true;if(++attempts>20000)return false;const row=rows[i];for(const option of row.options){if(placed.some(p=>overlap(option.box,p.box)))continue;result[row.index]=option;if(fit(i+1,[...placed,option]))return true;}return false;}
  if(fit(0,[]))return result;const placed=[];for(const row of rows){const option=row.options.find(o=>!placed.some(p=>overlap(o.box,p.box)));result[row.index]=option||{inline:false,y:row.y,width:row.width};if(option)placed.push(option);}return result;}
+function peLabelPosition(points,{left,right,top,bottom},paths,barriers){
+ for(let i=points.length-1;i>=0;i--){
+  const [px,py]=points[i],x=Math.max(left+15,Math.min(right-15,px));
+  for(const offset of [-12,12,-21,21]){
+   const y=py+offset,box={left:x-13,right:x+13,top:y-7,bottom:y+7};
+   if(box.top<top||box.bottom>bottom||barriers.some(b=>b.y>=box.top&&b.y<=box.bottom))continue;
+   if(!paths.some(path=>priceHitsBox(path,box)))return {x,y,px,py};
+  }
+ }
+ return null;
+}
 const overlayKeys=['pe','pb','target'];
 const overlayColors={pe:'#006c61',pb:'#a04f13',target:'#744299',archive:'#586779'};
 const overlayNames={pe:'Fwd P/E',pb:'Fwd P/B',target:'Morningstar fair value',archive:'BOS fair value / target'};
@@ -191,7 +202,7 @@ function bosResearch(row){
   : '';
  return call||target?{call,target,provider:clean(row.researchProvider,45),url:call?bosReportUrl(row.researchReportUrl):''}:null;
 }
-function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:options}={}){const chart=chartOptions(options),four=p.shares.length===4,out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
+function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:options}={}){const chart=chartOptions(options),four=p.shares.length===4,small=p.shares.length>=3,out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
  out.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Structured investment one-pager for ${escape(p.shares.map(s=>s.symbol).join(', '))}">`);rect(0,0,W,H,'#fff','#fff');
  text(28,four?31:39,'FOR REFERENCE ONLY',17,navy,true);text(772,four?30:38,'MARKET INTEL  /  SI BETA 2',11,muted,true,'end');
  text(28,four?45:58,'Indicative terms. Capital is at risk. Refer to the issuer’s final terms for conditions and observation rules.',9,muted);
@@ -236,18 +247,23 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
    if(chart.target)text(x,275,ratingLegend,8,muted);
   }
  }
- const start=four?216:hasOverlays?287:270,foot=four?1037:1010,available=(four?foot-8:998)-start,gap=four?7:8,block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length);
- const marginSources=new Set();
+ const start=four?216:hasOverlays?287:270,foot=small?1067:1044,available=foot-8-start,gap=small?6:8;
+ const block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length),header=small?18:23,shift=23-header;
+ const marginSources=new Set(),metricsDates=new Set();
  p.shares.forEach((s,i)=>{const d=enrichment[s.symbol]||{},y=start+i*(block+gap),r=reference(p,s,d),ls=levels(p,r.value),name=s.name||d.name||s.symbol;
- rect(28,y,744,block,'#fff');rect(28,y,744,23,navy,navy);fitted(37,y+16,clean(name,69),445,11,'#fff',true);fitted(762,y+16,s.symbol,110,10,'#fff',false,'end');
+ rect(28,y,744,block,'#fff');rect(28,y,744,header,navy,navy);
+ const titleY=y+(small?13:16);
+ fitted(37,titleY,clean(name,69),445,11,'#fff',true);fitted(762,titleY,s.symbol,110,10,'#fff',false,'end');
  const margin=validMoa(s.moaPct)?s.moaPct:d.moaPct;
  if(validMoa(margin))marginSources.add(validMoa(s.moaPct)?'manual entry':d.moaSource||'private lookup');
- fitted(635,y+16,'MOA margin '+(validMoa(margin)?pct(margin):'—'),132,9,'#fff',true,'end');
+ fitted(635,titleY,'MOA margin '+(validMoa(margin)?pct(margin):'—'),132,9,'#fff',true,'end');
  const {end,from,selected,series,prices:pts,calls:ratingHistory,incompatibleArchive}=chartWindow(d,chart);
- const bounds=priceExtrema(pts);
- const chartX=36,chartY=y+29,plotLeft=chartX+17,plotTop=chartY+13,plotBottom=y+block-(ratingHistory.length?46:hasOverlays?32:22);
- const ratios=[...(series.pe||[]),...(series.pb||[])].map(p=>p.value);
- const plotRight=ratios.length?417:427;
+ const bounds=priceExtrema(pts),ratios=[...(series.pe||[]),...(series.pb||[])].map(p=>p.value);
+ const flatPrice=!!bounds&&bounds.low===bounds.high,ratioAxis=ratios.length>0&&!flatPrice;
+ const showCoverage=hasOverlays&&(!small||incompatibleArchive>0||(flatPrice&&ratios.length>0)||selected.some(key=>!series[key].length));
+ const chartX=36,chartY=y+29-shift,plotLeft=chartX+17,plotTop=chartY+13;
+ const plotBottom=y+block-(showCoverage?32:22)-(ratingHistory.length?14:0);
+ const plotRight=ratioAxis?417:427;
  text(chartX+4,chartY+4,`${chart.years}-year price history${d.currency?' · '+d.currency:''}`,8,navy,true);
  if(pts.length>1){
   const fk=finalKO(p),bars=[['KO',ls.ko,'#699645','7 3'],['KI',ls.ki,'#b94a57','3 3'],['Strike',ls.strike,'#8261a8','9 3 2 3'],...(p.step>0&&fk!==null?[['Final KO',num(r.value)===null?null:r.value*fk/100,'#c07821','2 3']]:[])].filter(x=>x[1]!==null);
@@ -265,26 +281,33 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   out.push('<g class="si-price-grid">');
   for(const tick of ticks)line(plotLeft,py(tick),plotRight,py(tick),'#dde3e9');
   out.push('</g>');
-  for(let j=0;j<5;j++){const epoch=t0+(t1-t0)*j/4,xx=plotLeft+(plotRight-plotLeft)*j/4;line(xx,plotTop,xx,plotBottom,'#edf0f3');text(xx,y+block-(hasOverlays?19:9),monthLabel(epoch),7.5,muted,false,j===0?'start':j===4?'end':'middle');}
+  for(let j=0;j<5;j++){const epoch=t0+(t1-t0)*j/4,xx=plotLeft+(plotRight-plotLeft)*j/4;line(xx,plotTop,xx,plotBottom,'#edf0f3');text(xx,y+block-(showCoverage?19:9),monthLabel(epoch),7.5,muted,false,j===0?'start':j===4?'end':'middle');}
   let ry=py;
-  if(ratios.length){
-   const scale=axisScale(ratios);
-   ry=v=>plotBottom-(v-scale.low)/(scale.high-scale.low)*(plotBottom-plotTop);
-   line(plotRight,plotTop,plotRight,plotBottom,'#9caec0');
-   text(plotRight+3,chartY+4,'Ratios ×',7,muted,true);
+  if(ratioAxis){
+   // Keep multiples inside the vertical range occupied by the visible closes.
+   const scale=axisScale(ratios),ratioTop=py(priceHigh),ratioBottom=py(priceLow);
+   ry=v=>ratioBottom-(v-scale.low)/(scale.high-scale.low)*(ratioBottom-ratioTop);
+   line(plotRight,ratioTop,plotRight,ratioBottom,'#9caec0');
+   text(plotRight+3,chartY+4,series.pe?.length&&!series.pb?.length?'P/E ×':'Ratios ×',7,muted,true);
+   let previous=Infinity;
    for(const tick of scale.ticks){
     const yy=ry(tick);
+    if(previous-yy<9)continue;
     line(plotRight,yy,plotRight+3,yy,'#9caec0');
     text(plotRight+5,yy+2,fmt(tick,6),6.5,muted);
+    previous=yy;
    }
   }
   const overlayPaths=[];
   for(const key of selected){
-   const scale=key==='pe'||key==='pb'?ry:py,points=series[key],color=overlayColors[key];
+   const multiple=key==='pe'||key==='pb';
+   if(multiple&&!ratioAxis)continue;
+   const scale=multiple?ry:py,points=series[key],color=overlayColors[key];
    const xy=p=>[px(p.date),scale(p.value)];
    for(const run of observationRuns(points)){
-    const coords=run.map(xy);if(coords.length<2)continue;
-    overlayPaths.push(coords);
+    const coords=run.map(xy);
+    overlayPaths.push(coords.length===1?[coords[0],coords[0]]:coords);
+    if(coords.length<2)continue;
     out.push(`<polyline class="si-overlay si-overlay-${key}" fill="none" stroke="${color}" stroke-width="1.2" ${key==='pb'?'stroke-dasharray="4 2"':key==='archive'?'stroke-dasharray="2 2"':''} points="${pointList(coords)}"/>`);
    }
    for(const point of points){
@@ -293,8 +316,9 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
 
    }
   }
-  const labels=inlineBarrierLabels(bars.map(b=>({label:b[0],y:py(b[1])})),pricePoints,plotLeft,plotRight,overlayPaths);
-  const fallback=barrierLabels(labels.filter(l=>!l.inline).map(l=>l.y),plotTop+5,plotBottom-5),rail=ratios.length?29:1;
+  const barriers=bars.map(([label,value])=>({label,y:py(value)}));
+  const labels=inlineBarrierLabels(barriers,pricePoints,plotLeft,plotRight,overlayPaths);
+  const fallback=barrierLabels(labels.filter(l=>!l.inline).map(l=>l.y),plotTop+5,plotBottom-5),rail=ratioAxis?29:1;
   let fallbackIndex=0;
   out.push(`<g class="si-barriers" data-plot-right="${plotRight}">`);
   bars.forEach(([label,v,c,dash],j)=>{const yy=py(v),placement=labels[j];line(plotLeft,yy,plotRight,yy,c,dash);if(placement.inline){out.push(`<g class="si-inline-barrier-label" data-clearance="4">`);rect(placement.x-placement.width/2,yy-5,placement.width,10,'#fff','#fff');text(placement.x,yy+2.5,label,7,c,true,'middle');out.push('</g>');}else{const labelY=fallback[fallbackIndex++].y;out.push(`<path d="M ${plotRight+rail} ${yy} L ${plotRight+rail+4} ${yy} L ${plotRight+rail+8} ${labelY} L ${plotRight+rail+11} ${labelY}" fill="none" stroke="${c}" stroke-width="0.7"/>`);text(plotRight+rail+14,labelY+2.5,label,7,c,true);}});
@@ -303,6 +327,21 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   for(const [index,label] of bounds.high===bounds.low?[[bounds.high,'High and low']]:[[bounds.high,'High'],[bounds.low,'Low']]){
    const [xx,yy]=pricePoints[index], [date,price]=pts[index];
    out.push(`<circle class="si-price-extreme" cx="${xx.toFixed(2)}" cy="${yy.toFixed(2)}" r="2.2" fill="#fff" stroke="${blue}" stroke-width="1.1"><title>${escape(label+' · '+date+' · '+extremaLabel(price,spread))}</title></circle>`);
+  }
+  if(ratioAxis&&series.pe?.length){
+   const points=series.pe.map(point=>[px(point.date),ry(point.value)]);
+   const mark=peLabelPosition(points,{left:plotLeft,right:plotRight,top:plotTop,bottom:plotBottom},[pricePoints,...overlayPaths],barriers);
+   const color=overlayColors.pe;
+   out.push('<g class="si-pe-label" aria-label="Forward P/E on the right axis">');
+   if(mark){
+    line(mark.px,mark.py,mark.x,mark.y+(mark.y<mark.py?5:-5),color);
+    rect(mark.x-10,mark.y-5,20,10,'#fff','#fff');
+    text(mark.x,mark.y+2.5,'P/E',7.5,color,true,'middle');
+   }else{
+    line(chartX+145,chartY+1,chartX+155,chartY+1,color);
+    text(chartX+159,chartY+4,'P/E',7.5,color,true);
+   }
+   out.push('</g>');
   }
   if(ratingHistory.length){
    const tracks={B:[plotBottom+5,'#006955'],H:[plotBottom+10,'#536d8c'],S:[plotBottom+15,'#a63445']};
@@ -319,23 +358,24 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
    out.push('</g>');
   }
  }else{rect(plotLeft,plotTop,plotRight-plotLeft,Math.max(10,plotBottom-plotTop),'#f5f8fb');text((plotLeft+plotRight)/2,(plotTop+plotBottom)/2,'Price history unavailable',11,muted,false,'middle');}
- if(hasOverlays){
+ if(showCoverage){
   const names={pe:'P/E',pb:'P/B',target:'Morningstar',archive:'BOS archive'};
   const coverage=selected.map(key=>`${names[key]}: ${series[key].length||'unavailable'}`);
   if(chart.target)coverage.push(`Calls: ${ratingHistory.length||'unavailable'}`);
+  if(flatPrice&&ratios.length)coverage.push('Ratios hidden on flat prices');
   if(incompatibleArchive)coverage.push(`${incompatibleArchive} archive off scale`);
   fitted(chartX+4,y+block-6,'Observations · '+coverage.join(' · '),446,7.5,muted);
  }
- const rx=496,rw=266,small=p.shares.length>=3,description=s.description||d.description||'Company description not supplied. Add a short description in share details.';
+ const rx=496,rw=266,description=s.description||d.description||'Company description not supplied. Add a short description in share details.';
  // Keep artwork behind the entire info panel and outside the price plot and label rail.
  if(showWatermarks && typeof d.logo==='string' && /^data:image\/png;base64,[A-Za-z0-9+/]+=*$/.test(d.logo)){
-  out.push(`<image class="si-company-watermark" x="${rx}" y="${y+27}" width="${rw}" height="${block-31}" href="${d.logo}" preserveAspectRatio="xMidYMid meet" opacity="0.12" aria-hidden="true"/>`);
+  out.push(`<image class="si-company-watermark" x="${rx}" y="${y+27-shift}" width="${rw}" height="${block-31+shift}" href="${d.logo}" preserveAspectRatio="xMidYMid meet" opacity="0.12" aria-hidden="true"/>`);
  }
  // Show the complete entered description, including on four-share pages.
  const descriptionLines=wrap(description.length> (small?340:500)?description.slice(0,small?337:497).replace(/\s+\S*$/,'')+'…':description,small?60:49),descriptionHeight=small?65:90,descriptionSize=Math.min(small?8.5:10,descriptionHeight/descriptionLines.length-1.5);
- descriptionLines.slice(0,small?6:9).forEach((value,j)=>fitted(rx,y+37+j*(descriptionSize+1.5),value+(j===(small?5:8)&&descriptionLines.length>(small?6:9)?"…":""),rw,Math.max(7.5,descriptionSize),muted));
+ descriptionLines.slice(0,small?6:9).forEach((value,j)=>fitted(rx,y+37-shift+j*(descriptionSize+1.5),value+(j===(small?5:8)&&descriptionLines.length>(small?6:9)?"…":""),rw,Math.max(7.5,descriptionSize),muted));
  const research=bosResearch(d.metrics),compact=small&&!!research;
- const my=y+(compact?97:small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
+ const my=y-shift+(compact?97:small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
  metrics.forEach(([k,v],j)=>{const col=small?j%2:0,row=small?Math.floor(j/2):j,x=rx+col*137,yy=my+row*(compact?9:small?10:16);fitted(x,yy,k,small?64:125,small?7:9,muted);fitted(x+(small?129:rw),yy,v,small?62:130,small?7:9,navy,true,'end');});
  if(research){
   const yy=my+(compact?50:small?56:162),size=small?7.5:9,x=rx+(small?59:70);
@@ -350,24 +390,25 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   const label=[research.provider,research.target].filter(Boolean).join(' · ');
   fitted(rx+rw,yy,label,rx+rw-x-39,size,navy,true,'end');
  }
- const source=`${d.provider||'Price feed unavailable'}${d.metricsDate?' · BOS metrics '+d.metricsDate:''}`;text(rx,y+block-17,clean(source,65),8,muted);if(d.sourceUrl)text(rx,y+block-6,clean(d.sourceUrl.replace(/^https:\/\//,''),78),7,muted);if(!small)paragraph(rx,y+block-(hasOverlays?40:48),d.metricsBasis||'Valuations unavailable. No estimates are inferred.',61,2,8,muted);
+ if(validDay(d.metricsDate))metricsDates.add(d.metricsDate);
+ if(!small&&d.metricsBasis)paragraph(rx,y+block-26,d.metricsBasis,61,2,8,muted);
  });
  line(28,foot,772,foot);
+ const sourceNote=p.source?`Source ${p.source.reference} · ${p.source.date||'date unavailable'} · Rounded, photo-unverified terms.`:'User-entered terms require verification.';
+ const dates=[...metricsDates].sort();
+ const metricsNote=dates.length?`BOS metrics · ${dates[0]}${dates.length>1?' to '+dates.at(-1):''}`:'';
  const footerCopy=[
-  p.notes||'Indicative reference only. This sheet is not an issuer term sheet, offer or investment recommendation.',
-  p.source?`Draft based on ${p.source.reference}, source date ${p.source.date||'not shown'}. Imported levels are rounded and photo-unverified; edited terms require verification. Coupon basis and tenor units remain as labelled.`:'Manual terms are user-entered and unverified. Confirm coupon basis, KO observations, step-down timing, KI conditions, settlement and issuer terms.',
-  'Charts show source closes, not product returns. Barriers are illustrative; capital loss is possible. Company profiles are shortened excerpts from supplied Excel snapshot; observation date unavailable. Full descriptions are on share cards.',
+  'Indicative reference. Capital is at risk. Refer to the issuer’s final terms. Charts show historical closes.',
+  [sourceNote,metricsNote].filter(Boolean).join('  '),
+  ...(marginSources.size?['MOA margin source · '+[...marginSources].join(' / ')]:[]),
+  ...(p.notes?[p.notes]:[]),
  ];
- if(marginSources.size)footerCopy.push('MOA margin source · '+[...marginSources].join(' / '));
- if(four){
-  let y=foot+12;
-  for(const [i,copy] of footerCopy.entries()){
-   const lines=wrap(copy,163);
-   for(const lineText of lines){text(28,y,lineText,8,i===0?navy:muted);y+=10;}
-   y+=3;
+ let footerY=foot+12;
+ for(const [i,copy] of footerCopy.entries()){
+  for(const value of wrap(copy,161)){
+   text(28,footerY,value,8,i===0?navy:muted);
+   footerY+=10;
   }
- }else{
-  [15,44,71,94].slice(0,footerCopy.length).forEach((offset,i)=>paragraph(28,foot+offset,footerCopy[i],i===0?140:155,2,i===0?9:8,i===0?navy:muted));
  }
  out.push('</svg>');return out.join('');}
 async function pdfFromImages(images,PDFLib,linksByPage=[]){
