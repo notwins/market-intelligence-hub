@@ -397,8 +397,9 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  const sourceNote=p.source?`Source ${p.source.reference} · ${p.source.date||'date unavailable'} · Rounded, photo-unverified terms.`:'User-entered terms require verification.';
  const dates=[...metricsDates].sort();
  const metricsNote=dates.length?`BOS metrics · ${dates[0]}${dates.length>1?' to '+dates.at(-1):''}`:'';
+ const profileNote=p.shares.some(share=>enrichment[share.symbol]?.staticProfile)?' Company profiles: shortened excerpts.':'';
  const footerCopy=[
-  'Indicative reference. Capital is at risk. Refer to the issuer’s final terms. Charts show historical closes.',
+  'Indicative reference. Capital is at risk. Refer to the issuer’s final terms. Charts show historical closes.'+profileNote,
   [sourceNote,metricsNote].filter(Boolean).join('  '),
   ...(marginSources.size?['MOA margin source · '+[...marginSources].join(' / ')]:[]),
   ...(p.notes?[p.notes]:[]),
