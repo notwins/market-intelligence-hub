@@ -6,7 +6,7 @@ let showWatermarks=true,logoIndexPromise,chart=C.chartOptions();
 const CHART_KEY='market-si-beta2-chart',MOA_KEY='market-si-beta2-moa-v1';
 let moaLibrary=null;
 const bosFiles=window.SIBosHistory;
-let bosArchive=null,bosWorking=!!bosFiles,bosTemporary=false;
+let bosArchive=null,bosWorking=!!bosFiles;
 try{const saved=localStorage.getItem(MOA_KEY);if(saved)moaLibrary=C.parseMoa(JSON.parse(saved));}catch{/* Allow a fresh private import. */}
 try{chart=C.chartOptions(JSON.parse(localStorage.getItem(CHART_KEY)||'null'));}catch{/* Keep the defaults. */}
 const logoImages=new Map();
@@ -120,12 +120,6 @@ function buttons(){const p=active();
  $('clear-moa').hidden=!moaLibrary;
  $('moa-status').textContent=moaLibrary?`${moaLibrary.rates.size} rates loaded · ${moaLibrary.label} · private to this browser.`:'Load your private MOA file once, or enter a margin on any share.';
  $('chart-display').disabled=busy;
- $('load-bos-history').disabled=bosWorking;
- $('clear-bos-history').hidden=!bosArchive;
- $('clear-bos-history').disabled=bosWorking;
- $('bos-history-status').textContent=bosWorking?'Reading private BOS history…':bosArchive?
-  `${bosArchive.count.toLocaleString()} dated calls · ${bosTemporary?'this session':'this browser'}.`:
-  'Load the private BOS archive for monthly calls and targets.';
  $('chart-years').value=String(chart.years);
  for(const key of C.overlayKeys)$('chart-'+key).checked=chart[key];
  $('logo-watermark').setAttribute('aria-pressed',String(showWatermarks));
@@ -235,29 +229,6 @@ $('clear-moa').addEventListener('click',()=>{
  if(busy)return;
  try{localStorage.removeItem(MOA_KEY);}catch{notice('The private MOA file could not be cleared.');return;}
  moaLibrary=null;invalidatePDF();render();
-});
-$('load-bos-history').addEventListener('change',async event=>{
- const input=event.target,file=input.files?.[0];
- if(!file||busy||bosWorking)return;
- bosWorking=true;buttons();
- try{
-  if(file.size>16000000)throw Error('Choose a private BOS file under 16 MB.');
-  const raw=await file.text(),parsed=bosFiles.parse(raw);
-  bosTemporary=false;
-  try{await bosFiles.save(raw);}catch{bosTemporary=true;}
-  bosArchive=parsed;invalidatePDF();
- }catch(e){notice(e.message||'The private BOS history could not be loaded.');}
- finally{input.value='';bosWorking=false;render();}
-});
-$('clear-bos-history').addEventListener('click',async()=>{
- if(busy||bosWorking)return;
- bosWorking=true;buttons();
- try{
-  try{await bosFiles.clear();}catch(error){if(!bosTemporary)throw error;}
-  bosArchive=null;bosTemporary=false;invalidatePDF();
- }
- catch{notice('The private BOS history could not be cleared from this browser.');}
- finally{bosWorking=false;render();}
 });
 bosFiles?.read().then(raw=>{
  if(raw){bosArchive=bosFiles.parse(raw);invalidatePDF();}
