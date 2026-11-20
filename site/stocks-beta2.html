@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <link rel="stylesheet" href="company-fundamentals.css?v=1">
+  <script defer src="company-fundamentals.js?v=1"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Monthly price, market capitalisation and valuation history for 110 stock listings in the Bank of Singapore coverage archive.">
   <title>Stocks BETA 2 · Monthly market history · Market Intel</title>
@@ -12,7 +14,7 @@
   <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.3">
   <script defer src="company-logos.js"></script>
   <script defer src="stocks-beta2-charts.js?v=20261121.3"></script>
-  <script defer src="stocks-beta2.js?v=20261121.3"></script>
+  <script defer src="stocks-beta2.js?v=20261121.3&amp;fundamentals=1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to market history</a>
@@ -109,6 +111,7 @@
           <h3>Quick data</h3>
           <p class="sb2-research-status" role="status">Loading company research…</p>
           <div class="sb2-research-body" hidden></div>
+          <div data-sb2-fundamentals></div>
         </section>
         <section class="sb2-history sb2-valuation" aria-label="Forward valuation chart">
           <h3>Forward P/E and P/B</h3>

@@ -206,6 +206,7 @@
     const entry = { element, company, slot };
     element.dataset.slot = String(slot);
     paintHeading(entry);
+    element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.more(company) || '';
     const observed = company.observations.length;
     element.querySelector('.sb2-coverage').textContent = observed + ' of ' + data.months.length + ' monthly editions';
     if (existing) {
