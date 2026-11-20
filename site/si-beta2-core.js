@@ -7,6 +7,44 @@ const fmt=(v,d=2)=>num(v)===null?'Not supplied':Number(v).toLocaleString('en-US'
 const validMoa=v=>Number.isFinite(v)&&v>=0&&v<=100;
 const pct=v=>num(v)===null?'Not supplied':fmt(v,4)+'%';
 const clean=(v,n=160)=>String(v??'').trim().slice(0,n);
+function moaListing(ticker,currency){
+ const id=String(ticker||'').trim().toUpperCase().replace(/\s+EQUITY$/,'').replace(/\s+/g,' ').replace(/^0+(\d+ HK)$/,'$1');
+ return /^[A-Z0-9.\/-]{1,16} [A-Z]{2}$/.test(id)&&/^[A-Z]{3}$/.test(currency||'')?id+'|'+currency:'';
+}
+function moaIsin(isin,currency){
+ const id=String(isin||'').trim().toUpperCase();
+ return /^[A-Z]{2}[A-Z0-9]{9}[0-9]$/.test(id)&&/^[A-Z]{3}$/.test(currency||'')?id+'|'+currency:'';
+}
+function parseMoa(source){
+ if(source?.version!==1||typeof source.source!=='string'||!source.source.trim()||source.source.length>80||
+  !Array.isArray(source.records)||!source.records.length||source.records.length>10000)throw Error('Choose a valid private MOA file.');
+ const rates=new Map(),byIsin=new Map();
+ for(const record of source.records){
+  const key=moaListing(record?.ticker,record?.currency);
+  const isinKey=moaIsin(record?.isin,record?.currency);
+  if(!key||rates.has(key)||!validMoa(record.moaPct)||(record?.isin!=null&&!isinKey))
+   throw Error('The MOA file contains an invalid or duplicate listing.');
+  const entry={rate:record.moaPct,isinKey};
+  rates.set(key,entry);
+  if(isinKey)byIsin.set(isinKey,byIsin.has(isinKey)?null:entry);
+ }
+ return {label:source.source.trim(),rates,byIsin};
+}
+function matchMoa(library,ticker,currency,isin){
+ const key=moaListing(ticker,currency),isinKey=moaIsin(isin,currency);
+ if(key){
+  const entry=library.rates.get(key);
+  return entry&&(!isinKey||!entry.isinKey||entry.isinKey===isinKey)?entry.rate:undefined;
+ }
+ return library.byIsin.get(isinKey)?.rate;
+}
+function couponBand(coupon){
+ if(coupon>12)return 'above-12';
+ if(coupon>=10)return '10-12';
+ if(coupon>=8)return '8-10';
+ if(coupon>=6)return '6-8';
+ return '';
+}
 function symbol(v){v=clean(v,30).toUpperCase();if(/^\d{1,4}\s+HK$/.test(v))return v.split(/\s/)[0].padStart(4,'0')+'.HK';return v.replace(/\s+(?:UQ|UN|US)$/,'');}
 function blank(){return {id:'',shares:[],ko:null,ki:null,strike:null,step:null,months:null,coupon:null,currency:'SGD',tenorUnit:'months',couponBasis:'per_annum',kiType:'European at maturity',firstStep:2,date:'',issuer:'',notes:'',source:null};}
 function fromReference(r){return {...blank(),shares:r.shares.map(t=>({symbol:t,fixing:null,name:'',description:''})),ko:r.ko_pct,ki:r.ki_pct,strike:r.strike_pct,months:r.tenor_source_value,coupon:r.coupon_pct,currency:r.currency,tenorUnit:'months',couponBasis:r.coupon_basis||'unconfirmed',kiType:'Unconfirmed',source:{reference:r.reference,date:r.source_date||'',rounded:true,review:!!r.additional_review},date:''};}
@@ -318,5 +356,5 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
  }
  return doc.save();
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,couponBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

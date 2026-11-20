@@ -125,3 +125,20 @@ const withCalls=C.svg(p,{TEST:{...sample,bosCalls:privateCalls}},1,1,{chart:sett
 assert.equal((withCalls.match(/class="si-bos-call"/g)||[]).length,4);
 assert.match(withCalls,/Calls: 4/);
 assert(!C.svg(p,{TEST:{...sample,bosCalls:privateCalls}}).includes('si-call-history'));
+
+const matches = C.parseMoa({version:1,source:'Test rates',records:[
+ {ticker:'0005 HK EQUITY',currency:'HKD',isin:'GB0005405286',moaPct:0},
+ {ticker:'TEST US',currency:'USD',isin:'US0378331005',moaPct:65},
+ {ticker:'LEGACY US',currency:'USD',moaPct:50},
+]});
+assert.equal(C.matchMoa(matches,'5 HK','HKD','GB0005405286'),0);
+assert.equal(C.matchMoa(matches,undefined,'HKD','GB0005405286'),0);
+assert.equal(C.matchMoa(matches,'TEST US','USD','US5949181045'),undefined);
+assert.equal(C.matchMoa(matches,'OTHER US','USD','US0378331005'),undefined);
+assert.equal(C.matchMoa(matches,'TEST US','EUR','US0378331005'),undefined);
+assert.equal(C.matchMoa(matches,'LEGACY US','USD'),50);
+assert.throws(()=>C.parseMoa({version:1,source:'Test rates',records:[
+ {ticker:'TEST US',currency:'USD',isin:'BAD',moaPct:65},
+]}),/invalid or duplicate listing/);
+const bands=[5.99,6,7.99,8,9.99,10,12,12.01].map(C.couponBand);
+assert.deepEqual(bands,['','6-8','6-8','8-10','8-10','10-12','10-12','above-12']);

@@ -7,22 +7,7 @@ const CHART_KEY='market-si-beta2-chart',MOA_KEY='market-si-beta2-moa-v1';
 let moaLibrary=null;
 const bosFiles=window.SIBosHistory;
 let bosArchive=null,bosWorking=!!bosFiles,bosTemporary=false;
-function moaListing(ticker,currency){
- const id=String(ticker||'').trim().toUpperCase().replace(/\s+EQUITY$/,'').replace(/\s+/g,' ').replace(/^0+(\d+ HK)$/,'$1');
- return /^[A-Z0-9.\/-]{1,16} [A-Z]{2}$/.test(id)&&/^[A-Z]{3}$/.test(currency||'')?id+'|'+currency:'';
-}
-function parseMoa(source){
- if(source?.version!==1||typeof source.source!=='string'||!source.source.trim()||source.source.length>80||
-  !Array.isArray(source.records)||!source.records.length||source.records.length>10000)throw Error('Choose a valid private MOA file.');
- const rates=new Map();
- for(const record of source.records){
-  const key=moaListing(record?.ticker,record?.currency);
-  if(!key||rates.has(key)||!C.validMoa(record.moaPct))throw Error('The MOA file contains an invalid or duplicate listing.');
-  rates.set(key,record.moaPct);
- }
- return {label:source.source.trim(),rates};
-}
-try{const saved=localStorage.getItem(MOA_KEY);if(saved)moaLibrary=parseMoa(JSON.parse(saved));}catch{/* Allow a fresh private import. */}
+try{const saved=localStorage.getItem(MOA_KEY);if(saved)moaLibrary=C.parseMoa(JSON.parse(saved));}catch{/* Allow a fresh private import. */}
 try{chart=C.chartOptions(JSON.parse(localStorage.getItem(CHART_KEY)||'null'));}catch{/* Keep the defaults. */}
 const logoImages=new Map();
 try{showWatermarks=localStorage.getItem(WATERMARK_KEY)!=='off';}catch{/* The toggle can still work for this session. */}
@@ -83,7 +68,7 @@ function renderPage(page,data,number,total,watermarks=showWatermarks,links){
  const withPrivateData=Object.fromEntries(page.shares.map(s=>{
   const info=data[s.symbol]||{};
   return [s.symbol,{...info,
-   ...(moaLibrary?{moaPct:moaLibrary.rates.get(info.moaKey),moaSource:moaLibrary.label}:{}),
+   ...(moaLibrary?{moaPct:C.matchMoa(moaLibrary,info.moaTicker,info.moaCurrency,info.isin),moaSource:moaLibrary.label}:{}),
    bosCalls:bosArchive?.listings.get(info.bosKey)
   }];
  }));
@@ -168,8 +153,9 @@ async function enrich(p){
    market={error:'Exact listing history unavailable. No substitute listing is used.'};
   }
   const listing=valuation?.row||reviewedListing(item);
-  const moaKey=moaListing(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency);
-  result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,moaKey,
+  const moaTicker=listing?.instrumentId||profile?.bbTicker||item?.bbTicker;
+  const moaCurrency=item?.currency||listing?.currency||profile?.currency;
+  result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,moaTicker,moaCurrency,isin:item?.isin,
    bosKey:bosFiles?.listingKey(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency),
    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
   };
@@ -182,11 +168,11 @@ async function enrich(p){
 
 function select(pageId){if(protectEdits())return;activeId=pageId;fill(active());persist();render();}
 function add(p){if(pages.length>=LIMIT){notice(`A collection can contain up to ${LIMIT} pages. Save it before starting another collection.`);return;}invalidatePDF();p.id=id();pages.push(p);activeId=p.id;loading.add(p.id);fill(p);persist();render();enrich(p);$('preview-title').scrollIntoView({behavior:'smooth',block:'start'});}
-function changed(){dirty=true;invalidatePDF();$('editor-note').textContent=active()?'Edited terms will apply when you choose Update one-pager.':'Complete the terms, then create your one-pager.';buttons();$('preview-status').textContent='The preview shows the last applied terms. Apply changes below before exporting.';$('preview-status').classList.add('dirty');}
+function changed(event){if(event?.target?.id==='load-moa')return;dirty=true;invalidatePDF();$('editor-note').textContent=active()?'Edited terms will apply when you choose Update one-pager.':'Complete the terms, then create your one-pager.';buttons();$('preview-status').textContent='The preview shows the last applied terms. Apply changes below before exporting.';$('preview-status').classList.add('dirty');}
 form.addEventListener('input',event=>{
  const slot=event?.target?.name?.match(/^share([0-3])$/)?.[1],prior=active()?.shares[slot];
  if(prior&&C.symbol(event.target.value)!==prior.symbol)form.elements['moa'+slot].value='';
- changed();
+ changed(event);
 });form.addEventListener('change',changed);
 form.addEventListener('submit',e=>{e.preventDefault();if(busy)return;const p=read(),errors=C.validate(p);if(errors.length){$('form-errors').textContent=errors.join(' ');$('form-errors').scrollIntoView({behavior:'smooth',block:'center'});return;}invalidatePDF();if(active()){const index=pages.findIndex(x=>x.id===activeId);p.id=activeId;pages[index]=p;loading.add(p.id);fill(p);persist();render();enrich(p);}else add(p);});
 $('apply-pending').addEventListener('click',()=>form.requestSubmit());
@@ -198,7 +184,7 @@ $('load-moa').addEventListener('change',async event=>{
  if(!file||busy)return;
  try{
   if(file.size>1000000)throw Error('Choose a private MOA file under 1 MB.');
-  const raw=await file.text(),next=parseMoa(JSON.parse(raw));
+  const raw=await file.text(),next=C.parseMoa(JSON.parse(raw));
   if(busy)return;
   localStorage.setItem(MOA_KEY,raw);
   moaLibrary=next;invalidatePDF();render();
@@ -263,7 +249,8 @@ let refs=[];
 function renderLibrary(){refs=window.MarketSI.records();const q=$('library-search').value.trim().toLowerCase(),ccy=$('library-currency').value,filtered=refs.filter(r=>(list!=='saved'||watch.includes(r.reference))&&(!ccy||r.currency===ccy)&&[r.reference,...r.shares,r.source_date||'',...r.shares.map(s=>window.MarketPrices?.resolve(s)?.name||'')].join(' ').toLowerCase().includes(q));$('watch-count').textContent=watch.length;$('library-count').textContent=refs.length?`${filtered.length} of ${refs.length} historical records${list==='saved'?' · your SI watchlist':''}`:'Reference list unavailable. You can still create pages manually.';$('library-retry').hidden=refs.length>0;
  $('library-rows').innerHTML=filtered.map(r=>{
   const step=window.MarketSI.stepDown(r.reference);
-  return `<tr><td><button class="star" data-star="${E(r.reference)}" aria-pressed="${watch.includes(r.reference)}" aria-label="${watch.includes(r.reference)?'Remove':'Save'} ${E(r.reference)} ${watch.includes(r.reference)?'from':'to'} SI watchlist">${watch.includes(r.reference)?'★':'☆'}</button></td><td><span class="ticker">${r.shares.map(E).join(' / ')}</span><small>${E(r.reference)}${r.additional_review?' · review':''}</small></td><td data-tc-value="${E(r.source_date||'')}">${E(r.source_date||'Not shown')}</td><td>${E(r.currency)}</td><td data-tc-value="${r.tenor_source_value} months">${r.tenor_source_value}<small>${'months'}</small></td><td data-tc-value="${r.coupon_pct}%">${r.coupon_pct}%<small>${r.coupon_basis==='per_annum'?'p.a. (screen)':'basis unconfirmed'}</small></td><td>${r.ko_pct}%</td><td data-tc-value="${step??''}">${step===null?'—':step.toFixed(2)+' pp'}</td><td>${r.ki_pct}%</td><td>${r.strike_pct}%</td><td><button data-add="${E(r.reference)}">＋ Add page</button></td></tr>`;
+  const couponBand=C.couponBand(r.coupon_pct);
+  return `<tr data-currency="${E(r.currency)}"><td><button class="star" data-star="${E(r.reference)}" aria-pressed="${watch.includes(r.reference)}" aria-label="${watch.includes(r.reference)?'Remove':'Save'} ${E(r.reference)} ${watch.includes(r.reference)?'from':'to'} SI watchlist">${watch.includes(r.reference)?'★':'☆'}</button></td><td><span class="ticker">${r.shares.map(E).join(' / ')}</span><small>${E(r.reference)}${r.additional_review?' · review':''}</small></td><td data-tc-value="${E(r.source_date||'')}">${E(r.source_date||'Not shown')}</td><td>${E(r.currency)}</td><td data-tc-value="${r.tenor_source_value} months">${r.tenor_source_value}<small>${'months'}</small></td><td data-tc-value="${r.coupon_pct}%"><strong class="coupon-value" data-coupon-band="${couponBand}">${r.coupon_pct}%</strong><small>${r.coupon_basis==='per_annum'?'p.a. (screen)':'basis unconfirmed'}</small></td><td>${r.ko_pct}%</td><td data-tc-value="${step??''}">${step===null?'—':step.toFixed(2)+' pp'}</td><td>${r.ki_pct}%</td><td>${r.strike_pct}%</td><td><button data-add="${E(r.reference)}">＋ Add page</button></td></tr>`;
  }).join('')||'<tr><td colspan="11">'+(list==='saved'?'Save a reference with ☆ to build your SI watchlist.':'No matching references.')+'</td></tr>';
  const currencies=[...new Set(refs.map(r=>r.currency))].sort();if($('library-currency').options.length!==currencies.length+1){$('library-currency').innerHTML='<option value="">All currencies</option>'+currencies.map(c=>`<option>${E(c)}</option>`).join('');$('library-currency').value=ccy;}}
 $('library-rows').addEventListener('click',e=>{const star=e.target.closest('[data-star]'),button=e.target.closest('[data-add]');if(star){const ref=star.dataset.star;watch=watch.includes(ref)?watch.filter(x=>x!==ref):[...watch,ref];persist();renderLibrary();}if(button){if(protectEdits())return;const row=refs.find(r=>r.reference===button.dataset.add);if(row)add(C.fromReference(row));}});
