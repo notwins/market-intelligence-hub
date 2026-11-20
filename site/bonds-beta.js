@@ -24,6 +24,49 @@
   let cursor = 0;
   let cards = [];
   let redrawPending = false;
+  let remembered = false;
+  let showingSavedHistory = false;
+  let publicUnavailable = false;
+  let historyMessage = '';
+
+  function historyStorage(action, content) {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open('market-intel-bonds-beta', 1);
+      request.onupgradeneeded = () => request.result.createObjectStore('history');
+      let blocked = false;
+      request.onblocked = () => { blocked = true; reject(Error('Browser history storage is busy.')); };
+      request.onerror = () => reject(request.error);
+      request.onsuccess = () => {
+        const db = request.result;
+        if (blocked) { db.close(); return; }
+        try {
+          const tx = db.transaction('history', action === 'get' ? 'readonly' : 'readwrite');
+          const store = tx.objectStore('history');
+          const key = 'bond-history-csv';
+          const operation = action === 'get' ? store.get(key) : action === 'save' ? store.put(content, key) : store.delete(key);
+          tx.oncomplete = () => { db.close(); resolve(operation.result); };
+          tx.onabort = () => { db.close(); reject(tx.error || Error('Browser history storage was interrupted.')); };
+        } catch (error) { db.close(); reject(error); }
+      };
+    });
+  }
+
+  function setHistoryBusy(busy) {
+    for (const name of ['open', 'file', 'clear']) get(name).disabled = busy;
+  }
+
+  function updateStatus() {
+    let status = 'Loading the bond watchlist…';
+    if (localBonds.size) {
+      status = `Loaded ${localBonds.size.toLocaleString('en-GB')} bond series. ${showingSavedHistory ? 'History and ACE rates are saved in this browser.' : 'History and ACE rates are available for this session.'}`;
+      if (publicUnavailable) status += ' The public quote feed is currently unavailable.';
+    } else if (publicBonds.size) {
+      status = `${publicBonds.size} default bonds · Saved public quotes through ${dateLabel(dates.at(-1))}. Open and remember your CSV once for the full history and ACE rates.`;
+    } else if (publicUnavailable) {
+      status = 'The public watchlist could not load. Retry or open a Bonds BETA history CSV.';
+    }
+    get('status').textContent = [status, historyMessage].filter(Boolean).join(' ');
+  }
 
   const visible = new IntersectionObserver(entries => {
     for (const entry of entries) {
@@ -247,11 +290,9 @@
     dateRows = dates.map(date => ['', date, date]);
     cursor = Math.max(0, dates.length - 1);
     get('controls').hidden = !bonds.size;
-    get('clear').hidden = !localBonds.size;
+    get('clear').hidden = !localBonds.size && !remembered;
     populateControls(); dateRange(); renderCards();
-    get('status').textContent = localBonds.size
-      ? `Imported ${localBonds.size.toLocaleString('en-GB')} bond series. This tab keeps the history and ACE snapshot until you clear it or close the page.`
-      : `${publicBonds.size} default bonds · Saved public quotes through ${dateLabel(dates.at(-1))}. Open your history CSV for the monthly BOS archive and ACE rates.`;
+    updateStatus();
   }
 
   async function loadWatchlist() {
@@ -260,10 +301,28 @@
       const response = await fetch(feedURL);
       if (!response.ok) throw Error('Watchlist not reachable');
       publicBonds = publicHistory(await response.json());
+      publicUnavailable = false;
       applyData();
     } catch {
-      get('status').textContent = 'The public watchlist could not load. Retry or open a Bonds BETA history CSV.';
+      publicUnavailable = true;
+      updateStatus();
       get('retry').hidden = false;
+    }
+  }
+
+  async function restoreHistory() {
+    setHistoryBusy(true);
+    try {
+      const text = await historyStorage('get');
+      if (text === undefined) return;
+      remembered = true;
+      try { localBonds = readHistory(text); showingSavedHistory = true; }
+      catch { historyMessage = 'The saved history could not be read. Open a fresh copy of your history CSV.'; }
+      applyData();
+    } catch {
+      // A browser with storage disabled can still open a CSV for this visit.
+    } finally {
+      setHistoryBusy(false);
     }
   }
 
@@ -272,17 +331,44 @@
   get('file').addEventListener('change', async event => {
     const file = event.target.files[0];
     if (!file) return;
+    setHistoryBusy(true);
+    historyMessage = '';
     try {
       if (file.size > 25_000_000) throw Error('Choose a CSV smaller than 25 MB.');
-      localBonds = readHistory(await file.text());
+      const text = await file.text();
+      localBonds = readHistory(text);
+      showingSavedHistory = false;
+      try {
+        await historyStorage('save', text);
+        remembered = true;
+        showingSavedHistory = true;
+      } catch {
+        historyMessage = remembered ? 'The browser kept its previous saved copy. The new file is open for this session.'
+          : 'The browser could not save a copy.';
+      }
       applyData();
     } catch (error) {
-      get('status').textContent = error.message;
+      historyMessage = error.message;
+      updateStatus();
     } finally {
       event.target.value = '';
+      setHistoryBusy(false);
     }
   });
-  get('clear').addEventListener('click', () => { localBonds.clear(); applyData(); });
+  get('clear').addEventListener('click', async () => {
+    setHistoryBusy(true);
+    try {
+      if (remembered) await historyStorage('delete');
+      remembered = false;
+      showingSavedHistory = false;
+      historyMessage = '';
+      localBonds.clear();
+      applyData();
+    } catch {
+      historyMessage = 'The browser could not remove the saved history. Try again.';
+      updateStatus();
+    } finally { setHistoryBusy(false); }
+  });
   get('search').addEventListener('input', populateControls);
   get('add').addEventListener('click', () => {
     const key = get('match').value;
@@ -299,5 +385,6 @@
   document.querySelectorAll('[data-group]').forEach(button => button.addEventListener('click', () => {
     selectGroup(button.dataset.group); renderCards();
   }));
+  restoreHistory();
   loadWatchlist();
 })();
