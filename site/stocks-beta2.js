@@ -58,7 +58,7 @@
     vendor_ticker_alias: 'Earlier vendor code',
     predecessor_security: 'Predecessor security'
   };
-  let data, history, rankings, pending, origin;
+  let data, history, rankings, pending, origin, researchRequest;
   const deck = get('sb2-detail'), dialog = get('sb2-card-picker');
   const cards = new Map();
   let collection = 'global';
@@ -107,10 +107,81 @@
             : '<td>' + e(format.format(value)) + '</td>'
         )).join('') + '</tr>';
     }).join('');
-    const table = element.querySelector('table');
+    const table = element.querySelector('.sb2-history-table table');
     table.innerHTML = '<thead><tr><th scope="col">Report date</th><th scope="col">Price date</th>'
       + '<th scope="col">Source ticker</th>' + headers + '</tr></thead><tbody>' + values + '</tbody>';
     table.parentElement.scrollTo(0, 0);
+  }
+
+  function getResearch() {
+    researchRequest ??= (async () => {
+      const local = get('sb2-embedded-research');
+      let result;
+      if (local) {
+        result = JSON.parse(local.textContent);
+      } else {
+        const response = await fetch('data/stocks-beta2-research-briefs.json?v=20261121.3', { signal: AbortSignal.timeout(10000) });
+        if (!response.ok) throw new Error('Research download failed');
+        result = await response.json();
+      }
+      if (result.version !== 1 || !result.briefs) throw new Error('Research format is unavailable');
+      return result;
+    })().catch(error => { researchRequest = undefined; throw error; });
+    return researchRequest;
+  }
+
+  async function paintResearch({ element, company }) {
+    const status = element.querySelector('.sb2-research-status');
+    const body = element.querySelector('.sb2-research-body');
+    status.textContent = 'Loading company research…';
+    try {
+      const { briefs, coverageDate } = await getResearch();
+      if (!element.isConnected) return;
+      const brief = briefs[company.ticker];
+      if (!brief) {
+        status.textContent = 'No research brief for this listing.';
+        return;
+      }
+      const { financials, close, target } = brief;
+      const targetLabel = brief.provider === 'Haitong International' ? 'Target price' : 'Fair value';
+      const amount = metric => metric ? metric.currency + ' ' + root.StocksBeta2Charts.priceLabel(
+        Number(metric.value.replaceAll(',', ''))
+      ) : 'Unavailable';
+      const gap = Number.isFinite(brief.gap) ? (brief.gap > 0 ? '+' : '') + brief.gap.toFixed(1) + '%' : 'Unavailable';
+      const values = [
+        ['Research rating', brief.rating || 'Unavailable'], [targetLabel, amount(target)],
+        ['Reported close', amount(close)], [targetLabel + ' vs close', gap]
+      ].map(([label, value]) => '<div><dt>' + e(label) + '</dt><dd>' + e(value) + '</dd></div>').join('');
+      const columns = financials.periods.map((period, i) => '<th scope="col"' + (i ? ' data-estimate' : '') + '>' + e(period) + '</th>').join('');
+      const rows = financials.rows.map(([label, ...cells]) => '<tr><th scope="row">' + e(label) + '</th>'
+        + cells.map((value, i) => '<td' + (i ? ' data-estimate' : '') + '>' + e(value ?? '–') + '</td>').join('') + '</tr>').join('');
+      const sourceLink = (url, label) => '<a href="' + e(url) + '" target="_blank" rel="noopener">' + e(label) + '</a>';
+      const dateLabel = brief.archived ? ' · Saved report' : '';
+      const modelSuffix = financials.source !== brief.source ? ' · Previous report model' : '';
+      body.innerHTML = '<p class="sb2-research-note sb2-research-dates">' + e(brief.provider + ' · ' + day(brief.date) + dateLabel) + '</p>'
+        + '<dl class="sb2-quick-values">' + values + '</dl>'
+        + (close?.date ? '<p class="sb2-research-note">Reported close · ' + e(day(close.date)) + '</p>' : '')
+        + '<p>' + sourceLink(brief.source, 'Source PDF') + '</p>'
+        + '<details class="sb2-brief-details"><summary><span class="sb2-more">Show more</span><span class="sb2-less">Show less</span></summary>'
+        + (brief.archived ? '<p class="sb2-research-note">The ' + e(day(coverageDate)) + ' coverage list had no report link for this listing.</p>' : '')
+        + '<h4>Research outlook</h4><p>' + e(brief.outlook) + '</p><p class="sb2-research-note">'
+        + e(day(brief.outlookDate)) + ' · ' + sourceLink(brief.source + '#page=' + brief.outlookPage, 'Read analyst write-up') + '</p>'
+        + '<h4>Management guidance</h4><p>' + e(brief.guidance || 'The reviewed write-up did not identify specific management guidance.') + '</p>'
+        + '<h4>Financials and analyst estimates</h4><p class="sb2-research-note">'
+        + e(day(financials.date) + modelSuffix + (financials.units ? ' · ' + financials.units + ' unless marked' : ''))
+        + '. A = actual, E = analyst estimate.</p><div class="sb2-table" role="region" aria-label="Research financials" tabindex="0"><table>'
+        + '<thead><tr><th scope="col">Metric</th>' + columns + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
+        + '<p>' + sourceLink(financials.source + '#page=' + financials.page, 'Financial table in PDF') + '</p></details>';
+      status.textContent = '';
+      body.hidden = false;
+    } catch {
+      if (!element.isConnected) return;
+      const retryResearch = doc.createElement('button');
+      retryResearch.type = 'button';
+      retryResearch.textContent = 'Retry research';
+      retryResearch.addEventListener('click', () => paintResearch({ element, company }));
+      status.replaceChildren('Company research could not load. ', retryResearch);
+    }
   }
 
   function showGroup(group) {
@@ -147,6 +218,7 @@
     cards.set(slot, entry);
     history.add(element, company);
     paintMonthlyTable(entry, history.range());
+    paintResearch(entry);
     element.querySelector('.sb2-remove-card').addEventListener('click', () => {
       if (cards.size <= 1) return;
       history.remove(element);

@@ -64,3 +64,32 @@ assert.equal(lookup('GB0005405286', 'GBp').rows[0].currency, 'GBP');
 assert.equal(lookup(null, 'SGD').state, 'unverified');
 assert.equal(lookup('SG1L01001702', 'SGD').state, 'missing');
 console.log('BOS ACE matching: validates ISINs, keeps source rows and checks currencies.');
+
+const { historyPoints, priceLabel, probabilityCone } = require('../site/stocks-beta2-charts.js');
+const history = require('../site/data/stocks-beta2-monthly-history.json');
+const { briefs } = require('../site/data/stocks-beta2-research-briefs.json');
+assert.deepEqual(Object.keys(briefs).sort(), history.securities.map(item => item.ticker).sort());
+for (const brief of Object.values(briefs)) {
+  assert.equal(new URL(brief.source).origin, 'https://productgroup.bankofsingapore.com');
+  assert(brief.outlook && brief.target && brief.financials.periods.length >= 2);
+  assert(brief.financials.periods[0].endsWith('A'));
+  assert(brief.financials.periods.slice(1).every(period => period.endsWith('E')));
+}
+const coneFor = (ticker, end = history.months.length - 1) => {
+  const company = history.securities.find(item => item.ticker === ticker);
+  const anchor = historyPoints(history, company, 'price', 0, end).at(-1);
+  return probabilityCone(history, company, anchor);
+};
+const apple = coneFor('AAPL US');
+assert.equal(apple.count, 36);
+assert.equal(apple.points.length, 13);
+assert(apple.points[0].every(price => price === apple.anchor.value));
+assert.equal(apple.points[12][2], apple.anchor.value);
+assert(apple.points[12][0] > apple.points[6][0]);
+assert(apple.points[12][4] < apple.points[6][4]);
+assert(Math.abs(Math.log(apple.points[12][1] / apple.anchor.value) - apple.sigma * Math.sqrt(12)) < 1e-12);
+assert.equal(coneFor('NVDA US').splits, 1);
+assert.equal(coneFor('INTC US').splits, 0, 'Genuine moves with matching market-cap changes stay in the sample');
+assert.equal(coneFor('AAPL US', 0).points, undefined, 'An early range cannot use later months to fit a cone');
+assert.deepEqual([8, 9.86, 10.1, 290.47].map(priceLabel), ['8.0', '9.9', '10', '290']);
+console.log('Stocks BETA 2: listing research, price precision, and dated volatility cones passed.');

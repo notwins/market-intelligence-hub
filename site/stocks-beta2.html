@@ -9,10 +9,10 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.2">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.3">
   <script defer src="company-logos.js"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261121.2"></script>
-  <script defer src="stocks-beta2.js?v=20261121.2"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.3"></script>
+  <script defer src="stocks-beta2.js?v=20261121.3"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to market history</a>
@@ -70,6 +70,7 @@
           <button class="sb2-remove-card" type="button">Remove</button>
         </div>
         <p class="sb2-coverage"></p>
+        <div class="sb2-chart-and-research">
         <section class="sb2-history" aria-label="Historical chart">
           <h3>Historical chart</h3>
           <div class="sb2-metric-toggle" role="group" aria-label="Historical chart metric">
@@ -77,6 +78,7 @@
             <button type="button" data-metric="market_cap_usd_bn" aria-pressed="false">Market cap</button>
             <button type="button" data-metric="dividend_yield_pct" aria-pressed="false">Dividend yield</button>
             <button type="button" data-target aria-pressed="false">Morningstar price target</button>
+            <button type="button" data-cone aria-pressed="false">12-month probability cone</button>
           </div>
           <p class="sb2-chart-window"></p>
           <div class="sb2-target-legend" hidden>
@@ -91,7 +93,22 @@
             </figcaption>
           </figure>
           <p class="sb2-chart-empty" data-price-empty hidden>No values for this metric in the selected range.</p>
+          <div class="sb2-cone-info" hidden>
+            <p data-cone-summary role="status"></p>
+            <p data-cone-levels></p>
+            <details data-cone-method hidden>
+              <summary>Cone assumptions</summary>
+              <p>The cone uses the sample standard deviation of consecutive monthly log returns over the 36 months up to the last price in the selected range. It needs at least 12 usable returns. It skips missing months, predecessor transitions and split-like moves flagged using market cap.</p>
+              <p>The centre stays at the anchor price. The model scales log-return volatility by the square root of the months ahead. If log returns are normal with constant volatility, the ±1 SD and ±2 SD bands cover about 68% and 95% of outcomes at each horizon.</p>
+              <p>The underlying BOS prices are unadjusted. The shaded projection uses its own 12-month axis.</p>
+            </details>
+          </div>
           <label class="sb2-line-slider">Inspect month across cards<input type="range" step="1"></label>
+        </section>
+        <section class="sb2-research" aria-label="Company research">
+          <h3>Quick data</h3>
+          <p class="sb2-research-status" role="status">Loading company research…</p>
+          <div class="sb2-research-body" hidden></div>
         </section>
         <section class="sb2-history sb2-valuation" aria-label="Forward valuation chart">
           <h3>Forward P/E and P/B</h3>
@@ -102,6 +119,7 @@
           </figure>
           <p class="sb2-chart-empty" data-valuation-empty hidden>No forward P/E or P/B values in the selected range.</p>
         </section>
+        </div>
         <details class="sb2-history-table">
           <summary>Monthly data table</summary>
           <div class="sb2-table" role="region" tabindex="0" aria-label="Monthly observations. Scroll horizontally for more columns.">
