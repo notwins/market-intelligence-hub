@@ -30,3 +30,37 @@ assert.deepEqual(select('company=MSFT'), ['MSFT']);
 assert.deepEqual(select('companies='), []);
 assert.deepEqual(select('companies='+[...watchlist,'JPM','WMT'].join(',')), watchlist);
 console.log('Stocks BETA: ten-card default, SGD listings last, explicit selections and card limit passed.');
+
+// The archive joins by the verified ISIN and currency, and retains duplicate source rows.
+require('../site/v3-source-engine.js');
+const aceRows = [
+  ['ISIN', 'Security Currency', 'Security Name'],
+  ['SG1L01001701', 'SGD', 'Synthetic primary'],
+  ['SG1L01001701', 'SGD', 'Synthetic duplicate'],
+  ['SG1L01001701', 'USD', 'Synthetic different currency'],
+  ['GB0005405286', 'GBP', 'Synthetic UK listing'],
+  ['SG1L01001702', 'SGD', 'Invalid check digit'],
+];
+aceRows.forEach((row, index) => { row.sourceRow = index + 1; });
+const vm = require('node:vm');
+const fs = require('node:fs');
+const path = require('node:path');
+const context = {
+  USTDecisionImport: {
+    canonicalIsin: globalThis.USTDecisionImport.canonicalIsin,
+    openWorkbook: () => ({
+      sheets: ['Notes', 'ACE'],
+      readSheet(name) { assert.equal(name, 'ACE'); return aceRows; },
+    }),
+  },
+};
+vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../site/ace-listing-match.js'), 'utf8'), context);
+const ace = context.AceListingMatch.open(new ArrayBuffer(0));
+const lookup = (isin, unit) => context.AceListingMatch.match(ace, isin, unit);
+assert.deepEqual(Array.from(lookup('SG1L01001701', 'SGD').rows, row => row.row), [2, 3]);
+assert.equal(lookup('SG1L01001701', 'EUR').state, 'currency');
+assert.deepEqual(Array.from(lookup('SG1L01001701', 'EUR').currencies), ['SGD', 'USD']);
+assert.equal(lookup('GB0005405286', 'GBp').rows[0].currency, 'GBP');
+assert.equal(lookup(null, 'SGD').state, 'unverified');
+assert.equal(lookup('SG1L01001702', 'SGD').state, 'missing');
+console.log('BOS ACE matching: validates ISINs, keeps source rows and checks currencies.');

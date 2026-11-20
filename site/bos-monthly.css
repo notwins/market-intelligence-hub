@@ -1,0 +1,8 @@
+.bos-ace-import { margin:0 0 16px; }
+.bos-ace-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin-top:10px; }
+.bos-ace-actions input { max-width:100%; min-width:0; }
+.sb2-picker .bos-ace-filter { display:flex; align-items:center; gap:7px; margin:9px 0 0; }
+.sb2-picker .bos-ace-filter input { width:auto; }
+.bos-ace-filter[hidden] { display:none; }
+.sb2-security small { flex:none; margin-left:auto; color:var(--accent); }
+#ace-status:empty { display:none; }
