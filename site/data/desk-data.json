@@ -11132,7 +11132,7 @@
       "label": "SGS benchmark 2Y",
       "value": 1.98,
       "unit": "%",
-      "as_of": "2026-11-19",
+      "as_of": "2026-11-20",
       "status": "saved",
       "message": "Saved daily closing observation; not a live quote.",
       "basis": "SGS benchmark closing bid yields quoted by primary dealers, percent per annum. Bills are quoted in yield terms; bond prices are clean SGD per 100 principal. These are benchmark issues, not constant-maturity par estimates.",
@@ -11141,10 +11141,10 @@
       "observed_time": null,
       "source": "Monetary Authority of Singapore, Daily SGS Prices — Closing Levels",
       "source_url": "https://eservices.mas.gov.sg/statistics/fdanet/SgsBenchmarkIssuePrices.aspx",
-      "checked_at": "2026-11-19T11:56:42Z",
+      "checked_at": "2026-11-20T11:56:08Z",
       "last_attempt": null,
       "source_scope": "Append-preserved source-dated daily yields; prices and issue headers retained only where observed. Missing history is not inferred. Issue headers are saved as displayed by MAS at retrieval.",
-      "attribution": "Contains information from Daily SGS Prices accessed on 2026-11-19 from the Monetary Authority of Singapore. Made available under MAS dataset terms. MAS does not endorse this website.",
+      "attribution": "Contains information from Daily SGS Prices accessed on 2026-11-20 from the Monetary Authority of Singapore. Made available under MAS dataset terms. MAS does not endorse this website.",
       "license_url": "https://www.mas.gov.sg/Terms-of-Use.aspx",
       "history": [
         {
@@ -11210,15 +11210,19 @@
         {
           "date": "2026-11-19",
           "value": 1.98
+        },
+        {
+          "date": "2026-11-20",
+          "value": 1.98
         }
       ]
     },
     {
       "id": "sgs-10y",
       "label": "SGS benchmark 10Y",
-      "value": 2.28,
+      "value": 2.27,
       "unit": "%",
-      "as_of": "2026-11-19",
+      "as_of": "2026-11-20",
       "status": "saved",
       "message": "Saved daily closing observation; not a live quote.",
       "basis": "SGS benchmark closing bid yields quoted by primary dealers, percent per annum. Bills are quoted in yield terms; bond prices are clean SGD per 100 principal. These are benchmark issues, not constant-maturity par estimates.",
@@ -11227,10 +11231,10 @@
       "observed_time": null,
       "source": "Monetary Authority of Singapore, Daily SGS Prices — Closing Levels",
       "source_url": "https://eservices.mas.gov.sg/statistics/fdanet/SgsBenchmarkIssuePrices.aspx",
-      "checked_at": "2026-11-19T11:56:42Z",
+      "checked_at": "2026-11-20T11:56:08Z",
       "last_attempt": null,
       "source_scope": "Append-preserved source-dated daily yields; prices and issue headers retained only where observed. Missing history is not inferred. Issue headers are saved as displayed by MAS at retrieval.",
-      "attribution": "Contains information from Daily SGS Prices accessed on 2026-11-19 from the Monetary Authority of Singapore. Made available under MAS dataset terms. MAS does not endorse this website.",
+      "attribution": "Contains information from Daily SGS Prices accessed on 2026-11-20 from the Monetary Authority of Singapore. Made available under MAS dataset terms. MAS does not endorse this website.",
       "license_url": "https://www.mas.gov.sg/Terms-of-Use.aspx",
       "history": [
         {
@@ -11296,6 +11300,10 @@
         {
           "date": "2026-11-19",
           "value": 2.28
+        },
+        {
+          "date": "2026-11-20",
+          "value": 2.27
         }
       ]
     }
