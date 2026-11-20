@@ -70,20 +70,25 @@
     try {
       root.localStorage.setItem(comparisonKey, JSON.stringify({
         columns: columnChoice.value,
-        cards: [...cards.values()].map(({ slot, company }) => ({ slot, ticker: company.ticker }))
+        history: history.settings(),
+        cards: [...cards.values()].map(({ element, slot, company }) => ({
+          slot, ticker: company.ticker, chart: history.cardSettings(element)
+        }))
       }));
     } catch {
       // The comparison still works when browser storage is unavailable.
     }
   }
 
-  function restoreComparison() {
-    let saved;
+  function readComparison() {
     try {
-      saved = JSON.parse(root.localStorage.getItem(comparisonKey));
+      return JSON.parse(root.localStorage.getItem(comparisonKey));
     } catch {
-      return;
+      return null;
     }
+  }
+
+  function restoreComparison(saved) {
     if ([...columnChoice.options].some(option => option.value === saved?.columns)) {
       columnChoice.value = saved.columns;
     }
@@ -94,7 +99,7 @@
       const slot = card?.slot;
       const company = companies.get(card?.ticker);
       if (company && Number.isSafeInteger(slot) && slot > 0 && !cards.has(slot)) {
-        placeCard(slot, company);
+        placeCard(slot, company, { chart: card.chart });
       }
     }
   }
@@ -262,7 +267,7 @@
     });
   }
 
-  function placeCard(slot, company, focus = false) {
+  function placeCard(slot, company, { focus = false, chart } = {}) {
     const existing = cards.get(slot);
     const element = get('sb2-card-template').content.firstElementChild.cloneNode(true);
     const entry = { element, company, slot };
@@ -280,7 +285,7 @@
     }
     cards.set(slot, entry);
     fitCards();
-    history.add(element, company);
+    history.add(element, company, chart);
     paintMonthlyTable(entry, history.range());
     paintResearch(entry);
     element.querySelector('.sb2-remove-card').addEventListener('click', () => {
@@ -322,7 +327,7 @@
     const company = pending;
     origin = null;
     dialog.close();
-    placeCard(slot, company, true);
+    placeCard(slot, company, { focus: true });
     saveComparison();
   });
   dialog.addEventListener('close', () => {
@@ -351,11 +356,15 @@
       get('sb2-workspace').hidden = false;
       download.disabled = false;
       get('sb2-shared-controls').hidden = false;
-      history ??= root.StocksBeta2Charts.mountHistory(data, range =>
-        cards.forEach(card => paintMonthlyTable(card, range)));
+      const saved = readComparison();
+      history ??= root.StocksBeta2Charts.mountHistory(data, {
+        saved: saved?.history,
+        changeRange: range => cards.forEach(card => paintMonthlyTable(card, range)),
+        save: saveComparison
+      });
       rankings ??= root.StocksBeta2Charts.mountRankings(data, { logo, chooseCompany });
       showGroup('global');
-      if (!cards.size) restoreComparison();
+      if (!cards.size) restoreComparison(saved);
       if (!cards.size) placeCard(1, data.securities.find(item => item.group === 'global') ?? data.securities[0]);
     } catch {
       get('sb2-status').textContent = 'Monthly market history could not load.';
