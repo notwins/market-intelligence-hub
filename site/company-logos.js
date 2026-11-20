@@ -2,13 +2,41 @@
 (function(root){'use strict';
 const E=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=value=>String(value||'').normalize('NFKC').trim().toLowerCase();
-const boundary=(text,term)=>new RegExp('(^|[^\\p{L}\\p{N}_])'+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=$|[^\\p{L}\\p{N}_])','iu').test(text);
-function canonical(value,data){const key=String(value||'').trim().toUpperCase();return data.aliases[key]||key;}
-function resolve(value,data){const key=canonical(value,data);return data.companies.find(c=>c.ticker===key)||null;}
+const catalogues=new WeakMap(),patterns=new Map();
+function boundary(text,term,flags='iu'){
+ const key=flags+':'+term;
+ let pattern=patterns.get(key);
+ if(!pattern){
+  pattern=new RegExp('(^|[^\\p{L}\\p{N}_])'+term.replace(/[.*+?^\x24{}()|[\]\\]/g,'\\\x24&')+'(?=\x24|[^\\p{L}\\p{N}_])',flags);
+  patterns.set(key,pattern);
+ }
+ return pattern.test(text);
+}
+function lookup(data){
+ if(!catalogues.has(data)){
+  catalogues.set(data,new Map([...data.companies,...(data.badges||[])].map(c=>[c.ticker,c])));
+ }
+ return catalogues.get(data);
+}
+function canonical(value,data){
+ const key=String(value||'').trim().toUpperCase();
+ return Object.hasOwn(data.aliases,key)?data.aliases[key]:key;
+}
+function resolve(value,data){
+ const item=lookup(data).get(canonical(value,data));
+ return item&&!item.kind?item:null;
+}
+function resolveBadge(value,data){
+ return lookup(data).get(canonical(value,data))||null;
+}
+const compactFxPair=/\b(USD|SGD|JPY|CHF)(USD|SGD|JPY|CHF)\b/g;
+function labelTag(tag,data){
+ return data.tag_map[tag]||data.label_map[norm(tag)]||tag;
+}
 function infer(input,data){
- const found=[];const add=value=>{const c=resolve(value,data);if(c&&!found.includes(c.ticker))found.push(c.ticker);};
+ const found=[];const add=value=>{const c=input.article?resolveBadge(value,data):resolve(value,data);if(c&&!found.includes(c.ticker))found.push(c.ticker);};
  for(const value of input.tickers||[])add(value);
- for(const tag of input.tags||[]){const key=data.tag_map[tag]||data.label_map[norm(tag)];if(key)add(key);else if(resolve(tag,data))add(tag);else{const company=data.companies.find(c=>c.names.some(name=>norm(name)===norm(tag)));if(company)add(company.ticker);}}
+ for(const tag of input.tags||[]){const key=labelTag(tag,data);add(key);if(!resolveBadge(key,data)){const company=data.companies.find(c=>c.names.some(name=>norm(name)===norm(tag)));if(company)add(company.ticker);}}
  const title=String(input.title||'');
  // The local-bank basket is a deliberate editorial mapping, not a generic STI proxy.
  if(/\b(?:STI|Singapore|SG|local)\b.{0,35}\bbanks?\b|\bbanks?\b.{0,35}\b(?:STI|Singapore)\b/i.test(title)||
@@ -18,23 +46,30 @@ function infer(input,data){
   // Short ambiguous tickers (C, V, U, SE, MA...) are accepted only as metadata or $/bracket tokens.
   for(const ticker of [c.ticker,...(c.aliases||[])]){
    if(title.includes('$'+ticker)&&boundary(title,'$'+ticker)||new RegExp('\\('+ticker.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\)').test(title))add(c.ticker);
-   else if(ticker.length>=4&&ticker===ticker.toUpperCase()&&boundary(title,ticker)&&title.includes(ticker))add(c.ticker);
+   else if(!c.explicit_ticker&&ticker.length>=4&&ticker===ticker.toUpperCase()&&boundary(title,ticker)&&title.includes(ticker))add(c.ticker);
+  }
+ }
+ if(input.article){
+  const pairCodes=new Set([...title.matchAll(compactFxPair)].flatMap(pair=>pair.slice(1)));
+  for(const badge of data.badges||[]){
+   const currency=badge.kind==='currency'&&(pairCodes.has(badge.code)||boundary(title,badge.code,'u'));
+   if(currency||badge.names.some(name=>boundary(title,name)))add(badge.ticker);
   }
  }
  return found;
 }
 function html(tickers,data,{size=24,base='assets/company-logos/'}={}){
- const companies=[...new Set(tickers)].map(t=>resolve(t,data)).filter(Boolean);
+ const companies=[...new Map(tickers.map(t=>resolveBadge(t,data)).filter(Boolean).map(c=>[c.ticker,c])).values()];
  if(!companies.length)return '';
- return '<span class="mih-company-logos" data-logo-group="1" data-no-ticker-links style="--company-logo-size:'+([20,24,28,32,40].includes(size)?size:24)+'px">'+companies.map(c=>'<span class="mih-company-logo" data-logo-company="'+E(c.ticker)+'" role="img" aria-label="'+E(c.name)+' logo" title="'+E(c.name)+'"><img src="'+E(base+c.file)+'" alt="" width="64" height="64" loading="lazy" decoding="async"><span class="mih-logo-fallback" aria-hidden="true" hidden>'+E(c.ticker.slice(0,4))+'</span></span>').join('')+'</span>';
+ return '<span class="mih-company-logos" data-logo-group="1" data-no-ticker-links style="--company-logo-size:'+([20,24,28,32,40].includes(size)?size:24)+'px">'+companies.map(c=>'<span class="mih-company-logo" data-logo-company="'+E(c.ticker)+'" role="img" aria-label="'+E(c.label||c.name+' logo')+'" title="'+E(c.label||c.name)+'"><img src="'+E(base+c.file)+'" alt="" width="'+(c.width||64)+'" height="'+(c.height||64)+'" loading="lazy" decoding="async"><span class="mih-logo-fallback" aria-hidden="true" hidden>'+E(c.code||c.ticker.slice(0,4))+'</span></span>').join('')+'</span>';
 }
-const api={canonical,resolve,infer,html};root.CompanyLogos=api;if(typeof module!=='undefined')module.exports=api;
+const api={canonical,resolve,resolveBadge,infer,html};root.CompanyLogos=api;if(typeof module!=='undefined')module.exports=api;
 if(!root.document)return;
 const doc=root.document,script=doc.currentScript?.src;if(!script)return;
 const assetBase=new URL('assets/company-logos/',script).href;
 // UI card families, including plain article cards and nested Reuters/timeline rows.
 // A card may only use its own identity: never borrow a descendant card's heading.
-const selector='article,.card,.news-item,.watch-mini,.instrument[data-company],.latest-quick-card,.featured-research,.company-news-item,.er-company,.mp-card,.publication-entry,.gs-result,.watchlist-teaser,.ci-row,.sl-series-card,.sl-card,.result,.catalog-row,.security-row,tr[data-logo-ticker]';
+const selector='article,dialog.company-news-dialog,.card,.news-item,.watch-mini,.instrument[data-company],.latest-quick-card,.featured-research,.company-news-item,.er-company,.mp-card,.publication-entry,.gs-result,.watchlist-teaser,.ci-row,.sl-series-card,.sl-card,.result,.catalog-row,.security-row,tr[data-logo-ticker]';
 let data,observer,scheduled=false;const fingerprints=new WeakMap();
 const values=(node,key)=>{try{const v=JSON.parse(node.dataset[key]||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[];}catch{return [];}};
 function own(card,query){return Array.from(card.querySelectorAll(query)).filter(n=>n.closest(selector)===card&&!n.closest('[data-logo-group]'));}
@@ -53,7 +88,7 @@ function enhance(card){
  const fingerprint=JSON.stringify([tickers,tags,heading?.textContent||'',companyCard]);
  const prior=fingerprints.get(card);
  if(prior?.fingerprint===fingerprint&&prior.target===target&&(!prior.group||prior.group.isConnected))return;
- let names=infer({tickers,tags,title:heading?.textContent||''},data);
+ let names=infer({tickers,tags,title:heading?.textContent||'',article:!companyCard},data);
  // A chart embedded in an already identified company card needs no repeated badge.
  if(card.matches('.mp-card,.er-range-card')&&card.parentElement?.closest('.watchlist-card,.company-card,.ed-company,.instrument,.er-company'))names=[];
  // Remove only badge groups owned by this card.
@@ -77,6 +112,6 @@ function enhance(card){
 }
 function scan(){scheduled=false;observer?.disconnect();try{doc.querySelectorAll(selector).forEach(enhance);}finally{observer?.observe(doc.body,{childList:true,subtree:true,attributes:true,attributeFilter:['data-ticker','data-company','data-price-symbol','data-mih-tag','data-mih-tickers','data-mih-tags']});}}
 function schedule(records){if(records?.length&&records.every(r=>r.target.nodeType===1&&r.target.closest?.('[data-logo-group]')))return;if(!scheduled){scheduled=true;root.requestAnimationFrame(scan);}}
-async function start(){try{const response=await root.fetch(new URL('company-logos.json',assetBase));if(!response.ok)return;data=await response.json();if(data.schema_version!==1||data.companies.length!==150)return;api.data=data;api.refresh=schedule;observer=new MutationObserver(schedule);scan();}catch{/* Logo failure must never hide cards or interrupt the content reader. */}}
+async function start(){try{const response=await root.fetch(new URL('company-logos.json',assetBase));if(!response.ok)return;data=await response.json();if(data.schema_version!==1||!Array.isArray(data.companies)||!data.companies.length)return;api.data=data;api.refresh=schedule;observer=new MutationObserver(schedule);scan();doc.dispatchEvent(new Event('mih-logo-catalogue'));}catch{/* Logo failure must never hide cards or interrupt the content reader. */}}
 if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })(typeof window!=='undefined'?window:globalThis);
