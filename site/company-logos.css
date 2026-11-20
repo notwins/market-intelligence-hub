@@ -32,3 +32,6 @@
 .watchlist-teaser .mih-company-logo{--company-logo-size:24px!important}
 tr[data-logo-ticker] .mih-company-avatar{vertical-align:middle;margin:0 7px 0 0}
 .gs-result .mih-company-logo{padding:2px}
+
+.mih-related-review{grid-column:1/-1;flex-basis:100%;margin-top:.85rem;padding-top:.55rem;border-top:1px solid #cbd5d1;font:600 .82rem/1.4 system-ui,sans-serif}
+.mih-related-review a{color:#245851;text-underline-offset:3px}
