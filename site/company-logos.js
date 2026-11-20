@@ -38,13 +38,31 @@ const selector='article,.card,.news-item,.watch-mini,.instrument[data-company],.
 let data,observer,scheduled=false;const fingerprints=new WeakMap();
 const values=(node,key)=>{try{const v=JSON.parse(node.dataset[key]||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[];}catch{return [];}};
 function own(card,query){return Array.from(card.querySelectorAll(query)).filter(n=>n.closest(selector)===card&&!n.closest('[data-logo-group]'));}
+const jacketReview = "https://notwins.github.io/market-intelligence-content/research/standalone-risk-inside-the-jacket-2026-11-18/";
+function relatedReview(card, names) {
+ const footer = card.querySelector(':scope > .mih-related-review');
+ if (!names.includes('NVDA') || card.matches('tr,a,button,.news-item,.company-news-item') || card.closest('a,button')) {
+  footer?.remove();
+  return;
+ }
+ if (footer) return;
+ if (card.parentElement?.closest('article[data-company="NVDA"],article[data-ticker="NVDA"],article[data-stock="NVDA"]')) return;
+ if ([...card.querySelectorAll('a[href]')].some(a => a.href.replace(/index\.html$/, '') === jacketReview)) return;
+ const box = doc.createElement('div');
+ box.className = 'mih-related-review';
+ const a = doc.createElement('a');
+ a.href = jacketReview;
+ a.textContent = 'My Thoughts · The Risk Inside the Jacket';
+ box.append(a);
+ card.append(box);
+}
 function enhance(card){
  const heading=own(card,'h1,h2,h3,h4,h5,h6,.company-news-title,.gs-copy>strong,.security-title,.security b,.sl-share strong,.mp-quote>div>strong,.ci-identity>b,.instrument-head strong')[0]||own(card,':scope > a')[0];
  const tags=[...values(card,'mihTags'),card.dataset.mihTag||''];
  for(const node of own(card,'.mu-card-tags [data-mih-tag],.tags [data-mih-tag],.result-tags [data-mih-tag],.search-tags [data-mih-tag],.bs-identity[data-mih-tag],.er-company-chip[data-mih-tag]'))tags.push(node.dataset.mihTag);
  for(const node of own(card,'.mu-card-tag,.tags .tag,.result-tags .tag-button,.search-tags .tag-button'))tags.push(node.textContent);
  const tickers=values(card,'mihTickers');
- for(const key of ['ticker','company','companyTicker','priceSymbol','logoTicker'])if(card.dataset[key])tickers.push(card.dataset[key]);
+ for(const key of ['ticker','stock','company','companyTicker','priceSymbol','logoTicker'])if(card.dataset[key])tickers.push(card.dataset[key]);
  for(const node of own(card,'.ticker,.bs-identity,.er-company-chip,[data-quote]'))tickers.push(node.dataset.quote||node.textContent.trim());
  if(card.classList.contains('ed-company')&&card.id.startsWith('earnings-'))tickers.push(card.id.slice(9));
  const companyCard=card.matches('.watchlist-card[data-ticker],.ed-company,.company-news-card,.company-card,.instrument[data-company],.watch-mini,.er-company,.bs-card,.sl-card,.sl-series-card,.catalog-row,.security-row,.mp-card,.ci-row,.er-range-card,tr[data-logo-ticker]');
@@ -52,7 +70,7 @@ function enhance(card){
    own(card,':scope > .meta,:scope > .mu-eyebrow,:scope > .featured-date,:scope > .date,:scope > small,:scope > time,:scope > .eyebrow,:scope > .watchlist-label,.company-news-meta,.publication-meta,.gs-date,.result-date,.sr-card-top')[0]||null;
  const fingerprint=JSON.stringify([tickers,tags,heading?.textContent||'',companyCard]);
  const prior=fingerprints.get(card);
- if(prior?.fingerprint===fingerprint&&prior.target===target&&(!prior.group||prior.group.isConnected))return;
+ if(prior?.fingerprint===fingerprint&&prior.target===target&&(!prior.group||prior.group.isConnected)){relatedReview(card,prior.names);return;}
  let names=infer({tickers,tags,title:heading?.textContent||''},data);
  // A chart embedded in an already identified company card needs no repeated badge.
  if(card.matches('.mp-card,.er-range-card')&&card.parentElement?.closest('.watchlist-card,.company-card,.ed-company,.instrument,.er-company'))names=[];
@@ -73,7 +91,8 @@ function enhance(card){
  if(card.matches('.hourly-story')&&heading&&!card.querySelector(':scope > .mih-logo-source')){
   const source=doc.createElement('span');source.className='mih-logo-source';source.textContent='Reuters';heading.before(source);
  }
- fingerprints.set(card,{fingerprint,target,group});
+ relatedReview(card,names);
+ fingerprints.set(card,{fingerprint,target,group,names});
 }
 function scan(){scheduled=false;observer?.disconnect();try{doc.querySelectorAll(selector).forEach(enhance);}finally{observer?.observe(doc.body,{childList:true,subtree:true,attributes:true,attributeFilter:['data-ticker','data-company','data-price-symbol','data-mih-tag','data-mih-tickers','data-mih-tags']});}}
 function schedule(records){if(records?.length&&records.every(r=>r.target.nodeType===1&&r.target.closest?.('[data-logo-group]')))return;if(!scheduled){scheduled=true;root.requestAnimationFrame(scan);}}
