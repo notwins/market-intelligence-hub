@@ -3,7 +3,24 @@ const C=window.SIBetaCore,E=C.escape,$=id=>document.getElementById(id),form=$('s
 let pages=[],watch=[],activeId='',dirty=false,list='all',assets={},loading=new Set(),revisions={},busy=false,removed=null,storageOK=true,pdfURL='';
 const WATERMARK_KEY='market-si-beta2-logo-watermark',LOGO_BASE='assets/company-logos/';
 let showWatermarks=true,logoIndexPromise,chart=C.chartOptions();
-const CHART_KEY='market-si-beta2-chart';
+const CHART_KEY='market-si-beta2-chart',MOA_KEY='market-si-beta2-moa-v1';
+let moaLibrary=null;
+function moaListing(ticker,currency){
+ const id=String(ticker||'').trim().toUpperCase().replace(/\s+EQUITY$/,'').replace(/\s+/g,' ').replace(/^0+(\d+ HK)$/,'$1');
+ return /^[A-Z0-9.\/-]{1,16} [A-Z]{2}$/.test(id)&&/^[A-Z]{3}$/.test(currency||'')?id+'|'+currency:'';
+}
+function parseMoa(source){
+ if(source?.version!==1||typeof source.source!=='string'||!source.source.trim()||source.source.length>80||
+  !Array.isArray(source.records)||!source.records.length||source.records.length>10000)throw Error('Choose a valid private MOA file.');
+ const rates=new Map();
+ for(const record of source.records){
+  const key=moaListing(record?.ticker,record?.currency);
+  if(!key||rates.has(key)||!C.validMoa(record.moaPct))throw Error('The MOA file contains an invalid or duplicate listing.');
+  rates.set(key,record.moaPct);
+ }
+ return {label:source.source.trim(),rates};
+}
+try{const saved=localStorage.getItem(MOA_KEY);if(saved)moaLibrary=parseMoa(JSON.parse(saved));}catch{/* Allow a fresh private import. */}
 try{chart=C.chartOptions(JSON.parse(localStorage.getItem(CHART_KEY)||'null'));}catch{/* Keep the defaults. */}
 const logoImages=new Map();
 try{showWatermarks=localStorage.getItem(WATERMARK_KEY)!=='off';}catch{/* The toggle can still work for this session. */}
@@ -61,19 +78,27 @@ async function companyLogo(...tickers){
  return logoImages.get(file);
 }
 function renderPage(page,data,number,total,watermarks=showWatermarks,links){
- return C.svg(page,data,number,total,{showWatermarks:watermarks,links,chart});
+ const withMoa=Object.fromEntries(page.shares.map(s=>{
+  const info=data[s.symbol]||{};
+  return [s.symbol,moaLibrary?{...info,moaPct:moaLibrary.rates.get(info.moaKey),moaSource:moaLibrary.label}:info];
+ }));
+ return C.svg(page,withMoa,number,total,{showWatermarks:watermarks,links,chart});
 }
 function invalidatePDF(){if(pdfURL)URL.revokeObjectURL(pdfURL);pdfURL='';$('pdf-ready').hidden=true;for(const name of ['download-pdf','open-pdf'])$(name).removeAttribute('href');}
 function protectEdits(){if(busy)return true;if(!dirty)return false;notice('Apply or discard your changes in Review & export before continuing.');$('pending-edits').scrollIntoView({behavior:'smooth',block:'center'});return true;}
-function normalize(p){if(!p||typeof p!=='object'||!Array.isArray(p.shares)||p.shares.length>4)throw Error('Invalid collection page.');const b=C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])b[k]=C.num(p[k]);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])if(typeof p[k]==='string')b[k]=p[k].slice(0,k==='notes'?180:50);b.tenorUnit='months';b.firstStep=p.firstStep===undefined?2:Number(p.firstStep);b.id=typeof p.id==='string'?p.id.slice(0,80):id();b.shares=p.shares.map(s=>({symbol:C.symbol(s.symbol),fixing:C.num(s.fixing),name:String(s.name||'').slice(0,60),description:String(s.description||'').slice(0,280)}));if(p.source&&/^SI-\d{3,}$/.test(p.source.reference))b.source={reference:p.source.reference,date:/^\d{4}-\d{2}-\d{2}$/.test(p.source.date)?p.source.date:'',rounded:true,review:!!p.source.review};return b;}
+function normalize(p){if(!p||typeof p!=='object'||!Array.isArray(p.shares)||p.shares.length>4)throw Error('Invalid collection page.');const b=C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])b[k]=C.num(p[k]);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])if(typeof p[k]==='string')b[k]=p[k].slice(0,k==='notes'?180:50);b.tenorUnit='months';b.firstStep=p.firstStep===undefined?2:Number(p.firstStep);b.id=typeof p.id==='string'?p.id.slice(0,80):id();b.shares=p.shares.map(s=>({symbol:C.symbol(s.symbol),fixing:C.num(s.fixing),moaPct:C.num(s.moaPct),name:String(s.name||'').slice(0,60),description:String(s.description||'').slice(0,280)}));if(p.source&&/^SI-\d{3,}$/.test(p.source.reference))b.source={reference:p.source.reference,date:/^\d{4}-\d{2}-\d{2}$/.test(p.source.date)?p.source.date:'',rounded:true,review:!!p.source.review};return b;}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify({version:1,pages,watch,activeId}));storageOK=true;}catch{storageOK=false;notice('Browser storage is unavailable. Use Save collection to keep these pages.');}}
 function restore(){try{const raw=localStorage.getItem(KEY);if(!raw)return;if(raw.length>500000)throw Error();const s=JSON.parse(raw);if(s.version!==1||!Array.isArray(s.pages)||s.pages.length>LIMIT)throw Error();pages=s.pages.map(normalize);if(new Set(pages.map(p=>p.id)).size!==pages.length)throw Error();watch=Array.isArray(s.watch)?s.watch.filter(r=>/^SI-\d{3,}$/.test(r)).slice(0,3000):[];activeId=pages.some(p=>p.id===s.activeId)?s.activeId:pages[0]?.id||'';}catch{pages=[];notice('Saved collection could not be read. It has not been overwritten; you can load a collection backup.');}}
 $('share-inputs').innerHTML=Array.from({length:4},(_,i)=>`<label><span class="share-number">SHARE ${i+1}${i?' · OPTIONAL':''}</span><input name="share${i}" list="share-suggestions" autocomplete="off" maxlength="30" placeholder="${['NVDA','MSFT','939 HK','AMZN'][i]}" aria-label="Share ${i+1}"></label>`).join('');
-$('share-details').innerHTML=Array.from({length:4},(_,i)=>`<div class="share-detail"><strong>Share ${i+1} details</strong><label>Manual reference price<input name="fixing${i}" type="number" min="0.000001" step="any" placeholder="Use dated close"></label><label>Company name<input name="name${i}" maxlength="60" placeholder="From feed when available"></label><label>Company description<textarea name="description${i}" rows="2" maxlength="280" placeholder="Optional override; matched profile used when blank"></textarea></label></div>`).join('');
-function fill(p=C.blank()){for(const k of ['ko','ki','strike','step','months','coupon','currency','tenorUnit','couponBasis','kiType','firstStep','date','issuer','notes'])form.elements[k].value=p[k]??'';for(let i=0;i<4;i++){const s=p.shares[i]||{};form.elements['share'+i].value=s.symbol||'';form.elements['fixing'+i].value=s.fixing??'';form.elements['name'+i].value=s.name||'';form.elements['description'+i].value=s.description||'';}dirty=false;$('form-errors').textContent='';$('apply-page').textContent=active()?'Update one-pager':'Create one-pager';$('editor-title').textContent=active()?`Edit one-pager ${pages.indexOf(active())+1}`:'Create a one-pager';$('editor-note').textContent=p.source?`Based on ${p.source.reference}. Imported terms remain rounded and photo-unverified.`:'Start with one to four shares. All entered terms stay on this device.';}
-function read(){const p=active()?structuredClone(active()):C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])p[k]=C.num(form.elements[k].value);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])p[k]=form.elements[k].value.trim();p.firstStep=Number(form.elements.firstStep.value);p.shares=[];for(let i=0;i<4;i++){const s=form.elements['share'+i].value.trim();if(s)p.shares.push({symbol:C.symbol(s),fixing:C.num(form.elements['fixing'+i].value),name:form.elements['name'+i].value.trim(),description:form.elements['description'+i].value.trim()});}return p;}
+$('share-details').innerHTML=Array.from({length:4},(_,i)=>`<div class="share-detail"><strong>Share ${i+1} details</strong><label>Manual reference price<input name="fixing${i}" type="number" min="0.000001" step="any" placeholder="Use dated close"></label><label>MOA margin (%)<input name="moa${i}" type="number" min="0" max="100" step="any" placeholder="Use matched private rate"></label><label>Company name<input name="name${i}" maxlength="60" placeholder="From feed when available"></label><label>Company description<textarea name="description${i}" rows="2" maxlength="280" placeholder="Optional override; matched profile used when blank"></textarea></label></div>`).join('');
+function fill(p=C.blank()){for(const k of ['ko','ki','strike','step','months','coupon','currency','tenorUnit','couponBasis','kiType','firstStep','date','issuer','notes'])form.elements[k].value=p[k]??'';for(let i=0;i<4;i++){const s=p.shares[i]||{};form.elements['share'+i].value=s.symbol||'';form.elements['fixing'+i].value=s.fixing??'';form.elements['moa'+i].value=s.moaPct??'';form.elements['name'+i].value=s.name||'';form.elements['description'+i].value=s.description||'';}dirty=false;$('form-errors').textContent='';$('apply-page').textContent=active()?'Update one-pager':'Create one-pager';$('editor-title').textContent=active()?`Edit one-pager ${pages.indexOf(active())+1}`:'Create a one-pager';$('editor-note').textContent=p.source?`Based on ${p.source.reference}. Imported terms remain rounded and photo-unverified.`:'Start with one to four shares. All entered terms stay on this device.';}
+function read(){const p=active()?structuredClone(active()):C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])p[k]=C.num(form.elements[k].value);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])p[k]=form.elements[k].value.trim();p.firstStep=Number(form.elements.firstStep.value);p.shares=[];for(let i=0;i<4;i++){const s=form.elements['share'+i].value.trim();if(s)p.shares.push({symbol:C.symbol(s),fixing:C.num(form.elements['fixing'+i].value),moaPct:C.num(form.elements['moa'+i].value),name:form.elements['name'+i].value.trim(),description:form.elements['description'+i].value.trim()});}return p;}
 function buttons(){const p=active();
  $('logo-watermark').disabled=busy;
+ $('load-moa').disabled=busy;
+ $('clear-moa').disabled=busy;
+ $('clear-moa').hidden=!moaLibrary;
+ $('moa-status').textContent=moaLibrary?`${moaLibrary.rates.size} rates loaded · ${moaLibrary.label} · private to this browser.`:'Load your private MOA file once, or enter a margin on any share.';
  $('chart-display').disabled=busy;
  $('chart-years').value=String(chart.years);
  for(const key of C.overlayKeys)$('chart-'+key).checked=chart[key];
@@ -83,14 +108,17 @@ $('pdf-one').disabled=!p||dirty||busy||loading.has(p?.id);$('pdf-all').disabled=
 function preflight(p){const messages=[];if(!p||loading.has(p.id)){$('data-check').hidden=true;return;}const data=assets[p.id]||{},missingPrice=[],missingHistory=[],missingDescription=[];for(const s of p.shares){const d=data[s.symbol]||{};if(C.reference(p,s,d).value===null)missingPrice.push(s.symbol);if(C.chartWindow(d,chart).prices.length<2)missingHistory.push(s.symbol);if(!(s.description||d.description))missingDescription.push(s.symbol);}if(missingPrice.length)messages.push('Reference price unavailable: '+missingPrice.join(', ')+'. Enter a manual reference price or choose a date with a saved close.');if(missingHistory.length)messages.push('Price history unavailable: '+missingHistory.join(', ')+'.');if(missingDescription.length)messages.push('Company description not supplied: '+missingDescription.join(', ')+'. Add it in share details.');$('data-check').hidden=!messages.length;$('data-check-text').textContent=messages.join(' ')+' The PDF will retain these gaps.';}
 function render(){const p=active();$('page-tabs').innerHTML=pages.map((x,i)=>`<button role="tab" id="tab-${E(x.id)}" aria-controls="preview" aria-selected="${x.id===activeId}" tabindex="${x.id===activeId?0:-1}" data-page="${E(x.id)}" title="${E(x.shares.map(s=>s.symbol).join(' / '))}" aria-label="Page ${i+1}: ${E(x.shares.map(s=>s.symbol).join(' / '))}">${i+1}</button>`).join('');if(p){$('preview').innerHTML=renderPage(p,assets[p.id]||{},pages.indexOf(p)+1,pages.length);$('preview').setAttribute('aria-labelledby','tab-'+p.id);}else{$('preview').removeAttribute('aria-labelledby');$('preview').innerHTML='<div class="empty-preview"><span>▤</span><h3>Your first one-pager starts here</h3><p>Complete the terms above or choose “Add page” from the reference list below.</p></div>';}
  $('preview-status').classList.toggle('dirty',dirty);$('preview-status').textContent=dirty?'The preview shows the last applied terms. Apply changes below before exporting.':p?(loading.has(p.id)?'Loading dated share data…':`Page ${pages.indexOf(p)+1} of ${pages.length} · ${p.shares.map(s=>s.symbol).join(' + ')} · ${storageOK?'saved in this browser':'not saved; download a collection backup'}`):'No pages yet.';preflight(p);buttons();}
-async function chartHistory(item,valuation){
+function reviewedListing(item){
  if(!item)return null;
- const row=valuation?.row,keys=[item.ticker,...(item.aliases||[])];
+ const keys=[item.ticker,...(item.aliases||[])];
  const mappings=(window.BOSEquity?.reviewedListings||[]).filter(m=>m.verified===true&&m.currency===item.currency&&
   (!m.listingId||m.listingId===item.id)&&keys.includes(m.ticker));
  const matches=[...new Set(mappings.map(m=>m.instrumentId))];
- const listing=row||(matches.length===1?{instrumentId:matches[0],currency:item.currency}:null);
- if(!listing||listing.currency!==item.currency)return null;
+ return matches.length===1?{instrumentId:matches[0],currency:item.currency}:null;
+}
+async function chartHistory(item,valuation){
+ const listing=valuation?.row||reviewedListing(item);
+ if(!listing||listing.currency!==item?.currency)return null;
  const [history,editions]=await Promise.all([
   window.ShareLabData?.historyFor({id:`bb:${listing.instrumentId}|${listing.currency}`,currency:listing.currency}).catch(()=>null),
   window.BOSEquity?.valuationHistoryFor?.(item)?.catch(()=>[]),
@@ -107,9 +135,9 @@ async function enrich(p){
  const result={},wantOverlays=C.overlayKeys.some(key=>chart[key]);
  await Promise.all(p.shares.map(async share=>{
   const ticker=C.symbol(share.symbol);
-  const profile=window.ShareStaticData?.find(ticker);
-  const facts=profile?{name:profile.name,description:window.ShareStaticData.summary(profile),staticProfile:profile,profileImportedOn:window.ShareStaticData.metadata().importedOn}:{};
   const item=window.MarketPrices.resolve(ticker)||window.BOSEquity?.itemFor(ticker);
+  const profile=window.ShareStaticData?.find(item||ticker);
+  const facts=profile?{name:profile.name,description:window.ShareStaticData.summary(profile),staticProfile:profile,profileImportedOn:window.ShareStaticData.metadata().importedOn}:{};
   const logo=companyLogo(item?.ticker,profile?.publicTicker,ticker);
   let market,valuation=window.BOSEquity?.valuationFor(item);
   const overlays=wantOverlays?bounded(chartHistory(item,valuation),'Valuation history timed out.',15000).catch(()=>null):null;
@@ -128,7 +156,9 @@ async function enrich(p){
   }catch{
    market={error:'Exact listing history unavailable. No substitute listing is used.'};
   }
-  result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,
+  const listing=valuation?.row||reviewedListing(item);
+  const moaKey=moaListing(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency);
+  result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,moaKey,
    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
   };
  }));
@@ -141,12 +171,33 @@ async function enrich(p){
 function select(pageId){if(protectEdits())return;activeId=pageId;fill(active());persist();render();}
 function add(p){if(pages.length>=LIMIT){notice(`A collection can contain up to ${LIMIT} pages. Save it before starting another collection.`);return;}invalidatePDF();p.id=id();pages.push(p);activeId=p.id;loading.add(p.id);fill(p);persist();render();enrich(p);$('preview-title').scrollIntoView({behavior:'smooth',block:'start'});}
 function changed(){dirty=true;invalidatePDF();$('editor-note').textContent=active()?'Edited terms will apply when you choose Update one-pager.':'Complete the terms, then create your one-pager.';buttons();$('preview-status').textContent='The preview shows the last applied terms. Apply changes below before exporting.';$('preview-status').classList.add('dirty');}
-form.addEventListener('input',changed);form.addEventListener('change',changed);
+form.addEventListener('input',event=>{
+ const slot=event?.target?.name?.match(/^share([0-3])$/)?.[1],prior=active()?.shares[slot];
+ if(prior&&C.symbol(event.target.value)!==prior.symbol)form.elements['moa'+slot].value='';
+ changed();
+});form.addEventListener('change',changed);
 form.addEventListener('submit',e=>{e.preventDefault();if(busy)return;const p=read(),errors=C.validate(p);if(errors.length){$('form-errors').textContent=errors.join(' ');$('form-errors').scrollIntoView({behavior:'smooth',block:'center'});return;}invalidatePDF();if(active()){const index=pages.findIndex(x=>x.id===activeId);p.id=activeId;pages[index]=p;loading.add(p.id);fill(p);persist();render();enrich(p);}else add(p);});
 $('apply-pending').addEventListener('click',()=>form.requestSubmit());
 $('discard-pending').addEventListener('click',()=>{fill(active());render();});
 $('edit-details').addEventListener('click',()=>{document.querySelector('.more-terms').open=true;$('share-details').scrollIntoView({behavior:'smooth',block:'start'});});
 $('zoom-preview').addEventListener('click',()=>{const zoom=$('preview').classList.toggle('actual-size');$('zoom-preview').setAttribute('aria-pressed',String(zoom));$('zoom-preview').textContent=zoom?'Fit page':'Enlarge preview';});
+$('load-moa').addEventListener('change',async event=>{
+ const input=event.target,file=input.files?.[0];
+ if(!file||busy)return;
+ try{
+  if(file.size>1000000)throw Error('Choose a private MOA file under 1 MB.');
+  const raw=await file.text(),next=parseMoa(JSON.parse(raw));
+  if(busy)return;
+  localStorage.setItem(MOA_KEY,raw);
+  moaLibrary=next;invalidatePDF();render();
+ }catch(e){notice(e.message||'The private MOA file could not be loaded.');}
+ finally{input.value='';}
+});
+$('clear-moa').addEventListener('click',()=>{
+ if(busy)return;
+ try{localStorage.removeItem(MOA_KEY);}catch{notice('The private MOA file could not be cleared.');return;}
+ moaLibrary=null;invalidatePDF();render();
+});
 $('chart-display').addEventListener('change',()=>{
  if(busy)return;
  const wasEnabled=C.overlayKeys.some(key=>chart[key]);

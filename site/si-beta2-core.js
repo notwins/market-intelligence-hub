@@ -4,6 +4,7 @@ const W=800,H=1132,navy='#122b43',blue='#3879ad',muted='#526477',border='#ccd6df
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>v===''||v===null||v===undefined?null:Number.isFinite(Number(v))?Number(v):null;
 const fmt=(v,d=2)=>num(v)===null?'Not supplied':Number(v).toLocaleString('en-US',{maximumFractionDigits:d});
+const validMoa=v=>Number.isFinite(v)&&v>=0&&v<=100;
 const pct=v=>num(v)===null?'Not supplied':fmt(v,4)+'%';
 const clean=(v,n=160)=>String(v??'').trim().slice(0,n);
 function symbol(v){v=clean(v,30).toUpperCase();if(/^\d{1,4}\s+HK$/.test(v))return v.split(/\s/)[0].padStart(4,'0')+'.HK';return v.replace(/\s+(?:UQ|UN|US)$/,'');}
@@ -11,6 +12,7 @@ function blank(){return {id:'',shares:[],ko:null,ki:null,strike:null,step:null,m
 function fromReference(r){return {...blank(),shares:r.shares.map(t=>({symbol:t,fixing:null,name:'',description:''})),ko:r.ko_pct,ki:r.ki_pct,strike:r.strike_pct,months:r.tenor_source_value,coupon:r.coupon_pct,currency:r.currency,tenorUnit:'months',couponBasis:r.coupon_basis||'unconfirmed',kiType:'Unconfirmed',source:{reference:r.reference,date:r.source_date||'',rounded:true,review:!!r.additional_review},date:''};}
 function validate(p){const issues=[];if(!p||typeof p!=='object')return ['Invalid page'];if(!Array.isArray(p.shares)||p.shares.length<1||p.shares.length>4)issues.push('Enter one to four shares.');
  const shares=p.shares||[];if(shares.some(s=>!s||!/^[-A-Z0-9.^ ]{1,30}$/.test(s.symbol||'')))issues.push('Use a valid ticker for each share.');if(new Set(shares.map(s=>symbol(s.symbol))).size!==shares.length)issues.push('Each share should appear once.');
+ if(shares.some(s=>s?.moaPct!=null&&!validMoa(s.moaPct)))issues.push('Each MOA margin must be blank or between 0% and 100%.');
  for(const [key,label,lo,hi] of [['ko','KO',0.01,200],['ki','KI',0.01,200],['strike','Strike',0.01,200],['coupon','Coupon',0,100],['months','Months / tenor',1,120]])if(num(p[key])===null||p[key]<lo||p[key]>hi)issues.push(`${label} must be between ${lo} and ${hi}.`);
  if(num(p.months)!==null&&!Number.isInteger(Number(p.months)))issues.push('Enter a whole number of months / tenor units.');
  if(p.step!==null&&(num(p.step)===null||p.step<0||p.step>100))issues.push('Step-down must be blank or between 0 and 100 percentage points.');
@@ -143,8 +145,12 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   if(chart.target)text(lx,275,'B/H/S = Buy/Hold/Sell · archive shown where share basis matches',8,muted);
  }
  const start=hasOverlays?287:270,available=998-start,gap=8,block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length);
+ const marginSources=new Set();
  p.shares.forEach((s,i)=>{const d=enrichment[s.symbol]||{},y=start+i*(block+gap),r=reference(p,s,d),ls=levels(p,r.value),name=s.name||d.name||s.symbol;
- rect(28,y,744,block,'#fff');rect(28,y,744,23,navy,navy);fitted(37,y+16,clean(name,69),535,11,'#fff',true);fitted(762,y+16,s.symbol,175,10,'#fff',false,'end');
+ rect(28,y,744,block,'#fff');rect(28,y,744,23,navy,navy);fitted(37,y+16,clean(name,69),445,11,'#fff',true);fitted(762,y+16,s.symbol,110,10,'#fff',false,'end');
+ const margin=validMoa(s.moaPct)?s.moaPct:d.moaPct;
+ if(validMoa(margin))marginSources.add(validMoa(s.moaPct)?'manual entry':d.moaSource||'private lookup');
+ fitted(635,y+16,'MOA margin '+(validMoa(margin)?pct(margin):'—'),132,9,'#fff',true,'end');
  const chartX=36,chartY=y+29,plotLeft=chartX+35,plotTop=chartY+13,plotBottom=y+block-(hasOverlays?32:22);
  const {end,from,selected,series,prices:pts,incompatibleArchive}=chartWindow(d,chart);
  const ratios=[...(series.pe||[]),...(series.pb||[])].map(p=>p.value);
@@ -234,6 +240,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  const foot=1010;line(28,foot,772,foot);paragraph(28,foot+15,p.notes||'Indicative reference only. This sheet is not an issuer term sheet, offer or investment recommendation.',140,2,9,navy);
  paragraph(28,foot+44,p.source?`Draft based on ${p.source.reference}, source date ${p.source.date||'not shown'}. Imported levels are rounded and photo-unverified; edited terms require verification. Coupon basis and tenor units remain as labelled.`:'Manual terms are user-entered and unverified. Confirm coupon basis, KO observations, step-down timing, KI conditions, settlement and issuer terms.',155,2,8);
  paragraph(28,foot+71,'Charts show source closes, not product returns. Barriers are illustrative; capital loss is possible. Company profiles are shortened excerpts from supplied Excel snapshot; observation date unavailable. Full descriptions are on share cards.',155,2,8);
+ if(marginSources.size)paragraph(28,foot+94,'MOA margin source · '+[...marginSources].join(' / '),155,2,8);
  out.push('</svg>');return out.join('');}
 async function pdfFromImages(images,PDFLib,linksByPage=[]){
  if(!images.length)throw Error('Create a page first.');
@@ -256,5 +263,5 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
  }
  return doc.save();
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
