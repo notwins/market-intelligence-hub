@@ -250,15 +250,20 @@
     return { forIndex: index => x(time(dates[index][2])), coneStart: cone ? historicalRight : Infinity };
   }
 
-  function mountHistory(data, changeRange) {
+  function mountHistory(data, { saved, changeRange, save }) {
     const doc = root.document;
     const from = doc.getElementById('sb2-from'), to = doc.getElementById('sb2-to');
     const maximum = data.months.length - 1;
-    const state = { from: 0, to: maximum, cursor: maximum, axis: 'year' };
+    let start = data.months.findIndex(([month]) => month === saved?.from);
+    let end = data.months.findIndex(([month]) => month === saved?.to);
+    if (start < 0) start = 0;
+    if (end < 0) end = maximum;
+    if (start > end) [start, end] = [0, maximum];
+    const state = { from: start, to: end, cursor: end, axis: saved?.axis === 'quarter' ? 'quarter' : 'year' };
     const cards = new Map();
     const choices = data.months.map(([month], i) => '<option value="' + i + '">' + monthLabel(month) + '</option>').join('');
     from.innerHTML = to.innerHTML = choices;
-    to.value = String(maximum);
+    syncRange();
     let frame, targets, targetRequest;
     function getTargets() {
       targetRequest ??= (async () => {
@@ -335,6 +340,7 @@
       slider.max = String(to);
       slider.value = String(cursor);
       slider.setAttribute('aria-valuetext', monthLabel(data.months[cursor][0]));
+      get('[data-target]').setAttribute('aria-pressed', String(card.target));
       get('.sb2-target-legend').hidden = !(metric === 'price' && card.target);
       get('[data-target-status]').textContent = card.target && metric === 'price'
         ? card.targetError || (!targets ? 'Loading Morningstar fair values…'
@@ -349,13 +355,19 @@
       if (get('[data-cone-summary]').textContent !== summary) get('[data-cone-summary]').textContent = summary;
       get('[data-cone-levels]').textContent = cone ? cone.points.at(-1).map((value, i) => coneLabels[i] + ' ' + priceLabel(value)).join(' · ') : '';
     }
+    function syncRange() {
+      from.value = String(state.from);
+      to.value = String(state.to);
+      [...from.options].forEach(option => { option.disabled = Number(option.value) > state.to; });
+      [...to.options].forEach(option => { option.disabled = Number(option.value) < state.from; });
+    }
     function updateRange() {
       state.from = Number(from.value);
       state.to = Number(to.value);
       state.cursor = Math.min(state.to, Math.max(state.from, state.cursor));
-      [...from.options].forEach(option => { option.disabled = Number(option.value) > state.to; });
-      [...to.options].forEach(option => { option.disabled = Number(option.value) < state.from; });
+      syncRange();
       changeRange(state);
+      save();
       repaint();
     }
     from.addEventListener('change', updateRange);
@@ -367,14 +379,22 @@
       updateRange();
     });
     const axisButtons = [...doc.querySelectorAll('[data-axis]')];
+    function syncAxis() {
+      axisButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.axis === state.axis)));
+    }
+    syncAxis();
     axisButtons.forEach(button => button.addEventListener('click', () => {
       state.axis = button.dataset.axis;
-      axisButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+      syncAxis();
+      save();
       repaint();
     }));
     const resize = new ResizeObserver(repaint);
-    function add(element, company) {
-      const card = { element, company, positions: {}, metric: 'price', target: false, cone: false };
+    function add(element, company, settings) {
+      const card = {
+        element, company, positions: {}, metric: 'price',
+        target: settings?.target === true, cone: settings?.cone === true
+      };
       cards.set(element, card);
       const choices = [...element.querySelectorAll('[data-metric]')];
       const setMetric = metric => {
@@ -382,23 +402,33 @@
         choices.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.metric === metric)));
         repaint();
       };
-      choices.forEach(button => button.addEventListener('click', () => setMetric(button.dataset.metric)));
-      const cone = element.querySelector('[data-cone]');
-      cone.addEventListener('click', () => {
+      setMetric(choices.find(button => button.dataset.metric === settings?.metric)?.dataset.metric ?? 'price');
+      choices.forEach(button => button.addEventListener('click', () => {
+        setMetric(button.dataset.metric);
+        save();
+      }));
+      element.querySelector('[data-cone]').addEventListener('click', () => {
         card.cone = card.metric !== 'price' || !card.cone;
         if (card.cone) setMetric('price');
         else repaint();
+        save();
       });
-      const target = element.querySelector('[data-target]');
-      target.addEventListener('click', async () => {
-        card.target = !card.target;
-        card.targetError = '';
-        target.setAttribute('aria-pressed', String(card.target));
-        if (!card.target) { repaint(); return; }
-        setMetric('price');
+      async function loadCardTargets() {
         try { targets = await getTargets(); }
         catch { card.targetError = 'Fair values could not load. Toggle off and on to retry.'; }
         repaint();
+      }
+      if (card.target) loadCardTargets();
+      element.querySelector('[data-target]').addEventListener('click', () => {
+        card.target = !card.target;
+        card.targetError = '';
+        if (card.target) {
+          setMetric('price');
+          loadCardTargets();
+        } else {
+          repaint();
+        }
+        save();
       });
       const slider = element.querySelector('input[type=range]');
       slider.addEventListener('input', () => setCursor(Number(slider.value)));
@@ -425,9 +455,17 @@
         });
       }
       resize.observe(element);
-      repaint();
     }
-    return { add, range: () => state, remove(element) { resize.unobserve(element); cards.delete(element); } };
+    function settings() {
+      const { from, to, axis } = state;
+      if (from === 0 && to === maximum) return { axis };
+      return { from: data.months[from][0], to: data.months[to][0], axis };
+    }
+    function cardSettings(element) {
+      const { metric, target, cone } = cards.get(element);
+      return { metric, target, cone };
+    }
+    return { add, settings, cardSettings, range: () => state, remove(element) { resize.unobserve(element); cards.delete(element); } };
   }
 
   function mountRankings(data, { logo, chooseCompany }) {
