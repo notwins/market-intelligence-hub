@@ -93,7 +93,7 @@ function paintHome(host) {
     const d = state.cards.get(ticker) || {};
     const previousEvidence = node.querySelector('details')?.open;
     node.innerHTML = combinedChart(d.pe || [], d.pb || [], ticker) + valuationEvidence(ticker, d)
-      + (root.CompanyFundamentals?.button({ ticker, currency: 'USD', name: homeCompanies.find(c => c.ticker === ticker)?.name }) || '');
+      + (root.CompanyFundamentals?.button({ ticker, name: node.closest('[data-company]')?.querySelector('h3')?.textContent }) || '');
     if (previousEvidence) node.querySelector('details').open = true;
     const company = homeCompanies.find(c => c.ticker === ticker);
     if (!company) continue;
