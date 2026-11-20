@@ -73,7 +73,10 @@ function startingSelection(params, listings) {
   return [...new Set(candidates)].filter(ticker => tickers.has(ticker)).slice(0, MAX_CARDS);
 }
 
-const api={newsFor,previousQuote,findRecord,valuationPoints,rebase,plot,startingSelection,historyYears,historyBounds,valuationSigma};root.StocksBeta=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
+function companySearchText(item,logo) {
+  return [item.ticker,item.name,...(item.aliases||[]),logo?.name,...(logo?.names||[])].filter(Boolean).join(' ').toUpperCase();
+}
+const api={newsFor,previousQuote,findRecord,valuationPoints,rebase,plot,startingSelection,historyYears,historyBounds,valuationSigma,companySearchText};root.StocksBeta=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
 const $=s=>document.querySelector(s),state={selected:[],initialized:false,columns:1,loading:false},cards=new Map(),settings=new Map();let bundle={},desk={watchlist:[],reports:[],news:[]},resources={},identities=[],logos=null,reports=[],news=[],warnings=[],instruments=[],monthlyHistory=null;
 const currentYear=new Date(Date.now()+8*3600000).getUTCFullYear();
 let savedYears;
@@ -138,12 +141,48 @@ function stockColor(sector) {
   if (/consumer|retail|staple/i.test(sector)) return 'consumer';
   return 'other';
 }
-function renderCard(c){const r=c.val?.row||{},logo=stockBadge(c,40),name=c.record?.name||c.item.name,sector=r.sector||c.record?.sector||'';return `<article class="sb-card" data-stock="${E(c.ticker)}" data-sector-tone="${stockColor(sector)}" data-company-logo-manual aria-label="${E(c.ticker)} all-in-one stock card"><header class="sb-card-head"><div><div class="sb-identity">${logo||'<span class="sb-stock-mark" aria-hidden="true">'+E(c.symbol.slice(0,4))+'</span>'}<div><span class="sb-ticker">${E(c.ticker)}</span> <span class="sb-currency">${E(c.item.currency)}</span><h2>${E(name)}</h2><p>${E(r.sector||c.record?.sector||'Sector not supplied')}${c.record?.exchange?' · '+E(c.record.exchange):''}</p></div></div></div>${quote(c)}</header><div class="sb-card-body">${c.record?.description?`<p class="sb-description">${E(c.record.description)} ${link(c.record.descriptionSourceUrl,'Company profile')}</p>`:''}${root.ShareStaticData?.html(c.record||c.item,{description:!c.record?.description})||''}${root.CompanyFundamentals?.button(c.record||c.item)||''}${sources(c)}<dl class="sb-metrics">${valuationTile(c,'pe')}${valuationTile(c,'pb')}${metric('Market cap · USD bn',r.marketCapUsdBillions)}${metric('Forward dividend yield',r.dividendYieldPct,'%')}${metric('Latest indexed revenue · US$bn',c.earnings.observations[0]?.revenue_usd_bn)}${metric('Latest indexed EPS',c.earnings.observations[0]?.eps)}</dl><p class="sb-note">Valuations: ${day(r.priceAsOf)} · consensus forward estimates, forecast horizon unspecified. Revenue / EPS: ${E(c.earnings.observations[0]?.period||'not indexed')} · ${E(c.earnings.company?.eps_basis||'basis unavailable')}. These are separate reporting dates.</p>${returns(c)}${chartSection(c)}${fundamentals(c)}<div data-credit-listing="${E(c.ticker)}"></div>${earnings(c)}${reading(c)}${c.errors.length?`<p class="sb-warning">Some data could not load: ${E(c.errors.join(' · '))}. Available sections remain visible.</p>`:''}${root.NvdaArticle?.link(c.ticker) || ''}</div></article>`;}
+function renderCard(c) {
+  const r=c.val?.row||{},logo=stockBadge(c,40),name=c.record?.name||c.item.name;
+  const compactName=listingLogo(c.item,c.symbol)?.name||c.item.name||name;
+  const sector=r.sector||c.record?.sector||'',id=encodeURIComponent(c.ticker),expanded=Boolean(config(c.ticker).expanded);
+  const description=c.record?.description
+    ? `<p class="sb-description">${E(c.record.description)} ${link(c.record.descriptionSourceUrl,'Company profile')}</p>`
+    : '';
+  const warnings=c.errors.length
+    ? `<p class="sb-warning">Some data could not load: ${E(c.errors.join(' · '))}. Available sections remain visible.</p>`
+    : '';
+  return `<article class="sb-card" data-stock="${E(c.ticker)}" data-sector-tone="${stockColor(sector)}" ${expanded?'data-expanded-card ':''}data-company-logo-manual aria-label="${E(c.ticker)} all-in-one stock card">
+    <header class="sb-card-head"><div class="sb-company-overview"><div class="sb-identity">
+      ${logo||'<span class="sb-stock-mark" aria-hidden="true">'+E(c.symbol.slice(0,4))+'</span>'}
+      <div><span class="sb-ticker">${E(c.ticker)}</span> <span class="sb-currency">${E(c.item.currency)}</span>
+      <h2><span class="sb-title-full">${E(name)}</span><span class="sb-title-compact">${E(compactName)}</span></h2>
+      <p>${E(sector||'Sector not supplied')}${c.record?.exchange?' · '+E(c.record.exchange):''}</p></div>
+    </div></div>${quote(c)}</header>
+    <div class="sb-card-body">
+      <div class="sb-card-profile" id="sb-profile-${id}">
+        ${description}${root.ShareStaticData?.html(c.record||c.item,{description:!c.record?.description})||''}
+        ${root.CompanyFundamentals?.button(c.record||c.item)||''}${sources(c)}
+      </div>
+      <dl class="sb-metrics">${valuationTile(c,'pe')}${valuationTile(c,'pb')}
+        ${metric('Market cap · USD bn',r.marketCapUsdBillions)}${metric('Forward dividend yield',r.dividendYieldPct,'%')}
+        ${metric('Latest indexed revenue · US$bn',c.earnings.observations[0]?.revenue_usd_bn)}${metric('Latest indexed EPS',c.earnings.observations[0]?.eps)}
+      </dl>
+      <p class="sb-compact-date">${r.priceAsOf?'BOS ratios · '+E(day(r.priceAsOf)):'BOS ratio date unavailable'}</p>
+      <button class="sb-card-expand" type="button" data-expand-stock aria-expanded="${expanded}"
+        aria-controls="sb-profile-${id} sb-extra-${id}"><span>${expanded?'Compact card':'Full card'}</span><span class="sb-sr-only"> for ${E(c.ticker)}</span></button>
+      <div class="sb-card-extra" id="sb-extra-${id}">
+        <p class="sb-note">Valuations: ${day(r.priceAsOf)} · consensus forward estimates, forecast horizon unspecified. Revenue / EPS: ${E(c.earnings.observations[0]?.period||'not indexed')} · ${E(c.earnings.company?.eps_basis||'basis unavailable')}. These are separate reporting dates.</p>
+        ${returns(c)}${chartSection(c)}${fundamentals(c)}<div data-credit-listing="${E(c.ticker)}"></div>
+        ${earnings(c)}${reading(c)}${warnings}${root.NvdaArticle?.link(c.ticker)||''}
+      </div>
+    </div>
+  </article>`;
+}
 const benchmarks=new Map();
 let archivePromise=null;
 async function archives(){if(!archivePromise)archivePromise=(async()=>{const [index,review,latest]=await Promise.all([get('data/watchlist/index.json'),get('data/watchlist/research-index.json'),get('data/watchlist/latest.json')]);const valid=(index.editions||[]).filter(e=>/^watchlist-\d{8}T\d{6}Z(?:-r[1-9][0-9]*)?$/.test(e.id)&&e.path==='data/watchlist/archive/'+e.id+'.json');const result=await Promise.allSettled(valid.map(async e=>{const d=await get(e.path);if(d.id!==e.id||d.as_of!==e.as_of)throw Error('Archive identity mismatch');return d;}));return {review:review.editions||{},latest,editions:result.filter(r=>r.status==='fulfilled').map(r=>r.value),missing:result.filter(r=>r.status==='rejected').length};})().catch(e=>{archivePromise=null;throw e;});return archivePromise;}
 async function archivedReading(details){const ticker=details.closest('[data-stock]').dataset.stock,c=cards.get(ticker),host=details.querySelector('[data-archive-body]');if(!host||host.dataset.loaded)return;host.innerHTML='<p class="sb-note">Loading reviewed research editions…</p>';try{const a=await archives(),items=new Map();for(const d of a.editions.sort((x,y)=>y.as_of.localeCompare(x.as_of)))for(const r of root.MarketWatchlistReports.reviewedItems(d,c.symbol,a.review,'company')){const k=root.MarketWatchlistReports.contentKey(r);if(!items.has(k))items.set(k,r);}const saved=a.latest.rows?.find(r=>r.ticker===c.symbol);host.innerHTML=(a.missing?`<p class="sb-warning">${a.missing} archive files could not load. This list is incomplete.</p>`:'')+[...items.values()].map(r=>`<article class="sb-report"><div class="sb-meta">${day(r.date)}</div><h4>${E(r.headline)}</h4><h4>Reported facts</h4><ul>${r.facts.map(f=>`<li>${E(f)}</li>`).join('')}</ul>${[['Analysis',r.analysis],['Risks',r.risks],['Next to watch',r.next_watch]].map(([label,text])=>`<h4>${E(label)}</h4><p>${E(text)}</p>`).join('')}<p>${r.sources.map(s=>link(s.url,s.title)).join(' · ')}</p></article>`).join('')+(!items.size?'<p class="sb-empty">No reviewed company-specific narrative in the available editions.</p>':'')+(saved?`<h4>Saved research-edition returns · ${day(saved.price.as_of)}</h4><p class="sb-note">Historical snapshot. These are cumulative adjusted-close returns, separate from current prices and annual tiles.</p><div class="sb-table-wrap" tabindex="0"><table data-tc-layout="stock-saved-returns"><caption>Historical adjusted-close endpoints · saved edition ${day(a.latest.as_of)}</caption><thead><tr><th>Horizon</th><th>Base date</th><th>Base adjusted close</th><th>End adjusted close</th><th>Return</th></tr></thead><tbody>${saved.returns.map(r=>`<tr><th>${r.months} months</th><td>${E(r.base_date)}</td><td>${num(r.base_adjusted_close)}</td><td>${num(saved.price.adjusted_close)}</td><td>${pct(r.pct)}</td></tr>`).join('')}</tbody></table></div>`:'');host.dataset.loaded='true';}catch{host.innerHTML='<p class="sb-warning">Reviewed watchlist archive unavailable. Close and reopen to retry.</p>';}}
-async function draw(c){const host=$(`[data-stock="${CSS.escape(c.ticker)}"] [data-charts]`);if(!host)return;const s={...config(c.ticker)},signature=JSON.stringify([s,state.years,host.clientWidth]);host.dataset.request=signature;
+async function draw(c){const host=$(`[data-stock="${CSS.escape(c.ticker)}"] [data-charts]`);if(!host?.clientWidth)return;const s={...config(c.ticker)},signature=JSON.stringify([s,state.years,host.clientWidth]);host.dataset.request=signature;
 const latest=[c.price?.quote?.date,c.q.date,c.val?.row?.priceAsOf].filter(isoDate).sort().at(-1)||new Date().toISOString().slice(0,10);
 const {from,to}=historyBounds(state.years,latest,s.period);
 const price=c.price?root.MarketPrices.selectPoints(c.price.base,c.price.daily,from,to):[],pe=c.pe.filter(p=>p.date>=from&&p.date<=to),pb=c.pb.filter(p=>p.date>=from&&p.date<=to);let series=[{name:c.ticker+' price',points:price,color:'#126c66'}],failure='';
@@ -158,11 +197,10 @@ function picker() {
   if(!instruments.some(item=>item.ticker===companyInput.value))companyInput.value=state.selected[0]||instruments[0]?.ticker||'';
   companyInput.disabled=!instruments.length;
   $('#sb-company-menu').disabled=!instruments.length;
-  companyPicker?.update([{label:'Exact stock listings',entries:instruments.map(item=>({
-    ticker:item.ticker,name:item.name+' · '+item.currency,
-    search:[item.ticker,item.name,...(item.aliases||[])].join(' ').toUpperCase(),
-    logo:listingLogo(item)?.file
-  }))}]);
+  companyPicker?.update([{label:'Exact stock listings',entries:instruments.map(item=>{
+    const logo=listingLogo(item);
+    return {ticker:item.ticker,name:item.name+' · '+item.currency,search:companySearchText(item,logo),logo:logo?.file};
+  })}]);
   updateAddButton();
 }
 const companyInput=$('#sb-company');
@@ -240,6 +278,18 @@ if (!state.initialized) {
 benchmarks.clear();await Promise.all(state.selected.map(async t=>{try{await hydrate(t);}catch(e){warnings.push(t+': '+e.message);}}));state.loading=false;$('#sb-refresh').disabled=false;picker();paint();document.querySelectorAll('[data-columns]').forEach(el=>{if(el.tagName==='BUTTON')el.setAttribute('aria-pressed',String(Number(el.dataset.columns)===state.columns));});$('#sb-status').textContent=`${instruments.length} exact stock listings available · ${state.selected.length} cards open · dates shown per source. ${warnings.join(' · ')}`;}
 document.addEventListener('share-snapshot-columns-updated', event => { if (event.detail === 'stocks') paintWatchlist(); });
 companyInput.addEventListener('change',updateAddButton);
+$('#sb-cards').addEventListener('click',event=>{
+  const button=event.target.closest('[data-expand-stock]');
+  if(!button)return;
+  const card=button.closest('[data-stock]'),ticker=card.dataset.stock;
+  const option=config(ticker);
+  option.expanded=!option.expanded;
+  card.toggleAttribute('data-expanded-card',option.expanded);
+  button.setAttribute('aria-expanded',String(option.expanded));
+  button.firstElementChild.textContent=option.expanded?'Compact card':'Full card';
+  if(option.expanded)draw(cards.get(ticker));
+  card.scrollIntoView({block:'start'});
+});
 $('#sb-add').addEventListener('click',()=>add(companyInput.value));$('#sb-refresh').addEventListener('click',()=>load(true));
 document.addEventListener('click',e=>{const remove=e.target.closest('[data-remove]'),columns=e.target.closest('button[data-columns]'),period=e.target.closest('[data-period]');if(remove){state.selected=state.selected.filter(t=>t!==remove.dataset.remove);paint();address();}if(columns){state.columns=Number(columns.dataset.columns);$('#sb-cards').dataset.columns=state.columns;document.querySelectorAll('button[data-columns]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.columns)===state.columns)));for(const t of state.selected)if(cards.has(t))draw(cards.get(t));address();}if(period){const card=period.closest('[data-stock]');config(card.dataset.stock).period=period.dataset.period;card.querySelectorAll('[data-period]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.period===period.dataset.period)));draw(cards.get(card.dataset.stock));}});
 document.addEventListener('change',e=>{if(!e.target.matches('[data-setting]'))return;const ticker=e.target.closest('[data-stock]').dataset.stock;config(ticker)[e.target.dataset.setting]=e.target.type==='checkbox'?e.target.checked:e.target.value;draw(cards.get(ticker));});

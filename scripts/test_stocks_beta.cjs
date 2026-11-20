@@ -30,6 +30,12 @@ assert.deepEqual(select('company=MSFT'), ['MSFT']);
 assert.deepEqual(select('companies='), []);
 assert.deepEqual(select('companies='+[...watchlist,'JPM','WMT'].join(',')), watchlist);
 console.log('Stocks BETA: ten-card default, SGD listings last, explicit selections and card limit passed.');
+const logoDirectory = require('../site/assets/company-logos/company-logos.json');
+const tsmLogo = logoDirectory.companies.find(company => company.ticker === 'TSM');
+const searchText = S.companySearchText({ticker:'TSM',name:'TSMC',aliases:['TSM US']},tsmLogo);
+for(const query of ['TSM','TSMC','TAIWAN SEMICONDUCTOR'])assert(searchText.includes(query));
+assert.equal(S.companySearchText({ticker:'TEST',name:'Example listing'},null),'TEST EXAMPLE LISTING');
+console.log('Stocks BETA: search includes the exact listing and its verified company-name aliases.');
 
 // The archive joins by the verified ISIN and currency, and retains duplicate source rows.
 require('../site/v3-source-engine.js');
