@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head><link rel="stylesheet" href="return-sparks.css?v=1"><script src="return-sparks.js?v=1"></script><script data-price-render-only src="share-prices.js?sparks=1"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Compare bond prices, yields and observed price returns for the Market Intel bond watchlist. Load your own monthly bond history in the browser.">
@@ -13,7 +13,7 @@
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <script defer src="stocks-beta2-charts.js?v=20261121.bonds1"></script>
   <script defer src="bonds-beta-data.js?v=1"></script>
-  <script defer src="bonds-beta.js?v=2"></script>
+  <script defer src="bonds-beta.js?v=2&amp;sparks=1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to bond charts</a>
@@ -85,7 +85,7 @@
       <figure class="bb-figure"><figcaption>Yield (%)</figcaption><canvas tabindex="0" role="img" data-plot="yield" aria-label="Historical yield. Use arrow keys to move between dates."></canvas><p class="bb-no-data" hidden>No yields in this range.</p></figure>
       <p class="bb-legend" hidden></p>
       <details class="bb-returns"><summary>Yearly price changes</summary>
-        <div class="bb-table-wrap"><table class="bb-table"><thead><tr><th scope="col">Year</th><th scope="col">First date</th><th scope="col">Last date</th><th scope="col">First bid</th><th scope="col">Last bid</th><th scope="col">Price change</th></tr></thead><tbody></tbody></table></div>
+        <div class="bb-table-wrap"><table class="bb-table" data-return-sparks="bond-yearly-price-changes" data-return-provider="bond-beta"><thead><tr><th scope="col">Year</th><th scope="col">First date</th><th scope="col">Last date</th><th scope="col">First bid</th><th scope="col">Last bid</th><th scope="col">Price change</th></tr></thead><tbody></tbody></table></div>
         <p class="bb-returns-empty" hidden>Two dated bids in the same year are needed for a price change.</p>
       </details>
     </article>

@@ -68,6 +68,15 @@
     get('status').textContent = [status, historyMessage].filter(Boolean).join(' ');
   }
 
+  window.ReturnSparks?.register('bond-beta', ({ symbol }) => {
+    const item = bonds.get(symbol);
+    if (!item) return null;
+    const points = [...item.rows].filter(([, quote]) => Number.isFinite(quote.bid))
+      .map(([date, quote]) => [date, quote.bid]).sort((a, b) => a[0].localeCompare(b[0]));
+    return { points, name: item.name, unit: item.currency + ' per 100 face', label: 'bid price history',
+      basis: 'Saved bid prices. Price changes exclude coupons, accrued interest, fees and FX.' };
+  });
+
   const visible = new IntersectionObserver(entries => {
     for (const entry of entries) {
       const card = cards.find(item => item.element === entry.target);
@@ -185,7 +194,10 @@
 
   function fillReturns(card) {
     const returns = annualPriceChanges(card.instrument, dates[from], dates.at(-1));
-    const body = card.element.querySelector('tbody');
+    const table = card.element.querySelector('.bb-table');
+    table.dataset.returnSymbol = card.key;
+    table.dataset.returnCutoff = dates.at(-1) || '';
+    const body = table.tBodies[0];
     body.replaceChildren(...returns.map(row => {
       const tr = document.createElement('tr');
       const title = document.createElement('th');

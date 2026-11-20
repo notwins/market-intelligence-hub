@@ -20,6 +20,10 @@ Current hosts: V4, V2, archive reader, saved securities, external sources and th
 
 Standalone immutable research pages and original archived report HTML are deliberately not rewritten. Their original direct-page tables do not receive these controls. Saved watchlist editions read through `watchlist-report.html` receive controls at display time while their archived report HTML and JSON remain unchanged. There is no reliance on the unpublished subsection-navigation work or any protected research modification.
 
+## Historical-return tables
+
+Mark live tables that show historical security returns with `data-return-sparks`. Supply the exact listing and currency on each row, or on the table for a single listing, plus the as-of date for historical snapshots. Load `return-sparks.js`, `return-sparks.css` and the shared `share-prices.js` renderer. The optional Price sparklines control offers 1Y through 5Y, and a sparkline opens the price-history dialog. Use observed prices from the listing's source and keep the table's existing return basis and values.
+
 ## Checks
 
 - `node scripts/test_table_controls.cjs`: scalar/unit/type policy, sorting, heat bounds and host includes; run in both publishing validation stages.

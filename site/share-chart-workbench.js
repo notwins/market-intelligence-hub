@@ -55,12 +55,12 @@ function comparisonTable(data, api, lines, percentage) {
   const snapshot = root.ShareSnapshotColumns, columns = snapshot?.selection('history') || [];
   return `${snapshot?.button('history') || ''}${snapshot?.note(columns) || ''}
     <div class="mp-table-scroll" role="region" aria-label="Historical price comparison columns" tabindex="0">
-    <table class="mp-comparison-table"><caption>Historical feed closes · chart changes use the displayed window above</caption>
+    <table class="mp-comparison-table" data-return-sparks="share-price-comparison"><caption>Historical feed closes · chart changes use the displayed window above</caption>
     <thead><tr><th>Share</th><th>Historical feed close</th><th>Historical price date</th><th>Chart change</th>${snapshot?.headers(columns) || ''}</tr></thead>
     <tbody>${orderedShares(data).map(d => {
       const points = lines[data.indexOf(d)].points;
       const change = percentage ? pct(points.at(-1)[1]) : pct((points.at(-1)[1] / points[0][1] - 1) * 100);
-      return `<tr><th scope="row">${esc(d.item.ticker)}</th><td>${money(d.quote.close)} ${esc(api.displayUnit(d.item))}</td><td>${esc(d.quote.date)}</td><td>${change}</td>${snapshot?.cells(d.item, columns) || ''}</tr>`;
+      return `<tr ${root.ReturnSparks?.instrument(d.item.id||d.item.ticker,d.item.currency,points.at(-1)[0]) || ''}><th scope="row">${esc(d.item.ticker)}</th><td>${money(d.quote.close)} ${esc(api.displayUnit(d.item))}</td><td>${esc(d.quote.date)}</td><td>${change}</td>${snapshot?.cells(d.item, columns) || ''}</tr>`;
     }).join('')}</tbody></table></div>`;
 }
 

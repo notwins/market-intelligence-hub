@@ -161,12 +161,14 @@
     const ranked = rank ? '<p class="focus"><strong>' + esc(ticker(rank.winners[0].record)) + ' led at ' + signed(rank.winners[0].change) +
       '% and ' + esc(ticker(rank.losers[0].record)) + ' trailed at ' + signed(rank.losers[0].change) + '%.</strong> ' +
       esc(rank.basis) + ' · ' + rank.count + ' comparable listings · ' + day(rank.from) + ' to ' + day(rank.to) +
-      ' · ' + rank.jumps + ' paths flagged for possible price discontinuities.</p><div class="table-wrap"><table><caption>Top and bottom USD share price changes on the common ranking dates</caption><thead>' +
+      ' · ' + rank.jumps + ' paths flagged for possible price discontinuities.</p><div class="table-wrap"><table data-return-sparks="cross-market-' + esc(card.id) + '"><caption>Top and bottom USD share price changes on the common ranking dates</caption><thead>' +
       '<tr><th scope="col">Group</th><th scope="col">Listing</th><th scope="col">Price Δ (%)</th><th scope="col">vs SPX (pp)</th></tr></thead><tbody>' +
       ranks.map((r,i) => {
         const benchmark = index.find(p => p.date === rank.to);
         const excess = r.change - M.pct(spx.value,benchmark.value);
-        return '<tr><td>' + (i < 3 ? 'Top ' + (i+1) : 'Bottom ' + (i-2)) + '</td><th scope="row">' + esc(r.record.bbTicker) +
+        const provider = rank.basis.startsWith('BOS') ? 'cross-bos' : 'cross-weekly';
+        const attrs = window.ReturnSparks?.instrument(r.record.id,r.record.currency,rank.to,provider) || '';
+        return '<tr ' + attrs + '><td>' + (i < 3 ? 'Top ' + (i+1) : 'Bottom ' + (i-2)) + '</td><th scope="row">' + esc(r.record.bbTicker) +
           '</th><td class="' + heat(r.change,5) + '">' + signed(r.change) + '</td><td class="' + heat(excess,5) + '">' + signed(excess) + '</td></tr>';
       }).join('') + '</tbody></table></div>' : '<p class="gap"><strong>SPX is available on its own where the index archive covers this window.</strong> The share archive supplies too few comparable listings with common endpoints here.</p>';
     const valuationRecords = source.records.filter(r => ['pe','pb'].some(metric =>
@@ -332,6 +334,18 @@
     const monitor = await json('data/fred/'+catalog.monitor_url);
     const today = singaporeToday();
     const sources = assemble(eventData.events,fed,sgs,mas,spx,monitor,history,today);
+    for (const [provider, map, basis] of [
+      ['cross-weekly', sources.weeklyById, 'Saved weekly provider closes in the listing currency.'],
+      ['cross-bos', sources.bosById, 'BOS monthly reference prices in the listing currency.']
+    ]) {
+      window.ReturnSparks?.register(provider, ({ symbol, currency }) => {
+        const record = sources.records.find(r => r.id === symbol);
+        if (!record || record.currency !== currency) return null;
+        const series = map.get(symbol) || [];
+        return { points: series.map(p => [p.date,p.value]), name: ticker(record), unit: currency,
+          basis: basis + ' Price paths exclude dividends.', source: series.at(-1)?.sourceUrl, label: 'price history' };
+      });
+    }
     const cards = M.groupEvents(sources.events,today);
     const container = document.querySelector('#market-episodes');
     container.innerHTML = cards.map(c => renderCard(c,sources)).join('');
