@@ -46,6 +46,7 @@
   const search = get('sb2-search');
   const download = get('sb2-download');
   const retry = get('sb2-retry');
+  const embedded = get('sb2-embedded-data');
   const groups = [...doc.querySelectorAll('[data-group]')];
   const format = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
   const calendar = new Intl.DateTimeFormat('en-GB', {
@@ -57,12 +58,14 @@
     vendor_ticker_alias: 'Earlier vendor code',
     predecessor_security: 'Predecessor security'
   };
-  let data, selected;
+  let data, history, rankings, pending, origin;
+  const deck = get('sb2-detail'), dialog = get('sb2-card-picker');
+  const cards = new Map();
   let collection = 'global';
 
   function logo(security, size) {
     const api = root.CompanyLogos;
-    return api?.data ? api.html([security.logo], api.data, { size }) : '';
+    return api?.data ? api.html([security.logo], api.data, { size, base: embedded ? '' : undefined }) : '';
   }
 
   function paintList() {
@@ -74,31 +77,27 @@
     });
     list.innerHTML = results.map(security => (
       '<li><button type="button" class="sb2-security" data-security="' + e(security.ticker)
-      + '" aria-pressed="' + (security === selected) + '"><span aria-hidden="true" class="sb2-rank">'
+      + '" aria-haspopup="dialog"><span aria-hidden="true" class="sb2-rank">'
       + e(security.rank) + '</span>' + logo(security, 28) + '<span class="sb2-security-name">'
       + e(security.name) + '<span class="sb2-company-ticker">' + e(security.ticker) + '</span></span></button></li>'
     )).join('');
     get('sb2-empty').hidden = results.length > 0;
   }
 
-  function paintHeading() {
-    get('sb2-company').innerHTML = logo(selected, 40) + '<div><h2>' + e(selected.name)
-      + '</h2><span class="sb2-company-ticker">' + e(selected.ticker + ' · ' + selected.currency) + '</span></div>';
+  function paintHeading({ element, company, slot }) {
+    element.querySelector('.sb2-company-heading').innerHTML = logo(company, 40) + '<div><h2>' + e(company.name)
+      + '</h2><span class="sb2-company-ticker">Card ' + slot + ' · ' + e(company.ticker + ' · ' + company.currency) + '</span></div>';
   }
 
-  function paintDetail() {
-    paintHeading();
-    const points = selected.observations;
-    const missing = data.months.length - points.length;
-    get('sb2-coverage').textContent = points.length + ' of ' + data.months.length + ' monthly editions'
-      + (missing ? ' · ' + missing + ' without a matching observation' : '');
+  function paintMonthlyTable({ element, company }, { from, to }) {
+    const points = company.observations.filter(point => point[0] >= from && point[0] <= to);
     const headers = data.metrics.map(([, label, unit]) => (
-      '<th scope="col">' + e(label + ' (' + (unit === 'quote' ? selected.currency : unit) + ')') + '</th>'
+      '<th scope="col">' + e(label + ' (' + (unit === 'quote' ? company.currency : unit) + ')') + '</th>'
     )).join('');
     const values = [...points].reverse().map(point => {
       const [, reportDate, priceDate] = data.months[point[0]];
-      const prior = previousSource(selected, point, data.metrics.length);
-      const ticker = prior?.[0] || selected.ticker;
+      const prior = previousSource(company, point, data.metrics.length);
+      const ticker = prior?.[0] || company.ticker;
       const title = prior ? ' title="' + e(relationLabel[prior[1]]) + '"' : '';
       return '<tr><th scope="row"><time datetime="' + reportDate + '">' + day(reportDate) + '</time></th>'
         + '<td><time datetime="' + priceDate + '">' + day(priceDate) + '</time></td>'
@@ -108,29 +107,102 @@
             : '<td>' + e(format.format(value)) + '</td>'
         )).join('') + '</tr>';
     }).join('');
-    get('sb2-table').innerHTML = '<thead><tr><th scope="col">Report date</th><th scope="col">Price date</th>'
+    const table = element.querySelector('table');
+    table.innerHTML = '<thead><tr><th scope="col">Report date</th><th scope="col">Price date</th>'
       + '<th scope="col">Source ticker</th>' + headers + '</tr></thead><tbody>' + values + '</tbody>';
-    get('sb2-table').parentElement.scrollTo(0, 0);
-    get('sb2-related-reading').innerHTML = root.NvdaArticle?.link(selected.ticker) || '';
+    table.parentElement.scrollTo(0, 0);
   }
 
   function showGroup(group) {
     collection = group;
     groups.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.group === collection)));
     search.value = '';
-    selected = data.securities.find(item => item.group === collection);
     list.scrollTop = 0;
     paintList();
-    paintDetail();
+  }
+
+  function refreshRemoveButtons() {
+    cards.forEach(({ element, slot }) => {
+      const remove = element.querySelector('.sb2-remove-card');
+      remove.disabled = cards.size <= 1;
+      remove.setAttribute('aria-label', 'Remove card ' + slot);
+    });
+  }
+
+  function placeCard(slot, company, focus = false) {
+    const existing = cards.get(slot);
+    const element = get('sb2-card-template').content.firstElementChild.cloneNode(true);
+    const entry = { element, company, slot };
+    element.dataset.slot = String(slot);
+    paintHeading(entry);
+    const observed = company.observations.length;
+    element.querySelector('.sb2-coverage').textContent = observed + ' of ' + data.months.length + ' monthly editions';
+    if (existing) {
+      history.remove(existing.element);
+      existing.element.replaceWith(element);
+    } else {
+      const next = [...cards.values()].filter(card => card.slot > slot).sort((a, b) => a.slot - b.slot)[0];
+      deck.insertBefore(element, next?.element ?? null);
+    }
+    cards.set(slot, entry);
+    history.add(element, company);
+    paintMonthlyTable(entry, history.range());
+    element.querySelector('.sb2-remove-card').addEventListener('click', () => {
+      if (cards.size <= 1) return;
+      history.remove(element);
+      cards.delete(slot);
+      element.remove();
+      refreshRemoveButtons();
+      deck.querySelector('.sb2-company-heading').focus({preventScroll:true});
+    });
+    refreshRemoveButtons();
+    if (focus) element.querySelector('.sb2-company-heading').focus();
+  }
+
+  function chooseCompany(ticker, trigger) {
+    pending = data.securities.find(item => item.ticker === ticker);
+    if (!pending) return;
+    origin = trigger;
+    get('sb2-card-prompt').textContent = 'Show ' + pending.name + ' on';
+    const slots = [...new Set([1, 2, 3, ...cards.keys()])].sort((a, b) => a - b);
+    get('sb2-card-options').innerHTML = slots.map(slot => {
+      const current = cards.get(slot)?.company;
+      const label = current ? current.name + ' (' + current.ticker + ')' : 'Empty';
+      return '<button type="button" data-card-target="' + slot + '"><strong>Card ' + slot + '</strong><span>' + e(label) + '</span></button>';
+    }).join('') + '<button type="button" data-card-target="new"><strong>New card</strong></button>';
+    dialog.showModal();
+  }
+
+  dialog.addEventListener('click', event => {
+    const choice = event.target.closest('[data-card-target]');
+    if (!choice || !pending) return;
+    let slot = Number(choice.dataset.cardTarget);
+    if (choice.dataset.cardTarget === 'new') {
+      slot = 1;
+      while (cards.has(slot)) slot++;
+    }
+    const company = pending;
+    origin = null;
+    dialog.close();
+    placeCard(slot, company, true);
+  });
+  dialog.addEventListener('close', () => {
+    if (origin?.isConnected) origin.focus({preventScroll:true});
+    origin = pending = null;
+  });
+
+  async function getData() {
+    if (embedded) return JSON.parse(embedded.textContent);
+    const response = await fetch('data/stocks-beta2-monthly-history.json?v=20261121', { signal: AbortSignal.timeout(15000) });
+    if (!response.ok) throw new Error('History download failed');
+    return response.json();
   }
 
   async function load() {
     retry.hidden = true;
     get('sb2-status').textContent = 'Loading monthly market history…';
     try {
-      const response = await fetch('data/stocks-beta2-monthly-history.json?v=20261121', { signal: AbortSignal.timeout(15000) });
-      if (!response.ok) throw new Error('History download failed');
-      const result = await response.json();
+      const result = await getData();
       if (result.version !== 1 || !result.months?.length || !result.metrics?.length || !result.securities?.length) {
         throw new Error('History format is unavailable');
       }
@@ -139,7 +211,12 @@
       get('sb2-status').textContent = format.format(total) + ' observations across ' + data.months.length + ' saved monthly editions.';
       get('sb2-workspace').hidden = false;
       download.disabled = false;
+      get('sb2-shared-controls').hidden = false;
+      history ??= root.StocksBeta2Charts.mountHistory(data, range =>
+        cards.forEach(card => paintMonthlyTable(card, range)));
+      rankings ??= root.StocksBeta2Charts.mountRankings(data, { logo, chooseCompany });
       showGroup('global');
+      if (!cards.size) placeCard(1, data.securities.find(item => item.group === 'global'));
     } catch {
       get('sb2-status').textContent = 'Monthly market history could not load.';
       retry.hidden = false;
@@ -154,10 +231,7 @@
   list.addEventListener('click', event => {
     const choice = event.target.closest('button[data-security]');
     if (!choice) return;
-    selected = data.securities.find(security => security.ticker === choice.dataset.security);
-    list.querySelector('[aria-pressed="true"]')?.setAttribute('aria-pressed', 'false');
-    choice.setAttribute('aria-pressed', 'true');
-    paintDetail();
+    chooseCompany(choice.dataset.security, choice);
   });
   download.addEventListener('click', () => {
     if (!data) return;
@@ -172,7 +246,8 @@
   doc.addEventListener('mih-logo-catalogue', () => {
     if (!data) return;
     paintList();
-    paintHeading();
+    cards.forEach(paintHeading);
+    rankings?.renderBars();
   });
   load();
 })(typeof window !== 'undefined' ? window : globalThis);
