@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Monthly price, market capitalisation and valuation history for 110 stock listings in the Bank of Singapore coverage archive.">
+  <title>Stocks BETA 2 · Monthly market history · Market Intel</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="stocks-beta.css">
+  <link rel="stylesheet" href="company-logos.css">
+  <link rel="stylesheet" href="stocks-beta2.css?v=20261121">
+  <script defer src="company-logos.js"></script>
+  <script defer src="stocks-beta2.js?v=20261121"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to market history</a>
+  <header class="sb-mast sb2-mast">
+    <a href="desk.html"><b>M.</b> MARKET INTEL</a>
+    <nav aria-label="Stock section links">
+      <a href="stocks-beta.html">Stocks BETA</a>
+      <a href="v4.html#history/beta2-shares">Event studies</a>
+      <a href="v4.html#history/beta4-shares">History pivot</a>
+    </nav>
+  </header>
+  <main id="main">
+    <header class="sb2-intro">
+      <div>
+        <h1>Stocks BETA 2</h1>
+        <p>Monthly market history for the global top 100 and Singapore top 10 in the 3 November 2026 Bank of Singapore coverage universe.</p>
+      </div>
+      <button type="button" id="sb2-download" disabled>Download compact CSV</button>
+    </header>
+    <p id="sb2-status" role="status" aria-live="polite">Loading monthly market history…</p>
+    <button type="button" id="sb2-retry" hidden>Retry loading history</button>
+    <div class="sb2-workspace" id="sb2-workspace" hidden>
+      <section class="sb2-panel sb2-picker" aria-label="Choose a security">
+        <div class="sb2-groups" role="group" aria-label="Ranking">
+          <button type="button" data-group="global" aria-pressed="true">Global top 100</button>
+          <button type="button" data-group="singapore" aria-pressed="false">Singapore top 10</button>
+        </div>
+        <label for="sb2-search">Find a company</label>
+        <input type="search" id="sb2-search" placeholder="Name or ticker" autocomplete="off">
+        <ul id="sb2-securities" aria-label="Securities by market capitalisation"></ul>
+        <p id="sb2-empty" hidden>No companies match this search.</p>
+      </section>
+      <section class="sb2-panel sb2-detail" id="sb2-detail" aria-labelledby="sb2-company">
+        <header class="sb2-company-heading" id="sb2-company"></header>
+        <p class="sb2-coverage" id="sb2-coverage"></p>
+        <div class="sb2-table" role="region" tabindex="0" aria-label="Monthly observations. Scroll horizontally for more columns.">
+          <table aria-labelledby="sb2-company" id="sb2-table"></table>
+        </div>
+      </section>
+    </div>
+    <details class="sb2-method">
+      <summary>Data and coverage</summary>
+      <p>The 113 saved monthly editions run from July 2017 to November 2026. The archive has no editions from December 2016 to June 2017. Individual securities have coverage gaps. Share classes and exchange listings rank individually.</p>
+      <p>Quote dates follow the archive’s price column. Prices retain the source quote currency and reflect the original share basis. GBp is UK pence. Market cap is in USD billions. The forward multiples and estimates use the coverage report’s definitions. Implied EPS is the price divided by positive forward P/E. Earlier tickers and predecessor securities are labelled where present.</p>
+      <p>The compact CSV uses one row per archive month. Price and implied EPS headings identify the quote currency. The earlier-ticker fields are populated where the source used a different ticker.</p>
+    </details>
+    <footer><b>Market Intelligence Hub</b><p>Independent educational research.</p><a href="legal/index.html">Legal &amp; transparency</a> · <a href="desk.html">Home</a></footer>
+  </main>
+</body>
+</html>

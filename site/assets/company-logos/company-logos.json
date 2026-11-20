@@ -4112,6 +4112,22 @@
       "bytes": 1080,
       "width": 64,
       "height": 64
+    },
+    {
+      "ticker": "BS6.SI",
+      "name": "Yangzijiang Shipbuilding",
+      "names": [
+        "Yangzijiang Shipbuilding"
+      ],
+      "aliases": [],
+      "group": "singapore",
+      "explicit_ticker": true,
+      "file": "BS6.SI.webp",
+      "source": "https://links.sgx.com/FileOpen/YZJSH_1H2025%20Results%20Presentation_Final.ashx?App=Announcement&FileID=854458",
+      "sha256": "264ee02a8690d89b578b0cd7833db2d62f9057345f0591f24761ee7d73eac895",
+      "bytes": 4418,
+      "width": 64,
+      "height": 64
     }
   ],
   "attribution": "Company logos belong to their respective owners. Source: CompaniesMarketCap / CompaniesLogo. Editorial company identification; no endorsement implied. Currency flags from Flagpedia. People badges are original initials.",
