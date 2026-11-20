@@ -68,6 +68,38 @@ console.log('BOS ACE matching: validates ISINs, keeps source rows and checks cur
 
 const { historyPoints, priceLabel, probabilityCone, researchConeTarget, targetBand } = require('../site/stocks-beta2-charts.js');
 const history = require('../site/data/stocks-beta2-monthly-history.json');
+const years = S.historyYears(undefined, 2026);
+assert.deepEqual(years, {from:2017,to:null});
+assert.deepEqual(S.historyYears({from:2020,to:2019},2026),{from:2020,to:2020});
+assert.deepEqual(S.historyBounds(years,'2026-11-19'),{from:'2017-01-01',to:'2026-11-19'});
+assert.deepEqual(S.historyBounds({from:2020,to:2021},'2026-11-19'),{from:'2020-01-01',to:'2021-12-31'});
+const snapshot={reportDate:'2026-11-20',row:{instrumentId:'NVDA US',currency:'USD',priceAsOf:'2026-11-19',pe:9.6,pb:7}};
+const peSigma=S.valuationSigma(history,snapshot,'pe',years);
+const pbSigma=S.valuationSigma(history,snapshot,'pb',years);
+assert.equal(peSigma.n,113);
+assert.equal(peSigma.first,'2017-06-30');
+assert.equal(peSigma.last,'2026-10-30');
+assert.equal(peSigma.z.toFixed(2),'-2.32');
+assert.equal(peSigma.sd.toFixed(2),'10.66');
+assert.equal(peSigma.band,'strong');
+assert.equal(pbSigma.z.toFixed(2),'-1.54');
+assert.equal(pbSigma.sd.toFixed(2),'5.14');
+assert.equal(pbSigma.band,'soft');
+assert.match(S.valuationSigma(history,snapshot,'pe',{from:2026,to:null}).reason,/Insufficient history/);
+assert(S.valuationSigma(history,{...snapshot,row:{...snapshot.row,currency:'CAD'}},'pe',years).reason);
+const narrow={
+  metrics:[['forward_pe','Forward P/E','×']],
+  months:[['2025-12','2026-01-02','2025-12-31'],['2026-01','2026-02-02','2026-01-30'],
+    ['2026-02','2026-03-02','2026-02-27'],['2026-11','2026-11-20','2026-11-19'],
+    ['2026-10','2026-11-21','2026-10-30']],
+  securities:[{ticker:'NVDA US',currency:'USD',observations:[[0,10],[1,100,0],[2,20],[3,999],[4,999]]}],
+};
+const narrowSigma=S.valuationSigma(narrow,snapshot,'pe',years);
+assert.equal(narrowSigma.n,2,'Exclude predecessor, same-day and subsequently published observations');
+assert.equal(narrowSigma.mean,15);
+assert.equal(narrowSigma.z,null);
+console.log('Stocks BETA: exact BOS valuation sigma, prior observations, sample size and global history range passed.');
+
 const { briefs } = require('../site/data/stocks-beta2-research-briefs.json');
 assert.deepEqual(Object.keys(briefs).sort(), history.securities.map(item => item.ticker).sort());
 for (const brief of Object.values(briefs)) {

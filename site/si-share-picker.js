@@ -105,7 +105,8 @@ function mount(container,{escape:E,logoBase,allowCustom=true}){
     </div>`).join('')}
    </div>`;
   }).join('');
-  active.list.innerHTML=html||'<p class="share-picker-empty" role="status">No match. You can enter the ticker manually.</p>';
+  active.list.innerHTML=html||'<p class="share-picker-empty" role="status">'+
+   (allowCustom?'No match. You can enter the ticker manually.':'No exact listing matches this search.')+'</p>';
   options=[...active.list.querySelectorAll('[data-share-option]')];
   selected=-1;
   highlight(options.findIndex(option=>option.dataset.shareOption===previous));
