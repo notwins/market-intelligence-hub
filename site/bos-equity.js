@@ -305,6 +305,18 @@ function selectCurrent(row,fallback,options={}){
 }
 function selectionFor(item,fallback){return selectCurrent(recordFor(item),fallback,{reportDate:edition?.reportDate,sourceUrl:edition?.sourceUrl,available:!error});}
 function valuationFor(item){const row=recordFor(item);return row?{row,reportDate:edition.reportDate,sourceUrl:edition.sourceUrl,basis:edition.metricBasis,current:!error&&fresh(edition.reportDate)&&fresh(row.priceAsOf)}:null;}
+async function valuationHistoryFor(item){
+ await refresh();
+ const listing=recordFor(item);
+ if(!listing||!manifest)return [];
+ const settled=await Promise.allSettled(fallbackRefs(manifest).map(ref=>read(ref)));
+ return settled.flatMap(result=>{
+  if(result.status!=='fulfilled')return [];
+  const {records,reportDate}=result.value;
+  const row=records.find(r=>r.instrumentType==='equity'&&r.instrumentId===listing.instrumentId&&r.currency===listing.currency);
+  return row?[{row,reportDate}]:[];
+ });
+}
 function valuationById(instrumentId){const rows=edition?.records.filter(r=>r.instrumentType==='equity'&&r.instrumentId===instrumentId)||[];const row=rows.length===1?rows[0]:null;return row?{row,reportDate:edition.reportDate,sourceUrl:edition.sourceUrl,basis:edition.metricBasis,current:!error&&fresh(edition.reportDate)&&fresh(row.priceAsOf)}:null;}
 function valuationHtml(item){
  const value=valuationFor(item);if(!value)return '<p class="mp-muted">Valuations unavailable. The Yahoo fallback feed supplies prices only.</p>';
@@ -342,5 +354,5 @@ if(root.document){
  root.document.addEventListener('input',ev=>{if(ev.target.dataset.bosFilter!=='query')return;const el=ev.target.closest('[data-bos-panel]'),s=state(el.dataset.bosPanel);s.query=ev.target.value;s.page=1;el.querySelector('[data-bos-results]').innerHTML=rowsHtml(el._bosData,s);});
  root.document.addEventListener('change',ev=>{const el=ev.target.closest('[data-bos-panel]');if(!el)return;const s=state(el.dataset.bosPanel),key=ev.target.dataset.bosFilter;if(key&&key!=='query'){s[key]=ev.target.value;s.page=1;key==='edition'?paintPanel(el):el.querySelector('[data-bos-results]').innerHTML=rowsHtml(el._bosData,s);}if(ev.target.matches('[data-bos-saved-only]')){s.savedOnly=ev.target.checked;s.page=1;el.querySelector('[data-bos-results]').innerHTML=rowsHtml(el._bosData,s);}});
 }
-const api={panel,facts,mount,refresh,validateManifest,validateEdition,matchingRecord,valuationLabel,filtered,csv,safeUrl,refValid,recordFor,itemFor,selectCurrent,selectionFor,valuationFor,valuationById,valuationHtml,quoteForRow,fresh,reviewedListings,priceHistoryFor,validatePriceChunk,version};root.BOSEquity=api;if(typeof module!=='undefined')module.exports=api;
+const api={panel,facts,mount,refresh,validateManifest,validateEdition,matchingRecord,valuationLabel,filtered,csv,safeUrl,refValid,recordFor,itemFor,selectCurrent,selectionFor,valuationFor,valuationHistoryFor,valuationById,valuationHtml,quoteForRow,fresh,reviewedListings,priceHistoryFor,validatePriceChunk,version};root.BOSEquity=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

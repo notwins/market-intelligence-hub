@@ -62,3 +62,33 @@ async function checkPDFLinks(){
  assert(left>400&&right>left&&top>bottom&&top<842,'The call has a usable rectangle on its PDF page');
 }
 checkPDFLinks().catch(error=>{console.error(error);process.exitCode=1;});
+const settings=C.chartOptions({years:8,pe:true,pb:true,target:true});
+assert.deepEqual(C.chartOptions({years:9,pe:'true'}),{years:1,pe:false,pb:false,target:false});
+assert.equal(C.yearsBefore('2024-02-29',1),'2023-02-28');
+const listing={instrumentId:'TEST US',currency:'USD'};
+const observation=(reportDate,date,value)=>({reportDate,date,value,currency:'USD',sourceId:'bos:'+reportDate});
+const hist={record:{bbTicker:'TEST US',currency:'USD'},metrics:{
+ pe:[observation('2019-01-02','2018-12-31',20),observation('2025-10-01','2025-09-30',35)],
+ pb:[observation('2025-10-01','2025-09-30',5),observation('2025-11-01','2025-10-31',0)],
+ fairValueOrTarget:[observation('2019-01-02','2018-12-31',240),observation('2025-10-01','2025-09-30',100)],
+ sourcePrice:[observation('2019-01-02','2018-12-31',200),observation('2025-10-01','2025-09-30',89)],
+}};
+const current={...listing,pe:37,pb:7,price:105,researchProvider:'Morningstar',fairValueOrTargetKind:'fair_value',fairValueOrTargetPrice:110,rating:'Hold'};
+const data=C.valuationPoints(listing,hist,[{reportDate:'2026-11-19',row:current},{reportDate:'2026-11-20',row:{...current,currency:'EUR'}}]);
+assert.equal(data.pe.length,3);
+assert.equal(data.pb.length,2,'Nonpositive multiples and wrong currencies are excluded');
+assert.equal(data.target[0].date,'2026-11-19','Publication dates, rather than price snapshot dates, place research points');
+assert.deepEqual(C.valuationPoints(listing,{...hist,record:{...hist.record,bbTicker:'OTHER US'}},[]).pe,[]);
+const sample={points:[['2018-12-31',20],['2025-09-30',90],['2026-11-18',105]],quote:{close:105,date:'2026-11-18'},currency:'USD',overlays:data};
+const windowData=C.chartWindow(sample,settings);
+assert.equal(windowData.from,'2018-11-19');
+assert.equal(windowData.incompatibleArchive,1,'An older share basis does not enter the price scale');
+assert.deepEqual(windowData.series.archive.map(p=>p.value),[100]);
+assert.deepEqual(C.chartWindow(sample,C.chartOptions()).prices,[['2026-11-18',105]]);
+const overlaySvg=C.svg(p,{TEST:sample},1,1,{chart:settings});
+assert(overlaySvg.includes('8-year price history'));
+assert(overlaySvg.includes('class="si-price-area"'));
+assert(overlaySvg.includes('Ratios ×'));
+assert(overlaySvg.includes('Morningstar fair value')&&overlaySvg.includes('1 archive off scale'));
+assert(!overlaySvg.includes('class="si-overlay si-overlay-pe"'),'Long observation gaps are rendered as separate points');
+assert(!C.svg(p,{TEST:sample}).includes('class="si-price-area"'));

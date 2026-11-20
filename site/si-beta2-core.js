@@ -31,10 +31,72 @@ const monthLabel=ms=>new Date(ms).toLocaleDateString('en-US',{month:'short',year
 function barrierLabels(positions,top,bottom,gap=11){const rows=positions.map((target,index)=>({target,index,y:Math.max(top,Math.min(bottom,target))})).sort((a,b)=>a.y-b.y||a.index-b.index);for(let i=1;i<rows.length;i++)rows[i].y=Math.max(rows[i].y,rows[i-1].y+gap);if(rows.length&&rows.at(-1).y>bottom){rows.at(-1).y=bottom;for(let i=rows.length-2;i>=0;i--)rows[i].y=Math.min(rows[i].y,rows[i+1].y-gap);}return rows.sort((a,b)=>a.index-b.index);}
 function segmentHitsBox(a,b,box){let enter=0,leave=1;for(let axis=0;axis<2;axis++){const delta=b[axis]-a[axis],lo=axis?box.top:box.left,hi=axis?box.bottom:box.right;if(!delta){if(a[axis]<lo||a[axis]>hi)return false;continue;}let t0=(lo-a[axis])/delta,t1=(hi-a[axis])/delta;if(t0>t1)[t0,t1]=[t1,t0];enter=Math.max(enter,t0);leave=Math.min(leave,t1);if(enter>leave)return false;}return true;}
 function priceHitsBox(points,box){return points.some((point,i)=>i>0&&segmentHitsBox(points[i-1],point,box));}
-function inlineBarrierLabels(bars,points,left,right){const overlap=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top,rows=bars.map(({label,y},index)=>{const width=label.length*4.1+10,half=width/2,preferred=left+30+index*(right-left-60)/Math.max(1,bars.length-1),options=[];for(let x=left+half+4;x<=right-half-4;x+=3){const box={left:x-half-4,right:x+half+4,top:y-9,bottom:y+9};if(!priceHitsBox(points,box))options.push({inline:true,x,y,width,box});}options.sort((a,b)=>Math.abs(a.x-preferred)-Math.abs(b.x-preferred));return {index,y,width,options};}).sort((a,b)=>a.options.length-b.options.length||b.width-a.width),result=Array(bars.length);let attempts=0;
+function inlineBarrierLabels(bars,points,left,right,overlays=[]){const overlap=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top,rows=bars.map(({label,y},index)=>{const width=label.length*4.1+10,half=width/2,preferred=left+30+index*(right-left-60)/Math.max(1,bars.length-1),options=[];for(let x=left+half+4;x<=right-half-4;x+=3){const box={left:x-half-4,right:x+half+4,top:y-9,bottom:y+9};if(!priceHitsBox(points,box)&&!overlays.some(path=>priceHitsBox(path,box)))options.push({inline:true,x,y,width,box});}options.sort((a,b)=>Math.abs(a.x-preferred)-Math.abs(b.x-preferred));return {index,y,width,options};}).sort((a,b)=>a.options.length-b.options.length||b.width-a.width),result=Array(bars.length);let attempts=0;
  // Fit the most constrained words first and backtrack to leave room for the others.
  function fit(i,placed){if(i===rows.length)return true;if(++attempts>20000)return false;const row=rows[i];for(const option of row.options){if(placed.some(p=>overlap(option.box,p.box)))continue;result[row.index]=option;if(fit(i+1,[...placed,option]))return true;}return false;}
  if(fit(0,[]))return result;const placed=[];for(const row of rows){const option=row.options.find(o=>!placed.some(p=>overlap(o.box,p.box)));result[row.index]=option||{inline:false,y:row.y,width:row.width};if(option)placed.push(option);}return result;}
+const overlayKeys=['pe','pb','target'];
+const overlayColors={pe:'#006c61',pb:'#a04f13',target:'#744299',archive:'#586779'};
+const overlayNames={pe:'Fwd P/E',pb:'Fwd P/B',target:'Morningstar fair value',archive:'BOS fair value / target'};
+const ms=date=>Date.parse(date+'T12:00:00Z');
+const validDay=date=>/^\d{4}-\d{2}-\d{2}$/.test(date||'')&&Number.isFinite(ms(date))&&new Date(ms(date)).toISOString().slice(0,10)===date;
+function chartOptions(value){
+ return {years:Number.isInteger(value?.years)&&value.years>=1&&value.years<=8?value.years:1,
+  pe:value?.pe===true,pb:value?.pb===true,target:value?.target===true};
+}
+function yearsBefore(date,years){
+ const d=new Date(ms(date)),year=d.getUTCFullYear()-years,month=d.getUTCMonth(),day=d.getUTCDate();
+ return new Date(Date.UTC(year,month,Math.min(day,new Date(Date.UTC(year,month+1,0)).getUTCDate()))).toISOString().slice(0,10);
+}
+function valuationPoints(listing,history,editions){
+ const series={pe:new Map(),pb:new Map(),target:new Map(),archive:new Map()};
+ const pos=v=>Number.isFinite(v)&&v>0;
+ const set=(key,date,value,rating,reference)=>{if(validDay(date)&&pos(value))series[key].set(date,{date,value,rating,reference});};
+ const record=history?.record;
+ if(record?.bbTicker===listing.instrumentId&&record.currency===listing.currency&&record.compareEligible!==false&&record.currentEligible!==false){
+  const archived=key=>(history.metrics?.[key]||[]).filter(p=>p.currency===listing.currency&&/^bos:/.test(p.sourceId||''));
+  for(const key of ['pe','pb'])for(const p of archived(key))set(key,p.reportDate,p.value);
+  const ratings=new Map(archived('rating').map(p=>[p.reportDate,p.value]));
+  const sourceKey=p=>p.sourceId+'|'+p.reportDate+'|'+p.date;
+  const references=new Map(archived('sourcePrice').map(p=>[sourceKey(p),{date:p.date,value:p.value}]));
+  for(const p of archived('fairValueOrTarget'))set('archive',p.reportDate,p.value,ratings.get(p.reportDate),references.get(sourceKey(p)));
+ }
+ for(const {row,reportDate} of editions){
+  if(row?.instrumentId!==listing.instrumentId||row.currency!==listing.currency)continue;
+  set('pe',reportDate,row.pe);set('pb',reportDate,row.pb);
+  if(row.researchProvider==='Morningstar'&&row.fairValueOrTargetKind==='fair_value'){
+   set('target',reportDate,row.fairValueOrTargetPrice,row.rating);
+   if(series.target.has(reportDate))series.archive.delete(reportDate);
+  }else set('archive',reportDate,row.fairValueOrTargetPrice,row.rating,{date:row.priceAsOf,value:row.price});
+ }
+ return Object.fromEntries(Object.entries(series).map(([key,points])=>[key,[...points.values()].sort((a,b)=>a.date.localeCompare(b.date))]));
+}
+function chartWindow(d,chart){
+ const selected=[...overlayKeys.filter(key=>chart[key]),...(chart.target?['archive']:[])];
+ const all=(d.points||[]).filter(p=>Array.isArray(p)&&validDay(p[0])&&Number.isFinite(p[1])&&p[1]>0);
+ const end=[d.quote?.date,all.at(-1)?.[0],...selected.map(key=>d.overlays?.[key]?.at(-1)?.date)].filter(validDay).sort().at(-1);
+ const from=end?yearsBefore(end,chart.years):null;
+ const series=Object.fromEntries(selected.map(key=>[key,(d.overlays?.[key]||[]).filter(p=>p.date>=from&&p.date<=end)]));
+ let incompatibleArchive=0;
+ if(series.archive?.length){
+  const closes=new Map(d.comparisonPrices||all),count=series.archive.length;
+  // Compare same-date source closes before sharing a price scale with older per-share values.
+  series.archive=series.archive.filter(({reference})=>{
+   const close=closes.get(reference?.date),source=reference?.value;
+   return Number.isFinite(close)&&Number.isFinite(source)&&source>0&&Math.abs(close/source-1)<=.05;
+  });
+  incompatibleArchive=count-series.archive.length;
+ }
+ return {end,from,selected,prices:all.filter(p=>p[0]>=from&&p[0]<=end),series,incompatibleArchive};
+}
+function observationRuns(points){
+ const runs=[];
+ for(const p of points){
+  const last=runs.at(-1);
+  if(!last||ms(p.date)-ms(last.at(-1).date)>50*86400000)runs.push([p]);else last.push(p);
+ }
+ return runs;
+}
 function bosReportUrl(raw){
  try{
   const url=new URL(raw);
@@ -50,7 +112,7 @@ function bosResearch(row){
   : '';
  return call||target?{call,target,provider:clean(row.researchProvider,45),url:call?bosReportUrl(row.researchReportUrl):''}:null;
 }
-function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links}={}){const out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
+function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:options}={}){const chart=chartOptions(options),out=[];const rect=(x,y,w,h,fill,stroke=border)=>out.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}"/>`);const text=(x,y,t,size=10,color=navy,bold=false,anchor='start')=>out.push(`<text x="${x}" y="${y}" font-family="Arial, sans-serif" font-size="${size}" fill="${color}" font-weight="${bold?700:400}" text-anchor="${anchor}">${escape(t)}</text>`);const line=(x,y,x2,y2,color=border,dash='')=>out.push(`<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="${color}" ${dash?`stroke-dasharray="${dash}"`:''}/>`);const paragraph=(x,y,value,max,rows,size=10,color=muted)=>{const lines=wrap(value,max);lines.slice(0,rows).forEach((s,i)=>text(x,y+i*(size+3),s+(i===rows-1&&lines.length>rows?'…':''),size,color));};
  out.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="Structured investment one-pager for ${escape(p.shares.map(s=>s.symbol).join(', '))}">`);rect(0,0,W,H,'#fff','#fff');
  text(28,39,'FOR REFERENCE ONLY',17,navy,true);text(772,38,'MARKET INTEL  /  SI BETA 2',11,muted,true,'end');
  text(28,58,'Indicative terms. Capital is at risk. Refer to the issuer’s final terms for conditions and observation rules.',9,muted);
@@ -69,21 +131,75 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links}={}){cons
  text(28,257,stepNote,8,muted);
  // One shared legend outside every chart releases space for the price plots.
  [['Price',blue,''],['Initial KO','#699645','7 3'],['KI','#b94a57','3 3'],['Strike','#8261a8','9 3 2 3'],...(p.step>0?[['Final KO','#c07821','2 3']]:[])].forEach(([label,color,dash],j)=>{line(410+j*73,255,423+j*73,255,color,dash);text(427+j*73,258,label,7.5,muted);});
- const start=270,available=728,gap=8,block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length);
+ const hasOverlays=overlayKeys.some(key=>chart[key]);
+ if(hasOverlays){
+  const entries=overlayKeys.filter(key=>chart[key]).flatMap(key=>key==='target'?['target','archive']:[key]);
+  let lx=31;
+  for(const key of entries){
+   line(lx,272,lx+13,272,overlayColors[key],key==='archive'?'2 2':'');
+   text(lx+17,275,overlayNames[key],8,muted);
+   lx+=key==='target'||key==='archive'?133:74;
+  }
+  if(chart.target)text(lx,275,'B/H/S = Buy/Hold/Sell · archive shown where share basis matches',8,muted);
+ }
+ const start=hasOverlays?287:270,available=998-start,gap=8,block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length);
  p.shares.forEach((s,i)=>{const d=enrichment[s.symbol]||{},y=start+i*(block+gap),r=reference(p,s,d),ls=levels(p,r.value),name=s.name||d.name||s.symbol;
  rect(28,y,744,block,'#fff');rect(28,y,744,23,navy,navy);fitted(37,y+16,clean(name,69),535,11,'#fff',true);fitted(762,y+16,s.symbol,175,10,'#fff',false,'end');
- const chartX=36,chartY=y+29,chartW=446,plotLeft=chartX+35,plotRight=chartX+chartW-55,plotTop=chartY+13,plotBottom=y+block-22,pts=(d.points||[]).filter(x=>Array.isArray(x)&&Number.isFinite(x[1])&&x[1]>0);
- text(chartX+4,chartY+4,`1-year price history${d.currency?' · '+d.currency:''}`,8,navy,true);
- if(pts.length>1){const fk=finalKO(p),bars=[['KO',ls.ko,'#699645','7 3'],['KI',ls.ki,'#b94a57','3 3'],['Strike',ls.strike,'#8261a8','9 3 2 3'],...(p.step>0&&fk!==null?[['Final KO',num(r.value)===null?null:r.value*fk/100,'#c07821','2 3']]:[])].filter(x=>x[1]!==null),values=pts.map(x=>x[1]).concat(bars.map(x=>x[1])),ticks=axisTicks(values),low=ticks[0],high=ticks[4];const t0=Date.parse(pts[0][0]+'T12:00:00Z'),t1=Date.parse(pts.at(-1)[0]+'T12:00:00Z'),px=ms=>plotLeft+(ms-t0)/(t1-t0||1)*(plotRight-plotLeft),py=v=>plotBottom-(v-low)/(high-low)*(plotBottom-plotTop);
- ticks.forEach(v=>{const yy=py(v);line(plotLeft,yy,plotRight,yy,'#dde3e9');text(plotLeft-5,yy+3,fmt(v,6),7.5,muted,false,'end');});
- for(let j=0;j<5;j++){const ms=t0+(t1-t0)*j/4,xx=px(ms);line(xx,plotTop,xx,plotBottom,'#edf0f3');text(xx,plotBottom+13,monthLabel(ms),7.5,muted,false,j===0?'start':j===4?'end':'middle');}
- const pricePoints=pts.map(point=>[px(Date.parse(point[0]+'T12:00:00Z')),py(point[1])]),labels=inlineBarrierLabels(bars.map(b=>({label:b[0],y:py(b[1])})),pricePoints,plotLeft,plotRight),fallback=barrierLabels(labels.filter(l=>!l.inline).map(l=>l.y),plotTop+5,plotBottom-5);let fallbackIndex=0;
- out.push(`<g class="si-barriers" data-plot-right="${plotRight}">`);
- bars.forEach(([label,v,c,dash],j)=>{const yy=py(v),placement=labels[j];line(plotLeft,yy,plotRight,yy,c,dash);if(placement.inline){out.push(`<g class="si-inline-barrier-label" data-clearance="4">`);rect(placement.x-placement.width/2,yy-5,placement.width,10,'#fff','#fff');text(placement.x,yy+2.5,label,7,c,true,'middle');out.push('</g>');}else{const labelY=fallback[fallbackIndex++].y;out.push(`<path d="M ${plotRight+1} ${yy} L ${plotRight+5} ${yy} L ${plotRight+9} ${labelY} L ${plotRight+12} ${labelY}" fill="none" stroke="${c}" stroke-width="0.7"/>`);text(plotRight+15,labelY+2.5,label,7,c,true);}});
- out.push('</g>');
- // Price stays above barriers; inline label boxes are tested against every price segment.
- out.push(`<polyline class="si-price-line" fill="none" stroke="${blue}" stroke-width="1.5" points="${pts.map(x=>px(Date.parse(x[0]+'T12:00:00Z')).toFixed(2)+','+py(x[1]).toFixed(2)).join(' ')}"/>`);
+ const chartX=36,chartY=y+29,plotLeft=chartX+35,plotTop=chartY+13,plotBottom=y+block-(hasOverlays?32:22);
+ const {end,from,selected,series,prices:pts,incompatibleArchive}=chartWindow(d,chart);
+ const ratios=[...(series.pe||[]),...(series.pb||[])].map(p=>p.value);
+ const plotRight=ratios.length?417:427;
+ text(chartX+4,chartY+4,`${chart.years}-year price history${d.currency?' · '+d.currency:''}`,8,navy,true);
+ if(pts.length>1){
+  const fk=finalKO(p),bars=[['KO',ls.ko,'#699645','7 3'],['KI',ls.ki,'#b94a57','3 3'],['Strike',ls.strike,'#8261a8','9 3 2 3'],...(p.step>0&&fk!==null?[['Final KO',num(r.value)===null?null:r.value*fk/100,'#c07821','2 3']]:[])].filter(x=>x[1]!==null);
+  const values=[...pts.map(p=>p[1]),...bars.map(b=>b[1]),...(series.target||[]).map(p=>p.value),...(series.archive||[]).map(p=>p.value)];
+  const rounded=axisTicks(values),ticks=rounded[0]<0?rounded.map(v=>v-rounded[0]):rounded;
+  const low=ticks[0],high=ticks[4],t0=ms(from),t1=ms(end);
+  const px=date=>plotLeft+(ms(date)-t0)/(t1-t0)*(plotRight-plotLeft);
+  const py=v=>plotBottom-(v-low)/(high-low)*(plotBottom-plotTop);
+  const pricePoints=pts.map(([date,value])=>[px(date),py(value)]),pointList=points=>points.map(p=>p.map(n=>n.toFixed(2)).join(',')).join(' ');
+  if(hasOverlays)out.push(`<polygon class="si-price-area" fill="#dceaf7" points="${pricePoints[0][0]},${plotBottom} ${pointList(pricePoints)} ${pricePoints.at(-1)[0]},${plotBottom}"/>`);
+  ticks.forEach(v=>{const yy=py(v);line(plotLeft,yy,plotRight,yy,'#dde3e9');text(plotLeft-5,yy+3,fmt(v,6),7.5,muted,false,'end');});
+  for(let j=0;j<5;j++){const epoch=t0+(t1-t0)*j/4,xx=plotLeft+(plotRight-plotLeft)*j/4;line(xx,plotTop,xx,plotBottom,'#edf0f3');text(xx,plotBottom+13,monthLabel(epoch),7.5,muted,false,j===0?'start':j===4?'end':'middle');}
+  let ry=py;
+  if(ratios.length){
+   const rt=axisTicks(ratios),base=Math.max(0,rt[0]),top=rt.at(-1);
+   ry=v=>plotBottom-(v-base)/(top-base)*(plotBottom-plotTop);
+   line(plotRight,plotTop,plotRight,plotBottom,'#9caec0');
+   text(plotRight+3,chartY+4,'Ratios ×',7,muted,true);
+   rt.filter(v=>v>=base).forEach(v=>{line(plotRight,ry(v),plotRight+3,ry(v),'#9caec0');text(plotRight+5,ry(v)+2,fmt(v,4),6.5,muted);});
+  }
+  const overlayPaths=[],calls=[];
+  for(const key of selected){
+   const scale=key==='pe'||key==='pb'?ry:py,points=series[key],color=overlayColors[key];
+   const xy=p=>[px(p.date),scale(p.value)];
+   if(key!=='archive')for(const run of observationRuns(points)){
+    const coords=run.map(xy);if(coords.length<2)continue;
+    overlayPaths.push(coords);
+    out.push(`<polyline class="si-overlay si-overlay-${key}" fill="none" stroke="${color}" stroke-width="1.2" ${key==='pb'?'stroke-dasharray="4 2"':''} points="${pointList(coords)}"/>`);
+   }
+   for(const point of points){
+    const [xx,yy]=xy(point),rating=/^(buy|hold|sell)$/i.test(point.rating||'')?point.rating.toUpperCase():'';
+    out.push(`<circle class="si-observation si-observation-${key}" cx="${xx.toFixed(2)}" cy="${yy.toFixed(2)}" r="${key==='target'||key==='archive'?2.2:1.35}" fill="${key==='archive'?'#fff':color}" stroke="${color}"><title>${escape(`${overlayNames[key]} · ${point.date} · ${fmt(point.value,4)}${rating?' · '+rating:''}`)}</title></circle>`);
+    if(rating&&!calls.some(([x,y])=>Math.abs(x-xx)<14&&Math.abs(y-yy)<10)){
+     calls.push([xx,yy]);text(xx+(xx>plotRight-11?-4:4),yy+(yy<plotTop+9?8:-4),rating[0],6.5,color,true,xx>plotRight-11?'end':'start');
+    }
+   }
+  }
+  const labels=inlineBarrierLabels(bars.map(b=>({label:b[0],y:py(b[1])})),pricePoints,plotLeft,plotRight,overlayPaths);
+  const fallback=barrierLabels(labels.filter(l=>!l.inline).map(l=>l.y),plotTop+5,plotBottom-5),rail=ratios.length?29:1;
+  let fallbackIndex=0;
+  out.push(`<g class="si-barriers" data-plot-right="${plotRight}">`);
+  bars.forEach(([label,v,c,dash],j)=>{const yy=py(v),placement=labels[j];line(plotLeft,yy,plotRight,yy,c,dash);if(placement.inline){out.push(`<g class="si-inline-barrier-label" data-clearance="4">`);rect(placement.x-placement.width/2,yy-5,placement.width,10,'#fff','#fff');text(placement.x,yy+2.5,label,7,c,true,'middle');out.push('</g>');}else{const labelY=fallback[fallbackIndex++].y;out.push(`<path d="M ${plotRight+rail} ${yy} L ${plotRight+rail+4} ${yy} L ${plotRight+rail+8} ${labelY} L ${plotRight+rail+11} ${labelY}" fill="none" stroke="${c}" stroke-width="0.7"/>`);text(plotRight+rail+14,labelY+2.5,label,7,c,true);}});
+  out.push('</g>');
+  out.push(`<polyline class="si-price-line" fill="none" stroke="${blue}" stroke-width="1.5" points="${pointList(pricePoints)}"/>`);
  }else{rect(plotLeft,plotTop,plotRight-plotLeft,Math.max(10,plotBottom-plotTop),'#f5f8fb');text((plotLeft+plotRight)/2,(plotTop+plotBottom)/2,'Price history unavailable',11,muted,false,'middle');}
+ if(hasOverlays){
+  const names={pe:'P/E',pb:'P/B',target:'Morningstar',archive:'BOS archive'};
+  const coverage=selected.map(key=>`${names[key]}: ${series[key].length||'unavailable'}`);
+  if(incompatibleArchive)coverage.push(`${incompatibleArchive} archive off scale`);
+  fitted(chartX+4,y+block-6,'Observations · '+coverage.join(' · '),446,7.5,muted);
+ }
  const rx=496,rw=266,small=p.shares.length>=3,description=s.description||d.description||'Company description not supplied. Add a short description in share details.';
  // Keep artwork behind the entire info panel and outside the price plot and label rail.
  if(showWatermarks && typeof d.logo==='string' && /^data:image\/png;base64,[A-Za-z0-9+/]+=*$/.test(d.logo)){
@@ -135,5 +251,5 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
  }
  return doc.save();
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisTicks,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

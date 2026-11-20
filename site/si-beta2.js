@@ -2,7 +2,9 @@
 const C=window.SIBetaCore,E=C.escape,$=id=>document.getElementById(id),form=$('si-form'),KEY='market-si-beta2-v1',LIMIT=30;
 let pages=[],watch=[],activeId='',dirty=false,list='all',assets={},loading=new Set(),revisions={},busy=false,removed=null,storageOK=true,pdfURL='';
 const WATERMARK_KEY='market-si-beta2-logo-watermark',LOGO_BASE='assets/company-logos/';
-let showWatermarks=true,logoIndexPromise;
+let showWatermarks=true,logoIndexPromise,chart=C.chartOptions();
+const CHART_KEY='market-si-beta2-chart';
+try{chart=C.chartOptions(JSON.parse(localStorage.getItem(CHART_KEY)||'null'));}catch{/* Keep the defaults. */}
 const logoImages=new Map();
 try{showWatermarks=localStorage.getItem(WATERMARK_KEY)!=='off';}catch{/* The toggle can still work for this session. */}
 const active=()=>pages.find(p=>p.id===activeId),id=()=>crypto.randomUUID(),notice=msg=>{$('app-status').textContent=msg;clearTimeout(notice.timer);notice.timer=setTimeout(()=>{$('app-status').textContent='';},9000);};
@@ -59,7 +61,7 @@ async function companyLogo(...tickers){
  return logoImages.get(file);
 }
 function renderPage(page,data,number,total,watermarks=showWatermarks,links){
- return C.svg(page,data,number,total,{showWatermarks:watermarks,links});
+ return C.svg(page,data,number,total,{showWatermarks:watermarks,links,chart});
 }
 function invalidatePDF(){if(pdfURL)URL.revokeObjectURL(pdfURL);pdfURL='';$('pdf-ready').hidden=true;for(const name of ['download-pdf','open-pdf'])$(name).removeAttribute('href');}
 function protectEdits(){if(busy)return true;if(!dirty)return false;notice('Apply or discard your changes in Review & export before continuing.');$('pending-edits').scrollIntoView({behavior:'smooth',block:'center'});return true;}
@@ -72,12 +74,29 @@ function fill(p=C.blank()){for(const k of ['ko','ki','strike','step','months','c
 function read(){const p=active()?structuredClone(active()):C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])p[k]=C.num(form.elements[k].value);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])p[k]=form.elements[k].value.trim();p.firstStep=Number(form.elements.firstStep.value);p.shares=[];for(let i=0;i<4;i++){const s=form.elements['share'+i].value.trim();if(s)p.shares.push({symbol:C.symbol(s),fixing:C.num(form.elements['fixing'+i].value),name:form.elements['name'+i].value.trim(),description:form.elements['description'+i].value.trim()});}return p;}
 function buttons(){const p=active();
  $('logo-watermark').disabled=busy;
+ $('chart-display').disabled=busy;
+ $('chart-years').value=String(chart.years);
+ for(const key of C.overlayKeys)$('chart-'+key).checked=chart[key];
  $('logo-watermark').setAttribute('aria-pressed',String(showWatermarks));
  $('logo-watermark-state').textContent=showWatermarks?'On':'Off';
 $('pdf-one').disabled=!p||dirty||busy||loading.has(p?.id);$('pdf-all').disabled=!pages.length||dirty||busy||loading.size>0;for(const k of ['duplicate-page','remove-page','refresh-page'])$(k).disabled=!p||dirty||busy||(k==='refresh-page'&&loading.has(p?.id));for(const k of ['apply-page','apply-pending','discard-pending','new-page','undo-remove','backup-pages','restore-pages'])$(k).disabled=busy;$('pending-edits').hidden=!dirty;$('apply-pending').textContent=p?'Apply changes':'Create one-pager';$('page-count').textContent=pages.length;$('pdf-all').textContent=busy?'Creating PDF…':`↓ All pages PDF${pages.length?' ('+pages.length+')':''}`;}
-function preflight(p){const messages=[];if(!p||loading.has(p.id)){$('data-check').hidden=true;return;}const data=assets[p.id]||{},missingPrice=[],missingHistory=[],missingDescription=[];for(const s of p.shares){const d=data[s.symbol]||{};if(C.reference(p,s,d).value===null)missingPrice.push(s.symbol);if((d.points||[]).length<2)missingHistory.push(s.symbol);if(!(s.description||d.description))missingDescription.push(s.symbol);}if(missingPrice.length)messages.push('Reference price unavailable: '+missingPrice.join(', ')+'. Enter a manual reference price or choose a date with a saved close.');if(missingHistory.length)messages.push('Price history unavailable: '+missingHistory.join(', ')+'.');if(missingDescription.length)messages.push('Company description not supplied: '+missingDescription.join(', ')+'. Add it in share details.');$('data-check').hidden=!messages.length;$('data-check-text').textContent=messages.join(' ')+' The PDF will retain these gaps.';}
+function preflight(p){const messages=[];if(!p||loading.has(p.id)){$('data-check').hidden=true;return;}const data=assets[p.id]||{},missingPrice=[],missingHistory=[],missingDescription=[];for(const s of p.shares){const d=data[s.symbol]||{};if(C.reference(p,s,d).value===null)missingPrice.push(s.symbol);if(C.chartWindow(d,chart).prices.length<2)missingHistory.push(s.symbol);if(!(s.description||d.description))missingDescription.push(s.symbol);}if(missingPrice.length)messages.push('Reference price unavailable: '+missingPrice.join(', ')+'. Enter a manual reference price or choose a date with a saved close.');if(missingHistory.length)messages.push('Price history unavailable: '+missingHistory.join(', ')+'.');if(missingDescription.length)messages.push('Company description not supplied: '+missingDescription.join(', ')+'. Add it in share details.');$('data-check').hidden=!messages.length;$('data-check-text').textContent=messages.join(' ')+' The PDF will retain these gaps.';}
 function render(){const p=active();$('page-tabs').innerHTML=pages.map((x,i)=>`<button role="tab" id="tab-${E(x.id)}" aria-controls="preview" aria-selected="${x.id===activeId}" tabindex="${x.id===activeId?0:-1}" data-page="${E(x.id)}" title="${E(x.shares.map(s=>s.symbol).join(' / '))}" aria-label="Page ${i+1}: ${E(x.shares.map(s=>s.symbol).join(' / '))}">${i+1}</button>`).join('');if(p){$('preview').innerHTML=renderPage(p,assets[p.id]||{},pages.indexOf(p)+1,pages.length);$('preview').setAttribute('aria-labelledby','tab-'+p.id);}else{$('preview').removeAttribute('aria-labelledby');$('preview').innerHTML='<div class="empty-preview"><span>▤</span><h3>Your first one-pager starts here</h3><p>Complete the terms above or choose “Add page” from the reference list below.</p></div>';}
  $('preview-status').classList.toggle('dirty',dirty);$('preview-status').textContent=dirty?'The preview shows the last applied terms. Apply changes below before exporting.':p?(loading.has(p.id)?'Loading dated share data…':`Page ${pages.indexOf(p)+1} of ${pages.length} · ${p.shares.map(s=>s.symbol).join(' + ')} · ${storageOK?'saved in this browser':'not saved; download a collection backup'}`):'No pages yet.';preflight(p);buttons();}
+async function chartHistory(item,valuation){
+ if(!item)return null;
+ const row=valuation?.row,keys=[item.ticker,...(item.aliases||[])];
+ const mappings=(window.BOSEquity?.reviewedListings||[]).filter(m=>m.verified===true&&m.currency===item.currency&&
+  (!m.listingId||m.listingId===item.id)&&keys.includes(m.ticker));
+ const matches=[...new Set(mappings.map(m=>m.instrumentId))];
+ const listing=row||(matches.length===1?{instrumentId:matches[0],currency:item.currency}:null);
+ if(!listing||listing.currency!==item.currency)return null;
+ const [history,editions]=await Promise.all([
+  window.ShareLabData?.historyFor({id:`bb:${listing.instrumentId}|${listing.currency}`,currency:listing.currency}).catch(()=>null),
+  window.BOSEquity?.valuationHistoryFor?.(item)?.catch(()=>[]),
+ ]);
+ return C.valuationPoints(listing,history,[...(editions||[]),...(valuation?[valuation]:[])]);
+}
 async function enrich(p){
  if(!p)return;
  const revision=(revisions[p.id]||0)+1;
@@ -85,7 +104,7 @@ async function enrich(p){
  loading.add(p.id);
  render();
  await window.ShareStaticData?.load();
- const result={};
+ const result={},wantOverlays=C.overlayKeys.some(key=>chart[key]);
  await Promise.all(p.shares.map(async share=>{
   const ticker=C.symbol(share.symbol);
   const profile=window.ShareStaticData?.find(ticker);
@@ -93,21 +112,23 @@ async function enrich(p){
   const item=window.MarketPrices.resolve(ticker)||window.BOSEquity?.itemFor(ticker);
   const logo=companyLogo(item?.ticker,profile?.publicTicker,ticker);
   let market,valuation=window.BOSEquity?.valuationFor(item);
+  const overlays=wantOverlays?bounded(chartHistory(item,valuation),'Valuation history timed out.',15000).catch(()=>null):null;
   try{
    const data=await bounded(window.MarketPrices.series(ticker),'Share data timed out.');
    const quote=data.quote;
-   const from=new Date(Date.parse(quote.date+'T12:00:00Z')-366*86400000).toISOString().slice(0,10);
+   const from=C.yearsBefore(quote.date,8);
    valuation=window.BOSEquity?.valuationFor(data.item)||valuation;
    market={
     name:data.item.name||facts.name,currency:data.item.currency,provider:data.item.provider||'Shared historical price feed',
     quote:{close:quote.close,date:quote.date},daily:data.daily,
     points:window.MarketPrices.selectPoints(data.base,data.daily,from,quote.date),
+    comparisonPrices:[...data.base.monthly,...data.base.weekly,...data.daily].filter(p=>p[0]>=from),
     sourceUrl:window.MarketPrices.sourceUrl(data.item.history_url),basis:data.item.basis||''
    };
   }catch{
    market={error:'Exact listing history unavailable. No substitute listing is used.'};
   }
-  result[share.symbol]={...facts,...market,logo:await logo,
+  result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,
    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
   };
  }));
@@ -126,6 +147,15 @@ $('apply-pending').addEventListener('click',()=>form.requestSubmit());
 $('discard-pending').addEventListener('click',()=>{fill(active());render();});
 $('edit-details').addEventListener('click',()=>{document.querySelector('.more-terms').open=true;$('share-details').scrollIntoView({behavior:'smooth',block:'start'});});
 $('zoom-preview').addEventListener('click',()=>{const zoom=$('preview').classList.toggle('actual-size');$('zoom-preview').setAttribute('aria-pressed',String(zoom));$('zoom-preview').textContent=zoom?'Fit page':'Enlarge preview';});
+$('chart-display').addEventListener('change',()=>{
+ if(busy)return;
+ const wasEnabled=C.overlayKeys.some(key=>chart[key]);
+ chart=C.chartOptions({years:Number($('chart-years').value),...Object.fromEntries(C.overlayKeys.map(key=>[key,$('chart-'+key).checked]))});
+ try{localStorage.setItem(CHART_KEY,JSON.stringify(chart));}catch{/* Use the current session setting. */}
+ invalidatePDF();
+ if(!wasEnabled&&C.overlayKeys.some(key=>chart[key]))pages.forEach(enrich);
+ render();
+});
 $('logo-watermark').addEventListener('click',()=>{
  if(busy)return;
  showWatermarks=!showWatermarks;
@@ -139,7 +169,7 @@ $('page-tabs').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Hom
 $('duplicate-page').addEventListener('click',()=>{if(active())add(structuredClone(active()));});
 $('remove-page').addEventListener('click',()=>{if(!active()||protectEdits())return;invalidatePDF();removed={page:active(),index:pages.indexOf(active())};loading.delete(activeId);revisions[activeId]=(revisions[activeId]||0)+1;pages=pages.filter(p=>p.id!==activeId);activeId=pages[Math.min(removed.index,pages.length-1)]?.id||'';$('undo-remove').hidden=false;fill(active());persist();render();notice('Page removed. Undo is available.');});
 $('undo-remove').addEventListener('click',()=>{if(!removed||protectEdits())return;if(pages.length>=LIMIT){notice('Remove a page before undoing: the collection already has 30 pages.');return;}invalidatePDF();pages.splice(removed.index,0,removed.page);activeId=removed.page.id;removed=null;$('undo-remove').hidden=true;loading.add(activeId);fill(active());persist();render();enrich(active());});
-$('refresh-page').addEventListener('click',async()=>{const p=active();if(!p||protectEdits())return;invalidatePDF();loading.add(p.id);render();try{await bounded(Promise.all([window.MarketPrices.refresh(true),window.BOSEquity?.refresh(true)]),'Data refresh timed out.');}catch{notice('Some data could not refresh. Available saved data will be used.');}if(pages.includes(p))enrich(p);else{loading.delete(p.id);render();}});
+$('refresh-page').addEventListener('click',async()=>{const p=active();if(!p||protectEdits())return;invalidatePDF();loading.add(p.id);render();try{await bounded(Promise.all([window.MarketPrices.refresh(true),window.BOSEquity?.refresh(true),C.overlayKeys.some(key=>chart[key])?window.ShareLabData?.load(true):null]),'Data refresh timed out.');}catch{notice('Some data could not refresh. Available saved data will be used.');}if(pages.includes(p))enrich(p);else{loading.delete(p.id);render();}});
 let refs=[];
 function renderLibrary(){refs=window.MarketSI.records();const q=$('library-search').value.trim().toLowerCase(),ccy=$('library-currency').value,filtered=refs.filter(r=>(list!=='saved'||watch.includes(r.reference))&&(!ccy||r.currency===ccy)&&[r.reference,...r.shares,r.source_date||'',...r.shares.map(s=>window.MarketPrices?.resolve(s)?.name||'')].join(' ').toLowerCase().includes(q));$('watch-count').textContent=watch.length;$('library-count').textContent=refs.length?`${filtered.length} of ${refs.length} historical records${list==='saved'?' · your SI watchlist':''}`:'Reference list unavailable. You can still create pages manually.';$('library-retry').hidden=refs.length>0;
  $('library-rows').innerHTML=filtered.map(r=>{

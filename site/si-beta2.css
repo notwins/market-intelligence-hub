@@ -7,3 +7,9 @@
 @media print{#preview.actual-size svg{width:100%!important;min-width:0!important}}
 
 .library th{white-space:nowrap}
+
+.chart-display{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 12px;padding:8px 12px 10px;border:1px solid var(--line);border-radius:9px;min-width:0}
+.chart-display legend{padding:0 5px;font-size:.78rem;font-weight:700;color:var(--muted)}
+.chart-display label{display:inline-flex;align-items:center;gap:7px;font-size:.8rem}
+.chart-display input[type=checkbox]{width:16px;height:16px;margin:0;accent-color:#3674a0}
+.chart-display select{min-width:86px;padding:5px 8px}
