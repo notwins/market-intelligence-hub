@@ -30,7 +30,13 @@
   const more = document.getElementById('more-btn') || document.createElement('button');
   bar.className = 'bottom-nav hub-primary'; bar.setAttribute('aria-label', 'Main sections');
   const scroll = document.createElement('div'); scroll.className = 'hub-primary-scroll';
-  sections.forEach(([name, href, icon]) => scroll.append(link(name, href, icon)));
+  sections.forEach(([name, href, icon]) => {
+    scroll.append(link(name, href, icon));
+    if (name === 'Home') {
+      const earnings = link('US Earnings', 'v4.html#earnings', '◈');
+      earnings.className = 'hub-mobile-earnings'; scroll.append(earnings);
+    }
+  });
   more.type = 'button'; more.classList.add('hub-primary-more'); more.textContent = '••• More';
   more.setAttribute('aria-haspopup', 'dialog');
   let menu = document.getElementById('more');
@@ -60,7 +66,7 @@
   document.documentElement.classList.add('hub-primary-ready');
   function active() {
     const relative = location.pathname.slice(base.pathname.length);
-    const key = relative.startsWith('fred/') ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
+    const key = relative === 'v4.html' && /^#earnings(?:\/|$)/.test(location.hash) ? 'US Earnings' : relative.startsWith('fred/') ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || /^(?:historical-fred|fred-[123])\.html$/.test(relative) ? 'Historical charts'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
     scroll.querySelectorAll('a').forEach(a => {
