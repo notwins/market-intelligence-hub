@@ -1,7 +1,7 @@
 import copy,json,shutil,subprocess,tempfile,threading,unittest
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from research_feed import ROOT,canonical,digest,read,build,collect,validate_report,validate_review
+from research_feed import ROOT,canonical,digest,read,build,compile_feed,collect,validate_report,validate_review
 from submit_research import accept,submit,git
 from research_release_guard import guard,restore_ui
 from test_research_contracts import fixture,render,STANDARD
@@ -99,11 +99,11 @@ class ResearchFeedTests(unittest.TestCase):
         (self.repo/'site/v4.html').write_text('Mixed UI');git(self.repo,'add','.');git(self.repo,'commit','-m','Mixed')
         with self.assertRaises(ValueError):guard(self.repo,base,git(self.repo,'rev-parse','HEAD').stdout.strip())
     def test_hub_fallback_and_bootstrap_match_independent_delivery_contract(self):
-        # The independent content site owns new editions. Recompiling the Hub
-        # from its frozen record directory would reissue legacy content.
+        # Source control carries an empty bootstrap. The Pages search build
+        # materializes the Hub's frozen legacy records as an offline fallback.
         data = ROOT / "site/data"
         fallback = read(data / "research-feed.json")
-        expected = {
+        empty = {
             "schema_version": 1,
             "generation": 0,
             "revision": digest(canonical([])),
@@ -111,10 +111,9 @@ class ResearchFeedTests(unittest.TestCase):
             "records": [],
             "tags": {},
         }
-        self.assertEqual(fallback, expected)
+        self.assertIn(fallback, [empty, compile_feed(ROOT / "site")])
         bootstrap = (data / "research-feed-bootstrap.js").read_text(encoding="utf-8")
-        self.assertEqual(
-            bootstrap, "window.MIH_RESEARCH_FEED=" + canonical(expected).decode().rstrip() + ";\n"
-        )
+        safe = canonical(fallback).decode().replace('<','\\u003c').replace('\u2028','\\u2028').replace('\u2029','\\u2029')
+        self.assertEqual(bootstrap, "window.MIH_RESEARCH_FEED=" + safe.rstrip() + ";\n")
 
 if __name__=='__main__':unittest.main()
