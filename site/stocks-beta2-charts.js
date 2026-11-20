@@ -11,6 +11,9 @@
   const tickFormat = new Intl.DateTimeFormat('en-GB', { month: 'short', year: '2-digit', timeZone: 'UTC' });
   const numbers = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
   const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 2 });
+  const signedPercent = new Intl.NumberFormat('en-GB', {
+    style: 'percent', signDisplay: 'exceptZero', minimumFractionDigits: 1, maximumFractionDigits: 1
+  });
   const axisNumber = value => Math.abs(value) >= 1000 ? compact.format(value) : numbers.format(value);
   const wholePrice = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
   const smallPrice = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
@@ -122,6 +125,15 @@
     const value = Number(String(target.value).replaceAll(',', ''));
     if (!Number.isFinite(value) || value <= 0) return null;
     return { value, provider: brief.provider, date: brief.date };
+  }
+
+  function targetGapLabel(price, target) {
+    if (!Number.isFinite(price) || price <= 0 || !Number.isFinite(target) || target <= 0) return '';
+    const gap = (target - price) / price;
+    if (!Number.isFinite(gap)) return '';
+    if (gap === 0) return 'At the BOS coverage target';
+    const amount = Math.abs(gap) < .0005 ? 'Less than 0.1%' : signedPercent.format(gap);
+    return amount + (gap > 0 ? ' upside' : ' downside') + ' to the latest BOS target';
   }
 
   function targetBand(value, [upper2, upper1, , lower1, lower2]) {
@@ -385,29 +397,57 @@
       get('.sb2-chart-window').textContent = label + ' (' + unit + ') · ' + monthLabel(data.months[from][0]) + ' to '
         + monthLabel(data.months[to][0]) + ' · ' + prior.length + ' of ' + (to - from + 1) + ' editions'
         + (metric === 'price' ? ' · Unadjusted source prices' : '');
-      const quote = dateFormat.format(time(data.months[cursor][2]));
-      function show(kind, lines, unitText, description, options) {
+      const priceDate = data.months[cursor][2];
+      const quote = dateFormat.format(time(priceDate));
+      const setText = (selector, text) => {
+        const field = get(selector);
+        if (field.textContent !== text) field.textContent = text;
+      };
+      function show(kind, lines, description, options) {
         const canvas = get('[data-' + kind + '-chart]');
         const available = Boolean(options?.researchTarget) || lines.some(line => line.points.length);
         canvas.closest('figure').hidden = !available;
         get('[data-' + kind + '-empty]').hidden = available;
         canvas.setAttribute('aria-label', company.name + ' ' + description);
         card.positions[kind] = available ? drawPlot(canvas, lines, data.months, state, options) : null;
-        const readings = lines.flatMap(line => {
-          const point = line.points.find(item => item.index === cursor);
-          const formatter = options?.isPrice ? priceLabel : value => numbers.format(value);
-          return point ? [line.name + ' ' + formatter(point.value) + ' ' + unitText] : [];
-        });
-        const value = quote + ' · ' + (readings.join(' · ') || 'No observation');
-        const readout = get('[data-' + kind + '-value]');
-        if (readout.textContent !== value) readout.textContent = value;
       }
-      show('price', primary, unit, label + ' by price date'
+      show('price', primary, label + ' by price date'
         + (targetRows.length ? ' with Morningstar fair value' : '')
         + (cone ? ' and a 12-month cone with ' + card.bands.map(band => '±' + band + ' SD').join(' and ') : '')
         + (researchTarget ? ' and a research target at ' + numbers.format(researchTarget.value) + ' ' + unit : ''),
       { cone, bands: card.bands, researchTarget, isPrice: metric === 'price' });
-      show('valuation', ratios, '×', 'forward P/E and P/B by price date');
+      show('valuation', ratios, 'forward P/E and P/B by price date');
+      const dateField = get('[data-price-date]');
+      if (dateField.dateTime !== priceDate) dateField.dateTime = priceDate;
+      setText('[data-price-date]', quote);
+      const point = prior.find(item => item.index === cursor);
+      setText('[data-price-reading]', point ? label + ' ' + numbers.format(point.value) + ' ' + unit : 'No observation');
+      const analyst = targetRows.find(row => row[0] === cursor && cursor <= (cone?.anchor.index ?? to));
+      const call = get('[data-analyst-reading]');
+      call.hidden = !analyst;
+      if (analyst) {
+        call.dataset.rating = analyst[2];
+        setText('[data-analyst-call]', analyst[2]);
+        setText('[data-analyst-value]', numbers.format(analyst[1]) + ' ' + company.currency);
+      }
+      const latestTarget = card.researchTarget;
+      const gap = metric === 'price' ? targetGapLabel(point?.value, latestTarget?.value) : '';
+      const gapField = get('[data-bos-target-gap]');
+      gapField.hidden = !gap;
+      setText('[data-bos-target-gap]', gap);
+      if (gap) {
+        const targetDate = time(latestTarget.date);
+        gapField.title = [
+          numbers.format(latestTarget.value) + ' ' + company.currency,
+          latestTarget.provider,
+          Number.isFinite(targetDate) ? dateFormat.format(targetDate) : ''
+        ].filter(Boolean).join(' · ');
+      }
+      const valuations = ratios.flatMap(line => {
+        const ratio = line.points.find(item => item.index === cursor);
+        return ratio ? [line.name + ' ' + numbers.format(ratio.value) + ' ×'] : [];
+      });
+      setText('[data-valuation-value]', quote + ' · ' + (valuations.join(' · ') || 'No observation'));
       const slider = get('input[type=range]');
       slider.min = String(from);
       slider.max = String(to);
@@ -591,7 +631,7 @@
       if (!card) return;
       card.researchTarget = researchConeTarget(brief, card.company.currency);
       card.researchTargetFailed = brief === null;
-      if (card.bosTarget) repaint();
+      if (card.metric === 'price') repaint();
     }
     return { add, settings, cardSettings, setResearchTarget, range: () => state,
       remove(element) { resize.unobserve(element); cards.delete(element); } };
