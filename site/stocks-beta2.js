@@ -61,6 +61,31 @@
   let data, history, rankings, pending, origin, researchRequest;
   const deck = get('sb2-detail'), dialog = get('sb2-card-picker');
   const cards = new Map();
+  const columnChoice = get('sb2-card-columns');
+  const touch = root.matchMedia('(pointer:coarse)');
+  const portrait = root.matchMedia('(orientation:portrait)');
+
+  function fitCards() {
+    if (!cards.size || !deck.clientWidth) return;
+    const style = root.getComputedStyle(deck);
+    const gap = parseFloat(style.columnGap);
+    const minimum = parseFloat(style.getPropertyValue('--sb2-card-min-width'));
+    const preferred = columnChoice.value === 'auto' ? 5 : Number(columnChoice.value);
+    const deviceLimit = touch.matches ? (portrait.matches ? 1 : 2) : 5;
+    const capacity = Math.max(1, Math.floor((deck.clientWidth + gap) / (minimum + gap)));
+    const columns = Math.min(preferred, deviceLimit, capacity, cards.size);
+    const status = get('sb2-card-fit');
+    const label = columns + (columns === 1 ? ' card per row' : ' cards per row');
+    if (status.textContent === label) return;
+    deck.style.setProperty('--sb2-card-columns', String(columns));
+    deck.toggleAttribute('data-multiple', columns > 1);
+    status.textContent = label;
+  }
+
+  new ResizeObserver(fitCards).observe(deck);
+  columnChoice.addEventListener('change', fitCards);
+  touch.addEventListener('change', fitCards);
+  portrait.addEventListener('change', fitCards);
   let collection = 'global';
 
   function logo(security, size) {
@@ -217,6 +242,7 @@
       deck.insertBefore(element, next?.element ?? null);
     }
     cards.set(slot, entry);
+    fitCards();
     history.add(element, company);
     paintMonthlyTable(entry, history.range());
     paintResearch(entry);
@@ -225,6 +251,7 @@
       history.remove(element);
       cards.delete(slot);
       element.remove();
+      fitCards();
       refreshRemoveButtons();
       deck.querySelector('.sb2-company-heading').focus({preventScroll:true});
     });
