@@ -12,6 +12,9 @@
   const numbers = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
   const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 2 });
   const axisNumber = value => Math.abs(value) >= 1000 ? compact.format(value) : numbers.format(value);
+  const wholePrice = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
+  const smallPrice = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const priceLabel = value => (Math.abs(value) < 10 ? smallPrice : wholePrice).format(value);
   const monthLabel = month => monthFormat.format(time(month + '-01'));
   // NYSE or Nasdaq listings identified on the reports in the November 2026 coverage snapshot.
   const usaListings = new Set((
@@ -26,6 +29,46 @@
         const [, report, quote] = data.months[point[0]];
         return { index: point[0], report, quote, value: point[column] };
       });
+  }
+
+  function splitLike(previous, current, price, cap) {
+    if (!(previous[cap] > 0 && current[cap] > 0)) return false;
+    const priceRatio = current[price] / previous[price];
+    const capRatio = current[cap] / previous[cap];
+    if (Math.abs(Math.log(priceRatio)) < Math.log(1.6)) return false;
+    const shares = capRatio / priceRatio;
+    const change = Math.max(shares, 1 / shares);
+    return [2, 3, 4, 5, 8, 10, 20, 25, 50, 100].some(ratio => Math.abs(change / ratio - 1) <= .04);
+  }
+
+  function probabilityCone(data, company, anchor) {
+    const price = data.metrics.findIndex(([key]) => key === 'price') + 1;
+    const cap = data.metrics.findIndex(([key]) => key === 'market_cap_usd_bn') + 1;
+    const monthIndex = i => {
+      const [year, month] = data.months[i][0].split('-').map(Number);
+      return year * 12 + month;
+    };
+    const source = point => company.previous[point[data.metrics.length + 1]];
+    const earliest = monthIndex(anchor.index) - 36;
+    const observations = company.observations.filter(point => point[0] <= anchor.index && monthIndex(point[0]) >= earliest);
+    const changes = [];
+    let splits = 0;
+    for (let i = 1; i < observations.length; i++) {
+      const previous = observations[i - 1], current = observations[i];
+      if (monthIndex(current[0]) - monthIndex(previous[0]) !== 1 || !(previous[price] > 0 && current[price] > 0)) continue;
+      if (source(previous)?.[0] !== source(current)?.[0] &&
+          [source(previous)?.[1], source(current)?.[1]].includes('predecessor_security')) continue;
+      if (splitLike(previous, current, price, cap)) { splits++; continue; }
+      changes.push(Math.log(current[price] / previous[price]));
+    }
+    const count = changes.length;
+    if (count < 12) return { count, splits };
+    const mean = changes.reduce((sum, value) => sum + value, 0) / count;
+    const sigma = Math.sqrt(changes.reduce((sum, value) => sum + (value - mean) ** 2, 0) / (count - 1));
+    const points = Array.from({length:13}, (_, month) => [2, 1, 0, -1, -2].map(
+      sd => anchor.value * Math.exp(sd * sigma * Math.sqrt(month))
+    ));
+    return { count, splits, sigma, points, anchor };
   }
 
   function peRankings(data, month, market) {
@@ -62,7 +105,9 @@
   const targetColors = { Buy: '#2766bf', Hold: '#b38a00', Sell: '#d87882' };
   const ratioColors = ['#326d9f', '#8554a1'];
 
-  function drawPlot(canvas, series, dates, { from, to, cursor, axis }) {
+  const coneLabels = ['+2 SD', '+1 SD', '0 SD', '−1 SD', '−2 SD'];
+
+  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, isPrice } = {}) {
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return null;
     const scale = Math.min(root.devicePixelRatio || 1, 2);
@@ -72,6 +117,7 @@
     ctx.scale(scale, scale);
     ctx.font = '12px "Segoe UI", Arial, sans-serif';
     const values = series.flatMap(line => line.points.map(point => point.value));
+    if (cone) values.push(...cone.points.at(-1));
     if (series.some(line => line.area)) values.push(0);
     const low = Math.min(...values), high = Math.max(...values);
     const pad = low === high ? Math.max(Math.abs(low) / 10, .1) : 0;
@@ -79,10 +125,14 @@
     const min = Math.floor((low - pad) / step) * step;
     const max = Math.ceil((high + pad) / step) * step;
     const labels = Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + step * i);
-    const first = time(dates[from][2]), last = time(dates[to][2]);
-    const left = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(axisNumber(value)).width))) + 10;
-    const right = width - 12, top = 11, bottom = height - 28;
-    const x = instant => first === last ? (left + right) / 2 : left + (instant - first) / (last - first) * (right - left);
+    const first = time(dates[from][2]), last = time(cone?.anchor.quote || dates[to][2]);
+    const labelValue = isPrice ? priceLabel : axisNumber;
+    const left = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width))) + 10;
+    const endpointLabels = cone?.points.at(-1).map((value, i) => coneLabels[i] + '  ' + priceLabel(value));
+    const labelRoom = endpointLabels ? Math.max(...endpointLabels.map(label => ctx.measureText(label).width)) + 13 : 0;
+    const right = width - 12 - labelRoom, top = 11, bottom = height - 28;
+    const historicalRight = cone ? (first === last ? left : right - (right - left) * .38) : right;
+    const x = instant => first === last ? (left + historicalRight) / 2 : left + (instant - first) / (last - first) * (historicalRight - left);
     const y = value => bottom - (value - min) / (max - min) * (bottom - top);
     const tick = (x1, y1, x2, y2, color) => {
       ctx.strokeStyle = color;
@@ -95,9 +145,13 @@
     ctx.fillStyle = '#4e6569';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
+    let previousLabel;
     labels.forEach(value => {
+      const text = labelValue(value);
+      if (text === previousLabel) return;
       tick(left, y(value), right, y(value), '#e1e9e8');
-      ctx.fillText(axisNumber(value), left - 7, y(value));
+      ctx.fillText(text, left - 7, y(value));
+      previousLabel = text;
     });
     const start = new Date(first), spacing = axis === 'quarter' ? 3 : 12;
     let month = Math.floor(start.getUTCMonth() / spacing) * spacing;
@@ -115,12 +169,49 @@
       const text = axis === 'year' && last - first > 365 * 86400000
         ? String(new Date(instant).getUTCFullYear()) : tickFormat.format(instant);
       const half = ctx.measureText(text).width / 2;
-      const center = Math.max(left + half, Math.min(right - half, at));
+      const center = Math.max(left + half, Math.min(historicalRight - half, at));
       if (center - half < endLabel + 7) return;
       ctx.fillText(text, center, height - 10);
       endLabel = center + half;
     });
-    tick(x(time(dates[cursor][2])), top, x(time(dates[cursor][2])), bottom, '#9aafad');
+    if (!cone || cursor <= cone.anchor.index) {
+      tick(x(time(dates[cursor][2])), top, x(time(dates[cursor][2])), bottom, '#9aafad');
+    }
+    if (cone) {
+      const futureX = month => historicalRight + month / 12 * (right - historicalRight);
+      ctx.fillStyle = '#edf3fc';
+      ctx.fillRect(historicalRight, top, right - historicalRight, bottom - top);
+      tick(historicalRight, top, historicalRight, bottom, '#9fb7cf');
+      function band(upper, lower, fill, stroke) {
+        ctx.beginPath();
+        for (let month = 0; month <= 12; month++) ctx.lineTo(futureX(month), y(cone.points[month][upper]));
+        for (let month = 12; month >= 0; month--) ctx.lineTo(futureX(month), y(cone.points[month][lower]));
+        ctx.closePath();
+        ctx.fillStyle = fill;
+        ctx.fill();
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+      band(0, 4, '#d9e5f7', '#688bb5');
+      band(1, 3, '#b8d0ed', '#446f9f');
+      ctx.setLineDash([3, 3]);
+      tick(historicalRight, y(cone.anchor.value), right, y(cone.anchor.value), '#2c597d');
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#284867';
+      ctx.textAlign = 'center';
+      ctx.fillText('12 mo', right - 6, height - 10);
+      if (right - historicalRight > 86) ctx.fillText('6 mo', futureX(6), height - 10);
+      ctx.textAlign = 'left';
+      const end = cone.points.at(-1);
+      let labelY = top - 14;
+      end.forEach((value, i) => {
+        const spaced = Math.max(labelY + 14, Math.min(bottom - 14 * (end.length - 1 - i), y(value)));
+        tick(right, y(value), right + 7, spaced, '#688bb5');
+        ctx.fillText(endpointLabels[i], right + 9, spaced);
+        labelY = spaced;
+      });
+    }
     for (const line of series) {
       const runs = [];
       for (const point of line.points) {
@@ -156,7 +247,7 @@
         }
       }
     }
-    return index => x(time(dates[index][2]));
+    return { forIndex: index => x(time(dates[index][2])), coneStart: cone ? historicalRight : Infinity };
   }
 
   function mountHistory(data, changeRange) {
@@ -196,35 +287,48 @@
       const unit = rawUnit === 'quote' ? company.currency : rawUnit;
       const { from, to, cursor } = state;
       const prior = historyPoints(data, company, metric, from, to);
+      const anchor = prior.findLast(point => point.value > 0);
+      const activeCone = metric === 'price' && card.cone;
+      if (activeCone && anchor && card.coneAnchor !== anchor.index) {
+        card.coneAnchor = anchor.index;
+        card.projection = probabilityCone(data, company, anchor);
+      }
+      const projection = activeCone && anchor ? card.projection : null;
+      const cone = projection?.points ? projection : null;
       const targetRows = metric === 'price' && card.target ? targets?.[company.ticker] ?? [] : [];
       const targetLines = Object.entries(targetColors).map(([rating, color]) => ({
-        name: rating, color, points: targetRows.filter(row => row[0] >= from && row[0] <= to && row[2] === rating)
+        name: rating, color, points: targetRows.filter(row => row[0] >= from && row[0] <= (cone?.anchor.index ?? to) && row[2] === rating)
           .map(([index, value]) => ({index, value, quote: data.months[index][2]}))
       }));
       const ratios = ['forward_pe', 'forward_pb'].map((key, i) => ({
         name: ['P/E', 'P/B'][i], color: ratioColors[i], points: historyPoints(data, company, key, from, to)
       }));
-      const primary = [{name: label, color: priceColor, points: prior, area: Boolean(metric === 'price' && card.target)}, ...targetLines];
+      const primary = [{name: label, color: priceColor, points: cone ? prior.filter(point => point.index <= anchor.index) : prior,
+        area: Boolean(metric === 'price' && card.target && !cone)}, ...targetLines];
       get('.sb2-chart-window').textContent = label + ' (' + unit + ') · ' + monthLabel(data.months[from][0]) + ' to '
         + monthLabel(data.months[to][0]) + ' · ' + prior.length + ' of ' + (to - from + 1) + ' editions'
         + (metric === 'price' ? ' · Unadjusted source prices' : '');
       const quote = dateFormat.format(time(data.months[cursor][2]));
-      function show(kind, lines, unitText, description) {
+      function show(kind, lines, unitText, description, options) {
         const canvas = get('[data-' + kind + '-chart]');
         const available = lines.some(line => line.points.length);
         canvas.closest('figure').hidden = !available;
         get('[data-' + kind + '-empty]').hidden = available;
         canvas.setAttribute('aria-label', company.name + ' ' + description);
-        card.positions[kind] = available ? drawPlot(canvas, lines, data.months, state) : null;
+        card.positions[kind] = available ? drawPlot(canvas, lines, data.months, state, options) : null;
         const readings = lines.flatMap(line => {
           const point = line.points.find(item => item.index === cursor);
-          return point ? [line.name + ' ' + numbers.format(point.value) + ' ' + unitText] : [];
+          const formatter = options?.isPrice ? priceLabel : value => numbers.format(value);
+          return point ? [line.name + ' ' + formatter(point.value) + ' ' + unitText] : [];
         });
         const value = quote + ' · ' + (readings.join(' · ') || 'No observation');
         const readout = get('[data-' + kind + '-value]');
         if (readout.textContent !== value) readout.textContent = value;
       }
-      show('price', primary, unit, label + ' by price date' + (targetRows.length ? ' with Morningstar fair value' : ''));
+      show('price', primary, unit, label + ' by price date'
+        + (targetRows.length ? ' with Morningstar fair value' : '')
+        + (cone ? ' and a 12-month cone with one and two standard deviation bands' : ''),
+      { cone, isPrice: metric === 'price' });
       show('valuation', ratios, '×', 'forward P/E and P/B by price date');
       const slider = get('input[type=range]');
       slider.min = String(from);
@@ -235,6 +339,15 @@
       get('[data-target-status]').textContent = card.target && metric === 'price'
         ? card.targetError || (!targets ? 'Loading Morningstar fair values…'
           : targetLines.some(line => line.points.length) ? '' : 'No identified Morningstar fair values in this range.') : '';
+      get('.sb2-cone-info').hidden = !activeCone;
+      get('[data-cone]').setAttribute('aria-pressed', String(activeCone));
+      get('[data-cone-method]').hidden = !activeCone;
+      const summary = !activeCone ? '' : cone
+        ? '12 months from ' + dateFormat.format(time(anchor.quote)) + ' · ' + unit + ' · '
+          + cone.count + ' monthly returns' + (cone.splits ? ' · ' + cone.splits + ' split-like move' + (cone.splits === 1 ? '' : 's') + ' skipped' : '')
+        : 'Cone unavailable · ' + (anchor ? projection.count + ' usable monthly returns. At least 12 are needed.' : 'No positive price in this range.');
+      if (get('[data-cone-summary]').textContent !== summary) get('[data-cone-summary]').textContent = summary;
+      get('[data-cone-levels]').textContent = cone ? cone.points.at(-1).map((value, i) => coneLabels[i] + ' ' + priceLabel(value)).join(' · ') : '';
     }
     function updateRange() {
       state.from = Number(from.value);
@@ -261,7 +374,7 @@
     }));
     const resize = new ResizeObserver(repaint);
     function add(element, company) {
-      const card = { element, company, positions: {}, metric: 'price', target: false };
+      const card = { element, company, positions: {}, metric: 'price', target: false, cone: false };
       cards.set(element, card);
       const choices = [...element.querySelectorAll('[data-metric]')];
       const setMetric = metric => {
@@ -270,6 +383,12 @@
         repaint();
       };
       choices.forEach(button => button.addEventListener('click', () => setMetric(button.dataset.metric)));
+      const cone = element.querySelector('[data-cone]');
+      cone.addEventListener('click', () => {
+        card.cone = card.metric !== 'price' || !card.cone;
+        if (card.cone) setMetric('price');
+        else repaint();
+      });
       const target = element.querySelector('[data-target]');
       target.addEventListener('click', async () => {
         card.target = !card.target;
@@ -289,9 +408,10 @@
           const position = card.positions[kind];
           if (!position) return;
           const x = event.clientX - canvas.getBoundingClientRect().left;
+          if (x > position.coneStart) return;
           let nearest = state.from;
           for (let index = state.from + 1; index <= state.to; index++) {
-            if (Math.abs(position(index) - x) < Math.abs(position(nearest) - x)) nearest = index;
+            if (Math.abs(position.forIndex(index) - x) < Math.abs(position.forIndex(nearest) - x)) nearest = index;
           }
           setCursor(nearest);
         };
@@ -423,7 +543,7 @@
     return { renderBars };
   }
 
-  const api = { historyPoints, peRankings, mountRankings, mountHistory };
+  const api = { historyPoints, peRankings, mountRankings, mountHistory, priceLabel, probabilityCone };
   if (typeof module !== 'undefined') module.exports = api;
   root.StocksBeta2Charts = api;
 })(typeof window !== 'undefined' ? window : globalThis);
