@@ -13,9 +13,9 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.priorities1">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.priorities1">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.target1">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261121.priorities1"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.target1"></script>
   <script defer src="stocks-beta2.js?v=20261121.priorities1&amp;credit=1"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
@@ -141,8 +141,17 @@
             <div>
               <figure class="sb2-line-figure">
                 <canvas data-price-chart role="img" tabindex="0"></canvas>
-                <figcaption>
-                  <span class="sb2-point-label" data-price-value></span>
+                <figcaption class="sb2-price-caption">
+                  <span class="sb2-point-label sb2-price-readout" data-price-value>
+                    <time class="sb2-reading-date" data-price-date></time>
+                    <span class="sb2-reading-price" data-price-reading></span>
+                    <span class="sb2-analyst-reading" title="Archived BOS rating and Morningstar fair value" data-analyst-reading hidden>
+                      <span class="sb2-analyst-label">Analyst call</span>
+                      <span data-analyst-call></span>
+                      <span class="sb2-analyst-value">· Fair value <span data-analyst-value></span></span>
+                    </span>
+                  </span>
+                  <small class="sb2-target-gap" data-bos-target-gap hidden></small>
                   <span class="sb2-chart-hint">Select a point or use the arrow keys to step a month.</span>
                 </figcaption>
               </figure>

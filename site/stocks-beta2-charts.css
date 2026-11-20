@@ -112,6 +112,21 @@
 .sb2-line-figure { margin:0; }
 .sb2-line-figure canvas { display:block; width:100%; height:278px; touch-action:pan-y; }
 .sb2-line-figure figcaption { display:flex; flex-wrap:wrap; justify-content:space-between; gap:4px 12px; margin-top:4px; }
+.sb2-line-figure .sb2-price-caption { display:grid; gap:3px; }
+.sb2-price-readout { display:flex; flex-wrap:wrap; gap:3px 10px; align-items:baseline; line-height:1.4; }
+.sb2-reading-date { color:var(--muted); font:600 .81rem/1.4 'Segoe UI',system-ui,sans-serif; }
+.sb2-reading-price { font:700 .84rem/1.4 'Cascadia Mono',Consolas,ui-monospace,monospace; }
+.sb2-analyst-reading {
+  display:inline-flex; flex-wrap:wrap; gap:0 5px; align-items:baseline;
+  font:600 .87rem/1.4 Cambria,Georgia,serif;
+}
+.sb2-analyst-reading[hidden] { display:none; }
+.sb2-analyst-label,.sb2-analyst-value { color:var(--muted); font-weight:400; }
+.sb2-analyst-reading[data-rating="Buy"] [data-analyst-call] { color:#275b9e; }
+.sb2-analyst-reading[data-rating="Hold"] [data-analyst-call] { color:#775600; }
+.sb2-analyst-reading[data-rating="Sell"] [data-analyst-call] { color:#9c3e4b; }
+.sb2-analyst-value { white-space:nowrap; }
+.sb2-target-gap { color:var(--muted); font-size:.78rem; font-variant-numeric:tabular-nums; }
 .sb2-chart-hint { color:var(--muted); font-size:.78rem; }
 .sb2-line-slider { display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; margin-top:7px; font-size:.82rem; }
 .sb2-line-slider input { flex:1 1 150px; }
