@@ -1,0 +1,429 @@
+/* Chart the same dated observations used by the Stocks BETA 2 table. */
+(function (root) {
+  'use strict';
+
+  const e = value => String(value ?? '').replace(/[&<>"']/g, c => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+  const time = date => Date.parse(date + 'T00:00:00Z');
+  const dateFormat = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  const monthFormat = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+  const tickFormat = new Intl.DateTimeFormat('en-GB', { month: 'short', year: '2-digit', timeZone: 'UTC' });
+  const numbers = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
+  const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 2 });
+  const axisNumber = value => Math.abs(value) >= 1000 ? compact.format(value) : numbers.format(value);
+  const monthLabel = month => monthFormat.format(time(month + '-01'));
+  // NYSE or Nasdaq listings identified on the reports in the November 2026 coverage snapshot.
+  const usaListings = new Set((
+    'AAPL NVDA MSFT GOOG GOOGL AMZN TSM SPCX TSLA META AVGO LLY BRK/B BRK/A SKHY WMT MU JPM V AMD XOM JNJ ASML MA ABBV COST CVX PLTR KO CSCO PG MRK ORCL UNH BAC HD GE PM INTC AMAT MS PANW LRCX RY CAT TXN RTX GS WFC NFLX TMO BABA AMGN DELL CRWD IBM LIN GEV AXP GILD ARM ANET C SHOP'
+  ).split(' ').map(symbol => symbol + ' US'));
+
+  function historyPoints(data, company, metric, from, to) {
+    const column = data.metrics.findIndex(item => item[0] === metric) + 1;
+    return company.observations
+      .filter(point => point[0] >= from && point[0] <= to && Number.isFinite(point[column]))
+      .map(point => {
+        const [, report, quote] = data.months[point[0]];
+        return { index: point[0], report, quote, value: point[column] };
+      });
+  }
+
+  function peRankings(data, month, market) {
+    const pe = data.metrics.findIndex(item => item[0] === 'forward_pe') + 1;
+    const cap = data.metrics.findIndex(item => item[0] === 'market_cap_usd_bn') + 1;
+    const issuers = new Map();
+    for (const company of data.securities) {
+      if (usaListings.has(company.ticker) !== (market === 'usa')) continue;
+      const point = company.observations.find(item => item[0] === month);
+      if (!point || !Number.isFinite(point[pe]) || point[pe] <= 0) continue;
+      const marketCap = point[cap] ?? -Infinity;
+      const issuer = company.logo || company.ticker;
+      const previous = issuers.get(issuer);
+      if (!previous || marketCap > previous.marketCap) {
+        issuers.set(issuer, { company, value: point[pe], marketCap });
+      }
+    }
+    const ranked = [...issuers.values()];
+    const byTicker = (a, b) => a.company.ticker.localeCompare(b.company.ticker);
+    return {
+      count: ranked.length,
+      high: ranked.slice().sort((a, b) => b.value - a.value || byTicker(a, b)).slice(0, 10),
+      low: ranked.slice().sort((a, b) => a.value - b.value || byTicker(a, b)).slice(0, 10)
+    };
+  }
+
+  function niceStep(range, parts) {
+    const target = range / parts;
+    const order = 10 ** Math.floor(Math.log10(target));
+    return order * ([1, 2, 2.5, 5, 10].find(step => step >= target / order) ?? 10);
+  }
+
+  const priceColor = '#126c66';
+  const targetColors = { Buy: '#2766bf', Hold: '#b38a00', Sell: '#d87882' };
+  const ratioColors = ['#326d9f', '#8554a1'];
+
+  function drawPlot(canvas, series, dates, { from, to, cursor, axis }) {
+    const width = canvas.clientWidth, height = canvas.clientHeight;
+    if (!width || !height) return null;
+    const scale = Math.min(root.devicePixelRatio || 1, 2);
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(scale, scale);
+    ctx.font = '12px "Segoe UI", Arial, sans-serif';
+    const values = series.flatMap(line => line.points.map(point => point.value));
+    if (series.some(line => line.area)) values.push(0);
+    const low = Math.min(...values), high = Math.max(...values);
+    const pad = low === high ? Math.max(Math.abs(low) / 10, .1) : 0;
+    const step = niceStep(high - low + 2 * pad, 4);
+    const min = Math.floor((low - pad) / step) * step;
+    const max = Math.ceil((high + pad) / step) * step;
+    const labels = Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + step * i);
+    const first = time(dates[from][2]), last = time(dates[to][2]);
+    const left = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(axisNumber(value)).width))) + 10;
+    const right = width - 12, top = 11, bottom = height - 28;
+    const x = instant => first === last ? (left + right) / 2 : left + (instant - first) / (last - first) * (right - left);
+    const y = value => bottom - (value - min) / (max - min) * (bottom - top);
+    const tick = (x1, y1, x2, y2, color) => {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    };
+    ctx.fillStyle = '#4e6569';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    labels.forEach(value => {
+      tick(left, y(value), right, y(value), '#e1e9e8');
+      ctx.fillText(axisNumber(value), left - 7, y(value));
+    });
+    const start = new Date(first), spacing = axis === 'quarter' ? 3 : 12;
+    let month = Math.floor(start.getUTCMonth() / spacing) * spacing;
+    const datesOnAxis = [];
+    for (let instant = Date.UTC(start.getUTCFullYear(), month, 1); instant <= last;
+      instant = Date.UTC(start.getUTCFullYear(), month += spacing, 1)) {
+      if (instant >= first) datesOnAxis.push(instant);
+    }
+    if (!datesOnAxis.length) datesOnAxis.push(first);
+    ctx.textAlign = 'center';
+    let endLabel = -Infinity;
+    datesOnAxis.forEach(instant => {
+      const at = x(instant);
+      tick(at, bottom, at, bottom + 5, '#a6b8b5');
+      const text = axis === 'year' && last - first > 365 * 86400000
+        ? String(new Date(instant).getUTCFullYear()) : tickFormat.format(instant);
+      const half = ctx.measureText(text).width / 2;
+      const center = Math.max(left + half, Math.min(right - half, at));
+      if (center - half < endLabel + 7) return;
+      ctx.fillText(text, center, height - 10);
+      endLabel = center + half;
+    });
+    tick(x(time(dates[cursor][2])), top, x(time(dates[cursor][2])), bottom, '#9aafad');
+    for (const line of series) {
+      const runs = [];
+      for (const point of line.points) {
+        if (runs.at(-1)?.at(-1).index !== point.index - 1) runs.push([]);
+        runs.at(-1).push(point);
+      }
+      ctx.strokeStyle = ctx.fillStyle = line.color;
+      ctx.lineWidth = 2.25;
+      ctx.lineJoin = 'round';
+      for (const run of runs) {
+        const drawPath = () => run.forEach((point, i) => {
+          const xy = [x(time(point.quote)), y(point.value)];
+          if (i) ctx.lineTo(...xy); else ctx.moveTo(...xy);
+        });
+        if (line.area && run.length > 1) {
+          ctx.beginPath();
+          drawPath();
+          ctx.lineTo(x(time(run.at(-1).quote)), y(0));
+          ctx.lineTo(x(time(run[0].quote)), y(0));
+          ctx.closePath();
+          ctx.globalAlpha = 0.15;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+        ctx.beginPath();
+        drawPath();
+        ctx.stroke();
+        for (const point of run) {
+          if (run.length > 1 && point.index !== cursor) continue;
+          ctx.beginPath();
+          ctx.arc(x(time(point.quote)), y(point.value), point.index === cursor ? 4 : 2.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    return index => x(time(dates[index][2]));
+  }
+
+  function mountHistory(data, changeRange) {
+    const doc = root.document;
+    const from = doc.getElementById('sb2-from'), to = doc.getElementById('sb2-to');
+    const maximum = data.months.length - 1;
+    const state = { from: 0, to: maximum, cursor: maximum, axis: 'year' };
+    const cards = new Map();
+    const choices = data.months.map(([month], i) => '<option value="' + i + '">' + monthLabel(month) + '</option>').join('');
+    from.innerHTML = to.innerHTML = choices;
+    to.value = String(maximum);
+    let frame, targets, targetRequest;
+    function getTargets() {
+      targetRequest ??= (async () => {
+        const embedded = doc.getElementById('sb2-embedded-targets');
+        if (embedded) return JSON.parse(embedded.textContent);
+        const response = await fetch('data/stocks-beta2-morningstar.json?v=20261121.2', { signal: AbortSignal.timeout(15000) });
+        if (!response.ok) throw new Error('Morningstar data unavailable');
+        return response.json();
+      })().catch(error => { targetRequest = undefined; throw error; });
+      return targetRequest;
+    }
+    function repaint() {
+      if (frame !== undefined) return;
+      frame = root.requestAnimationFrame(() => { frame = undefined; cards.forEach(drawCard); });
+    }
+    function setCursor(value) {
+      const next = Math.max(state.from, Math.min(state.to, value));
+      if (next === state.cursor) return;
+      state.cursor = next;
+      repaint();
+    }
+    function drawCard(card) {
+      const { element, company, metric } = card;
+      const get = selector => element.querySelector(selector);
+      const [, label, rawUnit] = data.metrics.find(item => item[0] === metric);
+      const unit = rawUnit === 'quote' ? company.currency : rawUnit;
+      const { from, to, cursor } = state;
+      const prior = historyPoints(data, company, metric, from, to);
+      const targetRows = metric === 'price' && card.target ? targets?.[company.ticker] ?? [] : [];
+      const targetLines = Object.entries(targetColors).map(([rating, color]) => ({
+        name: rating, color, points: targetRows.filter(row => row[0] >= from && row[0] <= to && row[2] === rating)
+          .map(([index, value]) => ({index, value, quote: data.months[index][2]}))
+      }));
+      const ratios = ['forward_pe', 'forward_pb'].map((key, i) => ({
+        name: ['P/E', 'P/B'][i], color: ratioColors[i], points: historyPoints(data, company, key, from, to)
+      }));
+      const primary = [{name: label, color: priceColor, points: prior, area: Boolean(metric === 'price' && card.target)}, ...targetLines];
+      get('.sb2-chart-window').textContent = label + ' (' + unit + ') · ' + monthLabel(data.months[from][0]) + ' to '
+        + monthLabel(data.months[to][0]) + ' · ' + prior.length + ' of ' + (to - from + 1) + ' editions'
+        + (metric === 'price' ? ' · Unadjusted source prices' : '');
+      const quote = dateFormat.format(time(data.months[cursor][2]));
+      function show(kind, lines, unitText, description) {
+        const canvas = get('[data-' + kind + '-chart]');
+        const available = lines.some(line => line.points.length);
+        canvas.closest('figure').hidden = !available;
+        get('[data-' + kind + '-empty]').hidden = available;
+        canvas.setAttribute('aria-label', company.name + ' ' + description);
+        card.positions[kind] = available ? drawPlot(canvas, lines, data.months, state) : null;
+        const readings = lines.flatMap(line => {
+          const point = line.points.find(item => item.index === cursor);
+          return point ? [line.name + ' ' + numbers.format(point.value) + ' ' + unitText] : [];
+        });
+        const value = quote + ' · ' + (readings.join(' · ') || 'No observation');
+        const readout = get('[data-' + kind + '-value]');
+        if (readout.textContent !== value) readout.textContent = value;
+      }
+      show('price', primary, unit, label + ' by price date' + (targetRows.length ? ' with Morningstar fair value' : ''));
+      show('valuation', ratios, '×', 'forward P/E and P/B by price date');
+      const slider = get('input[type=range]');
+      slider.min = String(from);
+      slider.max = String(to);
+      slider.value = String(cursor);
+      slider.setAttribute('aria-valuetext', monthLabel(data.months[cursor][0]));
+      get('.sb2-target-legend').hidden = !(metric === 'price' && card.target);
+      get('[data-target-status]').textContent = card.target && metric === 'price'
+        ? card.targetError || (!targets ? 'Loading Morningstar fair values…'
+          : targetLines.some(line => line.points.length) ? '' : 'No identified Morningstar fair values in this range.') : '';
+    }
+    function updateRange() {
+      state.from = Number(from.value);
+      state.to = Number(to.value);
+      state.cursor = Math.min(state.to, Math.max(state.from, state.cursor));
+      [...from.options].forEach(option => { option.disabled = Number(option.value) > state.to; });
+      [...to.options].forEach(option => { option.disabled = Number(option.value) < state.from; });
+      changeRange(state);
+      repaint();
+    }
+    from.addEventListener('change', updateRange);
+    to.addEventListener('change', updateRange);
+    doc.getElementById('sb2-all-dates').addEventListener('click', () => {
+      from.value = '0';
+      to.value = String(maximum);
+      state.cursor = maximum;
+      updateRange();
+    });
+    const axisButtons = [...doc.querySelectorAll('[data-axis]')];
+    axisButtons.forEach(button => button.addEventListener('click', () => {
+      state.axis = button.dataset.axis;
+      axisButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+      repaint();
+    }));
+    const resize = new ResizeObserver(repaint);
+    function add(element, company) {
+      const card = { element, company, positions: {}, metric: 'price', target: false };
+      cards.set(element, card);
+      const choices = [...element.querySelectorAll('[data-metric]')];
+      const setMetric = metric => {
+        card.metric = metric;
+        choices.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.metric === metric)));
+        repaint();
+      };
+      choices.forEach(button => button.addEventListener('click', () => setMetric(button.dataset.metric)));
+      const target = element.querySelector('[data-target]');
+      target.addEventListener('click', async () => {
+        card.target = !card.target;
+        card.targetError = '';
+        target.setAttribute('aria-pressed', String(card.target));
+        if (!card.target) { repaint(); return; }
+        setMetric('price');
+        try { targets = await getTargets(); }
+        catch { card.targetError = 'Fair values could not load. Toggle off and on to retry.'; }
+        repaint();
+      });
+      const slider = element.querySelector('input[type=range]');
+      slider.addEventListener('input', () => setCursor(Number(slider.value)));
+      for (const kind of ['price', 'valuation']) {
+        const canvas = element.querySelector('[data-' + kind + '-chart]');
+        const inspect = event => {
+          const position = card.positions[kind];
+          if (!position) return;
+          const x = event.clientX - canvas.getBoundingClientRect().left;
+          let nearest = state.from;
+          for (let index = state.from + 1; index <= state.to; index++) {
+            if (Math.abs(position(index) - x) < Math.abs(position(nearest) - x)) nearest = index;
+          }
+          setCursor(nearest);
+        };
+        canvas.addEventListener('pointermove', event => { if (event.pointerType !== 'touch') inspect(event); });
+        canvas.addEventListener('click', inspect);
+        canvas.addEventListener('keydown', event => {
+          const value = {ArrowLeft: state.cursor - 1, ArrowRight: state.cursor + 1, Home: state.from, End: state.to}[event.key];
+          if (value === undefined) return;
+          event.preventDefault();
+          setCursor(value);
+        });
+      }
+      resize.observe(element);
+      repaint();
+    }
+    return { add, range: () => state, remove(element) { resize.unobserve(element); cards.delete(element); } };
+  }
+
+  function mountRankings(data, { logo, chooseCompany }) {
+    const doc = root.document;
+    const get = id => doc.getElementById(id);
+    const peerMonth = get('sb2-peer-month');
+    const peerYear = get('sb2-peer-year');
+    const play = get('sb2-play');
+    const previous = get('sb2-prev');
+    const next = get('sb2-next');
+    const bars = get('sb2-pe-bars');
+    const last = data.months.length - 1;
+    let timer;
+
+    peerMonth.max = String(last);
+    peerMonth.value = String(last);
+    const years = data.months.flatMap(([month], index) => (
+      !index || month.slice(0, 4) !== data.months[index - 1][0].slice(0, 4) ? [[month.slice(0, 4), index]] : []
+    ));
+    peerYear.innerHTML = years.map(([year, index]) => '<option value="' + index + '">' + year + '</option>').join('');
+    const tickStyle = index => ' style="--tick:' + 100 * index / Math.max(1, last) + '%"';
+    const quarters = data.months.flatMap(([month], index) => (
+      index && ['04', '07', '10'].includes(month.slice(5)) ? ['<i' + tickStyle(index) + '></i>'] : []
+    ));
+    get('sb2-year-axis').innerHTML = years.map(([year, index]) =>
+      '<span' + tickStyle(index) + '>' + year + '</span>'
+    ).concat(quarters).join('');
+    get('sb2-pe-rankings').hidden = false;
+
+    function renderBars() {
+      const index = Number(peerMonth.value);
+      const [month, report] = data.months[index];
+      const markets = [['usa', 'USA (NYSE and Nasdaq)'], ['world', 'Rest of world']].map(([id, label]) => ({
+        label, results: peRankings(data, index, id),
+        prior: index ? peRankings(data, index - 1, id) : { high: [], low: [] }
+      }));
+      get('sb2-peer-label').textContent = monthLabel(month);
+      peerMonth.setAttribute('aria-valuetext', monthLabel(month));
+      peerYear.value = String(years.find(([year]) => year === month.slice(0, 4))[1]);
+      previous.disabled = index === 0;
+      next.disabled = index === last;
+      get('sb2-peer-status').textContent = dateFormat.format(time(report))
+        + ' edition · Eligible companies by listing market';
+      function panel({label, results, prior}, type) {
+        const rows = results[type], before = prior[type];
+        const direction = type === 'low' ? 'lowest' : 'highest';
+        const heading = '<section class="sb2-bar-panel sb2-bar-' + type + '"><h3>'
+          + label + ' · ' + rows.length + ' ' + direction + ' forward P/E</h3>';
+        if (!rows.length) return heading + '<p>No eligible listings in this edition.</p></section>';
+        const beforeIds = new Set(before.map(row => row.company.logo));
+        const currentIds = new Set(rows.map(row => row.company.logo));
+        const entered = index ? rows.filter(row => !beforeIds.has(row.company.logo)) : [];
+        const left = before.filter(row => !currentIds.has(row.company.logo));
+        const enteredIds = new Set(entered.map(row => row.company.logo));
+        const names = items => items.map(row => e(row.company.name)).join(', ') || 'None';
+        const max = Math.max(...rows.map(row => row.value));
+        const step = niceStep(max, 2);
+        const ceiling = Math.ceil(max / step) * step;
+        return heading
+          + (index ? '<p class="sb2-rank-changes"><b>Entered</b> ' + names(entered)
+            + '<br><b>Left</b> ' + names(left) + '</p>'
+            : '<p class="sb2-rank-changes">First saved edition</p>')
+          + '<div class="sb2-bar-axis"><span>0×</span><span>' + compact.format(ceiling / 2)
+          + '×</span><span>' + compact.format(ceiling) + '×</span></div>'
+          + '<ol class="sb2-pe-bars-list">' + rows.map(({ company, value }, i) => (
+            '<li><button class="sb2-pe-bar" type="button" data-pe-company="' + e(company.ticker) + '"'
+            + ' aria-label="View ' + e(company.name + ', ' + company.ticker + ', ' + numbers.format(value) + ' times forward P/E')
+            + '" style="--bar-width:' + (100 * value / ceiling).toFixed(3) + '%">'
+            + '<span class="sb2-rank" aria-hidden="true">' + (i + 1) + '</span>'
+            + '<span class="sb2-bar-icon" aria-hidden="true">' + logo(company, 24) + '</span>'
+            + '<span class="sb2-bar-name">' + e(company.name)
+            + (enteredIds.has(company.logo) ? ' <small class="sb2-entry-label">Entered</small>' : '') + '</span>'
+            + '<span class="sb2-bar-value">' + numbers.format(value) + '×</span>'
+            + '<span class="sb2-bar-track" aria-hidden="true"><i></i></span></button></li>'
+          )).join('') + '</ol></section>';
+      }
+      bars.innerHTML = ['low', 'high'].map(type =>
+        '<div class="sb2-market-pair">' + markets.map(market => panel(market, type)).join('') + '</div>'
+      ).join('');
+    }
+
+    function stop() {
+      clearInterval(timer);
+      timer = undefined;
+      play.textContent = 'Play months';
+    }
+
+    function showMonth(index) {
+      peerMonth.value = String(index);
+      renderBars();
+    }
+
+    peerMonth.addEventListener('input', () => { stop(); renderBars(); });
+    peerMonth.addEventListener('change', renderBars);
+    peerYear.addEventListener('change', () => { stop(); showMonth(Number(peerYear.value)); });
+    previous.addEventListener('click', () => { stop(); showMonth(Number(peerMonth.value) - 1); });
+    next.addEventListener('click', () => { stop(); showMonth(Number(peerMonth.value) + 1); });
+    play.addEventListener('click', () => {
+      if (timer !== undefined) { stop(); return; }
+      if (Number(peerMonth.value) === last) showMonth(0);
+      play.textContent = 'Pause';
+      timer = setInterval(() => {
+        showMonth(Number(peerMonth.value) + 1);
+        if (Number(peerMonth.value) === last) stop();
+      }, 1400);
+    });
+    doc.addEventListener('visibilitychange', () => { if (doc.hidden) stop(); });
+    bars.addEventListener('click', event => {
+      const target = event.target.closest('[data-pe-company]');
+      if (target) { stop(); chooseCompany(target.dataset.peCompany, target); }
+    });
+    renderBars();
+    return { renderBars };
+  }
+
+  const api = { historyPoints, peRankings, mountRankings, mountHistory };
+  if (typeof module !== 'undefined') module.exports = api;
+  root.StocksBeta2Charts = api;
+})(typeof window !== 'undefined' ? window : globalThis);

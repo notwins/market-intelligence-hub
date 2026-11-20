@@ -9,10 +9,10 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121">
-  <link rel="stylesheet" href="nvda-article.css?v=20261121">
-  <script defer src="nvda-article.js?v=20261121"></script>
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.2">
   <script defer src="company-logos.js"></script>
-  <script defer src="stocks-beta2.js?v=20261121&amp;jacket=20261121"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.2"></script>
+  <script defer src="stocks-beta2.js?v=20261121.2"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to market history</a>
@@ -20,7 +20,6 @@
     <a href="desk.html"><b>M.</b> MARKET INTEL</a>
     <nav aria-label="Stock section links">
       <a href="stocks-beta.html">Stocks BETA</a>
-      <a href="bos-monthly.html">BOS monthly archive</a>
       <a href="v4.html#history/beta2-shares">Event studies</a>
       <a href="v4.html#history/beta4-shares">History pivot</a>
     </nav>
@@ -35,6 +34,22 @@
     </header>
     <p id="sb2-status" role="status" aria-live="polite">Loading monthly market history…</p>
     <button type="button" id="sb2-retry" hidden>Retry loading history</button>
+    <nav class="sb2-view-links" aria-label="Chart sections">
+      <a href="#sb2-detail">Company history</a>
+      <a href="#sb2-pe-rankings">P/E rankings</a>
+    </nav>
+    <div class="sb2-shared-controls" id="sb2-shared-controls" hidden>
+      <div class="sb2-date-range" role="group" aria-label="Date range for all cards">
+        <label>From edition<select id="sb2-from"></select></label>
+        <label>To edition<select id="sb2-to"></select></label>
+        <button type="button" id="sb2-all-dates">Full history</button>
+      </div>
+      <div class="sb2-axis-toggle" role="group" aria-label="Historical chart axis spacing for all cards">
+        <span>Chart axis</span>
+        <button type="button" data-axis="quarter" aria-pressed="false">Quarterly</button>
+        <button type="button" data-axis="year" aria-pressed="true">Yearly</button>
+      </div>
+    </div>
     <div class="sb2-workspace" id="sb2-workspace" hidden>
       <section class="sb2-panel sb2-picker" aria-label="Choose a security">
         <div class="sb2-groups" role="group" aria-label="Ranking">
@@ -46,19 +61,86 @@
         <ul id="sb2-securities" aria-label="Securities by market capitalisation"></ul>
         <p id="sb2-empty" hidden>No companies match this search.</p>
       </section>
-      <section class="sb2-panel sb2-detail" id="sb2-detail" aria-labelledby="sb2-company">
-        <header class="sb2-company-heading" id="sb2-company"></header>
-        <p class="sb2-coverage" id="sb2-coverage"></p>
-        <div class="sb2-table" role="region" tabindex="0" aria-label="Monthly observations. Scroll horizontally for more columns.">
-          <table aria-labelledby="sb2-company" id="sb2-table"></table>
-        </div>
-        <div id="sb2-related-reading"></div>
-      </section>
+      <div class="sb2-deck" id="sb2-detail" aria-label="Company comparison cards"></div>
     </div>
+    <template id="sb2-card-template">
+      <section class="sb2-panel sb2-detail">
+        <div class="sb2-card-header">
+          <header class="sb2-company-heading" tabindex="-1"></header>
+          <button class="sb2-remove-card" type="button">Remove</button>
+        </div>
+        <p class="sb2-coverage"></p>
+        <section class="sb2-history" aria-label="Historical chart">
+          <h3>Historical chart</h3>
+          <div class="sb2-metric-toggle" role="group" aria-label="Historical chart metric">
+            <button type="button" data-metric="price" aria-pressed="true">Price</button>
+            <button type="button" data-metric="market_cap_usd_bn" aria-pressed="false">Market cap</button>
+            <button type="button" data-metric="dividend_yield_pct" aria-pressed="false">Dividend yield</button>
+            <button type="button" data-target aria-pressed="false">Morningstar price target</button>
+          </div>
+          <p class="sb2-chart-window"></p>
+          <div class="sb2-target-legend" hidden>
+            <span>Buy</span><span>Hold</span><span>Sell</span><small>Morningstar fair value · BOS rating colours</small>
+          </div>
+          <p class="sb2-target-status" data-target-status role="status"></p>
+          <figure class="sb2-line-figure">
+            <canvas data-price-chart role="img" tabindex="0"></canvas>
+            <figcaption>
+              <span class="sb2-point-label" data-price-value></span>
+              <span class="sb2-chart-hint">Select a point or use the arrow keys to step a month.</span>
+            </figcaption>
+          </figure>
+          <p class="sb2-chart-empty" data-price-empty hidden>No values for this metric in the selected range.</p>
+          <label class="sb2-line-slider">Inspect month across cards<input type="range" step="1"></label>
+        </section>
+        <section class="sb2-history sb2-valuation" aria-label="Forward valuation chart">
+          <h3>Forward P/E and P/B</h3>
+          <div class="sb2-valuation-legend"><span>P/E</span><span>P/B</span><small>Shared scale (×)</small></div>
+          <figure class="sb2-line-figure">
+            <canvas data-valuation-chart role="img" tabindex="0"></canvas>
+            <figcaption class="sb2-point-label" data-valuation-value></figcaption>
+          </figure>
+          <p class="sb2-chart-empty" data-valuation-empty hidden>No forward P/E or P/B values in the selected range.</p>
+        </section>
+        <details class="sb2-history-table">
+          <summary>Monthly data table</summary>
+          <div class="sb2-table" role="region" tabindex="0" aria-label="Monthly observations. Scroll horizontally for more columns.">
+            <table></table>
+          </div>
+        </details>
+      </section>
+    </template>
+    <dialog id="sb2-card-picker" aria-labelledby="sb2-card-prompt">
+      <h2 id="sb2-card-prompt">Choose a card</h2>
+      <div id="sb2-card-options"></div>
+      <form method="dialog"><button>Cancel</button></form>
+    </dialog>
+    <section class="sb2-panel sb2-pe-rankings" id="sb2-pe-rankings" aria-labelledby="sb2-pe-heading" hidden>
+      <header class="sb2-peer-heading">
+        <div>
+          <h2 id="sb2-pe-heading">P/E rankings</h2>
+          <p id="sb2-peer-status" role="status"></p>
+        </div>
+      </header>
+      <div class="sb2-peer-controls">
+        <div class="sb2-transport" aria-label="Ranking playback">
+          <button type="button" id="sb2-play">Play months</button>
+          <button type="button" id="sb2-prev" aria-label="Previous ranking month">Previous</button>
+          <button type="button" id="sb2-next" aria-label="Next ranking month">Next</button>
+        </div>
+        <label>Jump to year<select id="sb2-peer-year"></select></label>
+      </div>
+      <label class="sb2-peer-slider" for="sb2-peer-month">Ranking edition <output id="sb2-peer-label"></output></label>
+      <input type="range" id="sb2-peer-month" min="0" step="1">
+      <div class="sb2-year-axis" id="sb2-year-axis" aria-hidden="true"></div>
+      <div class="sb2-peer-grid" id="sb2-pe-bars"></div>
+      <p class="sb2-peer-note">Market groups use listing exchanges at the November 2026 snapshot. Each company uses its largest qualifying listing in each market. Entries and exits compare with the previous saved edition. Each chart has its own scale.</p>
+    </section>
     <details class="sb2-method">
       <summary>Data and coverage</summary>
       <p>The 113 saved monthly editions run from July 2017 to November 2026. The archive has no editions from December 2016 to June 2017. Individual securities have coverage gaps. Share classes and exchange listings rank individually.</p>
       <p>Quote dates follow the archive’s price column. Prices retain the source quote currency and reflect the original share basis. GBp is UK pence. Market cap is in USD billions. The forward multiples and estimates use the coverage report’s definitions. Implied EPS is the price divided by positive forward P/E. Earlier tickers and predecessor securities are labelled where present.</p>
+      <p>The price target overlay plots Morningstar fair value where the Bank of Singapore archive identifies Morningstar coverage. Colours use the Buy, Hold and Sell labels printed in the Bank of Singapore table.</p>
       <p>The compact CSV uses one row per archive month. Price and implied EPS headings identify the quote currency. The earlier-ticker fields are populated where the source used a different ticker.</p>
     </details>
     <footer><b>Market Intelligence Hub</b><p>Independent educational research.</p><a href="legal/index.html">Legal &amp; transparency</a> · <a href="desk.html">Home</a></footer>
