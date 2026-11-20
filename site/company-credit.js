@@ -9,6 +9,7 @@
   const listingKey = value => value.trim().toUpperCase();
   const maxBytes = 1024 * 1024;
   const storageKey = 'market-intel-company-credit-v1';
+  const defaultUrl = 'https://notwins.github.io/market-intelligence-content/data/company-credit-summaries-2026-11-21.csv';
 
   function readCsv(text) {
     text = text.replace(/^\ufeff/, '');
@@ -76,12 +77,13 @@
   if (!library) return;
   library.innerHTML = `<details class="credit-panel">
     <summary>Credit reports</summary>
-    <p>Load a credit report CSV to see dated summaries on matching stock cards and browse issuer reports here.</p>
+    <p>Browse dated credit summaries here and on matching stock cards. You can also load your own CSV.</p>
     <div class="credit-actions">
       <label>Load credit report CSV <input type="file" accept=".csv,text/csv" data-credit-file></label>
-      <label><input type="checkbox" data-credit-remember> Remember in this browser</label>
+      <label><input type="checkbox" data-credit-remember disabled> Remember imported CSV in this browser</label>
       <button type="button" data-credit-download hidden>Download CSV</button>
-      <button type="button" data-credit-clear hidden>Clear reports</button>
+      <button type="button" data-credit-clear hidden>Use preloaded reports</button>
+      <button type="button" data-credit-retry hidden>Retry loading reports</button>
     </div>
     <p role="status" data-credit-status></p>
     <div data-credit-reports></div>
@@ -91,11 +93,14 @@
   const remember = library.querySelector('[data-credit-remember]');
   const download = library.querySelector('[data-credit-download]');
   const clear = library.querySelector('[data-credit-clear]');
+  const retry = library.querySelector('[data-credit-retry]');
   const status = library.querySelector('[data-credit-status]');
   const reportList = library.querySelector('[data-credit-reports]');
   let csv = '';
   let reports = [];
   let byListing = new Map();
+  let imported = false;
+  let defaultRequest;
   const dateFormat = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: 'UTC' });
 
   function make(tag, text, className) {
@@ -152,12 +157,35 @@
       reportList.append(report(row, true));
     }
     paintCards(doc);
-    download.hidden = clear.hidden = !rows.length;
+    download.hidden = !rows.length;
+    clear.hidden = remember.disabled = !imported;
+    retry.hidden = true;
+  }
+
+  async function loadDefaults() {
+    status.textContent = 'Loading credit reports…';
+    retry.hidden = true;
+    defaultRequest ??= (async () => {
+      const response = await fetch(defaultUrl, { signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error('Credit reports are unavailable.');
+      const text = await response.text();
+      return { text, rows: parse(text) };
+    })().catch(error => { defaultRequest = undefined; throw error; });
+    try {
+      const { text, rows } = await defaultRequest;
+      if (imported) return;
+      show(text, rows);
+      status.textContent = `${rows.length} credit summaries loaded.`;
+    } catch {
+      if (imported) return;
+      status.textContent = 'Credit summaries could not load. Retry or load a CSV.';
+      retry.hidden = false;
+    }
   }
 
   function updateStorage() {
     try {
-      if (remember.checked && csv) root.localStorage.setItem(storageKey, csv);
+      if (imported && remember.checked && csv) root.localStorage.setItem(storageKey, csv);
       else root.localStorage.removeItem(storageKey);
       return remember.checked && csv ? ' Saved in this browser.' : '';
     } catch {
@@ -177,7 +205,9 @@
       if (selected.size > maxBytes) throw new Error('Choose a credit report CSV under 1 MB.');
       const text = await selected.text();
       if (file.files[0] !== selected) return;
-      show(text, parse(text));
+      const rows = parse(text);
+      imported = true;
+      show(text, rows);
       announce();
     } catch (error) {
       status.textContent = error.message;
@@ -189,10 +219,13 @@
   clear.addEventListener('click', () => {
     file.value = '';
     remember.checked = false;
+    imported = false;
     show('', []);
-    status.textContent = 'Credit reports cleared.' + updateStorage();
+    updateStorage();
     file.focus();
+    loadDefaults();
   });
+  retry.addEventListener('click', loadDefaults);
   download.addEventListener('click', () => {
     const url = URL.createObjectURL(new Blob(['\ufeff' + csv.replace(/^\ufeff/, '')], { type: 'text/csv;charset=utf-8' }));
     const link = make('a');
@@ -206,11 +239,12 @@
   try {
     const saved = root.localStorage.getItem(storageKey);
     if (saved) {
-      show(saved, parse(saved));
+      const rows = parse(saved);
+      imported = true;
+      show(saved, rows);
       remember.checked = true;
       status.textContent = `${reports.length} saved ${reports.length === 1 ? 'report' : 'reports'} loaded.`;
     }
-  } catch {
-    status.textContent = 'Saved credit reports could not be loaded. You can load a CSV file here.';
-  }
+  } catch { /* Browser storage is optional. */ }
+  if (!imported) loadDefaults();
 }(globalThis));
