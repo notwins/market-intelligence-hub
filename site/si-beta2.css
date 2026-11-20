@@ -73,3 +73,12 @@
 .terms-grid [data-si-term="strike"]{--term-ink:#7652a3}
 .terms-grid [data-si-term="step"]{--term-ink:#9b5a0e}
 .terms-grid [data-si-term] :is(input,select){color:inherit;font-weight:600}
+
+/* Two complete identities on each line, in the source basket order. */
+.share-inputs{grid-template-columns:repeat(2,minmax(0,1fr))}
+.library .si-library-basket{min-width:220px}
+.library .si-library-shares{display:grid;grid-template-columns:repeat(2,max-content);gap:6px 10px;white-space:nowrap}
+.si-library-share{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.si-library-share img,.si-library-logo-fallback{display:inline-block;width:20px;height:20px;flex:none;object-fit:contain;border-radius:4px;background:#fff}
+.si-library-logo-fallback{border:1px solid #e0e7ec}
+.library table{min-width:990px}

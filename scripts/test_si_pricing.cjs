@@ -51,7 +51,8 @@ const ctx={window:null,console,fetch:async()=>({ok:!broken,json:async()=>payload
  input('si-strike-min','90');assert.equal(si.filtered().length,0,'reversed ranges fail visibly');input('si-strike-min','');assert(si.filtered().length>0);reset();
  change('si-share-4','DBSM');assert(si.filtered().length>0);assert(si.filtered().every(r=>r.shares.includes('DBSM')),'empty slots are ignored');reset();
  assert.equal(JSON.stringify(payload),before,'all quick-filter operations preserve the data');
- const controls=si.view();for(const label of ['SI quick filter','Top 20 · most used in SI','Singapore · 5 quick choices','Others','si-share-4','si-join-4','si-coupon-min','si-coupon-max','si-step-min','si-step-max'])assert(controls.includes(label),label);
+ const choiceGroups=ctx.SIQuickFilters.create({rows:()=>payload.rows,stepDown:()=>null,company:s=>({name:s})}).groups();assert.equal(choiceGroups[0][1].length,20);assert.equal(choiceGroups[1][1].length,5);assert.equal(choiceGroups[2][0],'Others');
+ const controls=si.view();for(const label of ['SI quick filter','si-share-4','si-join-4','si-coupon-min','si-coupon-max','si-step-min','si-step-max'])assert(controls.includes(label),label);
  assert(controls.indexOf('aria-label="SI quick filter"')<controls.indexOf('id="si-records"'),'quick filters remain visible while records are collapsed');
  const sample=[{shares:['A','B']},{shares:['C']},{shares:['B','C']},{shares:['AB']}].map(r=>({...r,coupon_pct:0,strike_pct:90,ko_pct:100,ki_pct:50,tenor_source_value:11,reference:'fixture'}));
  const q=ctx.SIQuickFilters.create({rows:()=>sample,stepDown:()=>null,company:s=>({name:s})});

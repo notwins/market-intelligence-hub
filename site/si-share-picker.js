@@ -52,20 +52,31 @@ function groups({instruments,profiles,watchlist,resolve,marketCap,symbol,logos})
   .map(([label,entries])=>({label,entries:entries.map(entry=>{
    const keys=[...entry.aliases];
    return {
-    ticker:entry.ticker,name:entry.name,
+    ticker:entry.ticker,name:entry.name,aliases:keys,
     search:[entry.name,...keys].join(' ').toUpperCase(),
     logo:keys.map(key=>logos.get(key)).find(Boolean)
    };
   })}));
 }
 
-function mount(container,{escape:E,logoBase}){
- let rows=[],active=null,options=[],selected=-1,query='';
+function mount(container,{escape:E,logoBase,allowCustom=true}){
+ let rows=[],active=null,options=[],selected=-1,query='',selecting=false;
+ const controls=[];
+ function identity(ticker){return rows.flatMap(group=>group.entries).find(row=>row.ticker===ticker||row.aliases?.includes(ticker));}
+ function decorate(control){
+  const value=control.input.value,row=identity(value);
+  control.selection.hidden=!value;
+  control.wrapper.toggleAttribute('data-picker-selected',!!value);
+  control.selection.innerHTML=value?`<span class="share-picker-icon" aria-hidden="true">${E(value.slice(0,2))}${row?.logo?`<img src="${E(logoBase+row.logo)}" width="24" height="24" alt="">`:''}</span><span class="share-picker-identity"><span>${E(row?.name||value)}</span><strong>${E(row?.ticker||value)}</strong></span>`:'';
+ }
+ function sync(){for(const control of controls){if(active===control)continue;control.committed=control.input.value;decorate(control);}}
  function close(){
   if(!active)return;
+  if(!allowCustom)active.input.value=active.committed;
   active.input.setAttribute('aria-expanded','false');
   active.input.removeAttribute('aria-activedescendant');
   active.list.hidden=true;
+  decorate(active);
   active=null;
  }
  function highlight(index,scroll=false){
@@ -88,9 +99,9 @@ function mount(container,{escape:E,logoBase}){
    const matches=entries.filter(row=>row.search.includes(query));
    if(!matches.length)return '';
    return `<div role="group" aria-label="${E(label)}"><div class="share-picker-group" aria-hidden="true">${E(label)}</div>
-    ${matches.map(({ticker,name,logo})=>`<div class="share-picker-option" role="option" id="${active.list.id}-${index++}" data-share-option="${E(ticker)}" aria-selected="false">
+    ${matches.map(({ticker,name,logo})=>`<div class="share-picker-option" role="option" id="${active.list.id}-${index++}" data-share-option="${E(ticker)}" aria-label="${E(name)}${ticker?' ('+E(ticker)+')':''}" aria-selected="false">
      <span class="share-picker-icon" aria-hidden="true">${E(ticker.slice(0,2))}${logo?`<img src="${E(logoBase+logo)}" width="24" height="24" alt="" loading="lazy">`:''}</span>
-     <span class="share-picker-identity"><strong>${E(ticker)}</strong><span>${E(name)}</span></span>
+     <span class="share-picker-identity"><span>${E(name)}</span><strong>${E(ticker)}</strong></span>
     </div>`).join('')}
    </div>`;
   }).join('');
@@ -104,6 +115,12 @@ function mount(container,{escape:E,logoBase}){
   const field=active.input.getBoundingClientRect();
   const viewportTop=root.visualViewport?.offsetTop||0;
   const viewportHeight=root.visualViewport?.height||root.innerHeight;
+  const viewportLeft=root.visualViewport?.offsetLeft||0,viewportWidth=root.visualViewport?.width||root.innerWidth;
+  const width=Math.min(Math.max(field.width,320),viewportWidth-24);
+  const left=Math.max(viewportLeft+12,Math.min(field.left,viewportLeft+viewportWidth-width-12));
+  active.list.style.width=width+'px';
+  active.list.style.insetInlineStart=(left-field.left)+'px';
+  active.list.style.insetInlineEnd='auto';
   const above=field.top-viewportTop-12,below=viewportTop+viewportHeight-field.bottom-12;
   const up=below<180&&above>below;
   active.list.dataset.placement=up?'above':'below';
@@ -124,20 +141,31 @@ function mount(container,{escape:E,logoBase}){
   draw();
  }
  function select(option){
-  const {input}=active;
+  const control=active,{input}=control;
   const ticker=option.dataset.shareOption;
   close();
   input.focus();
   if(input.value===ticker)return;
   input.value=ticker;
+  control.committed=ticker;
+  decorate(control);
   // Notify the form without reopening the menu for a programmatic selection.
-  input.dispatchEvent(new Event('change',{bubbles:true}));
+  selecting=true;
+  try{input.dispatchEvent(new Event('change',{bubbles:true}));}finally{selecting=false;}
  }
  for(const wrapper of container.querySelectorAll('.share-picker')){
-  const control={input:wrapper.querySelector('input'),list:wrapper.querySelector('[role=listbox]')};
+  const selection=root.document.createElement('span');selection.className='share-picker-selection';selection.setAttribute('aria-hidden','true');
+  wrapper.querySelector('.share-picker-field').append(selection);
+  const control={wrapper,selection,input:wrapper.querySelector('input'),list:wrapper.querySelector('[role=listbox]')};
+  control.committed=control.input.value;controls.push(control);
   const {input,list}=control,button=wrapper.querySelector('button');
   input.addEventListener('click',()=>{if(active!==control)open(control);});
-  input.addEventListener('input',()=>open(control,input.value));
+  input.addEventListener('input',event=>{if(!allowCustom)event.stopPropagation();open(control,input.value);});
+  input.addEventListener('change',event=>{
+   if(!allowCustom&&!selecting){input.value=control.committed;event.stopPropagation();}
+   else control.committed=input.value;
+   decorate(control);
+  });
   input.addEventListener('keydown',event=>{
    if(event.isComposing)return;
    const key=event.key;
@@ -165,6 +193,7 @@ function mount(container,{escape:E,logoBase}){
    if(option&&active===control)select(option);
   });
   list.addEventListener('error',event=>{if(event.target.tagName==='IMG')event.target.remove();},true);
+  selection.addEventListener('error',event=>{if(event.target.tagName==='IMG')event.target.remove();},true);
   wrapper.addEventListener('focusout',event=>{
    if(active===control&&event.relatedTarget&&!wrapper.contains(event.relatedTarget))close();
   });
@@ -175,7 +204,7 @@ function mount(container,{escape:E,logoBase}){
  root.addEventListener('scroll',fitList,{passive:true});
  root.addEventListener('resize',fitList);
  root.visualViewport?.addEventListener('resize',fitList);
- return {close,update(data){rows=data;draw();}};
+ return {close,sync,update(data){rows=data;sync();draw();}};
 }
 
 const api={groups,mount};

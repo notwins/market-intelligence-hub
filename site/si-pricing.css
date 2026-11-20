@@ -114,3 +114,17 @@ html[data-display-mode=dark] .si-share,html[data-display-mode=dark] .si-currency
  .si-quick-terms{grid-template-rows:repeat(2,minmax(34px,auto))}
 }
 @media(max-width:500px){.si-quick-terms{grid-template-rows:repeat(4,minmax(34px,auto))}}
+
+/* Every basket keeps two companies per line, independent of ticker length. */
+.si-table-wrap .si-shares{display:grid;grid-template-columns:repeat(2,max-content);gap:6px 9px;white-space:nowrap}
+.si-table-wrap .si-share{min-width:0;white-space:nowrap;flex-wrap:nowrap}
+.si-table-wrap .si-basket{min-width:180px;white-space:normal}
+.si-share-filter{grid-template-columns:48px 62px minmax(120px,1fr) minmax(0,115px)}
+@media(max-width:1100px){.si-share-filter{grid-template-columns:46px 58px minmax(120px,1fr)}}
+@media(max-width:760px){.si-share-filter{grid-template-columns:48px 62px minmax(100px,1fr) minmax(0,110px)}}
+@media(max-width:600px){
+ .si-table-wrap table{table-layout:auto;min-width:650px}
+ .si-table-wrap th:first-child{width:190px;min-width:190px}
+ .si-table-wrap .si-basket{width:190px;min-width:190px}
+}
+@media(max-width:500px){.si-share-filter{grid-template-columns:42px 56px minmax(120px,1fr)}}

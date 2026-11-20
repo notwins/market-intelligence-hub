@@ -67,3 +67,13 @@ BOS first for an exact listing and currency; Yahoo is the existing fallback.
 Each hint retains the source label, listing currency and observation date. No
 new quote collector, schedule or market-data branch is introduced. The logo
 identity aliases for Singapore companies and SK Hynix do not merge securities.
+
+
+The share selectors use the shared searchable SISharePicker: each option and
+selected identity places its local company logo, company name and ticker inside
+the field/menu. Typed search text does not filter the SI records until an option
+is selected; Escape restores the prior selection. Native keyboard navigation,
+Any share and Reset remain available. Both SI reference tables use an explicit
+two-column basket grid so four underlyings always occupy two rows of two.
+Beta 2 uses its existing local logo catalogue for the reference list and keeps
+its source basket order and private draft values.
