@@ -49,6 +49,21 @@ function controls(key,s,items){const multiple=s.symbols.length>1;return `<div cl
 function eventDetails(events){return events.length?`<details class="mp-event-sources"><summary>Dotted earnings markers · ${events.length} dates</summary><p>Markers show the calendar release date, including non-trading days. Announcement times are not available; a same-day close may precede an after-market release.</p><ul>${events.map(e=>`<li><b>${esc(e.ticker)}</b> · ${esc(e.date)} · ${esc(e.label)} · <a href="${esc(root.MarketPrices.sourceUrl(e.source_url))}" target="_blank" rel="noopener noreferrer">${esc(e.source_title)}</a></li>`).join('')}</ul></details>`:'<p class="mp-muted">No verified earnings-release date falls within this chart window.</p>';}
 function orderedShares(data){return root.ShareEnrichment?.sortShares(data,d=>d.item)||data;}
 function currentSelection(data,api){return `<section class="mp-current-selection" aria-label="Selected share prices and valuations"><h3>Selected prices &amp; valuations</h3>${orderedShares(data).map(d=>{const q=api.currentQuote?.(d.item)||{...d.quote,sourceLabel:'Historical feed close',sourceUrl:d.item.history_url},url=api.sourceUrl(q.sourceUrl);return `<article class="mp-current-quote"><div class="mp-quote"><div><strong>${esc(d.item.ticker)}</strong> <span>${esc(q.sourceLabel)}</span></div><b>${money(q.close)} <small>${esc(api.displayUnit(d.item))}</small></b></div><p class="mp-caption">Selected price · ${esc(q.date)}${q.current===false?' · Dated reference':''}${url?` · <a href="${esc(url)}" target="_blank" rel="noopener noreferrer">Selected source ↗</a>`:''}</p>${api.currentDetails?.(d.item)||''}</article>`;}).join('')}<p class="mp-muted">The historical chart and changes below use their original closing-price series and dates.</p></section>`;}
+const comparisonTables = new WeakMap();
+
+function comparisonTable(data, api, lines, percentage) {
+  const snapshot = root.ShareSnapshotColumns, columns = snapshot?.selection('history') || [];
+  return `${snapshot?.button('history') || ''}${snapshot?.note(columns) || ''}
+    <div class="mp-table-scroll" role="region" aria-label="Historical price comparison columns" tabindex="0">
+    <table class="mp-comparison-table"><caption>Historical feed closes · chart changes use the displayed window above</caption>
+    <thead><tr><th>Share</th><th>Historical feed close</th><th>Historical price date</th><th>Chart change</th>${snapshot?.headers(columns) || ''}</tr></thead>
+    <tbody>${orderedShares(data).map(d => {
+      const points = lines[data.indexOf(d)].points;
+      const change = percentage ? pct(points.at(-1)[1]) : pct((points.at(-1)[1] / points[0][1] - 1) * 100);
+      return `<tr><th scope="row">${esc(d.item.ticker)}</th><td>${money(d.quote.close)} ${esc(api.displayUnit(d.item))}</td><td>${esc(d.quote.date)}</td><td>${change}</td>${snapshot?.cells(d.item, columns) || ''}</tr>`;
+    }).join('')}</tbody></table></div>`;
+}
+
 async function render(el,force=false){
  const api=root.MarketPrices,key=el.dataset.shareWorkbench,s=state(key),version=api.version()+'|'+(root.ShareEnrichment?.version?.()||'')+'|'+s.revision;
  if(!force&&el.dataset.chartVersion===version)return;
@@ -68,11 +83,21 @@ async function render(el,force=false){
   if(!el.isConnected||el.dataset.chartToken!==token)return;
   mountResearch(el,s,key,{from:requestedFrom,to:end});
   const result=el.querySelector('.mp-workbench-result');result.removeAttribute('role');
-  result.innerHTML=`<p class="mp-comparison-dates"><b>${esc(from)} → ${esc(to)}</b> · ${percentage?'Percentage change · common start = 0%':esc(data[0].item.unit)}${from>requestedFrom?' · available history determines the start':''}</p><div class="mp-legend">${lines.map((line,i)=>`<span style="--share-color:${colors[i]}"><i></i>${esc(line.name)} <b>${percentage?pct(line.points.at(-1)[1]):pct((line.points.at(-1)[1]/line.points[0][1]-1)*100)}</b></span>`).join('')}</div>${api.svg(lines,[],events,{percent:percentage,expanded:true,colors,width:el.clientWidth})}<div class="mp-table-scroll"><table class="mp-comparison-table"><caption>Historical feed closes · chart changes use the displayed window above</caption><thead><tr><th>Share</th><th>Historical feed close</th><th>Historical price date</th><th>Chart change</th></tr></thead><tbody>${orderedShares(data).map(d=>{const i=data.indexOf(d);return `<tr><th scope="row">${esc(d.item.ticker)}</th><td>${money(d.quote.close)} ${esc(api.displayUnit(d.item))}</td><td>${esc(d.quote.date)}</td><td>${percentage?pct(lines[i].points.at(-1)[1]):pct((lines[i].points.at(-1)[1]/lines[i].points[0][1]-1)*100)}</td></tr>`;}).join('')}</tbody></table></div>${data.filter(d=>api.quoteStatus(d.quote)!=='Daily closing price').map(d=>`<p class="mp-warning">${esc(d.item.ticker)} · ${esc(api.quoteStatus(d.quote))}</p>`).join('')}${eventError?`<p class="mp-warning">${eventError}</p>`:s.events?eventDetails(events):''}<details class="mp-values"><summary>Price bases and available observations</summary><p>Older weekly/monthly baseline dates are period labels. Daily dates are actual available sessions. No missing sessions or price values are filled.</p>${data.map(d=>`<p><b>${esc(d.item.ticker)}</b> · ${esc(api.priceBasis(d.item))} ${esc(d.base.period_note)} <a href="${esc(api.sourceUrl(d.item.history_url))}" target="_blank" rel="noopener noreferrer">Price source ↗</a></p>`).join('')}</details>`+currentSelection(data,api);
+  result.innerHTML=`<p class="mp-comparison-dates"><b>${esc(from)} → ${esc(to)}</b> · ${percentage?'Percentage change · common start = 0%':esc(data[0].item.unit)}${from>requestedFrom?' · available history determines the start':''}</p><div class="mp-legend">${lines.map((line,i)=>`<span style="--share-color:${colors[i]}"><i></i>${esc(line.name)} <b>${percentage?pct(line.points.at(-1)[1]):pct((line.points.at(-1)[1]/line.points[0][1]-1)*100)}</b></span>`).join('')}</div>${api.svg(lines,[],events,{percent:percentage,expanded:true,colors,width:el.clientWidth})}<div data-snapshot-comparison>${comparisonTable(data,api,lines,percentage)}</div>${data.filter(d=>api.quoteStatus(d.quote)!=='Daily closing price').map(d=>`<p class="mp-warning">${esc(d.item.ticker)} · ${esc(api.quoteStatus(d.quote))}</p>`).join('')}${eventError?`<p class="mp-warning">${eventError}</p>`:s.events?eventDetails(events):''}<details class="mp-values"><summary>Price bases and available observations</summary><p>Older weekly/monthly baseline dates are period labels. Daily dates are actual available sessions. No missing sessions or price values are filled.</p>${data.map(d=>`<p><b>${esc(d.item.ticker)}</b> · ${esc(api.priceBasis(d.item))} ${esc(d.base.period_note)} <a href="${esc(api.sourceUrl(d.item.history_url))}" target="_blank" rel="noopener noreferrer">Price source ↗</a></p>`).join('')}</details>`+currentSelection(data,api);
+  const table = result.querySelector?.('[data-snapshot-comparison]');
+  const updateTable = () => { if (table?.isConnected) table.innerHTML = comparisonTable(data,api,lines,percentage); };
+  comparisonTables.set(el,updateTable);
+  if (root.ShareSnapshotColumns && !root.ShareEnrichment?.status?.().loaded) root.ShareEnrichment?.load().then(updateTable);
+
  }catch(e){if(el.isConnected&&el.dataset.chartToken===token){el.querySelector('.mp-workbench-result').innerHTML=`<p class="mp-warning">${esc(e.message)}</p>`;delete el.dataset.chartVersion;}}
 }
 const observed=new WeakSet();
 const resize=root.ResizeObserver?new root.ResizeObserver(entries=>{for(const entry of entries){const el=entry.target,w=Math.round(entry.contentRect.width);if(el.dataset.chartWidth&&Math.abs(w-Number(el.dataset.chartWidth))>16){clearTimeout(el.chartResizeTimer);el.chartResizeTimer=setTimeout(()=>{if(el.isConnected)render(el,true);},180);}el.dataset.chartWidth=w;}}):null;
+root.document?.addEventListener('share-snapshot-columns-updated', event => {
+  if (event.detail === 'history') {
+    for (const el of root.document.querySelectorAll('[data-share-workbench]')) comparisonTables.get(el)?.();
+  }
+});
 function mount(){for(const el of root.document?.querySelectorAll('[data-share-workbench]')||[]){render(el);if(resize&&!observed.has(el)){observed.add(el);resize.observe(el);}}}
 function open(symbol,origin){
  if(!root.document)return;returnFocus=origin||root.document.activeElement;
