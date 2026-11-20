@@ -35,3 +35,35 @@ Rows without a captured step stay blank. The map does not supply the first
 step-down month or change the schedule in a draft. Counts and known date ranges
 are validated against the data rather than a fixed 225-record limit. The SI table, grouping detail and matching desk cards
 retain the distinction between screen labels and independently verified terms.
+
+
+## Compact quick filter, 21 November 2026
+
+The SI Pricing route has an always-visible quick filter above the collapsible
+reference list. Four exact underlying selectors offer the 20 most frequent
+non-Singapore shares in the saved SI rows, followed by five Singapore choices
+(DBS, OCBC, UOB, Singtel and SGX), then the remaining source codes. These are
+navigation shortcuts, not a market-cap ranking. Missing matches stay empty.
+Native dropdowns support keyboard selection; tiny local logos sit beside the
+selected shares and source basket labels.
+
+Non-empty share slots combine with their AND/OR selector. AND binds before OR;
+the active basket expression is shown with parentheses. Currency, tenor and
+numeric ranges intersect that basket condition. Tenor 1–11 filters the source
+number without assigning months to legacy rows. Coupon p.a. bounds initially
+match only rows with a per_annum screen label. The explicit Include unconfirmed
+coupon basis option permits legacy source percentages while retaining their
+basis warning. All bounds are inclusive. Blank bounds are inactive, zero is a
+real bound, and reversed or negative bounds produce a visible validation message.
+
+Optional Strike/KI/KO/KO-step-down ranges sit to the right on desktop and fold
+on phones. Absent step-down values fail an active step-down range and are shown
+with a dash in the reference table. Filtering never modifies source data.
+Filtering opens the result list and updates the complete-source pivot count;
+reset clears all quick controls, search, currency and review filters.
+
+Selected-share price hints use the existing MarketPrices.currentQuote selection:
+BOS first for an exact listing and currency; Yahoo is the existing fallback.
+Each hint retains the source label, listing currency and observation date. No
+new quote collector, schedule or market-data branch is introduced. The logo
+identity aliases for Singapore companies and SK Hynix do not merge securities.
