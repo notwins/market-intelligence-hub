@@ -99,6 +99,16 @@ function mount(container,{escape:E,logoBase}){
   selected=-1;
   highlight(options.findIndex(option=>option.dataset.shareOption===previous));
  }
+ function fitList(){
+  if(!active)return;
+  const field=active.input.getBoundingClientRect();
+  const viewportTop=root.visualViewport?.offsetTop||0;
+  const viewportHeight=root.visualViewport?.height||root.innerHeight;
+  const above=field.top-viewportTop-12,below=viewportTop+viewportHeight-field.bottom-12;
+  const up=below<180&&above>below;
+  active.list.dataset.placement=up?'above':'below';
+  active.list.style.setProperty('--picker-height',Math.max(80,up?above:below)+'px');
+ }
  function open(control,filter=''){
   if(active!==control){
    close();
@@ -110,6 +120,7 @@ function mount(container,{escape:E,logoBase}){
   query=filter.trim().toUpperCase();
   control.input.setAttribute('aria-expanded','true');
   control.list.hidden=false;
+  fitList();
   draw();
  }
  function select(option){
@@ -161,6 +172,9 @@ function mount(container,{escape:E,logoBase}){
  root.document.addEventListener('click',event=>{
   if(active&&!active.input.closest('.share-picker').contains(event.target))close();
  });
+ root.addEventListener('scroll',fitList,{passive:true});
+ root.addEventListener('resize',fitList);
+ root.visualViewport?.addEventListener('resize',fitList);
  return {close,update(data){rows=data;draw();}};
 }
 
