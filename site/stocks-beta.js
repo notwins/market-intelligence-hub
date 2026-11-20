@@ -61,8 +61,39 @@ function previousQuote(quote,price,bos){const points=quote?.sourceId==='bos'?bos
 function findRecord(records,item,valuation,enrichment){const bb=valuation?.row?.instrumentId||enrichment?.bbTicker;const rows=records.filter(r=>r.currentEligible!==false&&r.identityStatus!=='conflict'&&r.currency===item.currency&&(bb?r.bbTicker===bb:item.isin?r.isin===item.isin:r.ticker===item.ticker));return rows.length===1?rows[0]:null;}
 function valuationPoints(points,metric,current){const map=new Map();for(const p of points||[]){if(!p.date||!finite(p.value)||p.value<=0)continue;const old=map.get(p.date);if(!old||String(p.reportDate||'')>=String(old.reportDate||''))map.set(p.date,p);}const row=current?.row;if(row?.priceAsOf&&finite(row[metric])&&row[metric]>0)map.set(row.priceAsOf,{date:row.priceAsOf,value:row[metric],source:'Bank of Singapore',sourceUrl:current.sourceUrl,reportDate:current.reportDate,basis:current.basis});return [...map.values()].sort((a,b)=>a.date.localeCompare(b.date));}
 function rebase(series){if(!series.length||series.some(s=>!s.points.length))return {series:[],reason:'At least one selected series has no observations in this window.'};const date=series[0].points.map(p=>p[0]).find(d=>series.every(s=>s.points.some(p=>p[0]===d&&finite(p[1])&&p[1]>0)));if(!date)return {series:[],reason:'No common observed date across these series. Choose a longer window or remove a series.'};return {date,series:series.map(s=>{const base=s.points.find(p=>p[0]===date)[1];return {...s,base,points:s.points.filter(p=>p[0]>=date).map(p=>[p[0],p[1]/base*100])};})};}
+function priceCurve(points) {
+  if (!points.length) return '';
+  const intervals = points.slice(1).map(([x, y], i) => {
+    const [previousX, previousY] = points[i];
+    const width = x - previousX;
+    return { width, slope: width > 0 ? (y - previousY) / width : 0 };
+  });
+  // Use a local, shape-preserving tangent. A price reversal gets a flat tangent.
+  const tangents = points.map((_, i) => {
+    const before = intervals[i - 1], after = intervals[i];
+    if (!before || !after) return (before ?? after)?.slope ?? 0;
+    if (!before.slope || !after.slope || Math.sign(before.slope) !== Math.sign(after.slope)) return 0;
+    const w1 = 2 * after.width + before.width, w2 = after.width + 2 * before.width;
+    return (w1 + w2) / (w1 / before.slope + w2 / after.slope);
+  });
+  const pair = (x, y) => x.toFixed(2) + ',' + y.toFixed(2);
+  const segments = ['M' + pair(...points[0])];
+  intervals.forEach(({ width }, i) => {
+    const [x1, y1] = points[i], [x2, y2] = points[i + 1];
+    if (width <= 0 || points.length === 2) {
+      segments.push('L' + pair(x2, y2));
+      return;
+    }
+    const third = width / 3;
+    const lower = Math.min(y1, y2), upper = Math.max(y1, y2);
+    const bound = y => Math.max(lower, Math.min(upper, y));
+    segments.push('C' + pair(x1 + third, bound(y1 + third * tangents[i])) + ' '
+      + pair(x2 - third, bound(y2 - third * tangents[i + 1])) + ' ' + pair(x2, y2));
+  });
+  return segments.join(' ');
+}
 function plot(series,{from,to,title,unit,events=[],width=840}){const all=series.flatMap(s=>s.points);if(!all.length)return `<div class="sb-empty">${E(title)} · no observations in this window.</div>`;let lo=Math.min(...all.map(p=>p[1])),hi=Math.max(...all.map(p=>p[1]));const pad=(hi-lo||Math.abs(hi)*.05||1)*.1;lo-=pad;hi+=pad;const a=Date.parse(from),b=Date.parse(to),w=Math.max(250,Math.min(1100,width)),left=w<480?44:62,right=w-24,x=d=>left+(Date.parse(d)-a)/(b-a||1)*(right-left),y=v=>210-(v-lo)/(hi-lo)*175;
-return `<div class="sb-plot"><h4>${E(title)} <small>· ${E(unit)}</small></h4><svg class="sb-chart" viewBox="0 0 ${w} 252" role="img" aria-label="${E(title+' · '+unit+' · '+from+' to '+to)}"><title>${E(title)}. Exact dated values are in the evidence table. Valuation dots do not fill missing dates.</title>${[0,.5,1].map(t=>{const v=lo+t*(hi-lo);return `<line class="grid" x1="${left}" x2="${right}" y1="${y(v)}" y2="${y(v)}"/><text x="${left-8}" y="${y(v)+4}" text-anchor="end">${E(num(v,1))}</text>`;}).join('')}${events.filter(e=>e.date>=from&&e.date<=to).map(e=>`<g><title>${E(e.label+' · '+e.date)}</title><line x1="${x(e.date)}" x2="${x(e.date)}" y1="25" y2="210" stroke="#8d7c9d" stroke-dasharray="3 5"/><text x="${x(e.date)}" y="18" text-anchor="middle">E</text></g>`).join('')}${series.map(s=>(s.dots?'':`<polyline stroke="${s.color}" points="${s.points.map(p=>x(p[0]).toFixed(2)+','+y(p[1]).toFixed(2)).join(' ')}"/>`)+s.points.map(p=>`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="${s.dots?3.4:1.9}" fill="${s.color}" tabindex="-1"><title>${E(s.name+' · '+p[0]+' · '+num(p[1],4)+' '+unit)}</title></circle>`).join('')).join('')}<text x="${left}" y="240">${E(from)}</text><text x="${right}" y="240" text-anchor="end">${E(to)}</text></svg><div class="sb-legend">${series.map(s=>`<span><i style="background:${s.color}"></i>${E(s.name)}${s.dots?' · source observations':''}</span>`).join('')}</div></div>`;}
+return `<div class="sb-plot"><h4>${E(title)} <small>· ${E(unit)}</small></h4><svg class="sb-chart" viewBox="0 0 ${w} 252" role="img" aria-label="${E(title+' · '+unit+' · '+from+' to '+to)}"><title>${E(title)}. Exact dated values are in the evidence table. Valuation dots do not fill missing dates.</title>${[0,.5,1].map(t=>{const v=lo+t*(hi-lo);return `<line class="grid" x1="${left}" x2="${right}" y1="${y(v)}" y2="${y(v)}"/><text x="${left-8}" y="${y(v)+4}" text-anchor="end">${E(num(v,1))}</text>`;}).join('')}${events.filter(e=>e.date>=from&&e.date<=to).map(e=>`<g><title>${E(e.label+' · '+e.date)}</title><line x1="${x(e.date)}" x2="${x(e.date)}" y1="25" y2="210" stroke="#8d7c9d" stroke-dasharray="3 5"/><text x="${x(e.date)}" y="18" text-anchor="middle">E</text></g>`).join('')}${series.map(s=>(s.dots?'':`<path class="sb-price-curve" stroke="${s.color}" fill="none" stroke-width="2.2" vector-effect="non-scaling-stroke" d="${priceCurve(s.points.map(([date,value])=>[x(date),y(value)]))}"/>`)+s.points.map(p=>`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="${s.dots?3.4:1.9}" fill="${s.color}" tabindex="-1"><title>${E(s.name+' · '+p[0]+' · '+num(p[1],4)+' '+unit)}</title></circle>`).join('')).join('')}<text x="${left}" y="240">${E(from)}</text><text x="${right}" y="240" text-anchor="end">${E(to)}</text></svg><div class="sb-legend">${series.map(s=>`<span><i style="background:${s.color}"></i>${E(s.name)}${s.dots?' · source observations':''}</span>`).join('')}</div></div>`;}
 const MAX_CARDS = 10;
 const DEFAULT_WATCHLIST = (typeof module !== 'undefined' ? require('./share-card-watchlist.js') : root.ShareCardWatchlist).tickers;
 
