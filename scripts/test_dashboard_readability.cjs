@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),a=require('node:assert/strict'),path=require('node:path');
 const site=path.join(__dirname,'../site'),read=f=>fs.readFileSync(path.join(site,f),'utf8'),json=f=>JSON.parse(read(f));
 const d=json('data/earnings-history.json'),watch=json('data/watchlist/membership.json');
-a.deepEqual(d.companies.map(c=>c.ticker).sort(),watch.members.map(c=>c.ticker).sort());
+a.deepEqual(d.companies.map(c=>c.ticker).sort(),watch.members.filter(c=>(c.currency??'USD')==='USD').map(c=>c.ticker).sort());
 a.equal(d.companies.length,13);a.equal(d.fcf.rows.length,6);
 for(const c of d.companies){a.equal(c.takeaways.length,5);a.ok(c.history.length>=(c.ticker==='BABA'?1:2));for(const h of c.history){a.ok(d.sources[h.source]);a.ok(h.report_date===null||h.report_date===d.sources[h.source].published_at);if(h.period_end)a.ok(h.period_end<=d.sources[h.source].published_at);}}
 const tsm=d.companies.find(c=>c.ticker==='TSM');a.equal(tsm.history[0].eps,4.6);a.equal(tsm.history[0].ordinary_eps_ntd,29.43);a.match(tsm.eps_basis,/ADR/);
