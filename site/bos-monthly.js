@@ -10,6 +10,11 @@
   const body = byId('bos-observations');
   const details = byId('bos-links');
   const equity = window.BOSEquity;
+  const aceFile = byId('ace-file');
+  const aceStatus = byId('ace-status');
+  const aceClear = byId('ace-clear');
+  const aceFilter = byId('ace-matches-only');
+  let ace, aceResults = new Map(), aceRequest = 0;
 
   const number = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 10 });
   const percent = new Intl.NumberFormat('en-GB', {
@@ -76,11 +81,20 @@
 
   function paintList() {
     const q = search.value.trim().toUpperCase();
-    const visible = data.listings.filter(([ticker, unit]) => (ticker + ' ' + unit).toUpperCase().includes(q));
+    const visible = data.listings.filter(listing => {
+      const [ticker, unit] = listing;
+      return (ticker + ' ' + unit).toUpperCase().includes(q)
+        && (!aceFilter.checked || aceResults.get(listing)?.state === 'matched');
+    });
     byId('bos-empty').hidden = visible.length > 0;
     menu.replaceChildren(...visible.map(listing => {
       const node = item('li', '');
       const button = item('button', listing[0] + ' · ' + listing[1]);
+      if (aceResults.get(listing)?.state === 'matched') {
+        const badge = item('small', 'ACE match');
+        badge.setAttribute('aria-hidden', 'true');
+        button.append(badge);
+      }
       button.type = 'button';
       button.className = 'sb2-security';
       button.setAttribute('aria-pressed', String(listing === selected));
@@ -93,6 +107,63 @@
       node.append(button);
       return node;
     }));
+  }
+
+  function aceDetail() {
+    const result = aceResults.get(selected);
+    if (!result) return [];
+    if (result.state === 'unverified') return [item('li', 'ACE · No verified ISIN for this listing')];
+    if (result.state === 'missing') return [item('li', 'ACE · ISIN absent from this workbook')];
+    if (result.state === 'currency') {
+      return [item('li', 'ACE · ISIN found in ' + result.currencies.join(', ') + ' · currency differs')];
+    }
+    const [,,, isin] = selected;
+    const heading = item('li', 'ACE · Matched ' + isin + ' · '
+      + result.rows.length + (result.rows.length === 1 ? ' workbook row' : ' workbook rows'));
+    const records = item('ul', '');
+    for (const row of result.rows) {
+      const description = [row.name, row.type, row.currency, ace.sheet + ' row ' + row.row].filter(Boolean);
+      records.append(item('li', description.join(' · ')));
+    }
+    heading.append(records);
+    return [heading];
+  }
+
+  function repaintAce() {
+    paintList();
+    paintSources();
+  }
+
+  async function loadAce(file) {
+    if (!file) return;
+    const request = ++aceRequest;
+    aceClear.hidden = false;
+    aceStatus.textContent = 'Reading ACE workbook…';
+    try {
+      if (!/\.xlsx$/i.test(file.name)) throw Error('Choose an .xlsx workbook.');
+      if (file.size > window.USTDecisionImport.limits.file) throw Error('Choose a workbook no larger than 20 MiB.');
+      const bytes = await file.arrayBuffer();
+      if (request !== aceRequest) return;
+      const workbook = window.AceListingMatch.open(bytes);
+      const results = new Map(data.listings.map(listing => {
+        const [, unit, , isin] = listing;
+        return [listing, window.AceListingMatch.match(workbook, isin, unit)];
+      }));
+      const total = [...results.values()].filter(result => result.state === 'matched').length;
+      ace = workbook;
+      aceResults = results;
+      aceFilter.checked = false;
+      byId('ace-filter').hidden = total === 0;
+      aceStatus.textContent = number.format(total) + ' of ' + number.format(data.listings.length)
+        + ' listings matched · ' + workbook.sheet + ' worksheet.';
+      repaintAce();
+    } catch (error) {
+      if (request === aceRequest) {
+        aceClear.hidden = !ace;
+        aceStatus.textContent = 'ACE workbook could not be loaded. ' + error.message
+          + (ace ? ' The previous workbook is still shown.' : '');
+      }
+    }
   }
 
   function paintSources() {
@@ -108,7 +179,8 @@
     }
     details.replaceChildren(
       item('li', 'Bloomberg · ' + (isin ? isin + ' · snapshot quote date unverified' : 'No verified listing match')),
-      item('li', 'BOS Daily · ' + message)
+      item('li', 'BOS Daily · ' + message),
+      ...aceDetail()
     );
   }
 
@@ -143,6 +215,7 @@
       status.textContent = count + ' monthly observations · ' + number.format(data.listings.length)
         + ' ticker and quote-unit combinations.';
       workspace.hidden = false;
+      byId('ace-import').hidden = false;
       paintList();
       paintTable();
     } catch {
@@ -151,6 +224,28 @@
     }
   }
 
+  aceFile.addEventListener('change', () => {
+    const [file] = aceFile.files;
+    loadAce(file);
+  });
+  aceClear.addEventListener('click', () => {
+    aceRequest += 1;
+    aceFile.value = '';
+    ace = null;
+    aceResults.clear();
+    aceFilter.checked = false;
+    byId('ace-filter').hidden = true;
+    aceClear.hidden = true;
+    aceStatus.textContent = 'ACE workbook cleared.';
+    repaintAce();
+  });
+  aceFilter.addEventListener('change', () => {
+    if (aceFilter.checked && aceResults.get(selected)?.state !== 'matched') {
+      selected = data.listings.find(listing => aceResults.get(listing)?.state === 'matched');
+      paintTable();
+    }
+    paintList();
+  });
   retry.addEventListener('click', load);
   search.addEventListener('input', paintList);
   Promise.resolve(equity?.refresh()).finally(() => {

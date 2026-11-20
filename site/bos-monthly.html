@@ -7,8 +7,11 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121">
+  <link rel="stylesheet" href="bos-monthly.css?v=20261121">
   <script defer src="bos-equity.js"></script>
-  <script defer src="bos-monthly.js?v=20261121"></script>
+  <script defer src="v3-source-engine.js?v=20261121-ace"></script>
+  <script defer src="ace-listing-match.js?v=20261121"></script>
+  <script defer src="bos-monthly.js?v=20261121-ace"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to BOS observations</a>
@@ -25,10 +28,23 @@
       <button type="button" id="bos-retry" hidden>Retry loading archive</button>
     </header>
     <p id="sb2-status" role="status" aria-live="polite">Loading BOS monthly history…</p>
+    <details class="sb2-method bos-ace-import" id="ace-import" hidden>
+      <summary>Match an ACE workbook</summary>
+      <p id="ace-file-hint">Choose an .xlsx file with ISIN and currency columns. The file is read in this browser tab.</p>
+      <div class="bos-ace-actions">
+        <label for="ace-file">ACE workbook</label>
+        <input type="file" id="ace-file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" aria-describedby="ace-file-hint">
+        <button type="button" id="ace-clear" hidden>Clear workbook</button>
+      </div>
+      <p id="ace-status" role="status" aria-live="polite"></p>
+    </details>
     <div class="sb2-workspace" id="bos-history" hidden>
       <section class="sb2-panel sb2-picker" aria-label="Choose a listing">
         <label for="bos-search">Find a ticker or quote unit</label>
         <input type="search" id="bos-search" autocomplete="off">
+        <label class="bos-ace-filter" id="ace-filter" hidden>
+          <input type="checkbox" id="ace-matches-only"> Show ACE matches only
+        </label>
         <ul id="sb2-securities" aria-label="BOS listings"></ul>
         <p id="bos-empty" hidden>No listings match.</p>
       </section>
@@ -53,7 +69,7 @@
     <details class="sb2-method">
       <summary>Dates and listing matches</summary>
       <p>Month identifies the archive report. Price date is the date of the quote. The target is from the same report and uses the same quote unit. The gap percentage divides the gap by that share price. GBp is UK pence.</p>
-      <p>Bloomberg identities refer to a snapshot with an unverified quote date. BOS Daily retains its own report and price dates. Historical observations keep their original ticker and quote unit.</p>
+      <p>Bloomberg identities refer to a snapshot with an unverified quote date. BOS Daily retains its own report and price dates. Historical observations keep their original ticker and quote unit. ACE matches require a verified ISIN and the same currency. GBp and GBX identify GBP for matching, with the original quote units shown.</p>
     </details>
   </main>
 </body>
