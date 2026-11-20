@@ -30,8 +30,20 @@ function mountResearch(el,s,key,dates={}){
  catch{host.innerHTML='<p class="mp-warning">Valuation and earnings evidence could not load. Reload this view to retry.</p>';}
 }
 let linkedCompany='';
-function panel(){const requested=typeof URLSearchParams==='function'?new URLSearchParams(root.location?.search||'').get('company'):null;if(requested&&requested!==linkedCompany&&/^[A-Z]{1,5}(?:\.[A-Z])?$/.test(requested)){select(requested);linkedCompany=requested;}return `<section class="card section mp-history" id="mp-history"><div class="section-title"><div><h2>Share prices &amp; historical charts</h2><p data-price-status>Daily closes · one shared price history</p></div><button class="button ghost" data-price-refresh>Check for price update</button></div>${shell('history')}</section>`;}
-function select(symbol){const s=state('history');s.symbols=[symbol];s.mode='price';s.revision++;}
+let historyView=root.ShareCardWatchlist?'cards':'compare';
+function historyBody(){
+ if(historyView==='compare')return shell('history');
+ return `<div class="mp-si-grid" aria-label="Watchlist price cards">${root.ShareCardWatchlist.tickers.map(ticker=>root.MarketPrices.card(ticker,{key:'watchlist-history-'+ticker,period:'6M'})).join('')}</div>`;
+}
+function panel(){
+ const requested=typeof URLSearchParams==='function'?new URLSearchParams(root.location?.search||'').get('company'):null;
+ if(requested&&requested!==linkedCompany&&/^[A-Z]{1,5}(?:\.[A-Z])?$/.test(requested)){
+  select(requested);linkedCompany=requested;
+ }
+ const tabs=root.ShareCardWatchlist?`<div class="mp-periods" role="group" aria-label="Share prices display"><button type="button" data-share-history-view="cards" aria-pressed="${historyView==='cards'}">Watchlist cards</button><button type="button" data-share-history-view="compare" aria-pressed="${historyView==='compare'}">Compare shares</button></div>`:'';
+ return `<section class="card section mp-history" id="mp-history"><div class="section-title"><div><h2>Share prices &amp; historical charts</h2><p data-price-status>Daily closes · one shared price history</p></div><button class="button ghost" data-price-refresh>Check for price update</button></div>${tabs}<div data-share-history-body>${historyBody()}</div></section>`;
+}
+function select(symbol){const s=state('history');s.symbols=[symbol];s.mode='price';s.revision++;historyView='compare';}
 function options(items,s){return items.filter(x=>!s.symbols.includes(x.ticker)).map(x=>`<option value="${esc(x.ticker)}" ${x.ticker===s.pending?'selected':''}>${esc(x.name)} [${esc(x.ticker)}] · ${esc(x.currency||x.unit)}</option>`).join('');}
 function controls(key,s,items){const multiple=s.symbols.length>1;return `<div class="mp-share-chips" aria-label="Shares in this chart">${s.symbols.map((t,i)=>`<span style="--share-color:${colors[i]}"><b>${esc(t)}</b><button type="button" data-share-remove="${esc(t)}" aria-label="Remove ${esc(t)}" ${s.symbols.length===1?'disabled':''}>×</button></span>`).join('')}</div><div class="mp-share-add"><label>Add a share to compare<select data-share-add-select ${s.symbols.length>=6?'disabled':''}>${options(items,s)}</select></label><button type="button" class="button" data-share-add ${s.symbols.length>=6?'disabled':''}>Add to chart</button></div><div class="mp-chart-controls"><div class="mp-periods" role="group" aria-label="Comparison chart period">${Object.keys(ranges).map(p=>`<button type="button" data-share-range="${p}" aria-pressed="${s.range===p}">${p}</button>`).join('')}</div><label>Chart units<select data-share-mode ${multiple?'disabled':''}><option value="price" ${!multiple&&s.mode==='price'?'selected':''}>Listing price</option><option value="percent" ${multiple||s.mode==='percent'?'selected':''}>Percentage change</option></select></label><label class="mp-events-toggle"><input type="checkbox" data-share-events ${s.events?'checked':''}> Show earnings dates</label></div><p class="mp-muted">${multiple?'Every line starts at 0% on the first common observation date and ends on the last common date.':'Add up to six shares. Comparisons automatically use percentage change.'} Listing currencies are retained; no FX conversion. Share/ETF price changes exclude dividends. Total-return indices retain their own published methodology.</p><div class="mp-workbench-result" role="status">Loading chart…</div>`;}
 function eventDetails(events){return events.length?`<details class="mp-event-sources"><summary>Dotted earnings markers · ${events.length} dates</summary><p>Markers show the calendar release date, including non-trading days. Announcement times are not available; a same-day close may precede an after-market release.</p><ul>${events.map(e=>`<li><b>${esc(e.ticker)}</b> · ${esc(e.date)} · ${esc(e.label)} · <a href="${esc(root.MarketPrices.sourceUrl(e.source_url))}" target="_blank" rel="noopener noreferrer">${esc(e.source_title)}</a></li>`).join('')}</ul></details>`:'<p class="mp-muted">No verified earnings-release date falls within this chart window.</p>';}
@@ -71,6 +83,17 @@ function open(symbol,origin){
 }
 if(root.document){
  root.document.addEventListener('click',e=>{
+  const tab=e.target.closest('[data-share-history-view]');
+  if(tab){
+   const view=tab.dataset.shareHistoryView;
+   if(view===historyView)return;
+   historyView=view;
+   const panel=tab.closest('#mp-history');
+   for(const button of panel.querySelectorAll('[data-share-history-view]'))button.setAttribute('aria-pressed',String(button===tab));
+   panel.querySelector('[data-share-history-body]').innerHTML=historyBody();
+   root.MarketPrices.mount();
+   return;
+  }
   const expand=e.target.closest('[data-price-expand]');if(expand){open(expand.dataset.priceExpand,expand);return;}
   if(e.target.closest('[data-share-close]')){dialog?.close();return;}
   const el=e.target.closest('[data-share-workbench]');if(!el)return;const s=state(el.dataset.shareWorkbench);
