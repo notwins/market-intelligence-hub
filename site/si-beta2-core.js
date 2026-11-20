@@ -96,7 +96,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links}={}){cons
  const my=y+(compact?97:small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Shown high / low',pts.length?`${fmt(Math.max(...pts.map(x=>x[1])))} / ${fmt(Math.min(...pts.map(x=>x[1])))}`:'Unavailable'],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
  metrics.forEach(([k,v],j)=>{const col=small?j%2:0,row=small?Math.floor(j/2):j,x=rx+col*137,yy=my+row*(compact?9:small?10:16);fitted(x,yy,k,small?64:125,small?7:9,muted);fitted(x+(small?129:rw),yy,v,small?62:130,small?7:9,navy,true,'end');});
  if(research){
-  const yy=my+(compact?50:small?56:162),size=small?7.5:9,x=rx+59;
+  const yy=my+(compact?50:small?56:162),size=small?7.5:9,x=rx+(small?59:70);
   text(rx,yy,'BOS research',size,muted,true);
   if(research.url){
    const box={left:x-2,top:yy-size-2,right:x+33,bottom:yy+3};
@@ -106,7 +106,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links}={}){cons
    line(x,yy+1,x+research.call.length*size*.64,yy+1,'#174e88');out.push('</a>');
   }else if(research.call){text(x,yy,research.call,size,navy,true);}
   const label=[research.provider,research.target].filter(Boolean).join(' · ');
-  fitted(rx+rw,yy,label,rw-96,size,navy,true,'end');
+  fitted(rx+rw,yy,label,rx+rw-x-39,size,navy,true,'end');
  }
  const source=`${d.provider||'Price feed unavailable'}${d.metricsDate?' · BOS metrics '+d.metricsDate:''}`;text(rx,y+block-17,clean(source,65),8,muted);if(d.sourceUrl)text(rx,y+block-6,clean(d.sourceUrl.replace(/^https:\/\//,''),78),7,muted);if(!small)paragraph(rx,y+block-48,d.metricsBasis||'Valuations unavailable. No estimates are inferred.',61,2,8,muted);
  });
