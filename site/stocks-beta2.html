@@ -12,11 +12,11 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
-  <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.9">
+  <link rel="stylesheet" href="stocks-beta2.css?v=20261121.priorities1">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.priorities1">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261121.9"></script>
-  <script defer src="stocks-beta2.js?v=20261121.9&amp;credit=1"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.priorities1"></script>
+  <script defer src="stocks-beta2.js?v=20261121.priorities1&amp;credit=1"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -24,9 +24,9 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to market history</a>
-  <header class="sb-mast sb2-mast">
+  <header class="sb-mast sb2-mast" id="sb2-mast">
     <a href="desk.html"><b>M.</b> MARKET INTEL</a>
-    <nav aria-label="Stock section links">
+    <nav class="sb2-related-links" aria-label="Stock section links">
       <a href="stocks-beta.html">Stocks BETA</a>
       <a href="bos-monthly.html">BOS monthly archive</a>
       <a href="v4.html#history/beta2-shares">Event studies</a>
@@ -37,58 +37,68 @@
     <header class="sb2-intro">
       <div>
         <h1>Stocks BETA 2</h1>
-        <p>Monthly market history for the global top 100 and Singapore top 10 in the 3 November 2026 Bank of Singapore coverage universe.</p>
+        <p>Monthly prices, valuations and research for 110 listings.</p>
       </div>
-      <button type="button" id="sb2-download" disabled>Download compact CSV</button>
     </header>
     <p id="sb2-status" role="status" aria-live="polite">Loading monthly market history…</p>
-    <details class="sb2-fund-import" data-fund-import-panel>
-      <summary>Morningstar annual statements</summary>
-      <p>Load a Fundamentals JSON file to see the annual income statement, balance sheet and cash flow on company cards. The file is saved in this browser. Quick data shows the research snapshot with its own report date.</p>
-      <label class="sb2-file-label">Load fundamentals JSON<input type="file" accept=".json,application/json" data-fund-file></label>
-      <p class="fund-state" role="status"></p>
-    </details>
-    <div data-credit-library></div>
     <button type="button" id="sb2-retry" hidden>Retry loading history</button>
-    <nav class="sb2-view-links" aria-label="Chart sections">
-      <a href="#sb2-detail">Company history</a>
-      <a href="#sb2-pe-rankings">P/E rankings</a>
-    </nav>
-    <div class="sb2-shared-controls" id="sb2-shared-controls" hidden>
-      <div class="sb2-date-range" role="group" aria-label="Date range for all cards">
-        <label>From edition<select id="sb2-from"></select></label>
-        <label>To edition<select id="sb2-to"></select></label>
-        <button type="button" id="sb2-all-dates">Full history</button>
-      </div>
-      <div class="sb2-axis-toggle" role="group" aria-label="Historical chart axis spacing for all cards">
-        <span>Chart axis</span>
-        <button type="button" data-axis="quarter" aria-pressed="false">Quarterly</button>
-        <button type="button" data-axis="year" aria-pressed="true">Yearly</button>
-      </div>
-      <label class="sb2-layout-control">Cards per row
-        <select id="sb2-card-columns" aria-describedby="sb2-card-fit">
-          <option value="auto">Auto (up to 5)</option>
-          <option value="1">1 card</option>
-          <option value="2">2 cards</option>
-          <option value="3">3 cards</option>
-          <option value="4">4 cards</option>
-          <option value="5">5 cards</option>
-        </select>
-      </label>
-      <span id="sb2-card-fit" class="sb2-card-fit" role="status"></span>
+    <div class="sb2-page-tools">
+      <nav class="sb2-view-links" aria-label="Chart sections">
+        <a href="#sb2-detail">Company history</a>
+        <a href="#sb2-pe-rankings">P/E rankings</a>
+      </nav>
+      <details id="sb2-options">
+        <summary>Options</summary>
+        <div id="sb2-options-content">
+          <div class="sb2-shared-controls" id="sb2-shared-controls" hidden>
+            <div class="sb2-date-range" role="group" aria-label="Date range for all cards">
+              <label>From edition<select id="sb2-from"></select></label>
+              <label>To edition<select id="sb2-to"></select></label>
+              <button type="button" id="sb2-all-dates">Full history</button>
+            </div>
+            <div class="sb2-axis-toggle" role="group" aria-label="Historical chart axis spacing for all cards">
+              <span>Chart axis</span>
+              <button type="button" data-axis="quarter" aria-pressed="false">Quarterly</button>
+              <button type="button" data-axis="year" aria-pressed="true">Yearly</button>
+            </div>
+            <label class="sb2-layout-control">Cards per row
+              <select id="sb2-card-columns" aria-describedby="sb2-card-fit">
+                <option value="auto">Auto (up to 5)</option>
+                <option value="1">1 card</option>
+                <option value="2">2 cards</option>
+                <option value="3">3 cards</option>
+                <option value="4">4 cards</option>
+                <option value="5">5 cards</option>
+              </select>
+            </label>
+            <span id="sb2-card-fit" class="sb2-card-fit" role="status"></span>
+          </div>
+          <button type="button" id="sb2-download" disabled>Download compact CSV</button>
+          <details class="sb2-fund-import" data-fund-import-panel>
+            <summary>Morningstar annual statements</summary>
+            <p>Load a Fundamentals JSON file to see annual statements on company cards. The file is saved in this browser.</p>
+            <label class="sb2-file-label">Load fundamentals JSON<input type="file" accept=".json,application/json" data-fund-file></label>
+            <p class="fund-state" role="status"></p>
+          </details>
+          <div data-credit-library></div>
+        </div>
+      </details>
     </div>
     <div class="sb2-workspace" id="sb2-workspace" hidden>
       <section class="sb2-panel sb2-picker" aria-label="Choose a security">
-        <div class="sb2-groups" role="group" aria-label="Ranking">
-          <button type="button" data-group="global" aria-pressed="true">Global top 100</button>
-          <button type="button" data-group="singapore" aria-pressed="false">Singapore top 10</button>
-        </div>
         <div class="sb2-find">
-          <label for="sb2-search">Find a company<input type="search" id="sb2-search" placeholder="Name or ticker across both lists" autocomplete="off"></label>
-          <span id="sb2-result-count" role="status"></span>
+          <label for="sb2-search">Find a company<input type="search" id="sb2-search" placeholder="Name or ticker" autocomplete="off"></label>
+          <button id="sb2-browse" type="button" aria-expanded="false" aria-controls="sb2-picker-results">Browse</button>
         </div>
-        <ul id="sb2-securities" aria-label="Securities by market capitalisation"></ul>
-        <p id="sb2-empty" hidden>No companies match this search.</p>
+        <div id="sb2-picker-results" hidden>
+          <div class="sb2-groups" role="group" aria-label="Ranked companies">
+            <button type="button" data-group="global" aria-pressed="true">Global top 100</button>
+            <button type="button" data-group="singapore" aria-pressed="false">Singapore top 10</button>
+          </div>
+          <span id="sb2-result-count" role="status"></span>
+          <ul id="sb2-securities" aria-label="Securities by market capitalisation"></ul>
+          <p id="sb2-empty" hidden>No companies match this search.</p>
+        </div>
       </section>
       <div class="sb2-deck" id="sb2-detail" aria-label="Company comparison cards"></div>
     </div>
@@ -104,16 +114,19 @@
         <div class="sb2-chart-and-research">
           <section class="sb2-history" aria-label="Historical chart">
             <div>
-              <h3>Historical chart</h3>
+              <div class="sb2-chart-heading">
+                <h3>Historical chart</h3>
+                <button type="button" class="sb2-expand" aria-expanded="false">Expand chart</button>
+              </div>
               <div class="sb2-metric-toggle" role="group" aria-label="Historical chart metric">
                 <button type="button" data-metric="price" aria-pressed="true">Price</button>
                 <button type="button" data-metric="market_cap_usd_bn" aria-pressed="false">Market cap</button>
                 <button type="button" data-metric="dividend_yield_pct" aria-pressed="false">Dividend yield</button>
               </div>
               <div class="sb2-metric-toggle sb2-overlay-controls" role="group" aria-label="Price chart overlays">
-                <button type="button" data-target aria-pressed="false">Morningstar price target</button>
+                <button type="button" data-target aria-pressed="false">Historical fair value</button>
                 <button type="button" data-cone aria-pressed="false">12-month probability cone</button>
-                <button type="button" data-bos-target aria-pressed="false">BOS coverage target</button>
+                <button type="button" data-bos-target aria-pressed="false">Research target</button>
               </div>
               <div class="sb2-metric-toggle sb2-overlay-controls" data-cone-bands role="group" aria-label="Probability cone bands" hidden>
                 <button type="button" data-cone-band="1" aria-pressed="true">±1 SD</button>
@@ -148,6 +161,13 @@
             </div>
             <label class="sb2-line-slider">Inspect month across cards<input type="range" step="1"></label>
           </section>
+          <section class="sb2-research" aria-label="Company research">
+            <h3>Quick data</h3>
+            <p class="sb2-research-status" role="status">Loading company research…</p>
+            <div class="sb2-research-body" hidden></div>
+            <div data-sb2-fundamentals></div>
+            <div data-credit-listing></div>
+          </section>
           <section class="sb2-history sb2-valuation" aria-label="Forward valuation chart">
             <div>
               <h3>Forward P/E and P/B</h3>
@@ -160,13 +180,6 @@
               </figure>
               <p class="sb2-chart-empty" data-valuation-empty hidden>No forward P/E or P/B values in the selected range.</p>
             </div>
-          </section>
-          <section class="sb2-research" aria-label="Company research">
-            <h3>Quick data</h3>
-            <p class="sb2-research-status" role="status">Loading company research…</p>
-            <div class="sb2-research-body" hidden></div>
-            <div data-sb2-fundamentals></div>
-            <div data-credit-listing></div>
           </section>
         </div>
         <details class="sb2-history-table">
@@ -189,17 +202,27 @@
           <p id="sb2-peer-status" role="status"></p>
         </div>
       </header>
-      <div class="sb2-peer-controls">
-        <div class="sb2-transport" aria-label="Ranking playback">
-          <button type="button" id="sb2-play">Play months</button>
-          <button type="button" id="sb2-prev" aria-label="Previous ranking month">Previous</button>
-          <button type="button" id="sb2-next" aria-label="Next ranking month">Next</button>
+      <div class="sb2-rank-toolbar">
+        <div class="sb2-peer-controls">
+          <div class="sb2-peer-filters">
+            <label>Market<select id="sb2-peer-market">
+              <option value="all">Both markets</option><option value="usa">USA</option><option value="world">Rest of world</option>
+            </select></label>
+            <label>Forward P/E<select id="sb2-peer-direction">
+              <option value="low">Lowest</option><option value="high">Highest</option>
+            </select></label>
+            <label>Jump to year<select id="sb2-peer-year"></select></label>
+          </div>
+          <div class="sb2-transport" aria-label="Ranking playback">
+            <button type="button" id="sb2-play">Play months</button>
+            <button type="button" id="sb2-prev" aria-label="Previous ranking month">Previous</button>
+            <button type="button" id="sb2-next" aria-label="Next ranking month">Next</button>
+          </div>
         </div>
-        <label>Jump to year<select id="sb2-peer-year"></select></label>
+        <label class="sb2-peer-slider" for="sb2-peer-month">Ranking edition <output id="sb2-peer-label"></output></label>
+        <input type="range" id="sb2-peer-month" min="0" step="1">
+        <div class="sb2-year-axis" id="sb2-year-axis" aria-hidden="true"></div>
       </div>
-      <label class="sb2-peer-slider" for="sb2-peer-month">Ranking edition <output id="sb2-peer-label"></output></label>
-      <input type="range" id="sb2-peer-month" min="0" step="1">
-      <div class="sb2-year-axis" id="sb2-year-axis" aria-hidden="true"></div>
       <div class="sb2-peer-grid" id="sb2-pe-bars"></div>
       <p class="sb2-peer-note">Market groups use listing exchanges at the November 2026 snapshot. Each company uses its largest qualifying listing in each market. Entries and exits compare with the previous saved edition. Each chart has its own scale.</p>
     </section>

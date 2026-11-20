@@ -111,7 +111,7 @@
   function coneLevels(cone, bands) {
     return cone?.points.at(-1).flatMap((value, i) => {
       const band = Math.abs(2 - i);
-      return band === 0 || bands.includes(band) ? [{ value, label: coneLabels[i] + ' ' + priceLabel(value) }] : [];
+      return band === 0 || bands.includes(band) ? [{ value, label: coneLabels[i] }] : [];
     }) ?? [];
   }
   const researchTargetColor = '#914913';
@@ -134,6 +134,7 @@
   function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice, axisGutter = 0 } = {}) {
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return null;
+    const narrow = width < 500 && axis !== 'days';
     const scale = Math.min(root.devicePixelRatio || 1, 2);
     canvas.width = width * scale;
     canvas.height = height * scale;
@@ -152,12 +153,16 @@
     const max = Math.ceil((high + pad) / step) * step;
     const labels = Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + step * i);
     const first = time(dates[from][2]), last = time(cone?.anchor.quote || dates[to][2]);
-    const labelValue = isPrice ? priceLabel : axisNumber;
-    const left = Math.max(axisGutter, Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width))) + 10);
-    const endpoints = levels.map(level => ({ ...level, color: '#284867', stroke: '#688bb5' }));
+    const labelValue = value => isPrice && (!narrow || Math.abs(value) < 1000) ? priceLabel(value) : axisNumber(value);
+    const labelWidth = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width)));
+    const left = Math.max(axisGutter, labelWidth + 10);
+    const endpoints = levels.map(({ value, label }) => ({
+      value, label: narrow ? label : label + '  ' + priceLabel(value), color: '#284867', stroke: '#688bb5'
+    }));
     if (researchTarget) {
       const { value } = researchTarget;
-      endpoints.push({ value, label: 'BOS ' + numbers.format(value), color: researchTargetColor, stroke: researchTargetColor });
+      endpoints.push({ value, label: narrow ? 'Target' : 'Research target  ' + priceLabel(value),
+        color: researchTargetColor, stroke: researchTargetColor });
       endpoints.sort((a, b) => b.value - a.value);
     }
     const labelRoom = endpoints.length ? Math.max(...endpoints.map(item => ctx.measureText(item.label).width)) + 13 : 0;
@@ -199,16 +204,24 @@
     }
     if (!datesOnAxis.length) datesOnAxis.push(first);
     ctx.textAlign = 'center';
+    const formatTick = instant => {
+      if (axis === 'days') return dateFormat.format(instant).replace(/ \d{4}$/, '');
+      return axis === 'year' && last - first > 365 * 86400000
+        ? String(new Date(instant).getUTCFullYear()) : tickFormat.format(instant);
+    };
+    const ticks = narrow && last > first
+      ? [first, ...datesOnAxis.filter(instant => instant > first && instant < last), last] : datesOnAxis;
+    const lastLabelLeft = historicalRight - ctx.measureText(formatTick(last)).width;
     let endLabel = -Infinity;
-    datesOnAxis.forEach(instant => {
+    ticks.forEach((instant, i) => {
       const at = x(instant);
-      tick(at, bottom, at, bottom + 5, '#a6b8b5');
-      const text = axis === 'days' ? dateFormat.format(instant).replace(/ \d{4}$/, '')
-        : axis === 'year' && last - first > 365 * 86400000
-          ? String(new Date(instant).getUTCFullYear()) : tickFormat.format(instant);
+      if (!narrow) tick(at, bottom, at, bottom + 5, '#a6b8b5');
+      const text = formatTick(instant);
       const half = ctx.measureText(text).width / 2;
       const center = Math.max(left + half, Math.min(historicalRight - half, at));
+      if (narrow && i > 0 && instant !== last && center + half + 7 > lastLabelLeft) return;
       if (center - half < endLabel + 7) return;
+      if (narrow) tick(at, bottom, at, bottom + 5, '#a6b8b5');
       ctx.fillText(text, center, height - 10);
       endLabel = center + half;
     });
@@ -392,7 +405,7 @@
       show('price', primary, unit, label + ' by price date'
         + (targetRows.length ? ' with Morningstar fair value' : '')
         + (cone ? ' and a 12-month cone with ' + card.bands.map(band => '±' + band + ' SD').join(' and ') : '')
-        + (researchTarget ? ' and a BOS coverage target at ' + numbers.format(researchTarget.value) + ' ' + unit : ''),
+        + (researchTarget ? ' and a research target at ' + numbers.format(researchTarget.value) + ' ' + unit : ''),
       { cone, bands: card.bands, researchTarget, isPrice: metric === 'price' });
       show('valuation', ratios, '×', 'forward P/E and P/B by price date');
       const slider = get('input[type=range]');
@@ -418,20 +431,21 @@
           + cone.count + ' monthly returns' + (cone.splits ? ' · ' + cone.splits + ' split-like move' + (cone.splits === 1 ? '' : 's') + ' skipped' : '')
         : 'Cone unavailable · ' + (anchor ? projection.count + ' usable monthly returns. At least 12 are needed.' : 'No positive price in this range.');
       if (get('[data-cone-summary]').textContent !== summary) get('[data-cone-summary]').textContent = summary;
-      get('[data-cone-levels]').textContent = coneLevels(cone, card.bands).map(level => level.label).join(' · ');
+      get('[data-cone-levels]').textContent = coneLevels(cone, card.bands)
+        .map(({ value, label }) => label + ' ' + priceLabel(value)).join(' · ');
       const note = get('[data-bos-target-note]');
       note.toggleAttribute('data-line', Boolean(researchTarget));
       let targetNote = '';
       if (researchTarget) {
         const bandNote = cone && card.bands.length === allBands.length
           ? ' · ' + targetBand(researchTarget.value, cone.points.at(-1)) + ' at 12 months' : '';
-        targetNote = 'BOS coverage target ' + numbers.format(researchTarget.value) + ' ' + unit
-          + ' · ' + researchTarget.provider + ' · ' + dateFormat.format(time(researchTarget.date))
+        targetNote = 'Research target ' + numbers.format(researchTarget.value) + ' ' + unit
+          + ' · BOS coverage · ' + researchTarget.provider + ' · ' + dateFormat.format(time(researchTarget.date))
           + (researchTarget.date > (anchor?.quote ?? data.months[to][2]) ? ' (after last price date)' : '') + bandNote;
       } else if (targetEnabled) {
-        targetNote = card.researchTargetFailed ? 'BOS coverage target could not load. Retry in Quick data.'
+        targetNote = card.researchTargetFailed ? 'Research target could not load. Retry in Quick data.'
           : card.researchTarget === undefined
-          ? 'Loading BOS coverage target…' : 'No BOS coverage target in the listing currency.';
+          ? 'Loading research target…' : 'No research target in the listing currency.';
       }
       if (note.textContent !== targetNote) note.textContent = targetNote;
     }
@@ -588,6 +602,8 @@
     const get = id => doc.getElementById(id);
     const peerMonth = get('sb2-peer-month');
     const peerYear = get('sb2-peer-year');
+    const peerMarket = get('sb2-peer-market');
+    const direction = get('sb2-peer-direction');
     const play = get('sb2-play');
     const previous = get('sb2-prev');
     const next = get('sb2-next');
@@ -597,6 +613,7 @@
 
     peerMonth.max = String(last);
     peerMonth.value = String(last);
+    if (root.matchMedia('(max-width:760px)').matches) peerMarket.value = 'usa';
     const years = data.months.flatMap(([month], index) => (
       !index || month.slice(0, 4) !== data.months[index - 1][0].slice(0, 4) ? [[month.slice(0, 4), index]] : []
     ));
@@ -613,7 +630,9 @@
     function renderBars() {
       const index = Number(peerMonth.value);
       const [month, report] = data.months[index];
-      const markets = [['usa', 'USA (NYSE and Nasdaq)'], ['world', 'Rest of world']].map(([id, label]) => ({
+      const markets = [['usa', 'USA (NYSE and Nasdaq)'], ['world', 'Rest of world']]
+        .filter(([id]) => peerMarket.value === 'all' || id === peerMarket.value)
+        .map(([id, label]) => ({
         label, results: peRankings(data, index, id),
         prior: index ? peRankings(data, index - 1, id) : { high: [], low: [] }
       }));
@@ -657,9 +676,8 @@
             + '<span class="sb2-bar-track" aria-hidden="true"><i></i></span></button></li>'
           )).join('') + '</ol></section>';
       }
-      bars.innerHTML = ['low', 'high'].map(type =>
-        '<div class="sb2-market-pair">' + markets.map(market => panel(market, type)).join('') + '</div>'
-      ).join('');
+      const rendered = markets.map(market => panel(market, direction.value)).join('');
+      bars.innerHTML = markets.length > 1 ? '<div class="sb2-market-pair">' + rendered + '</div>' : rendered;
     }
 
     function stop() {
@@ -676,6 +694,8 @@
     peerMonth.addEventListener('input', () => { stop(); renderBars(); });
     peerMonth.addEventListener('change', renderBars);
     peerYear.addEventListener('change', () => { stop(); showMonth(Number(peerYear.value)); });
+    peerMarket.addEventListener('change', renderBars);
+    direction.addEventListener('change', renderBars);
     previous.addEventListener('click', () => { stop(); showMonth(Number(peerMonth.value) - 1); });
     next.addEventListener('click', () => { stop(); showMonth(Number(peerMonth.value) + 1); });
     play.addEventListener('click', () => {

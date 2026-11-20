@@ -44,6 +44,7 @@
   const get = id => doc.getElementById(id);
   const list = get('sb2-securities');
   const search = get('sb2-search');
+  const browse = get('sb2-browse'), pickerResults = get('sb2-picker-results');
   const download = get('sb2-download');
   const retry = get('sb2-retry');
   const embedded = get('sb2-embedded-data');
@@ -65,6 +66,15 @@
   const columnChoice = get('sb2-card-columns');
   const touch = root.matchMedia('(pointer:coarse)');
   const portrait = root.matchMedia('(orientation:portrait)');
+  const smallScreen = root.matchMedia('(max-width:760px)');
+  const mast = get('sb2-mast');
+  const relatedLinks = mast.querySelector('.sb2-related-links');
+
+  function placeRelatedLinks() {
+    (smallScreen.matches ? get('sb2-options-content') : mast).append(relatedLinks);
+  }
+  smallScreen.addEventListener('change', placeRelatedLinks);
+  placeRelatedLinks();
 
   function saveComparison() {
     try {
@@ -108,13 +118,19 @@
     if (!cards.size || !deck.clientWidth) return;
     const style = root.getComputedStyle(deck);
     const gap = parseFloat(style.columnGap);
-    const minimum = parseFloat(style.getPropertyValue('--sb2-card-min-width'));
+    const hasCone = [...cards.values()].some(({ element }) => {
+      const chart = history.cardSettings(element);
+      return chart.metric === 'price' && chart.cone;
+    });
+    const minimum = parseFloat(style.getPropertyValue(hasCone ? '--sb2-cone-card-min-width' : '--sb2-card-min-width'));
     const preferred = columnChoice.value === 'auto' ? 5 : Number(columnChoice.value);
     const deviceLimit = touch.matches ? (portrait.matches ? 1 : 2) : 5;
     const capacity = Math.max(1, Math.floor((deck.clientWidth + gap) / (minimum + gap)));
     const columns = Math.min(preferred, deviceLimit, capacity, cards.size);
     const status = get('sb2-card-fit');
     const label = columns + (columns === 1 ? ' card per row' : ' cards per row');
+    const expanded = deck.querySelector('[data-expanded]');
+    if (expanded && (columns === 1 || touch.matches)) setExpanded(expanded, false);
     if (status.textContent === label) return;
     deck.style.setProperty('--sb2-card-columns', String(columns));
     deck.toggleAttribute('data-multiple', columns > 1);
@@ -129,6 +145,19 @@
   touch.addEventListener('change', fitCards);
   portrait.addEventListener('change', fitCards);
   let collection = 'global';
+
+  function showPicker(open) {
+    pickerResults.hidden = !open;
+    browse.setAttribute('aria-expanded', String(open));
+    browse.textContent = open ? 'Close list' : 'Browse';
+  }
+
+  function setExpanded(element, expanded) {
+    const button = element.querySelector('.sb2-expand');
+    element.toggleAttribute('data-expanded', expanded);
+    button.setAttribute('aria-expanded', String(expanded));
+    button.textContent = expanded ? 'Collapse chart' : 'Expand chart';
+  }
 
   function logo(security, size) {
     const api = root.CompanyLogos;
@@ -297,10 +326,16 @@
       deck.insertBefore(element, next?.element ?? null);
     }
     cards.set(slot, entry);
-    fitCards();
     history.add(element, company, chart);
+    fitCards();
     paintMonthlyTable(entry, history.range());
     paintResearch(entry);
+    element.querySelector('.sb2-expand').addEventListener('click', () => {
+      const previous = deck.querySelector('[data-expanded]');
+      if (previous) setExpanded(previous, false);
+      if (previous !== element) setExpanded(element, true);
+      element.scrollIntoView({ block: 'start' });
+    });
     element.querySelector('.sb2-remove-card').addEventListener('click', () => {
       if (cards.size <= 1) return;
       history.remove(element);
@@ -340,6 +375,7 @@
     const company = pending;
     origin = null;
     dialog.close();
+    showPicker(false);
     placeCard(slot, company, { focus: true });
     saveComparison();
   });
@@ -356,8 +392,10 @@
   }
 
   async function load() {
+    const status = get('sb2-status');
     retry.hidden = true;
-    get('sb2-status').textContent = 'Loading monthly market history…';
+    retry.before(status);
+    status.textContent = 'Loading monthly market history…';
     try {
       const result = await getData();
       if (result.version !== 1 || !result.months?.length || !result.metrics?.length || !result.securities?.length) {
@@ -365,7 +403,7 @@
       }
       data = result;
       const total = data.securities.reduce((sum, security) => sum + security.observations.length, 0);
-      get('sb2-status').textContent = format.format(total) + ' observations across ' + data.months.length + ' saved monthly editions.';
+      status.textContent = format.format(total) + ' observations across ' + data.months.length + ' saved monthly editions.';
       get('sb2-workspace').hidden = false;
       download.disabled = false;
       get('sb2-shared-controls').hidden = false;
@@ -373,24 +411,32 @@
       history ??= root.StocksBeta2Charts.mountHistory(data, {
         saved: saved?.history,
         changeRange: range => cards.forEach(card => paintMonthlyTable(card, range)),
-        save: saveComparison
+        save: () => { fitCards(); saveComparison(); }
       });
       rankings ??= root.StocksBeta2Charts.mountRankings(data, { logo, chooseCompany });
       showGroup('global');
       if (!cards.size) restoreComparison(saved);
       if (!cards.size) placeCard(1, data.securities.find(item => item.group === 'global') ?? data.securities[0]);
+      get('sb2-options-content').prepend(status);
     } catch {
-      get('sb2-status').textContent = 'Monthly market history could not load.';
+      status.textContent = 'Monthly market history could not load.';
       retry.hidden = false;
     }
   }
 
   groups.forEach(button => button.addEventListener('click', () => showGroup(button.dataset.group)));
+  browse.addEventListener('click', () => showPicker(pickerResults.hidden));
   search.addEventListener('input', () => {
+    showPicker(true);
     list.scrollTop = 0;
     paintList();
   });
   search.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !pickerResults.hidden) {
+      event.preventDefault();
+      showPicker(false);
+      return;
+    }
     const only = list.children.length === 1 && list.querySelector('[data-security]');
     if (event.key !== 'Enter' || !only) return;
     event.preventDefault();

@@ -1,5 +1,15 @@
 .sb2-intro { display:flex; justify-content:space-between; align-items:end; gap:18px; }
 .sb2-intro p { color:var(--muted); margin:8px 0 0; max-width:680px; }
+.sb2-page-tools { display:flex; align-items:center; justify-content:space-between; gap:8px; margin:12px 0; }
+.sb2-page-tools:has(#sb2-options[open]) { display:block; }
+#sb2-options > summary {
+  width:max-content; margin-inline-start:auto; padding:5px 11px; border:1px solid var(--line);
+  border-radius:7px; background:var(--paper); cursor:pointer; font-size:.86rem; font-weight:650;
+}
+#sb2-options[open] > summary { margin-top:5px; }
+#sb2-options-content { margin-top:7px; padding:12px; border:1px solid var(--line); border-radius:9px; background:var(--paper); }
+#sb2-options-content #sb2-status { margin:0 0 8px; font-size:.84rem; }
+#sb2-options-content .sb2-related-links { display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:10px; font-size:.85rem; }
 #sb2-download { background:var(--accent); color:white; border-color:var(--accent); white-space:nowrap; }
 #sb2-download:hover:not(:disabled) { background:#0e554f; }
 #sb2-status { color:var(--muted); margin:17px 0; }
@@ -10,9 +20,11 @@
 .sb2-groups { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
 .sb2-groups button { padding-inline:13px; font-size:.86rem; }
 .sb2-picker label { display:block; font-size:.84rem; font-weight:650; margin-bottom:4px; }
-.sb2-find { display:flex; align-items:end; flex-wrap:wrap; gap:4px 12px; }
-.sb2-find label { flex:1 1 250px; max-width:550px; min-width:0; margin:0; }
+.sb2-find { display:flex; align-items:end; gap:8px; }
+.sb2-find label { flex:1 1 auto; max-width:550px; min-width:0; margin:0; }
 .sb2-find input { width:100%; margin-top:4px; }
+#sb2-browse { flex:none; padding-inline:10px; font-size:.85rem; }
+#sb2-picker-results { margin-top:12px; }
 #sb2-result-count { font-size:.85rem; color:var(--muted); align-self:end; padding:4px 0; }
 #sb2-securities { display:grid; grid-template-columns:repeat(var(--sb2-results,1),minmax(0,1fr)); gap:6px; padding:2px 4px 2px 2px; margin:12px 0 0; max-height:214px; overflow:auto; list-style:none; }
 #sb2-securities li { display:flex; min-width:0; border:1px solid var(--line); border-radius:6px; }
@@ -20,7 +32,7 @@
 @container (min-width:690px) { #sb2-securities { --sb2-results:3; } }
 @container (min-width:940px) { #sb2-securities { --sb2-results:4; } }
 @container (min-width:1190px) { #sb2-securities { --sb2-results:5; } }
-.sb2-fund-import { margin:0 0 16px; padding:10px 14px; border:1px solid var(--line); border-radius:8px; background:#fff; }
+.sb2-fund-import { margin:10px 0 0; padding:8px 11px; border:1px solid var(--line); border-radius:8px; background:#fff; }
 .sb2-fund-import summary { color:var(--accent); font-weight:650; cursor:pointer; }
 .sb2-fund-import p { max-width:70ch; color:var(--muted); font-size:.88rem; }
 .sb2-file-label { display:grid; gap:4px; width:fit-content; max-width:100%; font-weight:650; font-size:.88rem; }
@@ -52,8 +64,12 @@
 .sb2-method summary { cursor:pointer; font-weight:650; }
 .sb2-method p { color:var(--muted); font-size:.89rem; margin:8px 0 0; }
 @media(max-width:760px) {
-  .sb2-intro { align-items:start; flex-direction:column; gap:12px; }
-  .sb2-workspace { grid-template-columns:minmax(0,1fr); }
+  .hub-primary-ready .sb2-mast { display:none; }
+  .sb2-main { padding-top:13px; }
+  .sb2-intro h1 { margin:3px 0; }
+  .sb2-intro p { margin:3px 0 0; font-size:.87rem; }
+  .sb2-workspace { gap:9px; }
+  .sb2-picker { padding:8px 10px; }
   #sb2-securities { max-height:225px; }
   .sb2-table { max-height:500px; }
   .sb2-table th,.sb2-table td { padding:8px; }
