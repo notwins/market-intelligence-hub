@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Compare bond prices, yields and observed price returns for the Market Intel bond watchlist. Load your own monthly bond history in the browser.">
+  <title>Bonds BETA · Market Intel</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="stocks-beta.css">
+  <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
+  <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
+  <link rel="stylesheet" href="bonds-beta.css?v=1">
+  <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.bonds1"></script>
+  <script defer src="bonds-beta-data.js?v=1"></script>
+  <script defer src="bonds-beta.js?v=1"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to bond charts</a>
+  <header class="sb-mast">
+    <a href="desk.html"><b>M.</b> MARKET INTEL</a>
+    <nav aria-label="Bond section links">
+      <a href="v4.html#watchlist">Bond watchlist</a>
+      <a href="v4.html#ust">Treasury selection</a>
+      <a href="v4.html#history/yield">Yield history</a>
+    </nav>
+  </header>
+  <main id="main" class="sb2-main bb-main">
+    <header class="sb2-intro bb-intro">
+      <div><h1>Bonds BETA</h1><p>Compare bond prices and yields for Temasek, U.S. Treasuries and your bond watchlist.</p></div>
+      <div class="bb-file-actions">
+        <button id="bb-open" type="button">Open history CSV</button>
+        <input id="bb-file" type="file" accept=".csv,text/csv" hidden>
+        <button id="bb-clear" type="button" hidden>Clear imported history</button>
+      </div>
+    </header>
+    <p class="bb-source" id="bb-status" role="status" aria-live="polite">Loading the bond watchlist…</p>
+    <button id="bb-retry" type="button" hidden>Retry watchlist</button>
+    <section id="bb-controls" class="sb2-panel bb-controls" aria-label="Watchlist controls" hidden>
+      <div class="bb-inputs">
+        <label>Find a bond<input id="bb-search" type="search" placeholder="Issuer or ISIN" autocomplete="off"></label>
+        <label>Matching bonds<select id="bb-match"></select></label>
+        <button id="bb-add" type="button">Add card</button>
+        <label>Compare with<select id="bb-overlay"></select></label>
+      </div>
+      <div class="bb-inputs bb-view-inputs">
+        <div class="bb-tabs" role="group" aria-label="Visible cards">
+          <button type="button" data-group="all" aria-pressed="true">All cards</button>
+          <button type="button" data-group="ust" aria-pressed="false">U.S. Treasuries</button>
+          <button type="button" data-group="temasek" aria-pressed="false">Temasek</button>
+          <button type="button" data-group="other" aria-pressed="false">Other bonds</button>
+        </div>
+        <label>Range<select id="bb-range"><option value="all">Full history</option><option value="12">1 year</option><option value="36" selected>3 years</option><option value="60">5 years</option><option value="1">1 month</option></select></label>
+        <label>Cards per row<select id="bb-columns"><option value="auto">Auto</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label>
+        <button id="bb-reset" type="button">Reset watchlist</button>
+      </div>
+    </section>
+    <section id="bb-inspect" class="bb-inspect" aria-label="Inspect shared chart date" hidden>
+      <label for="bb-cursor">Chart date</label><input type="range" id="bb-cursor" min="0" max="0" value="0">
+      <output id="bb-date" for="bb-cursor"></output>
+    </section>
+    <p id="bb-empty" hidden>No cards in this view.</p>
+    <div id="bb-cards" class="bb-cards" aria-label="Bond history cards"></div>
+    <details class="sb-coverage bb-method">
+      <summary>Price, yield and return definitions</summary>
+      <p>Bid prices are quoted per 100 face value in the bond currency. BOS and OCBC history uses the printed report date and reported yield to maturity. WSJ uses asked yields. Bondsupermart uses bid yields to maturity or to worst as labelled. A point represents the source observation only.</p>
+      <p>Yearly price change uses the first and last available bid in each calendar year within your selected range. It excludes coupons, accrued interest, fees and FX. ACE Fixed AR is the workbook snapshot percentage and has no historical time series.</p>
+      <p>Imported CSV data stays in this tab for the session.</p>
+    </details>
+    <footer><b>Market Intelligence Hub</b><p><a href="desk.html">Home</a> · <a href="legal/index.html">Legal &amp; transparency</a></p></footer>
+  </main>
+  <template id="bb-template">
+    <article class="sb2-panel bb-card">
+      <header class="bb-card-head">
+        <div><h2></h2><p class="bb-id"></p></div>
+        <button class="bb-remove" type="button">Remove</button>
+      </header>
+      <div class="bb-values">
+        <div><span>Bid price</span><strong data-bb-price>—</strong></div>
+        <div><span>Yield</span><strong data-bb-yield>—</strong></div>
+        <div data-bb-ar hidden><span>ACE Fixed AR</span><strong></strong></div>
+      </div>
+      <p class="bb-point"></p>
+      <figure class="bb-figure"><figcaption>Bid price per 100</figcaption><canvas tabindex="0" role="img" data-plot="bid" aria-label="Historical bid price. Use arrow keys to move between dates."></canvas><p class="bb-no-data" hidden>No bid prices in this range.</p></figure>
+      <figure class="bb-figure"><figcaption>Yield (%)</figcaption><canvas tabindex="0" role="img" data-plot="yield" aria-label="Historical yield. Use arrow keys to move between dates."></canvas><p class="bb-no-data" hidden>No yields in this range.</p></figure>
+      <p class="bb-legend" hidden></p>
+      <details class="bb-returns"><summary>Yearly price changes</summary>
+        <div class="bb-table-wrap"><table class="bb-table"><thead><tr><th scope="col">Year</th><th scope="col">First date</th><th scope="col">Last date</th><th scope="col">First bid</th><th scope="col">Last bid</th><th scope="col">Price change</th></tr></thead><tbody></tbody></table></div>
+        <p class="bb-returns-empty" hidden>Two dated bids in the same year are needed for a price change.</p>
+      </details>
+    </article>
+  </template>
+</body>
+</html>

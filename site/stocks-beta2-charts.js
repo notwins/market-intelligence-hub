@@ -131,7 +131,7 @@
     return value > upper1 ? 'Between +1 and +2 SD' : 'Between −1 and −2 SD';
   }
 
-  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice } = {}) {
+  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice, axisGutter = 0 } = {}) {
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return null;
     const scale = Math.min(root.devicePixelRatio || 1, 2);
@@ -153,7 +153,7 @@
     const labels = Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + step * i);
     const first = time(dates[from][2]), last = time(cone?.anchor.quote || dates[to][2]);
     const labelValue = isPrice ? priceLabel : axisNumber;
-    const left = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width))) + 10;
+    const left = Math.max(axisGutter, Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width))) + 10);
     const endpoints = levels.map(level => ({ ...level, color: '#284867', stroke: '#688bb5' }));
     if (researchTarget) {
       const { value } = researchTarget;
@@ -191,14 +191,21 @@
       instant = Date.UTC(start.getUTCFullYear(), month += spacing, 1)) {
       if (instant >= first) datesOnAxis.push(instant);
     }
+    if (axis === 'days') {
+      datesOnAxis.length = 0;
+      for (let instant = first; instant <= last; instant += Math.max(1, Math.ceil((last-first)/86400000/5))*86400000) {
+        datesOnAxis.push(instant);
+      }
+    }
     if (!datesOnAxis.length) datesOnAxis.push(first);
     ctx.textAlign = 'center';
     let endLabel = -Infinity;
     datesOnAxis.forEach(instant => {
       const at = x(instant);
       tick(at, bottom, at, bottom + 5, '#a6b8b5');
-      const text = axis === 'year' && last - first > 365 * 86400000
-        ? String(new Date(instant).getUTCFullYear()) : tickFormat.format(instant);
+      const text = axis === 'days' ? dateFormat.format(instant).replace(/ \d{4}$/, '')
+        : axis === 'year' && last - first > 365 * 86400000
+          ? String(new Date(instant).getUTCFullYear()) : tickFormat.format(instant);
       const half = ctx.measureText(text).width / 2;
       const center = Math.max(left + half, Math.min(historicalRight - half, at));
       if (center - half < endLabel + 7) return;
@@ -689,7 +696,7 @@
     return { renderBars };
   }
 
-  const api = { historyPoints, peRankings, mountRankings, mountHistory, priceLabel, probabilityCone, researchConeTarget, targetBand };
+  const api = { historyPoints, peRankings, mountRankings, mountHistory, priceLabel, probabilityCone, researchConeTarget, targetBand, drawPlot };
   if (typeof module !== 'undefined') module.exports = api;
   root.StocksBeta2Charts = api;
 })(typeof window !== 'undefined' ? window : globalThis);
