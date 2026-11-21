@@ -92,6 +92,14 @@ test('long lookbacks use older period dates without filling a gap in the daily s
  assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:1},archive),null);
  assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:25}, {weekly:[],monthly:[['2024-09-01',50]]}),null);
 });
+test('Yearly extends to the oldest supported anniversary for each listing',()=>{
+ const base={weekly:[],monthly:[['2006-11-30',10],['2007-10-31',20]]};
+ const history={daily:[['2026-11-19',100]],quote:{date:'2026-11-19'},base};
+ assert.equal(Desk.longestYearlyLookback(history),19);
+ assert.equal(Desk.longestYearlyLookback({...history,daily:[['2026-11-30',100]],quote:{date:'2026-11-30'}}),20);
+ assert.equal(Desk.longestYearlyLookback({...history,base:{weekly:[],monthly:[['2021-10-31',25]]}}),5);
+ assert.equal(Desk.longestYearlyLookback({...history,daily:[]}),0);
+});
 test('stock move colours use fixed bands with matching gain and loss boundaries',()=>{
  for(const [move,band] of [[0.1,1],[4.9,1],[5,2],[9.9,2],[10,3],[15,3],[15.1,4],[100,4]]){
   assert.equal(Desk.moveHeat(move),'gain-'+band);
