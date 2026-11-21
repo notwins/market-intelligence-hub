@@ -7,8 +7,7 @@ const groups=[
   ['bonds-beta','Bonds BETA','bond','bonds-beta.html'],
   ['yield','Yield history','curve'],
   ['curves','Historical curves','curve'],
-  ['fx','FX history','fx'],
-  ['si-beta2','SI beta 2','bond','si-beta2.html']
+  ['fx','FX history','fx']
  ]},
  {id:'shares',label:'Shares',icon:'shares',items:[
   ['stocks-beta','Stocks BETA','shares','stocks-beta.html'],
@@ -17,7 +16,8 @@ const groups=[
   ['si','SI pricing','bond'],
   ['beta2-shares','Event studies','event'],
   ['beta4-shares','History pivot','pivot'],
-  ['spx','SPX index','trend']
+  ['spx','SPX index','trend'],
+  ['si-beta2','SI beta 2','bond','si-beta2.html']
  ]},
  {id:'fred',label:'Historical FRED',icon:'fred',items:[
   ['fred-dashboard','FRED dashboard','fred','fred/'],
