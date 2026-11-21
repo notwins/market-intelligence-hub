@@ -4,6 +4,7 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
+const navigationVersion = '?v=20261121.subsections1';
 const accessFile = path.join(root, 'data/blueprint-access.json');
 const access = fs.existsSync(accessFile) ? JSON.parse(fs.readFileSync(accessFile, 'utf8')) : null;
 if(access){const owner=new URL(access.owner_url);if(access.schema_version!==1||owner.protocol!=='https:'||owner.username||owner.password||owner.search||owner.hash||!owner.hostname.endsWith('.chatgpt.site'))throw Error('Invalid blueprint access destination');}
@@ -29,11 +30,12 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
     const addPath = filename => path.posix.relative(directory, filename);
     const addScript = filename => '<script defer src="' + addPath(filename) + '"></script>';
     let assets = '';
-    if (!dependencies.includes(navigationCSS)) assets += '<link id="hub-primary-assets" rel="stylesheet" href="' + addPath(navigationCSS) + '?v=20261121.layout1">';
-    if (!dependencies.includes(navigationJS)) assets += addScript(navigationJS + '?v=20261121.layout1');
+    if (!dependencies.includes(navigationCSS)) assets += '<link id="hub-primary-assets" rel="stylesheet" href="' + addPath(navigationCSS) + navigationVersion + '">';
+    if (!dependencies.includes(navigationJS)) assets += addScript(navigationJS + navigationVersion);
     if (relative !== 'blueprint.html' && relative !== 'research-feed.html' && !dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
     if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   }
+  content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
   const bootstrap=path.posix.relative(directory,'blueprint-access.js?v=20261116.settings3');

@@ -6,7 +6,7 @@
   const sections = [
     ['Home', 'desk.html', '⌂'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['Stocks BETA 2', 'stocks-beta2.html', '▥'], ['Bonds BETA', 'bonds-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
     ['Master Pivot', 'v4.html#master/pivot', '▦'],
-    ['Historical charts', 'v4.html#history/shares', '↗'],
+    ['Historical charts', 'cross-market-history.html', '↗'],
     ['My Blog', 'market-understanding/', '▤'], ['Markets', 'desk.html#markets', '◫']
   ];
   const moreLinks = [
@@ -23,9 +23,10 @@
     ]],
     ['Historical charts', [
       ['Cross-market history', 'cross-market-history.html'],
-      ['Event studies', 'v4.html#history/beta2-shares'],
-      ['History pivot', 'v4.html#history/beta4-shares'], ['Yield history', 'v4.html#history/yield'],
-      ['FX history', 'v4.html#history/fx'], ['Historical curves', 'v4.html#history/curves']
+      ['Yield history', 'v4.html#history/yield'], ['Historical curves', 'v4.html#history/curves'],
+      ['FX history', 'v4.html#history/fx'], ['Share prices', 'v4.html#history/shares'],
+      ['Event studies', 'v4.html#history/beta2-shares'], ['History pivot', 'v4.html#history/beta4-shares'],
+      ['SPX index', 'v4.html#history/spx'], ['Historical FRED', 'historical-fred.html']
     ]],
     ['FRED and rates', [
       ['Historical FRED and Prices', 'historical-fred.html'], ['Fred-1 · Event Replay', 'fred-1.html'],
@@ -36,6 +37,21 @@
     ]],
     ['Site', [['Site map', 'site-map.html'], ['External sources', 'external-sources.html'], ['Site tags', 'tag-map.html']]]
   ];
+  const jumpGroups = new Map(moreLinks);
+  const subsections = new Map([
+    ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
+    ['Stocks BETA', [['Share comparison', 'stocks-beta.html#sb-watchlist-table'], ['Stock cards', 'stocks-beta.html#sb-cards']]],
+    ['Stocks BETA 2', [['Company history', 'stocks-beta2.html#sb2-detail'], ['P/E rankings', 'stocks-beta2.html#sb2-pe-rankings'], ['BOS monthly archive', 'bos-monthly.html']]],
+    ['Bonds BETA', [['Bond history cards', 'bonds-beta.html#bb-cards'], ['Bond watchlist', 'v4.html#watchlist'], ['Treasury selection', 'v4.html#ust']]],
+    ['FRED', jumpGroups.get('FRED and rates')],
+    ['Master Pivot', [
+      ['Explore securities', 'v4.html#master/explore'], ['Master Pivot', 'v4.html#master/pivot'],
+      ['Watchlists', 'v4.html#master/watchlists'], ['Screens', 'v4.html#master/screens'], ['Review', 'v4.html#master/review']
+    ]],
+    ['Historical charts', jumpGroups.get('Historical charts')],
+    ['My Blog', [['Latest research', 'market-understanding/#main-published-research'], ['Research explained', 'market-understanding/#research-readings'], ['My research', 'market-understanding/#my-research']]],
+    ['Markets', [['Stock moves', 'desk.html#stock-moves'], ['Rates and FX', 'desk.html#market-rates'], ['Bond yields', 'desk.html#market-bonds']]]
+  ]);
   function link(label, href, icon) {
     const a = document.createElement('a'); a.href = new URL(href, base);
     if (icon) { const span = document.createElement('span'); span.textContent = icon; span.setAttribute('aria-hidden', 'true'); a.append(span); }
@@ -46,7 +62,87 @@
   const more = old?.querySelector('button#more-btn') || document.createElement('button');
   bar.className = 'bottom-nav hub-primary'; bar.setAttribute('aria-label', 'Main sections');
   const scroll = document.createElement('div'); scroll.className = 'hub-primary-scroll';
-  sections.forEach(([name, href, icon]) => scroll.append(link(name, href, icon)));
+  const primaryLinks = new Map();
+  let openMenu;
+
+  function closeMenu() {
+    if (!openMenu) return;
+    openMenu.panel.hidden = true;
+    openMenu.button.setAttribute('aria-expanded', 'false');
+    openMenu = undefined;
+  }
+
+  function positionMenu() {
+    if (!openMenu) return;
+    const {group, panel} = openMenu;
+    const anchor = group.getBoundingClientRect(), viewport = scroll.getBoundingClientRect();
+    if (anchor.right <= viewport.left || anchor.left >= viewport.right) {
+      closeMenu();
+      return;
+    }
+    panel.style.top = anchor.bottom + 'px';
+    panel.style.left = Math.max(8, Math.min(anchor.left, document.documentElement.clientWidth - panel.offsetWidth - 8)) + 'px';
+  }
+
+  sections.forEach(([name, href, icon], index) => {
+    const mainLink = link(name, href, icon);
+    mainLink.className = 'hub-primary-link';
+    primaryLinks.set(name, mainLink);
+    const links = subsections.get(name);
+    if (!links?.length) {
+      scroll.append(mainLink);
+      return;
+    }
+    const group = document.createElement('div'); group.className = 'hub-primary-group';
+    const button = document.createElement('button'); button.className = 'hub-primary-toggle';
+    const panel = document.createElement('div'); panel.className = 'hub-primary-dropdown';
+    panel.id = 'hub-primary-subsections-' + index;
+    panel.hidden = true;
+    panel.append(...links.map(([label, route]) => link(label, route)));
+    button.type = 'button';
+    button.setAttribute('aria-label', name + ' subsections');
+    button.setAttribute('aria-controls', panel.id);
+    button.setAttribute('aria-expanded', 'false');
+    group.append(mainLink, button, panel);
+    scroll.append(group);
+
+    function open(pinned) {
+      if (openMenu?.group !== group) closeMenu();
+      openMenu = {group, panel, button, pinned};
+      panel.hidden = false;
+      button.setAttribute('aria-expanded', 'true');
+      positionMenu();
+    }
+    group.addEventListener('pointerenter', e => {
+      if (e.pointerType === 'mouse' && openMenu?.group !== group) open(false);
+    });
+    group.addEventListener('pointerleave', e => {
+      if (e.pointerType === 'mouse' && openMenu?.group === group && !openMenu.pinned &&
+        !panel.contains(document.activeElement)) closeMenu();
+    });
+    button.addEventListener('click', () => {
+      if (openMenu?.group === group && openMenu.pinned) closeMenu();
+      else open(true);
+    });
+    group.addEventListener('focusout', e => {
+      if (openMenu?.group === group && !group.contains(e.relatedTarget)) closeMenu();
+    });
+    group.addEventListener('click', e => {
+      if (openMenu?.group === group && e.target.closest('a')) closeMenu();
+    });
+  });
+  document.addEventListener('pointerdown', e => {
+    if (openMenu && !openMenu.group.contains(e.target)) closeMenu();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || !openMenu) return;
+    const {panel, button} = openMenu;
+    if (panel.contains(document.activeElement)) button.focus({preventScroll: true});
+    closeMenu();
+    e.preventDefault();
+  });
+  scroll.addEventListener('scroll', positionMenu, {passive: true});
+  window.addEventListener('scroll', positionMenu, {passive: true});
   more.type = 'button'; more.classList.add('hub-primary-more'); more.textContent = 'Jump to';
   more.setAttribute('aria-haspopup', 'dialog');
   let menu = document.querySelector('dialog#more:has(.more-grid)');
@@ -90,11 +186,17 @@
       : relative === 'bonds-beta.html' ? 'Bonds BETA' : ['stocks-beta2.html','bos-monthly.html'].includes(relative) ? 'Stocks BETA 2' : relative === 'stocks-beta.html' ? 'Stocks BETA'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || relative === 'cross-market-history.html' ? 'Historical charts'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
-    scroll.querySelectorAll('a').forEach(a => {
-      const selected = a.textContent.endsWith(key) && !!key;
-      if (selected) { a.setAttribute('aria-current', 'page'); scroll.scrollLeft = Math.max(0, a.offsetLeft - scroll.offsetLeft - 12); }
+    primaryLinks.forEach((a, name) => {
+      if (name === key) {
+        a.setAttribute('aria-current', 'page');
+        const item = a.parentElement === scroll ? a : a.parentElement;
+        const bounds = item.getBoundingClientRect(), viewport = scroll.getBoundingClientRect();
+        if (bounds.left < viewport.left) scroll.scrollLeft += bounds.left - viewport.left;
+        else if (bounds.right > viewport.right) scroll.scrollLeft += bounds.right - viewport.right;
+      }
       else a.removeAttribute('aria-current');
     });
+    positionMenu();
   }
   new ResizeObserver(() => {
     document.documentElement.style.setProperty('--hub-primary-height', bar.getBoundingClientRect().height + 'px');
