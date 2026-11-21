@@ -146,10 +146,25 @@
   portrait.addEventListener('change', fitCards);
   let collection = 'global';
 
+  function fitPickerRows() {
+    if (pickerResults.hidden || !list.clientWidth || !list.lastElementChild) return;
+    const style = root.getComputedStyle(list);
+    const columns = style.gridTemplateColumns.split(/\s+/).length;
+    const last = list.children[columns * 5 - 1] ?? list.lastElementChild;
+    const height = Math.ceil(last.getBoundingClientRect().bottom - list.getBoundingClientRect().top
+      + list.scrollTop + parseFloat(style.paddingBottom)) + 'px';
+    if (list.style.getPropertyValue('--sb2-browse-height') !== height) {
+      list.style.setProperty('--sb2-browse-height', height);
+    }
+  }
+
+  new ResizeObserver(fitPickerRows).observe(list);
+
   function showPicker(open) {
     pickerResults.hidden = !open;
     browse.setAttribute('aria-expanded', String(open));
     browse.textContent = open ? 'Close list' : 'Browse';
+    if (open) fitPickerRows();
   }
 
   function setExpanded(element, expanded) {
@@ -178,6 +193,7 @@
       + e(security.rank) + '</span>' + logo(security, 28) + '<span class="sb2-security-name">'
       + e(security.name) + '<span class="sb2-company-ticker">' + e(security.ticker) + '</span></span></button></li>'
     )).join('');
+    fitPickerRows();
     get('sb2-empty').hidden = results.length > 0;
     get('sb2-result-count').textContent = results.length + (results.length === 1 ? ' listing' : ' listings')
       + (query ? ' across both lists' : '');
