@@ -102,7 +102,10 @@ function stockCard(r) {
   const destination = r.earnings ? 'v4.html?company=' + ticker + '#earnings' : 'stocks-beta.html?companies=' + ticker;
   return `<article class="instrument" id="company-${E(r.ticker)}" data-company="${E(r.ticker)}" aria-labelledby="stock-title-${E(r.ticker)}">
     <header class="instrument-head">
-      <div><h3 id="stock-title-${E(r.ticker)}">${E(r.name)}</h3><small>${E(r.ticker)} · ${E(r.group)}</small></div>
+      <div class="stock-card-heading">
+        <div><h3 id="stock-title-${E(r.ticker)}">${E(r.name)}</h3><small>${E(r.ticker)} · ${E(r.group)}</small></div>
+        <span data-stock-spark="${E(r.ticker)}"></span>
+      </div>
       <span class="quote" data-quote="${E(r.ticker)}">${quote(r)}</span>
     </header>
     <div class="detail-body">
@@ -126,7 +129,6 @@ function stockCard(r) {
       </details>
       ${root.CompanyFundamentals?.button({ ticker: r.ticker, name: r.name }) || ''}
       <div data-company-research></div>
-      ${root.NvdaArticle?.link(r.ticker) || ''}
     </div>
   </article>`;
 }
@@ -138,8 +140,8 @@ function buildMarkets(){
   }));
   priceWatchlist = [...data.watchlist, ...newStocks.filter(stock => !data.watchlist.some(r => r.ticker === stock.ticker))];
   $('#watch-strip').innerHTML = priceWatchlist.map(r => `<div class="watch-mini" data-ticker="${E(r.ticker)}">
-    <header>${link('#company-' + encodeURIComponent(r.ticker), r.ticker)}</header>
-    <span data-quote="${E(r.ticker)}">${quote(r)}</span>${moveStats()}${root.NvdaArticle?.link(r.ticker) || ''}
+    <header>${link('#company-' + encodeURIComponent(r.ticker), r.ticker)}<span data-stock-spark="${E(r.ticker)}"></span></header>
+    <span data-quote="${E(r.ticker)}">${quote(r)}</span>${moveStats()}
   </div>`).join('');
   $('#main-company-cards').innerHTML = root.CompanyDashboard.shell({home: true, cards: priceWatchlist.map(stockCard).join('')});
   $('#yield-rows').innerHTML=data.yields.map(y=>{const points=(y.history||[]).map(p=>[p.date,p.value]);return `<details class="instrument" open><summary><span><strong>${E(y.label)}</strong><small>${E(y.basis)}</small></span><span class="quote"><b>${num(y.value)}%</b><small>${E(date(y.as_of))}</small></span></summary><div class="detail-body"><p class="fine">${E(y.basis)}</p>${y.status==='error'?`<p class="warning">${E(y.message||'Refresh failed; retaining the dated saved observation.')}</p>`:''}${spark(points,'% p.a.')}${valuesTable(points,'% p.a.')}${link(y.source_url,'Open original source ↗')}${y.attribution?'<p class="fine">'+E(y.attribution)+' '+link(y.license_url,'Dataset terms')+'</p>':''}</div></details>`;}).join('');}
@@ -205,6 +207,10 @@ async function warmCharts() {
         const s = await series(ticker);
         moves = movePeriods.map(([, period]) => priceMove(s.daily, s.quote.date, period));
         if (moves.every(Number.isFinite)) covered++;
+        for (const slot of document.querySelectorAll(`[data-stock-spark="${CSS.escape(ticker)}"]`)) {
+          const chart = root.ReturnSparks?.priceSpark?.(s);
+          if (chart) slot.replaceChildren(chart);
+        }
       } catch {}
       paintStockMoves(ticker, moves);
       const target = document.getElementById('company-' + ticker).querySelector('.detail-content');

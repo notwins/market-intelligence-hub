@@ -59,6 +59,14 @@
 #watch-strip [data-heat="loss"] { background: hsl(355 66% var(--heat-lightness)); border-top-color: #aa4853; }
 .watch-mini header { display: flex; align-items: center; gap: 6px; }
 .watch-mini header a { display: inline-flex; align-items: center; min-height: 34px; font-weight: 800; }
+.watch-mini [data-stock-spark] { margin-inline-start: auto; }
+.stock-card-heading { display: flex; align-items: center; gap: 8px; }
+.stock-card-heading > div { min-width: 0; overflow-wrap: anywhere; }
+[data-stock-spark] { flex: 0 1 96px; min-width: 48px; }
+[data-stock-spark]:empty { display: none; }
+[data-stock-spark] button.rs-button { width: 100%; margin: 0; padding: 3px 4px; gap: 3px; }
+[data-stock-spark] .rs-spark { min-width: 0; height: 28px; }
+.rs-card-period { flex: none; font-size: 10px; }
 .watch-mini [data-quote] > b { font-size: 22px; font-weight: 800; }
 .watch-mini b small { display: inline; margin-left: 3px; font-weight: 600; }
 .watch-moves {

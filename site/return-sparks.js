@@ -1,4 +1,4 @@
-/* Opt-in price history for tables with historical security returns. */
+/* Price history sparklines for cards and tables. */
 (function (root) {
   'use strict';
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -32,16 +32,19 @@
     providers.set(name, load);
   }
 
-  async function marketHistory(info) {
+  function marketData({ item, base, daily }) {
     const market = root.MarketPrices;
-    if (!market) return null;
-    const { item, base, daily } = await market.series(info.symbol);
-    if (info.currency && item.currency !== info.currency) return null;
     return {
       points: market.selectPoints(base, daily, '0001-01-01', '9999-12-31'),
       name: item.ticker, unit: market.displayUnit(item), basis: market.priceBasis(item),
       source: item.history_url, note: base.period_note, label: 'closing prices'
     };
+  }
+
+  async function marketHistory(info) {
+    if (!root.MarketPrices) return null;
+    const series = await root.MarketPrices.series(info.symbol);
+    return info.currency && series.item.currency !== info.currency ? null : marketData(series);
   }
 
   root.ReturnSparks = { instrument, listing, register, windowPoints };
@@ -81,28 +84,57 @@
     return `<svg class="rs-spark" viewBox="0 0 112 32" aria-hidden="true" focusable="false"><polyline points="${path}"/></svg>`;
   }
 
+  function sparkButton(info, range) {
+    const button = node('button', 'rs-button', 'Loading…');
+    button.type = 'button';
+    button.disabled = true;
+    button.dataset.returnUi = '';
+    button.dataset.tcUi = '';
+    button.setAttribute('aria-label', 'Loading ' + label(info) + ' price history');
+    buttons.set(button, { info, range });
+    return button;
+  }
+
+  function renderSpark(button, data) {
+    const entry = buttons.get(button);
+    const points = data?.points?.filter(p => dateOK(p[0]) && Number.isFinite(p[1])) || [];
+    const range = windowPoints(points, entry.range, entry.info.cutoff);
+    if (range.points.length < 2) return false;
+    entry.data = { ...data, points };
+    button.title = `${data.name || label(entry.info)} · ${range.points[0][0]} to ${range.points.at(-1)[0]} · ${data.unit || 'Price'}`;
+    const period = entry.range === 1 ? '1 year' : `${entry.range} years`;
+    button.setAttribute('aria-label', `Open ${data.name || label(entry.info)} price history · ${period}`);
+    button.setAttribute('aria-haspopup', 'dialog');
+    button.innerHTML = sparkline(range.points);
+    button.disabled = false;
+    return true;
+  }
+
+  function priceSpark(series) {
+    const { item, quote } = series;
+    const button = sparkButton({ symbol: item.ticker, currency: item.currency, cutoff: quote.date }, 1);
+    if (!renderSpark(button, marketData(series))) return null;
+    const period = node('span', 'rs-card-period', '1Y');
+    period.setAttribute('aria-hidden', 'true');
+    button.append(period);
+    return button;
+  }
+  root.ReturnSparks.priceSpark = priceSpark;
+
   async function paintSpark(button) {
     const entry = buttons.get(button);
     if (!entry || !button.isConnected) return;
     try {
       const load = entry.info.provider ? providers.get(entry.info.provider) : marketHistory;
       const data = await load?.(entry.info);
-      const points = data?.points?.filter(p => dateOK(p[0]) && Number.isFinite(p[1])) || [];
-      const range = windowPoints(points, entry.range, entry.info.cutoff);
       if (!button.isConnected) return;
-      if (range.points.length < 2) throw Error('Insufficient dated prices');
-      entry.data = { ...data, points };
-      button.title = `${data.name || label(entry.info)} · ${range.points[0][0]} to ${range.points.at(-1)[0]} · ${data.unit || 'Price'}`;
-      button.setAttribute('aria-label', 'Open ' + (data.name || label(entry.info)) + ' price history · ' + entry.range + ' years');
-      button.setAttribute('aria-haspopup', 'dialog');
-      button.innerHTML = sparkline(range.points);
-      button.disabled = false;
+      if (renderSpark(button, data)) return;
     } catch {
       if (!button.isConnected) return;
-      button.textContent = 'Unavailable';
-      button.title = 'Fewer than two validated price observations for ' + label(entry.info) + ' in this window.';
-      button.setAttribute('aria-label', button.title);
     }
+    button.textContent = 'Unavailable';
+    button.title = 'Fewer than two validated price observations for ' + label(entry.info) + ' in this window.';
+    button.setAttribute('aria-label', button.title);
   }
 
   const visible = root.IntersectionObserver ? new root.IntersectionObserver(entries => {
@@ -132,14 +164,7 @@
 
   function addSpark(table, state, owner, target) {
     if (!target || state.sparks.has(owner)) return;
-    const info = readInstrument(owner, table);
-    const button = node('button', 'rs-button', 'Loading…');
-    button.type = 'button';
-    button.disabled = true;
-    button.dataset.returnUi = '';
-    button.dataset.tcUi = '';
-    button.setAttribute('aria-label', 'Loading ' + label(info) + ' price history');
-    buttons.set(button, { info, range: state.options.range });
+    const button = sparkButton(readInstrument(owner, table), state.options.range);
     target.append(button);
     state.sparks.set(owner, button);
     if (visible) visible.observe(button);
