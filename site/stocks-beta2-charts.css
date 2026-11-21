@@ -1,5 +1,7 @@
 .sb2-view-links { display:flex; flex-wrap:wrap; gap:3px 14px; margin:0; font-size:.87rem; font-weight:650; }
-.sb2-shared-controls { display:flex; flex-wrap:wrap; align-items:end; gap:10px 20px; margin-bottom:14px; }
+.sb2-shared-controls { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; padding:12px 14px; }
+.sb2-shared-overlays { display:flex; flex-wrap:wrap; align-items:center; gap:6px 12px; }
+.sb2-shared-overlays .sb2-overlay-controls { margin-top:0; }
 .sb2-main { max-width:2160px; }
 .sb2-deck {
   --sb2-card-min-width:265px;
@@ -49,7 +51,6 @@
 .sb2-research-divider[data-dragging] { background:#126c6620; }
 .sb2-card-reading { padding:0 18px 16px; min-width:0; }
 .sb2-card-reading .sb-reading-grid { grid-template-columns:minmax(0,1fr); }
-.sb2-chart-scope { font-weight:400; margin-inline-start:5px; }
 .sb2-chart-notes { padding:0 18px 17px; }
 .sb2-chart-and-research > * { min-width:0; }
 .sb2-chart-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:5px; margin-bottom:9px; }
@@ -87,8 +88,8 @@
 @container (min-width:765px) {
   .sb2-chart-and-research { grid-template-columns:minmax(0,1fr) minmax(230px,var(--sb2-fundamentals-width,32%)); grid-template-rows:min-content min-content minmax(min-content,1fr); }
   .sb2-research { grid-area:1 / 2 / span 3; border-left:1px solid var(--line); }
-  .sb2-valuation { grid-area:2 / 1; }
-  .sb2-chart-notes { grid-area:3 / 1; }
+  .sb2-chart-notes { grid-area:2 / 1; }
+  .sb2-valuation { grid-area:3 / 1; }
   .sb2-deck:not([data-multiple]) .sb2-research-divider { display:block; }
   .sb2-card-reading .sb-reading-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
@@ -215,6 +216,10 @@
   .sb2-peer-filters { display:grid; width:100%; grid-template-columns:1.25fr 1fr .85fr; }
   .sb2-peer-filters label,.sb2-peer-filters select { min-width:0; }
   .sb2-peer-filters select { width:100%; }
+}
+@media(max-width:440px) {
+  .sb2-peer-filters { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .sb2-peer-filters label:first-child { grid-column:1/-1; }
 }
 @media(max-width:540px) {
   .sb2-year-axis span:nth-child(even) { font-size:0; }

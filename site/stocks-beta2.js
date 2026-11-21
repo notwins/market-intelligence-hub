@@ -97,6 +97,7 @@
         compareFiscalYears,
         fundamentalsWidth,
         history: history.settings(),
+        rankings: rankings?.settings(),
         cards: [...cards.values()].map(({ slot, company }) => ({ slot, ticker: company.ticker }))
       }));
     } catch {
@@ -575,7 +576,7 @@
         changeRange: range => cards.forEach(card => paintMonthlyTable(card, range)),
         save: () => { fitCards(); saveComparison(); }
       });
-      rankings ??= root.StocksBeta2Charts.mountRankings(data, { logo, chooseCompany });
+      rankings ??= root.StocksBeta2Charts.mountRankings(data, { logo, chooseCompany, saved: saved?.rankings, save: saveComparison });
       showGroup('global');
       if (!cards.size) restoreComparison(saved);
       if (!cards.size) placeCard(1, data.securities.find(item => item.group === 'global') ?? data.securities[0]);
