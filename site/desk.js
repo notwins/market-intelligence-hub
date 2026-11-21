@@ -197,7 +197,7 @@ function stockCard(r) {
     <header class="instrument-head">
       <div class="stock-card-heading">
         <div><h3 id="stock-title-${E(r.ticker)}">${E(r.name)}</h3><small>${E(r.ticker)} · ${E(r.group)}</small></div>
-        <span data-stock-spark="${E(r.ticker)}"></span>
+        <a class="desk-beta2-link" href="stocks-beta2.html?ticker=${ticker}" aria-label="Open ${E(r.name)} in Stocks BETA 2">Stocks BETA 2 →</a>
       </div>
       <span class="quote" data-quote="${E(r.ticker)}">${quote(r)}</span>
     </header>

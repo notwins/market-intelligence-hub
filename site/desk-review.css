@@ -162,7 +162,7 @@
 .stock-move-table .move-pin-share { left: 0; }
 .stock-move-table .move-pin-price { left: var(--move-share-width); box-shadow: 1px 0 #afc0c7; }
 .stock-move-table td.move-pin-price { color: var(--ink); background: var(--card); line-height: 1.4; }
-.stock-move-table td.move-pin-price small { font-size: .72em; }
+.stock-move-table td.move-pin-price small { display: inline; margin: 0; font-size: .72em; }
 .stock-move-table td.move-pin-price time { display: block; color: var(--muted); font-size: .72rem; font-weight: 400; }
 .stock-move-table [data-move-band="1"] { background: #e7effa; }
 .stock-move-table [data-move-band="2"] { background: #e5f2eb; }
@@ -183,6 +183,19 @@
   .stock-move-table .stock-move-spark { display: none; }
 }
 
+
+.stock-card-heading { flex-wrap: wrap; }
+.desk-beta2-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-weight: 700;
+  font-size: .75rem;
+  white-space: nowrap;
+}
 
 #stock-moves [data-move-heat^="gain-"] { --move-ink: #14603a; }
 #stock-moves [data-move-heat^="loss-"] { --move-ink: #8e2035; }

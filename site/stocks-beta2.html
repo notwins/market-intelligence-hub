@@ -17,12 +17,14 @@
   <script defer src="company-logos.js?v=20261121.layout1"></script>
   <script defer src="stocks-beta2-charts.js?v=20261121.audit1"></script>
   <script defer src="bos-equity.js"></script>
+  <link rel="stylesheet" href="share-prices.css">
+  <script defer src="share-prices.js?beta2=20261122"></script>
   <script defer src="equity-research-data.js"></script>
   <script defer src="research-feed.js"></script>
   <script defer src="content-source.js"></script>
   <script defer src="desk-news.js"></script>
   <script defer src="si-beta2-core.js?v=20261121.si2cards1"></script><link rel="stylesheet" href="si-reference-table.css?v=20261121.si2cards1"><script defer src="si-reference-table.js?v=20261121.si2cards1"></script><script defer src="stock-card-reading.js?v=20261121.si-refs2&amp;si2cards=1"></script>
-  <script defer src="stocks-beta2.js?v=20261121.audit1&amp;si2cards=1"></script>
+  <script defer src="stocks-beta2.js?v=20261122.more-shares1"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -70,6 +72,7 @@
     </div>
     <div class="sb2-workspace" id="sb2-workspace" hidden>
       <section class="sb2-panel sb2-picker" aria-label="Choose a security">
+        <p class="sb2-coverage" id="sb2-open-status" role="status" hidden></p>
         <div class="sb2-find">
           <div class="sb2-company-search">
             <label for="sb2-search">Find a company<input type="search" id="sb2-search" placeholder="Name or ticker" autocomplete="off"></label>
@@ -91,17 +94,18 @@
           </div>
         </div>
         <div id="sb2-picker-results" hidden>
-          <div class="sb2-groups" role="group" aria-label="Ranked companies">
+          <div class="sb2-groups" role="group" aria-label="Company lists">
             <button type="button" data-group="global" aria-pressed="true">Global top 100</button>
             <button type="button" data-group="singapore" aria-pressed="false">Singapore top 10</button>
+            <button type="button" data-group="shared" aria-pressed="false" hidden>More shares</button>
           </div>
           <span id="sb2-result-count" role="status"></span>
-          <ul id="sb2-securities" aria-label="Securities by market capitalisation"></ul>
+          <ul id="sb2-securities" aria-label="Available securities"></ul>
           <p id="sb2-empty" hidden>No companies match this search.</p>
         </div>
       </section>
-      <div class="sb2-panel sb2-shared-controls" role="group" aria-label="Chart controls for all cards" id="sb2-shared-controls" hidden>
-        <div class="sb2-date-range" role="group" aria-label="Date range for all cards">
+      <div class="sb2-panel sb2-shared-controls" role="group" aria-label="Chart controls for BOS archive cards" id="sb2-shared-controls" hidden>
+        <div class="sb2-date-range" role="group" aria-label="Date range for BOS archive cards">
           <label>From edition<select id="sb2-from"></select></label>
           <label>To edition<select id="sb2-to"></select></label>
           <button type="button" id="sb2-all-dates">Full history</button>
@@ -218,6 +222,22 @@
             <table></table>
           </div>
         </details>
+        <div class="sb2-card-reading">
+          <div data-sb2-earnings><p class="sb-note" role="status">Loading issuer earnings…</p></div>
+          <div data-sb2-reading><p class="sb-note" role="status">Loading saved company research and news…</p></div>
+        </div>
+      </section>
+    </template>
+    <template id="sb2-shared-card-template">
+      <section class="sb2-panel sb2-detail sb2-shared-price-card">
+        <div>
+          <div class="sb2-card-header">
+            <header class="sb2-company-heading" tabindex="-1"></header>
+            <button class="sb2-remove-card" type="button">Remove</button>
+          </div>
+          <p class="sb2-coverage">Shared price history</p>
+        </div>
+        <div data-sb2-shared-chart></div>
         <div class="sb2-card-reading">
           <div data-sb2-earnings><p class="sb-note" role="status">Loading issuer earnings…</p></div>
           <div data-sb2-reading><p class="sb-note" role="status">Loading saved company research and news…</p></div>

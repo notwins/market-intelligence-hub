@@ -100,6 +100,26 @@ test('stock move colours use fixed bands with matching gain and loss boundaries'
  assert.equal(Desk.moveHeat(0),'flat');
  assert.equal(Desk.moveHeat(null),'missing');
 });
+test('Stocks BETA 2 offers exact additional equity listings without duplicating the BOS archive',()=>{
+ const {sharedPriceCompanies}=require('../site/stocks-beta2.js');
+ const securities=[{ticker:'BRK/B US',currency:'USD'},{ticker:'BABA US',currency:'USD'}];
+ const mappings=[
+  {instrumentId:'BRK/B US',listingId:'brk-b',currency:'USD',verified:true},
+  {instrumentId:'BABA US',listingId:'baba',currency:'USD',verified:true},
+  {instrumentId:'BABA US',listingId:'9988-hk',currency:'HKD',verified:false}
+ ];
+ const instruments=[
+  {id:'brk-b',ticker:'BRK-B',name:'Berkshire',currency:'USD',asset_type:'equity'},
+  {id:'baba',ticker:'BABA',name:'Alibaba ADS',currency:'USD',asset_type:'equity'},
+  {id:'9988-hk',ticker:'9988.HK',name:'Alibaba Hong Kong',currency:'HKD',asset_type:'equity'},
+  {id:'spy',ticker:'SPY',name:'SPY',currency:'USD',asset_type:'equity_etf'}
+ ];
+ assert.deepEqual(sharedPriceCompanies(securities,instruments,mappings).map(c=>[c.key,c.ticker,c.currency]),
+  [['price:9988-hk','9988.HK','HKD']]);
+ const MarketPrices=require('../site/share-prices.js');
+ assert(MarketPrices.card('DIS',{showWorkspaceActions:false}).includes('data-price-hide-workspace-actions'));
+ assert(!MarketPrices.card('DIS').includes('data-price-hide-workspace-actions'));
+});
 test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
  const cards=require('../site/company-news-cards.js');
  const story={story_id:'nvda',headline:'Nvidia update',topic:'US / Nvidia',source_urls:['https://www.reuters.com/nvidia'],version:1,body:'Saved facts',analysis:'Saved analysis',watch_next:'Next disclosure',earlier:''};
