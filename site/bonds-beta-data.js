@@ -109,6 +109,57 @@
     return combined;
   }
 
+  const dayMs = 86400000;
+  const utcDate = date => new Date(date + 'T00:00:00Z');
+  const tenors = new Map([['DGS1MO', 1 / 12], ['DGS3MO', .25], ['DGS6MO', .5], ['DGS1', 1],
+    ['DGS2', 2], ['DGS3', 3], ['DGS5', 5], ['DGS7', 7], ['DGS10', 10], ['DGS20', 20], ['DGS30', 30]]);
+
+  function fredCurves(data) {
+    if (data?.schemaVersion !== 1 || !Array.isArray(data.series)) throw Error('Unexpected FRED history format.');
+    const curves = new Map();
+    for (const series of data.series) {
+      const tenor = tenors.get(series.provider_series);
+      if (!tenor || series.family !== 'ust' || !Array.isArray(series.points)) continue;
+      for (const [date, rate] of series.points) {
+        if (!dateOk(date) || !Number.isFinite(rate) || rate <= -200) continue;
+        // Treasury suspended the published 30-year constant maturity rate during this interval.
+        if (tenor === 30 && date >= '2002-02-18' && date < '2006-02-09') continue;
+        if (!curves.has(date)) curves.set(date, new Map());
+        curves.get(date).set(tenor, rate);
+      }
+    }
+    return [...curves].filter(([, rates]) => rates.size >= 2).sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, rates]) => ({ date, settlement: utcDate(date), rates: [...rates].sort(([a], [b]) => a - b) }));
+  }
+
+  function yieldAt(rates, years) {
+    const [lower, low] = rates.findLast(([tenor]) => tenor <= years) ?? rates[0];
+    const [upper, high] = rates.find(([tenor]) => tenor >= years) ?? rates.at(-1);
+    return { lower, upper, rate: lower === upper ? low : low + (high - low) * (years - lower) / (upper - lower) };
+  }
+
+  function reconstructedPrices(instrument, curves, { cleanPrice, offsetMonth }) {
+    const { isTreasury, currency, maturity, coupon, rows } = instrument;
+    if (!isTreasury || currency !== 'USD' || !dateOk(maturity) || !Number.isFinite(coupon) || coupon <= 0) return null;
+    const end = utcDate(maturity);
+    const start = offsetMonth(end, -360).toISOString().slice(0, 10);
+    const firstBid = [...rows.keys()].filter(date => rows.get(date).bid > 0).sort()[0];
+    const cutoff = firstBid && firstBid < maturity ? firstBid : maturity;
+    const eligible = curves.filter(curve => curve.date >= start && curve.date < cutoff);
+    if (!eligible.length) return null;
+    // Use actual FRED observation dates: first available, last of each month, and last before saved bids.
+    const months = new Map(eligible.map(curve => [curve.date.slice(0, 7), curve]));
+    const samples = new Set([eligible[0], ...months.values()]);
+    const points = new Map();
+    for (const { date, settlement, rates } of samples) {
+      const years = Math.min(30, (end - settlement) / (365.2425 * dayMs));
+      const benchmark = yieldAt(rates, years);
+      const price = cleanPrice(end, settlement, coupon, benchmark.rate);
+      if (Number.isFinite(price) && price > 0) points.set(date, { price, years, ...benchmark });
+    }
+    return points.size ? { start, points, firstBid } : null;
+  }
+
   function annualPriceChanges(instrument, from, to) {
     const years = new Map();
     for (const [date, { bid }] of [...instrument.rows].sort(([a], [b]) => a.localeCompare(b))) {
@@ -123,7 +174,7 @@
     });
   }
 
-  const api = { sources, publicHistory, readHistory, mergeHistory, annualPriceChanges };
+  const api = { sources, publicHistory, readHistory, mergeHistory, annualPriceChanges, fredCurves, reconstructedPrices };
   if (typeof module !== 'undefined') module.exports = api;
   root.BondsBetaData = api;
 })(globalThis);

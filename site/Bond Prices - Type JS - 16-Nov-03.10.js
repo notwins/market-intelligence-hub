@@ -317,7 +317,7 @@ function toggleIdentifiers(event) {
   button.setAttribute('aria-pressed',String(show));
   for (const cell of button.closest('.daily-ust-watch').querySelectorAll('[data-ust-identifier]')) cell.hidden = !show;
 }
-root.DailyBondPrices={mount,render,lastDays,yieldText};
+root.DailyBondPrices={mount,render,lastDays,yieldText,cleanPrice,offsetMonth};
 if(typeof module!=='undefined')module.exports=root.DailyBondPrices;
-if(typeof document!=='undefined'){document.addEventListener('click',toggleIdentifiers);if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();document.addEventListener('visibilitychange',()=>{if(!document.hidden)mount();});setInterval(()=>{if(!document.hidden)mount();},300000);}
+if(typeof document!=='undefined'&&!document.currentScript?.hasAttribute('data-price-model-only')){document.addEventListener('click',toggleIdentifiers);if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();document.addEventListener('visibilitychange',()=>{if(!document.hidden)mount();});setInterval(()=>{if(!document.hidden)mount();},300000);}
 })(typeof window!=='undefined'?window:globalThis);
