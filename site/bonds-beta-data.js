@@ -138,26 +138,37 @@
     return { lower, upper, rate: lower === upper ? low : low + (high - low) * (years - lower) / (upper - lower) };
   }
 
+  function sampleCurves(curves, start, cutoff) {
+    const eligible = curves.filter(curve => curve.date >= start && curve.date < cutoff);
+    if (!eligible.length) return [];
+    // Use the first available date and the last published observation in each month.
+    const months = new Map(eligible.map(curve => [curve.date.slice(0, 7), curve]));
+    return [...new Set([eligible[0], ...months.values()])];
+  }
+
   function reconstructedPrices(instrument, curves, { cleanPrice, offsetMonth }) {
     const { isTreasury, currency, maturity, coupon, rows } = instrument;
     if (!isTreasury || currency !== 'USD' || !dateOk(maturity) || !Number.isFinite(coupon) || coupon <= 0) return null;
     const end = utcDate(maturity);
     const start = offsetMonth(end, -360).toISOString().slice(0, 10);
-    const firstBid = [...rows.keys()].filter(date => rows.get(date).bid > 0).sort()[0];
-    const cutoff = firstBid && firstBid < maturity ? firstBid : maturity;
-    const eligible = curves.filter(curve => curve.date >= start && curve.date < cutoff);
-    if (!eligible.length) return null;
-    // Use actual FRED observation dates: first available, last of each month, and last before saved bids.
-    const months = new Map(eligible.map(curve => [curve.date.slice(0, 7), curve]));
-    const samples = new Set([eligible[0], ...months.values()]);
-    const points = new Map();
-    for (const { date, settlement, rates } of samples) {
+    const observed = [...rows].sort(([a], [b]) => a.localeCompare(b));
+    const firstBid = observed.find(([, quote]) => quote.bid > 0)?.[0];
+    const firstYield = observed.find(([, quote]) => Number.isFinite(quote.yield))?.[0];
+    const cutoff = first => first && first < maturity ? first : maturity;
+    const priceSamples = sampleCurves(curves, start, cutoff(firstBid));
+    const yieldSamples = cutoff(firstYield) === cutoff(firstBid) ? priceSamples : sampleCurves(curves, start, cutoff(firstYield));
+    const estimate = ({ settlement, rates }) => {
       const years = Math.min(30, (end - settlement) / (365.2425 * dayMs));
-      const benchmark = yieldAt(rates, years);
-      const price = cleanPrice(end, settlement, coupon, benchmark.rate);
-      if (Number.isFinite(price) && price > 0) points.set(date, { price, years, ...benchmark });
+      return { years, ...yieldAt(rates, years) };
+    };
+    const yields = new Map(yieldSamples.map(curve => [curve.date, estimate(curve)]));
+    const points = new Map();
+    for (const curve of priceSamples) {
+      const benchmark = yields.get(curve.date) ?? estimate(curve);
+      const price = cleanPrice(end, curve.settlement, coupon, benchmark.rate);
+      if (Number.isFinite(price) && price > 0) points.set(curve.date, { price, ...benchmark });
     }
-    return points.size ? { start, points, firstBid } : null;
+    return points.size || yields.size ? { start, points, yields, firstBid, firstYield } : null;
   }
 
   function annualPriceChanges(instrument, from, to) {

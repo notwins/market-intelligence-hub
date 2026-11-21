@@ -123,8 +123,15 @@ for (const instrument of betaList.values()) {
   assert(samples.every(([date, point], index) => point.price > 0 && point.years <= 30 &&
     date < instrument.maturity && (!index || date > samples[index - 1][0])));
   const firstBid = [...instrument.rows].filter(([, quote]) => quote.bid > 0).map(([date]) => date).sort()[0];
+  const firstYield = [...instrument.rows].filter(([, quote]) => Number.isFinite(quote.yield)).map(([date]) => date).sort()[0];
   assert.equal(model.firstBid, firstBid);
+  assert.equal(model.firstYield, firstYield);
   if (firstBid) assert(samples.every(([date]) => date < firstBid));
+  if (firstYield) assert([...model.yields.keys()].every(date => date < firstYield));
+  for (const [date, point] of samples) {
+    if (model.yields.has(date)) assert.equal(model.yields.get(date).rate, point.rate);
+    assert.equal(point.price, daily.cleanPrice(utc(instrument.maturity), utc(date), instrument.coupon, point.rate));
+  }
   assert.equal(JSON.stringify([...instrument.rows]), beforeRows);
 }
 assert.equal(modelCount, 29);
@@ -139,4 +146,13 @@ const earlier = { ...betaList.get('US91282CJJ18|USD'), rows: new Map([['2024-01-
 const joined = beta.mergeHistory(betaList, new Map([['US91282CJJ18|USD', earlier]])).get('US91282CJJ18|USD');
 assert.equal(beta.reconstructedPrices(joined, archive, daily).firstBid, '2024-01-02');
 assert.equal(joined.rows.get('2024-01-02'), csvBid);
-console.log('PASS Treasury clean prices, dynamic FRED tenors, the 30-year publication gap and handoffs to dated bids');
+const separate = { ...earlier, rows: new Map([
+  ['2024-01-02', { ...csvBid, yield: null }],
+  ['2024-03-01', { ...csvBid, bid: null }],
+]) };
+const mixed = beta.reconstructedPrices(separate, archive, daily);
+assert.equal(mixed.firstBid, '2024-01-02');
+assert.equal(mixed.firstYield, '2024-03-01');
+assert.equal([...mixed.points.keys()].at(-1), '2023-12-29');
+assert.equal([...mixed.yields.keys()].at(-1), '2024-02-29');
+console.log('PASS Treasury clean prices, dynamic FRED tenors, the 30-year publication gap and separate handoffs to reported bids and yields');
