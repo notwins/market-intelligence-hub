@@ -331,7 +331,7 @@
       ctx.fillText(label, right + 9, spaced);
       labelY = spaced;
     });
-    return { forIndex: index => x(time(dates[index][2])), coneStart: cone ? historicalRight : Infinity };
+    return { forIndex: index => x(time(dates[index][2])), forValue: y, top, bottom, coneStart: cone ? historicalRight : Infinity };
   }
 
   function mountHistory(data, { saved, previousChart, changeRange, save }) {
