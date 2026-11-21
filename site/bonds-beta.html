@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="bonds-beta.css?v=20261122.performance1">
-  <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
+  <link rel="stylesheet" href="bonds-beta.css?v=20261122.cashflow2">
+  <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261122.cashflow"></script>
   <script defer src="stocks-beta2-charts.js?v=20261122.performance1"></script>
   <script defer data-price-model-only src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.performance1"></script>
-  <script defer src="bonds-beta-data.js?v=20261122.performance1"></script>
-  <script defer src="bonds-beta.js?v=20261122.performance1"></script>
+  <script defer src="bonds-beta-data.js?v=20261122.cashflow2"></script>
+  <script defer src="bonds-beta.js?v=20261122.cashflow2"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to bond charts</a>
@@ -29,7 +29,7 @@
   <main id="main" class="sb2-main bb-main">
     <header class="sb2-intro bb-intro">
       <div><h1>Bonds BETA</h1><p>Compare bond prices and yields for Temasek, U.S. Treasuries and your bond watchlist.</p></div>
-      <div class="bb-file-actions">
+      <div class="bb-file-actions"><a class="bb-cashflow-open" href="bond-cashflow.html">Bond Cashflow Studio</a>
         <button id="bb-open" type="button">Open and remember CSV</button>
         <input id="bb-file" type="file" accept=".csv,text/csv" hidden>
         <button id="bb-clear" type="button" hidden>Forget history on this browser</button>
@@ -82,6 +82,7 @@
         <div><h2></h2><p class="bb-id"></p></div>
         <button class="bb-remove" type="button">Remove</button>
       </header>
+      <a class="bb-cashflow" href="bond-cashflow.html">Explore cashflow</a>
       <div class="bb-values">
         <div><span data-bb-price-label>Bid price</span><strong data-bb-price>—</strong></div>
         <div><span data-bb-yield-label>Yield</span><strong data-bb-yield>—</strong></div>

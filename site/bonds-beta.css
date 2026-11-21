@@ -63,3 +63,7 @@
   .bb-inputs label:has(#bb-overlay) { flex-basis: 100%; }
   .bb-figure canvas { height: 148px; }
 }
+
+.bb-cashflow-open, .bb-cashflow {display:inline-flex;align-items:center;width:fit-content;font-weight:650;color:#075f64;text-decoration:underline;text-underline-offset:3px}
+.bb-cashflow-open {background:#15575d;color:white;text-decoration:none;border-radius:7px;padding:9px 15px}
+.bb-cashflow {margin:.3rem 0 .6rem}

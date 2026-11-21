@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en-SG">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>Bond Cashflow Studio · Market Intel</title>
+    <meta
+      name="description"
+      content="Compare bond interest, capital and exchange-rate outcomes across two years, with history from 1995 and A4 PDF reports."
+    />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="bond-cashflow/studio.css" />
+    <link rel="stylesheet" href="bond-cashflow/market.css" />
+    <link
+      rel="stylesheet"
+      href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1"
+    />
+    <script
+      defer
+      src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261122.cashflow"
+    ></script>
+  </head>
+  <body>
+    <a class="studio-skip" href="#main">Skip to Bond Cashflow Studio</a>
+    <header class="app-header">
+      <a class="brand" href="desk.html"
+        ><span class="brand-mark" aria-hidden="true">M.</span
+        ><span>Market Intel</span></a
+      ><a class="section-link" href="bonds-beta.html">Bonds BETA</a>
+      <div class="header-actions">
+        <button id="present" disabled>Present</button
+        ><button id="pdf" class="primary" disabled>Generate PDF</button>
+      </div>
+    </header>
+    <main id="main">
+      <section
+        id="capitalSummary"
+        class="capital-strip"
+        aria-label="Your starting cash and maturity value"
+        hidden
+      >
+        <article>
+          <span>Maturity value (face amount)</span
+          ><strong id="maturityValue">—</strong
+          ><small id="maturityDate"
+            >Principal due at maturity, assuming repayment</small
+          >
+        </article>
+        <article>
+          <span id="capitalNativeLabel">Capital cash · USD equivalent</span
+          ><strong id="capitalNative">—</strong
+          ><small id="capitalFxNote"
+            >At the purchase exchange rate, before fees</small
+          >
+        </article>
+        <article class="starting-cash">
+          <span>CAPITAL CASH · STARTING AMOUNT</span
+          ><strong id="capitalSgd">—</strong
+          ><small>Your money · no loans · before upfront fees</small>
+        </article>
+        <p id="capitalStale" hidden>
+          Inputs changed. Update the report to refresh these figures.
+        </p>
+      </section>
+      <section class="intro">
+        <div>
+          <p class="eyebrow">Fixed income</p>
+          <h1>Bond Cashflow Studio</h1>
+          <p>
+            Explore a bond’s price history, then project its interest and
+            capital value in SGD.
+          </p>
+        </div>
+        <div class="intro-action">
+          <button id="demo">Load example</button
+          ><small>Temasek 2070 · S$216,000 illustration</small>
+        </div>
+      </section>
+      <p class="feed-health" id="feedHealth" role="status">
+        Loading Market Intel data…
+      </p>
+      <div class="workspace">
+        <aside class="input-panel" aria-label="Bond and scenario inputs">
+          <div class="panel-heading">
+            <div><h2>Purchase assumptions</h2></div>
+            <button id="reset" class="text-button">Clear</button>
+          </div>
+          <form id="inputs" novalidate>
+            <section class="form-section">
+              <label for="list">Bond choices</label>
+              <div class="inline-control">
+                <select id="list">
+                  <option value="quick">Market Intel watchlist</option>
+                  <option value="watchlist">Imported favourites</option>
+                  <option value="catalogue">All Market Intel bonds</option>
+                  <option value="custom">Enter another bond</option></select
+                ><button
+                  type="button"
+                  id="importWatchlist"
+                  title="Read favourites from a Portfolio JSON export"
+                >
+                  Load favourites
+                </button>
+              </div>
+              <p id="listHint" class="hint">
+                Loading Market Intel bond references…
+              </p>
+              <label for="search" class="sr-only"
+                >Search bond names or ISIN</label
+              ><input
+                id="search"
+                type="search"
+                placeholder="Find a bond or ISIN…"
+              /><label for="bond" class="sr-only">Choose bond</label
+              ><select id="bond"></select>
+              <p id="bondTerms" class="bond-terms"></p>
+              <p id="structureNotice" class="notice"></p>
+            </section>
+            <section class="form-section">
+              <label for="budget">Capital cash <span>SGD</span></label
+              ><input
+                id="budget"
+                class="amount-input"
+                inputmode="decimal"
+                type="number"
+                min="0"
+                step="1000"
+                placeholder="Enter SGD amount"
+              />
+              <div class="field-pair">
+                <label for="fx"
+                  >Exchange rate <span id="fxUnit">SGD per USD</span
+                  ><input
+                    id="fx"
+                    type="number"
+                    step="0.0001"
+                    min="0"
+                    placeholder="e.g. 1.3000" /></label
+                ><label for="price"
+                  >Bond purchase price <span>per 100 due at maturity</span
+                  ><input
+                    id="price"
+                    type="number"
+                    step="0.001"
+                    min="0"
+                    placeholder="e.g. 50.000"
+                /></label>
+              </div>
+              <p id="priceHint" class="hint">
+                Enter your dealer's price and FX.
+              </p>
+              <button id="referencePrice" type="button" class="text-button">
+                Use reference price
+              </button>
+              <button
+                id="referenceFx"
+                type="button"
+                class="text-button"
+                disabled
+              >
+                Use reference FX
+              </button>
+              <p class="hint" id="fxHint"></p>
+              <div class="field-pair">
+                <label for="settlement"
+                  >Settlement date<input id="settlement" type="date" /></label
+                ><label for="fees"
+                  >Upfront fees <span>SGD</span
+                  ><input id="fees" type="number" min="0" step="1" value="0"
+                /></label>
+              </div>
+            </section>
+            <details class="form-section" id="bondDetails">
+              <summary>Bond terms & purchase details</summary>
+              <div class="detail-body">
+                <label for="name"
+                  >Bond name<input id="name" maxlength="160"
+                /></label>
+                <div class="field-pair">
+                  <label for="isin"
+                    >ISIN<input id="isin" maxlength="20" /></label
+                  ><label for="currency"
+                    >Currency<input id="currency" maxlength="3" value="USD"
+                  /></label>
+                </div>
+                <div class="field-pair">
+                  <label for="coupon"
+                    >Yearly interest rate %<input
+                      id="coupon"
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.125" /></label
+                  ><label for="frequency"
+                    >Payments per year<select id="frequency">
+                      <option value="">Confirm</option>
+                      <option value="1">1 · Annual</option>
+                      <option value="2">2 · Semiannual</option>
+                      <option value="4">4 · Quarterly</option>
+                    </select></label
+                  >
+                </div>
+                <label for="maturity"
+                  >Maturity<input id="maturity" type="date" /></label
+                ><label for="structure"
+                  >Structure used for this illustration<select id="structure">
+                    <option value="unsupported">
+                      Unconfirmed / unsupported
+                    </option>
+                    <option value="fixed">Regular fixed coupon</option>
+                    <option value="callable-proxy">
+                      Fixed coupon · conditional no-call model
+                    </option>
+                  </select></label
+                ><label for="dayCount"
+                  >Accrued-interest convention<select id="dayCount">
+                    <option value="ACT/ACT">Actual / Actual</option>
+                    <option value="30/360">
+                      30 / 360 US · modelling assumption
+                    </option>
+                  </select></label
+                >
+                <p class="hint">
+                  Confirm the convention with the dealer. Irregular coupons,
+                  floaters, perpetuals and callable payoffs are not modelled.
+                </p>
+                <div class="field-pair">
+                  <label for="minimum"
+                    >Minimum face value<input
+                      id="minimum"
+                      type="number"
+                      min="0"
+                      step="1000" /></label
+                  ><label for="increment"
+                    >Face-value increment<input
+                      id="increment"
+                      type="number"
+                      min="0"
+                      step="100"
+                  /></label>
+                </div>
+                <label for="lotMode"
+                  >Purchase sizing<select id="lotMode">
+                    <option value="round">Respect minimum & increment</option>
+                    <option value="fractional">
+                      Fractional illustration · may not be tradable
+                    </option>
+                  </select></label
+                ><label for="accrued"
+                  >Dealer accrued interest <span>per 100 · blank = model</span
+                  ><input
+                    id="accrued"
+                    type="number"
+                    min="0"
+                    step="0.0001"
+                    placeholder="Use calculated accrued interest"
+                /></label>
+                <div class="field-pair">
+                  <label for="priceDate"
+                    >Price observation date<input
+                      id="priceDate"
+                      type="date" /></label
+                  ><label for="fxDate"
+                    >FX observation date<input id="fxDate" type="date"
+                  /></label>
+                </div>
+              </div>
+            </details>
+            <section class="form-section scenario-section">
+              <div class="section-title"><h2>Market scenarios</h2></div>
+              <p class="hint">
+                Targets are assumptions. “Downside” is not a guaranteed worst
+                outcome.
+              </p>
+              <label for="path"
+                >How markets reach the targets<select id="path">
+                  <option value="gradual">Gradually over 10 years</option>
+                  <option value="immediate">Immediately after purchase</option>
+                </select></label
+              >
+              <div class="scenario-card upside">
+                <h3>A · Upside</h3>
+                <div class="field-pair">
+                  <label for="upYield"
+                    >Yield change <span>basis points</span
+                    ><input
+                      id="upYield"
+                      type="number"
+                      step="25"
+                      value="-100" /></label
+                  ><label for="upFx"
+                    >FX change <span>%</span
+                    ><input id="upFx" type="number" step="1" value="10"
+                  /></label>
+                </div>
+              </div>
+              <div class="scenario-card unchanged">
+                <h3>B · No change</h3>
+                <p>
+                  Purchase yield and FX stay constant.<br />The bond's price can
+                  still change with time.
+                </p>
+              </div>
+              <div class="scenario-card downside">
+                <h3>C · Downside</h3>
+                <div class="field-pair">
+                  <label for="downYield"
+                    >Yield change <span>basis points</span
+                    ><input
+                      id="downYield"
+                      type="number"
+                      step="25"
+                      value="100" /></label
+                  ><label for="downFx"
+                    >FX change <span>%</span
+                    ><input id="downFx" type="number" step="1" value="-10"
+                  /></label>
+                </div>
+              </div>
+            </section>
+            <details class="form-section">
+              <summary>Heat-map range & appendix</summary>
+              <div class="detail-body">
+                <div class="field-pair">
+                  <label for="yieldStep"
+                    >Yield grid step <span>percentage points</span
+                    ><input
+                      id="yieldStep"
+                      type="number"
+                      min="0.01"
+                      step="0.25"
+                      value="0.5" /></label
+                  ><label for="fxStep"
+                    >FX grid step <span>%</span
+                    ><input
+                      id="fxStep"
+                      type="number"
+                      min="0.1"
+                      max="30"
+                      step="1"
+                      value="5"
+                  /></label>
+                </div>
+                <label for="historyYears"
+                  >Historical chart window<select id="historyYears">
+                    <option value="10">Past 10 years</option>
+                    <option value="20">Past 20 years</option>
+                    <option value="30">Past 30 years</option>
+                    <option value="99" selected>
+                      All supplied history · from 1995
+                    </option>
+                  </select></label
+                >
+                <p class="hint">
+                  FX runs across the columns. Interest received has one row;
+                  capital and total value also vary by bond yield. The outlined
+                  cell is the no-change case.
+                </p>
+              </div>
+            </details>
+            <div class="update-wrap">
+              <button id="calculate" class="primary" type="submit">
+                Build 14-page report
+              </button>
+              <p id="validation" role="alert"></p>
+            </div>
+          </form>
+          <div class="file-actions">
+            <button id="saveInputs">Save inputs</button
+            ><button id="loadInputs">Load inputs</button
+            ><button id="csv" disabled>Export values</button>
+          </div>
+          <p class="privacy">
+            Calculations run in your browser. Inputs stay in this session unless
+            you download them.
+          </p>
+        </aside>
+        <section class="results" aria-label="Report preview">
+          <section class="price-panel" aria-labelledby="price-title">
+            <header>
+              <div>
+                <h2 id="price-title">Historical price</h2>
+                <p id="historyBond">Loading bond history…</p>
+              </div>
+              <label class="range-label"
+                >Range<select id="priceRange">
+                  <option value="all">Full history</option>
+                  <option value="12">1 year</option>
+                  <option value="36">3 years</option>
+                  <option value="60">5 years</option>
+                </select></label
+              >
+            </header>
+            <div class="quote-summary">
+              <strong id="pointValue">—</strong>
+              <div>
+                <b id="pointBasis">Price per 100 face value</b
+                ><span id="pointSource"></span>
+              </div>
+            </div>
+            <canvas
+              id="pricePlot"
+              hidden
+              aria-label="Historical price per 100 face value. Use the date slider to inspect observations."
+              role="img"
+            ></canvas>
+            <p id="chartEmpty" class="chart-empty">Loading prices…</p>
+            <div class="plot-tools" hidden id="plotTools">
+              <div class="plot-key">
+                <span id="observedKey">Observed bid</span
+                ><span id="modelKey">FRED estimate</span>
+              </div>
+              <label for="pointDate">Inspect date</label
+              ><input type="range" id="pointDate" min="0" max="0" value="0" />
+            </div>
+            <p id="modelNote" hidden>
+              Dashed prices use FRED Treasury yields. Estimates before issuance
+              are hypothetical.
+            </p>
+          </section>
+          <div id="insights" class="insight-grid">
+            <article>
+              <span>Year 10 · capital value, excluding cashflow</span
+              ><strong id="metricFace">—</strong
+              ><small id="metricResidual"
+                >Profit/loss compared with your starting cash</small
+              >
+            </article>
+            <article>
+              <span>Year 10 · interest received</span
+              ><strong id="metricCash">—</strong
+              ><small>No-change scenario</small>
+            </article>
+            <article>
+              <span>Year 10 · interest + capital</span
+              ><strong id="metricTotal">—</strong
+              ><small id="metricGain">No-change scenario</small>
+            </article>
+          </div>
+          <div class="report-toolbar">
+            <div
+              class="report-tabs"
+              role="tablist"
+              aria-label="Report sections"
+            >
+              <button role="tab" data-page="0" aria-selected="true">
+                Heat maps</button
+              ><button
+                role="tab"
+                id="compareTab"
+                aria-selected="false"
+                disabled
+              >
+                Compare years</button
+              ><button role="tab" data-page="10" aria-selected="false">
+                Scenario charts</button
+              ><button role="tab" data-page="11" aria-selected="false">
+                FX &amp; rates</button
+              ><button role="tab" data-page="12" aria-selected="false">
+                Notes</button
+              ><button role="tab" data-page="13" aria-selected="false">
+                Final table
+              </button>
+            </div>
+            <span class="paper-label">A4 · Landscape · 14 pages</span>
+          </div>
+          <div
+            id="yearNav"
+            class="year-nav"
+            aria-label="Select report year"
+          ></div>
+          <section
+            id="compareControls"
+            class="compare-controls"
+            hidden
+            aria-label="Choose the two years to compare"
+          >
+            <div>
+              <strong>Left year</strong>
+              <div
+                id="compareLeft"
+                class="year-nav"
+                aria-label="Left comparison year"
+              ></div>
+            </div>
+            <div>
+              <strong>Right year</strong>
+              <div
+                id="compareRight"
+                class="year-nav"
+                aria-label="Right comparison year"
+              ></div>
+            </div>
+            <p>
+              Click a year on each side. Both use the same cash, bond and market
+              assumptions.
+            </p>
+            <button id="comparePdf" disabled>
+              Download this comparison PDF
+            </button>
+            <div
+              id="compareDelta"
+              class="compare-delta"
+              aria-live="polite"
+            ></div>
+          </section>
+          <div id="historyControls" class="history-controls" hidden>
+            <label for="historyWindow">History shown</label
+            ><select id="historyWindow">
+              <option value="99">All supplied history · 1995 onwards</option>
+              <option value="30">Past 30 years</option>
+              <option value="20">Past 20 years</option>
+              <option value="10">Past 10 years</option></select
+            ><span>Five-year date labels · compact future area</span>
+          </div>
+          <div id="dirtyNotice" class="dirty-notice" hidden>
+            Inputs have changed. Build the report to refresh these figures.
+          </div>
+          <div id="emptyState" class="empty-state">
+            <h2>Cashflow report</h2>
+            <p>
+              Enter your starting cash, exchange rate and purchase price.<br />Then
+              explore interest received, capital value and profit or loss as
+              markets change.
+            </p>
+            <button id="demoEmpty" class="primary">View example report</button>
+            <div class="empty-features">
+              <span>10 yearly heat-map pages</span><span>3 scenario paths</span
+              ><span>A4 PDF export</span>
+            </div>
+          </div>
+          <div id="reportFrame" class="report-frame" hidden>
+            <div id="pageMount"></div>
+          </div>
+          <div class="page-navigation" id="pageNavigation" hidden>
+            <button id="prev">Previous</button
+            ><span id="pageCount" aria-live="polite"></span
+            ><button id="next">Next</button>
+          </div>
+          <div id="resultNote" class="result-note" hidden></div>
+          <details id="exactData" class="exact-data" hidden>
+            <summary>Exact values & reconciliation</summary>
+            <div id="dataTables"></div>
+          </details>
+          <details class="reference-box">
+            <summary>Where the data comes from</summary>
+            <div id="sources"></div>
+          </details>
+        </section>
+      </div>
+    </main>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <input
+      type="file"
+      id="watchFile"
+      accept=".json,application/json"
+      hidden
+    /><input
+      type="file"
+      id="inputsFile"
+      accept=".json,application/json"
+      hidden
+    />
+    <script src="bonds-beta-data.js?v=20261122.cashflow2"></script>
+    <script
+      data-price-model-only
+      src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.performance1"
+    ></script>
+    <script src="stocks-beta2-charts.js?v=20261122.performance1"></script>
+    <script src="bond-cashflow/model.js"></script>
+    <script src="bond-cashflow/favourites.js"></script>
+    <script src="bond-cashflow/report.js"></script>
+    <script src="vendor/jspdf-4.2.0.umd.min.js"></script>
+    <script src="bond-cashflow/market-data.js"></script>
+    <script src="bond-cashflow/price-chart.js"></script>
+    <script src="bond-cashflow/studio.js"></script>
+  </body>
+</html>
