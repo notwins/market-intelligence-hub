@@ -116,6 +116,14 @@ market-fundamentals:empty { display: none; }
 .fund-year .fund-down { background: #ab4664; border-radius: 0 0 3px 3px; }
 .fund-year .fund-gap { width: .35rem; bottom: var(--fund-zero); height: 2px; background: #b7c6cf; }
 .fund-table-wrap { overflow: auto; max-height: min(43vh, 31rem); border: 1px solid #d3dfe7; border-radius: 8px; }
+.fund-table-wrap[data-fund-resizable] { max-height: var(--fund-table-height, 560px); }
+.fund-table-wrap[data-fund-fit-height] { max-height: none; }
+.fund-table-controls { display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .65rem; margin: .55rem 0; font-size: .8rem; }
+.fund-table-controls label { display: inline-flex; gap: .4rem; align-items: center; min-width: 0; font-weight: 650; }
+.fund-table-controls input[type="range"] { width: clamp(5rem, 13vw, 10rem); min-width: 0; accent-color: #126c66; }
+.fund-table-controls output { min-width: 3.4em; color: #435e72; font-variant-numeric: tabular-nums; }
+.fund-table-controls button { padding: .35rem .54rem; border: 1px solid #b4cbd7; border-radius: 6px; color: #183342; background: #fff; font: inherit; font-weight: 650; cursor: pointer; }
+.fund-table-controls button[aria-pressed="true"] { color: #fff; border-color: #126c66; background: #126c66; }
 .fund-table {
   --fund-label-width: clamp(128px, 38vw, 270px);
   margin: 0;
@@ -157,6 +165,32 @@ market-fundamentals:empty { display: none; }
   cursor: pointer;
 }
 .fund-table button[data-fund-row]:hover { text-decoration: underline; }
+.fund-table [data-fund-index][hidden] { display: none; }
+.fund-line-label { display: flex; align-items: baseline; gap: .28rem; }
+.fund-line-label span { min-width: 0; }
+.fund-row-toggle {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 1.75rem;
+  min-height: 1.8rem;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  color: #1d5e79;
+  background: transparent;
+  cursor: pointer;
+}
+.fund-row-toggle::before {
+  content: "";
+  width: .42rem;
+  height: .42rem;
+  border: solid currentColor;
+  border-width: .12rem .12rem 0 0;
+  transform: rotate(45deg);
+}
+.fund-row-toggle[aria-expanded="true"]::before { transform: rotate(135deg); }
+.fund-row-toggle:hover { background: #e3eff5; }
+.fund-row-toggle:focus-visible, .fund-table-controls :focus-visible { outline: 2px solid #1e5b84; outline-offset: 1px; }
 .fund-table .fund-ttm { box-shadow: inset -2px 0 #9aafc5; }
 .fund-table thead .fund-ttm { background: #534771; }
 .fund-table .fund-negative { color: #9f2c4b; }
