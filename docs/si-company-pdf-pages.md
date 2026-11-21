@@ -32,16 +32,36 @@ Morningstar stars are separate concepts. No substitute listing is used.
 
 ## Optional 12-month cone
 
-The cone starts at the latest dated historical close and ends twelve calendar months
-later. It uses up to 36 completed monthly log returns from that same listing's price
-history, sample standard deviation, and zero log drift. At month m the boundaries
-are `close * exp(sd * sigma * sqrt(m))` for sd = -2, -1, 0, 1, 2.
+The main cone starts at the latest selected dated close (BOS first, Yahoo fallback)
+and ends twelve calendar months later. Volatility uses the full available price-only
+Yahoo Close history when available, otherwise split-normalised BOS. Each source uses
+up to 36 completed monthly log returns, sample standard deviation, and zero log drift.
+At month m the boundaries are `close * exp(sd * sigma * sqrt(m))`, sd = -2,-1,0,1,2.
 
-At least twelve adjacent-month return pairs are required. Missing months are not
-interpolated. A monthly move above a factor of 1.8 in either direction requires price
-basis review: the code does not guess whether it is a split or an economic move.
-Future observations and the incomplete anchor month cannot enter the estimate.
-Shading represents model ranges, not forecasts or barrier-hit probabilities.
+The Yahoo fan, purple BOS outer dashes, and gold supplied-Close outer dashes retain
+separate histories and sample counts. Prices are never averaged or spliced across
+providers. The saved Global Top 100 Close source retains its unconfirmed adjustment
+basis and is diagnostic only. BOS corrections reuse Stocks BETA 2's documented split
+calendar and corrected quotation dates; the original data are unchanged.
+
+At least twelve monthly return pairs are required. Intervals must be 20-40 actual
+days across adjacent calendar months. Reviews compare at least twelve shared pairs,
+with start and end date labels within seven days across sources. Actual daily
+sessions take priority over period labels; older weekly/monthly labels may not be
+exact session dates. The full primary
+sample is never reduced to fit a thinner comparison source. A symmetric max/min
+volatility difference of 25%, or a median absolute price-level difference of 10%, flags
+review. A difference does not prove an error or identify the correct provider.
+
+MU's old 80%-move block was a false positive: fresh Yahoo data confirmed its May 2026
+87.8% rise, all 255 overlapping daily closes matched, and the fetched five-year split
+calendar was empty. Verified Yahoo moves are retained. Unlabelled legacy input stays
+conservative. Future observations and the incomplete anchor month are excluded.
+
+The collapsed source-check panel distinguishes each source's full-sample volatility
+from the common-sample diagnostic. It also exposes dates, counts, starting-price
+source, documented split counts, and 12-month ranges. These are model ranges, not
+forecasts, guaranteed probabilities, or barrier-hit probabilities.
 
 ## Verification and rollback
 

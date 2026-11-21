@@ -186,3 +186,5 @@ const bands=[5.99,6,7.99,8,9.99,10,12,12.01].map(C.couponBand);
 assert.deepEqual(bands,['','6-8','6-8','8-10','8-10','10-12','10-12','above-12']);
 
 require("./test_si_equity_pages.cjs");
+
+require("./test_si_cone_sources.cjs");

@@ -141,6 +141,7 @@ function renderEquityPreview(){const p=active(),holder=$('equity-preview');
 }
 function render(){const p=active();
  renderEquityPreview();
+ renderConeChecks();
  $('page-tabs').innerHTML=pages.map((x,i)=>`<button role="tab" id="tab-${E(x.id)}" aria-controls="preview" aria-selected="${x.id===activeId}" tabindex="${x.id===activeId?0:-1}" data-page="${E(x.id)}" title="${E(x.shares.map(s=>s.symbol).join(' / '))}" aria-label="Page ${i+1}: ${E(x.shares.map(s=>s.symbol).join(' / '))}">${i+1}</button>`).join('');if(p){$('preview').innerHTML=renderPage(p,assets[p.id]||{},pages.indexOf(p)+1,pages.length);$('preview').setAttribute('aria-labelledby','tab-'+p.id);}else{$('preview').removeAttribute('aria-labelledby');$('preview').innerHTML='<div class="empty-preview"><span>▤</span><h3>Your first one-pager starts here</h3><p>Complete the terms above or choose “Add page” from the reference list below.</p></div>';}
  $('preview-status').classList.toggle('dirty',dirty);$('preview-status').textContent=dirty?'The preview shows the last applied terms. Apply changes below before exporting.':p?(loading.has(p.id)?'Loading dated share data…':`Page ${pages.indexOf(p)+1} of ${pages.length} · ${p.shares.map(s=>s.symbol).join(' + ')} · ${storageOK?'saved in this browser':'not saved; download a collection backup'}`):'No pages yet.';preflight(p);buttons();}
 function reviewedListing(item){
@@ -150,6 +151,25 @@ function reviewedListing(item){
   (!m.listingId||m.listingId===item.id)&&keys.includes(m.ticker));
  const matches=[...new Set(mappings.map(m=>m.instrumentId))];
  return matches.length===1?{instrumentId:matches[0],currency:item.currency}:null;
+}
+function renderConeChecks(){
+ const p=active(),holder=$('cone-checks');holder.hidden=!p||!chart.cone;
+ if(!p||!chart.cone){$('cone-check-rows').innerHTML='';return;}
+ $('cone-check-rows').innerHTML=p.shares.map(share=>{
+  const d=assets[p.id]?.[share.symbol]||{},check=C.coneAnalysis(d),model=check.primary;
+  if(!model?.points)return `<section><h4>${E(share.symbol)}</h4><p>${E(loading.has(p.id)?'Loading source checks…':model?.reason||'History unavailable.')}</p></section>`;
+  const anchor=`${d.currency||''} ${C.fmt(model.anchor.close,4)} · ${d.quoteSource||'Saved close'} · ${model.anchor.date}`;
+  const rows=check.models.map(m=>`<dl class="cone-source-row" data-cone-source="${E(m.id)}">
+   <div><dt>Source</dt><dd>${E(m.label)}${m.id==='bos'?` · ${m.splits} documented split${m.splits===1?'':'s'}`:''}</dd></div>
+   <div><dt>Sample</dt><dd>${m.count} monthly returns<small>${E(m.from)} to ${E(m.to)}</small></dd></div>
+   <div><dt>Full-sample annual volatility</dt><dd>${E(C.fmt(m.sigma*Math.sqrt(12)*100,1)+"%")}</dd></div>
+   <div><dt>12-month ±2 SD range</dt><dd>${E(C.fmt(m.points[12].values[0],2))} – ${E(C.fmt(m.points[12].values[4],2))}</dd></div>
+   <div><dt>Shared-date annual volatility</dt><dd>${Number.isFinite(m.matchedSigma)?E(C.fmt(m.matchedSigma*Math.sqrt(12)*100,1)+"%"):"Not comparable"}<small>${m.matchedCount} shared returns</small></dd></div>
+   <div><dt>Shared-date check</dt><dd>${m.id===model.id?'Primary volatility source':m.review?'Review differences':`Volatility difference ${Number.isFinite(m.volGap)?(m.volGap<.001?'under 0.1%':C.fmt(m.volGap*100,1)+'%'):'unavailable'}`}</dd></div>
+   <div class="cone-source-basis"><dt>Price basis</dt><dd>${E(m.basis||'Source basis unconfirmed')}${!m.splitAdjusted?' · diagnostic only':''}</dd></div>
+  </dl>`).join('');
+  return `<section><h4>${E(share.symbol)} · ${check.review?'Review source differences':check.matched?'Shared dates checked':check.models.length>1?'Source dates not comparable':'Single-source estimate'}</h4><p>Starts from ${E(anchor)}</p>${rows}${check.excluded?.length?`<p>${E(check.excluded.join('; '))}.</p>`:''}</section>`;
+ }).join('');
 }
 async function chartHistory(item,valuation){
  const listing=valuation?.row||reviewedListing(item);
@@ -178,12 +198,13 @@ async function enrich(p){
   const overlays=wantOverlays?bounded(chartHistory(item,valuation),'Valuation history timed out.',15000).catch(()=>null):null;
   try{
    const data=await bounded(window.MarketPrices.series(ticker),'Share data timed out.');
-   const quote=data.quote;
+   const selected=window.MarketPrices.currentQuote?.(data.item);
+   const quote=Number.isFinite(selected?.close)&&selected.close>0&&selected.date?selected:data.quote;
    const from=C.yearsBefore(quote.date,8);
    valuation=window.BOSEquity?.valuationFor(data.item)||valuation;
    market={
     name:data.item.name||facts.name,currency:data.item.currency,provider:data.item.provider||'Shared historical price feed',
-    quote:{close:quote.close,date:quote.date},daily:data.daily,
+    quote:{close:quote.close,date:quote.date},quoteSource:quote.sourceLabel||data.item.provider||'Saved close',daily:data.daily,
     points:window.MarketPrices.selectPoints(data.base,data.daily,from,quote.date),
     comparisonPrices:[...data.base.monthly,...data.base.weekly,...data.daily].filter(p=>p[0]>=from),
     sourceUrl:window.MarketPrices.sourceUrl(data.item.history_url),basis:data.item.basis||''
@@ -195,11 +216,12 @@ async function enrich(p){
   const moaTicker=listing?.instrumentId||profile?.bbTicker||item?.bbTicker;
   const moaCurrency=item?.currency||listing?.currency||profile?.currency;
   const identity={...(item||{}),ticker:moaTicker||ticker,currency:moaCurrency};
+  const coneSources=chart.cone?bounded(Promise.resolve(window.SIConeSources?.histories(identity,market)),'Cone source comparison timed out.',15000).catch(()=>[]):null;
   const fundamentals=await bounded(Promise.resolve(window.CompanyFundamentals?.snapshot(identity)),'Company statements timed out.',12000).catch(()=>null);
   const bbg=window.ShareEnrichment?.find(identity);
   const creditReports=await bounded(Promise.resolve(window.CompanyCreditData?.load()),'Credit research timed out.',12000).then(rows=>window.CompanyCreditData?.forListing(rows,moaTicker||ticker)||[]).catch(()=>[]);
   result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,moaTicker,moaCurrency,isin:item?.isin,
-   fundamentals,creditRatings:window.SIEquityPages?.ratings(bbg)||[],creditOutlook:bbg?.creditOutlook?.value||'',creditReports,
+   fundamentals,coneHistories:await coneSources,creditRatings:window.SIEquityPages?.ratings(bbg)||[],creditOutlook:bbg?.creditOutlook?.value||'',creditReports,
    bosKey:bosFiles?.listingKey(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency),
    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
   };
@@ -249,10 +271,11 @@ bosFiles?.read().then(raw=>{
 $('chart-display').addEventListener('change',()=>{
  if(busy)return;
  const wasEnabled=C.overlayKeys.some(key=>chart[key]);
+ const wasCone=chart.cone;
  chart=C.chartOptions({years:Number($('chart-years').value),cone:$('chart-cone').checked,...Object.fromEntries(C.overlayKeys.map(key=>[key,$('chart-'+key).checked]))});
  try{localStorage.setItem(CHART_KEY,JSON.stringify(chart));}catch{/* Use the current session setting. */}
  invalidatePDF();
- if(!wasEnabled&&C.overlayKeys.some(key=>chart[key]))pages.forEach(enrich);
+ if(!wasEnabled&&C.overlayKeys.some(key=>chart[key])||!wasCone&&chart.cone)pages.forEach(enrich);
  render();
 });
 $('include-equity').addEventListener('change',()=>{

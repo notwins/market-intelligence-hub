@@ -1,0 +1,44 @@
+/* Keep real volatility, separate providers, and compare like quotation periods. */
+const assert=require('node:assert/strict'),C=require('../site/si-beta2-core.js');
+const charts=require('../site/stocks-beta2-charts.js'),S=require('../site/si-cone-sources.js');
+const anchor={date:'2026-11-19',close:690.44};
+const monthly=Array.from({length:37},(_,i)=>[C.monthsAfter('2023-10-31',i),100*Math.exp(.01*i+.035*Math.sin(i))*(i>=31?1.8775621672650864:1)]);
+const yahoo={id:'yahoo',label:'Yahoo',splitAdjusted:true,points:monthly};
+const bos={id:'bos',label:'BOS',splitAdjusted:true,points:monthly.filter((p,i)=>i!==31)};
+const saved={id:'saved',label:'Saved Close',splitAdjusted:false,points:monthly};
+const single=C.coneAnalysis({quote:anchor,coneHistories:[yahoo]});
+assert(single.primary.points,'A verified 87.8% rally is not automatically a split error');
+assert.equal(single.primary.count,36);
+const checked=C.coneAnalysis({quote:anchor,coneHistories:[yahoo,bos,saved]});
+assert.equal(checked.primary.sigma,single.primary.sigma,'Missing peer months cannot remove a real rally from the main cone');
+assert(checked.primary.matchedCount<checked.primary.count);assert.equal(checked.models.length,3);
+assert(checked.models.every(m=>m.matchedCount===checked.primary.matchedCount));assert.equal(checked.review,false);
+assert(checked.models.every(m=>m.anchor.close===690.44),'All sources use the same current-price anchor');
+assert(checked.models.find(m=>m.id==='bos').matchedSigma<single.primary.sigma,'The shared-sample check is distinct from the full-source cone');
+const bad={...bos,points:monthly.map((p,i)=>[p[0],p[1]*(i===15?10:1)])};
+const disagreement=C.coneAnalysis({quote:anchor,coneHistories:[yahoo,bad]});
+assert.equal(disagreement.review,true);assert.equal(disagreement.primary.sigma,single.primary.sigma,'A bad peer cannot contaminate Yahoo volatility');
+assert(disagreement.models.find(m=>m.id==='bos').volGap>=.25);
+const shifted={...bos,points:monthly.map(p=>[p[0].slice(0,7)+'-01',p[1]])};
+const timing=C.coneAnalysis({quote:anchor,coneHistories:[yahoo,shifted]});
+assert.equal(timing.review,false,'Different snapshot days are not evidence of a pricing error');
+assert(timing.excluded.some(s=>s.includes('common dates')));
+const sessions=C.coneMonths({points:[['2026-05-31',999]],daily:[['2026-05-29',971]]},anchor);assert.deepEqual(sessions.monthly.get('2026-05'),['2026-05-29',971],'Actual session dates beat later period labels');
+const intervals=C.coneMonths({points:[['2026-04-30',100],['2026-05-01',101],['2026-06-30',200]]},anchor);
+assert.equal(intervals.returns.size,0,'One-day and sixty-day moves are not monthly returns');
+const future=C.coneAnalysis({quote:anchor,coneHistories:[{...yahoo,points:[...monthly,['2027-01-31',1e10]]}]});
+assert.equal(future.primary.sigma,single.primary.sigma);
+const calendar={version:1,metrics:[['price']],months:monthly.map(p=>[p[0].slice(0,7),p[0],p[0]]),securities:[
+ {ticker:'TEST US',currency:'USD',previous:[],observations:monthly.map((p,i)=>[i,p[1]*(p[0]<'2024-06-10'?10:1)])}
+]};
+const before=JSON.stringify(calendar),adjustments={version:1,splits:{'TEST US':[['2024-06-10',10,'https://example.com/split.pdf']]}};
+const normalized=S.bosHistory(calendar,adjustments,'TEST US','USD');
+assert.equal(normalized.splits,1);normalized.points.forEach((p,i)=>{assert.equal(p[0],monthly[i][0]);assert(Math.abs(p[1]/monthly[i][1]-1)<1e-12);});
+assert.equal(JSON.stringify(calendar),before,'The original BOS record stays unchanged');
+assert.equal(S.bosHistory(calendar,adjustments,'TEST US','SGD'),null,'Currency mismatch cannot borrow another listing');
+assert.equal(S.bosHistory({...calendar,securities:[...calendar.securities,...calendar.securities]},adjustments,'TEST US','USD'),null,'Ambiguous listings are not compared');
+const p={...C.blank(),shares:[{symbol:'MU'}],ko:100,ki:70,strike:80,step:1,months:11,coupon:8};
+const svg=C.svg(p,{MU:{quote:anchor,points:monthly,provider:'Yahoo Finance',coneHistories:[yahoo,bos,saved]}},1,1,{chart:{cone:true}});
+assert(svg.includes('si-probability-cone'));assert.equal((svg.match(/class="si-cone-comparison"/g)||[]).length,4);
+assert(svg.includes('data-source="bos"'));assert(svg.includes('data-source="saved"'));assert(!svg.includes('NaN'));
+console.log('PASS source cones: real rallies retained, full primary sample, fair shared dates, split normalization, disagreement flags and source-separated SVGs');
