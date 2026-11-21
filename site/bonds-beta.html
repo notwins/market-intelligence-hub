@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="bonds-beta.css?v=20261122.more1">
+  <link rel="stylesheet" href="bonds-beta.css?v=20261122.eligibility1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261122.cashflow"></script>
   <script defer src="stocks-beta2-charts.js?v=20261122.performance1"></script>
   <script defer data-price-model-only src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.performance1"></script>
-  <script defer src="bonds-beta-data.js?v=20261122.filters1"></script>
-  <script defer src="bonds-beta.js?v=20261122.sort1"></script>
+  <script defer src="bonds-beta-data.js?v=20261122.eligibility1"></script>
+  <script defer src="bonds-beta.js?v=20261122.eligibility1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to bond charts</a>
@@ -63,6 +63,10 @@
             <input id="bb-coupon-high" type="range" aria-label="Maximum coupon" min="0" max="20" step="0.25" value="20">
           </div>
         </fieldset>
+        <div class="bb-picker-scope">
+          <label><input id="bb-include-matured" type="checkbox" autocomplete="off"> Include matured bonds</label>
+          <label><input id="bb-ace-only" type="checkbox" autocomplete="off" checked> ACE AR only</label>
+        </div>
         <button id="bb-clear-filters" type="button" disabled>Clear filters</button>
       </div>
       <div class="bb-inputs">
@@ -81,6 +85,7 @@
       <div class="bb-match-summary">
         <p id="bb-match-count" role="status"></p>
         <button id="bb-show-more" type="button" aria-controls="bb-match bb-overlay" hidden>Show more</button>
+        <p id="bb-ace-picker-help" hidden>Open your history CSV for ACE quick picks, or turn off ACE AR only to browse all bonds.</p>
       </div>
       <div class="bb-inputs bb-view-inputs">
         <div class="bb-tabs" role="group" aria-label="Visible cards">
@@ -109,6 +114,7 @@
       <p>Each estimate uses the two published Treasury tenors that bracket the remaining maturity. The 15-year point sits halfway between 10 and 20 years. When the remaining maturity falls outside the available curve, the model uses the closest published tenor. The 30-year rate was suspended from February 2002 to February 2006. <a href="https://fred.stlouisfed.org/series/DGS10">FRED 10Y</a> · <a href="https://fred.stlouisfed.org/series/DGS20">FRED 20Y</a> · <a href="https://fred.stlouisfed.org/series/DGS30">FRED 30Y</a> · <a href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve">Treasury rate availability</a></p>
       <p>The price chart switches to the first saved bid. The yield chart switches to the first reported yield. A dotted connector marks each transition when the two dates are within seven calendar days. Larger gaps remain open.</p>
       <p>Yearly price change uses the first and last available bid in each calendar year within your selected range. It excludes coupons, accrued interest, fees and FX. ACE Fixed AR is the workbook snapshot percentage and has no historical time series.</p>
+      <p>Quick picks use recorded ACE Fixed AR from your saved history CSV. A recorded 0% is included. Turn off <strong>ACE AR only</strong> to browse the full catalogue. <strong>Include matured bonds</strong> also reveals bonds with an unknown maturity. Maturity is checked against the current Singapore date.</p>
       <p>Choose your history CSV once to load its price, yield and ACE data automatically on later visits in this browser. Use “Forget history on this browser” to remove the saved copy.</p>
     </details>
     <footer><b>Market Intelligence Hub</b><p><a href="desk.html">Home</a> · <a href="legal/index.html">Legal &amp; transparency</a></p></footer>

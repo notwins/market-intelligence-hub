@@ -7,6 +7,7 @@
   const temasek = 'US87973RAW07';
   const get = id => document.getElementById(`bb-${id}`);
   const formatDate = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+  const singaporeDate = new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'Asia/Singapore' });
   const dateLabel = date => date ? formatDate.format(new Date(`${date}T00:00:00Z`)) : '—';
   const decimal = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 3 });
   const shortNumber = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2 });
@@ -21,6 +22,7 @@
   const shownMatches = new Set();
   let publicBonds = new Map();
   let localBonds = new Map();
+  let aceRatesAvailable = false;
   let catalogue = new Map();
   let bonds = new Map();
   let curves = [];
@@ -145,8 +147,27 @@
     return Math.round(ratio * Number(get('coupon-high').max) * 4) / 4;
   }
 
+  function maturityCutoff() {
+    if (get('include-matured').checked) return '';
+    const parts = singaporeDate.formatToParts(new Date());
+    return ['year', 'month', 'day'].map(key => parts.find(part => part.type === key).value).join('-');
+  }
+
+  const pickerMaturity = item => item.maturity || item.listedMaturity;
+
+  function inMaturityScope(item, cutoff) {
+    const maturity = pickerMaturity(item);
+    return !cutoff || (maturity ? maturity > cutoff : item.isPerpetual);
+  }
+
+  function pickerEligible(item, cutoff, aceOnly) {
+    return item && inMaturityScope(item, cutoff) && (!aceOnly || Number.isFinite(item.ar));
+  }
+
   function updateMatchOptions(count = 0, previousComparison = get('overlay').value) {
     const overlay = get('overlay');
+    const cutoff = maturityCutoff();
+    const aceOnly = get('ace-only').checked;
     const offset = shownMatches.size;
     overlay.options.length = offset + 1;
     const matchOptions = document.createDocumentFragment();
@@ -159,11 +180,13 @@
     }
     for (const key of new Set([...selected, previousComparison])) {
       const item = bonds.get(key);
-      if (item && !shownMatches.has(key)) comparisonOptions.append(new Option(`${item.name} · ${item.currency}`, key));
+      if (!shownMatches.has(key) && pickerEligible(item, cutoff, aceOnly)) {
+        comparisonOptions.append(new Option(`${item.name} · ${item.currency}`, key));
+      }
     }
     get('match').append(matchOptions);
     overlay.append(comparisonOptions);
-    overlay.value = bonds.has(previousComparison) ? previousComparison : '';
+    overlay.value = pickerEligible(bonds.get(previousComparison), cutoff, aceOnly) ? previousComparison : '';
 
     if (!count) return;
     const total = matchingKeys.length;
@@ -173,6 +196,7 @@
       ? `Showing ${formatCount(shownMatches.size)} of ${formatCount(total)} matching bonds.`
       : `${formatCount(total)} matching ${total === 1 ? 'bond' : 'bonds'}.`;
     get('show-more').hidden = !more;
+    get('ace-picker-help').hidden = !aceOnly || aceRatesAvailable;
   }
 
   function populateControls(resetMatches = false) {
@@ -180,10 +204,13 @@
     const low = get('coupon-low'), high = get('coupon-high');
     const min = low.valueAsNumber, max = high.valueAsNumber;
     const couponActive = min > 0 || high.value !== high.max;
+    const cutoff = maturityCutoff();
+    const aceOnly = get('ace-only').checked;
     const pool = originalTenor ? [...catalogue.keys()] : query.length || couponActive
-      ? [...bonds.keys()] : [...new Set([...defaultKeys, ...catalogue.keys()])];
+      ? [...bonds.keys()] : [...new Set([...defaultKeys, ...catalogue.keys(), ...bonds.keys()])];
     matchingKeys = pool.filter(key => {
       const instrument = bonds.get(key);
+      if (!pickerEligible(instrument, cutoff, aceOnly)) return false;
       if (originalTenor && originalYears(instrument) !== originalTenor) return false;
       if (couponActive && !(Number.isFinite(instrument.coupon) && instrument.coupon >= min && instrument.coupon <= max)) return false;
       return query.every(term => `${instrument.isin} ${instrument.name} ${instrument.type ?? ''} ${instrument.currency}`.toUpperCase().includes(term));
@@ -191,9 +218,10 @@
     const [field, direction] = get('sort').value.split('-');
     if (field) {
       const sign = direction === 'asc' ? 1 : -1;
+      const sortValue = field === 'maturity' ? pickerMaturity : item => item.coupon;
       matchingKeys.sort((left, right) => {
-        const a = bonds.get(left)[field] ?? '';
-        const b = bonds.get(right)[field] ?? '';
+        const a = sortValue(bonds.get(left)) ?? '';
+        const b = sortValue(bonds.get(right)) ?? '';
         if (a === b) return 0;
         // Some observed-only bonds have no terms. Keep those at the end in either direction.
         if (a === '') return 1;
@@ -213,7 +241,7 @@
     if (shownMatches.has(priorMatch)) matchSelect.value = priorMatch;
     if (!shownMatches.size) matchSelect.add(new Option('No matching bonds', ''));
     get('add').disabled = !shownMatches.size;
-    get('clear-filters').disabled = !originalTenor && !couponActive && !query.length;
+    get('clear-filters').disabled = !originalTenor && !couponActive && !query.length && !!cutoff && aceOnly;
   }
 
   function setCursor(index) {
@@ -471,8 +499,12 @@
 
   function renderCards() {
     const deck = get('cards');
+    const cutoff = maturityCutoff();
     const previous = new Map(cards.map(card => [card.key, card]));
-    cards = selected.filter(key => visibleInGroup(bonds.get(key))).map(key => {
+    cards = selected.filter(key => {
+      const item = bonds.get(key);
+      return inMaturityScope(item, cutoff) && visibleInGroup(item);
+    }).map(key => {
       const card = previous.get(key);
       return card?.instrument === bonds.get(key) ? card : createCard(key);
     });
@@ -498,9 +530,10 @@
   function refreshDates() {
     const previous = cursor < dates.length - 1 ? dates[cursor] : undefined;
     const unique = new Set();
+    const cutoff = maturityCutoff();
     for (const key of new Set([...selected, get('overlay').value])) {
       const item = bonds.get(key);
-      if (!item) continue;
+      if (!item || !inMaturityScope(item, cutoff)) continue;
       for (const date of item.rows.keys()) unique.add(date);
       if (curves.length && !modeled.has(item)) modeled.set(item, reconstructedPrices(item, curves, window.DailyBondPrices));
       const model = modeled.get(item);
@@ -517,6 +550,7 @@
 
   function applyData() {
     bonds = mergeCatalogue(mergeHistory(publicBonds, localBonds), catalogue);
+    aceRatesAvailable = [...localBonds.values()].some(item => Number.isFinite(item.ar));
     const previousDefaults = new Set(defaultKeys);
     defaultKeys = [...publicBonds.keys()];
     if (!defaultKeys.length) defaultKeys = [...localBonds].filter(([, item]) => item.isin === temasek ||
@@ -684,6 +718,16 @@
   });
   get('search').addEventListener('input', () => populateControls(true));
   get('sort').addEventListener('change', () => populateControls(true));
+  get('include-matured').addEventListener('change', () => {
+    populateControls(true); refreshDates(); renderCards();
+  });
+  get('ace-only').addEventListener('change', () => {
+    const previousComparison = get('overlay').value;
+    populateControls(true);
+    if (get('overlay').value !== previousComparison) {
+      refreshDates(); showSeries();
+    }
+  });
   get('tenors').addEventListener('click', event => {
     const button = event.target.closest('[data-tenor]');
     if (!button || button.disabled) return;
@@ -719,7 +763,9 @@
     get('search').value = '';
     get('coupon-low').value = '0';
     get('coupon-high').value = get('coupon-high').max;
-    showTenor(); showCoupon(); populateControls(true);
+    get('include-matured').checked = false;
+    get('ace-only').checked = true;
+    showTenor(); showCoupon(); populateControls(true); refreshDates(); renderCards();
     get('search').focus();
   });
   get('show-more').addEventListener('click', event => {
