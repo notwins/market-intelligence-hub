@@ -1,4 +1,4 @@
-/* Optional, self-contained A4 appendices. Annual figures stay in the owner's browser. */
+/* Optional A4 appendices. Private quarterly figures are rendered in the owner's browser. */
 (function(root){'use strict';
 const C=root.SIBetaCore||(typeof require==='function'?require('./si-beta2-core.js'):null);
 const E=C.escape,navy='#122b43',teal='#276976',muted='#526477',border='#d3dfe6';
@@ -14,19 +14,32 @@ const choices={
   ['Financing cash flow',/^Cash Flow from(?:\/Used in)? Financing Activities$/i],
   ['Ending cash',/^Cash and Cash Equivalents, End of Period$/i],['Change in cash',/^Change in Cash$/i]]
 };
-function highlights(report,key){
- if(!report?.periods||!report?.rows)return null;
- const periods=report.periods.map((label,index)=>({label,index})).filter(p=>/^\d{4}$/.test(p.label))
-  .sort((a,b)=>b.label.localeCompare(a.label)).slice(0,3).reverse();
- if(!periods.length)return null;
+function fiscalQuarters(statements){
+ let latest=-Infinity;
+ for(const report of Object.values(statements||{})){
+  report?.periods.forEach((label,index)=>{
+   const match=/^Q([1-4]) (\d{4})$/.exec(label);
+   if(match&&report.rows.some(row=>Number.isFinite(row[2][index]))){
+    latest=Math.max(latest,Number(match[2])*4+Number(match[1])-1);
+   }
+  });
+ }
+ return Number.isFinite(latest)?Array.from({length:12},(_,i)=>{
+  const quarter=latest-11+i;
+  return 'Q'+(quarter%4+1)+' '+Math.floor(quarter/4);
+ }):[];
+}
+function highlights(report,key,periods=fiscalQuarters({[key]:report})){
+ if(!report||!periods.length)return null;
+ const indices=periods.map(label=>report.periods.indexOf(label));
  const rows=choices[key].map(([label,pattern])=>{
-  const match=report.rows.find(row=>pattern.test(row[1])&&periods.some(p=>Number.isFinite(row[2][p.index])));
+  const match=report.rows.find(row=>pattern.test(row[1])&&indices.some(index=>Number.isFinite(row[2][index])));
   const perShare=match&&/per share|\bEPS\b/i.test(match[1]);
   const caption=/Normalized/.test(match?.[1]||'')?'Normalized diluted EPS':/Short Term Investments/.test(match?.[1]||'')?'Cash & short-term investments':label;
-  return {label:caption+(perShare?' (per share)':''),reportedLabel:match?.[1],
-   values:periods.map(p=>match?.[2][p.index]??null),scale:perShare?1:1e6};
+  return {label:caption,reportedLabel:match?.[1],
+   values:indices.map(index=>match?.[2][index]??null),scale:perShare?1:1e6};
  });
- return {periods:periods.map(p=>p.label),rows,currency:report.currency,fiscalEnd:report.fiscalEnd};
+ return rows.some(row=>row.reportedLabel)?{periods,rows,currency:report.currency,fiscalEnd:report.fiscalEnd}:null;
 }
 function ratings(record){
  return (record?.credit||[]).filter(r=>r.raw).map(r=>({...r,source:'Bloomberg supplied snapshot',
@@ -67,62 +80,68 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
  fitted(logo?80:28,143,share.name||data.name||share.symbol,logo?565:620,19,navy,true);
  text(772,143,share.symbol,14,teal,true,'end');text(28,180,source?`Underlying of ${source}`:'SI underlying',10,teal,true);
  prose(28,198,share.description||data.description||'Company description unavailable.',112,2,11);
- heading(240,'1','Equity research');
+ heading(233,'1','Equity research');
  const research=data.metrics,call=research?.rating||brief?.rating||'Unavailable',provider=research?.researchProvider||brief?.provider||'BOS research';
  const currentTarget=Number.isFinite(research?.fairValueOrTargetPrice)?research:null;
- text(28,263,`${provider} · Analyst view: ${call}${data.metricsDate?' · '+data.metricsDate:brief?.date?' · '+brief.date:''}`,12,navy,true);
+ text(28,254,`${provider} · Analyst view: ${call}${data.metricsDate?' · '+data.metricsDate:brief?.date?' · '+brief.date:''}`,12,navy,true);
  const target=currentTarget?`${research.fairValueOrTargetKind==='fair_value'?'Fair value':'Target'}: ${research.currency} ${C.fmt(research.fairValueOrTargetPrice,4)}`:
   brief?.target?`Report fair value / target: ${brief.target.currency} ${brief.target.value} · ${brief.target.date}`:'Fair value / target unavailable.';
- text(28,283,target,12,teal,true);
- prose(28,305,brief?.outlook?`Report summary · ${brief.outlookDate||brief.date}: ${brief.outlook}`:'A matched equity research summary is unavailable.',110,3,11.5);
- if(brief?.guidance)prose(28,355,'Guidance: '+brief.guidance,115,1,11);
+ text(28,272,target,12,teal,true);
+ prose(28,290,brief?.outlook?`Report summary · ${brief.outlookDate||brief.date}: ${brief.outlook}`:'A matched equity research summary is unavailable.',110,3,11.5);
+ if(brief?.guidance)prose(28,334,'Guidance: '+brief.guidance,115,1,11);
  const researchUrl=root.CompanyFundamentals?.researchLink?.(brief)||research?.researchReportUrl;
- link(28,378,`Open ${brief?.provider||provider} research${brief?.date?' · '+brief.date:''}`,researchUrl);
- heading(413,'2','Agency credit ratings');
+ link(28,350,`Open ${brief?.provider||provider} research${brief?.date?' · '+brief.date:''}`,researchUrl);
+ heading(377,'2','Agency credit ratings');
  if(credit.length){
-  rect(28,427,744,21,'#edf4f6');text(38,442,'Agency / rating scope',11,muted,true);text(620,442,'Reported rating',11,muted,true);
-  credit.slice(0,5).forEach((r,i)=>{const y=464+i*18;
+  rect(28,387,744,17,'#edf4f6');text(38,399,'Agency / rating scope',11,muted,true);text(620,399,'Reported rating',11,muted,true);
+  credit.slice(0,5).forEach((r,i)=>{const y=417+i*14;
    fitted(38,y,r.agency+' · '+r.scope,555,11.5);fitted(620,y,r.display,142,11.5,navy,true);
   });
-  text(28,557,'Bloomberg supplied snapshot · rating observation dates unavailable.',10,muted);
-  if(data.creditOutlook)text(28,572,'S&P outlook: '+data.creditOutlook+' (separate from credit grade).',10,muted);
- }else text(28,450,'No agency rating supplied for this exact listing.',12,muted);
+  text(28,487,'Bloomberg supplied snapshot · rating observation dates unavailable.',10,muted);
+  if(data.creditOutlook)text(28,501,'S&P outlook: '+data.creditOutlook+' (separate from credit grade).',10,muted);
+ }else text(28,405,'No agency rating supplied for this exact listing.',12,muted);
  const bos=bosCredit.find(r=>r.ratings_as_reported);
- if(bos)prose(28,591,`BOS credit research · ${bos.report_date}: ${bos.ratings_as_reported}`,118,1,10);
- else if(!credit.length)text(28,472,'Missing ratings are not treated as investment grades.',11,muted);
+ if(bos)prose(28,515,`BOS credit research · ${bos.report_date}: ${bos.ratings_as_reported}`,118,1,10);
+ else if(!credit.length)text(28,423,'Missing ratings are not treated as investment grades.',11,muted);
  const titles={income:'Income statement',balance:'Balance sheet',cash:'Cash flow'};
+ const quarters=fiscalQuarters(company?.quarterly);
  ['income','balance','cash'].forEach((key,section)=>{
-  const top=615+section*136,report=company?.statements?.[key],table=highlights(report,key);
+  const top=539+section*161,report=company?.quarterly?.[key],table=highlights(report,key,quarters);
   heading(top,String(section+3),titles[key]);
   if(table?.fiscalEnd)text(772,top,'Fiscal year end: '+table.fiscalEnd,10,muted,false,'end');
   if(!table){
-   text(28,top+27,'Annual statement not loaded in this browser for this listing.',12,muted);
+   text(28,top+27,report?'No selected quarterly figures in this range.':'Quarterly statement unavailable for this listing.',12,muted);
    if(key==='income'&&brief?.financials){
     const f=brief.financials;
-    text(28,top+49,'The linked BOS report contains financial estimates; these are not imported annual statements.',10,muted);
+    text(28,top+49,'The linked BOS report includes financial estimates.',10,muted);
     const row=f.rows?.find(r=>/^Revenue/.test(r[0]));
     if(row)prose(28,top+70,'Report '+row[0]+': '+f.periods.map((p,i)=>p+' '+row[i+1]).join(' · '),110,2,10);
-   }else link(28,top+53,'View company financials',info?.financialsUrl);
+   }
    return;
   }
-  const columns=[530,642,758];
-  rect(28,top+10,744,22,'#edf4f6');text(38,top+25,table.currency+' millions'+(key==='income'?' · EPS per share':''),10,muted,true);
-  table.periods.forEach((year,i)=>text(columns[i],top+25,year,11,navy,true,'end'));
-  table.rows.forEach((row,i)=>{const y=top+47+i*17;
-   if(i%2===0)rect(28,y-13,744,17,'#f7fafb','#f7fafb');
-   text(38,y,row.label,11.5,navy,i===0);
-   row.values.forEach((v,j)=>text(columns[j],y,v===null?'Unavailable':C.fmt(v/row.scale,2),11.5,v===null?muted:navy,true,'end'));
-  });
+  const columns=[333,418,503,588,673,758];
+  for(const [band,start] of [0,6].entries()){
+   const y0=top+10+band*72;
+   rect(28,y0,744,14,'#edf4f6');
+   text(38,y0+10,table.currency+' millions'+(key==='income'?' · EPS per share':''),10,muted,true);
+   table.periods.slice(start,start+6).forEach((quarter,i)=>text(columns[i],y0+10,quarter,10,navy,true,'end'));
+   table.rows.forEach((row,i)=>{const y=y0+24+i*11;
+    if(i%2===0)rect(28,y-9,744,11,'#f7fafb','#f7fafb');
+    text(38,y,row.label,10.5,navy,i===0);
+    row.values.slice(start,start+6).forEach((v,j)=>text(columns[j],y,v===null?'—':C.fmt(v/row.scale,2),10.5,v===null?muted:navy,v!==null,'end'));
+   });
+  }
  });
  line(1025);
- const captured=company?.capturedAt?.slice(0,10);
- text(28,1044,`Annual statements: Morningstar${captured?' · captured '+captured:''}. Latest three available fiscal years; selected reported totals.`,10,muted);
- text(28,1060,'Currencies belong to each statement; they may differ from the share quotation. No missing amounts are inferred.',10,muted);
- if(company)link(28,1078,'Open full Morningstar financial statements',info?.financialsUrl);
- else text(28,1078,'To include annual figures, load your Fundamentals JSON in Stocks BETA 2 settings on this browser.',10,teal);
+ const captured=company?.quarterlyCapturedAt;
+ text(28,1044,`Morningstar quarterly financials · As Originally Reported${captured?' · captured '+captured:''}`,10,muted);
+ text(28,1060,quarters.length?`12 fiscal quarters · ${quarters[0]} to ${quarters.at(-1)} · — means no reported figure`:
+  company?.quarterly?'No fiscal quarters with reported figures.':
+  'Connect private statements in Stocks BETA 2 to include the available quarterly figures.',10,muted);
+ link(28,1078,'Open full Morningstar financial statements',info?.financialsUrl);
  if(bos)link(28,1096,'Credit research source · '+bos.report_date,bos.source_pdf);
  else text(28,1096,'Agency credit ratings are separate from analyst calls and Morningstar stars.',10,muted);
  out.push('</svg>');return out.join('');
 }
-const api={highlights,ratings,summary,plan,svg};root.SIEquityPages=api;if(typeof module!=='undefined')module.exports=api;
+const api={fiscalQuarters,highlights,ratings,summary,plan,svg};root.SIEquityPages=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
