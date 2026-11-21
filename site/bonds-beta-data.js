@@ -160,6 +160,12 @@
       .map(([date, rates]) => ({ date, settlement: utcDate(date), rates: [...rates].sort(([a], [b]) => a - b) }));
   }
 
+  async function loadFredCurves() {
+    const response = await fetch('data/fred-daily.json', { signal: AbortSignal.timeout(20000) });
+    if (!response.ok) throw Error('FRED history unavailable');
+    return fredCurves(await response.json());
+  }
+
   function yieldAt(rates, years) {
     const [lower, low] = rates.findLast(([tenor]) => tenor <= years) ?? rates[0];
     const [upper, high] = rates.find(([tenor]) => tenor >= years) ?? rates.at(-1);
@@ -214,7 +220,7 @@
   }
 
   const api = { sources, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
-    annualPriceChanges, fredCurves, reconstructedPrices };
+    annualPriceChanges, fredCurves, loadFredCurves, reconstructedPrices };
   if (typeof module !== 'undefined') module.exports = api;
   root.BondsBetaData = api;
 })(globalThis);
