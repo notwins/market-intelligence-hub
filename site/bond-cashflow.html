@@ -11,7 +11,7 @@
     />
     <link rel="icon" href="favicon.ico" />
     <link rel="stylesheet" href="bond-cashflow/studio.css" />
-    <link rel="stylesheet" href="bond-cashflow/market.css" />
+    <link rel="stylesheet" href="bond-cashflow/market.css?v=20261122.usd1" />
     <link
       rel="stylesheet"
       href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1"
@@ -56,7 +56,7 @@
         </article>
         <article class="starting-cash">
           <span>CAPITAL CASH · STARTING AMOUNT</span
-          ><strong id="capitalSgd">—</strong
+          ><strong id="capitalCash">—</strong
           ><small>Your money · no loans · before upfront fees</small>
         </article>
         <p id="capitalStale" hidden>
@@ -69,7 +69,7 @@
           <h1>Bond Cashflow Studio</h1>
           <p>
             Explore a bond’s price history, then project its interest and
-            capital value in SGD.
+            capital value in SGD or USD.
           </p>
         </div>
         <div class="intro-action">
@@ -118,7 +118,26 @@
               <p id="structureNotice" class="notice"></p>
             </section>
             <section class="form-section">
-              <label for="budget">Capital cash <span>SGD</span></label
+              <fieldset class="capital-currency">
+                <legend>Investment currency</legend>
+                <label
+                  ><input
+                    type="radio"
+                    name="capitalCurrency"
+                    value="SGD"
+                    checked
+                  /><span>SGD</span></label
+                >
+                <label
+                  ><input
+                    type="radio"
+                    name="capitalCurrency"
+                    value="USD"
+                  /><span>USD</span></label
+                >
+              </fieldset>
+              <label for="budget"
+                >Invested capital <span id="budgetUnit">SGD</span></label
               ><input
                 id="budget"
                 class="amount-input"
@@ -166,7 +185,7 @@
                 <label for="settlement"
                   >Settlement date<input id="settlement" type="date" /></label
                 ><label for="fees"
-                  >Upfront fees <span>SGD</span
+                  >Upfront fees <span id="feeUnit">SGD</span
                   ><input id="fees" type="number" min="0" step="1" value="0"
                 /></label>
               </div>
@@ -298,8 +317,9 @@
               <div class="scenario-card unchanged">
                 <h3>B · No change</h3>
                 <p>
-                  Purchase yield and FX stay constant.<br />The bond's price can
-                  still change with time.
+                  <span id="constantAssumptions"
+                    >Purchase yield and FX stay constant.</span
+                  ><br />The bond's price can still change with time.
                 </p>
               </div>
               <div class="scenario-card downside">
@@ -352,7 +372,7 @@
                     </option>
                   </select></label
                 >
-                <p class="hint">
+                <p class="hint" id="gridHint">
                   FX runs across the columns. Interest received has one row;
                   capital and total value also vary by bond yield. The outlined
                   cell is the no-change case.
@@ -361,7 +381,7 @@
             </details>
             <div class="update-wrap">
               <button id="calculate" class="primary" type="submit">
-                Build 14-page report
+                Build 15-page report
               </button>
               <p id="validation" role="alert"></p>
             </div>
@@ -456,14 +476,16 @@
               ><button role="tab" data-page="10" aria-selected="false">
                 Scenario charts</button
               ><button role="tab" data-page="11" aria-selected="false">
-                FX &amp; rates</button
+                Bond price</button
               ><button role="tab" data-page="12" aria-selected="false">
-                Notes</button
+                FX &amp; rates</button
               ><button role="tab" data-page="13" aria-selected="false">
+                Notes</button
+              ><button role="tab" data-page="14" aria-selected="false">
                 Final table
               </button>
             </div>
-            <span class="paper-label">A4 · Landscape · 14 pages</span>
+            <span class="paper-label">A4 · Landscape · 15 pages</span>
           </div>
           <div
             id="yearNav"
@@ -520,9 +542,9 @@
           <div id="emptyState" class="empty-state">
             <h2>Cashflow report</h2>
             <p>
-              Enter your starting cash, exchange rate and purchase price.<br />Then
-              explore interest received, capital value and profit or loss as
-              markets change.
+              Enter your starting cash and purchase price.<br />Then explore
+              interest received, capital value and profit or loss as markets
+              change.
             </p>
             <button id="demoEmpty" class="primary">View example report</button>
             <div class="empty-features">
@@ -568,12 +590,12 @@
       src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.performance1"
     ></script>
     <script src="stocks-beta2-charts.js?v=20261122.performance1"></script>
-    <script src="bond-cashflow/model.js"></script>
+    <script src="bond-cashflow/model.js?v=20261122.usd1"></script>
     <script src="bond-cashflow/favourites.js"></script>
-    <script src="bond-cashflow/report.js"></script>
+    <script src="bond-cashflow/report.js?v=20261122.usd1"></script>
     <script src="vendor/jspdf-4.2.0.umd.min.js"></script>
-    <script src="bond-cashflow/market-data.js"></script>
-    <script src="bond-cashflow/price-chart.js"></script>
-    <script src="bond-cashflow/studio.js"></script>
+    <script src="bond-cashflow/market-data.js?v=20261122.usd1"></script>
+    <script src="bond-cashflow/price-chart.js?v=20261122.usd1"></script>
+    <script src="bond-cashflow/studio.js?v=20261122.usd1"></script>
   </body>
 </html>

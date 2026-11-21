@@ -162,6 +162,60 @@
   function getNum(id) {
     return $(id).value === '' ? null : Number($(id).value);
   }
+  const investmentCurrency = () => $('inputs').elements.capitalCurrency.value;
+  function currentFxQuote() {
+    return market.fxReference(
+      D.fx,
+      $('currency').value.toUpperCase(),
+      $('settlement').value,
+      investmentCurrency()
+    );
+  }
+  function applyFxQuote(ref) {
+    setValue('fx', ref.value);
+    setValue('fxDate', ref.date);
+    fxOrigin = ref.source + ' · ' + ref.date;
+  }
+  function updateCurrencyFields({ restore = false, dateChanged = false } = {}) {
+    const capital = investmentCurrency(),
+      currency = $('currency').value.toUpperCase();
+    const same = currency === capital,
+      pair = capital + '/' + currency;
+    const changed = $('fx').dataset.pair !== pair;
+    $('fx').dataset.pair = pair;
+    $('fx').readOnly = same;
+    for (const id of ['fx', 'fxDate', 'upFx', 'downFx', 'fxStep']) {
+      $(id).closest('label').hidden = same;
+      $(id).disabled = same;
+    }
+    $('fxUnit').textContent = capital + ' per ' + currency;
+    $('feeUnit').textContent = $('budgetUnit').textContent = capital;
+    $('budget').placeholder = 'Enter ' + capital + ' amount';
+    $('constantAssumptions').textContent =
+      (same ? 'Purchase yield stays' : 'Purchase yield and FX stay') +
+      ' constant.';
+    $('gridHint').textContent = same
+      ? 'The grid varies bond yield. Interest is received directly in ' +
+        capital +
+        '.'
+      : 'FX runs across the columns. Capital and total value also vary by bond yield.';
+    if (same) {
+      setValue('fx', 1);
+      setValue('fxDate', null);
+      fxOrigin = 'Both invested capital and bond are in ' + capital + '.';
+    } else if (
+      !restore &&
+      (changed || (dateChanged && $('fx').dataset.automatic === 'true'))
+    ) {
+      if (changed && !(getNum('fxStep') > 0)) setValue('fxStep', 5);
+      setValue('fx', null);
+      setValue('fxDate', null);
+      fxOrigin = 'User-entered FX';
+      $('fx').dataset.automatic = String(capital === 'USD');
+      const quote = capital === 'USD' && currentFxQuote();
+      if (quote) applyFxQuote(quote);
+    }
+  }
   function choose(id) {
     selected = byId.get(id) || watchlist.find((r) => r.id === id) || null;
     const b = selected || {},
@@ -180,14 +234,7 @@
     setValue('structure', b.structure || 'unsupported');
     setValue('dayCount', b.dayCount || 'ACT/ACT');
     for (const key of ['price', 'priceDate', 'accrued']) setValue(key, null);
-    if ($('fx').dataset.currency !== curr || curr === 'SGD') {
-      setValue('fx', curr === 'SGD' ? 1 : null);
-      setValue('fxDate', null);
-      fxOrigin =
-        curr === 'SGD' ? 'SGD purchase' : 'User entered; date not supplied';
-    }
-    $('fx').dataset.currency = curr;
-    $('fx').readOnly = curr === 'SGD';
+    updateCurrencyFields();
     $('bondDetails').open =
       id === '__custom__' || Boolean(selected && !selected.structure);
     priceOrigin = 'Enter a purchase price or use a dated Market Intel quote.';
@@ -200,7 +247,6 @@
   }
   function updateTerms() {
     const currency = $('currency').value.toUpperCase();
-    $('fxUnit').textContent = 'SGD per ' + currency;
     $('bondTerms').textContent = [
       $('isin').value,
       getNum('coupon') === null
@@ -218,8 +264,8 @@
         : 'Regular fixed-coupon model. Verify dealing minimums and terms before use.';
     const row = hubBond();
     window.BondPriceChart.show(row, D.curves);
-    const fxQuote = market.fxReference(D.fx, currency, $('settlement').value);
-    $('referenceFx').hidden = currency === 'SGD';
+    const fxQuote = currentFxQuote();
+    $('referenceFx').hidden = currency === investmentCurrency();
     $('referenceFx').disabled = !fxQuote;
     $('referenceFx').textContent = fxQuote
       ? 'Use FRED FX · ' + R.fmt(fxQuote.value, 4) + ' · ' + fxQuote.date
@@ -248,6 +294,7 @@
         minimum: getNum('minimum'),
         increment: getNum('increment')
       },
+      capitalCurrency: investmentCurrency(),
       budget: getNum('budget'),
       fx: getNum('fx'),
       cleanPrice: getNum('price'),
@@ -257,10 +304,16 @@
       lotMode: $('lotMode').value,
       path: $('path').value,
       yieldStep: getNum('yieldStep'),
-      fxStep: getNum('fxStep'),
+      fxStep: $('fx').readOnly ? 0 : getNum('fxStep'),
       historyYears: Number($('historyYears').value),
-      up: { yieldBps: getNum('upYield'), fxPct: getNum('upFx') },
-      down: { yieldBps: getNum('downYield'), fxPct: getNum('downFx') },
+      up: {
+        yieldBps: getNum('upYield'),
+        fxPct: $('fx').readOnly ? 0 : getNum('upFx')
+      },
+      down: {
+        yieldBps: getNum('downYield'),
+        fxPct: $('fx').readOnly ? 0 : getNum('downFx')
+      },
       priceSource: priceOrigin,
       fxSource: fxOrigin,
       priceDate: $('priceDate').value || null,
@@ -270,6 +323,10 @@
   }
   function write(x) {
     const b = x.bond || {};
+    const capital = x.capitalCurrency ?? 'SGD';
+    if (!['USD', 'SGD'].includes(capital))
+      throw Error('Choose an input file with a supported investment currency.');
+    $('inputs').elements.capitalCurrency.value = capital;
     selected = byId.get(b.id) || byId.get(b.isin + '|' + b.currency) || null;
     for (const key of [
       'name',
@@ -307,8 +364,8 @@
     priceOrigin = x.priceSource || 'Imported user input; date not supplied';
     fxOrigin = x.fxSource || 'Imported user input; date not supplied';
     example = !!x.example;
-    $('fx').readOnly = b.currency === 'SGD';
-    $('fx').dataset.currency = b.currency || '';
+    $('fx').dataset.automatic = 'false';
+    updateCurrencyFields({ restore: true });
     if (selected) {
       $('list').value = D.quick.some((r) => r.id === selected.id)
         ? 'quick'
@@ -331,14 +388,19 @@
       $(id).disabled = true;
     $('validation').textContent = '';
     $('calculate').textContent = report
-      ? 'Update 14-page report'
-      : 'Build 14-page report';
+      ? 'Update 15-page report'
+      : 'Build 15-page report';
   }
   function build() {
     try {
       const x = read();
       result = M.run(x);
-      report = R.build(result, D, reportDate());
+      report = R.build(
+        result,
+        D,
+        reportDate(),
+        window.BondPriceChart.snapshot()
+      );
       dirty = false;
       $('validation').textContent = '';
       $('dirtyNotice').hidden = true;
@@ -355,34 +417,59 @@
       $('capitalSummary').hidden = false;
       $('capitalSummary').dataset.stale = 'false';
       $('capitalStale').hidden = true;
-      $('capitalSgd').textContent = 'SGD ' + R.fmt(cap.sgd);
+      $('capitalCash').textContent =
+        cap.capitalCurrency + ' ' + R.fmt(cap.amount);
       $('capitalNativeLabel').textContent =
-        'Capital cash · ' + cap.currency + ' equivalent';
+        cap.currency === cap.capitalCurrency
+          ? 'Cash used at purchase'
+          : 'Capital cash · ' + cap.currency + ' equivalent';
       $('capitalNative').textContent =
-        cap.currency + ' ' + R.fmt(cap.equivalent);
+        cap.currency +
+        ' ' +
+        R.fmt(
+          cap.currency === cap.capitalCurrency ? p.cashUsed : cap.equivalent
+        );
       $('capitalFxNote').textContent =
-        'SGD ' + R.fmt(p.x.fx, 4) + ' for ' + cap.currency + ' 1 · before fees';
+        cap.currency === cap.capitalCurrency
+          ? 'Includes accrued interest and upfront fees'
+          : cap.capitalCurrency +
+            ' ' +
+            R.fmt(p.x.fx, 4) +
+            ' for ' +
+            cap.currency +
+            ' 1 · before fees';
       $('maturityValue').textContent =
         cap.currency + ' ' + R.fmt(cap.maturityValue);
       $('maturityDate').textContent =
         'Principal on ' + cap.maturity + ' · assumes repayment';
-      $('metricFace').textContent = R.cash(base.nav);
+      $('metricFace').textContent = R.cash(
+        base.nav,
+        result.prepared.x.capitalCurrency
+      );
       $('metricResidual').textContent =
-        R.signedCash(base.nav - p.x.budget) +
+        R.signedCash(base.nav - p.x.budget, result.prepared.x.capitalCurrency) +
         ' capital profit/loss · before received interest';
-      $('metricCash').textContent = R.cash(base.cumulativeCF);
-      $('metricTotal').textContent = R.cash(base.total);
+      $('metricCash').textContent = R.cash(
+        base.cumulativeCF,
+        result.prepared.x.capitalCurrency
+      );
+      $('metricTotal').textContent = R.cash(
+        base.total,
+        result.prepared.x.capitalCurrency
+      );
       $('metricGain').textContent =
-        (base.gain >= 0 ? '+' : '') + R.cash(base.gain) + ' vs original cash';
+        (base.gain >= 0 ? '+' : '') +
+        R.cash(base.gain, result.prepared.x.capitalCurrency) +
+        ' vs original cash';
       $('resultNote').textContent =
-        'Capital remaining (NAV) is what your investment is worth, excluding interest already received. Capital profit/loss compares that value with your starting SGD cash. It includes unpaid interest and cash left over. Cashflow is the interest already paid to you. ' +
+        'Capital remaining (NAV) is what your investment is worth, excluding interest already received. Capital profit/loss compares that value with your starting cash. It includes unpaid interest and cash left over. Cashflow is the interest already paid to you. ' +
         (p.b.structure === 'callable-proxy'
           ? 'This illustration assumes the issuer pays in full and does not repay the bond early. '
           : '') +
         (p.x.lotMode === 'fractional'
           ? 'Fractional holding: dealing minimums are not enforced.'
           : 'Minimum denomination and face increments are included.');
-      $('calculate').textContent = 'Update 14-page report';
+      $('calculate').textContent = 'Update 15-page report';
       renderPage();
       renderTables();
       return true;
@@ -396,7 +483,7 @@
   function renderPage() {
     if (!report) return;
     $('compareControls').hidden = !compareMode;
-    $('historyControls').hidden = compareMode || pageIndex !== 11;
+    $('historyControls').hidden = compareMode || pageIndex !== 12;
     $('historyWindow').value = String(result.prepared.x.historyYears);
     $('compareTab').setAttribute('aria-selected', String(compareMode));
     if (compareMode) {
@@ -404,12 +491,17 @@
       return;
     }
     $('pageNavigation').hidden = false;
-    pageIndex = Math.max(0, Math.min(13, pageIndex));
+    pageIndex = Math.max(0, Math.min(report.pages.length - 1, pageIndex));
     $('pageMount').innerHTML = R.svg(report.pages[pageIndex]);
     $('pageCount').textContent =
-      'Page ' + (pageIndex + 1) + ' of 14 · ' + report.pages[pageIndex].title;
+      'Page ' +
+      (pageIndex + 1) +
+      ' of ' +
+      report.pages.length +
+      ' · ' +
+      report.pages[pageIndex].title;
     $('prev').disabled = pageIndex === 0;
-    $('next').disabled = pageIndex === 13;
+    $('next').disabled = pageIndex === report.pages.length - 1;
     $('yearNav').hidden = pageIndex > 9;
     document.querySelectorAll('[data-page]').forEach((b) => {
       const idx = Number(b.dataset.page);
@@ -439,17 +531,21 @@
       renderCompareTable();
       return;
     }
+    const hasFx =
+      result.prepared.b.currency !== result.prepared.x.capitalCurrency;
     $('dataTables').innerHTML =
       result.series
         .map(
           (s) =>
             '<div class="table-scroll"><table><caption>' +
             esc(s.label) +
-            ' · amounts in SGD</caption><thead><tr>' +
+            ' · amounts in ' +
+            result.prepared.x.capitalCurrency +
+            '</caption><thead><tr>' +
             [
               'Year',
               'Bond yield',
-              'FX',
+              ...(hasFx ? ['FX'] : []),
               'Interest this year',
               'Interest so far',
               'Bond value',
@@ -469,7 +565,7 @@
                   [
                     r.years,
                     R.fmt(r.yield, 3) + '%',
-                    R.fmt(r.fx, 4),
+                    ...(hasFx ? [R.fmt(r.fx, 4)] : []),
                     R.fmt(r.annualCF, 2),
                     R.fmt(r.cumulativeCF, 2),
                     R.fmt(r.cleanNAV, 2),
@@ -490,6 +586,8 @@
   }
   function matrixTable() {
     if (!result || pageIndex > 9) return '';
+    const hasFx =
+      result.prepared.b.currency !== result.prepared.x.capitalCurrency;
     const v = R.heatView(result.prepared, pageIndex + 1),
       table = (caption, headers, rows) =>
         '<div class="table-scroll"><table><caption>' +
@@ -510,17 +608,27 @@
       table(
         'Interest received - Year ' +
           (pageIndex + 1) +
-          ' - changes with FX only',
-        ['Target FX', 'Interest received SGD'],
-        v.cashflow.map((c) => [R.fmt(c.fx, 4), R.fmt(c.value, 2)])
+          (hasFx ? ' - changes with FX only' : ''),
+        [
+          ...(hasFx ? ['Target FX'] : []),
+          'Interest received ' + result.prepared.x.capitalCurrency
+        ],
+        v.cashflow.map((c) => [
+          ...(hasFx ? [R.fmt(c.fx, 4)] : []),
+          R.fmt(c.value, 2)
+        ])
       ) +
       table(
-        'Capital remaining - Year ' + (pageIndex + 1) + ' - exact SGD values',
+        'Capital remaining - Year ' +
+          (pageIndex + 1) +
+          ' - exact ' +
+          result.prepared.x.capitalCurrency +
+          ' values',
         [
           'Target yield %',
-          'Target FX',
+          ...(hasFx ? ['Target FX'] : []),
           'Applied yield %',
-          'Applied FX',
+          ...(hasFx ? ['Applied FX'] : []),
           'Bond price per 100',
           'Capital value',
           'Capital profit/loss',
@@ -529,9 +637,9 @@
         v.rows.flatMap((row) =>
           row.cells.map((r, i) => [
             R.fmt(row.yieldTarget, 3),
-            R.fmt(v.columns[i].fx, 4),
+            ...(hasFx ? [R.fmt(v.columns[i].fx, 4)] : []),
             R.fmt(r.yield, 3),
-            R.fmt(r.fx, 4),
+            ...(hasFx ? [R.fmt(r.fx, 4)] : []),
             row.repaid ? 'Repaid' : R.fmt(r.cleanPrice, 3),
             R.fmt(r.nav, 2),
             R.fmt(r.capitalPnl, 2),
@@ -542,6 +650,7 @@
     );
   }
   function demo() {
+    $('inputs').elements.capitalCurrency.value = 'SGD';
     const t = D.demoBond;
     $('list').value = D.quick.includes(t) ? 'quick' : 'catalogue';
     $('search').value = '';
@@ -585,6 +694,7 @@
     document.body.classList.remove('presentation');
     $('present').textContent = 'Present';
     $('inputs').reset();
+    delete $('fx').dataset.pair;
     setValue('budget', null);
     setValue('fx', null);
     setValue('price', null);
@@ -671,7 +781,7 @@
       await new Promise((resolve) => setTimeout(resolve, 30));
       const pdf = R.pdf(report, window.jspdf.jsPDF);
       pdf.save('Bond Cashflow Report - Type PDF - ' + stamp() + '.pdf');
-      toast('14-page A4 landscape PDF generated.');
+      toast('15-page A4 landscape PDF generated.');
     } catch (e) {
       toast('PDF could not be generated: ' + e.message);
     } finally {
@@ -726,6 +836,7 @@
       example = false;
     }
     if (e.target.id === 'fx') {
+      $('fx').dataset.automatic = 'false';
       setValue('fxDate', null);
       fxOrigin = 'User-entered FX';
       example = false;
@@ -735,23 +846,21 @@
   $('inputs').addEventListener('change', (e) => {
     if (['list', 'bond', 'search'].includes(e.target.id)) return;
     if (e.target.id === 'currency') {
-      if ($('fx').dataset.currency !== $('currency').value.toUpperCase()) {
-        setValue('fxDate', null);
-        setValue('price', null);
-        setValue('priceDate', null);
-        priceOrigin = 'Enter the purchase price for this currency.';
-        fxOrigin =
-          $('currency').value.toUpperCase() === 'SGD'
-            ? 'SGD purchase'
-            : 'User-entered FX';
-      }
       $('currency').value = $('currency').value.toUpperCase();
-      $('fx').readOnly = $('currency').value === 'SGD';
-      if ($('fx').readOnly) setValue('fx', 1);
-      else if ($('fx').dataset.currency !== $('currency').value)
-        setValue('fx', null);
-      $('fx').dataset.currency = $('currency').value;
+      setValue('price', null);
+      setValue('priceDate', null);
+      priceOrigin = 'Enter the purchase price for this currency.';
     }
+    if (e.target.name === 'capitalCurrency') {
+      example = false;
+      if (getNum('budget') !== null)
+        toast(
+          'The entered capital and fees are now in ' +
+            investmentCurrency() +
+            '.'
+        );
+    }
+    updateCurrencyFields({ dateChanged: e.target.id === 'settlement' });
     if (e.target.id === 'priceDate')
       priceOrigin =
         'User-entered clean price' +
@@ -776,15 +885,10 @@
     populateOptions(selected?.id);
   });
   $('referenceFx').addEventListener('click', () => {
-    const ref = market.fxReference(
-      D.fx,
-      $('currency').value.toUpperCase(),
-      $('settlement').value
-    );
+    const ref = currentFxQuote();
     if (!ref) return;
-    setValue('fx', ref.value);
-    setValue('fxDate', ref.date);
-    fxOrigin = ref.source + ' · ' + ref.date;
+    applyFxQuote(ref);
+    $('fx').dataset.automatic = 'true';
     example = false;
     updateTerms();
     markDirty();
@@ -869,7 +973,10 @@
       'Bond Cashflow Inputs - Type JSON - ' + stamp() + '.json',
       JSON.stringify(
         {
-          schema: 'bond-cashflow-studio/1',
+          schema:
+            investmentCurrency() === 'USD'
+              ? 'bond-cashflow-studio/2'
+              : 'bond-cashflow-studio/1',
           exportedAt: new Date().toISOString(),
           inputs: read()
         },
@@ -886,7 +993,12 @@
       if (!f) return;
       if (f.size > 2e6) throw Error('Input file is too large.');
       const x = JSON.parse(await f.text());
-      if (x.schema !== 'bond-cashflow-studio/1' || !x.inputs)
+      if (
+        !['bond-cashflow-studio/1', 'bond-cashflow-studio/2'].includes(
+          x.schema
+        ) ||
+        !x.inputs
+      )
         throw Error('Choose an input file saved by Bond Cashflow Studio.');
       write(x.inputs);
       if (build()) toast('Inputs loaded and report rebuilt.');
@@ -907,7 +1019,9 @@
   function renderCompareTable() {
     if (!result) return;
     $('dataTables').innerHTML =
-      '<div class="table-scroll"><table><caption>Chosen years · exact values in SGD</caption><thead><tr>' +
+      '<div class="table-scroll"><table><caption>Chosen years · exact values in ' +
+      result.prepared.x.capitalCurrency +
+      '</caption><thead><tr>' +
       [
         'Scenario',
         'Year',
@@ -943,7 +1057,13 @@
       '</tbody></table></div>';
   }
   function comparisonReport() {
-    return R.comparison(result, compareYears[0], compareYears[1], reportDate());
+    return R.comparison(
+      result,
+      compareYears[0],
+      compareYears[1],
+      reportDate(),
+      window.BondPriceChart.snapshot()
+    );
   }
   function renderComparison() {
     renderCompareTable();
@@ -983,7 +1103,11 @@
       ]
         .map(
           ([label, v]) =>
-            '<span>' + label + '<b>' + esc(R.signedCash(v)) + '</b></span>'
+            '<span>' +
+            label +
+            '<b>' +
+            esc(R.signedCash(v, result.prepared.x.capitalCurrency)) +
+            '</b></span>'
         )
         .join('');
   }
@@ -1017,6 +1141,9 @@
     } catch (e) {
       toast('Could not generate comparison PDF: ' + e.message);
     }
+  });
+  $('priceRange').addEventListener('change', () => {
+    if (report && !dirty) build();
   });
   $('historyWindow').addEventListener('change', () => {
     setValue('historyYears', $('historyWindow').value);

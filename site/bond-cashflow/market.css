@@ -376,3 +376,49 @@ body.presentation .bottom-nav.hub-primary {
     margin-bottom: 12px;
   }
 }
+
+.capital-currency {
+  border: 0;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  gap: 4px;
+}
+.capital-currency legend {
+  font-weight: 650;
+  font-size: 0.875rem;
+  margin-bottom: 7px;
+  padding: 0;
+}
+.form-section .capital-currency label {
+  position: relative;
+  margin: 0;
+}
+.capital-currency input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.form-section .capital-currency label span {
+  display: block;
+  border: 1px solid #b9cbcb;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  font-weight: 650;
+  color: #36575d;
+}
+.capital-currency input:checked + span {
+  background: #15575d;
+  border-color: #15575d;
+  color: white;
+}
+.capital-currency input:focus-visible + span {
+  outline: 3px solid #93b6d0;
+  outline-offset: 2px;
+}
+.field-pair:has(> label[hidden]) {
+  grid-template-columns: 1fr;
+}

@@ -36,8 +36,9 @@
       minimumFractionDigits: d,
       maximumFractionDigits: d
     });
-  const cash = (v) => 'S$' + fmt(v),
-    k = (v) => 'S$' + fmt(v / 1000, 1) + 'k',
+  const prefix = (currency) => (currency === 'USD' ? 'US$' : 'S$');
+  const cash = (v, currency = 'SGD') => prefix(currency) + fmt(v),
+    k = (v, currency) => prefix(currency) + fmt(v / 1000, 1) + 'k',
     pct = (v) => fmt(v, 2) + '%',
     sgn = (v) => (v >= 0 ? '+' : '') + fmt(v, 1) + '%';
   class Page {
@@ -121,18 +122,20 @@
   }
   function capitalSummary(p) {
     return {
-      sgd: p.x.budget,
+      amount: p.x.budget,
+      ...(p.x.capitalCurrency === 'SGD' ? { sgd: p.x.budget } : {}),
+      capitalCurrency: p.x.capitalCurrency,
       currency: p.b.currency,
       equivalent: p.x.budget / p.x.fx,
       maturityValue: p.nominal,
       maturity: p.b.maturity
     };
   }
-  function signedCash(v) {
-    return (v < 0 ? '-' : '+') + cash(Math.abs(v));
+  function signedCash(v, currency) {
+    return (v < 0 ? '-' : '+') + cash(Math.abs(v), currency);
   }
-  function signedK(v) {
-    return (v < 0 ? '-' : '+') + k(Math.abs(v));
+  function signedK(v, currency) {
+    return (v < 0 ? '-' : '+') + k(Math.abs(v), currency);
   }
   function header(page, p, eyebrow, title, generated) {
     const cap = capitalSummary(p);
@@ -172,14 +175,26 @@
       {
         x: 102,
         w: 87,
-        label: 'Capital cash - ' + cap.currency + ' equivalent',
-        value: cap.currency + ' ' + fmt(cap.equivalent),
-        note:
-          'At purchase FX: SGD ' +
-          fmt(p.x.fx, 4) +
-          ' for ' +
+        label:
+          cap.currency === cap.capitalCurrency
+            ? 'Cash used at purchase'
+            : 'Capital cash - ' + cap.currency + ' equivalent',
+        value:
           cap.currency +
-          ' 1',
+          ' ' +
+          fmt(
+            cap.currency === cap.capitalCurrency ? p.cashUsed : cap.equivalent
+          ),
+        note:
+          cap.currency === cap.capitalCurrency
+            ? 'Includes accrued interest and upfront fees'
+            : 'At purchase FX: ' +
+              cap.capitalCurrency +
+              ' ' +
+              fmt(p.x.fx, 4) +
+              ' for ' +
+              cap.currency +
+              ' 1',
         fill: '#e8f2ed',
         color: C.navy
       },
@@ -187,7 +202,7 @@
         x: 193,
         w: 92,
         label: 'CAPITAL CASH - STARTING AMOUNT',
-        value: 'SGD ' + fmt(cap.sgd),
+        value: cap.capitalCurrency + ' ' + fmt(cap.amount),
         note: 'Your starting cash, before any upfront fees',
         fill: C.navy,
         color: C.white
@@ -221,8 +236,9 @@
         : crop(
             'Price: ' +
               (p.x.priceSource || 'User entered') +
-              ' | FX: ' +
-              (p.x.fxSource || 'User entered'),
+              (p.b.currency === p.x.capitalCurrency
+                ? ''
+                : ' | FX: ' + (p.x.fxSource || 'User entered')),
             140
           ),
       7,
@@ -277,8 +293,11 @@
     };
   }
   function fxHeading(p) {
+    if (p.b.currency === p.x.capitalCurrency) return 'Investment currency';
     return (
-      'FX: SGD for ' +
+      'FX: ' +
+      p.x.capitalCurrency +
+      ' for ' +
       p.b.currency +
       ' 1' +
       (p.x.path === 'gradual' ? ' - Year 10 targets' : '')
@@ -304,7 +323,17 @@
         delta = v.baseline.cumulativeCF
           ? 100 * (value / v.baseline.cumulativeCF - 1)
           : 0;
-      page.text(xx + cw / 2, y + 18, fmt(c.fx, 3), 7.2, C.ink, true, 'center');
+      page.text(
+        xx + cw / 2,
+        y + 18,
+        p.b.currency === p.x.capitalCurrency
+          ? p.x.capitalCurrency
+          : fmt(c.fx, 3),
+        7.2,
+        C.ink,
+        true,
+        'center'
+      );
       page.rect(
         xx + 0.25,
         y + 21,
@@ -313,16 +342,29 @@
         tone(delta),
         central ? C.navy : C.white,
         central ? 0.65 : 0.15,
-        'FX ' + fmt(c.fx, 4) + '; cashflow received ' + cash(value)
+        (p.b.currency === p.x.capitalCurrency
+          ? 'Cashflow received '
+          : 'FX ' + fmt(c.fx, 4) + '; cashflow received ') +
+          cash(value, p.x.capitalCurrency)
       );
-      page.text(xx + cw / 2, y + 27, k(value), 8, C.ink, central, 'center');
+      page.text(
+        xx + cw / 2,
+        y + 27,
+        k(value, p.x.capitalCurrency),
+        8,
+        C.ink,
+        central,
+        'center'
+      );
     });
     page.text(
       x,
       y + 34,
       'Fixed interest in ' +
         p.b.currency +
-        '; only its SGD value changes with the exchange rate.',
+        (p.b.currency === p.x.capitalCurrency
+          ? '.'
+          : '; its ' + p.x.capitalCurrency + ' value varies with FX.'),
       6.9,
       C.muted
     );
@@ -374,7 +416,9 @@
       page.text(
         x + lw + (i + 0.5) * cw,
         y + 23,
-        fmt(c.fx, 3),
+        p.b.currency === p.x.capitalCurrency
+          ? p.x.capitalCurrency
+          : fmt(c.fx, 3),
         7.2,
         C.ink,
         true,
@@ -414,9 +458,9 @@
           central ? C.navy : C.white,
           central ? 0.65 : 0.15,
           'Capital value ' +
-            cash(r.nav) +
+            cash(r.nav, p.x.capitalCurrency) +
             '; capital profit/loss ' +
-            signedCash(r.capitalPnl) +
+            signedCash(r.capitalPnl, p.x.capitalCurrency) +
             '; bond price ' +
             fmt(r.cleanPrice, 3) +
             ' per 100'
@@ -424,7 +468,7 @@
         page.text(
           xx + cw / 2,
           yy + 2.8,
-          k(r.nav),
+          k(r.nav, p.x.capitalCurrency),
           7.3,
           C.ink,
           central,
@@ -433,7 +477,7 @@
         page.text(
           xx + cw / 2,
           yy + 5.7,
-          signedK(r.capitalPnl),
+          signedK(r.capitalPnl, p.x.capitalCurrency),
           6.4,
           r.capitalPnl < 0 ? C.rust : C.teal,
           false,
@@ -458,7 +502,7 @@
     page.text(
       x,
       y + 14,
-      'Top: total value. Below: gain/loss in SGD.',
+      'Top: total value. Below: gain/loss in ' + p.x.capitalCurrency + '.',
       6.9,
       C.muted
     );
@@ -468,7 +512,9 @@
       page.text(
         x + lw + (i + 0.5) * cw,
         y + 25,
-        fmt(c.fx, 3),
+        p.b.currency === p.x.capitalCurrency
+          ? p.x.capitalCurrency
+          : fmt(c.fx, 3),
         7.2,
         C.ink,
         true,
@@ -498,14 +544,14 @@
           central ? C.navy : C.white,
           central ? 0.65 : 0.15,
           'Cashflow plus capital ' +
-            cash(r.total) +
+            cash(r.total, p.x.capitalCurrency) +
             '; total gain/loss ' +
-            signedCash(r.gain)
+            signedCash(r.gain, p.x.capitalCurrency)
         );
         page.text(
           xx + cw / 2,
           yy + rh / 2 - 1,
-          k(r.total),
+          k(r.total, p.x.capitalCurrency),
           7.8,
           C.ink,
           central,
@@ -514,7 +560,7 @@
         page.text(
           xx + cw / 2,
           yy + rh / 2 + 3,
-          signedK(r.gain),
+          signedK(r.gain, p.x.capitalCurrency),
           6.5,
           r.gain < 0 ? C.rust : C.teal,
           false,
@@ -544,11 +590,11 @@
       12,
       188,
       'NO CHANGE:  interest received ' +
-        cash(b.cumulativeCF) +
+        cash(b.cumulativeCF, p.x.capitalCurrency) +
         '  +  capital ' +
-        cash(b.nav) +
+        cash(b.nav, p.x.capitalCurrency) +
         '  =  ' +
-        cash(b.total),
+        cash(b.total, p.x.capitalCurrency),
       8.5,
       C.navy,
       true
@@ -557,8 +603,8 @@
       12,
       193,
       (p.x.path === 'gradual'
-        ? 'Yield/FX are Year 10 targets. '
-        : 'Yield/FX change after purchase. ') +
+        ? 'Scenario targets apply at Year 10. '
+        : 'Scenario changes apply after purchase. ') +
         '*Bond price per 100 at Year ' +
         year +
         '; unpaid interest is extra. Outlined = no change; amber = lower, teal = higher.',
@@ -573,7 +619,7 @@
       page.text(x + i * 56 + 12, y + 1, s.label, 8, C.ink);
     });
   }
-  function chart(page, series, key, x, y, w, h, title, budget) {
+  function chart(page, series, key, x, y, w, h, title, budget, currency) {
     page.text(x, y + 4, title, 11, C.navy, true);
     const xx = x + 18,
       yy = y + 11,
@@ -631,7 +677,7 @@
         s.dash
       )
     );
-    page.text(x + 1, y + 10, 'SGD', 6.8, C.muted);
+    page.text(x + 1, y + 10, currency, 6.8, C.muted);
   }
   function chartPage(r, generated) {
     const p = r.prepared,
@@ -653,7 +699,8 @@
       142,
       45,
       'Interest received',
-      null
+      null,
+      p.x.capitalCurrency
     );
     chart(
       page,
@@ -664,7 +711,8 @@
       142,
       55,
       'Capital value - excluding cashflow',
-      p.x.budget
+      p.x.budget,
+      p.x.capitalCurrency
     );
     chart(
       page,
@@ -675,7 +723,8 @@
       123,
       107,
       'Interest + capital value',
-      p.x.budget
+      p.x.budget,
+      p.x.capitalCurrency
     );
     page.line(158, 76, 158, 182);
     page.text(
@@ -683,7 +732,9 @@
       189,
       'YEAR 10  ' +
         r.series
-          .map((s) => s.label + ': ' + cash(s.rows[10].total))
+          .map(
+            (s) => s.label + ': ' + cash(s.rows[10].total, p.x.capitalCurrency)
+          )
           .join('   /   '),
       9,
       C.navy,
@@ -692,7 +743,7 @@
     page.text(
       12,
       194,
-      'A/C are user-defined scenarios, not statistical best/worst bounds. No change holds yield and FX fixed; the bond price can still change over time.',
+      'A/C are user-defined scenarios, not statistical best/worst bounds. The bond price can change over time even when the purchase yield stays fixed.',
       7,
       C.muted
     );
@@ -735,25 +786,29 @@
       return;
     }
     const isFX = key === 'fx',
-      base = isFX && p.b.currency === 'USD' ? p.x.fx : last[key],
-      forecast = p.targets.map((s) => ({
-        color: s.color,
-        values: [
-          { date: p.x.settlement, v: base },
-          ...Array.from({ length: 10 }, (_, i) => {
-            const d = M.addYears(p.x.settlement, i + 1),
-              f = M.factor(p, d);
-            return {
-              date: d,
-              v: isFX
-                ? p.b.currency === 'USD'
-                  ? p.x.fx + (s.fx - p.x.fx) * f
-                  : last[key]
-                : base + (s.yield - p.y0) * f
-            };
-          })
-        ]
-      }));
+      tracksFx = p.x.capitalCurrency === 'SGD' && p.b.currency === 'USD',
+      inverseFx = p.x.capitalCurrency === 'USD' && p.b.currency === 'SGD',
+      toBenchmark = (rate) => (inverseFx ? 1 / rate : rate),
+      base = isFX ? toBenchmark(p.x.fx) : last[key],
+      forecast =
+        isFX && !tracksFx && !inverseFx
+          ? []
+          : p.targets.map((s) => ({
+              color: s.color,
+              values: [
+                { date: p.x.settlement, v: base },
+                ...Array.from({ length: 10 }, (_, i) => {
+                  const d = M.addYears(p.x.settlement, i + 1),
+                    f = M.factor(p, d);
+                  return {
+                    date: d,
+                    v: isFX
+                      ? toBenchmark(p.x.fx + (s.fx - p.x.fx) * f)
+                      : base + (s.yield - p.y0) * f
+                  };
+                })
+              ]
+            }));
     const vals = [
         ...rows.map((r) => r[key]).filter(Number.isFinite),
         ...forecast.flatMap((s) => s.values.map((v) => v.v))
@@ -826,7 +881,7 @@
     page.text(
       cutX + (ww - historyW) / 2,
       y + 14,
-      '10 years, compressed',
+      forecast.length ? '10 years, compressed' : 'No FX projection',
       5.9,
       C.muted,
       false,
@@ -954,15 +1009,13 @@
       12,
       195,
       'Treasury paths provide context, not forecasts for the selected bond. Events mark dates, not proof of cause. ' +
-        (p.b.currency === 'USD'
-          ? 'FX starts at your purchase assumption.'
-          : 'USD/SGD future paths stay flat for a non-USD bond.'),
+        'USD/SGD paths appear for purchases converting between USD and SGD.',
       6.5,
       C.muted
     );
     return page;
   }
-  function comparison(result, leftYear, rightYear, generated) {
+  function comparison(result, leftYear, rightYear, generated, priceHistory) {
     const p = result.prepared,
       years = [leftYear, rightYear].map(Number);
     if (years.some((y) => !Number.isInteger(y) || y < 1 || y > 10))
@@ -994,7 +1047,7 @@
       page.text(
         x,
         192,
-        'No change: interest + capital = ' + cash(b.total),
+        'No change: interest + capital = ' + cash(b.total, p.x.capitalCurrency),
         8.5,
         i ? C.blue : C.teal,
         true
@@ -1006,13 +1059,15 @@
       195.5,
       '*Bond prices are per 100, before unpaid interest. ' +
         (p.x.path === 'gradual'
-          ? 'Yield/FX labels are Year 10 targets; each year follows the selected path.'
-          : 'Yield/FX change immediately after purchase.'),
+          ? 'Year 10 targets follow the selected path.'
+          : 'Scenario changes apply immediately after purchase.'),
       6,
       C.muted
     );
-    footer(page, p, 1, 1);
-    return { pages: [page], width: 297, height: 210, result };
+    const prices = bondPricePage(p, priceHistory, generated);
+    footer(page, p, 1, 2);
+    footer(prices, p, 2, 2);
+    return { pages: [page, prices], width: 297, height: 210, result };
   }
   function sourcesPage(p, ref, generated) {
     const page = new Page('Assumptions, definitions and sources');
@@ -1027,21 +1082,31 @@
     const left = [
       [
         'Your starting cash',
-        'The SGD amount is your original cash budget. Its USD (or other currency) equivalent uses the purchase exchange rate, before fees. This is different from the amount actually spent on bonds.'
+        'Your budget and fees are in ' +
+          p.x.capitalCurrency +
+          '. The purchase uses the clean price plus accrued interest. Unspent cash stays in the original investment currency.'
       ],
       [
         'Cashflow means interest received',
-        'Fixed bond interest does not change when market yields change. The SGD amount can change with the exchange rate on each payment date. Received interest is kept as cash and earns no further interest.'
+        'Coupon amounts are fixed in ' +
+          p.b.currency +
+          '. ' +
+          (p.b.currency === p.x.capitalCurrency
+            ? 'Payments stay in the same currency.'
+            : 'Payments are converted into ' +
+              p.x.capitalCurrency +
+              ' at the scenario rate on each payment date.') +
+          ' Interest received is held as cash.'
       ],
       [
         'Capital value and profit/loss',
-        'Capital remaining (NAV) is the bond value, unpaid interest and any unspent or repaid principal. It excludes interest already received. Capital profit/loss = this value minus your starting SGD cash. Total adds the received interest back once.'
+        'Capital remaining (NAV) is the bond value, unpaid interest and any unspent or repaid principal. It excludes interest already received. Capital profit/loss = this value minus your starting cash. Total adds the received interest back once.'
       ],
       [
         'How the scenarios change over time',
         p.x.path === 'gradual'
-          ? 'Yield and FX move linearly from purchase to Year 10. Each heat-map cell and each chart uses that same path.'
-          : 'Yield and FX move immediately after purchase and then stay constant. Year 0 is the recorded purchase, before the shock.'
+          ? 'Scenario changes take effect gradually from purchase to Year 10. The heat maps and charts use the same path.'
+          : 'Scenario changes take effect immediately after purchase and then stay constant. Year 0 is the recorded purchase, before the shock.'
       ],
       [
         'Bond price and maturity value',
@@ -1061,7 +1126,12 @@
       page.text(
         153,
         z,
-        s.label + '  |  Bond yield ' + pct(s.yield) + '  |  FX ' + fmt(s.fx, 4),
+        s.label +
+          '  |  Bond yield ' +
+          pct(s.yield) +
+          (p.b.currency === p.x.capitalCurrency
+            ? ''
+            : '  |  FX ' + fmt(s.fx, 4)),
         8.2,
         s.color,
         true
@@ -1140,9 +1210,9 @@
         ' | Increment ' +
         (p.b.increment === null ? 'unconfirmed' : fmt(p.b.increment)) +
         ' | Unspent ' +
-        cash(p.residual) +
+        cash(p.residual, p.x.capitalCurrency) +
         ' | Fees ' +
-        cash(p.x.fees),
+        cash(p.x.fees, p.x.capitalCurrency),
       7.5,
       C.ink,
       true
@@ -1163,9 +1233,9 @@
       12,
       70,
       'Spent on bonds including fees: ' +
-        cash(p.cashUsed) +
+        cash(p.cashUsed, p.x.capitalCurrency) +
         ' | Cash left over: ' +
-        cash(p.residual),
+        cash(p.residual, p.x.capitalCurrency),
       8.4,
       C.navy,
       true
@@ -1244,7 +1314,9 @@
     page.text(
       12,
       182,
-      'All amounts are SGD. Interest = all payments received so far. Capital = remaining value, excluding received interest; it is not profit alone.',
+      'All amounts are ' +
+        p.x.capitalCurrency +
+        '. Interest = all payments received so far. Capital = remaining value, excluding received interest; it is not profit alone.',
       7.5,
       C.muted
     );
@@ -1264,12 +1336,183 @@
     );
     return page;
   }
-  function build(result, ref, generated) {
+  function bondPricePage(p, snapshot, generated) {
+    const page = new Page('Historical bond price');
+    header(
+      page,
+      p,
+      'Market Intel / price history',
+      'Historical bond price',
+      generated
+    );
+    const points =
+      snapshot?.isin === String(p.b.isin || '').toUpperCase() &&
+      snapshot.currency === p.b.currency
+        ? snapshot.points
+        : [];
+    if (!points.length) {
+      page.rect(12, 77, 273, 80, '#f2f6f6');
+      page.text(22, 109, 'No dated price history available', 14, C.navy, true);
+      page.text(
+        22,
+        119,
+        'Market Intel has no matching price observations for these bond terms.',
+        9,
+        C.muted
+      );
+      return page;
+    }
+    const first = points[0],
+      last = points.at(-1);
+    const bids = points.filter((point) => !point.model),
+      modeled = points.filter((point) => point.model);
+    const unit = p.b.currency + ' per 100 face value';
+    page.text(
+      12,
+      76,
+      fmt(last.value, 3),
+      18,
+      last.model ? '#835495' : C.teal,
+      true
+    );
+    page.text(
+      51,
+      72,
+      last.model ? 'Latest estimated clean price' : 'Latest observed bid',
+      9,
+      C.navy,
+      true
+    );
+    page.text(51, 78, last.date + '  |  ' + last.source, 8, C.muted);
+    page.text(
+      285,
+      72,
+      snapshot.range + '  |  ' + first.date + ' to ' + last.date,
+      9,
+      C.navy,
+      true,
+      'right'
+    );
+    page.text(
+      285,
+      78,
+      bids.length + ' observed bids  |  ' + modeled.length + ' estimates',
+      8,
+      C.muted,
+      false,
+      'right'
+    );
+    const left = 30,
+      right = 281,
+      top = 92,
+      bottom = 164;
+    const timespan = Date.parse(last.date) - Date.parse(first.date);
+    const x = (date) =>
+      timespan
+        ? left +
+          ((right - left) * (Date.parse(date) - Date.parse(first.date))) /
+            timespan
+        : (left + right) / 2;
+    const values = points.map((point) => point.value);
+    const min = Math.min(...values),
+      max = Math.max(...values);
+    const pad = Math.max((max - min) * 0.09, 0.025),
+      low = min - pad,
+      high = max + pad;
+    const y = (value) =>
+      bottom - ((value - low) * (bottom - top)) / (high - low);
+    page.text(12, 88, 'Price (' + unit + ')', 8, C.muted);
+    for (let i = 0; i <= 4; i++) {
+      const value = low + (i * (high - low)) / 4;
+      page.line(left, y(value), right, y(value), C.line, 0.2);
+      page.text(
+        left - 3,
+        y(value) + 1,
+        fmt(value, 2),
+        7.5,
+        C.muted,
+        false,
+        'right'
+      );
+    }
+    const ticks = Math.min(4, timespan / 86400000);
+    for (let i = 0; i <= ticks; i++) {
+      const date = new Date(
+        Date.parse(first.date) + (ticks ? (timespan * i) / ticks : 0)
+      )
+        .toISOString()
+        .slice(0, 10);
+      page.text(
+        x(date),
+        bottom + 6,
+        date,
+        7.5,
+        C.muted,
+        false,
+        i === 0 && ticks ? 'left' : i === ticks && ticks ? 'right' : 'center'
+      );
+    }
+    function series(rows, color, dashed) {
+      let run = [],
+        previous;
+      function flush() {
+        if (run.length === 1)
+          page.rect(run[0][0] - 0.65, run[0][1] - 0.65, 1.3, 1.3, color);
+        else page.path(run, color, 0.7, dashed);
+        run = [];
+      }
+      for (const point of rows) {
+        if (
+          previous &&
+          Date.parse(point.date) - Date.parse(previous) > 45 * 86400000
+        )
+          flush();
+        run.push([x(point.date), y(point.value)]);
+        previous = point.date;
+      }
+      flush();
+    }
+    series(modeled, '#835495', true);
+    series(bids, C.teal, false);
+    if (bids.length) {
+      page.line(12, 178, 24, 178, C.teal, 0.7);
+      page.text(
+        27,
+        179,
+        'Observed bid  |  ' +
+          [...new Set(bids.map((point) => point.source))].join(', '),
+        8,
+        C.ink
+      );
+    }
+    if (modeled.length) {
+      page.line(158, 178, 170, 178, '#835495', 0.7, true);
+      page.text(
+        173,
+        179,
+        'Estimated clean price  |  FRED Treasury curve',
+        8,
+        C.ink
+      );
+    }
+    page.text(
+      12,
+      189,
+      modeled.length
+        ? 'FRED estimates use the Treasury curve and bond terms. Estimates before issuance are hypothetical.'
+        : 'Bid prices are historical observations. The purchase price used in the cashflow model is shown above.',
+      8,
+      C.muted
+    );
+    return page;
+  }
+  function build(result, ref, generated, priceHistory) {
     const p = result.prepared,
       pages = [];
     for (let i = 1; i <= 10; i++) pages.push(heatPage(p, i, generated));
     pages.push(
       chartPage(result, generated),
+      bondPricePage(p, priceHistory, generated),
       appendixPage(p, ref, generated),
       sourcesPage(p, ref, generated),
       tablePage(result, generated)
