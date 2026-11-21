@@ -103,6 +103,7 @@
   };
   const comparisonKey = 'market-hub-stocks-beta2-comparison-v1';
   const columnChoice = get('sb2-card-columns');
+  const researchLayout = get('sb2-research-layout');
   const fiscalToggle = get('sb2-fiscal-compare');
   const statementToggle = get('sb2-expand-statements');
   const statementSelector = 'details[data-fund-statement]';
@@ -155,6 +156,7 @@
     try {
       root.localStorage.setItem(comparisonKey, JSON.stringify({
         columns: columnChoice.value,
+        researchLayout: researchLayout.value,
         compareFiscalYears,
         fundamentalsWidth,
         history: history.settings(),
@@ -179,6 +181,8 @@
       columnChoice.value = saved.columns;
     }
     if (Number.isFinite(saved?.fundamentalsWidth)) setFundamentalsWidth(saved.fundamentalsWidth);
+    researchLayout.value = saved?.researchLayout === 'below' ? 'below' : 'side';
+    applyResearchLayout();
     compareFiscalYears = saved?.compareFiscalYears === true;
     applyFiscalComparison();
     if (!Array.isArray(saved?.cards)) return;
@@ -194,6 +198,8 @@
   }
 
   function fitCards() {
+    const fullWidth = deck.matches('[data-financial-compare], [data-research-below]');
+    columnChoice.disabled = fullWidth;
     statementToggle.disabled = !deck.hasAttribute('data-fund-expand-details') && !deck.querySelector(statementSelector);
     if (!cards.size || !deck.clientWidth) return;
     const style = root.getComputedStyle(deck);
@@ -204,7 +210,7 @@
     const preferred = columnChoice.value === 'auto' ? 5 : Number(columnChoice.value);
     const deviceLimit = touch.matches ? (portrait.matches ? 1 : 2) : 5;
     const capacity = Math.max(1, Math.floor((deck.clientWidth + gap) / (minimum + gap)));
-    const columns = deck.hasAttribute('data-financial-compare') ? 1 : Math.min(preferred, deviceLimit, capacity, cards.size);
+    const columns = fullWidth ? 1 : Math.min(preferred, deviceLimit, capacity, cards.size);
     const status = get('sb2-card-fit');
     const label = columns + (columns === 1 ? ' card per row' : ' cards per row');
     const expanded = deck.querySelector('[data-expanded]');
@@ -216,11 +222,18 @@
   }
 
   new ResizeObserver(fitCards).observe(deck);
+  function applyResearchLayout() {
+    deck.toggleAttribute('data-research-below', researchLayout.value === 'below');
+    fitCards();
+  }
+  researchLayout.addEventListener('change', () => {
+    applyResearchLayout();
+    saveComparison();
+  });
   function applyFiscalComparison() {
     const active = compareFiscalYears && desktop.matches;
     fiscalToggle.hidden = !desktop.matches;
     fiscalToggle.setAttribute('aria-pressed', String(active));
-    columnChoice.disabled = active;
     deck.toggleAttribute('data-financial-compare', active);
     fitCards();
   }

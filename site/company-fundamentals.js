@@ -217,6 +217,14 @@
       + '<button type="button" data-fund-fit aria-pressed="false">Fit height</button></div>';
   }
 
+  const keyStatementTotals = new Set([
+    'total revenue', 'revenue', 'gross profit', 'total operating profit/loss',
+    'operating income', 'net income', 'net income after non-controlling/minority interests',
+    'total assets', 'total liabilities', 'total equity',
+    'cash flow from operating activities, indirect', 'cash flow from/used in operating activities, direct',
+    'cash and cash equivalents, end of period',
+  ]);
+
   function table(report, layout, grouped = false) {
     const columns = periods(report);
     const outline = grouped ? statementHierarchy(report.rows) : [];
@@ -233,6 +241,7 @@
         const rowClass = depth === 0 ? 'fund-group' : parent || /^(?:Total|Net)\b/.test(label) ? 'fund-subtotal' : '';
         const { scale } = unit(label, report);
         const available = values.some(Number.isFinite);
+        const keyTotal = available && keyStatementTotals.has(label.toLowerCase());
         const entry = outline[index];
         const toggle = entry?.expandable ? '<button type="button" class="fund-row-toggle" data-fund-toggle aria-expanded="false" aria-label="Details for '
           + esc(label) + '"></button>' : '';
@@ -241,7 +250,8 @@
           : esc(label);
         const treeAttrs = entry ? ' data-fund-index="' + index + '"'
           + (entry.parent == null ? '' : ' data-fund-parent="' + entry.parent + '" hidden') : '';
-        return '<tr class="' + rowClass + '" style="--fund-depth:' + Math.min(depth, 5) + '"' + treeAttrs + '>'
+        return '<tr class="' + rowClass + '" style="--fund-depth:' + Math.min(depth, 5) + '"'
+          + (keyTotal ? ' data-fund-key-total' : '') + treeAttrs + '>'
           + '<th scope="row">' + (toggle ? '<div class="fund-line-label">' + toggle + '<span>' + labelHtml + '</span></div>' : labelHtml)
           + '</th>' + columns.map(({ index: column, label: period }) => {
             const value = values[column];
