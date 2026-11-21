@@ -58,7 +58,7 @@
 #watch-strip [data-heat="gain"] { background: hsl(147 43% var(--heat-lightness)); border-top-color: #217854; }
 #watch-strip [data-heat="loss"] { background: hsl(355 66% var(--heat-lightness)); border-top-color: #aa4853; }
 .watch-mini header { display: flex; align-items: center; gap: 6px; }
-.watch-mini header a { display: inline-flex; align-items: center; min-height: 34px; font-weight: 800; }
+.watch-mini header a { display: inline-flex; align-items: center; min-height: 34px; font-weight: 800; white-space: nowrap; }
 .watch-mini [data-stock-spark] { margin-inline-start: auto; }
 .stock-card-heading { display: flex; align-items: center; gap: 8px; }
 .stock-card-heading > div { min-width: 0; overflow-wrap: anywhere; }
@@ -66,6 +66,7 @@
 [data-stock-spark]:empty { display: none; }
 [data-stock-spark] button.rs-button { width: 100%; margin: 0; padding: 3px 4px; gap: 3px; }
 [data-stock-spark] .rs-spark { min-width: 0; height: 28px; }
+[data-stock-spark] .rs-spark polyline { vector-effect: non-scaling-stroke; }
 .rs-card-period { flex: none; font-size: 10px; }
 .watch-mini [data-quote] > b { font-size: 22px; font-weight: 800; }
 .watch-mini b small { display: inline; margin-left: 3px; font-weight: 600; }
@@ -122,6 +123,7 @@
   #market-rows .instrument-head .quote { text-align: right; margin-top: 0; }
 }
 @container (max-width: 224px) {
+  .watch-mini header > .mih-company-avatar { --company-logo-size: 26px !important; margin-inline-end: 0; }
   .watch-moves { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .watch-moves > div { grid-column: span 2; padding-inline: 1px; }
   .watch-moves > div:nth-child(n+4) { grid-column: span 3; }
