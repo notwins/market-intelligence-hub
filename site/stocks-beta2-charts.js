@@ -431,7 +431,10 @@
         setText('[data-analyst-call]', analyst[2]);
         setText('[data-analyst-value]', numbers.format(analyst[1]) + ' ' + company.currency);
         const analystGap = targetGapLabel(point?.value, analyst[1]);
-        get('[data-analyst-gap]').hidden = !analystGap;
+        const analystGapField = get('[data-analyst-gap]');
+        analystGapField.hidden = !analystGap;
+        analystGapField.classList.toggle('positive', !!analystGap && analyst[1] > point.value);
+        analystGapField.classList.toggle('negative', !!analystGap && analyst[1] < point.value);
         setText('[data-analyst-gap]', analystGap);
       }
       const latestTarget = card.researchTarget;
