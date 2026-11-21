@@ -103,6 +103,8 @@
   const comparisonKey = 'market-hub-stocks-beta2-comparison-v1';
   const columnChoice = get('sb2-card-columns');
   const fiscalToggle = get('sb2-fiscal-compare');
+  const statementToggle = get('sb2-expand-statements');
+  const statementSelector = 'details[data-fund-statement]';
   const desktop = root.matchMedia('(any-pointer:fine)');
   let compareFiscalYears = false;
   const touch = root.matchMedia('(pointer:coarse)');
@@ -116,6 +118,31 @@
   }
   smallScreen.addEventListener('change', placeRelatedLinks);
   placeRelatedLinks();
+
+  statementToggle.addEventListener('click', () => {
+    const open = deck.toggleAttribute('data-fund-expand-details');
+    for (const statement of deck.querySelectorAll(statementSelector)) statement.open = open;
+    for (const table of deck.querySelectorAll('[data-fund-resizable]')) {
+      table.dispatchEvent(new CustomEvent('fund-set-details', { detail: open }));
+    }
+    statementToggle.textContent = open ? 'Collapse all statements' : 'Expand all statements';
+  });
+
+  deck.addEventListener('click', event => {
+    const statement = event.target.closest('summary')?.parentElement;
+    if (event.defaultPrevented || !statement?.matches(statementSelector) || statement.open) return;
+    for (const peer of deck.querySelectorAll(statementSelector)) {
+      if (peer !== statement && peer.dataset.fundStatement === statement.dataset.fundStatement) peer.open = true;
+    }
+  });
+
+  deck.addEventListener('fund-statements-ready', event => {
+    const openTypes = new Set([...deck.querySelectorAll(statementSelector + '[open]')].map(row => row.dataset.fundStatement));
+    for (const statement of event.target.querySelectorAll(statementSelector)) {
+      if (deck.hasAttribute('data-fund-expand-details') || openTypes.has(statement.dataset.fundStatement)) statement.open = true;
+    }
+    statementToggle.disabled = false;
+  });
 
   function saveComparison() {
     try {
@@ -160,6 +187,7 @@
   }
 
   function fitCards() {
+    statementToggle.disabled = !deck.hasAttribute('data-fund-expand-details') && !deck.querySelector(statementSelector);
     if (!cards.size || !deck.clientWidth) return;
     const style = root.getComputedStyle(deck);
     const gap = parseFloat(style.columnGap);
