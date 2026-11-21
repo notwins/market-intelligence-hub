@@ -603,8 +603,7 @@
     if (shared) {
       root.MarketPrices.mount();
     } else {
-      history.add(element, company);
-      entry.archiveChart = root.StocksBeta2Charts.mountPriceArchive(element, company);
+      entry.archiveChart = history.add(element, company);
       mountDivider(element, slot);
       paintMonthlyTable(entry, history.range());
       paintResearch(entry);
@@ -713,13 +712,25 @@
     return response.json();
   }
 
+  async function getHistoryAdjustments() {
+    try {
+      const response = await fetch('data/stocks-beta2-history-adjustments.json?v=1', { signal: AbortSignal.timeout(10000) });
+      if (response.ok) {
+        const result = await response.json();
+        if (result.version === 1) return result;
+      }
+    } catch {
+      // Raw BOS history remains available while the adjustments are unavailable.
+    }
+  }
+
   async function load() {
     const status = get('sb2-status');
     retry.hidden = true;
     retry.before(status);
     status.textContent = 'Loading monthly market history…';
     try {
-      const result = await getData();
+      const [result, adjustments] = await Promise.all([getData(), getHistoryAdjustments()]);
       if (result.version !== 1 || !result.months?.length || !result.metrics?.length || !result.securities?.length) {
         throw new Error('History format is unavailable');
       }
@@ -734,6 +745,7 @@
       const previousChart = oldCards.filter(card => card?.chart && Number.isSafeInteger(card.slot) && card.slot > 0
         && data.securities.some(company => company.ticker === card.ticker)).sort((a, b) => a.slot - b.slot)[0]?.chart;
       history ??= root.StocksBeta2Charts.mountHistory(data, {
+        adjustments,
         saved: saved?.history,
         previousChart,
         changeRange: range => cards.forEach(card => paintMonthlyTable(card, range)),

@@ -1,0 +1,194 @@
+{
+  "version": 1,
+  "splits": {
+    "7203 JP": [
+      [
+        "2021-09-29",
+        5,
+        "https://global.toyota/pages/global_toyota/ir/stock/share/commonstocksplit_20210512_02_en.pdf"
+      ]
+    ],
+    "AAPL US": [
+      [
+        "2020-08-31",
+        4,
+        "https://www.apple.com/newsroom/2020/07/apple-reports-third-quarter-results/"
+      ]
+    ],
+    "AMZN US": [
+      [
+        "2022-06-06",
+        20,
+        "https://www.sec.gov/Archives/edgar/data/1018724/000110465922065872/tm2215904d1_8k.htm"
+      ]
+    ],
+    "ANET US": [
+      [
+        "2021-11-18",
+        4,
+        "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2021/Arista-Networks-Completes-Four-for-One-Stock-Split/default.aspx"
+      ],
+      [
+        "2024-12-04",
+        4,
+        "https://investors.arista.com/Communications/Press-Releases-and-Events/Press-Release-Detail/2024/Arista-Networks-Completes-Four-for-One-Stock-Split-2024-UzV4VbnUJu/default.aspx"
+      ]
+    ],
+    "AVGO US": [
+      [
+        "2024-07-15",
+        10,
+        "https://investors.broadcom.com/static-files/e90fe911-25c9-47eb-afbe-8e763b71eb64"
+      ]
+    ],
+    "CRWD US": [
+      [
+        "2026-07-02",
+        4,
+        "https://ir.crowdstrike.com/node/16826/ixbrl-viewer"
+      ]
+    ],
+    "DBS SP": [
+      [
+        "2024-04-22",
+        1.1,
+        "https://links.sgx.com/FileOpen/20240422%20DBS%20ex-1.ashx?App=Announcement&FileID=797383"
+      ]
+    ],
+    "GE US": [
+      [
+        "2021-08-02",
+        0.125,
+        "https://www.sec.gov/Archives/edgar/data/40545/000120677421001925/ge3936671-ex911.htm"
+      ]
+    ],
+    "GOOG US": [
+      [
+        "2022-07-18",
+        20,
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312522167375/d294315d8k.htm"
+      ]
+    ],
+    "GOOGL US": [
+      [
+        "2022-07-18",
+        20,
+        "https://www.sec.gov/Archives/edgar/data/1652044/000119312522167375/d294315d8k.htm"
+      ]
+    ],
+    "LRCX US": [
+      [
+        "2024-10-03",
+        10,
+        "https://investor.lamresearch.com/dividend-history/historic-stock-price"
+      ]
+    ],
+    "NFLX US": [
+      [
+        "2025-11-17",
+        10,
+        "https://ir.netflix.net/investor-news-and-events/financial-releases/press-release-details/2025/Netflix-Announces-Ten-For-One-Stock-Split/default.aspx"
+      ]
+    ],
+    "NVDA US": [
+      [
+        "2021-07-20",
+        4,
+        "https://investor.nvidia.com/files/doc_downloads/doc_faq/08/Investor-NVIDIA-2021-Stock-Split-FAQ-08.9.2021.pdf"
+      ],
+      [
+        "2024-06-10",
+        10,
+        "https://investor.nvidia.com/files/doc_downloads/2024/05/NVIDIA-2024-Stock-Split-FAQ.pdf"
+      ]
+    ],
+    "PANW US": [
+      [
+        "2022-09-14",
+        3,
+        "https://investors.paloaltonetworks.com/investor-resources/investor-faqs"
+      ],
+      [
+        "2024-12-16",
+        2,
+        "https://investors.paloaltonetworks.com/static-files/016aaa74-0c47-46af-933a-c555763f2961"
+      ]
+    ],
+    "SHOP CN": [
+      [
+        "2022-06-29",
+        10,
+        "https://www.sec.gov/Archives/edgar/data/1419828/000095017025088336/shopca10_prelim.htm"
+      ]
+    ],
+    "SHOP US": [
+      [
+        "2022-06-29",
+        10,
+        "https://www.sec.gov/Archives/edgar/data/1419828/000119312526437766/gs-20261029.htm"
+      ]
+    ],
+    "TSLA US": [
+      [
+        "2020-08-31",
+        5,
+        "https://ir.tesla.com/_flysystem/s3/sec/000156459020039353/tsla-8k_20200811.html"
+      ],
+      [
+        "2022-08-25",
+        3,
+        "https://www.sec.gov/Archives/edgar/data/1318605/000156459022028207/tsla-ex991_6.htm"
+      ]
+    ],
+    "WMT US": [
+      [
+        "2024-02-26",
+        3,
+        "https://corporate.walmart.com/news/2024/01/30/walmart-announces-3-for-1-stock-split"
+      ]
+    ]
+  },
+  "fairValueBasisDates": {
+    "GE US": {
+      "2021-08-02": "2021-08-02"
+    }
+  },
+  "tradingDates": {
+    "2017-09-05": ["2017-09-04",{"2017-09-01":["AAPL US","NVDA US","MSFT US","GOOGL US","AMZN US","TSLA US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","MA US","ABBV US","COST US","CVX US","KO US","CSCO US","PG US","ORCL US","UNH US","BAC US","HD US","PM US","INTC US","AMAT US","MS US","PANW US","LRCX US","RY US","CAT US","TXN US","GS US","WFC US","NFLX US","TMO US","BABA US","AMGN US","AXP US","GILD US","ANET US","C US"]}],
+    "2018-01-02": ["2018-01-01",{"2017-12-29":["AAPL US","NVDA US","MSFT US","GOOGL US","AMZN US","TSLA US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","MA US","ABBV US","COST US","CVX US","1398 HK","601398 CH","KO US","CSCO US","1288 HK","601288 CH","PG US","857 HK","601857 CH","ORCL US","UNH US","939 HK","601939 CH","BAC US","HD US","PM US","INTC US","3988 HK","601988 CH","AMAT US","HSBA LN","MS US","SAP GY","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","GS US","NESN SW","OR FP","WFC US","NFLX US","TMO US","BABA US","AMGN US","941 HK","AXP US","MC FP","GILD US","ANET US","C US","ITX SM"]}],
+    "2018-04-02": ["2018-03-30",{"2018-03-29":["AAPL US","NVDA US","MSFT US","GOOGL US","AMZN US","TSLA US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","MA US","ABBV US","COST US","CVX US","1398 HK","KO US","CSCO US","1288 HK","PG US","857 HK","ORCL US","UNH US","939 HK","BAC US","HD US","PM US","INTC US","3988 HK","AMAT US","HSBA LN","MS US","SAP GY","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","GS US","NESN SW","OR FP","WFC US","NFLX US","TMO US","BABA US","AMGN US","941 HK","AXP US","MC FP","GILD US","ANET US","C US","ITX SM","DBS SP","ST SP","UOB SP","STE SP","WIL SP"]}],
+    "2018-05-02": ["2018-05-01",{"2018-04-30":["ASML NA","1398 HK","1288 HK","857 HK","939 HK","3988 HK","SAP GY","NESN SW","OR FP","941 HK","MC FP","ITX SM","DBS SP","ST SP","UOB SP","STE SP","SGX SP","WIL SP"],"2018-04-27":["601398 CH","601288 CH","601857 CH","601939 CH","601988 CH"]}],
+    "2018-09-04": ["2018-09-03",{"2018-08-31":["AAPL US","NVDA US","MSFT US","GOOGL US","AMZN US","TSLA US","AVGO US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","MA US","ABBV US","COST US","CVX US","KO US","CSCO US","PG US","ORCL US","UNH US","BAC US","HD US","PM US","INTC US","AMAT US","MS US","PANW US","LRCX US","RY US","CAT US","TXN US","GS US","WFC US","NFLX US","TMO US","BABA US","AMGN US","AXP US","GILD US","ANET US","C US"]}],
+    "2018-10-01": ["2018-09-28",{"2018-09-27":["AAPL US","NVDA US","TSLA US","WMT US","MU US","JPM US","V US","AMD US","XOM US","ASML NA","MA US","ABBV US","COST US","CVX US","1398 HK","601398 CH","KO US","CSCO US","1288 HK","601288 CH","PG US","857 HK","601857 CH","ORCL US","UNH US","939 HK","BAC US","HD US","PM US","HSBA LN","MS US","AZN LN","PANW US","RY US","CAT US","7203 JP","GS US","NESN SW","OR FP","WFC US","NFLX US","8306 JP","TMO US","BABA US","941 HK","AXP US","MC FP","ANET US","C US","ITX SM","DBS SP","ST SP","UOB SP","SGX SP","WIL SP"],"2018-09-24":["MSFT US","GOOGL US","AMZN US","AVGO US","LLY US","BRK/B US","JNJ US","INTC US","AMAT US","LRCX US","AMGN US","GILD US"]}],
+    "2019-01-02": ["2019-01-01",{"2018-12-31":["AAPL US","NVDA US","MSFT US","GOOGL US","AMZN US","TSM US","TSLA US","AVGO US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","MA US","ABBV US","COST US","CVX US","1398 HK","KO US","CSCO US","1288 HK","PG US","857 HK","ORCL US","UNH US","939 HK","BAC US","HD US","PM US","INTC US","3988 HK","AMAT US","5 HK","MS US","AZN LN","PANW US","LRCX US","RY US","CAT US","7203 JP","TXN US","GS US","OR FP","WFC US","NFLX US","8306 JP","TMO US","BABA US","AMGN US","941 HK","AXP US","MC FP","GILD US","ANET US","C US","BHP LN","ITX SM"],"2018-12-28":["601398 CH","601288 CH","601857 CH","601939 CH","601988 CH","SAP GY","NESN SW"]}],
+    "2019-05-02": ["2019-05-01",{"2019-04-30":["ASML NA","1398 HK","1288 HK","857 HK","939 HK","5 HK","SAP GY","NESN SW","OR FP","941 HK","MC FP","ITX SM","DBS SP","ST SP","UOB SP","STE SP","SGX SP","WIL SP"],"2019-04-24":["601398 CH","3988 HK"],"2019-04-25":["601988 CH"],"2019-04-26":["7203 JP","8306 JP"]}],
+    "2019-09-03": ["2019-09-02",{"2019-08-30":["AAPL US","NVDA US","MSFT US","GOOGL US","AMZN US","TSM US","TSLA US","AVGO US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","MA US","ABBV US","COST US","CVX US","KO US","CSCO US","PG US","ORCL US","UNH US","BAC US","HD US","PM US","INTC US","AMAT US","MS US","PANW US","LRCX US","RY US","CAT US","TXN US","GS US","WFC US","NFLX US","TMO US","BABA US","AMGN US","AXP US","GILD US","ANET US","C US"]}],
+    "2020-01-02": ["2020-01-01",{"2019-12-31":["AAPL US","NVDA US","MSFT US","GOOGL US","AMZN US","TSM US","TSLA US","AVGO US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","MA US","ABBV US","COST US","CVX US","1398 HK","601398 CH","KO US","CSCO US","1288 HK","601288 CH","PG US","857 HK","601857 CH","ORCL US","UNH US","939 HK","601939 CH","BAC US","HD US","PM US","INTC US","3988 HK","601988 CH","AMAT US","5 HK","MS US","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","600519 CH","GS US","OR FP","WFC US","NFLX US","TMO US","BABA US","9988 HK","AMGN US","941 HK","AXP US","MC FP","GILD US","ANET US","C US","BHP LN","ITX SM","SHOP US","DBS SP","ST SP","UOB SP","STE SP","SGX SP","WIL SP"],"2019-12-30":["SAP GY","7203 JP","NESN SW","8306 JP"]}],
+    "2020-05-04": ["2020-05-01",{"2020-04-30":["ASML NA","601398 CH","601288 CH","601857 CH","601939 CH","601988 CH","SAP GY","600519 CH","NESN SW","OR FP","MC FP","ITX SM","DBS SP","ST SP","UOB SP","STE SP","SGX SP","WIL SP"],"2020-04-29":["1398 HK","1288 HK","857 HK","939 HK","3988 HK","5 HK","9988 HK","941 HK"]}],
+    "2020-08-03": ["2020-07-31",{"2020-07-30":["DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP"]}],
+    "2020-09-01": ["2020-08-31",{"2020-08-28":["SMSN LI","HSBA LN","AZN LN","BHP LN"]}],
+    "2021-01-04": ["2021-01-01",{"2020-12-31":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","MA US","ABBV US","COST US","CVX US","601398 CH","PLTR US","KO US","CSCO US","601288 CH","PG US","601857 CH","ORCL US","UNH US","939 HK","601939 CH","BAC US","HD US","PM US","INTC US","3988 HK","601988 CH","AMAT US","HSBA LN","MS US","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","600519 CH","GS US","OR FP","WFC US","NFLX US","TMO US","BABA US","AMGN US","LIN US","AXP US","MC FP","GILD US","ANET US","C US","BHP LN","ITX SM","SHOP CN"],"2020-12-29":["1288 HK","CICT SP"],"2020-12-28":["857 HK"],"2020-12-30":["SAP GY","NESN SW","8306 JP","SIE GY"]}],
+    "2021-06-01": ["2021-05-31",{"2021-05-28":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","MA US","ABBV US","COST US","CVX US","PLTR US","KO US","CSCO US","PG US","ORCL US","UNH US","BAC US","HD US","PM US","INTC US","AMAT US","HSBA LN","MS US","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","GS US","WFC US","NFLX US","TMO US","BABA US","AMGN US","LIN US","AXP US","GILD US","ANET US","C US","BHP LN","SHOP US"]}],
+    "2022-01-03": ["2021-12-31",{"2021-12-30":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","MA US","ABBV US","COST US","CVX US","1398 HK","601398 CH","PLTR US","KO US","CSCO US","PG US","601857 CH","MRK US","ORCL US","UNH US","BAC US","HD US","PM US","INTC US","3988 HK","AMAT US","HSBA LN","MS US","SAP GY","AZN LN","PANW US","LRCX US","RY US","CAT US","7203 JP","TXN US","RTX US","600519 CH","GS US","NESN SW","OR FP","WFC US","NFLX US","8306 JP","TMO US","BABA US","9988 HK","AMGN US","DELL US","CRWD US","IBM US","LIN US","SIE GY","941 HK","AXP US","MC FP","TTE FP","GILD US","ANET US","C US","BHP LN","ITX SM","SHOP CN","SHOP US","UOB SP","SGX SP","SIA SP"]}],
+    "2022-02-03": ["2022-02-02",{"2022-01-28":["601398 CH","601288 CH","601857 CH","939 HK","601939 CH","601988 CH","600519 CH"],"2022-01-31":["1288 HK","3988 HK","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP"]}],
+    "2022-05-04": ["2022-05-03",{"2022-04-29":["601398 CH","601288 CH","601857 CH","601939 CH","601988 CH","600519 CH","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","YZJSGD SP"],"2022-05-02":["7203 JP","8306 JP"]}],
+    "2023-01-03": ["2023-01-02",{"2022-12-30":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","MA US","ABBV US","COST US","CVX US","1398 HK","601398 CH","PLTR US","KO US","CSCO US","1288 HK","601288 CH","PG US","857 HK","601857 CH","MRK US","ORCL US","UNH US","939 HK","601939 CH","BAC US","HD US","PM US","INTC US","3988 HK","601988 CH","SHEL LN","AMAT US","HSBA LN","5 HK","MS US","AZN LN","PANW US","LRCX US","RY US","CAT US","7203 JP","TXN US","RTX US","600519 CH","GS US","NESN SW","WFC US","NFLX US","8306 JP","TMO US","BABA US","9988 HK","AMGN US","DELL US","CRWD US","IBM US","LIN US","941 HK","AXP US","GILD US","ANET US","C US","BHP LN","BHP AU","SHOP CN","SHOP US","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","YZJSGD SP"]}],
+    "2023-05-02": ["2023-05-01",{"2023-04-28":["SMSN LI","ASML NA","700 HK","1398 HK","601398 CH","1288 HK","601288 CH","857 HK","601857 CH","939 HK","601939 CH","3988 HK","601988 CH","SHELL NA","SHEL LN","HSBA LN","5 HK","SAP GY","AZN LN","600519 CH","NESN SW","OR FP","9988 HK","SIE GY","941 HK","MC FP","TTE FP","BHP LN","ITX SM","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP"]}],
+    "2023-09-05": ["2023-09-04",{"2023-09-01":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML US","MA US","ABBV US","COST US","CVX US","PLTR US","KO US","CSCO US","PG US","MRK US","ORCL US","UNH US","BAC US","HD US","PM US","INTC US","AMAT US","MS US","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","GS US","WFC US","NFLX US","TMO US","BABA US","AMGN US","DELL US","CRWD US","IBM US","LIN US","AXP US","GILD US","ANET US","C US","TD CN","SHOP CN","SHOP US"]}],
+    "2023-10-02": ["2023-09-29",{"2023-09-28":["601398 CH","601288 CH","601857 CH","601939 CH","601988 CH","600519 CH"]}],
+    "2024-01-02": ["2024-01-01",{"2023-12-29":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","ASML US","MA US","ABBV US","COST US","700 HK","CVX US","1398 HK","601398 CH","PLTR US","KO US","CSCO US","1288 HK","601288 CH","PG US","857 HK","601857 CH","MRK US","ORCL US","UNH US","939 HK","601939 CH","BAC US","HD US","NOVN SW","PM US","INTC US","3988 HK","601988 CH","SHELL NA","SHEL LN","AMAT US","HSBA LN","5 HK","MS US","SAP GY","AZN LN","PANW US","LRCX US","RY US","CAT US","7203 JP","TXN US","RTX US","600519 CH","GS US","NESN SW","OR FP","WFC US","NFLX US","8306 JP","TMO US","BABA US","9988 HK","AMGN US","DELL US","CRWD US","IBM US","LIN US","SIE GY","941 HK","AXP US","MC FP","TTE FP","GILD US","ANET US","C US","BHP LN","TD CN","BHP AU","ITX SM","SHOP CN","SHOP US","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2024-04-01": ["2024-03-29",{"2024-03-28":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","ASML US","MA US","ABBV US","COST US","700 HK","CVX US","1398 HK","PLTR US","KO US","CSCO US","1288 HK","PG US","857 HK","MRK US","ORCL US","UNH US","939 HK","BAC US","HD US","NOVN SW","PM US","INTC US","3988 HK","SHEL LN","AMAT US","HSBA LN","5 HK","MS US","SAP GY","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","GS US","NESN SW","OR FP","WFC US","NFLX US","TMO US","BABA US","9988 HK","AMGN US","DELL US","CRWD US","IBM US","LIN US","SIE GY","941 HK","AXP US","MC FP","TTE FP","GILD US","ARM US","ANET US","C US","BHP LN","TD CN","BHP AU","ITX SM","SHOP US","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2024-05-02": ["2024-05-01",{"2024-04-30":["ASML NA","700 HK","1398 HK","601398 CH","1288 HK","601288 CH","857 HK","601857 CH","939 HK","601939 CH","NOVN SW","3988 HK","601988 CH","SHELL NA","5 HK","SAP GY","600519 CH","NESN SW","OR FP","9988 HK","SIE GY","941 HK","MC FP","TTE FP","ITX SM","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2024-09-03": ["2024-09-02",{"2024-08-30":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML US","MA US","ABBV US","COST US","CVX US","PLTR US","KO US","CSCO US","PG US","MRK US","ORCL US","UNH US","BAC US","HD US","GE US","PM US","INTC US","AMAT US","MS US","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","GS US","WFC US","NFLX US","TMO US","BABA US","AMGN US","DELL US","CRWD US","IBM US","LIN US","GEV US","AXP US","GILD US","ARM US","ANET US","C US","TD CN","SHOP CN","SHOP US"],"2024-08-26":["CICT SP"]}],
+    "2024-11-01": ["2024-10-31",{"2024-10-30":["DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2025-01-02": ["2025-01-01",{"2024-12-31":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","ASML US","MA US","ABBV US","COST US","CVX US","601398 CH","PLTR US","KO US","CSCO US","1288 HK","601288 CH","PG US","601857 CH","MRK US","ORCL US","UNH US","601939 CH","BAC US","HD US","GE US","PM US","INTC US","601988 CH","SHEL LN","AMAT US","HSBA LN","5 HK","MS US","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","600519 CH","GS US","OR FP","WFC US","NFLX US","TMO US","BABA US","AMGN US","DELL US","CRWD US","IBM US","LIN US","GEV US","AXP US","MC FP","TTE FP","GILD US","ARM US","ANET US","C US","BHP LN","BHP AU","ITX SM","SHOP CN","SHOP US","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"],"2024-12-30":["NOVN SW","SAP GY","7203 JP","NESN SW","8306 JP","SIE GY"]}],
+    "2025-02-03": ["2025-01-31",{"2025-01-28":["1398 HK","1288 HK","857 HK","3988 HK","5 HK"],"2025-01-27":["601398 CH","601288 CH","601857 CH","601939 CH","601988 CH","600519 CH"]}],
+    "2025-04-01": ["2025-03-31",{"2025-03-28":["DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2025-05-02": ["2025-05-01",{"2025-04-30":["ASML NA","700 HK","1398 HK","601398 CH","1288 HK","601288 CH","857 HK","601857 CH","939 HK","601939 CH","NOVN SW","3988 HK","601988 CH","SHELL NA","5 HK","SAP GY","600519 CH","NESN SW","OR FP","9988 HK","SIE GY","941 HK","MC FP","TTE FP","ITX SM","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2025-09-02": ["2025-09-01",{"2025-08-29":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML US","MA US","ABBV US","COST US","CVX US","PLTR US","KO US","CSCO US","PG US","MRK US","ORCL US","UNH US","BAC US","HD US","GE US","PM US","INTC US","AMAT US","MS US","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","GS US","WFC US","NFLX US","TMO US","BABA US","AMGN US","DELL US","CRWD US","IBM US","LIN US","GEV US","AXP US","GILD US","ARM US","ANET US","C US","TD CN","SHOP US"]}],
+    "2026-01-02": ["2026-01-01",{"2025-12-31":["AAPL US","NVDA US","MSFT US","GOOG US","GOOGL US","AMZN US","TSM US","TSLA US","META US","AVGO US","LLY US","BRK/B US","BRK/A US","WMT US","SMSN LI","MU US","JPM US","V US","AMD US","XOM US","JNJ US","ASML NA","ASML US","MA US","ABBV US","COST US","700 HK","CVX US","601398 CH","PLTR US","KO US","CSCO US","601288 CH","PG US","857 HK","601857 CH","MRK US","ORCL US","UNH US","601939 CH","BAC US","HD US","GE US","PM US","INTC US","3988 HK","601988 CH","SHELL NA","SHEL LN","AMAT US","HSBA LN","MS US","AZN LN","PANW US","LRCX US","RY US","CAT US","TXN US","RTX US","600519 CH","GS US","OR FP","WFC US","NFLX US","TMO US","BABA US","9988 HK","AMGN US","DELL US","CRWD US","IBM US","LIN US","GEV US","941 HK","AXP US","MC FP","TTE FP","GILD US","ARM US","ANET US","C US","BHP LN","TD CN","BHP AU","ITX SM","SHOP CN","SHOP US","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"],"2025-12-30":["NOVN SW","SAP GY","7203 JP","NESN SW","8306 JP","SIE GY"]}],
+    "2026-05-04": ["2026-05-01",{"2026-04-30":["ASML NA","700 HK","1398 HK","601398 CH","ROP SW","1288 HK","601288 CH","857 HK","601857 CH","939 HK","601939 CH","NOVN SW","3988 HK","601988 CH","SHELL NA","5 HK","SAP GY","600519 CH","NESN SW","OR FP","9988 HK","SIE GY","941 HK","MC FP","TTE FP","ITX SM","DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2026-06-02": ["2026-06-01",{"2026-05-29":["DBS SP","ST SP","UOB SP","STE SP","SGX SP","SIA SP","WIL SP","CICT SP","KEP SP"]}],
+    "2026-09-01": ["2026-08-31",{"2026-08-28":["SMSN LI","SHEL LN","HSBA LN","AZN LN","BHP LN"]}]
+  }
+}
