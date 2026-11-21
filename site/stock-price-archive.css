@@ -1,0 +1,11 @@
+.price-archive-import { margin-block: 8px; font-size: .89rem; }
+.price-archive-import summary, .sb2-price-archive summary { cursor: pointer; font-weight: 650; }
+.price-archive-import p { margin-block: 6px; }
+.price-archive-import label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.price-archive-import input { max-width: 100%; font: inherit; }
+.price-archive-import button { margin-block-start: 6px; }
+
+.sb2-price-archive { min-width: 0; margin-block: 12px; padding: 10px; border: 1px solid #d5e0e1; border-radius: 8px; }
+.sb2-archive-periods { display: flex; flex-wrap: wrap; gap: 5px; margin-block: 6px; }
+.sb2-archive-periods [aria-pressed="true"] { background: #175650; border-color: #175650; color: white; }
+.sb2-price-archive [data-archive-close] { display: block; min-height: 1.4em; font-size: .9rem; font-variant-numeric: tabular-nums; }

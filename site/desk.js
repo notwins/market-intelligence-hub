@@ -39,7 +39,7 @@ const moveGroup = (label, unit, first, last, band = 0) => ({
 const moveViews = {
   default: [moveGroup('Trading days', 'D', 1, 6), moveGroup('Weeks', 'W', 1, 4), moveGroup('Months', 'M', 2, 12)],
   monthly: Array.from({length: 5}, (_, i) => moveGroup(`Months ${i * 12 + 1}–${(i + 1) * 12}`, 'M', i * 12 + 1, (i + 1) * 12, i + 1)),
-  yearly: [moveGroup('Years', 'Y', 1, 5)]
+  yearly: [moveGroup('Years', 'Y', 1, 20)]
 };
 const dayMs = 86400000;
 
@@ -86,15 +86,12 @@ function moveObservation(daily, endDate, {days, months, sessions}, history) {
 function priceMove(daily, endDate, period) {
   return moveObservation(daily, endDate, period)?.value ?? null;
 }
-function longestYearlyLookback({daily, quote, base}) {
-  const first = [daily[0]?.[0], base?.weekly[0]?.[0], base?.monthly[0]?.[0]].filter(Boolean).sort()[0];
-  const end = quote?.date;
-  if (!first || !end) return 0;
-  const possibleYears = Number(end.slice(0, 4)) - Number(first.slice(0, 4));
-  for (let years = possibleYears; years >= 1; years--) {
-    if (moveObservation(daily, end, {months: years * 12}, base)) return years;
-  }
-  return 0;
+function archiveYearlyMove(archive, lookback) {
+  const end = archive.closes.at(-1)[0];
+  const move = moveObservation(archive.closes, end, lookback);
+  if (!move) return null;
+  const earlier = archive.prior && move.from < archive.prior.before;
+  return {...move, grain: earlier ? `imported close · ${archive.prior.label}` : 'imported daily close'};
 }
 function selectedPrice(ticker,market=root.MarketPrices){const item=market?.resolve(ticker)||root.BOSEquity?.itemFor(ticker),q=market?.currentQuote(item||ticker);if(!item||!Number.isFinite(q?.close)||q.close<=0||!q.date)return null;const label=(q.sourceLabel||'Shared price feed')+(q.current===false?' · dated observation':'');return {value:q.close,currency:market.displayUnit(item),as_of:q.date,basis:q.reason||label,status_label:label,source_url:q.sourceUrl};}
 function moveHeat(move) {
@@ -104,7 +101,7 @@ function moveHeat(move) {
   const band = magnitude < 5 ? 1 : magnitude < 10 ? 2 : magnitude <= 15 ? 3 : 4;
   return `${move > 0 ? 'gain' : 'loss'}-${band}`;
 }
-const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat,moveObservation,longestYearlyLookback};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
+const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat,moveObservation,archiveYearlyMove};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
 let data=null,feed=null,reports=[],featured=[],limit=12,opener=null,refreshing=false;const editing=canEdit(root.location);const seriesCache=new Map();
 const priceSections = ['markets', 'stock-moves', 'stock-prices', 'main-company-cards', 'market-rates', 'market-bonds', 'yields'];
 let priceWatchlist = [], pricesStarted = false, moveView = 'default';
@@ -129,16 +126,30 @@ function moveQuote(row) {
 const groupDivider = (groupIndex, periodIndex) => groupIndex > 0 && periodIndex === 0 ? ' class="move-divider"' : '';
 
 function paintStockMoves(row) {
-  const history = moveHistory.get(row.dataset.logoTicker);
+  const ticker = row.dataset.logoTicker;
+  const history = moveHistory.get(ticker);
+  const item = moveView === 'yearly' ? history?.item || root.MarketPrices?.resolve(ticker) : null;
+  const archive = item ? root.StockPriceArchive?.bySymbol(item.ticker, item.currency) : null;
+  const saved = priceWatchlist.find(stock => stock.ticker === ticker);
+  const [as_of, value] = archive?.closes.at(-1) || [];
+  row.querySelector('[data-move-quote]').innerHTML = moveQuote(archive
+    ? {price: {as_of, value, currency: archive.currency, status_label: 'Imported Yahoo Finance closing price'}} : saved);
   row.querySelectorAll('[data-stock-return]').forEach(cell => cell.remove());
   row.insertAdjacentHTML('beforeend', moveViews[moveView].map((group, groupIndex) => group.periods.map((period, periodIndex) => {
-    const move = history?.quote?.date && moveObservation(history.daily, history.quote.date, period.lookback, history.base);
+    const move = archive ? archiveYearlyMove(archive, period.lookback)
+      : history?.quote?.date && moveObservation(history.daily, history.quote.date, period.lookback, history.base);
     const rounded = Number.isFinite(move?.value) ? Number(move.value.toFixed(1)) : null;
-    const change = rounded === null ? '—' : `${rounded > 0 ? '+' : ''}${rounded.toFixed(1)}%`;
+    const change = rounded === null ? (moveView === 'yearly' ? '' : '—') : `${rounded > 0 ? '+' : ''}${rounded.toFixed(1)}%`;
     const basis = move ? `${move.from} (${move.grain}) to ${move.to}` : 'Insufficient history';
     return `<td${groupDivider(groupIndex, periodIndex)} data-stock-return data-move-heat="${moveHeat(rounded)}" title="${E(basis)}">${change}</td>`;
   }).join('')).join(''));
 }
+
+document.addEventListener('stock-price-archive-updated', () => {
+  if (moveView !== 'yearly') return;
+  document.querySelectorAll('#watch-strip tbody tr').forEach(paintStockMoves);
+  if (!refreshing) paintMoveStatus();
+});
 
 const moveCount = () => moveViews[moveView].reduce((sum, group) => sum + group.periods.length, 0);
 function paintMoveStatus() {
@@ -313,15 +324,8 @@ async function refreshPrices(force = false) {
       const ticker = CSS.escape(row.ticker);
       for (const node of document.querySelectorAll(`[data-quote="${ticker}"]`)) node.innerHTML = quote(row);
       document.querySelector(`[data-quote-info="${ticker}"]`).innerHTML = quoteDetails(row);
-      document.querySelector(`[data-move-quote="${ticker}"]`).innerHTML = moveQuote(row);
     }
     await warmCharts();
-    const sources = [...moveHistory.values()];
-    const years = Math.max(5, ...sources.map(longestYearlyLookback));
-    if (years !== moveViews.yearly[0].periods.length) {
-      moveViews.yearly = [moveGroup('Years', 'Y', 1, years)];
-      if (moveView === 'yearly') paintMoveView();
-    }
     paintMoveStatus();
   } finally {
     refreshing = false;

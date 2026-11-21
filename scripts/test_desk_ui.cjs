@@ -92,13 +92,29 @@ test('long lookbacks use older period dates without filling a gap in the daily s
  assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:1},archive),null);
  assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:25}, {weekly:[],monthly:[['2024-09-01',50]]}),null);
 });
-test('Yearly extends to the oldest supported anniversary for each listing',()=>{
+test('Yearly compares a verified 20-year close and leaves shorter listings empty',()=>{
+ const long={closes:[['2006-11-20',10],['2026-11-20',100]],prior:null};
+ const short={closes:[['2007-11-20',10],['2026-11-20',100]],prior:null};
+ assert.deepEqual(Desk.archiveYearlyMove(long,{months:240}),
+  {value:900,from:'2006-11-20',to:'2026-11-20',grain:'imported daily close'});
+ assert.equal(Desk.archiveYearlyMove(short,{months:240}),null);
+ assert.equal(Desk.archiveYearlyMove({...long,prior:{before:'2022-01-01',label:'Predecessor'}},{months:240}).grain,
+  'imported close · Predecessor');
  const base={weekly:[],monthly:[['2006-11-30',10],['2007-10-31',20]]};
- const history={daily:[['2026-11-19',100]],quote:{date:'2026-11-19'},base};
- assert.equal(Desk.longestYearlyLookback(history),19);
- assert.equal(Desk.longestYearlyLookback({...history,daily:[['2026-11-30',100]],quote:{date:'2026-11-30'}}),20);
- assert.equal(Desk.longestYearlyLookback({...history,base:{weekly:[],monthly:[['2021-10-31',25]]}}),5);
- assert.equal(Desk.longestYearlyLookback({...history,daily:[]}),0);
+ assert.equal(Desk.moveObservation([['2026-11-19',100]],'2026-11-19',{months:240},base),null);
+ assert.equal(Desk.moveObservation([['2026-11-30',100]],'2026-11-30',{months:240},base).value,900);
+});
+test('price archive matches exact listing and currency and rejects duplicate or invalid closes',()=>{
+ const {parseArchive}=require('../site/stock-price-archive.js');
+ const record={listing:'GOOGL US',symbol:'GOOGL',currency:'USD',prior:null,closes:[['2006-11-20',10],['2026-11-20',100]]};
+ const archive={format:'mih-stock-price-archive',version:1,source:'Yahoo Finance Close',asOf:'2026-11-20',listings:[record]};
+ const parsed=parseArchive(archive);
+ assert.equal(parsed.listings.get('GOOGL US|USD'),record);
+ assert.equal(parsed.symbols.get('GOOGL|CAD'),undefined);
+ assert.equal(parsed.symbols.get('GOOG|USD'),undefined);
+ assert.throws(()=>parseArchive({...archive,listings:[record,record]}),/duplicate listing/);
+ assert.throws(()=>parseArchive({...archive,listings:[{...record,closes:[['2006-02-30',10]]}]}),/invalid close or date/);
+ assert.throws(()=>parseArchive({...archive,listings:[{...record,closes:[['2026-11-21',10]]}]}),/invalid close or date/);
 });
 test('stock move colours use fixed bands with matching gain and loss boundaries',()=>{
  for(const [move,band] of [[0.1,1],[4.9,1],[5,2],[9.9,2],[10,3],[15,3],[15.1,4],[100,4]]){

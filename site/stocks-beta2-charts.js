@@ -808,7 +808,78 @@
     return { renderBars, settings: () => ({ month: data.months[Number(peerMonth.value)][0], market: peerMarket.value, direction: direction.value }) };
   }
 
-  const api = { historyPoints, peRankings, mountRankings, mountHistory, priceLabel, probabilityCone, researchConeTarget, targetBand, drawPlot };
+  function mountPriceArchive(element, company) {
+    const panel = element.querySelector('[data-sb2-price-archive]');
+    const canvas = panel.querySelector('canvas'), slider = panel.querySelector('input');
+    const rangeLabel = panel.querySelector('[data-archive-range]');
+    const closeLabel = panel.querySelector('[data-archive-close]');
+    const priorLabel = panel.querySelector('[data-archive-prior]');
+    const buttons = [...panel.querySelectorAll('[data-archive-years]')];
+    let record, dates, lines, from, to, years = 20;
+
+    function paint() {
+      if (!record || !panel.open || !dates) return;
+      const cursor = Number(slider.value);
+      const [day, value] = record.closes[cursor];
+      const source = record.prior && day < record.prior.before ? ` · ${record.prior.label}` : '';
+      const reading = `${dateFormat.format(time(day))} · ${numbers.format(value)} ${record.currency}${source}`;
+      closeLabel.value = reading;
+      slider.setAttribute('aria-valuetext', reading);
+      drawPlot(canvas, lines, dates, { from, to, cursor, axis: 'year' }, { isPrice: true });
+    }
+
+    function buildRange() {
+      if (!record || !panel.open) return;
+      const { closes, currency, prior } = record;
+      to = closes.length - 1;
+      const end = new Date(time(closes[to][0]));
+      const year = end.getUTCFullYear() - years, month = end.getUTCMonth();
+      const lastDay = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+      const cutoff = new Date(Date.UTC(year, month, Math.min(end.getUTCDate(), lastDay))).toISOString().slice(0, 10);
+      from = Math.max(0, closes.findLastIndex(([day]) => day <= cutoff));
+      dates = closes.map(([day]) => [null, null, day]);
+      const earlier = [], current = [];
+      for (let index = from; index <= to; index++) {
+        const [quote, value] = closes[index];
+        (prior && quote < prior.before ? earlier : current).push({ index, quote, value });
+      }
+      lines = [{ color: '#6a8396', points: earlier, maxGapDays: 14 },
+        { color: priceColor, points: current, maxGapDays: 14 }].filter(line => line.points.length);
+      slider.max = String(to);
+      slider.min = String(from);
+      slider.value = String(to);
+      slider.disabled = from === to;
+      const span = `${dateFormat.format(time(closes[from][0]))} to ${dateFormat.format(time(closes[to][0]))}`;
+      rangeLabel.textContent = `${currency} · Yahoo Finance Close · ${span}`;
+      canvas.setAttribute('aria-label', `${company.name} daily closing prices in ${currency} from ${span}`);
+      priorLabel.hidden = !earlier.length;
+      priorLabel.textContent = earlier.length ? `Earlier series in grey · ${prior.label}` : '';
+      paint();
+    }
+
+    function refresh() {
+      const next = root.StockPriceArchive?.byListing(company.ticker, company.currency);
+      if (next === record) return;
+      record = next;
+      panel.hidden = !record;
+      dates = lines = undefined;
+      buildRange();
+    }
+
+    const resize = new ResizeObserver(paint);
+    resize.observe(canvas);
+    panel.addEventListener('toggle', buildRange);
+    slider.addEventListener('input', paint);
+    for (const button of buttons) button.addEventListener('click', () => {
+      years = Number(button.dataset.archiveYears);
+      for (const option of buttons) option.setAttribute('aria-pressed', String(option === button));
+      buildRange();
+    });
+    refresh();
+    return { refresh, remove: () => resize.disconnect() };
+  }
+
+  const api = { historyPoints, peRankings, mountRankings, mountHistory, mountPriceArchive, priceLabel, probabilityCone, researchConeTarget, targetBand, drawPlot };
   if (typeof module !== 'undefined') module.exports = api;
   root.StocksBeta2Charts = api;
 })(typeof window !== 'undefined' ? window : globalThis);
