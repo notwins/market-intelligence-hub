@@ -152,6 +152,8 @@
 .sb2-analyst-value,.sb2-analyst-gap { white-space:nowrap; }
 .sb2-analyst-gap::before { content:"·"; color:var(--muted); margin-right:5px; }
 .sb2-target-gap { color:var(--muted); font-size:.78rem; font-variant-numeric:tabular-nums; }
+.sb2-target-gap a { color:inherit; white-space:nowrap; }
+.sb2-target-gap a:any-link { text-decoration:underline; text-underline-offset:2px; }
 .sb2-chart-hint { color:var(--muted); font-size:.78rem; }
 .sb2-line-slider { display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; margin-top:7px; font-size:.82rem; }
 .sb2-line-slider input { flex:1 1 150px; }

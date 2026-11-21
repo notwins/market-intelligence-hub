@@ -13,9 +13,9 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.fiscal1">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.fiscal1">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.target-date1">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261121.target4"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.target-date1"></script>
   <script defer src="bos-equity.js"></script>
   <script defer src="equity-research-data.js"></script>
   <script defer src="research-feed.js"></script>
@@ -183,7 +183,9 @@
                   <span class="sb2-analyst-gap" data-analyst-gap hidden></span>
                 </span>
               </span>
-              <small class="sb2-target-gap" data-bos-target-gap hidden></small>
+              <small class="sb2-target-gap" data-bos-target-gap hidden>
+                <span data-bos-target-text></span><span data-bos-target-report hidden> · <a data-bos-target-source target="_blank" rel="noopener noreferrer"><time data-bos-target-date></time></a></span>
+              </small>
               <span class="sb2-chart-hint">Select a point or use the arrow keys to step a month.</span>
             </div>
             <p class="sb2-bos-target-note" data-bos-target-note role="status"></p>

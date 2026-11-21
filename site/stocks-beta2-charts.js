@@ -124,7 +124,16 @@
     if (!target || target.currency !== currency) return null;
     const value = Number(String(target.value).replaceAll(',', ''));
     if (!Number.isFinite(value) || value <= 0) return null;
-    return { value, provider: brief.provider, date: brief.date };
+    let source = '';
+    try {
+      const url = new URL(brief.source);
+      if (url.protocol === 'https:' && !url.username && !url.password && url.pathname.toLowerCase().endsWith('.pdf')) {
+        source = url.href;
+      }
+    } catch {
+      // An unavailable PDF still allows the report date to be shown.
+    }
+    return { value, provider: brief.provider, date: brief.date, source };
   }
 
   function targetGapLabel(price, target, atTarget = 'At fair value') {
@@ -466,13 +475,25 @@
       if (latestTarget) {
         const targetPrice = numbers.format(latestTarget.value) + ' ' + company.currency;
         const gap = targetGapLabel(point?.value, latestTarget.value, 'At target');
-        setText('[data-bos-target-gap]', 'Latest BOS target ' + targetPrice + (gap ? ' · ' + gap : ''));
+        setText('[data-bos-target-text]', 'Latest BOS target ' + targetPrice + (gap ? ' · ' + gap : ''));
+        gapField.title = latestTarget.provider || '';
         const targetDate = time(latestTarget.date);
-        gapField.title = [latestTarget.provider, Number.isFinite(targetDate) ? dateFormat.format(targetDate) : '']
-          .filter(Boolean).join(' · ');
-      } else {
-        setText('[data-bos-target-gap]', '');
-        gapField.removeAttribute('title');
+        const report = get('[data-bos-target-report]');
+        report.hidden = !Number.isFinite(targetDate);
+        if (!report.hidden) {
+          const reportLabel = dateFormat.format(targetDate);
+          const reportTime = get('[data-bos-target-date]');
+          if (reportTime.dateTime !== latestTarget.date) reportTime.dateTime = latestTarget.date;
+          setText('[data-bos-target-date]', reportLabel);
+          const reportLink = get('[data-bos-target-source]');
+          if (latestTarget.source) {
+            if (reportLink.href !== latestTarget.source) reportLink.href = latestTarget.source;
+            reportLink.setAttribute('aria-label', reportLabel + ' · ' + company.name + ' research report (PDF, new tab)');
+          } else {
+            reportLink.removeAttribute('href');
+            reportLink.removeAttribute('aria-label');
+          }
+        }
       }
       const valuations = ratios.flatMap(line => {
         const ratio = line.points.find(item => item.index === cursor);
