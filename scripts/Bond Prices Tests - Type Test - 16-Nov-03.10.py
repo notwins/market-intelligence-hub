@@ -15,6 +15,23 @@ NOW = dt.datetime(2026, 11, 16, 0, tzinfo=B.UTC)
 
 
 class BondPricesTests(unittest.TestCase):
+    def test_dashboard_preserves_unavailable_or_older_wsj_quotes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / B.WSJ_CURVE.name
+            prior = {'as_of': '2026-11-12', 'quotes': [
+                {'kind': 'note', 'maturity': '2033-11-15', 'coupon_percent': 4.5, 'asked_yield_percent': 5},
+                {'kind': 'bill', 'maturity': '2027-05-13', 'coupon_percent': None, 'asked_yield_percent': 4},
+            ]}
+            path.write_text(json.dumps(prior), encoding='utf-8')
+            source = dict(maturityDate='11/15/2033', coupon='4.500', bid='96.2320', ask='96.2520', askYield='5.050')
+            B.update_wsj_curve(path, b'Missing bill table', NOW, ('2026-11-13', [source]))
+            saved = json.loads(path.read_text(encoding='utf-8'))
+            self.assertEqual(saved['as_of'], '2026-11-13')
+            self.assertEqual(saved['quotes'][0]['ask_price'], 96.7890625)
+            self.assertEqual(saved['quotes'][1], {**prior['quotes'][1], 'quote_date': '2026-11-12'})
+            B.update_wsj_curve(path, b'Missing bill table', NOW, ('2026-11-12', [source]))
+            self.assertEqual(json.loads(path.read_text(encoding='utf-8')), saved)
+
     def test_wsj_notation(self):
         for raw, expected in [('99.3040', 99.953125), ('99.3140', 99.984375), ('64.0100', 64.03125), ('96.2320', 96.7265625)]:
             self.assertEqual(B.treasury_price(raw), expected)

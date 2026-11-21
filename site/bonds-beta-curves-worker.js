@@ -1,6 +1,6 @@
 'use strict';
 
-importScripts('bonds-beta-data.js?v=20261122.performance1');
+importScripts('bonds-beta-data.js?v=20261122.weekly-fred');
 
 BondsBetaData.loadFredCurves().then(
   curves => self.postMessage({ curves }),

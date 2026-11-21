@@ -18,6 +18,8 @@ on:
     - cron: '0 23 * * *'
     # Weekly check of monthly Fed FX and benchmark yields. UTC; may be delayed.
     - cron: '17 6 * * 6'
+    # Wednesday 07:30 SGT, after the U.S. H.10 release and Monday-holiday deferrals.
+    - cron: '30 23 * * 2'
 permissions:
   contents: read
 concurrency:
@@ -31,6 +33,7 @@ jobs:
     outputs:
       update_outcome: ${{ steps.update.outcome }}
       history_outcome: ${{ steps.history.outcome }}
+      weekly_outcome: ${{ steps.fred_weekly.outcome }}
       bond_outcome: ${{ steps.bonds.outcome }}
       treasury_catalogue_outcome: ${{ steps.treasury_catalogue.outcome }}
       sgs_failed: ${{ steps.sgs.outputs.source_failed }}
@@ -165,6 +168,12 @@ jobs:
         continue-on-error: true
         timeout-minutes: 8
         run: python3 scripts/update_fed_history.py
+      - name: Refresh 30 years of Friday-ending FRED yields and FX
+        id: fred_weekly
+        if: steps.sgs_mode.outputs.enabled != 'true' && (github.event_name == 'workflow_dispatch' || github.event.schedule == '30 23 * * 2')
+        continue-on-error: true
+        timeout-minutes: 8
+        run: python3 scripts/update_fred_weekly.py
       - name: Refresh and save daily MAS SGS closing levels
         id: sgs
         if: steps.sgs_mode.outputs.enabled == 'true'
@@ -314,7 +323,7 @@ jobs:
           PAGES_URL: ${{ steps.deployment.outputs.page_url }}
         run: python3 scripts/verify_sgs_daily.py --base-url "$PAGES_URL"
       - name: Flag feed failure after publishing visible health status
-        if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure' || needs.build.outputs.bond_outcome == 'failure' || needs.build.outputs.treasury_catalogue_outcome == 'failure' || needs.build.outputs.sgs_failed == 'true'
+        if: needs.build.outputs.update_outcome == 'failure' || needs.build.outputs.history_outcome == 'failure' || needs.build.outputs.weekly_outcome == 'failure' || needs.build.outputs.bond_outcome == 'failure' || needs.build.outputs.treasury_catalogue_outcome == 'failure' || needs.build.outputs.sgs_failed == 'true'
         run: |
           echo 'A feed failed. Previous valid data and visible failure status were published.'
           exit 1

@@ -35,7 +35,7 @@ class ArchitectureMapTests(unittest.TestCase):
         self.assertIn(('job:content-build','app:pages-content'),pairs)
         self.assertNotIn(('job:content-build','job:hub-build'),pairs)
         self.assertNotIn(('job:hub-build','job:content-build'),pairs)
-        self.assertIn('No automatic WSJ updater',self.nodes['data:wsj-treasury-dashboard.json']['description'])
+        self.assertIn('daily 07:00 SGT WSJ refresh',self.nodes['data:wsj-treasury-dashboard.json']['description'])
 
     def test_public_graph_has_no_local_schedule_ids_prompts_or_private_paths(self):
         s=json.dumps(self.graph)

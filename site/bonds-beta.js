@@ -608,7 +608,7 @@
     if (!window.Worker) return loadFredCurves();
     let worker;
     try {
-      worker = new Worker('bonds-beta-curves-worker.js?v=20261122.performance1');
+      worker = new Worker('bonds-beta-curves-worker.js?v=20261122.weekly-fred');
     } catch {
       return loadFredCurves();
     }
@@ -636,7 +636,7 @@
       showSeries();
       if (pendingFocus) inspectLatest(pendingFocus);
       pendingFocus = undefined;
-      status.textContent = 'FRED estimates before a Treasury’s issue date are hypothetical. The charts show saved bids and reported yields where available.';
+      status.textContent = 'Weekly FRED estimates use the last available Treasury curve in each Friday-ending week. Estimates before issue are hypothetical. Saved bids and reported yields appear where available.';
     } catch {
       status.textContent = 'FRED price and yield reconstruction is unavailable. Saved quotes are shown where available.';
     }
