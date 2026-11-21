@@ -11,6 +11,10 @@
   const shortNumber = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2 });
   const percent = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: 'exceptZero' });
   const displayNumber = value => Number.isFinite(value) ? decimal.format(value) : '—';
+  const displayYield = value => Number.isFinite(value) ? `${displayNumber(value)}%` : '—';
+  const tenor = value => value < 1 ? `${Math.round(value * 12)}M` : `${value}Y`;
+  const quoteColors = { bid: '#147875', yield: '#536aa0' };
+  const modelColor = '#754298', peerColor = '#ac741d', peerModelColor = '#a44c31';
   const noOverlay = () => new Option('No overlay', '');
   let publicBonds = new Map();
   let localBonds = new Map();
@@ -155,23 +159,35 @@
   function updatePoint(card) {
     const date = dates[cursor];
     const own = card.instrument.rows.get(date);
-    const estimate = !Number.isFinite(own?.bid) ? modeled.get(card.instrument)?.points.get(date) : null;
-    const peer = card.peer?.rows.get(date);
-    const peerEstimate = !Number.isFinite(peer?.bid) ? modeled.get(card.peer)?.points.get(date) : null;
-    card.element.querySelector('[data-bb-price-label]').textContent = estimate ? 'Estimated clean price' : 'Bid price';
-    card.element.querySelector('[data-bb-price]').textContent = displayNumber(estimate?.price ?? own?.bid);
-    card.element.querySelector('[data-bb-yield]').textContent = Number.isFinite(own?.yield) ? `${displayNumber(own.yield)}%` : '—';
-    const tenor = value => value < 1 ? `${Math.round(value * 12)}M` : `${value}Y`;
-    const detail = estimate ? `${dateLabel(date)} · ${shortNumber.format(estimate.years)} years left · FRED ${tenor(estimate.lower)}${estimate.lower === estimate.upper ? '' : '–' + tenor(estimate.upper)} · ${displayNumber(estimate.rate)}% model yield`
-      : own ? `${dateLabel(date)} · ${sources[own.source].join(' · ')}`
-      : date ? `${dateLabel(date)} · No observation` : 'No dated quotes available';
-    card.element.querySelector('.bb-point').textContent = detail;
+    const model = modeled.get(card.instrument);
+    const price = model?.points.get(date);
+    const yieldEstimate = model?.yields.get(date);
+    card.element.querySelector('[data-bb-price-label]').textContent = price ? 'Estimated clean price' : 'Bid price';
+    card.element.querySelector('[data-bb-price]').textContent = displayNumber(price?.price ?? own?.bid);
+    card.element.querySelector('[data-bb-yield-label]').textContent = yieldEstimate ? 'Modeled FRED yield' : 'Yield';
+    card.element.querySelector('[data-bb-yield]').textContent = displayYield(yieldEstimate?.rate ?? own?.yield);
+    const estimate = price ?? yieldEstimate;
+    const detail = [date ? dateLabel(date) : 'No dated quotes available'];
+    if (estimate) {
+      const bracket = estimate.lower === estimate.upper ? tenor(estimate.lower) : `${tenor(estimate.lower)}–${tenor(estimate.upper)}`;
+      detail.push(`${shortNumber.format(estimate.years)} years left`, `FRED ${bracket}`,
+        `${displayYield(estimate.rate)} ${price ? 'applied yield' : 'modeled yield'}`);
+    }
+    if (own) detail.push(...sources[own.source]);
+    if (date && !own && !estimate) detail.push('No observation');
+    card.element.querySelector('.bb-point').textContent = detail.join(' · ');
     const legend = card.element.querySelector('.bb-legend');
     legend.hidden = !card.peer;
     if (card.peer) {
-      const values = peerEstimate ? ` · Estimated clean price ${displayNumber(peerEstimate.price)}`
-        : peer ? ` · Bid ${displayNumber(peer.bid)} · Yield ${Number.isFinite(peer.yield) ? `${displayNumber(peer.yield)}%` : '—'} · ${sources[peer.source].join(' · ')}` : '';
-      legend.textContent = `${card.peer.name}${values}`;
+      const peer = card.peer.rows.get(date), peerModel = modeled.get(card.peer);
+      const peerPrice = peerModel?.points.get(date), peerYield = peerModel?.yields.get(date);
+      const values = [card.peer.name];
+      if (peerPrice) values.push(`Estimated clean price ${displayNumber(peerPrice.price)}`);
+      else if (Number.isFinite(peer?.bid)) values.push(`Bid ${displayNumber(peer.bid)}`);
+      if (peerYield) values.push(`Modeled FRED yield ${displayYield(peerYield.rate)}`);
+      else if (Number.isFinite(peer?.yield)) values.push(`Yield ${displayYield(peer.yield)}`);
+      if (peer) values.push(...sources[peer.source]);
+      legend.textContent = values.join(' · ');
     }
   }
 
@@ -188,19 +204,23 @@
     return [...lines.values()].map(points => ({ color, maxGapDays: 45, points: points.sort((a, b) => a.index - b.index) }));
   }
 
-  function priceLines(bond, observedColor, modelColor) {
-    const observed = pointsFor(bond, 'bid', observedColor);
+  function historyLines(bond, field, observedColor, estimateColor) {
+    const observed = pointsFor(bond, field, observedColor);
     const model = modeled.get(bond);
-    const points = model ? [...model.points].flatMap(([quote, { price }]) => {
+    if (!model) return observed;
+    const isPrice = field === 'bid';
+    const estimates = isPrice ? model.points : model.yields;
+    const points = [...estimates].flatMap(([quote, estimate]) => {
       const index = dateIndices.get(quote);
-      return index >= from ? [{ index, quote, value: price }] : [];
-    }) : [];
+      return index >= from ? [{ index, quote, value: isPrice ? estimate.price : estimate.rate }] : [];
+    });
     if (!points.length) return observed;
-    const last = points.at(-1), first = observed[0]?.points[0];
-    const handoff = first && first.quote === model.firstBid && Date.parse(first.quote) - Date.parse(last.quote) <= 7 * 86400000;
+    const firstSaved = isPrice ? model.firstBid : model.firstYield;
+    const last = points.at(-1), first = observed.find(line => line.points[0].quote === firstSaved)?.points[0];
+    const handoff = first && Date.parse(first.quote) - Date.parse(last.quote) <= 7 * 86400000;
     return [
       ...(handoff ? [{ color: '#84909e', dash: [2, 3], connector: true, maxGapDays: 7, points: [last, first] }] : []),
-      { color: modelColor, dash: [5, 3], maxGapDays: 45, points },
+      { color: estimateColor, dash: [5, 3], maxGapDays: 45, points },
       ...observed
     ];
   }
@@ -291,19 +311,21 @@
     const peer = bonds.get(get('overlay').value);
     for (const card of cards) {
       card.peer = peer?.currency === card.instrument.currency && peer.isin !== card.instrument.isin ? peer : null;
-      card.series = {
-        bid: [...priceLines(card.instrument, '#147875', '#754298'), ...priceLines(card.peer, '#ac741d', '#a44c31')],
-        yield: [...pointsFor(card.instrument, 'yield', '#536aa0'), ...pointsFor(card.peer, 'yield', '#ac741d')],
-      };
-      const model = modeled.get(card.instrument);
-      const modelInRange = card.series.bid.some(line => line.color === '#754298');
-      const peerInRange = card.series.bid.some(line => line.color === '#a44c31');
-      const key = card.element.querySelector('.bb-price-key');
-      key.hidden = !modelInRange && !peerInRange;
-      key.querySelector('.bb-model-key').hidden = !modelInRange;
-      key.querySelector('.bb-peer-model-key').hidden = !peerInRange;
-      key.querySelector('.bb-bid-key').hidden = !card.series.bid.some(line => line.color === '#147875');
-      if (modelInRange) key.querySelector('.bb-model-start').textContent = dateLabel(model.start);
+      card.series = {};
+      for (const key of card.element.querySelectorAll('[data-series-key]')) {
+        const field = key.dataset.seriesKey;
+        const lines = [...historyLines(card.instrument, field, quoteColors[field], modelColor),
+          ...historyLines(card.peer, field, peerColor, peerModelColor)];
+        card.series[field] = lines;
+        const modelInRange = lines.some(line => line.color === modelColor);
+        const peerInRange = lines.some(line => line.color === peerModelColor);
+        key.hidden = !modelInRange && !peerInRange;
+        key.querySelector('.bb-model-key').hidden = !modelInRange;
+        key.querySelector('.bb-peer-model-key').hidden = !peerInRange;
+        key.querySelector('.bb-observed-key').hidden = !lines.some(line => line.color === quoteColors[field]);
+        const start = key.querySelector('.bb-model-start');
+        if (start && modelInRange) start.textContent = dateLabel(modeled.get(card.instrument).start);
+      }
       fillReturns(card);
     }
     queueRedraw();
@@ -341,6 +363,7 @@
       if (!model) continue;
       modeled.set(item, model);
       for (const date of model.points.keys()) unique.add(date);
+      for (const date of model.yields.keys()) unique.add(date);
     }
     dates = [...unique].sort();
     dateIndices = new Map(dates.map((date, index) => [date, index]));
@@ -373,9 +396,9 @@
       curves = data;
       refreshDates();
       showSeries();
-      status.textContent = 'FRED estimates before a Treasury’s issue date are hypothetical. Saved bids are shown where available.';
+      status.textContent = 'FRED estimates before a Treasury’s issue date are hypothetical. The charts show saved bids and reported yields where available.';
     } catch {
-      status.textContent = 'FRED price reconstruction is unavailable. Saved quotes are shown where available.';
+      status.textContent = 'FRED price and yield reconstruction is unavailable. Saved quotes are shown where available.';
     }
   }
 
