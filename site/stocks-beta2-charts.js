@@ -127,14 +127,14 @@
     return { value, provider: brief.provider, date: brief.date };
   }
 
-  function targetGapLabel(price, target, reference) {
+  function targetGapLabel(price, target, atTarget = 'At fair value') {
     if (!Number.isFinite(price) || price <= 0 || !Number.isFinite(target) || target <= 0) return '';
     const gap = (target - price) / price;
     if (!Number.isFinite(gap)) return '';
-    if (gap === 0) return 'At ' + (reference || 'fair value');
+    if (gap === 0) return atTarget;
     const amount = Math.abs(gap) < .0005 ? 'Less than 0.1%' : signedPercent.format(gap);
     const direction = gap > 0 ? ' upside' : ' downside';
-    return amount + direction + (reference ? ' to ' + reference : '');
+    return amount + direction;
   }
 
   function targetBand(value, [upper2, upper1, , lower1, lower2]) {
@@ -460,18 +460,19 @@
         analystGapField.classList.toggle('negative', !!analystGap && analyst[1] < point.value);
         setText('[data-analyst-gap]', analystGap);
       }
-      const latestTarget = card.researchTarget;
-      const gap = metric === 'price' ? targetGapLabel(point?.value, latestTarget?.value, 'the latest BOS target') : '';
+      const latestTarget = metric === 'price' ? card.researchTarget : null;
       const gapField = get('[data-bos-target-gap]');
-      gapField.hidden = !gap;
-      setText('[data-bos-target-gap]', gap);
-      if (gap) {
+      gapField.hidden = !latestTarget;
+      if (latestTarget) {
+        const targetPrice = numbers.format(latestTarget.value) + ' ' + company.currency;
+        const gap = targetGapLabel(point?.value, latestTarget.value, 'At target');
+        setText('[data-bos-target-gap]', 'Latest BOS target ' + targetPrice + (gap ? ' · ' + gap : ''));
         const targetDate = time(latestTarget.date);
-        gapField.title = [
-          numbers.format(latestTarget.value) + ' ' + company.currency,
-          latestTarget.provider,
-          Number.isFinite(targetDate) ? dateFormat.format(targetDate) : ''
-        ].filter(Boolean).join(' · ');
+        gapField.title = [latestTarget.provider, Number.isFinite(targetDate) ? dateFormat.format(targetDate) : '']
+          .filter(Boolean).join(' · ');
+      } else {
+        setText('[data-bos-target-gap]', '');
+        gapField.removeAttribute('title');
       }
       const valuations = ratios.flatMap(line => {
         const ratio = line.points.find(item => item.index === cursor);
