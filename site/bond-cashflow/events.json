@@ -1,0 +1,29 @@
+[
+  {
+    "id": "trade2018",
+    "group": "trade",
+    "date": "2018-07-06",
+    "label": "US–China tariffs",
+    "note": "First US Section 301 tariffs on the initial Chinese product list take effect.",
+    "source": "https://ustr.gov/about-us/policy-offices/press-office/press-releases/2018/june/ustr-issues-tariffs-chinese-products",
+    "colour": "#735C95"
+  },
+  {
+    "id": "qe2020",
+    "group": "qe",
+    "date": "2020-03-23",
+    "label": "QE · COVID",
+    "note": "Fed announces Treasury and agency MBS purchases in the amounts needed for market functioning.",
+    "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20200323a.htm",
+    "colour": "#2B7584"
+  },
+  {
+    "id": "hikes2022",
+    "group": "rates",
+    "date": "2022-03-16",
+    "label": "Fed hikes begin",
+    "note": "Fed raises the funds-rate target range and anticipates ongoing increases.",
+    "source": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20220316a.htm",
+    "colour": "#9A6041"
+  }
+]

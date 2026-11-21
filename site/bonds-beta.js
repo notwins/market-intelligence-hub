@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const { sources, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
+  const { sources, historyStorage, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
     annualPriceChanges, fredCurves, reconstructedPrices } = BondsBetaData;
   const feedURL = 'data/Bond%20Prices%20-%20Type%20JSON%20-%2016-Nov-03.10.json';
   const temasek = 'US87973RAW07';
@@ -38,28 +38,6 @@
   let publicUnavailable = false;
   let historyMessage = '';
   let pendingFocus;
-
-  function historyStorage(action, content) {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open('market-intel-bonds-beta', 1);
-      request.onupgradeneeded = () => request.result.createObjectStore('history');
-      let blocked = false;
-      request.onblocked = () => { blocked = true; reject(Error('Browser history storage is busy.')); };
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => {
-        const db = request.result;
-        if (blocked) { db.close(); return; }
-        try {
-          const tx = db.transaction('history', action === 'get' ? 'readonly' : 'readwrite');
-          const store = tx.objectStore('history');
-          const key = 'bond-history-csv';
-          const operation = action === 'get' ? store.get(key) : action === 'save' ? store.put(content, key) : store.delete(key);
-          tx.oncomplete = () => { db.close(); resolve(operation.result); };
-          tx.onabort = () => { db.close(); reject(tx.error || Error('Browser history storage was interrupted.')); };
-        } catch (error) { db.close(); reject(error); }
-      };
-    });
-  }
 
   function setHistoryBusy(busy) {
     for (const name of ['open', 'file', 'clear']) get(name).disabled = busy;
@@ -290,6 +268,7 @@
     const instrument = bonds.get(key);
     const element = get('template').content.firstElementChild.cloneNode(true);
     element.dataset.isin = instrument.isin;
+    element.querySelector('.bb-cashflow').href = 'bond-cashflow.html?' + new URLSearchParams({ isin: instrument.isin, currency: instrument.currency });
     element.querySelector('h2').textContent = instrument.name;
     element.querySelector('.bb-id').textContent = [instrument.isin, instrument.currency,
       instrument.issueDate ? `Issued ${dateLabel(instrument.issueDate)}` : ''].filter(Boolean).join(' · ');

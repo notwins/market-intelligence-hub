@@ -1,0 +1,378 @@
+html {
+  font-size: 100%;
+}
+body {
+  background: #f2f5f6;
+  color: #203c48;
+}
+[hidden] {
+  display: none !important;
+}
+.studio-skip {
+  position: absolute;
+  top: -100px;
+  z-index: 50;
+  padding: 10px;
+  background: white;
+}
+.studio-skip:focus {
+  top: 4px;
+}
+.app-header {
+  padding: 10px max(4vw, 18px);
+  min-height: 62px;
+  justify-content: flex-start;
+  border-color: #cfddde;
+}
+.brand {
+  color: #173c48;
+}
+.brand-mark {
+  background: #183d47;
+  font-family: Georgia, serif;
+  border-radius: 6px;
+  height: 36px;
+  width: 36px;
+}
+.section-link {
+  border-left: 1px solid #c8d5d6;
+  padding-left: 18px;
+  font-size: 0.875rem;
+  color: #356270;
+  text-decoration: none;
+}
+.section-link:hover {
+  text-decoration: underline;
+}
+.header-actions {
+  margin-left: auto;
+}
+main {
+  max-width: 1540px;
+  padding: 25px clamp(16px, 4vw, 64px) 60px;
+}
+.intro {
+  margin: 0;
+  padding: 20px 0 25px;
+  align-items: center;
+}
+.intro .eyebrow {
+  margin: 0 0 5px;
+  color: #28656c;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.intro h1 {
+  font:
+    500 clamp(2.05rem, 4.5vw, 3.55rem) / 1.06 Georgia,
+    'Times New Roman',
+    serif;
+  letter-spacing: -0.045em;
+  color: #163a48;
+  margin-bottom: 10px;
+}
+.intro p:not(.eyebrow) {
+  color: #445d66;
+  font-size: 1rem;
+}
+.intro-action button {
+  border-color: #aec6c6;
+  color: #174c56;
+}
+.intro-action small {
+  color: #536a72;
+  font-size: 0.78rem;
+}
+.feed-health {
+  border-top: 1px solid #c4d2d5;
+  padding: 10px 0 0;
+  margin: 0 0 18px;
+  color: #506873;
+  font-size: 0.84rem;
+}
+.workspace {
+  grid-template-columns: minmax(300px, 350px) minmax(0, 1fr);
+  gap: clamp(14px, 2vw, 30px);
+  align-items: start;
+}
+.input-panel,
+.price-panel,
+.insight-grid article,
+.empty-state,
+.report-frame {
+  border: 1px solid #cddadb;
+  border-radius: 12px;
+  background: #fff;
+}
+.panel-heading {
+  background: #183e49;
+  color: #fff;
+  padding: 17px 19px;
+}
+.panel-heading h2 {
+  color: #fff;
+  font-size: 1.05rem;
+}
+.panel-heading .text-button {
+  color: #d3edf0;
+  font-size: 0.875rem;
+}
+.form-section {
+  padding: 15px 18px;
+}
+.form-section label,
+.form-section summary,
+.text-button,
+.file-actions button {
+  font-size: 0.875rem;
+}
+.hint,
+.privacy,
+.notice,
+.form-section label > span,
+.bond-terms {
+  font-size: 0.8rem;
+}
+.form-section input,
+.form-section select {
+  font-size: 0.94rem;
+}
+.form-section select,
+.range-label select {
+  appearance: none;
+  padding-right: 27px;
+  background: white
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='m1 1 5 5 5-5' fill='none' stroke='%2335515d' stroke-width='1.6'/%3E%3C/svg%3E")
+    no-repeat right 9px center;
+}
+.inline-control {
+  flex-wrap: wrap;
+}
+.inline-control select {
+  flex: 1 1 160px;
+}
+.inline-control button {
+  font-size: 0.8rem;
+}
+#referencePrice,
+#referenceFx {
+  display: block;
+  color: #08616b;
+}
+#priceHint,
+#fxHint {
+  margin: 5px 0;
+}
+#fxHint:empty {
+  display: none;
+}
+.price-panel {
+  padding: clamp(16px, 2vw, 28px);
+  margin-bottom: 16px;
+}
+.price-panel header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.price-panel h2,
+.empty-state h2 {
+  font:
+    500 clamp(1.5rem, 2.8vw, 2.15rem) / 1.16 Georgia,
+    serif;
+  letter-spacing: -0.035em;
+  color: #143a47;
+}
+.price-panel header p {
+  color: #46616c;
+  margin: 5px 0 0;
+  font-size: 0.94rem;
+}
+.range-label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  font-size: 0.82rem;
+  color: #4a606a;
+}
+.range-label select {
+  border: 1px solid #b7ccce;
+  border-radius: 6px;
+  padding: 6px 27px 6px 9px;
+  font-size: 0.86rem;
+}
+.quote-summary {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 19px 0 5px;
+}
+.quote-summary strong {
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  letter-spacing: -0.045em;
+  color: #125952;
+}
+.quote-summary b,
+.quote-summary span {
+  display: block;
+  font-size: 0.82rem;
+}
+.quote-summary span {
+  color: #526971;
+}
+#pricePlot {
+  width: 100%;
+  height: clamp(175px, 19vw, 245px);
+  display: block;
+}
+.chart-empty {
+  padding: 20px;
+  border: 1px dashed #c3d2d4;
+  border-radius: 6px;
+  color: #526872;
+}
+.plot-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-top: 1px solid #e2e9e9;
+  padding-top: 10px;
+}
+.plot-tools label,
+.plot-key,
+#modelNote {
+  font-size: 0.8rem;
+  color: #4c636d;
+}
+.plot-key {
+  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.plot-key span::before {
+  content: '';
+  width: 18px;
+  margin-right: 5px;
+  border-top: 3px solid #11716f;
+  display: inline-block;
+  vertical-align: middle;
+}
+#modelKey::before {
+  border-top: 2px dashed #835495;
+}
+#pointDate {
+  width: 24%;
+  max-width: 190px;
+  accent-color: #11645f;
+}
+#modelNote {
+  margin-bottom: 0;
+}
+.empty-state {
+  padding: 26px 18px;
+  min-height: auto;
+}
+.empty-features {
+  font-size: 0.8rem;
+}
+.insight-grid article span,
+.insight-grid article small,
+.report-tabs button {
+  font-size: 0.8rem;
+}
+body.presentation .price-panel,
+body.presentation .feed-health,
+body.presentation .bottom-nav.hub-primary {
+  display: none !important;
+}
+@media (max-width: 860px) {
+  main {
+    padding: 12px 12px 38px;
+  }
+  .workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .workspace > *,
+  .workspace > .results > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .workspace .results {
+    display: contents;
+  }
+  .workspace .price-panel {
+    order: -2;
+    width: 100%;
+    margin: 0;
+  }
+  .workspace .input-panel {
+    order: -1;
+    width: 100%;
+  }
+  .workspace > .results > * {
+    width: 100%;
+  }
+  .intro {
+    padding: 14px 0;
+  }
+  .intro-action {
+    max-width: 140px;
+  }
+  .app-header {
+    padding: 10px 12px;
+    gap: 9px;
+  }
+  .section-link {
+    padding-left: 9px;
+  }
+  .hub-menu-main {
+    min-width: 0;
+  }
+}
+@media (max-width: 520px) {
+  .intro {
+    display: block;
+  }
+  .intro-action {
+    display: flex;
+    max-width: none;
+    align-items: center;
+    gap: 9px;
+    margin-top: 13px;
+    text-align: left;
+  }
+  .intro-action small {
+    margin: 0;
+  }
+  .section-link {
+    display: none;
+  }
+  .range-label {
+    display: block;
+  }
+  .range-label select {
+    display: block;
+  }
+  #pointDate {
+    width: 32%;
+  }
+  .plot-key {
+    flex-basis: 100%;
+  }
+  .form-section input,
+  .form-section select {
+    font-size: 1rem;
+  }
+  .feed-health {
+    margin-bottom: 12px;
+  }
+}
