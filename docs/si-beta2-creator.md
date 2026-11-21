@@ -2,6 +2,14 @@
 
 `si-beta2.html` sits beside SI Pricing in the shared History navigation. Both views use the shared historical SI reference data.
 
+SI and SI 2 also have direct links in the shared primary navigation and the
+Historical charts menu. The SI pricing table opens on entry. Company-card SI
+references span the card above research and news. Narrow containers stack
+Tenor/Coupon, KI/KO and Strike/Step-down in three paired columns; source date and
+currency stay with the basket. The nine underlying table fields and their
+column menus remain available, with normal page scrolling instead of an inner
+scroll box. These display changes reuse the reference data without copying rows.
+
 The reference list shares SI Pricing's quick filter: four logo/name/ticker
 selectors with AND/OR joins, currency, tenor 1–11 and inclusive coupon min/max.
 The selectors occupy two rows on desktop and four compact rows on phones.

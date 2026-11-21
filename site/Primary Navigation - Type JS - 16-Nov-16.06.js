@@ -13,7 +13,9 @@
     ['Calls', 'v4.html#calls', '✎']
   ];
   const sections = [
-    ['Home', 'desk.html', '⌂'], ['News', 'v4.html#overview', '◫'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['Stocks BETA 2', 'stocks-beta2.html', '▥'], ['Bonds BETA', 'bonds-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
+    ['Home', 'desk.html', '⌂'], ['News', 'v4.html#overview', '◫'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['Stocks BETA 2', 'stocks-beta2.html', '▥'],
+    ['SI', 'v4.html#history/si', '▧'], ['SI 2', 'si-beta2.html#si-library', '▧'],
+    ['Bonds BETA', 'bonds-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
     ['Master Pivot', 'v4.html#master/pivot', '▦'],
     ['Historical charts', 'cross-market-history.html', '↗'],
     ['My Blog', 'market-understanding/', '▤'], ['Markets', 'desk.html#markets', '◫']
@@ -30,6 +32,7 @@
     ]],
     ['Historical charts', [
       ['Cross-market history', 'cross-market-history.html'],
+      ['SI pricing data', 'v4.html#history/si'], ['SI 2 data', 'si-beta2.html#si-library'],
       ['Yield history', 'v4.html#history/yield'], ['Historical curves', 'v4.html#history/curves'],
       ['FX history', 'v4.html#history/fx'], ['Share prices', 'v4.html#history/shares'],
       ['Event studies', 'v4.html#history/beta2-shares'], ['History pivot', 'v4.html#history/beta4-shares'],
@@ -192,7 +195,8 @@
     const relative = location.pathname.slice(base.pathname.length);
     const route = location.hash || '#overview';
     const onWorkspace = relative === 'v4.html';
-    const key = relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
+    const key = relative === 'si-beta2.html' ? 'SI 2' : onWorkspace && route === '#history/si' ? 'SI'
+      : relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
       : ['bonds-beta.html','bond-cashflow.html'].includes(relative) || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA' : ['stocks-beta2.html','bos-monthly.html'].includes(relative) ? 'Stocks BETA 2' : relative === 'stocks-beta.html' ? 'Stocks BETA'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || relative === 'cross-market-history.html' ? 'Historical charts'
       : onWorkspace && (route === '#hourly' || newsLinks.some(([, href]) => href === 'v4.html' + route)) ? 'News'

@@ -20,6 +20,7 @@
   }
   const onePagerHref = reference => 'si-beta2.html?reference=' + encodeURIComponent(reference);
   const headers = ['Shares / reference', 'Date', 'CCY', 'Tenor', 'Coupon', 'KO', 'KO Step-down', 'KI', 'Strike'];
+  const fields = ['stocks', 'date', 'currency', 'tenor', 'coupon', 'ko', 'step', 'ki', 'strike'];
 
   function cells(row, step, basket) {
     const barrier = (term, value) => `<td data-tc-value="${value}"><span class="si-term-value" data-si-barrier-band="${C.barrierBand(term, value)}">${value}%</span></td>`;
@@ -33,6 +34,15 @@
 
   function basket(row, logos) {
     return `<span class="si-library-shares">${row.shares.map(code => `<span class="si-library-share">${logos ? root.CompanyLogos.html([code], logos, { size: 20 }) : ''}${E(code)}</span>`).join('')}</span>`;
+  }
+
+  function cardCells(row, step, logos) {
+    let index = 0;
+    const shares = basket(row, logos) + `<small class="si-card-source-meta">${E(row.source_date || 'Date not shown')} · ${E(row.currency)}</small>`;
+    return cells(row, step, shares).replace(/<td(?=[\s>])/g, () => {
+      const field = fields[index], label = headers[index++];
+      return `<td role="cell" data-si-field="${field}" data-label="${E(label)}"`;
+    });
   }
 
   function section(listing, { open = false } = {}) {
@@ -55,11 +65,11 @@
       const code = codeFor(detail.dataset.siCardListing);
       const rows = data.rows.filter(row => row.shares.includes(code));
       detail.querySelector('summary').textContent = `SI Beta 2 references · ${rows.length}`;
-      body.innerHTML = rows.length ? `<div class="si-card-scroll" tabindex="0" role="region" aria-label="${E(detail.dataset.siCardListing)} SI Beta 2 references">
-        <table data-table-controls="on" data-tc-layout="si-card-references">
+      body.innerHTML = rows.length ? `<div class="si-card-scroll" role="region" aria-label="${E(detail.dataset.siCardListing)} SI Beta 2 references">
+        <table role="table" data-table-controls="on" data-tc-layout="si-card-references">
           <caption>Rounded historical references · select a reference to open its one-pager</caption>
-          <thead><tr>${headers.map((name, index) => `<th scope="col"${index === 6 ? ' data-table-unit="pp"' : ''}>${name}</th>`).join('')}</tr></thead>
-          <tbody>${rows.map(row => '<tr>' + cells(row, data.ko_step_down_pp?.[row.reference], basket(row, logos)) + '</tr>').join('')}</tbody>
+          <thead role="rowgroup"><tr role="row">${headers.map((name, index) => `<th role="columnheader" scope="col"${index === 6 ? ' data-table-unit="pp"' : ''}>${name}</th>`).join('')}</tr></thead>
+          <tbody role="rowgroup">${rows.map(row => '<tr role="row">' + cardCells(row, data.ko_step_down_pp?.[row.reference], logos) + '</tr>').join('')}</tbody>
         </table></div>` : '<p>No saved SI references for this listing.</p>';
       detail.dataset.siCardState = 'loaded';
       if (!logos && root.CompanyLogos && rows.length) root.document.addEventListener('mih-logo-catalogue', () => {

@@ -1,13 +1,38 @@
-.si-card-references { min-width: 0; margin-block: .75rem; border: 1px solid var(--line, #d6e0e3); border-radius: .5rem; }
+.si-card-references { container-type: inline-size; min-width: 0; margin-block: .75rem; border: 1px solid var(--line, #d6e0e3); border-radius: .5rem; }
 .si-card-references > summary { padding: .55rem .7rem; font-weight: 650; cursor: pointer; }
 .si-card-references > div { padding: 0 .7rem .7rem; }
 .si-card-references p { margin-block: .4rem; }
-.si-card-scroll { max-width: 100%; max-height: 27rem; overflow: auto; }
-.si-card-scroll table { width: 100%; min-width: 43rem; border-collapse: collapse; font-size: .85em; }
-.si-card-scroll :is(th, td) { padding: .4rem .55rem; white-space: nowrap; text-align: left; }
+.si-card-scroll { max-width: 100%; overflow: visible; }
+.si-card-scroll table { width: 100%; min-width: 0; border-collapse: collapse; font-size: .875rem; }
+.si-card-scroll :is(th, td) { padding: .4rem .55rem; white-space: normal; text-align: left; }
 .si-card-scroll caption { text-align: left; padding-block: .35rem; }
 .si-card-scroll td small { display: block; margin-top: .2rem; }
 .si-card-scroll .si-library-shares { display: grid; grid-template-columns: repeat(2, max-content); gap: .25rem .6rem; }
 .si-card-scroll .si-library-share { display: inline-flex; align-items: center; gap: .25rem; }
 .si-card-scroll .si-library-share img { object-fit: contain; }
+.si-card-source-meta { display: none !important; }
 .mp-watchlist-company { min-width: 0; }
+
+@container (max-width: 70rem) {
+  .si-card-scroll table, .si-card-scroll thead, .si-card-scroll tbody { display: block; width: 100%; }
+  .si-card-scroll caption { display: block; width: 100%; }
+  .si-card-scroll colgroup { display: none; }
+  .si-card-scroll thead tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .25rem; margin-bottom: .6rem; }
+  .si-card-scroll thead th { width: auto !important; min-width: 0; padding: .3rem .4rem; border: 1px solid var(--line, #d6e0e3); border-radius: .3rem; font-size: .75rem; }
+  .si-card-scroll tbody { display: grid; gap: .65rem; }
+  .si-card-scroll tbody tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line, #d6e0e3); border-radius: .4rem; padding: .5rem; }
+  .si-card-scroll tbody tr[hidden] { display: none; }
+  .si-card-scroll tbody td { min-width: 0; width: auto !important; padding: .3rem; border: 0; }
+  .si-card-scroll [data-si-field="stocks"] { grid-column: 1 / -1; grid-row: 1; padding-bottom: .55rem; }
+  .si-card-scroll :is([data-si-field="date"], [data-si-field="currency"]) { display: none; }
+  .si-card-scroll [data-si-field="tenor"] { grid-area: 2 / 1; }
+  .si-card-scroll [data-si-field="coupon"] { grid-area: 3 / 1; }
+  .si-card-scroll [data-si-field="ki"] { grid-area: 2 / 2; }
+  .si-card-scroll [data-si-field="ko"] { grid-area: 3 / 2; }
+  .si-card-scroll [data-si-field="strike"] { grid-area: 2 / 3; }
+  .si-card-scroll [data-si-field="step"] { grid-area: 3 / 3; }
+  .si-card-scroll tbody td:not([data-si-field="stocks"])::before { content: attr(data-label); display: block; font-size: .75rem; font-weight: 500; color: var(--muted, #52666e); margin-bottom: .15rem; }
+  .si-card-scroll .si-library-shares { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .si-card-scroll .si-library-share { overflow-wrap: anywhere; }
+  .si-card-scroll .si-card-source-meta { display: block !important; }
+}

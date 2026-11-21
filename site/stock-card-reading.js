@@ -153,13 +153,12 @@
   }
 
   function reading({ matches, items, listing, afterSi = '', reportsUnavailable, newsUnavailable }) {
-    return `<section class="sb-section sb-reading-grid">
+    return `${root.SIReferenceTable?.section(listing) || ''}<section class="sb-section sb-reading-grid">
       <div>
         <h3>Research &amp; saved write-ups <small>(${matches.length})</small></h3>
         <p class="sb-note">${reportsUnavailable ? 'Independent research is unavailable. Saved matches are shown.'
           : 'Company-tagged or titled reports from the connected catalogue. Links open the original reports.'}</p>
         ${matches.map(reportMarkup).join('') || '<p class="sb-empty">No company-matched report is indexed.</p>'}
-        ${root.SIReferenceTable?.section(listing) || ''}
         ${afterSi}
       </div>
       <div>
