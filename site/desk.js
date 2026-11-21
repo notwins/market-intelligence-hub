@@ -86,6 +86,16 @@ function moveObservation(daily, endDate, {days, months, sessions}, history) {
 function priceMove(daily, endDate, period) {
   return moveObservation(daily, endDate, period)?.value ?? null;
 }
+function longestYearlyLookback({daily, quote, base}) {
+  const first = [daily[0]?.[0], base?.weekly[0]?.[0], base?.monthly[0]?.[0]].filter(Boolean).sort()[0];
+  const end = quote?.date;
+  if (!first || !end) return 0;
+  const possibleYears = Number(end.slice(0, 4)) - Number(first.slice(0, 4));
+  for (let years = possibleYears; years >= 1; years--) {
+    if (moveObservation(daily, end, {months: years * 12}, base)) return years;
+  }
+  return 0;
+}
 function selectedPrice(ticker,market=root.MarketPrices){const item=market?.resolve(ticker)||root.BOSEquity?.itemFor(ticker),q=market?.currentQuote(item||ticker);if(!item||!Number.isFinite(q?.close)||q.close<=0||!q.date)return null;const label=(q.sourceLabel||'Shared price feed')+(q.current===false?' · dated observation':'');return {value:q.close,currency:market.displayUnit(item),as_of:q.date,basis:q.reason||label,status_label:label,source_url:q.sourceUrl};}
 function moveHeat(move) {
   if (!Number.isFinite(move)) return 'missing';
@@ -94,7 +104,7 @@ function moveHeat(move) {
   const band = magnitude < 5 ? 1 : magnitude < 10 ? 2 : magnitude <= 15 ? 3 : 4;
   return `${move > 0 ? 'gain' : 'loss'}-${band}`;
 }
-const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat,moveObservation};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
+const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat,moveObservation,longestYearlyLookback};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
 let data=null,feed=null,reports=[],featured=[],limit=12,opener=null,refreshing=false;const editing=canEdit(root.location);const seriesCache=new Map();
 const priceSections = ['markets', 'stock-moves', 'stock-prices', 'main-company-cards', 'market-rates', 'market-bonds', 'yields'];
 let priceWatchlist = [], pricesStarted = false, moveView = 'default';
@@ -173,15 +183,18 @@ function bindMoveViews() {
   resize.observe(table);
 
   const buttons = [...document.querySelectorAll('[data-move-view]')];
-  for (const button of buttons) button.addEventListener('click', () => {
-    if (moveView === button.dataset.moveView) return;
-    moveView = button.dataset.moveView;
-    for (const option of buttons) option.setAttribute('aria-pressed', String(option === button));
-    paintMoveView();
-    strip.scrollLeft = 0;
-    syncScrollControls();
-    if (!refreshing) paintMoveStatus();
-  });
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      if (moveView === button.dataset.moveView) return;
+      moveView = button.dataset.moveView;
+      for (const option of buttons) option.setAttribute('aria-pressed', String(option === button));
+      paintMoveView();
+      strip.scrollLeft = 0;
+      syncScrollControls();
+      if (!refreshing) paintMoveStatus();
+    });
+    button.disabled = false;
+  }
 }
 
 function quoteDetails(r) {
@@ -302,6 +315,12 @@ async function refreshPrices(force = false) {
       document.querySelector(`[data-move-quote="${ticker}"]`).innerHTML = moveQuote(row);
     }
     await warmCharts();
+    const sources = [...moveHistory.values()];
+    const years = Math.max(5, ...sources.map(longestYearlyLookback));
+    if (years !== moveViews.yearly[0].periods.length) {
+      moveViews.yearly = [moveGroup('Years', 'Y', 1, years)];
+      if (moveView === 'yearly') paintMoveView();
+    }
     paintMoveStatus();
   } finally {
     refreshing = false;
