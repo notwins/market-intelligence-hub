@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="company-fundamentals.css?v=2">
-  <script defer src="company-fundamentals.js?v=2"></script>
+  <link rel="stylesheet" href="company-fundamentals.css?v=3">
+  <script defer src="company-fundamentals.js?v=3"></script>
   <link rel="stylesheet" href="company-credit.css?v=1">
   <script defer src="company-credit.js?v=2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -74,10 +74,11 @@
             <span id="sb2-card-fit" class="sb2-card-fit" role="status"></span>
           </div>
           <button type="button" id="sb2-download" disabled>Download compact CSV</button>
-          <details class="sb2-fund-import" data-fund-import-panel>
+          <details class="sb2-fund-import" id="sb2-fundamentals-import" data-fund-import-panel>
             <summary>Morningstar annual statements</summary>
             <p>Load a Fundamentals JSON file to see annual statements on company cards. The file is saved in this browser.</p>
             <label class="sb2-file-label">Load fundamentals JSON<input type="file" accept=".json,application/json" data-fund-file></label>
+            <button type="button" data-fund-clear hidden>Clear browser copy</button>
             <p class="fund-state" role="status"></p>
           </details>
           <div data-credit-library></div>
@@ -172,7 +173,7 @@
             <label class="sb2-line-slider">Inspect month across cards<input type="range" step="1"></label>
           </section>
           <section class="sb2-research" aria-label="Company research">
-            <h3>Quick data</h3>
+            <h3>BOS Equity Research</h3>
             <p class="sb2-research-status" role="status">Loading company research…</p>
             <div class="sb2-research-body" hidden></div>
             <div data-sb2-fundamentals></div>

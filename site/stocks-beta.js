@@ -200,7 +200,7 @@ function renderCard(c) {
     <div class="sb-card-body">
       <div class="sb-card-profile" id="sb-profile-${id}">
         ${description}${root.ShareStaticData?.html(c.record||c.item,{description:!c.record?.description})||''}
-        ${root.CompanyFundamentals?.button(c.record||c.item)||''}${sources(c)}
+        ${sources(c)}
       </div>
       <dl class="sb-metrics">${valuationTile(c,'pe')}${valuationTile(c,'pb')}
         ${metric('Market cap · USD bn',r.marketCapUsdBillions)}${metric('Forward dividend yield',r.dividendYieldPct,'%')}
@@ -213,6 +213,7 @@ function renderCard(c) {
         <p class="sb-note">Valuations: ${day(r.priceAsOf)} · consensus forward estimates, forecast horizon unspecified. Revenue / EPS: ${E(c.earnings.observations[0]?.period||'not indexed')} · ${E(c.earnings.company?.eps_basis||'basis unavailable')}. These are separate reporting dates.</p>
         ${returns(c)}${chartSection(c)}${fundamentals(c)}<div data-credit-listing="${E(c.ticker)}"></div>
         ${earnings(c)}${reading(c)}${warnings}${root.NvdaArticle?.link(c.ticker)||''}
+        ${root.CompanyFundamentals?.button(c.record||c.item)||''}
       </div>
     </div>
   </article>`;

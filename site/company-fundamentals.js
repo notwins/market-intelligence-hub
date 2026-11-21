@@ -2,9 +2,9 @@
 (function (root) {
   'use strict';
 
-  const types = { income: 'Income statement', balance: 'Balance sheet', cash: 'Cash flow' };
+  const types = { balance: 'Balance Sheet', cash: 'Cash Flow', income: 'Net Income' };
   const initialSeries = {
-    income: /^Total Revenue$/,
+    income: /^Net Income(?:\/Loss)?(?:, Total| Attributable to Parent)?$/i,
     balance: /^Total Assets$/,
     cash: /^Cash Flow from(?:\/Used in)? Operating Activities/
   };
@@ -19,8 +19,7 @@
   const currency = value => /^(GBX|GBp)$/.test(value) ? 'GBP' : value;
   const fields = ['bbTicker', 'instrumentId', 'ticker', 'publicTicker', 'symbol', 'id'];
   const doc = root.document;
-  let directoryRequest, databaseRequest, loadRequest, memory, dialog, active;
-  let statement = 'income';
+  let directoryRequest, databaseRequest, loadRequest, researchRequest, memory;
   let temporary = false, writing = false;
   const importPanels = new Set();
 
@@ -121,13 +120,24 @@
       const clear = panel.querySelector('[data-fund-clear]');
       if (clear) clear.hidden = !memory;
     }
-    if (dialog?.open) paint();
+    doc.dispatchEvent(new Event('fundamentals-updated'));
   }
 
   function bindImport(panel) {
     if (!panel) return;
     importPanels.add(panel);
     load().then(updateImportPanels);
+    panel.addEventListener('click', async event => {
+      if (!event.target.closest('[data-fund-clear]') || writing) return;
+      writing = true;
+      try {
+        if (!temporary) await stored('delete');
+        memory = null;
+        temporary = false;
+        updateImportPanels();
+      } catch { panel.querySelector('.fund-state').textContent = 'The browser copy could not be cleared.'; }
+      finally { writing = false; }
+    });
     panel.addEventListener('change', async event => {
       const input = event.target;
       const file = input.matches('[data-fund-file]') && input.files[0];
@@ -162,26 +172,25 @@
       .catch(error => { directoryRequest = null; throw error; });
   }
 
-  function button(item, { label = 'Fundamentals', exact = false } = {}) {
+  function section(item, { label = '', research = true } = {}) {
     if (!item) return '';
     const source = typeof item === 'string' ? { ticker: item } : item;
     const pick = [...fields, 'aliases', 'currency', 'exchangeMic', 'mic', 'asset_type',
       'instrumentType', 'identityStatus', 'currentEligible', 'name'];
     const identity = Object.fromEntries(pick.filter(key => source[key] !== undefined).map(key => [key, source[key]]));
     return '<market-fundamentals data-identity="' + esc(JSON.stringify(identity)) + '" data-label="'
-      + esc(label) + '"' + (exact ? ' data-exact' : '') + '></market-fundamentals>';
+      + esc(label) + '"' + (research ? ' data-bos-research' : '') + '></market-fundamentals>';
   }
 
   function more(item) {
-    return '<details class="fund-more"><summary>More data</summary><h3>Fundamentals</h3>'
-      + '<p>Annual income statement, balance sheet and cash flow.</p>'
-      + button(item, { label: 'Open financial statements', exact: true }) + '</details>';
+    return '<details class="fund-more"><summary>More data</summary>'
+      + section(item, { research: false }) + '</details>';
   }
 
   function unit(label, report) {
-    if (/per share|\b(?:EPS|DPS)\b/i.test(label)) return { scale: 1, text: report.currency + ' per share' };
+    if (/per share|\b(?:EPS|DPS)\b/i.test(label)) return { scale: 1, text: 'per share' };
     if (/shares outstanding|weighted average shares/i.test(label)) return { scale: 1e6, text: 'million shares' };
-    return { scale: 1e6, text: report.currency + ' millions' };
+    return { scale: 1e6, text: report.currency ? report.currency + ' millions' : 'Millions of reported units' };
   }
 
   const number = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2 });
@@ -241,117 +250,155 @@
       }).join('') + '</div></figure>';
   }
 
-  function paint() {
-    const title = dialog.querySelector('h2');
-    const content = dialog.querySelector('.fund-content');
-    const report = memory?.companies[active.id]?.statements[statement];
-    title.textContent = active.name + ' · Fundamentals';
-    const count = Object.keys(memory?.companies || {}).length;
-    const listing = active.id + ' · ' + active.mic;
-    dialog.querySelector('.fund-listing').textContent = listing;
-    dialog.querySelector('.fund-state').textContent = importMessage();
-    dialog.querySelector('[data-fund-clear]').hidden = !count;
-    if (!report) {
-      content.innerHTML = '<p class="fund-note">' + (count ? 'The saved import has no statements for this listing.'
-        : 'Income statement, balance sheet and cash flow will appear here after import.') + '</p>';
+  function readResearch() {
+    return researchRequest ??= root.fetch('data/stocks-beta2-research-briefs.json?v=20261121.3', {
+      signal: AbortSignal.timeout(10000)
+    }).then(async response => {
+      if (!response.ok) throw new Error('The BOS research index is unavailable.');
+      const data = await response.json();
+      if (data.version !== 1 || !data.briefs) throw new Error('The BOS research index is invalid.');
+      return data.briefs;
+    }).catch(error => { researchRequest = null; throw error; });
+  }
+
+  function researchLink(brief) {
+    if (!brief?.source) return '';
+    try {
+      const url = new URL(brief.source);
+      if (url.origin !== 'https://productgroup.bankofsingapore.com' || url.username || url.password
+          || !/^\/(?:apollo\/assets\/reports|equities_research)\/.*\.pdf$/i.test(url.pathname)) return '';
+      return url.href;
+    } catch { return ''; }
+  }
+
+  function reportContent(company, key, id) {
+    const original = company.statements[key];
+    // TSMC's audited FY2025 filings reconcile to the export totals in Taiwan dollars.
+    // The provider's field mirrors the listing currency for several other cross-listings.
+    const report = { ...original, currency: id === 'TSM US' ? 'TWD' : '' };
+    const options = report.rows.map((row, index) => ({ row, index })).filter(({ row }) => row[2].some(Number.isFinite));
+    const selected = options.find(({ row }) => initialSeries[key].test(row[1])) || options[0];
+    const title = key === 'income' ? 'Income statement · ' : '';
+    const scale = report.currency ? report.currency + ' millions' : 'millions of reported units';
+    const chartPanel = selected ? '<details class="fund-line-chart"><summary>Chart a line item</summary>'
+      + '<label class="fund-chart-select">Line item <select data-fund-series>' + options.map(({ row, index }) => (
+        '<option value="' + index + '"' + (index === selected.index ? ' selected' : '') + '>' + esc(row[1]) + '</option>'
+      )).join('') + '</select></label><div data-fund-chart>' + chart(report, selected.index) + '</div></details>' : '';
+    return {
+      report,
+      html: '<p class="fund-note">' + title + 'Annual · As Originally Reported · Fiscal year ends ' + esc(report.fiscalEnd)
+        + '. Amounts in ' + esc(scale) + ', with shares in millions and per-share figures as reported. '
+        + 'Export currency field: ' + esc(original.currency) + '.'
+        + (report.periods.includes('TTM') ? ' TTM is trailing 12 months.' : '') + '</p>'
+        + chartPanel + table(report, key) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
+        + ' (SGT). Dashes mark unavailable values.</p>'
+    };
+  }
+
+  function paintStatement(disclosure, id) {
+    const body = disclosure.querySelector('[data-fund-body]');
+    const company = memory?.companies[id];
+    if (!company) {
+      body.innerHTML = '<p class="fund-note">Load your saved statements under '
+        + '<a href="stocks-beta2.html#sb2-fundamentals-import">Stocks BETA 2 import settings</a>.</p>';
       return;
     }
-    const filtered = report.rows.map((row, i) => ({ row, i })).filter(({ row }) => row[2].some(Number.isFinite));
-    const defaultRow = filtered.find(({ row }) => initialSeries[statement].test(row[1]) && row[2].some(
-      (value, i) => Number.isFinite(value) && report.periods[i] !== 'TTM')) || filtered[0];
-    const captured = memory.companies[active.id].capturedAt.slice(0, 10);
-    content.innerHTML = '<div class="fund-tabs" role="group" aria-label="Financial statement">' + Object.entries(types).map(([key, label]) => (
-      '<button type="button" data-fund-statement="' + key + '" aria-pressed="' + String(key === statement) + '">' + label + '</button>'
-    )).join('') + '</div><p class="fund-note">Annual · As Originally Reported · Fiscal year ends ' + esc(report.fiscalEnd)
-      + '. Amounts in ' + esc(report.currency) + ' millions, except per-share amounts and shares in millions. TTM is trailing 12 months.</p>'
-      + (defaultRow ? '<label class="fund-chart-select">Chart line item<select data-fund-series>' + filtered.map(({ row, i }) => (
-        '<option value="' + i + '"' + (i === defaultRow.i ? ' selected' : '') + '>' + esc(row[1]) + '</option>'
-      )).join('') + '</select></label><div data-fund-chart>' + chart(report, defaultRow.i) + '</div>' : '')
-      + '<p class="fund-note fund-table-hint">Select a line item to chart it. Scroll across for earlier periods.</p>'
-      + table(report, statement) + '<p class="fund-note">Morningstar export captured ' + esc(captured)
-      + ' (SGT). Blank cells indicate no reported value.</p>';
+    const { html, report } = reportContent(company, disclosure.dataset.fundStatement, id);
+    body.innerHTML = html;
+    const select = body.querySelector('[data-fund-series]');
+    if (!select) return;
+    const plot = body.querySelector('[data-fund-chart]');
+    const draw = () => { plot.innerHTML = chart(report, Number(select.value)); };
+    select.addEventListener('change', draw);
+    body.querySelector('.fund-table').addEventListener('click', event => {
+      const button = event.target.closest('[data-fund-row]');
+      if (!button) return;
+      select.value = button.dataset.fundRow;
+      select.closest('details').open = true;
+      draw();
+      select.focus();
+    });
   }
 
-  function open(row, name) {
-    const [id, mic, symbol] = row;
-    active = { id, mic, name: name || id };
-    statement = 'income';
-    if (!dialog) {
-      dialog = doc.createElement('dialog');
-      dialog.className = 'fund-dialog';
-      dialog.setAttribute('aria-labelledby', 'fund-dialog-title');
-      dialog.innerHTML = '<header class="fund-heading"><div><p class="fund-listing"></p><h2 id="fund-dialog-title"></h2></div>'
-        + '<form method="dialog"><button type="submit" autofocus>Close</button></form></header>'
-        + '<div class="fund-content"></div><footer class="fund-import">'
-        + '<p class="fund-state" role="status"></p><div><label>Load fundamentals JSON<input type="file" accept=".json,application/json" data-fund-file></label>'
-        + '<button type="button" data-fund-clear hidden>Clear browser copy</button>'
-        + '<a target="_blank" rel="noopener noreferrer" data-fund-source>Morningstar Financials</a></div></footer>';
-      doc.body.append(dialog);
-      bindImport(dialog.querySelector('.fund-import'));
-      dialog.addEventListener('click', async event => {
-        const tab = event.target.closest('[data-fund-statement]');
-        const metric = event.target.closest('[data-fund-row]');
-        if (tab) {
-          statement = tab.dataset.fundStatement;
-          paint();
-          dialog.querySelector('[data-fund-statement="' + statement + '"]').focus();
-        } else if (metric) {
-          const field = dialog.querySelector('[data-fund-series]');
-          field.value = metric.dataset.fundRow;
-          draw(field.value);
-          field.focus();
-        } else if (event.target.closest('[data-fund-clear]') && !writing) {
-          writing = true;
-          try {
-            if (!temporary) await stored('delete');
-            memory = null;
-            temporary = false;
-            updateImportPanels();
-          } catch { dialog.querySelector('.fund-state').textContent = 'The browser copy could not be cleared.'; }
-          finally { writing = false; }
-        }
-      });
-      dialog.addEventListener('change', async event => {
-        const input = event.target;
-        if (input.matches('[data-fund-series]')) draw(input.value);
-      });
-    }
-    dialog.querySelector('[data-fund-source]').href = 'https://www.morningstar.com/stocks/'
-      + mic.toLowerCase() + '/' + encodeURIComponent(symbol.toLowerCase()) + '/financials';
-    paint();
-    dialog.showModal();
-    dialog.scrollTop = 0;
-    load().then(() => { if (dialog.open && active.id === id) paint(); });
+  function rowsFor([id, mic, symbol], research, label) {
+    const source = 'https://www.morningstar.com/stocks/' + mic.toLowerCase() + '/'
+      + encodeURIComponent(symbol.toLowerCase()) + '/financials';
+    return '<section class="fund-inline" data-no-ticker-links>'
+      + (label ? '<h4 class="fund-card-heading">' + esc(label) + '</h4>' : '')
+      + (research ? '<details class="fund-research"><summary>BOS Equity Research</summary>'
+        + '<p class="fund-note" data-fund-research>Loading the listing’s equity research…</p></details>' : '')
+      + Object.entries(types).map(([key, title]) => '<details class="fund-statement" data-fund-statement="' + key
+        + '"><summary>' + title + '</summary><div class="fund-statement-body" data-fund-body></div></details>').join('')
+      + '<p class="fund-source"><a href="' + esc(source) + '" target="_blank" rel="noopener noreferrer">Morningstar Financials</a></p></section>';
   }
 
-  function draw(index) {
-    const report = memory.companies[active.id].statements[statement];
-    dialog.querySelector('[data-fund-chart]').innerHTML = chart(report, Number(index));
-  }
-
-  const api = { button, more, findListing, unpack, unit, table, chart };
+  const api = { button: section, more, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor };
   root.CompanyFundamentals = api;
   if (typeof module !== 'undefined') module.exports = api;
   if (!doc || !root.customElements) return;
-  bindImport(doc.querySelector('[data-fund-import-panel]'));
+  const importPanel = doc.querySelector('[data-fund-import-panel]');
+  if (importPanel) {
+    const revealImport = () => {
+      if (root.location.hash !== '#sb2-fundamentals-import') return;
+      const options = importPanel.parentElement.closest('details');
+      if (options) options.open = true;
+      importPanel.open = true;
+    };
+    revealImport();
+    root.addEventListener('hashchange', revealImport);
+    bindImport(importPanel);
+  }
 
   root.customElements.define('market-fundamentals', class extends root.HTMLElement {
     connectedCallback() {
-      if (this.childElementCount) return;
+      if (this.refresh) {
+        doc.addEventListener('fundamentals-updated', this.refresh);
+        this.refresh();
+        return;
+      }
+      if (this.hasAttribute('data-fund-pending')) return;
+      this.setAttribute('data-fund-pending', '');
       const item = JSON.parse(this.dataset.identity);
       directory().then(rows => {
         const match = findListing(item, rows);
-        if (!match || !this.isConnected || this.childElementCount) return;
-        const control = doc.createElement('button');
-        control.type = 'button';
-        control.className = 'fund-button';
-        control.textContent = this.dataset.label;
-        control.setAttribute('aria-haspopup', 'dialog');
-        control.addEventListener('click', () => open(match, item.name));
-        this.append(control);
-      }).catch(() => {
-        if (this.hasAttribute('data-exact')) this.textContent = 'The Fundamentals listing index could not load.';
-      });
+        if (!match || !this.isConnected) return;
+        this.innerHTML = rowsFor(match, this.hasAttribute('data-bos-research'), this.dataset.label);
+        const refresh = () => {
+          for (const detail of this.querySelectorAll('[data-fund-statement][open]')) paintStatement(detail, match[0]);
+          for (const detail of this.querySelectorAll('[data-fund-statement]:not([open])')) {
+            detail.querySelector('[data-fund-body]').replaceChildren();
+          }
+        };
+        this.addEventListener('toggle', event => {
+          const detail = event.target;
+          if (!detail.matches('[data-fund-statement]') || !detail.open || detail.querySelector('[data-fund-body]').childElementCount) return;
+          load().then(() => { if (detail.open && detail.isConnected) paintStatement(detail, match[0]); });
+        }, true);
+        this.refresh = refresh;
+        doc.addEventListener('fundamentals-updated', refresh);
+        const link = this.querySelector('[data-fund-research]');
+        if (link) {
+          const loadLink = async () => {
+            try {
+              const brief = (await readResearch())[match[0]];
+              const url = researchLink(brief);
+              if (!url) { link.textContent = 'No linked BOS equity research for this listing.'; return; }
+              const summary = link.previousElementSibling;
+              summary.textContent = 'BOS Equity Research · ' + brief.provider;
+              link.innerHTML = esc(brief.date) + ' · <a href="' + esc(url)
+                + '" target="_blank" rel="noopener noreferrer">Open research PDF</a>';
+              link.parentElement.removeEventListener('toggle', retryLink);
+            } catch { link.textContent = 'BOS equity research could not load. Reopen to retry.'; }
+          };
+          const retryLink = () => { if (link.parentElement.open) loadLink(); };
+          link.parentElement.addEventListener('toggle', retryLink);
+          loadLink();
+        }
+      }).catch(() => {}).finally(() => { this.removeAttribute('data-fund-pending'); });
+    }
+
+    disconnectedCallback() {
+      if (this.refresh) doc.removeEventListener('fundamentals-updated', this.refresh);
     }
   });
 })(typeof window !== 'undefined' ? window : globalThis);
