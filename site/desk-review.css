@@ -200,8 +200,13 @@
 @media (max-width: 760px) {
   .daily-dialog-head { padding: 10px 13px; }
   #daily-desk-report { padding: 11px 10px 15px; }
-  #bonds .read-bond-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  #bonds > .read-bond-grid > :first-child { grid-column: 1 / -1; }
+  .daily-desk-editions,
+  .briefing-indicators,
+  .history-shortcuts.history-directory,
+  .pulse-grid,
+  #bonds .read-bond-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .stock-move-share { width: 20.5%; }
   .stock-move-table th, .stock-move-table td { font-size: .65rem; padding-inline: 2px; }
   .stock-move-table th:first-child { padding-inline: 3px 1px; }
@@ -209,9 +214,6 @@
   .stock-move-table .stock-move-row a span { display: none; }
   .stock-move-table .stock-move-row header { gap: 3px; }
   .stock-move-table .stock-move-row .mih-company-logos { --company-logo-size: 13px !important; }
-}
-@media (max-width: 460px) {
-  #bonds .read-bond-grid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 350px) {
   .stock-move-table th, .stock-move-table td { font-size: .6rem; }
