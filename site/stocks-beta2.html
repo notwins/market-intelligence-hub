@@ -15,7 +15,9 @@
   <link rel="stylesheet" href="stocks-beta2.css?v=20261122.writeups">
   <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261122.research">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261121.audit1"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261122.price-archive"></script>
+  <link rel="stylesheet" href="stock-price-archive.css?v=1">
+  <script defer src="stock-price-archive.js?v=1"></script>
   <script defer src="bos-equity.js"></script>
   <link rel="stylesheet" href="share-prices.css">
   <script defer src="share-prices.js?beta2=20261122"></script>
@@ -25,7 +27,7 @@
   <script defer src="desk-news.js"></script>
   <script defer src="si-beta2-core.js?v=20261121.si2cards1"></script><link rel="stylesheet" href="si-reference-table.css?v=20261121.si2cards1"><script defer src="si-reference-table.js?v=20261121.si2cards1"></script><script defer src="stock-card-reading.js?v=20261121.si-refs2&amp;si2cards=1"></script>
   <script defer src="stocks-beta2-research.js?v=2"></script>
-  <script defer src="stocks-beta2.js?v=20261122.statement-controls3"></script>
+  <script defer src="stocks-beta2.js?v=20261122.price-archive"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -60,6 +62,13 @@
         <summary>Options</summary>
         <div id="sb2-options-content">
           <button type="button" id="sb2-download" disabled>Download compact CSV</button>
+          <details class="price-archive-import" data-price-archive-import>
+            <summary>Import price history</summary>
+            <p>Choose the Top 110 price archive JSON to save it in this browser for Stocks BETA 2 and the Hub Yearly heatmap.</p>
+            <label>Price archive JSON <input type="file" accept=".json,application/json"></label>
+            <button type="button" data-price-archive-clear hidden>Clear browser copy</button>
+            <p data-price-archive-status role="status">Checking browser storage…</p>
+          </details>
           <details class="sb2-fund-import" id="sb2-research-import">
             <summary>BOS equity research library</summary>
             <p>Load your local library to add detailed peer tables and the full projection tables to matching cards.</p>
@@ -153,6 +162,20 @@
           </div>
           <p class="sb2-coverage"></p>
         </div>
+        <details class="sb2-price-archive" data-sb2-price-archive hidden>
+          <summary>Daily price history</summary>
+          <p class="sb2-coverage" data-archive-range></p>
+          <div class="sb2-archive-periods" role="group" aria-label="Daily price history range">
+            <button type="button" data-archive-years="1" aria-pressed="false">1Y</button>
+            <button type="button" data-archive-years="5" aria-pressed="false">5Y</button>
+            <button type="button" data-archive-years="10" aria-pressed="false">10Y</button>
+            <button type="button" data-archive-years="20" aria-pressed="true">20Y</button>
+          </div>
+          <figure class="sb2-line-figure"><canvas role="img"></canvas></figure>
+          <label class="sb2-line-slider">Inspect daily close<input type="range" step="1"></label>
+          <output data-archive-close></output>
+          <p class="sb2-coverage" data-archive-prior hidden></p>
+        </details>
         <div class="sb2-chart-and-research">
           <section class="sb2-history" aria-label="Historical chart">
             <div>

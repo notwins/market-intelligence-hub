@@ -84,6 +84,7 @@
   const deck = get('sb2-detail'), dialog = get('sb2-card-picker');
   const cards = new Map();
   const researchLibrary = root.StocksBeta2Research;
+  doc.addEventListener('stock-price-archive-updated', () => cards.forEach(entry => entry.archiveChart?.refresh()));
   doc.addEventListener('sb2-research-updated', () => cards.forEach(entry => {
     if (entry.company.group !== 'shared') paintResearch(entry);
   }));
@@ -572,6 +573,7 @@
     }
     if (existing) {
       history.remove(existing.element);
+      existing.archiveChart?.remove();
       existing.element.replaceWith(element);
     } else {
       const next = [...cards.values()].filter(card => card.slot > slot).sort((a, b) => a.slot - b.slot)[0];
@@ -582,6 +584,7 @@
       root.MarketPrices.mount();
     } else {
       history.add(element, company);
+      entry.archiveChart = root.StocksBeta2Charts.mountPriceArchive(element, company);
       mountDivider(element, slot);
       paintMonthlyTable(entry, history.range());
       paintResearch(entry);
@@ -597,6 +600,7 @@
     element.querySelector('.sb2-remove-card').addEventListener('click', () => {
       if (cards.size <= 1) return;
       history.remove(element);
+      entry.archiveChart?.remove();
       cards.delete(slot);
       element.remove();
       fitCards();
