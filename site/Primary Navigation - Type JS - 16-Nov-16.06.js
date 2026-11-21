@@ -13,8 +13,7 @@
     ['Calls', 'v4.html#calls', '✎']
   ];
   const sections = [
-    ['Home', 'desk.html', '⌂'], ['News', 'v4.html#overview', '◫'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['Stocks BETA 2', 'stocks-beta2.html', '▥'],
-    ['SI', 'v4.html#history/si', '▧'], ['SI 2', 'si-beta2.html#si-library', '▧'],
+    ['Home', 'desk.html', '⌂'], ['News', 'v4.html#overview', '◫'], ['Shares', 'stocks-beta.html', '▥'],
     ['Bonds BETA', 'bonds-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
     ['Master Pivot', 'v4.html#master/pivot', '▦'],
     ['Historical charts', 'cross-market-history.html', '↗'],
@@ -51,8 +50,12 @@
   const subsections = new Map([
     ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
     ['News', newsLinks],
-    ['Stocks BETA', [['Share comparison', 'stocks-beta.html#sb-watchlist-table'], ['Stock cards', 'stocks-beta.html#sb-cards']]],
-    ['Stocks BETA 2', [['Company history', 'stocks-beta2.html#sb2-detail'], ['P/E rankings', 'stocks-beta2.html#sb2-pe-rankings'], ['BOS monthly archive', 'bos-monthly.html']]],
+    ['Shares', [
+      ['Stocks BETA', 'stocks-beta.html', '▥'],
+      ['Stocks BETA 2', 'stocks-beta2.html', '▥'],
+      ['SI pricing', 'v4.html#history/si', '▧'],
+      ['SI beta 2', 'si-beta2.html#si-library', '▧']
+    ]],
     ['Bonds BETA', [['Bond history cards', 'bonds-beta.html#bb-cards'], ['Bond Cashflow Studio', 'bond-cashflow.html'], credit, treasury, ['Bond watchlist', 'v4.html#watchlist']]],
     ['FRED', jumpGroups.get('FRED and rates')],
     ['Master Pivot', [
@@ -195,9 +198,11 @@
     const relative = location.pathname.slice(base.pathname.length);
     const route = location.hash || '#overview';
     const onWorkspace = relative === 'v4.html';
-    const key = relative === 'si-beta2.html' ? 'SI 2' : onWorkspace && route === '#history/si' ? 'SI'
+    const shares = ['stocks-beta.html', 'stocks-beta2.html', 'bos-monthly.html', 'si-beta2.html'].includes(relative)
+      || (onWorkspace && route === '#history/si');
+    const key = shares ? 'Shares'
       : relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
-      : ['bonds-beta.html','bond-cashflow.html'].includes(relative) || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA' : ['stocks-beta2.html','bos-monthly.html'].includes(relative) ? 'Stocks BETA 2' : relative === 'stocks-beta.html' ? 'Stocks BETA'
+      : ['bonds-beta.html','bond-cashflow.html'].includes(relative) || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || relative === 'cross-market-history.html' ? 'Historical charts'
       : onWorkspace && (route === '#hourly' || newsLinks.some(([, href]) => href === 'v4.html' + route)) ? 'News'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
