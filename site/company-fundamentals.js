@@ -1,4 +1,4 @@
-/* Annual statements imported by the reader. Storage is scoped to this browser origin. */
+/* Financial statements from private online storage or a browser-local import. */
 (function (root) {
   'use strict';
 
@@ -19,7 +19,9 @@
   const currency = value => /^(GBX|GBp)$/.test(value) ? 'GBP' : value;
   const fields = ['bbTicker', 'instrumentId', 'ticker', 'publicTicker', 'symbol', 'id'];
   const doc = root.document;
-  let directoryRequest, databaseRequest, loadRequest, researchRequest, memory;
+  let directoryRequest, databaseRequest, loadRequest, researchRequest, memory, online;
+  let frequency = 'annual';
+  const frequencyKey = 'mih.fundamentals.frequency';
   let temporary = false, writing = false;
   const importPanels = new Set();
 
@@ -55,8 +57,22 @@
     return matches.length === 1 ? matches[0] : null;
   }
 
+  function validReport(report, quarterly = false) {
+    const periodPattern = quarterly ? /^(?:Q[1-4] \d{4}|TTM)$/ : /^(?:\d{4}|TTM)$/;
+    return /^[A-Z]{3}$/.test(report?.currency) && typeof report.fiscalEnd === 'string'
+      && report.fiscalEnd.length < 35 && Array.isArray(report.periods)
+      && report.periods.length > 0 && report.periods.length <= 30
+      && report.periods.every(period => periodPattern.test(period))
+      && new Set(report.periods).size === report.periods.length
+      && Array.isArray(report.rows) && report.rows.length > 0 && report.rows.length <= 400
+      && report.rows.every(row => Array.isArray(row) && row.length === 3 && Number.isInteger(row[0])
+        && row[0] >= 0 && row[0] <= 16 && typeof row[1] === 'string' && row[1].trim() && row[1].length <= 400
+        && Array.isArray(row[2]) && row[2].length === report.periods.length
+        && row[2].every(amount => amount === null || Number.isFinite(amount)));
+  }
+
   function unpack(value, directory) {
-    if (value?.version !== 1 || value.source !== 'Morningstar' || !value.companies
+    if (![1, 2].includes(value?.version) || value.source !== 'Morningstar' || !value.companies
         || typeof value.companies !== 'object' || Array.isArray(value.companies)) {
       throw new Error('Choose a Stocks BETA 2 Fundamentals JSON file.');
     }
@@ -64,19 +80,9 @@
     const entries = Object.entries(value.companies);
     const valid = entries.length > 0 && entries.every(([id, company]) => ids.has(id)
       && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d[+-]\d\d:\d\d$/.test(company?.capturedAt)
-      && Object.keys(types).every(key => {
-        const report = company.statements?.[key];
-        return /^[A-Z]{3}$/.test(report?.currency) && typeof report.fiscalEnd === 'string'
-          && report.fiscalEnd.length < 35 && Array.isArray(report.periods)
-          && report.periods.length > 0 && report.periods.length <= 30
-          && report.periods.every(period => /^\d{4}$|^TTM$/.test(period))
-          && new Set(report.periods).size === report.periods.length
-          && Array.isArray(report.rows) && report.rows.length > 0 && report.rows.length <= 400
-          && report.rows.every(row => Array.isArray(row) && row.length === 3 && Number.isInteger(row[0])
-            && row[0] >= 0 && row[0] <= 16 && typeof row[1] === 'string' && row[1].trim() && row[1].length <= 400
-            && Array.isArray(row[2]) && row[2].length === report.periods.length
-            && row[2].every(amount => amount === null || Number.isFinite(amount)));
-      }));
+      && Object.keys(types).every(key => validReport(company.statements?.[key]))
+      && (value.version === 1 || (/^\d{4}-\d\d-\d\d$/.test(company.quarterlyCapturedAt)
+        && Object.keys(types).every(key => company.quarterly?.[key] === null || validReport(company.quarterly?.[key], true)))));
     if (!valid) throw new Error('The file contains an unknown listing or an invalid statement.');
     return value;
   }
@@ -90,12 +96,12 @@
     });
   }
 
-  async function stored(action, value) {
+  async function stored(action, value, key = 'annual') {
     const db = await database();
     return new Promise((resolve, reject) => {
       const tx = db.transaction('imports', action === 'get' ? 'readonly' : 'readwrite');
       const store = tx.objectStore('imports');
-      const request = action === 'put' ? store.put(value, 'annual') : store[action]('annual');
+      const request = action === 'put' ? store.put(value, key) : store[action](key);
       tx.oncomplete = () => resolve(request.result);
       tx.onabort = () => reject(tx.error);
     });
@@ -111,7 +117,7 @@
     return captured ? companies.length + ' listings loaded ' + (temporary ? 'for this page' : 'in this browser')
       + '. Latest capture ' + new Date(captured + 'T00:00:00Z').toLocaleDateString('en-GB', {
         day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Singapore'
-      }) + ' SGT.' : 'Choose your Fundamentals JSON to load annual statements.';
+      }) + ' SGT.' : '';
   }
 
   function updateImportPanels() {
@@ -163,6 +169,84 @@
     });
   }
 
+  async function openArchive(key, bytes) {
+    if (!(bytes instanceof ArrayBuffer) || bytes.byteLength < 29 || bytes.byteLength > 12e6) {
+      throw new Error('Invalid encrypted statements');
+    }
+    const gzip = await root.crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes.slice(0, 12) }, key, bytes.slice(12));
+    const stream = new Blob([gzip]).stream().pipeThrough(new DecompressionStream('gzip'));
+    const data = JSON.parse(await new Response(stream).text());
+    const listings = await directory();
+    if (data.version !== 2 || Object.keys(data.companies ?? {}).length !== listings.length) {
+      throw new Error('Incomplete statements archive');
+    }
+    return unpack(data, listings);
+  }
+
+  function bindOnline(panel) {
+    if (!panel) return;
+    const field = panel.querySelector('[data-fund-access]');
+    const status = panel.querySelector('[data-fund-online-state]');
+    const forget = panel.querySelector('[data-fund-forget-access]');
+    const keyName = 'private-online';
+    const prompt = 'Connect this browser once to load annual and quarterly statements automatically.';
+    let busy = false;
+    const show = (bundle, cached = false) => {
+      online = bundle;
+      forget.hidden = !bundle;
+      status.textContent = bundle ? Object.keys(bundle.companies).length
+        + ' listings · ' + (cached ? 'Saved private copy' : 'Private online statements ready') : prompt;
+      updateImportPanels();
+    };
+    async function getRemote(key) {
+      const response = await root.fetch(panel.dataset.fundOnline, {
+        cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout(15000)
+      });
+      if (!response.ok) throw new Error('The private archive is unavailable.');
+      const bytes = await response.arrayBuffer();
+      return { key, bytes, bundle: await openArchive(key, bytes) };
+    }
+    async function connect(key, savedBytes) {
+      busy = true;
+      field.disabled = forget.disabled = true;
+      status.textContent = 'Loading private online statements…';
+      try {
+        const { bundle, bytes } = await getRemote(key);
+        show(bundle);
+        try { await stored('put', { key, bytes }, keyName); }
+        catch { status.textContent = 'Private statements ready for this page. Chrome could not remember the connection.'; }
+      } catch {
+        try { show(await openArchive(key, savedBytes), true); }
+        catch {
+          status.textContent = 'Could not open the private archive. Check the access file or try again.';
+        }
+      } finally {
+        busy = false;
+        field.disabled = forget.disabled = false;
+      }
+    }
+    status.textContent = prompt;
+    stored('get', undefined, keyName).then(saved => { if (saved?.key && !busy) connect(saved.key, saved.bytes); }).catch(() => {});
+    field.addEventListener('change', async () => {
+      const file = field.files[0];
+      if (!file || busy) return;
+      try {
+        if (file.size > 128) throw new Error();
+        const value = (await file.text()).trim();
+        if (!/^[A-Za-z0-9_-]{43}$/.test(value)) throw new Error();
+        const bytes = Uint8Array.from(root.atob(value.replace(/-/g, '+').replace(/_/g, '/') + '='), char => char.charCodeAt(0));
+        const key = await root.crypto.subtle.importKey('raw', bytes, 'AES-GCM', false, ['decrypt']);
+        await connect(key);
+      } catch { status.textContent = 'Choose the Private Fundamentals Access file.'; }
+      finally { field.value = ''; }
+    });
+    forget.addEventListener('click', async () => {
+      if (busy) return;
+      try { await stored('delete', undefined, keyName); show(null); }
+      catch { status.textContent = 'Chrome could not forget the private access file.'; }
+    });
+  }
+
   function directory() {
     return directoryRequest ??= root.fetch('data/company-fundamentals-listings.json?v=1')
       .then(response => {
@@ -193,8 +277,12 @@
   const valueText = (value, scale) => value === null ? '—' : number.format(value / scale);
 
   function periods(report) {
+    const rank = label => {
+      if (label === 'TTM') return Infinity;
+      return label.startsWith('Q') ? Number(label.slice(3)) * 4 + Number(label[1]) : Number(label) * 4;
+    };
     return report.periods.map((label, index) => ({ label, index }))
-      .sort((left, right) => Number(right.label === 'TTM') - Number(left.label === 'TTM') || right.label.localeCompare(left.label));
+      .sort((left, right) => rank(right.label) - rank(left.label));
   }
 
   function statementHierarchy(rows) {
@@ -267,13 +355,14 @@
     const { scale, text } = unit(label, report);
     const series = periods(report).filter(p => p.label !== 'TTM').reverse();
     const available = series.map(p => values[p.index]).filter(Number.isFinite);
-    if (!available.length) return '<p class="fund-note">No annual observations for this line.</p>';
+    if (!available.length) return '<p class="fund-note">No reported periods for this line.</p>';
     const min = Math.min(0, ...available);
     const max = Math.max(0, ...available);
     const range = max - min || 1;
     const baseline = -min / range * 100;
     return '<figure class="fund-chart"><figcaption><strong>' + esc(label) + '</strong><span>' + esc(text) + '</span></figcaption>'
-      + '<div class="fund-plot" style="--fund-zero:' + baseline.toFixed(4) + '%">'
+      + '<div class="fund-plot' + (series.some(period => period.label.startsWith('Q')) ? ' fund-quarter-plot' : '')
+      + '" style="--fund-zero:' + baseline.toFixed(4) + '%">'
       + series.map(({ index: column, label: year }) => {
         const value = values[column];
         const height = Math.abs(value ?? 0) / range * 100;
@@ -398,7 +487,7 @@
 
   function breakdownPlot(report, view) {
     const bars = view.lanes.flatMap(row => row.bars).filter(segment => Number.isFinite(segment.amount));
-    if (!bars.length) return '<p class="fund-note">No reported values for the summary chart this year.</p>';
+    if (!bars.length) return '<p class="fund-note">No reported values for the summary chart in this period.</p>';
     const scale = barScale(bars);
     const { low, high, position, zero } = scale;
     const label = value => valueText(value, 1e6);
@@ -423,16 +512,17 @@
 
   function changeLabel(series) {
     const reported = series.filter(({ amount }) => Number.isFinite(amount));
-    if (reported.length < 2) return '<span class="fund-missing" aria-label="Two reported years needed">—</span>';
+    if (reported.length < 2) return '<span class="fund-missing" aria-label="Two reported periods needed">—</span>';
     const oldest = reported[0], latest = reported.at(-1);
     const change = (latest.amount - oldest.amount) / 1e6;
     const direction = change > 0 ? 'increase' : change < 0 ? 'decrease' : 'flat';
     const label = change && Math.abs(change) < .005 ? (change > 0 ? '+' : '−') + '<0.01' : signedChange.format(change);
-    return '<span class="fund-change-value" data-direction="' + direction + '" title="FY '
-      + esc(latest.year) + ' minus FY ' + esc(oldest.year) + '">' + esc(label) + '</span>';
+    return '<span class="fund-change-value" data-direction="' + direction + '" title="'
+      + esc(latest.year) + ' minus ' + esc(oldest.year) + '">' + esc(label) + '</span>';
   }
 
-  function comparisonPlot(report, key, views) {
+  function comparisonPlot(report, key, views, quarterly) {
+    const period = quarterly ? 'quarter' : 'year';
     const years = views.slice(0, 5).reverse();
     if (!years.length) return '';
     const available = years.filter(({ view }) => view.lanes.some(row => Number.isFinite(row.amount)));
@@ -443,12 +533,12 @@
       fixedColour: true
     };
     const panels = years.map(({ label, index, view }) => ({
-      label,
+      label: quarterly ? label : 'FY ' + label,
       view: breakdown(report, key, index, options),
       available: view.lanes.some(row => Number.isFinite(row.amount))
     }));
     const reference = panels.find(panel => panel.available)?.view;
-    if (!reference) return '<div class="fund-comparison"><p class="fund-note">No reported values in these fiscal years.</p></div>';
+    if (!reference) return '<div class="fund-comparison"><p class="fund-note">No reported values in these fiscal ' + period + 's.</p></div>';
     const rows = new Set(panels.filter(panel => panel.available).flatMap(({ view }) => view.lanes.map(row => row.label)));
     // The optional post-tax step belongs before the continuing-income total in every waterfall.
     if (options.waterfall && rows.has('Post-tax equity income')) {
@@ -466,11 +556,11 @@
       + '<span>' + esc(units) + ' · Shared scale ' + numberLabel(scale.low) + ' to ' + numberLabel(scale.high) + '</span></figcaption>'
       + '<ul class="fund-bar-key">' + legend.map(([label, colour]) => '<li><i data-colour="' + colour
         + '" aria-hidden="true"></i>' + esc(label) + '</li>').join('') + '</ul>'
-      + '<div class="fund-compare-scroll" role="region" aria-label="Fiscal-year comparison" tabindex="0">'
+      + '<div class="fund-compare-scroll" role="region" aria-label="Fiscal-' + period + ' comparison" tabindex="0">'
       + '<table class="fund-compare-table" data-table-controls="off" style="--fund-year-count:' + panels.length + '">'
       + '<thead><tr><th scope="col">Reported line item</th>'
-      + panels.map(panel => '<th scope="col">FY ' + esc(panel.label) + '</th>').join('')
-      + '<th scope="col" class="fund-change">5-year change</th></tr></thead><tbody>'
+      + panels.map(panel => '<th scope="col">' + esc(panel.label) + '</th>').join('')
+      + '<th scope="col" class="fund-change">5-' + period + ' change</th></tr></thead><tbody>'
       + [...rows].map(label => {
         const series = panels.map(({ label: year, view, available }) => ({
           year, row: available ? view.lanes.find(candidate => candidate.label === label) : undefined
@@ -496,12 +586,13 @@
           + '<td class="fund-change"><b>' + total + '</b>' + components + '</td></tr>';
       }).join('')
       + '</tbody></table></div>'
-      + '<p class="fund-note">Change is the latest minus the oldest reported value in these fiscal years.</p>'
+      + '<p class="fund-note">Change is the latest minus the oldest reported value in these fiscal ' + period + 's.</p>'
       + (reference.note ? '<p class="fund-note">' + esc(reference.note) + '</p>' : '') + '</figure>';
   }
 
-  function reportContent(company, key, id, compareYears = false, grouped = false) {
-    const original = company.statements[key];
+  function reportContent(company, key, id, compareYears = false, grouped = false, quarterly = false) {
+    const original = quarterly ? company.quarterly?.[key] : company.statements[key];
+    if (!original) return { html: '<p class="fund-note">Morningstar supplied no quarterly figures for this statement.</p>' };
     // TSMC's audited FY2025 filings reconcile to the export totals in Taiwan dollars.
     // The provider's field mirrors the listing currency for several other cross-listings.
     const report = { ...original, currency: id === 'TSM US' ? 'TWD' : '' };
@@ -512,7 +603,8 @@
     const years = periods(report).filter(period => period.label !== 'TTM');
     const views = years.map(period => ({ ...period, view: breakdown(report, key, period.index) }));
     const latest = views.find(period => period.view.lanes.some(row => Number.isFinite(row.amount))) || views[0];
-    const summary = latest ? '<div class="fund-breakdown fund-single-year"><label>Fiscal year <select data-fund-year>'
+    const summary = latest ? '<div class="fund-breakdown fund-single-year"><label>Fiscal '
+      + (quarterly ? 'quarter' : 'year') + ' <select data-fund-year>'
       + views.map(period => '<option value="' + period.index + '"' + (period === latest ? ' selected' : '')
         + '>' + esc(period.label) + '</option>').join('')
       + '</select></label><div data-fund-breakdown>' + breakdownPlot(report, latest.view) + '</div></div>' : '';
@@ -522,12 +614,12 @@
       )).join('') + '</select></label><div data-fund-chart>' + chart(report, selected.index) + '</div></details>' : '';
     return {
       report,
-      html: '<p class="fund-note">' + title + 'Annual · As Originally Reported · Fiscal year ends ' + esc(report.fiscalEnd)
+      html: '<p class="fund-note">' + title + (quarterly ? 'Quarterly' : 'Annual') + ' · As Originally Reported · Fiscal year ends ' + esc(report.fiscalEnd)
         + '. Amounts in ' + esc(scale) + ', with shares in millions and per-share figures as reported. '
         + 'Export currency field: ' + esc(original.currency) + '.'
         + (report.periods.includes('TTM') ? ' TTM is trailing 12 months.' : '') + '</p>'
-        + summary + (compareYears ? comparisonPlot(report, key, views) : '') + chartPanel
-        + table(report, key, grouped) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
+        + summary + (compareYears ? comparisonPlot(report, key, views, quarterly) : '') + chartPanel
+        + table(report, key, grouped) + '<p class="fund-note">Captured ' + esc(quarterly ? company.quarterlyCapturedAt : company.capturedAt.slice(0, 10))
         + ' (SGT). Dashes mark unavailable values.</p>'
     };
   }
@@ -580,15 +672,16 @@
 
   function paintStatement(disclosure, id) {
     const body = disclosure.querySelector('[data-fund-body]');
-    const company = memory?.companies[id];
-    if (!company) {
-      body.innerHTML = '<p class="fund-note">Load your saved statements under '
-        + '<a href="stocks-beta2.html#sb2-fundamentals-import">Stocks BETA 2 import settings</a>.</p>';
+    const quarterly = frequency === 'quarterly';
+    const company = (online ?? memory)?.companies[id];
+    if (!company || (quarterly && !company.quarterly)) {
+      body.innerHTML = '<p class="fund-note">Connect your statements under '
+        + '<a href="stocks-beta2.html#sb2-fundamentals-import">Stocks BETA 2 statement settings</a>.</p>';
       return;
     }
     const key = disclosure.dataset.fundStatement;
     const { html, report } = reportContent(company, key, id,
-      !!disclosure.closest('[data-compare-years]'), !!disclosure.closest('[data-fund-grouped]'));
+      !!disclosure.closest('[data-compare-years]'), !!disclosure.closest('[data-fund-grouped]'), quarterly);
     body.innerHTML = html;
     bindTableControls(body);
     const year = body.querySelector('[data-fund-year]');
@@ -654,6 +747,17 @@
     revealImport();
     root.addEventListener('hashchange', revealImport);
     bindImport(importPanel);
+    bindOnline(importPanel.querySelector('[data-fund-online]'));
+  }
+  const frequencyControl = doc.querySelector('[data-fund-frequency]');
+  if (frequencyControl) {
+    try { if (root.localStorage.getItem(frequencyKey) === 'quarterly') frequency = 'quarterly'; } catch {}
+    frequencyControl.value = frequency;
+    frequencyControl.addEventListener('change', () => {
+      frequency = frequencyControl.value === 'quarterly' ? 'quarterly' : 'annual';
+      try { root.localStorage.setItem(frequencyKey, frequency); } catch {}
+      doc.dispatchEvent(new Event('fundamentals-updated'));
+    });
   }
 
   root.customElements.define('market-fundamentals', class extends root.HTMLElement {

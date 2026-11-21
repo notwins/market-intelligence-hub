@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="company-fundamentals.css?v=20261122.statement-layout1">
-  <script defer src="company-fundamentals.js?v=20261122.research-layout1"></script>
+  <link rel="stylesheet" href="company-fundamentals.css?v=20261122.quarterly1">
+  <script defer src="company-fundamentals.js?v=20261122.quarterly1"></script>
   <link rel="stylesheet" href="company-credit.css?v=1">
   <script defer src="company-credit.js?v=2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,8 +78,12 @@
             <p class="fund-state" id="sb2-research-import-status" role="status"></p>
           </details>
           <details class="sb2-fund-import" id="sb2-fundamentals-import" data-fund-import-panel>
-            <summary>Morningstar annual statements</summary>
-            <p>Load a Fundamentals JSON file to see annual statements on company cards. The file is saved in this browser.</p>
+            <summary>Morningstar statements</summary>
+            <div data-fund-online="https://market-intel-fundamentals-vault.vercel.app/statements.bin">
+              <label class="sb2-file-label">Connect private statements<input type="file" accept=".txt,text/plain" data-fund-access></label>
+              <button type="button" data-fund-forget-access hidden>Forget private access</button>
+              <p class="fund-note" data-fund-online-state role="status"></p>
+            </div>
             <label class="sb2-file-label">Load fundamentals JSON<input type="file" accept=".json,application/json" data-fund-file></label>
             <button type="button" data-fund-clear hidden>Clear browser copy</button>
             <p class="fund-state" role="status"></p>
@@ -115,6 +119,12 @@
               </select>
             </label>
             <button type="button" id="sb2-fiscal-compare" aria-pressed="false" aria-controls="sb2-detail" hidden>Compare 5 fiscal years</button>
+            <label class="sb2-layout-control">Statement period
+              <select data-fund-frequency aria-label="Statement period" aria-controls="sb2-detail">
+                <option value="annual" selected>Annual</option>
+                <option value="quarterly">Quarterly</option>
+              </select>
+            </label>
             <button type="button" id="sb2-expand-statements" aria-controls="sb2-detail" disabled>Expand all statements</button>
           </div>
         </div>
