@@ -83,15 +83,15 @@ input[type=range]{margin:4px 0;width:100%;accent-color:var(--blue)}
 .table-scroll{overflow:auto;max-height:650px;border-top:1px solid var(--line);border-radius:0 0 var(--radius) var(--radius)}
 table{border-collapse:separate;border-spacing:0;width:100%;white-space:nowrap;font-size:.875rem;font-variant-numeric:tabular-nums}
 th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:right}
-thead th{position:sticky;top:0;z-index:1;background:#eaf0f7;vertical-align:bottom}
+thead th{position:sticky;top:0;z-index:1;background:#eaf0f7;vertical-align:bottom;white-space:normal;line-height:1.25}
 th:first-child,td:nth-child(2){text-align:left}
 .year th,.year td{font-weight:700;background:#f2f6fb}
 .year button{border:0;background:transparent;padding:0;color:#164f97}
 .year button:hover{text-decoration:underline}
 th.extra,td.extra{background:#edf7f5;color:var(--green)}
 thead th.extra{background:#dbefe9}
-th.balance,td.balance{background:#ecf2fb;color:#1e487d;font-weight:700}
-thead th.balance{background:#dee9f9}
+th.balance,td.balance{position:sticky;right:0;background:#ecf2fb;color:#1e487d;font-weight:700;box-shadow:-2px 0 5px #223b5814}
+thead th.balance{background:#dee9f9;z-index:2}
 .method{margin:16px 2px 0;color:var(--muted);font-size:.8125rem}
 .method summary{font-weight:700;list-style:revert}
 .method p{max-width:95ch;margin:.5em 0}
@@ -234,7 +234,7 @@ const context = canvas.getContext('2d');
 const whole = new Intl.NumberFormat('en-SG', { maximumFractionDigits: 0 });
 const compact = new Intl.NumberFormat('en-SG', { notation: 'compact', maximumFractionDigits: 1 });
 const dateFormat = new Intl.DateTimeFormat('en-SG', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
-const monthFormat = new Intl.DateTimeFormat('en-SG', { month: 'short', year: '2-digit', timeZone: 'UTC' });
+const monthFormat = new Intl.DateTimeFormat('en-SG', { month: 'short', year: 'numeric', timeZone: 'UTC' });
 const percent = new Intl.NumberFormat('en-SG', { style: 'percent', maximumFractionDigits: 4 });
 let result;
 let plot;
