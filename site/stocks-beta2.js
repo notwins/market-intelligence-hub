@@ -104,6 +104,7 @@
   const comparisonKey = 'market-hub-stocks-beta2-comparison-v1';
   const columnChoice = get('sb2-card-columns');
   const researchLayout = get('sb2-research-layout');
+  let researchLayoutChoice;
   const fiscalToggle = get('sb2-fiscal-compare');
   const statementToggle = get('sb2-expand-statements');
   const statementSelector = 'details[data-fund-statement]';
@@ -156,7 +157,7 @@
     try {
       root.localStorage.setItem(comparisonKey, JSON.stringify({
         columns: columnChoice.value,
-        researchLayout: researchLayout.value,
+        researchLayoutChoice,
         compareFiscalYears,
         fundamentalsWidth,
         history: history.settings(),
@@ -181,7 +182,12 @@
       columnChoice.value = saved.columns;
     }
     if (Number.isFinite(saved?.fundamentalsWidth)) setFundamentalsWidth(saved.fundamentalsWidth);
-    researchLayout.value = saved?.researchLayout === 'below' ? 'below' : 'side';
+    researchLayoutChoice = saved?.researchLayoutChoice;
+    if (researchLayoutChoice !== 'side' && researchLayoutChoice !== 'below') {
+      // Older saves wrote the side-by-side default even when the layout was never changed.
+      researchLayoutChoice = saved?.researchLayout === 'below' ? 'below' : undefined;
+    }
+    researchLayout.value = researchLayoutChoice ?? 'below';
     applyResearchLayout();
     compareFiscalYears = saved?.compareFiscalYears === true;
     applyFiscalComparison();
@@ -227,6 +233,7 @@
     fitCards();
   }
   researchLayout.addEventListener('change', () => {
+    researchLayoutChoice = researchLayout.value;
     applyResearchLayout();
     saveComparison();
   });
