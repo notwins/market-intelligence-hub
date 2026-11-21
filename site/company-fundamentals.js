@@ -172,14 +172,15 @@
       .catch(error => { directoryRequest = null; throw error; });
   }
 
-  function section(item, { label = '', research = true } = {}) {
+  function section(item, { label = '', research = true, compareYears = false } = {}) {
     if (!item) return '';
     const source = typeof item === 'string' ? { ticker: item } : item;
     const pick = [...fields, 'aliases', 'currency', 'exchangeMic', 'mic', 'asset_type',
       'instrumentType', 'identityStatus', 'currentEligible', 'name'];
     const identity = Object.fromEntries(pick.filter(key => source[key] !== undefined).map(key => [key, source[key]]));
     return '<market-fundamentals data-identity="' + esc(JSON.stringify(identity)) + '" data-label="'
-      + esc(label) + '"' + (research ? ' data-bos-research' : '') + '></market-fundamentals>';
+      + esc(label) + '"' + (research ? ' data-bos-research' : '')
+      + (compareYears ? ' data-compare-years' : '') + '></market-fundamentals>';
   }
 
   function unit(label, report) {
@@ -274,7 +275,7 @@
       && Math.abs(total - parts.reduce((sum, part) => sum + part, 0)) <= Math.max(1, Math.abs(total) * 1e-10);
   }
 
-  function breakdown(report, key, index) {
+  function breakdown(report, key, index, { stack = true, splitAssets = true, waterfall = true, fixedColour = false } = {}) {
     const get = (...labels) => {
       for (const label of labels) {
         const row = report.rows.find(([, name, values]) => name === label && Number.isFinite(values[index]));
@@ -289,11 +290,11 @@
       const current = get('Total Current Assets');
       const nonCurrent = get('Total Non-Current Assets', 'Total Noncurrent Assets');
       const assetLane = lane('Total assets', assets, 'blue');
-      if (current >= 0 && nonCurrent >= 0 && reconciles(assets, current, nonCurrent)) {
+      if (splitAssets && current >= 0 && nonCurrent >= 0 && reconciles(assets, current, nonCurrent)) {
         assetLane.bars = [bar('Current assets', current, 'blue'), bar('Non-current assets', nonCurrent, 'purple', current)];
       }
-      if (liabilities >= 0 && equity >= 0 && reconciles(assets, liabilities, equity)) {
-        return { title: 'Assets and how they are funded', lanes: [assetLane, {
+      if (stack && liabilities >= 0 && equity >= 0 && reconciles(assets, liabilities, equity)) {
+        return { kind: 'stacked', title: 'Assets and how they are funded', lanes: [assetLane, {
           label: 'Liabilities + equity', amount: liabilities + equity,
           bars: [bar('Liabilities', liabilities, 'amber'), bar('Equity', equity, 'teal', liabilities)]
         }] };
@@ -319,17 +320,17 @@
     const net = get('Net Income from Continuing Operations');
     const afterTaxEquity = get('Earnings from Equity Interest, Post-Tax');
     const totalNet = get('Net Income after Non-Controlling/Minority Interests');
-    const taxRow = lane('Income tax', tax, tax > 0 ? 'teal' : 'rose');
+    const taxRow = lane('Income tax', tax, !fixedColour && tax > 0 ? 'teal' : 'rose');
     const netRow = lane('Net income from continuing operations', net, 'blue');
     const lanes = [lane('Pretax income', pretax, 'blue'), taxRow];
     const equityBridge = !reconciles(net, pretax, tax) && reconciles(net, pretax, tax, afterTaxEquity);
-    if (reconciles(net, pretax, tax) || equityBridge) {
+    if (waterfall && (reconciles(net, pretax, tax) || equityBridge)) {
       taxRow.bars[0].start = pretax;
       if (equityBridge) lanes.push({
         label: 'Post-tax equity income', amount: afterTaxEquity,
         bars: [bar('Post-tax equity income', afterTaxEquity, 'purple', pretax + tax)]
       });
-      return { title: 'From pretax income to continuing net income', lanes: [...lanes, netRow] };
+      return { kind: 'waterfall', title: 'From pretax income to continuing net income', lanes: [...lanes, netRow] };
     }
     return {
       title: 'Reported income and tax',
@@ -338,27 +339,36 @@
     };
   }
 
-  function breakdownPlot(report, view) {
-    const bars = view.lanes.flatMap(row => row.bars).filter(segment => Number.isFinite(segment.amount));
-    if (!bars.length) return '<p class="fund-note">No reported values for the summary chart this year.</p>';
+  function barScale(bars) {
     const bounds = bars.flatMap(segment => [segment.start, segment.start + segment.amount]);
     const low = Math.min(0, ...bounds);
     const high = Math.max(0, ...bounds);
     const range = high - low || 1;
     const position = value => ((value - low) / range * 100).toFixed(4) + '%';
     const percent = value => (value / range * 100).toFixed(4) + '%';
+    return { low, high, position, percent, zero: -low / range };
+  }
+
+  function barTrack(bars, { position, percent }) {
+    return '<div class="fund-track" aria-hidden="true">' + bars.filter(segment => Number.isFinite(segment.amount)).map(segment =>
+      '<i data-colour="' + segment.colour + '" style="--fund-start:'
+      + position(segment.start + Math.min(0, segment.amount)) + ';--fund-extent:' + percent(Math.abs(segment.amount)) + '"></i>'
+    ).join('') + '</div>';
+  }
+
+  function breakdownPlot(report, view) {
+    const bars = view.lanes.flatMap(row => row.bars).filter(segment => Number.isFinite(segment.amount));
+    if (!bars.length) return '<p class="fund-note">No reported values for the summary chart this year.</p>';
+    const scale = barScale(bars);
+    const { low, high, position, zero } = scale;
     const label = value => valueText(value, 1e6);
-    const zero = -low / range;
     const ticks = low === high ? [0] : [low, ...(zero >= .15 && zero <= .85 ? [0] : []), high];
     const units = report.currency ? report.currency + ' millions' : 'Millions of reported units';
     return '<figure class="fund-breakdown-figure" style="--fund-baseline:' + position(0) + '">'
       + '<figcaption><strong>' + esc(view.title) + '</strong><span>' + esc(units) + '</span></figcaption>'
       + view.lanes.map(row => '<div class="fund-bar-row"><div class="fund-bar-label"><span>' + esc(row.label)
         + '</span><b>' + (Number.isFinite(row.amount) ? esc(label(row.amount)) : 'Unavailable') + '</b></div>'
-        + '<div class="fund-track" aria-hidden="true">' + row.bars.filter(segment => Number.isFinite(segment.amount)).map(segment =>
-          '<i data-colour="' + segment.colour + '" style="--fund-start:'
-          + position(segment.start + Math.min(0, segment.amount)) + ';--fund-extent:' + percent(Math.abs(segment.amount)) + '"></i>'
-        ).join('') + '</div>'
+        + barTrack(row.bars, scale)
         + (row.bars.length > 1 ? '<ul class="fund-bar-key">' + row.bars.map(segment =>
           '<li><i data-colour="' + segment.colour + '" aria-hidden="true"></i>' + esc(segment.label)
           + ' <b>' + esc(label(segment.amount)) + '</b></li>'
@@ -369,7 +379,58 @@
       + (view.note ? '<p class="fund-note">' + esc(view.note) + '</p>' : '') + '</figure>';
   }
 
-  function reportContent(company, key, id) {
+  function comparisonPlot(report, key, views) {
+    const years = views.slice(0, 5).reverse();
+    if (!years.length) return '';
+    const available = years.filter(({ view }) => view.lanes.some(row => Number.isFinite(row.amount)));
+    const options = {
+      stack: available.every(({ view }) => view.kind === 'stacked'),
+      splitAssets: available.every(({ view }) => view.lanes[0].bars.length > 1),
+      waterfall: available.every(({ view }) => view.kind === 'waterfall'),
+      fixedColour: true
+    };
+    const panels = years.map(({ label, index, view }) => ({
+      label,
+      view: breakdown(report, key, index, options),
+      available: view.lanes.some(row => Number.isFinite(row.amount))
+    }));
+    const reference = panels.find(panel => panel.available)?.view;
+    if (!reference) return '<div class="fund-comparison"><p class="fund-note">No reported values in these fiscal years.</p></div>';
+    const rows = new Set(panels.filter(panel => panel.available).flatMap(({ view }) => view.lanes.map(row => row.label)));
+    // The optional post-tax step belongs before the continuing-income total in every waterfall.
+    if (options.waterfall && rows.has('Post-tax equity income')) {
+      rows.delete('Net income from continuing operations');
+      rows.add('Net income from continuing operations');
+    }
+    const bars = panels.filter(panel => panel.available).flatMap(({ view }) =>
+      view.lanes.flatMap(row => row.bars).filter(segment => Number.isFinite(segment.amount)));
+    const scale = barScale(bars);
+    const units = report.currency ? report.currency + ' millions' : 'Millions of reported units';
+    const numberLabel = amount => esc(valueText(amount, 1e6));
+    const legend = [...new Map(bars.map(segment => [segment.label, segment.colour]))];
+    return '<figure class="fund-breakdown fund-comparison" style="--fund-baseline:' + scale.position(0) + '">'
+      + '<figcaption><strong>' + esc(reference.title) + '</strong>'
+      + '<span>' + esc(units) + ' · Shared scale ' + numberLabel(scale.low) + ' to ' + numberLabel(scale.high) + '</span></figcaption>'
+      + '<ul class="fund-bar-key">' + legend.map(([label, colour]) => '<li><i data-colour="' + colour
+        + '" aria-hidden="true"></i>' + esc(label) + '</li>').join('') + '</ul>'
+      + '<div class="fund-compare-scroll" role="region" aria-label="Fiscal-year comparison" tabindex="0">'
+      + '<table class="fund-compare-table" data-table-controls="off" style="--fund-year-count:' + panels.length + '">'
+      + '<thead><tr><th scope="col">Reported line item</th>'
+      + panels.map(panel => '<th scope="col">FY ' + esc(panel.label) + '</th>').join('') + '</tr></thead><tbody>'
+      + [...rows].map(label => '<tr><th scope="row">' + esc(label) + '</th>' + panels.map(({ view, available }) => {
+        const row = available && view.lanes.find(candidate => candidate.label === label);
+        if (!row || !Number.isFinite(row.amount)) return '<td class="fund-missing" aria-label="Unavailable">—</td>';
+        return '<td><b>' + numberLabel(row.amount) + '</b>' + barTrack(row.bars, scale)
+          + (row.bars.length > 1 ? '<small>' + row.bars.map(segment =>
+            '<span title="' + esc(segment.label) + '"><i data-colour="' + segment.colour + '" aria-hidden="true"></i>'
+            + '<span class="fund-visually-hidden">' + esc(segment.label) + ' </span>' + numberLabel(segment.amount) + '</span>'
+          ).join('') + '</small>' : '') + '</td>';
+      }).join('') + '</tr>').join('')
+      + '</tbody></table></div>'
+      + (reference.note ? '<p class="fund-note">' + esc(reference.note) + '</p>' : '') + '</figure>';
+  }
+
+  function reportContent(company, key, id, compareYears = false) {
     const original = company.statements[key];
     // TSMC's audited FY2025 filings reconcile to the export totals in Taiwan dollars.
     // The provider's field mirrors the listing currency for several other cross-listings.
@@ -381,7 +442,7 @@
     const years = periods(report).filter(period => period.label !== 'TTM');
     const views = years.map(period => ({ ...period, view: breakdown(report, key, period.index) }));
     const latest = views.find(period => period.view.lanes.some(row => Number.isFinite(row.amount))) || views[0];
-    const summary = latest ? '<div class="fund-breakdown"><label>Fiscal year <select data-fund-year>'
+    const summary = latest ? '<div class="fund-breakdown fund-single-year"><label>Fiscal year <select data-fund-year>'
       + views.map(period => '<option value="' + period.index + '"' + (period === latest ? ' selected' : '')
         + '>' + esc(period.label) + '</option>').join('')
       + '</select></label><div data-fund-breakdown>' + breakdownPlot(report, latest.view) + '</div></div>' : '';
@@ -395,7 +456,8 @@
         + '. Amounts in ' + esc(scale) + ', with shares in millions and per-share figures as reported. '
         + 'Export currency field: ' + esc(original.currency) + '.'
         + (report.periods.includes('TTM') ? ' TTM is trailing 12 months.' : '') + '</p>'
-        + summary + chartPanel + table(report, key) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
+        + summary + (compareYears ? comparisonPlot(report, key, views) : '') + chartPanel
+        + table(report, key) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
         + ' (SGT). Dashes mark unavailable values.</p>'
     };
   }
@@ -409,7 +471,7 @@
       return;
     }
     const key = disclosure.dataset.fundStatement;
-    const { html, report } = reportContent(company, key, id);
+    const { html, report } = reportContent(company, key, id, !!disclosure.closest('[data-compare-years]'));
     body.innerHTML = html;
     const year = body.querySelector('[data-fund-year]');
     year?.addEventListener('change', () => {
