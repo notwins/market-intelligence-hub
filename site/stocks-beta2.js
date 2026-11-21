@@ -62,6 +62,17 @@
   let data, history, rankings, pending, origin, researchRequest;
   const deck = get('sb2-detail'), dialog = get('sb2-card-picker');
   const cards = new Map();
+  const fundamentalsBounds = { min: 30, max: 52, initial: 32 };
+  let fundamentalsWidth = fundamentalsBounds.initial;
+  let savedReadingRequest;
+  let earningsRequest;
+  const listingSymbols = new Map((root.BOSEquity?.reviewedListings || []).filter(row => row.verified)
+    .map(row => [row.instrumentId + '|' + row.currency, row.ticker]));
+  const exactSymbol = ({ ticker, currency }) => {
+    const symbol = listingSymbols.get(ticker + '|' + currency);
+    // Beta 1's saved issuer data uses the dotted symbol for Berkshire's Class B shares.
+    return symbol === 'BRK-B' ? 'BRK.B' : symbol;
+  };
   const comparisonKey = 'market-hub-stocks-beta2-comparison-v1';
   const columnChoice = get('sb2-card-columns');
   const touch = root.matchMedia('(pointer:coarse)');
@@ -80,10 +91,9 @@
     try {
       root.localStorage.setItem(comparisonKey, JSON.stringify({
         columns: columnChoice.value,
+        fundamentalsWidth,
         history: history.settings(),
-        cards: [...cards.values()].map(({ element, slot, company }) => ({
-          slot, ticker: company.ticker, chart: history.cardSettings(element)
-        }))
+        cards: [...cards.values()].map(({ slot, company }) => ({ slot, ticker: company.ticker }))
       }));
     } catch {
       // The comparison still works when browser storage is unavailable.
@@ -102,6 +112,7 @@
     if ([...columnChoice.options].some(option => option.value === saved?.columns)) {
       columnChoice.value = saved.columns;
     }
+    if (Number.isFinite(saved?.fundamentalsWidth)) setFundamentalsWidth(saved.fundamentalsWidth);
     if (!Array.isArray(saved?.cards)) return;
 
     const companies = new Map(data.securities.map(company => [company.ticker, company]));
@@ -109,7 +120,7 @@
       const slot = card?.slot;
       const company = companies.get(card?.ticker);
       if (company && Number.isSafeInteger(slot) && slot > 0 && !cards.has(slot)) {
-        placeCard(slot, company, { chart: card.chart });
+        placeCard(slot, company);
       }
     }
   }
@@ -118,10 +129,8 @@
     if (!cards.size || !deck.clientWidth) return;
     const style = root.getComputedStyle(deck);
     const gap = parseFloat(style.columnGap);
-    const hasCone = [...cards.values()].some(({ element }) => {
-      const chart = history.cardSettings(element);
-      return chart.metric === 'price' && chart.cone;
-    });
+    const chart = history.chartSettings();
+    const hasCone = chart.metric === 'price' && chart.cone;
     const minimum = parseFloat(style.getPropertyValue(hasCone ? '--sb2-cone-card-min-width' : '--sb2-card-min-width'));
     const preferred = columnChoice.value === 'auto' ? 5 : Number(columnChoice.value);
     const deviceLimit = touch.matches ? (portrait.matches ? 1 : 2) : 5;
@@ -316,6 +325,111 @@
     paintList();
   }
 
+  function setFundamentalsWidth(width) {
+    fundamentalsWidth = Math.max(fundamentalsBounds.min, Math.min(fundamentalsBounds.max, Math.round(width)));
+    deck.style.setProperty('--sb2-fundamentals-width', fundamentalsWidth + '%');
+    cards.forEach(({ element }) => syncDivider(element.querySelector('.sb2-research-divider')));
+  }
+
+  function syncDivider(divider) {
+    divider.setAttribute('aria-valuenow', String(fundamentalsWidth));
+    divider.setAttribute('aria-valuetext', 'Fundamentals ' + fundamentalsWidth + '% wide');
+  }
+
+  function mountDivider(element, slot) {
+    const divider = element.querySelector('.sb2-research-divider');
+    const panel = element.querySelector('.sb2-research');
+    panel.id = 'sb2-fundamentals-' + slot;
+    divider.setAttribute('aria-controls', panel.id);
+    divider.setAttribute('aria-valuemin', String(fundamentalsBounds.min));
+    divider.setAttribute('aria-valuemax', String(fundamentalsBounds.max));
+    syncDivider(divider);
+
+    let drag;
+    divider.addEventListener('pointerdown', event => {
+      if (event.button !== 0 || drag) return;
+      divider.focus({ preventScroll: true });
+      divider.setPointerCapture(event.pointerId);
+      drag = { id: event.pointerId, x: event.clientX, width: fundamentalsWidth, total: divider.parentElement.clientWidth };
+      divider.setAttribute('data-dragging', '');
+    });
+    divider.addEventListener('pointermove', event => {
+      if (drag?.id === event.pointerId) setFundamentalsWidth(drag.width + 100 * (drag.x - event.clientX) / drag.total);
+    });
+    divider.addEventListener('lostpointercapture', () => {
+      drag = undefined;
+      divider.removeAttribute('data-dragging');
+      saveComparison();
+    });
+    divider.addEventListener('keydown', event => {
+      const width = {
+        ArrowLeft: fundamentalsWidth + 2, ArrowRight: fundamentalsWidth - 2,
+        Home: fundamentalsBounds.min, End: fundamentalsBounds.max
+      }[event.key];
+      if (width === undefined) return;
+      event.preventDefault();
+      setFundamentalsWidth(width);
+      saveComparison();
+    });
+  }
+
+  async function getSavedJson(path) {
+    const response = await root.fetch(path, { cache: 'no-cache', signal: AbortSignal.timeout(15000) });
+    if (!response.ok) throw new Error('Saved source unavailable');
+    return response.json();
+  }
+
+  function loadSavedReading() {
+    savedReadingRequest ??= (async () => {
+      const desk = await getSavedJson('data/desk-data.json').catch(() => ({}));
+      const watchlist = desk.watchlist || [];
+      const hourlyListings = new Map(data.securities.map(company => {
+        const ticker = exactSymbol(company) || company.ticker;
+        return [ticker, { ticker, name: company.name }];
+      }));
+      watchlist.forEach(row => hourlyListings.set(row.ticker, row));
+      const shared = root.StockCardReading;
+      const [hourly, research] = await shared.independentSources(getSavedJson, [...hourlyListings.values()]);
+      const logos = root.CompanyLogos?.data
+        || await getSavedJson('assets/company-logos/company-logos.json').catch(() => null);
+      return {
+        watchlist, logos,
+        news: [...(desk.news || []), ...(hourly.value?.news || [])],
+        reports: [...(desk.reports || []), ...(research.value ? shared.independentReports(research.value) : [])],
+        newsUnavailable: hourly.status === 'rejected' || hourly.value.delivery_error,
+        reportsUnavailable: research.status === 'rejected' || research.value.delivery_error
+      };
+    })();
+    return savedReadingRequest;
+  }
+
+  function paintSavedReading({ element, company }) {
+    const shared = root.StockCardReading;
+    if (!shared) return;
+    const symbol = exactSymbol(company);
+    const earnings = element.querySelector('[data-sb2-earnings]');
+    const reading = element.querySelector('[data-sb2-reading]');
+    earningsRequest ??= root.EquityResearchData.load();
+    earningsRequest.then(bundle => {
+      const result = root.EquityResearchData.earningsFor({ ticker: symbol || company.ticker, currency: company.currency }, bundle);
+      earnings.innerHTML = shared.earnings(company.ticker, result, bundle, { includeSource: true });
+    }).catch(() => {
+      earnings.innerHTML = shared.earnings(company.ticker, { observations: [] }, {});
+    });
+    loadSavedReading().then(({ watchlist, logos, news, reports, newsUnavailable, reportsUnavailable }) => {
+      const companySymbol = company.logo || symbol || company.ticker;
+      const aliases = [company.ticker, symbol, companySymbol].filter(Boolean);
+      reading.innerHTML = shared.reading({
+        matches: shared.reportRows(reports, companySymbol, logos, aliases),
+        items: shared.newsFor(news, companySymbol, aliases),
+        si: watchlist.find(row => row.ticker === symbol)?.si,
+        showEmptySi: true, newsUnavailable, reportsUnavailable
+      });
+    }).catch(() => {
+      reading.innerHTML = '<p class="sb-note" role="status">Saved research, SI references and news could not load.</p>';
+    });
+  }
+
   function refreshRemoveButtons() {
     cards.forEach(({ element, slot }) => {
       const remove = element.querySelector('.sb2-remove-card');
@@ -324,7 +438,7 @@
     });
   }
 
-  function placeCard(slot, company, { focus = false, chart } = {}) {
+  function placeCard(slot, company, { focus = false } = {}) {
     const existing = cards.get(slot);
     const element = get('sb2-card-template').content.firstElementChild.cloneNode(true);
     const entry = { element, company, slot };
@@ -346,10 +460,12 @@
       deck.insertBefore(element, next?.element ?? null);
     }
     cards.set(slot, entry);
-    history.add(element, company, chart);
+    history.add(element, company);
+    mountDivider(element, slot);
     fitCards();
     paintMonthlyTable(entry, history.range());
     paintResearch(entry);
+    paintSavedReading(entry);
     element.querySelector('.sb2-expand').addEventListener('click', () => {
       const previous = deck.querySelector('[data-expanded]');
       if (previous) setExpanded(previous, false);
@@ -428,8 +544,12 @@
       download.disabled = false;
       get('sb2-shared-controls').hidden = false;
       const saved = readComparison();
+      const oldCards = Array.isArray(saved?.cards) ? saved.cards : [];
+      const previousChart = oldCards.filter(card => card?.chart && Number.isSafeInteger(card.slot) && card.slot > 0
+        && data.securities.some(company => company.ticker === card.ticker)).sort((a, b) => a.slot - b.slot)[0]?.chart;
       history ??= root.StocksBeta2Charts.mountHistory(data, {
         saved: saved?.history,
+        previousChart,
         changeRange: range => cards.forEach(card => paintMonthlyTable(card, range)),
         save: () => { fitCards(); saveComparison(); }
       });

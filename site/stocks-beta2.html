@@ -13,10 +13,16 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.picker1">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.target3.full1.picker1">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.shared1">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261121.target3"></script>
-  <script defer src="stocks-beta2.js?v=20261121.full1.picker1&amp;credit=1&amp;statement-charts=1"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261121.shared1"></script>
+  <script defer src="bos-equity.js"></script>
+  <script defer src="equity-research-data.js"></script>
+  <script defer src="research-feed.js"></script>
+  <script defer src="content-source.js"></script>
+  <script defer src="desk-news.js"></script>
+  <script defer src="stock-card-reading.js?v=20261121.shared1"></script>
+  <script defer src="stocks-beta2.js?v=20261121.shared1"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -120,20 +126,20 @@
           <section class="sb2-history" aria-label="Historical chart">
             <div>
               <div class="sb2-chart-heading">
-                <h3>Historical chart</h3>
+                <h3>Historical chart <small class="sb2-chart-scope">Controls apply to all cards</small></h3>
                 <button type="button" class="sb2-expand" aria-expanded="false">Expand chart</button>
               </div>
-              <div class="sb2-metric-toggle" role="group" aria-label="Historical chart metric">
+              <div class="sb2-metric-toggle" role="group" aria-label="Historical chart metric for all cards">
                 <button type="button" data-metric="price" aria-pressed="true">Price</button>
                 <button type="button" data-metric="market_cap_usd_bn" aria-pressed="false">Market cap</button>
                 <button type="button" data-metric="dividend_yield_pct" aria-pressed="false">Dividend yield</button>
               </div>
-              <div class="sb2-metric-toggle sb2-overlay-controls" role="group" aria-label="Price chart overlays">
+              <div class="sb2-metric-toggle sb2-overlay-controls" role="group" aria-label="Price chart overlays for all cards">
                 <button type="button" data-target aria-pressed="false">Historical fair value</button>
                 <button type="button" data-cone aria-pressed="false">12-month probability cone</button>
                 <button type="button" data-bos-target aria-pressed="false">Research target</button>
               </div>
-              <div class="sb2-metric-toggle sb2-overlay-controls" data-cone-bands role="group" aria-label="Probability cone bands" hidden>
+              <div class="sb2-metric-toggle sb2-overlay-controls" data-cone-bands role="group" aria-label="Probability cone bands for all cards" hidden>
                 <button type="button" data-cone-band="1" aria-pressed="true">±1 SD</button>
                 <button type="button" data-cone-band="2" aria-pressed="true">±2 SD</button>
               </div>
@@ -146,42 +152,9 @@
             <div>
               <figure class="sb2-line-figure">
                 <canvas data-price-chart role="img" tabindex="0"></canvas>
-                <figcaption class="sb2-price-caption">
-                  <span class="sb2-point-label sb2-price-readout" data-price-value>
-                    <time class="sb2-reading-date" data-price-date></time>
-                    <span class="sb2-reading-price" data-price-reading></span>
-                    <span class="sb2-analyst-reading" title="Archived BOS rating and Morningstar fair value" data-analyst-reading hidden>
-                      <span class="sb2-analyst-label">Analyst call</span>
-                      <span data-analyst-call></span>
-                      <span class="sb2-analyst-value">· Fair value <span data-analyst-value></span></span>
-                      <span class="sb2-analyst-gap" data-analyst-gap hidden></span>
-                    </span>
-                  </span>
-                  <small class="sb2-target-gap" data-bos-target-gap hidden></small>
-                  <span class="sb2-chart-hint">Select a point or use the arrow keys to step a month.</span>
-                </figcaption>
               </figure>
               <p class="sb2-chart-empty" data-price-empty hidden>No values for this metric in the selected range.</p>
-              <p class="sb2-bos-target-note" data-bos-target-note role="status"></p>
-              <div class="sb2-cone-info" hidden>
-                <p data-cone-summary role="status"></p>
-                <p data-cone-levels></p>
-                <details data-cone-method hidden>
-                  <summary>Cone assumptions</summary>
-                  <p>The cone uses the sample standard deviation of consecutive monthly log returns over the 36 months up to the last price in the selected range. It needs at least 12 usable returns. It skips missing months, predecessor transitions and split-like moves flagged using market cap.</p>
-                  <p>The centre stays at the anchor price. The model scales log-return volatility by the square root of the months ahead. If log returns are normal with constant volatility, the ±1 SD and ±2 SD bands cover about 68% and 95% of outcomes at each horizon.</p>
-                  <p>The underlying BOS prices are unadjusted. The shaded projection uses its own 12-month axis.</p>
-                </details>
-              </div>
             </div>
-            <label class="sb2-line-slider">Inspect month across cards<input type="range" step="1"></label>
-          </section>
-          <section class="sb2-research" aria-label="Company research">
-            <h3>BOS Equity Research</h3>
-            <p class="sb2-research-status" role="status">Loading company research…</p>
-            <div class="sb2-research-body" hidden></div>
-            <div data-sb2-fundamentals></div>
-            <div data-credit-listing></div>
           </section>
           <section class="sb2-history sb2-valuation" aria-label="Forward valuation chart">
             <div>
@@ -196,6 +169,43 @@
               <p class="sb2-chart-empty" data-valuation-empty hidden>No forward P/E or P/B values in the selected range.</p>
             </div>
           </section>
+          <section class="sb2-chart-notes" aria-label="Chart readings and notes">
+            <label class="sb2-line-slider">Inspect month across cards<input type="range" step="1"></label>
+            <div class="sb2-price-caption">
+              <span class="sb2-point-label sb2-price-readout" data-price-value>
+                <time class="sb2-reading-date" data-price-date></time>
+                <span class="sb2-reading-price" data-price-reading></span>
+                <span class="sb2-analyst-reading" title="Archived BOS rating and Morningstar fair value" data-analyst-reading hidden>
+                  <span class="sb2-analyst-label">Analyst call</span>
+                  <span data-analyst-call></span>
+                  <span class="sb2-analyst-value">· Fair value <span data-analyst-value></span></span>
+                  <span class="sb2-analyst-gap" data-analyst-gap hidden></span>
+                </span>
+              </span>
+              <small class="sb2-target-gap" data-bos-target-gap hidden></small>
+              <span class="sb2-chart-hint">Select a point or use the arrow keys to step a month.</span>
+            </div>
+            <p class="sb2-bos-target-note" data-bos-target-note role="status"></p>
+            <div class="sb2-cone-info" hidden>
+              <p data-cone-summary role="status"></p>
+              <p data-cone-levels></p>
+              <details data-cone-method hidden>
+                <summary>Cone assumptions</summary>
+                <p>The cone uses the sample standard deviation of consecutive monthly log returns over the 36 months up to the last price in the selected range. It needs at least 12 usable returns. It skips missing months, predecessor transitions and split-like moves flagged using market cap.</p>
+                <p>The centre stays at the anchor price. The model scales log-return volatility by the square root of the months ahead. If log returns are normal with constant volatility, the ±1 SD and ±2 SD bands cover about 68% and 95% of outcomes at each horizon.</p>
+                <p>The underlying BOS prices are unadjusted. The shaded projection uses its own 12-month axis.</p>
+              </details>
+            </div>
+          </section>
+          <div class="sb2-research-divider" role="separator" aria-label="Resize fundamentals panel"
+               aria-orientation="vertical" tabindex="0" title="Drag or use arrow keys to resize fundamentals"></div>
+          <section class="sb2-research" aria-label="Company research">
+            <h3>BOS Equity Research</h3>
+            <p class="sb2-research-status" role="status">Loading company research…</p>
+            <div class="sb2-research-body" hidden></div>
+            <div data-sb2-fundamentals></div>
+            <div data-credit-listing></div>
+          </section>
         </div>
         <details class="sb2-history-table">
           <summary>Monthly data table</summary>
@@ -203,6 +213,10 @@
             <table></table>
           </div>
         </details>
+        <div class="sb2-card-reading">
+          <div data-sb2-earnings><p class="sb-note" role="status">Loading issuer earnings…</p></div>
+          <div data-sb2-reading><p class="sb-note" role="status">Loading saved company research and news…</p></div>
+        </div>
       </section>
     </template>
     <dialog id="sb2-card-picker" aria-labelledby="sb2-card-prompt">
