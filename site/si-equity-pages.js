@@ -106,7 +106,7 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
  const titles={income:'Income statement',balance:'Balance sheet',cash:'Cash flow'};
  const quarters=fiscalQuarters(company?.quarterly);
  ['income','balance','cash'].forEach((key,section)=>{
-  const top=539+section*161,report=company?.quarterly?.[key],table=highlights(report,key,quarters);
+  const top=534+section*169,report=company?.quarterly?.[key],table=highlights(report,key,quarters);
   heading(top,String(section+3),titles[key]);
   if(table?.fiscalEnd)text(772,top,'Fiscal year end: '+table.fiscalEnd,10,muted,false,'end');
   if(!table){
@@ -121,7 +121,7 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
   }
   const columns=[333,418,503,588,673,758];
   for(const [band,start] of [0,6].entries()){
-   const y0=top+10+band*72;
+   const y0=top+8+band*70;
    rect(28,y0,744,14,'#edf4f6');
    text(38,y0+10,table.currency+' millions'+(key==='income'?' · EPS per share':''),10,muted,true);
    table.periods.slice(start,start+6).forEach((quarter,i)=>text(columns[i],y0+10,quarter,10,navy,true,'end'));
