@@ -103,7 +103,7 @@ function moveHeat(move) {
 }
 const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat,moveObservation,archiveYearlyMove};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
 let data=null,feed=null,reports=[],featured=[],limit=12,opener=null,refreshing=false;const editing=canEdit(root.location);const seriesCache=new Map();
-const priceSections = ['markets', 'stock-moves', 'stock-prices', 'main-company-cards', 'market-rates', 'market-bonds', 'yields'];
+const priceSections = ['markets', 'stock-moves', 'stock-prices', 'main-company-cards', 'market-rates', 'market-bonds', 'yield-curves', 'yields'];
 let priceWatchlist = [], pricesStarted = false, moveView = 'default';
 const moveHistory = new Map();
 const $=s=>document.querySelector(s);
