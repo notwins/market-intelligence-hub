@@ -24,6 +24,39 @@
     'AAPL NVDA MSFT GOOG GOOGL AMZN TSM SPCX TSLA META AVGO LLY BRK/B BRK/A SKHY WMT MU JPM V AMD XOM JNJ ASML MA ABBV COST CVX PLTR KO CSCO PG MRK ORCL UNH BAC HD GE PM INTC AMAT MS PANW LRCX RY CAT TXN RTX GS WFC NFLX TMO BABA AMGN DELL CRWD IBM LIN GEV AXP GILD ARM ANET C SHOP'
   ).split(' ').map(symbol => symbol + ' US'));
 
+  function chartHistory(data, company, adjustments) {
+    const splits = adjustments?.splits?.[company.ticker] ?? [];
+    const source = point => company.previous?.[point[data.metrics.length + 1]];
+    const priceColumn = data.metrics.findIndex(([key]) => key === 'price') + 1;
+    const factor = quote => splits.reduce((divisor, [day, ratio]) => quote < day ? ratio * divisor : divisor, 1);
+    const direct = new Set(company.observations.filter(point => !source(point)).map(point => point[0]));
+    const months = data.months.map((month, index) => {
+      const [edition, report, declared] = month;
+      const [expected, choices] = adjustments?.tradingDates?.[report] ?? [];
+      if (expected !== declared || !direct.has(index)) return month;
+      const verified = Object.keys(choices).find(day => choices[day].includes(company.ticker));
+      return verified ? [edition, report, verified] : month;
+    });
+    const observations = company.observations.map(point => {
+      const divisor = direct.has(point[0]) ? factor(months[point[0]][2]) : 1;
+      if (divisor === 1 || !Number.isFinite(point[priceColumn])) return point;
+      const adjusted = point.slice();
+      adjusted[priceColumn] /= divisor;
+      return adjusted;
+    });
+    const prices = new Map(observations.map(point => [point[0], point[priceColumn]]));
+    const valueDates = adjustments?.fairValueBasisDates?.[company.ticker];
+    function fairValues(rows) {
+      return rows?.flatMap(([index, value, rating]) => {
+        if (!direct.has(index) || !Number.isFinite(value)) return [];
+        const [, report, quote] = months[index];
+        const adjusted = value / factor(valueDates?.[report] ?? quote);
+        return [{ index, quote, value: adjusted, rating, price: prices.get(index), divisor: factor(quote) }];
+      });
+    }
+    return { data: { ...data, months }, company: { ...company, observations }, splits, fairValues };
+  }
+
   function historyPoints(data, company, metric, from, to) {
     const column = data.metrics.findIndex(item => item[0] === metric) + 1;
     return company.observations
@@ -334,7 +367,7 @@
     return { forIndex: index => x(time(dates[index][2])), forValue: y, top, bottom, coneStart: cone ? historicalRight : Infinity };
   }
 
-  function mountHistory(data, { saved, previousChart, changeRange, save }) {
+  function mountHistory(data, { saved, previousChart, changeRange, save, adjustments }) {
     const doc = root.document;
     const from = doc.getElementById('sb2-from'), to = doc.getElementById('sb2-to');
     const maximum = data.months.length - 1;
@@ -456,37 +489,45 @@
       repaint();
     }
     function drawCard(card) {
-      const { element, company } = card;
+      const { element, history } = card;
+      const { company } = history;
+      const { data: chartData } = history;
       const { metric } = chart;
       const get = selector => element.querySelector(selector);
       const [, label, rawUnit] = data.metrics.find(item => item[0] === metric);
       const unit = rawUnit === 'quote' ? company.currency : rawUnit;
       const { from, to, cursor } = state;
-      const prior = historyPoints(data, company, metric, from, to);
+      const prior = historyPoints(chartData, company, metric, from, to);
       const anchor = prior.findLast(point => point.value > 0);
       const activeCone = metric === 'price' && chart.cone;
       if (activeCone && anchor && card.coneAnchor !== anchor.index) {
         card.coneAnchor = anchor.index;
-        card.projection = probabilityCone(data, company, anchor);
+        card.projection = probabilityCone(chartData, company, anchor);
       }
       const projection = activeCone && anchor ? card.projection : null;
       const cone = projection?.points ? projection : null;
       const targetEnabled = metric === 'price' && chart.bosTarget;
       const researchTarget = targetEnabled ? card.researchTarget : null;
-      const targetRows = metric === 'price' && chart.target ? targets?.[company.ticker] ?? [] : [];
+      const availableTargets = chart.target ? targets?.[company.ticker] : undefined;
+      if (availableTargets !== card.availableTargets) {
+        card.availableTargets = availableTargets;
+        card.fairValues = history.fairValues(availableTargets);
+        card.archiveChart.setFairValues(card.fairValues);
+      }
+      const targetRows = metric === 'price' ? card.fairValues ?? [] : [];
       const targetLines = Object.entries(targetColors).map(([rating, color]) => ({
-        name: rating, color, points: targetRows.filter(row => row[0] >= from && row[0] <= (cone?.anchor.index ?? to) && row[2] === rating)
-          .map(([index, value]) => ({index, value, quote: data.months[index][2]}))
+        name: rating, color, points: targetRows.filter(row => row.index >= from && row.index <= (cone?.anchor.index ?? to) && row.rating === rating)
       }));
       const ratios = ['forward_pe', 'forward_pb'].map((key, i) => ({
-        name: ['P/E', 'P/B'][i], color: ratioColors[i], points: historyPoints(data, company, key, from, to)
+        name: ['P/E', 'P/B'][i], color: ratioColors[i], points: historyPoints(chartData, company, key, from, to)
       }));
       const primary = [{name: label, color: priceColor, points: cone ? prior.filter(point => point.index <= anchor.index) : prior,
         area: Boolean(metric === 'price' && chart.target && !cone)}, ...targetLines];
       get('.sb2-chart-window').textContent = label + ' (' + unit + ') · ' + monthLabel(data.months[from][0]) + ' to '
         + monthLabel(data.months[to][0]) + ' · ' + prior.length + ' of ' + (to - from + 1) + ' editions'
-        + (metric === 'price' ? ' · Unadjusted source prices' : '');
-      const priceDate = data.months[cursor][2];
+        + (metric === 'price' ? (history.splits.length ? ' · Split-adjusted BOS prices' : ' · BOS prices') : '');
+      const priceDate = chartData.months[cursor][2];
+      const bosDate = data.months[cursor][2];
       const quote = dateFormat.format(time(priceDate));
       const setText = (selector, text) => {
         const field = get(selector);
@@ -498,7 +539,7 @@
         canvas.closest('figure').hidden = !available;
         get('[data-' + kind + '-empty]').hidden = available;
         canvas.setAttribute('aria-label', company.name + ' ' + description);
-        card.positions[kind] = available ? drawPlot(canvas, lines, data.months, state, options) : null;
+        card.positions[kind] = available ? drawPlot(canvas, lines, chartData.months, state, options) : null;
       }
       show('price', primary, label + ' by price date'
         + (targetRows.length ? ' with Morningstar fair value' : '')
@@ -508,21 +549,22 @@
       show('valuation', ratios, 'forward P/E and P/B by price date');
       const dateField = get('[data-price-date]');
       if (dateField.dateTime !== priceDate) dateField.dateTime = priceDate;
+      dateField.title = priceDate === bosDate ? 'BOS price date' : 'Verified trading date. BOS price date was ' + dateFormat.format(time(bosDate)) + '.';
       setText('[data-price-date]', quote);
       const point = prior.find(item => item.index === cursor);
       setText('[data-price-reading]', point ? label + ' ' + numbers.format(point.value) + ' ' + unit : 'No observation');
-      const analyst = targetRows.find(row => row[0] === cursor && cursor <= (cone?.anchor.index ?? to));
+      const analyst = targetRows.find(row => row.index === cursor && cursor <= (cone?.anchor.index ?? to));
       const call = get('[data-analyst-reading]');
       call.hidden = !analyst;
       if (analyst) {
-        call.dataset.rating = analyst[2];
-        setText('[data-analyst-call]', analyst[2]);
-        setText('[data-analyst-value]', numbers.format(analyst[1]) + ' ' + company.currency);
-        const analystGap = targetGapLabel(point?.value, analyst[1]);
+        call.dataset.rating = analyst.rating;
+        setText('[data-analyst-call]', analyst.rating);
+        setText('[data-analyst-value]', numbers.format(analyst.value) + ' ' + company.currency);
+        const analystGap = targetGapLabel(point?.value, analyst.value);
         const analystGapField = get('[data-analyst-gap]');
         analystGapField.hidden = !analystGap;
-        analystGapField.classList.toggle('positive', !!analystGap && analyst[1] > point.value);
-        analystGapField.classList.toggle('negative', !!analystGap && analyst[1] < point.value);
+        analystGapField.classList.toggle('positive', !!analystGap && analyst.value > point.value);
+        analystGapField.classList.toggle('negative', !!analystGap && analyst.value < point.value);
         setText('[data-analyst-gap]', analystGap);
       }
       const latestTarget = metric === 'price' ? card.researchTarget : null;
@@ -556,7 +598,7 @@
         return ratio ? [line.name + ' ' + numbers.format(ratio.value) + ' ×'] : [];
       });
       setText('[data-valuation-value]', quote + ' · ' + (valuations.join(' · ') || 'No observation'));
-      const slider = get('input[type=range]');
+      const slider = get('[data-sb2-month]');
       slider.min = String(from);
       slider.max = String(to);
       slider.value = String(cursor);
@@ -628,9 +670,10 @@
     }));
     const resize = new ResizeObserver(repaint);
     function add(element, company) {
-      const card = { element, company, positions: {} };
+      const archiveChart = mountPriceArchive(element, company);
+      const card = { element, company, archiveChart, history: chartHistory(data, company, adjustments), positions: {} };
       cards.set(element, card);
-      const slider = element.querySelector('input[type=range]');
+      const slider = element.querySelector('[data-sb2-month]');
       slider.addEventListener('input', () => setCursor(Number(slider.value), true));
       for (const kind of ['price', 'valuation']) {
         const canvas = element.querySelector('[data-' + kind + '-chart]');
@@ -656,6 +699,7 @@
         });
       }
       resize.observe(element);
+      return archiveChart;
     }
     function settings() {
       const { from, to, axis } = state;
@@ -808,14 +852,26 @@
     return { renderBars, settings: () => ({ month: data.months[Number(peerMonth.value)][0], market: peerMarket.value, direction: direction.value }) };
   }
 
+  function fairValuesForArchive(record, values) {
+    if (!record || !values?.length) return [];
+    const sessions = new Map(record.closes.map(([day, price], index) => [day, { price, index }]));
+    return values.flatMap(point => {
+      const close = sessions.get(point.quote);
+      // Some providers also adjust for distributions. Compare only on a verified common basis.
+      if (!close || Math.abs((close.price - point.price) * point.divisor) >= .005 || !Number.isFinite(point.price)) return [];
+      return [{ ...point, index: close.index }];
+    });
+  }
+
   function mountPriceArchive(element, company) {
     const panel = element.querySelector('[data-sb2-price-archive]');
     const canvas = panel.querySelector('canvas'), slider = panel.querySelector('input');
     const rangeLabel = panel.querySelector('[data-archive-range]');
     const closeLabel = panel.querySelector('[data-archive-close]');
     const priorLabel = panel.querySelector('[data-archive-prior]');
+    const fairValueLegend = panel.querySelector('[data-archive-fair-values]');
     const buttons = [...panel.querySelectorAll('[data-archive-years]')];
-    let record, dates, lines, from, to, years = 20;
+    let record, dates, lines, from, to, fairValues, matched = [], years = 20;
 
     function paint() {
       if (!record || !panel.open || !dates) return;
@@ -825,7 +881,12 @@
       const reading = `${dateFormat.format(time(day))} · ${numbers.format(value)} ${record.currency}${source}`;
       closeLabel.value = reading;
       slider.setAttribute('aria-valuetext', reading);
-      drawPlot(canvas, lines, dates, { from, to, cursor, axis: 'year' }, { isPrice: true });
+      const visible = matched.filter(point => point.index >= from && point.index <= to);
+      fairValueLegend.hidden = !visible.length;
+      const overlays = Object.entries(targetColors).map(([rating, color]) => ({
+        color, points: visible.filter(point => point.rating === rating), maxGapDays: 45
+      }));
+      drawPlot(canvas, [...lines, ...overlays], dates, { from, to, cursor, axis: 'year' }, { isPrice: true });
     }
 
     function buildRange() {
@@ -850,7 +911,7 @@
       slider.value = String(to);
       slider.disabled = from === to;
       const span = `${dateFormat.format(time(closes[from][0]))} to ${dateFormat.format(time(closes[to][0]))}`;
-      rangeLabel.textContent = `${currency} · Yahoo Finance Close · ${span}`;
+      rangeLabel.textContent = `${currency} · Yahoo Finance Close (same source as the 20-year workbook) · ${span}`;
       canvas.setAttribute('aria-label', `${company.name} daily closing prices in ${currency} from ${span}`);
       priorLabel.hidden = !earlier.length;
       priorLabel.textContent = earlier.length ? `Earlier series in grey · ${prior.label}` : '';
@@ -860,9 +921,12 @@
     function refresh() {
       const next = root.StockPriceArchive?.byListing(company.ticker, company.currency);
       if (next === record) return;
+      const opening = !record && next;
       record = next;
       panel.hidden = !record;
+      if (opening) panel.open = true;
       dates = lines = undefined;
+      matched = fairValuesForArchive(record, fairValues);
       buildRange();
     }
 
@@ -876,10 +940,18 @@
       buildRange();
     });
     refresh();
-    return { refresh, remove: () => resize.disconnect() };
+    return {
+      refresh,
+      setFairValues(next) {
+        fairValues = next;
+        matched = fairValuesForArchive(record, fairValues);
+        paint();
+      },
+      remove: () => resize.disconnect()
+    };
   }
 
-  const api = { historyPoints, peRankings, mountRankings, mountHistory, mountPriceArchive, priceLabel, probabilityCone, researchConeTarget, targetBand, drawPlot };
+  const api = { chartHistory, fairValuesForArchive, historyPoints, peRankings, mountRankings, mountHistory, mountPriceArchive, priceLabel, probabilityCone, researchConeTarget, targetBand, drawPlot };
   if (typeof module !== 'undefined') module.exports = api;
   root.StocksBeta2Charts = api;
 })(typeof window !== 'undefined' ? window : globalThis);

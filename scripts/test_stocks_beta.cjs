@@ -91,7 +91,7 @@ assert.equal(lookup(null, 'SGD').state, 'unverified');
 assert.equal(lookup('SG1L01001702', 'SGD').state, 'missing');
 console.log('BOS ACE matching: validates ISINs, keeps source rows and checks currencies.');
 
-const { historyPoints, priceLabel, probabilityCone, researchConeTarget, targetBand } = require('../site/stocks-beta2-charts.js');
+const { chartHistory, fairValuesForArchive, historyPoints, priceLabel, probabilityCone, researchConeTarget, targetBand } = require('../site/stocks-beta2-charts.js');
 const history = require('../site/data/stocks-beta2-monthly-history.json');
 const years = S.historyYears(undefined, 2026);
 assert.deepEqual(years, {from:2017,to:null});
@@ -154,6 +154,32 @@ assert(apple.points[12][4] < apple.points[6][4]);
 assert(Math.abs(Math.log(apple.points[12][1] / apple.anchor.value) - apple.sigma * Math.sqrt(12)) < 1e-12);
 assert.equal(coneFor('NVDA US').splits, 1);
 assert.equal(coneFor('INTC US').splits, 0, 'Genuine moves with matching market-cap changes stay in the sample');
+const adjustments = require('../site/data/stocks-beta2-history-adjustments.json');
+const targetData = require('../site/data/stocks-beta2-morningstar.json');
+for (const [ticker, quote, raw, price, fairValue] of [
+  ['NVDA US', '2021-06-30', 800.10, 20.0025, 13.75],
+  ['NVDA US', '2024-05-31', 1096.33, 109.633, 105],
+  ['AMZN US', '2022-05-31', 2404.19, 120.2095, 192.5],
+  ['GOOGL US', '2022-06-30', 2179.26, 108.963, 180],
+  ['GOOG US', '2022-06-30', 2187.45, 109.3725, 180],
+  ['GE US', '2021-07-30', 12.95, 103.6, 127.2],
+]) {
+  const original = history.securities.find(item => item.ticker === ticker);
+  const basis = chartHistory(history, original, adjustments);
+  const points = historyPoints(basis.data, basis.company, 'price', 0, history.months.length - 1);
+  const point = points.find(item => item.quote === quote);
+  assert(Math.abs(point.value - price) < 1e-10);
+  assert.equal(original.observations.find(row => row[0] === point.index)[1], raw);
+  const [overlay] = basis.fairValues(targetData[ticker]).filter(value => value.index === point.index);
+  assert.equal(overlay.value, fairValue);
+  assert.equal(fairValuesForArchive({ closes: [[quote, price]] }, [overlay]).length, 1);
+  assert.equal(fairValuesForArchive({ closes: [[quote, price * .9]] }, [overlay]).length, 0);
+}
+const nvidiaBasis = chartHistory(history, history.securities.find(item => item.ticker === 'NVDA US'), adjustments);
+assert.equal(nvidiaBasis.data.months.filter((month, index) => month[2] !== history.months[index][2]).length, 19);
+assert.equal(nvidiaBasis.data.months.find(month => month[1] === '2021-06-01')[2], '2021-05-28');
+const nvidiaCone = probabilityCone(nvidiaBasis.data, nvidiaBasis.company, historyPoints(nvidiaBasis.data, nvidiaBasis.company, 'price', 0, 112).at(-1));
+assert.deepEqual([nvidiaCone.anchor.value, nvidiaCone.count, nvidiaCone.splits], [204.64, 36, 0]);
 assert.equal(coneFor('AAPL US', 0).points, undefined, 'An early range cannot use later months to fit a cone');
 assert.deepEqual([8, 9.86, 10.1, 290.47].map(priceLabel), ['8.0', '9.9', '10', '290']);
 assert.equal(researchConeTarget(briefs['AAPL US'], 'USD').value, 290);

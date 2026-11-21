@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="stocks-beta2.css?v=20261122.writeups">
   <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261122.research-layout1">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
-  <script defer src="stocks-beta2-charts.js?v=20261122.price-archive"></script>
+  <script defer src="stocks-beta2-charts.js?v=20261122.split-history"></script>
   <link rel="stylesheet" href="stock-price-archive.css?v=1">
   <script defer src="stock-price-archive.js?v=1"></script>
   <script defer src="bos-equity.js"></script>
@@ -27,7 +27,7 @@
   <script defer src="desk-news.js"></script>
   <script defer src="si-beta2-core.js?v=20261121.si2cards1"></script><link rel="stylesheet" href="si-reference-table.css?v=20261122.fit1"><script defer src="si-reference-table.js?v=20261122.fit1"></script><script defer src="stock-card-reading.js?v=20261122.si-fit1&amp;si2cards=1"></script>
   <script defer src="stocks-beta2-research.js?v=2"></script>
-  <script defer src="stocks-beta2.js?v=20261122.research-default1"></script>
+  <script defer src="stocks-beta2.js?v=20261122.split-history"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -169,7 +169,7 @@
           <p class="sb2-coverage"></p>
         </div>
         <details class="sb2-price-archive" data-sb2-price-archive hidden>
-          <summary>Daily price history</summary>
+          <summary>Price history · up to 20 years</summary>
           <p class="sb2-coverage" data-archive-range></p>
           <div class="sb2-archive-periods" role="group" aria-label="Daily price history range">
             <button type="button" data-archive-years="1" aria-pressed="false">1Y</button>
@@ -177,7 +177,10 @@
             <button type="button" data-archive-years="10" aria-pressed="false">10Y</button>
             <button type="button" data-archive-years="20" aria-pressed="true">20Y</button>
           </div>
-          <figure class="sb2-line-figure"><canvas role="img"></canvas></figure>
+            <div class="sb2-target-legend" data-archive-fair-values hidden>
+              <span>Buy</span><span>Hold</span><span>Sell</span><small>BOS fair values on a verified matching price basis</small>
+            </div>
+            <figure class="sb2-line-figure"><canvas role="img"></canvas></figure>
           <label class="sb2-line-slider">Inspect daily close<input type="range" step="1"></label>
           <output data-archive-close></output>
           <p class="sb2-coverage" data-archive-prior hidden></p>
@@ -186,7 +189,7 @@
           <section class="sb2-history" aria-label="Historical chart">
             <div>
               <div class="sb2-chart-heading">
-                <h3>Historical chart</h3>
+                <h3>BOS monthly chart</h3>
                 <button type="button" class="sb2-expand" aria-expanded="false">Expand chart</button>
               </div>
               <p class="sb2-chart-window"></p>
@@ -203,7 +206,7 @@
             </div>
           </section>
           <section class="sb2-chart-notes" aria-label="Chart readings and notes">
-            <label class="sb2-line-slider">Inspect month across BOS archive cards<input type="range" step="1"></label>
+            <label class="sb2-line-slider">Inspect month across BOS archive cards<input type="range" step="1" data-sb2-month></label>
             <div class="sb2-price-caption">
               <span class="sb2-point-label sb2-price-readout" data-price-value>
                 <time class="sb2-reading-date" data-price-date></time>
@@ -226,7 +229,7 @@
               <p data-cone-levels></p>
               <details data-cone-method hidden>
                 <summary>Cone assumptions</summary>
-                <p>The cone uses the sample standard deviation of consecutive monthly log returns over the 36 months up to the last price in the selected range. It needs at least 12 usable returns. It skips missing months, predecessor transitions and split-like moves flagged using market cap.</p>
+                <p>The cone uses consecutive monthly log returns over the 36 months up to the last price in the selected range. It adjusts for verified splits and skips missing months, predecessor transitions and other split-like moves flagged using market cap. It needs at least 12 usable returns.</p>
                 <p>The centre stays at the anchor price. The model scales log-return volatility by the square root of the months ahead. If log returns are normal with constant volatility, the ±1 SD and ±2 SD bands cover about 68% and 95% of outcomes at each horizon.</p>
                 <p>The underlying BOS prices are unadjusted. The shaded projection uses its own 12-month axis.</p>
               </details>
