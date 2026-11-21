@@ -13,7 +13,9 @@
 .si-card-source-meta { display: none !important; }
 .mp-watchlist-company { min-width: 0; }
 
-@container (max-width: 70rem) {
+.sb2-main .si-card-references { --si-two-row: yes; }
+
+@container (max-width: 70rem) or style(--si-two-row: yes) {
   .si-card-scroll table, .si-card-scroll thead, .si-card-scroll tbody { display: block; width: 100%; }
   .si-card-scroll caption { display: block; width: 100%; }
   .si-card-scroll colgroup { display: none; }
@@ -38,7 +40,7 @@
 }
 
 /* Keep the Stocks BETA 2 basket beside two rows of terms on compact cards. */
-@container (max-width: 70rem) {
+@container style(--si-two-row: yes) {
   .sb2-main .si-card-scroll tbody tr {
     grid-template-columns: minmax(0, 1.55fr) repeat(3, minmax(0, 1fr));
     align-items: start;
