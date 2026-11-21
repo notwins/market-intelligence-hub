@@ -28,32 +28,63 @@ return `<svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-labe
 </svg>`;}
 const valuesTable=(points,unit,notes='')=>`<details><summary>Dates, values &amp; source basis</summary>${notes}<div class="table-wrap" tabindex="0" role="region" aria-label="Historical observations"><table><caption>Saved observations · ${E(unit)}</caption><thead><tr><th>Date</th><th>Value</th></tr></thead><tbody>${points.map(p=>`<tr><td>${E(p[0])}</td><td>${num(p[1],4)}</td></tr>`).join('')}</tbody></table></div></details>`;
 const canEdit=location=>location?.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(location.hostname);
-const movePeriods = [
-  ['1D', {sessions: 1}], ['1W', {days: 7}], ['2W', {days: 14}], ['3W', {days: 21}],
-  ['1M', {months: 1}], ['6M', {months: 6}]
-];
-function priceMove(daily, endDate, {days, months, sessions}) {
-  const last = daily.findLast(p => p[0] <= endDate);
-  if (!last || last[0] !== endDate) return null;
-  if (sessions === 1) {
-    const previous = daily.findLast(p => p[0] < endDate);
-    if (!previous || Date.parse(endDate) - Date.parse(previous[0]) > 7 * 86400000) return null;
-    return (last[1] / previous[1] - 1) * 100;
-  }
+const moveGroup = (label, unit, first, last, band = 0) => ({
+  label, band, periods: Array.from({length: last - first + 1}, (_, i) => ({
+    label: (first + i) + unit,
+    lookback: unit === 'D' ? {sessions: first + i}
+      : unit === 'W' ? {days: (first + i) * 7}
+      : {months: (first + i) * (unit === 'Y' ? 12 : 1)}
+  }))
+});
+const moveViews = {
+  default: [moveGroup('Trading days', 'D', 1, 6), moveGroup('Weeks', 'W', 1, 4), moveGroup('Months', 'M', 2, 12)],
+  monthly: Array.from({length: 5}, (_, i) => moveGroup(`Months ${i * 12 + 1}–${(i + 1) * 12}`, 'M', i * 12 + 1, (i + 1) * 12, i + 1)),
+  yearly: [moveGroup('Years', 'Y', 1, 5)]
+};
+const dayMs = 86400000;
 
-  const target = new Date(endDate + 'T12:00:00Z');
-  if (days) {
-    target.setUTCDate(target.getUTCDate() - days);
+function moveObservation(daily, endDate, {days, months, sessions}, history) {
+  const lastIndex = daily.findLastIndex(([date]) => date <= endDate);
+  const last = daily[lastIndex];
+  if (!last || last[0] !== endDate) return null;
+
+  let base, grain = 'daily close';
+  if (sessions) {
+    const sessionWindow = daily.slice(Math.max(0, lastIndex - sessions), lastIndex + 1);
+    if (sessionWindow.length !== sessions + 1 ||
+        sessionWindow.some((p, i) => i && Date.parse(p[0]) - Date.parse(sessionWindow[i - 1][0]) > 7 * dayMs)) return null;
+    base = sessionWindow[0];
   } else {
-    const day = target.getUTCDate();
-    target.setUTCDate(1);
-    target.setUTCMonth(target.getUTCMonth() - months);
-    const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
-    target.setUTCDate(Math.min(day, lastDay));
+    const target = new Date(endDate + 'T00:00:00Z');
+    if (days) {
+      target.setUTCDate(target.getUTCDate() - days);
+    } else {
+      const day = target.getUTCDate();
+      target.setUTCDate(1);
+      target.setUTCMonth(target.getUTCMonth() - months);
+      const lastDay = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
+      target.setUTCDate(Math.min(day, lastDay));
+    }
+    const cutoff = target.toISOString().slice(0, 10);
+    let points = daily, maxAge = 7;
+    // Keep gaps inside the daily series visible. Use older workbook observations only before it begins.
+    if (months && history && cutoff < daily[0][0]) {
+      if (history.weekly[0]?.[0] <= cutoff) {
+        points = history.weekly;
+        grain = 'saved weekly period';
+      } else {
+        points = history.monthly;
+        grain = 'saved monthly period';
+        maxAge = 31;
+      }
+    }
+    base = points.findLast(([date]) => date <= cutoff);
+    if (!base || target - Date.parse(base[0]) > maxAge * dayMs) return null;
   }
-  const base = daily.findLast(p => p[0] <= target.toISOString().slice(0, 10));
-  if (!base || target - Date.parse(base[0] + 'T12:00:00Z') > 7 * 86400000) return null;
-  return (last[1] / base[1] - 1) * 100;
+  return {value: (last[1] / base[1] - 1) * 100, from: base[0], to: last[0], grain};
+}
+function priceMove(daily, endDate, period) {
+  return moveObservation(daily, endDate, period)?.value ?? null;
 }
 function selectedPrice(ticker,market=root.MarketPrices){const item=market?.resolve(ticker)||root.BOSEquity?.itemFor(ticker),q=market?.currentQuote(item||ticker);if(!item||!Number.isFinite(q?.close)||q.close<=0||!q.date)return null;const label=(q.sourceLabel||'Shared price feed')+(q.current===false?' · dated observation':'');return {value:q.close,currency:market.displayUnit(item),as_of:q.date,basis:q.reason||label,status_label:label,source_url:q.sourceUrl};}
 function moveHeat(move) {
@@ -63,10 +94,11 @@ function moveHeat(move) {
   const band = magnitude < 5 ? 1 : magnitude < 10 ? 2 : magnitude <= 15 ? 3 : 4;
   return `${move > 0 ? 'gain' : 'loss'}-${band}`;
 }
-const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
+const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat,moveObservation};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
 let data=null,feed=null,reports=[],featured=[],limit=12,opener=null,refreshing=false;const editing=canEdit(root.location);const seriesCache=new Map();
 const priceSections = ['markets', 'stock-moves', 'stock-prices', 'main-company-cards', 'market-rates', 'market-bonds', 'yields'];
-let priceWatchlist = [], pricesStarted = false;
+let priceWatchlist = [], pricesStarted = false, moveView = 'default';
+const moveHistory = new Map();
 const $=s=>document.querySelector(s);
 function card(r,kind=''){return `<article class="report-card" data-report-id="${E(r.id)}" data-mih-tags="${E(JSON.stringify(r.tags||[]))}"><p class="meta">${E(kind||r.edition||r.kind)} · ${E(date(r.research_date))}</p><h3>${E(r.title)}</h3><p>${E(r.summary||'Open the complete dated report and its original evidence.')}</p>${link(r.href,r.full_edition?.completeness_verified?'Read full edition →':'Read report →','report-link')}${kind==='Featured research'?`<div class="brief-links">${(r.briefs||[]).map(b=>`<a class="brief-link" href="${E(safeHref(b.href)||r.href)}"><span class="brief-icon" aria-hidden="true">▤</span><span><b>${E(b.title)}</b><small>${E(b.summary||b.format||'Matching published companion')}</small></span></a>`).join('')}</div>`:''}</article>`;}
 function renderReports(){const latest=new Map();for(const r of reports){const f=r.full_edition;if(f?.completeness_verified&&(!latest.has(f.channel)||f.cutoff>latest.get(f.channel).full_edition.cutoff))latest.set(f.channel,r);}$('#daily-cards').innerHTML=[...latest.values()].slice(0,2).map(r=>card(r,'Verified full edition')).join('')||'<p class="empty">No complete daily editions available. Use the publication archive.</p>';$('#featured-cards').innerHTML=featured.map(id=>reports.find(r=>r.id===id)).filter(r=>r&&![...latest.values()].some(d=>d.id===r.id)).map(r=>card(r,'Featured research')).join('')||'<p class="empty">Choose reports for the featured shelf.</p>';renderArchive();}
@@ -77,18 +109,79 @@ function quote(r) {
   return `<b>${num(r.price.value)} <small>${E(r.price.currency)}</small></b>`;
 }
 
-function moveStats(values = []) {
-  return movePeriods.map((_, i) => {
-    const rounded = Number.isFinite(values[i]) ? Number(values[i].toFixed(1)) : null;
-    const change = rounded === null ? '—' : `${rounded > 0 ? '+' : ''}${rounded.toFixed(1)}%`;
-    return `<td data-move-heat="${moveHeat(rounded)}">${change}</td>`;
-  }).join('');
+const shortQuoteDate = new Intl.DateTimeFormat('en-GB', {day: '2-digit', month: 'short', year: '2-digit', timeZone: 'UTC'});
+function moveQuote(row) {
+  const p = row.price, asOf = p?.as_of?.slice(0, 10);
+  if (!Number.isFinite(p?.value) || !Number.isFinite(Date.parse(asOf))) return '<span aria-label="Price unavailable">—</span>';
+  return `${quote(row)}<time datetime="${E(asOf)}" title="${E(p.status_label || 'Saved price')}">${E(shortQuoteDate.format(Date.parse(asOf)))}</time>`;
 }
 
-function paintStockMoves(ticker, values) {
-  const row = document.querySelector(`.stock-move-row[data-logo-ticker="${CSS.escape(ticker)}"]`);
-  row.querySelectorAll('td').forEach(cell => cell.remove());
-  row.insertAdjacentHTML('beforeend', moveStats(values));
+const groupDivider = (groupIndex, periodIndex) => groupIndex > 0 && periodIndex === 0 ? ' class="move-divider"' : '';
+
+function paintStockMoves(row) {
+  const history = moveHistory.get(row.dataset.logoTicker);
+  row.querySelectorAll('[data-stock-return]').forEach(cell => cell.remove());
+  row.insertAdjacentHTML('beforeend', moveViews[moveView].map((group, groupIndex) => group.periods.map((period, periodIndex) => {
+    const move = history?.quote?.date && moveObservation(history.daily, history.quote.date, period.lookback, history.base);
+    const rounded = Number.isFinite(move?.value) ? Number(move.value.toFixed(1)) : null;
+    const change = rounded === null ? '—' : `${rounded > 0 ? '+' : ''}${rounded.toFixed(1)}%`;
+    const basis = move ? `${move.from} (${move.grain}) to ${move.to}` : 'Insufficient history';
+    return `<td${groupDivider(groupIndex, periodIndex)} data-stock-return data-move-heat="${moveHeat(rounded)}" title="${E(basis)}">${change}</td>`;
+  }).join('')).join(''));
+}
+
+const moveCount = () => moveViews[moveView].reduce((sum, group) => sum + group.periods.length, 0);
+function paintMoveStatus() {
+  const rows = [...document.querySelectorAll('#watch-strip tbody tr')];
+  const available = rows.filter(row => row.querySelector('[data-stock-return]:not([data-move-heat="missing"])')).length;
+  $('#price-status').textContent = `${available} of ${rows.length} stocks have price changes · ${moveCount()} periods`;
+}
+
+function paintMoveView() {
+  const table = $('#watch-strip table');
+  const groups = moveViews[moveView];
+  table.style.setProperty('--move-count', moveCount());
+  table.querySelectorAll('[data-move-columns]').forEach(group => group.remove());
+  table.tHead.insertAdjacentHTML('beforebegin', groups.map(group =>
+    `<colgroup data-move-columns span="${group.periods.length}"></colgroup>`).join(''));
+  table.tHead.innerHTML = `<tr>
+    <th class="move-pin-share" scope="col" rowspan="2">Share</th>
+    <th class="move-pin-price" scope="col" rowspan="2">Latest price</th>
+    ${groups.map((group, i) => `<th scope="colgroup" colspan="${group.periods.length}"${groupDivider(i, 0)} data-move-band="${group.band}">${group.label}</th>`).join('')}
+  </tr><tr>${groups.map((group, groupIndex) => group.periods.map((period, periodIndex) =>
+    `<th scope="col"${groupDivider(groupIndex, periodIndex)} data-move-band="${group.band}">${period.label}</th>`).join('')).join('')}</tr>`;
+  for (const row of table.tBodies[0].rows) paintStockMoves(row);
+}
+
+function bindMoveViews() {
+  const strip = $('#watch-strip'), table = strip.querySelector('table');
+  const scrollControls = $('.stock-move-scroll');
+  const [shorter, longer] = scrollControls.querySelectorAll('[data-move-scroll]');
+  function syncScrollControls() {
+    const max = strip.scrollWidth - strip.clientWidth;
+    scrollControls.hidden = max < 2;
+    shorter.disabled = strip.scrollLeft < 2;
+    longer.disabled = max - strip.scrollLeft < 2;
+  }
+  for (const button of [shorter, longer]) button.addEventListener('click', () => {
+    const pinned = [...table.tHead.querySelectorAll('[rowspan]')].reduce((width, cell) => width + cell.offsetWidth, 0);
+    strip.scrollBy({left: Number(button.dataset.moveScroll) * Math.max(80, strip.clientWidth - pinned - 28)});
+  });
+  strip.addEventListener('scroll', syncScrollControls, {passive: true});
+  const resize = new ResizeObserver(syncScrollControls);
+  resize.observe(strip);
+  resize.observe(table);
+
+  const buttons = [...document.querySelectorAll('[data-move-view]')];
+  for (const button of buttons) button.addEventListener('click', () => {
+    if (moveView === button.dataset.moveView) return;
+    moveView = button.dataset.moveView;
+    for (const option of buttons) option.setAttribute('aria-pressed', String(option === button));
+    paintMoveView();
+    strip.scrollLeft = 0;
+    syncScrollControls();
+    if (!refreshing) paintMoveStatus();
+  });
 }
 
 function quoteDetails(r) {
@@ -142,17 +235,19 @@ function buildMarkets(){
   priceWatchlist = [...data.watchlist, ...newStocks.filter(stock => !data.watchlist.some(r => r.ticker === stock.ticker))];
   $('#watch-strip').innerHTML = `<table class="stock-move-table" data-table-controls="off">
     <caption class="sr-only">Watchlist price changes by period</caption>
-    <colgroup><col class="stock-move-share"><col span="6"></colgroup>
-    <thead><tr><th scope="col">Share</th>${movePeriods.map(([label]) => `<th scope="col">${label}</th>`).join('')}</tr></thead>
+    <colgroup><col class="stock-move-share"></colgroup><colgroup><col class="stock-move-price"></colgroup>
+    <thead></thead>
     <tbody>${priceWatchlist.map(r => `<tr class="stock-move-row" data-logo-ticker="${E(r.ticker)}">
-      <th scope="row"><header>
+      <th scope="row" class="move-pin-share"><header>
         <a href="#company-${encodeURIComponent(r.ticker)}" aria-label="${E(r.name)} (${E(r.ticker)})">
           <b>${E(r.ticker)}</b><span>${E(r.name)}</span>
         </a>
         <span class="stock-move-spark" data-stock-spark="${E(r.ticker)}"></span>
-      </header></th>${moveStats()}
+      </header></th><td class="move-pin-price" data-move-quote="${E(r.ticker)}">${moveQuote(r)}</td>
     </tr>`).join('')}</tbody>
   </table>`;
+  paintMoveView();
+  bindMoveViews();
   $('#main-company-cards').innerHTML = root.CompanyDashboard.shell({home: true, cards: priceWatchlist.map(stockCard).join('')});
   $('#yield-rows').innerHTML=data.yields.map(y=>{const points=(y.history||[]).map(p=>[p.date,p.value]);return `<details class="instrument" open><summary><span><strong>${E(y.label)}</strong><small>${E(y.basis)}</small></span><span class="quote"><b>${num(y.value)}%</b><small>${E(date(y.as_of))}</small></span></summary><div class="detail-body"><p class="fine">${E(y.basis)}</p>${y.status==='error'?`<p class="warning">${E(y.message||'Refresh failed; retaining the dated saved observation.')}</p>`:''}${spark(points,'% p.a.')}${valuesTable(points,'% p.a.')}${link(y.source_url,'Open original source ↗')}${y.attribution?'<p class="fine">'+E(y.attribution)+' '+link(y.license_url,'Dataset terms')+'</p>':''}</div></details>`;}).join('');}
 async function series(ticker){if(!seriesCache.has(ticker))seriesCache.set(ticker,root.MarketPrices.series(ticker).catch(e=>{seriesCache.delete(ticker);throw e;}));return seriesCache.get(ticker);}
@@ -204,9 +299,10 @@ async function refreshPrices(force = false) {
       const ticker = CSS.escape(row.ticker);
       for (const node of document.querySelectorAll(`[data-quote="${ticker}"]`)) node.innerHTML = quote(row);
       document.querySelector(`[data-quote-info="${ticker}"]`).innerHTML = quoteDetails(row);
+      document.querySelector(`[data-move-quote="${ticker}"]`).innerHTML = moveQuote(row);
     }
-    const covered = await warmCharts();
-    $('#price-status').textContent = `${covered} of ${priceWatchlist.length} stocks have all ${movePeriods.length} price changes.`;
+    await warmCharts();
+    paintMoveStatus();
   } finally {
     refreshing = false;
     $('#refresh-prices').disabled = false;
@@ -214,21 +310,19 @@ async function refreshPrices(force = false) {
 }
 
 async function warmCharts() {
-  let next = 0, covered = 0;
+  let next = 0;
   const workers = Array.from({length: 3}, async () => {
     while (next < priceWatchlist.length) {
       const {ticker} = priceWatchlist[next++];
-      let moves = [];
       try {
         const s = await series(ticker);
-        moves = movePeriods.map(([, period]) => priceMove(s.daily, s.quote.date, period));
-        if (moves.every(Number.isFinite)) covered++;
+        moveHistory.set(ticker, s);
         for (const slot of document.querySelectorAll(`[data-stock-spark="${CSS.escape(ticker)}"]`)) {
           const chart = root.ReturnSparks?.priceSpark?.(s);
           if (chart) slot.replaceChildren(chart);
         }
       } catch {}
-      paintStockMoves(ticker, moves);
+      paintStockMoves(document.querySelector(`.stock-move-row[data-logo-ticker="${CSS.escape(ticker)}"]`));
       const target = document.getElementById('company-' + ticker).querySelector('.detail-content');
       if (!target.dataset.kind || target.dataset.kind === 'history') {
         await detail(ticker, 'history', Number(target.dataset.days) || 93);
@@ -236,7 +330,6 @@ async function warmCharts() {
     }
   });
   await Promise.all(workers);
-  return covered;
 }
 
 function openPrices() {

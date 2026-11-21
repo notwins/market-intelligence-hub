@@ -117,17 +117,58 @@
 #bonds > details { margin-top: 8px; }
 #bonds > details > summary { cursor: pointer; padding-block: 10px; color: var(--teal); font-size: .87rem; font-weight: 700; }
 
-#watch-strip { display: block; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
-.stock-move-table { table-layout: fixed; font-size: .83rem; font-variant-numeric: tabular-nums; }
-.stock-move-share { width: 25%; }
+#watch-strip {
+  --move-share-width: 235px;
+  --move-price-width: 105px;
+  --move-period-width: 72px;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+}
+.stock-move-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; margin: 10px 0 6px; }
+.stock-move-modes, .stock-move-scroll { display: flex; gap: 4px; }
+.stock-move-scroll[hidden] { display: none; }
+.stock-move-toolbar button { padding: 6px 10px; min-height: 36px; font-size: .78rem; }
+.stock-move-toolbar [aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: white; }
+.stock-move-scroll button { min-width: 34px; padding-inline: 6px; }
+.stock-move-scroll button:disabled { cursor: default; }
+.stock-move-table {
+  table-layout: fixed;
+  min-width: calc(var(--move-share-width) + var(--move-price-width) + var(--move-count, 0) * var(--move-period-width));
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: .83rem;
+  font-variant-numeric: tabular-nums;
+}
+.stock-move-share { width: var(--move-share-width); }
+.stock-move-price { width: var(--move-price-width); }
 .stock-move-table th, .stock-move-table td {
-  padding: 4px 3px;
+  padding: 5px 6px;
   text-align: right;
   vertical-align: middle;
   white-space: nowrap;
 }
-.stock-move-table th:first-child { padding-inline: 8px 3px; text-align: left; }
+.stock-move-table th[scope="colgroup"], .stock-move-table .move-pin-share { text-align: left; }
+.stock-move-table th[scope="colgroup"] { padding-inline-start: 8px; }
 .stock-move-table td { background: var(--move-bg, var(--card)); color: var(--move-ink, var(--muted)); font-weight: 700; border-left: 1px solid #172e3b10; }
+.stock-move-table td[data-stock-return] { padding-inline: 4px; }
+.stock-move-table .move-divider { border-inline-start: 2px solid #92a6af; }
+.stock-move-table :is(.move-pin-share, .move-pin-price) { position: sticky; z-index: 1; }
+.stock-move-table .move-pin-share { left: 0; }
+.stock-move-table .move-pin-price { left: var(--move-share-width); box-shadow: 1px 0 #afc0c7; }
+.stock-move-table td.move-pin-price { color: var(--ink); background: var(--card); line-height: 1.4; }
+.stock-move-table td.move-pin-price small { font-size: .72em; }
+.stock-move-table td.move-pin-price time { display: block; color: var(--muted); font-size: .72rem; font-weight: 400; }
+.stock-move-table [data-move-band="1"] { background: #e7effa; }
+.stock-move-table [data-move-band="2"] { background: #e5f2eb; }
+.stock-move-table [data-move-band="3"] { background: #eee9f7; }
+.stock-move-table [data-move-band="4"] { background: #f9eedf; }
+.stock-move-table [data-move-band="5"] { background: #e3eef0; }
 .stock-move-table tbody tr:last-child > * { border-bottom: 0; }
 .stock-move-table .stock-move-row > th { background: var(--card); text-transform: none; letter-spacing: 0; }
 .stock-move-table .stock-move-row header { display: flex; align-items: center; gap: 5px; }
@@ -138,6 +179,7 @@
 .stock-move-table .stock-move-row .mih-company-logo { padding: 0; }
 .stock-move-table .stock-move-spark { margin-inline-start: auto; }
 @media (max-width: 1120px) {
+  #watch-strip { --move-share-width: 150px; }
   .stock-move-table .stock-move-spark { display: none; }
 }
 
@@ -207,16 +249,16 @@
   #bonds .read-bond-grid {
     grid-template-columns: minmax(0, 1fr);
   }
-  .stock-move-share { width: 20.5%; }
-  .stock-move-table th, .stock-move-table td { font-size: .65rem; padding-inline: 2px; }
-  .stock-move-table th:first-child { padding-inline: 3px 1px; }
+  #watch-strip { --move-share-width: 67px; --move-price-width: 80px; --move-period-width: 58px; }
+  .stock-move-table th, .stock-move-table td { font-size: .7rem; padding-inline: 4px; }
+  .stock-move-table .move-pin-share { padding-inline: 3px 1px; }
+  .stock-move-table td.move-pin-price time { font-size: .63rem; }
   .stock-move-table .stock-move-row a b { font-size: .67rem; }
   .stock-move-table .stock-move-row a span { display: none; }
   .stock-move-table .stock-move-row header { gap: 3px; }
   .stock-move-table .stock-move-row .mih-company-logos { --company-logo-size: 13px !important; }
 }
 @media (max-width: 350px) {
-  .stock-move-table th, .stock-move-table td { font-size: .6rem; }
   .stock-move-table .stock-move-row a b { font-size: .62rem; }
   .daily-edition { padding: 10px; }
   .daily-edition h3 { font-size: 1rem; }

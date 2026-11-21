@@ -75,6 +75,23 @@ test('1D compares consecutive trading closes and rejects a stale previous close'
  assert.equal(Desk.priceMove(daily,'2026-11-20',{sessions:1}),null);
  assert.equal(Desk.priceMove(daily,'2026-11-22',{sessions:1}),null);
 });
+test('multiple trading sessions skip weekends and leave gaps unavailable',()=>{
+ const sessions=[['2026-11-12',25],['2026-11-13',30],['2026-11-16',40],['2026-11-17',45],['2026-11-18',50],['2026-11-19',60],['2026-11-20',75]];
+ assert.equal(Desk.priceMove(sessions,'2026-11-20',{sessions:6}),200);
+ assert.equal(Desk.priceMove(sessions,'2026-11-20',{sessions:2}),50);
+ assert.equal(Desk.priceMove(sessions,'2026-11-20',{sessions:7}),null);
+ assert.equal(Desk.priceMove([['2026-11-02',80],...sessions],'2026-11-13',{sessions:2}),null);
+});
+test('long lookbacks use older period dates without filling a gap in the daily series',()=>{
+ const daily=[['2025-12-01',80],['2026-09-30',80],['2026-11-20',100]];
+ const archive={weekly:[['2025-11-16',50],['2025-11-23',80]],monthly:[['2024-09-30',10],['2024-10-31',40],['2024-11-30',80]]};
+ assert.deepEqual(Desk.moveObservation(daily,'2026-11-20',{months:12},archive),
+  {value:100,from:'2025-11-16',to:'2026-11-20',grain:'saved weekly period'});
+ assert.deepEqual(Desk.moveObservation(daily,'2026-11-20',{months:24},archive),
+  {value:150,from:'2024-10-31',to:'2026-11-20',grain:'saved monthly period'});
+ assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:1},archive),null);
+ assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:25}, {weekly:[],monthly:[['2024-09-01',50]]}),null);
+});
 test('stock move colours use fixed bands with matching gain and loss boundaries',()=>{
  for(const [move,band] of [[0.1,1],[4.9,1],[5,2],[9.9,2],[10,3],[15,3],[15.1,4],[100,4]]){
   assert.equal(Desk.moveHeat(move),'gain-'+band);
