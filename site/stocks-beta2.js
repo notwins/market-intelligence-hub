@@ -65,6 +65,8 @@
   const download = get('sb2-download');
   const retry = get('sb2-retry');
   const embedded = get('sb2-embedded-data');
+  const pageQuery = new URLSearchParams(root.location.search);
+  const researchView = pageQuery.get('research') === '1';
   const groups = [...doc.querySelectorAll('[data-group]')];
   const format = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
   const calendar = new Intl.DateTimeFormat('en-GB', {
@@ -274,7 +276,10 @@
       '<li><button type="button" class="sb2-security" data-security="' + e(companyKey(security))
       + '" aria-haspopup="dialog">' + (security.rank == null ? '' : '<span aria-hidden="true" class="sb2-rank">'
       + e(security.rank) + '</span>') + logo(security, 28) + '<span class="sb2-security-name">'
-      + e(security.name) + '<span class="sb2-company-ticker">' + e(security.ticker) + '</span></span></button></li>'
+      + e(security.name) + '<span class="sb2-company-ticker">' + e(security.ticker) + '</span></span></button>'
+      + (security.group === 'shared' || embedded ? '' : '<a class="sb2-picker-research" href="stocks-beta2.html?ticker='
+        + encodeURIComponent(security.ticker) + '&amp;research=1" aria-label="Research for ' + e(security.name) + '">Research</a>')
+      + '</li>'
     )).join('');
     fitPickerRows();
     get('sb2-empty').hidden = results.length > 0;
@@ -337,7 +342,7 @@
     const body = element.querySelector('.sb2-research-body');
     status.textContent = 'Loading company research…';
     try {
-      const { briefs, coverageDate } = await getResearch();
+      const [{ briefs, coverageDate }, extra] = await Promise.all([getResearch(), researchLibrary?.forListing(company.ticker)]);
       if (!element.isConnected) return;
       const brief = briefs[company.ticker];
       history.setResearchTarget(element, brief);
@@ -345,7 +350,6 @@
         status.textContent = 'No research brief for this listing.';
         return;
       }
-      const extra = researchLibrary?.forListing(company.ticker);
       const { close, target } = brief;
       const financials = extra?.projections || brief.financials;
       const targetLabel = brief.provider === 'Haitong International' ? 'Target price' : 'Fair value';
@@ -361,13 +365,14 @@
       const columns = financials.periods.map((period, i) => '<th scope="col"' + estimate(i) + '>' + e(period) + '</th>').join('');
       const rows = financials.rows.map(([label, ...cells]) => '<tr><th scope="row">' + e(label) + '</th>'
         + cells.map((value, i) => '<td' + estimate(i) + '>' + e(value ?? '–') + '</td>').join('') + '</tr>').join('');
-      const readthrough = financials.readthrough?.length ? '<h4>Next estimate vs latest actual</h4><ul class="sb2-research-readthrough">'
+      const readthrough = !extra?.forecast && financials.readthrough?.length ? '<h4>Next estimate vs latest actual</h4><ul class="sb2-research-readthrough">'
         + financials.readthrough.map(item => '<li>' + e(item) + '</li>').join('') + '</ul>' : '';
       const sourceLink = (url, label) => '<a href="' + e(url) + '" target="_blank" rel="noopener">' + e(label) + '</a>';
       const dateLabel = brief.archived ? ' · Saved report' : '';
       const modelSuffix = financials.source !== brief.source ? ' · Previous report model' : '';
       const wasOpen = body.querySelector('.sb2-brief-details')?.open;
       const projectionWasOpen = body.querySelector('.sb2-research-projections')?.open;
+      const peersWereOpen = body.querySelector('.sb2-research-peers')?.open;
       const sections = extra ? researchLibrary.sections(extra, day) : '';
       body.innerHTML = '<p class="sb2-research-note sb2-research-dates">' + e(brief.provider + ' · ' + day(brief.date) + dateLabel) + '</p>'
         + '<dl class="sb2-quick-values">' + values + '</dl>'
@@ -384,9 +389,12 @@
         + '. A = actual, E = analyst estimate.</p><div class="sb2-table" role="region" aria-label="Research financials. Scroll horizontally for more years." tabindex="0"><table>'
         + '<thead><tr><th scope="col">Metric</th>' + columns + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
         + '<p>' + sourceLink(financials.source + '#page=' + financials.page, 'Financial table in PDF') + '</p>'
-        + readthrough + (extra ? '</details>' : '') + '</details>';
+        + (extra?.forecast ? researchLibrary.forecastSection(extra.forecast, day) : readthrough)
+        + (extra ? '</details>' : '') + '</details>';
       status.textContent = '';
       body.hidden = false;
+      if (peersWereOpen && extra) body.querySelector('.sb2-research-peers').open = true;
+      if (element.hasAttribute('data-open-research')) revealResearch(element);
     } catch {
       if (!element.isConnected) return;
       history.setResearchTarget(element, null);
@@ -396,6 +404,19 @@
       retryResearch.addEventListener('click', () => paintResearch({ element, company }));
       status.replaceChildren('Company research could not load. ', retryResearch);
     }
+  }
+
+  function revealResearch(element) {
+    const details = element.querySelector('.sb2-brief-details');
+    element.toggleAttribute('data-open-research', !details);
+    if (!details) return;
+    if (!details.getClientRects().length && deck.hasAttribute('data-multiple')) {
+      const expanded = deck.querySelector('[data-expanded]');
+      if (expanded && expanded !== element) setExpanded(expanded, false);
+      setExpanded(element, true);
+    }
+    details.open = true;
+    details.querySelector('summary').focus();
   }
 
   function showGroup(group) {
@@ -579,6 +600,7 @@
     });
     refreshRemoveButtons();
     if (focus) element.querySelector('.sb2-company-heading').focus();
+    return entry;
   }
 
   function chooseCompany(ticker, trigger) {
@@ -638,8 +660,9 @@
     }
     if (status) status.hidden = true;
     const displayed = [...cards.values()].find(card => companyKey(card.company) === companyKey(company));
-    if (displayed) displayed.element.querySelector('.sb2-company-heading').focus();
-    else placeCard(freeSlot(), company, { focus: true });
+    const entry = displayed || placeCard(freeSlot(), company);
+    if (researchView && company.group !== 'shared') revealResearch(entry.element);
+    else entry.element.querySelector('.sb2-company-heading').focus();
   }
 
   async function loadPriceCompanies() {
@@ -688,13 +711,14 @@
       });
       rankings ??= root.StocksBeta2Charts.mountRankings(data, { logo, chooseCompany, saved: saved?.rankings, save: saveComparison });
       showGroup('global');
-      const ticker = normalizedTicker(new URLSearchParams(root.location.search).get('ticker')).slice(0, 64);
+      const ticker = normalizedTicker(pageQuery.get('ticker')).slice(0, 64);
       const pricesReady = loadPriceCompanies().catch(() => {});
       if ((ticker && !archiveCompany(ticker)) ||
           oldCards.some(card => typeof card?.ticker === 'string' && card.ticker.startsWith('price:'))) await pricesReady;
       if (!cards.size) restoreComparison(saved);
       openRequested(ticker);
       if (!cards.size) placeCard(1, data.securities.find(item => item.group === 'global') ?? data.securities[0]);
+      if (researchView && !ticker) showPicker(true);
       get('sb2-options-content').prepend(status);
     } catch {
       status.textContent = 'Monthly market history could not load.';
