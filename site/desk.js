@@ -183,15 +183,18 @@ function bindMoveViews() {
   resize.observe(table);
 
   const buttons = [...document.querySelectorAll('[data-move-view]')];
-  for (const button of buttons) button.addEventListener('click', () => {
-    if (moveView === button.dataset.moveView) return;
-    moveView = button.dataset.moveView;
-    for (const option of buttons) option.setAttribute('aria-pressed', String(option === button));
-    paintMoveView();
-    strip.scrollLeft = 0;
-    syncScrollControls();
-    if (!refreshing) paintMoveStatus();
-  });
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      if (moveView === button.dataset.moveView) return;
+      moveView = button.dataset.moveView;
+      for (const option of buttons) option.setAttribute('aria-pressed', String(option === button));
+      paintMoveView();
+      strip.scrollLeft = 0;
+      syncScrollControls();
+      if (!refreshing) paintMoveStatus();
+    });
+    button.disabled = false;
+  }
 }
 
 function quoteDetails(r) {
