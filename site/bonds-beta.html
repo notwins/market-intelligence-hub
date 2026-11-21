@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="bonds-beta.css?v=20261122.filters1">
+  <link rel="stylesheet" href="bonds-beta.css?v=20261122.more1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261122.cashflow"></script>
   <script defer src="stocks-beta2-charts.js?v=20261122.performance1"></script>
   <script defer data-price-model-only src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.performance1"></script>
   <script defer src="bonds-beta-data.js?v=20261122.filters1"></script>
-  <script defer src="bonds-beta.js?v=20261122.filters1"></script>
+  <script defer src="bonds-beta.js?v=20261122.more1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to bond charts</a>
@@ -71,7 +71,10 @@
         <button id="bb-add" type="button">Add card</button>
         <label>Compare with<select id="bb-overlay"></select></label>
       </div>
-      <p id="bb-match-count" class="bb-match-count" role="status"></p>
+      <div class="bb-match-summary">
+        <p id="bb-match-count" role="status"></p>
+        <button id="bb-show-more" type="button" aria-controls="bb-match bb-overlay" hidden>Show more</button>
+      </div>
       <div class="bb-inputs bb-view-inputs">
         <div class="bb-tabs" role="group" aria-label="Visible cards">
           <button type="button" data-group="all" aria-pressed="true">All cards</button>
