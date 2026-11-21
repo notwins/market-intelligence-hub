@@ -21,13 +21,22 @@
 .sb2-groups button { padding-inline:13px; font-size:.86rem; }
 .sb2-picker label { display:block; font-size:.84rem; font-weight:650; margin-bottom:4px; }
 .sb2-find { display:flex; align-items:end; gap:8px; }
-.sb2-find label { flex:1 1 auto; max-width:550px; min-width:0; margin:0; }
-.sb2-find input { width:100%; margin-top:4px; }
+.sb2-company-search { display:flex; align-items:end; gap:8px; flex:1 1 auto; min-width:0; max-width:650px; }
+.sb2-company-search label { flex:1 1 auto; max-width:550px; min-width:0; margin:0; }
+.sb2-company-search input { width:100%; margin-top:4px; }
+.sb2-card-layout { display:flex; align-items:end; gap:8px; margin-inline-start:auto; }
+.sb2-picker .sb2-layout-control { display:grid; gap:4px; margin:0; color:var(--muted); }
+.sb2-layout-control select { min-height:42px; font-size:.85rem; padding:6px 10px; }
+.sb2-card-fit { color:var(--muted); font-size:.8rem; padding-bottom:10px; }
 #sb2-browse { flex:none; padding-inline:10px; font-size:.85rem; }
 #sb2-picker-results { margin-top:12px; }
 #sb2-result-count { font-size:.85rem; color:var(--muted); align-self:end; padding:4px 0; }
-#sb2-securities { display:grid; grid-template-columns:repeat(var(--sb2-results,1),minmax(0,1fr)); gap:6px; padding:2px 4px 2px 2px; margin:12px 0 0; max-height:214px; overflow:auto; list-style:none; }
+#sb2-securities { display:grid; grid-template-columns:repeat(var(--sb2-results,1),minmax(0,1fr)); gap:6px; padding:2px 4px 2px 2px; margin:12px 0 0; max-height:var(--sb2-browse-height,321px); overflow:auto; scrollbar-gutter:stable; list-style:none; }
 #sb2-securities li { display:flex; min-width:0; border:1px solid var(--line); border-radius:6px; }
+@container (max-width:600px) {
+  .sb2-find { flex-wrap:wrap; }
+  .sb2-company-search { flex-basis:100%; }
+}
 @container (min-width:440px) { #sb2-securities { --sb2-results:2; } }
 @container (min-width:690px) { #sb2-securities { --sb2-results:3; } }
 @container (min-width:940px) { #sb2-securities { --sb2-results:4; } }
@@ -70,7 +79,7 @@
   .sb2-intro p { margin:3px 0 0; font-size:.87rem; }
   .sb2-workspace { gap:9px; }
   .sb2-picker { padding:8px 10px; }
-  #sb2-securities { max-height:225px; }
+  #sb2-securities { max-height:min(var(--sb2-browse-height,270px),65svh); }
   .sb2-table { max-height:500px; }
   .sb2-table th,.sb2-table td { padding:8px; }
 }

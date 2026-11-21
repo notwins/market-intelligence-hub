@@ -1,9 +1,6 @@
 .sb2-view-links { display:flex; flex-wrap:wrap; gap:3px 14px; margin:0; font-size:.87rem; font-weight:650; }
 .sb2-shared-controls { display:flex; flex-wrap:wrap; align-items:end; gap:10px 20px; margin-bottom:14px; }
 .sb2-main { max-width:2160px; }
-.sb2-layout-control { display:grid; gap:3px; color:var(--muted); font-size:.78rem; font-weight:650; }
-.sb2-layout-control select { min-height:36px; font-size:.84rem; padding:6px 10px; }
-.sb2-card-fit { color:var(--muted); font-size:.8rem; padding-bottom:6px; }
 .sb2-deck {
   --sb2-card-min-width:265px;
   --sb2-cone-card-min-width:380px;
@@ -27,9 +24,6 @@
     display:grid; grid-template-rows:subgrid; grid-row:span 3; row-gap:0;
   }
   .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) .sb2-valuation { grid-row:span 2; }
-}
-@media(max-width:930px), (pointer:coarse) {
-  .sb2-main #sb2-securities { max-height:180px; }
 }
 .sb2-card-header { display:flex; justify-content:space-between; align-items:start; gap:8px; }
 .sb2-detail { container-type:inline-size; }

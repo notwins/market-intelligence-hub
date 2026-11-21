@@ -12,11 +12,11 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
-  <link rel="stylesheet" href="stocks-beta2.css?v=20261121.priorities1">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.target3.full1">
+  <link rel="stylesheet" href="stocks-beta2.css?v=20261121.picker1">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261121.target3.full1.picker1">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
   <script defer src="stocks-beta2-charts.js?v=20261121.target3"></script>
-  <script defer src="stocks-beta2.js?v=20261121.full1&amp;credit=1&amp;statement-charts=1"></script>
+  <script defer src="stocks-beta2.js?v=20261121.full1.picker1&amp;credit=1&amp;statement-charts=1"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -61,17 +61,6 @@
               <button type="button" data-axis="quarter" aria-pressed="false">Quarterly</button>
               <button type="button" data-axis="year" aria-pressed="true">Yearly</button>
             </div>
-            <label class="sb2-layout-control">Cards per row
-              <select id="sb2-card-columns" aria-describedby="sb2-card-fit">
-                <option value="auto">Auto (up to 5)</option>
-                <option value="1">1 card</option>
-                <option value="2">2 cards</option>
-                <option value="3">3 cards</option>
-                <option value="4">4 cards</option>
-                <option value="5">5 cards</option>
-              </select>
-            </label>
-            <span id="sb2-card-fit" class="sb2-card-fit" role="status"></span>
           </div>
           <button type="button" id="sb2-download" disabled>Download compact CSV</button>
           <details class="sb2-fund-import" id="sb2-fundamentals-import" data-fund-import-panel>
@@ -88,8 +77,23 @@
     <div class="sb2-workspace" id="sb2-workspace" hidden>
       <section class="sb2-panel sb2-picker" aria-label="Choose a security">
         <div class="sb2-find">
-          <label for="sb2-search">Find a company<input type="search" id="sb2-search" placeholder="Name or ticker" autocomplete="off"></label>
-          <button id="sb2-browse" type="button" aria-expanded="false" aria-controls="sb2-picker-results">Browse</button>
+          <div class="sb2-company-search">
+            <label for="sb2-search">Find a company<input type="search" id="sb2-search" placeholder="Name or ticker" autocomplete="off"></label>
+            <button id="sb2-browse" type="button" aria-expanded="false" aria-controls="sb2-picker-results">Browse</button>
+          </div>
+          <div class="sb2-card-layout">
+            <label class="sb2-layout-control">Cards per row
+              <select id="sb2-card-columns" aria-describedby="sb2-card-fit">
+                <option value="auto">Auto (up to 5)</option>
+                <option value="1">1 card</option>
+                <option value="2">2 cards</option>
+                <option value="3">3 cards</option>
+                <option value="4">4 cards</option>
+                <option value="5">5 cards</option>
+              </select>
+            </label>
+            <span id="sb2-card-fit" class="sb2-card-fit" role="status"></span>
+          </div>
         </div>
         <div id="sb2-picker-results" hidden>
           <div class="sb2-groups" role="group" aria-label="Ranked companies">
