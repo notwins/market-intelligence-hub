@@ -33,8 +33,7 @@ The optional top-level `ko_step_down_pp` map records the 1.50 percentage-point
 step shown for those 21 records. SI beta 2 displays it in the reference list.
 Rows without a captured step stay blank. The map does not supply the first
 step-down month or change the schedule in a draft. Counts and known date ranges
-are validated against the data rather than a fixed 225-record limit. The SI table, grouping detail and matching desk cards
-retain the distinction between screen labels and independently verified terms.
+are validated against the data rather than a fixed 225-record limit. The SI table and grouping detail show tenors in months. Coupons use the screen basis or the regular-coupon p.a. display assumption. Explicit bonus-enhanced references retain their source coupon basis.
 
 
 ## Compact quick filter, 21 November 2026
@@ -49,11 +48,7 @@ selected shares and source basket labels.
 
 Non-empty share slots combine with their AND/OR selector. AND binds before OR;
 the active basket expression is shown with parentheses. Currency, tenor and
-numeric ranges intersect that basket condition. Tenor 1–11 filters the source
-number without assigning months to legacy rows. Coupon p.a. bounds initially
-match only rows with a per_annum screen label. The explicit Include unconfirmed
-coupon basis option permits legacy source percentages while retaining their
-basis warning. All bounds are inclusive. Blank bounds are inactive, zero is a
+numeric ranges intersect that basket condition. The tenor filter uses months. The main SI Pricing coupon bounds include assumed p.a. coupons by default. Clear Include assumed p.a. coupons to show only explicitly annual values. Bonus-enhanced notes with an unconfirmed basis are excluded from annual bounds. All bounds are inclusive. Blank bounds are inactive, zero is a
 real bound, and reversed or negative bounds produce a visible validation message.
 
 Optional Strike/KI/KO/KO-step-down ranges sit to the right on desktop and fold

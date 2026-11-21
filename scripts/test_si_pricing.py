@@ -8,7 +8,11 @@ class SIReferenceTests(unittest.TestCase):
   self.assertEqual(d['record_count'],246);self.assertEqual(len(d['rows']),246)
   allowed={'reference','shares','source_date','currency','tenor_source_value','coupon_pct','strike_pct','ko_pct','ki_pct','additional_review'}
   for i,r in enumerate(d['rows'],1):
-   self.assertEqual(set(r),allowed if i<=225 else allowed|{'source_kind','tenor_unit','coupon_basis'});self.assertEqual(r['reference'],f'SI-{i:03d}')
+   expected=allowed if i<=225 else allowed|{'source_kind','tenor_unit','coupon_basis'}
+   if 'product_type' in r:
+    self.assertEqual(r['product_type'],'bonus_enhanced')
+    expected=expected|{'product_type'}
+   self.assertEqual(set(r),expected);self.assertEqual(r['reference'],f'SI-{i:03d}')
    if r['source_date'] is not None:
     self.assertLessEqual('2026-10-30',r['source_date']);self.assertLessEqual(r['source_date'],'2026-11-13')
    for k in ['coupon_pct','strike_pct','ko_pct','ki_pct']:self.assertIs(type(r[k]),int)

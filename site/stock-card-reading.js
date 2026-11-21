@@ -139,7 +139,7 @@
     return `<details class="sb-details">
       <summary>SI references · ${rows.length} saved references</summary>
       <div><p class="sb-note">Historical and indicative references · rounded source values. Tenors are shown in months.
-        Coupons default to p.a. where the source basis is unconfirmed. Barrier colours favour lower percentages.</p>
+        Regular coupons default to p.a. where the source basis is unconfirmed. Barrier colours favour lower percentages.</p>
         ${pricingLink}
         <div class="sb-table-wrap" tabindex="0" role="region" aria-label="Saved SI references">
           <table data-tc-layout="stock-si-references">
@@ -151,7 +151,7 @@
               <td data-tc-value="${escape((row.shares || []).join(' / '))}"><span class="si-reference-basket">
                 ${(row.shares || []).map(code => `<span>${logos?.data ? logos.html([code], logos.data, { size: 20 }) : ''}${escape(code)}</span>`).join('')}
               </span></td>
-              <td data-tc-value="${Number.isFinite(row.coupon_pct) ? row.coupon_pct : ''}"><span class="si-term-value" data-si-coupon-band="${terms?.couponBand(row.coupon_pct) || ''}">${percent(row.coupon_pct)}</span><small>${row.coupon_basis === 'per_annum' ? 'p.a.' : 'p.a. (assumed)'}</small></td>
+              <td data-tc-value="${Number.isFinite(row.coupon_pct) ? row.coupon_pct : ''}"><span class="si-term-value" data-si-coupon-band="${terms?.referenceCouponBand(row) || ''}">${percent(row.coupon_pct)}</span><small>${escape(terms?.referenceCouponLabel(row) || '')}</small></td>
               <td data-tc-value="${Number.isFinite(row.strike_pct) ? row.strike_pct : ''}"><span class="si-reference-barriers">${barrier('strike', row.strike_pct)} / ${barrier('ko', row.ko_pct)} / ${barrier('ki', row.ki_pct)}</span></td>
               <td>${escape(row.currency)}<small>${num(row.tenor_source_value, 0)} months</small></td>
               <td>${row.source_kind === 'indicative_pricing' ? 'Indicative pricing' : 'Historical reference'}

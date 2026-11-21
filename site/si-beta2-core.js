@@ -38,6 +38,13 @@ function matchMoa(library,ticker,currency,isin){
  }
  return library.byIsin.get(isinKey)?.rate;
 }
+function isBonusEnhanced(row){
+ return row?.product_type==='bonus_enhanced';
+}
+function referenceCouponLabel(row){
+ if(isBonusEnhanced(row))return row.coupon_basis==='per_annum'?'Bonus-enhanced · p.a. (screen)':'Bonus-enhanced · basis unconfirmed';
+ return row.coupon_basis==='per_annum'?'p.a. (screen)':'p.a. (assumed)';
+}
 function couponBand(coupon){
  if(coupon>12)return 'above-12';
  if(coupon>=10)return '10-12';
@@ -52,9 +59,12 @@ function barrierBand(term,value){
  const index=bounds.findIndex(max=>value<=max);
  return index<0?'high':['low','mid-low','mid-high'][index];
 }
+function referenceCouponBand(row){
+ return isBonusEnhanced(row)&&row.coupon_basis!=='per_annum'?'':couponBand(row.coupon_pct);
+}
 function symbol(v){v=clean(v,30).toUpperCase();if(/^\d{1,4}\s+HK$/.test(v))return v.split(/\s/)[0].padStart(4,'0')+'.HK';return v.replace(/\s+(?:UQ|UN|US)$/,'');}
 function blank(){return {id:'',shares:[],ko:null,ki:null,strike:null,step:null,months:null,coupon:null,currency:'SGD',tenorUnit:'months',couponBasis:'per_annum',kiType:'European at maturity',firstStep:2,date:'',issuer:'',notes:'',source:null};}
-function fromReference(r,step=null){return {...blank(),step,shares:r.shares.map(t=>({symbol:t,fixing:null,name:'',description:''})),ko:r.ko_pct,ki:r.ki_pct,strike:r.strike_pct,months:r.tenor_source_value,coupon:r.coupon_pct,currency:r.currency,tenorUnit:'months',couponBasis:r.coupon_basis||'unconfirmed',kiType:'Unconfirmed',source:{reference:r.reference,date:r.source_date||'',rounded:true,review:!!r.additional_review},date:''};}
+function fromReference(r,step=null){return {...blank(),step,shares:r.shares.map(t=>({symbol:t,fixing:null,name:'',description:''})),ko:r.ko_pct,ki:r.ki_pct,strike:r.strike_pct,months:r.tenor_source_value,coupon:r.coupon_pct,currency:r.currency,tenorUnit:'months',couponBasis:r.coupon_basis||'unconfirmed',kiType:'Unconfirmed',source:{reference:r.reference,date:r.source_date||'',rounded:true,review:!!r.additional_review,...(isBonusEnhanced(r)?{bonusEnhanced:true}:{})},date:''};}
 function validate(p){const issues=[];if(!p||typeof p!=='object')return ['Invalid page'];if(!Array.isArray(p.shares)||p.shares.length<1||p.shares.length>4)issues.push('Enter one to four shares.');
  const shares=p.shares||[];if(shares.some(s=>!s||!/^[-A-Z0-9.^ ]{1,30}$/.test(s.symbol||'')))issues.push('Use a valid ticker for each share.');if(new Set(shares.map(s=>symbol(s.symbol))).size!==shares.length)issues.push('Each share should appear once.');
  if(shares.some(s=>s?.moaPct!=null&&!validMoa(s.moaPct)))issues.push('Each MOA margin must be blank or between 0% and 100%.');
@@ -449,7 +459,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  if(!small&&d.metricsBasis)paragraph(rx,y+block-26,d.metricsBasis,61,2,8,muted);
  });
  line(28,foot,772,foot);
- const sourceNote=p.source?`Source ${p.source.reference} · ${p.source.date||'date unavailable'} · Rounded, photo-unverified terms.${p.source.couponAssumed && p.couponBasis==='per_annum'?' Coupon assumed p.a.':''}`:'User-entered terms require verification.';
+ const sourceNote=p.source?`Source ${p.source.reference} · ${p.source.date||'date unavailable'} · Rounded, photo-unverified terms.${p.source.bonusEnhanced?' Bonus-enhanced note.':''}${p.source.couponAssumed && p.couponBasis==='per_annum'?' Coupon assumed p.a.':''}`:'User-entered terms require verification.';
  const dates=[...metricsDates].sort();
  const metricsNote=dates.length?`BOS metrics · ${dates[0]}${dates.length>1?' to '+dates.at(-1):''}`:'';
  const profileNote=p.shares.some(share=>enrichment[share.symbol]?.staticProfile)?' Company profiles: shortened excerpts.':'';
@@ -488,5 +498,5 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
  }
  return doc.save();
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

@@ -128,3 +128,9 @@ html[data-display-mode=dark] .si-share,html[data-display-mode=dark] .si-currency
  .si-table-wrap .si-basket{width:190px;min-width:190px}
 }
 @media(max-width:500px){.si-share-filter{grid-template-columns:42px 56px minmax(120px,1fr)}}
+
+.si-reference-link { white-space:nowrap; font-weight:650; text-underline-offset:2px; }
+@media(max-width:600px){
+ .si-mobile-source .si-reference-link { display:inline-flex; align-items:center; min-height:24px; }
+ .si-table-wrap .si-cell-note:is(.si-tenor-unit,.si-coupon-unit) { display:block; font-size:.73em; white-space:normal; }
+}
