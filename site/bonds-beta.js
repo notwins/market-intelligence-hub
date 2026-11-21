@@ -188,6 +188,19 @@
       if (couponActive && !(Number.isFinite(instrument.coupon) && instrument.coupon >= min && instrument.coupon <= max)) return false;
       return query.every(term => `${instrument.isin} ${instrument.name} ${instrument.type ?? ''} ${instrument.currency}`.toUpperCase().includes(term));
     });
+    const [field, direction] = get('sort').value.split('-');
+    if (field) {
+      const sign = direction === 'asc' ? 1 : -1;
+      matchingKeys.sort((left, right) => {
+        const a = bonds.get(left)[field] ?? '';
+        const b = bonds.get(right)[field] ?? '';
+        if (a === b) return 0;
+        // Some observed-only bonds have no terms. Keep those at the end in either direction.
+        if (a === '') return 1;
+        if (b === '') return -1;
+        return a > b ? sign : -sign;
+      });
+    }
     const count = resetMatches ? matchBatchSize : Math.max(matchBatchSize, shownMatches.size);
     const matchSelect = get('match');
     const priorMatch = matchSelect.value;
@@ -670,6 +683,7 @@
     } finally { setHistoryBusy(false); }
   });
   get('search').addEventListener('input', () => populateControls(true));
+  get('sort').addEventListener('change', () => populateControls(true));
   get('tenors').addEventListener('click', event => {
     const button = event.target.closest('[data-tenor]');
     if (!button || button.disabled) return;
