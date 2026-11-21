@@ -1,0 +1,1129 @@
+{
+  "schema": 1,
+  "id": "20261122T055813SGT",
+  "checkedAt": "2026-11-22T05:58:13+08:00",
+  "sources": {
+    "hub": "360b1c35ba0dabdf990adb012360765a7ae5b908",
+    "content": "363df80bd8b4489959a55968a48ad6da837c765c"
+  },
+  "baseline": "20261121T022223SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 254,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 7,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 182,
+      "changed": 23,
+      "tags": 23,
+      "colour": 21,
+      "logos": 6
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261119-US-BANK-PAYMENT-VENDOR-CYBERATTACK",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "JPMorgan, Visa and Mastercard report third-party vendor cyber incidents",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.entity.ma",
+          "ticker.entity.v"
+        ],
+        "colour": null,
+        "logos": [
+          "MA",
+          "V"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-CHINA-2BN-USD-SOVEREIGN-ISSUE-UST-FLAT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "China's US$2bn three-year dollar bond prices flat to comparable Treasuries",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.us_treasuries",
+          "event.guidance_change",
+          "geo.mainland_china",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "asset.us_treasuries": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            },
+            "event.guidance_change": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-CHINA-REDCHIP-OFFSHORE-IPO-RESTRICTIONS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Reuters sources describe tighter Hong Kong initial public offering access for newer Chinese red-chip firms",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.ipo_listing",
+          "geo.hong_kong",
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.hong_kong",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "event.ipo_listing": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.hong_kong": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-CRWD-ZS-ACQUISITION-TALKS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "CrowdStrike and Zscaler reportedly discuss a combination; no agreed transaction",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.entity.crwd",
+          "ticker.entity.zs"
+        ],
+        "colour": null,
+        "logos": [
+          "CRWD",
+          "ZS"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-ECB-BOARD-FR-DE-ES-NOMINATIONS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "France nominates Laurence Boone as Reuters outlines prospective ECB leadership changes",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.france",
+          "geo.germany",
+          "institution.european_central_bank",
+          "person.christine_lagarde"
+        ],
+        "colour": {
+          "tag": "geo.france",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "person.christine_lagarde": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-FED-COOK-BESSENT-RATE-DEBATE-AI-FINANCING",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Cook urges tighter Fed policy and scrutiny of AI financing; Bessent opposes a large hike",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "institution.federal_reserve",
+          "person.scott_bessent",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "person.scott_bessent",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.scott_bessent": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-HORMUZ-TANKER-FIRE-PROJECTILE-UKMTO",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Saturday tanker reports extend the retained Hormuz shipping-security story",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.transport_logistics"
+        ],
+        "colour": {
+          "tag": "sector.transport_logistics",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "sector.transport_logistics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-INDIA-SEBI-OFFSHORE-FUND-DISCLOSURE-RELAXATION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "SEBI proposes removing extra offshore-fund disclosures; existing ownership rules remain relevant",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-NVDA-HUANG-SENATE-TESTIMONY-AGREEMENT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Former Nvidia CEO Jensen Huang agrees to public Senate testimony; date unconfirmed",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "macro.trade_data",
+          "person.entity.person.jensen-huang",
+          "person.political_officeholders_other",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.political_officeholders_other",
+          "light": "#7E22CE",
+          "dark": "#D8B4FE",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "macro.trade_data": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "person.political_officeholders_other": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            },
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "NVDA",
+          "PERSON:JENSEN-HUANG"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-ORACLE-OPENAI-INFRASTRUCTURE-FUNDING-CONFIRMED",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Oracle confirms funding for OpenAI infrastructure contract after earlier capital raise",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.cash_deposits",
+          "sector.infrastructure_construction",
+          "ticker.entity.orcl",
+          "ticker.oracle_orcl"
+        ],
+        "colour": {
+          "tag": "sector.infrastructure_construction",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "asset.cash_deposits": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "sector.infrastructure_construction": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "ticker.oracle_orcl": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": [
+          "ORCL"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-RUSSIA-UKRAINE-RETALIATORY-INFRASTRUCTURE-STRIKES",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Reuters reports deadly Russian infrastructure strikes after Crimean Bridge attacks",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.gold",
+          "geo.russia",
+          "geo.ukraine",
+          "sector.infrastructure_construction"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "asset.gold": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            },
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "sector.infrastructure_construction": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-SINGAPORE-US-INSIDER-TRADING-EXTRADITION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Singaporean extradited to face United States insider-trading charges; allegations remain unproven",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.mergers_acquisitions",
+          "event.regulatory_legal_decision",
+          "geo.singapore",
+          "geo.united_states"
+        ],
+        "colour": {
+          "tag": "geo.singapore",
+          "light": "#047857",
+          "dark": "#6EE7B7",
+          "chips": {
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "event.regulatory_legal_decision": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            },
+            "geo.singapore": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            },
+            "geo.united_states": {
+              "text": "#1D4ED8",
+              "background": "#EFF6FF",
+              "dark_text": "#93C5FD",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-SK-HYNIX-KIOXIA-BOND-CONVERSION-STAKE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "SK Hynix plans an indirect 14.1% Kioxia holding through a December bond conversion",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.000660_ks",
+          "company.285a_t",
+          "sector.semiconductors",
+          "ticker.entity.000660.ks"
+        ],
+        "colour": {
+          "tag": "company.000660_ks",
+          "light": "#6D28D9",
+          "dark": "#DDD6FE",
+          "chips": {
+            "company.000660_ks": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            },
+            "company.285a_t": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            },
+            "sector.semiconductors": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "000660.KS"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-US-PURE-LITHIUM-REJECTS-GOVERNMENT-MAJORITY-STAKE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Reuters discloses rejected US government majority-stake proposal for Pure Lithium",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.mergers_acquisitions",
+          "geo.united_states"
+        ],
+        "colour": {
+          "tag": "event.mergers_acquisitions",
+          "light": "#86198F",
+          "dark": "#F0ABFC",
+          "chips": {
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-US-SEC-NVIDIA-ACCOUNTING-INQUIRY",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Reuters identifies accounting focus in SEC inquiry into Nvidia",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.singapore",
+          "macro.corporate_earnings_metrics",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.singapore",
+          "light": "#047857",
+          "dark": "#6EE7B7",
+          "chips": {
+            "geo.singapore": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            },
+            "macro.corporate_earnings_metrics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-US-TREASURY-IRAN-OIL-TRUSTEES-OFAC-DESIGNATIONS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "US Treasury designates four alleged Iranian oil-revenue trustees",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.oil_crude",
+          "event.sanctions",
+          "geo.malaysia",
+          "geo.singapore",
+          "geo.united_states",
+          "macro.corporate_earnings_metrics"
+        ],
+        "colour": {
+          "tag": "macro.corporate_earnings_metrics",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "event.sanctions": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.malaysia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "geo.singapore": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            },
+            "macro.corporate_earnings_metrics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-EU-2028-2034-BUDGET-FRANCE-OBJECTION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "EU budget follow-up adds proposed EUR40bn reduction and 3% digital levy",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu",
+          "ticker.alphabet_googl",
+          "ticker.amazon_amzn",
+          "ticker.apple_aapl",
+          "ticker.meta_meta",
+          "ticker.microsoft_msft"
+        ],
+        "colour": {
+          "tag": "ticker.alphabet_googl",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "ticker.alphabet_googl": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "ticker.amazon_amzn": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "ticker.apple_aapl": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "ticker.meta_meta": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "ticker.microsoft_msft": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-EU-INDONESIA-TRADE-DEAL-SIGNED",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "EU and Indonesia sign trade agreements; implementation still requires approval",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.tariffs_trade_restrictions",
+          "geo.euro_area_eu",
+          "geo.indonesia"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "event.tariffs_trade_restrictions": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-EU-PLASTIC-WASTE-NON-OECD-EXPORT-BAN",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "EU plastic-waste export restrictions take effect for non-OECD destinations",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu",
+          "geo.indonesia",
+          "geo.malaysia",
+          "geo.vietnam",
+          "macro.trade_data"
+        ],
+        "colour": {
+          "tag": "macro.trade_data",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "geo.malaysia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "geo.vietnam": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "macro.trade_data": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-INTESA-MPS-34-5BN-TENDER-BOARD-RESPONSE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "MPS judges Intesa Sanpaolo offer financially fair while disputing its share of future value",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.isp_mi",
+          "event.mergers_acquisitions"
+        ],
+        "colour": {
+          "tag": "company.isp_mi",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "company.isp_mi": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-QATAR-TEHRAN-DIPLOMATIC-VISIT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Iranian official reports Qatar delegation talks in Tehran; no agreement established",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.gulf_gcc",
+          "sector.transport_logistics"
+        ],
+        "colour": {
+          "tag": "geo.gulf_gcc",
+          "light": "#854D0E",
+          "dark": "#FDE68A",
+          "chips": {
+            "geo.gulf_gcc": {
+              "text": "#854D0E",
+              "background": "#FEFCE8",
+              "dark_text": "#FDE68A",
+              "dark_background": "#422006"
+            },
+            "sector.transport_logistics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-SPAIN-BANK-LEVY-2027-HOUSING",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Spain proposes a 2027 bank-levy extension to support housing",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "sector.financials_banking",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-VIETNAM-PRIORITY-PROJECT-LAND-EXPROPRIATION-LAW",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Vietnam approves land legislation for faster infrastructure projects from July 2027",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.regulatory_legal_decision",
+          "geo.vietnam",
+          "sector.infrastructure_construction"
+        ],
+        "colour": {
+          "tag": "geo.vietnam",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "event.regulatory_legal_decision": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            },
+            "geo.vietnam": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "sector.infrastructure_construction": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
