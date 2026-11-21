@@ -127,42 +127,6 @@
     </section>`;
   }
 
-  function siReferences(rows, showEmpty) {
-    const pricingLink = '<a href="si-beta2.html#si-library">Open SI pricing and one-pagers →</a>';
-    const logos = root.CompanyLogos;
-    const terms = root.SIBetaCore;
-    const percent = value => Number.isFinite(value) ? num(value) + '%' : 'Unavailable';
-    const barrier = (type, value) => '<span class="si-term-value" data-si-barrier-band="'
-      + (terms?.barrierBand(type, value) || '') + '">' + num(value) + '</span>';
-    if (!rows?.length) return showEmpty ? `<h4>SI pricing &amp; saved references</h4>
-      <p class="sb-note">No saved SI references for this exact listing.</p>${pricingLink}` : '';
-    return `<details class="sb-details">
-      <summary>SI references · ${rows.length} saved references</summary>
-      <div><p class="sb-note">Historical and indicative references · rounded source values. Tenors are shown in months.
-        Regular coupons default to p.a. where the source basis is unconfirmed. Barrier colours favour lower percentages.</p>
-        ${pricingLink}
-        <div class="sb-table-wrap" tabindex="0" role="region" aria-label="Saved SI references">
-          <table data-tc-layout="stock-si-references">
-            <caption>Source dates and product conventions remain separate from the current share quote.</caption>
-            <thead><tr><th>Reference / date</th><th>Underlying basket</th><th>Coupon</th>
-              <th>Strike / KO / KI %</th><th>Currency / tenor</th><th>Source / review</th></tr></thead>
-            <tbody>${rows.map(row => `<tr>
-              <th><a href="si-beta2.html?reference=${encodeURIComponent(row.reference)}" aria-label="Open ${escape(row.reference)} one-pager">${escape(row.reference)}</a><small>${day(row.source_date)}</small></th>
-              <td data-tc-value="${escape((row.shares || []).join(' / '))}"><span class="si-reference-basket">
-                ${(row.shares || []).map(code => `<span>${logos?.data ? logos.html([code], logos.data, { size: 20 }) : ''}${escape(code)}</span>`).join('')}
-              </span></td>
-              <td data-tc-value="${Number.isFinite(row.coupon_pct) ? row.coupon_pct : ''}"><span class="si-term-value" data-si-coupon-band="${terms?.referenceCouponBand(row) || ''}">${percent(row.coupon_pct)}</span><small>${escape(terms?.referenceCouponLabel(row) || '')}</small></td>
-              <td data-tc-value="${Number.isFinite(row.strike_pct) ? row.strike_pct : ''}"><span class="si-reference-barriers">${barrier('strike', row.strike_pct)} / ${barrier('ko', row.ko_pct)} / ${barrier('ki', row.ki_pct)}</span></td>
-              <td>${escape(row.currency)}<small>${num(row.tenor_source_value, 0)} months</small></td>
-              <td>${row.source_kind === 'indicative_pricing' ? 'Indicative pricing' : 'Historical reference'}
-                ${row.additional_review ? '<small>Additional review required</small>' : ''}</td>
-            </tr>`).join('')}</tbody>
-          </table>
-        </div>
-      </div>
-    </details>`;
-  }
-
   function reportMarkup(report) {
     return `<article class="sb-report">
       <div class="sb-meta">${day(report.research_date)} · ${escape(report.kind || 'Research')}</div>
@@ -188,14 +152,14 @@
     </article>`;
   }
 
-  function reading({ matches, items, si, afterSi = '', showEmptySi = false, reportsUnavailable, newsUnavailable }) {
+  function reading({ matches, items, listing, afterSi = '', reportsUnavailable, newsUnavailable }) {
     return `<section class="sb-section sb-reading-grid">
       <div>
         <h3>Research &amp; saved write-ups <small>(${matches.length})</small></h3>
         <p class="sb-note">${reportsUnavailable ? 'Independent research is unavailable. Saved matches are shown.'
           : 'Company-tagged or titled reports from the connected catalogue. Links open the original reports.'}</p>
         ${matches.map(reportMarkup).join('') || '<p class="sb-empty">No company-matched report is indexed.</p>'}
-        ${siReferences(si, showEmptySi)}
+        ${root.SIReferenceTable?.section(listing) || ''}
         ${afterSi}
       </div>
       <div>

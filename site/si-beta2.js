@@ -256,10 +256,12 @@ $('duplicate-page').addEventListener('click',()=>{if(active())add(structuredClon
 $('remove-page').addEventListener('click',()=>{if(!active()||protectEdits())return;invalidatePDF();removed={page:active(),index:pages.indexOf(active())};loading.delete(activeId);revisions[activeId]=(revisions[activeId]||0)+1;pages=pages.filter(p=>p.id!==activeId);activeId=pages[Math.min(removed.index,pages.length-1)]?.id||'';$('undo-remove').hidden=false;fill(active());persist();render();notice('Page removed. Undo is available.');});
 $('undo-remove').addEventListener('click',()=>{if(!removed||protectEdits())return;if(pages.length>=LIMIT){notice('Remove a page before undoing: the collection already has 30 pages.');return;}invalidatePDF();pages.splice(removed.index,0,removed.page);activeId=removed.page.id;removed=null;$('undo-remove').hidden=true;loading.add(activeId);fill(active());persist();render();enrich(active());});
 $('refresh-page').addEventListener('click',async()=>{const p=active();if(!p||protectEdits())return;invalidatePDF();loading.add(p.id);render();try{await bounded(Promise.all([window.MarketPrices.refresh(true),window.BOSEquity?.refresh(true),C.overlayKeys.some(key=>chart[key])?window.ShareLabData?.load(true):null]),'Data refresh timed out.');}catch{notice('Some data could not refresh. Available saved data will be used.');}if(pages.includes(p))enrich(p);else{loading.delete(p.id);render();}});
-let refs=[],libraryCurrency='All';
+const referenceTable=window.SIReferenceTable;
+const urlParams=new URLSearchParams(window.location?.search||'');
+let refs=[],referenceSteps={},referenceLoading=false,referenceError=false,libraryCurrency='All',libraryCompany=referenceTable?.codeFor(urlParams.get('company'))||'';
 const libraryAliases={DBSM:'D05.SI',UOBH:'U11.SI',SGXL:'S68.SI',STEL:'Z74.SI',STEG:'S63.SI',SIAL:'C6L.SI',SKHY:'000660.KS'};
 const libraryQuick=window.SIQuickFilters?.create({
- rows:()=>refs,stepDown:reference=>window.MarketSI.stepDown(reference),namespace:'si-b2-q',simple:true,
+ rows:()=>refs,stepDown:reference=>referenceSteps[reference]??null,namespace:'si-b2-q',simple:true,
  getIdentity(code){const ticker=libraryAliases[code]||code,item=window.MarketPrices?.resolve(ticker);return {name:item?.name||code,file:pickerLogos.get(ticker)||pickerLogos.get(code)};}
 });
 function mountLibraryQuick(){
@@ -268,19 +270,20 @@ function mountLibraryQuick(){
  if(!holder.dataset.ready){holder.innerHTML=libraryQuick.render({currency:libraryCurrency,query:'',reviewOnly:false});holder.dataset.ready='true';}
 }
 function libraryShares(row){return `<span class="ticker si-library-shares" aria-label="${E(row.shares.join(' / '))}">${row.shares.map(code=>{const ticker=libraryAliases[code]||code,file=pickerLogos.get(ticker)||pickerLogos.get(code),name=window.MarketPrices?.resolve(ticker)?.name||code;return `<span class="si-library-share" title="${E(name)} (${E(code)})">${file?`<img src="${E(LOGO_BASE+file)}" width="20" height="20" alt="" loading="lazy">`:'<span class="si-library-logo-fallback" aria-hidden="true"></span>'}<span>${E(code)}</span></span>`;}).join('')}</span>`;}
-function renderLibrary(){refs=window.MarketSI.records();const q=$('library-search').value.trim().toLowerCase(),ccy=libraryQuick?libraryCurrency:($('library-currency')?.value||''),filtered=refs.filter(r=>(list!=='saved'||watch.includes(r.reference))&&(!ccy||ccy==='All'||r.currency===ccy)&&(!libraryQuick||libraryQuick.matches(r))&&[r.reference,...r.shares,r.source_date||'',...r.shares.map(s=>window.MarketPrices?.resolve(s)?.name||'')].join(' ').toLowerCase().includes(q));$('watch-count').textContent=watch.length;$('library-count').textContent=refs.length?`${filtered.length} of ${refs.length} historical records${list==='saved'?' · your SI watchlist':''}`:'Reference list unavailable. You can still create pages manually.';$('library-retry').hidden=refs.length>0;mountLibraryQuick();
+function renderLibrary(){
+ const scope=$('library-company-scope');
+ if(scope){scope.hidden=!libraryCompany;$('library-company-code').textContent=libraryCompany;}
+ const q=$('library-search').value.trim().toLowerCase(),ccy=libraryQuick?libraryCurrency:($('library-currency')?.value||''),filtered=refs.filter(r=>(!libraryCompany||r.shares.includes(libraryCompany))&&(list!=='saved'||watch.includes(r.reference))&&(!ccy||ccy==='All'||r.currency===ccy)&&(!libraryQuick||libraryQuick.matches(r))&&[r.reference,...r.shares,r.source_date||'',...r.shares.map(s=>window.MarketPrices?.resolve(s)?.name||'')].join(' ').toLowerCase().includes(q));$('watch-count').textContent=watch.length;$('library-count').textContent=refs.length?`${filtered.length} of ${refs.length} historical records${list==='saved'?' · your SI watchlist':''}`:referenceLoading?'Loading saved SI references...':'Reference list unavailable. You can still create pages manually.';$('library-retry').hidden=!referenceError;mountLibraryQuick();
  $('library-rows').innerHTML=filtered.map(r=>{
-  const step=window.MarketSI.stepDown(r.reference);
-  const barrier=(term,value)=>`<td data-tc-value="${value}"><span class="si-term-value" data-si-barrier-band="${C.barrierBand(term,value)}">${value}%</span></td>`;
-  return `<tr data-currency="${E(r.currency)}"><td><button class="star" data-star="${E(r.reference)}" aria-pressed="${watch.includes(r.reference)}" aria-label="${watch.includes(r.reference)?'Remove':'Save'} ${E(r.reference)} ${watch.includes(r.reference)?'from':'to'} SI watchlist">${watch.includes(r.reference)?'★':'☆'}</button></td><td class="si-library-basket" data-tc-value="${E(r.shares.join(' / '))}">${libraryShares(r)}<small><a href="?reference=${encodeURIComponent(r.reference)}">${E(r.reference)}</a>${r.additional_review?' · review':''}</small></td><td data-tc-value="${E(r.source_date||'')}">${E(r.source_date||'Not shown')}</td><td>${E(r.currency)}</td><td data-tc-value="${r.tenor_source_value} months">${r.tenor_source_value}<small>${'months'}</small></td><td data-tc-value="${r.coupon_pct}%"><strong class="si-term-value" data-si-coupon-band="${C.referenceCouponBand(r)}">${r.coupon_pct}%</strong><small>${E(C.referenceCouponLabel(r))}</small></td>${barrier('ko',r.ko_pct)}<td data-tc-value="${step??''}">${step===null?'—':step.toFixed(2)+' pp'}</td>${barrier('ki',r.ki_pct)}${barrier('strike',r.strike_pct)}<td><button data-add="${E(r.reference)}">＋ Add page</button></td></tr>`;
+  const step=referenceSteps[r.reference]??null;
+  return `<tr data-currency="${E(r.currency)}"><td><button class="star" data-star="${E(r.reference)}" aria-pressed="${watch.includes(r.reference)}" aria-label="${watch.includes(r.reference)?'Remove':'Save'} ${E(r.reference)} ${watch.includes(r.reference)?'from':'to'} SI watchlist">${watch.includes(r.reference)?'★':'☆'}</button></td>${referenceTable.cells(r,step,libraryShares(r))}<td><button data-add="${E(r.reference)}">＋ Add page</button></td></tr>`;
  }).join('')||'<tr><td colspan="11">'+(list==='saved'?'Save a reference with ☆ to build your SI watchlist.':'No matching references.')+'</td></tr>';
  openRequestedReference();
  if(libraryQuick)libraryQuick.sync(filtered.length);
  else {const select=$('library-currency'),currencies=[...new Set(refs.map(r=>r.currency))].sort();if(select&&select.options.length!==currencies.length+1){select.innerHTML='<option value="">All currencies</option>'+currencies.map(c=>`<option>${E(c)}</option>`).join('');select.value=ccy;}}}
-const query=window.location?.search;
-let requestedReference=query?new URLSearchParams(query).get('reference'):null;
+let requestedReference=urlParams.get('reference');
 function addReference(row){
- const page=C.fromReference(row,window.MarketSI.stepDown(row.reference));
+ const page=C.fromReference(row,referenceSteps[row.reference]??null);
  if(page.couponBasis==='unconfirmed'&&!C.isBonusEnhanced(row)){
   page.couponBasis='per_annum';
   page.source.couponAssumed=true;
@@ -299,6 +302,24 @@ function openRequestedReference(){
   $('preview-title').scrollIntoView({block:'start'});
  }else addReference(row);
 }
+async function loadReferenceLibrary(force=false){
+ if(referenceLoading)return;
+ referenceLoading=true;referenceError=false;
+ renderLibrary();
+ try{
+  const data=await C.loadReferences(force);
+  refs=data.rows;referenceSteps=data.ko_step_down_pp||{};
+ }catch{referenceError=true;}
+ finally{referenceLoading=false;renderLibrary();}
+}
+function clearLibraryCompany(){
+ libraryCompany='';
+ if(!urlParams.has('company'))return;
+ urlParams.delete('company');
+ const query=urlParams.toString();
+ window.history.replaceState(window.history.state,'',window.location.pathname+(query?'?'+query:'')+window.location.hash);
+}
+$('library-clear-company')?.addEventListener('click',()=>{clearLibraryCompany();renderLibrary();$('library-search').focus();});
 const quickHolder=$('library-quick-filter');
 quickHolder?.addEventListener('input',event=>{if(libraryQuick?.handle(event.target))renderLibrary();});
 quickHolder?.addEventListener('change',event=>{
@@ -308,12 +329,12 @@ quickHolder?.addEventListener('change',event=>{
 });
 quickHolder?.addEventListener('click',event=>{
  if(!libraryQuick||!event.target.closest('[data-si-b2-q-reset]'))return;
- libraryQuick.reset();libraryCurrency='All';$('library-search').value='';
+ libraryQuick.reset();libraryCurrency='All';clearLibraryCompany();$('library-search').value='';
  const currency=$(libraryQuick.id('si-currency'));if(currency)currency.value='All';renderLibrary();
 });
 for(const event of ['market-prices-updated','bos-equity-updated','share-static-updated'])document.addEventListener(event,()=>{if(refs.length)renderLibrary();});
 $('library-rows').addEventListener('click',e=>{const star=e.target.closest('[data-star]'),button=e.target.closest('[data-add]');if(star){const ref=star.dataset.star;watch=watch.includes(ref)?watch.filter(x=>x!==ref):[...watch,ref];persist();renderLibrary();}if(button){if(protectEdits())return;const row=refs.find(r=>r.reference===button.dataset.add);if(row)addReference(row);}});
-document.querySelectorAll('[data-list]').forEach(b=>b.addEventListener('click',()=>{list=b.dataset.list;document.querySelectorAll('[data-list]').forEach(n=>n.setAttribute('aria-pressed',String(n===b)));renderLibrary();}));$('library-search').addEventListener('input',renderLibrary);$('library-currency')?.addEventListener('change',renderLibrary);$('library-retry').addEventListener('click',()=>window.MarketSI.refresh());
+document.querySelectorAll('[data-list]').forEach(b=>b.addEventListener('click',()=>{list=b.dataset.list;document.querySelectorAll('[data-list]').forEach(n=>n.setAttribute('aria-pressed',String(n===b)));renderLibrary();}));$('library-search').addEventListener('input',renderLibrary);$('library-currency')?.addEventListener('change',renderLibrary);$('library-retry').addEventListener('click',()=>loadReferenceLibrary(true));
 function download(bytes,type,name){const url=URL.createObjectURL(new Blob([bytes],{type})),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 let pdfLibrary;
 async function getPDFLib(){if(window.PDFLib)return window.PDFLib;if(!pdfLibrary){const s=document.createElement('script');pdfLibrary=bounded(new Promise((resolve,reject)=>{s.src='vendor/pdf-lib-1.17.1.min.js';s.onload=()=>window.PDFLib?resolve(window.PDFLib):reject(Error('PDF exporter is unavailable.'));s.onerror=()=>reject(Error('PDF exporter could not load. Try again.'));document.head.append(s);}), 'PDF exporter timed out. Try again.').catch(e=>{pdfLibrary=null;s.remove();throw e;});}return pdfLibrary;}
@@ -327,6 +348,6 @@ $('pdf-one').addEventListener('click',()=>exportPDF(false));$('pdf-all').addEven
 $('backup-pages').addEventListener('click',()=>{if(protectEdits())return;download(JSON.stringify({version:1,pages,watch},null,2),'application/json','SI-beta2-collection.json');});
 $('restore-pages').addEventListener('click',e=>{if(protectEdits())e.preventDefault();});
 $('restore-pages').addEventListener('change',async e=>{try{if(protectEdits())return;const file=e.target.files?.[0];if(!file)return;if(file.size>500000)throw Error('Collection file is too large.');const input=JSON.parse(await file.text());if(protectEdits())return;if(input.version!==1||!Array.isArray(input.pages)||pages.length+input.pages.length>LIMIT)throw Error('Invalid collection or too many pages.');const added=input.pages.map(normalize);if(added.some(p=>C.validate(p).length))throw Error('Collection includes invalid terms. No pages were imported.');invalidatePDF();for(const p of added){p.id=id();pages.push(p);loading.add(p.id);}watch=[...new Set([...watch,...(Array.isArray(input.watch)?input.watch.filter(x=>/^SI-\d{3,}$/.test(x)):[])])];activeId=added[0]?.id||activeId;fill(active());persist();render();renderLibrary();added.forEach(enrich);notice(`Added ${added.length} pages. Your existing collection was preserved.`);}catch(error){notice(error.message||'Collection could not be loaded.');}finally{e.target.value='';}});
-restore();pages.forEach(p=>loading.add(p.id));fill(active());render();window.MarketSI.connect(renderLibrary);bounded(Promise.all([window.MarketPrices.refresh(),window.BOSEquity?.refresh(),window.ShareStaticData?.load()]),'Initial data load timed out.').catch(()=>notice('Some share data is unavailable. You can use manual prices and retry Refresh data.')).finally(()=>{updateSharePicker();renderLibrary();pages.forEach(enrich);});
+restore();pages.forEach(p=>loading.add(p.id));fill(active());render();loadReferenceLibrary();bounded(Promise.all([window.MarketPrices.refresh(),window.BOSEquity?.refresh(),window.ShareStaticData?.load()]),'Initial data load timed out.').catch(()=>notice('Some share data is unavailable. You can use manual prices and retry Refresh data.')).finally(()=>{updateSharePicker();renderLibrary();pages.forEach(enrich);});
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
 })();

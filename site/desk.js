@@ -112,7 +112,7 @@ function stockCard(r) {
       <div class="detail-tabs" role="group" aria-label="${E(r.ticker)} details">
         <button data-detail="history" data-ticker="${E(r.ticker)}" aria-pressed="true">Price &amp; valuation</button>
         <button data-detail="earnings" data-ticker="${E(r.ticker)}" aria-pressed="false">Earnings</button>
-        ${r.si ? `<button data-detail="si" data-ticker="${E(r.ticker)}" aria-pressed="false">SI references (${r.si.length})</button>` : ''}
+        <button data-detail="si" data-ticker="${E(r.ticker)}" aria-pressed="false">SI Beta 2</button>
       </div>
       <div data-stock-periods>
         <h4>Price history</h4>
@@ -184,7 +184,10 @@ async function detail(ticker,kind='history',days){
    }catch{if(target.dataset.ticket===ticket)target.innerHTML='<p class="empty">Shared history unavailable. See quote details for the available close.</p>';}
  }
 else if(kind==='earnings'){const c=row.earnings;target.innerHTML=c?`<h3>${E(c.name)} earnings</h3><p class="fine">${E(c.coverage)} · EPS: ${E(c.eps_basis)}</p><ul>${c.takeaways.map(t=>`<li><b>${E(t.label)}</b> ${E(t.text)}</li>`).join('')}</ul><div class="table-wrap" tabindex="0" role="region" aria-label="${E(ticker)} earnings history"><table><caption>Selected reported quarters, not forecasts</caption><thead><tr><th>Period</th><th>Revenue US$bn</th><th>EPS</th><th>Source</th></tr></thead><tbody>${c.history.map(h=>`<tr><td>${E(h.period)}<small>Ended ${E(date(h.period_end))}</small></td><td>${num(h.revenue_usd_bn,3)}</td><td>${num(h.eps,3)}</td><td>${link(data.earnings_sources[h.source]?.url,'Issuer release')}<small>${E(date(h.report_date))}</small></td></tr>`).join('')}</tbody></table></div>`:`<p class="empty">Verified issuer history is unavailable here.</p>${link('stocks-beta.html?companies='+encodeURIComponent(ticker),'Open the company workspace →')}`;}
-else if(kind==='si'){target.innerHTML=`<h3>${E(ticker)} · matching SI references</h3><p class="warning">Rounded historical references, not live quotes. Screen labels are shown where supplied; earlier coupon bases and tenor units remain unconfirmed.</p>${row.si.length?`<div class="table-wrap" tabindex="0" role="region" aria-label="${E(ticker)} matching SI records"><table><thead><tr><th>Reference / date</th><th>Underlyings</th><th>Strike / KO / KI</th><th>Coupon</th></tr></thead><tbody>${row.si.map(s=>`<tr><td>${E(s.reference)}<small>${E(s.source_date||"Date not shown")}</small>${s.additional_review?'<small>Additional review required</small>':''}</td><td>${E((s.shares||[]).join(' / '))}</td><td>${num(s.strike_pct)} / ${num(s.ko_pct)} / ${num(s.ki_pct)}%</td><td>${num(s.coupon_pct)}%${s.coupon_basis==='per_annum'?'<small>p.a. (screen)</small>':'<small>Basis unconfirmed</small>'}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">No exact matching underlying in the saved SI references.</p>'}${link('v4.html#history/si','Open the complete SI reference desk →')}`;}}
+else if(kind==='si'){
+  target.innerHTML=root.SIReferenceTable.section(ticker,{open:true});
+  root.SIReferenceTable.mount(target.querySelector('[data-si-card-listing]'));
+ }}
 async function refreshPrices(force = false) {
   if (refreshing || !data) return;
   refreshing = true;

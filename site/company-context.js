@@ -10,7 +10,7 @@ function safeURL(value){try{const u=new URL(value);return u.protocol==='https:'&
 const external=(href,label)=>safeURL(href)?'<a href="'+E(safeURL(href))+'" target="_blank" rel="noopener noreferrer">'+E(label)+' ↗</a>':E(label);
 const number=v=>finite(v)?v.toLocaleString('en-US',{maximumFractionDigits:4}):'Unavailable';
 function dated(value){if(!value||!finite(Date.parse(value)))return 'Publication date unavailable';return /^\d{4}-\d{2}-\d{2}$/.test(value)?value+' · time not supplied':new Date(value).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Singapore'})+' SGT';}
-function routes(ticker){const t=normalized(ticker);if(!supported(t))return null;const q='v4.html?company='+encodeURIComponent(t);return {earnings:q+'#earnings',shares:q+'#history/shares',si:q+'#history/si',watchlist:q+'#watchlist'};}
+function routes(ticker){const t=normalized(ticker);if(!supported(t))return null;const q='v4.html?company='+encodeURIComponent(t);return {earnings:q+'#earnings',shares:q+'#history/shares',si:'si-beta2.html?company='+encodeURIComponent(t)+'#si-library',watchlist:q+'#watchlist'};}
 function newsFor(rows,ticker,now=Date.now()){
  const t=normalized(ticker),seenIds=new Set(),seenURLs=new Set();
  return (rows||[]).filter(n=>n&&Array.isArray(n.tickers)&&n.tickers.some(x=>normalized(x)===t)&&typeof n.title==='string'&&safeURL(n.href)&&finite(Date.parse(n.published_at))&&Date.parse(n.published_at)<=now)
@@ -80,7 +80,7 @@ function decorateSnapshot(host){
  }
  if(!logos)loadLogos().then(d=>{if(d&&host.isConnected)decorateSnapshot(host);});
 }
-function nav(ticker){const r=routes(ticker);return r?'<nav class="cc-links" aria-label="'+E(ticker)+' company sections"><a href="'+E(r.earnings)+'">Earnings card →</a><a href="'+E(r.shares)+'">Historical · Shares →</a><a href="'+E(r.si)+'">SI Pricing →</a><a href="'+E(r.watchlist)+'">Latest watchlist →</a></nav>':'';}
+function nav(ticker){const r=routes(ticker);return r?'<nav class="cc-links" aria-label="'+E(ticker)+' company sections"><a href="'+E(r.earnings)+'">Earnings card →</a><a href="'+E(r.shares)+'">Historical · Shares →</a><a href="'+E(r.si)+'">SI Beta 2 →</a><a href="'+E(r.watchlist)+'">Latest watchlist →</a></nav>':'';}
 function earningsHTML(earnings){
  const c=earnings?.company;if(!c)return '<p class="cc-status">Earnings for this company are unavailable in the saved coverage.</p>';
  return '<p class="cc-note">'+E(c.coverage||'Selected reported quarters')+' · '+E(c.eps_basis||'EPS basis unavailable')+'</p><ul>'+(c.takeaways||[]).map(t=>'<li><strong>'+E(t.label)+'</strong> '+E(t.text)+'</li>').join('')+'</ul><div class="cc-table-scroll"><table><caption>Reported company earnings</caption><thead><tr><th>Period</th><th>Revenue · USD bn</th><th>EPS</th><th>Release date / source</th></tr></thead><tbody>'+(earnings.observations||[]).map(h=>'<tr><th scope="row">'+E(h.period)+'<small>Ended '+E(h.period_end||'unavailable')+'</small></th><td>'+number(h.revenue_usd_bn)+'</td><td>'+number(h.eps)+'<small>'+E(h.eps_basis)+'</small></td><td>'+E(h.report_date||'Original release date unavailable')+'<small>'+external(h.source_details?.url,'Issuer source')+'</small></td></tr>').join('')+'</tbody></table></div>';

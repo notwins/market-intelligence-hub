@@ -38,6 +38,43 @@ function matchMoa(library,ticker,currency,isin){
  }
  return library.byIsin.get(isinKey)?.rate;
 }
+const fields=['reference','shares','source_date','currency','tenor_source_value','coupon_pct','strike_pct','ko_pct','ki_pct','additional_review'];
+const quoteFields=['source_kind','tenor_unit','coupon_basis'];
+const validDate=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFinite(Date.parse(s+'T00:00:00Z'))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s;
+function acceptable(d){
+ if(!(d?.schema_version===1&&d.classification==='rounded_historical_reference'&&d.live_quotes===false&&d.source_verification==='photo_transcribed_unverified'&&d.tenor_unit==='unconfirmed'&&d.coupon_basis==='unconfirmed'&&d.rounding?.unit==='whole_percentage_point'&&d.rounding.strike==='up'&&d.rounding.ko==='up'&&d.rounding.ki==='up'&&d.rounding.coupon==='down'))return false;
+ if(!Number.isInteger(d.record_count)||d.record_count<1||!Number.isInteger(d.additional_review_count)||d.additional_review_count<0||!Array.isArray(d.rows)||d.rows.length!==d.record_count||!Array.isArray(d.source_date_range)||d.source_date_range.length!==2||!d.source_date_range.every(validDate)||d.source_date_range[0]>d.source_date_range[1]||!validDate(d.source_capture_date)||d.source_capture_date<d.source_date_range[1])return false;
+ if(!d.rows.every(r=>{
+  if(!r||typeof r!=='object'||Array.isArray(r))return false;
+  const quote=r.source_kind==='indicative_pricing',allowed=quote?[...fields,...quoteFields]:[...fields];
+  if(Object.hasOwn(r,'product_type')){
+   if(r.product_type!=='bonus_enhanced')return false;
+   allowed.push('product_type');
+  }
+  return Object.keys(r).length===allowed.length&&allowed.every(k=>Object.hasOwn(r,k))&&(!quote||(r.tenor_unit==='months'&&r.coupon_basis==='per_annum'))&&/^SI-\d{3,}$/.test(r.reference)&&Array.isArray(r.shares)&&r.shares.length>=2&&r.shares.length<=4&&r.shares.every(t=>/^[A-Z0-9]{1,8}$/.test(t))&&((r.source_date===null&&quote&&r.additional_review===true)||(validDate(r.source_date)&&d.source_date_range[0]<=r.source_date&&r.source_date<=d.source_date_range[1]))&&/^[A-Z]{3}$/.test(r.currency)&&Number.isInteger(r.tenor_source_value)&&r.tenor_source_value>0&&['coupon_pct','strike_pct','ko_pct','ki_pct'].every(k=>Number.isInteger(r[k])&&r[k]>=0&&r[k]<=200)&&typeof r.additional_review==='boolean';
+ }))return false;
+ const references=new Set(d.rows.map(r=>r.reference)),steps=d.ko_step_down_pp;
+ if(steps!==undefined){
+  if(!steps||typeof steps!=='object'||Array.isArray(steps)||!Object.entries(steps).every(([reference,value])=>references.has(reference)&&Number.isFinite(value)&&value>=0&&value<=100))return false;
+ }
+ const dates=d.rows.map(r=>r.source_date).filter(Boolean).sort();
+ return references.size===d.record_count&&d.rows.filter(r=>r.additional_review).length===d.additional_review_count&&dates[0]===d.source_date_range[0]&&dates.at(-1)===d.source_date_range[1];
+}
+let catalogue, pendingCatalogue;
+function loadReferences(force=false){
+ if(pendingCatalogue)return pendingCatalogue;
+ if(catalogue&&!force)return Promise.resolve(catalogue);
+ const controller=typeof AbortController==='function' ? new AbortController() : null;
+ const timer=controller ? setTimeout(()=>controller.abort(),15000) : null;
+ pendingCatalogue=root.fetch('data/si-pricing-reference.json',{cache:'no-store',signal:controller?.signal}).then(async response=>{
+  if(!response.ok)throw Error('Historical SI reference could not load.');
+  const data=await response.json();
+  if(!acceptable(data))throw Error('Historical SI reference did not pass its data checks.');
+  catalogue=data;
+  return data;
+ }).finally(()=>{if(timer!==null)clearTimeout(timer);pendingCatalogue=null;});
+ return pendingCatalogue;
+}
 function isBonusEnhanced(row){
  return row?.product_type==='bonus_enhanced';
 }
@@ -498,5 +535,5 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
  }
  return doc.save();
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

@@ -158,7 +158,7 @@ function reading(c) {
   return sharedReading.reading({
     matches: sharedReading.reportRows(reports, c.symbol, logos),
     items: newsFor(news, c.symbol),
-    si: desk.watchlist.find(row => row.ticker === c.symbol)?.si,
+    listing: c.item?.ticker || c.symbol,
     afterSi: `<details class="sb-details" data-archive><summary>All reviewed watchlist write-ups &amp; saved returns</summary><div data-archive-body><p class="sb-note">Open to load the dated research archive.</p></div></details><p class="sb-note"><a href="v4.html#watchlist">Open dated watchlist research editions →</a></p>`
   });
 }
