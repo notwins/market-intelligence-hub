@@ -1,0 +1,221 @@
+/* Daily briefings, the Read bond snapshot and company charts on the Main page. */
+#main-news { margin-top: 26px; }
+#main-news .section-head { margin-bottom: 4px; }
+.daily-headlines {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  padding: 0;
+  margin: 12px 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--card);
+}
+.daily-headlines > li + li { border-top: 1px solid var(--line); }
+.daily-headline-button {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: .91rem;
+  text-align: left;
+  line-height: 1.35;
+}
+.daily-headline-button:focus-visible { outline-offset: -4px; }
+.daily-headline-button:hover { text-decoration: underline; }
+.daily-headline-lead { background: #e9f0f9; border-left: 4px solid #214d7b; }
+.daily-headline-lead button { padding-block: 18px; font-size: clamp(1.15rem, 2vw, 1.5rem); color: #163961; }
+.daily-desk-editions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.daily-edition {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+}
+.daily-edition-label { margin: 0; font-size: .8rem; font-weight: 700; color: var(--teal); }
+.daily-edition h3 { font-size: 1.12rem; margin: 1px 0 0; }
+.daily-edition .fine { margin: 4px 0; }
+.daily-edition-summary { margin: 4px 0 12px; font-size: .87rem; line-height: 1.4; }
+.daily-edition button { margin-top: auto; padding-inline: 10px; }
+
+#daily-desk-dialog {
+  width: min(960px, calc(100% - 20px));
+  max-height: min(90dvh, 1000px);
+  padding: 0;
+  background: #f6f8fa;
+  color: #172e3b;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.daily-dialog-head {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: #fff;
+  border-bottom: 1px solid #d6dfe8;
+}
+.daily-dialog-head h2, .daily-dialog-head p { margin: 0; }
+.daily-dialog-head h2 { font-size: clamp(1.2rem, 3vw, 1.8rem); }
+#daily-desk-report { padding: 16px 20px 22px; display: grid; gap: 14px; }
+#daily-desk-dialog a { color: #12466d; text-decoration: underline; }
+#daily-desk-dialog :focus-visible { outline: 3px solid #245a98; outline-offset: 3px; }
+.briefing-economy { --brief-color: #244e7f; --brief-soft: #edf3fa; }
+.briefing-credit { --brief-color: #13634e; --brief-soft: #e6f3ed; }
+.briefing-shares { --brief-color: #61378e; --brief-soft: #f2edf8; }
+.briefing-news { --brief-color: #84500e; --brief-soft: #fbf2e3; }
+.briefing-coverage, .briefing-selected, .briefing-section {
+  padding: 14px;
+  border: 1px solid #dbe2e9;
+  border-radius: 10px;
+  background: white;
+  min-width: 0;
+}
+.briefing-coverage p { margin: 0 0 8px; }
+.coverage-bar { display: flex; gap: 2px; height: 8px; border-radius: 8px; overflow: hidden; }
+.coverage-bar span { background: var(--brief-color); }
+.briefing-coverage ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.briefing-coverage li { font-size: .78rem; color: var(--brief-color); font-weight: 650; }
+.briefing-section { border-top: 3px solid var(--brief-color); }
+.briefing-section h3, .briefing-selected h3 { margin: 0 0 8px; color: var(--brief-color, #172e3b); font-size: 1.08rem; }
+.briefing-indicators { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 8px; }
+.daily-indicator { margin: 0; border-radius: 8px; padding: 10px; background: var(--brief-soft); color: var(--brief-color); }
+.daily-indicator figcaption { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; font-size: .82rem; font-weight: 650; }
+.daily-indicator figcaption strong { font-size: 1.1rem; }
+.daily-indicator svg { display: block; width: 100%; height: auto; max-height: 90px; }
+.daily-indicator svg line { stroke: #bdcad5; }
+.daily-indicator svg polyline { stroke: currentColor; stroke-width: 2.4; vector-effect: non-scaling-stroke; fill: none; }
+.daily-indicator svg circle { fill: currentColor; }
+.daily-indicator p { margin: 0; }
+.briefing-stories { list-style: none; padding: 0; margin: 8px 0 0; }
+.briefing-stories li { border-top: 1px solid #dbe2e9; padding: 8px 0 4px; }
+.briefing-stories h4 { margin: 0; font-size: .91rem; }
+#daily-desk-dialog .briefing-stories p, #daily-desk-dialog .briefing-selected p { margin: 5px 0; color: #344555; }
+.briefing-stories a, .briefing-selected a, .daily-source-date { font-size: .79rem; }
+
+#bonds .read-bond-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.read-bond-card { padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); min-width: 0; background: var(--card); }
+.read-bond-card h3 { line-height: 1.4; font-size: .91rem; margin: 0; }
+.read-bond-card svg { display: block; width: 100%; height: 48px; color: #245789; }
+.read-bond-card svg polyline { stroke: currentColor; fill: none; stroke-width: 1.8; vector-effect: non-scaling-stroke; }
+.read-bond-card svg circle { fill: currentColor; }
+.read-bond-values { margin: 6px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); font-variant-numeric: tabular-nums; }
+.read-bond-values dt { font-size: .71rem; color: var(--muted); }
+.read-bond-values dd { margin: 0; font-weight: 700; font-size: .94rem; }
+.read-bond-values div:last-child { text-align: right; color: #214e7c; }
+.read-bond-card .fine { margin: 0; font-size: .73rem; }
+#bonds > details { margin-top: 8px; }
+#bonds > details > summary { cursor: pointer; padding-block: 10px; color: var(--teal); font-size: .87rem; font-weight: 700; }
+
+#watch-strip { display: block; border: 1px solid var(--line); border-radius: 8px; background: var(--card); }
+.stock-move-table { table-layout: fixed; font-size: .83rem; font-variant-numeric: tabular-nums; }
+.stock-move-share { width: 25%; }
+.stock-move-table th, .stock-move-table td {
+  padding: 4px 3px;
+  text-align: right;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.stock-move-table th:first-child { padding-inline: 8px 3px; text-align: left; }
+.stock-move-table td { background: var(--move-bg, var(--card)); color: var(--move-ink, var(--muted)); font-weight: 700; border-left: 1px solid #172e3b10; }
+.stock-move-table tbody tr:last-child > * { border-bottom: 0; }
+.stock-move-table .stock-move-row > th { background: var(--card); text-transform: none; letter-spacing: 0; }
+.stock-move-table .stock-move-row header { display: flex; align-items: center; gap: 5px; }
+.stock-move-table .stock-move-row a { min-width: 0; min-height: 33px; display: flex; align-items: center; gap: 8px; }
+.stock-move-table .stock-move-row a b { font-size: .78rem; }
+.stock-move-table .stock-move-row a span { font-size: .75rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; color: var(--muted); }
+.stock-move-table .stock-move-row .mih-company-logos { --company-logo-size: 16px !important; margin: 0; flex: none; }
+.stock-move-table .stock-move-row .mih-company-logo { padding: 0; }
+.stock-move-table .stock-move-spark { margin-inline-start: auto; }
+@media (max-width: 1120px) {
+  .stock-move-table .stock-move-spark { display: none; }
+}
+
+
+#stock-moves [data-move-heat^="gain-"] { --move-ink: #14603a; }
+#stock-moves [data-move-heat^="loss-"] { --move-ink: #8e2035; }
+#stock-moves [data-move-heat="gain-3"] { --move-bg: #b1dbc0; }
+#stock-moves [data-move-heat="gain-4"] { --move-bg: #9dd0b0; }
+#stock-moves [data-move-heat="loss-3"] { --move-bg: #efb6be; }
+#stock-moves [data-move-heat="loss-4"] { --move-bg: #eaa9b4; }
+
+.stock-history-chart {
+  --series-price: #174678;
+  --series-pe: #633a95;
+  --series-pb: #126550;
+  display: block;
+  position: relative;
+  margin: 4px 0 0;
+  color: #3d4d58;
+}
+.series-price { color: var(--series-price); }
+.series-pe { color: var(--series-pe); }
+.series-pb { color: var(--series-pb); }
+.stock-history-chart svg { display: block; width: 100%; height: auto; }
+.stock-history-chart svg:focus-visible { outline: 2px solid var(--teal); outline-offset: -2px; }
+.stock-history-chart text { fill: currentColor; font: 11px var(--font); }
+.stock-gridline { stroke: #d5e0e8; }
+.stock-history-chart polygon { fill: currentColor; opacity: .12; }
+.stock-history-chart polyline { fill: none; stroke: currentColor; stroke-width: 2.1; stroke-linejoin: round; }
+.stock-history-valuation polyline { stroke-width: 1.8; }
+.stock-history-valuation .series-pb polyline { stroke-dasharray: 4 2; }
+.stock-history-chart circle { fill: currentColor; }
+.stock-history-chart figcaption { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 3px 6px; font-size: .76rem; }
+.stock-history-chart figcaption span { position: relative; padding-inline-start: 16px; }
+.stock-history-chart figcaption span::before { content: ""; position: absolute; left: 0; top: .7em; width: 11px; border-top: 2px solid currentColor; }
+.stock-history-chart figcaption .series-pb::before { border-top-style: dashed; }
+.stock-history-chart [data-cursor] { stroke: #596a77; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.stock-history-chart [data-cursor][hidden] { display: none; }
+.stock-chart-tooltip {
+  position: absolute;
+  top: 18px;
+  right: 10px;
+  z-index: 1;
+  background: white;
+  color: #34424a;
+  border: 1px solid #cbd7e2;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px #05244520;
+  pointer-events: none;
+  padding: 6px 8px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+.stock-chart-tooltip.tooltip-left { left: 20%; right: auto; }
+.stock-chart-tooltip > * { display: block; }
+.stock-chart-tooltip time { font-weight: 700; }
+.stock-chart-tooltip small { margin-left: 5px; color: #48545f; font-size: .89em; }
+#market-rows .stock-price-source { margin: 0 0 10px; }
+
+@media (max-width: 760px) {
+  .daily-dialog-head { padding: 10px 13px; }
+  #daily-desk-report { padding: 11px 10px 15px; }
+  #bonds .read-bond-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #bonds > .read-bond-grid > :first-child { grid-column: 1 / -1; }
+  .stock-move-share { width: 20.5%; }
+  .stock-move-table th, .stock-move-table td { font-size: .65rem; padding-inline: 2px; }
+  .stock-move-table th:first-child { padding-inline: 3px 1px; }
+  .stock-move-table .stock-move-row a b { font-size: .67rem; }
+  .stock-move-table .stock-move-row a span { display: none; }
+  .stock-move-table .stock-move-row header { gap: 3px; }
+  .stock-move-table .stock-move-row .mih-company-logos { --company-logo-size: 13px !important; }
+}
+@media (max-width: 460px) {
+  #bonds .read-bond-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 350px) {
+  .stock-move-table th, .stock-move-table td { font-size: .6rem; }
+  .stock-move-table .stock-move-row a b { font-size: .62rem; }
+  .daily-edition { padding: 10px; }
+  .daily-edition h3 { font-size: 1rem; }
+}

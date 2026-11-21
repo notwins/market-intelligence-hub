@@ -29,13 +29,17 @@ return `<svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-labe
 const valuesTable=(points,unit,notes='')=>`<details><summary>Dates, values &amp; source basis</summary>${notes}<div class="table-wrap" tabindex="0" role="region" aria-label="Historical observations"><table><caption>Saved observations · ${E(unit)}</caption><thead><tr><th>Date</th><th>Value</th></tr></thead><tbody>${points.map(p=>`<tr><td>${E(p[0])}</td><td>${num(p[1],4)}</td></tr>`).join('')}</tbody></table></div></details>`;
 const canEdit=location=>location?.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(location.hostname);
 const movePeriods = [
-  ['1W', {days: 7}], ['2W', {days: 14}], ['3W', {days: 21}],
-  ['1M', {months: 1}], ['2M', {months: 2}], ['6M', {months: 6}], ['12M', {months: 12}]
+  ['1D', {sessions: 1}], ['1W', {days: 7}], ['2W', {days: 14}], ['3W', {days: 21}],
+  ['1M', {months: 1}], ['6M', {months: 6}]
 ];
-const monthMoveIndex = movePeriods.findIndex(([label]) => label === '1M');
-function priceMove(daily, endDate, {days, months}) {
+function priceMove(daily, endDate, {days, months, sessions}) {
   const last = daily.findLast(p => p[0] <= endDate);
   if (!last || last[0] !== endDate) return null;
+  if (sessions === 1) {
+    const previous = daily.findLast(p => p[0] < endDate);
+    if (!previous || Date.parse(endDate) - Date.parse(previous[0]) > 7 * 86400000) return null;
+    return (last[1] / previous[1] - 1) * 100;
+  }
 
   const target = new Date(endDate + 'T12:00:00Z');
   if (days) {
@@ -74,21 +78,17 @@ function quote(r) {
 }
 
 function moveStats(values = []) {
-  return `<dl class="watch-moves">${movePeriods.map(([label], i) => {
-    const move = values[i];
-    const rounded = Number.isFinite(move) ? Number(move.toFixed(1)) : null;
+  return movePeriods.map((_, i) => {
+    const rounded = Number.isFinite(values[i]) ? Number(values[i].toFixed(1)) : null;
     const change = rounded === null ? '—' : `${rounded > 0 ? '+' : ''}${rounded.toFixed(1)}%`;
-    return `<div data-move-heat="${moveHeat(rounded)}"><dt>${label}</dt><dd>${change}</dd></div>`;
-  }).join('')}</dl>`;
+    return `<td data-move-heat="${moveHeat(rounded)}">${change}</td>`;
+  }).join('');
 }
 
 function paintStockMoves(ticker, values) {
-  const tile = document.querySelector(`.watch-mini[data-ticker="${CSS.escape(ticker)}"]`);
-  tile.querySelector('.watch-moves').outerHTML = moveStats(values);
-  const month = values[monthMoveIndex];
-  const magnitude = Math.abs(month ?? 0);
-  tile.dataset.heat = magnitude < 0.05 ? 'neutral' : month > 0 ? 'gain' : 'loss';
-  tile.style.setProperty('--heat-lightness', `${97 - Math.min(magnitude, 25) / 25 * 12}%`);
+  const row = document.querySelector(`.stock-move-row[data-logo-ticker="${CSS.escape(ticker)}"]`);
+  row.querySelectorAll('td').forEach(cell => cell.remove());
+  row.insertAdjacentHTML('beforeend', moveStats(values));
 }
 
 function quoteDetails(r) {
@@ -100,7 +100,7 @@ function quoteDetails(r) {
 function stockCard(r) {
   const ticker = encodeURIComponent(r.ticker);
   const destination = r.earnings ? 'v4.html?company=' + ticker + '#earnings' : 'stocks-beta.html?companies=' + ticker;
-  return `<article class="instrument" id="company-${E(r.ticker)}" data-company="${E(r.ticker)}" aria-labelledby="stock-title-${E(r.ticker)}">
+  return `<article class="instrument" tabindex="-1" id="company-${E(r.ticker)}" data-company="${E(r.ticker)}" aria-labelledby="stock-title-${E(r.ticker)}">
     <header class="instrument-head">
       <div class="stock-card-heading">
         <div><h3 id="stock-title-${E(r.ticker)}">${E(r.name)}</h3><small>${E(r.ticker)} · ${E(r.group)}</small></div>
@@ -125,6 +125,7 @@ function stockCard(r) {
       <details class="stock-card-info">
         <summary>Quote source &amp; links</summary>
         <div data-quote-info="${E(r.ticker)}">${quoteDetails(r)}</div>
+        <div data-valuation-source></div>
         <p class="fine">${link(destination, 'Company workspace →')} · ${link(r.research_href, 'Search research →')}</p>
       </details>
       ${root.CompanyFundamentals?.button({ ticker: r.ticker, name: r.name }) || ''}
@@ -139,10 +140,19 @@ function buildMarkets(){
     ticker, name, group, research_href: 'search.html?q=' + encodeURIComponent(ticker)
   }));
   priceWatchlist = [...data.watchlist, ...newStocks.filter(stock => !data.watchlist.some(r => r.ticker === stock.ticker))];
-  $('#watch-strip').innerHTML = priceWatchlist.map(r => `<div class="watch-mini" data-ticker="${E(r.ticker)}">
-    <header>${link('#company-' + encodeURIComponent(r.ticker), r.ticker)}<span data-stock-spark="${E(r.ticker)}"></span></header>
-    <span data-quote="${E(r.ticker)}">${quote(r)}</span>${moveStats()}
-  </div>`).join('');
+  $('#watch-strip').innerHTML = `<table class="stock-move-table" data-table-controls="off">
+    <caption class="sr-only">Watchlist price changes by period</caption>
+    <colgroup><col class="stock-move-share"><col span="6"></colgroup>
+    <thead><tr><th scope="col">Share</th>${movePeriods.map(([label]) => `<th scope="col">${label}</th>`).join('')}</tr></thead>
+    <tbody>${priceWatchlist.map(r => `<tr class="stock-move-row" data-logo-ticker="${E(r.ticker)}">
+      <th scope="row"><header>
+        <a href="#company-${encodeURIComponent(r.ticker)}" aria-label="${E(r.name)} (${E(r.ticker)})">
+          <b>${E(r.ticker)}</b><span>${E(r.name)}</span>
+        </a>
+        <span class="stock-move-spark" data-stock-spark="${E(r.ticker)}"></span>
+      </header></th>${moveStats()}
+    </tr>`).join('')}</tbody>
+  </table>`;
   $('#main-company-cards').innerHTML = root.CompanyDashboard.shell({home: true, cards: priceWatchlist.map(stockCard).join('')});
   $('#yield-rows').innerHTML=data.yields.map(y=>{const points=(y.history||[]).map(p=>[p.date,p.value]);return `<details class="instrument" open><summary><span><strong>${E(y.label)}</strong><small>${E(y.basis)}</small></span><span class="quote"><b>${num(y.value)}%</b><small>${E(date(y.as_of))}</small></span></summary><div class="detail-body"><p class="fine">${E(y.basis)}</p>${y.status==='error'?`<p class="warning">${E(y.message||'Refresh failed; retaining the dated saved observation.')}</p>`:''}${spark(points,'% p.a.')}${valuesTable(points,'% p.a.')}${link(y.source_url,'Open original source ↗')}${y.attribution?'<p class="fine">'+E(y.attribution)+' '+link(y.license_url,'Dataset terms')+'</p>':''}</div></details>`;}).join('');}
 async function series(ticker){if(!seriesCache.has(ticker))seriesCache.set(ticker,root.MarketPrices.series(ticker).catch(e=>{seriesCache.delete(ticker);throw e;}));return seriesCache.get(ticker);}
@@ -167,7 +177,10 @@ async function detail(ticker,kind='history',days){
      const cutoff=new Date(Date.parse(s.quote.date+'T12:00:00Z')-days*86400000).toISOString().slice(0,10);
      const points=root.MarketPrices.selectPoints(s.base,s.daily,cutoff,s.quote.date);
      const unit=root.MarketPrices.displayUnit(s.item);
-     target.innerHTML=`<p class="fine stock-price-basis">${E(unit)} · ${E(root.MarketPrices.quoteStatus(s.quote))}</p>${spark(points,unit,true)}${valuesTable(points,unit,`<p class="fine">${E(root.MarketPrices.priceBasis(s.item))} ${E(s.base.period_note||'')} ${link(s.item.history_url,'Original price source ↗')}</p>`)}`;
+     target.innerHTML = `<p class="fine stock-price-basis">${E(unit)} · ${E(root.MarketPrices.quoteStatus(s.quote))}</p>
+       <div data-stock-price-chart></div>
+       <p class="fine stock-price-source">${link(s.item.history_url, 'Price history source')} · ${E(root.MarketPrices.priceBasis(s.item))} ${E(s.base.period_note || '')}</p>`;
+     root.DeskStockCharts.price(target.querySelector('[data-stock-price-chart]'), points, unit, ticker);
    }catch{if(target.dataset.ticket===ticket)target.innerHTML='<p class="empty">Shared history unavailable. See quote details for the available close.</p>';}
  }
 else if(kind==='earnings'){const c=row.earnings;target.innerHTML=c?`<h3>${E(c.name)} earnings</h3><p class="fine">${E(c.coverage)} · EPS: ${E(c.eps_basis)}</p><ul>${c.takeaways.map(t=>`<li><b>${E(t.label)}</b> ${E(t.text)}</li>`).join('')}</ul><div class="table-wrap" tabindex="0" role="region" aria-label="${E(ticker)} earnings history"><table><caption>Selected reported quarters, not forecasts</caption><thead><tr><th>Period</th><th>Revenue US$bn</th><th>EPS</th><th>Source</th></tr></thead><tbody>${c.history.map(h=>`<tr><td>${E(h.period)}<small>Ended ${E(date(h.period_end))}</small></td><td>${num(h.revenue_usd_bn,3)}</td><td>${num(h.eps,3)}</td><td>${link(data.earnings_sources[h.source]?.url,'Issuer release')}<small>${E(date(h.report_date))}</small></td></tr>`).join('')}</tbody></table></div>`:`<p class="empty">Verified issuer history is unavailable here.</p>${link('stocks-beta.html?companies='+encodeURIComponent(ticker),'Open the company workspace →')}`;}
@@ -262,6 +275,7 @@ function route() {
     else a.removeAttribute('aria-current');
   });
   target?.scrollIntoView({block:'start'});
+  if (company || id === 'market-bonds') target?.focus({preventScroll:true});
 }
 function setupDeskTabs() {
   for (const tab of deskTabs) {
@@ -312,7 +326,7 @@ function updateWatchlistReport(reports){
 function picker(){if(!editing)return;opener=document.activeElement;const dailyIds=[...document.querySelectorAll('#daily-cards [data-report-id]')].map(x=>x.dataset.reportId);$('#picker-options').innerHTML=reports.filter(r=>!dailyIds.includes(r.id)).map(r=>`<label><input type="checkbox" name="featured" value="${E(r.id)}" ${featured.includes(r.id)?'checked':''}>${E(r.title)}</label>`).join('');$('#picker-status').textContent='';$('#report-picker').showModal();$('#report-picker [data-close-picker]').focus();}
 function chosen(){return [...document.querySelectorAll('#picker-options input:checked')].map(x=>x.value);}
 function validSelection(ids){if(ids.length>12||ids.length<1){$('#picker-status').textContent='Choose between one and twelve reports.';return false;}return true;}
-async function refreshNews(){try{const local=await json('data/hourly-news.json'),result=await root.DeskNews.load(local,data.watchlist);data.news=[...result.news,...data.news];renderNews();$('#news-status').textContent=result.delivery_error?'Independent news refresh unavailable; showing saved matched headlines with original dates.':'Matched to explicit company/topic metadata. Publisher dates stay separate from edition cutoffs.';}catch{$('#news-status').textContent='Independent news unavailable; showing the dated saved headline matches.';}}
+async function refreshNews(){try{const local=await json('data/hourly-news.json'),result=await root.DeskNews.load(local,data.watchlist);data.news=[...result.news,...data.news];renderNews();root.DailyDesk?.render(result.feed);$('#news-status').textContent=result.delivery_error?'Independent news refresh unavailable; showing saved matched headlines with original dates.':'Matched to explicit company/topic metadata. Publisher dates stay separate from edition cutoffs.';}catch{$('#news-status').textContent='Independent news unavailable; showing the dated saved headline matches.';}}
 async function init(){try{if(matchMedia('(max-width:760px)').matches)document.querySelectorAll('.rail details').forEach(d=>d.open=false);data=await json('data/desk-data.json');if(data.schema_version!==1||!['reports','watchlist','yields','news','calls'].every(k=>Array.isArray(data[k])))throw Error('Invalid desk data');reports=mergeReports(data.reports,[]);featured=[...data.featured_ids];$('#choose-reports').hidden=!editing;buildMarkets();root.DeskDashboard?.mount();renderReports();renderCalls();$('#news-company').innerHTML='<option value="all">All watchlist companies</option>'+data.watchlist.map(r=>`<option value="${E(r.ticker)}">${E(r.ticker)} · ${E(r.name)}</option>`).join('');renderNews();
 document.addEventListener('click',e=>{const anchor=e.target.closest('a[href="#archive"]');if(anchor)$('#archive').open=true;const d=e.target.closest('[data-detail]');if(d)detail(d.dataset.ticker,d.dataset.detail);const p=e.target.closest('[data-period]');if(p)detail(p.dataset.ticker,'history',Number(p.dataset.period));});
 document.addEventListener('market-prices-updated',()=>{seriesCache.clear();if(pricesStarted)refreshPrices();});

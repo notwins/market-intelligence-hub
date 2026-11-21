@@ -91,9 +91,18 @@ function paintHome(host) {
   for (const node of host.querySelectorAll('[data-company-valuation]')) {
     const ticker = node.dataset.companyValuation;
     const d = state.cards.get(ticker) || {};
-    const previousEvidence = node.querySelector('details')?.open;
-    node.innerHTML = combinedChart(d.pe || [], d.pb || [], ticker) + valuationEvidence(ticker, d);
-    if (previousEvidence) node.querySelector('details').open = true;
+    if (root.DeskStockCharts) {
+      root.DeskStockCharts.valuation(node, d.pe || [], d.pb || [], ticker);
+      const source = node.closest('.instrument').querySelector('[data-valuation-source]');
+      const previousEvidence = source.querySelector('details')?.open;
+      source.innerHTML = valuationEvidence(ticker, d, 'Valuation sources');
+      if (previousEvidence) source.querySelector('details').open = true;
+      node.insertAdjacentHTML('beforeend', '<p class="fine stock-price-source">Bank of Singapore observations · Forecast horizon unspecified.</p>');
+    } else {
+      const previousEvidence = node.querySelector('details')?.open;
+      node.innerHTML = combinedChart(d.pe || [], d.pb || [], ticker) + valuationEvidence(ticker, d);
+      if (previousEvidence) node.querySelector('details').open = true;
+    }
     const company = homeCompanies.find(c => c.ticker === ticker);
     if (!company) continue;
     const research = node.closest('[data-company]').querySelector('[data-company-research]');

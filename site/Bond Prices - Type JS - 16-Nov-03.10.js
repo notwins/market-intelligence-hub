@@ -18,6 +18,7 @@ const couponRate = new Intl.NumberFormat('en-SG',{maximumFractionDigits:3});
 const couponBand = coupon => !Number.isFinite(coupon) ? '' : coupon < 2 ? 'under-2' : coupon < 3 ? '2-to-3' : coupon <= 4 ? '3-to-4' : 'above-4';
 const displayedYield = q => q?.yield_basis === 'Asked yield' && Number.isFinite(q.yield_pct) ? Number(num(q.yield_pct,1).replaceAll(',','')) : null;
 const shortDate = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',timeZone:'UTC'});
+const shortMonthYear = new Intl.DateTimeFormat('en-GB',{month:'short',year:'2-digit',timeZone:'UTC'});
 const shortDateWithYear = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'2-digit',timeZone:'UTC'});
 const lookbackMonths = [1,2,3,4,5,6,12];
 const dayMs = 86400000;
@@ -154,8 +155,53 @@ function compactWatchlist(feed, checked, showIdentifiers, curves) {
     <h3 class="daily-ust-title daily-ust-other">Other watched bonds</h3>
     ${table(otherBonds,feed,false,'Prices per 100 face value · yields % per year')}`;
 }
-function render(feed,{compactTreasuries=false,showIdentifiers=false,curves={}}={}){
+// Read charts use actual source-dated asks, with the last accepted revision for each day.
+const readHeading = '<div class="section-head"><h2>Bond watchlist</h2><a href="#market-bonds">Full bond tables →</a></div>';
+
+function readBondCard(bond, feed) {
+  const byDate = new Map();
+  for (const point of [...(feed.history[bond.id] || []), feed.latest[bond.id]]) {
+    if (Number.isFinite(point?.ask) && Number.isFinite(Date.parse(point.date))) byDate.set(point.date, point);
+  }
+  const points = [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
+  const first = points[0], latest = points.at(-1);
+  const title = `<h3><a href="${E(safe(bond.source_url))}">${E(bond.name)}</a></h3>`;
+  if (!latest) return `<article class="read-bond-card">${title}<p class="fine">Saved ask unavailable</p></article>`;
+  const low = points.reduce((a, p) => p.ask < a.ask ? p : a);
+  const high = points.reduce((a, p) => p.ask > a.ask ? p : a);
+  const span = Date.parse(latest.date) - Date.parse(first.date);
+  const x = point => span ? 5 + 230 * (Date.parse(point.date) - Date.parse(first.date)) / span : 120;
+  const y = point => high.ask === low.ask ? 26 : 46 - 40 * (point.ask - low.ask) / (high.ask - low.ask);
+  const amount = point => '$' + num(point.ask, 2);
+  return `<article class="read-bond-card">${title}
+    <svg class="read-bond-spark" viewBox="0 0 240 52" role="img" aria-label="${E(bond.currency)} saved asks from ${E(first.date)} to ${E(latest.date)}">
+      ${points.length > 1 ? `<polyline points="${points.map(point => `${x(point)},${y(point)}`).join(' ')}"/>` : ''}
+      ${[...new Set([low, high, latest])].map(point => `<circle cx="${x(point)}" cy="${y(point)}" r="3"><title>${E(point.date)} · ${E(amount(point))}</title></circle>`).join('')}
+    </svg>
+    <dl class="read-bond-values">
+      <div><dt>Low</dt><dd>${amount(low)}</dd></div>
+      <div><dt>High</dt><dd>${amount(high)}</dd></div>
+      <div><dt>Latest</dt><dd>${amount(latest)}</dd></div>
+    </dl>
+    <p class="fine">From ${E(shortMonthYear.format(utcDate(first.date)).replace(' ', '-'))} · Latest ${dateLabel(latest.date, true)} · ${E(bond.currency)}</p>
+  </article>`;
+}
+
+function readSnapshot(feed, expanded) {
+  const latest = feed.instruments.map(b => feed.latest[b.id]?.date).filter(Boolean).sort().at(-1);
+  const cards = feed.instruments.map(bond => readBondCard(bond, feed));
+  return `${readHeading}
+    <p class="fine">Latest saved ask ${dateLabel(latest, true)} · WSJ &amp; Bondsupermart asks per 100 face value.</p>
+    <div class="read-bond-grid">${cards.slice(0, 3).join('')}</div>
+    <details ${expanded ? 'open' : ''}><summary>More watched bonds (${cards.length - 3})</summary>
+      <div class="read-bond-grid">${cards.slice(3).join('')}</div>
+    </details>
+    <p class="fine"><a href="v4.html#watchlist">Full watchlist →</a> · <a href="${encodeURI(path)}" download>Download saved quotes</a></p>`;
+}
+
+function render(feed,{compactTreasuries=false,showIdentifiers=false,curves={},snapshot=false,expanded=false}={}){
  if(feed?.schema_version!==1||!Array.isArray(feed.instruments)||feed.instruments.length!==34||!feed.latest||!feed.history||!feed.checks)return '<p class="fine">Bond price feed unavailable. Open the original source links in the full watchlist.</p>';
+ if (snapshot) return readSnapshot(feed, expanded);
  const count=feed.instruments.filter(r=>feed.latest[r.id]).length,checked=feed.checked_at?new Date(feed.checked_at).toLocaleString('en-GB',{timeZone:'Asia/Singapore',day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}):'Unavailable';
  return `<div class="section-head"><div>${compactTreasuries ? '' : '<p class="eyebrow">DAILY BOND WATCHLIST</p>'}<h2>Bond prices &amp; yields</h2></div><a href="v4.html#watchlist">Full watchlist →</a></div>${compactTreasuries ? `<p class="fine daily-ust-summary">${count}/34 have saved quotes · Daily check at 7:00 am Singapore time.</p>` : `<p class="fine">29 watched US Treasuries + five Bondsupermart bonds. Daily check scheduled for 7:00 am Singapore time; publication follows processing. ${count}/34 have saved quotes. Last check: ${E(checked)} SGT.</p>`}${compactTreasuries ? compactWatchlist(feed,checked,showIdentifiers,curves) : table(feed.instruments,feed)}<details class="daily-bonds-history"><summary>Last few daily prices &amp; yields</summary><p class="fine">Only source-dated prices are saved. Repeated checks add no duplicate quote dates; weekends and holidays are not filled. Earlier undated UST shortlist values remain in the full watchlist and are excluded from daily history.</p>${table(feed.instruments,feed,true)}</details><p class="fine daily-bonds-basis">WSJ: Treasury prices converted from points and 32nds; yield is the asked yield. Bondsupermart: indicative full-lot bid/ask prices with bid yield to maturity (YTM) or worst (YTW), as labelled. Each row retains its own source date. <a href="${encodeURI(path)}" download>Download prices and full saved history (JSON)</a>.</p>`;
 }
@@ -242,19 +288,24 @@ async function mount() {
     for (const host of hosts) {
       if (!host.isConnected) continue;
       const compactTreasuries = host.dataset.dailyBonds === 'compact-ust';
+      const snapshot = host.dataset.dailyBonds === 'read-snapshot';
       const hostCurves = compactTreasuries ? curves : undefined;
       const previous = rendered.get(host);
-      if (previous?.feed === feed && previous.curves === hostCurves && host.querySelector('.daily-bonds-scroll')) continue;
+      if (previous?.feed === feed && previous.curves === hostCurves && host.querySelector(snapshot ? '.read-bond-grid' : '.daily-bonds-scroll')) continue;
       const showIdentifiers = host.querySelector('[data-ust-identifiers]')?.getAttribute('aria-pressed') === 'true';
       const scrollLeft = host.querySelector('.daily-ust-scroll')?.scrollLeft ?? 0;
-      host.innerHTML = render(feed,{compactTreasuries,showIdentifiers,curves:hostCurves});
+      const expanded = snapshot && host.querySelector('details')?.open;
+      host.innerHTML = render(feed,{compactTreasuries,showIdentifiers,curves:hostCurves,snapshot,expanded});
       const scroll = host.querySelector('.daily-ust-scroll');
       if (scroll) scroll.scrollLeft = scrollLeft;
       rendered.set(host,{feed,curves:hostCurves});
     }
   } catch {
     for (const host of hosts) {
-      if (host.isConnected) host.innerHTML = '<h2>Bond prices &amp; yields</h2><p class="fine">Saved bond prices could not be loaded. <a href="v4.html#watchlist">Open the full bond watchlist →</a></p>';
+      if (!host.isConnected) continue;
+      if (host.dataset.dailyBonds === 'read-snapshot') {
+        if (!rendered.has(host)) host.innerHTML = readHeading + '<p class="fine">Saved quotes could not be loaded.</p>';
+      } else host.innerHTML = '<h2>Bond prices &amp; yields</h2><p class="fine">Saved bond prices could not be loaded. <a href="v4.html#watchlist">Open the full bond watchlist →</a></p>';
     }
   }
 }
