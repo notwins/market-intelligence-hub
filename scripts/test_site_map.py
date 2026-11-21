@@ -34,8 +34,8 @@ class SiteMapTests(unittest.TestCase):
         original = json.loads((ROOT / 'scripts/fixtures/site_map_destinations.json').read_text())
         current = [a['href'] for a in self.nodes]
         self.assertEqual(len(original), 40)
-        self.assertEqual(set(current), {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta-shares','v4.html#history/beta2-shares','v4.html#history/beta3-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html','historical-fred.html','fred-1.html','fred-2.html','fred-3.html'})
-        self.assertEqual(len(current), 63)
+        self.assertEqual(set(current), {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta2-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html','historical-fred.html','fred-1.html','fred-2.html','fred-3.html'})
+        self.assertEqual(len(current), 61)
         self.assertEqual(len(set(current)), len(current) - 3)  # Main shortcuts intentionally share the real destination.
         for href in current:
             path = ROOT / 'site' / href.split('#')[0]
@@ -73,7 +73,7 @@ class SiteMapTests(unittest.TestCase):
     def test_mapped_colours_and_contrast(self):
         tags = {t['id']: t for t in json.loads((ROOT / 'site/data/colour-templates-v3.json').read_text())['tags']}
         mapped = [a for t, a in self.parsed.tags if 'data-semantic-tag' in a]
-        self.assertEqual(len(mapped), 16)
+        self.assertEqual(len(mapped), 14)
         for attrs in mapped:
             tag = tags[attrs['data-semantic-tag']]
             self.assertEqual(attrs['style'], f'--accent:{tag["light"]};--soft:{tag["lightChip"]}')

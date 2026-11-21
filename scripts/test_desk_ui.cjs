@@ -91,12 +91,13 @@ test('company cards group exact tickers, open saved reading and keep source link
 });
 test('home chart shortcuts preserve all real historical destinations and accessible icons',()=>{
  const nav=require('../site/history-navigation.js'),html=nav.html();
- assert.equal(nav.items.length,10);for(const route of ['historical-fred.html','fred-1.html','fred-2.html','fred-3.html'])assert(html.includes(route));assert(html.includes('v4.html#history/beta3-shares'));assert(html.includes('aria-hidden="true"'));assert(!html.includes('javascript:'));
+ assert.equal(nav.items.length,8);for(const route of ['historical-fred.html','fred-1.html','fred-2.html','fred-3.html'])assert(html.includes(route));assert(html.includes('v4.html#history/beta4-shares'));assert(html.includes('aria-hidden="true"'));assert(!html.includes('javascript:'));
 });
-test('history directory shares three groups and all15 routes across rail, toolbar and home',()=>{
+test('history directory shares three groups and 13 active destinations across rail, toolbar and home',()=>{
  const fs=require('node:fs'),nav=require('../site/history-navigation.js');assert.deepEqual(nav.groups.map(g=>g.id),['bonds','shares','fred']);
- const all=nav.groups.flatMap(g=>g.items);assert.equal(all.length,15);assert.equal(new Set(all.map(i=>i[0])).size,15);
+ const all=nav.groups.flatMap(g=>g.items);assert.equal(all.length,13);assert.equal(new Set(all.map(i=>i[0])).size,13);
  const rail=nav.sidebar(),menu=nav.toolbar('yield'),home=nav.html();
+ for(const rendered of [rail,menu,home])assert.doesNotMatch(rendered,/beta-shares|beta3-shares/);
  for(const rendered of [rail,menu,home])assert(rendered.indexOf('href="cross-market-history.html"') < rendered.indexOf('data-history-group=') && rendered.includes('href="cross-market-history.html"'));
  for(const item of all){assert(rail.includes('data-history-id="'+item[0]+'"'));assert(menu.includes(item[3]?'href="'+item[3]+'"':'data-tab="'+item[0]+'"'));assert(home.includes(item[3]||'v4.html#history/'+item[0]));}
  assert(menu.includes('data-active-group="true"'));assert(menu.includes('data-tab="yield" aria-pressed="true"'));assert(menu.includes('focusable="false"'));assert(rail.includes('id="rail-group-history"><a href="#history" data-view="history">History</a>'));

@@ -168,3 +168,7 @@ assert.deepEqual([170, 160, 130, 80, 75, 60, 50].map(value => targetBand(value, 
   'Between −1 and −2 SD', 'Between −1 and −2 SD', 'Below −2 SD',
 ]);
 console.log('Stocks BETA 2: listing research, price precision, and dated volatility cones passed.');
+
+const aliases = [{ticker:'BRK-B',aliases:['BRK.B']},{ticker:'AAPL',aliases:['APPLE']},{ticker:'ANOTHER',aliases:['APPLE']}];
+assert.deepEqual(S.startingSelection(new URLSearchParams('company=BRK.B'),aliases),['BRK-B']);
+assert.deepEqual(S.startingSelection(new URLSearchParams('companies=BRK.B,BRK-B,APPLE'),aliases),['BRK-B']);

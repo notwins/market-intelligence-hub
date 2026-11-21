@@ -22,8 +22,8 @@
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
     ]],
     ['Historical charts', [
-      ['Cross-market history', 'cross-market-history.html'], ['Annual returns', 'v4.html#history/beta-shares'],
-      ['Event studies', 'v4.html#history/beta2-shares'], ['Share explorer', 'v4.html#history/beta3-shares'],
+      ['Cross-market history', 'cross-market-history.html'],
+      ['Event studies', 'v4.html#history/beta2-shares'],
       ['History pivot', 'v4.html#history/beta4-shares'], ['Yield history', 'v4.html#history/yield'],
       ['FX history', 'v4.html#history/fx'], ['Historical curves', 'v4.html#history/curves']
     ]],

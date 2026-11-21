@@ -25,8 +25,9 @@ class ArchitectureMapTests(unittest.TestCase):
         for e in self.graph['edges']:
             self.assertIn(e['source'],self.nodes);self.assertIn(e['target'],self.nodes);self.assertNotEqual(e['source'],e['target'])
         self.assertEqual(self.nodes['company:AAPL:earnings']['url'],HUB+'v4.html?company=AAPL#earnings')
-        self.assertEqual(self.nodes['company:AAPL:history/beta3-shares']['parent'],'route:history/beta3-shares')
-        self.assertEqual(self.nodes['route:history/beta3-shares']['parent'],'route:history')
+        self.assertNotIn('route:history/beta-shares', self.nodes)
+        self.assertNotIn('route:history/beta3-shares', self.nodes)
+        self.assertEqual(self.nodes['route:history/beta4-shares']['parent'],'route:history')
 
     def test_automation_pipeline_does_not_conflate_independent_deployments(self):
         pairs={(e['source'],e['target']) for e in self.graph['edges']}

@@ -66,7 +66,16 @@ function environment({dataFailure=false,batch=false,bosFailure=false,mobile=fals
  const html=fs.readFileSync('site/v4.html','utf8'),routes=fs.readFileSync('site/v4-tools.js','utf8'),mobile=fs.readFileSync('site/mobile-navigation.js','utf8');
  const css=fs.readFileSync('site/v4-share-lab.css','utf8');assert(css.includes('17px * var(--chart-text-scale,1)')&&css.includes('21px * var(--chart-text-scale,1)'),'desktop and mobile axes honor independent chart text scale');assert(css.includes('var(--surface,')&&css.includes('var(--soft,')&&css.includes('var(--accent,'),'shared Hub palette controls apply');assert(css.includes('data-display-columns=one')&&css.includes('data-display-columns=four')&&css.includes('var(--card-pad,'),'card density and column controls apply');
  for(const name of ['v4-share-lab.js','v4-share-lab.css','share-lab-data.js'])assert(html.includes(name),'registered shared asset: '+name);
- for(const route of ['beta3-shares','beta4-shares']){assert(html.includes('history/'+route));const start=routes.indexOf("if(['beta3-shares','beta4-shares'].includes(X.historyTab))"),end=routes.indexOf("if(X.historyTab==='beta2-shares')",start),renderRoute=new Function('X','tabs',routes.slice(start,end));assert(renderRoute({historyTab:route},'').includes('id="'+route+'"'));assert(routes.includes("'"+route+"'"));assert(mobile.includes(route));}
+ const route='beta4-shares';
+ const start=routes.indexOf("if(X.historyTab==='beta4-shares')"),end=routes.indexOf("if(X.historyTab==='beta2-shares')",start);
+ const renderRoute=new Function('X','tabs',routes.slice(start,end));
+ assert(renderRoute({historyTab:route},'').includes('id="'+route+'"'));
+ assert(html.includes('history/'+route)&&mobile.includes(route));
+ for(const retired of ['beta-shares','beta3-shares']) {
+  assert(!html.includes('data-view="history/'+retired+'"'));
+  assert(!routes.includes("'"+retired+"'"));
+  assert(!mobile.includes(retired));
+ }
  assert(routes.includes('ShareLab.mount(next,{view:'));
  console.log('PASS Beta3/4 exact-listing current metrics, immutable dates, source-separated history, global sorting, missing values, shared selection/filters, independent views, lazy cached histories, resize keyboard controls, colours, refresh/failure state and registered routes.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

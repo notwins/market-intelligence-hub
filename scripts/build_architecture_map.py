@@ -174,7 +174,7 @@ def build_graph(root=ROOT):
             edges.pop((old,id,'contains'),None); edge('page:'+parent,id,'contains','subpage / companion')
     # Real client-side routes, discovered from desktop/mobile navigation.
     routes = pages.get('v4.html', Page('')).routes
-    route_names={'history/beta-shares':'Returns','history/beta2-shares':'Event studies','history/beta3-shares':'Share explorer · price / P/E / P/B','history/beta4-shares':'History pivot'}
+    route_names={'history/beta2-shares':'Event studies','history/beta4-shares':'History pivot'}
     for route, raw in sorted(routes.items()):
         title = route_names.get(route) or re.sub(r'^[^\w]+','',re.sub(r'\s+',' ',raw)).strip() or route
         group='history' if route.startswith('history') else 'site'
@@ -187,10 +187,9 @@ def build_graph(root=ROOT):
     for company in companies:
         ticker=company.get('ticker','')
         if not re.fullmatch(r'[A-Z0-9.\-]{1,15}',ticker): continue
-        for suffix,parent,label in [('earnings','route:earnings','Earnings card'),('history/beta3-shares','route:history/beta3-shares','Price / P/E / P/B history')]:
-            id='company:'+ticker+':'+suffix
-            node(id,company.get('name',ticker)+' · '+label,'section','history' if suffix.startswith('history') else 'site',url=HUB+'v4.html?company='+ticker+'#'+suffix,description='A company-selected destination inside an existing V4 view. Data availability and source dates stay explicit.',evidence=['site/data/earnings-history.json','site/earnings-desk.js','site/v4-share-lab.js'],parent=parent)
-            edge(parent,id,'contains','company card')
+        id='company:'+ticker+':earnings'
+        node(id,company.get('name',ticker)+' · Earnings card','section','site',url=HUB+'v4.html?company='+ticker+'#earnings',description='A company-selected earnings card. Data availability and source dates stay explicit.',evidence=['site/data/earnings-history.json','site/earnings-desk.js'],parent='route:earnings')
+        edge('route:earnings',id,'contains','company card')
     def resolve(rel, href):
         if href.startswith(('mailto:','tel:','javascript:','data:')): return None
         u=urlsplit(urljoin(HUB+rel,href))
@@ -299,9 +298,9 @@ def build_graph(root=ROOT):
         ('data:hourly-news.json','route:hourly'),('data:hourly-news.json','page:desk.html'),('data:news.json','route:headlines'),('data:news.json','page:desk.html'),
         ('data:sgs-daily-snapshot.json','page:desk.html'),('data:sgs-daily-snapshot.json','route:history/curves'),('data:sgs-daily-snapshot.json','route:history/yield'),
         ('data:history-fed.json','route:history/yield'),('data:history-fed.json','route:history/fx'),('data:wsj-treasury-dashboard.json','page:desk.html'),
-        ('data:prices','page:desk.html'),('data:prices','route:earnings'),('data:prices','route:history/shares'),('data:bos','page:desk.html'),('data:bos','route:history/beta3-shares'),('data:bos','route:earnings'),
-        ('data:share-history.csv','route:history/beta3-shares'),('data:share-history.csv','route:history/beta4-shares'),('data:earnings-history.json','route:earnings'),('data:desk-data.json','page:desk.html'),('data:site-search.json','page:search.html'),('data:ust-curves-daily.json','route:history/curves'),
-        ('data:beta-shares.json','route:earnings'),('data:beta-shares.json','route:history/beta-shares'),('data:master-v3.json','route:master'),('data:master-v3.json','route:master/pivot'),('data:master-v3.json','route:watchlist'),
+        ('data:prices','page:desk.html'),('data:prices','route:earnings'),('data:prices','route:history/shares'),('data:bos','page:desk.html'),('data:bos','route:earnings'),
+        ('data:share-history.csv','route:history/beta4-shares'),('data:earnings-history.json','route:earnings'),('data:desk-data.json','page:desk.html'),('data:site-search.json','page:search.html'),('data:ust-curves-daily.json','route:history/curves'),
+        ('data:beta-shares.json','route:earnings'),('data:master-v3.json','route:master'),('data:master-v3.json','route:master/pivot'),('data:master-v3.json','route:watchlist'),
         ('app:codex','job:daily'),('app:codex','job:hourly'),('app:github' if sgs_cloud else 'app:codex','job:sgs'),('app:codex','job:bos'),('app:github','job:prices'),('app:github','job:hub-build'),('app:github','job:content-build'),('app:github','job:colour-audit'),('app:pages-hub','page:desk.html'),('app:pages-hub','page:v4.html')]
     for a,b in pairs:
         if a in nodes and b in nodes:
