@@ -182,11 +182,6 @@
       + esc(label) + '"' + (research ? ' data-bos-research' : '') + '></market-fundamentals>';
   }
 
-  function more(item) {
-    return '<details class="fund-more"><summary>More data</summary>'
-      + section(item, { research: false }) + '</details>';
-  }
-
   function unit(label, report) {
     if (/per share|\b(?:EPS|DPS)\b/i.test(label)) return { scale: 1, text: 'per share' };
     if (/shares outstanding|weighted average shares/i.test(label)) return { scale: 1e6, text: 'million shares' };
@@ -271,6 +266,109 @@
     } catch { return ''; }
   }
 
+  const bar = (label, amount, colour, start = 0) => ({ label, amount, colour, start });
+  const lane = (label, amount, colour) => ({ label, amount, bars: [bar(label, amount, colour)] });
+
+  function reconciles(total, ...parts) {
+    return [total, ...parts].every(Number.isFinite)
+      && Math.abs(total - parts.reduce((sum, part) => sum + part, 0)) <= Math.max(1, Math.abs(total) * 1e-10);
+  }
+
+  function breakdown(report, key, index) {
+    const get = (...labels) => {
+      for (const label of labels) {
+        const row = report.rows.find(([, name, values]) => name === label && Number.isFinite(values[index]));
+        if (row) return row[2][index];
+      }
+      return null;
+    };
+    if (key === 'balance') {
+      const assets = get('Total Assets');
+      const liabilities = get('Total Liabilities');
+      const equity = get('Total Equity');
+      const current = get('Total Current Assets');
+      const nonCurrent = get('Total Non-Current Assets', 'Total Noncurrent Assets');
+      const assetLane = lane('Total assets', assets, 'blue');
+      if (current >= 0 && nonCurrent >= 0 && reconciles(assets, current, nonCurrent)) {
+        assetLane.bars = [bar('Current assets', current, 'blue'), bar('Non-current assets', nonCurrent, 'purple', current)];
+      }
+      if (liabilities >= 0 && equity >= 0 && reconciles(assets, liabilities, equity)) {
+        return { title: 'Assets and how they are funded', lanes: [assetLane, {
+          label: 'Liabilities + equity', amount: liabilities + equity,
+          bars: [bar('Liabilities', liabilities, 'amber'), bar('Equity', equity, 'teal', liabilities)]
+        }] };
+      }
+      return {
+        title: 'Reported balance sheet totals',
+        note: 'Separate bars show the reported totals when a funding stack would hide a negative balance or require an unverified amount.',
+        lanes: [assetLane, lane('Liabilities', liabilities, 'amber'), lane('Equity', equity, 'teal')]
+      };
+    }
+    if (key === 'cash') {
+      return {
+        title: 'Cash inflows and outflows by activity',
+        lanes: [
+          lane('Operating', get('Cash Flow from Operating Activities, Indirect', 'Cash Flow from/Used in Operating Activities, Direct'), 'teal'),
+          lane('Investing', get('Cash Flow from Investing Activities'), 'purple'),
+          lane('Financing', get('Cash Flow from Financing Activities'), 'amber')
+        ]
+      };
+    }
+    const pretax = get('Pretax Income');
+    const tax = get('Provision for Income Tax');
+    const net = get('Net Income from Continuing Operations');
+    const afterTaxEquity = get('Earnings from Equity Interest, Post-Tax');
+    const totalNet = get('Net Income after Non-Controlling/Minority Interests');
+    const taxRow = lane('Income tax', tax, tax > 0 ? 'teal' : 'rose');
+    const netRow = lane('Net income from continuing operations', net, 'blue');
+    const lanes = [lane('Pretax income', pretax, 'blue'), taxRow];
+    const equityBridge = !reconciles(net, pretax, tax) && reconciles(net, pretax, tax, afterTaxEquity);
+    if (reconciles(net, pretax, tax) || equityBridge) {
+      taxRow.bars[0].start = pretax;
+      if (equityBridge) lanes.push({
+        label: 'Post-tax equity income', amount: afterTaxEquity,
+        bars: [bar('Post-tax equity income', afterTaxEquity, 'purple', pretax + tax)]
+      });
+      return { title: 'From pretax income to continuing net income', lanes: [...lanes, netRow] };
+    }
+    return {
+      title: 'Reported income and tax',
+      note: 'A waterfall needs reported steps that add up to the reported total. These bars show each available amount separately.',
+      lanes: [...lanes, netRow, lane('Net income attributable to parent', totalNet, 'teal')]
+    };
+  }
+
+  function breakdownPlot(report, view) {
+    const bars = view.lanes.flatMap(row => row.bars).filter(segment => Number.isFinite(segment.amount));
+    if (!bars.length) return '<p class="fund-note">No reported values for the summary chart this year.</p>';
+    const bounds = bars.flatMap(segment => [segment.start, segment.start + segment.amount]);
+    const low = Math.min(0, ...bounds);
+    const high = Math.max(0, ...bounds);
+    const range = high - low || 1;
+    const position = value => ((value - low) / range * 100).toFixed(4) + '%';
+    const percent = value => (value / range * 100).toFixed(4) + '%';
+    const label = value => valueText(value, 1e6);
+    const zero = -low / range;
+    const ticks = low === high ? [0] : [low, ...(zero >= .15 && zero <= .85 ? [0] : []), high];
+    const units = report.currency ? report.currency + ' millions' : 'Millions of reported units';
+    return '<figure class="fund-breakdown-figure" style="--fund-baseline:' + position(0) + '">'
+      + '<figcaption><strong>' + esc(view.title) + '</strong><span>' + esc(units) + '</span></figcaption>'
+      + view.lanes.map(row => '<div class="fund-bar-row"><div class="fund-bar-label"><span>' + esc(row.label)
+        + '</span><b>' + (Number.isFinite(row.amount) ? esc(label(row.amount)) : 'Unavailable') + '</b></div>'
+        + '<div class="fund-track" aria-hidden="true">' + row.bars.filter(segment => Number.isFinite(segment.amount)).map(segment =>
+          '<i data-colour="' + segment.colour + '" style="--fund-start:'
+          + position(segment.start + Math.min(0, segment.amount)) + ';--fund-extent:' + percent(Math.abs(segment.amount)) + '"></i>'
+        ).join('') + '</div>'
+        + (row.bars.length > 1 ? '<ul class="fund-bar-key">' + row.bars.map(segment =>
+          '<li><i data-colour="' + segment.colour + '" aria-hidden="true"></i>' + esc(segment.label)
+          + ' <b>' + esc(label(segment.amount)) + '</b></li>'
+        ).join('') + '</ul>' : '') + '</div>').join('')
+      + '<div class="fund-bar-axis" aria-hidden="true">' + ticks.map(value =>
+        '<span style="--fund-tick:' + position(value) + '">' + esc(label(value)) + '</span>'
+      ).join('') + '</div>'
+      + (view.note ? '<p class="fund-note">' + esc(view.note) + '</p>' : '') + '</figure>';
+  }
+
   function reportContent(company, key, id) {
     const original = company.statements[key];
     // TSMC's audited FY2025 filings reconcile to the export totals in Taiwan dollars.
@@ -280,6 +378,13 @@
     const selected = options.find(({ row }) => initialSeries[key].test(row[1])) || options[0];
     const title = key === 'income' ? 'Income statement · ' : '';
     const scale = report.currency ? report.currency + ' millions' : 'millions of reported units';
+    const years = periods(report).filter(period => period.label !== 'TTM');
+    const views = years.map(period => ({ ...period, view: breakdown(report, key, period.index) }));
+    const latest = views.find(period => period.view.lanes.some(row => Number.isFinite(row.amount))) || views[0];
+    const summary = latest ? '<div class="fund-breakdown"><label>Fiscal year <select data-fund-year>'
+      + views.map(period => '<option value="' + period.index + '"' + (period === latest ? ' selected' : '')
+        + '>' + esc(period.label) + '</option>').join('')
+      + '</select></label><div data-fund-breakdown>' + breakdownPlot(report, latest.view) + '</div></div>' : '';
     const chartPanel = selected ? '<details class="fund-line-chart"><summary>Chart a line item</summary>'
       + '<label class="fund-chart-select">Line item <select data-fund-series>' + options.map(({ row, index }) => (
         '<option value="' + index + '"' + (index === selected.index ? ' selected' : '') + '>' + esc(row[1]) + '</option>'
@@ -290,7 +395,7 @@
         + '. Amounts in ' + esc(scale) + ', with shares in millions and per-share figures as reported. '
         + 'Export currency field: ' + esc(original.currency) + '.'
         + (report.periods.includes('TTM') ? ' TTM is trailing 12 months.' : '') + '</p>'
-        + chartPanel + table(report, key) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
+        + summary + chartPanel + table(report, key) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
         + ' (SGT). Dashes mark unavailable values.</p>'
     };
   }
@@ -303,8 +408,14 @@
         + '<a href="stocks-beta2.html#sb2-fundamentals-import">Stocks BETA 2 import settings</a>.</p>';
       return;
     }
-    const { html, report } = reportContent(company, disclosure.dataset.fundStatement, id);
+    const key = disclosure.dataset.fundStatement;
+    const { html, report } = reportContent(company, key, id);
     body.innerHTML = html;
+    const year = body.querySelector('[data-fund-year]');
+    year?.addEventListener('change', () => {
+      const result = breakdown(report, key, Number(year.value));
+      body.querySelector('[data-fund-breakdown]').innerHTML = breakdownPlot(report, result);
+    });
     const select = body.querySelector('[data-fund-series]');
     if (!select) return;
     const plot = body.querySelector('[data-fund-chart]');
@@ -332,7 +443,7 @@
       + '<p class="fund-source"><a href="' + esc(source) + '" target="_blank" rel="noopener noreferrer">Morningstar Financials</a></p></section>';
   }
 
-  const api = { button: section, more, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor };
+  const api = { button: section, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor, breakdown };
   root.CompanyFundamentals = api;
   if (typeof module !== 'undefined') module.exports = api;
   if (!doc || !root.customElements) return;

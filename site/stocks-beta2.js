@@ -314,7 +314,7 @@
     const entry = { element, company, slot };
     element.dataset.slot = String(slot);
     paintHeading(entry);
-    element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.more(company) || '';
+    element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.button(company, { research: false }) || '';
     const credit = element.querySelector('[data-credit-listing]');
     if (credit) {
       credit.dataset.creditListing = company.ticker;
