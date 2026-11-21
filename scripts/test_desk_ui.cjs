@@ -120,6 +120,21 @@ test('Stocks BETA 2 offers exact additional equity listings without duplicating 
  assert(MarketPrices.card('DIS',{showWorkspaceActions:false}).includes('data-price-hide-workspace-actions'));
  assert(!MarketPrices.card('DIS').includes('data-price-hide-workspace-actions'));
 });
+test('financial statement outlines keep core totals visible and nest detailed rows from the source',()=>{
+ const {statementHierarchy,table}=require('../site/company-fundamentals.js');
+ const rows=[[0,'Section',[null]],[1,'Total Assets',[100]],[2,'Current Assets',[60]],[3,'Cash',[20]],
+  [2,'Fixed Assets',[40]],[1,'Total Equity',[40]],[0,'Supplemental section',[null]],[1,'Additional point',[5]]];
+ const outline=statementHierarchy(rows);
+ assert.deepEqual(outline.map(row=>row.parent),[undefined,undefined,1,2,1,undefined,undefined,6]);
+ assert.deepEqual(outline.map(row=>row.expandable),[false,true,true,false,false,false,true,false]);
+ const report={rows,periods:['2025'],currency:'USD'};
+ const grouped=table(report,'balance',true);
+ assert(grouped.includes('data-fund-parent="2" hidden'));
+ assert(grouped.includes('aria-expanded="false" aria-label="Details for Total Assets"'));
+ assert(grouped.includes('data-fund-height')&&grouped.includes('data-fund-fit'));
+ assert(!table(report,'balance').includes('data-fund-parent'));
+ assert(!table({ ...report,rows:[[0,'Revenue',[100]]]},'income',true).includes('data-fund-all'));
+});
 test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
  const cards=require('../site/company-news-cards.js');
  const story={story_id:'nvda',headline:'Nvidia update',topic:'US / Nvidia',source_urls:['https://www.reuters.com/nvidia'],version:1,body:'Saved facts',analysis:'Saved analysis',watch_next:'Next disclosure',earlier:''};

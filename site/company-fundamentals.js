@@ -197,9 +197,32 @@
       .sort((left, right) => Number(right.label === 'TTM') - Number(left.label === 'TTM') || right.label.localeCompare(left.label));
   }
 
-  function table(report, layout) {
+  function statementHierarchy(rows) {
+    const parents = [];
+    return rows.map(([depth, label, values], index) => {
+      while (parents.length && parents.at(-1).depth >= depth) parents.pop();
+      const parent = parents.at(-1)?.index;
+      const heading = /^(?:section|income statement|balance sheet|cash flow)$/i.test(label) && !values.some(Number.isFinite);
+      const expandable = rows[index + 1]?.[0] > depth && !heading;
+      if (expandable) parents.push({depth, index});
+      return {parent, expandable};
+    });
+  }
+
+  function tableControls(hasGroups) {
+    return '<div class="fund-table-controls">'
+      + (hasGroups ? '<button type="button" data-fund-all>Expand all details</button>' : '')
+      + '<label>Table height <input type="range" min="260" max="1200" step="20" value="560" data-fund-height>'
+      + '<output>560 px</output></label>'
+      + '<button type="button" data-fund-fit aria-pressed="false">Fit height</button></div>';
+  }
+
+  function table(report, layout, grouped = false) {
     const columns = periods(report);
-    return '<div class="fund-table-wrap" role="region" aria-label="Financial statement table" tabindex="0"><table class="fund-table"'
+    const outline = grouped ? statementHierarchy(report.rows) : [];
+    const controls = grouped ? tableControls(outline.some(row => row.expandable)) : '';
+    return controls + '<div class="fund-table-wrap" role="region" aria-label="Financial statement table" tabindex="0"'
+      + (grouped ? ' data-fund-resizable' : '') + '><table class="fund-table"'
       + (layout ? ' data-tc-layout="annual-statement-' + esc(layout) + '" data-tc-fixed-rows' : '')
       + ' style="--fund-periods:' + columns.length + '">'
       + '<thead><tr><th scope="col">Reported line item</th>' + columns.map(({ label }) => (
@@ -210,10 +233,17 @@
         const rowClass = depth === 0 ? 'fund-group' : parent || /^(?:Total|Net)\b/.test(label) ? 'fund-subtotal' : '';
         const { scale } = unit(label, report);
         const available = values.some(Number.isFinite);
-        return '<tr class="' + rowClass + '" style="--fund-depth:' + Math.min(depth, 5) + '">'
-          + '<th scope="row">' + (available
-            ? '<button type="button" data-fund-row="' + index + '" title="Chart ' + esc(label) + '">' + esc(label) + '</button>'
-            : esc(label)) + '</th>' + columns.map(({ index: column, label: period }) => {
+        const entry = outline[index];
+        const toggle = entry?.expandable ? '<button type="button" class="fund-row-toggle" data-fund-toggle aria-expanded="false" aria-label="Details for '
+          + esc(label) + '"></button>' : '';
+        const labelHtml = available
+          ? '<button type="button" data-fund-row="' + index + '" title="Chart ' + esc(label) + '">' + esc(label) + '</button>'
+          : esc(label);
+        const treeAttrs = entry ? ' data-fund-index="' + index + '"'
+          + (entry.parent == null ? '' : ' data-fund-parent="' + entry.parent + '" hidden') : '';
+        return '<tr class="' + rowClass + '" style="--fund-depth:' + Math.min(depth, 5) + '"' + treeAttrs + '>'
+          + '<th scope="row">' + (toggle ? '<div class="fund-line-label">' + toggle + '<span>' + labelHtml + '</span></div>' : labelHtml)
+          + '</th>' + columns.map(({ index: column, label: period }) => {
             const value = values[column];
             const classes = [period === 'TTM' ? 'fund-ttm' : '', value === null ? 'fund-missing' : value < 0 ? 'fund-negative' : ''];
             return '<td class="' + classes.join(' ') + '"' + (value === null ? ' aria-label="Unavailable"' : ' title="' + esc(value) + '"')
@@ -460,7 +490,7 @@
       + (reference.note ? '<p class="fund-note">' + esc(reference.note) + '</p>' : '') + '</figure>';
   }
 
-  function reportContent(company, key, id, compareYears = false) {
+  function reportContent(company, key, id, compareYears = false, grouped = false) {
     const original = company.statements[key];
     // TSMC's audited FY2025 filings reconcile to the export totals in Taiwan dollars.
     // The provider's field mirrors the listing currency for several other cross-listings.
@@ -487,9 +517,53 @@
         + 'Export currency field: ' + esc(original.currency) + '.'
         + (report.periods.includes('TTM') ? ' TTM is trailing 12 months.' : '') + '</p>'
         + summary + (compareYears ? comparisonPlot(report, key, views) : '') + chartPanel
-        + table(report, key) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
+        + table(report, key, grouped) + '<p class="fund-note">Captured ' + esc(company.capturedAt.slice(0, 10))
         + ' (SGT). Dashes mark unavailable values.</p>'
     };
+  }
+
+  function bindTableControls(body) {
+    const area = body.querySelector('[data-fund-resizable]');
+    if (!area) return;
+    const rows = [...area.querySelectorAll('[data-fund-index]')];
+    const toggles = [...area.querySelectorAll('[data-fund-toggle]')];
+    const all = body.querySelector('[data-fund-all]');
+    const height = body.querySelector('[data-fund-height]');
+    const fit = body.querySelector('[data-fund-fit]');
+    const sizeLabel = body.querySelector('.fund-table-controls output');
+    const expanded = button => button.getAttribute('aria-expanded') === 'true';
+
+    function syncRows() {
+      const open = new Set();
+      for (const row of rows) {
+        const {fundParent, fundIndex} = row.dataset;
+        const hidden = fundParent != null && !open.has(fundParent);
+        if (row.hidden !== hidden) row.hidden = hidden;
+        const toggle = row.querySelector('[data-fund-toggle]');
+        if (!hidden && toggle && expanded(toggle)) open.add(fundIndex);
+      }
+      if (all) all.textContent = toggles.every(expanded) ? 'Collapse all details' : 'Expand all details';
+    }
+    area.addEventListener('click', event => {
+      const button = event.target.closest('[data-fund-toggle]');
+      if (!button) return;
+      button.setAttribute('aria-expanded', String(!expanded(button)));
+      syncRows();
+    });
+    all?.addEventListener('click', () => {
+      const show = !toggles.every(expanded);
+      toggles.forEach(toggle => toggle.setAttribute('aria-expanded', String(show)));
+      syncRows();
+    });
+
+    function syncHeight(fitted) {
+      area.style.setProperty('--fund-table-height', height.value + 'px');
+      area.toggleAttribute('data-fund-fit-height', fitted);
+      fit.setAttribute('aria-pressed', String(fitted));
+      sizeLabel.textContent = fitted ? 'Fitted' : height.value + ' px';
+    }
+    height.addEventListener('input', () => syncHeight(false));
+    fit.addEventListener('click', () => syncHeight(fit.getAttribute('aria-pressed') !== 'true'));
   }
 
   function paintStatement(disclosure, id) {
@@ -501,8 +575,10 @@
       return;
     }
     const key = disclosure.dataset.fundStatement;
-    const { html, report } = reportContent(company, key, id, !!disclosure.closest('[data-compare-years]'));
+    const { html, report } = reportContent(company, key, id,
+      !!disclosure.closest('[data-compare-years]'), !!disclosure.closest('[data-fund-grouped]'));
     body.innerHTML = html;
+    bindTableControls(body);
     const year = body.querySelector('[data-fund-year]');
     year?.addEventListener('change', () => {
       const result = breakdown(report, key, Number(year.value));
@@ -535,7 +611,7 @@
       + '<p class="fund-source"><a href="' + esc(source) + '" target="_blank" rel="noopener noreferrer">Morningstar Financials</a></p></section>';
   }
 
-  const api = { button: section, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor, breakdown };
+  const api = { button: section, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor, breakdown, statementHierarchy };
   root.CompanyFundamentals = api;
   if (typeof module !== 'undefined') module.exports = api;
   if (!doc || !root.customElements) return;
