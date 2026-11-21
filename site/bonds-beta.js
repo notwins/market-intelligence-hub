@@ -2,7 +2,7 @@
   'use strict';
 
   const { sources, historyStorage, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
-    annualPriceChanges, fredCurves, reconstructedPrices } = BondsBetaData;
+    annualPriceChanges, loadFredCurves, reconstructedPrices } = BondsBetaData;
   const feedURL = 'data/Bond%20Prices%20-%20Type%20JSON%20-%2016-Nov-03.10.json';
   const temasek = 'US87973RAW07';
   const get = id => document.getElementById(`bb-${id}`);
@@ -22,7 +22,7 @@
   let catalogue = new Map();
   let bonds = new Map();
   let curves = [];
-  let modeled = new Map();
+  let modeled = new WeakMap();
   let defaultKeys = [];
   let selected = [];
   let group = 'all';
@@ -80,9 +80,12 @@
     redrawPending = true;
     requestAnimationFrame(() => {
       redrawPending = false;
+      for (const card of cards) if (card.near) drawCard(card);
       for (const card of cards) {
-        updatePoint(card);
-        if (card.near) drawCard(card);
+        if (card.near || !card.pointReady) {
+          updatePoint(card);
+          card.pointReady = true;
+        }
       }
     });
   }
@@ -216,19 +219,53 @@
       const field = canvas.dataset.plot;
       const data = card.series[field];
       const empty = !data.length || !dates.length;
-      canvas.hidden = empty;
-      canvas.nextElementSibling.hidden = !empty;
+      const container = canvas.parentElement;
+      container.hidden = empty;
+      container.nextElementSibling.hidden = !empty;
       if (empty) {
         card.positions[field] = null;
         continue;
       }
-      const plotFrom = Math.min(...data.map(line => line.points[0].index));
-      const plotTo = Math.max(...data.map(line => line.points.at(-1).index));
-      const axisSpan = Date.parse(dates[plotTo]) - Date.parse(dates[plotFrom]);
-      const axis = axisSpan < 55 * 86400000 ? 'days' : axisSpan < 4 * 365 * 86400000 ? 'quarter' : 'year';
-      const plot = StocksBeta2Charts.drawPlot(canvas, data, dateRows,
-        { from: plotFrom, to: plotTo, cursor, axis }, { axisGutter: 58 });
-      card.positions[field] = plot && { ...plot, from: plotFrom, to: plotTo };
+      const width = canvas.clientWidth, height = canvas.clientHeight;
+      let position = card.positions[field];
+      if (!position || position.data !== data || position.width !== width || position.height !== height) {
+        const plotFrom = Math.min(...data.map(line => line.points[0].index));
+        const plotTo = Math.max(...data.map(line => line.points.at(-1).index));
+        const axisSpan = Date.parse(dates[plotTo]) - Date.parse(dates[plotFrom]);
+        const axis = axisSpan < 55 * 86400000 ? 'days' : axisSpan < 4 * 365 * 86400000 ? 'quarter' : 'year';
+        // Plot the series once. The shared date marker updates independently.
+        const plot = StocksBeta2Charts.drawPlot(canvas, data, dateRows,
+          { from: plotFrom, to: plotTo, cursor: -1, axis }, { axisGutter: 58 });
+        if (!plot) {
+          card.positions[field] = null;
+          continue;
+        }
+        const markers = new Map();
+        for (const line of data) {
+          if (line.connector) continue;
+          for (const point of line.points) {
+            if (!markers.has(point.index)) markers.set(point.index, []);
+            markers.get(point.index).push({ y: plot.forValue(point.value) - plot.top, color: line.color });
+          }
+        }
+        position = { ...plot, from: plotFrom, to: plotTo, data, width, height, markers };
+        card.positions[field] = position;
+        const indicator = canvas.nextElementSibling;
+        indicator.style.top = plot.top + 'px';
+        indicator.style.height = plot.bottom - plot.top + 'px';
+      }
+      if (position.cursor === cursor) continue;
+      position.cursor = cursor;
+      const indicator = canvas.nextElementSibling;
+      indicator.hidden = cursor < position.from || cursor > position.to;
+      if (indicator.hidden) continue;
+      indicator.style.transform = `translateX(${position.forIndex(cursor)}px)`;
+      indicator.replaceChildren(...(position.markers.get(cursor) ?? []).map(({ y, color }) => {
+        const dot = document.createElement('span');
+        dot.style.top = y + 'px';
+        dot.style.backgroundColor = color;
+        return dot;
+      }));
     }
   }
 
@@ -257,10 +294,13 @@
     const position = card.positions[event.currentTarget.dataset.plot];
     if (!position || (event.type === 'pointermove' && event.pointerType === 'touch')) return;
     const x = event.clientX - event.currentTarget.getBoundingClientRect().left;
-    let nearest = position.from;
-    for (let i = position.from + 1; i <= position.to; i++) {
-      if (Math.abs(position.forIndex(i) - x) < Math.abs(position.forIndex(nearest) - x)) nearest = i;
+    let low = position.from, high = position.to;
+    while (high - low > 1) {
+      const middle = Math.floor((low + high) / 2);
+      if (position.forIndex(middle) < x) low = middle;
+      else high = middle;
     }
+    const nearest = Math.abs(position.forIndex(high) - x) < Math.abs(position.forIndex(low) - x) ? high : low;
     if (nearest !== cursor) setCursor(nearest);
   }
 
@@ -330,10 +370,21 @@
 
   function renderCards() {
     const deck = get('cards');
-    visible.disconnect();
-    cards = selected.filter(key => visibleInGroup(bonds.get(key))).map(createCard);
-    deck.replaceChildren(...cards.map(card => card.element));
-    for (const { element } of cards) visible.observe(element);
+    const previous = new Map(cards.map(card => [card.key, card]));
+    cards = selected.filter(key => visibleInGroup(bonds.get(key))).map(key => {
+      const card = previous.get(key);
+      return card?.instrument === bonds.get(key) ? card : createCard(key);
+    });
+    const present = new Set(cards);
+    for (const card of previous.values()) {
+      if (present.has(card)) continue;
+      visible.unobserve(card.element);
+      card.element.remove();
+    }
+    cards.forEach((card, index) => {
+      if (deck.children[index] !== card.element) deck.insertBefore(card.element, deck.children[index] ?? null);
+      if (!present.has(previous.get(card.key))) visible.observe(card.element);
+    });
     get('empty').hidden = !!cards.length;
     showSeries();
   }
@@ -346,14 +397,13 @@
   function refreshDates() {
     const previous = cursor < dates.length - 1 ? dates[cursor] : undefined;
     const unique = new Set();
-    modeled = new Map();
     for (const key of new Set([...selected, get('overlay').value])) {
       const item = bonds.get(key);
       if (!item) continue;
       for (const date of item.rows.keys()) unique.add(date);
-      const model = curves.length ? reconstructedPrices(item, curves, window.DailyBondPrices) : null;
+      if (curves.length && !modeled.has(item)) modeled.set(item, reconstructedPrices(item, curves, window.DailyBondPrices));
+      const model = modeled.get(item);
       if (!model) continue;
-      modeled.set(item, model);
       for (const date of model.points.keys()) unique.add(date);
       for (const date of model.yields.keys()) unique.add(date);
     }
@@ -417,14 +467,34 @@
     }
   }
 
+  function readCurveInBackground() {
+    if (!window.Worker) return loadFredCurves();
+    let worker;
+    try {
+      worker = new Worker('bonds-beta-curves-worker.js?v=20261122.performance1');
+    } catch {
+      return loadFredCurves();
+    }
+    return new Promise((resolve, reject) => {
+      worker.onmessage = ({ data }) => {
+        worker.terminate();
+        if (data.error) reject(Error(data.error));
+        else resolve(data.curves);
+      };
+      worker.onerror = () => {
+        worker.terminate();
+        resolve(loadFredCurves());
+      };
+    });
+  }
+
   async function loadCurve() {
     const status = get('model-status');
     try {
-      const response = await fetch('data/fred-daily.json', { signal: AbortSignal.timeout(20000) });
-      if (!response.ok) throw Error('FRED history unavailable');
-      const data = fredCurves(await response.json());
+      const data = await readCurveInBackground();
       if (!data.length || !window.DailyBondPrices?.cleanPrice || !window.DailyBondPrices?.offsetMonth) throw Error('FRED history has no usable curves');
       curves = data;
+      modeled = new WeakMap();
       refreshDates();
       showSeries();
       if (pendingFocus) inspectLatest(pendingFocus);

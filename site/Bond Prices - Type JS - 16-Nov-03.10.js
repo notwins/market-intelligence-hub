@@ -41,14 +41,18 @@ function cleanPrice(maturity, settlement, coupon, yieldPct) {
       !Number.isFinite(coupon) || !Number.isFinite(yieldPct) || yieldPct <= -200) return null;
   const endOfMonth = offsetMonth(maturity,0,true).getTime() === maturity.getTime();
   const payment = coupon / 2, rate = yieldPct / 200;
-  let period = 0, next = maturity, previous = offsetMonth(maturity,-6,endOfMonth);
-  let value = 100 + payment;
-  while (previous > settlement) {
-    value = value / (1 + rate) + payment;
-    next = previous;
-    period += 1;
-    previous = offsetMonth(maturity,-6 * (period + 1),endOfMonth);
+  const months = (maturity.getUTCFullYear() - settlement.getUTCFullYear()) * 12 +
+    maturity.getUTCMonth() - settlement.getUTCMonth();
+  let periods = Math.floor(months / 6);
+  let next = offsetMonth(maturity,-6 * periods,endOfMonth);
+  if (next <= settlement) {
+    periods -= 1;
+    next = offsetMonth(maturity,-6 * periods,endOfMonth);
   }
+  const previous = offsetMonth(maturity,-6 * (periods + 1),endOfMonth);
+  const exponent = -periods * Math.log1p(rate);
+  const annuity = rate === 0 ? periods : -Math.expm1(exponent) / rate;
+  const value = payment * (1 + annuity) + 100 * Math.exp(exponent);
   // Treasury coupon-date convention, using actual days in the partial half-year.
   const remaining = (next - settlement) / (next - previous);
   return value / (1 + remaining * rate) - payment * (1 - remaining);
