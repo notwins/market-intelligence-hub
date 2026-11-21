@@ -93,9 +93,14 @@ test('home chart shortcuts preserve all real historical destinations and accessi
  const nav=require('../site/history-navigation.js'),html=nav.html();
  assert.equal(nav.items.length,8);for(const route of ['historical-fred.html','fred-1.html','fred-2.html','fred-3.html'])assert(html.includes(route));assert(html.includes('v4.html#history/beta4-shares'));assert(html.includes('aria-hidden="true"'));assert(!html.includes('javascript:'));
 });
-test('history directory shares three groups and 13 active destinations across rail, toolbar and home',()=>{
+test('history directory shares three groups and the same destinations across rail, toolbar and home',()=>{
  const fs=require('node:fs'),nav=require('../site/history-navigation.js');assert.deepEqual(nav.groups.map(g=>g.id),['bonds','shares','fred']);
- const all=nav.groups.flatMap(g=>g.items);assert.equal(all.length,13);assert.equal(new Set(all.map(i=>i[0])).size,13);
+ const all=nav.groups.flatMap(g=>g.items);assert.equal(new Set(all.map(i=>i[0])).size,all.length);
+ const [bonds,shares,fred]=nav.groups;
+ assert.deepEqual(shares.items.map(i=>i[0]),['stocks-beta','stocks-beta2','shares','si','beta2-shares','beta4-shares','spx']);
+ assert.equal(bonds.items[0][3],'bonds-beta.html');
+ assert(!bonds.items.some(i=>i[0]==='si'));
+ assert.deepEqual(fred.items.slice(0,6).map(i=>i[3]),['fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html']);
  const rail=nav.sidebar(),menu=nav.toolbar('yield'),home=nav.html();
  for(const rendered of [rail,menu,home])assert.doesNotMatch(rendered,/beta-shares|beta3-shares/);
  for(const rendered of [rail,menu,home])assert(rendered.indexOf('href="cross-market-history.html"') < rendered.indexOf('data-history-group=') && rendered.includes('href="cross-market-history.html"'));
