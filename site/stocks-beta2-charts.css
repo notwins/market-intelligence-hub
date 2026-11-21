@@ -126,7 +126,6 @@
 .sb2-analyst-reading[data-rating="Hold"] [data-analyst-call] { color:#775600; }
 .sb2-analyst-reading[data-rating="Sell"] [data-analyst-call] { color:#9c3e4b; }
 .sb2-analyst-value,.sb2-analyst-gap { white-space:nowrap; }
-.sb2-analyst-gap { color:var(--ink); }
 .sb2-analyst-gap::before { content:"·"; color:var(--muted); margin-right:5px; }
 .sb2-target-gap { color:var(--muted); font-size:.78rem; font-variant-numeric:tabular-nums; }
 .sb2-chart-hint { color:var(--muted); font-size:.78rem; }
