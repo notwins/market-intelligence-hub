@@ -80,11 +80,10 @@ function card(c) {
   <header class="cd-card-head"><div><span class="cd-ticker cd-${c.family}">${c.ticker} · USD${c.ticker==='BABA'?' ADS':''}</span><h3 id="cd-${c.ticker}">${c.name}</h3></div><div class="cd-price"><strong>${finite(q.close)?'$'+num(q.close):'Unavailable'}</strong><small>${E(day(q.date))} ${q.sourceId==='bos'?'reference':'close'}</small></div></header>
   <p class="cd-note cd-source">${E(q.sourceLabel||'Quote source unavailable')}${q.current===false?' · dated reference':''} ${q.sourceUrl?link(q.sourceUrl,'Source'):''}</p>
   ${root.ShareStaticData?.html({ticker:c.ticker,currency:'USD'})||''}
-  ${root.CompanyFundamentals?.button({ticker:c.ticker,currency:'USD',name:c.name})||''}
   <div class="cd-charts">${chart(d.pe||[],'Forward P/E',c.ticker)}${chart(d.pb||[],'Forward P/B',c.ticker)}</div>
   <p class="cd-note">${r.priceAsOf?'BOS consensus estimates · '+E(day(r.priceAsOf))+'. Forecast horizon unspecified.':'Valuation source unavailable.'} Dots show source observations; missing dates are not filled.</p>
   ${valuationEvidence(c.ticker,d,'Chart values &amp; sources')}${reading(c,false)}
-  <nav class="cd-actions" aria-label="${c.ticker} shortcuts"><a href="stocks-beta.html?companies=${c.ticker}">Price · P/E · P/B charts →</a><a href="v4.html?si=${c.ticker}#history/si">SI pricing →</a><a href="v4.html?company=${c.ticker}#earnings">Earnings</a><a href="search.html?q=${c.ticker}">All news &amp; research</a></nav>${root.NvdaArticle?.link(c.ticker) || ''}</article>`;
+  <nav class="cd-actions" aria-label="${c.ticker} shortcuts"><a href="stocks-beta.html?companies=${c.ticker}">Price · P/E · P/B charts →</a><a href="v4.html?si=${c.ticker}#history/si">SI pricing →</a><a href="v4.html?company=${c.ticker}#earnings">Earnings</a><a href="search.html?q=${c.ticker}">All news &amp; research</a></nav>${root.NvdaArticle?.link(c.ticker) || ''}${root.CompanyFundamentals?.button({ticker:c.ticker,currency:'USD',name:c.name})||''}</article>`;
 }
 function paintHome(host) {
   if (!state.loaded || state.loading) return;
@@ -92,8 +91,7 @@ function paintHome(host) {
     const ticker = node.dataset.companyValuation;
     const d = state.cards.get(ticker) || {};
     const previousEvidence = node.querySelector('details')?.open;
-    node.innerHTML = combinedChart(d.pe || [], d.pb || [], ticker) + valuationEvidence(ticker, d)
-      + (root.CompanyFundamentals?.button({ ticker, name: node.closest('[data-company]')?.querySelector('h3')?.textContent }) || '');
+    node.innerHTML = combinedChart(d.pe || [], d.pb || [], ticker) + valuationEvidence(ticker, d);
     if (previousEvidence) node.querySelector('details').open = true;
     const company = homeCompanies.find(c => c.ticker === ticker);
     if (!company) continue;

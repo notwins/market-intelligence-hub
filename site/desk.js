@@ -126,6 +126,7 @@ function stockCard(r) {
       </details>
       <div data-company-research></div>
       ${root.NvdaArticle?.link(r.ticker) || ''}
+      ${root.CompanyFundamentals?.button({ ticker: r.ticker, name: r.name }) || ''}
     </div>
   </article>`;
 }
