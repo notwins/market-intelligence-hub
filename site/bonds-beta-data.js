@@ -14,6 +14,19 @@
   const identity = (isin, currency) => `${isin}|${currency}`;
   const validId = (isin, currency) => /^[A-Z]{2}[A-Z0-9]{9}\d$/.test(isin) && /^[A-Z]{3}$/.test(currency);
 
+  function historyMaturity(name) {
+    if (/\b(?:PERP|PERPETUAL)\b/i.test(name)) return { isPerpetual: true };
+    const dates = name.match(/\b(?:\d{4}-\d{2}-\d{2}|\d{1,2}\/\d{1,2}\/(?:\d{4}|\d{2}))\b/g);
+    if (dates?.length !== 1) return {};
+    let [date] = dates;
+    if (date.includes('/')) {
+      // ACE uses month/day/year in bond names, with two-digit years in the 2000s.
+      const [month, day, year] = date.split('/');
+      date = `${year.length === 2 ? '20' + year : year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    }
+    return dateOk(date) ? { listedMaturity: date } : {};
+  }
+
   function publicHistory(data) {
     if (data.schema_version !== 1 || !Array.isArray(data.instruments) || !data.history) throw Error('Unexpected watchlist format.');
     return new Map(data.instruments.filter(item => validId(item.isin, item.currency)).map(item => {
@@ -88,7 +101,9 @@
       const field = fields.get(label);
       if (!field || !validId(isin, currency) || extra !== undefined) throw Error('The CSV column headings do not match Bonds BETA.');
       const key = identity(isin, currency);
-      if (!instruments.has(key)) instruments.set(key, { isin, currency, name, rows: new Map(), columns: {}, ar: null });
+      if (!instruments.has(key)) {
+        instruments.set(key, { isin, currency, name, ...historyMaturity(name), rows: new Map(), columns: {}, ar: null });
+      }
       const instrument = instruments.get(key);
       if (instrument.columns[field] !== undefined) throw Error('Duplicate bond field in the CSV.');
       instrument.columns[field] = i + 1;
@@ -126,7 +141,8 @@
     const combined = new Map(imported);
     for (const [key, saved] of builtIn) {
       const local = imported.get(key);
-      combined.set(key, { ...saved, rows: new Map([...(local?.rows || []), ...saved.rows]), ar: local?.ar ?? null });
+      combined.set(key, { ...saved, rows: new Map([...(local?.rows || []), ...saved.rows]), ar: local?.ar ?? null,
+        listedMaturity: local?.listedMaturity, isPerpetual: local?.isPerpetual });
     }
     return combined;
   }

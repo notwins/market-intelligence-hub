@@ -189,4 +189,25 @@ assert.equal(identified.isTreasury, true);
 assert.equal(identified.ar, 42);
 assert.equal(identified.rows.get('2026-11-19'), csvBid);
 assert.equal(beta.reconstructedPrices(identified, archive, daily).firstBid, '2026-11-19');
+
+const namedBonds = [
+  ['XS0000000001', 'Example Note 3.5 11/22/26', '0'],
+  ['XS0000000002', 'Example Perp 11/22/26', '25'],
+  ['XS0000000003', 'Example Note 2/30/28', '30'],
+  ['XS0000000004', 'Example Note 2024-01-01 to 2030-01-01', '40'],
+  ['US912810UY28', 'Example Treasury 12/12/30', '42'],
+];
+const historyFields = ['Bid Price', 'Yield (%)', 'Quote Source', 'ACE Fixed AR Snapshot (%)'];
+const namedCsv = [
+  ['Date', ...namedBonds.flatMap(([isin, name]) => historyFields.map(field => `${isin} | USD | ${name} | ${field}`))],
+  ['2025-10-31', ...namedBonds.flatMap(([, , ar]) => ['98', '4.75', 'BOS_YTM', ar])],
+].map(row => row.join(',')).join('\n');
+const namedHistory = beta.readHistory(namedCsv);
+assert.equal(namedHistory.get('XS0000000001|USD').listedMaturity, '2026-11-22');
+assert.equal(namedHistory.get('XS0000000001|USD').ar, 0);
+assert.equal(namedHistory.get('XS0000000002|USD').isPerpetual, true);
+assert.equal(namedHistory.get('XS0000000002|USD').listedMaturity, undefined);
+assert.equal(namedHistory.get('XS0000000003|USD').listedMaturity, undefined);
+assert.equal(namedHistory.get('XS0000000004|USD').listedMaturity, undefined);
+assert.equal(beta.mergeCatalogue(namedHistory, treasuryDirectory).get('US912810UY28|USD').maturity, '2056-11-15');
 console.log('PASS auction identifiers, historical and current catalogue issues, and exact matching of imported quotes');

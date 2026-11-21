@@ -9,6 +9,9 @@
 .bb-picker-filters legend { padding: 0; margin-bottom: .25rem; font-size: .86rem; font-weight: 650; }
 .bb-picker-filters .bb-tabs button { min-width: 2.65rem; padding-inline: .65rem; }
 .bb-picker-filters .bb-coupon { flex: 1 1 15rem; max-width: 22rem; }
+.bb-picker-scope { display: grid; align-self: center; gap: .2rem; }
+.bb-picker-scope label { display: flex; align-items: center; gap: .45rem; min-height: 1.6rem; font-size: .86rem; font-weight: 650; }
+.bb-picker-scope input { margin: 0; accent-color: #136c70; }
 .bb-coupon-values { display: flex; justify-content: space-between; font-size: .8rem; font-variant-numeric: tabular-nums; color: var(--muted); }
 .bb-coupon-values output { color: #075c66; font-weight: 650; }
 .bb-coupon-slider { position: relative; height: 36px; cursor: ew-resize; touch-action: pan-y; }
