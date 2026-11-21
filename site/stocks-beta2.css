@@ -55,6 +55,8 @@
 }
 .sb2-security[aria-pressed=true] { color:var(--ink); background:#e1f0ed; }
 .sb2-security:focus-visible { outline-offset:-3px; }
+#sb2-securities .sb2-security { min-width:0; }
+.sb2-picker-research { align-self:center; flex:none; padding:10px 8px; font-size:.8rem; font-weight:650; }
 .sb2-rank { width:26px; flex:none; color:var(--muted); font-size:.8rem; text-align:center; }
 .sb2-security-name { min-width:0; overflow-wrap:anywhere; }
 .sb2-company-ticker { display:block; color:var(--muted); font-size:.78rem; font-weight:500; margin-top:2px; }
