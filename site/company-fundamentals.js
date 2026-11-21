@@ -20,6 +20,9 @@
   const fields = ['bbTicker', 'instrumentId', 'ticker', 'publicTicker', 'symbol', 'id'];
   const doc = root.document;
   let directoryRequest, databaseRequest, loadRequest, researchRequest, memory, online;
+  let privateSnapshotRequest;
+  const privateArchiveUrl = 'https://market-intel-fundamentals-vault.vercel.app/statements.bin';
+  const privateArchiveKey = 'private-online';
   let frequency = 'annual';
   const frequencyKey = 'mih.fundamentals.frequency';
   let temporary = false, writing = false;
@@ -183,12 +186,33 @@
     return unpack(data, listings);
   }
 
+  async function fetchArchive(key, url, timeout) {
+    const response = await root.fetch(url, {
+      cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout(timeout)
+    });
+    if (!response.ok) throw new Error('The private archive is unavailable.');
+    const bytes = await response.arrayBuffer();
+    return { bytes, bundle: await openArchive(key, bytes) };
+  }
+
+  function readPrivateSnapshot() {
+    if (online) return Promise.resolve(online);
+    return privateSnapshotRequest ??= (async () => {
+      const saved = await stored('get', undefined, privateArchiveKey);
+      if (!saved?.key) return null;
+      try { return (await fetchArchive(saved.key, privateArchiveUrl, 6000)).bundle; }
+      catch { return openArchive(saved.key, saved.bytes); }
+    })().catch(() => null).then(bundle => {
+      if (!bundle) privateSnapshotRequest = null;
+      return bundle;
+    });
+  }
+
   function bindOnline(panel) {
     if (!panel) return;
     const field = panel.querySelector('[data-fund-access]');
     const status = panel.querySelector('[data-fund-online-state]');
     const forget = panel.querySelector('[data-fund-forget-access]');
-    const keyName = 'private-online';
     const prompt = 'Connect this browser once to load annual and quarterly statements automatically.';
     let busy = false;
     const show = (bundle, cached = false) => {
@@ -198,22 +222,14 @@
         + ' listings · ' + (cached ? 'Saved private copy' : 'Private online statements ready') : prompt;
       updateImportPanels();
     };
-    async function getRemote(key) {
-      const response = await root.fetch(panel.dataset.fundOnline, {
-        cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout(15000)
-      });
-      if (!response.ok) throw new Error('The private archive is unavailable.');
-      const bytes = await response.arrayBuffer();
-      return { key, bytes, bundle: await openArchive(key, bytes) };
-    }
     async function connect(key, savedBytes) {
       busy = true;
       field.disabled = forget.disabled = true;
       status.textContent = 'Loading private online statements…';
       try {
-        const { bundle, bytes } = await getRemote(key);
+        const { bundle, bytes } = await fetchArchive(key, panel.dataset.fundOnline || privateArchiveUrl, 15000);
         show(bundle);
-        try { await stored('put', { key, bytes }, keyName); }
+        try { await stored('put', { key, bytes }, privateArchiveKey); }
         catch { status.textContent = 'Private statements ready for this page. Chrome could not remember the connection.'; }
       } catch {
         try { show(await openArchive(key, savedBytes), true); }
@@ -226,7 +242,7 @@
       }
     }
     status.textContent = prompt;
-    stored('get', undefined, keyName).then(saved => { if (saved?.key && !busy) connect(saved.key, saved.bytes); }).catch(() => {});
+    stored('get', undefined, privateArchiveKey).then(saved => { if (saved?.key && !busy) connect(saved.key, saved.bytes); }).catch(() => {});
     field.addEventListener('change', async () => {
       const file = field.files[0];
       if (!file || busy) return;
@@ -242,7 +258,11 @@
     });
     forget.addEventListener('click', async () => {
       if (busy) return;
-      try { await stored('delete', undefined, keyName); show(null); }
+      try {
+        await stored('delete', undefined, privateArchiveKey);
+        privateSnapshotRequest = null;
+        show(null);
+      }
       catch { status.textContent = 'Chrome could not forget the private access file.'; }
     });
   }
@@ -716,17 +736,20 @@
       + '<p class="fund-source"><a href="' + esc(source) + '" target="_blank" rel="noopener noreferrer">Morningstar Financials</a></p></section>';
   }
 
-  // Read the same exact-listing browser import as the statement panels, without opening them.
+  // Reuse the statement panels' private connection and exact listing match in the SI exporter.
   async function snapshot(item) {
-    const [listings, , briefs] = await Promise.all([directory(), load(), readResearch().catch(() => ({}))]);
+    const listings = await directory();
+    const listing = findListing(item, listings);
+    if (!listing) return null;
+    const [privateBundle, , briefs] = await Promise.all([
+      readPrivateSnapshot(), load(), readResearch().catch(() => ({}))
+    ]);
     // Refresh imports made in another tab of this origin when the SI data is refreshed.
     if (!temporary && !writing) {
       try { memory = await stored('get'); } catch { /* Keep the session copy. */ }
     }
-    const listing = findListing(item, listings);
-    if (!listing) return null;
     const [id, mic, symbol] = listing;
-    return { id, mic, symbol, company: memory?.companies?.[id] || null,
+    return { id, mic, symbol, company: privateBundle?.companies?.[id] || memory?.companies?.[id] || null,
       research: briefs[id] || null,
       financialsUrl: 'https://www.morningstar.com/stocks/' + mic.toLowerCase() + '/'
         + encodeURIComponent(symbol.toLowerCase()) + '/financials' };
