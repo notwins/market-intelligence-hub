@@ -12,7 +12,7 @@
 .hub-primary-toggle[aria-expanded=true]::after{transform:translateY(2px) rotate(225deg)}
 .hub-primary .hub-primary-dropdown{position:fixed;z-index:2;box-sizing:border-box;width:min(17.5rem,calc(100vw - 16px));max-height:calc(100dvh - var(--hub-primary-height,56px) - 12px);overflow:auto;padding:5px;border:1px solid #cbd9de;border-radius:8px;background:#fff;box-shadow:0 8px 22px #17394b26}
 .hub-primary .hub-primary-dropdown[hidden]{display:none}
-.hub-primary .hub-primary-dropdown a{display:flex;align-items:center;min-height:40px;padding:7px 10px;border-radius:5px;color:#243e4a;font:inherit;text-decoration:none;white-space:normal}
+.hub-primary .hub-primary-dropdown a{display:flex;align-items:center;gap:8px;min-height:40px;padding:7px 10px;border-radius:5px;color:#243e4a;font:inherit;text-decoration:none;white-space:normal}
 .hub-primary .hub-primary-dropdown a:hover,.hub-primary .hub-primary-toggle:hover{background:#e7f1f3}
 .bottom-nav.hub-primary>.hub-primary-more{flex:0 0 auto;border-left:1px solid #d9e3e7;border-radius:0;padding-inline:12px!important;background:#fff;box-shadow:-7px 0 10px #fff}
 .hub-primary a:focus-visible,.hub-primary button:focus-visible{outline:3px solid #6655bd;outline-offset:-3px}

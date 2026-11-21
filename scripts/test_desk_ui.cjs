@@ -98,7 +98,7 @@ test('history directory shares three groups and the same destinations across rai
  const all=nav.groups.flatMap(g=>g.items);assert.equal(new Set(all.map(i=>i[0])).size,all.length);
  const [bonds,shares,fred]=nav.groups;
  assert.deepEqual(shares.items.map(i=>i[0]),['stocks-beta','stocks-beta2','shares','si','beta2-shares','beta4-shares','spx','si-beta2']);
- assert.equal(bonds.items[0][3],'bonds-beta.html');
+ assert.deepEqual(bonds.items.slice(0,3).map(item=>item[3]),['bonds-beta.html','v4.html#credit','v4.html#ust']);
  assert(!bonds.items.some(i=>['si','si-beta2'].includes(i[0])));
  assert.deepEqual(fred.items.slice(0,6).map(i=>i[3]),['fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html']);
  const rail=nav.sidebar(),menu=nav.toolbar('yield'),home=nav.html();

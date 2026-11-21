@@ -3,22 +3,29 @@
   'use strict';
   if (document.documentElement.classList.contains('hub-primary-ready')) return;
   const base = new URL('./', document.currentScript.src);
+  const credit = ['Bonds & credit', 'v4.html#credit', '▤'];
+  const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
+  const newsLinks = [
+    ['Daily briefing', 'v4.html#overview', '◫'],
+    ['US earnings', 'v4.html#earnings', '◈'],
+    credit,
+    ['Central Banks / US Admin', 'v4.html#policy', '◎'],
+    ['Calls', 'v4.html#calls', '✎']
+  ];
   const sections = [
-    ['Home', 'desk.html', '⌂'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['Stocks BETA 2', 'stocks-beta2.html', '▥'], ['Bonds BETA', 'bonds-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
+    ['Home', 'desk.html', '⌂'], ['News', 'v4.html#overview', '◫'], ['Stocks BETA', 'stocks-beta.html', '▥'], ['Stocks BETA 2', 'stocks-beta2.html', '▥'], ['Bonds BETA', 'bonds-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
     ['Master Pivot', 'v4.html#master/pivot', '▦'],
     ['Historical charts', 'cross-market-history.html', '↗'],
     ['My Blog', 'market-understanding/', '▤'], ['Markets', 'desk.html#markets', '◫']
   ];
   const moreLinks = [
     ['News and research', [
-      ['Daily briefing', 'v4.html#overview'], ['Hourly news', 'v4.html#hourly'],
-      ['Calls & full reports', 'v4.html#calls'], ['US earnings', 'v4.html#earnings'],
-      ['Bonds & credit', 'v4.html#credit'], ['Research archive', 'archive.html'],
+      ...newsLinks, ['Hourly news', 'v4.html#hourly'], ['Research archive', 'archive.html'],
       ['Research editions', 'research-editions.html'], ['Search library', 'search.html']
     ]],
     ['Stocks, bonds and pricing', [
       ['BOS monthly archive', 'bos-monthly.html'], ['Bonds & shares watchlist', 'v4.html#watchlist'],
-      ['Treasury selection', 'v4.html#ust'], ['SI pricing', 'v4.html#history/si'], ['SI BETA 2', 'si-beta2.html'],
+      treasury, ['SI pricing', 'v4.html#history/si'], ['SI BETA 2', 'si-beta2.html'],
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
     ]],
     ['Historical charts', [
@@ -40,9 +47,10 @@
   const jumpGroups = new Map(moreLinks);
   const subsections = new Map([
     ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
+    ['News', newsLinks],
     ['Stocks BETA', [['Share comparison', 'stocks-beta.html#sb-watchlist-table'], ['Stock cards', 'stocks-beta.html#sb-cards']]],
     ['Stocks BETA 2', [['Company history', 'stocks-beta2.html#sb2-detail'], ['P/E rankings', 'stocks-beta2.html#sb2-pe-rankings'], ['BOS monthly archive', 'bos-monthly.html']]],
-    ['Bonds BETA', [['Bond history cards', 'bonds-beta.html#bb-cards'], ['Bond watchlist', 'v4.html#watchlist'], ['Treasury selection', 'v4.html#ust']]],
+    ['Bonds BETA', [['Bond history cards', 'bonds-beta.html#bb-cards'], credit, treasury, ['Bond watchlist', 'v4.html#watchlist']]],
     ['FRED', jumpGroups.get('FRED and rates')],
     ['Master Pivot', [
       ['Explore securities', 'v4.html#master/explore'], ['Master Pivot', 'v4.html#master/pivot'],
@@ -98,7 +106,7 @@
     const panel = document.createElement('div'); panel.className = 'hub-primary-dropdown';
     panel.id = 'hub-primary-subsections-' + index;
     panel.hidden = true;
-    panel.append(...links.map(([label, route]) => link(label, route)));
+    panel.append(...links.map(([label, route, icon]) => link(label, route, icon)));
     button.type = 'button';
     button.setAttribute('aria-label', name + ' subsections');
     button.setAttribute('aria-controls', panel.id);
@@ -182,9 +190,12 @@
   document.documentElement.classList.add('hub-primary-ready');
   function active() {
     const relative = location.pathname.slice(base.pathname.length);
+    const route = location.hash || '#overview';
+    const onWorkspace = relative === 'v4.html';
     const key = relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
-      : relative === 'bonds-beta.html' ? 'Bonds BETA' : ['stocks-beta2.html','bos-monthly.html'].includes(relative) ? 'Stocks BETA 2' : relative === 'stocks-beta.html' ? 'Stocks BETA'
+      : relative === 'bonds-beta.html' || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA' : ['stocks-beta2.html','bos-monthly.html'].includes(relative) ? 'Stocks BETA 2' : relative === 'stocks-beta.html' ? 'Stocks BETA'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || relative === 'cross-market-history.html' ? 'Historical charts'
+      : onWorkspace && (route === '#hourly' || newsLinks.some(([, href]) => href === 'v4.html' + route)) ? 'News'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
     primaryLinks.forEach((a, name) => {
       if (name === key) {
