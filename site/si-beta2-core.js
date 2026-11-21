@@ -192,7 +192,37 @@ const ms=date=>Date.parse(date+'T12:00:00Z');
 const validDay=date=>/^\d{4}-\d{2}-\d{2}$/.test(date||'')&&Number.isFinite(ms(date))&&new Date(ms(date)).toISOString().slice(0,10)===date;
 function chartOptions(value){
  return {years:Number.isInteger(value?.years)&&value.years>=1&&value.years<=8?value.years:1,
-  pe:value?.pe===true,pb:value?.pb===true,target:value?.target===true};
+  pe:value?.pe===true,pb:value?.pb===true,target:value?.target===true,cone:value?.cone===true};
+}
+function monthsAfter(date,months){
+ const d=new Date(ms(date)),last=new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+months+1,0));
+ return new Date(Date.UTC(last.getUTCFullYear(),last.getUTCMonth(),Math.min(d.getUTCDate(),last.getUTCDate()))).toISOString().slice(0,10);
+}
+// Same zero-log-drift, monthly-volatility model as Stocks BETA 2. Never use a future observation.
+function probabilityCone(d){
+ const anchor=d.quote;
+ if(!validDay(anchor?.date)||!Number.isFinite(anchor.close)||anchor.close<=0)return {reason:'No dated anchor close'};
+ const monthly=new Map(),earliest=monthsAfter(anchor.date,-37),anchorMonth=anchor.date.slice(0,7);
+ for(const point of [...(d.comparisonPrices||d.points||[])].sort((a,b)=>String(a[0]).localeCompare(String(b[0])))){
+  if(!validDay(point[0])||point[0]<earliest||point[0]>=anchorMonth+'-01'||!Number.isFinite(point[1])||point[1]<=0)continue;
+  monthly.set(point[0].slice(0,7),point);
+ }
+ const observations=[...monthly.values()],changes=[];
+ for(let i=1;i<observations.length;i++){
+  const [prior,a]=observations[i-1],[date,b]=observations[i];
+  if(monthsAfter(prior.slice(0,7)+'-01',1).slice(0,7)!==date.slice(0,7))continue;
+  const change=Math.log(b/a);
+  // A large discontinuity cannot be assumed to be a stock split or an economic return.
+  if(Math.abs(change)>Math.log(1.8))return {reason:'Price-basis review needed'};
+  changes.push(change);
+ }
+ const returns=changes.slice(-36),count=returns.length;
+ if(count<12)return {count,reason:'Need 12 monthly return pairs'};
+ const mean=returns.reduce((a,b)=>a+b,0)/count;
+ const sigma=Math.sqrt(returns.reduce((sum,r)=>sum+(r-mean)**2,0)/(count-1));
+ const points=Array.from({length:13},(_,month)=>({date:monthsAfter(anchor.date,month),
+  values:[-2,-1,0,1,2].map(sd=>anchor.close*Math.exp(sd*sigma*Math.sqrt(month)))}));
+ return {anchor,count,sigma,points,end:points.at(-1).date};
 }
 function yearsBefore(date,years){
  const d=new Date(ms(date)),year=d.getUTCFullYear()-years,month=d.getUTCMonth(),day=d.getUTCDate();
@@ -321,7 +351,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
    if(chart.target)text(x,275,ratingLegend,8,muted);
   }
  }
- const start=four?216:hasOverlays?287:270,foot=small?1067:1044,available=foot-8-start,gap=small?6:8;
+ const start=four?216:hasOverlays?287:270,foot=small?1054:1044,available=foot-8-start,gap=small?6:8;
  const block=(available-gap*(p.shares.length-1))/Math.max(1,p.shares.length),header=small?18:23,shift=23-header;
  const marginSources=new Set(),metricsDates=new Set();
  p.shares.forEach((s,i)=>{const d=enrichment[s.symbol]||{},y=start+i*(block+gap),r=reference(p,s,d),ls=levels(p,r.value),name=s.name||d.name||s.symbol;
@@ -332,9 +362,10 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  if(validMoa(margin))marginSources.add(validMoa(s.moaPct)?'manual entry':d.moaSource||'private lookup');
  fitted(635,titleY,'MOA margin '+(validMoa(margin)?pct(margin):'—'),132,9,'#fff',true,'end');
  const {end,from,selected,series,prices:pts,calls:ratingHistory,incompatibleArchive}=chartWindow(d,chart);
+ const cone=chart.cone?probabilityCone(d):null;
  const bounds=priceExtrema(pts),ratios=[...(series.pe||[]),...(series.pb||[])].map(p=>p.value);
  const flatPrice=!!bounds&&bounds.low===bounds.high,ratioAxis=ratios.length>0&&!flatPrice;
- const showCoverage=hasOverlays&&(!small||incompatibleArchive>0||(flatPrice&&ratios.length>0)||selected.some(key=>!series[key].length));
+ const showCoverage=chart.cone||hasOverlays&&(!small||incompatibleArchive>0||(flatPrice&&ratios.length>0)||selected.some(key=>!series[key].length));
  const chartX=36,chartY=y+29-shift,plotLeft=chartX+17,plotTop=chartY+13;
  const plotBottom=y+block-(showCoverage?32:22)-(ratingHistory.length?14:0);
  const plotRight=ratioAxis?417:427;
@@ -343,11 +374,22 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  if(pts.length>1){
   const fk=finalKO(p),bars=[['KO',ls.ko,'#699645','7 3'],['KI',ls.ki,'#b94a57','3 3'],['Strike',ls.strike,'#8261a8','9 3 2 3'],...(p.step>0&&fk!==null?[['Final KO',num(r.value)===null?null:r.value*fk/100,'#c07821','2 3']]:[])].filter(x=>x[1]!==null);
   const priceHigh=pts[bounds.high][1],priceLow=pts[bounds.low][1],spread=priceHigh-priceLow;
-  const values=[priceLow,priceHigh,...bars.map(b=>b[1]),...(series.target||[]).map(p=>p.value),...(series.archive||[]).map(p=>p.value)];
-  const {low,high,ticks}=axisScale(values,{wholeTicks:true}),t0=ms(from),t1=ms(end);
+  const values=[priceLow,priceHigh,...bars.map(b=>b[1]),...(series.target||[]).map(p=>p.value),...(series.archive||[]).map(p=>p.value),...(cone?.points?.flatMap(p=>p.values)||[])];
+  const {low,high,ticks}=axisScale(values,{wholeTicks:true}),t0=ms(from),t1=ms(cone?.end||end);
   const px=date=>plotLeft+(ms(date)-t0)/(t1-t0)*(plotRight-plotLeft);
   const py=v=>plotBottom-(v-low)/(high-low)*(plotBottom-plotTop);
   const pricePoints=pts.map(([date,value])=>[px(date),py(value)]),pointList=points=>points.map(p=>p.map(n=>n.toFixed(2)).join(',')).join(' ');
+  if(cone?.points){
+   out.push(`<g class="si-probability-cone" data-anchor="${cone.anchor.date}" data-end="${cone.end}" aria-label="12-month model ranges, not forecasts">`);
+   for(const [lower,upper,color] of [[0,4,'#e4edf4'],[1,3,'#bdd6e7']]){
+    const coords=[...cone.points.map(p=>[px(p.date),py(p.values[upper])]),...cone.points.toReversed().map(p=>[px(p.date),py(p.values[lower])])];
+    out.push(`<polygon fill="${color}" points="${pointList(coords)}"/>`);
+   }
+   line(px(cone.anchor.date),plotTop,px(cone.anchor.date),plotBottom,'#6b879a','2 3');
+   line(px(cone.anchor.date),py(cone.anchor.close),px(cone.end),py(cone.anchor.close),'#55768d','4 3');
+   text(px(cone.end)-3,plotTop+8,'+12m',7,muted,true,'end');
+   out.push('</g>');
+  }
   if(hasOverlays)out.push(`<polygon class="si-price-area" fill="#dceaf7" points="${pricePoints[0][0]},${plotBottom} ${pointList(pricePoints)} ${pricePoints.at(-1)[0]},${plotBottom}"/>`);
   out.push('<g class="si-price-grid">');
   for(const tick of ticks)line(plotLeft,py(tick),plotRight,py(tick),'#dde3e9');
@@ -466,7 +508,8 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   if(chart.target)coverage.push(`Calls: ${ratingHistory.length||'unavailable'}`);
   if(flatPrice&&ratios.length)coverage.push('Ratios hidden on flat prices');
   if(incompatibleArchive)coverage.push(`${incompatibleArchive} archive off scale`);
-  fitted(chartX+4,y+block-6,'Observations · '+coverage.join(' · '),446,7.5,muted);
+  if(chart.cone)coverage.push(cone?.points?`Cone: ±1 and ±2 SD · ${cone.count} monthly returns`:'Cone: '+cone.reason);
+  fitted(chartX+4,y+block-6,(hasOverlays?'Observations · ':'')+coverage.join(' · '),446,7.5,muted);
  }
  const rx=496,rw=266,description=s.description||d.description||'Company description not supplied. Add a short description in share details.';
  // Keep artwork behind the entire info panel and outside the price plot and label rail.
@@ -476,11 +519,12 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  // Show the complete entered description, including on four-share pages.
  const descriptionLines=wrap(description.length> (small?340:500)?description.slice(0,small?337:497).replace(/\s+\S*$/,'')+'…':description,small?60:49),descriptionHeight=small?65:90,descriptionSize=Math.min(small?8.5:10,descriptionHeight/descriptionLines.length-1.5);
  descriptionLines.slice(0,small?6:9).forEach((value,j)=>fitted(rx,y+37-shift+j*(descriptionSize+1.5),value+(j===(small?5:8)&&descriptionLines.length>(small?6:9)?"…":""),rw,Math.max(7.5,descriptionSize),muted));
- const research=bosResearch(d.metrics),compact=small&&!!research;
- const my=y-shift+(compact?97:small?105:135),metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)],['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']];
- metrics.forEach(([k,v],j)=>{const col=small?j%2:0,row=small?Math.floor(j/2):j,x=rx+col*137,yy=my+row*(compact?9:small?10:16);fitted(x,yy,k,small?64:125,small?7:9,muted);fitted(x+(small?129:rw),yy,v,small?62:130,small?7:9,navy,true,'end');});
+ const research=bosResearch(d.metrics);
+ const my=y+(four?94:small?96:135),spacing=four?10:small?10.5:16;
+ const metrics=[['Historical close',d.quote?`${fmt(d.quote.close,4)} ${d.currency||''}`:'Unavailable'],['Observation date',d.quote?.date||'Unavailable'],...(!four?[['Reference basis',r.basis],['Reference price',num(r.value)===null?'Unavailable':fmt(r.value,4)]]:[]),['Forward P/E',fmt(d.metrics?.pe)],['Forward P/B',fmt(d.metrics?.pb)],['Dividend yield',d.metrics?.dividendYieldPct==null?'Unavailable':pct(d.metrics.dividendYieldPct)],...(!four?[['Employees · snapshot',fmt(d.staticProfile?.employees,0)],['Incorporated',d.staticProfile?.yearIncorporated??'Not supplied']]:[])];
+ metrics.forEach(([k,v],j)=>{const yy=my+j*spacing;out.push('<g class="si-company-metric">');fitted(rx,yy,k,125,small?8:9,muted);fitted(rx+rw,yy,v,135,small?8:9,navy,true,'end');out.push('</g>');});
  if(research){
-  const yy=my+(compact?50:small?56:162),size=small?7.5:9,x=rx+(small?59:70);
+  const yy=my+metrics.length*spacing+5,size=small?8:9,x=rx+78;
   text(rx,yy,'BOS research',size,muted,true);
   if(research.url){
    const box={left:x-2,top:yy-size-2,right:x+33,bottom:yy+3};
@@ -490,7 +534,13 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
    line(x,yy+1,x+research.call.length*size*.64,yy+1,'#174e88');out.push('</a>');
   }else if(research.call){text(x,yy,research.call,size,navy,true);}
   const label=[research.provider,research.target].filter(Boolean).join(' · ');
-  fitted(rx+rw,yy,label,rx+rw-x-39,size,navy,true,'end');
+  fitted(rx,yy+(small?11:15),label,rw,size,navy,true);
+ }
+ const credit=root.SIEquityPages?.summary(d.creditRatings)||[];
+ if(credit.length){
+  const yy=my+metrics.length*spacing+(research?(four?26:small?31:42):12),size=four?7.5:small?8:9;
+  text(rx,yy,'Agency credit · BBG snapshot, undated',size,muted,true);
+  credit.forEach((row,j)=>{const yy2=yy+(j+1)*(four?9:small?10:13);fitted(rx,yy2,row.label,170,size,muted);fitted(rx+rw,yy2,row.value,92,size,navy,true,'end');});
  }
  if(validDay(d.metricsDate))metricsDates.add(d.metricsDate);
  if(!small&&d.metricsBasis)paragraph(rx,y+block-26,d.metricsBasis,61,2,8,muted);
@@ -502,6 +552,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  const profileNote=p.shares.some(share=>enrichment[share.symbol]?.staticProfile)?' Company profiles: shortened excerpts.':'';
  const footerCopy=[
   'Indicative reference. Capital is at risk. Refer to the issuer’s final terms. Charts show historical closes.'+profileNote,
+  ...(chart.cone?['Cone: zero log drift; up to 36 completed monthly returns. Shading ±1 and ±2 SD (~68/95%) is modelled, not a forecast or barrier-hit probability.']:[]),
   [sourceNote,metricsNote].filter(Boolean).join('  '),
   ...(marginSources.size?['MOA margin source · '+[...marginSources].join(' / ')]:[]),
   ...(p.notes?[p.notes]:[]),
@@ -509,8 +560,8 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  let footerY=foot+12;
  for(const [i,copy] of footerCopy.entries()){
   for(const value of wrap(copy,161)){
-   text(28,footerY,value,8,i===0?navy:muted);
-   footerY+=10;
+   text(28,footerY,value,small?7.5:8,i===0?navy:muted);
+   footerY+=small?9:10;
   }
  }
  out.push('</svg>');return out.join('');}
@@ -522,7 +573,7 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
   const img=await doc.embedPng(bytes),page=doc.addPage([width,height]);
   page.drawImage(img,{x:0,y:0,width,height});
   for(const {left,top,right,bottom,url} of linksByPage[index]||[]){
-   const uri=bosReportUrl(url);
+   const uri=pdfLinkUrl(url);
    if(!uri)continue;
    // The preview uses a top-left origin. PDF annotation coordinates start at the bottom left.
    const annotation=doc.context.obj({
@@ -535,5 +586,11 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
  }
  return doc.save();
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+function pdfLinkUrl(raw){
+ if(bosReportUrl(raw))return bosReportUrl(raw);
+ try{const url=new URL(raw);return !url.username&&!url.password&&url.protocol==='https:'&&
+  (url.hostname==='www.morningstar.com'&&/^\/stocks\/[a-z]+\/[^/]+\/financials$/.test(url.pathname)||
+   ['www.apple.com','www.fitchratings.com','www.spglobal.com','ratings.moodys.com'].includes(url.hostname))?url.href:'';}catch{return '';}
+}
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,monthsAfter,probabilityCone,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

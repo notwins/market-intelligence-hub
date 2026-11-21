@@ -83,7 +83,7 @@ async function checkPDFLinks(){
 }
 checkPDFLinks().catch(error=>{console.error(error);process.exitCode=1;});
 const settings=C.chartOptions({years:8,pe:true,pb:true,target:true});
-assert.deepEqual(C.chartOptions({years:9,pe:'true'}),{years:1,pe:false,pb:false,target:false});
+assert.deepEqual(C.chartOptions({years:9,pe:'true'}),{years:1,pe:false,pb:false,target:false,cone:false});
 assert.equal(C.yearsBefore('2024-02-29',1),'2023-02-28');
 const listing={instrumentId:'TEST US',currency:'USD'};
 const observation=(reportDate,date,value)=>({reportDate,date,value,currency:'USD',sourceId:'bos:'+reportDate});
@@ -184,3 +184,5 @@ assert.throws(()=>C.parseMoa({version:1,source:'Test rates',records:[
 ]}),/invalid or duplicate listing/);
 const bands=[5.99,6,7.99,8,9.99,10,12,12.01].map(C.couponBand);
 assert.deepEqual(bands,['','6-8','6-8','8-10','8-10','10-12','10-12','above-12']);
+
+require("./test_si_equity_pages.cjs");

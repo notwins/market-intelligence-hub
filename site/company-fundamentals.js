@@ -623,7 +623,23 @@
       + '<p class="fund-source"><a href="' + esc(source) + '" target="_blank" rel="noopener noreferrer">Morningstar Financials</a></p></section>';
   }
 
-  const api = { button: section, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor, breakdown, statementHierarchy };
+  // Read the same exact-listing browser import as the statement panels, without opening them.
+  async function snapshot(item) {
+    const [listings, , briefs] = await Promise.all([directory(), load(), readResearch().catch(() => ({}))]);
+    // Refresh imports made in another tab of this origin when the SI data is refreshed.
+    if (!temporary && !writing) {
+      try { memory = await stored('get'); } catch { /* Keep the session copy. */ }
+    }
+    const listing = findListing(item, listings);
+    if (!listing) return null;
+    const [id, mic, symbol] = listing;
+    return { id, mic, symbol, company: memory?.companies?.[id] || null,
+      research: briefs[id] || null,
+      financialsUrl: 'https://www.morningstar.com/stocks/' + mic.toLowerCase() + '/'
+        + encodeURIComponent(symbol.toLowerCase()) + '/financials' };
+  }
+
+  const api = { button: section, snapshot, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor, breakdown, statementHierarchy };
   root.CompanyFundamentals = api;
   if (typeof module !== 'undefined') module.exports = api;
   if (!doc || !root.customElements) return;

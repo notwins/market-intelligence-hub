@@ -71,7 +71,22 @@
     }).sort((a, b) => b.report_date.localeCompare(a.report_date));
   }
 
-  if (typeof module !== 'undefined') module.exports = { parse };
+  let dataRequest;
+  async function loadData() {
+    return dataRequest ??= (async () => {
+      try {
+        const saved = root.localStorage?.getItem(storageKey);
+        if (saved) return parse(saved);
+      } catch { /* Fall back to the preloaded reports. */ }
+      const response = await root.fetch(defaultUrl, { signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error('Credit reports are unavailable.');
+      return parse(await response.text());
+    })().catch(error => { dataRequest = null; throw error; });
+  }
+  const dataApi = { parse, load: loadData, forListing: (rows, ticker) =>
+    (rows || []).filter(row => row.listingKeys.includes(listingKey(ticker || ''))) };
+  root.CompanyCreditData = dataApi;
+  if (typeof module !== 'undefined') module.exports = dataApi;
   const doc = root.document;
   const library = doc?.querySelector('[data-credit-library]');
   if (!library) return;
