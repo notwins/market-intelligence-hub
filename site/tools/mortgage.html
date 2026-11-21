@@ -80,24 +80,35 @@ input[type=range]{margin:4px 0;width:100%;accent-color:var(--blue)}
 .schedule{grid-column:1/-1}
 .schedule-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 17px}
 .schedule-actions p{margin:0 auto 0 0;font-size:.875rem;color:var(--muted)}
+.schedule-options{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:0 17px 12px}
+.schedule-options label{display:flex;align-items:center;gap:7px;font-weight:500}
+.schedule-options input[type=range]{width:105px;margin:0}
+.schedule-options input[type=checkbox]{width:17px;height:17px;margin:0;accent-color:var(--blue)}
 .table-scroll{overflow:auto;max-height:650px;border-top:1px solid var(--line);border-radius:0 0 var(--radius) var(--radius)}
-table{border-collapse:separate;border-spacing:0;width:100%;white-space:nowrap;font-size:.875rem;font-variant-numeric:tabular-nums}
+table{border-collapse:separate;border-spacing:0;white-space:nowrap;font-size:.875rem;font-variant-numeric:tabular-nums}
 th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:right}
 thead th{position:sticky;top:0;z-index:1;background:#eaf0f7;vertical-align:bottom;white-space:normal;line-height:1.25}
+th{font-weight:400}
 th:first-child,td:nth-child(2){text-align:left}
-.year th,.year td{font-weight:700;background:#f2f6fb}
-.year button{border:0;background:transparent;padding:0;color:#164f97}
+.year th,.year td{background:#f2f6fb}
+.year button{border:0;background:transparent;padding:0;color:#164f97;font-weight:400;text-align:left}
 .year button:hover{text-decoration:underline}
 th.extra,td.extra{background:#edf7f5;color:var(--green)}
 thead th.extra{background:#dbefe9}
+th.paid,td.paid{font-weight:700}
 th.balance,td.balance{position:sticky;right:0;background:#ecf2fb;color:#1e487d;font-weight:700;box-shadow:-2px 0 5px #223b5814}
 thead th.balance{background:#dee9f9;z-index:2}
+table.freeze th:first-child{position:sticky;left:0;z-index:1;background:white;box-shadow:2px 0 4px #223b581a}
+table.freeze .year th:first-child{background:#f2f6fb}
+table.freeze thead th:first-child{z-index:3;background:#eaf0f7}
+input.extra-cell{font-size:.875rem;text-align:right;height:34px;margin:0;min-width:92px;background:#fff;border-color:#9dc9c0}
+.applied{display:block;margin-top:3px;font-size:.75rem}
 .method{margin:16px 2px 0;color:var(--muted);font-size:.8125rem}
 .method summary{font-weight:700;list-style:revert}
 .method p{max-width:95ch;margin:.5em 0}
 @media(max-width:960px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:730px){.shell{width:calc(100% - 24px);margin:12px auto 24px}.hero{margin-bottom:12px;padding:16px;gap:12px}.hero-icon{width:44px;height:44px}.hero-icon .icon{width:24px;height:24px}.hero p{font-size:.9rem}.workspace{grid-template-columns:minmax(0,1fr);gap:12px}.right{gap:12px}.chart{padding:14px 12px}.metric strong{font-size:1.2rem}.schedule-actions{padding:10px 12px}.schedule-actions p{width:100%}}
-@media print{.shell{width:100%;margin:0}.table-scroll{max-height:none;overflow:visible}.action-row,.schedule-actions button,.scrub label,.scrub input{display:none}.hero{color:var(--ink);background:white}.hero p{color:var(--muted)}}
+@media print{.shell{width:100%;margin:0}.table-scroll{max-height:none;overflow:visible}#schedule-table{width:100%!important}.action-row,.schedule-actions button,.schedule-options,.scrub label,.scrub input{display:none}.hero{color:var(--ink);background:white}.hero p{color:var(--muted)}}
 </style>
 </head>
 <body>
@@ -117,12 +128,12 @@ thead th.balance{background:#dee9f9;z-index:2}
           <label>Tenure (years)<input id="years" type="number" required min="0.083333333" max="50" step="any" inputmode="decimal" autocomplete="off"></label>
           <label>First payment date<input id="first" type="date" required min="1900-01-01" max="2200-12-31" autocomplete="off"></label>
           <label>Payments per year<select id="frequency"><option value="12">12 · Monthly</option><option value="4">4 · Quarterly</option><option value="2">2 · Half-yearly</option><option value="1">1 · Annually</option></select></label>
-          <label>Fixed period (months)<input id="fixed" type="number" min="1" max="600" step="1" inputmode="numeric" placeholder="Full tenure" autocomplete="off"></label>
-          <label>Rate after fixed (%)<input id="after" type="number" min="0" max="100" step="any" inputmode="decimal" disabled autocomplete="off"></label>
+          <label>Fixed period (months)<input id="fixed" type="number" min="1" max="600" step="1" inputmode="numeric" value="24" placeholder="Full tenure" autocomplete="off"></label>
+          <label>Rate after fixed (%)<input id="after" type="number" min="0" max="100" step="any" inputmode="decimal" value="3" disabled autocomplete="off"></label>
         </div>
         <details class="repayments" id="repayments">
           <summary><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8m-4-4h8"/></svg>Early repayments<span id="extra-count"></span><span class="chevron" aria-hidden="true"></span></summary>
-          <label>After each early repayment<select id="strategy"><option value="shorten">Shorten tenure · keep instalments</option><option value="recast">Keep tenure · lower instalments</option></select></label>
+          <label>After each early repayment<select id="strategy"><option value="recast">Keep tenure · lower instalments</option><option value="shorten">Keep instalments · shorten tenure</option></select></label>
           <div id="extras"></div>
           <button class="add" type="button" id="add">＋ Add early repayment</button>
           <p class="note">Enter the payment number and extra principal, applied after that instalment.</p>
@@ -154,8 +165,12 @@ thead th.balance{background:#dee9f9;z-index:2}
     <details class="panel schedule" id="schedule" open hidden>
       <summary class="panel-summary"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h2m4 0h2"/></svg>Amortisation schedule<span class="chevron" aria-hidden="true"></span></summary>
       <div class="schedule-actions"><p id="schedule-note">Expand a loan year to see individual payments.</p><button type="button" id="expand-years">Expand all years</button><button type="button" id="collapse-years">Collapse all years</button></div>
+      <div class="schedule-options">
+        <label><input id="freeze-period" type="checkbox">Freeze first column</label>
+        <label for="table-width">Table width<input id="table-width" type="range" min="80" max="180" value="100" step="5"><output id="table-width-value" for="table-width">100%</output></label>
+      </div>
       <div class="table-scroll" role="region" aria-label="Scrollable amortisation schedule" tabindex="0">
-        <table id="schedule-table"><thead><tr><th scope="col">Period</th><th scope="col">Payment date</th><th scope="col">Rate / period</th><th scope="col">Scheduled paid</th><th scope="col">Interest paid</th><th scope="col">Scheduled principal</th><th scope="col" class="extra">Early repayment</th><th scope="col">Cumulative paid</th><th scope="col">Cumulative principal</th><th scope="col">Cumulative interest</th><th scope="col" class="balance">Balance</th></tr></thead></table>
+        <table id="schedule-table"><thead><tr><th scope="col">Period</th><th scope="col">Payment date</th><th scope="col">Rate / period</th><th scope="col">Scheduled paid</th><th scope="col">Interest paid</th><th scope="col">Scheduled principal</th><th scope="col" class="extra">Early repayment</th><th scope="col" class="paid">Cumulative paid</th><th scope="col">Cumulative principal</th><th scope="col">Cumulative interest</th><th scope="col" class="balance">Balance</th></tr></thead></table>
       </div>
     </details>
   </div>
@@ -238,10 +253,18 @@ const monthFormat = new Intl.DateTimeFormat('en-SG', { month: 'short', year: 'nu
 const percent = new Intl.NumberFormat('en-SG', { style: 'percent', maximumFractionDigits: 4 });
 let result;
 let plot;
+let pending = false;
 
 function status(message = '', error = false) {
   get('form-status').textContent = message;
   get('form-status').classList.toggle('error', error);
+}
+
+function markPending() {
+  if (!result) return;
+  pending = true;
+  table.querySelectorAll('.extra-cell').forEach(input => { input.disabled = true; });
+  status('Inputs changed. Select Calculate to update the schedule.');
 }
 
 function setResetRate() {
@@ -258,14 +281,15 @@ function readTerms() {
     throw new Error('Tenure must contain a whole number of payments for the selected frequency.');
   }
   const rawFixed = get('fixed').value ? get('fixed').valueAsNumber * perYear / 12 : periods;
-  if (!Number.isInteger(rawFixed) || rawFixed > periods) {
-    throw new Error('The fixed period must end on a payment interval and fit within the tenure.');
+  const fixedPeriods = Math.min(rawFixed, periods);
+  if (!Number.isInteger(fixedPeriods)) {
+    throw new Error('The fixed period must end on a payment interval.');
   }
   const initial = get('rate').valueAsNumber;
   return {
     amount: get('amount').valueAsNumber, currency: get('currency').value,
-    initial, reset: rawFixed < periods ? get('after').valueAsNumber : initial,
-    periods, fixedPeriods: rawFixed, perYear, first: get('first').value, strategy: get('strategy').value
+    initial, reset: fixedPeriods < periods ? get('after').valueAsNumber : initial,
+    periods, fixedPeriods, perYear, first: get('first').value, strategy: get('strategy').value
   };
 }
 
@@ -290,7 +314,7 @@ function updateExtraCount() {
   get('extra-count').textContent = entries.length ? '(' + entries.length + ')' : '';
 }
 
-get('add').addEventListener('click', () => {
+function addExtra(period = '', amount = '') {
   const entry = document.createElement('div');
   entry.className = 'entry';
   entry.innerHTML = '<div class="entry-head"><span></span><button type="button" class="remove">Remove</button></div>' +
@@ -300,12 +324,19 @@ get('add').addEventListener('click', () => {
     entry.remove();
     updateExtraCount();
     get('add').focus();
-    if (result) status('Inputs changed. Select Calculate to update the results.');
+    markPending();
   });
+  const [periodInput, amountInput] = entry.querySelectorAll('input');
+  periodInput.value = period;
+  amountInput.value = amount;
   get('extras').append(entry);
   updateExtraCount();
-  entry.querySelector('input').focus();
-  if (result) status('Inputs changed. Select Calculate to update the results.');
+  return periodInput;
+}
+
+get('add').addEventListener('click', () => {
+  addExtra().focus();
+  markPending();
 });
 
 function money(value) {
@@ -328,24 +359,60 @@ function renderMetrics() {
   get('metrics').hidden = false;
 }
 
-function tableCells(row, rateLabel) {
-  return '<td>' + dateFormat.format(row.date) + '</td><td>' + rateLabel + '</td>' +
-    [row.scheduled, row.interest, row.principal, row.extra, row.cumulativePaid, row.cumulativePrincipal, row.cumulativeInterest, row.balance]
-      .map((amount, index) => '<td' + (index === 3 ? ' class="extra"' : index === 7 ? ' class="balance"' : '') + '>' +
-        (index === 3 && !amount ? '—' : whole.format(amount)) + '</td>').join('');
+function paintRow(tr, row, rateLabel, editable) {
+  const values = [
+    dateFormat.format(row.date), rateLabel, whole.format(row.scheduled), whole.format(row.interest),
+    whole.format(row.principal), row.extra ? whole.format(row.extra) : '—', whole.format(row.cumulativePaid),
+    whole.format(row.cumulativePrincipal), whole.format(row.cumulativeInterest), whole.format(row.balance)
+  ];
+  values.forEach((value, index) => {
+    if (editable && index === 5) {
+      const planned = result.extras.get(row.period) ?? 0;
+      const input = tr.cells[index + 1].querySelector('input');
+      const applied = input.nextElementSibling;
+      if (input.valueAsNumber !== planned) input.value = planned || '';
+      input.disabled = false;
+      applied.textContent = row.extra + 1e-7 < planned ? whole.format(row.extra) + ' applied' : '';
+    } else {
+      tr.cells[index + 1].textContent = value;
+    }
+  });
 }
 
 function renderTable() {
   const { rows, terms } = result;
-  get('schedule-note').textContent = 'Expand a loan year to see individual payments.' +
+  get('schedule-note').textContent = 'Expand a year and enter extra payments directly in the green cells.' +
     (terms.currency ? ' Amounts in ' + terms.currency + '.' : '');
-  const openYears = new Set([...table.querySelectorAll('button[aria-expanded="true"]')].map(button => button.getAttribute('aria-controls')));
-  [...table.tBodies].forEach(body => body.remove());
+  const structure = rows.length + '/' + terms.perYear;
+  if (table.dataset.structure !== structure) {
+    const openYears = new Set([...table.querySelectorAll('button[aria-expanded="true"]')].map(button => button.getAttribute('aria-controls')));
+    [...table.tBodies].forEach(body => body.remove());
+    const tabular = '<td></td>'.repeat(5);
+    const totals = '<td class="paid"></td><td></td><td></td><td class="balance"></td>';
+    for (let start = 0; start < rows.length; start += terms.perYear) {
+      const group = rows.slice(start, start + terms.perYear);
+      const end = group.at(-1);
+      const year = Math.floor(start / terms.perYear) + 1;
+      const id = 'schedule-year-' + year;
+      const heading = table.createTBody();
+      heading.innerHTML = '<tr class="year"><th scope="row"><button type="button" aria-expanded="false" aria-controls="' + id +
+        '">Year ' + year + ' · ' + group[0].period + (end.period === group[0].period ? '' : '–' + end.period) + '</button></th>' +
+        tabular + '<td class="extra"></td>' + totals + '</tr>';
+      const body = table.createTBody();
+      body.id = id;
+      body.innerHTML = group.map(row => '<tr><th scope="row">' + row.period + '</th>' + tabular +
+        '<td class="extra"><input type="number" class="extra-cell" inputmode="decimal" autocomplete="off" min="0" max="1000000000000" step="any" data-period="' +
+        row.period + '" aria-label="Early repayment, payment ' + row.period + '"><small class="applied"></small></td>' + totals + '</tr>').join('');
+      const button = heading.querySelector('button');
+      setYear(button, openYears.has(id));
+      button.addEventListener('click', () => setYear(button, body.hidden));
+    }
+    table.dataset.structure = structure;
+  }
+  let section = 0;
   for (let start = 0; start < rows.length; start += terms.perYear) {
     const group = rows.slice(start, start + terms.perYear);
     const end = group.at(-1);
-    const year = Math.floor(start / terms.perYear) + 1;
-    const id = 'schedule-year-' + year;
     const summary = { ...end, scheduled: 0, interest: 0, principal: 0, extra: 0 };
     group.forEach(row => {
       summary.scheduled += row.scheduled;
@@ -354,16 +421,10 @@ function renderTable() {
       summary.extra += row.extra;
     });
     const rate = group[0].rate === end.rate ? percent.format(end.rate) : percent.format(group[0].rate) + ' → ' + percent.format(end.rate);
-    const heading = table.createTBody();
-    heading.innerHTML = '<tr class="year"><th scope="row"><button type="button" aria-expanded="false" aria-controls="' + id +
-      '">Year ' + year + ' · ' + group[0].period + (end.period === group[0].period ? '' : '–' + end.period) + '</button></th>' +
-      tableCells(summary, rate) + '</tr>';
-    const body = table.createTBody();
-    body.id = id;
-    body.innerHTML = group.map(row => '<tr><th scope="row">' + row.period + '</th>' + tableCells(row, percent.format(row.rate)) + '</tr>').join('');
-    const button = heading.querySelector('button');
-    setYear(button, openYears.has(id));
-    button.addEventListener('click', () => setYear(button, body.hidden));
+    const heading = table.tBodies[section++];
+    const body = table.tBodies[section++];
+    paintRow(heading.rows[0], summary, rate, false);
+    group.forEach((row, index) => paintRow(body.rows[index], row, percent.format(row.rate), true));
   }
   get('schedule').hidden = false;
 }
@@ -375,6 +436,37 @@ function setYear(button, open) {
 
 get('expand-years').addEventListener('click', () => table.querySelectorAll('button').forEach(button => setYear(button, true)));
 get('collapse-years').addEventListener('click', () => table.querySelectorAll('button').forEach(button => setYear(button, false)));
+get('freeze-period').addEventListener('change', event => table.classList.toggle('freeze', event.target.checked));
+function resizeSchedule() {
+  const width = get('table-width').valueAsNumber;
+  table.style.width = 'max(' + width + '%, ' + (width * .72) + 'rem)';
+  get('table-width-value').textContent = width + '%';
+}
+get('table-width').addEventListener('input', resizeSchedule);
+resizeSchedule();
+
+table.addEventListener('change', event => {
+  const input = event.target;
+  if (!input.matches('.extra-cell') || pending || !input.reportValidity()) return;
+  const period = Number(input.dataset.period);
+  const amount = input.valueAsNumber || 0;
+  if ((result.extras.get(period) ?? 0) === amount) return;
+  for (const entry of get('extras').children) {
+    if (entry.querySelector('input').valueAsNumber === period) entry.dataset.replace = '';
+  }
+  get('extras').querySelectorAll('[data-replace]').forEach(entry => entry.remove());
+  if (amount > 0) addExtra(period, amount);
+  else updateExtraCount();
+  calculate(result.terms, readExtras(result.terms.periods), period);
+});
+table.addEventListener('keydown', event => {
+  if (event.key !== 'Enter' || !event.target.matches('.extra-cell')) return;
+  event.preventDefault();
+  if (!event.target.reportValidity()) return;
+  const selector = '.extra-cell[data-period="' + event.target.dataset.period + '"]';
+  event.target.dispatchEvent(new Event('change', { bubbles: true }));
+  table.querySelector(selector)?.focus({ preventScroll: true });
+});
 
 function renderChart() {
   if (!context) return;
@@ -514,9 +606,11 @@ function moveCursor(event) {
 canvas.addEventListener('pointermove', event => { if (event.pointerType === 'mouse') moveCursor(event); });
 canvas.addEventListener('click', moveCursor);
 
-termsForm.addEventListener('input', () => {
+termsForm.addEventListener('input', event => {
   setResetRate();
-  if (result) status('Inputs changed. Select Calculate to update the results.');
+  if (result && event.target.id === 'strategy' && !pending) {
+    calculate({ ...result.terms, strategy: get('strategy').value }, result.extras);
+  } else if (result) markPending();
   else status();
 });
 termsForm.addEventListener('invalid', event => {
@@ -524,37 +618,30 @@ termsForm.addEventListener('invalid', event => {
 }, true);
 termsForm.addEventListener('reset', () => {
   result = undefined;
+  pending = false;
   get('extras').replaceChildren();
   updateExtraCount();
   ['metrics', 'schedule', 'scrub'].forEach(id => { get(id).hidden = true; });
   [...table.tBodies].forEach(body => body.remove());
+  delete table.dataset.structure;
   get('empty').hidden = false;
   get('repayments').open = false;
   status();
   renderChart();
   queueMicrotask(setResetRate);
 });
-termsForm.addEventListener('submit', event => {
-  event.preventDefault();
-  let terms;
-  let extras;
-  try {
-    terms = readTerms();
-    extras = readExtras(terms.periods);
-  } catch (error) {
-    status(error.message, true);
-    return;
-  }
+function calculate(terms, extras, reviewPeriod) {
   const baseline = Mortgage.build(terms);
   const rows = extras.size ? Mortgage.build(terms, extras, baseline) : baseline;
   const initialPoint = { balance: terms.amount, cumulativePrincipal: 0, cumulativeInterest: 0, cumulativePaid: 0 };
   const points = [initialPoint, ...rows];
   while (points.length <= terms.periods) points.push(rows.at(-1));
-  result = { terms, baseline, rows, points };
+  result = { terms, baseline, rows, points, extras };
+  pending = false;
   get('empty').hidden = true;
   get('scrub').hidden = false;
   periodSlider.max = terms.periods;
-  periodSlider.value = rows.length;
+  periodSlider.value = reviewPeriod ?? rows.length;
   renderMetrics();
   renderTable();
   selectPeriod();
@@ -563,7 +650,20 @@ termsForm.addEventListener('submit', event => {
   status(applied + 1e-7 < requested
     ? 'Applied ' + money(applied) + ' of ' + money(requested) + ' in early repayments. The rest exceeds the balance or falls after payoff.'
     : 'Schedule updated' + (terms.currency ? ' · ' + terms.currency : '') + '.');
+}
+termsForm.addEventListener('submit', event => {
+  event.preventDefault();
+  try {
+    const terms = readTerms();
+    calculate(terms, readExtras(terms.periods));
+  } catch (error) {
+    status(error.message, true);
+  }
 });
+const today = new Date();
+get('first').defaultValue = [today.getFullYear(), today.getMonth() + 1, today.getDate()]
+  .map(value => String(value).padStart(2, '0')).join('-');
+get('first').value = get('first').defaultValue;
 setResetRate();
 </script>
 </body>
