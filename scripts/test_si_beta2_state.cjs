@@ -9,12 +9,16 @@ function harness(references){
  const p={...C.blank(),id:'saved',shares:[{symbol:'TEST',fixing:100,name:'Test',description:'Layout test'}],ko:100,ki:70,strike:90,step:0,months:11,coupon:8};
  const context={console,structuredClone,Blob,Uint8Array,crypto:{randomUUID:()=>`id-${++timerId}`},URL:{createObjectURL:()=>`blob:test-${++timerId}`,revokeObjectURL:u=>revoked.push(u)},setTimeout:(fn,ms)=>{const id=++timerId;timers.set(id,{fn,ms});return id;},clearTimeout:id=>timers.delete(id),localStorage:{getItem:()=>JSON.stringify({version:1,pages:[p],activeId:p.id,watch:[]}),setItem:(k,v)=>writes.push(k==='market-si-beta2-v1'?JSON.parse(v):{key:k,value:v})},document:{getElementById:get,addEventListener(){},querySelectorAll:()=>[],querySelector:()=>element(),head:element(),body:element(),createElement(tag){const e=element();if(tag==='canvas'){e.getContext=()=>({fillRect(){},drawImage(){}});e.toBlob=fn=>fn(new Blob(['test']));}return e;}},Image:class{set src(v){Promise.resolve().then(()=>this.onload());}},window:{SIBetaCore:C,addEventListener(){},MarketSI:{connect(fn){fn();},records:()=>[],refresh(){}},MarketPrices:{refresh:()=>refresh.promise,series:()=>Promise.reject(Error('No data')),instruments:()=>[],resolve:()=>null},PDFLib:{PDFDocument:{create:async()=>({setTitle(){},setProducer(){},embedPng:async()=>({}),addPage:()=>({drawImage(){}}),save:async()=>new Uint8Array([37,80,68,70])})}}}};
  if(references){context.window.document=context.document;context.window.MarketPrices.currentQuote=()=>null;context.window.MarketSI.records=()=>references;context.window.MarketSI.stepDown=()=>null;vm.runInNewContext(fs.readFileSync('site/si-quick-filter.js','utf8'),context);}
+ context.URLSearchParams=URLSearchParams;
+ context.window.SIBetaCore={...C,loadReferences:async()=>({rows:references||[]})};
+ vm.runInNewContext(fs.readFileSync('site/si-reference-table.js','utf8'),context);
  vm.runInNewContext(fs.readFileSync('site/si-beta2.js','utf8'),context);
  return {get,form,p,refresh,writes,timers,revoked};
 }
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 async function run(){
  const references=JSON.parse(fs.readFileSync('site/data/si-pricing-reference.json','utf8')).rows,original=JSON.stringify(references),q=harness(references),holder=q.get('library-quick-filter');
+ await flush();
  const change=(id,value)=>holder.listeners.change({target:{id:'si-b2-q-'+id,value}}),count=()=>Number.parseInt(q.get('library-count').textContent);
  assert.equal(count(),246);assert.match(holder.innerHTML,/id="si-b2-q-share-1"/);assert.doesNotMatch(holder.innerHTML,/id="si-share-[1-4]"/,'Library IDs must not collide with the editor');
  const writes=q.writes.length,editorCurrency=q.form.elements.currency.value,editorCoupon=q.form.elements.coupon.value;

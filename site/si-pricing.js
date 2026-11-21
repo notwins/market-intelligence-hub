@@ -6,28 +6,6 @@ window.MarketSI=(()=>{'use strict';
  const company=s=>presentation.companies[s]||{name:s,light:"#475569",dark:"#CBD5E1"};
  const sortedShares=r=>[...r.shares].sort((a,b)=>company(a).name.localeCompare(company(b).name,"en")||a.localeCompare(b));
  const basketKey=r=>sortedShares(r).map(s=>company(s).name).join(" / ");
- const fields=['reference','shares','source_date','currency','tenor_source_value','coupon_pct','strike_pct','ko_pct','ki_pct','additional_review'];
- const quoteFields=['source_kind','tenor_unit','coupon_basis'];
- const validDate=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&Number.isFinite(Date.parse(s+'T00:00:00Z'))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s;
- function acceptable(d){
-  if(!(d?.schema_version===1&&d.classification==='rounded_historical_reference'&&d.live_quotes===false&&d.source_verification==='photo_transcribed_unverified'&&d.tenor_unit==='unconfirmed'&&d.coupon_basis==='unconfirmed'&&d.rounding?.unit==='whole_percentage_point'&&d.rounding.strike==='up'&&d.rounding.ko==='up'&&d.rounding.ki==='up'&&d.rounding.coupon==='down'))return false;
-  if(!Number.isInteger(d.record_count)||d.record_count<1||!Number.isInteger(d.additional_review_count)||d.additional_review_count<0||!Array.isArray(d.rows)||d.rows.length!==d.record_count||!Array.isArray(d.source_date_range)||d.source_date_range.length!==2||!d.source_date_range.every(validDate)||d.source_date_range[0]>d.source_date_range[1]||!validDate(d.source_capture_date)||d.source_capture_date<d.source_date_range[1])return false;
-  if(!d.rows.every(r=>{
-   if(!r||typeof r!=='object'||Array.isArray(r))return false;
-   const quote=r.source_kind==='indicative_pricing',allowed=quote?[...fields,...quoteFields]:[...fields];
-   if(Object.hasOwn(r,'product_type')){
-    if(r.product_type!=='bonus_enhanced')return false;
-    allowed.push('product_type');
-   }
-   return Object.keys(r).length===allowed.length&&allowed.every(k=>Object.hasOwn(r,k))&&(!quote||(r.tenor_unit==='months'&&r.coupon_basis==='per_annum'))&&/^SI-\d{3,}$/.test(r.reference)&&Array.isArray(r.shares)&&r.shares.length>=2&&r.shares.length<=4&&r.shares.every(t=>/^[A-Z0-9]{1,8}$/.test(t))&&((r.source_date===null&&quote&&r.additional_review===true)||(validDate(r.source_date)&&d.source_date_range[0]<=r.source_date&&r.source_date<=d.source_date_range[1]))&&/^[A-Z]{3}$/.test(r.currency)&&Number.isInteger(r.tenor_source_value)&&r.tenor_source_value>0&&['coupon_pct','strike_pct','ko_pct','ki_pct'].every(k=>Number.isInteger(r[k])&&r[k]>=0&&r[k]<=200)&&typeof r.additional_review==='boolean';
-  }))return false;
-  const references=new Set(d.rows.map(r=>r.reference)),steps=d.ko_step_down_pp;
-  if(steps!==undefined){
-   if(!steps||typeof steps!=='object'||Array.isArray(steps)||!Object.entries(steps).every(([reference,value])=>references.has(reference)&&Number.isFinite(value)&&value>=0&&value<=100))return false;
-  }
-  const dates=d.rows.map(r=>r.source_date).filter(Boolean).sort();
-  return references.size===d.record_count&&d.rows.filter(r=>r.additional_review).length===d.additional_review_count&&dates[0]===d.source_date_range[0]&&dates.at(-1)===d.source_date_range[1];
- }
  const terms=window.SIBetaCore;
  const quick=window.SIQuickFilters?.create({rows:()=>data?.rows||[],stepDown:reference=>data?.ko_step_down_pp?.[reference]??null,company,assumeAnnual:true});
  const dateLabel=r=>r.source_date||'Date not shown';
@@ -38,7 +16,7 @@ window.MarketSI=(()=>{'use strict';
  const barrier=(key,value)=>`<td data-tc-value="${value}"><span class="si-term-value" data-si-barrier-band="${terms.barrierBand(key,value)}">${value}%</span></td>`;
  const reviewLabel=r=>r.source_date===null?'Date unconfirmed · Photo unverified':r.additional_review?'Additional review':r.source_kind==='indicative_pricing'?'Indicative · Photo unverified':'Photo unverified';
  const dateRange=()=>data.source_date_range.map(E).join(' to ');
- async function refresh(){if(loading)return;loading=true;try{const r=await fetch('data/si-pricing-reference.json',{cache:'no-store'});if(!r.ok)throw Error('Historical SI reference could not load.');const d=await r.json();if(!acceptable(d))throw Error('Historical SI reference did not pass its data checks.');data=d;error='';}catch(e){error=e.message;}finally{loading=false;render();}}
+ async function refresh(){if(loading)return;loading=true;try{data=await terms.loadReferences(true);error='';}catch(e){error=e.message;}finally{loading=false;render();}}
  let requestedCompany=typeof URLSearchParams==='function'?new URLSearchParams(window.location?.search||'').get('company')||'':'';
  if(/^[A-Z]{1,5}(?:\.[A-Z])?$/.test(requestedCompany)){query=requestedCompany;opened=true;}else requestedCompany='';
  function filtered(){return(data?.rows||[]).filter(r=>(currency==='All'||r.currency===currency)&&(!reviewOnly||r.additional_review)&&(!requestedCompany||r.shares.includes(requestedCompany))&&(!quick||quick.matches(r))&&[r.reference,...r.shares,r.source_date,...r.shares.map(s=>company(s).name)].join(' ').toLowerCase().includes(query.toLowerCase())).sort((a,b)=>basketKey(a).localeCompare(basketKey(b),'en')||a.reference.localeCompare(b.reference));}
@@ -61,5 +39,5 @@ window.MarketSI=(()=>{'use strict';
  function partial(openResults=false){const rows=filtered(),target=document.getElementById('si-rows'),count=document.getElementById('si-count');if(target)target.innerHTML=body(rows);if(count)count.textContent=`${rows.length} of ${data.rows.length} historical source records`;quick?.sync(rows.length);if(openResults){opened=true;const records=document.getElementById('si-records');if(records)records.open=true;}mountPivot();}
  function releaseCompany(){if(!requestedCompany)return;requestedCompany='';query='';const el=document.getElementById('si-query');if(el)el.value='';}
  function connect(fn){render=fn;document.addEventListener('input',e=>{if(quick?.handle(e.target)){releaseCompany();partial(true);return;}if(e.target.id==='si-query'){query=e.target.value;requestedCompany='';partial(true);}});document.addEventListener('change',e=>{if(quick?.handle(e.target)){releaseCompany();partial(true);return;}if(e.target.id==='si-currency'){currency=e.target.value;partial(true);}if(e.target.id==='si-review-only'){reviewOnly=e.target.checked;partial(true);}});for(const event of ['mih-logo-catalogue','market-prices-updated','bos-equity-updated'])document.addEventListener(event,()=>{if(data)partial();});document.addEventListener('toggle',e=>{if(e.target.matches?.('[data-si-panel]')&&e.target.isConnected)opened=e.target.open;},true);document.addEventListener('click',e=>{if(e.target.closest('[data-si-retry]'))refresh();if(e.target.closest('[data-si-reset]')){quick?.reset();query='';requestedCompany='';currency='All';reviewOnly=false;for(const[id,value]of[['si-query',''],['si-currency','All']]){const el=document.getElementById(id);if(el)el.value=value;}const check=document.getElementById('si-review-only');if(check)check.checked=false;partial();}});refresh();}
- return{view,panel,connect,refresh,acceptable,filtered,mountPivot,currencySegments,records:()=>data?.rows||[],stepDown};
+ return{view,panel,connect,refresh,acceptable:terms.acceptable,filtered,mountPivot,currencySegments,records:()=>data?.rows||[],stepDown};
 })();

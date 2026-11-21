@@ -38,7 +38,7 @@ const {chromium}=require('playwright'),assert=require('node:assert/strict');
   await page.waitForSelector('.mp-share-chips');
   assert.deepEqual(await page.locator('.mp-share-chips b').allTextContents(),['AAPL']);
   await page.goBack();await page.waitForSelector('#AAPL .cc-workspace');
-  await page.locator('#AAPL .cc-workspace').getByRole('link',{name:'SI Pricing →'}).click();
+  await page.locator('#AAPL .cc-workspace').getByRole('link',{name:'SI Beta 2 →'}).click();
   await page.waitForSelector('#si-query');
   assert.equal(await page.locator('#si-query').inputValue(),'AAPL');
   assert.match(await page.locator('#si-rows').innerText(),/No matching saved SI references/);

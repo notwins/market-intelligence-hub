@@ -1,0 +1,13 @@
+.si-card-references { min-width: 0; margin-block: .75rem; border: 1px solid var(--line, #d6e0e3); border-radius: .5rem; }
+.si-card-references > summary { padding: .55rem .7rem; font-weight: 650; cursor: pointer; }
+.si-card-references > div { padding: 0 .7rem .7rem; }
+.si-card-references p { margin-block: .4rem; }
+.si-card-scroll { max-width: 100%; max-height: 27rem; overflow: auto; }
+.si-card-scroll table { width: 100%; min-width: 43rem; border-collapse: collapse; font-size: .85em; }
+.si-card-scroll :is(th, td) { padding: .4rem .55rem; white-space: nowrap; text-align: left; }
+.si-card-scroll caption { text-align: left; padding-block: .35rem; }
+.si-card-scroll td small { display: block; margin-top: .2rem; }
+.si-card-scroll .si-library-shares { display: grid; grid-template-columns: repeat(2, max-content); gap: .25rem .6rem; }
+.si-card-scroll .si-library-share { display: inline-flex; align-items: center; gap: .25rem; }
+.si-card-scroll .si-library-share img { object-fit: contain; }
+.mp-watchlist-company { min-width: 0; }

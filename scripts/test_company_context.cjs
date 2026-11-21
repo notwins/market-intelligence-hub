@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict');
 const api=require('../site/company-context.js');
 const news=(id,date,tickers=['AAPL'],extra={})=>({id,title:'Story '+id,href:'https://example.com/story/'+id,published_at:date,tickers,...extra});
-assert.deepEqual(api.routes('AAPL'),{earnings:'v4.html?company=AAPL#earnings',shares:'v4.html?company=AAPL#history/shares',si:'v4.html?company=AAPL#history/si',watchlist:'v4.html?company=AAPL#watchlist'});
+assert.deepEqual(api.routes('AAPL'),{earnings:'v4.html?company=AAPL#earnings',shares:'v4.html?company=AAPL#history/shares',si:'si-beta2.html?company=AAPL#si-library',watchlist:'v4.html?company=AAPL#watchlist'});
 assert.equal(api.routes('BRK-B').shares,'v4.html?company=BRK.B#history/shares');
 assert.equal(api.routes('<script>'),null);
 const rows=Array.from({length:14},(_,i)=>news(String(i),'2026-11-'+String(i+1).padStart(2,'0')));

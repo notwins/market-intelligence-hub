@@ -414,7 +414,7 @@
       const logos = root.CompanyLogos?.data
         || await getSavedJson('assets/company-logos/company-logos.json').catch(() => null);
       return {
-        watchlist, logos,
+        logos,
         news: [...(desk.news || []), ...(hourly.value?.news || [])],
         reports: [...(desk.reports || []), ...(research.value ? shared.independentReports(research.value) : [])],
         newsUnavailable: hourly.status === 'rejected' || hourly.value.delivery_error,
@@ -437,17 +437,17 @@
     }).catch(() => {
       earnings.innerHTML = shared.earnings(company.ticker, { observations: [] }, {});
     });
-    loadSavedReading().then(({ watchlist, logos, news, reports, newsUnavailable, reportsUnavailable }) => {
+    loadSavedReading().then(({ logos, news, reports, newsUnavailable, reportsUnavailable }) => {
       const companySymbol = company.logo || symbol || company.ticker;
       const aliases = [company.ticker, symbol, companySymbol].filter(Boolean);
       reading.innerHTML = shared.reading({
         matches: shared.reportRows(reports, companySymbol, logos, aliases),
         items: shared.newsFor(news, companySymbol, aliases),
-        si: watchlist.find(row => row.ticker === symbol)?.si,
-        showEmptySi: true, newsUnavailable, reportsUnavailable
+        listing: symbol || company.ticker,
+        newsUnavailable, reportsUnavailable
       });
     }).catch(() => {
-      reading.innerHTML = '<p class="sb-note" role="status">Saved research, SI references and news could not load.</p>';
+      reading.innerHTML = '<p class="sb-note" role="status">Saved research and news could not load.</p>' + (root.SIReferenceTable?.section(symbol || company.ticker) || '');
     });
   }
 
