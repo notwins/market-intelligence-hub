@@ -550,11 +550,13 @@
       button.setAttribute('aria-expanded', String(!expanded(button)));
       syncRows();
     });
-    all?.addEventListener('click', () => {
-      const show = !toggles.every(expanded);
+    function setAll(show) {
       toggles.forEach(toggle => toggle.setAttribute('aria-expanded', String(show)));
       syncRows();
-    });
+    }
+    all?.addEventListener('click', () => setAll(!toggles.every(expanded)));
+    area.addEventListener('fund-set-details', event => setAll(event.detail === true));
+    if (area.closest('[data-fund-expand-details]')) setAll(true);
 
     function syncHeight(fitted) {
       area.style.setProperty('--fund-table-height', height.value + 'px');
@@ -655,6 +657,7 @@
         }, true);
         this.refresh = refresh;
         doc.addEventListener('fundamentals-updated', refresh);
+        this.dispatchEvent(new CustomEvent('fund-statements-ready', { bubbles: true }));
         const link = this.querySelector('[data-fund-research]');
         if (link) {
           const loadLink = async () => {
