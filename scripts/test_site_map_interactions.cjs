@@ -45,7 +45,7 @@ const input = ids.get('map-search'), status = ids.get('map-status'), families = 
 const nodes = root.querySelectorAll('.map-node');
 const click = id => ids.get(id).events.click();
 const search = value => {input.value = value; input.events.input();};
-assert(status.textContent.startsWith('63 destinations'));
+assert(status.textContent.startsWith('61 destinations'));
 assert.equal(details.filter(d => d.open).length, 8);
 assert.equal(root.querySelector('.map-controls').hidden, false);
 click('collapse-all'); assert(details.every(d => !d.open));

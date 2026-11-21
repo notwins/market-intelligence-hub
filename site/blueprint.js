@@ -23,7 +23,7 @@ function shownNodes(){
   if(state.expanded){const parent=byId.get(state.expanded);return [parent,...children(state.expanded)].filter(Boolean);}
   return graph.nodes.filter(n=>n.type==='group'&&['site','research','history','tools','archive','legal'].includes(n.group));
  }
- if(state.view==='flows')return graph.nodes.filter(n=>['source','automation','process','data'].includes(n.type)||['page:desk.html','page:v4.html','route:hourly','route:earnings','route:history/beta3-shares','app:pages-content'].includes(n.id)||$('layer-reference').checked&&n.type==='module');
+ if(state.view==='flows')return graph.nodes.filter(n=>['source','automation','process','data'].includes(n.type)||['page:desk.html','page:v4.html','route:hourly','route:earnings','route:history/beta4-shares','app:pages-content'].includes(n.id)||$('layer-reference').checked&&n.type==='module');
  return graph.nodes.filter(n=>n.type==='software'&&n.type!=='group');
 }
 function representative(id,shown){if(shown.has(id))return id;let n=byId.get(id),guard=0;while(n&&guard++<6){if(n.parent&&shown.has(n.parent))return n.parent;n=byId.get(n.parent);}const initial=byId.get(id);if(initial&&shown.has('group:'+initial.group))return 'group:'+initial.group;return null;}

@@ -51,9 +51,9 @@ function cut(file,first,next){const text=read(file);return text.slice(text.index
   for(const f of e.listeners['share-enrichment-updated']||[])f();assert.doesNotMatch(e.nodes['earnings-desk'].innerHTML,/id="earnings-AAPL"/);
   console.log('PASS earnings TRR and asynchronous cap ordering preserve selected-company filter');
 
-  const r={X:{historyTab:'yield',masterTab:'explore'}};vm.createContext(r);vm.runInContext(cut('v4-tools.js','function routeSuffix(','return{routeSuffix'),r);r.applyRoute('history','beta-shares');assert.equal(r.routeSuffix('history'),'/beta-shares');r.applyRoute('history','bogus');assert.equal(r.routeSuffix('history'),'/beta-shares');
-  let mounted=0,cleaned=0,host={};const life={$:()=>host,window:{BetaShares:{mount:()=>{mounted++;return()=>cleaned++;}}}};life.BetaShares=life.window.BetaShares;vm.createContext(life);vm.runInContext(cut('v4-tools.js','let betaSharesHost=','function afterRender('),life);life.mountBetaShares();life.mountBetaShares();assert.equal(mounted,1);host=null;life.mountBetaShares();assert.equal(cleaned,1);
-  console.log('PASS Beta shares routing and one mount/cleanup per host without history-data dependence');
+  const r={X:{historyTab:'yield',masterTab:'explore'}};vm.createContext(r);vm.runInContext(cut('v4-tools.js','function routeSuffix(','return{routeSuffix'),r);r.applyRoute('history','beta4-shares');assert.equal(r.routeSuffix('history'),'/beta4-shares');for(const retired of ['beta-shares','beta3-shares','bogus']){r.applyRoute('history',retired);assert.equal(r.routeSuffix('history'),'/beta4-shares');}
+  let mounted=0,cleaned=0,host={};const life={$:()=>host,window:{ShareLab:{mount:(_host,options)=>{assert.equal(options.view,"beta4");mounted++;return()=>cleaned++;}}}};life.ShareLab=life.window.ShareLab;vm.createContext(life);vm.runInContext(cut('v4-tools.js','let shareLabHost=','function afterRender('),life);life.mountShareLab();life.mountShareLab();assert.equal(mounted,1);host=null;life.mountShareLab();assert.equal(cleaned,1);
+  console.log('PASS History Pivot routing and one mount/cleanup per host without history-data dependence');
 
   // Exercise actual historical fields and identifiers, not only the sorting stub.
   const actual=context({ShareEnrichment:undefined,CustomEvent:class{constructor(type){this.type=type;}}});

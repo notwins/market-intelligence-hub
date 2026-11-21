@@ -4,7 +4,7 @@ const paths={curve:'M3 17c4 0 4-10 8-10s4 6 10 6M3 3v18h18',shares:'M4 19V9m5 10
 function icon(key){return '<svg class="history-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="'+(paths[key]||paths.fred)+'"/></svg>';}
 const groups=[
  {id:'bonds',label:'Yields & bonds',icon:'curve',items:[['yield','Yield history','curve'],['curves','Historical curves','curve'],['fx','FX history','fx'],['si','SI pricing','bond'],['si-beta2','SI beta 2','bond','si-beta2.html']]},
- {id:'shares',label:'Shares',icon:'shares',items:[['shares','Share prices','shares'],['beta-shares','Returns','trend'],['beta2-shares','Event studies','event'],['beta3-shares','Share explorer','search'],['beta4-shares','History pivot','pivot'],['spx','SPX index','trend']]},
+ {id:'shares',label:'Shares',icon:'shares',items:[['shares','Share prices','shares'],['beta2-shares','Event studies','event'],['beta4-shares','History pivot','pivot'],['spx','SPX index','trend']]},
  {id:'fred',label:'Historical FRED',icon:'fred',items:[['fred-history','FRED history','fred','historical-fred.html'],['fred-1','Fred-1 · Event Replay','replay','fred-1.html'],['fred-2','Fred-2 · Response Matrix','table','fred-2.html'],['fred-3','Fred-3 · Transmission Desk','network','fred-3.html']]}
 ];
 const items=groups.flatMap(g=>g.items.filter(i=>!i[3]).map(i=>[i[0],i[2],i[1]]));

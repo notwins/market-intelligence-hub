@@ -108,8 +108,13 @@ const DEFAULT_WATCHLIST = (typeof module !== 'undefined' ? require('./share-card
 function startingSelection(params, listings) {
   const requested = params.get('companies') ?? params.get('company');
   const tickers = new Set(listings.map(item => item.ticker));
+  function exactTicker(symbol) {
+    if (tickers.has(symbol)) return symbol;
+    const matches = listings.filter(item => item.aliases?.includes(symbol));
+    return matches.length === 1 ? matches[0].ticker : null;
+  }
   const candidates = requested === null ? DEFAULT_WATCHLIST : requested.split(',').map(ticker => ticker.trim());
-  return [...new Set(candidates)].filter(ticker => tickers.has(ticker)).slice(0, MAX_CARDS);
+  return [...new Set(candidates.map(exactTicker).filter(Boolean))].slice(0, MAX_CARDS);
 }
 
 function companySearchText(item,logo) {
