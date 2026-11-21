@@ -5,6 +5,8 @@ function icon(key){return '<svg class="history-nav-icon" viewBox="0 0 24 24" fil
 const groups=[
  {id:'bonds',label:'Yields & bonds',icon:'curve',items:[
   ['bonds-beta','Bonds BETA','bond','bonds-beta.html'],
+  ['bonds-credit','Bonds &amp; credit','bond','v4.html#credit'],
+  ['ust-selection','UST selection desk','curve','v4.html#ust'],
   ['yield','Yield history','curve'],
   ['curves','Historical curves','curve'],
   ['fx','FX history','fx']
