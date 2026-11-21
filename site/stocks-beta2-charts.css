@@ -78,6 +78,11 @@
 .sb2-brief-details .sb2-table th,.sb2-brief-details .sb2-table td { padding:6px; font-size:.79rem; }
 .sb2-brief-details .sb2-table tbody th { z-index:1; white-space:normal; min-width:110px; width:135px; }
 .sb2-brief-details th[data-estimate],.sb2-brief-details td[data-estimate] { background:#edf6f4; }
+.sb2-research-archive,.sb2-research-peers,.sb2-research-projections { margin-block:12px; }
+.sb2-research-notes { list-style:none; margin:0; padding:0; }
+.sb2-research-notes > li + li { margin-top:10px; padding-top:8px; border-top:1px solid var(--line); }
+.sb2-research-notes > li > p { margin:3px 0 7px; }
+.sb2-research-peers tbody td { white-space:nowrap; }
 .sb2-research-readthrough { margin:5px 0 8px; padding-inline-start:18px; font-size:.84rem; }
 .sb2-cone-info { margin-top:8px; padding:8px 9px; background:#eff4fc; border-radius:6px; }
 .sb2-cone-info p { margin:0 0 3px; font-size:.82rem; color:#284867; }

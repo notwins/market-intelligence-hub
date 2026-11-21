@@ -81,6 +81,10 @@
   const allCompanies = () => [...data.securities, ...priceCompanies];
   const deck = get('sb2-detail'), dialog = get('sb2-card-picker');
   const cards = new Map();
+  const researchLibrary = root.StocksBeta2Research;
+  doc.addEventListener('sb2-research-updated', () => cards.forEach(entry => {
+    if (entry.company.group !== 'shared') paintResearch(entry);
+  }));
   const fundamentalsBounds = { min: 30, max: 72, initial: 32 };
   let fundamentalsWidth = fundamentalsBounds.initial;
   let savedReadingRequest;
@@ -313,7 +317,9 @@
         status.textContent = 'No research brief for this listing.';
         return;
       }
-      const { financials, close, target } = brief;
+      const extra = researchLibrary?.forListing(company.ticker);
+      const { close, target } = brief;
+      const financials = extra?.projections || brief.financials;
       const targetLabel = brief.provider === 'Haitong International' ? 'Target price' : 'Fair value';
       const amount = metric => metric ? metric.currency + ' ' + root.StocksBeta2Charts.priceLabel(
         Number(metric.value.replaceAll(',', ''))
@@ -332,21 +338,25 @@
       const sourceLink = (url, label) => '<a href="' + e(url) + '" target="_blank" rel="noopener">' + e(label) + '</a>';
       const dateLabel = brief.archived ? ' · Saved report' : '';
       const modelSuffix = financials.source !== brief.source ? ' · Previous report model' : '';
+      const wasOpen = body.querySelector('.sb2-brief-details')?.open;
+      const projectionWasOpen = body.querySelector('.sb2-research-projections')?.open;
+      const sections = extra ? researchLibrary.sections(extra, day) : '';
       body.innerHTML = '<p class="sb2-research-note sb2-research-dates">' + e(brief.provider + ' · ' + day(brief.date) + dateLabel) + '</p>'
         + '<dl class="sb2-quick-values">' + values + '</dl>'
         + (close?.date ? '<p class="sb2-research-note">Reported close · ' + e(day(close.date)) + '</p>' : '')
         + '<p>' + sourceLink(brief.source, 'Source PDF') + '</p>'
-        + '<details class="sb2-brief-details"><summary>Outlook &amp; financials</summary>'
+        + '<details class="sb2-brief-details"' + (wasOpen ? ' open' : '') + '><summary>Outlook &amp; financials</summary>'
         + (brief.archived ? '<p class="sb2-research-note">The ' + e(day(coverageDate)) + ' coverage list had no report link for this listing.</p>' : '')
-        + '<h4>Research outlook</h4><p>' + e(brief.outlook) + '</p><p class="sb2-research-note">'
-        + e(day(brief.outlookDate)) + ' · ' + sourceLink(brief.source + '#page=' + brief.outlookPage, 'Read analyst write-up') + '</p>'
+        + (sections || '<h4>Research outlook</h4><p>' + e(brief.outlook) + '</p><p class="sb2-research-note">'
+          + e(day(brief.outlookDate)) + ' · ' + sourceLink(brief.source + '#page=' + brief.outlookPage, 'Read analyst write-up') + '</p>')
         + '<h4>Management guidance</h4><p>' + e(brief.guidance || 'The reviewed write-up did not identify specific management guidance.') + '</p>'
-        + '<h4>Financials and analyst estimates</h4><p class="sb2-research-note">'
+        + (extra ? '<details class="sb2-research-projections"' + (projectionWasOpen === false ? '' : ' open') + '><summary>Financials and analyst estimates</summary>'
+          : '<h4>Financials and analyst estimates</h4>') + '<p class="sb2-research-note">'
         + e(day(financials.date) + modelSuffix + (financials.units ? ' · ' + financials.units + ' unless marked' : ''))
         + '. A = actual, E = analyst estimate.</p><div class="sb2-table" role="region" aria-label="Research financials. Scroll horizontally for more years." tabindex="0"><table>'
         + '<thead><tr><th scope="col">Metric</th>' + columns + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
         + '<p>' + sourceLink(financials.source + '#page=' + financials.page, 'Financial table in PDF') + '</p>'
-        + readthrough + '</details>';
+        + readthrough + (extra ? '</details>' : '') + '</details>';
       status.textContent = '';
       body.hidden = false;
     } catch {
