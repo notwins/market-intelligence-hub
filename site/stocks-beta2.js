@@ -105,6 +105,7 @@
   const fiscalToggle = get('sb2-fiscal-compare');
   const statementToggle = get('sb2-expand-statements');
   const statementSelector = 'details[data-fund-statement]';
+  const statementOverrides = new Map();
   const desktop = root.matchMedia('(any-pointer:fine)');
   let compareFiscalYears = false;
   const touch = root.matchMedia('(pointer:coarse)');
@@ -121,6 +122,7 @@
 
   statementToggle.addEventListener('click', () => {
     const open = deck.toggleAttribute('data-fund-expand-details');
+    statementOverrides.clear();
     for (const statement of deck.querySelectorAll(statementSelector)) statement.open = open;
     for (const table of deck.querySelectorAll('[data-fund-resizable]')) {
       table.dispatchEvent(new CustomEvent('fund-set-details', { detail: open }));
@@ -130,16 +132,20 @@
 
   deck.addEventListener('click', event => {
     const statement = event.target.closest('summary')?.parentElement;
-    if (event.defaultPrevented || !statement?.matches(statementSelector) || statement.open) return;
+    if (event.defaultPrevented || !statement?.matches(statementSelector)) return;
+    event.preventDefault();
+    const type = statement.dataset.fundStatement;
+    const open = !statement.open;
+    statementOverrides.set(type, open);
     for (const peer of deck.querySelectorAll(statementSelector)) {
-      if (peer !== statement && peer.dataset.fundStatement === statement.dataset.fundStatement) peer.open = true;
+      if (peer.dataset.fundStatement === type) peer.open = open;
     }
   });
 
   deck.addEventListener('fund-statements-ready', event => {
-    const openTypes = new Set([...deck.querySelectorAll(statementSelector + '[open]')].map(row => row.dataset.fundStatement));
+    const expandDetails = deck.hasAttribute('data-fund-expand-details');
     for (const statement of event.target.querySelectorAll(statementSelector)) {
-      if (deck.hasAttribute('data-fund-expand-details') || openTypes.has(statement.dataset.fundStatement)) statement.open = true;
+      statement.open = statementOverrides.get(statement.dataset.fundStatement) ?? expandDetails;
     }
     statementToggle.disabled = false;
   });
