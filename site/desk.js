@@ -150,6 +150,7 @@ function paintMoveStatus() {
 function paintMoveView() {
   const table = $('#watch-strip table');
   const groups = moveViews[moveView];
+  table.dataset.moveMode = moveView;
   table.style.setProperty('--move-count', moveCount());
   table.querySelectorAll('[data-move-columns]').forEach(group => group.remove());
   table.tHead.insertAdjacentHTML('beforebegin', groups.map(group =>
