@@ -69,6 +69,14 @@ test('stock moves use a daily close before the calendar cutoff and reject covera
  assert.equal(Desk.priceMove([...daily.slice(0,-1),['2026-05-31',100]],'2026-05-31',{months:1}),25);
  assert.equal(Desk.priceMove(daily,'2026-05-01',{days:7}),null);
 });
+test('stock move colours use fixed bands with matching gain and loss boundaries',()=>{
+ for(const [move,band] of [[0.1,1],[4.9,1],[5,2],[9.9,2],[10,3],[15,3],[15.1,4],[100,4]]){
+  assert.equal(Desk.moveHeat(move),'gain-'+band);
+  assert.equal(Desk.moveHeat(-move),'loss-'+band);
+ }
+ assert.equal(Desk.moveHeat(0),'flat');
+ assert.equal(Desk.moveHeat(null),'missing');
+});
 test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
  const cards=require('../site/company-news-cards.js');
  const story={story_id:'nvda',headline:'Nvidia update',topic:'US / Nvidia',source_urls:['https://www.reuters.com/nvidia'],version:1,body:'Saved facts',analysis:'Saved analysis',watch_next:'Next disclosure',earlier:''};

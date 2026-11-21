@@ -28,7 +28,11 @@ return `<svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-labe
 </svg>`;}
 const valuesTable=(points,unit,notes='')=>`<details><summary>Dates, values &amp; source basis</summary>${notes}<div class="table-wrap" tabindex="0" role="region" aria-label="Historical observations"><table><caption>Saved observations · ${E(unit)}</caption><thead><tr><th>Date</th><th>Value</th></tr></thead><tbody>${points.map(p=>`<tr><td>${E(p[0])}</td><td>${num(p[1],4)}</td></tr>`).join('')}</tbody></table></div></details>`;
 const canEdit=location=>location?.protocol==='http:'&&['localhost','127.0.0.1','[::1]'].includes(location.hostname);
-const movePeriods = [['1W', {days: 7}], ['1M', {months: 1}], ['6M', {months: 6}]];
+const movePeriods = [
+  ['1W', {days: 7}], ['2W', {days: 14}], ['3W', {days: 21}],
+  ['1M', {months: 1}], ['2M', {months: 2}], ['6M', {months: 6}], ['12M', {months: 12}]
+];
+const monthMoveIndex = movePeriods.findIndex(([label]) => label === '1M');
 function priceMove(daily, endDate, {days, months}) {
   const last = daily.findLast(p => p[0] <= endDate);
   if (!last || last[0] !== endDate) return null;
@@ -48,7 +52,14 @@ function priceMove(daily, endDate, {days, months}) {
   return (last[1] / base[1] - 1) * 100;
 }
 function selectedPrice(ticker,market=root.MarketPrices){const item=market?.resolve(ticker)||root.BOSEquity?.itemFor(ticker),q=market?.currentQuote(item||ticker);if(!item||!Number.isFinite(q?.close)||q.close<=0||!q.date)return null;const label=(q.sourceLabel||'Shared price feed')+(q.current===false?' · dated observation':'');return {value:q.close,currency:market.displayUnit(item),as_of:q.date,basis:q.reason||label,status_label:label,source_url:q.sourceUrl};}
-const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
+function moveHeat(move) {
+  if (!Number.isFinite(move)) return 'missing';
+  if (move === 0) return 'flat';
+  const magnitude = Math.abs(move);
+  const band = magnitude < 5 ? 1 : magnitude < 10 ? 2 : magnitude <= 15 ? 3 : 4;
+  return `${move > 0 ? 'gain' : 'loss'}-${band}`;
+}
+const api={canEdit,E,safeHref,canonical,archiveSort,mergeReports,matchNews,newsResearchHref,spark,selectedPrice,priceMove,moveHeat};root.Desk=api;if(typeof module!=='undefined')module.exports=api;if(!root.document)return;
 let data=null,feed=null,reports=[],featured=[],limit=12,opener=null,refreshing=false;const editing=canEdit(root.location);const seriesCache=new Map();
 const priceSections = ['markets', 'stock-moves', 'stock-prices', 'main-company-cards', 'market-rates', 'market-bonds', 'yields'];
 let priceWatchlist = [], pricesStarted = false;
@@ -67,14 +78,14 @@ function moveStats(values = []) {
     const move = values[i];
     const rounded = Number.isFinite(move) ? Number(move.toFixed(1)) : null;
     const change = rounded === null ? '—' : `${rounded > 0 ? '+' : ''}${rounded.toFixed(1)}%`;
-    return `<div><dt>${label}</dt><dd>${change}</dd></div>`;
+    return `<div data-move-heat="${moveHeat(rounded)}"><dt>${label}</dt><dd>${change}</dd></div>`;
   }).join('')}</dl>`;
 }
 
 function paintStockMoves(ticker, values) {
   const tile = document.querySelector(`.watch-mini[data-ticker="${CSS.escape(ticker)}"]`);
   tile.querySelector('.watch-moves').outerHTML = moveStats(values);
-  const month = values[1];
+  const month = values[monthMoveIndex];
   const magnitude = Math.abs(month ?? 0);
   tile.dataset.heat = magnitude < 0.05 ? 'neutral' : month > 0 ? 'gain' : 'loss';
   tile.style.setProperty('--heat-lightness', `${97 - Math.min(magnitude, 25) / 25 * 12}%`);
@@ -176,7 +187,7 @@ async function refreshPrices(force = false) {
       document.querySelector(`[data-quote-info="${ticker}"]`).innerHTML = quoteDetails(row);
     }
     const covered = await warmCharts();
-    $('#price-status').textContent = `${covered} of ${priceWatchlist.length} stocks have all three price changes.`;
+    $('#price-status').textContent = `${covered} of ${priceWatchlist.length} stocks have all ${movePeriods.length} price changes.`;
   } finally {
     refreshing = false;
     $('#refresh-prices').disabled = false;
