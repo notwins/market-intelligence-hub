@@ -222,7 +222,7 @@
       if (local) {
         result = JSON.parse(local.textContent);
       } else {
-        const response = await fetch('data/stocks-beta2-research-briefs.json?v=20261121.3', { signal: AbortSignal.timeout(10000) });
+        const response = await fetch('data/stocks-beta2-research-briefs.json?v=20261121.full1', { signal: AbortSignal.timeout(10000) });
         if (!response.ok) throw new Error('Research download failed');
         result = await response.json();
       }
@@ -255,9 +255,12 @@
         ['Research rating', brief.rating || 'Unavailable'], [targetLabel, amount(target)],
         ['Reported close', amount(close)], [targetLabel + ' vs close', gap]
       ].map(([label, value]) => '<div><dt>' + e(label) + '</dt><dd>' + e(value) + '</dd></div>').join('');
-      const columns = financials.periods.map((period, i) => '<th scope="col"' + (i ? ' data-estimate' : '') + '>' + e(period) + '</th>').join('');
+      const estimate = i => i >= (financials.actuals ?? 1) ? ' data-estimate' : '';
+      const columns = financials.periods.map((period, i) => '<th scope="col"' + estimate(i) + '>' + e(period) + '</th>').join('');
       const rows = financials.rows.map(([label, ...cells]) => '<tr><th scope="row">' + e(label) + '</th>'
-        + cells.map((value, i) => '<td' + (i ? ' data-estimate' : '') + '>' + e(value ?? '–') + '</td>').join('') + '</tr>').join('');
+        + cells.map((value, i) => '<td' + estimate(i) + '>' + e(value ?? '–') + '</td>').join('') + '</tr>').join('');
+      const readthrough = financials.readthrough?.length ? '<h4>Next estimate vs latest actual</h4><ul class="sb2-research-readthrough">'
+        + financials.readthrough.map(item => '<li>' + e(item) + '</li>').join('') + '</ul>' : '';
       const sourceLink = (url, label) => '<a href="' + e(url) + '" target="_blank" rel="noopener">' + e(label) + '</a>';
       const dateLabel = brief.archived ? ' · Saved report' : '';
       const modelSuffix = financials.source !== brief.source ? ' · Previous report model' : '';
@@ -265,16 +268,17 @@
         + '<dl class="sb2-quick-values">' + values + '</dl>'
         + (close?.date ? '<p class="sb2-research-note">Reported close · ' + e(day(close.date)) + '</p>' : '')
         + '<p>' + sourceLink(brief.source, 'Source PDF') + '</p>'
-        + '<details class="sb2-brief-details"><summary><span class="sb2-more">Show more</span><span class="sb2-less">Show less</span></summary>'
+        + '<details class="sb2-brief-details"><summary>Outlook &amp; financials</summary>'
         + (brief.archived ? '<p class="sb2-research-note">The ' + e(day(coverageDate)) + ' coverage list had no report link for this listing.</p>' : '')
         + '<h4>Research outlook</h4><p>' + e(brief.outlook) + '</p><p class="sb2-research-note">'
         + e(day(brief.outlookDate)) + ' · ' + sourceLink(brief.source + '#page=' + brief.outlookPage, 'Read analyst write-up') + '</p>'
         + '<h4>Management guidance</h4><p>' + e(brief.guidance || 'The reviewed write-up did not identify specific management guidance.') + '</p>'
         + '<h4>Financials and analyst estimates</h4><p class="sb2-research-note">'
         + e(day(financials.date) + modelSuffix + (financials.units ? ' · ' + financials.units + ' unless marked' : ''))
-        + '. A = actual, E = analyst estimate.</p><div class="sb2-table" role="region" aria-label="Research financials" tabindex="0"><table>'
+        + '. A = actual, E = analyst estimate.</p><div class="sb2-table" role="region" aria-label="Research financials. Scroll horizontally for more years." tabindex="0"><table>'
         + '<thead><tr><th scope="col">Metric</th>' + columns + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
-        + '<p>' + sourceLink(financials.source + '#page=' + financials.page, 'Financial table in PDF') + '</p></details>';
+        + '<p>' + sourceLink(financials.source + '#page=' + financials.page, 'Financial table in PDF') + '</p>'
+        + readthrough + '</details>';
       status.textContent = '';
       body.hidden = false;
     } catch {
