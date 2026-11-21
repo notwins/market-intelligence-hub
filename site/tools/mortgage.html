@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Plan mortgage repayments, compare early repayments and explore a principal and interest schedule.">
+<title>Mortgage Amortisation</title>
+<style>
+:root{color-scheme:light;--paper:#f2f5fa;--ink:#17314b;--muted:#52667a;--line:#dce4ee;--navy:#132c47;--blue:#245aab;--teal:#087d72;--green:#086358;--radius:17px;font:16px/1.5 "Inter","Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink)}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+button,summary{cursor:pointer}
+button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid #3b80dd;outline-offset:3px}
+.shell{width:min(100% - 40px,1320px);margin:24px auto 40px}
+.hero{display:flex;gap:18px;align-items:center;padding:24px 28px;color:white;background:linear-gradient(116deg,#11283f 5%,#173e60 65%,#16545b);border-radius:var(--radius);margin-bottom:18px}
+.hero h1{font-size:clamp(1.65rem,3.4vw,2.65rem);letter-spacing:-.042em;line-height:1.05;margin:0 0 7px}
+.hero p{margin:0;color:#dfedf5}
+.icon{width:1.2rem;height:1.2rem;flex:none;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.hero-icon{display:grid;place-items:center;width:58px;height:58px;flex:none;color:#aef4e5;background:#ffffff14;border:1px solid #ffffff35;border-radius:15px}
+.hero-icon .icon{width:31px;height:31px}
+.workspace{display:grid;grid-template-columns:minmax(300px,350px) minmax(0,1fr);align-items:start;gap:18px}
+.panel{background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 6px 19px #2643620a;min-width:0}
+details>summary{list-style:none}
+details>summary::-webkit-details-marker{display:none}
+.panel-summary{display:flex;align-items:center;gap:11px;min-height:60px;padding:14px 19px;font-weight:700;font-size:1.075rem}
+.panel-summary .icon{color:var(--blue)}
+.chevron{margin-left:auto;flex:none;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg)}
+details[open]>.panel-summary .chevron{transform:rotate(45deg)}
+details[open]>.panel-summary{border-bottom:1px solid var(--line)}
+form{padding:16px 18px 18px}
+.fields,.extra-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 10px}
+.wide{grid-column:1/-1}
+label{display:block;font-weight:600;font-size:.875rem;line-height:1.25}
+input:not([type=range]),select{display:block;width:100%;height:42px;margin-top:5px;padding:7px 9px;border:1px solid #bdccdc;background:#fbfdff;border-radius:8px;font-weight:400;min-width:0}
+input[type=date]{min-inline-size:0}
+.repayments{margin-top:17px;padding-top:14px;border-top:1px solid var(--line)}
+.repayments summary{display:flex;align-items:center;gap:9px;font-size:.95rem;font-weight:700}
+.repayments summary .icon{color:var(--teal)}
+.repayments[open] .chevron{transform:rotate(45deg)}
+.repayments[open] summary{margin-bottom:12px}
+.entry{margin-top:10px;padding:9px;background:#edf7f5;border:1px solid #d5ebe6;border-radius:9px}
+.entry-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;font-size:.875rem;font-weight:700}
+button{min-height:38px;padding:6px 11px;border:1px solid #c8d6e5;border-radius:9px;background:white;font-weight:650;font-size:.875rem}
+button:hover{background:#eaf1f9}
+.remove{padding:2px 6px;min-height:28px;color:var(--muted)}
+.primary{color:white;background:var(--blue);border-color:var(--blue);flex:1}
+.primary:hover{background:#184a92}
+.action-row{display:flex;gap:8px;margin-top:15px}
+.add{margin-top:10px;color:var(--green)}
+.note,.status{font-size:.8125rem;color:var(--muted);margin:9px 0 0}
+.status:empty{display:none}
+.error{color:#9b3030}
+.right{display:grid;gap:16px;min-width:0}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.metric{background:white;border:1px solid var(--line);border-radius:13px;padding:12px 13px;min-width:0}
+.metric span,.metric small{display:block;color:var(--muted);font-size:.8125rem}
+.metric strong{display:block;line-height:1.15;margin:4px 0 5px;font-size:clamp(1rem,1.8vw,1.48rem);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.metric:nth-child(3){background:#edf8f5;border-color:#cde8e1}
+.metric:nth-child(3) strong{color:var(--green)}
+.chart{padding:17px 19px 15px}
+h2{margin:0;line-height:1.22;font-size:1.18rem;letter-spacing:-.018em}
+.chart-head{display:flex;gap:10px;align-items:center}
+.chart-head .icon{color:var(--blue)}
+.legend{display:flex;flex-wrap:wrap;gap:5px 15px;margin-top:10px;color:var(--muted);font-size:.8125rem}
+.legend span{display:flex;align-items:center;gap:6px}
+.key{width:12px;height:10px;border-radius:2px;background:#316dc0}
+.key.interest{background:#38a494}
+.key.drawn{width:19px;height:0;border-top:2px dashed #6a507f;border-radius:0;background:none}
+.plot{position:relative;background:linear-gradient(#f6faff,#fbfcfe);margin-top:12px;border:1px solid #e0e9f3;border-radius:12px;overflow:hidden}
+canvas{display:block;width:100%;height:clamp(245px,31vw,350px)}
+.empty{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;padding:24px;text-align:center;color:var(--muted)}
+.empty strong{color:var(--ink);font-size:1.05rem}
+.empty .icon{width:39px;height:39px;color:#567fa8;margin-bottom:9px}
+.scrub{display:grid;gap:5px;margin-top:10px}
+input[type=range]{margin:4px 0;width:100%;accent-color:var(--blue)}
+.readout{display:flex;flex-wrap:wrap;gap:5px 16px;font-size:.8125rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.readout b{color:var(--ink)}
+.schedule{grid-column:1/-1}
+.schedule-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 17px}
+.schedule-actions p{margin:0 auto 0 0;font-size:.875rem;color:var(--muted)}
+.table-scroll{overflow:auto;max-height:650px;border-top:1px solid var(--line);border-radius:0 0 var(--radius) var(--radius)}
+table{border-collapse:separate;border-spacing:0;width:100%;white-space:nowrap;font-size:.875rem;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:right}
+thead th{position:sticky;top:0;z-index:1;background:#eaf0f7;vertical-align:bottom;white-space:normal;line-height:1.25}
+th:first-child,td:nth-child(2){text-align:left}
+.year th,.year td{font-weight:700;background:#f2f6fb}
+.year button{border:0;background:transparent;padding:0;color:#164f97}
+.year button:hover{text-decoration:underline}
+th.extra,td.extra{background:#edf7f5;color:var(--green)}
+thead th.extra{background:#dbefe9}
+th.balance,td.balance{position:sticky;right:0;background:#ecf2fb;color:#1e487d;font-weight:700;box-shadow:-2px 0 5px #223b5814}
+thead th.balance{background:#dee9f9;z-index:2}
+.method{margin:16px 2px 0;color:var(--muted);font-size:.8125rem}
+.method summary{font-weight:700;list-style:revert}
+.method p{max-width:95ch;margin:.5em 0}
+@media(max-width:960px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:730px){.shell{width:calc(100% - 24px);margin:12px auto 24px}.hero{margin-bottom:12px;padding:16px;gap:12px}.hero-icon{width:44px;height:44px}.hero-icon .icon{width:24px;height:24px}.hero p{font-size:.9rem}.workspace{grid-template-columns:minmax(0,1fr);gap:12px}.right{gap:12px}.chart{padding:14px 12px}.metric strong{font-size:1.2rem}.schedule-actions{padding:10px 12px}.schedule-actions p{width:100%}}
+@media print{.shell{width:100%;margin:0}.table-scroll{max-height:none;overflow:visible}.action-row,.schedule-actions button,.scrub label,.scrub input{display:none}.hero{color:var(--ink);background:white}.hero p{color:var(--muted)}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="hero">
+    <span class="hero-icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m2.5 10 9.5-7.5 9.5 7.5M5 8.5V21h14V8.5M10 21v-6h4v6"/></svg></span>
+    <div><h1>Mortgage Amortisation</h1><p>Plan your repayments and see how early payments change the cost of your loan.</p></div>
+  </header>
+  <div class="workspace">
+    <details class="panel" id="calculator" open>
+      <summary class="panel-summary"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 7h8M8 12h1m3 0h1m3 0h1m-9 4h1m3 0h1m3 0h1"/></svg>Loan calculator<span class="chevron" aria-hidden="true"></span></summary>
+      <form id="terms">
+        <div class="fields">
+          <label>Loan amount<input id="amount" type="number" required min=".01" max="1000000000000" step="any" inputmode="decimal" autocomplete="off"></label>
+          <label>Currency<select id="currency"><option>SGD</option><option>USD</option><option>EUR</option><option>GBP</option><option>CHF</option><option>JPY</option><option>HKD</option><option>AUD</option><option>CAD</option><option>MYR</option><option value="">Other</option></select></label>
+          <label>Initial annual rate (%)<input id="rate" type="number" required min="0" max="100" step="any" inputmode="decimal" autocomplete="off"></label>
+          <label>Tenure (years)<input id="years" type="number" required min="0.083333333" max="50" step="any" inputmode="decimal" autocomplete="off"></label>
+          <label>First payment date<input id="first" type="date" required min="1900-01-01" max="2200-12-31" autocomplete="off"></label>
+          <label>Payments per year<select id="frequency"><option value="12">12 · Monthly</option><option value="4">4 · Quarterly</option><option value="2">2 · Half-yearly</option><option value="1">1 · Annually</option></select></label>
+          <label>Fixed period (months)<input id="fixed" type="number" min="1" max="600" step="1" inputmode="numeric" placeholder="Full tenure" autocomplete="off"></label>
+          <label>Rate after fixed (%)<input id="after" type="number" min="0" max="100" step="any" inputmode="decimal" disabled autocomplete="off"></label>
+        </div>
+        <details class="repayments" id="repayments">
+          <summary><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v8m-4-4h8"/></svg>Early repayments<span id="extra-count"></span><span class="chevron" aria-hidden="true"></span></summary>
+          <label>After each early repayment<select id="strategy"><option value="shorten">Shorten tenure · keep instalments</option><option value="recast">Keep tenure · lower instalments</option></select></label>
+          <div id="extras"></div>
+          <button class="add" type="button" id="add">＋ Add early repayment</button>
+          <p class="note">Enter the payment number and extra principal, applied after that instalment.</p>
+        </details>
+        <div class="action-row"><button class="primary" type="submit">Calculate</button><button type="reset">Clear</button></div>
+        <p class="status" id="form-status" role="status"></p>
+      </form>
+    </details>
+    <div class="right">
+      <section class="metrics" id="metrics" aria-label="Mortgage results" hidden>
+        <div class="metric"><span>First instalment</span><strong id="payment"></strong><small id="payment-detail"></small></div>
+        <div class="metric"><span>Total interest</span><strong id="total-interest"></strong><small id="interest-detail"></small></div>
+        <div class="metric"><span>Interest saved</span><strong id="savings"></strong><small>vs no early repayments</small></div>
+        <div class="metric"><span>Payoff date</span><strong id="payoff"></strong><small id="payoff-detail"></small></div>
+      </section>
+      <section class="panel chart" aria-labelledby="chart-title">
+        <div class="chart-head"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v17h18M6 15l5-5 4 2 6-7"/></svg><h2 id="chart-title">Principal &amp; interest paid over time</h2></div>
+        <div class="legend"><span><i class="key"></i>Principal paid</span><span><i class="key interest"></i>Interest paid</span><span><i class="key drawn"></i>Original loan drawn</span></div>
+        <div class="plot">
+          <canvas id="chart" role="img" aria-label="Stacked area chart of cumulative principal and interest paid with a reference line at the original loan amount"></canvas>
+          <div class="empty" id="empty"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v17h18M6 15l5-5 4 2 6-7M6 20v-2m5 2v-7m4 7v-5m5 5v-9"/></svg><strong>Your repayment chart</strong><span>Enter your loan terms and select Calculate.</span></div>
+        </div>
+        <div class="scrub" id="scrub" hidden>
+          <label for="period">Explore payment history</label><input id="period" type="range" min="0" max="1" value="0">
+          <output class="readout" id="chart-values" for="period"></output>
+        </div>
+      </section>
+    </div>
+    <details class="panel schedule" id="schedule" open hidden>
+      <summary class="panel-summary"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h2m4 0h2"/></svg>Amortisation schedule<span class="chevron" aria-hidden="true"></span></summary>
+      <div class="schedule-actions"><p id="schedule-note">Expand a loan year to see individual payments.</p><button type="button" id="expand-years">Expand all years</button><button type="button" id="collapse-years">Collapse all years</button></div>
+      <div class="table-scroll" role="region" aria-label="Scrollable amortisation schedule" tabindex="0">
+        <table id="schedule-table"><thead><tr><th scope="col">Period</th><th scope="col">Payment date</th><th scope="col">Rate / period</th><th scope="col">Scheduled paid</th><th scope="col">Interest paid</th><th scope="col">Scheduled principal</th><th scope="col" class="extra">Early repayment</th><th scope="col">Cumulative paid</th><th scope="col">Cumulative principal</th><th scope="col">Cumulative interest</th><th scope="col" class="balance">Balance</th></tr></thead></table>
+      </div>
+    </details>
+  </div>
+  <details class="method">
+    <summary>Calculation assumptions</summary>
+    <p>Interest accrues at the annual rate divided by payments per year. Early repayments are applied after the scheduled principal and interest, capped at the outstanding balance. At a rate change, the instalment is reset. In Shorten tenure mode, it follows the instalment calculated without extra payments for that rate period. In Keep tenure mode, it uses the remaining balance and original maturity.</p>
+    <p>Results estimate principal and interest. Taxes, insurance, fees, penalties, and daily interest adjustments are excluded. Displayed money is rounded to whole units. The schedule uses full precision.</p>
+  </details>
+</main>
+<script id="mortgage-model">
+'use strict';
+const Mortgage = (() => {
+  function instalment(balance, periodicRate, periods) {
+    if (periodicRate === 0) return balance / periods;
+    return balance * periodicRate / -Math.expm1(-periods * Math.log1p(periodicRate));
+  }
+
+  function paymentDate(first, monthOffset) {
+    const [year, month, day] = first.split('-').map(Number);
+    const startLast = new Date(Date.UTC(year, month, 0)).getUTCDate();
+    const nextLast = new Date(Date.UTC(year, month + monthOffset, 0)).getUTCDate();
+    return new Date(Date.UTC(year, month - 1 + monthOffset, day === startLast ? nextLast : Math.min(day, nextLast)));
+  }
+
+  function build(terms, extras = new Map(), baseline) {
+    const { amount, initial, reset, fixedPeriods, periods, perYear, first, strategy } = terms;
+    let balance = amount;
+    let cumulativeInterest = 0;
+    let cumulativeExtra = 0;
+    let nextPrincipal = 0;
+    let recastNext = false;
+    const rows = [];
+    const tolerance = Math.max(Number.EPSILON * amount * periods * 4, 1e-12);
+    for (let index = 0; index < periods && balance > 0; index++) {
+      const period = index + 1;
+      const rate = (index < fixedPeriods ? initial : reset) / (100 * perYear);
+      if (index === 0 || index === fixedPeriods || recastNext) {
+        if (baseline && strategy === 'shorten') {
+          const reference = baseline[index];
+          const referenceOpening = reference.balance + reference.principal;
+          nextPrincipal = reference.principal + (referenceOpening - balance) * rate;
+        } else {
+          const remaining = periods - index;
+          nextPrincipal = instalment(balance, rate, remaining) * Math.exp(-remaining * Math.log1p(rate));
+        }
+      }
+      const interest = balance * rate;
+      const principal = period === periods || balance - nextPrincipal <= tolerance ? balance : nextPrincipal;
+      const extra = Math.min(balance - principal, extras.get(period) ?? 0);
+      balance -= principal + extra;
+      cumulativeInterest += interest;
+      cumulativeExtra += extra;
+      const cumulativePrincipal = amount - balance;
+      rows.push({
+        period, date: paymentDate(first, index * (12 / perYear)), rate,
+        scheduled: principal + interest, interest, principal, extra, balance,
+        cumulativeInterest, cumulativePrincipal, cumulativeExtra,
+        cumulativePaid: cumulativePrincipal + cumulativeInterest
+      });
+      recastNext = extra > 0 && strategy === 'recast';
+      nextPrincipal = principal + (principal + extra) * rate;
+    }
+    return rows;
+  }
+  return { build };
+})();
+</script>
+<script>
+'use strict';
+const get = id => document.getElementById(id);
+const termsForm = get('terms');
+const periodSlider = get('period');
+const table = get('schedule-table');
+const canvas = get('chart');
+const context = canvas.getContext('2d');
+const whole = new Intl.NumberFormat('en-SG', { maximumFractionDigits: 0 });
+const compact = new Intl.NumberFormat('en-SG', { notation: 'compact', maximumFractionDigits: 1 });
+const dateFormat = new Intl.DateTimeFormat('en-SG', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+const monthFormat = new Intl.DateTimeFormat('en-SG', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+const percent = new Intl.NumberFormat('en-SG', { style: 'percent', maximumFractionDigits: 4 });
+let result;
+let plot;
+
+function status(message = '', error = false) {
+  get('form-status').textContent = message;
+  get('form-status').classList.toggle('error', error);
+}
+
+function setResetRate() {
+  const hasReset = get('fixed').value && (!get('years').value || get('fixed').valueAsNumber < get('years').valueAsNumber * 12 - 1e-7);
+  get('after').disabled = !hasReset;
+  get('after').required = Boolean(hasReset);
+}
+
+function readTerms() {
+  const perYear = Number(get('frequency').value);
+  const rawPeriods = get('years').valueAsNumber * perYear;
+  const periods = Math.round(rawPeriods);
+  if (periods < 1 || Math.abs(periods - rawPeriods) > 1e-6) {
+    throw new Error('Tenure must contain a whole number of payments for the selected frequency.');
+  }
+  const rawFixed = get('fixed').value ? get('fixed').valueAsNumber * perYear / 12 : periods;
+  if (!Number.isInteger(rawFixed) || rawFixed > periods) {
+    throw new Error('The fixed period must end on a payment interval and fit within the tenure.');
+  }
+  const initial = get('rate').valueAsNumber;
+  return {
+    amount: get('amount').valueAsNumber, currency: get('currency').value,
+    initial, reset: rawFixed < periods ? get('after').valueAsNumber : initial,
+    periods, fixedPeriods: rawFixed, perYear, first: get('first').value, strategy: get('strategy').value
+  };
+}
+
+function readExtras(periods) {
+  const extras = new Map();
+  [...get('extras').children].forEach((entry, index) => {
+    const [periodInput, amountInput] = entry.querySelectorAll('input');
+    const period = periodInput.valueAsNumber;
+    if (period > periods) throw new Error('Early repayment ' + (index + 1) + ' is after the original maturity.');
+    extras.set(period, (extras.get(period) ?? 0) + amountInput.valueAsNumber);
+  });
+  return extras;
+}
+
+function updateExtraCount() {
+  const entries = [...get('extras').children];
+  entries.forEach((entry, index) => {
+    entry.querySelector('span').textContent = 'Repayment ' + (index + 1);
+    entry.querySelector('button').setAttribute('aria-label', 'Remove early repayment ' + (index + 1));
+    entry.querySelectorAll('input').forEach(input => input.setAttribute('aria-label', input.closest('label').firstChild.textContent + ', repayment ' + (index + 1)));
+  });
+  get('extra-count').textContent = entries.length ? '(' + entries.length + ')' : '';
+}
+
+get('add').addEventListener('click', () => {
+  const entry = document.createElement('div');
+  entry.className = 'entry';
+  entry.innerHTML = '<div class="entry-head"><span></span><button type="button" class="remove">Remove</button></div>' +
+    '<div class="extra-fields"><label>Payment no.<input type="number" min="1" max="600" step="1" required inputmode="numeric" autocomplete="off"></label>' +
+    '<label>Amount<input type="number" min=".01" max="1000000000000" step="any" required inputmode="decimal" autocomplete="off"></label></div>';
+  entry.querySelector('button').addEventListener('click', () => {
+    entry.remove();
+    updateExtraCount();
+    get('add').focus();
+    if (result) status('Inputs changed. Select Calculate to update the results.');
+  });
+  get('extras').append(entry);
+  updateExtraCount();
+  entry.querySelector('input').focus();
+  if (result) status('Inputs changed. Select Calculate to update the results.');
+});
+
+function money(value) {
+  return (result.terms.currency ? result.terms.currency + ' ' : '') + whole.format(value);
+}
+
+function renderMetrics() {
+  const { terms, rows, baseline } = result;
+  const last = rows.at(-1);
+  const base = baseline.at(-1);
+  const earlier = base.period - last.period;
+  get('payment').textContent = money(rows[0].scheduled);
+  const resetRow = rows[terms.fixedPeriods];
+  get('payment-detail').textContent = resetRow ? money(resetRow.scheduled) + ' at rate reset' : dateFormat.format(rows[0].date);
+  get('total-interest').textContent = money(last.cumulativeInterest);
+  get('interest-detail').textContent = money(last.cumulativePaid) + ' total paid';
+  get('savings').textContent = money(Math.max(0, base.cumulativeInterest - last.cumulativeInterest));
+  get('payoff').textContent = dateFormat.format(last.date);
+  get('payoff-detail').textContent = earlier ? earlier + (earlier === 1 ? ' payment earlier' : ' payments earlier') : last.period + ' scheduled payments';
+  get('metrics').hidden = false;
+}
+
+function tableCells(row, rateLabel) {
+  return '<td>' + dateFormat.format(row.date) + '</td><td>' + rateLabel + '</td>' +
+    [row.scheduled, row.interest, row.principal, row.extra, row.cumulativePaid, row.cumulativePrincipal, row.cumulativeInterest, row.balance]
+      .map((amount, index) => '<td' + (index === 3 ? ' class="extra"' : index === 7 ? ' class="balance"' : '') + '>' +
+        (index === 3 && !amount ? '—' : whole.format(amount)) + '</td>').join('');
+}
+
+function renderTable() {
+  const { rows, terms } = result;
+  get('schedule-note').textContent = 'Expand a loan year to see individual payments.' +
+    (terms.currency ? ' Amounts in ' + terms.currency + '.' : '');
+  const openYears = new Set([...table.querySelectorAll('button[aria-expanded="true"]')].map(button => button.getAttribute('aria-controls')));
+  [...table.tBodies].forEach(body => body.remove());
+  for (let start = 0; start < rows.length; start += terms.perYear) {
+    const group = rows.slice(start, start + terms.perYear);
+    const end = group.at(-1);
+    const year = Math.floor(start / terms.perYear) + 1;
+    const id = 'schedule-year-' + year;
+    const summary = { ...end, scheduled: 0, interest: 0, principal: 0, extra: 0 };
+    group.forEach(row => {
+      summary.scheduled += row.scheduled;
+      summary.interest += row.interest;
+      summary.principal += row.principal;
+      summary.extra += row.extra;
+    });
+    const rate = group[0].rate === end.rate ? percent.format(end.rate) : percent.format(group[0].rate) + ' → ' + percent.format(end.rate);
+    const heading = table.createTBody();
+    heading.innerHTML = '<tr class="year"><th scope="row"><button type="button" aria-expanded="false" aria-controls="' + id +
+      '">Year ' + year + ' · ' + group[0].period + (end.period === group[0].period ? '' : '–' + end.period) + '</button></th>' +
+      tableCells(summary, rate) + '</tr>';
+    const body = table.createTBody();
+    body.id = id;
+    body.innerHTML = group.map(row => '<tr><th scope="row">' + row.period + '</th>' + tableCells(row, percent.format(row.rate)) + '</tr>').join('');
+    const button = heading.querySelector('button');
+    setYear(button, openYears.has(id));
+    button.addEventListener('click', () => setYear(button, body.hidden));
+  }
+  get('schedule').hidden = false;
+}
+
+function setYear(button, open) {
+  button.setAttribute('aria-expanded', String(open));
+  get(button.getAttribute('aria-controls')).hidden = !open;
+}
+
+get('expand-years').addEventListener('click', () => table.querySelectorAll('button').forEach(button => setYear(button, true)));
+get('collapse-years').addEventListener('click', () => table.querySelectorAll('button').forEach(button => setYear(button, false)));
+
+function renderChart() {
+  if (!context) return;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+  context.scale(dpr, dpr);
+  if (!result || width < 150) return;
+  const { terms, rows, points } = result;
+  const last = rows.at(-1);
+  const selected = Number(periodSlider.value);
+  const left = width < 420 ? 48 : 61;
+  const right = width - 23;
+  const top = 23;
+  const bottom = height - 32;
+  plot = { left, right };
+  const targetStep = last.cumulativePaid * 1.055 / 4;
+  const magnitude = 10 ** Math.floor(Math.log10(targetStep));
+  const step = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find(value => value * magnitude >= targetStep) * magnitude;
+  const ceiling = step * 4;
+  const x = period => left + period / terms.periods * (right - left);
+  const y = amount => bottom - amount / ceiling * (bottom - top);
+  context.font = '12px "Segoe UI", sans-serif';
+  context.textBaseline = 'middle';
+  context.textAlign = 'right';
+  for (let tick = 0; tick <= 4; tick++) {
+    const value = tick * step;
+    const level = y(value);
+    context.strokeStyle = '#dbe5f1';
+    context.beginPath();
+    context.moveTo(left, level);
+    context.lineTo(right, level);
+    context.stroke();
+    context.fillStyle = '#54687f';
+    context.fillText(value < 1 && value > 0 ? value.toPrecision(2) : compact.format(value), left - 7, level);
+  }
+
+  // The house watermark sits within the plotting area.
+  context.save();
+  context.translate(left + .66 * (right - left), top + .51 * (bottom - top));
+  context.scale(.85, .85);
+  context.strokeStyle = '#315e8d1b';
+  context.lineWidth = 5;
+  context.lineJoin = 'round';
+  context.beginPath();
+  context.moveTo(-60, -5);
+  context.lineTo(0, -57);
+  context.lineTo(60, -5);
+  context.moveTo(-48, -15);
+  context.lineTo(-48, 49);
+  context.lineTo(48, 49);
+  context.lineTo(48, -15);
+  context.moveTo(-12, 49);
+  context.lineTo(-12, 17);
+  context.lineTo(12, 17);
+  context.lineTo(12, 49);
+  context.stroke();
+  context.restore();
+
+  function area(upper, lower, fill, stroke) {
+    context.beginPath();
+    points.forEach((point, index) => {
+      if (index === 0) context.moveTo(x(index), y(upper(point)));
+      else context.lineTo(x(index), y(upper(point)));
+    });
+    context.strokeStyle = stroke;
+    context.lineWidth = 2;
+    context.stroke();
+    for (let index = points.length - 1; index >= 0; index--) {
+      context.lineTo(x(index), y(lower(points[index])));
+    }
+    context.closePath();
+    context.fillStyle = fill;
+    context.fill();
+  }
+
+  area(point => point.cumulativePrincipal, () => 0, '#3478cf54', '#285ead');
+  area(point => point.cumulativePaid, point => point.cumulativePrincipal, '#36ae9e62', '#087d72');
+  context.save();
+  context.strokeStyle = '#6a507f';
+  context.setLineDash([6, 4]);
+  context.beginPath();
+  context.moveTo(left, y(terms.amount));
+  context.lineTo(right, y(terms.amount));
+  context.stroke();
+  context.restore();
+
+  const divisions = Math.min(terms.periods, width < 430 ? 3 : 5);
+  context.textAlign = 'center';
+  context.fillStyle = '#54687f';
+  for (let tick = 0; tick <= divisions; tick++) {
+    const index = Math.round(tick * terms.periods / divisions);
+    const label = index === 0 ? 'Start' : monthFormat.format(result.baseline[index - 1].date);
+    context.textAlign = tick === divisions ? 'right' : tick === 0 ? 'left' : 'center';
+    context.fillText(label, x(index), bottom + 18);
+  }
+  const point = points[selected];
+  context.strokeStyle = '#425b77';
+  context.lineWidth = 1;
+  context.beginPath();
+  context.moveTo(x(selected), top);
+  context.lineTo(x(selected), bottom);
+  context.stroke();
+  [point.cumulativePrincipal, point.cumulativePaid].forEach((value, index) => {
+    context.beginPath();
+    context.arc(x(selected), y(value), 4, 0, Math.PI * 2);
+    context.fillStyle = index ? '#087d72' : '#285ead';
+    context.fill();
+  });
+}
+
+function selectPeriod() {
+  const index = Number(periodSlider.value);
+  const { terms, points, baseline } = result;
+  const point = points[index];
+  const date = index ? dateFormat.format(baseline[index - 1].date) : 'At drawdown';
+  periodSlider.setAttribute('aria-valuetext', index ? 'Payment ' + index + ', ' + date : date);
+  get('chart-values').innerHTML = '<b>' + date + '</b><span>Principal <b>' + money(point.cumulativePrincipal) +
+    '</b></span><span>Interest <b>' + money(point.cumulativeInterest) + '</b></span><span>Original loan <b>' +
+    money(terms.amount) + '</b></span><span>Balance <b>' + money(point.balance) + '</b></span>';
+  renderChart();
+}
+
+periodSlider.addEventListener('input', selectPeriod);
+new ResizeObserver(renderChart).observe(canvas);
+function moveCursor(event) {
+  if (!result || !plot) return;
+  const offset = event.clientX - canvas.getBoundingClientRect().left;
+  const period = Math.round(Math.max(0, Math.min(1, (offset - plot.left) / (plot.right - plot.left))) * result.terms.periods);
+  if (period !== Number(periodSlider.value)) {
+    periodSlider.value = period;
+    selectPeriod();
+  }
+}
+canvas.addEventListener('pointermove', event => { if (event.pointerType === 'mouse') moveCursor(event); });
+canvas.addEventListener('click', moveCursor);
+
+termsForm.addEventListener('input', () => {
+  setResetRate();
+  if (result) status('Inputs changed. Select Calculate to update the results.');
+  else status();
+});
+termsForm.addEventListener('invalid', event => {
+  if (event.target.closest('#repayments')) get('repayments').open = true;
+}, true);
+termsForm.addEventListener('reset', () => {
+  result = undefined;
+  get('extras').replaceChildren();
+  updateExtraCount();
+  ['metrics', 'schedule', 'scrub'].forEach(id => { get(id).hidden = true; });
+  [...table.tBodies].forEach(body => body.remove());
+  get('empty').hidden = false;
+  get('repayments').open = false;
+  status();
+  renderChart();
+  queueMicrotask(setResetRate);
+});
+termsForm.addEventListener('submit', event => {
+  event.preventDefault();
+  let terms;
+  let extras;
+  try {
+    terms = readTerms();
+    extras = readExtras(terms.periods);
+  } catch (error) {
+    status(error.message, true);
+    return;
+  }
+  const baseline = Mortgage.build(terms);
+  const rows = extras.size ? Mortgage.build(terms, extras, baseline) : baseline;
+  const initialPoint = { balance: terms.amount, cumulativePrincipal: 0, cumulativeInterest: 0, cumulativePaid: 0 };
+  const points = [initialPoint, ...rows];
+  while (points.length <= terms.periods) points.push(rows.at(-1));
+  result = { terms, baseline, rows, points };
+  get('empty').hidden = true;
+  get('scrub').hidden = false;
+  periodSlider.max = terms.periods;
+  periodSlider.value = rows.length;
+  renderMetrics();
+  renderTable();
+  selectPeriod();
+  const requested = [...extras.values()].reduce((sum, amount) => sum + amount, 0);
+  const applied = rows.at(-1).cumulativeExtra;
+  status(applied + 1e-7 < requested
+    ? 'Applied ' + money(applied) + ' of ' + money(requested) + ' in early repayments. The rest exceeds the balance or falls after payoff.'
+    : 'Schedule updated' + (terms.currency ? ' · ' + terms.currency : '') + '.');
+});
+setResetRate();
+</script>
+</body>
+</html>
