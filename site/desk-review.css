@@ -145,6 +145,7 @@
   font-size: .83rem;
   font-variant-numeric: tabular-nums;
 }
+.stock-move-table[data-move-mode="yearly"] { --move-period-width: 92px; }
 .stock-move-share { width: var(--move-share-width); }
 .stock-move-price { width: var(--move-price-width); }
 .stock-move-table th, .stock-move-table td {
@@ -263,6 +264,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
   #watch-strip { --move-share-width: 67px; --move-price-width: 80px; --move-period-width: 58px; }
+  .stock-move-table[data-move-mode="yearly"] { --move-period-width: 76px; }
   .stock-move-table th, .stock-move-table td { font-size: .7rem; padding-inline: 4px; }
   .stock-move-table .move-pin-share { padding-inline: 3px 1px; }
   .stock-move-table td.move-pin-price time { font-size: .63rem; }
