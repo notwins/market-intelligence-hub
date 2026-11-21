@@ -379,6 +379,19 @@
       + (view.note ? '<p class="fund-note">' + esc(view.note) + '</p>' : '') + '</figure>';
   }
 
+  const signedChange = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2, signDisplay: 'exceptZero' });
+
+  function changeLabel(series) {
+    const reported = series.filter(({ amount }) => Number.isFinite(amount));
+    if (reported.length < 2) return '<span class="fund-missing" aria-label="Two reported years needed">—</span>';
+    const oldest = reported[0], latest = reported.at(-1);
+    const change = (latest.amount - oldest.amount) / 1e6;
+    const direction = change > 0 ? 'increase' : change < 0 ? 'decrease' : 'flat';
+    const label = change && Math.abs(change) < .005 ? (change > 0 ? '+' : '−') + '<0.01' : signedChange.format(change);
+    return '<span class="fund-change-value" data-direction="' + direction + '" title="FY '
+      + esc(latest.year) + ' minus FY ' + esc(oldest.year) + '">' + esc(label) + '</span>';
+  }
+
   function comparisonPlot(report, key, views) {
     const years = views.slice(0, 5).reverse();
     if (!years.length) return '';
@@ -416,17 +429,34 @@
       + '<div class="fund-compare-scroll" role="region" aria-label="Fiscal-year comparison" tabindex="0">'
       + '<table class="fund-compare-table" data-table-controls="off" style="--fund-year-count:' + panels.length + '">'
       + '<thead><tr><th scope="col">Reported line item</th>'
-      + panels.map(panel => '<th scope="col">FY ' + esc(panel.label) + '</th>').join('') + '</tr></thead><tbody>'
-      + [...rows].map(label => '<tr><th scope="row">' + esc(label) + '</th>' + panels.map(({ view, available }) => {
-        const row = available && view.lanes.find(candidate => candidate.label === label);
-        if (!row || !Number.isFinite(row.amount)) return '<td class="fund-missing" aria-label="Unavailable">—</td>';
-        return '<td><b>' + numberLabel(row.amount) + '</b>' + barTrack(row.bars, scale)
-          + (row.bars.length > 1 ? '<small>' + row.bars.map(segment =>
-            '<span title="' + esc(segment.label) + '"><i data-colour="' + segment.colour + '" aria-hidden="true"></i>'
-            + '<span class="fund-visually-hidden">' + esc(segment.label) + ' </span>' + numberLabel(segment.amount) + '</span>'
-          ).join('') + '</small>' : '') + '</td>';
-      }).join('') + '</tr>').join('')
+      + panels.map(panel => '<th scope="col">FY ' + esc(panel.label) + '</th>').join('')
+      + '<th scope="col" class="fund-change">5-year change</th></tr></thead><tbody>'
+      + [...rows].map(label => {
+        const series = panels.map(({ label: year, view, available }) => ({
+          year, row: available ? view.lanes.find(candidate => candidate.label === label) : undefined
+        }));
+        const cells = series.map(({ row }) => {
+          if (!Number.isFinite(row?.amount)) return '<td class="fund-missing" aria-label="Unavailable">—</td>';
+          return '<td><b>' + numberLabel(row.amount) + '</b>' + barTrack(row.bars, scale)
+            + (row.bars.length > 1 ? '<small>' + row.bars.map(segment =>
+              '<span title="' + esc(segment.label) + '"><i data-colour="' + segment.colour + '" aria-hidden="true"></i>'
+              + '<span class="fund-visually-hidden">' + esc(segment.label) + ' </span>' + numberLabel(segment.amount) + '</span>'
+            ).join('') + '</small>' : '') + '</td>';
+        }).join('');
+        const total = changeLabel(series.map(({ year, row }) => ({ year, amount: row?.amount })));
+        const parts = series.find(({ row }) => row?.bars.length > 1)?.row.bars;
+        const components = parts ? '<small>' + parts.map(part => (
+          '<span><i data-colour="' + part.colour + '" aria-hidden="true"></i>'
+          + '<span class="fund-visually-hidden">' + esc(part.label) + ' </span>'
+          + changeLabel(series.map(({ year, row }) => ({
+            year, amount: row?.bars.find(segment => segment.label === part.label)?.amount
+          }))) + '</span>'
+        )).join('') + '</small>' : '';
+        return '<tr><th scope="row">' + esc(label) + '</th>' + cells
+          + '<td class="fund-change"><b>' + total + '</b>' + components + '</td></tr>';
+      }).join('')
       + '</tbody></table></div>'
+      + '<p class="fund-note">Change is the latest minus the oldest reported value in these fiscal years.</p>'
       + (reference.note ? '<p class="fund-note">' + esc(reference.note) + '</p>' : '') + '</figure>';
   }
 
