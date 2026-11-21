@@ -3,6 +3,7 @@
 
   const storageKey = 'market-intel-stocks-beta2-research-library-v1';
   const maxSize = 1500000;
+  const publishedPath = 'data/bos-equity-writeups-2026-11-22.json';
   const date = value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
     && Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value;
   const text = (value, limit) => typeof value === 'string' && value.length <= limit && Boolean(value.trim());
@@ -29,17 +30,26 @@
       && stringList(model.readthrough, 8, 240);
   }
 
-  function validPeers(peers) {
+  function validPeers(peers, published) {
     return span(peers) && text(peers.summary, 1200)
       && (peers.analysisPage == null || page(peers.analysisPage))
-      && stringList(peers.columns, 12, 80) && Array.isArray(peers.rows)
-      && (peers.columns.length ? rows(peers.rows, 20, peers.columns.length + 1) : peers.rows.length === 0);
+      && (published ? peers.columns === undefined && peers.rows === undefined && stringList(peers.names, 20, 180) : (
+        peers.names === undefined && stringList(peers.columns, 12, 80) && Array.isArray(peers.rows)
+        && (peers.columns.length ? rows(peers.rows, 20, peers.columns.length + 1) : peers.rows.length === 0)
+      ));
   }
 
-  function parse(raw) {
+  function validForecast(forecast) {
+    return span(forecast) && text(forecast.actual, 20) && forecast.actual.endsWith('A')
+      && [forecast.first, forecast.last].every(period => text(period, 20) && period.endsWith('E'))
+      && rows(forecast.rows, 15, 3);
+  }
+
+  function parse(raw, published = false) {
     if (raw.length > maxSize) throw new Error('Choose a research library under 1.5 MB.');
     const data = JSON.parse(raw.replace(/^\ufeff/, ''));
-    if (data?.format !== 'stocks-beta2-bos-library' || data.version !== 1 || !date(data.coverageDate)
+    const format = published ? 'stocks-beta2-bos-writeups' : 'stocks-beta2-bos-library';
+    if (data?.format !== format || data.version !== 1 || !date(data.coverageDate)
         || !data.listings || typeof data.listings !== 'object' || Array.isArray(data.listings)) {
       throw new Error('Choose a Stocks BETA 2 BOS equity research JSON file.');
     }
@@ -48,7 +58,9 @@
       /^[A-Z0-9][A-Z0-9./-]{0,23} [A-Z]{2}$/.test(ticker) && Array.isArray(item?.notes) && item.notes.length <= 3
       && item.notes.every((note, i) => summary(note) && (i === 0 || item.notes[i - 1].date > note.date))
       && (item.outlook === null || summary(item.outlook)) && (item.notes.length > 0 || item.outlook)
-      && (item.peers === null || validPeers(item.peers)) && validProjections(item.projections)
+      && (item.peers === null || validPeers(item.peers, published))
+      && (published ? item.projections === undefined && validForecast(item.forecast)
+        : item.forecast === undefined && validProjections(item.projections))
     ))) throw new Error('The research file contains an invalid listing, note, peer comparison or forecast.');
     return data;
   }
@@ -62,7 +74,7 @@
     + '<time datetime="' + item.date + '">' + esc(day(item.date)) + '</time> · ' + link(item, 'Source PDF') + '</p>';
 
   function peerTable({ columns, rows: peerRows, subject }) {
-    if (!columns.length) return '';
+    if (!columns?.length) return '';
     const heads = columns.map(label => '<th scope="col">' + esc(label) + '</th>').join('');
     const data = peerRows.map(([name, ...cells]) => '<tr><th scope="row">' + esc(name)
       + (name === subject ? ' <small>(company)</small>' : '') + '</th>'
@@ -80,22 +92,50 @@
     const context = outlook ? '<h4>Strategy outlook</h4>' + noteSource(outlook, day) + '<p>' + esc(outlook.summary) + '</p>' : '';
     const contextLink = peers?.analysisPage && peers.analysisPage !== peers.page
       ? ' · ' + link({ ...peers, page: peers.analysisPage }, 'Competitive discussion in PDF') : '';
+    const names = peers?.names?.length ? '<p>Report peers include ' + esc(peers.names.join(', ')) + '.</p>' : '';
     const peerReview = peers ? '<p class="sb2-research-note">Report dated ' + esc(day(peers.date)) + ' · '
-      + link(peers, 'Peer comparison in PDF') + contextLink + '</p><p>' + esc(peers.summary) + '</p>' + peerTable(peers)
+      + link(peers, 'Peer comparison in PDF') + contextLink + '</p><p>' + esc(peers.summary) + '</p>' + names + peerTable(peers)
       : '<p class="sb2-research-note">No peer comparison was identified in the saved reports.</p>';
     return '<section class="sb2-research-archive"><h4>Latest analyst write-ups</h4>' + totals + items + context + '</section>'
       + '<details class="sb2-research-peers"><summary>Competitors and peers</summary>' + peerReview + '</details>';
   }
 
-  if (typeof module !== 'undefined') module.exports = { parse, sections };
+  function forecastSection(model, day) {
+    if (!model) return '';
+    const body = model.rows.map(([name, next, final]) => '<tr><th scope="row">' + esc(name) + '</th>'
+      + '<td>' + esc(next ?? '–') + '</td><td>' + esc(final ?? '–') + '</td></tr>').join('');
+    return '<h4>Forecast change from ' + esc(model.actual) + '</h4><p class="sb2-research-note">'
+      + 'Change from the latest actual fiscal year, calculated from the ' + esc(day(model.date)) + ' analyst model. '
+      + link(model, 'Model in PDF') + '</p><div class="sb2-table" role="region" aria-label="Forecast changes" tabindex="0">'
+      + '<table><thead><tr><th scope="col">Metric</th><th scope="col" data-estimate>' + esc(model.first) + '</th>'
+      + '<th scope="col" data-estimate>' + esc(model.last) + '</th></tr></thead><tbody>' + body + '</tbody></table></div>';
+  }
+
+  if (typeof module !== 'undefined') module.exports = { parse, sections, forecastSection };
   const doc = root.document;
   const file = doc?.getElementById('sb2-research-file');
   if (!file) return;
   const status = doc.getElementById('sb2-research-import-status');
   const remember = doc.getElementById('sb2-research-remember');
   const clear = doc.getElementById('sb2-research-clear');
-  let data = null;
-  root.StocksBeta2Research = { forListing: ticker => data?.listings[ticker], sections };
+  let data = null, publishedRequest;
+
+  async function forListing(ticker) {
+    if (data?.listings[ticker]) return data.listings[ticker];
+    const base = root.ContentDelivery?.CONTENT;
+    if (!base || doc.getElementById('sb2-embedded-data')) return undefined;
+    publishedRequest ??= root.fetch(base + publishedPath, { signal: AbortSignal.timeout(6500) })
+      .then(response => {
+        if (!response.ok) throw new Error('Published equity research is unavailable.');
+        return response.text();
+      })
+      .then(raw => parse(raw, true))
+      .catch(() => null);
+    const published = await publishedRequest;
+    return data?.listings[ticker] || published?.listings[ticker];
+  }
+
+  root.StocksBeta2Research = { forListing, sections, forecastSection };
 
   function update(saved) {
     status.textContent = data ? Object.keys(data.listings).length + ' listings loaded '
