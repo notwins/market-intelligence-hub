@@ -15,16 +15,7 @@
 .chart-display select{min-width:86px;padding:5px 8px}
 
 #library-rows tr[data-currency="USD"] td{color:var(--navy)!important}
-#library-rows tr[data-currency="USD"] td :is(small,.ticker,button,.coupon-value){color:inherit}
-.library .coupon-value{font-size:.9rem;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
-.library .coupon-value[data-coupon-band]:not([data-coupon-band=""]){
- display:inline-block;min-width:4ch;padding:2px 6px;
- color:var(--coupon-ink);background:var(--coupon-bg);border-inline-start:3px solid var(--coupon-ink);border-radius:3px
-}
-.library [data-coupon-band="6-8"]{--coupon-ink:#385781;--coupon-bg:#edf3ff}
-.library [data-coupon-band="8-10"]{--coupon-ink:#146354;--coupon-bg:#e5f6ed}
-.library [data-coupon-band="10-12"]{--coupon-ink:#855311;--coupon-bg:#fff1d9}
-.library [data-coupon-band="above-12"]{--coupon-ink:#902750;--coupon-bg:#fbe8f0}
+#library-rows tr[data-currency="USD"] td :is(small,.ticker,button){color:inherit}
 .share-picker{position:relative;min-width:0}
 .share-picker .share-number{margin-bottom:7px;text-transform:uppercase}
 .share-picker-field{position:relative}

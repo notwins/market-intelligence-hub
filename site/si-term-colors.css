@@ -1,0 +1,13 @@
+/* SI reference values retain their original numbers and use separate colour bands by term. */
+.si-term-value { font-weight:750; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.si-term-value[data-si-coupon-band="6-8"] { color:#385781; }
+.si-term-value[data-si-coupon-band="8-10"] { color:#146354; }
+.si-term-value[data-si-coupon-band="10-12"] { color:#855311; }
+.si-term-value[data-si-coupon-band="above-12"] { color:#902750; }
+.si-term-value[data-si-barrier-band="low"] { color:#146354; }
+.si-term-value[data-si-barrier-band="mid-low"] { color:#365e89; }
+.si-term-value[data-si-barrier-band="mid-high"] { color:#855311; }
+.si-term-value[data-si-barrier-band="high"] { color:#a43047; }
+.si-reference-basket { display:flex; flex-wrap:wrap; gap:3px 7px; }
+.si-reference-basket > span { display:inline-flex; align-items:center; gap:3px; white-space:nowrap; }
+.si-reference-barriers { white-space:nowrap; }

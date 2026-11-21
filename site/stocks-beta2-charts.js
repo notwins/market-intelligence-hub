@@ -376,10 +376,60 @@
     }
     if (chart.target) loadTargets();
 
+    const toolbar = doc.getElementById('sb2-shared-controls');
+    function syncChartControls() {
+      for (const button of toolbar.querySelectorAll('[data-metric]')) {
+        button.setAttribute('aria-pressed', String(button.dataset.metric === chart.metric));
+      }
+      const price = chart.metric === 'price';
+      for (const [selector, enabled] of [['[data-target]', chart.target], ['[data-cone]', chart.cone], ['[data-bos-target]', chart.bosTarget]]) {
+        toolbar.querySelector(selector).setAttribute('aria-pressed', String(price && enabled));
+      }
+      toolbar.querySelector('[data-cone-bands]').hidden = !(price && chart.cone);
+      for (const button of toolbar.querySelectorAll('[data-cone-band]')) {
+        button.setAttribute('aria-pressed', String(chart.bands.includes(Number(button.dataset.coneBand))));
+      }
+    }
     function updateChart() {
+      syncChartControls();
       repaint();
       save();
     }
+
+    toolbar.querySelectorAll('[data-metric]').forEach(button => button.addEventListener('click', () => {
+      chart.metric = button.dataset.metric;
+      updateChart();
+    }));
+    const coneButton = toolbar.querySelector('[data-cone]');
+    coneButton.addEventListener('click', () => {
+      chart.cone = chart.metric !== 'price' || !chart.cone;
+      if (chart.cone) chart.metric = 'price';
+      updateChart();
+    });
+    toolbar.querySelectorAll('[data-cone-band]').forEach(button => button.addEventListener('click', () => {
+      const band = Number(button.dataset.coneBand);
+      chart.bands = chart.bands.includes(band) ? chart.bands.filter(value => value !== band) : [...chart.bands, band];
+      if (!chart.bands.length) {
+        chart.cone = false;
+        chart.bands = allBands;
+        coneButton.focus();
+      }
+      updateChart();
+    }));
+    toolbar.querySelector('[data-bos-target]').addEventListener('click', () => {
+      chart.bosTarget = chart.metric !== 'price' || !chart.bosTarget;
+      if (chart.bosTarget) chart.metric = 'price';
+      updateChart();
+    });
+    toolbar.querySelector('[data-target]').addEventListener('click', () => {
+      chart.target = chart.metric !== 'price' || !chart.target;
+      if (chart.target) {
+        chart.metric = 'price';
+        if (!targets) loadTargets();
+      }
+      updateChart();
+    });
+    syncChartControls();
 
     function repaint() {
       if (frame !== undefined) return;
@@ -505,21 +555,11 @@
       slider.max = String(to);
       slider.value = String(cursor);
       slider.setAttribute('aria-valuetext', monthLabel(data.months[cursor][0]));
-      element.querySelectorAll('[data-metric]').forEach(button => {
-        button.setAttribute('aria-pressed', String(button.dataset.metric === metric));
-      });
-      get('[data-target]').setAttribute('aria-pressed', String(metric === 'price' && chart.target));
       get('.sb2-target-legend').hidden = !(metric === 'price' && chart.target);
       get('[data-target-status]').textContent = chart.target && metric === 'price'
         ? targetError || (!targets ? 'Loading Morningstar fair values…'
           : targetLines.some(line => line.points.length) ? '' : 'No identified Morningstar fair values in this range.') : '';
       get('.sb2-cone-info').hidden = !activeCone;
-      get('[data-cone]').setAttribute('aria-pressed', String(activeCone));
-      get('[data-cone-bands]').hidden = !activeCone;
-      element.querySelectorAll('[data-cone-band]').forEach(button => {
-        button.setAttribute('aria-pressed', String(chart.bands.includes(Number(button.dataset.coneBand))));
-      });
-      get('[data-bos-target]').setAttribute('aria-pressed', String(targetEnabled));
       get('[data-cone-method]').hidden = !activeCone;
       const summary = !activeCone ? '' : cone
         ? '12 months from ' + dateFormat.format(time(anchor.quote)) + ' · ' + unit + ' · '
@@ -584,39 +624,6 @@
     function add(element, company) {
       const card = { element, company, positions: {} };
       cards.set(element, card);
-      element.querySelectorAll('[data-metric]').forEach(button => button.addEventListener('click', () => {
-        chart.metric = button.dataset.metric;
-        updateChart();
-      }));
-      const coneButton = element.querySelector('[data-cone]');
-      coneButton.addEventListener('click', () => {
-        chart.cone = chart.metric !== 'price' || !chart.cone;
-        if (chart.cone) chart.metric = 'price';
-        updateChart();
-      });
-      element.querySelectorAll('[data-cone-band]').forEach(button => button.addEventListener('click', () => {
-        const band = Number(button.dataset.coneBand);
-        chart.bands = chart.bands.includes(band) ? chart.bands.filter(value => value !== band) : [...chart.bands, band];
-        if (!chart.bands.length) {
-          chart.cone = false;
-          chart.bands = allBands;
-          coneButton.focus();
-        }
-        updateChart();
-      }));
-      element.querySelector('[data-bos-target]').addEventListener('click', () => {
-        chart.bosTarget = chart.metric !== 'price' || !chart.bosTarget;
-        if (chart.bosTarget) chart.metric = 'price';
-        updateChart();
-      });
-      element.querySelector('[data-target]').addEventListener('click', () => {
-        chart.target = chart.metric !== 'price' || !chart.target;
-        if (chart.target) {
-          chart.metric = 'price';
-          if (!targets) loadTargets();
-        }
-        updateChart();
-      });
       const slider = element.querySelector('input[type=range]');
       slider.addEventListener('input', () => setCursor(Number(slider.value), true));
       for (const kind of ['price', 'valuation']) {
@@ -669,7 +676,7 @@
       } };
   }
 
-  function mountRankings(data, { logo, chooseCompany }) {
+  function mountRankings(data, { logo, chooseCompany, saved, save }) {
     const doc = root.document;
     const get = id => doc.getElementById(id);
     const peerMonth = get('sb2-peer-month');
@@ -684,8 +691,11 @@
     let timer;
 
     peerMonth.max = String(last);
-    peerMonth.value = String(last);
-    if (root.matchMedia('(max-width:760px)').matches) peerMarket.value = 'usa';
+    const savedIndex = data.months.findIndex(([month]) => month === saved?.month);
+    peerMonth.value = String(savedIndex < 0 ? last : savedIndex);
+    peerMarket.value = ['all', 'usa', 'world'].includes(saved?.market)
+      ? saved.market : root.matchMedia('(max-width:760px)').matches ? 'usa' : 'all';
+    direction.value = saved?.direction === 'high' ? 'high' : 'low';
     const years = data.months.flatMap(([month], index) => (
       !index || month.slice(0, 4) !== data.months[index - 1][0].slice(0, 4) ? [[month.slice(0, 4), index]] : []
     ));
@@ -760,14 +770,18 @@
 
     function showMonth(index) {
       peerMonth.value = String(index);
-      renderBars();
+      updateRankings();
     }
 
-    peerMonth.addEventListener('input', () => { stop(); renderBars(); });
-    peerMonth.addEventListener('change', renderBars);
+    function updateRankings() {
+      renderBars();
+      save();
+    }
+
+    peerMonth.addEventListener('input', () => { stop(); updateRankings(); });
     peerYear.addEventListener('change', () => { stop(); showMonth(Number(peerYear.value)); });
-    peerMarket.addEventListener('change', renderBars);
-    direction.addEventListener('change', renderBars);
+    peerMarket.addEventListener('change', updateRankings);
+    direction.addEventListener('change', updateRankings);
     previous.addEventListener('click', () => { stop(); showMonth(Number(peerMonth.value) - 1); });
     next.addEventListener('click', () => { stop(); showMonth(Number(peerMonth.value) + 1); });
     play.addEventListener('click', () => {
@@ -785,7 +799,7 @@
       if (target) { stop(); chooseCompany(target.dataset.peCompany, target); }
     });
     renderBars();
-    return { renderBars };
+    return { renderBars, settings: () => ({ month: data.months[Number(peerMonth.value)][0], market: peerMarket.value, direction: direction.value }) };
   }
 
   const api = { historyPoints, peRankings, mountRankings, mountHistory, priceLabel, probabilityCone, researchConeTarget, targetBand, drawPlot };
