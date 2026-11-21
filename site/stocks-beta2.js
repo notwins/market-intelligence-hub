@@ -81,7 +81,7 @@
   const allCompanies = () => [...data.securities, ...priceCompanies];
   const deck = get('sb2-detail'), dialog = get('sb2-card-picker');
   const cards = new Map();
-  const fundamentalsBounds = { min: 30, max: 52, initial: 32 };
+  const fundamentalsBounds = { min: 30, max: 72, initial: 32 };
   let fundamentalsWidth = fundamentalsBounds.initial;
   let savedReadingRequest;
   let earningsRequest;

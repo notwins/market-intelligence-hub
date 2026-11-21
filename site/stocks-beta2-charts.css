@@ -13,18 +13,19 @@
 .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) .sb2-chart-and-research {
   grid-template-columns:minmax(0,1fr); grid-template-rows:none;
 }
-.sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) :is(.sb2-research,.sb2-valuation,.sb2-chart-notes) {
+.sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) :is(.sb2-research,.sb2-valuation,.sb2-chart-notes,.sb2-history-table,.sb2-card-reading) {
   grid-area:auto;
 }
 .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) .sb2-research { border-left:0; }
 .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) .sb-reading-grid { grid-template-columns:minmax(0,1fr); }
 @supports(grid-template-rows:subgrid) {
-  .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) {
+  .sb2-deck[data-multiple] > .sb2-shared-price-card { grid-row:span 9; }
+  .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded],.sb2-shared-price-card) {
     display:grid; grid-template-rows:subgrid; grid-row:span 9; row-gap:0; align-self:stretch;
     container-type:normal;
   }
   .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) .sb2-chart-and-research {
-    grid-template-rows:subgrid; grid-row:span 6; row-gap:0;
+    grid-template-rows:subgrid; grid-row:span 8; row-gap:0;
   }
   .sb2-deck[data-multiple] > .sb2-detail:not([data-expanded]) .sb2-history {
     display:grid; grid-template-rows:subgrid; grid-row:span 2; row-gap:0;
@@ -49,6 +50,7 @@
 .sb2-research-divider:focus-visible { outline:none; }
 .sb2-research-divider:focus-visible::before { outline:2px solid #8672a7; outline-offset:2px; }
 .sb2-research-divider[data-dragging] { background:#126c6620; }
+.sb2-shared-price-card [data-sb2-shared-chart] { min-width:0; padding:0 12px 10px; }
 .sb2-card-reading { padding:0 18px 16px; min-width:0; }
 .sb2-card-reading .sb-reading-grid { grid-template-columns:minmax(0,1fr); }
 .sb2-chart-notes { padding:0 18px 17px; }
@@ -86,18 +88,20 @@
 .sb2-cone-info details { margin-top:3px; font-size:.81rem; }
 .sb2-cone-info details p { margin-top:5px; }
 @container (min-width:765px) {
-  .sb2-chart-and-research { grid-template-columns:minmax(0,1fr) minmax(230px,var(--sb2-fundamentals-width,32%)); grid-template-rows:min-content min-content minmax(min-content,1fr); }
-  .sb2-research { grid-area:1 / 2 / span 3; border-left:1px solid var(--line); }
+  .sb2-chart-and-research { grid-template-columns:minmax(0,1fr) minmax(230px,var(--sb2-fundamentals-width,32%)); grid-template-rows:repeat(4,min-content) minmax(min-content,1fr); }
+  .sb2-research { grid-area:1 / 2 / span 5; border-left:1px solid var(--line); }
   .sb2-chart-notes { grid-area:2 / 1; }
   .sb2-valuation { grid-area:3 / 1; }
+  .sb2-history-table { grid-area:4 / 1; }
+  .sb2-chart-and-research > .sb2-card-reading { grid-area:5 / 1; align-self:start; }
   .sb2-deck:not([data-multiple]) .sb2-research-divider { display:block; }
-  .sb2-card-reading .sb-reading-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .sb2-card-reading .sb-reading-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr)); }
 }
 .sb2-deck[data-financial-compare] .sb2-chart-and-research {
   grid-template-columns:minmax(0,1fr);
   grid-template-rows:none;
 }
-.sb2-deck[data-financial-compare] :is(.sb2-valuation,.sb2-chart-notes,.sb2-research) { grid-area:auto; }
+.sb2-deck[data-financial-compare] :is(.sb2-valuation,.sb2-chart-notes,.sb2-research,.sb2-history-table,.sb2-card-reading) { grid-area:auto; }
 .sb2-deck[data-financial-compare] .sb2-research { border-left:0; }
 .sb2-deck[data-financial-compare] .sb2-research-divider { display:none; }
 .sb2-remove-card { margin:13px 13px 0 0; min-height:34px; padding:4px 9px; font-size:.8rem; }
