@@ -23,12 +23,14 @@
   const fields = ['stocks', 'date', 'currency', 'tenor', 'coupon', 'ko', 'step', 'ki', 'strike'];
 
   function cells(row, step, basket) {
+    const bonus = C.isBonusEnhanced(row);
+    const basis = row.coupon_basis === 'per_annum' ? 'screen' : bonus ? 'unconfirmed' : 'assumed';
     const barrier = (term, value) => `<td data-tc-value="${value}"><span class="si-term-value" data-si-barrier-band="${C.barrierBand(term, value)}">${value}%</span></td>`;
     return `<td class="si-library-basket" data-tc-value="${E(row.shares.join(' / '))}">${basket}<small><a href="${onePagerHref(row.reference)}" aria-label="Open ${E(row.reference)} one-pager">${E(row.reference)}</a>${row.additional_review ? ' · review' : ''}</small></td>
       <td data-tc-value="${E(row.source_date || '')}">${E(row.source_date || 'Not shown')}</td>
       <td>${E(row.currency)}</td>
       <td data-tc-value="${row.tenor_source_value}">${row.tenor_source_value}<small>months</small></td>
-      <td data-tc-value="${row.coupon_pct}"><strong class="si-term-value" data-si-coupon-band="${C.referenceCouponBand(row)}">${row.coupon_pct}%</strong><small>${E(C.referenceCouponLabel(row))}</small></td>
+      <td data-tc-value="${row.coupon_pct}"><strong class="si-term-value" data-si-coupon-band="${C.referenceCouponBand(row)}">${row.coupon_pct}%</strong><small data-si-coupon-basis="${basis}"${bonus ? ' data-si-bonus' : ''}>${E(C.referenceCouponLabel(row))}</small></td>
       ${barrier('ko', row.ko_pct)}<td data-tc-value="${step ?? ''}">${step == null ? '—' : step.toFixed(2) + ' pp'}</td>${barrier('ki', row.ki_pct)}${barrier('strike', row.strike_pct)}`;
   }
 
@@ -67,7 +69,7 @@
       detail.querySelector('summary').textContent = `SI Beta 2 references · ${rows.length}`;
       body.innerHTML = rows.length ? `<div class="si-card-scroll" role="region" aria-label="${E(detail.dataset.siCardListing)} SI Beta 2 references">
         <table role="table" data-table-controls="on" data-tc-layout="si-card-references">
-          <caption>Rounded historical references · select a reference to open its one-pager</caption>
+          <caption>Rounded historical references · select a reference to open its one-pager<span class="si-card-coupon-key">Coupon basis · p.a. (screen) unless marked · * p.a. assumed · † basis unconfirmed · ‡ bonus-enhanced</span></caption>
           <thead role="rowgroup"><tr role="row">${headers.map((name, index) => `<th role="columnheader" scope="col"${index === 6 ? ' data-table-unit="pp"' : ''}>${name}</th>`).join('')}</tr></thead>
           <tbody role="rowgroup">${rows.map(row => '<tr role="row">' + cardCells(row, data.ko_step_down_pp?.[row.reference], logos) + '</tr>').join('')}</tbody>
         </table></div>` : '<p>No saved SI references for this listing.</p>';
