@@ -1,7 +1,8 @@
 (() => {
   'use strict';
 
-  const { sources, publicHistory, readHistory, mergeHistory, annualPriceChanges, fredCurves, reconstructedPrices } = BondsBetaData;
+  const { sources, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
+    annualPriceChanges, fredCurves, reconstructedPrices } = BondsBetaData;
   const feedURL = 'data/Bond%20Prices%20-%20Type%20JSON%20-%2016-Nov-03.10.json';
   const temasek = 'US87973RAW07';
   const get = id => document.getElementById(`bb-${id}`);
@@ -18,6 +19,7 @@
   const noOverlay = () => new Option('No overlay', '');
   let publicBonds = new Map();
   let localBonds = new Map();
+  let catalogue = new Map();
   let bonds = new Map();
   let curves = [];
   let modeled = new Map();
@@ -35,6 +37,7 @@
   let showingSavedHistory = false;
   let publicUnavailable = false;
   let historyMessage = '';
+  let pendingFocus;
 
   function historyStorage(action, content) {
     return new Promise((resolve, reject) => {
@@ -108,10 +111,10 @@
 
   function populateControls() {
     const query = get('search').value.toUpperCase().trim().split(/\s+/).filter(Boolean);
-    const pool = query.length ? [...bonds.keys()] : defaultKeys;
+    const pool = query.length ? [...bonds.keys()] : [...new Set([...defaultKeys, ...catalogue.keys()])];
     const matches = pool.filter(key => {
       const instrument = bonds.get(key);
-      return query.every(term => `${instrument.isin} ${instrument.name} ${instrument.currency}`.toUpperCase().includes(term));
+      return query.every(term => `${instrument.isin} ${instrument.name} ${instrument.type ?? ''} ${instrument.currency}`.toUpperCase().includes(term));
     }).slice(0, 100);
     const matchSelect = get('match');
     matchSelect.replaceChildren(...matches.map(key => {
@@ -162,8 +165,12 @@
     const model = modeled.get(card.instrument);
     const price = model?.points.get(date);
     const yieldEstimate = model?.yields.get(date);
-    card.element.querySelector('[data-bb-price-label]').textContent = price ? 'Estimated clean price' : 'Bid price';
-    card.element.querySelector('[data-bb-price]').textContent = displayNumber(price?.price ?? own?.bid);
+    const priceLabel = card.element.querySelector('[data-bb-price-label]');
+    const priceValue = card.element.querySelector('[data-bb-price]');
+    priceLabel.textContent = price ? 'Theoretical price' : 'Bid price';
+    priceLabel.toggleAttribute('data-theoretical', !!price);
+    priceValue.textContent = displayNumber(price?.price ?? own?.bid);
+    priceValue.toggleAttribute('data-theoretical', !!price);
     card.element.querySelector('[data-bb-yield-label]').textContent = yieldEstimate ? 'Modeled FRED yield' : 'Yield';
     card.element.querySelector('[data-bb-yield]').textContent = displayYield(yieldEstimate?.rate ?? own?.yield);
     const estimate = price ?? yieldEstimate;
@@ -172,6 +179,7 @@
       const bracket = estimate.lower === estimate.upper ? tenor(estimate.lower) : `${tenor(estimate.lower)}–${tenor(estimate.upper)}`;
       detail.push(`${shortNumber.format(estimate.years)} years left`, `FRED ${bracket}`,
         `${displayYield(estimate.rate)} ${price ? 'applied yield' : 'modeled yield'}`);
+      if (card.instrument.issueDate && date < card.instrument.issueDate) detail.push('Before issuance');
     }
     if (own) detail.push(...sources[own.source]);
     if (date && !own && !estimate) detail.push('No observation');
@@ -182,7 +190,7 @@
       const peer = card.peer.rows.get(date), peerModel = modeled.get(card.peer);
       const peerPrice = peerModel?.points.get(date), peerYield = peerModel?.yields.get(date);
       const values = [card.peer.name];
-      if (peerPrice) values.push(`Estimated clean price ${displayNumber(peerPrice.price)}`);
+      if (peerPrice) values.push(`Theoretical price ${displayNumber(peerPrice.price)}`);
       else if (Number.isFinite(peer?.bid)) values.push(`Bid ${displayNumber(peer.bid)}`);
       if (peerYield) values.push(`Modeled FRED yield ${displayYield(peerYield.rate)}`);
       else if (Number.isFinite(peer?.yield)) values.push(`Yield ${displayYield(peer.yield)}`);
@@ -237,11 +245,12 @@
         continue;
       }
       const plotFrom = Math.min(...data.map(line => line.points[0].index));
-      const axisSpan = Date.parse(dates.at(-1)) - Date.parse(dates[plotFrom]);
+      const plotTo = Math.max(...data.map(line => line.points.at(-1).index));
+      const axisSpan = Date.parse(dates[plotTo]) - Date.parse(dates[plotFrom]);
       const axis = axisSpan < 55 * 86400000 ? 'days' : axisSpan < 4 * 365 * 86400000 ? 'quarter' : 'year';
       const plot = StocksBeta2Charts.drawPlot(canvas, data, dateRows,
-        { from: plotFrom, to: dates.length - 1, cursor, axis }, { axisGutter: 58 });
-      card.positions[field] = plot && { ...plot, from: plotFrom };
+        { from: plotFrom, to: plotTo, cursor, axis }, { axisGutter: 58 });
+      card.positions[field] = plot && { ...plot, from: plotFrom, to: plotTo };
     }
   }
 
@@ -271,7 +280,7 @@
     if (!position || (event.type === 'pointermove' && event.pointerType === 'touch')) return;
     const x = event.clientX - event.currentTarget.getBoundingClientRect().left;
     let nearest = position.from;
-    for (let i = position.from + 1; i < dates.length; i++) {
+    for (let i = position.from + 1; i <= position.to; i++) {
       if (Math.abs(position.forIndex(i) - x) < Math.abs(position.forIndex(nearest) - x)) nearest = i;
     }
     if (nearest !== cursor) setCursor(nearest);
@@ -282,7 +291,8 @@
     const element = get('template').content.firstElementChild.cloneNode(true);
     element.dataset.isin = instrument.isin;
     element.querySelector('h2').textContent = instrument.name;
-    element.querySelector('.bb-id').textContent = `${instrument.isin} · ${instrument.currency}`;
+    element.querySelector('.bb-id').textContent = [instrument.isin, instrument.currency,
+      instrument.issueDate ? `Issued ${dateLabel(instrument.issueDate)}` : ''].filter(Boolean).join(' · ');
     const margin = element.querySelector('[data-bb-ar]');
     if (instrument.ar !== null) {
       margin.hidden = false;
@@ -292,14 +302,17 @@
     remove.setAttribute('aria-label', `Remove ${instrument.name}`);
     remove.addEventListener('click', () => {
       selected = selected.filter(item => item !== key);
-      populateControls(); renderCards(); get('add').focus();
+      populateControls(); refreshDates(); renderCards(); get('add').focus();
     });
     const card = { key, instrument, element, near: false, positions: {} };
     for (const canvas of element.querySelectorAll('canvas')) {
       for (const event of ['pointermove', 'click']) canvas.addEventListener(event, e => chartPointer(e, card));
       canvas.addEventListener('keydown', event => {
-        const start = card.positions[canvas.dataset.plot]?.from ?? from;
-        const next = { ArrowLeft: Math.max(start, cursor - 1), ArrowRight: Math.max(start, cursor + 1), Home: start, End: dates.length - 1 }[event.key];
+        const position = card.positions[canvas.dataset.plot];
+        if (!position) return;
+        const { from: start, to: end } = position;
+        const next = { ArrowLeft: Math.min(end, Math.max(start, cursor - 1)),
+          ArrowRight: Math.min(end, Math.max(start, cursor + 1)), Home: start, End: end }[event.key];
         if (next === undefined) return;
         event.preventDefault(); setCursor(next);
       });
@@ -323,8 +336,6 @@
         key.querySelector('.bb-model-key').hidden = !modelInRange;
         key.querySelector('.bb-peer-model-key').hidden = !peerInRange;
         key.querySelector('.bb-observed-key').hidden = !lines.some(line => line.color === quoteColors[field]);
-        const start = key.querySelector('.bb-model-start');
-        if (start && modelInRange) start.textContent = dateLabel(modeled.get(card.instrument).start);
       }
       fillReturns(card);
     }
@@ -357,7 +368,9 @@
     const previous = cursor < dates.length - 1 ? dates[cursor] : undefined;
     const unique = new Set();
     modeled = new Map();
-    for (const item of bonds.values()) {
+    for (const key of new Set([...selected, get('overlay').value])) {
+      const item = bonds.get(key);
+      if (!item) continue;
       for (const date of item.rows.keys()) unique.add(date);
       const model = curves.length ? reconstructedPrices(item, curves, window.DailyBondPrices) : null;
       if (!model) continue;
@@ -373,17 +386,56 @@
   }
 
   function applyData() {
-    bonds = mergeHistory(publicBonds, localBonds);
+    bonds = mergeCatalogue(mergeHistory(publicBonds, localBonds), catalogue);
+    const previousDefaults = new Set(defaultKeys);
     defaultKeys = [...publicBonds.keys()];
     if (!defaultKeys.length) defaultKeys = [...localBonds].filter(([, item]) => item.isin === temasek ||
       [...item.rows.values()].some(quote => ['WSJ_ASK','BSM_YTM','BSM_YTW'].includes(quote.source))).map(([key]) => key);
     defaultKeys.sort((a, b) => Number(b.startsWith(temasek)) - Number(a.startsWith(temasek)));
-    selected = [...new Set([...defaultKeys, ...selected.filter(key => bonds.has(key))])];
-    refreshDates();
+    selected = [...new Set([...selected.filter(key => bonds.has(key)), ...defaultKeys.filter(key => !previousDefaults.has(key))])];
     get('controls').hidden = !bonds.size;
     get('clear').hidden = !localBonds.size && !remembered;
-    populateControls(); renderCards();
+    populateControls(); refreshDates(); renderCards();
     updateStatus();
+  }
+
+  function inspectLatest(key) {
+    const bond = bonds.get(key);
+    if (!bond) return false;
+    const model = modeled.get(bond);
+    // Prefer a price date so a newly added Treasury opens with its latest theoretical price or saved bid.
+    const prices = [...bond.rows].filter(([, quote]) => quote.bid > 0).map(([date]) => date);
+    if (model) prices.push(...model.points.keys());
+    const latest = (prices.length ? prices : [...bond.rows.keys(), ...(model?.yields.keys() ?? [])]).sort().at(-1);
+    const index = dateIndices.get(latest);
+    if (index === undefined) return false;
+    if (index < from) {
+      get('range').value = 'all';
+      dateRange();
+      showSeries();
+    }
+    setCursor(index);
+    return true;
+  }
+
+  async function loadCatalogue() {
+    const status = get('catalogue-status');
+    try {
+      const response = await fetch('data/treasury-catalogue.json', { cache: 'no-cache', signal: AbortSignal.timeout(15000) });
+      if (!response.ok) throw Error('Treasury catalogue unavailable');
+      const data = await response.json();
+      const verified = treasuryCatalogue(data);
+      const asOf = data.latest_auction_date;
+      catalogue = new Map([...verified].sort(([, a], [, b]) => {
+        const activeA = a.maturity > asOf, activeB = b.maturity > asOf;
+        return Number(activeB) - Number(activeA) ||
+          (activeA ? a.maturity.localeCompare(b.maturity) : b.maturity.localeCompare(a.maturity));
+      }));
+      applyData();
+      status.textContent = `${catalogue.size.toLocaleString('en-GB')} fixed-rate U.S. Treasury notes and bonds · Auction data through ${dateLabel(asOf)}.`;
+    } catch {
+      status.textContent = 'The TreasuryDirect catalogue could not load. Watchlist and imported bonds are still available.';
+    }
   }
 
   async function loadCurve() {
@@ -396,6 +448,8 @@
       curves = data;
       refreshDates();
       showSeries();
+      if (pendingFocus) inspectLatest(pendingFocus);
+      pendingFocus = undefined;
       status.textContent = 'FRED estimates before a Treasury’s issue date are hypothetical. The charts show saved bids and reported yields where available.';
     } catch {
       status.textContent = 'FRED price and yield reconstruction is unavailable. Saved quotes are shown where available.';
@@ -481,18 +535,20 @@
     const key = get('match').value;
     if (!bonds.has(key)) return;
     selected = [...new Set([key, ...selected])];
-    selectGroup('all'); populateControls(); renderCards();
+    selectGroup('all'); populateControls(); refreshDates(); renderCards();
+    pendingFocus = !inspectLatest(key) && !curves.length ? key : undefined;
     cards[0]?.element.scrollIntoView({ block: 'nearest' });
   });
   get('range').addEventListener('change', () => { dateRange(); showSeries(); });
-  get('overlay').addEventListener('change', showSeries);
+  get('overlay').addEventListener('change', () => { refreshDates(); showSeries(); });
   get('columns').addEventListener('change', () => { get('cards').dataset.columns = get('columns').value; });
   get('cursor').addEventListener('input', () => setCursor(Number(get('cursor').value)));
-  get('reset').addEventListener('click', () => { selected = [...defaultKeys]; selectGroup('all'); populateControls(); renderCards(); });
+  get('reset').addEventListener('click', () => { selected = [...defaultKeys]; selectGroup('all'); populateControls(); refreshDates(); renderCards(); });
   document.querySelectorAll('[data-group]').forEach(button => button.addEventListener('click', () => {
     selectGroup(button.dataset.group); renderCards();
   }));
   restoreHistory();
   loadWatchlist();
+  loadCatalogue();
   loadCurve();
 })();

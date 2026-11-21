@@ -156,3 +156,33 @@ assert.equal(mixed.firstYield, '2024-03-01');
 assert.equal([...mixed.points.keys()].at(-1), '2023-12-29');
 assert.equal([...mixed.yields.keys()].at(-1), '2024-02-29');
 console.log('PASS Treasury clean prices, dynamic FRED tenors, the 30-year publication gap and separate handoffs to reported bids and yields');
+
+const treasuryDirectory = beta.treasuryCatalogue(JSON.parse(fs.readFileSync('site/data/treasury-catalogue.json', 'utf8')));
+const expanded = beta.mergeCatalogue(betaList, treasuryDirectory);
+assert(treasuryDirectory.size > betaList.size);
+for (const [key, saved] of betaList) {
+  assert.equal(expanded.get(key).rows, saved.rows);
+  if (!saved.isTreasury) continue;
+  assert.equal(treasuryDirectory.get(key).coupon, saved.coupon);
+  assert.equal(treasuryDirectory.get(key).maturity, saved.maturity);
+  assert(expanded.get(key).issueDate);
+}
+for (const isin of ['US912810UY28', 'US912810CL09']) {
+  const key = isin + '|USD';
+  const newBond = expanded.get(key);
+  assert(!betaList.has(key));
+  assert.equal(newBond.rows.size, 0);
+  const history = beta.reconstructedPrices(newBond, archive, daily);
+  assert(history.points.size > 0);
+  assert.equal(history.firstBid, undefined);
+  assert([...history.points].every(([date, point]) => date < newBond.maturity && point.price > 0));
+}
+assert.throws(() => beta.treasuryCatalogue({ schema_version: 1, latest_auction_date: '2026-11-12',
+  instruments: [['US912810UY28', 'TIPS', 5.375, '2026-11-16', '2056-11-15']] }));
+const localInventory = new Map([['US912810UY28|USD', { name: 'Imported bond', ar: 42, rows: new Map([['2026-11-19', csvBid]]) }]]);
+const identified = beta.mergeCatalogue(localInventory, treasuryDirectory).get('US912810UY28|USD');
+assert.equal(identified.isTreasury, true);
+assert.equal(identified.ar, 42);
+assert.equal(identified.rows.get('2026-11-19'), csvBid);
+assert.equal(beta.reconstructedPrices(identified, archive, daily).firstBid, '2026-11-19');
+console.log('PASS auction identifiers, historical and current catalogue issues, and exact matching of imported quotes');
