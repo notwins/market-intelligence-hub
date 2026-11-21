@@ -84,10 +84,22 @@ input[type=range]{margin:4px 0;width:100%;accent-color:var(--blue)}
 .schedule-options label{display:flex;align-items:center;gap:7px;font-weight:500}
 .schedule-options input[type=range]{width:105px;margin:0}
 .schedule-options input[type=checkbox]{width:17px;height:17px;margin:0;accent-color:var(--blue)}
+.resize-hint{margin:0;font-size:.8125rem;color:var(--muted)}
 .table-scroll{overflow:auto;max-height:650px;border-top:1px solid var(--line);border-radius:0 0 var(--radius) var(--radius)}
 table{border-collapse:separate;border-spacing:0;white-space:nowrap;font-size:.875rem;font-variant-numeric:tabular-nums}
 th,td{border-bottom:1px solid var(--line);padding:8px 12px;text-align:right}
-thead th{position:sticky;top:0;z-index:1;background:#eaf0f7;vertical-align:bottom;white-space:normal;line-height:1.25}
+thead th{position:sticky;top:0;z-index:1;background:#eaf0f7;vertical-align:bottom;white-space:normal;line-height:1.25;min-width:64px}
+thead th:first-child{min-width:88px}
+thead th.extra{min-width:120px}
+.columns-sized{table-layout:fixed}
+.columns-sized th{overflow-wrap:anywhere}
+.columns-sized td{overflow:hidden;text-overflow:ellipsis}
+.columns-sized .year button{max-width:100%;white-space:normal}
+.column-edge{position:absolute;inset-block:0;inset-inline-end:0;width:12px;cursor:col-resize;touch-action:none;user-select:none}
+.column-edge::after{content:"";position:absolute;inset-block:5px;inset-inline-end:3px;width:1px;background:#a9b9cc}
+th.balance .column-edge{inset-inline-start:0;inset-inline-end:auto}
+th.balance .column-edge::after{inset-inline-start:3px;inset-inline-end:auto}
+.column-edge:hover::after,.column-edge:focus-visible::after,.column-edge[data-resizing]::after{width:3px;background:var(--blue)}
 th{font-weight:400}
 th:first-child,td:nth-child(2){text-align:left}
 .year th,.year td{background:#f2f6fb}
@@ -108,7 +120,7 @@ input.extra-cell{font-size:.875rem;text-align:right;height:34px;margin:0;min-wid
 .method p{max-width:95ch;margin:.5em 0}
 @media(max-width:960px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:730px){.shell{width:calc(100% - 24px);margin:12px auto 24px}.hero{margin-bottom:12px;padding:16px;gap:12px}.hero-icon{width:44px;height:44px}.hero-icon .icon{width:24px;height:24px}.hero p{font-size:.9rem}.workspace{grid-template-columns:minmax(0,1fr);gap:12px}.right{gap:12px}.chart{padding:14px 12px}.metric strong{font-size:1.2rem}.schedule-actions{padding:10px 12px}.schedule-actions p{width:100%}}
-@media print{.shell{width:100%;margin:0}.table-scroll{max-height:none;overflow:visible}#schedule-table{width:100%!important}.action-row,.schedule-actions button,.schedule-options,.scrub label,.scrub input{display:none}.hero{color:var(--ink);background:white}.hero p{color:var(--muted)}}
+@media print{.shell{width:100%;margin:0}.table-scroll{max-height:none;overflow:visible}#schedule-table{width:100%!important;table-layout:auto}#schedule-table col{width:auto!important}.action-row,.schedule-actions button,.schedule-options,.column-edge,.scrub label,.scrub input{display:none}.hero{color:var(--ink);background:white}.hero p{color:var(--muted)}}
 </style>
 </head>
 <body>
@@ -122,10 +134,10 @@ input.extra-cell{font-size:.875rem;text-align:right;height:34px;margin:0;min-wid
       <summary class="panel-summary"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 7h8M8 12h1m3 0h1m3 0h1m-9 4h1m3 0h1m3 0h1"/></svg>Loan calculator<span class="chevron" aria-hidden="true"></span></summary>
       <form id="terms">
         <div class="fields">
-          <label>Loan amount<input id="amount" type="number" required min=".01" max="1000000000000" step="any" inputmode="decimal" autocomplete="off"></label>
+          <label>Loan amount<input id="amount" type="number" required min=".01" max="1000000000000" step="any" inputmode="decimal" autocomplete="off" value="1000000"></label>
           <label>Currency<select id="currency"><option>SGD</option><option>USD</option><option>EUR</option><option>GBP</option><option>CHF</option><option>JPY</option><option>HKD</option><option>AUD</option><option>CAD</option><option>MYR</option><option value="">Other</option></select></label>
-          <label>Initial annual rate (%)<input id="rate" type="number" required min="0" max="100" step="any" inputmode="decimal" autocomplete="off"></label>
-          <label>Tenure (years)<input id="years" type="number" required min="0.083333333" max="50" step="any" inputmode="decimal" autocomplete="off"></label>
+          <label>Initial annual rate (%)<input id="rate" type="number" required min="0" max="100" step="any" inputmode="decimal" autocomplete="off" value="2.2"></label>
+          <label>Tenure (years)<input id="years" type="number" required min="0.083333333" max="50" step="any" inputmode="decimal" autocomplete="off" value="20"></label>
           <label>First payment date<input id="first" type="date" required min="1900-01-01" max="2200-12-31" autocomplete="off"></label>
           <label>Payments per year<select id="frequency"><option value="12">12 · Monthly</option><option value="4">4 · Quarterly</option><option value="2">2 · Half-yearly</option><option value="1">1 · Annually</option></select></label>
           <label>Fixed period (months)<input id="fixed" type="number" min="1" max="600" step="1" inputmode="numeric" value="24" placeholder="Full tenure" autocomplete="off"></label>
@@ -138,7 +150,7 @@ input.extra-cell{font-size:.875rem;text-align:right;height:34px;margin:0;min-wid
           <button class="add" type="button" id="add">＋ Add early repayment</button>
           <p class="note">Enter the payment number and extra principal, applied after that instalment.</p>
         </details>
-        <div class="action-row"><button class="primary" type="submit">Calculate</button><button type="reset">Clear</button></div>
+        <div class="action-row"><button class="primary" type="submit">Calculate</button><button type="reset">Reset</button></div>
         <p class="status" id="form-status" role="status"></p>
       </form>
     </details>
@@ -168,6 +180,7 @@ input.extra-cell{font-size:.875rem;text-align:right;height:34px;margin:0;min-wid
       <div class="schedule-options">
         <label><input id="freeze-period" type="checkbox">Freeze first column</label>
         <label for="table-width">Table width<input id="table-width" type="range" min="80" max="180" value="100" step="5"><output id="table-width-value" for="table-width">100%</output></label>
+        <p class="resize-hint" id="resize-hint">Drag a header edge to resize its column.</p>
       </div>
       <div class="table-scroll" role="region" aria-label="Scrollable amortisation schedule" tabindex="0">
         <table id="schedule-table"><thead><tr><th scope="col">Period</th><th scope="col">Payment date</th><th scope="col">Rate / period</th><th scope="col">Scheduled paid</th><th scope="col">Interest paid</th><th scope="col">Scheduled principal</th><th scope="col" class="extra">Early repayment</th><th scope="col" class="paid">Cumulative paid</th><th scope="col">Cumulative principal</th><th scope="col">Cumulative interest</th><th scope="col" class="balance">Balance</th></tr></thead></table>
@@ -437,13 +450,89 @@ function setYear(button, open) {
 get('expand-years').addEventListener('click', () => table.querySelectorAll('button').forEach(button => setYear(button, true)));
 get('collapse-years').addEventListener('click', () => table.querySelectorAll('button').forEach(button => setYear(button, false)));
 get('freeze-period').addEventListener('change', event => table.classList.toggle('freeze', event.target.checked));
+const headings = [...table.tHead.rows[0].cells];
+const widthInput = get('table-width');
+const columns = headings.map(() => document.createElement('col'));
+const widthsGroup = document.createElement('colgroup');
+widthsGroup.append(...columns);
+table.insertBefore(widthsGroup, table.tHead);
+let columnWidths;
+const minimumWidth = index => index === 6 ? 120 : index === 0 ? 88 : 64;
+const maximumWidth = 800;
+const limitWidth = (index, width) => Math.max(minimumWidth(index), Math.min(maximumWidth, width));
+
 function resizeSchedule() {
-  const width = get('table-width').valueAsNumber;
-  table.style.width = 'max(' + width + '%, ' + (width * .72) + 'rem)';
+  const width = widthInput.valueAsNumber;
+  if (columnWidths) {
+    const scaled = columnWidths.map((value, index) => limitWidth(index, value * width / 100));
+    columns.forEach((column, index) => { column.style.width = scaled[index] + 'px'; });
+    table.style.width = scaled.reduce((total, value) => total + value, 0) + 'px';
+  } else {
+    table.style.width = 'max(' + width + '%, ' + (width * .72) + 'rem)';
+  }
   get('table-width-value').textContent = width + '%';
 }
-get('table-width').addEventListener('input', resizeSchedule);
+widthInput.addEventListener('input', resizeSchedule);
 resizeSchedule();
+
+function setColumnWidth(index, pixels) {
+  const scale = widthInput.valueAsNumber / 100;
+  if (!columnWidths) {
+    columnWidths = headings.map(heading => heading.getBoundingClientRect().width / scale);
+    table.classList.add('columns-sized');
+  }
+  columnWidths[index] = limitWidth(index, pixels) / scale;
+  resizeSchedule();
+}
+
+const edges = headings.map((heading, index) => {
+  const edge = document.createElement('span');
+  const label = heading.textContent;
+  const direction = heading.classList.contains('balance') ? -1 : 1;
+  edge.className = 'column-edge';
+  edge.tabIndex = 0;
+  edge.setAttribute('role', 'separator');
+  edge.setAttribute('aria-label', 'Resize ' + label + ' column');
+  edge.setAttribute('aria-orientation', 'vertical');
+  edge.setAttribute('aria-valuemin', minimumWidth(index));
+  edge.setAttribute('aria-valuemax', maximumWidth);
+  edge.title = 'Drag or use the arrow keys to resize ' + label;
+  heading.append(edge);
+  let drag;
+  edge.addEventListener('pointerdown', event => {
+    if (!event.isPrimary || event.button !== 0) return;
+    event.preventDefault();
+    edge.focus({ preventScroll: true });
+    drag = { pointer: event.pointerId, position: event.clientX, width: heading.getBoundingClientRect().width };
+    edge.setPointerCapture(event.pointerId);
+    edge.dataset.resizing = '';
+  });
+  edge.addEventListener('pointermove', event => {
+    if (!drag || event.pointerId !== drag.pointer || (event.clientX === drag.position && !columnWidths)) return;
+    setColumnWidth(index, drag.width + direction * (event.clientX - drag.position));
+  });
+  edge.addEventListener('lostpointercapture', () => {
+    drag = undefined;
+    delete edge.dataset.resizing;
+  });
+  edge.addEventListener('keydown', event => {
+    const sign = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+    if (!sign) return;
+    event.preventDefault();
+    setColumnWidth(index, heading.getBoundingClientRect().width + direction * sign * (event.shiftKey ? 24 : 8));
+  });
+  return edge;
+});
+const columnObserver = new ResizeObserver(entries => {
+  entries.forEach(({ target }) => {
+    const width = Math.round(target.getBoundingClientRect().width);
+    if (width) {
+      const index = headings.indexOf(target);
+      edges[index].setAttribute('aria-valuenow', limitWidth(index, width));
+    }
+  });
+});
+headings.forEach(heading => columnObserver.observe(heading));
 
 table.addEventListener('change', event => {
   const input = event.target;
