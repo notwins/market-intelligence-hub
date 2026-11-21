@@ -99,6 +99,8 @@ market-fundamentals:empty { display: none; }
 .fund-chart figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .25rem .7rem; font-size: .88rem; }
 .fund-chart figcaption span { color: #466077; }
 .fund-plot { display: flex; gap: 3px; margin-top: .4rem; }
+.fund-quarter-plot { overflow-x: auto; }
+.fund-quarter-plot .fund-year { min-width: 3.55rem; }
 .fund-year { flex: 1 1 0; min-width: 0; text-align: center; font-size: clamp(.57rem, 1.7vw, .825rem); }
 .fund-year > div { position: relative; height: clamp(50px, 12vh, 105px); margin-bottom: .12rem; }
 .fund-year > div::before { content: ""; position: absolute; width: 100%; left: 0; bottom: var(--fund-zero); border-bottom: 1px solid #7794aa; }

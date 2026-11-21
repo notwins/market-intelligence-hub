@@ -159,6 +159,29 @@ test('financial statement outlines keep core totals visible and nest detailed ro
  assert(!table(report,'balance').includes('data-fund-parent'));
  assert(!table({ ...report,rows:[[0,'Revenue',[100]]]},'income',true).includes('data-fund-all'));
 });
+test('financial statements switch fiscal periods for the chart and table together',()=>{
+ const {unpack,reportContent}=require('../site/company-fundamentals.js');
+ const annual={currency:'USD',fiscalEnd:'Dec 31',periods:['2025','2026'],rows:[[0,'Total Assets',[10e6,11e6]]]};
+ const quarter={...annual,periods:['Q4 2025','Q1 2026','TTM'],rows:[[0,'Total Assets',[11e6,13e6,45e6]]]};
+ const company={capturedAt:'2026-11-21T07:00:00+08:00',statements:{balance:annual,cash:annual,income:annual},
+  quarterlyCapturedAt:'2026-11-22',quarterly:{balance:quarter,cash:null,income:quarter}};
+ const catalogue=[['DEMO US','XNAS','DEMO','USD']];
+ const companies={'DEMO US':company};
+ assert.doesNotThrow(()=>unpack({version:1,source:'Morningstar',companies},catalogue));
+ assert.doesNotThrow(()=>unpack({version:2,source:'Morningstar',companies},catalogue));
+ const year=reportContent(company,'balance','DEMO US',true,true).html;
+ assert.match(year,/Annual · As Originally Reported/);
+ assert.match(year,/5-year change/);
+ const quarterly=reportContent(company,'balance','DEMO US',true,true,true).html;
+ assert.match(quarterly,/Quarterly · As Originally Reported/);
+ assert.match(quarterly,/<option value="1" selected>Q1 2026<\/option><option value="0">Q4 2025<\/option>/);
+ assert.match(quarterly,/5-quarter change/);
+ assert.match(quarterly,/title="Q1 2026 minus Q4 2025">\+2/);
+ assert.match(quarterly,/fund-quarter-plot/);
+ const missing=reportContent(company,'cash','DEMO US',true,true,true).html;
+ assert.match(missing,/no quarterly figures/);
+ assert.doesNotMatch(missing,/fund-table/);
+});
 test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
  const cards=require('../site/company-news-cards.js');
  const story={story_id:'nvda',headline:'Nvidia update',topic:'US / Nvidia',source_urls:['https://www.reuters.com/nvidia'],version:1,body:'Saved facts',analysis:'Saved analysis',watch_next:'Next disclosure',earlier:''};
