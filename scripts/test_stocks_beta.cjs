@@ -129,10 +129,16 @@ const { briefs } = require('../site/data/stocks-beta2-research-briefs.json');
 assert.deepEqual(Object.keys(briefs).sort(), history.securities.map(item => item.ticker).sort());
 for (const brief of Object.values(briefs)) {
   assert.equal(new URL(brief.source).origin, 'https://productgroup.bankofsingapore.com');
-  assert(brief.outlook && brief.target && brief.financials.periods.length >= 2);
-  assert(brief.financials.periods[0].endsWith('A'));
-  assert(brief.financials.periods.slice(1).every(period => period.endsWith('E')));
+  assert(brief.outlook && brief.target);
+  const { periods, actuals, rows, readthrough, source } = brief.financials;
+  assert.equal(new URL(source).origin, 'https://productgroup.bankofsingapore.com');
+  assert(Number.isInteger(actuals) && actuals > 0 && actuals < periods.length);
+  assert(periods.slice(0, actuals).every(period => period.endsWith('A')));
+  assert(periods.slice(actuals).every(period => period.endsWith('E')));
+  assert(rows.length && rows.every(row => row.length === periods.length + 1 && row[0]));
+  assert(Array.isArray(readthrough));
 }
+assert(Object.values(briefs).some(({ financials }) => financials.periods.length > 3 && financials.rows.length > 4));
 const coneFor = (ticker, end = history.months.length - 1) => {
   const company = history.securities.find(item => item.ticker === ticker);
   const anchor = historyPoints(history, company, 'price', 0, end).at(-1);

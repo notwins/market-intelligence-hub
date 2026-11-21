@@ -57,11 +57,11 @@
 .sb2-quick-values dd { margin:2px 0 0; font-size:.91rem; font-weight:650; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
 .sb2-brief-details { margin-top:9px; }
 .sb2-brief-details summary,.sb2-cone-info summary { color:var(--accent); cursor:pointer; font-weight:650; }
-.sb2-brief-details:not([open]) .sb2-less,.sb2-brief-details[open] .sb2-more { display:none; }
 .sb2-brief-details .sb2-table { border:1px solid var(--line); border-radius:6px; max-height:none; margin-top:5px; }
 .sb2-brief-details .sb2-table th,.sb2-brief-details .sb2-table td { padding:6px; font-size:.79rem; }
-.sb2-brief-details .sb2-table tbody th { position:static; white-space:normal; min-width:84px; }
+.sb2-brief-details .sb2-table tbody th { z-index:1; white-space:normal; min-width:110px; width:135px; }
 .sb2-brief-details th[data-estimate],.sb2-brief-details td[data-estimate] { background:#edf6f4; }
+.sb2-research-readthrough { margin:5px 0 8px; padding-inline-start:18px; font-size:.84rem; }
 .sb2-cone-info { margin-top:8px; padding:8px 9px; background:#eff4fc; border-radius:6px; }
 .sb2-cone-info p { margin:0 0 3px; font-size:.82rem; color:#284867; }
 .sb2-cone-info p:empty { display:none; }
