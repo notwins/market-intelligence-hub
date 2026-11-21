@@ -17,6 +17,8 @@
   const quoteColors = { bid: '#147875', yield: '#536aa0' };
   const modelColor = '#754298', peerColor = '#ac741d', peerModelColor = '#a44c31';
   const noOverlay = () => new Option('No overlay', '');
+  const matchBatchSize = 100;
+  const shownMatches = new Set();
   let publicBonds = new Map();
   let localBonds = new Map();
   let catalogue = new Map();
@@ -25,6 +27,7 @@
   let modeled = new WeakMap();
   let defaultKeys = [];
   let selected = [];
+  let matchingKeys = [];
   let originalTenor = 0;
   let group = 'all';
   let dates = [];
@@ -133,7 +136,7 @@
     if (pointerValue !== undefined && input.valueAsNumber === next) return;
     input.value = String(next);
     showCoupon();
-    populateControls();
+    populateControls(true);
   }
 
   function couponAtPointer(event) {
@@ -142,42 +145,62 @@
     return Math.round(ratio * Number(get('coupon-high').max) * 4) / 4;
   }
 
-  function populateControls() {
+  function updateMatchOptions(count = 0, previousComparison = get('overlay').value) {
+    const overlay = get('overlay');
+    const offset = shownMatches.size;
+    overlay.options.length = offset + 1;
+    const matchOptions = document.createDocumentFragment();
+    const comparisonOptions = document.createDocumentFragment();
+    for (const key of matchingKeys.slice(offset, offset + count)) {
+      const item = bonds.get(key);
+      matchOptions.append(new Option(`${item.name} · ${item.isin}`, key));
+      comparisonOptions.append(new Option(`${item.name} · ${item.currency}`, key));
+      shownMatches.add(key);
+    }
+    for (const key of new Set([...selected, previousComparison])) {
+      const item = bonds.get(key);
+      if (item && !shownMatches.has(key)) comparisonOptions.append(new Option(`${item.name} · ${item.currency}`, key));
+    }
+    get('match').append(matchOptions);
+    overlay.append(comparisonOptions);
+    overlay.value = bonds.has(previousComparison) ? previousComparison : '';
+
+    if (!count) return;
+    const total = matchingKeys.length;
+    const formatCount = value => value.toLocaleString('en-GB');
+    const more = shownMatches.size < total;
+    get('match-count').textContent = more
+      ? `Showing ${formatCount(shownMatches.size)} of ${formatCount(total)} matching bonds.`
+      : `${formatCount(total)} matching ${total === 1 ? 'bond' : 'bonds'}.`;
+    get('show-more').hidden = !more;
+  }
+
+  function populateControls(resetMatches = false) {
     const query = get('search').value.toUpperCase().trim().split(/\s+/).filter(Boolean);
     const low = get('coupon-low'), high = get('coupon-high');
     const min = low.valueAsNumber, max = high.valueAsNumber;
     const couponActive = min > 0 || high.value !== high.max;
     const pool = originalTenor ? [...catalogue.keys()] : query.length || couponActive
       ? [...bonds.keys()] : [...new Set([...defaultKeys, ...catalogue.keys()])];
-    const filtered = pool.filter(key => {
+    matchingKeys = pool.filter(key => {
       const instrument = bonds.get(key);
       if (originalTenor && originalYears(instrument) !== originalTenor) return false;
       if (couponActive && !(Number.isFinite(instrument.coupon) && instrument.coupon >= min && instrument.coupon <= max)) return false;
       return query.every(term => `${instrument.isin} ${instrument.name} ${instrument.type ?? ''} ${instrument.currency}`.toUpperCase().includes(term));
     });
-    const matches = filtered.slice(0, 100);
+    const count = resetMatches ? matchBatchSize : Math.max(matchBatchSize, shownMatches.size);
     const matchSelect = get('match');
     const priorMatch = matchSelect.value;
-    matchSelect.replaceChildren(...matches.map(key => {
-      const item = bonds.get(key);
-      return new Option(`${item.name} · ${item.isin}`, key);
-    }));
-    if (matches.includes(priorMatch)) matchSelect.value = priorMatch;
-    if (!matches.length) matchSelect.add(new Option('No matching bonds', ''));
-    get('add').disabled = !matches.length;
-    get('clear-filters').disabled = !originalTenor && !couponActive && !query.length;
-    get('match-count').textContent = filtered.length > matches.length
-      ? `Showing ${matches.length} of ${filtered.length.toLocaleString('en-GB')} matches. Narrow by tenor, coupon or search.`
-      : `${filtered.length} matching ${filtered.length === 1 ? 'bond' : 'bonds'}.`;
     const overlay = get('overlay');
-    const previous = overlay.value;
-    const choices = [...new Set([...matches, ...selected])];
-    if (bonds.has(previous) && !choices.includes(previous)) choices.push(previous);
-    overlay.replaceChildren(noOverlay(), ...choices.map(key => {
-      const item = bonds.get(key);
-      return new Option(`${item.name} · ${item.currency}`, key);
-    }));
-    overlay.value = previous && bonds.has(previous) ? previous : '';
+    const previousComparison = overlay.value;
+    shownMatches.clear();
+    matchSelect.replaceChildren();
+    overlay.replaceChildren(noOverlay());
+    updateMatchOptions(count, previousComparison);
+    if (shownMatches.has(priorMatch)) matchSelect.value = priorMatch;
+    if (!shownMatches.size) matchSelect.add(new Option('No matching bonds', ''));
+    get('add').disabled = !shownMatches.size;
+    get('clear-filters').disabled = !originalTenor && !couponActive && !query.length;
   }
 
   function setCursor(index) {
@@ -386,7 +409,7 @@
     remove.setAttribute('aria-label', `Remove ${instrument.name}`);
     remove.addEventListener('click', () => {
       selected = selected.filter(item => item !== key);
-      populateControls(); refreshDates(); renderCards(); get('add').focus();
+      updateMatchOptions(); refreshDates(); renderCards(); get('add').focus();
     });
     const card = { key, instrument, element, near: false, positions: {} };
     for (const canvas of element.querySelectorAll('canvas')) {
@@ -646,13 +669,15 @@
       updateStatus();
     } finally { setHistoryBusy(false); }
   });
-  get('search').addEventListener('input', populateControls);
+  get('search').addEventListener('input', () => populateControls(true));
   get('tenors').addEventListener('click', event => {
     const button = event.target.closest('[data-tenor]');
     if (!button || button.disabled) return;
-    originalTenor = Number(button.dataset.tenor);
+    const next = Number(button.dataset.tenor);
+    if (next === originalTenor) return;
+    originalTenor = next;
     showTenor();
-    populateControls();
+    populateControls(true);
   });
   for (const end of ['low', 'high']) {
     get('coupon-' + end).addEventListener('input', event => changeCoupon(event.currentTarget));
@@ -680,14 +705,22 @@
     get('search').value = '';
     get('coupon-low').value = '0';
     get('coupon-high').value = get('coupon-high').max;
-    showTenor(); showCoupon(); populateControls();
+    showTenor(); showCoupon(); populateControls(true);
     get('search').focus();
+  });
+  get('show-more').addEventListener('click', event => {
+    // Move focus before the last batch hides this button.
+    if (matchingKeys.length - shownMatches.size <= matchBatchSize) {
+      if (event.detail === 0) get('match').focus({ preventScroll: true });
+      else event.currentTarget.blur();
+    }
+    updateMatchOptions(matchBatchSize);
   });
   get('add').addEventListener('click', () => {
     const key = get('match').value;
     if (!bonds.has(key)) return;
     selected = [...new Set([key, ...selected])];
-    selectGroup('all'); populateControls(); refreshDates(); renderCards();
+    selectGroup('all'); updateMatchOptions(); refreshDates(); renderCards();
     pendingFocus = !inspectLatest(key) && !curves.length ? key : undefined;
     cards[0]?.element.scrollIntoView({ block: 'nearest' });
   });
@@ -695,7 +728,7 @@
   get('overlay').addEventListener('change', () => { refreshDates(); showSeries(); });
   get('columns').addEventListener('change', () => { get('cards').dataset.columns = get('columns').value; });
   get('cursor').addEventListener('input', () => setCursor(Number(get('cursor').value)));
-  get('reset').addEventListener('click', () => { selected = [...defaultKeys]; selectGroup('all'); populateControls(); refreshDates(); renderCards(); });
+  get('reset').addEventListener('click', () => { selected = [...defaultKeys]; selectGroup('all'); updateMatchOptions(); refreshDates(); renderCards(); });
   document.querySelectorAll('[data-group]').forEach(button => button.addEventListener('click', () => {
     selectGroup(button.dataset.group); renderCards();
   }));
