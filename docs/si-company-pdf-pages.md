@@ -18,11 +18,10 @@ reads the same browser-local Morningstar import as the stock cards, and loads th
 existing BOS research briefs. Refresh also reads imports saved in another tab.
 No imported statements or private drafts are uploaded or included in the deployment.
 
-Each statement shows up to three fiscal years, excluding TTM, with five selected
-reported totals. Statement currencies and fiscal year ends are retained; amounts
-are displayed in millions, with EPS separately labelled per share. Normalized EPS
-remains labelled normalized. Missing values remain unavailable. BOS estimates are
-identified separately and never fill missing annual statements.
+The company-page renderer retains the current twelve-quarter financial profiles,
+statement currencies and fiscal periods. Amounts are displayed in millions, with
+EPS labelled per share and normalized EPS identified separately. Missing periods
+and values remain unavailable; BOS estimates never fill missing statements.
 
 Agency ratings use the existing validated Bloomberg snapshot via ShareEnrichment
 and the existing credit summaries via CompanyCreditData. Agency, issuer/debt scope,
@@ -34,7 +33,8 @@ Morningstar stars are separate concepts. No substitute listing is used.
 
 The main cone starts at the latest selected dated close (BOS first, Yahoo fallback)
 and ends twelve calendar months later. Volatility uses the full available price-only
-Yahoo Close history when available, otherwise split-normalised BOS. Each source uses
+Yahoo Close history when available, otherwise split-normalised BOS, retaining a valid selected quote even if the Yahoo
+history request fails. Each source uses
 up to 36 completed monthly log returns, sample standard deviation, and zero log drift.
 At month m the boundaries are `close * exp(sd * sigma * sqrt(m))`, sd = -2,-1,0,1,2.
 

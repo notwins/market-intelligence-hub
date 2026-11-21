@@ -210,7 +210,11 @@ async function enrich(p){
     sourceUrl:window.MarketPrices.sourceUrl(data.item.history_url),basis:data.item.basis||''
    };
   }catch{
-   market={error:'Exact listing history unavailable. No substitute listing is used.'};
+   const quote=window.MarketPrices.currentQuote?.(item);
+   market={error:'Exact listing history unavailable. No substitute listing is used.',
+    ...(Number.isFinite(quote?.close)&&quote.close>0&&quote.date?{
+     quote:{close:quote.close,date:quote.date},quoteSource:quote.sourceLabel||'Saved quote',currency:item?.currency,
+    }:{})};
   }
   const listing=valuation?.row||reviewedListing(item);
   const moaTicker=listing?.instrumentId||profile?.bbTicker||item?.bbTicker;
@@ -220,8 +224,18 @@ async function enrich(p){
   const fundamentals=await bounded(Promise.resolve(window.CompanyFundamentals?.snapshot(identity)),'Company statements timed out.',12000).catch(()=>null);
   const bbg=window.ShareEnrichment?.find(identity);
   const creditReports=await bounded(Promise.resolve(window.CompanyCreditData?.load()),'Credit research timed out.',12000).then(rows=>window.CompanyCreditData?.forListing(rows,moaTicker||ticker)||[]).catch(()=>[]);
+  const coneHistories=await coneSources;
+  if(!market.points?.length&&market.quote){
+   const bos=coneHistories?.find(source=>source.id==='bos'&&source.splitAdjusted===true);
+   if(bos){
+    const from=C.yearsBefore(market.quote.date,8);
+    market.points=[...new Map(bos.points.filter(([date,value])=>typeof date==='string'&&date>=from&&date<=market.quote.date&&Number.isFinite(value)&&value>0)).entries()].sort((a,b)=>a[0].localeCompare(b[0]));
+    market.comparisonPrices=market.points;market.provider='Bank of Singapore archive';market.basis=bos.basis;
+    if(market.points.length)delete market.error;
+   }
+  }
   result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,moaTicker,moaCurrency,isin:item?.isin,
-   fundamentals,coneHistories:await coneSources,creditRatings:window.SIEquityPages?.ratings(bbg)||[],creditOutlook:bbg?.creditOutlook?.value||'',creditReports,
+   fundamentals,coneHistories,creditRatings:window.SIEquityPages?.ratings(bbg)||[],creditOutlook:bbg?.creditOutlook?.value||'',creditReports,
    bosKey:bosFiles?.listingKey(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency),
    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
   };

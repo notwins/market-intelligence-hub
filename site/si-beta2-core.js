@@ -554,7 +554,7 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
   if(chart.target)coverage.push(`Calls: ${ratingHistory.length||'unavailable'}`);
   if(flatPrice&&ratios.length)coverage.push('Ratios hidden on flat prices');
   if(incompatibleArchive)coverage.push(`${incompatibleArchive} archive off scale`);
-  if(chart.cone)coverage.push(cone?.points?`Cone: ${cone.label} ${cone.count} months${coneCheck.models.find(m=>m.id==='bos')?' · purple BOS '+coneCheck.models.find(m=>m.id==='bos').count:''}${coneCheck.models.find(m=>m.id==='saved')?' · gold Saved '+coneCheck.models.find(m=>m.id==='saved').count:''}${coneCheck.review?' · REVIEW':coneCheck.matched?' · shared-date check OK':''}`:'Cone: '+cone.reason);
+  if(chart.cone)coverage.push(cone?.points?`Cone: ${cone.label} ${cone.count} months${coneCheck.models.find(m=>m.id==='bos'&&m.id!==cone.id)?' · purple BOS '+coneCheck.models.find(m=>m.id==='bos'&&m.id!==cone.id).count:''}${coneCheck.models.find(m=>m.id==='saved')?' · gold Saved '+coneCheck.models.find(m=>m.id==='saved').count:''}${coneCheck.review?' · REVIEW':coneCheck.matched?' · shared-date check OK':''}`:'Cone: '+cone.reason);
   fitted(chartX+4,y+block-6,(hasOverlays?'Observations · ':'')+coverage.join(' · '),446,7.5,muted);
  }
  const rx=496,rw=266,description=s.description||d.description||'Company description not supplied. Add a short description in share details.';
