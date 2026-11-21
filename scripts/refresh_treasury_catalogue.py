@@ -45,6 +45,15 @@ def auction_day(row, key):
     return date.fromisoformat(row[key][:10])
 
 
+def original_term_months(row):
+    value = row.get('originalSecurityTerm') or ''
+    match = re.fullmatch(r'(\d{1,2})-Year(?: (\d{1,2})-Month)?', value)
+    if not match:
+        return None
+    years, months = int(match[1]), int(match[2] or 0)
+    return 12 * years + months if years > 0 and months < 12 else None
+
+
 def project(sources, today):
     instruments = {}
     latest = None
@@ -67,13 +76,17 @@ def project(sources, today):
             previous = instruments.get(isin)
             if previous and (previous[0], previous[1], previous[3]) != (kind, coupon, maturity):
                 raise ValueError(f'Conflicting coupon or maturity across auctions for {isin}')
-            instruments[isin] = (kind, coupon, min(original, previous[2]) if previous else original, maturity)
+            term = original_term_months(row)
+            if previous and previous[4] and term and term != previous[4]:
+                raise ValueError(f'Conflicting original term across auctions for {isin}')
+            instruments[isin] = (kind, coupon, min(original, previous[2]) if previous else original,
+                                 maturity, term or (previous[4] if previous else None))
             latest = auction if latest is None else max(latest, auction)
     if not latest or {terms[0] for terms in instruments.values()} != {'Bond', 'Note'}:
         raise ValueError('Incomplete Treasury catalogue')
     return {'schema_version': 1, 'source_url': SOURCE, 'latest_auction_date': latest.isoformat(),
-            'instruments': [[isin, kind, coupon, first.isoformat(), end.isoformat()]
-                            for isin, (kind, coupon, first, end) in sorted(instruments.items())]}
+            'instruments': [[isin, kind, coupon, first.isoformat(), end.isoformat(), term]
+                            for isin, (kind, coupon, first, end, term) in sorted(instruments.items())]}
 
 
 def serialize(catalogue):
@@ -94,6 +107,9 @@ def refresh(destination, today):
         if ({row[0] for row in before['instruments']} - {row[0] for row in catalogue['instruments']}
                 or catalogue['latest_auction_date'] < before['latest_auction_date']):
             raise ValueError('Incomplete auction refresh. The previous Treasury catalogue was retained.')
+        terms = {row[0]: row[5] for row in catalogue['instruments']}
+        if any(len(row) > 5 and row[5] and not terms.get(row[0]) for row in before['instruments']):
+            raise ValueError('Refresh lost verified original terms. The previous Treasury catalogue was retained.')
     temporary = destination.with_suffix('.json.tmp')
     try:
         temporary.write_bytes(content)

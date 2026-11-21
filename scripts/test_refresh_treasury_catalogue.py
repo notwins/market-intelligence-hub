@@ -18,8 +18,8 @@ class TreasuryCatalogueTest(unittest.TestCase):
     today = date(2026, 11, 22)
 
     def setUp(self):
-        self.bond = auction('Bond', '912810UY2', '5.375', '2026-11-16', '2056-11-15')
-        self.note = auction('Note', '91282CJJ1', '4.5', '2023-11-15', '2033-11-15')
+        self.bond = auction('Bond', '912810UY2', '5.375', '2026-11-16', '2056-11-15', originalSecurityTerm='30-Year')
+        self.note = auction('Note', '91282CJJ1', '4.5', '2023-11-15', '2033-11-15', originalSecurityTerm='10-Year')
         self.sources = {'Bond': [self.bond], 'Note': [self.note]}
 
     def test_terms_exclude_other_structures_and_reopenings_preserve_issuance(self):
@@ -31,9 +31,10 @@ class TreasuryCatalogueTest(unittest.TestCase):
         ])
         result = catalogue.project(self.sources, self.today)
         self.assertEqual(result['instruments'], [
-            ['US912810UY28', 'Bond', 5.375, '2026-11-16', '2056-11-15'],
-            ['US91282CJJ18', 'Note', 4.5, '2023-11-15', '2033-11-15'],
+            ['US912810UY28', 'Bond', 5.375, '2026-11-16', '2056-11-15', 360],
+            ['US91282CJJ18', 'Note', 4.5, '2023-11-15', '2033-11-15', 120],
         ])
+        self.assertEqual(catalogue.original_term_months({'originalSecurityTerm': '20-Year 1-Month'}), 241)
 
     def test_incomplete_refresh_retains_previous_bytes(self):
         with tempfile.TemporaryDirectory() as directory:

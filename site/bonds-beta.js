@@ -25,6 +25,7 @@
   let modeled = new WeakMap();
   let defaultKeys = [];
   let selected = [];
+  let originalTenor = 0;
   let group = 'all';
   let dates = [];
   let dateIndices = new Map();
@@ -90,23 +91,87 @@
     });
   }
 
+  const originalYears = item => Math.round(item.termMonths / 12);
+
+  function showTenor() {
+    const available = new Set([...catalogue.values()].map(originalYears));
+    for (const button of get('tenors').querySelectorAll('[data-tenor]')) {
+      const years = Number(button.dataset.tenor);
+      button.disabled = years > 0 && !available.has(years);
+      button.setAttribute('aria-pressed', String(years === originalTenor));
+    }
+  }
+
+  function showCoupon() {
+    const track = get('coupon-slider');
+    for (const end of ['low', 'high']) {
+      const input = get('coupon-' + end);
+      const label = input.valueAsNumber.toFixed(2) + '%';
+      get('coupon-' + end + '-value').textContent = label;
+      input.setAttribute('aria-valuetext', label);
+      track.style.setProperty('--coupon-' + end, input.valueAsNumber / Number(input.max) * 100 + '%');
+    }
+  }
+
+  function updateCouponDomain() {
+    const low = get('coupon-low'), high = get('coupon-high');
+    const wasFull = high.value === high.max;
+    let maxCoupon = .25;
+    for (const { coupon } of bonds.values()) {
+      if (Number.isFinite(coupon)) maxCoupon = Math.max(maxCoupon, coupon);
+    }
+    const max = String(Math.ceil(maxCoupon * 4) / 4);
+    low.max = high.max = max;
+    if (wasFull) high.value = max;
+    showCoupon();
+  }
+
+  function changeCoupon(input, pointerValue) {
+    const low = get('coupon-low'), high = get('coupon-high');
+    const value = pointerValue ?? input.valueAsNumber;
+    const next = input === low ? Math.min(value, high.valueAsNumber) : Math.max(value, low.valueAsNumber);
+    if (pointerValue !== undefined && input.valueAsNumber === next) return;
+    input.value = String(next);
+    showCoupon();
+    populateControls();
+  }
+
+  function couponAtPointer(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left - 12) / (rect.width - 24)));
+    return Math.round(ratio * Number(get('coupon-high').max) * 4) / 4;
+  }
+
   function populateControls() {
     const query = get('search').value.toUpperCase().trim().split(/\s+/).filter(Boolean);
-    const pool = query.length ? [...bonds.keys()] : [...new Set([...defaultKeys, ...catalogue.keys()])];
-    const matches = pool.filter(key => {
+    const low = get('coupon-low'), high = get('coupon-high');
+    const min = low.valueAsNumber, max = high.valueAsNumber;
+    const couponActive = min > 0 || high.value !== high.max;
+    const pool = originalTenor ? [...catalogue.keys()] : query.length || couponActive
+      ? [...bonds.keys()] : [...new Set([...defaultKeys, ...catalogue.keys()])];
+    const filtered = pool.filter(key => {
       const instrument = bonds.get(key);
+      if (originalTenor && originalYears(instrument) !== originalTenor) return false;
+      if (couponActive && !(Number.isFinite(instrument.coupon) && instrument.coupon >= min && instrument.coupon <= max)) return false;
       return query.every(term => `${instrument.isin} ${instrument.name} ${instrument.type ?? ''} ${instrument.currency}`.toUpperCase().includes(term));
-    }).slice(0, 100);
+    });
+    const matches = filtered.slice(0, 100);
     const matchSelect = get('match');
+    const priorMatch = matchSelect.value;
     matchSelect.replaceChildren(...matches.map(key => {
       const item = bonds.get(key);
       return new Option(`${item.name} · ${item.isin}`, key);
     }));
+    if (matches.includes(priorMatch)) matchSelect.value = priorMatch;
     if (!matches.length) matchSelect.add(new Option('No matching bonds', ''));
     get('add').disabled = !matches.length;
+    get('clear-filters').disabled = !originalTenor && !couponActive && !query.length;
+    get('match-count').textContent = filtered.length > matches.length
+      ? `Showing ${matches.length} of ${filtered.length.toLocaleString('en-GB')} matches. Narrow by tenor, coupon or search.`
+      : `${filtered.length} matching ${filtered.length === 1 ? 'bond' : 'bonds'}.`;
     const overlay = get('overlay');
     const previous = overlay.value;
-    const choices = [...new Set([...selected, ...matches])];
+    const choices = [...new Set([...matches, ...selected])];
     if (bonds.has(previous) && !choices.includes(previous)) choices.push(previous);
     overlay.replaceChildren(noOverlay(), ...choices.map(key => {
       const item = bonds.get(key);
@@ -424,6 +489,8 @@
     selected = [...new Set([...selected.filter(key => bonds.has(key)), ...defaultKeys.filter(key => !previousDefaults.has(key))])];
     get('controls').hidden = !bonds.size;
     get('clear').hidden = !localBonds.size && !remembered;
+    showTenor();
+    updateCouponDomain();
     populateControls(); refreshDates(); renderCards();
     updateStatus();
   }
@@ -580,6 +647,42 @@
     } finally { setHistoryBusy(false); }
   });
   get('search').addEventListener('input', populateControls);
+  get('tenors').addEventListener('click', event => {
+    const button = event.target.closest('[data-tenor]');
+    if (!button || button.disabled) return;
+    originalTenor = Number(button.dataset.tenor);
+    showTenor();
+    populateControls();
+  });
+  for (const end of ['low', 'high']) {
+    get('coupon-' + end).addEventListener('input', event => changeCoupon(event.currentTarget));
+  }
+  const couponSlider = get('coupon-slider');
+  let couponDrag;
+  couponSlider.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || couponDrag) return;
+    const low = get('coupon-low'), high = get('coupon-high');
+    const value = couponAtPointer(event);
+    const input = value > (low.valueAsNumber + high.valueAsNumber) / 2 ? high : low;
+    input.focus({ preventScroll: true });
+    couponSlider.setPointerCapture(event.pointerId);
+    couponDrag = { input, pointerId: event.pointerId };
+    changeCoupon(input, value);
+  });
+  couponSlider.addEventListener('pointermove', event => {
+    if (couponDrag?.pointerId === event.pointerId) changeCoupon(couponDrag.input, couponAtPointer(event));
+  });
+  couponSlider.addEventListener('lostpointercapture', event => {
+    if (couponDrag?.pointerId === event.pointerId) couponDrag = undefined;
+  });
+  get('clear-filters').addEventListener('click', () => {
+    originalTenor = 0;
+    get('search').value = '';
+    get('coupon-low').value = '0';
+    get('coupon-high').value = get('coupon-high').max;
+    showTenor(); showCoupon(); populateControls();
+    get('search').focus();
+  });
   get('add').addEventListener('click', () => {
     const key = get('match').value;
     if (!bonds.has(key)) return;

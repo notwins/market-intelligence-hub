@@ -160,6 +160,10 @@ console.log('PASS Treasury clean prices, dynamic FRED tenors, the 30-year public
 const treasuryDirectory = beta.treasuryCatalogue(JSON.parse(fs.readFileSync('site/data/treasury-catalogue.json', 'utf8')));
 const expanded = beta.mergeCatalogue(betaList, treasuryDirectory);
 assert(treasuryDirectory.size > betaList.size);
+assert.equal(treasuryDirectory.get('US912810UY28|USD').termMonths, 360);
+assert.equal(treasuryDirectory.get('US91282CJJ18|USD').termMonths, 120);
+assert.equal(beta.treasuryCatalogue({ schema_version: 1, latest_auction_date: '2026-11-12',
+  instruments: [['US912810UY28', 'Bond', 5.375, '2026-11-16', '2056-11-15']] }).get('US912810UY28|USD').termMonths, null);
 for (const [key, saved] of betaList) {
   assert.equal(expanded.get(key).rows, saved.rows);
   if (!saved.isTreasury) continue;
