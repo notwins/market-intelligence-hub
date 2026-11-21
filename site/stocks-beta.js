@@ -211,9 +211,8 @@ function renderCard(c) {
         aria-controls="sb-profile-${id} sb-extra-${id}"><span>${expanded?'Compact card':'Full card'}</span><span class="sb-sr-only"> for ${E(c.ticker)}</span></button>
       <div class="sb-card-extra" id="sb-extra-${id}">
         <p class="sb-note">Valuations: ${day(r.priceAsOf)} · consensus forward estimates, forecast horizon unspecified. Revenue / EPS: ${E(c.earnings.observations[0]?.period||'not indexed')} · ${E(c.earnings.company?.eps_basis||'basis unavailable')}. These are separate reporting dates.</p>
-        ${returns(c)}${chartSection(c)}${fundamentals(c)}<div data-credit-listing="${E(c.ticker)}"></div>
+        ${returns(c)}${chartSection(c)}${fundamentals(c)}${root.CompanyFundamentals?.button(c.record||c.item)||''}<div data-credit-listing="${E(c.ticker)}"></div>
         ${earnings(c)}${reading(c)}${warnings}${root.NvdaArticle?.link(c.ticker)||''}
-        ${root.CompanyFundamentals?.button(c.record||c.item)||''}
       </div>
     </div>
   </article>`;

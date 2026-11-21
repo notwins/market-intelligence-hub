@@ -124,9 +124,9 @@ function stockCard(r) {
         <div data-quote-info="${E(r.ticker)}">${quoteDetails(r)}</div>
         <p class="fine">${link(destination, 'Company workspace →')} · ${link(r.research_href, 'Search research →')}</p>
       </details>
+      ${root.CompanyFundamentals?.button({ ticker: r.ticker, name: r.name }) || ''}
       <div data-company-research></div>
       ${root.NvdaArticle?.link(r.ticker) || ''}
-      ${root.CompanyFundamentals?.button({ ticker: r.ticker, name: r.name }) || ''}
     </div>
   </article>`;
 }
