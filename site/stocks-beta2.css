@@ -24,10 +24,12 @@
 .sb2-company-search { display:flex; align-items:end; gap:8px; flex:1 1 auto; min-width:0; max-width:650px; }
 .sb2-company-search label { flex:1 1 auto; max-width:550px; min-width:0; margin:0; }
 .sb2-company-search input { width:100%; margin-top:4px; }
-.sb2-card-layout { display:flex; align-items:end; gap:8px; margin-inline-start:auto; }
+.sb2-card-layout { display:flex; flex-wrap:wrap; align-items:end; gap:8px; margin-inline-start:auto; }
 .sb2-picker .sb2-layout-control { display:grid; gap:4px; margin:0; color:var(--muted); }
 .sb2-layout-control select { min-height:42px; font-size:.85rem; padding:6px 10px; }
 .sb2-card-fit { color:var(--muted); font-size:.8rem; padding-bottom:10px; }
+#sb2-fiscal-compare { min-height:42px; font-size:.85rem; white-space:nowrap; }
+#sb2-fiscal-compare[aria-pressed="true"] { color:#fff; background:var(--accent); border-color:var(--accent); }
 #sb2-browse { flex:none; padding-inline:10px; font-size:.85rem; }
 #sb2-picker-results { margin-top:12px; }
 #sb2-result-count { font-size:.85rem; color:var(--muted); align-self:end; padding:4px 0; }

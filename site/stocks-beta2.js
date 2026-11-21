@@ -75,6 +75,9 @@
   };
   const comparisonKey = 'market-hub-stocks-beta2-comparison-v1';
   const columnChoice = get('sb2-card-columns');
+  const fiscalToggle = get('sb2-fiscal-compare');
+  const desktop = root.matchMedia('(any-pointer:fine)');
+  let compareFiscalYears = false;
   const touch = root.matchMedia('(pointer:coarse)');
   const portrait = root.matchMedia('(orientation:portrait)');
   const smallScreen = root.matchMedia('(max-width:760px)');
@@ -91,6 +94,7 @@
     try {
       root.localStorage.setItem(comparisonKey, JSON.stringify({
         columns: columnChoice.value,
+        compareFiscalYears,
         fundamentalsWidth,
         history: history.settings(),
         cards: [...cards.values()].map(({ slot, company }) => ({ slot, ticker: company.ticker }))
@@ -113,6 +117,8 @@
       columnChoice.value = saved.columns;
     }
     if (Number.isFinite(saved?.fundamentalsWidth)) setFundamentalsWidth(saved.fundamentalsWidth);
+    compareFiscalYears = saved?.compareFiscalYears === true;
+    applyFiscalComparison();
     if (!Array.isArray(saved?.cards)) return;
 
     const companies = new Map(data.securities.map(company => [company.ticker, company]));
@@ -135,7 +141,7 @@
     const preferred = columnChoice.value === 'auto' ? 5 : Number(columnChoice.value);
     const deviceLimit = touch.matches ? (portrait.matches ? 1 : 2) : 5;
     const capacity = Math.max(1, Math.floor((deck.clientWidth + gap) / (minimum + gap)));
-    const columns = Math.min(preferred, deviceLimit, capacity, cards.size);
+    const columns = deck.hasAttribute('data-financial-compare') ? 1 : Math.min(preferred, deviceLimit, capacity, cards.size);
     const status = get('sb2-card-fit');
     const label = columns + (columns === 1 ? ' card per row' : ' cards per row');
     const expanded = deck.querySelector('[data-expanded]');
@@ -147,6 +153,20 @@
   }
 
   new ResizeObserver(fitCards).observe(deck);
+  function applyFiscalComparison() {
+    const active = compareFiscalYears && desktop.matches;
+    fiscalToggle.hidden = !desktop.matches;
+    fiscalToggle.setAttribute('aria-pressed', String(active));
+    columnChoice.disabled = active;
+    deck.toggleAttribute('data-financial-compare', active);
+    fitCards();
+  }
+  desktop.addEventListener('change', applyFiscalComparison);
+  fiscalToggle.addEventListener('click', () => {
+    compareFiscalYears = !compareFiscalYears;
+    applyFiscalComparison();
+    saveComparison();
+  });
   columnChoice.addEventListener('change', () => {
     fitCards();
     saveComparison();
@@ -444,7 +464,9 @@
     const entry = { element, company, slot };
     element.dataset.slot = String(slot);
     paintHeading(entry);
-    element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.button(company, { research: false }) || '';
+    element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.button(company, {
+      research: false, compareYears: true
+    }) || '';
     const credit = element.querySelector('[data-credit-listing]');
     if (credit) {
       credit.dataset.creditListing = company.ticker;
