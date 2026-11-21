@@ -14,7 +14,7 @@
   <script defer src="stocks-beta2-charts.js?v=20261122.performance1"></script>
   <script defer data-price-model-only src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.performance1"></script>
   <script defer src="bonds-beta-data.js?v=20261122.filters1"></script>
-  <script defer src="bonds-beta.js?v=20261122.more1"></script>
+  <script defer src="bonds-beta.js?v=20261122.sort1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to bond charts</a>
@@ -67,6 +67,13 @@
       </div>
       <div class="bb-inputs">
         <label>Find a bond<input id="bb-search" type="search" placeholder="Coupon, maturity or ISIN" autocomplete="off"></label>
+        <label>Sort by<select id="bb-sort">
+          <option value="">Default order</option>
+          <option value="maturity-asc">Maturity · earliest first</option>
+          <option value="maturity-desc">Maturity · latest first</option>
+          <option value="coupon-asc">Coupon · lowest first</option>
+          <option value="coupon-desc">Coupon · highest first</option>
+        </select></label>
         <label>Matching bonds<select id="bb-match"></select></label>
         <button id="bb-add" type="button">Add card</button>
         <label>Compare with<select id="bb-overlay"></select></label>
