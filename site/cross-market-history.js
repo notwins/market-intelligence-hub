@@ -15,7 +15,8 @@
   guideButton.addEventListener('click', () => guide.showModal());
   guide.querySelectorAll('[data-guide-jump]').forEach(anchor => anchor.addEventListener('click', () => guide.close()));
   const colors = ['#114fa9', '#087e72', '#6843a6', '#b66a08', '#b63d56', '#676f87', '#233044'];
-  const equityColors = ['#086b58', '#197443', '#00727e', '#ab3929', '#a02d64', '#986005'];
+  const equityColors = ['#086b58', '#247821', '#007398', '#2354ac', '#4a50a4',
+    '#be2d36', '#a02d64', '#a84d10', '#806018', '#754b7e'];
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
   const num = (v, dp = 1) => Number.isFinite(v) ? v.toFixed(dp) : '—';
   const signed = (v, dp = 1) => Number.isFinite(v) ? (v > 0 ? '+' : '') + num(v, dp) : '—';
@@ -156,11 +157,12 @@
     const spx = index.find(p => p.date === rank?.from) || index[0];
     const rebase = (points, base) => base ? points.map(p => ({...p, value:p.value / base.value * 100})) : [];
     const lines = [chartLine('SPX', rebase(index, spx), colors[6])];
-    ranks.forEach((r,i) => lines.push(chartLine(ticker(r.record), rebase(r.points, r.from), equityColors[i],
-      rank.basis.startsWith('BOS') ? 45 : 10, i >= 3 ? '6 4' : '')));
+    const winners = rank?.winners.length ?? 0;
+    ranks.forEach((r,i) => lines.push(chartLine(ticker(r.record), rebase(r.points, r.from),
+      equityColors[i < winners ? i : 5 + i - winners], rank.basis.startsWith('BOS') ? 45 : 10, i >= winners ? '6 4' : '')));
     const ranked = rank ? '<p class="focus"><strong>' + esc(ticker(rank.winners[0].record)) + ' led at ' + signed(rank.winners[0].change) +
       '% and ' + esc(ticker(rank.losers[0].record)) + ' trailed at ' + signed(rank.losers[0].change) + '%.</strong> ' +
-      esc(rank.basis) + ' · ' + rank.count + ' comparable listings · ' + day(rank.from) + ' to ' + day(rank.to) +
+      esc(rank.basis) + ' · ' + rank.count + ' comparable listings from the ' + source.watchlistSize + '-listing watchlist · ' + day(rank.from) + ' to ' + day(rank.to) +
       ' · ' + rank.jumps + ' paths flagged for possible price discontinuities.</p><div class="table-wrap"><table data-return-sparks="cross-market-' + esc(card.id) + '"><caption>Top and bottom USD share price changes on the common ranking dates</caption><thead>' +
       '<tr><th scope="col">Group</th><th scope="col">Listing</th><th scope="col">Price Δ (%)</th><th scope="col">vs SPX (pp)</th></tr></thead><tbody>' +
       ranks.map((r,i) => {
@@ -168,9 +170,10 @@
         const excess = r.change - M.pct(spx.value,benchmark.value);
         const provider = rank.basis.startsWith('BOS') ? 'cross-bos' : 'cross-weekly';
         const attrs = window.ReturnSparks?.instrument(r.record.id,r.record.currency,rank.to,provider) || '';
-        return '<tr ' + attrs + '><td>' + (i < 3 ? 'Top ' + (i+1) : 'Bottom ' + (i-2)) + '</td><th scope="row">' + esc(r.record.bbTicker) +
+        return '<tr ' + attrs + '><td>' + (i < winners ? 'Top ' + (i+1) : 'Bottom ' + (i-winners+1)) + '</td><th scope="row">' + esc(r.record.bbTicker) +
           '</th><td class="' + heat(r.change,5) + '">' + signed(r.change) + '</td><td class="' + heat(excess,5) + '">' + signed(excess) + '</td></tr>';
-      }).join('') + '</tbody></table></div>' : '<p class="gap"><strong>SPX is available on its own where the index archive covers this window.</strong> The share archive supplies too few comparable listings with common endpoints here.</p>';
+      }).join('') + '</tbody></table></div>' : '<p class="gap">' + (source.watchlistSize ?
+        'Too few watchlist shares have comparable price history for this period.' : 'The stock watchlist could not load.') + '</p>';
     const valuationRecords = source.records.filter(r => ['pe','pb'].some(metric =>
       calc(source.valuations[metric].get(r.id),card).length > 0));
     const best = ranks.find(r => valuationRecords.some(v => v.id === r.record.id))?.record.id ||
@@ -180,7 +183,7 @@
       '<label>Listing <select class="valuation-select">' + valuationRecords.map(r => '<option value="' + esc(r.id) + '"' +
         (r.id === best ? ' selected' : '') + '>' + esc(r.bbTicker + ' · ' + r.name) + '</option>').join('') +
       '</select></label><div class="valuation-charts"></div></details>' : '<p class="gap">No dated P/E or P/B observations in Shares Historical for this window.</p>';
-    return '<section class="panel equity"><h3>SPX and top / bottom shares <small>base 100</small></h3><p class="caption">' +
+    return '<section class="panel equity"><h3>SPX and watchlist performance <small>base 100</small></h3><p class="caption">' +
       (spx ? 'Base 100 on ' + day(spx.date) + '. ' : '') + 'Ranked share paths use a single source. SPX shows the saved index through its latest available session.</p>' +
       figure(card, lines, 'index', 'SPX and ranked shares', {reference:[100]}) + ranked + valuation + '</section>';
   }
@@ -288,8 +291,11 @@
 
   async function shareData() {
     const S = window.ShareLabData;
-    const loaded = await S.load();
-    const records = M.stockUniverse(S.records());
+    const [loaded, coverage] = await Promise.all([
+      S.load(), json('data/stocks-beta2-monthly-history.json?v=20261121').catch(() => null)
+    ]);
+    const watchlist = coverage?.version === 1 && Array.isArray(coverage.securities) ? coverage.securities.slice(0, 110) : [];
+    const records = M.stockUniverse(S.records(), watchlist);
     const [global,bos,pe,pb] = await Promise.all(['globalPrice','sourcePrice','pe','pb'].map(k => S.metricFor(k)));
     const make = (map, grain, prefix) => new Map(records.flatMap(r => {
       const points = M.uniquePoints((map.get(r.id) || []).filter(p =>
@@ -298,7 +304,7 @@
     }));
     const weeklyById = make(global,'weekly','global-top100-close-'), bosById = make(bos,'month','bos:');
     const entries = map => records.flatMap(record => map.has(record.id) ? [{record,points:map.get(record.id)}] : []);
-    return {loaded,records,weeklyById,bosById,weekly:entries(weeklyById),bos:entries(bosById),
+    return {loaded,watchlistSize:watchlist.length,records,weeklyById,bosById,weekly:entries(weeklyById),bos:entries(bosById),
       valuations:{pe:make(pe,'month','bos:'),pb:make(pb,'month','bos:')}};
   }
 

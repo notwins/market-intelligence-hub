@@ -31,11 +31,15 @@
 .rail nav .rail-history [data-history-group=fred]>summary{color:#c4bbdc}
 .rail .brand{gap:10px}.rail .brand b{font:750 15px/1.25 system-ui,sans-serif}.rail .brand small{font:500 9px/1.5 system-ui,sans-serif;letter-spacing:.12em}.rail .brand-icon{width:34px;height:36px;border-radius:10px;font-size:22px}
 .rail .rail-foot{font:11px/1.5 system-ui,sans-serif}
-/* Calm three-button history toolbar; the full FRED list is always one click away. */
-.topbar .top-subsections.history-menu-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;overflow:visible;padding:0;scrollbar-width:none;min-width:340px;flex:1 1 440px}
+/* Keep all four history shortcuts on the same toolbar row. */
+.topbar .top-subsections.history-menu-toolbar{display:grid;grid-template-columns:minmax(0,1.65fr) repeat(3,minmax(0,1fr));align-items:stretch;gap:5px;overflow:visible;padding:0;min-width:0;flex:1 1 420px}
 .history-menu-group{position:relative;min-width:0;margin:0;padding:0;border:0;background:transparent;color:#344e5b;font:500 13px/1.35 system-ui,sans-serif}
+.topbar .history-menu-toolbar>a.history-featured{display:flex;align-items:center;gap:6px;min-width:0;min-height:44px;padding:6px 8px;border-radius:7px;background:#d50024;color:#fff;font:650 12px/1.25 system-ui,sans-serif;text-decoration:none}
+.topbar .history-menu-toolbar>a.history-featured:hover{background:#b5001e}
+.topbar .history-menu-toolbar>a.history-featured:focus-visible{outline:3px solid #1e40af;outline-offset:2px}
+.topbar .history-menu-toolbar>a.history-featured .history-nav-icon{width:16px;height:16px;flex-basis:16px}
 .history-menu-group>summary::after,.rail-history-section>summary::after{content:none!important}
-.history-menu-group>summary{display:flex;align-items:center;gap:7px;min-height:44px;padding:8px 10px;border:1px solid #d4dfe3;border-radius:7px;background:#f5f8f9;color:#3a5360;list-style:none;cursor:pointer;font:600 12px/1.25 system-ui,sans-serif;letter-spacing:0}
+.history-menu-group>summary{box-sizing:border-box;display:flex;align-items:center;gap:6px;height:100%;min-height:44px;padding:6px 8px;border:1px solid #d4dfe3;border-radius:7px;background:#f5f8f9;color:#3a5360;list-style:none;cursor:pointer;font:600 12px/1.25 system-ui,sans-serif;letter-spacing:0}
 .history-menu-group>summary::-webkit-details-marker{display:none}
 .history-menu-group>summary>span{flex:1;min-width:0}
 .history-menu-group[data-active-group]>summary{background:#e5f0ef;border-color:#95b9b5;color:#235b5c}
@@ -64,7 +68,12 @@
 @media(min-width:761px) and (max-height:850px){.rail nav .rail-group :is(a,button){min-height:36px;padding-block:7px}.rail nav .rail-group .rail-group-label{padding-block:5px}.rail-history .rail-history-section{margin-bottom:3px}}
 @media(min-width:761px) and (max-height:850px){.rail #section-jump.section-jump-docked .section-jump-controls{grid-template-columns:32px minmax(0,1fr) 32px}.rail #section-jump.section-jump-docked select{grid-column:2;grid-row:1}.rail #section-jump.section-jump-docked .section-jump-controls>button{grid-row:1;width:32px;min-width:32px;padding:0;font-size:0}.rail #section-jump.section-jump-docked .section-jump-prev{grid-column:1}.rail #section-jump.section-jump-docked .section-jump-next{grid-column:3}.rail #section-jump.section-jump-docked .section-jump-prev::before{content:'↑';font-size:16px}.rail #section-jump.section-jump-docked .section-jump-next::before{content:'↓';font-size:16px}}
 @media(max-width:1180px) and (min-width:761px){.topbar.has-top-subsections{display:grid;grid-template-columns:minmax(0,1fr) auto}.topbar .top-subsections.history-menu-toolbar{grid-column:1/-1;grid-row:2;width:100%}}
-@media(max-width:760px){.history-shortcuts.history-directory{grid-template-columns:1fr}.topbar .top-subsections.history-menu-toolbar{min-width:0;width:100%;gap:4px;grid-column:1;grid-row:3}.history-menu-group>summary{min-height:48px;padding:7px 6px;gap:4px;font-size:11px}.history-menu-group>summary .history-nav-icon{width:15px;height:15px;flex-basis:15px}.history-menu-chevron{width:10px;height:10px;flex-basis:10px}.history-menu-group:nth-child(2) .history-menu-links{left:50%;transform:translateX(-50%)}.topbar #global-search-button{width:40px;min-width:40px}.topbar b{font-size:14px}}
+@media(max-width:760px){.history-shortcuts.history-directory{grid-template-columns:1fr}.topbar .top-subsections.history-menu-toolbar{min-width:0;width:100%;gap:4px;grid-column:1;grid-row:3}.history-menu-group>summary,.topbar .history-menu-toolbar>a.history-featured{min-height:48px;padding:5px;gap:4px;font-size:11px}.topbar .history-menu-toolbar :is(summary,a.history-featured) .history-nav-icon{width:13px;height:13px;flex-basis:13px}.history-menu-chevron{width:9px;height:9px;flex-basis:9px}.topbar #global-search-button{width:40px;min-width:40px}.topbar b{font-size:14px}}
+@media(max-width:460px){
+ .topbar .history-menu-toolbar .history-menu-group>summary{flex-direction:column;justify-content:center;gap:2px;text-align:center}
+ .topbar .history-menu-toolbar .history-menu-group>summary>.history-nav-icon{display:none}
+ .topbar .history-menu-toolbar .history-menu-group>summary>span{flex:0 1 auto}
+}
 @media(forced-colors:active){.history-menu-group>summary,.history-menu-links,.topbar .history-menu-links :is(a.history-nav-item,button.history-nav-item){background:Canvas;color:CanvasText;border-color:CanvasText}.history-menu-group[data-active-group]>summary,.topbar .history-menu-links .history-nav-item.active{background:Highlight;color:HighlightText}}
 .history-directory a.history-featured,.history-menu a.history-featured,.rail nav .rail-group a.history-featured,.dashboard-links a.history-featured {
  display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 10px;border:1px solid #b7d6d0;border-radius:7px;background:#d9ede8;color:#104e49;font-weight:750;text-decoration:none;
@@ -72,3 +81,8 @@
 .history-directory a.history-featured {grid-column:1/-1}
 .rail nav .rail-group a.history-featured {margin-bottom:5px}
 .history-menu a.history-featured {font-size:13px}
+.history-featured .history-nav-icon {color:#d50024}
+.topbar .history-menu-toolbar>a.history-featured .history-nav-icon {color:inherit}
+@media(forced-colors:active){
+ .topbar .history-menu-toolbar>a.history-featured{border:1px solid LinkText;background:Canvas;color:LinkText}
+}

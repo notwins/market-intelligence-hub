@@ -78,8 +78,10 @@
     });
   }
 
-  function stockUniverse(records) {
-    return records.filter(r => r.compareEligible === true && r.currency === 'USD' && / US$/.test(r.bbTicker || '') &&
+  function stockUniverse(records, watchlist) {
+    const listings = new Set(watchlist.map(r => r.ticker + '|' + r.currency));
+    return records.filter(r => listings.has(r.bbTicker + '|' + r.currency) &&
+      r.compareEligible === true && r.currency === 'USD' && / US$/.test(r.bbTicker || '') &&
       ['exact_ticker_currency', 'exact_provider_ticker_currency'].includes(r.identityStatus));
   }
 
@@ -103,8 +105,9 @@
     const picked = eligible[0];
     if (!picked) return null;
     picked.sort((a, b) => b.change - a.change || a.record.id.localeCompare(b.record.id));
+    const groupSize = Math.min(5, Math.floor(picked.length / 2));
     return {basis, jumps, count: picked.length, from: picked[0].from.date, to: picked[0].to.date,
-      winners: picked.slice(0, 3), losers: picked.slice(-3).reverse()};
+      winners: picked.slice(0, groupSize), losers: picked.slice(-groupSize).reverse()};
   }
 
   function chooseStockRanking(card, spx, weekly, bos) {
