@@ -149,5 +149,15 @@ window.BondPriceChart = (() => {
   canvas.addEventListener('pointermove', inspect);
   canvas.addEventListener('click', inspect);
   new ResizeObserver(draw).observe(canvas.parentElement);
-  return { show };
+  // Capture the same instrument and window shown on screen at report build time.
+  function snapshot() {
+    return {
+      isin: bond?.isin,
+      currency: bond?.currency,
+      issueDate: bond?.issueDate,
+      range: select.selectedOptions[0].textContent,
+      points: visible.map((point) => ({ ...point }))
+    };
+  }
+  return { show, snapshot };
 })();

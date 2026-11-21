@@ -113,10 +113,10 @@ window.BondCashflowMarket = (() => {
     return { ...item, ...terms, id, bids, asks: asks.get(id) || [] };
   }
 
-  function fxReference(series, currency, settlement) {
-    if (!dateOK(settlement) || currency === 'SGD') return null;
-    const direct = series.find((s) => s.id === currency + '/SGD');
-    const inverse = series.find((s) => s.id === 'SGD/' + currency);
+  function fxReference(series, currency, settlement, capital = 'SGD') {
+    if (!dateOK(settlement) || currency === capital) return null;
+    const direct = series.find((s) => s.id === currency + '/' + capital);
+    const inverse = series.find((s) => s.id === capital + '/' + currency);
     const source = direct || inverse;
     const point = source?.points.findLast(
       ([date, v]) => date <= settlement && positive(v)

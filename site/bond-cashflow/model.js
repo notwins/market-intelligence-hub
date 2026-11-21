@@ -160,14 +160,25 @@
   function validate(input) {
     const x = input || {},
       b = x.bond || {},
+      capital = x.capitalCurrency ?? 'SGD',
+      sameCurrency = capital === b.currency,
       errors = [];
     const range = (v, lo, hi, label, strict = false) => {
       const n = number(v);
       if (!Number.isFinite(n) || (strict ? n <= lo : n < lo) || n > hi)
         errors.push(label);
     };
-    range(x.budget, 0, 1e12, 'Enter the available SGD cash.', true);
-    range(x.fx, 0, 1e6, 'Enter SGD per one unit of bond currency.', true);
+    if (!['SGD', 'USD'].includes(capital))
+      errors.push('Choose SGD or USD for your invested capital.');
+    range(x.budget, 0, 1e12, 'Enter the available ' + capital + ' cash.', true);
+    if (!sameCurrency)
+      range(
+        x.fx,
+        0,
+        1e6,
+        'Enter ' + capital + ' per one unit of bond currency.',
+        true
+      );
     range(
       x.cleanPrice,
       0,
@@ -179,7 +190,7 @@
       x.fees,
       0,
       1e12,
-      'Enter total upfront fees in SGD (zero is allowed).'
+      'Enter total upfront fees in ' + capital + ' (zero is allowed).'
     );
     if (number(x.fees) >= number(x.budget))
       errors.push('Fees must be less than the cash budget.');
@@ -194,8 +205,6 @@
       );
     if (!/^[A-Z]{3}$/.test(b.currency || ''))
       errors.push('Enter a three-letter bond currency.');
-    if (b.currency === 'SGD' && number(x.fx) !== 1)
-      errors.push('An SGD bond must use an FX rate of 1.');
     try {
       if (date(x.settlement) >= date(b.maturity))
         errors.push('Maturity must be after the settlement date.');
@@ -228,16 +237,18 @@
     if (!['gradual', 'immediate'].includes(x.path))
       errors.push('Choose the scenario path.');
     range(x.yieldStep, 0, 20, 'Yield grid step must be positive.', true);
-    range(
-      x.fxStep,
-      0,
-      30,
-      'FX grid step must be above zero and at most 30%.',
-      true
-    );
+    if (!sameCurrency)
+      range(
+        x.fxStep,
+        0,
+        30,
+        'FX grid step must be above zero and at most 30%.',
+        true
+      );
     for (const k of ['up', 'down']) {
       range(x[k]?.yieldBps, -5000, 5000, 'Enter valid scenario yield shifts.');
-      range(x[k]?.fxPct, -90, 500, 'Enter valid scenario FX changes.');
+      if (!sameCurrency)
+        range(x[k]?.fxPct, -90, 500, 'Enter valid scenario FX changes.');
     }
     return [...new Set(errors)];
   }
@@ -246,6 +257,14 @@
     if (errors.length) throw Error(errors.join(' '));
     const x = copy(input),
       b = x.bond;
+    x.capitalCurrency ??= 'SGD';
+    const sameCurrency = x.capitalCurrency === b.currency;
+    if (sameCurrency) {
+      x.fx = 1;
+      x.fxDate = null;
+      x.fxSource = 'Both amounts in ' + x.capitalCurrency;
+      x.fxStep = x.up.fxPct = x.down.fxPct = 0;
+    }
     ['budget', 'fx', 'cleanPrice', 'fees', 'yieldStep', 'fxStep'].forEach(
       (k) => (x[k] = number(x[k]))
     );
@@ -274,7 +293,9 @@
       b.minimum === null ? null : x.fees + ((b.minimum * dirty) / 100) * x.fx;
     if (!(nominal > 0))
       throw Error(
-        'Budget is below the minimum denomination. Minimum required: SGD ' +
+        'Budget is below the minimum denomination. Minimum required: ' +
+          x.capitalCurrency +
+          ' ' +
           minimumCost.toFixed(2) +
           '. Adjust the budget or explicitly use an illustrative fractional holding.'
       );
@@ -316,7 +337,6 @@
         throw Error(
           'A scenario target is outside the supported yield or FX range.'
         );
-    if (b.currency === 'SGD') targets.forEach((t) => (t.fx = 1));
     const payments = schedule(b, x.settlement).dates.map((d) => ({
       date: d,
       couponNative: (nominal * b.coupon) / 100 / b.frequency,
@@ -371,7 +391,10 @@
     const f = factor(p, d);
     return {
       yield: p.y0 + (target.yield - p.y0) * f,
-      fx: p.b.currency === 'SGD' ? 1 : p.x.fx + (target.fx - p.x.fx) * f
+      fx:
+        p.b.currency === p.x.capitalCurrency
+          ? 1
+          : p.x.fx + (target.fx - p.x.fx) * f
     };
   }
   function project(p, years, target = p.targets[1]) {
@@ -385,12 +408,20 @@
     for (const e of p.payments) {
       if (e.date > at) break;
       const fx = levels(p, target, e.date).fx,
-        couponSGD = e.couponNative * fx,
-        principalSGD = e.principalNative * fx;
-      cumulativeCF += couponSGD;
-      principalCash += principalSGD;
-      if (e.date > prev) annualCF += couponSGD;
-      ledger.push({ ...e, fx, couponSGD, principalSGD });
+        couponCash = e.couponNative * fx,
+        principalPaid = e.principalNative * fx;
+      cumulativeCF += couponCash;
+      principalCash += principalPaid;
+      if (e.date > prev) annualCF += couponCash;
+      ledger.push({
+        ...e,
+        fx,
+        couponCash,
+        principalPaid,
+        ...(p.x.capitalCurrency === 'SGD'
+          ? { couponSGD: couponCash, principalSGD: principalPaid }
+          : {})
+      });
     }
     const px =
       years === 0
@@ -436,7 +467,7 @@
         (_, i) => p.y0 + (i - 3) * p.x.yieldStep
       ),
       fxs =
-        p.b.currency === 'SGD'
+        p.b.currency === p.x.capitalCurrency
           ? [1]
           : Array.from(
               { length: 7 },
@@ -452,23 +483,24 @@
     };
   }
   function toCSV(result) {
+    const capital = result.prepared.x.capitalCurrency;
     const header = [
       'Scenario',
       'Year',
       'Date',
       'Yield_pct',
-      'SGD_per_bond_currency',
+      capital + '_per_bond_currency',
       'Clean_price',
       'Dirty_price',
-      'Annual_coupons_SGD',
-      'Cumulative_coupons_SGD',
-      'Clean_bond_NAV_SGD',
-      'Accrued_NAV_SGD',
-      'Residual_SGD',
-      'Redeemed_principal_SGD',
-      'NAV_SGD',
-      'Total_SGD',
-      'Gain_SGD'
+      'Annual_coupons_' + capital,
+      'Cumulative_coupons_' + capital,
+      'Clean_bond_NAV_' + capital,
+      'Accrued_NAV_' + capital,
+      'Residual_' + capital,
+      'Redeemed_principal_' + capital,
+      'NAV_' + capital,
+      'Total_' + capital,
+      'Gain_' + capital
     ];
     const rows = result.series.flatMap((s) =>
       s.rows.map((r) => [
