@@ -319,7 +319,7 @@
     return { forIndex: index => x(time(dates[index][2])), coneStart: cone ? historicalRight : Infinity };
   }
 
-  function mountHistory(data, { saved, changeRange, save }) {
+  function mountHistory(data, { saved, previousChart, changeRange, save }) {
     const doc = root.document;
     const from = doc.getElementById('sb2-from'), to = doc.getElementById('sb2-to');
     const maximum = data.months.length - 1;
@@ -329,6 +329,15 @@
     if (end < 0) end = maximum;
     if (start > end) [start, end] = [0, maximum];
     const state = { from: start, to: end, cursor: end, axis: saved?.axis === 'quarter' ? 'quarter' : 'year' };
+    const savedChart = saved?.chart ?? previousChart;
+    const bands = allBands.filter(band => Array.isArray(savedChart?.bands) && savedChart.bands.includes(band));
+    const chart = {
+      metric: ['price', 'market_cap_usd_bn', 'dividend_yield_pct'].includes(savedChart?.metric) ? savedChart.metric : 'price',
+      target: savedChart?.target === true,
+      cone: savedChart?.cone === true,
+      bands: bands.length ? bands : allBands,
+      bosTarget: (savedChart?.bosTarget ?? savedChart?.cone) === true
+    };
     const savedIndex = data.months.findIndex(([month]) => month === saved?.month);
     let selectedIndex;
     if (savedIndex >= 0) {
@@ -339,7 +348,7 @@
     const choices = data.months.map(([month], i) => '<option value="' + i + '">' + monthLabel(month) + '</option>').join('');
     from.innerHTML = to.innerHTML = choices;
     syncRange();
-    let frame, targets, targetRequest;
+    let frame, targets, targetRequest, targetError;
     function getTargets() {
       targetRequest ??= (async () => {
         const embedded = doc.getElementById('sb2-embedded-targets');
@@ -350,6 +359,19 @@
       })().catch(error => { targetRequest = undefined; throw error; });
       return targetRequest;
     }
+    async function loadTargets() {
+      targetError = '';
+      try { targets = await getTargets(); }
+      catch { targetError = 'Fair values could not load. Toggle off and on to retry.'; }
+      repaint();
+    }
+    if (chart.target) loadTargets();
+
+    function updateChart() {
+      repaint();
+      save();
+    }
+
     function repaint() {
       if (frame !== undefined) return;
       frame = root.requestAnimationFrame(() => { frame = undefined; cards.forEach(drawCard); });
@@ -369,23 +391,24 @@
       repaint();
     }
     function drawCard(card) {
-      const { element, company, metric } = card;
+      const { element, company } = card;
+      const { metric } = chart;
       const get = selector => element.querySelector(selector);
       const [, label, rawUnit] = data.metrics.find(item => item[0] === metric);
       const unit = rawUnit === 'quote' ? company.currency : rawUnit;
       const { from, to, cursor } = state;
       const prior = historyPoints(data, company, metric, from, to);
       const anchor = prior.findLast(point => point.value > 0);
-      const activeCone = metric === 'price' && card.cone;
+      const activeCone = metric === 'price' && chart.cone;
       if (activeCone && anchor && card.coneAnchor !== anchor.index) {
         card.coneAnchor = anchor.index;
         card.projection = probabilityCone(data, company, anchor);
       }
       const projection = activeCone && anchor ? card.projection : null;
       const cone = projection?.points ? projection : null;
-      const targetEnabled = metric === 'price' && card.bosTarget;
+      const targetEnabled = metric === 'price' && chart.bosTarget;
       const researchTarget = targetEnabled ? card.researchTarget : null;
-      const targetRows = metric === 'price' && card.target ? targets?.[company.ticker] ?? [] : [];
+      const targetRows = metric === 'price' && chart.target ? targets?.[company.ticker] ?? [] : [];
       const targetLines = Object.entries(targetColors).map(([rating, color]) => ({
         name: rating, color, points: targetRows.filter(row => row[0] >= from && row[0] <= (cone?.anchor.index ?? to) && row[2] === rating)
           .map(([index, value]) => ({index, value, quote: data.months[index][2]}))
@@ -394,7 +417,7 @@
         name: ['P/E', 'P/B'][i], color: ratioColors[i], points: historyPoints(data, company, key, from, to)
       }));
       const primary = [{name: label, color: priceColor, points: cone ? prior.filter(point => point.index <= anchor.index) : prior,
-        area: Boolean(metric === 'price' && card.target && !cone)}, ...targetLines];
+        area: Boolean(metric === 'price' && chart.target && !cone)}, ...targetLines];
       get('.sb2-chart-window').textContent = label + ' (' + unit + ') · ' + monthLabel(data.months[from][0]) + ' to '
         + monthLabel(data.months[to][0]) + ' · ' + prior.length + ' of ' + (to - from + 1) + ' editions'
         + (metric === 'price' ? ' · Unadjusted source prices' : '');
@@ -414,9 +437,9 @@
       }
       show('price', primary, label + ' by price date'
         + (targetRows.length ? ' with Morningstar fair value' : '')
-        + (cone ? ' and a 12-month cone with ' + card.bands.map(band => '±' + band + ' SD').join(' and ') : '')
+        + (cone ? ' and a 12-month cone with ' + chart.bands.map(band => '±' + band + ' SD').join(' and ') : '')
         + (researchTarget ? ' and a research target at ' + numbers.format(researchTarget.value) + ' ' + unit : ''),
-      { cone, bands: card.bands, researchTarget, isPrice: metric === 'price' });
+      { cone, bands: chart.bands, researchTarget, isPrice: metric === 'price' });
       show('valuation', ratios, 'forward P/E and P/B by price date');
       const dateField = get('[data-price-date]');
       if (dateField.dateTime !== priceDate) dateField.dateTime = priceDate;
@@ -460,16 +483,19 @@
       slider.max = String(to);
       slider.value = String(cursor);
       slider.setAttribute('aria-valuetext', monthLabel(data.months[cursor][0]));
-      get('[data-target]').setAttribute('aria-pressed', String(card.target));
-      get('.sb2-target-legend').hidden = !(metric === 'price' && card.target);
-      get('[data-target-status]').textContent = card.target && metric === 'price'
-        ? card.targetError || (!targets ? 'Loading Morningstar fair values…'
+      element.querySelectorAll('[data-metric]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.metric === metric));
+      });
+      get('[data-target]').setAttribute('aria-pressed', String(metric === 'price' && chart.target));
+      get('.sb2-target-legend').hidden = !(metric === 'price' && chart.target);
+      get('[data-target-status]').textContent = chart.target && metric === 'price'
+        ? targetError || (!targets ? 'Loading Morningstar fair values…'
           : targetLines.some(line => line.points.length) ? '' : 'No identified Morningstar fair values in this range.') : '';
       get('.sb2-cone-info').hidden = !activeCone;
       get('[data-cone]').setAttribute('aria-pressed', String(activeCone));
       get('[data-cone-bands]').hidden = !activeCone;
       element.querySelectorAll('[data-cone-band]').forEach(button => {
-        button.setAttribute('aria-pressed', String(card.bands.includes(Number(button.dataset.coneBand))));
+        button.setAttribute('aria-pressed', String(chart.bands.includes(Number(button.dataset.coneBand))));
       });
       get('[data-bos-target]').setAttribute('aria-pressed', String(targetEnabled));
       get('[data-cone-method]').hidden = !activeCone;
@@ -478,13 +504,13 @@
           + cone.count + ' monthly returns' + (cone.splits ? ' · ' + cone.splits + ' split-like move' + (cone.splits === 1 ? '' : 's') + ' skipped' : '')
         : 'Cone unavailable · ' + (anchor ? projection.count + ' usable monthly returns. At least 12 are needed.' : 'No positive price in this range.');
       if (get('[data-cone-summary]').textContent !== summary) get('[data-cone-summary]').textContent = summary;
-      get('[data-cone-levels]').textContent = coneLevels(cone, card.bands)
+      get('[data-cone-levels]').textContent = coneLevels(cone, chart.bands)
         .map(({ value, label }) => label + ' ' + priceLabel(value)).join(' · ');
       const note = get('[data-bos-target-note]');
       note.toggleAttribute('data-line', Boolean(researchTarget));
       let targetNote = '';
       if (researchTarget) {
-        const bandNote = cone && card.bands.length === allBands.length
+        const bandNote = cone && chart.bands.length === allBands.length
           ? ' · ' + targetBand(researchTarget.value, cone.points.at(-1)) + ' at 12 months' : '';
         targetNote = 'Research target ' + numbers.format(researchTarget.value) + ' ' + unit
           + ' · BOS coverage · ' + researchTarget.provider + ' · ' + dateFormat.format(time(researchTarget.date))
@@ -533,65 +559,41 @@
       repaint();
     }));
     const resize = new ResizeObserver(repaint);
-    function add(element, company, settings) {
-      const bands = allBands.filter(band => Array.isArray(settings?.bands) && settings.bands.includes(band));
-      const card = {
-        element, company, positions: {}, metric: 'price',
-        target: settings?.target === true, cone: settings?.cone === true,
-        bands: bands.length ? bands : allBands,
-        bosTarget: (settings?.bosTarget ?? settings?.cone) === true
-      };
+    function add(element, company) {
+      const card = { element, company, positions: {} };
       cards.set(element, card);
-      const choices = [...element.querySelectorAll('[data-metric]')];
-      const setMetric = metric => {
-        card.metric = metric;
-        choices.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.metric === metric)));
-        repaint();
-      };
-      setMetric(choices.find(button => button.dataset.metric === settings?.metric)?.dataset.metric ?? 'price');
-      choices.forEach(button => button.addEventListener('click', () => {
-        setMetric(button.dataset.metric);
-        save();
+      element.querySelectorAll('[data-metric]').forEach(button => button.addEventListener('click', () => {
+        chart.metric = button.dataset.metric;
+        updateChart();
       }));
-      element.querySelector('[data-cone]').addEventListener('click', () => {
-        card.cone = card.metric !== 'price' || !card.cone;
-        if (card.cone) setMetric('price');
-        else repaint();
-        save();
+      const coneButton = element.querySelector('[data-cone]');
+      coneButton.addEventListener('click', () => {
+        chart.cone = chart.metric !== 'price' || !chart.cone;
+        if (chart.cone) chart.metric = 'price';
+        updateChart();
       });
       element.querySelectorAll('[data-cone-band]').forEach(button => button.addEventListener('click', () => {
         const band = Number(button.dataset.coneBand);
-        card.bands = card.bands.includes(band) ? card.bands.filter(value => value !== band) : [...card.bands, band];
-        if (!card.bands.length) {
-          card.cone = false;
-          card.bands = allBands;
-          element.querySelector('[data-cone]').focus();
+        chart.bands = chart.bands.includes(band) ? chart.bands.filter(value => value !== band) : [...chart.bands, band];
+        if (!chart.bands.length) {
+          chart.cone = false;
+          chart.bands = allBands;
+          coneButton.focus();
         }
-        repaint();
-        save();
+        updateChart();
       }));
       element.querySelector('[data-bos-target]').addEventListener('click', () => {
-        card.bosTarget = card.metric !== 'price' || !card.bosTarget;
-        if (card.bosTarget) setMetric('price');
-        else repaint();
-        save();
+        chart.bosTarget = chart.metric !== 'price' || !chart.bosTarget;
+        if (chart.bosTarget) chart.metric = 'price';
+        updateChart();
       });
-      async function loadCardTargets() {
-        try { targets = await getTargets(); }
-        catch { card.targetError = 'Fair values could not load. Toggle off and on to retry.'; }
-        repaint();
-      }
-      if (card.target) loadCardTargets();
       element.querySelector('[data-target]').addEventListener('click', () => {
-        card.target = !card.target;
-        card.targetError = '';
-        if (card.target) {
-          setMetric('price');
-          loadCardTargets();
-        } else {
-          repaint();
+        chart.target = chart.metric !== 'price' || !chart.target;
+        if (chart.target) {
+          chart.metric = 'price';
+          if (!targets) loadTargets();
         }
-        save();
+        updateChart();
       });
       const slider = element.querySelector('input[type=range]');
       slider.addEventListener('input', () => setCursor(Number(slider.value), true));
@@ -608,6 +610,7 @@
           }
           setCursor(nearest, event.type === 'click');
         };
+        resize.observe(canvas);
         canvas.addEventListener('pointermove', event => { if (event.pointerType !== 'touch') inspect(event); });
         canvas.addEventListener('click', inspect);
         canvas.addEventListener('keydown', event => {
@@ -621,7 +624,7 @@
     }
     function settings() {
       const { from, to, axis } = state;
-      const result = { axis };
+      const result = { axis, chart: { ...chart } };
       if (from !== 0 || to !== maximum) {
         result.from = data.months[from][0];
         result.to = data.months[to][0];
@@ -629,19 +632,19 @@
       if (selectedIndex !== undefined) result.month = data.months[selectedIndex][0];
       return result;
     }
-    function cardSettings(element) {
-      const { metric, target, cone, bands, bosTarget } = cards.get(element);
-      return { metric, target, cone, bands, bosTarget };
-    }
     function setResearchTarget(element, brief) {
       const card = cards.get(element);
       if (!card) return;
       card.researchTarget = researchConeTarget(brief, card.company.currency);
       card.researchTargetFailed = brief === null;
-      if (card.metric === 'price') repaint();
+      if (chart.metric === 'price') repaint();
     }
-    return { add, settings, cardSettings, setResearchTarget, range: () => state,
-      remove(element) { resize.unobserve(element); cards.delete(element); } };
+    return { add, settings, chartSettings: () => chart, setResearchTarget, range: () => state,
+      remove(element) {
+        element.querySelectorAll('canvas').forEach(canvas => resize.unobserve(canvas));
+        resize.unobserve(element);
+        cards.delete(element);
+      } };
   }
 
   function mountRankings(data, { logo, chooseCompany }) {
