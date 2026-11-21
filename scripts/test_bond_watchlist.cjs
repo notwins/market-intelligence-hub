@@ -98,3 +98,45 @@ const bands = daily.render(unsafe,{compactTreasuries:true});
 for(const [band,coupon] of [["under-2","1.875"],["2-to-3","2"],["3-to-4","3"],["3-to-4","4"],["above-4","4.125"]]) assert(new RegExp('data-coupon-band="'+band+'"><a [^>]+>UST '+coupon.replace('.','\\.')+'%<').test(bands));
 assert(!bands.includes('javascript:bad'));
 console.log('PASS compact daily Treasury quote: all 29 identities, exact coupon bands, rounded asked values, unavailable quote, full precision and source links');
+
+const beta = require('../site/bonds-beta-data.js');
+const utc = value => new Date(value + 'T00:00:00Z');
+// TreasuryDirect Appendix B examples for clean prices on and between coupon dates.
+assert(Math.abs(daily.cleanPrice(utc('2020-05-15'), utc('1990-05-15'), 8.75, 8.84) - 99.057893) < .000001);
+assert(Math.abs(daily.cleanPrice(utc('1995-11-15'), utc('1985-11-29'), 9.5, 9.54) - 99.730918) < .000001);
+const archive = beta.fredCurves(JSON.parse(fs.readFileSync('site/data/fred-daily.json', 'utf8')));
+assert(archive.find(curve => curve.date === '2004-01-02').rates.every(([tenor]) => tenor <= 20));
+assert(archive.find(curve => curve.date === '2006-02-09').rates.some(([tenor]) => tenor === 30));
+const betaList = beta.publicHistory(prices);
+let modelCount = 0;
+for (const instrument of betaList.values()) {
+  const beforeRows = JSON.stringify([...instrument.rows]);
+  const model = beta.reconstructedPrices(instrument, archive, daily);
+  if (!instrument.isTreasury) {
+    assert.equal(model, null);
+    continue;
+  }
+  modelCount++;
+  assert.equal(model.start, instrument.maturity.replace(/^\d{4}/, year => Number(year) - 30));
+  const samples = [...model.points];
+  assert(samples.length > 1 && samples[0][0] >= model.start);
+  assert(samples.every(([date, point], index) => point.price > 0 && point.years <= 30 &&
+    date < instrument.maturity && (!index || date > samples[index - 1][0])));
+  const firstBid = [...instrument.rows].filter(([, quote]) => quote.bid > 0).map(([date]) => date).sort()[0];
+  assert.equal(model.firstBid, firstBid);
+  if (firstBid) assert(samples.every(([date]) => date < firstBid));
+  assert.equal(JSON.stringify([...instrument.rows]), beforeRows);
+}
+assert.equal(modelCount, 29);
+const oldest = beta.reconstructedPrices(betaList.get('US91282CJJ18|USD'), archive, daily);
+const first = oldest.points.values().next().value;
+assert.deepEqual([first.lower, first.upper], [20, 20]);
+const [day, interpolated] = [...oldest.points].find(([, point]) => point.lower === 10 && point.upper === 20);
+const rates = new Map(archive.find(curve => curve.date === day).rates);
+assert.equal(interpolated.rate, rates.get(10) + (rates.get(20) - rates.get(10)) * (interpolated.years - 10) / 10);
+const csvBid = { bid: 98, yield: 4.75, source: 'BOS_YTM' };
+const earlier = { ...betaList.get('US91282CJJ18|USD'), rows: new Map([['2024-01-02', csvBid]]) };
+const joined = beta.mergeHistory(betaList, new Map([['US91282CJJ18|USD', earlier]])).get('US91282CJJ18|USD');
+assert.equal(beta.reconstructedPrices(joined, archive, daily).firstBid, '2024-01-02');
+assert.equal(joined.rows.get('2024-01-02'), csvBid);
+console.log('PASS Treasury clean prices, dynamic FRED tenors, the 30-year publication gap and handoffs to dated bids');

@@ -247,7 +247,7 @@
       ctx.fillText(text, center, height - 10);
       endLabel = center + half;
     });
-    if (!cone || cursor <= cone.anchor.index) {
+    if (cursor >= from && cursor <= to && (!cone || cursor <= cone.anchor.index)) {
       tick(x(time(dates[cursor][2])), top, x(time(dates[cursor][2])), bottom, '#9aafad');
     }
     if (cone) {
@@ -279,12 +279,17 @@
     for (const line of series) {
       const runs = [];
       for (const point of line.points) {
-        if (runs.at(-1)?.at(-1).index !== point.index - 1) runs.push([]);
+        const previous = runs.at(-1)?.at(-1);
+        const adjacent = previous && (line.maxGapDays
+          ? time(point.quote) - time(previous.quote) <= line.maxGapDays * 86400000
+          : previous.index === point.index - 1);
+        if (!adjacent) runs.push([]);
         runs.at(-1).push(point);
       }
       ctx.strokeStyle = ctx.fillStyle = line.color;
       ctx.lineWidth = 2.25;
       ctx.lineJoin = 'round';
+      if (line.dash) ctx.setLineDash(line.dash);
       for (const run of runs) {
         const drawPath = () => run.forEach((point, i) => {
           const xy = [x(time(point.quote)), y(point.value)];
@@ -304,12 +309,13 @@
         drawPath();
         ctx.stroke();
         for (const point of run) {
-          if (run.length > 1 && point.index !== cursor) continue;
+          if (line.connector || (run.length > 1 && point.index !== cursor)) continue;
           ctx.beginPath();
           ctx.arc(x(time(point.quote)), y(point.value), point.index === cursor ? 4 : 2.4, 0, Math.PI * 2);
           ctx.fill();
         }
       }
+      if (line.dash) ctx.setLineDash([]);
     }
     if (researchTarget) {
       ctx.setLineDash([6, 3]);
