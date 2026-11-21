@@ -135,13 +135,14 @@
     if (data?.schema_version !== 1 || !dateOk(data.latest_auction_date) ||
         !Array.isArray(data.instruments) || !data.instruments.length) throw Error('Unexpected Treasury catalogue format.');
     const catalogue = new Map();
-    for (const [isin, type, coupon, issueDate, maturity] of data.instruments) {
+    for (const [isin, type, coupon, issueDate, maturity, termMonths] of data.instruments) {
       const key = identity(isin, 'USD');
       if (!/^US912[A-Z0-9]{6}\d$/.test(isin) || !['Note', 'Bond'].includes(type) || !Number.isFinite(coupon) ||
-          coupon <= 0 || !dateOk(issueDate) || !dateOk(maturity) || issueDate >= maturity || catalogue.has(key)) {
+          coupon <= 0 || !dateOk(issueDate) || !dateOk(maturity) || issueDate >= maturity || catalogue.has(key) ||
+          (termMonths != null && (!Number.isSafeInteger(termMonths) || termMonths < 12))) {
         throw Error('Invalid Treasury catalogue terms.');
       }
-      catalogue.set(key, { isin, type, coupon, issueDate, maturity, currency: 'USD', isTreasury: true,
+      catalogue.set(key, { isin, type, coupon, issueDate, maturity, termMonths: termMonths ?? null, currency: 'USD', isTreasury: true,
         name: `US Treasury ${type} ${coupon}% · ${maturity}` });
     }
     return catalogue;
