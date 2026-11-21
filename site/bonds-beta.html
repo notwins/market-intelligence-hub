@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261121.8">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="bonds-beta.css?v=20261122.fred2">
+  <link rel="stylesheet" href="bonds-beta.css?v=20261122.catalogue1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <script defer src="stocks-beta2-charts.js?v=20261122.fred1"></script>
   <script defer data-price-model-only src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.fred1"></script>
-  <script defer src="bonds-beta-data.js?v=20261122.fred2"></script>
-  <script defer src="bonds-beta.js?v=20261122.fred2"></script>
+  <script defer src="bonds-beta-data.js?v=20261122.catalogue1"></script>
+  <script defer src="bonds-beta.js?v=20261122.catalogue1"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to bond charts</a>
@@ -36,11 +36,12 @@
       </div>
     </header>
     <p class="bb-source" id="bb-status" role="status" aria-live="polite">Loading the bond watchlist…</p>
+    <p class="bb-source" id="bb-catalogue-status" role="status">Loading the TreasuryDirect catalogue…</p>
     <p class="bb-source" id="bb-model-status" role="status">Loading FRED Treasury yields for price and yield reconstruction…</p>
     <button id="bb-retry" type="button" hidden>Retry watchlist</button>
     <section id="bb-controls" class="sb2-panel bb-controls" aria-label="Watchlist controls" hidden>
       <div class="bb-inputs">
-        <label>Find a bond<input id="bb-search" type="search" placeholder="Issuer or ISIN" autocomplete="off"></label>
+        <label>Find a bond<input id="bb-search" type="search" placeholder="Issuer, coupon, maturity or ISIN" autocomplete="off"></label>
         <label>Matching bonds<select id="bb-match"></select></label>
         <button id="bb-add" type="button">Add card</button>
         <label>Compare with<select id="bb-overlay"></select></label>
@@ -66,7 +67,8 @@
     <details class="sb-coverage bb-method">
       <summary>Price, yield and return definitions</summary>
       <p>Bid prices are quoted per 100 face value in the bond currency. BOS and OCBC history uses the printed report date and reported yield to maturity. WSJ uses asked yields. Bondsupermart uses bid yields to maturity or to worst as labelled. A point represents the source observation only.</p>
-      <p>For watched U.S. Treasuries, the model starts 30 calendar years before maturity and uses the first available FRED date and the last eligible observation in each month. The yield chart uses the same FRED yield that discounts semiannual coupons and principal in the price chart. The clean price per 100 excludes accrued interest. Before issuance, both lines are hypothetical.</p>
+      <p>Choose a fixed-rate, noncallable U.S. Treasury note or bond to generate its history. TreasuryDirect supplies the coupon, issue date and maturity. The catalogue includes matured issues within the FRED archive, which starts in January 1995. <a href="https://www.treasurydirect.gov/auctions/auction-query/">TreasuryDirect auction data</a></p>
+      <p>The model begins 30 calendar years before maturity or at the first available FRED date. It uses the last eligible observation in each month. The modeled yield discounts semiannual coupons and principal. The theoretical price is per 100 of face value and excludes accrued interest. Before issuance, both lines are hypothetical.</p>
       <p>Each estimate uses the two published Treasury tenors that bracket the remaining maturity. The 15-year point sits halfway between 10 and 20 years. When the remaining maturity falls outside the available curve, the model uses the closest published tenor. The 30-year rate was suspended from February 2002 to February 2006. <a href="https://fred.stlouisfed.org/series/DGS10">FRED 10Y</a> · <a href="https://fred.stlouisfed.org/series/DGS20">FRED 20Y</a> · <a href="https://fred.stlouisfed.org/series/DGS30">FRED 30Y</a> · <a href="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve">Treasury rate availability</a></p>
       <p>The price chart switches to the first saved bid. The yield chart switches to the first reported yield. A dotted connector marks each transition when the two dates are within seven calendar days. Larger gaps remain open.</p>
       <p>Yearly price change uses the first and last available bid in each calendar year within your selected range. It excludes coupons, accrued interest, fees and FX. ACE Fixed AR is the workbook snapshot percentage and has no historical time series.</p>
@@ -88,7 +90,7 @@
       <p class="bb-point"></p>
       <figure class="bb-figure">
         <figcaption>Price per 100</figcaption>
-        <p class="bb-series-key" data-series-key="bid" hidden><span class="bb-model-key">FRED estimate from <span class="bb-model-start"></span></span><span class="bb-observed-key">Saved bid</span><span class="bb-peer-model-key">Comparison FRED estimate</span></p>
+        <p class="bb-series-key" data-series-key="bid" hidden><span class="bb-model-key">Theoretical FRED price</span><span class="bb-observed-key">Saved bid</span><span class="bb-peer-model-key">Comparison FRED estimate</span></p>
         <canvas tabindex="0" role="img" data-plot="bid" aria-label="Bond price history. Saved bids and any FRED estimates use separate lines. Use arrow keys to move between dates."></canvas>
         <p class="bb-no-data" hidden>No prices in this range.</p>
       </figure>

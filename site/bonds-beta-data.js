@@ -109,6 +109,34 @@
     return combined;
   }
 
+  function treasuryCatalogue(data) {
+    if (data?.schema_version !== 1 || !dateOk(data.latest_auction_date) ||
+        !Array.isArray(data.instruments) || !data.instruments.length) throw Error('Unexpected Treasury catalogue format.');
+    const catalogue = new Map();
+    for (const [isin, type, coupon, issueDate, maturity] of data.instruments) {
+      const key = identity(isin, 'USD');
+      if (!/^US912[A-Z0-9]{6}\d$/.test(isin) || !['Note', 'Bond'].includes(type) || !Number.isFinite(coupon) ||
+          coupon <= 0 || !dateOk(issueDate) || !dateOk(maturity) || issueDate >= maturity || catalogue.has(key)) {
+        throw Error('Invalid Treasury catalogue terms.');
+      }
+      catalogue.set(key, { isin, type, coupon, issueDate, maturity, currency: 'USD', isTreasury: true,
+        name: `US Treasury ${type} ${coupon}% · ${maturity}` });
+    }
+    return catalogue;
+  }
+
+  function mergeCatalogue(observed, catalogue) {
+    const combined = new Map(observed);
+    for (const [key, terms] of catalogue) {
+      const saved = combined.get(key);
+      // Do not attach a different coupon or maturity to quotes for a conflicting public identity.
+      if (saved?.maturity && (saved.maturity !== terms.maturity || saved.coupon !== terms.coupon)) continue;
+      combined.set(key, { ...saved, ...terms, name: saved?.name ?? terms.name,
+        rows: saved?.rows ?? new Map(), ar: saved?.ar ?? null });
+    }
+    return combined;
+  }
+
   const dayMs = 86400000;
   const utcDate = date => new Date(date + 'T00:00:00Z');
   const tenors = new Map([['DGS1MO', 1 / 12], ['DGS3MO', .25], ['DGS6MO', .5], ['DGS1', 1],
@@ -185,7 +213,8 @@
     });
   }
 
-  const api = { sources, publicHistory, readHistory, mergeHistory, annualPriceChanges, fredCurves, reconstructedPrices };
+  const api = { sources, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
+    annualPriceChanges, fredCurves, reconstructedPrices };
   if (typeof module !== 'undefined') module.exports = api;
   root.BondsBetaData = api;
 })(globalThis);
