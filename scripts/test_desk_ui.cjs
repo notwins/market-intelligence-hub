@@ -75,6 +75,23 @@ test('1D compares consecutive trading closes and rejects a stale previous close'
  assert.equal(Desk.priceMove(daily,'2026-11-20',{sessions:1}),null);
  assert.equal(Desk.priceMove(daily,'2026-11-22',{sessions:1}),null);
 });
+test('multiple trading sessions skip weekends and leave gaps unavailable',()=>{
+ const sessions=[['2026-11-12',25],['2026-11-13',30],['2026-11-16',40],['2026-11-17',45],['2026-11-18',50],['2026-11-19',60],['2026-11-20',75]];
+ assert.equal(Desk.priceMove(sessions,'2026-11-20',{sessions:6}),200);
+ assert.equal(Desk.priceMove(sessions,'2026-11-20',{sessions:2}),50);
+ assert.equal(Desk.priceMove(sessions,'2026-11-20',{sessions:7}),null);
+ assert.equal(Desk.priceMove([['2026-11-02',80],...sessions],'2026-11-13',{sessions:2}),null);
+});
+test('long lookbacks use older period dates without filling a gap in the daily series',()=>{
+ const daily=[['2025-12-01',80],['2026-09-30',80],['2026-11-20',100]];
+ const archive={weekly:[['2025-11-16',50],['2025-11-23',80]],monthly:[['2024-09-30',10],['2024-10-31',40],['2024-11-30',80]]};
+ assert.deepEqual(Desk.moveObservation(daily,'2026-11-20',{months:12},archive),
+  {value:100,from:'2025-11-16',to:'2026-11-20',grain:'saved weekly period'});
+ assert.deepEqual(Desk.moveObservation(daily,'2026-11-20',{months:24},archive),
+  {value:150,from:'2024-10-31',to:'2026-11-20',grain:'saved monthly period'});
+ assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:1},archive),null);
+ assert.equal(Desk.moveObservation(daily,'2026-11-20',{months:25}, {weekly:[],monthly:[['2024-09-01',50]]}),null);
+});
 test('stock move colours use fixed bands with matching gain and loss boundaries',()=>{
  for(const [move,band] of [[0.1,1],[4.9,1],[5,2],[9.9,2],[10,3],[15,3],[15.1,4],[100,4]]){
   assert.equal(Desk.moveHeat(move),'gain-'+band);
@@ -82,6 +99,26 @@ test('stock move colours use fixed bands with matching gain and loss boundaries'
  }
  assert.equal(Desk.moveHeat(0),'flat');
  assert.equal(Desk.moveHeat(null),'missing');
+});
+test('Stocks BETA 2 offers exact additional equity listings without duplicating the BOS archive',()=>{
+ const {sharedPriceCompanies}=require('../site/stocks-beta2.js');
+ const securities=[{ticker:'BRK/B US',currency:'USD'},{ticker:'BABA US',currency:'USD'}];
+ const mappings=[
+  {instrumentId:'BRK/B US',listingId:'brk-b',currency:'USD',verified:true},
+  {instrumentId:'BABA US',listingId:'baba',currency:'USD',verified:true},
+  {instrumentId:'BABA US',listingId:'9988-hk',currency:'HKD',verified:false}
+ ];
+ const instruments=[
+  {id:'brk-b',ticker:'BRK-B',name:'Berkshire',currency:'USD',asset_type:'equity'},
+  {id:'baba',ticker:'BABA',name:'Alibaba ADS',currency:'USD',asset_type:'equity'},
+  {id:'9988-hk',ticker:'9988.HK',name:'Alibaba Hong Kong',currency:'HKD',asset_type:'equity'},
+  {id:'spy',ticker:'SPY',name:'SPY',currency:'USD',asset_type:'equity_etf'}
+ ];
+ assert.deepEqual(sharedPriceCompanies(securities,instruments,mappings).map(c=>[c.key,c.ticker,c.currency]),
+  [['price:9988-hk','9988.HK','HKD']]);
+ const MarketPrices=require('../site/share-prices.js');
+ assert(MarketPrices.card('DIS',{showWorkspaceActions:false}).includes('data-price-hide-workspace-actions'));
+ assert(!MarketPrices.card('DIS').includes('data-price-hide-workspace-actions'));
 });
 test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
  const cards=require('../site/company-news-cards.js');
