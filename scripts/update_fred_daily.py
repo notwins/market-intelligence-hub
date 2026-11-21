@@ -32,13 +32,13 @@ CROSSES = {'CHF/SGD': ('USD/SGD', 'USD/CHF', '/'),
            'SGD/MYR': ('USD/MYR', 'USD/SGD', '/')}
 
 
-def parse_group(text, codes, today):
+def parse_group(text, codes, today, fx_codes=FX.values()):
     reader = csv.DictReader(io.StringIO(text.lstrip('\ufeff')))
     if reader.fieldnames != ['observation_date', *codes]:
         raise ValueError('Unexpected FRED daily columns')
     result = {code: {} for code in codes}
     previous = ''
-    fx_codes = set(FX.values())
+    fx_codes = set(fx_codes)
     for row in reader:
         day = row['observation_date']
         observed = date.fromisoformat(day)

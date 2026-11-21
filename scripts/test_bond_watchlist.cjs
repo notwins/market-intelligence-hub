@@ -104,9 +104,12 @@ const utc = value => new Date(value + 'T00:00:00Z');
 // TreasuryDirect Appendix B examples for clean prices on and between coupon dates.
 assert(Math.abs(daily.cleanPrice(utc('2020-05-15'), utc('1990-05-15'), 8.75, 8.84) - 99.057893) < .000001);
 assert(Math.abs(daily.cleanPrice(utc('1995-11-15'), utc('1985-11-29'), 9.5, 9.54) - 99.730918) < .000001);
-const archive = beta.fredCurves(JSON.parse(fs.readFileSync('site/data/fred-daily.json', 'utf8')));
+const weekly = JSON.parse(fs.readFileSync('site/data/fred-weekly-yields.json', 'utf8'));
+const archive = beta.fredCurves(weekly);
+assert(archive.length >= 1500);
+assert(archive.every((curve, i) => curve.date === weekly.observations[i].date));
 assert(archive.find(curve => curve.date === '2004-01-02').rates.every(([tenor]) => tenor <= 20));
-assert(archive.find(curve => curve.date === '2006-02-09').rates.some(([tenor]) => tenor === 30));
+assert(archive.find(curve => curve.date === '2006-02-10').rates.some(([tenor]) => tenor === 30));
 const betaList = beta.publicHistory(prices);
 let modelCount = 0;
 for (const instrument of betaList.values()) {
@@ -154,7 +157,7 @@ const mixed = beta.reconstructedPrices(separate, archive, daily);
 assert.equal(mixed.firstBid, '2024-01-02');
 assert.equal(mixed.firstYield, '2024-03-01');
 assert.equal([...mixed.points.keys()].at(-1), '2023-12-29');
-assert.equal([...mixed.yields.keys()].at(-1), '2024-02-29');
+assert.equal([...mixed.yields.keys()].at(-1), '2024-02-23');
 console.log('PASS Treasury clean prices, dynamic FRED tenors, the 30-year publication gap and separate handoffs to reported bids and yields');
 
 const treasuryDirectory = beta.treasuryCatalogue(JSON.parse(fs.readFileSync('site/data/treasury-catalogue.json', 'utf8')));
@@ -183,12 +186,12 @@ for (const isin of ['US912810UY28', 'US912810CL09']) {
 }
 assert.throws(() => beta.treasuryCatalogue({ schema_version: 1, latest_auction_date: '2026-11-12',
   instruments: [['US912810UY28', 'TIPS', 5.375, '2026-11-16', '2056-11-15']] }));
-const localInventory = new Map([['US912810UY28|USD', { name: 'Imported bond', ar: 42, rows: new Map([['2026-11-19', csvBid]]) }]]);
+const localInventory = new Map([['US912810UY28|USD', { name: 'Imported bond', ar: 42, rows: new Map([['2026-11-23', csvBid]]) }]]);
 const identified = beta.mergeCatalogue(localInventory, treasuryDirectory).get('US912810UY28|USD');
 assert.equal(identified.isTreasury, true);
 assert.equal(identified.ar, 42);
-assert.equal(identified.rows.get('2026-11-19'), csvBid);
-assert.equal(beta.reconstructedPrices(identified, archive, daily).firstBid, '2026-11-19');
+assert.equal(identified.rows.get('2026-11-23'), csvBid);
+assert.equal(beta.reconstructedPrices(identified, archive, daily).firstBid, '2026-11-23');
 
 const namedBonds = [
   ['XS0000000001', 'Example Note 3.5 11/22/26', '0'],

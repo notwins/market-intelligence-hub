@@ -12,6 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = Path('site/data/Bond Prices - Type JSON - 16-Nov-03.10.json')
+WSJ_CURVE = Path('site/data/wsj-treasury-dashboard.json')
 WSJ = 'https://www.wsj.com/market-data/bonds/treasuries'
 BSM = 'https://www.bondsupermart.com/bsm/bond-factsheet/'
 API = 'https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/'
@@ -90,7 +91,7 @@ def checked_date(value, now):
     return date.isoformat()
 
 
-def parse_wsj(raw, now):
+def parse_wsj(raw, now, table='NOTES_AND_BONDS'):
     text = raw.decode('utf-8')
     start = re.search(r'window\.__STATE__\s*=\s*', text)
     if not start:
@@ -98,24 +99,28 @@ def parse_wsj(raw, now):
     state = json.JSONDecoder().raw_decode(text[start.end():])[0]
     matches = [v['data']['data'] for v in state.get('data', {}).values()
                if v.get('data', {}).get('type') == 'mdc_treasury'
-               and json.loads(v['data']['id']).get('treasury') == 'NOTES_AND_BONDS']
+               and json.loads(v['data']['id']).get('treasury') == table]
     if len(matches) != 1:
-        raise ValueError('Missing/ambiguous Treasury notes-and-bonds table')
+        raise ValueError('Missing/ambiguous WSJ Treasury table: ' + table)
     data = matches[0]
     date = checked_date(dt.datetime.strptime(data['timestamp'], '%A, %B %d, %Y').date().isoformat(), now)
     rows = data['instruments']
-    if not isinstance(rows, list) or len(rows) < 100:
+    if not isinstance(rows, list) or len(rows) < (100 if table == 'NOTES_AND_BONDS' else 10):
         raise ValueError('Incomplete Treasury source table')
     return date, rows
 
 
-def wsj_quote(row, date, quotes, raw, now):
+def wsj_match(row, quotes):
     found = [q for q in quotes
              if dt.datetime.strptime(q['maturityDate'], '%m/%d/%Y').date().isoformat() == row['maturity']
-             and number(q['coupon'], 0, 30) == row['coupon']]
+             and (row['coupon'] is None or number(q['coupon'], 0, 30) == row['coupon'])]
     if len(found) != 1:
         raise ValueError('Exact coupon/maturity match unavailable; no substitute bond used')
-    q = found[0]
+    return found[0]
+
+
+def wsj_quote(row, date, quotes, raw, now):
+    q = wsj_match(row, quotes)
     bid, ask = treasury_price(q['bid']), treasury_price(q['ask'])
     if bid > ask:
         raise ValueError('Crossed Treasury bid/ask')
@@ -123,6 +128,45 @@ def wsj_quote(row, date, quotes, raw, now):
                 bid_raw=q['bid'], ask_raw=q['ask'], yield_pct=number(q['askYield'], -10, 100),
                 yield_basis='Asked yield', source='WSJ', source_url=WSJ,
                 source_sha256=digest(raw), retrieved_at=stamp(now))
+
+
+def update_wsj_curve(path, raw, now, notes):
+    if not path.exists():
+        return
+    curve = json.loads(path.read_text(encoding='utf-8'))
+    previous = copy.deepcopy(curve)
+    tables = {'note': notes, 'bond': notes} if notes else {}
+    try:
+        tables['bill'] = parse_wsj(raw, now, 'BILLS')
+    except (ValueError, KeyError, TypeError):
+        pass  # Keep the last correctly dated bill observations.
+    for sample in curve['quotes']:
+        prior_date = sample.get('quote_date', previous['as_of'])
+        sample['quote_date'] = prior_date
+        if sample['kind'] not in tables:
+            continue
+        day, rows = tables[sample['kind']]
+        if day < prior_date or day >= sample['maturity']:
+            continue
+        identity = {'maturity': sample['maturity'], 'coupon': sample['coupon_percent']}
+        try:
+            if sample['kind'] == 'bill':
+                quote = wsj_match(identity, rows)
+                # The WSJ bill Bid/Asked fields are discount rates.
+                values = {'asked_yield_percent': number(quote['askYield'], -10, 100)}
+            else:
+                quote = wsj_quote(identity, day, rows, raw, now)
+                values = {'asked_yield_percent': quote['yield_pct'],
+                          'bid_price': quote['bid'], 'ask_price': quote['ask']}
+        except (ValueError, KeyError, TypeError):
+            continue
+        sample.update(values, quote_date=day)
+    curve['as_of'] = max(row['quote_date'] for row in curve['quotes'])
+    if curve != previous:
+        curve['verified_on_sgt'] = now.astimezone(SGT).date().isoformat()
+        temp = path.with_suffix('.tmp')
+        temp.write_text(json.dumps(curve, ensure_ascii=False, indent=2, allow_nan=False) + '\n', encoding='utf-8', newline='\n')
+        temp.replace(path)
 
 
 def bsm_quote(row, raw, now):
@@ -248,6 +292,8 @@ def update(root=ROOT, now=None, get=fetch):
         temp = path.with_suffix('.tmp')
         temp.write_text(json.dumps(saved, ensure_ascii=False, indent=2, allow_nan=False) + '\n', encoding='utf-8')
         temp.replace(path)
+    if raw_wsj:
+        update_wsj_curve(root / WSJ_CURVE, raw_wsj, now, (wsj_date, wsj_rows) if not error_wsj else None)
     return saved
 
 

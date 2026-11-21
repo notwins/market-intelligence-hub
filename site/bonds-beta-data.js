@@ -182,25 +182,31 @@
     ['DGS2', 2], ['DGS3', 3], ['DGS5', 5], ['DGS7', 7], ['DGS10', 10], ['DGS20', 20], ['DGS30', 30]]);
 
   function fredCurves(data) {
-    if (data?.schemaVersion !== 1 || !Array.isArray(data.series)) throw Error('Unexpected FRED history format.');
-    const curves = new Map();
-    for (const series of data.series) {
-      const tenor = tenors.get(series.provider_series);
-      if (!tenor || series.family !== 'ust' || !Array.isArray(series.points)) continue;
-      for (const [date, rate] of series.points) {
-        if (!dateOk(date) || !Number.isFinite(rate) || rate <= -200) continue;
-        // Treasury suspended the published 30-year constant maturity rate during this interval.
-        if (tenor === 30 && date >= '2002-02-18' && date < '2006-02-09') continue;
-        if (!curves.has(date)) curves.set(date, new Map());
-        curves.get(date).set(tenor, rate);
-      }
+    if (data?.schema_version !== 1 || data.frequency !== 'weekly' ||
+        !Array.isArray(data.columns) || !Array.isArray(data.observations)) {
+      throw Error('Unexpected weekly FRED history format.');
     }
-    return [...curves].filter(([, rates]) => rates.size >= 2).sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, rates]) => ({ date, settlement: utcDate(date), rates: [...rates].sort(([a], [b]) => a - b) }));
+    const terms = data.columns.map(column => tenors.get(column.provider_series));
+    const curves = [];
+    let previous = '';
+    for (const { date, week_ending: friday, values } of data.observations) {
+      const settlement = utcDate(date), weekEnd = utcDate(friday);
+      if (!dateOk(date) || !dateOk(friday) || weekEnd.getUTCDay() !== 5 ||
+          date <= previous || date > friday || weekEnd - settlement > 4 * dayMs ||
+          !Array.isArray(values) || values.length !== terms.length) throw Error('Invalid weekly observation.');
+      previous = date;
+      const rates = terms.flatMap((tenor, i) => {
+        const rate = values[i];
+        return tenor && Number.isFinite(rate) && rate >= -10 && rate <= 100 &&
+          !(tenor === 30 && date >= '2002-02-18' && date < '2006-02-09') ? [[tenor, rate]] : [];
+      }).sort(([a], [b]) => a - b);
+      if (rates.length >= 2) curves.push({ date, settlement, rates });
+    }
+    return curves;
   }
 
   async function loadFredCurves() {
-    const response = await fetch('data/fred-daily.json', { signal: AbortSignal.timeout(20000) });
+    const response = await fetch('data/fred-weekly-yields.json', { signal: AbortSignal.timeout(20000) });
     if (!response.ok) throw Error('FRED history unavailable');
     return fredCurves(await response.json());
   }
@@ -209,14 +215,6 @@
     const [lower, low] = rates.findLast(([tenor]) => tenor <= years) ?? rates[0];
     const [upper, high] = rates.find(([tenor]) => tenor >= years) ?? rates.at(-1);
     return { lower, upper, rate: lower === upper ? low : low + (high - low) * (years - lower) / (upper - lower) };
-  }
-
-  function sampleCurves(curves, start, cutoff) {
-    const eligible = curves.filter(curve => curve.date >= start && curve.date < cutoff);
-    if (!eligible.length) return [];
-    // Use the first available date and the last published observation in each month.
-    const months = new Map(eligible.map(curve => [curve.date.slice(0, 7), curve]));
-    return [...new Set([eligible[0], ...months.values()])];
   }
 
   function reconstructedPrices(instrument, curves, { cleanPrice, offsetMonth }) {
@@ -228,8 +226,9 @@
     const firstBid = observed.find(([, quote]) => quote.bid > 0)?.[0];
     const firstYield = observed.find(([, quote]) => Number.isFinite(quote.yield))?.[0];
     const cutoff = first => first && first < maturity ? first : maturity;
-    const priceSamples = sampleCurves(curves, start, cutoff(firstBid));
-    const yieldSamples = cutoff(firstYield) === cutoff(firstBid) ? priceSamples : sampleCurves(curves, start, cutoff(firstYield));
+    const priceSamples = curves.filter(curve => curve.date >= start && curve.date < cutoff(firstBid));
+    const yieldSamples = cutoff(firstYield) === cutoff(firstBid) ? priceSamples :
+      curves.filter(curve => curve.date >= start && curve.date < cutoff(firstYield));
     const estimate = ({ settlement, rates }) => {
       const years = Math.min(30, (end - settlement) / (365.2425 * dayMs));
       return { years, ...yieldAt(rates, years) };
