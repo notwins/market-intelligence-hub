@@ -224,6 +224,9 @@ test('history directory shares three groups and the same destinations across rai
  assert(!bonds.items.some(i=>['si','si-beta2'].includes(i[0])));
  assert.deepEqual(fred.items.slice(0,6).map(i=>i[3]),['fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html']);
  const rail=nav.sidebar(),menu=nav.toolbar('yield'),home=nav.html();
+ for(const rendered of [rail,menu,home]){
+  assert.match(rendered,/<(?:a|button)[^>]+(?:data-history-id|data-tab)="fx"[^>]+data-nav-tone="blue"/);
+ }
  for(const rendered of [rail,menu,home])assert.doesNotMatch(rendered,/beta-shares|beta3-shares/);
  for(const rendered of [rail,menu,home])assert(rendered.indexOf('href="cross-market-history.html"') < rendered.indexOf('data-history-group=') && rendered.includes('href="cross-market-history.html"'));
  for(const item of all){assert(rail.includes('data-history-id="'+item[0]+'"'));assert(menu.includes(item[3]?'href="'+item[3]+'"':'data-tab="'+item[0]+'"'));assert(home.includes(item[3]||'v4.html#history/'+item[0]));}
