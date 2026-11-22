@@ -3,49 +3,74 @@
   'use strict';
   if (document.documentElement.classList.contains('hub-primary-ready')) return;
   const root = document.documentElement;
-  const styleKey = 'market-hub-navigation-style';
-  const defaultNavigationStyle = 'professional';
-  const styleLabels = {
-    en: ['Navigation style', 'Section colours', 'Professional · standard spacing'],
-    'zh-Hans': ['导航样式', '按栏目配色', '专业 · 标准间距'],
-    'zh-Hant': ['導覽樣式', '按欄目配色', '專業 · 標準間距']
-  };
+  const preferences = [
+    {
+      key: 'market-hub-navigation-style',
+      attribute: 'data-nav-style',
+      options: ['professional', 'sections'],
+      labels: {
+        en: ['Navigation style', 'Professional', 'Section colours'],
+        'zh-Hans': ['导航样式', '专业', '按栏目配色'],
+        'zh-Hant': ['導覽樣式', '專業', '按欄目配色']
+      }
+    },
+    {
+      key: 'market-hub-navigation-size',
+      attribute: 'data-nav-size',
+      options: ['standard', 'compact'],
+      labels: {
+        en: ['Navigation size', 'Standard', 'Compact'],
+        'zh-Hans': ['导航大小', '标准', '紧凑'],
+        'zh-Hant': ['導覽大小', '標準', '緊湊']
+      }
+    }
+  ];
 
-  function applyNavigationStyle(value) {
-    root.dataset.navStyle = value === 'sections' ? 'sections' : defaultNavigationStyle;
-    for (const picker of document.querySelectorAll('[data-nav-style-picker]')) picker.value = root.dataset.navStyle;
+  function applyPreference({attribute, options}, value) {
+    const selected = options.includes(value) ? value : options[0];
+    root.setAttribute(attribute, selected);
+    for (const picker of document.querySelectorAll(`[${attribute}-picker]`)) picker.value = selected;
+    return selected;
   }
 
-  function setNavigationStyle(value) {
-    applyNavigationStyle(value);
-    try { localStorage.setItem(styleKey, root.dataset.navStyle); } catch { /* The setting still works on this page. */ }
+  function savePreference(preference, value) {
+    const selected = applyPreference(preference, value);
+    try { localStorage.setItem(preference.key, selected); } catch { /* The setting still works on this page. */ }
   }
 
-  let savedStyle;
-  try { savedStyle = localStorage.getItem(styleKey); } catch { /* Use the default when storage is unavailable. */ }
-  applyNavigationStyle(savedStyle);
+  for (const preference of preferences) {
+    let saved;
+    try { saved = localStorage.getItem(preference.key); } catch { /* Use the default when storage is unavailable. */ }
+    applyPreference(preference, saved);
+  }
   window.addEventListener('storage', event => {
-    if (event.key === styleKey || event.key === null) applyNavigationStyle(event.newValue);
+    for (const preference of preferences) {
+      if (event.key === preference.key || event.key === null) applyPreference(preference, event.newValue);
+    }
   });
   document.addEventListener('click', event => {
-    if (event.target.closest('#display-settings [data-display-reset]')) setNavigationStyle(defaultNavigationStyle);
+    if (event.target.closest('#display-settings [data-display-reset]')) {
+      for (const preference of preferences) savePreference(preference, preference.options[0]);
+    }
   }, true);
 
   window.HubNavigationStyle = {
     mountSettings(dialog) {
-      if (dialog.querySelector('[data-nav-style-picker]')) return;
-      const [title, sections, professional] = styleLabels[root.lang] ?? styleLabels.en;
+      if (dialog.querySelector('.hub-navigation-preferences')) return;
       const section = document.createElement('section');
-      section.className = 'display-section hub-navigation-style';
-      const label = document.createElement('label');
-      const picker = document.createElement('select');
-      picker.dataset.navStylePicker = '';
-      picker.add(new Option(professional, 'professional'));
-      picker.add(new Option(sections, 'sections'));
-      picker.value = root.dataset.navStyle;
-      picker.addEventListener('change', () => setNavigationStyle(picker.value));
-      label.append(document.createTextNode(title), picker);
-      section.append(label);
+      section.className = 'display-section hub-navigation-preferences';
+      for (const preference of preferences) {
+        const {attribute, options, labels} = preference;
+        const [title, ...optionLabels] = labels[root.lang] ?? labels.en;
+        const label = document.createElement('label');
+        const picker = document.createElement('select');
+        picker.setAttribute(attribute + '-picker', '');
+        options.forEach((value, index) => picker.add(new Option(optionLabels[index], value)));
+        picker.value = root.getAttribute(attribute);
+        picker.addEventListener('change', () => savePreference(preference, picker.value));
+        label.append(document.createTextNode(title), picker);
+        section.append(label);
+      }
       const anchor = dialog.querySelector('.display-intro, header');
       if (anchor) anchor.after(section);
       else dialog.prepend(section);
@@ -306,6 +331,7 @@
   }
   new ResizeObserver(() => {
     document.documentElement.style.setProperty('--hub-primary-height', bar.getBoundingClientRect().height + 'px');
+    positionMenu();
   }).observe(bar);
   window.addEventListener('hashchange', active); window.addEventListener('resize', active); requestAnimationFrame(active);
 })();
