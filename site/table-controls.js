@@ -33,13 +33,14 @@
  function heatBand(value,min,max){return !Number.isFinite(value)?null:max===min?2:Math.min(4,Math.max(0,Math.floor((value-min)/(max-min)*5)));}
  if(typeof module!=='undefined'&&module.exports){module.exports={scalar,profile,compare,heatBand};return;}
  const doc=root.document;if(!doc||root.MarketTableControls)return;
- const states=new WeakMap(),live=new Set(),pending=new Set();let observer,frame=0,dialog,active,trigger,serial=0;
+ const states=new WeakMap(),live=new Set(),pending=new Set();let observer,frame=0,dialog,active,trigger,organizerDialog,organizing,serial=0;
  const sourceCells=new WeakMap(),companyFilters=new Map(),minWidth=96,maxWidth=960;
+ const organizeDefaults=()=>({group:'',levels:[],ki:null,strike:null});
  const observation={childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','data-table-controls']};
  const own=node=>node?.nodeType===1&&(node.matches('[data-tc-ui]')||node.closest('[data-tc-ui]'));
  function ingest(records){for(const record of records){if(own(record.target))continue;const table=record.target.nodeType===1?record.target.closest('table'):record.target.parentElement?.closest('table');if(table)pending.add(table);if(record.type==='attributes'&&record.attributeName==='data-table-controls')record.target.querySelectorAll('table').forEach(t=>pending.add(t));for(const node of record.addedNodes||[]){if(node.nodeType!==1||own(node))continue;if(node.matches('table'))pending.add(node);node.querySelectorAll('table').forEach(t=>pending.add(t));}}if(records.length)schedule();}
  function mutate(fn){if(observer){ingest(observer.takeRecords());observer.disconnect();}try{return fn();}finally{observer?.observe(doc.body,observation);}}
- function schedule(){if(!frame)frame=root.requestAnimationFrame(()=>{frame=0;mutate(()=>{for(const state of live)if(!state.table.isConnected){live.delete(state);state.status.remove();}if(active&&(!active.state.table.isConnected||!trigger?.isConnected))close();const tables=[...pending];pending.clear();tables.forEach(mount);});});}
+ function schedule(){if(!frame)frame=root.requestAnimationFrame(()=>{frame=0;mutate(()=>{for(const state of live)if(!state.table.isConnected){live.delete(state);state.status.remove();state.organizeButton?.remove();}if(active&&(!active.state.table.isConnected||!trigger?.isConnected))close();if(organizing&&!organizing.table.isConnected)organizerDialog.close();const tables=[...pending];pending.clear();tables.forEach(mount);});});}
  function sourceText(cell){if(!cell)return '';return (cell.dataset.tcValue??cell.querySelector('[data-tc-original]')?.textContent??cell.textContent).replace(/\s+/g,' ').trim();}
  function cells(row){
   const prior=sourceCells.get(row);
@@ -155,14 +156,14 @@
   const state=states.get(table);if(!state)return;
   if(active?.state===state){close();active=null;trigger=null;}
   state.rows=state.rows.filter(row=>dataRow(row,state.model.count));
-  state.excludedCompanies=new Set();state.sort=null;state.restoreOrder=true;state.focus=null;
+  state.excludedCompanies=new Set();state.organizer=organizeDefaults();state.sort=null;state.restoreOrder=true;state.focus=null;
   for(const config of state.configs.values())Object.assign(config,{filter:'',heat:false,bold:false,font:'original',percent:false});
   apply(state,false);
   if(state.layout){state.layout.order=state.layout.labels.map((_,index)=>index);state.layout.widths=[];drawLayout(state);}
   table.querySelectorAll('[data-tc-button],[data-tc-grip]').forEach(control=>control.remove());
   table.querySelectorAll('.tc-filtered,.tc-heat,.tc-focus,[data-tc-font],[data-tc-band]').forEach(node=>{node.classList.remove('tc-filtered','tc-heat','tc-focus');delete node.dataset.tcFont;delete node.dataset.tcBand;delete node.dataset.tcScale;});
   table.querySelectorAll('[data-tc-original]').forEach(original=>{original.parentElement.querySelector('[data-tc-formatted]')?.remove();while(original.firstChild)original.before(original.firstChild);original.remove();});
-  table.classList.remove('tc-table');state.status.remove();live.delete(state);states.delete(table);
+  table.classList.remove('tc-table');state.status.remove();state.organizeButton?.remove();live.delete(state);states.delete(table);
  }
  function mount(table){
   if(!table.isConnected)return;
@@ -176,8 +177,10 @@
   const companyKey=companyScope?JSON.stringify([root.location.pathname,root.location.search,root.location.hash,companyScope]):'';
   if(state.companyKey!==companyKey){
    state.companyKey=companyKey;
-   state.excludedCompanies=companyFilters.get(companyKey)||new Set();
-   if(companyKey)companyFilters.set(companyKey,state.excludedCompanies);
+   const view=companyFilters.get(companyKey)||{excludedCompanies:new Set(),organizer:organizeDefaults()};
+   state.excludedCompanies=view.excludedCompanies;
+   state.organizer=view.organizer;
+   if(companyKey)companyFilters.set(companyKey,view);
   }
   if(companyKey)state.companies=[...new Set(state.rows.flatMap(companyCodes))].sort(collator.compare);
   const layout=layoutFor(state);
@@ -196,17 +199,28 @@
    state.configs.set(index,{...previous,label,header:cell,button,info,originalSort:previous.header===cell?previous.originalSort:cell.getAttribute('aria-sort')});
   }
   if(state.fixedRows){state.sort=null;for(const config of state.configs.values())config.filter='';}
+  state.fields=new Map(structure.columns.filter(({cell})=>cell.dataset.tcField).map(({cell,index})=>[cell.dataset.tcField,index]));
+  if(companyKey&&state.fields.has('coupon')&&!state.fixedRows&&!state.organizeButton){
+   const button=doc.createElement('button');
+   button.type='button';button.className='tc-organize-button';button.dataset.tcUi='';button.setAttribute('aria-haspopup','dialog');
+   button.addEventListener('click',()=>openOrganizer(state));
+   const parent=table.parentElement;
+   (parent.matches('.si-card-scroll,.si-table-wrap,.table-scroll')?parent:table).before(button);
+   state.organizeButton=button;
+  }
   drawLayout(state);
   const scroll=table.parentElement;if(scroll&&/(auto|scroll)/.test(root.getComputedStyle(scroll).overflowX)&&!scroll.hasAttribute('tabindex')){scroll.tabIndex=0;if(!scroll.hasAttribute('role'))scroll.setAttribute('role','region');if(!scroll.hasAttribute('aria-label'))scroll.setAttribute('aria-label',(table.caption?.textContent.trim()||'Data table')+'; scroll horizontally');}
-  apply(state,Boolean(state.status.textContent||state.excludedCompanies.size));
+  apply(state,Boolean(state.status.textContent||state.excludedCompanies.size||hasOrganizer(state.organizer)));
   if(active?.state===state){if(!state.configs.has(active.index))close();else sync();}
  }
  function apply(state,announce=true){
-  const {table,rows}=state;
+  const {rows,organizer}=state;
+  const levels=activeLevels(state),mainSort=levels[0];
+  if(state.organizeButton)state.organizeButton.textContent=hasOrganizer(organizer)?'Group & sort · Active':'Group & sort';
   for(const [index,config]of state.configs){
    const values=rows.map(row=>scalar(sourceText(at(row,index)))?.value).filter(Number.isFinite),min=values.length?Math.min(...values):0,max=values.length?Math.max(...values):0;
    config.range={min,max};const heat=config.heat&&config.info.numeric;if(!config.info.percent)config.percent=false;
-   config.button.dataset.active=String(!!(config.filter||(config.header.hasAttribute('data-tc-company-column')&&state.excludedCompanies.size)||heat||config.bold||config.font!=='original'||config.percent||state.focus===index||state.sort?.index===index));
+   config.button.dataset.active=String(!!(config.filter||(config.header.hasAttribute('data-tc-company-column')&&state.excludedCompanies.size)||heat||config.bold||config.font!=='original'||config.percent||state.focus===index||levels.some(level=>level.index===index)));
    for(const row of rows){const cell=at(row,index);const raw=sourceText(cell),value=scalar(raw)?.value;
     cell.classList.toggle('tc-bold',!!config.bold);
     cell.classList.toggle('tc-heat',heat&&Number.isFinite(value));cell.classList.toggle('tc-focus',state.focus===index);
@@ -219,20 +233,164 @@
     else if(original){original.hidden=false;formatted?.remove();while(original.firstChild)cell.insertBefore(original.firstChild,original);original.remove();}
    }
    config.header.classList.toggle('tc-focus',state.focus===index);
-   if(state.sort?.index===index)config.header.setAttribute('aria-sort',state.sort.descending?'descending':'ascending');else if(config.header.hasAttribute('data-tc-own-sort')){if(config.originalSort)config.header.setAttribute('aria-sort',config.originalSort);else config.header.removeAttribute('aria-sort');delete config.header.dataset.tcOwnSort;}
-   if(state.sort?.index===index)config.header.dataset.tcOwnSort='';
+   if(mainSort?.index===index)config.header.setAttribute('aria-sort',mainSort.descending?'descending':'ascending');else if(config.header.hasAttribute('data-tc-own-sort')){if(config.originalSort)config.header.setAttribute('aria-sort',config.originalSort);else config.header.removeAttribute('aria-sort');delete config.header.dataset.tcOwnSort;}
+   if(mainSort?.index===index)config.header.dataset.tcOwnSort='';
   }
+  const bounds=['ki','strike'].filter(field=>organizer[field]!==null&&state.fields.has(field));
   for(const row of rows){
    const excluded=state.excludedCompanies.size&&companyCodes(row).some(code=>state.excludedCompanies.has(code));
-   const filtered=excluded||[...state.configs].some(([index,c])=>c.filter&&!sourceText(at(row,index)).toLocaleLowerCase().includes(c.filter.toLocaleLowerCase()));
+   const outside=bounds.some(field=>{
+    const value=numberAt(state,row,field);
+    return value===undefined||value>=organizer[field];
+   });
+   const filtered=excluded||outside||[...state.configs].some(([index,c])=>c.filter&&!sourceText(at(row,index)).toLocaleLowerCase().includes(c.filter.toLocaleLowerCase()));
    row.classList.toggle('tc-filtered',Boolean(filtered));
   }
-  // Never move spanning rows or totals, or reorder across row groups.
-  if(!state.fixedRows&&(state.sort||state.restoreOrder)){const dataRows=new Set(rows);for(const body of table.tBodies){let segment=[];const flush=()=>{if(segment.length){const anchor=segment[segment.length-1].nextSibling;segment.sort((a,b)=>state.sort?(compare(sourceText(at(a,state.sort.index)),sourceText(at(b,state.sort.index)),state.configs.get(state.sort.index).info.type,state.sort.descending)||state.order.get(a)-state.order.get(b)):state.order.get(a)-state.order.get(b));const fragment=doc.createDocumentFragment();segment.forEach(row=>fragment.append(row));body.insertBefore(fragment,anchor);segment=[];}};for(const row of [...body.rows]){if(dataRows.has(row))segment.push(row);else flush();}flush();}state.restoreOrder=false;}
+  if(!state.fixedRows)orderRows(state,levels);
   if(announce){
    const matching=rows.filter(r=>!r.classList.contains('tc-filtered')&&!r.hidden).length;
    state.status.textContent=state.companyKey?matching+' of '+rows.length+' references shown.':matching+' of '+rows.length+' loaded data rows match. Changes apply to this rendered table only.';
   }
+ }
+ function hasOrganizer({group,levels,ki,strike}){
+  return Boolean(group||levels.length||ki!==null||strike!==null);
+ }
+ function activeLevels(state){
+  const levels=state.organizer.levels.length?state.organizer.levels:state.sort?[state.sort]:[];
+  return levels.filter(level=>state.configs.has(level.index));
+ }
+ function numberAt(state,row,field){
+  return scalar(sourceText(at(row,state.fields.get(field))))?.value;
+ }
+ function orderRows(state,levels){
+  const {table,rows,organizer}=state;
+  const removedGroups=table.querySelectorAll('[data-tc-group-heading]');
+  removedGroups.forEach(node=>node.remove());
+  if(!organizer.group&&!levels.length&&!state.restoreOrder&&!removedGroups.length)return;
+  const dataRows=new Set(rows);
+  for(const body of table.tBodies){
+   let segment=[];
+   const flush=()=>{
+    if(!segment.length)return;
+    const anchor=segment.at(-1).nextSibling,fragment=doc.createDocumentFragment();
+    const grouped=organizer.group==='coupon';
+    const groupValues=new Map(organizer.group?segment.map(row=>[row,grouped?numberAt(state,row,'coupon'):companyCodes(row).slice().sort(collator.compare).join(' / ')]):[]);
+    const groupLevel=levels.find(level=>level.index===state.fields.get(grouped?'coupon':'stocks'));
+    const direction=(groupLevel?.descending??grouped)?-1:1;
+    segment.sort((a,b)=>{
+     if(groupValues.get(a)!==groupValues.get(b)){
+      const x=groupValues.get(a),y=groupValues.get(b);
+      if(x===undefined||y===undefined)return x===undefined?1:-1;
+      const groupOrder=grouped?x-y:collator.compare(x,y);
+      if(groupOrder)return groupOrder*direction;
+     }
+     for(const {index,descending} of levels){
+      const result=compare(sourceText(at(a,index)),sourceText(at(b,index)),state.configs.get(index).info.type,descending);
+      if(result)return result;
+     }
+     return state.order.get(a)-state.order.get(b);
+    });
+    const counts=new Map();
+    if(groupValues.size)for(const row of segment)if(!row.hidden&&!row.classList.contains('tc-filtered')){
+     const key=groupValues.get(row);
+     counts.set(key,(counts.get(key)||0)+1);
+    }
+    for(const row of segment){
+     const key=groupValues.get(row);
+     if(!row.hidden&&!row.classList.contains('tc-filtered')&&counts.has(key)){
+      const heading=doc.createElement('tr'),label=doc.createElement('th');
+      heading.dataset.tcUi='';heading.dataset.tableStatic='';heading.dataset.tcGroupHeading='';
+      label.colSpan=state.model.count;label.scope='row';
+      label.textContent=(grouped?(key===undefined?'Coupon unavailable':'Coupon '+key+'%'):(key||'Shares unavailable'))+' · '+counts.get(key);
+      heading.append(label);fragment.append(heading);counts.delete(key);
+     }
+     fragment.append(row);
+    }
+    body.insertBefore(fragment,anchor);segment=[];
+   };
+   for(const row of [...body.rows]){if(dataRows.has(row))segment.push(row);else flush();}
+   flush();
+  }
+  state.restoreOrder=false;
+ }
+ function sortLabel(config){
+  const header=config.header.cloneNode(true);
+  header.querySelectorAll('[data-tc-ui],.si-cell-note').forEach(node=>node.remove());
+  return header.textContent.trim();
+ }
+ function drawLevels(levels){
+  const list=organizerDialog.querySelector('#tc-levels');
+  list.replaceChildren(...levels.map(({index,descending},i)=>{
+   const row=doc.createElement('div');
+   row.className='tc-sort-level';
+   row.innerHTML='<label><span></span><select data-tc-level-field></select></label><label>Direction<select data-tc-level-direction><option value="desc">Descending</option><option value="asc">Ascending</option></select></label><button type="button" data-tc-remove-level>Remove</button>';
+   row.querySelector('span').textContent=i?'Then by':'Sort by';
+   const field=row.querySelector('[data-tc-level-field]');
+   field.append(new Option('Choose a column',''));
+   for(const [column,config] of organizing.configs)field.append(new Option(sortLabel(config),String(column)));
+   field.value=index===null?'':String(index);
+   row.querySelector('[data-tc-level-direction]').value=descending?'desc':'asc';
+   row.querySelector('button').setAttribute('aria-label','Remove sort level '+(i+1));
+   return row;
+  }));
+  organizerDialog.querySelector('#tc-add-level').disabled=levels.length>=organizing.configs.size;
+ }
+ function formLevels(){
+  return [...organizerDialog.querySelectorAll('.tc-sort-level')].map(row=>{
+   const value=row.querySelector('[data-tc-level-field]').value;
+   return {index:value===''?null:Number(value),descending:row.querySelector('[data-tc-level-direction]').value==='desc'};
+  });
+ }
+ function createOrganizer(){
+  organizerDialog=doc.createElement('dialog');organizerDialog.className='tc-dialog tc-organizer';
+  organizerDialog.dataset.tcUi='';organizerDialog.setAttribute('aria-labelledby','tc-organizer-title');
+  organizerDialog.innerHTML='<form><header><h2 id="tc-organizer-title">Group &amp; sort</h2><button type="button" id="tc-organizer-close" aria-label="Close group and sort">✕</button></header>'
+   + '<label>Group by<select id="tc-group-by"><option value="">No grouping</option><option value="coupon">Coupon</option><option value="shares">Share basket</option></select></label>'
+   + '<p class="tc-hint">Sort levels run in order within each group.</p><div id="tc-levels"></div><button type="button" id="tc-add-level">Add sort level</button>'
+   + '<div class="tc-organizer-bounds"><label>KI below (%)<input id="tc-ki-below" type="number" min="0" step="any" inputmode="decimal"></label><label>Strike below (%)<input id="tc-strike-below" type="number" min="0" step="any" inputmode="decimal"></label></div>'
+   + '<p class="tc-hint" id="tc-organizer-error" role="alert"></p><footer><button type="button" id="tc-organizer-reset">Reset grouping, sorts and limits</button><button type="submit">Apply</button></footer></form>';
+  doc.body.append(organizerDialog);
+  organizerDialog.addEventListener('click',event=>{
+   const button=event.target.closest('button');
+   if(!button||!organizing)return;
+   if(button.id==='tc-organizer-close'){organizerDialog.close();return;}
+   if(button.id==='tc-add-level'){
+    drawLevels([...formLevels(),{index:null,descending:true}]);
+    organizerDialog.querySelector('.tc-sort-level:last-child select').focus();
+   }else if(button.hasAttribute('data-tc-remove-level')){
+    const index=[...organizerDialog.querySelectorAll('.tc-sort-level')].indexOf(button.closest('.tc-sort-level'));
+    drawLevels(formLevels().filter((_,i)=>i!==index));
+    organizerDialog.querySelector('#tc-add-level').focus();
+   }else if(button.id==='tc-organizer-reset'){
+    Object.assign(organizing.organizer,organizeDefaults());
+    organizing.sort=null;organizing.restoreOrder=true;
+    mutate(()=>apply(organizing));organizerDialog.close();
+   }
+  });
+  organizerDialog.querySelector('form').addEventListener('submit',event=>{
+   event.preventDefault();
+   if(!organizing?.table.isConnected)return;
+   const levels=formLevels().filter(level=>level.index!==null);
+   const error=organizerDialog.querySelector('#tc-organizer-error');
+   if(new Set(levels.map(level=>level.index)).size!==levels.length){error.textContent='Choose a different column for each sort level.';return;}
+   const bound=id=>{const field=organizerDialog.querySelector(id);return field.value===''?null:field.valueAsNumber;};
+   Object.assign(organizing.organizer,{group:organizerDialog.querySelector('#tc-group-by').value,levels,ki:bound('#tc-ki-below'),strike:bound('#tc-strike-below')});
+   organizing.sort=null;organizing.restoreOrder=true;
+   mutate(()=>apply(organizing));organizerDialog.close();
+  });
+  organizerDialog.addEventListener('close',()=>{organizing?.organizeButton?.focus({preventScroll:true});organizing=null;});
+ }
+ function openOrganizer(state){
+  if(!organizerDialog?.isConnected)createOrganizer();
+  organizing=state;
+  const {group,ki,strike}=state.organizer;
+  organizerDialog.querySelector('#tc-group-by').value=group;
+  organizerDialog.querySelector('#tc-ki-below').value=ki??'';
+  organizerDialog.querySelector('#tc-strike-below').value=strike??'';
+  organizerDialog.querySelector('#tc-organizer-error').textContent='';
+  const levels=activeLevels(state);
+  drawLevels(levels.length?levels:[{index:null,descending:true}]);
+  organizerDialog.showModal();
  }
  function companyOptions(state){
   const search=dialog.querySelector('#tc-company-search').value.trim().toLocaleLowerCase();
@@ -294,10 +452,10 @@
     state.excludedCompanies.clear();
     mutate(()=>apply(state));syncCompanies(state);return;
    }
-   if(button.hasAttribute('data-tc-sort')){const direction=button.dataset.tcSort;state.restoreOrder=direction==='none';state.sort=direction==='none'?null:{index,descending:direction==='desc'};}
-   else if(button.id==='tc-reset'){Object.assign(config,{filter:'',heat:config.header.hasAttribute('data-tc-default-heat'),bold:false,font:'original',percent:false});if(state.sort?.index===index){state.sort=null;state.restoreOrder=true;}if(state.focus===index)state.focus=null;if(config.header.hasAttribute('data-tc-company-column'))state.excludedCompanies.clear();}
+   if(button.hasAttribute('data-tc-sort')){state.organizer.levels=[];const direction=button.dataset.tcSort;state.restoreOrder=direction==='none';state.sort=direction==='none'?null:{index,descending:direction==='desc'};}
+   else if(button.id==='tc-reset'){Object.assign(config,{filter:'',heat:config.header.hasAttribute('data-tc-default-heat'),bold:false,font:'original',percent:false});if(state.sort?.index===index||state.organizer.levels.some(level=>level.index===index)){if(state.sort?.index===index)state.sort=null;state.organizer.levels=state.organizer.levels.filter(level=>level.index!==index);state.restoreOrder=true;}if(state.focus===index)state.focus=null;if(config.header.hasAttribute('data-tc-company-column'))state.excludedCompanies.clear();const field=config.header.dataset.tcField;if(field==='ki'||field==='strike')state.organizer[field]=null;}
    else if(button.id==='tc-reset-table'){
-    state.sort=null;state.restoreOrder=true;state.focus=null;state.excludedCompanies.clear();
+    state.sort=null;state.restoreOrder=true;state.focus=null;state.excludedCompanies.clear();Object.assign(state.organizer,organizeDefaults());
     for(const c of state.configs.values())Object.assign(c,{filter:'',heat:c.header.hasAttribute('data-tc-default-heat'),bold:false,font:'original',percent:false});
     if(state.layout){
      state.layout.order=state.layout.labels.map((_,i)=>i);
@@ -346,7 +504,8 @@
   const companyFilter=Boolean(state.companyKey&&config.header.hasAttribute('data-tc-company-column'));
   query('tc-company-filter').hidden=!companyFilter;
   if(companyFilter)syncCompanies(state);
-  dialog.querySelectorAll('[data-tc-sort]').forEach(button=>{button.disabled=state.fixedRows;button.setAttribute('aria-pressed',String(button.dataset.tcSort==='none'?!state.sort:state.sort?.index===index&&state.sort.descending===(button.dataset.tcSort==='desc')));});
+  const levels=activeLevels(state),first=levels[0];
+  dialog.querySelectorAll('[data-tc-sort]').forEach(button=>{button.disabled=state.fixedRows;button.setAttribute('aria-pressed',String(button.dataset.tcSort==='none'?!levels.length:first?.index===index&&first.descending===(button.dataset.tcSort==='desc')));});
   query('tc-structure').textContent=state.fixedRows?'This table keeps its source row structure.':'';
   query('tc-heat').checked=config.heat&&config.info.numeric;query('tc-heat').disabled=!config.info.numeric;
   query('tc-bold').checked=!!config.bold;
@@ -357,13 +516,14 @@
  function close(){if(dialog?.open)dialog.close();}
  function refresh(scope=doc){mutate(()=>{if(scope.matches?.('table'))mount(scope);scope.querySelectorAll('table').forEach(mount);});}
  function start(){refresh();observer=new MutationObserver(ingest);observer.observe(doc.body,observation);}
- function clearCompanyFilters(table){
+ function clearSiFilters(table){
   const state=states.get(table);
-  if(!state?.excludedCompanies.size)return;
+  if(!state)return;
   state.excludedCompanies.clear();
+  state.organizer.ki=null;state.organizer.strike=null;
   mutate(()=>apply(state));
   if(active?.state===state)sync();
  }
- root.MarketTableControls={refresh,clearCompanyFilters};
+ root.MarketTableControls={refresh,clearSiFilters};
  if(doc.readyState==='loading')doc.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })(typeof window!=='undefined'?window:globalThis);

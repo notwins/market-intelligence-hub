@@ -57,3 +57,15 @@
 .tc-dialog #tc-company-list label + label { border-top: 1px solid #e9eef3; }
 .tc-dialog #tc-company-list :focus-visible { outline-offset: 1px; }
 @media (pointer: coarse) { .tc-dialog #tc-company-list label { min-height: 44px; } }
+
+.tc-organize-button { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; margin-block: .4rem; padding: .45rem .8rem; border: 1px solid #91a2b6; border-radius: 7px; background: #f5f8fa; color: #152c45; font: inherit; font-size: .85em; font-weight: 650; cursor: pointer; }
+.tc-organize-button:hover { background: #e7edff; }
+.tc-organizer .tc-sort-level { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) auto; align-items: end; gap: 8px; margin-block: 6px; }
+.tc-organizer .tc-sort-level label, .tc-organizer-bounds label { margin: 0; }
+.tc-organizer .tc-sort-level select, .tc-organizer-bounds input { width: 100%; }
+.tc-organizer-bounds { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.tc-organizer #tc-organizer-error { color: #91293d; }
+.tc-organizer #tc-organizer-error:empty { display: none; }
+.tc-table [data-tc-group-heading] > th { grid-column: 1 / -1; position: static; padding: .55rem .65rem; border-block: 1px solid #c8d9e8; background: #e9f1f8; color: #193752; font-weight: 700; text-align: left; white-space: normal; }
+@media (max-width: 430px) { .tc-organizer .tc-sort-level { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tc-organizer [data-tc-remove-level] { grid-column: 2; } }
+@media print { .tc-organize-button { display: none !important; } }
