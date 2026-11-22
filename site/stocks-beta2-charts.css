@@ -65,6 +65,20 @@
   .sb2-deck[data-multiple] .sb2-expand { display:inline-block; }
 }
 .sb2-research { padding:15px 16px 17px; border-top:1px solid var(--line); background:var(--wash); }
+.sb2-public-peers { max-width:100%; min-width:0; margin-bottom:16px; overflow:hidden; border:1px solid var(--line); border-radius:8px; }
+.sb2-public-peers > summary, .sb2-peer-section > summary, .sb2-peer-method > summary { padding:9px 10px; cursor:pointer; font-weight:700; }
+.sb2-public-peers [data-sb2-peer-body] { padding:0 10px 10px; font-size:.86rem; }
+.sb2-peer-controls,.sb2-peer-selections { display:flex; gap:6px; flex-wrap:wrap; }
+.sb2-peer-controls label { display:grid; gap:3px; flex:1 1 145px; min-width:0; }
+.sb2-peer-controls select { width:100%; min-height:36px; }
+.sb2-peer-selections button { min-height:32px; text-align:left; }
+.sb2-peer-selections:not(:empty) { margin-top:8px; }
+.sb2-peer-section, .sb2-peer-method { border-top:1px solid var(--line); }
+.sb2-peer-section .sb2-table { max-height:none; overflow-x:auto; }
+.sb2-peer-section .sb2-table th,.sb2-peer-section .sb2-table td { padding:7px 9px; font-size:.8rem; }
+.sb2-peer-section .sb2-table th { white-space:normal; min-width:105px; }
+.sb2-peer-section .sb2-table thead th small,.sb2-peer-section .sb2-table thead th a { display:block; margin-top:3px; font-weight:400; }
+.sb2-peer-section .sb2-table td { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
 .sb2-research h3 { font-size:1.03rem; margin:0 0 8px; }
 .sb2-research h4 { font-size:.92rem; margin:12px 0 4px; }
 .sb2-research p { margin:5px 0; line-height:1.45; font-size:.88rem; }
