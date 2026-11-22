@@ -68,11 +68,11 @@
       const code = codeFor(detail.dataset.siCardListing);
       const rows = data.rows.filter(row => row.shares.includes(code));
       detail.querySelector('summary').textContent = `SI Beta 2 references · ${rows.length}`;
-      body.innerHTML = rows.length ? `<div class="si-card-scroll" role="region" aria-label="${E(detail.dataset.siCardListing)} SI Beta 2 references">
-        <table role="table" data-table-controls="on" data-tc-layout="si-card-references">
+      body.innerHTML = rows.length ? `<div class="si-card-scroll" tabindex="0" role="region" aria-label="${E(detail.dataset.siCardListing)} SI Beta 2 references">
+        <table role="table" data-table-controls="on" data-tc-layout="si-card-references" data-tc-companies="${E(code)}">
           <caption>Rounded historical references · select a reference to open its one-pager<span class="si-card-coupon-key">Coupon basis · p.a. (screen) unless marked · * p.a. assumed · † basis unconfirmed · ‡ bonus-enhanced</span></caption>
-          <thead role="rowgroup"><tr role="row">${headers.map((name, index) => `<th role="columnheader" scope="col"${index === 6 ? ' data-table-unit="pp"' : ''}>${name}</th>`).join('')}</tr></thead>
-          <tbody role="rowgroup">${rows.map(row => '<tr role="row">' + cardCells(row, data.ko_step_down_pp?.[row.reference], logos) + '</tr>').join('')}</tbody>
+          <thead role="rowgroup"><tr role="row">${headers.map((name, index) => `<th role="columnheader" scope="col"${index === 0 ? ' data-tc-company-column' : ''}${index === 6 ? ' data-table-unit="pp"' : ''}>${name}</th>`).join('')}</tr></thead>
+          <tbody role="rowgroup">${rows.map(row => '<tr role="row" data-tc-company-codes="' + E(row.shares.join(' ')) + '">' + cardCells(row, data.ko_step_down_pp?.[row.reference], logos) + '</tr>').join('')}</tbody>
         </table></div>` : '<p>No saved SI references for this listing.</p>';
       detail.dataset.siCardState = 'loaded';
       if (!logos && root.CompanyLogos && rows.length) root.document.addEventListener('mih-logo-catalogue', () => {

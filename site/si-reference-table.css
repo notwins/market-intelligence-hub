@@ -16,107 +16,107 @@
 .sb2-main .si-card-references { --si-two-row: yes; }
 
 @container (max-width: 70rem) or style(--si-two-row: yes) {
-  .si-card-scroll table, .si-card-scroll thead, .si-card-scroll tbody { display: block; width: 100%; }
-  .si-card-scroll caption { display: block; width: 100%; }
-  .si-card-scroll colgroup { display: none; }
-  .si-card-scroll thead tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .25rem; margin-bottom: .6rem; }
-  .si-card-scroll thead th { width: auto !important; min-width: 0; padding: .3rem .4rem; border: 1px solid var(--line, #d6e0e3); border-radius: .3rem; font-size: .75rem; }
-  .si-card-scroll tbody { display: grid; gap: .65rem; }
-  .si-card-scroll tbody tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line, #d6e0e3); border-radius: .4rem; padding: .5rem; }
-  .si-card-scroll tbody tr[hidden] { display: none; }
-  .si-card-scroll tbody td { min-width: 0; width: auto !important; padding: .3rem; border: 0; }
-  .si-card-scroll [data-si-field="stocks"] { grid-column: 1 / -1; grid-row: 1; padding-bottom: .55rem; }
+  .si-card-scroll table:not([data-tc-sized]), .si-card-scroll :where(table:not([data-tc-sized])) thead, .si-card-scroll :where(table:not([data-tc-sized])) tbody { display: block; width: 100%; }
+  .si-card-scroll :where(table:not([data-tc-sized])) caption { display: block; width: 100%; }
+  .si-card-scroll :where(table:not([data-tc-sized])) colgroup { display: none; }
+  .si-card-scroll :where(table:not([data-tc-sized])) thead tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .25rem; margin-bottom: .6rem; }
+  .si-card-scroll :where(table:not([data-tc-sized])) thead th { width: auto !important; min-width: 0; padding: .3rem .4rem; border: 1px solid var(--line, #d6e0e3); border-radius: .3rem; font-size: .75rem; }
+  .si-card-scroll :where(table:not([data-tc-sized])) tbody { display: grid; gap: .65rem; }
+  .si-card-scroll :where(table:not([data-tc-sized])) tbody tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--line, #d6e0e3); border-radius: .4rem; padding: .5rem; }
+  .si-card-scroll :where(table:not([data-tc-sized])) tbody tr[hidden] { display: none; }
+  .si-card-scroll :where(table:not([data-tc-sized])) tbody td { min-width: 0; width: auto !important; padding: .3rem; border: 0; }
+  .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="stocks"] { grid-column: 1 / -1; grid-row: 1; padding-bottom: .55rem; }
   .si-card-scroll :is([data-si-field="date"], [data-si-field="currency"]) { display: none; }
-  .si-card-scroll [data-si-field="tenor"] { grid-area: 2 / 1; }
-  .si-card-scroll [data-si-field="coupon"] { grid-area: 3 / 1; }
-  .si-card-scroll [data-si-field="ki"] { grid-area: 2 / 2; }
-  .si-card-scroll [data-si-field="ko"] { grid-area: 3 / 2; }
-  .si-card-scroll [data-si-field="strike"] { grid-area: 2 / 3; }
-  .si-card-scroll [data-si-field="step"] { grid-area: 3 / 3; }
-  .si-card-scroll tbody td:not([data-si-field="stocks"])::before { content: attr(data-label); display: block; font-size: .75rem; font-weight: 500; color: var(--muted, #52666e); margin-bottom: .15rem; }
-  .si-card-scroll .si-library-shares { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .si-card-scroll .si-library-share { overflow-wrap: anywhere; }
-  .si-card-scroll .si-card-source-meta { display: block !important; }
+  .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="tenor"] { grid-area: 2 / 1; }
+  .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="coupon"] { grid-area: 3 / 1; }
+  .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="ki"] { grid-area: 2 / 2; }
+  .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="ko"] { grid-area: 3 / 2; }
+  .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="strike"] { grid-area: 2 / 3; }
+  .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="step"] { grid-area: 3 / 3; }
+  .si-card-scroll :where(table:not([data-tc-sized])) tbody td:not([data-si-field="stocks"])::before { content: attr(data-label); display: block; font-size: .75rem; font-weight: 500; color: var(--muted, #52666e); margin-bottom: .15rem; }
+  .si-card-scroll :where(table:not([data-tc-sized])) .si-library-shares { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .si-card-scroll :where(table:not([data-tc-sized])) .si-library-share { overflow-wrap: anywhere; }
+  .si-card-scroll :where(table:not([data-tc-sized])) .si-card-source-meta { display: block !important; }
 }
 
 /* Keep the basket beside an inline pricing pair and one row of barriers. */
 @container style(--si-two-row: yes) {
-  .sb2-main .si-card-scroll tbody tr {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody tr {
     grid-template-columns: minmax(0, 1.55fr) repeat(4, minmax(0, 1fr));
     grid-template-rows: min-content 1fr;
     align-items: start;
   }
-  .sb2-main .si-card-scroll [data-si-field="stocks"] { grid-area: 1 / 1 / 3 / 2; padding-bottom: .3rem; }
-  .sb2-main .si-card-scroll [data-si-field="tenor"] {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="stocks"] { grid-area: 1 / 1 / 3 / 2; padding-bottom: .3rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="tenor"] {
     grid-area: 1 / 2 / 2 / 3; justify-self: end; white-space: nowrap;
   }
-  .sb2-main .si-card-scroll [data-si-field="coupon"] {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="coupon"] {
     grid-area: 1 / 3 / 2 / 6; border-inline-start: 1px solid var(--line, #d6e0e3);
     white-space: nowrap;
   }
-  .sb2-main .si-card-scroll [data-si-field="ki"] { grid-area: 2 / 2; }
-  .sb2-main .si-card-scroll [data-si-field="strike"] { grid-area: 2 / 3; }
-  .sb2-main .si-card-scroll [data-si-field="ko"] { grid-area: 2 / 4; }
-  .sb2-main .si-card-scroll [data-si-field="step"] { grid-area: 2 / 5; }
-  .sb2-main .si-card-scroll tbody td:not([data-si-field="stocks"])::before {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="ki"] { grid-area: 2 / 2; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="strike"] { grid-area: 2 / 3; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="ko"] { grid-area: 2 / 4; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="step"] { grid-area: 2 / 5; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td:not([data-si-field="stocks"])::before {
     display: inline; margin-inline-end: .25rem;
   }
-  .sb2-main .si-card-scroll td small { display: inline; margin: 0 0 0 .25rem; }
-  .sb2-main .si-card-scroll .si-card-source-meta {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) td small { display: inline; margin: 0 0 0 .25rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) .si-card-source-meta {
     display: inline !important; margin-inline-start: 0; overflow-wrap: anywhere;
   }
-  .sb2-main .si-card-scroll [data-si-field="tenor"] small { font-size: 0; }
-  .sb2-main .si-card-scroll [data-si-field="tenor"] small::after { content: "mth"; font-size: .75rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="tenor"] small { font-size: 0; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="tenor"] small::after { content: "mth"; font-size: .75rem; }
 }
 @container (max-width: 46rem) {
-  .sb2-main .si-card-scroll .si-card-coupon-key {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) .si-card-coupon-key {
     display: block !important; margin-block-start: .2rem; color: var(--muted, #52666e); font-size: .75rem;
   }
-  .sb2-main .si-card-scroll [data-si-coupon-basis] { font-size: 0; margin: 0; }
-  .sb2-main .si-card-scroll [data-si-coupon-basis="assumed"]::before { content: "*"; font-size: .7rem; }
-  .sb2-main .si-card-scroll [data-si-coupon-basis="unconfirmed"]::before { content: "†"; font-size: .7rem; }
-  .sb2-main .si-card-scroll [data-si-bonus]::after { content: "‡"; font-size: .7rem; }
-  .sb2-main .si-card-scroll [data-si-field="tenor"] { grid-area: 1 / 2 / 2 / 4; }
-  .sb2-main .si-card-scroll [data-si-field="coupon"] { grid-area: 1 / 4 / 2 / 6; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-coupon-basis] { font-size: 0; margin: 0; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-coupon-basis="assumed"]::before { content: "*"; font-size: .7rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-coupon-basis="unconfirmed"]::before { content: "†"; font-size: .7rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-bonus]::after { content: "‡"; font-size: .7rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="tenor"] { grid-area: 1 / 2 / 2 / 4; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="coupon"] { grid-area: 1 / 4 / 2 / 6; }
 }
 @container (max-width: 26rem) {
-  .sb2-main .si-card-scroll tbody tr {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody tr {
     grid-template-columns: minmax(70px, 1fr) repeat(4, max-content);
   }
-  .sb2-main .si-card-scroll tbody td { padding: .2rem; font-size: .75rem; }
-  .sb2-main .si-card-scroll .si-library-shares { grid-template-columns: minmax(0, 1fr); }
-  .sb2-main .si-card-scroll tbody td:is([data-si-field="ki"], [data-si-field="strike"], [data-si-field="ko"], [data-si-field="step"]) {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td { padding: .2rem; font-size: .75rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) .si-library-shares { grid-template-columns: minmax(0, 1fr); }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td:is([data-si-field="ki"], [data-si-field="strike"], [data-si-field="ko"], [data-si-field="step"]) {
     white-space: nowrap; font-size: .67rem; padding-inline: .08rem;
   }
-  .sb2-main .si-card-scroll tbody td:is([data-si-field="ki"], [data-si-field="strike"], [data-si-field="ko"], [data-si-field="step"])::before {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td:is([data-si-field="ki"], [data-si-field="strike"], [data-si-field="ko"], [data-si-field="step"])::before {
     margin-inline-end: .125rem; font-size: inherit;
   }
-  .sb2-main .si-card-scroll tbody td:is([data-si-field="strike"], [data-si-field="ko"], [data-si-field="step"]) {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td:is([data-si-field="strike"], [data-si-field="ko"], [data-si-field="step"]) {
     border-inline-start: 1px solid var(--line, #d6e0e3);
   }
-  .sb2-main .si-card-scroll tbody td[data-si-field="step"]::before { content: "Step-down"; }
-  .sb2-main .si-card-scroll .si-step-display { font-size: 0; }
-  .sb2-main .si-card-scroll .si-step-display::after { content: attr(data-si-step-short); font-size: .67rem; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td[data-si-field="step"]::before { content: "Step-down"; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) .si-step-display { font-size: 0; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) .si-step-display::after { content: attr(data-si-step-short); font-size: .67rem; }
 }
 @container (max-width: 21rem) {
-  .sb2-main .si-card-scroll tbody tr {
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody tr {
     grid-template-columns: minmax(70px, 1.45fr) repeat(4, minmax(0, 1fr));
     grid-template-rows: min-content min-content 1fr;
   }
-  .sb2-main .si-card-scroll [data-si-field="stocks"] { grid-area: 1 / 1 / 4 / 2; }
-  .sb2-main .si-card-scroll [data-si-field="ki"] { grid-area: 2 / 2 / 3 / 4; }
-  .sb2-main .si-card-scroll [data-si-field="strike"] { grid-area: 2 / 4 / 3 / 6; }
-  .sb2-main .si-card-scroll tbody td[data-si-field="ko"] { grid-area: 3 / 2 / 4 / 4; border-inline-start: 0; }
-  .sb2-main .si-card-scroll tbody td[data-si-field="step"] { grid-area: 3 / 4 / 4 / 6; justify-self: end; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="stocks"] { grid-area: 1 / 1 / 4 / 2; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="ki"] { grid-area: 2 / 2 / 3 / 4; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="strike"] { grid-area: 2 / 4 / 3 / 6; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td[data-si-field="ko"] { grid-area: 3 / 2 / 4 / 4; border-inline-start: 0; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td[data-si-field="step"] { grid-area: 3 / 4 / 4 / 6; justify-self: end; }
 }
 @container (max-width: 14.5rem) {
-  .sb2-main .si-card-scroll tbody tr { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .sb2-main .si-card-scroll [data-si-field="stocks"] { grid-area: 1 / 1 / 2 / 5; }
-  .sb2-main .si-card-scroll .si-library-shares { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sb2-main .si-card-scroll [data-si-field="tenor"] { grid-area: 2 / 1 / 3 / 3; }
-  .sb2-main .si-card-scroll [data-si-field="coupon"] { grid-area: 2 / 3 / 3 / 5; }
-  .sb2-main .si-card-scroll [data-si-field="ki"] { grid-area: 3 / 1 / 4 / 3; }
-  .sb2-main .si-card-scroll [data-si-field="strike"] { grid-area: 3 / 3 / 4 / 5; }
-  .sb2-main .si-card-scroll tbody td[data-si-field="ko"] { grid-area: 4 / 1 / 5 / 3; }
-  .sb2-main .si-card-scroll tbody td[data-si-field="step"] { grid-area: 4 / 3 / 5 / 5; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody tr { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="stocks"] { grid-area: 1 / 1 / 2 / 5; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) .si-library-shares { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="tenor"] { grid-area: 2 / 1 / 3 / 3; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="coupon"] { grid-area: 2 / 3 / 3 / 5; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="ki"] { grid-area: 3 / 1 / 4 / 3; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) [data-si-field="strike"] { grid-area: 3 / 3 / 4 / 5; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td[data-si-field="ko"] { grid-area: 4 / 1 / 5 / 3; }
+  .sb2-main .si-card-scroll :where(table:not([data-tc-sized])) tbody td[data-si-field="step"] { grid-area: 4 / 3 / 5 / 5; }
 }
