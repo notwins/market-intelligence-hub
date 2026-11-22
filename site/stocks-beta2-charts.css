@@ -53,6 +53,9 @@
 .sb2-shared-price-card [data-sb2-shared-chart] { min-width:0; padding:0 12px 10px; }
 .sb2-card-reading { padding:0 18px 16px; min-width:0; }
 .sb2-card-reading .sb-reading-grid { grid-template-columns:minmax(0,1fr); }
+.sb2-card-reading .sb-company-news { min-width:0; overflow-wrap:anywhere; }
+.sb2-card-reading .sb-company-news > summary { min-height:32px; line-height:1.4; padding-block:5px; cursor:pointer; }
+.sb2-card-reading .sb-company-news > summary h3 { display:inline; margin:0; }
 .sb2-chart-notes { padding:0 18px 17px; }
 .sb2-chart-and-research > * { min-width:0; }
 .sb2-chart-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:5px; margin-bottom:9px; }

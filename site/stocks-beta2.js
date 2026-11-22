@@ -106,6 +106,8 @@
   const columnChoice = get('sb2-card-columns');
   const researchLayout = get('sb2-research-layout');
   let researchLayoutChoice;
+  let companyNewsOpen = false;
+  const newsSelector = 'details[data-company-news]';
   const fiscalToggle = get('sb2-fiscal-compare');
   const statementToggle = get('sb2-expand-statements');
   const statementSelector = 'details[data-fund-statement]';
@@ -154,11 +156,20 @@
     statementToggle.disabled = false;
   });
 
+  deck.addEventListener('toggle', event => {
+    const panel = event.target;
+    if (!panel.matches(newsSelector) || panel.open === companyNewsOpen) return;
+    companyNewsOpen = panel.open;
+    for (const news of deck.querySelectorAll(newsSelector)) news.open = companyNewsOpen;
+    saveComparison();
+  }, true);
+
   function saveComparison() {
     try {
       root.localStorage.setItem(comparisonKey, JSON.stringify({
         columns: columnChoice.value,
         researchLayoutChoice,
+        companyNewsOpen,
         compareFiscalYears,
         fundamentalsWidth,
         history: history.settings(),
@@ -179,6 +190,7 @@
   }
 
   function restoreComparison(saved) {
+    companyNewsOpen = saved?.companyNewsOpen === true;
     if ([...columnChoice.options].some(option => option.value === saved?.columns)) {
       columnChoice.value = saved.columns;
     }
@@ -565,7 +577,7 @@
         matches: shared.reportRows(reports, companySymbol, logos, aliases),
         items: shared.newsFor(news, companySymbol, aliases),
         listing: symbol || company.ticker,
-        newsUnavailable, reportsUnavailable
+        newsUnavailable, reportsUnavailable, newsOpen: companyNewsOpen
       });
     }).catch(() => {
       reading.innerHTML = '<p class="sb-note" role="status">Saved research and news could not load.</p>' + (root.SIReferenceTable?.section(symbol || company.ticker) || '');
