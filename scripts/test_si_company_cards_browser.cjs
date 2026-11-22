@@ -5,6 +5,10 @@ const assert = require('node:assert/strict');
 (async () => {
   const base = new URL(process.env.SITE_URL || 'http://127.0.0.1:8156/');
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH });
+  const response = await fetch(new URL('data/si-pricing-reference.json', base));
+  assert(response.ok, 'SI reference data must be available');
+  const { rows: references } = await response.json();
+  const count = code => references.filter(row => row.shares.includes(code)).length;
   const expected = ['Shares / reference', 'Date', 'CCY', 'Tenor', 'Coupon', 'KO', 'KO Step-down', 'KI', 'Strike'];
   const surfaces = [
     ['Main', 'v4.html', '#overview', '.cd-card[data-company="NVDA"]'],
@@ -59,13 +63,14 @@ const assert = require('node:assert/strict');
       await page.locator('#library-company-scope').waitFor();
       await page.getByRole('link', { name: 'Open SI-006 one-pager' }).waitFor();
       assert.equal(await page.evaluate(() => typeof window.MarketSI), 'undefined', 'SI2 loads independently of SI1');
-      assert.match(await page.locator('#library-count').textContent(), /114 of 246/);
+      assert((await page.locator('#library-count').textContent()).startsWith(`${count('NVDA')} of ${references.length}`));
       await page.getByRole('button', { name: 'Show all companies' }).click();
-      assert.match(await page.locator('#library-count').textContent(), /246 of 246/);
+      assert((await page.locator('#library-count').textContent()).startsWith(`${references.length} of ${references.length}`));
       await page.getByRole('link', { name: 'Open SI-006 one-pager' }).click();
       await page.waitForFunction(() => document.querySelector('#preview svg')?.textContent.includes('SI-006'));
       await navigate('si-beta2.html?company=BABA', '#si-library');
-      await page.waitForFunction(() => document.querySelector('#library-count').textContent.startsWith('0 of 246'));
+      await page.waitForFunction(text => document.querySelector('#library-count').textContent.startsWith(text), `${count('BABA')} of ${references.length}`);
+      assert(await page.locator('#library-rows tr .si-library-shares').evaluateAll(rows => rows.every(row => row.getAttribute('aria-label').split(' / ').includes('BABA'))));
       await navigate('si-beta2.html?company=9988.HK', '#si-library');
       await page.locator('#library-rows tr .si-library-share').first().waitFor();
       assert.equal(await page.locator('#library-company-code').textContent(), '9988');
