@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "source_commit": "27ef7ce4a9dc47540bacbde7d0b61e1d25a602da",
-  "built_at": "2026-11-21T23:35:18.334106+00:00",
+  "source_commit": "4af3a66eb9a730b1546a09c6b74da022009fdacf",
+  "built_at": "2026-11-22T00:56:32.052749+00:00",
   "coverage": {
     "archive": "All legacy published research HTML in this checkout; companion assets remain attached. New independent editions are merged by ContentDelivery in the browser.",
     "chronology": "First added to the public repository; not a verified Pages upload time. Unknown introduction dates sort last. Source/research dates remain separate.",
