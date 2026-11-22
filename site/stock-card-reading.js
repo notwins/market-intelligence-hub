@@ -159,7 +159,11 @@
     </article>`;
   }
 
-  function reading({ matches, items, listing, afterSi = '', reportsUnavailable, newsUnavailable }) {
+  function reading({ matches, items, listing, afterSi = '', reportsUnavailable, newsUnavailable, newsOpen }) {
+    const newsTitle = `<h3>Latest 10 company news <small>(${items.length}/10)</small></h3>`;
+    const newsBody = `<p class="sb-note">${newsUnavailable ? 'Independent news is unavailable. Saved matches are shown.'
+      : 'Newest saved matches, deduplicated by source URL.'} Publisher time is shown separately from the research cutoff.</p>
+      ${items.map(newsMarkup).join('') || '<p class="sb-empty">No matched saved news.</p>'}`;
     return `${root.SIReferenceTable?.section(listing) || ''}<section class="sb-section sb-reading-grid">
       <div>
         <h3>Research &amp; saved write-ups <small>(${matches.length})</small></h3>
@@ -168,12 +172,9 @@
         ${matches.map(reportMarkup).join('') || '<p class="sb-empty">No company-matched report is indexed.</p>'}
         ${afterSi}
       </div>
-      <div>
-        <h3>Latest 10 company news <small>(${items.length}/10)</small></h3>
-        <p class="sb-note">${newsUnavailable ? 'Independent news is unavailable. Saved matches are shown.'
-          : 'Newest saved matches, deduplicated by source URL.'} Publisher time is shown separately from the research cutoff.</p>
-        ${items.map(newsMarkup).join('') || '<p class="sb-empty">No matched saved news.</p>'}
-      </div>
+      ${typeof newsOpen === 'boolean'
+        ? `<details class="sb-company-news" data-company-news${newsOpen ? ' open' : ''}><summary>${newsTitle}</summary>${newsBody}</details>`
+        : `<div>${newsTitle}${newsBody}</div>`}
     </section>`;
   }
 
