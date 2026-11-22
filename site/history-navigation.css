@@ -37,10 +37,11 @@
 .rail .brand{gap:10px}.rail .brand b{font:750 15px/1.25 system-ui,sans-serif}.rail .brand small{font:500 9px/1.5 system-ui,sans-serif;letter-spacing:.12em}.rail .brand-icon{width:34px;height:36px;border-radius:10px;font-size:22px}
 .rail .rail-foot{font:11px/1.5 system-ui,sans-serif}
 /* Keep all four history shortcuts on the same toolbar row. */
+.history-featured{--history-featured-fill:#f6dce1;--history-featured-hover:#f0cfd7;--history-featured-ink:#7e3e4c;--history-featured-border:#dfadb8}
 .topbar .top-subsections.history-menu-toolbar{display:grid;grid-template-columns:minmax(0,1.65fr) repeat(3,minmax(0,1fr));align-items:stretch;gap:5px;overflow:visible;padding:0;min-width:0;flex:1 1 420px}
 .history-menu-group{position:relative;min-width:0;margin:0;padding:0;border:0;background:transparent;color:#344e5b;font:500 13px/1.35 system-ui,sans-serif}
-.topbar .history-menu-toolbar>a.history-featured{display:flex;align-items:center;gap:6px;min-width:0;min-height:44px;padding:6px 8px;border-radius:7px;background:#d50024;color:#fff;font:650 12px/1.25 system-ui,sans-serif;text-decoration:none}
-.topbar .history-menu-toolbar>a.history-featured:hover{background:#b5001e}
+.topbar .history-menu-toolbar>a.history-featured{display:flex;align-items:center;gap:6px;min-width:0;min-height:44px;padding:6px 8px;border:1px solid var(--history-featured-border);border-radius:7px;background:var(--history-featured-fill);color:var(--history-featured-ink);font:650 12px/1.25 system-ui,sans-serif;text-decoration:none}
+.topbar .history-menu-toolbar>a.history-featured:hover{background:var(--history-featured-hover);color:var(--history-featured-ink)}
 .topbar .history-menu-toolbar>a.history-featured:focus-visible{outline:3px solid #1e40af;outline-offset:2px}
 .topbar .history-menu-toolbar>a.history-featured .history-nav-icon{width:16px;height:16px;flex-basis:16px}
 .history-menu-group>summary::after,.rail-history-section>summary::after{content:none!important}
@@ -81,13 +82,13 @@
 }
 @media(forced-colors:active){.history-menu-group>summary,.history-menu-links,.topbar .history-menu-links :is(a.history-nav-item,button.history-nav-item){background:Canvas;color:CanvasText;border-color:CanvasText}.history-menu-group[data-active-group]>summary,.topbar .history-menu-links .history-nav-item.active{background:Highlight;color:HighlightText}}
 .history-directory a.history-featured,.history-menu a.history-featured,.rail nav .rail-group a.history-featured,.dashboard-links a.history-featured {
- display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 10px;border:1px solid #b7d6d0;border-radius:7px;background:#d9ede8;color:#104e49;font-weight:750;text-decoration:none;
+ display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 10px;border:1px solid var(--history-featured-border);border-radius:7px;background:var(--history-featured-fill);color:var(--history-featured-ink);font-weight:750;text-decoration:none;
 }
+.history-directory a.history-featured:hover,.history-menu a.history-featured:hover,.rail nav .rail-group a.history-featured:hover,.dashboard-links a.history-featured:hover{background:var(--history-featured-hover);color:var(--history-featured-ink)}
 .history-directory a.history-featured {grid-column:1/-1}
 .rail nav .rail-group a.history-featured {margin-bottom:5px}
 .history-menu a.history-featured {font-size:13px}
-.history-featured .history-nav-icon {color:#d50024}
-.topbar .history-menu-toolbar>a.history-featured .history-nav-icon {color:inherit}
+.history-featured .history-nav-icon {color:inherit}
 @media(forced-colors:active){
  .topbar .history-menu-toolbar>a.history-featured{border:1px solid LinkText;background:Canvas;color:LinkText}
 }
