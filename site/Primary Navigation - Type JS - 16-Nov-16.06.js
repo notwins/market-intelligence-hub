@@ -4,6 +4,7 @@
   if (document.documentElement.classList.contains('hub-primary-ready')) return;
   const root = document.documentElement;
   const styleKey = 'market-hub-navigation-style';
+  const defaultNavigationStyle = 'professional';
   const styleLabels = {
     en: ['Navigation style', 'Section colours', 'Professional · standard spacing'],
     'zh-Hans': ['导航样式', '按栏目配色', '专业 · 标准间距'],
@@ -11,7 +12,7 @@
   };
 
   function applyNavigationStyle(value) {
-    root.dataset.navStyle = value === 'professional' ? 'professional' : 'sections';
+    root.dataset.navStyle = value === 'sections' ? 'sections' : defaultNavigationStyle;
     for (const picker of document.querySelectorAll('[data-nav-style-picker]')) picker.value = root.dataset.navStyle;
   }
 
@@ -27,7 +28,7 @@
     if (event.key === styleKey || event.key === null) applyNavigationStyle(event.newValue);
   });
   document.addEventListener('click', event => {
-    if (event.target.closest('#display-settings [data-display-reset]')) setNavigationStyle('sections');
+    if (event.target.closest('#display-settings [data-display-reset]')) setNavigationStyle(defaultNavigationStyle);
   }, true);
 
   window.HubNavigationStyle = {
@@ -39,8 +40,8 @@
       const label = document.createElement('label');
       const picker = document.createElement('select');
       picker.dataset.navStylePicker = '';
-      picker.add(new Option(sections, 'sections'));
       picker.add(new Option(professional, 'professional'));
+      picker.add(new Option(sections, 'sections'));
       picker.value = root.dataset.navStyle;
       picker.addEventListener('change', () => setNavigationStyle(picker.value));
       label.append(document.createTextNode(title), picker);
