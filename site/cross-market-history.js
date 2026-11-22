@@ -106,8 +106,10 @@
 
   function yieldLines(card, tenor, sources) {
     const {us, sg} = sources.month[tenor];
+    const weekly = sources.weeklyTreasuries.get('UST ' + tenor);
     const lines = [
-      chartLine('UST ' + tenor + ' month-end', us, colors[0], 33),
+      weekly ? chartLine('UST ' + tenor + ' weekly', weekly, colors[0], 10)
+        : chartLine('UST ' + tenor + ' month-end', us, colors[0], 33),
       chartLine('SGS ' + tenor + ' month-end', sg, colors[1], 33)
     ];
     if (card.current) {
@@ -251,14 +253,16 @@
       (card.current ? '<p class="caption"><strong>Compare the latest saved observations with the prior twelve months.</strong> Each source retains its observation date so the daily quotes and lagged economic releases are easy to distinguish.</p>' : '') + '</header>' +
       '<div class="core"><section class="panel"><div class="panel-heading"><h3>UST and SGS bond yields <small>% p.a.</small></h3>' +
       '<label>Tenor <select class="tenor"><option>2Y</option><option>5Y</option><option selected>10Y</option></select></label></div>' +
-      '<p class="caption">Matched maturities. Solid lines show month-end yields.' + (card.current ? ' Dashed lines show recent daily closes.' : '') +
+      '<p class="caption">Matched maturities. ' +
+      (sources.weeklyTreasuries.size ? 'UST uses weekly FRED observations. SGS uses month-end yields.' : 'Solid lines show month-end yields.') +
+      (card.current ? ' Dashed lines show recent daily closes.' : '') +
       '</p><div class="yield-plot">' + figure(card,yieldLines(card,'10Y',sources),'% p.a.','UST and SGS 10Y yields') + '</div>' +
       (card.current ? eventNotes(card,sources) : '') + '</section>' + equitySection(card,sources) + '</div>' +
       (card.current ? '' : '<div class="event-notes">' + eventNotes(card,sources) + '</div>') +
       '<div class="macro">' + plotMacro(card,sources) + '</div></article>';
   }
 
-  function assemble(events, fed, sgs, mas, spx, monitor, history, today) {
+  function assemble(events, fed, sgs, mas, spx, monitor, history, today, weekly) {
     const month = M.monthlyYields(fed,sgs);
     const daily = Object.fromEntries(M.tenors.map(tenor => [tenor,{
       us:D.points(fed.series.find(s => s.id === 'UST ' + tenor)?.points,'daily'),
@@ -279,6 +283,14 @@
       return [id,{label,unit,scan,points,grain,caption,source:'https://fred.stlouisfed.org/series/'+id}];
     }));
     for (const id of ['USD/SGD','CHF/SGD']) {
+      const sourced = weekly[1].find(s => s.id === id);
+      if (sourced) {
+        macro[id] = {label:id,unit:sourced.unit,grain:'weekly',points:D.points(sourced.points,'weekly'),
+          caption:sourced.formula ? 'Weekly cross from ' + sourced.formula + ' on the same source date.'
+            : 'Last available H.10 observation each Friday-ending week.',
+          source:sourced.source_url || sourced.source_urls[0]};
+        continue;
+      }
       const quote = fed.series.find(s => s.id === id.replace('CHF/SGD','USD/CHF'));
       const usd = fed.series.find(s => s.id === 'USD/SGD');
       const points = id === 'USD/SGD' ? D.points(usd?.points,'daily') : M.matched(D.points(usd?.points,'daily'),D.points(quote?.points,'daily'))
@@ -286,7 +298,8 @@
       macro[id] = {label:id,unit:'SGD per '+id.slice(0,3),grain:'daily',points,caption:id === 'USD/SGD' ? 'Daily Fed H.10 exchange rate.' :
         'Derived cross from the same-date USD/SGD and USD/CHF Fed H.10 observations.',source:quote?.source_url || 'https://www.federalreserve.gov/releases/h10/'};
     }
-    return {events,month,daily,macro,spx:D.points(spx.points,'daily'),...history};
+    const weeklyTreasuries = new Map(weekly[0].map(s => [s.id, D.points(s.points, 'weekly')]));
+    return {events,month,daily,macro,weeklyTreasuries,spx:D.points(spx.points,'daily'),...history};
   }
 
   async function shareData() {
@@ -335,11 +348,12 @@
   async function start() {
     const paths = ['historical-fred-events.json','fred-daily.json','cross-market-sgs-month-end.json','sgs-daily-snapshot.json',
       'spx/history.json','fred/catalog.json'];
-    const parts = await Promise.all([...paths.map(path => json('data/'+path)),shareData()]);
-    const [eventData,fed,sgs,mas,spx,catalog,history] = parts;
+    const weekly = Promise.all(['yields','fx'].map(family => FredWeekly.load(family).then(r => r.series).catch(() => [])));
+    const parts = await Promise.all([...paths.map(path => json('data/'+path)),shareData(),weekly]);
+    const [eventData,fed,sgs,mas,spx,catalog,history,weeklyParts] = parts;
     const monitor = await json('data/fred/'+catalog.monitor_url);
     const today = singaporeToday();
-    const sources = assemble(eventData.events,fed,sgs,mas,spx,monitor,history,today);
+    const sources = assemble(eventData.events,fed,sgs,mas,spx,monitor,history,today,weeklyParts);
     for (const [provider, map, basis] of [
       ['cross-weekly', sources.weeklyById, 'Saved weekly provider closes in the listing currency.'],
       ['cross-bos', sources.bosById, 'BOS monthly reference prices in the listing currency.']

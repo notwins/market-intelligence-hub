@@ -771,7 +771,7 @@
   ];
   function historyChart(page, p, ref, key, title, x, y, w, h, start, color) {
     const rows = ref.history.filter(
-        (r) => r.date >= start && r.date <= p.x.settlement
+        (r) => (ref.historyFrequency !== 'weekly' || Object.hasOwn(r, key)) && r.date >= start && r.date <= p.x.settlement
       ),
       last = [...rows].reverse().find((r) => Number.isFinite(r[key]));
     page.text(x, y + 4, title, 10, color, true);
@@ -850,8 +850,13 @@
         'right'
       );
     }
-    let segment = [];
+    let segment = [], priorDate;
     rows.forEach((row) => {
+      if (ref.historyFrequency === 'weekly' && priorDate && +M.date(row.date) - +M.date(priorDate) > 10 * 86400000) {
+        page.path(segment, color, 0.5);
+        segment = [];
+      }
+      priorDate = row.date;
       if (Number.isFinite(row[key])) segment.push([xf(row.date), yf(row[key])]);
       else {
         page.path(segment, color, 0.5);
@@ -918,7 +923,7 @@
         ' | ' +
         fmt(last[key], isFX ? 4 : 2) +
         (isFX ? ' SGD per USD' : '%') +
-        ' | monthly observations',
+        ' | ' + (ref.historyFrequency || 'monthly') + ' observations',
       6.6,
       C.muted
     );

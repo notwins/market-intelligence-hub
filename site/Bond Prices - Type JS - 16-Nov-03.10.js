@@ -22,7 +22,7 @@ const shortMonthYear = new Intl.DateTimeFormat('en-GB',{month:'short',year:'2-di
 const shortDateWithYear = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'2-digit',timeZone:'UTC'});
 const lookbackMonths = [1,2,3,4,5,6,12];
 const dayMs = 86400000;
-const curveTenors = [5,7,10,20,30];
+const curveTenors = [1/12,.25,.5,1,2,3,5,7,10,20,30];
 const treasuryRates = 'https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve';
 const fedRates = 'https://www.federalreserve.gov/releases/h15/';
 // Only the May 2046 bond was first issued within 12 months of this table's launch.
@@ -148,7 +148,7 @@ function compactWatchlist(feed, checked, showIdentifiers, curves) {
       <details class="daily-bonds-history daily-ust-evidence">
         <summary>How historical prices are estimated</summary>
         <p class="fine">Lookbacks count back from the newest saved WSJ quote date. The dates shown under 1M–12M are the closest available observations on or before each target, within seven calendar days. Each estimate uses a yield interpolated from the curve at the bond’s remaining maturity. Semiannual coupons and redemption are discounted at that yield, and accrued interest is removed. A dash can indicate that the bond had yet to be issued or that a curve is unavailable.</p>
-        <p class="fine">Yield sources · <a href="${treasuryRates}">U.S. Treasury daily par yield curve</a>${Object.values(curves).some(c => c?.source === 'Fed H.15') ? ` · <a href="${fedRates}">Federal Reserve H.15</a>` : ''}</p>
+        <p class="fine">Yield sources · <a href="${treasuryRates}">U.S. Treasury daily par yield curve</a>${Object.values(curves).some(c => c?.source === 'Weekly FRED H.15') ? ` · <a href="${fedRates}">Weekly Federal Reserve H.15</a>` : ''}</p>
       </details>
     </div>
     <details class="daily-bonds-history daily-ust-evidence">
@@ -242,17 +242,15 @@ async function treasuryCurves(years) {
 }
 
 async function fedCurves(start, end) {
-  const data = await fetchJson('data/fred-daily.json');
-  const curves = new Map();
-  for (const years of curveTenors) {
-    const series = data.series.find(s => s.id === `UST ${years}Y` && s.family === 'ust');
-    for (const [date,yieldPct] of series?.points ?? []) {
-      if (date < start || date > end || !Number.isFinite(yieldPct)) continue;
-      if (!curves.has(date)) curves.set(date,{date,source:'Fed H.15',points:[]});
-      curves.get(date).points.push({years,yieldPct});
-    }
-  }
-  return [...curves.values()].sort((a,b) => a.date.localeCompare(b.date));
+  const data = await fetchJson('data/fred-weekly-yields.json');
+  if (data.schema_version !== 1 || data.frequency !== 'weekly') return [];
+  const indices = curveTenors.map(years => data.columns.findIndex(c =>
+    c.id === (years < 1 ? `UST ${Math.round(years * 12)}M` : `UST ${years}Y`)));
+  return data.observations.filter(row => row.date >= start && row.date <= end).map(row => ({
+    date: row.date, source: 'Weekly FRED H.15',
+    points: curveTenors.map((years, i) => ({ years, yieldPct: row.values[indices[i]] }))
+      .filter(point => Number.isFinite(point.yieldPct))
+  }));
 }
 
 async function historicalCurves(asOf) {
@@ -260,15 +258,11 @@ async function historicalCurves(asOf) {
   const targets = lookbackMonths.map(months => isoDate(offsetMonth(utcDate(asOf),-months)));
   const earliest = target => isoDate(new Date(utcDate(target).getTime() - 7 * dayMs));
   const years = [...new Set(targets.flatMap(target => [earliest(target).slice(0,4),target.slice(0,4)]))];
-  const archive = await treasuryCurves(years).catch(() => []);
-  const observed = targets.map(target => curveOnOrBefore(archive,target));
-  // The dated Treasury archive can lag the Hub's regularly refreshed Fed H.15 history.
-  const fallback = targets.some((t,i) => !observed[i] || t > archive.at(-1)?.date)
-    ? await fedCurves(earliest(targets.at(-1)),targets[0]).catch(() => []) : [];
-  return Object.fromEntries(lookbackMonths.map((months,i) => {
-    const supplied = observed[i], fed = curveOnOrBefore(fallback,targets[i]);
-    return [months, fed && (!supplied || fed.date > supplied.date) ? fed : supplied];
-  }));
+  const weekly = await fedCurves(earliest(targets.at(-1)),targets[0]).catch(() => []);
+  const observed = targets.map(target => curveOnOrBefore(weekly,target));
+  const fallback = observed.some(curve => !curve) ? await treasuryCurves(years).catch(() => []) : [];
+  return Object.fromEntries(lookbackMonths.map((months,i) =>
+    [months, observed[i] || curveOnOrBefore(fallback,targets[i])]));
 }
 
 let curveRequest;

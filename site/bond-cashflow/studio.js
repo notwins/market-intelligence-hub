@@ -802,7 +802,7 @@
       ...Object.entries(D.seriesSources).map(([k, url]) => [
         url,
         {
-          fx: 'FRED · monthly USD/SGD',
+          fx: 'FRED · historical USD/SGD',
           y10: 'FRED · 10-year Treasury',
           y20: 'FRED · 20-year Treasury',
           y30: 'FRED · 30-year Treasury'
@@ -813,7 +813,7 @@
       '<p>Prices are quoted per 100 of face value. The chart shows observed bids and available Treasury estimates. Purchase inputs can use a dated ask or, when only a newer bid is available, an explicitly labelled bid. The reference buttons use observations on or before settlement.</p><p>' +
       (D.history.length
         ? esc(D.historySource + ' · ' + D.historyFrom + ' to ' + D.historyTo)
-        : 'Monthly benchmark history is unavailable.') +
+        : 'Benchmark history is unavailable.') +
       '</p><ul>' +
       refs
         .map(

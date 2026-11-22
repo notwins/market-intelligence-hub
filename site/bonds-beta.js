@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const { sources, historyStorage, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
+  const { sources, historyStorage, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue, mergeWSJSamples,
     annualPriceChanges, loadFredCurves, reconstructedPrices } = BondsBetaData;
   const feedURL = 'data/Bond%20Prices%20-%20Type%20JSON%20-%2016-Nov-03.10.json';
   const temasek = 'US87973RAW07';
@@ -21,6 +21,7 @@
   const matchBatchSize = 100;
   const shownMatches = new Set();
   let publicBonds = new Map();
+  let wsjSamples;
   let localBonds = new Map();
   let aceRatesAvailable = false;
   let catalogue = new Map();
@@ -441,6 +442,20 @@
     element.querySelector('h2').textContent = instrument.name;
     element.querySelector('.bb-id').textContent = [instrument.isin, instrument.currency,
       instrument.issueDate ? `Issued ${dateLabel(instrument.issueDate)}` : ''].filter(Boolean).join(' · ');
+    if (instrument.isTreasury) {
+      const panel = element.querySelector('.bb-wsj');
+      const quote = instrument.latestWSJ;
+      panel.hidden = false;
+      panel.querySelector('dl').hidden = !quote;
+      panel.querySelector('.bb-wsj-date').textContent = quote
+        ? `${dateLabel(quote.date)}${quote.retained || publicUnavailable ? ' · last saved' : ''}`
+        : 'No WSJ quote saved for this issue';
+      if (quote) {
+        panel.querySelector('[data-wsj-bid]').textContent = quote.bid.toFixed(4);
+        panel.querySelector('[data-wsj-ask]').textContent = quote.ask.toFixed(4);
+        panel.querySelector('[data-wsj-yield]').textContent = quote.yield.toFixed(3) + '%';
+      }
+    }
     const margin = element.querySelector('[data-bb-ar]');
     if (instrument.ar !== null) {
       margin.hidden = false;
@@ -549,7 +564,7 @@
   }
 
   function applyData() {
-    bonds = mergeCatalogue(mergeHistory(publicBonds, localBonds), catalogue);
+    bonds = mergeWSJSamples(mergeCatalogue(mergeHistory(publicBonds, localBonds), catalogue), wsjSamples);
     aceRatesAvailable = [...localBonds.values()].some(item => Number.isFinite(item.ar));
     const previousDefaults = new Set(defaultKeys);
     defaultKeys = [...publicBonds.keys()];
@@ -645,15 +660,26 @@
   async function loadWatchlist() {
     get('retry').hidden = true;
     try {
-      const response = await fetch(feedURL);
+      const response = await fetch(feedURL, { cache: 'no-cache', signal: AbortSignal.timeout(15000) });
       if (!response.ok) throw Error('Watchlist not reachable');
       publicBonds = publicHistory(await response.json());
       publicUnavailable = false;
       applyData();
     } catch {
       publicUnavailable = true;
-      updateStatus();
+      applyData();
       get('retry').hidden = false;
+    }
+  }
+
+  async function loadWSJSamples() {
+    try {
+      const response = await fetch('data/wsj-treasury-dashboard.json', { cache: 'no-cache', signal: AbortSignal.timeout(15000) });
+      if (!response.ok) return;
+      wsjSamples = await response.json();
+      applyData();
+    } catch {
+      // The saved watchlist continues to supply its own WSJ quotes.
     }
   }
 
@@ -794,6 +820,7 @@
   }));
   restoreHistory();
   loadWatchlist();
+  loadWSJSamples();
   loadCatalogue();
   loadCurve();
 })();
