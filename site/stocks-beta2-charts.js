@@ -10,6 +10,7 @@
   const monthFormat = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric', timeZone: 'UTC' });
   const tickFormat = new Intl.DateTimeFormat('en-GB', { month: 'short', year: '2-digit', timeZone: 'UTC' });
   const numbers = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
+  const figures = root.FinancialDisplay;
   const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 2 });
   const signedPercent = new Intl.NumberFormat('en-GB', {
     style: 'percent', signDisplay: 'exceptZero', minimumFractionDigits: 1, maximumFractionDigits: 1
@@ -186,7 +187,7 @@
     return value > upper1 ? 'Between +1 and +2 SD' : 'Between −1 and −2 SD';
   }
 
-  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice, axisGutter = 0 } = {}) {
+  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice, formatAxis, axisGutter = 0 } = {}) {
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return null;
     const narrow = width < 500 && axis !== 'days';
@@ -208,7 +209,7 @@
     const max = Math.ceil((high + pad) / step) * step;
     const labels = Array.from({ length: Math.round((max - min) / step) + 1 }, (_, i) => min + step * i);
     const first = time(dates[from][2]), last = time(cone?.anchor.quote || dates[to][2]);
-    const labelValue = value => isPrice && (!narrow || Math.abs(value) < 1000) ? priceLabel(value) : axisNumber(value);
+    const labelValue = formatAxis || (value => isPrice && (!narrow || Math.abs(value) < 1000) ? priceLabel(value) : axisNumber(value));
     const labelWidth = Math.ceil(Math.max(32, ...labels.map(value => ctx.measureText(labelValue(value)).width)));
     const left = Math.max(axisGutter, labelWidth + 10);
     const endpoints = levels.map(({ value, label }) => ({
@@ -494,8 +495,12 @@
       const { data: chartData } = history;
       const { metric } = chart;
       const get = selector => element.querySelector(selector);
-      const [, label, rawUnit] = data.metrics.find(item => item[0] === metric);
-      const unit = rawUnit === 'quote' ? company.currency : rawUnit;
+      const metricIndex = data.metrics.findIndex(item => item[0] === metric);
+      const [, label, rawUnit] = data.metrics[metricIndex];
+      const marketCap = metric === 'market_cap_usd_bn' && figures
+        ? (card.marketCap ??= figures.marketCap(company.observations.map(point => point[metricIndex + 1]))) : null;
+      const unit = marketCap?.unit || (rawUnit === 'quote' ? company.currency : rawUnit);
+      const showValue = marketCap?.show || (rawUnit === 'quote' ? figures?.quote : figures?.number) || (value => numbers.format(value));
       const { from, to, cursor } = state;
       const prior = historyPoints(chartData, company, metric, from, to);
       const anchor = prior.findLast(point => point.value > 0);
@@ -545,14 +550,14 @@
         + (targetRows.length ? ' with Morningstar fair value' : '')
         + (cone ? ' and a 12-month cone with ' + chart.bands.map(band => '±' + band + ' SD').join(' and ') : '')
         + (researchTarget ? ' and a research target at ' + numbers.format(researchTarget.value) + ' ' + unit : ''),
-      { cone, bands: chart.bands, researchTarget, isPrice: metric === 'price' });
+      { cone, bands: chart.bands, researchTarget, isPrice: metric === 'price', formatAxis: marketCap?.show });
       show('valuation', ratios, 'forward P/E and P/B by price date');
       const dateField = get('[data-price-date]');
       if (dateField.dateTime !== priceDate) dateField.dateTime = priceDate;
       dateField.title = priceDate === bosDate ? 'BOS price date' : 'Verified trading date. BOS price date was ' + dateFormat.format(time(bosDate)) + '.';
       setText('[data-price-date]', quote);
       const point = prior.find(item => item.index === cursor);
-      setText('[data-price-reading]', point ? label + ' ' + numbers.format(point.value) + ' ' + unit : 'No observation');
+      setText('[data-price-reading]', point ? label + ' ' + showValue(point.value) + ' ' + unit : 'No observation');
       const analyst = targetRows.find(row => row.index === cursor && cursor <= (cone?.anchor.index ?? to));
       const call = get('[data-analyst-reading]');
       call.hidden = !analyst;
@@ -595,7 +600,7 @@
       }
       const valuations = ratios.flatMap(line => {
         const ratio = line.points.find(item => item.index === cursor);
-        return ratio ? [line.name + ' ' + numbers.format(ratio.value) + ' ×'] : [];
+        return ratio ? [line.name + ' ' + (figures?.number(ratio.value) || numbers.format(ratio.value)) + ' ×'] : [];
       });
       setText('[data-valuation-value]', quote + ' · ' + (valuations.join(' · ') || 'No observation'));
       const slider = get('[data-sb2-month]');

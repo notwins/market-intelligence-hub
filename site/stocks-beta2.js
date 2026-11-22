@@ -69,6 +69,7 @@
   const researchView = pageQuery.get('research') === '1';
   const groups = [...doc.querySelectorAll('[data-group]')];
   const format = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
+  const figures = root.FinancialDisplay;
   const calendar = new Intl.DateTimeFormat('en-GB', {
     month: 'short', year: 'numeric', day: 'numeric', timeZone: 'UTC'
   });
@@ -322,9 +323,15 @@
   function paintMonthlyTable({ element, company }, { from, to }) {
     if (company.group === 'shared') return;
     const points = company.observations.filter(point => point[0] >= from && point[0] <= to);
-    const headers = data.metrics.map(([, label, unit]) => (
-      '<th scope="col" data-tc-key="' + e(label) + '" data-table-unit="' + e(unit === 'quote' ? company.currency : unit)
-      + '">' + e(label + ' (' + (unit === 'quote' ? company.currency : unit) + ')') + '</th>'
+    const columns = data.metrics.map(([key, label, unit], i) => {
+      if (key === 'market_cap_usd_bn') {
+        return { label, ...figures.marketCap(company.observations.map(point => point[i + 1])) };
+      }
+      return { label, unit: unit === 'quote' ? company.currency : unit, show: unit === 'quote' ? figures.quote : figures.number };
+    });
+    const headers = columns.map(({ label, unit }) => (
+      '<th scope="col" data-tc-key="' + e(label) + '" data-table-unit="' + e(unit)
+      + '">' + e(label + ' (' + unit + ')') + '</th>'
     )).join('');
     const values = [...points].reverse().map(point => {
       const [, reportDate, priceDate] = data.months[point[0]];
@@ -334,9 +341,10 @@
       return '<tr><th scope="row"><time datetime="' + reportDate + '">' + day(reportDate) + '</time></th>'
         + '<td><time datetime="' + priceDate + '">' + day(priceDate) + '</time></td>'
         + '<td class="sb2-ticker"' + title + '>' + e(ticker) + (prior ? '<br><small>' + e(relationLabel[prior[1]]) + '</small>' : '') + '</td>'
-        + point.slice(1, data.metrics.length + 1).map(value => (
+        + point.slice(1, data.metrics.length + 1).map((value, i) => (
           value === null ? '<td class="sb2-missing" aria-label="Unavailable">–</td>'
-            : '<td data-tc-value="' + e(value) + '">' + e(format.format(value)) + '</td>'
+            : '<td data-tc-value="' + e(value) + '" title="' + e(value + ' ' + (data.metrics[i][2] === 'quote'
+              ? company.currency : data.metrics[i][2])) + '">' + e(columns[i].show(value)) + '</td>'
         )).join('') + '</tr>';
     }).join('');
     const table = element.querySelector('.sb2-history-table table');
@@ -390,8 +398,12 @@
       ].map(([label, value]) => '<div><dt>' + e(label) + '</dt><dd>' + e(value) + '</dd></div>').join('');
       const estimate = i => i >= (financials.actuals ?? 1) ? ' data-estimate' : '';
       const columns = financials.periods.map((period, i) => '<th scope="col"' + estimate(i) + '>' + e(period) + '</th>').join('');
-      const rows = financials.rows.map(([label, ...cells]) => '<tr><th scope="row">' + e(label) + '</th>'
-        + cells.map((value, i) => '<td' + estimate(i) + '>' + e(value ?? '–') + '</td>').join('') + '</tr>').join('');
+      const rows = financials.rows.map(([label, ...cells]) => {
+        const display = researchLibrary?.projectionRow?.(label, cells, financials.units) || { label, values: cells };
+        return '<tr><th scope="row">' + e(display.label) + '</th>' + display.values.map((value, i) =>
+          '<td' + estimate(i) + (cells[i] == null ? '' : ' title="' + e(cells[i]) + '"') + '>' + e(value ?? '–') + '</td>'
+        ).join('') + '</tr>';
+      }).join('');
       const readthrough = !extra?.forecast && financials.readthrough?.length ? '<h4>Next estimate vs latest actual</h4><ul class="sb2-research-readthrough">'
         + financials.readthrough.map(item => '<li>' + e(item) + '</li>').join('') + '</ul>' : '';
       const sourceLink = (url, label) => '<a href="' + e(url) + '" target="_blank" rel="noopener">' + e(label) + '</a>';
@@ -412,8 +424,9 @@
         + '<h4>Management guidance</h4><p>' + e(brief.guidance || 'The reviewed write-up did not identify specific management guidance.') + '</p>'
         + (extra ? '<details class="sb2-research-projections"' + (projectionWasOpen === false ? '' : ' open') + '><summary>Financials and analyst estimates</summary>'
           : '<h4>Financials and analyst estimates</h4>') + '<p class="sb2-research-note">'
-        + e(day(financials.date) + modelSuffix + (financials.units ? ' · ' + financials.units + ' unless marked' : ''))
-        + '. A = actual, E = analyst estimate.</p><div class="sb2-table" role="region" aria-label="Research financials. Scroll horizontally for more years." tabindex="0"><table>'
+        + e(day(financials.date) + modelSuffix + (financials.units ? ' · Source units ' + financials.units + ' unless marked' : ''))
+        + ". M = millions · '000 = thousands. A = actual, E = analyst estimate.</p>"
+        + '<div class="sb2-table" role="region" aria-label="Research financials. Scroll horizontally for more years." tabindex="0"><table>'
         + '<thead><tr><th scope="col">Metric</th>' + columns + '</tr></thead><tbody>' + rows + '</tbody></table></div>'
         + '<p>' + sourceLink(financials.source + '#page=' + financials.page, 'Financial table in PDF') + '</p>'
         + (extra?.forecast ? researchLibrary.forecastSection(extra.forecast, day) : readthrough)
@@ -541,7 +554,7 @@
     earningsRequest ??= root.EquityResearchData.load();
     earningsRequest.then(bundle => {
       const result = root.EquityResearchData.earningsFor({ ticker: symbol || company.ticker, currency: company.currency }, bundle);
-      earnings.innerHTML = shared.earnings(company.ticker, result, bundle, { includeSource: true });
+      earnings.innerHTML = shared.earnings(company.ticker, result, bundle, { includeSource: true, compact: true });
     }).catch(() => {
       earnings.innerHTML = shared.earnings(company.ticker, { observations: [] }, {});
     });
@@ -578,7 +591,7 @@
     paintHeading(entry);
     if (shared) {
       element.querySelector('[data-sb2-shared-chart]').innerHTML = root.MarketPrices.card(company.ticker, {
-        key: 'beta2-shared-' + slot + '-' + companyKey(company), period: '1Y', showWorkspaceActions: false
+        key: 'beta2-shared-' + slot + '-' + companyKey(company), period: '1Y', showWorkspaceActions: false, roundPriceTable: true
       });
     } else {
       element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.button(company, {

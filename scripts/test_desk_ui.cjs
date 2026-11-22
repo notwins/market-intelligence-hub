@@ -182,6 +182,23 @@ test('financial statements switch fiscal periods for the chart and table togethe
  assert.match(missing,/no quarterly figures/);
  assert.doesNotMatch(missing,/fund-table/);
 });
+test('Stocks BETA 2 rounds financial rows and calculates QoQ on adjacent unrounded quarters',()=>{
+ const {table}=require('../site/company-fundamentals.js');
+ const report={compact:true,currency:'USD',periods:['TTM','Q1 2026','Q4 2025','Q2 2025','Q1 2025'],rows:[
+  [0,'Total Revenue',[200e6,125040000,100000000,98e6,96e6]],
+  [1,'Net Income',[5000,50000,-100000,100,0]],
+  [1,'Diluted EPS',[1,0.01,null,0.02,0]],
+ ]};
+ const html=table(report,'income',true,true);
+ assert.match(html,/USD M/);assert.match(html,/USD &#39;000/);assert.match(html,/per share/);
+ assert.match(html,/data-tc-value="125040000">125/);
+ assert.match(html,/Revenue QoQ/);assert.match(html,/Net income QoQ/);
+ assert.match(html,/data-fund-index="qoq-1" data-fund-parent="0" hidden/);
+ assert.match(html,/data-direction="increase" data-tc-value="150">\+150%/);
+ assert.match(html,/fund-missing fund-ttm/);
+ assert.doesNotMatch(table(report,'income',true,false),/QoQ/);
+ assert.doesNotMatch(table(report,'balance',true,true),/QoQ/);
+});
 test('company cards group exact tickers, open saved reading and keep source links inside the popup',()=>{
  const cards=require('../site/company-news-cards.js');
  const story={story_id:'nvda',headline:'Nvidia update',topic:'US / Nvidia',source_urls:['https://www.reuters.com/nvidia'],version:1,body:'Saved facts',analysis:'Saved analysis',watch_next:'Next disclosure',earlier:''};

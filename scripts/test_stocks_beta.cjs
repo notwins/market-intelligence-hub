@@ -81,6 +81,24 @@ const context = {
 };
 vm.runInNewContext(fs.readFileSync(path.join(__dirname, '../site/ace-listing-match.js'), 'utf8'), context);
 assert.match(fs.readFileSync(path.join(__dirname, '../site/stocks-beta2.html'), 'utf8'), /href="bos-monthly\.html"/);
+{
+  const { marketCap, quote } = require('../site/financial-display.js');
+  const { projectionRow, forecastSection } = require('../site/stocks-beta2-research.js');
+  const cap = marketCap([1.12345, 1.25]);
+  assert.equal(cap.unit, 'USD M');assert.equal(cap.show(1.12345), '1,123');
+  assert.equal(quote(0.03456), '0.0346');
+  assert.deepEqual(projectionRow('Revenue (USD Bil)', ['1.22456', '2', null]), {
+    label: 'Revenue (USD M)', values: ['1,225', '2,000', null]
+  });
+  assert.deepEqual(projectionRow('Net profit', ['0.1234', '-0.2456'], 'SGD m'), {
+    label: "Net profit (SGD '000)", values: ['123', '-246']
+  });
+  assert.deepEqual(projectionRow('ROE (%)', ['12.345%', 'Turns negative'], 'SGD m'), {
+    label: 'ROE (%)', values: ['12.35%', 'Turns negative']
+  });
+  assert.match(forecastSection({ rows: [['Revenue', '+12.345%', '-1.12%']], date: '2026-11-22' }, String),
+    /data-direction="increase"[^>]*>\+12.3%.*data-direction="decrease"[^>]*>−1.1%/);
+}
 const ace = context.AceListingMatch.open(new ArrayBuffer(0));
 const lookup = (isin, unit) => context.AceListingMatch.match(ace, isin, unit);
 assert.deepEqual(Array.from(lookup('SG1L01001701', 'SGD').rows, row => row.row), [2, 3]);

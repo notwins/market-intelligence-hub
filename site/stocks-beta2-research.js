@@ -68,6 +68,48 @@
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   })[char]);
+  const figures = root.FinancialDisplay || (typeof module !== 'undefined' ? require('./financial-display.js') : null);
+
+  function sourceNumber(value) {
+    const match = /^([+\-−]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)\s*(%|[×x])?$/i.exec(String(value ?? '').trim());
+    if (!match) return null;
+    const number = Number(match[1].replaceAll(',', '').replace('−', '-'));
+    return Number.isFinite(number) ? { number, suffix: match[2] || '', hasPlus: match[1].startsWith('+') } : null;
+  }
+
+  function roundedSource(value) {
+    const parsed = sourceNumber(value);
+    if (!parsed) return value;
+    const { number, suffix, hasPlus } = parsed;
+    return (hasPlus ? '+' : '') + figures.quote(number) + suffix;
+  }
+
+  function amountUnit(label) {
+    const match = /^([A-Za-z]{3})\s*(bn|bil(?:lion)?|b|mn|mil(?:lion)?|m|thousand|k|'000)\.?$/i.exec(label?.trim() || '');
+    if (!match) return null;
+    const [, currency, unit] = match;
+    const size = unit.toLowerCase();
+    return { currency, multiplier: size.startsWith('b') ? 1e9 : size.startsWith('m') ? 1e6 : 1e3 };
+  }
+
+  function projectionRow(label, cells, fallbackUnit) {
+    const explicit = /\s*\(([^()]*)\)$/.exec(label);
+    const financialTotal = /revenue|turnover|sales|income|profit|cash flow|\bebit(?:da)?\b|assets|liabilities|debt|market cap/i.test(label)
+      && !/per share|growth|margin|yield|%|\b(?:eps|dps)\b/i.test(label);
+    const sourceUnit = financialTotal ? amountUnit(explicit ? explicit[1] : fallbackUnit) : null;
+    if (!sourceUnit) return { label, values: cells.map(roundedSource) };
+    const amounts = cells.map(cell => {
+      const parsed = sourceNumber(cell);
+      return parsed && !parsed.suffix ? parsed.number * sourceUnit.multiplier : null;
+    });
+    if (!amounts.some(Number.isFinite)) return { label, values: cells };
+    const scale = figures.scaleFor(amounts);
+    return {
+      label: (explicit ? label.slice(0, explicit.index) : label) + ' (' + sourceUnit.currency + ' ' + figures.unit(scale) + ')',
+      values: cells.map((cell, i) => amounts[i] === null ? cell : figures.amount(amounts[i], scale))
+    };
+  }
+
   const link = (item, label) => '<a href="' + esc(item.source) + '#page=' + item.page
     + '" target="_blank" rel="noopener noreferrer">' + esc(label) + '</a>';
   const noteSource = (item, day) => '<p class="sb2-research-note">' + esc(item.provider) + ' · '
@@ -75,10 +117,12 @@
 
   function peerTable({ columns, rows: peerRows, subject }) {
     if (!columns?.length) return '';
-    const heads = columns.map(label => '<th scope="col">' + esc(label) + '</th>').join('');
-    const data = peerRows.map(([name, ...cells]) => '<tr><th scope="row">' + esc(name)
+    const display = columns.map((label, i) => projectionRow(label, peerRows.map(row => row[i + 1])));
+    const heads = display.map(({ label }) => '<th scope="col">' + esc(label) + '</th>').join('');
+    const data = peerRows.map(([name, ...cells], row) => '<tr><th scope="row">' + esc(name)
       + (name === subject ? ' <small>(company)</small>' : '') + '</th>'
-      + cells.map(value => '<td>' + esc(value ?? '–') + '</td>').join('') + '</tr>').join('');
+      + cells.map((value, i) => '<td' + (value == null ? '' : ' title="' + esc(value) + '"')
+        + '>' + esc(display[i].values[row] ?? '–') + '</td>').join('') + '</tr>').join('');
     return '<div class="sb2-table" role="region" aria-label="Report peers. Scroll horizontally for additional columns." tabindex="0">'
       + '<table><thead><tr><th scope="col">Company</th>' + heads + '</tr></thead><tbody>' + data + '</tbody></table></div>';
   }
@@ -102,8 +146,14 @@
 
   function forecastSection(model, day) {
     if (!model) return '';
+    const percent = value => {
+      const parsed = sourceNumber(value);
+      if (parsed?.suffix !== '%') return '<td>' + esc(roundedSource(value) ?? '–') + '</td>';
+      return '<td class="fund-change-value" data-direction="' + figures.direction(parsed.number) + '" title="' + esc(value)
+        + '">' + esc(figures.changeText(parsed.number)) + '</td>';
+    };
     const body = model.rows.map(([name, next, final]) => '<tr><th scope="row">' + esc(name) + '</th>'
-      + '<td>' + esc(next ?? '–') + '</td><td>' + esc(final ?? '–') + '</td></tr>').join('');
+      + percent(next) + percent(final) + '</tr>').join('');
     return '<h4>Forecast change from ' + esc(model.actual) + '</h4><p class="sb2-research-note">'
       + 'Change from the latest actual fiscal year, calculated from the ' + esc(day(model.date)) + ' analyst model. '
       + link(model, 'Model in PDF') + '</p><div class="sb2-table" role="region" aria-label="Forecast changes" tabindex="0">'
@@ -111,7 +161,7 @@
       + '<th scope="col" data-estimate>' + esc(model.last) + '</th></tr></thead><tbody>' + body + '</tbody></table></div>';
   }
 
-  if (typeof module !== 'undefined') module.exports = { parse, sections, forecastSection };
+  if (typeof module !== 'undefined') module.exports = { parse, sections, forecastSection, projectionRow };
   const doc = root.document;
   const file = doc?.getElementById('sb2-research-file');
   if (!file) return;
@@ -135,7 +185,7 @@
     return data?.listings[ticker] || published?.listings[ticker];
   }
 
-  root.StocksBeta2Research = { forListing, sections, forecastSection };
+  root.StocksBeta2Research = { forListing, sections, forecastSection, projectionRow };
 
   function update(saved) {
     status.textContent = data ? Object.keys(data.listings).length + ' listings loaded '
