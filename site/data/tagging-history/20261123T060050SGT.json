@@ -1,0 +1,525 @@
+{
+  "schema": 1,
+  "id": "20261123T060050SGT",
+  "checkedAt": "2026-11-23T06:00:50+08:00",
+  "sources": {
+    "hub": "923925b45208c26a2b9a5d0829680ed90aebae78",
+    "content": "7a7c2552ede81e292e30aab1c73df14ae3780f3f"
+  },
+  "baseline": "20261122T180657SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 269,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 7,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 197,
+      "changed": 9,
+      "tags": 9,
+      "colour": 9,
+      "logos": 1
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261120-NVDA-HUANG-SENATE-TESTIMONY-AGREEMENT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Bessent says US officials directly sought Nvidia export-compliance answers from management and directors",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "geo.mainland_china",
+          "macro.trade_data",
+          "person.entity.person.jensen-huang",
+          "person.political_officeholders_other",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.political_officeholders_other",
+          "light": "#7E22CE",
+          "dark": "#D8B4FE",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "macro.trade_data": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "person.political_officeholders_other": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            },
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "NVDA",
+          "PERSON:JENSEN-HUANG"
+        ]
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "geo.united_states",
+          "person.scott_bessent",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.scott_bessent",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "person.scott_bessent": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-BAHRAIN-IRAN-AERIAL-ATTACK-INDUSTRIAL-FIRE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Bahrain reports two injuries in wider Iranian attacks; industrial-site link remains unverified",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "asset.oil_crude",
+          "sector.defence_aerospace"
+        ],
+        "colour": {
+          "tag": "sector.defence_aerospace",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "asset.oil_crude": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            },
+            "sector.defence_aerospace": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.insurance",
+          "sector.transport_logistics"
+        ],
+        "colour": {
+          "tag": "sector.transport_logistics",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "sector.insurance": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "sector.transport_logistics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-CHINA-EXCHANGES-MARGIN-100-TO-80",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "China’s exchanges announce minimum margin ratio cut to 80% from 100%, effective 30 November",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-HOUTHI-CLAIMS-RABIGH-REFINERY-STRIKE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Houthis claim Rabigh refinery strike; physical damage and production loss remain unconfirmed",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.gulf_gcc",
+          "geo.japan",
+          "sector.transport_logistics"
+        ],
+        "colour": {
+          "tag": "geo.gulf_gcc",
+          "light": "#854D0E",
+          "dark": "#FDE68A",
+          "chips": {
+            "geo.gulf_gcc": {
+              "text": "#854D0E",
+              "background": "#FEFCE8",
+              "dark_text": "#FDE68A",
+              "dark_background": "#422006"
+            },
+            "geo.japan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "sector.transport_logistics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-LIBYA-BENGHAZI-RUSSIAN-VESSEL-DRONE-SUSPECTED",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Libyan authorities suspect drone attack behind Russian vessel explosion at Benghazi",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia",
+          "sector.transport_logistics"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "sector.transport_logistics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-POLAND-RUSSIAN-KH101-MISSILES-CONFIRMED",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Polish prosecutors identify all three Friday airspace incursions as Russian Kh-101 missiles",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-SNB-INFLATION-SECOND-ROUND-MARTIN",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "SNB watches second-round inflation effects ahead of December decision",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.chf_sgd",
+          "asset.usd_chf",
+          "geo.switzerland",
+          "institution.swiss_national_bank"
+        ],
+        "colour": {
+          "tag": "institution.swiss_national_bank",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "asset.chf_sgd": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "asset.usd_chf": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "geo.switzerland": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "institution.swiss_national_bank": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-TATA-STEEL-APL-APOLLO-TUBES-COLORS-SALE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Tata Steel announces conditional tubes and Colors sales to APL Apollo for up to INR280bn",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.cash_deposits",
+          "geo.india",
+          "sector.materials_chemicals"
+        ],
+        "colour": {
+          "tag": "sector.materials_chemicals",
+          "light": "#92400E",
+          "dark": "#FDE68A",
+          "chips": {
+            "asset.cash_deposits": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "sector.materials_chemicals": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-THAILAND-MYANMAR-RARE-EARTH-CHEMICAL-EXPORT-PLAN",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Thailand plans controls on chemicals used in Myanmar rare-earth mining",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "sector.materials_chemicals"
+        ],
+        "colour": {
+          "tag": "sector.materials_chemicals",
+          "light": "#92400E",
+          "dark": "#FDE68A",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "sector.materials_chemicals": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
