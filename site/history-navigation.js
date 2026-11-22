@@ -3,7 +3,7 @@
 const paths={curve:'M3 17c4 0 4-10 8-10s4 6 10 6M3 3v18h18',shares:'M4 19V9m5 10V5m5 14v-7m5 7V3',table:'M3 4h18v16H3zM3 9h18M8 4v16',event:'M4 5h16v15H4zM8 3v4m8-4v4M4 10h16m-11 5 2 2 4-4',search:'M15 15l6 6M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0',pivot:'M3 3h18v18H3zM3 9h18M3 15h18M9 3v18m6-18v18',fx:'M3 7h17l-4-4m5 14H4l4 4',trend:'m3 17 6-6 4 3 8-10m-6 0h6v6',bond:'M5 3h14v18H5zM8 8h8m-8 4h8m-8 4h5',fred:'M3 20V4m0 16h18M6 15l4-6 4 3 6-8',replay:'m9 6 10 6-10 6zM4 5v14',network:'M12 3v6M5 15V9h14v6M2 15h6v6H2zm14 0h6v6h-6zM9 1h6v5H9z'};
 function icon(key){return '<svg class="history-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="'+(paths[key]||paths.fred)+'"/></svg>';}
 const groups=[
- {id:'bonds',label:'Yields & bonds',icon:'curve',items:[
+ {id:'bonds',label:'Bonds, curves & FX',icon:'curve',items:[
   ['bonds-beta','Bonds BETA','bond','bonds-beta.html'],
   ['bonds-credit','Bonds &amp; credit','bond','v4.html#credit'],
   ['ust-selection','UST selection desk','curve','v4.html#ust'],
@@ -38,9 +38,10 @@ const items=groups.flatMap(g=>g.items.filter(i=>!i[3]).map(i=>[i[0],i[2],i[1]]))
 const featured='<a class="history-nav-item history-featured" href="cross-market-history.html" data-history-id="cross-market">'+icon('event')+'<span class="history-link-label">UST, SGS &amp; Stock Market · Beta</span></a>';
 function itemHTML(item,current,where){const [id,label,key,external]=item,inside=!external,selected=id===current,attrs=inside&&where!=='home'?'data-tool="tab" data-key="historyTab" data-tab="'+id+'" aria-pressed="'+selected+'"':'';
  const body=icon(key)+'<span class="history-link-label">'+label+'</span>';
- if(where==='rail')return '<a class="history-nav-item'+(selected?' active':'')+'" href="'+(external||'#history/'+id)+'"'+(inside?' data-view="history/'+id+'"':'')+' data-history-id="'+id+'">'+body+'</a>';
- if(inside&&where==='toolbar')return '<button type="button" class="history-nav-item'+(selected?' active':'')+'" '+attrs+'>'+body+'</button>';
- return '<a class="history-nav-item" href="'+(external||'v4.html#history/'+id)+'" data-history-id="'+id+'">'+body+'</a>';
+ const tone=id==='fx'?' data-nav-tone="blue"':'';
+ if(where==='rail')return '<a class="history-nav-item'+(selected?' active':'')+'" href="'+(external||'#history/'+id)+'"'+(inside?' data-view="history/'+id+'"':'')+' data-history-id="'+id+'"'+tone+'>'+body+'</a>';
+ if(inside&&where==='toolbar')return '<button type="button" class="history-nav-item'+(selected?' active':'')+'" '+attrs+tone+'>'+body+'</button>';
+ return '<a class="history-nav-item" href="'+(external||'v4.html#history/'+id)+'" data-history-id="'+id+'"'+tone+'>'+body+'</a>';
 }
 function html(){return '<nav class="history-shortcuts history-directory" aria-label="Historical charts">'+featured+groups.map(g=>'<section class="history-directory-group" data-history-group="'+g.id+'"><h3>'+icon(g.icon)+g.label+'</h3><div>'+g.items.map(i=>itemHTML(i,'','home')).join('')+'</div></section>').join('')+'</nav>';}
 function sidebar(){return '<div class="rail-group rail-history" role="group" aria-labelledby="rail-group-history"><div class="rail-group-label" id="rail-group-history"><a href="#history" data-view="history">History</a></div>'+featured+groups.map(g=>'<details class="rail-history-section" data-history-group="'+g.id+'"'+(g.id==='bonds'?' open':'')+'><summary>'+icon(g.icon)+'<span>'+g.label+'</span><span class="rail-history-count">'+g.items.length+'</span><svg class="history-menu-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>'+g.items.map(i=>itemHTML(i,'','rail')).join('')+'</details>').join('')+'</div>';}

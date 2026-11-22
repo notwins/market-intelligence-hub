@@ -3,8 +3,10 @@
   'use strict';
   if (document.documentElement.classList.contains('hub-primary-ready')) return;
   const base = new URL('./', document.currentScript.src);
+  const pagePath = location.pathname.slice(base.pathname.length);
   const credit = ['Bonds & credit', 'v4.html#credit', '▤'];
   const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
+  const watchlist = ['Bonds & shares watchlist', 'v4.html#watchlist'];
   const newsLinks = [
     ['Daily briefing', 'v4.html#overview', '◫'],
     ['US earnings', 'v4.html#earnings', '◈'],
@@ -25,7 +27,7 @@
       ['Research editions', 'research-editions.html'], ['Search library', 'search.html']
     ], 'orange'],
     ['Stocks, bonds and pricing', [
-      ['BOS monthly archive', 'bos-monthly.html'], ['Bond Cashflow Studio', 'bond-cashflow.html'], ['Bonds & shares watchlist', 'v4.html#watchlist'],
+      ['BOS monthly archive', 'bos-monthly.html'], ['Bond Cashflow Studio', 'bond-cashflow.html'], watchlist,
       treasury, ['SI pricing', 'v4.html#history/si'], ['SI BETA 2', 'si-beta2.html'],
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
     ], 'green'],
@@ -56,7 +58,7 @@
       ['SI pricing', 'v4.html#history/si', '▧'],
       ['SI beta 2', 'si-beta2.html#si-library', '▧']
     ]],
-    ['Bonds BETA', [['Bond history cards', 'bonds-beta.html#bb-cards'], ['Bond Cashflow Studio', 'bond-cashflow.html'], credit, treasury, ['Bond watchlist', 'v4.html#watchlist']]],
+    ['Bonds BETA', [['Bond history cards', 'bonds-beta.html#bb-cards'], ['Bond Cashflow Studio', 'bond-cashflow.html'], credit, treasury, watchlist]],
     ['FRED', jumpGroups.get('FRED and rates')],
     ['Master Pivot', [
       ['Explore securities', 'v4.html#master/explore'], ['Master Pivot', 'v4.html#master/pivot'],
@@ -67,15 +69,19 @@
     ['Markets', [['Stock moves', 'desk.html#stock-moves'], ['Rates and FX', 'desk.html#market-rates'], ['Bond yields', 'desk.html#market-bonds']]]
   ]);
   const routeTones = [
-    [/^(?:stocks-beta2?\.html|bos-monthly\.html|si-beta2\.html|desk\.html#stock-moves|v4\.html#(?:watchlist|history\/(?:shares|si|spx|beta[24]-shares)))/, 'green'],
-    [/^(?:bonds-beta\.html|bond-cashflow\.html|desk\.html#(?:market-bonds|market-rates)|v4\.html#(?:credit|ust|history\/(?:yield|curves|fx)))/, 'maroon'],
+    [/^(?:stocks-beta2?\.html|bos-monthly\.html|si-beta2\.html|desk\.html#(?:stock-moves|main-company-cards)|v4\.html#history\/(?:shares|si|spx|beta[24]-shares))/, 'green'],
+    [/^(?:bonds-beta\.html|bond-cashflow\.html|desk\.html#(?:market-bonds|yield-curves)|v4\.html#(?:credit|ust|history\/(?:yield|curves)))/, 'maroon'],
     [/^(?:fred\/|(?:historical-fred|fred-[123]|fred-feed)\.html)/, 'purple'],
     [/^(?:cross-market-history\.html|desk\.html#full-history|v4\.html#history$)/, 'rose'],
     [/^(?:v4\.html#(?:overview|earnings|policy|calls|hourly|headlines|reports|research)|market-understanding\/|archive\.html|research-editions\.html)/, 'orange'],
-    [/^(?:v4\.html#(?:master|tools)|saved-securities\.html)/, 'blue']
+    [/^(?:v4\.html#(?:master|tools|watchlist|history\/fx)|desk\.html#market-rates|saved-securities\.html)/, 'blue']
   ];
   const toneFor = (href, fallback) => routeTones.find(([pattern]) => pattern.test(href))?.[1] ?? fallback;
-  const controlRoute = control => control.dataset.view ? 'v4.html#' + control.dataset.view : control.getAttribute('href') || '';
+  function controlRoute(control) {
+    if (control.dataset.view) return 'v4.html#' + control.dataset.view;
+    const href = control.getAttribute('href') || '';
+    return href.startsWith('#') ? pagePath + href : href;
+  }
 
   function link(label, href, icon, tone) {
     const a = document.createElement('a'); a.href = new URL(href, base);
@@ -211,7 +217,7 @@
   for (const control of grid.querySelectorAll(':scope > a, :scope > button')) {
     control.dataset.navTone = toneFor(controlRoute(control), 'blue');
   }
-  for (const control of document.querySelectorAll('.rail-group:not(.rail-history) > :is(a,button)')) {
+  for (const control of document.querySelectorAll('.rail-group:not(.rail-history) > :is(a,button), .dashboard-links > a:not(.history-featured)')) {
     const tone = toneFor(controlRoute(control));
     if (tone) control.dataset.navTone = tone;
   }
@@ -224,7 +230,7 @@
   document.documentElement.classList.add('hub-primary-ready');
   const workspaceToolbar = document.querySelector('.topbar');
   function active() {
-    const relative = location.pathname.slice(base.pathname.length);
+    const relative = pagePath;
     const route = location.hash || '#overview';
     const onWorkspace = relative === 'v4.html';
     const shares = ['stocks-beta.html', 'stocks-beta2.html', 'bos-monthly.html', 'si-beta2.html'].includes(relative)
