@@ -176,9 +176,11 @@
     function paintEquityLinks(container) {
       const slots = [...(container?.querySelectorAll('[data-bos-equity-fallback]') || [])];
       const listings = root.BOSEquity?.reviewedListings || [];
-      const matches = slots.map(slot => ({
-        slot, listing: listings.find(row => row.verified && row.ticker === slot.dataset.bosEquityFallback)
-      })).filter(({ listing }) => listing);
+      const matches = slots.map(slot => {
+        const symbol = slot.dataset.bosEquityFallback;
+        const ticker = symbol === 'BRK.B' ? 'BRK-B' : symbol;
+        return { slot, listing: listings.find(row => row.verified && row.ticker === ticker) };
+      }).filter(({ listing }) => listing);
       if (!matches.length) return;
       briefsRequest ??= root.fetch('data/stocks-beta2-research-briefs.json', { signal: AbortSignal.timeout(10000) })
         .then(response => {
