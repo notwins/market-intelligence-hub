@@ -160,7 +160,7 @@ function paper(links=[]){
  const link=(x,y,label,url)=>{if(!/^https:\/\//.test(url||''))return;const width=Math.min(720,label.length*6);
   out.push(`<a href="${E(url)}" target="_blank" rel="noopener noreferrer">`);text(x,y,label,10,teal,true);out.push('</a>');
   links.push({left:x,top:y-11,right:x+width,bottom:y+3,url});};
- return {out,text,rect,line,prose,fitted,heading,link};
+ return {out,text,rect,line,prose,fitted,heading,link,wrap};
 }
 function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source=''}={}){
  const {out,text,rect,line,prose,fitted,heading,link}=paper(links);
@@ -176,34 +176,47 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
  fitted(logo?80:28,143,share.name||data.name||share.symbol,logo?565:620,19,navy,true);
  text(772,143,share.symbol,14,teal,true,'end');text(28,180,source?`Underlying of ${source}`:'SI underlying',10,teal,true);
  prose(28,198,share.description||data.description||'Company description unavailable.',112,2,11);
- heading(233,'1','Equity research');
+ const card=(x,number,title)=>{
+  rect(x,225,365,192,'#fff');
+  rect(x,225,365,31,'#eaf2f5');
+  rect(x+10,231,18,18,teal,teal);
+  text(x+19,244,number,10,'#fff',true,'middle');
+  text(x+37,245,title,13,navy,true);
+ };
+ card(28,'1','Equity research');
  const research=data.metrics,call=research?.rating||brief?.rating||'Unavailable',provider=research?.researchProvider||brief?.provider||'BOS research';
  const currentTarget=Number.isFinite(research?.fairValueOrTargetPrice)?research:null;
- text(28,254,`${provider} · Analyst view: ${call}${data.metricsDate?' · '+data.metricsDate:brief?.date?' · '+brief.date:''}`,12,navy,true);
+ fitted(40,273,`${provider} · ${call}${data.metricsDate?' · '+data.metricsDate:brief?.date?' · '+brief.date:''}`,340,11.7,navy,true);
  const target=currentTarget?`${research.fairValueOrTargetKind==='fair_value'?'Fair value':'Target'}: ${research.currency} ${C.fmt(research.fairValueOrTargetPrice,4)}`:
   brief?.target?`Report fair value / target: ${brief.target.currency} ${brief.target.value}${brief.target.date?' · '+brief.target.date:''}`:'Fair value / target unavailable.';
- text(28,272,target,12,teal,true);
- prose(28,290,brief?.outlook?`Report summary · ${brief.outlookDate||brief.date}: ${brief.outlook}`:'A matched equity research summary is unavailable.',110,3,11.5);
- if(brief?.guidance)prose(28,334,'Guidance: '+brief.guidance,115,1,11);
+ fitted(40,292,target,340,11.7,teal,true);
+ if(brief?.outlookDate||brief?.date)text(40,309,'Research summary · '+(brief.outlookDate||brief.date),10,muted,true);
+ prose(40,325,brief?.outlook||'A matched equity research summary is unavailable.',58,4,10.5);
+ if(brief?.guidance)prose(40,382,'Guidance: '+brief.guidance,63,1,10);
  const researchUrl=root.CompanyFundamentals?.researchLink?.(brief)||research?.researchReportUrl;
- link(28,350,`Open ${brief?.provider||provider} research${brief?.date?' · '+brief.date:''}`,researchUrl);
- heading(377,'2','Agency credit ratings');
+ link(40,402,'Open full equity research',researchUrl);
+
+ card(407,'2','Credit research');
  if(credit.length){
-  rect(28,387,744,17,'#edf4f6');text(38,399,'Agency / rating scope',11,muted,true);text(620,399,'Reported rating',11,muted,true);
-  credit.slice(0,5).forEach((r,i)=>{const y=417+i*14;
-   fitted(38,y,r.agency+' · '+r.scope,555,11.5);fitted(620,y,r.display,142,11.5,navy,true);
+  text(419,270,'Agency / rating scope',9.5,muted,true);
+  text(760,270,'Grade',9.5,muted,true,'end');
+  credit.slice(0,5).forEach((r,i)=>{
+   const y=287+i*14;
+   fitted(419,y,r.agency+' · '+r.scope,245,10.5);
+   fitted(760,y,r.display,86,10.5,navy,true,'end');
   });
-  text(28,487,'Bloomberg supplied snapshot · rating observation dates unavailable.',10,muted);
-  if(data.creditOutlook)text(28,501,'S&P outlook: '+data.creditOutlook+' (separate from credit grade).',10,muted);
- }else text(28,405,'No agency rating supplied for this exact listing.',12,muted);
+  text(419,361,'Bloomberg snapshot · rating observation dates unavailable',9.5,muted);
+  if(data.creditOutlook)fitted(419,376,'S&P outlook: '+data.creditOutlook,337,9.5,muted);
+ }else{
+  prose(419,276,'No agency rating supplied for this listing.',60,2,11);
+ }
  const bos=bosCredit.find(r=>r.ratings_as_reported);
- if(bos)prose(28,515,`BOS credit research · ${bos.report_date}: ${bos.ratings_as_reported}`,118,1,10);
- else if(!credit.length)text(28,423,'Missing ratings are not treated as investment grades.',11,muted);
+ if(bos)prose(419,394,`BOS · ${bos.report_date} · ${bos.ratings_as_reported}`,65,2,9);
  const quarters=fiscalQuarters(company?.quarterly);
  const displayCurrency=currencyTools.tradingCurrency(data.currency||data.moaCurrency);
  const definitions=new Set(),translations=new Set(),unconverted=new Set();
  let mixed=false,halfYear=false;
- for(const [section,key,title,top] of [[3,'income','Income statement',536],[4,'balance','Balance sheet',738],[5,'cash','Cash flow',872]]){
+ for(const [section,key,title,top] of [[3,'income','Income statement',454],[4,'balance','Balance sheet',686],[5,'cash','Cash flow',838]]){
   const report=company?.quarterly?.[key];
   const from=currencyTools.reportingCurrency(info?.id,report);
   const table=highlights(report,key,quarters,{listingId:info?.id,target:displayCurrency,fx:data.statementFx?.[from],annual:company?.statements?.[key]});
@@ -222,33 +235,50 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
   if(!table.comparable)mixed=true;
   if(table.periods.some(period=>table.displayedPeriods.has(period)))halfYear=true;
   const y0=top+10,cellWidth=46,first=218;
-  rect(28,y0,744,20,'#eaf2f5');
-  text(38,y0+14,table.currency,11,teal,true);
-  text(207,y0+14,'Unit',10,muted,true,'end');
-  table.periods.forEach((quarter,i)=>{
-   const left=first+cellWidth*i;
-   if(quarter.startsWith('Q1')&&i>0)out.push(`<path d="M${left} ${y0}v20" stroke="${border}"/>`);
-   const label=table.displayedPeriods.get(quarter)||quarter;
-   text(left+cellWidth-5,y0+14,label,10,label===quarter?navy:'#805526',true,'end');
+  const columns=table.periods.map((period,index)=>({period,index})).reverse();
+  const years=new Map();
+  columns.forEach(({period},i)=>{
+   const year=period.slice(-4),group=years.get(year)||{start:i,count:0};
+   group.count++;years.set(year,group);
+  });
+  rect(28,y0,744,32,'#eaf2f5');
+  text(38,y0+25,table.currency,11,teal,true);
+  text(207,y0+25,'Unit',10,muted,true,'end');
+  for(const [year,group] of years){
+   const x=first+cellWidth*(group.start+group.count/2);
+   text(x,y0+12,year,10.8,navy,true,'middle');
+  }
+  columns.forEach(({period},i)=>{
+   const label=table.displayedPeriods.get(period)||period;
+   out.push(`<g data-period="${E(period)}">`);
+   text(first+cellWidth*(i+.5),y0+26,label.split(' ')[0],10,label===period?navy:'#805526',true,'middle');
+   out.push('</g>');
   });
   const rows=table.rows.flatMap(row=>row.changes?
    [row,{label:'QoQ change',values:row.changes,kind:'change'}]:[row]);
-  rows.forEach((row,i)=>{
-   const y=y0+32+i*12.2;
+  let y=y0+46;
+  for(const row of rows){
    const change=row.kind==='change';
    if(row.definition)definitions.add(row.definition);
-   if(row.important)rect(28,y-9.5,744,12,'#eef6f7','#eef6f7');
-   else if(change)rect(28,y-9.5,744,12,'#f7f9fb','#f7f9fb');
-   fitted(change?50:38,y,row.label,154,10.6,row.important?teal:change?muted:navy,row.important);
+   if(row.important)rect(28,y-10,744,13,'#eef6f7','#eef6f7');
+   else if(change)rect(28,y-10,744,13,'#f7f9fb','#f7f9fb');
+   fitted(change?50:38,y,row.label,154,11,row.important?teal:change?muted:navy,row.important);
    const unit=row.kind==='amount'?figures.unit(row.scale):row.kind==='perShare'?'per share':'%';
-   if(row.kind==='change'||row.values.some(Number.isFinite))text(207,y,unit,9,muted,false,'end');
-   row.values.forEach((value,j)=>{
+   if(change||row.values.some(Number.isFinite))text(207,y,unit,9.5,muted,false,'end');
+   columns.forEach(({index},j)=>{
+    const value=row.values[index];
     const color=value===null?muted:change?(value>0?'#226247':value<0?'#a03543':muted):row.important?teal:navy;
     const formatted=change?figures.changeText(value):row.kind==='ratio'&&Number.isFinite(value)?
      figures.number(value,1)+'%':figures.amount(value,row.scale);
-    fitted(first+cellWidth*(j+1)-5,y,formatted,cellWidth-6,10.5,color,row.important||change,'end');
+    fitted(first+cellWidth*(j+1)-5,y,formatted,cellWidth-6,11,color,row.important||change,'end');
    });
-  });
+   y+=change?17.4:13.7;
+  }
+  for(const {start} of years.values()){
+   if(start===0)continue;
+   const x=first+cellWidth*start;
+   out.push(`<path class="si-fiscal-year-divider" d="M${x} ${y0}V${y-9}" stroke="#a8bec7" stroke-width="1"/>`);
+  }
  }
  line(1003);
  const captured=company?.quarterlyCapturedAt;
@@ -265,72 +295,148 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
  if(bos)link(445,1108,'BOS credit source · '+bos.report_date,bos.source_pdf);
  out.push('</svg>');return out.join('');
 }
+function payoffExamples(page){
+ const terms=C.payoffTerms(page.payoffTerms),notional=10000;
+ const money=value=>`${page.currency} ${C.fmt(value,2)}`;
+ const monthlyTenor=page.tenorUnit==='months'&&Number.isInteger(page.months)&&page.months>0;
+ const early=monthlyTenor&&page.months>1?Math.min(3,page.months-1):null;
+ const standard=!page.source?.bonusEnhanced;
+ const coupon=(elapsed,maturity=false)=>{
+  if(!standard)return 'Check the coupon and bonus clauses.';
+  if(!elapsed||!Number.isFinite(page.coupon))return 'Check coupon amount and timing.';
+  let amount=null;
+  if(page.couponBasis==='per_annum')amount=notional*page.coupon/100*elapsed/12;
+  if(page.couponBasis==='per_month')amount=notional*page.coupon/100*elapsed;
+  if(maturity&&page.couponBasis==='total')amount=notional*page.coupon/100;
+  return amount===null?'Check coupon amount and timing.':
+   money(amount)+(maturity?' over the term.':` through month ${elapsed}; then stops.`);
+ };
+ const strike=page.strike,ki=page.ki;
+ const stress=Number.isFinite(strike)&&strike>0&&Number.isFinite(ki)&&ki>0?
+  Math.floor(Math.min(60,0.9*strike,0.9*ki)*100)/100:null;
+ const fallback=[
+  {condition:early?`Month ${early}, if eligible and the KO test is met.`:
+   'KO on an eligible date before maturity, if one exists.',
+   coupon:coupon(early),principal:`Par returned: ${money(notional)}.`},
+  {condition:'Reaches maturity without a qualifying KI event.',
+   coupon:coupon(monthlyTenor?page.months:null,true),principal:`Par returned: ${money(notional)}.`},
+  {condition:stress===null?'KI occurs and the worst share ends below strike.':
+   `KI occurs; worst share finishes at ${C.pct(stress)} of initial, below strike.`,
+   coupon:coupon(monthlyTenor?page.months:null,true),
+   principal:stress!==null&&standard?`Cash equivalent ${money(notional*stress/strike)} (${C.pct(100*(1-stress/strike))} principal loss). Share delivery may apply.`:
+    'Principal may fall below par. Check the cash or share settlement rule.'}
+ ];
+ const examples=C.payoffCases.map(([key,title],i)=>{
+  const saved=terms.source?terms.cases[key]:{};
+  const useIssuer=(saved.coupon||saved.principal);
+  const condition=i===0&&useIssuer?'Early redemption on an eligible observation date.':fallback[i].condition;
+  const result={title,condition};
+  for(const field of C.payoffFields){
+   result[field]={confirmed:!!saved[field],text:saved[field]||fallback[i][field]};
+  }
+  return result;
+ });
+ return {examples,notional:money(notional),source:terms.source,cashExample:stress!==null&&standard&&!examples[2].principal.confirmed,
+  assumedAnnual:page.source?.couponAssumed===true&&page.couponBasis==='per_annum'};
+}
 function termsSvg(page,data={},number,total){
- const {out,text,rect,line,prose,fitted,heading}=paper();
+ const {out,text,rect,line,prose,fitted,heading,wrap}=paper();
  const shareLabels=page.shares.map(share=>share.symbol).join(' + ');
  out.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${C.W}" height="${C.H}" viewBox="0 0 ${C.W} ${C.H}" role="img" aria-label="SI terms and KO schedule">`);
  rect(0,0,C.W,C.H,'#fff','#fff');
  text(28,38,'FOR REFERENCE ONLY',17,navy,true);
  text(772,37,`MARKET INTEL / ${number} OF ${total}`,11,muted,true,'end');
- text(28,58,'Indicative levels from the entered SI terms and reference prices.',10,muted);
+ text(28,58,'Reference levels and three examples of how coupon and principal may be paid.',10,muted);
  rect(28,75,744,35,navy,navy);text(42,98,'SI terms & KO schedule',18,'#fff',true);
  fitted(28,140,shareLabels,550,19,navy,true);
  if(page.source?.reference)text(772,139,page.source.reference,12,teal,true,'end');
  const basis={per_annum:' p.a.',per_month:' per month',total:' total'}[page.couponBasis]||' · basis unconfirmed';
  text(28,169,`${page.currency}  ·  ${page.months} ${page.tenorUnit==='months'?'months':'(tenor unit unconfirmed)'}  ·  Coupon ${C.pct(page.coupon)}${basis}`,13,teal,true);
  if(page.issuer)fitted(28,190,'Issuer '+page.issuer,740,11,muted);
- heading(226,'1','Initial price levels');
+ heading(209,'1','Initial price levels');
  const referenceRows=page.shares.map(share=>{
   const stock=data[share.symbol]||{},ref=C.reference(page,share,stock);
   return {share,stock,ref,levels:C.levels(page,ref.value)};
  });
  const ends=[410,526,641,757];
- rect(28,239,744,25,'#eaf2f5');
- text(39,256,'Share / price basis',11,navy,true);
- ['Reference','Initial KO','KI','Strike'].forEach((label,i)=>text(ends[i],256,label,11,navy,true,'end'));
+ rect(28,220,744,22,'#eaf2f5');
+ text(39,235,'Share / price basis',11,navy,true);
+ ['Reference','Initial KO','KI','Strike'].forEach((label,i)=>text(ends[i],235,label,11,navy,true,'end'));
  referenceRows.forEach(({share,stock,ref,levels},i)=>{
-  const y=283+i*36;
-  if(i%2===0)rect(28,y-14,744,35,'#f4f8fa','#f4f8fa');
+  const y=257+i*26;
+  if(i%2===0)rect(28,y-11,744,26,'#f4f8fa','#f4f8fa');
   text(39,y,share.symbol+(stock.currency?' · '+stock.currency:''),12,teal,true);
-  text(39,y+14,[ref.basis,ref.date].filter(Boolean).join(' · '),9.5,muted);
+  text(39,y+11,[ref.basis,ref.date].filter(Boolean).join(' · '),9.5,muted);
   [ref.value,levels.ko,levels.ki,levels.strike].forEach((value,j)=>text(ends[j],y,C.fmt(value,4),12,navy,true,'end'));
  });
- heading(444,'2','Monthly knock-out levels');
+ heading(374,'2','Monthly knock-out levels');
  const final=C.finalKO(page);
  const scheduleAvailable=Number.isInteger(page.months)&&page.months>=1&&page.tenorUnit==='months'
   &&final!==null&&final>0;
  if(scheduleAvailable){
   const stepText=page.step>0?`KO steps down by ${C.fmt(page.step,4)} percentage points from month ${page.firstStep}.`:'KO is fixed across the entered tenor.';
-  text(28,468,stepText+(page.months>12?' First and final months shown.':''),11,muted);
+  text(28,397,stepText+(page.months>12?' First and final months shown.':''),11,muted);
   const right=referenceRows.map((_,i)=>757-(referenceRows.length-1-i)*140);
-  rect(28,484,744,24,'#eaf2f5');
-  text(39,500,'Month',11,navy,true);text(185,500,'KO %',11,navy,true,'end');
-  referenceRows.forEach(({share,stock},i)=>fitted(right[i],500,share.symbol+(stock.currency?' · '+stock.currency:''),134,11,navy,true,'end'));
+  rect(28,408,744,22,'#eaf2f5');
+  text(39,423,'Month',11,navy,true);text(185,423,'KO %',11,navy,true,'end');
+  referenceRows.forEach(({share,stock},i)=>fitted(right[i],423,share.symbol+(stock.currency?' · '+stock.currency:''),134,11,navy,true,'end'));
   const months=page.months<=12?Array.from({length:page.months},(_,i)=>i+1):
    [1,2,3,4,5,null,page.months-4,page.months-3,page.months-2,page.months-1,page.months];
   months.forEach((month,index)=>{
-   const y=526+index*19;
+   const y=445+index*15;
    if(month===null){text(39,y,'…',11,muted);return;}
    const ko=C.finalKO({...page,months:month});
-   if(month%2||month===page.months)rect(28,y-13,744,19,month===page.months?'#eaf2f5':'#f4f8fa','#fff');
+   if(month%2||month===page.months)rect(28,y-11,744,15,month===page.months?'#eaf2f5':'#f4f8fa','#fff');
    text(39,y,month,11);text(185,y,C.pct(ko),11,teal,true,'end');
    referenceRows.forEach(({ref},i)=>text(right[i],y,C.fmt(Number.isFinite(ref.value)?ref.value*ko/100:null,4),11,navy,true,'end'));
   });
  }else{
-  text(28,474,'A monthly schedule needs a confirmed monthly tenor and a supplied step-down.',11,muted);
-  text(28,494,`Entered initial KO ${C.pct(page.ko)} · Final KO ${C.pct(final)}`,11,teal,true);
+  text(28,411,'A monthly schedule needs a confirmed monthly tenor and a supplied step-down.',11,muted);
+  text(28,433,`Entered initial KO ${C.pct(page.ko)} · Final KO ${C.pct(final)}`,11,teal,true);
  }
- heading(796,'3','Check before relying on the levels');
- prose(28,823,'Confirm the first eligible observation, exact dates, KO basket rule and coupon terms against the issuer term sheet.',110,2,12);
- prose(28,859,`Entered KI observation: ${page.kiType||'Unconfirmed'}. Confirm the strike, settlement terms and capital loss conditions.`,110,2,12);
- if(page.notes){
-  text(28,908,'Entered notes',12,teal,true);
-  prose(28,929,page.notes,110,3,11);
+ heading(655,'3','Payoff examples');
+ const {examples,notional,source,cashExample,assumedAnnual}=payoffExamples(page);
+ text(28,678,`Illustrative notional ${notional} · Each amount or clause is labelled below.`,11,muted);
+ rect(28,691,744,22,'#eaf2f5');
+ text(40,706,'Scenario',11,navy,true);
+ text(268,706,'Coupon',11,navy,true);
+ text(520,706,'Principal',11,navy,true);
+ examples.forEach((example,i)=>{
+  const y=718+i*78;
+  rect(28,y,744,73,i%2?'#fff':'#f4f8fa',border);
+  text(40,y+18,example.title,12,navy,true);
+  prose(40,y+35,example.condition,37,3,10.3);
+  for(const [field,x] of [['coupon',268],['principal',520]]){
+   const cell=example[field];
+   text(x,y+18,cell.confirmed?'Issuer clause entered':'Illustrative',10,cell.confirmed?teal:muted,true);
+   const lines=wrap(cell.text,40);
+   const spacing=lines.length>3?10:13.8,size=lines.length>3?9.6:10.8;
+   lines.forEach((label,index)=>fitted(x,y+34+index*spacing,label,230,size,navy));
+  }
+ });
+ line(962);
+ let footer=980;
+ if(source&&examples.some(example=>example.coupon.confirmed||example.principal.confirmed)){
+  fitted(28,footer,'Final term sheet reference: '+source,744,10.5,teal,true);
+  footer+=17;
  }
- line(1036);
- text(28,1057,'Share levels use the local quote currency shown for each listing. The SI currency is shown in the header.',10,muted);
- text(28,1075,'The month numbers describe model levels. The issuer term sheet sets the contractual observation dates.',10,muted);
+ if(examples.some(example=>!example.coupon.confirmed)){
+  text(28,footer,'Coupon illustration assumes every scheduled coupon is earned. For p.a. rates, it uses months ÷ 12.',10.5,muted);
+  footer+=16;
+  if(assumedAnnual){
+   text(28,footer,'The archived reference assumes a p.a. coupon basis.',10.5,muted);
+   footer+=16;
+  }
+ }
+ if(cashExample){
+  text(28,footer,'Cash illustration after KI = notional × final price ÷ strike. Recovery to strike can change the outcome.',10.5,muted);
+  footer+=16;
+ }
+ text(28,footer,'Issuer terms determine eligible observation dates, coupon conditions and cash or share settlement.',10.5,muted);
+ footer+=16;
+ fitted(28,footer,`Entered KI observation: ${page.kiType||'Unconfirmed'} · Share levels use local quote currency.`,744,10.5,muted);
+ if(page.notes)prose(28,footer+16,'Note: '+page.notes,115,2,10);
  out.push('</svg>');return out.join('');
 }
-const api={fiscalQuarters,highlights,ratings,summary,plan,svg,termsSvg};root.SIEquityPages=api;if(typeof module!=='undefined')module.exports=api;
+const api={fiscalQuarters,highlights,ratings,summary,plan,svg,payoffExamples,termsSvg};root.SIEquityPages=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

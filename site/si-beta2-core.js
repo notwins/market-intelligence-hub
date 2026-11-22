@@ -100,9 +100,22 @@ function referenceCouponBand(row){
  return isBonusEnhanced(row)&&row.coupon_basis!=='per_annum'?'':couponBand(row.coupon_pct);
 }
 function symbol(v){v=clean(v,30).toUpperCase();if(/^\d{1,4}\s+HK$/.test(v))return v.split(/\s/)[0].padStart(4,'0')+'.HK';return v.replace(/\s+(?:UQ|UN|US)$/,'');}
+const payoffCases=[
+ ['earlyKO','Early KO'],['noKI','Maturity without KI'],['afterKI','Maturity after KI']
+];
+const payoffFields=['coupon','principal'];
+function payoffTerms(value){
+ const cleanText=(input,max)=>typeof input==='string'?input.trim().replace(/\s+/g,' ').slice(0,max):'';
+ const source=cleanText(value?.source,100);
+ const cases=Object.fromEntries(payoffCases.map(([key])=>[key,Object.fromEntries(payoffFields.map(field=>
+  [field,cleanText(value?.cases?.[key]?.[field],100)]))]));
+ return {source,cases};
+}
 function blank(){return {id:'',shares:[],ko:null,ki:null,strike:null,step:null,months:null,coupon:null,currency:'SGD',tenorUnit:'months',couponBasis:'per_annum',kiType:'European at maturity',firstStep:2,date:'',issuer:'',notes:'',source:null};}
 function fromReference(r,step=null){return {...blank(),step,shares:r.shares.map(t=>({symbol:t,fixing:null,name:'',description:''})),ko:r.ko_pct,ki:r.ki_pct,strike:r.strike_pct,months:r.tenor_source_value,coupon:r.coupon_pct,currency:r.currency,tenorUnit:'months',couponBasis:r.coupon_basis||'unconfirmed',kiType:'Unconfirmed',source:{reference:r.reference,date:r.source_date||'',rounded:true,review:!!r.additional_review,...(isBonusEnhanced(r)?{bonusEnhanced:true}:{})},date:''};}
 function validate(p){const issues=[];if(!p||typeof p!=='object')return ['Invalid page'];if(!Array.isArray(p.shares)||p.shares.length<1||p.shares.length>4)issues.push('Enter one to four shares.');
+  const terms=payoffTerms(p.payoffTerms);
+ if(!terms.source&&Object.values(terms.cases).some(entry=>entry.coupon||entry.principal))issues.push('Enter the issuer term sheet reference for the payoff clauses you supply.');
  const shares=p.shares||[];if(shares.some(s=>!s||!/^[-A-Z0-9.^ ]{1,30}$/.test(s.symbol||'')))issues.push('Use a valid ticker for each share.');if(new Set(shares.map(s=>symbol(s.symbol))).size!==shares.length)issues.push('Each share should appear once.');
  if(shares.some(s=>s?.moaPct!=null&&!validMoa(s.moaPct)))issues.push('Each MOA margin must be blank or between 0% and 100%.');
  for(const [key,label,lo,hi] of [['ko','KO',0.01,200],['ki','KI',0.01,200],['strike','Strike',0.01,200],['coupon','Coupon',0,100],['months','Months / tenor',1,120]])if(num(p[key])===null||p[key]<lo||p[key]>hi)issues.push(`${label} must be between ${lo} and ${hi}.`);
@@ -638,5 +651,5 @@ function pdfLinkUrl(raw){
   (url.hostname==='www.morningstar.com'&&/^\/stocks\/[a-z]+\/[^/]+\/financials$/.test(url.pathname)||
    ['www.apple.com','www.fitchratings.com','www.spglobal.com','ratings.moodys.com'].includes(url.hostname))?url.href:'';}catch{return '';}
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,monthsAfter,probabilityCone,coneAnalysis,coneMonths,commonConePairs,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,payoffCases,payoffFields,payoffTerms,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,monthsAfter,probabilityCone,coneAnalysis,coneMonths,commonConePairs,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

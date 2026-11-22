@@ -7,7 +7,14 @@ The company previews sit in a collapsed disclosure below the main preview.
 
 With **Include SI terms & KO schedule**, the export adds one A4 page after the
 company pages. It shows the local-currency reference and barrier levels, the
-entered KO step-down by month, and the terms to verify against the issuer sheet.
+entered KO step-down by month, and three payoff illustrations: early KO, maturity
+without KI, and maturity after KI with the worst share ending below strike.
+The illustration uses a 10,000 notional in the SI currency, assumes coupons are
+earned on schedule, and shows a cash-equivalent after KI using final price
+divided by strike. It omits amounts when the coupon basis is unknown or a bonus
+structure requires its own formula. In **Issuer payoff clauses**, enter the final
+term sheet reference and either or both of the coupon and principal clauses for
+each scenario. The PDF labels these entries separately from illustrations.
 Without company appendices, the schedule follows the main SI. Combined exports
 repeat the same order for each SI. Both choices are independent browser options.
 
@@ -18,7 +25,9 @@ reads the same browser-local Morningstar import as the stock cards, and loads th
 existing BOS research briefs. Refresh also reads imports saved in another tab.
 No imported statements or private drafts are uploaded or included in the deployment.
 
-Each available statement aligns twelve fiscal slots across one A4 table. Each
+Equity research and credit research display as two cards above the statements.
+Each statement aligns twelve fiscal slots across one A4 table, newest first.
+Quarters share year headings and a vertical divider separates each fiscal year. Each
 monetary row uses consistent millions or thousands. EPS is per share and
 retains its reported basic, diluted or normalized basis. Teal emphasizes key
 figures and green/red mark the direction of quarter-over-quarter change.
