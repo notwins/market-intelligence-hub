@@ -12,7 +12,7 @@
     '3988 HK': 'CNY', '857 HK': 'CNY', '939 HK': 'CNY', '941 HK': 'CNY',
     '5 HK': 'USD', 'HSBA LN': 'USD', 'SHEL LN': 'USD', 'SHELL NA': 'USD',
     'BHP LN': 'USD', 'BHP AU': 'USD', 'WIL SP': 'USD', 'YZJSGD SP': 'CNY',
-    'AZN LN': 'USD', 'TTE FP': 'USD'
+    'AZN LN': 'USD', 'TTE FP': 'USD', 'NOVN SW': 'USD'
   }));
   const mixedFlowPeriods = new Set(['3988 HK', '601988 CH', '857 HK', '601857 CH', '939 HK', '601939 CH']);
   const semiannualFlowPeriods = new Set(['BHP LN', 'BHP AU', 'WIL SP', 'YZJSGD SP']);

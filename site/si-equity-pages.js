@@ -25,7 +25,7 @@ const choices={
   ['Operating cash flow',/^Cash Flow from(?:\/Used in)? Operating Activities(?:, (?:Indirect|Direct))?$/i,true],
   ['Investing cash flow',/^Cash Flow from(?:\/Used in)? Investing Activities$/i],
   ['Financing cash flow',/^Cash Flow from(?:\/Used in)? Financing Activities$/i],
-  ['Ending cash',/^Cash and Cash Equivalents, End of Period$/i]
+  ['Ending cash',/^Cash and Cash Equivalents, End of Period$/i],['Change in cash',/^Change in Cash$/i]
  ]
 };
 function fiscalQuarters(statements){
