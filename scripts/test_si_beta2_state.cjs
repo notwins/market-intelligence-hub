@@ -50,6 +50,10 @@ async function run(){
  assert.equal(h.writes.filter(w=>w.version===1).length,draftWrites,'The appendix option must not rewrite saved drafts');
  await h.get('pdf-one').click();assert.equal(h.pdfPages.length-priorPages,2,'One share adds exactly one physical PDF page');
  assert.match(h.get('pdf-ready-text').textContent,/2-page PDF ready/);
+ h.get('include-terms').checked=true;h.get('include-terms').listeners.change();
+ assert.equal(h.get('pdf-ready').hidden,true);
+ assert.match(h.get('pdf-all').textContent,/\(3\)/);
+ await h.get('pdf-one').click();assert.match(h.get('pdf-ready-text').textContent,/3-page PDF ready/);
  h.get('chart-cone').checked=true;h.get('chart-display').listeners.change();
  assert.equal(h.get('pdf-ready').hidden,true);assert.match(h.get('preview').innerHTML,/not a forecast or barrier-hit probability/);
  assert.equal(h.get('pending-edits').hidden,true,'Chart choices must not dirty the SI terms');

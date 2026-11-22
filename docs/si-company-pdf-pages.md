@@ -5,11 +5,11 @@ are no longer expanded above it. The optional **Include equity research & financ
 checkbox adds one A4 portrait page for each underlying, after its main SI page.
 The company previews sit in a collapsed disclosure below the main preview.
 
-Three-share SI export order: SI, share 1, share 2, share 3. Combined exports repeat
-that order for each saved SI, including repeated underlyings. Button counts and PDF
-page numbers describe the resulting physical pages. Existing draft schema and the
-30-SI collection limit are unchanged. The appendix choice uses the separate browser
-key `market-si-beta2-equity-pages`; chart choices use `market-si-beta2-chart`.
+With **Include SI terms & KO schedule**, the export adds one A4 page after the
+company pages. It shows the local-currency reference and barrier levels, the
+entered KO step-down by month, and the terms to verify against the issuer sheet.
+Without company appendices, the schedule follows the main SI. Combined exports
+repeat the same order for each SI. Both choices are independent browser options.
 
 ## Financials and research
 
@@ -18,10 +18,28 @@ reads the same browser-local Morningstar import as the stock cards, and loads th
 existing BOS research briefs. Refresh also reads imports saved in another tab.
 No imported statements or private drafts are uploaded or included in the deployment.
 
-The company-page renderer retains the current twelve-quarter financial profiles,
-statement currencies and fiscal periods. Amounts are displayed in millions, with
-EPS labelled per share and normalized EPS identified separately. Missing periods
-and values remain unavailable; BOS estimates never fill missing statements.
+Each available statement aligns twelve fiscal slots across one A4 table. Each
+monetary row uses consistent millions or thousands. EPS is per share and
+retains its reported basic, diluted or normalized basis. Teal emphasizes key
+figures and green/red mark the direction of quarter-over-quarter change.
+QoQ uses consecutive comparable fiscal periods and the absolute prior amount,
+before FX or display rounding. Half-year and full-year totals identified by
+reconciling with annual figures are labelled; mixed-duration changes are omitted.
+
+Net margin is net income divided by revenue. EBITA and EBITDA are distinct
+reported lines. FCF uses the reported figure when available, then operating cash
+flow less reported capital spending. A separate net PP&E variant includes
+disposals when clean capex is unavailable. Missing values stay unavailable.
+
+Statement currency is distinct from listing and SI currency. Exact-listing
+overrides correct reviewed vendor labels, for example TSMC's TWD consolidated
+amounts, Tencent and Alibaba's CNY figures, and ASML's EUR consolidated figures.
+When the currencies differ, the appendix translates all displayed periods at
+one dated FRED H.10 reference rate, with both currencies and the rate printed on
+the page. The rate uses the latest common observation within 35 days on or
+before the statement capture. If FX is unavailable, the report keeps its
+reporting currency. The export does not update the archive or restate the
+issuer's historical financial statements.
 
 Agency ratings use the existing validated Bloomberg snapshot via ShareEnrichment
 and the existing credit summaries via CompanyCreditData. Agency, issuer/debt scope,

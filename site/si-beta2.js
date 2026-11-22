@@ -4,9 +4,12 @@ let pages=[],watch=[],activeId='',dirty=false,list='all',assets={},loading=new S
 const WATERMARK_KEY='market-si-beta2-logo-watermark',LOGO_BASE='assets/company-logos/';
 let showWatermarks=true,logoIndexPromise,chart=C.chartOptions();
 const CHART_KEY='market-si-beta2-chart',MOA_KEY='market-si-beta2-moa-v1';
-const EQUITY_KEY='market-si-beta2-equity-pages';
-let includeEquity=false;
-try{includeEquity=localStorage.getItem(EQUITY_KEY)==='on';}catch{/* Session-only option. */}
+const EQUITY_KEY='market-si-beta2-equity-pages',TERMS_KEY='market-si-beta2-terms-page';
+let includeEquity=false,includeTerms=false;
+try{
+ includeEquity=localStorage.getItem(EQUITY_KEY)==='on';
+ includeTerms=localStorage.getItem(TERMS_KEY)==='on';
+}catch{/* Session-only options. */}
 let moaLibrary=null;
 const bosFiles=window.SIBosHistory;
 let bosArchive=null,bosWorking=!!bosFiles;
@@ -116,7 +119,16 @@ if(picker){
 $('share-details').innerHTML=Array.from({length:4},(_,i)=>`<div class="share-detail"><strong>Share ${i+1} details</strong><label>Manual reference price<input name="fixing${i}" type="number" min="0.000001" step="any" placeholder="Use dated close"></label><label>MOA margin (%)<input name="moa${i}" type="number" min="0" max="100" step="any" placeholder="Use matched private rate"></label><label>Company name<input name="name${i}" maxlength="60" placeholder="From feed when available"></label><label>Company description<textarea name="description${i}" rows="2" maxlength="280" placeholder="Optional override; matched profile used when blank"></textarea></label></div>`).join('');
 function fill(p=C.blank()){picker?.close();for(const k of ['ko','ki','strike','step','months','coupon','currency','tenorUnit','couponBasis','kiType','firstStep','date','issuer','notes'])form.elements[k].value=p[k]??'';for(let i=0;i<4;i++){const s=p.shares[i]||{};form.elements['share'+i].value=s.symbol||'';form.elements['fixing'+i].value=s.fixing??'';form.elements['moa'+i].value=s.moaPct??'';form.elements['name'+i].value=s.name||'';form.elements['description'+i].value=s.description||'';}picker?.sync();dirty=false;$('form-errors').textContent='';$('apply-page').textContent=active()?'Update one-pager':'Create one-pager';$('editor-title').textContent=active()?`Edit one-pager ${pages.indexOf(active())+1}`:'Create a one-pager';$('editor-note').textContent=p.source?`Based on ${p.source.reference}. Imported terms remain rounded and photo-unverified.${p.source.couponAssumed&&p.couponBasis==='per_annum'?' Coupon assumed p.a.':''}`:'Start with one to four shares. All entered terms stay on this device.';}
 function read(){const p=active()?structuredClone(active()):C.blank();for(const k of ['ko','ki','strike','step','months','coupon'])p[k]=C.num(form.elements[k].value);for(const k of ['currency','tenorUnit','couponBasis','kiType','date','issuer','notes'])p[k]=form.elements[k].value.trim();p.firstStep=Number(form.elements.firstStep.value);p.shares=[];for(let i=0;i<4;i++){const s=form.elements['share'+i].value.trim();if(s)p.shares.push({symbol:C.symbol(s),fixing:C.num(form.elements['fixing'+i].value),moaPct:C.num(form.elements['moa'+i].value),name:form.elements['name'+i].value.trim(),description:form.elements['description'+i].value.trim()});}return p;}
-const pdfCount=collection=>window.SIEquityPages?.plan(collection,includeEquity).length??collection.length;
+const pdfPlan=collection=>window.SIEquityPages?.plan(collection,includeEquity,includeTerms)||
+ collection.map(page=>({kind:'si',page}));
+const pdfCount=collection=>pdfPlan(collection).length;
+function renderPDFPage(entry,data,number,total,watermarks,links=[]){
+ const {kind,page,share}=entry;
+ if(kind==='si')return renderPage(page,data,number,total,watermarks,links);
+ if(kind==='terms')return window.SIEquityPages.termsSvg(page,data,number,total);
+ return window.SIEquityPages.svg(share,data[share.symbol]||{},number,total,
+  {showWatermarks:watermarks,links,source:page.source?.reference});
+}
 function buttons(){const p=active();
  $('logo-watermark').disabled=busy;
  $('load-moa').disabled=busy;
@@ -129,15 +141,19 @@ function buttons(){const p=active();
  $('chart-cone').checked=chart.cone;
  $('include-equity').checked=includeEquity;
  $('include-equity').disabled=busy;
- $('equity-pages-note').textContent=includeEquity&&p?`${pdfCount([p])} pages for this SI: main page, then one company per A4 page.`:'One A4 page per share, after each main SI page.';
+ $('include-terms').checked=includeTerms;
+ $('include-terms').disabled=busy;
+ const extra=[includeEquity&&'one page per share',includeTerms&&'one SI schedule page'].filter(Boolean).join(' + ');
+ $('equity-pages-note').textContent=extra&&p?`${pdfCount([p])} A4 pages · main page + ${extra}`:'Add appendices to the selected PDF.';
  $('logo-watermark').setAttribute('aria-pressed',String(showWatermarks));
  $('logo-watermark-state').textContent=showWatermarks?'On':'Off';
 $('pdf-one').disabled=!p||dirty||busy||bosWorking||loading.has(p?.id);$('pdf-all').disabled=!pages.length||dirty||busy||bosWorking||loading.size>0;for(const k of ['duplicate-page','remove-page','refresh-page'])$(k).disabled=!p||dirty||busy||(k==='refresh-page'&&loading.has(p?.id));for(const k of ['apply-page','apply-pending','discard-pending','new-page','undo-remove','backup-pages','restore-pages'])$(k).disabled=busy;$('pending-edits').hidden=!dirty;$('apply-pending').textContent=p?'Apply changes':'Create one-pager';$('page-count').textContent=pages.length;$('pdf-all').textContent=busy?'Creating PDF…':`↓ All pages PDF${pages.length?' ('+pdfCount(pages)+')':''}`;}
 function preflight(p){const messages=[];if(!p||loading.has(p.id)){$('data-check').hidden=true;return;}const data=assets[p.id]||{},missingPrice=[],missingHistory=[],missingDescription=[];for(const s of p.shares){const d=data[s.symbol]||{};if(C.reference(p,s,d).value===null)missingPrice.push(s.symbol);if(C.chartWindow(d,chart).prices.length<2)missingHistory.push(s.symbol);if(!(s.description||d.description))missingDescription.push(s.symbol);}if(missingPrice.length)messages.push('Reference price unavailable: '+missingPrice.join(', ')+'. Enter a manual reference price or choose a date with a saved close.');if(missingHistory.length)messages.push('Price history unavailable: '+missingHistory.join(', ')+'.');if(missingDescription.length)messages.push('Company description not supplied: '+missingDescription.join(', ')+'. Add it in share details.');$('data-check').hidden=!messages.length;$('data-check-text').textContent=messages.join(' ')+' The PDF will retain these gaps.';}
 function renderEquityPreview(){const p=active(),holder=$('equity-preview');
- holder.hidden=!p||!includeEquity;
- $('equity-preview-pages').innerHTML=p&&includeEquity&&holder.open?p.shares.map((s,i)=>
-  window.SIEquityPages?.svg(s,assets[p.id]?.[s.symbol]||{},i+2,p.shares.length+1,{showWatermarks,source:p.source?.reference})||'').join(''):'';
+ holder.hidden=!p||!(includeEquity||includeTerms);
+ const plan=p&&holder.open?pdfPlan([p]):[];
+ $('equity-preview-pages').innerHTML=plan.slice(1).map((entry,i)=>
+  renderPDFPage(entry,assets[p.id]||{},i+2,plan.length,showWatermarks)).join('');
 }
 function render(){const p=active();
  renderEquityPreview();
@@ -222,6 +238,7 @@ async function enrich(p){
   const identity={...(item||{}),ticker:moaTicker||ticker,currency:moaCurrency};
   const coneSources=chart.cone?bounded(Promise.resolve(window.SIConeSources?.histories(identity,market)),'Cone source comparison timed out.',15000).catch(()=>[]):null;
   const fundamentals=await bounded(Promise.resolve(window.CompanyFundamentals?.snapshot(identity)),'Company statements timed out.',12000).catch(()=>null);
+  const statementFx=window.SIStatementCurrency?.forListing(fundamentals,market.currency||moaCurrency).catch(()=>({}));
   const bbg=window.ShareEnrichment?.find(identity);
   const creditReports=await bounded(Promise.resolve(window.CompanyCreditData?.load()),'Credit research timed out.',12000).then(rows=>window.CompanyCreditData?.forListing(rows,moaTicker||ticker)||[]).catch(()=>[]);
   const coneHistories=await coneSources;
@@ -235,7 +252,7 @@ async function enrich(p){
    }
   }
   result[share.symbol]={...facts,...market,logo:await logo,overlays:await overlays,moaTicker,moaCurrency,isin:item?.isin,
-   fundamentals,coneHistories,creditRatings:window.SIEquityPages?.ratings(bbg)||[],creditOutlook:bbg?.creditOutlook?.value||'',creditReports,
+   fundamentals,statementFx:await statementFx,coneHistories,creditRatings:window.SIEquityPages?.ratings(bbg)||[],creditOutlook:bbg?.creditOutlook?.value||'',creditReports,
    bosKey:bosFiles?.listingKey(listing?.instrumentId||profile?.bbTicker,listing?.currency||profile?.currency),
    metrics:valuation?.row||null,metricsDate:valuation?.reportDate||'',metricsBasis:valuation?.basis||''
   };
@@ -296,6 +313,12 @@ $('include-equity').addEventListener('change',()=>{
  if(busy)return;
  includeEquity=$('include-equity').checked;
  try{localStorage.setItem(EQUITY_KEY,includeEquity?'on':'off');}catch{/* Session-only option. */}
+ invalidatePDF();render();
+});
+$('include-terms').addEventListener('change',()=>{
+ if(busy)return;
+ includeTerms=$('include-terms').checked;
+ try{localStorage.setItem(TERMS_KEY,includeTerms?'on':'off');}catch{/* Session-only option. */}
  invalidatePDF();render();
 });
 $('equity-preview').addEventListener('toggle',renderEquityPreview);
@@ -397,8 +420,8 @@ function download(bytes,type,name){const url=URL.createObjectURL(new Blob([bytes
 let pdfLibrary;
 async function getPDFLib(){if(window.PDFLib)return window.PDFLib;if(!pdfLibrary){const s=document.createElement('script');pdfLibrary=bounded(new Promise((resolve,reject)=>{s.src='vendor/pdf-lib-1.17.1.min.js';s.onload=()=>window.PDFLib?resolve(window.PDFLib):reject(Error('PDF exporter is unavailable.'));s.onerror=()=>reject(Error('PDF exporter could not load. Try again.'));document.head.append(s);}), 'PDF exporter timed out. Try again.').catch(e=>{pdfLibrary=null;s.remove();throw e;});}return pdfLibrary;}
 async function imageBytes(svg){const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'}),url=URL.createObjectURL(blob);try{const img=new Image();await new Promise((ok,no)=>{img.onload=ok;img.onerror=()=>no(Error('Preview could not be converted to a PDF page.'));img.src=url;});const canvas=document.createElement('canvas');canvas.width=C.W*2;canvas.height=C.H*2;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);const png=await new Promise(ok=>canvas.toBlob(ok,'image/png'));if(!png)throw Error('PDF image creation failed.');return new Uint8Array(await png.arrayBuffer());}finally{URL.revokeObjectURL(url);}}
-async function exportPDF(all){if(busy||dirty||bosWorking)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets),watermarks=showWatermarks,plan=window.SIEquityPages?.plan(snapshot,includeEquity)||snapshot.map(page=>({kind:'si',page}));invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[],linksByPage=[];for(let i=0;i<plan.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${plan.length}…`;const links=[],entry=plan[i],page=entry.page;linksByPage.push(links);
- const svg=entry.kind==='si'?renderPage(page,data[page.id]||{},i+1,plan.length,watermarks,links):window.SIEquityPages.svg(entry.share,data[page.id]?.[entry.share.symbol]||{},i+1,plan.length,{showWatermarks:watermarks,links,source:page.source?.reference});
+async function exportPDF(all){if(busy||dirty||bosWorking)return;const selected=all?pages:[active()];if(!selected[0]||selected.some(p=>loading.has(p.id)))return;const errors=selected.flatMap((p,i)=>C.validate(p).map(v=>`Page ${i+1}: ${v}`));if(errors.length){notice(errors.join(' '));return;}const snapshot=structuredClone(selected),data=structuredClone(assets),watermarks=showWatermarks,plan=pdfPlan(snapshot);invalidatePDF();busy=true;buttons();$('export-progress').hidden=false;try{const lib=await getPDFLib(),images=[],linksByPage=[];for(let i=0;i<plan.length;i++){$('export-progress').textContent=`Preparing PDF page ${i+1} of ${plan.length}…`;const links=[],entry=plan[i],page=entry.page;linksByPage.push(links);
+ const svg=renderPDFPage(entry,data[page.id]||{},i+1,plan.length,watermarks,links);
  images.push(await bounded(imageBytes(svg),'This page could not render. Please try again.'));}const bytes=await C.pdfFromImages(images,lib,linksByPage),name=all?'SI-one-pagers.pdf':'SI-'+snapshot[0].shares.map(s=>s.symbol).join('-').replace(/[^A-Z0-9.-]/g,'-')+'.pdf';
  // Explicit links keep the generated file usable when a browser blocks automatic downloads.
  if(dirty){$('export-progress').textContent='Terms changed during export. Apply your changes and generate a new PDF.';return;}
