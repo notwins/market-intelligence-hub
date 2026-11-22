@@ -4,7 +4,17 @@ const settings={public_url:'https://notwins.github.io/market-intelligence-hub/bl
 if(window.HubBlueprintAccess){window.HubBlueprintAccess.refresh();return;}
 const make=owner=>{const a=document.createElement('a');a.href=owner?settings.owner_url:settings.public_url;a.target='_blank';a.rel='noopener noreferrer';a.dataset.blueprintLink=owner?'owner':'public';a.textContent=owner?'Owner Blueprint':'Blueprint';if(owner)a.title='Private owner blueprint · password required';return a;};
 let queued=false,customDialog,opener;
-function links(host){if(host.querySelector('[data-blueprint-settings]'))return;const section=document.createElement('section');section.dataset.blueprintSettings='';section.className='display-section bp-settings-links';const heading=document.createElement('h3');heading.textContent='Site tools';section.append(heading,make(false),make(true));host.append(section);}
+function links(host) {
+ window.HubNavigationStyle?.mountSettings(host);
+ if(host.querySelector('[data-blueprint-settings]'))return;
+ const section=document.createElement('section');
+ section.dataset.blueprintSettings='';
+ section.className='display-section bp-settings-links';
+ const heading=document.createElement('h3');
+ heading.textContent='Site tools';
+ section.append(heading,make(false),make(true));
+ host.append(section);
+}
 function open(button){opener=button;document.querySelector('#hub-sections[open]')?.close();customDialog.showModal();customDialog.querySelector('button').focus();}
 function refresh(){
  if(!document.body)return;
@@ -15,7 +25,8 @@ function refresh(){
  if(existing){document.querySelectorAll('[data-site-settings-open],.mih-blueprint-nav').forEach(n=>n.remove());if(customDialog){if(customDialog.open)customDialog.close();customDialog.remove();customDialog=null;}if(existing.querySelector('.display-heading'))links(existing);return;}
  const menu=document.querySelector('#hub-sections .more-grid,#more .more-grid');if(!menu)return;
  document.querySelectorAll('.mih-blueprint-nav').forEach(n=>n.remove());
- if(!customDialog){customDialog=document.createElement('dialog');customDialog.id='hub-site-settings';customDialog.setAttribute('aria-labelledby','hub-site-settings-title');customDialog.innerHTML='<header><h2 id="hub-site-settings-title">Settings</h2><button type="button" aria-label="Close settings">×</button></header>';links(customDialog);customDialog.querySelector('button').onclick=()=>customDialog.close();customDialog.addEventListener('close',()=>opener?.isConnected&&opener.focus({preventScroll:true}));document.body.append(customDialog);}
+ if(!customDialog){customDialog=document.createElement('dialog');customDialog.id='hub-site-settings';customDialog.setAttribute('aria-labelledby','hub-site-settings-title');customDialog.innerHTML='<header><h2 id="hub-site-settings-title">Settings</h2><button type="button" aria-label="Close settings">×</button></header>';customDialog.querySelector('button').onclick=()=>customDialog.close();customDialog.addEventListener('close',()=>opener?.isConnected&&opener.focus({preventScroll:true}));document.body.append(customDialog);}
+ links(customDialog);
  document.querySelectorAll('[data-site-settings-open]').forEach(n=>{if(n.parentElement!==menu)n.remove();});
  if(!menu.querySelector('[data-site-settings-open]')){const button=document.createElement('button');button.type='button';button.dataset.siteSettingsOpen='';button.textContent='Settings';button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls',customDialog.id);button.onclick=()=>open(button);menu.append(button);}
 }

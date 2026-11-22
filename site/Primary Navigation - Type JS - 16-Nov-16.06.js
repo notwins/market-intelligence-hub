@@ -2,6 +2,55 @@
 (() => {
   'use strict';
   if (document.documentElement.classList.contains('hub-primary-ready')) return;
+  const root = document.documentElement;
+  const styleKey = 'market-hub-navigation-style';
+  const styleLabels = {
+    en: ['Navigation style', 'Section colours', 'Professional · standard spacing'],
+    'zh-Hans': ['导航样式', '按栏目配色', '专业 · 标准间距'],
+    'zh-Hant': ['導覽樣式', '按欄目配色', '專業 · 標準間距']
+  };
+
+  function applyNavigationStyle(value) {
+    root.dataset.navStyle = value === 'professional' ? 'professional' : 'sections';
+    for (const picker of document.querySelectorAll('[data-nav-style-picker]')) picker.value = root.dataset.navStyle;
+  }
+
+  function setNavigationStyle(value) {
+    applyNavigationStyle(value);
+    try { localStorage.setItem(styleKey, root.dataset.navStyle); } catch { /* The setting still works on this page. */ }
+  }
+
+  let savedStyle;
+  try { savedStyle = localStorage.getItem(styleKey); } catch { /* Use the default when storage is unavailable. */ }
+  applyNavigationStyle(savedStyle);
+  window.addEventListener('storage', event => {
+    if (event.key === styleKey || event.key === null) applyNavigationStyle(event.newValue);
+  });
+  document.addEventListener('click', event => {
+    if (event.target.closest('#display-settings [data-display-reset]')) setNavigationStyle('sections');
+  }, true);
+
+  window.HubNavigationStyle = {
+    mountSettings(dialog) {
+      if (dialog.querySelector('[data-nav-style-picker]')) return;
+      const [title, sections, professional] = styleLabels[root.lang] ?? styleLabels.en;
+      const section = document.createElement('section');
+      section.className = 'display-section hub-navigation-style';
+      const label = document.createElement('label');
+      const picker = document.createElement('select');
+      picker.dataset.navStylePicker = '';
+      picker.add(new Option(sections, 'sections'));
+      picker.add(new Option(professional, 'professional'));
+      picker.value = root.dataset.navStyle;
+      picker.addEventListener('change', () => setNavigationStyle(picker.value));
+      label.append(document.createTextNode(title), picker);
+      section.append(label);
+      const anchor = dialog.querySelector('.display-intro, header');
+      if (anchor) anchor.after(section);
+      else dialog.prepend(section);
+    }
+  };
+
   const base = new URL('./', document.currentScript.src);
   const pagePath = location.pathname.slice(base.pathname.length);
   const credit = ['Bonds & credit', 'v4.html#credit', '▤'];
