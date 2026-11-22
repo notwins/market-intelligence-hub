@@ -134,3 +134,10 @@ html[data-display-mode=dark] .si-share,html[data-display-mode=dark] .si-currency
  .si-mobile-source .si-reference-link { display:inline-flex; align-items:center; min-height:24px; }
  .si-table-wrap .si-cell-note:is(.si-tenor-unit,.si-coupon-unit) { display:block; font-size:.73em; white-space:normal; }
 }
+
+.si-table-wrap table[data-tc-sized] .si-shares { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.si-table-wrap table[data-tc-sized] .si-share { white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+ .si-table-wrap table[data-tc-sized] .si-source-column { display: table-cell; }
+ .si-table-wrap table[data-tc-sized] .si-mobile-source { display: none; }
+}

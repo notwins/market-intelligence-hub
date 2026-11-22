@@ -370,7 +370,7 @@ function renderLibrary(){
  const q=$('library-search').value.trim().toLowerCase(),ccy=libraryQuick?libraryCurrency:($('library-currency')?.value||''),filtered=refs.filter(r=>(!libraryCompany||r.shares.includes(libraryCompany))&&(list!=='saved'||watch.includes(r.reference))&&(!ccy||ccy==='All'||r.currency===ccy)&&(!libraryQuick||libraryQuick.matches(r))&&[r.reference,...r.shares,r.source_date||'',...r.shares.map(s=>window.MarketPrices?.resolve(s)?.name||'')].join(' ').toLowerCase().includes(q));$('watch-count').textContent=watch.length;$('library-count').textContent=refs.length?`${filtered.length} of ${refs.length} historical records${list==='saved'?' · your SI watchlist':''}`:referenceLoading?'Loading saved SI references...':'Reference list unavailable. You can still create pages manually.';$('library-retry').hidden=!referenceError;mountLibraryQuick();
  $('library-rows').innerHTML=filtered.map(r=>{
   const step=referenceSteps[r.reference]??null;
-  return `<tr data-currency="${E(r.currency)}"><td><button class="star" data-star="${E(r.reference)}" aria-pressed="${watch.includes(r.reference)}" aria-label="${watch.includes(r.reference)?'Remove':'Save'} ${E(r.reference)} ${watch.includes(r.reference)?'from':'to'} SI watchlist">${watch.includes(r.reference)?'★':'☆'}</button></td>${referenceTable.cells(r,step,libraryShares(r))}<td><button data-add="${E(r.reference)}">＋ Add page</button></td></tr>`;
+  return `<tr data-currency="${E(r.currency)}" data-tc-company-codes="${E(r.shares.join(' '))}"><td><button class="star" data-star="${E(r.reference)}" aria-pressed="${watch.includes(r.reference)}" aria-label="${watch.includes(r.reference)?'Remove':'Save'} ${E(r.reference)} ${watch.includes(r.reference)?'from':'to'} SI watchlist">${watch.includes(r.reference)?'★':'☆'}</button></td>${referenceTable.cells(r,step,libraryShares(r))}<td><button data-add="${E(r.reference)}">＋ Add page</button></td></tr>`;
  }).join('')||'<tr><td colspan="11">'+(list==='saved'?'Save a reference with ☆ to build your SI watchlist.':'No matching references.')+'</td></tr>';
  openRequestedReference();
  if(libraryQuick)libraryQuick.sync(filtered.length);
@@ -423,6 +423,7 @@ quickHolder?.addEventListener('change',event=>{
 });
 quickHolder?.addEventListener('click',event=>{
  if(!libraryQuick||!event.target.closest('[data-si-b2-q-reset]'))return;
+ window.MarketTableControls?.clearCompanyFilters($('library-rows').closest('table'));
  libraryQuick.reset();libraryCurrency='All';clearLibraryCompany();$('library-search').value='';
  const currency=$(libraryQuick.id('si-currency'));if(currency)currency.value='All';renderLibrary();
 });

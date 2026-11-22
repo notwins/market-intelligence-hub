@@ -38,8 +38,32 @@ assert.deepEqual(qa('#defaults .tc-heat').map(c=>c.dataset.tcBand),['4','0']);
 click('#defaults [data-tc-button]');assert(q('#tc-heat').checked);
 change('#tc-heat',false);assert.equal(qa('#defaults .tc-heat').length,0);
 click('#tc-reset-table');assert(q('#tc-heat').checked);click('#tc-done');
-// Real SI renderer remains explicitly opted out; existing search and source notes survive.
-const payload=JSON.parse(fs.readFileSync('site/data/si-pricing-reference.json','utf8'));w.fetch=async()=>({ok:true,json:async()=>payload});w.eval(fs.readFileSync('site/si-beta2-core.js','utf8'));w.eval(fs.readFileSync('site/si-pricing.js','utf8'));w.MarketSI.connect(()=>{d.body.innerHTML=w.MarketSI.view();});await wait();await wait();const sourceRows=qa('#si-rows tr').length;assert(sourceRows>=225);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,0);assert(!q('.si-records').open);q('.si-records').open=true;
-input('#si-query','NVDA');await wait();assert(qa('#si-rows tr').length<sourceRows);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,0);assert(q('.si-notice').textContent.includes('unconfirmed source coupon basis and tenor units'));click('[data-si-reset]');await wait();assert.equal(qa('#si-rows tr').length,sourceRows);
+// SI action columns stay at the edges while the other headers offer widths.
+d.body.insertAdjacentHTML('beforeend','<table id="library" data-tc-companies="library"><thead><tr><th data-tc-skip>Save</th><th data-tc-company-column>Shares</th><th>Coupon</th><th data-tc-skip>Add</th></tr></thead><tbody><tr data-tc-company-codes="NVDA AMD"><td></td><td>NVDA / AMD</td><td>8%</td><td></td></tr><tr data-tc-company-codes="NVDX"><td></td><td>NVDX</td><td>9%</td><td></td></tr><tr data-tc-company-codes="AMD TSM"><td></td><td>AMD / TSM</td><td>10%</td><td></td></tr></tbody></table>');
+await wait();
+assert.equal(qa('#library [data-tc-button]').length,2);
+click('#library [data-tc-button]');
+assert(!q('#tc-layout').hidden);
+assert(q('[data-tc-move="-1"]').disabled);
+change('#tc-width','220');
+assert.equal(qa('#library col')[1].style.width,'220px');
+assert.equal(q('#tc-company-list').children.length,4);
+input('#tc-company-search','NVDA');
+assert.equal(q('#tc-company-list').children.length,1);
+change('#tc-company-all',false);
+assert.deepEqual(qa('#library tr.tc-filtered').map(row=>row.dataset.tcCompanyCodes),['NVDA AMD']);
+click('#tc-done');
+const library=q('#library');
+const replacement=library.cloneNode(true);
+replacement.querySelectorAll('[data-tc-ui]').forEach(node=>node.remove());
+library.replaceWith(replacement);
+await wait();
+assert.equal(qa('#library tr.tc-filtered').length,1);
+assert.equal(qa('#library col')[1].style.width,'220px');
+w.MarketTableControls.clearCompanyFilters(q('#library'));
+assert.equal(qa('#library tr.tc-filtered').length,0);
+// Real SI search, notes and the shared column controls can be used together.
+const payload=JSON.parse(fs.readFileSync('site/data/si-pricing-reference.json','utf8'));w.fetch=async()=>({ok:true,json:async()=>payload});w.eval(fs.readFileSync('site/si-beta2-core.js','utf8'));w.eval(fs.readFileSync('site/si-pricing.js','utf8'));w.MarketSI.connect(()=>{d.body.innerHTML=w.MarketSI.view();});await wait();await wait();const sourceRows=qa('#si-rows tr').length;assert(sourceRows>=225);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,11);q('.si-records').open=true;
+input('#si-query','NVDA');await wait();assert(qa('#si-rows tr').length<sourceRows);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,11);assert(q('.si-notice').textContent.includes('unconfirmed source coupon basis and tenor units'));click('[data-si-reset]');await wait();assert.equal(qa('#si-rows tr').length,sourceRows);
 assert.deepEqual(errors,[]);w.close();process.stdout.write('PASS DOM: sorting/reset and pre-existing aria-sort, filter combinations/literal input, stable heat bounds, font/focus, precise percent restoration, external ordering, body/header replacement, orphaned modal dismissal, group/total preservation, rowspan safety, control idempotency, rounded triangle, small/large article thresholds, clean unmount/remount, explicit ancestor opt-out and live SI renderer/filter integration\n');
 })().catch(error=>{process.stderr.write(error.stack+'\n');process.exit(1)});

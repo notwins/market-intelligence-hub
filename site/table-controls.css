@@ -45,3 +45,15 @@
 .tc-layout-actions label{margin:0;font-size:.85em}
 .tc-layout-actions input{display:block;width:88px;margin-top:4px}
 @media print{.tc-table [data-tc-grip]{display:none}.tc-table[data-tc-sized]{width:100%!important;min-width:0!important}}
+
+.tc-dialog #tc-company-filter { min-width: 0; margin: 14px 0; padding: 10px; border: 1px solid #d9e3e7; border-radius: 8px; }
+.tc-dialog #tc-company-filter legend { padding-inline: 5px; font-weight: 650; }
+.tc-dialog #tc-company-filter label { margin: 0; }
+.tc-company-tools { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-block: 8px; }
+.tc-company-tools #tc-company-count { font-size: .85em; }
+.tc-dialog #tc-company-list { max-height: min(12rem, 32dvh); overflow: auto; overscroll-behavior: contain; border: 1px solid #d9e3e7; border-radius: 6px; }
+.tc-dialog #tc-company-list:empty { display: none; }
+.tc-dialog #tc-company-list label { min-height: 36px; padding: 5px 8px; font-weight: 400; cursor: pointer; }
+.tc-dialog #tc-company-list label + label { border-top: 1px solid #e9eef3; }
+.tc-dialog #tc-company-list :focus-visible { outline-offset: 1px; }
+@media (pointer: coarse) { .tc-dialog #tc-company-list label { min-height: 44px; } }
