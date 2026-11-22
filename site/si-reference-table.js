@@ -23,6 +23,7 @@
   const fields = ['stocks', 'date', 'currency', 'tenor', 'coupon', 'ko', 'step', 'ki', 'strike'];
 
   function cells(row, step, basket) {
+    const stepDisplay = step == null ? '—' : `<span class="si-step-display" data-si-step-short="${step} pp">${step.toFixed(2)} pp</span>`;
     const bonus = C.isBonusEnhanced(row);
     const basis = row.coupon_basis === 'per_annum' ? 'screen' : bonus ? 'unconfirmed' : 'assumed';
     const barrier = (term, value) => `<td data-tc-value="${value}"><span class="si-term-value" data-si-barrier-band="${C.barrierBand(term, value)}">${value}%</span></td>`;
@@ -31,7 +32,7 @@
       <td>${E(row.currency)}</td>
       <td data-tc-value="${row.tenor_source_value}">${row.tenor_source_value}<small>months</small></td>
       <td data-tc-value="${row.coupon_pct}"><strong class="si-term-value" data-si-coupon-band="${C.referenceCouponBand(row)}">${row.coupon_pct}%</strong><small data-si-coupon-basis="${basis}"${bonus ? ' data-si-bonus' : ''}>${E(C.referenceCouponLabel(row))}</small></td>
-      ${barrier('ko', row.ko_pct)}<td data-tc-value="${step ?? ''}">${step == null ? '—' : step.toFixed(2) + ' pp'}</td>${barrier('ki', row.ki_pct)}${barrier('strike', row.strike_pct)}`;
+      ${barrier('ko', row.ko_pct)}<td data-tc-value="${step ?? ''}">${stepDisplay}</td>${barrier('ki', row.ki_pct)}${barrier('strike', row.strike_pct)}`;
   }
 
   function basket(row, logos) {
