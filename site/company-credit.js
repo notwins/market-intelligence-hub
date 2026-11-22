@@ -77,6 +77,16 @@
     }).sort((a, b) => b.report_date.localeCompare(a.report_date));
   }
 
+  let defaultRequest;
+  function loadPreloaded() {
+    return defaultRequest ??= (async () => {
+      const response = await root.fetch(defaultUrl, { signal: AbortSignal.timeout(10000) });
+      if (!response.ok) throw new Error('Credit reports are unavailable.');
+      const text = await response.text();
+      return { text, rows: parse(text) };
+    })().catch(error => { defaultRequest = undefined; throw error; });
+  }
+
   let dataRequest;
   async function loadData() {
     return dataRequest ??= (async () => {
@@ -84,9 +94,7 @@
         const saved = root.localStorage?.getItem(storageKey);
         if (saved) return parse(saved);
       } catch { /* Fall back to the preloaded reports. */ }
-      const response = await root.fetch(defaultUrl, { signal: AbortSignal.timeout(10000) });
-      if (!response.ok) throw new Error('Credit reports are unavailable.');
-      return parse(await response.text());
+      return (await loadPreloaded()).rows;
     })().catch(error => { dataRequest = null; throw error; });
   }
   const dataApi = { parse, load: loadData, forListing: (rows, ticker) =>
@@ -94,35 +102,31 @@
   root.CompanyCreditData = dataApi;
   if (typeof module !== 'undefined') module.exports = dataApi;
   const doc = root.document;
-  const library = doc?.querySelector('[data-credit-library]');
-  if (!library) return;
-  library.innerHTML = `<details class="credit-panel">
-    <summary>Credit reports</summary>
-    <p>Browse dated credit summaries here and on matching stock cards. You can also load your own CSV.</p>
-    <div class="credit-actions">
-      <label>Load credit report CSV <input type="file" accept=".csv,text/csv" data-credit-file></label>
-      <label><input type="checkbox" data-credit-remember disabled> Remember imported CSV in this browser</label>
-      <button type="button" data-credit-download hidden>Download CSV</button>
-      <button type="button" data-credit-clear hidden>Use preloaded reports</button>
-      <button type="button" data-credit-retry hidden>Retry loading reports</button>
-    </div>
-    <p role="status" data-credit-status></p>
-    <div data-credit-reports></div>
-  </details>`;
-
-  const file = library.querySelector('[data-credit-file]');
-  const remember = library.querySelector('[data-credit-remember]');
-  const download = library.querySelector('[data-credit-download]');
-  const clear = library.querySelector('[data-credit-clear]');
-  const retry = library.querySelector('[data-credit-retry]');
-  const status = library.querySelector('[data-credit-status]');
-  const reportList = library.querySelector('[data-credit-reports]');
-  let csv = '';
-  let reports = [];
-  let byListing = new Map();
-  let imported = false;
-  let defaultRequest;
+  if (!doc) return;
   const dateFormat = new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeZone: 'UTC' });
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  })[character]);
+
+  function equityLink(equity) {
+    let source;
+    try {
+      const url = new URL(equity?.url);
+      if (url.origin === 'https://productgroup.bankofsingapore.com' && !url.username && !url.password) source = url;
+    } catch { /* There is no verified publisher link for this listing. */ }
+    return source
+      ? `<p><a href="${escape(source.href)}" target="_blank" rel="noopener noreferrer">Open BOS-hosted equity report ↗</a>${equity.note ? `<small>${escape(equity.note)}</small>` : ''}</p>`
+      : '';
+  }
+
+  function researchPair(ticker, equity) {
+    const evidence = equityLink(equity) || `<p data-bos-equity-fallback="${escape(ticker)}">No verified BOS equity report is available for this listing.</p>`;
+    return `<div class="company-research-pair"><details class="credit-card company-equity"><summary>BOS Equity Research</summary>${evidence}</details><div data-credit-listing="${escape(ticker)}" data-credit-availability></div></div>`;
+  }
+
+  function exportLink() {
+    return `<a href="${defaultUrl}" target="_blank" rel="noopener noreferrer">Download credit summaries CSV</a>`;
+  }
 
   function make(tag, text, className) {
     const element = doc.createElement(tag);
@@ -154,14 +158,91 @@
     return detail;
   }
 
+  function paintListing(slot, matches, message = 'No verified full credit report is available for this listing.') {
+    slot.replaceChildren();
+    if (!matches.length && !slot.hasAttribute('data-credit-availability')) return;
+    const detail = make('details', '', 'credit-card');
+    const label = matches.length ? `Credit Research (${matches.length})` : 'Credit Research';
+    detail.append(make('summary', label));
+    if (matches.length) detail.append(...matches.map(row => report(row, false)));
+    else detail.append(make('p', message, 'credit-context'));
+    slot.append(detail);
+  }
+
+  const library = doc?.querySelector('[data-credit-library]');
+  if (!library) {
+    const painted = new WeakMap();
+    let briefsRequest;
+    function paintEquityLinks(container) {
+      const slots = [...(container?.querySelectorAll('[data-bos-equity-fallback]') || [])];
+      const listings = root.BOSEquity?.reviewedListings || [];
+      const matches = slots.map(slot => ({
+        slot, listing: listings.find(row => row.verified && row.ticker === slot.dataset.bosEquityFallback)
+      })).filter(({ listing }) => listing);
+      if (!matches.length) return;
+      briefsRequest ??= root.fetch('data/stocks-beta2-research-briefs.json', { signal: AbortSignal.timeout(10000) })
+        .then(response => {
+          if (!response.ok) throw Error('Equity research unavailable');
+          return response.json();
+        }).catch(() => { briefsRequest = undefined; return null; });
+      briefsRequest.then(data => {
+        for (const { slot, listing } of matches) {
+          const brief = data?.briefs?.[listing.instrumentId];
+          if (!slot.isConnected || !brief) continue;
+          const date = new Date(brief.date + 'T00:00:00Z');
+          const note = [brief.provider, Number.isFinite(+date) && dateFormat.format(date)].filter(Boolean).join(' · ');
+          const link = equityLink({ url: brief.source, note });
+          if (link) slot.outerHTML = link;
+        }
+      });
+    }
+    function paintCards(container) {
+      paintEquityLinks(container);
+      const slots = [...(container?.querySelectorAll('[data-credit-listing]') || [])];
+      if (!slots.length) return;
+      loadPreloaded().then(({ rows }) => {
+        for (const slot of slots) {
+          if (!slot.isConnected || painted.get(slot) === rows) continue;
+          paintListing(slot, dataApi.forListing(rows, slot.dataset.creditListing));
+          painted.set(slot, rows);
+        }
+      }).catch(() => {
+        for (const slot of slots) {
+          if (slot.isConnected && !painted.has(slot)) paintListing(slot, [], 'Credit summaries could not load.');
+        }
+      });
+    }
+    root.CompanyCredit = { researchPair, exportLink, paintCards };
+    return;
+  }
+  library.innerHTML = `<details class="credit-panel">
+    <summary>Credit reports</summary>
+    <p>Browse dated credit summaries here and on matching stock cards. You can also load your own CSV.</p>
+    <div class="credit-actions">
+      <label>Load credit report CSV <input type="file" accept=".csv,text/csv" data-credit-file></label>
+      <label><input type="checkbox" data-credit-remember disabled> Remember imported CSV in this browser</label>
+      <button type="button" data-credit-download hidden>Download CSV</button>
+      <button type="button" data-credit-clear hidden>Use preloaded reports</button>
+      <button type="button" data-credit-retry hidden>Retry loading reports</button>
+    </div>
+    <p role="status" data-credit-status></p>
+    <div data-credit-reports></div>
+  </details>`;
+
+  const file = library.querySelector('[data-credit-file]');
+  const remember = library.querySelector('[data-credit-remember]');
+  const download = library.querySelector('[data-credit-download]');
+  const clear = library.querySelector('[data-credit-clear]');
+  const retry = library.querySelector('[data-credit-retry]');
+  const status = library.querySelector('[data-credit-status]');
+  const reportList = library.querySelector('[data-credit-reports]');
+  let csv = '';
+  let reports = [];
+  let byListing = new Map();
+  let imported = false;
   function paintCard(slot) {
     const matches = byListing.get(listingKey(slot.dataset.creditListing)) || [];
-    slot.replaceChildren();
-    if (matches.length) {
-      const detail = make('details', '', 'credit-card');
-      detail.append(make('summary', `Credit reports (${matches.length})`), ...matches.map(row => report(row, false)));
-      slot.append(detail);
-    }
+    paintListing(slot, matches);
   }
 
   function paintCards(container) {
@@ -189,14 +270,8 @@
   async function loadDefaults() {
     status.textContent = 'Loading credit reports…';
     retry.hidden = true;
-    defaultRequest ??= (async () => {
-      const response = await fetch(defaultUrl, { signal: AbortSignal.timeout(10000) });
-      if (!response.ok) throw new Error('Credit reports are unavailable.');
-      const text = await response.text();
-      return { text, rows: parse(text) };
-    })().catch(error => { defaultRequest = undefined; throw error; });
     try {
-      const { text, rows } = await defaultRequest;
+      const { text, rows } = await loadPreloaded();
       if (imported) return;
       show(text, rows);
       status.textContent = `${rows.length} credit summaries loaded.`;
@@ -259,7 +334,7 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 
-  root.CompanyCredit = { paintCard, paintCards };
+  root.CompanyCredit = { researchPair, exportLink, paintCard, paintCards };
   try {
     const saved = root.localStorage.getItem(storageKey);
     if (saved) {
