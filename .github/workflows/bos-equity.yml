@@ -51,3 +51,55 @@ jobs:
           --feed-dir feed --archive-dir private-archive
           --work-dir "${{ runner.temp }}/bos-run"
       # Never upload PDFs, full extraction or private receipts as public artifacts.
+
+  publisher-links:
+    name: Refresh publisher PDF links (data only)
+    needs: refresh
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          path: code
+          sparse-checkout: scripts
+      - uses: actions/checkout@v6
+        with:
+          ref: market-prices
+          path: feed
+          sparse-checkout: |
+            bos
+            publisher-documents
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pdfplumber==0.11.9 pypdf==6.21.4
+      - working-directory: code
+        run: python -m unittest discover -s scripts -p test_bos_documents.py
+      - name: Verify source links and publish changed metadata
+        working-directory: feed
+        shell: bash
+        run: |
+          set -euo pipefail
+          file=publisher-documents/latest.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for attempt in 1 2 3; do
+            git fetch --depth=1 origin market-prices
+            git checkout --detach FETCH_HEAD
+            python ../code/scripts/update_bos_documents.py --feed-dir .
+            git add -- "$file"
+            if git diff --cached --quiet; then
+              echo "Publisher links match the data branch."
+              exit 0
+            fi
+            test "$(git diff --cached --name-only)" = "$file"
+            git commit -m 'Refresh BOS and OCBC publisher document links'
+            if git push origin HEAD:refs/heads/market-prices; then
+              git fetch --depth=1 origin market-prices
+              git show "FETCH_HEAD:$file" | cmp - "$file"
+              exit 0
+            fi
+          done
+          exit 1
