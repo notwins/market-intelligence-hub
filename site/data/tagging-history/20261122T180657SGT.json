@@ -1,0 +1,522 @@
+{
+  "schema": 1,
+  "id": "20261122T180657SGT",
+  "checkedAt": "2026-11-22T18:06:57+08:00",
+  "sources": {
+    "hub": "90d2cb2deffb4b16872ceaff411acc1771593d83",
+    "content": "3a3652722ead827809c7de3e958f13885d0682de"
+  },
+  "baseline": "20261122T092044SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 262,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 7,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 190,
+      "changed": 10,
+      "tags": 10,
+      "colour": 10,
+      "logos": 1
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261116-UNICREDIT-COMMERZBANK-EU-US-APPROVAL",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Commerzbank raises expected 2026 net profit to EUR3.5bn as retained takeover story advances",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "event.mergers_acquisitions",
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.ucg_mi",
+          "event.guidance_change",
+          "event.mergers_acquisitions",
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "event.mergers_acquisitions",
+          "light": "#86198F",
+          "dark": "#F0ABFC",
+          "chips": {
+            "company.ucg_mi": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "event.guidance_change": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-BAYER-ROUNDUP-725BN-SETTLEMENT-COURT-APPROVAL",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Missouri court approves Bayer’s US$7.25bn Roundup settlement; some cases remain",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.regulatory_legal_decision"
+        ],
+        "colour": {
+          "tag": "event.regulatory_legal_decision",
+          "light": "#7E22CE",
+          "dark": "#D8B4FE",
+          "chips": {
+            "event.regulatory_legal_decision": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-CITI-EUROPEAN-TRADING-RWA-35BN-ERROR",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Citigroup reportedly understated European trading-unit risk-weighted assets by US$35bn",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.financials_banking",
+          "ticker.citigroup_c"
+        ],
+        "colour": {
+          "tag": "sector.financials_banking",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "ticker.citigroup_c": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": [
+          "C"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-BAHRAIN-IRAN-AERIAL-ATTACK-INDUSTRIAL-FIRE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Bahrain reports industrial-facility fire after Iranian attack; no injuries reported",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.oil_crude",
+          "sector.defence_aerospace"
+        ],
+        "colour": {
+          "tag": "sector.defence_aerospace",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "asset.oil_crude": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            },
+            "sector.defence_aerospace": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-BALTIC-SPARTA-II-DRONE-FIRE-FINLAND",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Sparta II fire reaches Finnish waters; crew evacuates and temporary restrictions follow",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia",
+          "geo.ukraine",
+          "sector.transport_logistics"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "sector.transport_logistics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-COP31-OVERTIME-NO-DEAL-RISK",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "COP31 revised text moves toward an approval session; final adoption remains unconfirmed",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.australia"
+        ],
+        "colour": {
+          "tag": "geo.australia",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "geo.australia": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-GERMANY-IGMETALL-23K-STRIKE-EXPANSION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "IG Metall plans a Monday 24-hour walkout for 23,000 workers at 19 companies",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261121-UN-AUTONOMOUS-WEAPONS-2028-TALKS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "UN talks set a path toward possible autonomous-weapons rules by 2028; no binding ban adopted",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.global_cross_border",
+          "geo.russia",
+          "geo.united_states",
+          "sector.defence_aerospace"
+        ],
+        "colour": {
+          "tag": "geo.united_states",
+          "light": "#1D4ED8",
+          "dark": "#93C5FD",
+          "chips": {
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.united_states": {
+              "text": "#1D4ED8",
+              "background": "#EFF6FF",
+              "dark_text": "#93C5FD",
+              "dark_background": "#172554"
+            },
+            "sector.defence_aerospace": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-AUSTRALIA-AUKUS-CBO-SUBMARINE-FLEET-DISPUTE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Australia disputes US budget office warning over AUKUS submarine transfers",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.australia",
+          "geo.united_kingdom",
+          "geo.united_states",
+          "sector.defence_aerospace"
+        ],
+        "colour": {
+          "tag": "geo.australia",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "geo.australia": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "geo.united_kingdom": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "sector.defence_aerospace": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261122-CHINA-FCC-US-TELECOM-NUMBER-BAN-OPPOSITION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "China opposes US phone-number restriction on Chinese telecom firms; warns of countermeasures",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "geo.united_states"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
