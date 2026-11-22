@@ -423,7 +423,7 @@ quickHolder?.addEventListener('change',event=>{
 });
 quickHolder?.addEventListener('click',event=>{
  if(!libraryQuick||!event.target.closest('[data-si-b2-q-reset]'))return;
- window.MarketTableControls?.clearCompanyFilters($('library-rows').closest('table'));
+ window.MarketTableControls?.clearSiFilters($('library-rows').closest('table'));
  libraryQuick.reset();libraryCurrency='All';clearLibraryCompany();$('library-search').value='';
  const currency=$(libraryQuick.id('si-currency'));if(currency)currency.value='All';renderLibrary();
 });

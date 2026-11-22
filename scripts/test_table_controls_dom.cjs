@@ -60,8 +60,30 @@ library.replaceWith(replacement);
 await wait();
 assert.equal(qa('#library tr.tc-filtered').length,1);
 assert.equal(qa('#library col')[1].style.width,'220px');
-w.MarketTableControls.clearCompanyFilters(q('#library'));
+w.MarketTableControls.clearSiFilters(q('#library'));
 assert.equal(qa('#library tr.tc-filtered').length,0);
+// Numeric cutoffs are strict, and secondary sorts run only within primary ties.
+const terms=[
+ ['A','NVDA AMD',10,79,79,92],['B','NVDA',10,80,79,99],['C','TSM',10,79,80,99],
+ ['D','MSFT',10,70,75,98],['E','MSFT',8,70,75,100],['F','AMD NVDA',10,70,77,95],
+];
+const termHeaders=['stocks','coupon','ki','strike','ko'];
+d.body.insertAdjacentHTML('beforeend','<div id="organize-case"><table data-tc-companies="organize-case"><thead><tr>'+termHeaders.map(field=>'<th data-tc-field="'+field+'">'+field+'</th>').join('')+'</tr></thead><tbody>'+terms.map(([id,shares,...values])=>'<tr id="term-'+id+'" data-tc-company-codes="'+shares+'"><td>'+shares+'</td>'+values.map(value=>'<td>'+value+'%</td>').join('')+'</tr>').join('')+'</tbody></table></div>');
+await wait();
+const shown=()=>qa('#organize-case tbody tr[data-tc-company-codes]:not(.tc-filtered)').map(row=>row.id.at(-1));
+const applyOrganizer=()=>q('.tc-organizer form').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));
+click('#organize-case .tc-organize-button');
+change('#tc-group-by','coupon');change('#tc-ki-below','80');change('#tc-strike-below','80');
+change('.tc-sort-level [data-tc-level-field]','1');click('#tc-add-level');
+change('.tc-sort-level:last-child [data-tc-level-field]','4');applyOrganizer();
+assert.deepEqual(shown(),['D','F','A','E']);
+assert.deepEqual(qa('#organize-case [data-tc-group-heading]').map(row=>row.textContent),['Coupon 10% · 3','Coupon 8% · 1']);
+click('#organize-case .tc-organize-button');change('#tc-group-by','shares');applyOrganizer();
+assert(qa('#organize-case [data-tc-group-heading]').some(row=>row.textContent==='AMD / NVDA · 2'));
+assert.equal(qa('#organize-case tbody tr.tc-filtered').length,2);
+click('#organize-case .tc-organize-button');click('#tc-organizer-reset');
+assert.deepEqual(shown(),['A','B','C','D','E','F']);
+assert.equal(qa('#organize-case [data-tc-group-heading]').length,0);
 // Real SI search, notes and the shared column controls can be used together.
 const payload=JSON.parse(fs.readFileSync('site/data/si-pricing-reference.json','utf8'));w.fetch=async()=>({ok:true,json:async()=>payload});w.eval(fs.readFileSync('site/si-beta2-core.js','utf8'));w.eval(fs.readFileSync('site/si-pricing.js','utf8'));w.MarketSI.connect(()=>{d.body.innerHTML=w.MarketSI.view();});await wait();await wait();const sourceRows=qa('#si-rows tr').length;assert(sourceRows>=225);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,11);q('.si-records').open=true;
 input('#si-query','NVDA');await wait();assert(qa('#si-rows tr').length<sourceRows);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,11);assert(q('.si-notice').textContent.includes('unconfirmed source coupon basis and tenor units'));click('[data-si-reset]');await wait();assert.equal(qa('#si-rows tr').length,sourceRows);
