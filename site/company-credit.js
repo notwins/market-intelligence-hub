@@ -11,7 +11,7 @@
   const listingKey = value => value.trim().toUpperCase();
   const maxBytes = 1024 * 1024;
   const storageKey = 'market-intel-company-credit-v1';
-  const defaultUrl = 'https://notwins.github.io/market-intelligence-content/data/company-credit-summaries-2026-11-22-r5.csv';
+  const defaultUrl = 'https://notwins.github.io/market-intelligence-content/data/company-credit-summaries-2026-11-22-r6.csv';
 
   function readCsv(text) {
     text = text.replace(/^\ufeff/, '');
