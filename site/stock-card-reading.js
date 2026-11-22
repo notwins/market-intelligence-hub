@@ -95,13 +95,18 @@
       </li>`).join('')}</ul>`;
   }
 
-  function earnings(ticker, result, bundle, { includeSource = false } = {}) {
+  function earnings(ticker, result, bundle, { includeSource = false, compact = false } = {}) {
     const { company, observations } = result;
     const latest = observations[0];
     const heading = '<h3>Earnings &amp; company explanation</h3>';
     if (!company) return `<section class="sb-section">${heading}
       <p class="sb-empty">${bundle.earnings ? 'Issuer earnings and takeaways have not been indexed for this exact listing.'
         : 'Issuer earnings could not load.'}</p></section>`;
+    const figures = compact ? root.FinancialDisplay : null;
+    const revenue = observations.map(row => Number.isFinite(row.revenue_usd_bn) ? row.revenue_usd_bn * 1e9 : null);
+    const scale = figures?.scaleFor(revenue);
+    const changes = figures?.quarterChanges(observations.map(row =>
+      row.period.replace(/^FY(\d{4}) (Q[1-4])$/, '$2 $1').replace(/\bFY(?=\d{4}$)/, '')), revenue);
     return `<section class="sb-section">${heading}
       <p class="sb-meta">${escape(latest?.period)} · issuer release ${day(latest?.report_date)} · ${escape(company.eps_basis)}</p>
       ${takeaways(company.takeaways)}
@@ -111,10 +116,12 @@
         <div><p class="sb-note">${escape(company.coverage)} Period ends and source publication dates are separate. Missing dates remain unavailable.</p>
           <div class="sb-table-wrap" tabindex="0" role="region" aria-label="${escape(ticker)} earnings actuals">
             <table data-tc-layout="stock-earnings">
-              <caption>Revenue in US$bn · EPS basis: ${escape(company.eps_basis)}</caption>
-              <thead><tr><th>Fiscal period / end</th><th>Revenue</th><th>EPS</th><th>Release / evidence</th></tr></thead>
-              <tbody>${observations.map(row => `<tr><th>${escape(row.period)}<small>${day(row.period_end)}</small></th>
-                <td>${num(row.revenue_usd_bn, 3)}</td><td>${num(row.eps)}</td>
+              <caption>Revenue in US$${figures ? ' ' + escape(figures.unit(scale)) : 'bn'} · EPS basis: ${escape(company.eps_basis)}</caption>
+              <thead><tr><th>Fiscal period / end</th><th>Revenue</th>${figures ? '<th>Revenue QoQ</th>' : ''}<th>EPS</th><th>Release / evidence</th></tr></thead>
+              <tbody>${observations.map((row, i) => `<tr><th>${escape(row.period)}<small>${day(row.period_end)}</small></th>
+                <td${figures && revenue[i] !== null ? ` title="${escape(row.revenue_usd_bn)} USD bn" data-tc-value="${revenue[i]}"` : ''}>${figures ? figures.amount(revenue[i], scale) : num(row.revenue_usd_bn, 3)}</td>
+                ${figures ? `<td class="fund-change-value" data-direction="${figures.direction(changes[i])}">${figures.changeText(changes[i])}</td>` : ''}
+                <td>${figures ? figures.quote(row.eps) : num(row.eps)}</td>
                 <td>${day(row.report_date)}<small>${escape(row.evidence_basis)}</small>
                   ${link(row.source_details?.url, row.source_details?.title || 'Source')}</td></tr>`).join('')}
               </tbody>

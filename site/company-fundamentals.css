@@ -197,3 +197,11 @@ market-fundamentals:empty { display: none; }
 .fund-table thead .fund-ttm { background: #534771; }
 .fund-table .fund-negative { color: #9f2c4b; }
 .fund-table .fund-missing { color: #728592; }
+.fund-table tr.fund-growth { --fund-cell: #edf5f5; font-weight: 700; }
+.fund-display-unit {
+  display: inline-block;
+  margin-inline-start: .45rem;
+  color: #40576a;
+  font-weight: 500;
+  white-space: nowrap;
+}

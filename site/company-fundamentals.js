@@ -19,6 +19,7 @@
   const currency = value => /^(GBX|GBp)$/.test(value) ? 'GBP' : value;
   const fields = ['bbTicker', 'instrumentId', 'ticker', 'publicTicker', 'symbol', 'id'];
   const doc = root.document;
+  const figures = root.FinancialDisplay || (typeof module !== 'undefined' ? require('./financial-display.js') : null);
   let directoryRequest, databaseRequest, loadRequest, researchRequest, memory, online;
   let privateSnapshotRequest;
   const privateArchiveUrl = 'https://market-intel-fundamentals-vault.vercel.app/statements.bin';
@@ -287,14 +288,21 @@
       + (compareYears ? ' data-compare-years' : '') + '></market-fundamentals>';
   }
 
-  function unit(label, report) {
+  function unit(label, report, values = []) {
     if (/per share|\b(?:EPS|DPS)\b/i.test(label)) return { scale: 1, text: 'per share' };
+    if (report.compact) {
+      const scale = figures.scaleFor(values);
+      const marker = figures.unit(scale);
+      const qualifier = /shares outstanding|weighted average shares/i.test(label) ? 'shares' : report.currency;
+      return { scale, text: [qualifier, marker].filter(Boolean).join(' ') };
+    }
     if (/shares outstanding|weighted average shares/i.test(label)) return { scale: 1e6, text: 'million shares' };
     return { scale: 1e6, text: report.currency ? report.currency + ' millions' : 'Millions of reported units' };
   }
 
   const number = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2 });
   const valueText = (value, scale) => value === null ? '—' : number.format(value / scale);
+  const reportValue = (value, scale, report) => report.compact ? figures.amount(value, scale) : valueText(value, scale);
 
   function periods(report) {
     const rank = label => {
@@ -333,10 +341,17 @@
     'cash and cash equivalents, end of period',
   ]);
 
-  function table(report, layout, grouped = false) {
+  function table(report, layout, grouped = false, quarterly = false) {
     const columns = periods(report);
     const outline = grouped ? statementHierarchy(report.rows) : [];
     const controls = grouped ? tableControls(outline.some(row => row.expandable)) : '';
+    const growthRows = new Map();
+    if (report.compact && quarterly && layout === 'income') {
+      for (const [label, pattern] of [['Revenue', figures.revenue], ['Net income', figures.netIncome]]) {
+        const index = report.rows.findIndex(([, name, values]) => pattern.test(name) && values.some(Number.isFinite));
+        if (index >= 0) growthRows.set(index, { label, changes: figures.quarterChanges(report.periods, report.rows[index][2]) });
+      }
+    }
     return controls + '<div class="fund-table-wrap" role="region" aria-label="Financial statement table" tabindex="0"'
       + (grouped ? ' data-fund-resizable' : '') + '><table class="fund-table"'
       + (layout ? ' data-tc-layout="annual-statement-' + esc(layout) + '" data-tc-fixed-rows' : '')
@@ -347,7 +362,7 @@
       + report.rows.map(([depth, label, values], index) => {
         const parent = report.rows[index + 1]?.[0] > depth;
         const rowClass = depth === 0 ? 'fund-group' : parent || /^(?:Total|Net)\b/.test(label) ? 'fund-subtotal' : '';
-        const { scale } = unit(label, report);
+        const { scale, text } = unit(label, report, values);
         const available = values.some(Number.isFinite);
         const keyTotal = available && keyStatementTotals.has(label.toLowerCase());
         const entry = outline[index];
@@ -358,23 +373,37 @@
           : esc(label);
         const treeAttrs = entry ? ' data-fund-index="' + index + '"'
           + (entry.parent == null ? '' : ' data-fund-parent="' + entry.parent + '" hidden') : '';
-        return '<tr class="' + rowClass + '" style="--fund-depth:' + Math.min(depth, 5) + '"'
+        const metric = '<tr class="' + rowClass + '" style="--fund-depth:' + Math.min(depth, 5) + '"'
           + (keyTotal ? ' data-fund-key-total' : '') + treeAttrs + '>'
           + '<th scope="row">' + (toggle ? '<div class="fund-line-label">' + toggle + '<span>' + labelHtml + '</span></div>' : labelHtml)
+          + (report.compact && available ? '<small class="fund-display-unit">' + esc(text) + '</small>' : '')
           + '</th>' + columns.map(({ index: column, label: period }) => {
             const value = values[column];
             const classes = [period === 'TTM' ? 'fund-ttm' : '', value === null ? 'fund-missing' : value < 0 ? 'fund-negative' : ''];
-            return '<td class="' + classes.join(' ') + '"' + (value === null ? ' aria-label="Unavailable"' : ' title="' + esc(value) + '"')
-              + '>' + esc(valueText(value, scale)) + '</td>';
+            return '<td class="' + classes.join(' ') + '"' + (value === null ? ' aria-label="Unavailable"' :
+              ' title="' + esc(value) + '"' + (report.compact ? ' data-tc-value="' + esc(value) + '"' : ''))
+              + '>' + esc(reportValue(value, scale, report)) + '</td>';
+          }).join('') + '</tr>';
+        const growth = growthRows.get(index);
+        if (!growth) return metric;
+        const growthAttrs = grouped ? ' data-fund-index="qoq-' + index + '"'
+          + (entry?.parent == null ? '' : ' data-fund-parent="' + entry.parent + '" hidden') : '';
+        return metric + '<tr class="fund-growth" style="--fund-depth:' + Math.min(depth + 1, 5) + '"' + growthAttrs + '>'
+          + '<th scope="row">' + esc(growth.label) + ' QoQ</th>'
+          + columns.map(({ index: column, label: period }) => {
+            const change = growth.changes[column];
+            if (change === null) return '<td class="fund-missing' + (period === 'TTM' ? ' fund-ttm' : '') + '" aria-label="Unavailable">—</td>';
+            return '<td class="fund-change-value" data-direction="' + figures.direction(change)
+              + '" data-tc-value="' + esc(change) + '">' + esc(figures.changeText(change)) + '</td>';
           }).join('') + '</tr>';
       }).join('') + '</tbody></table></div>';
   }
 
   function chart(report, index) {
     const [, label, values] = report.rows[index];
-    const { scale, text } = unit(label, report);
     const series = periods(report).filter(p => p.label !== 'TTM').reverse();
     const available = series.map(p => values[p.index]).filter(Number.isFinite);
+    const { scale, text } = unit(label, report, values);
     if (!available.length) return '<p class="fund-note">No reported periods for this line.</p>';
     const min = Math.min(0, ...available);
     const max = Math.max(0, ...available);
@@ -387,7 +416,7 @@
         const value = values[column];
         const height = Math.abs(value ?? 0) / range * 100;
         const offset = value < 0 ? baseline - height : baseline;
-        const full = year + ' · ' + (value === null ? 'Unavailable' : valueText(value, scale) + ' ' + text);
+        const full = year + ' · ' + (value === null ? 'Unavailable' : reportValue(value, scale, report) + ' ' + text);
         return '<div class="fund-year" title="' + esc(full) + '" aria-label="' + esc(full) + '" role="img"><div>'
           + (value === null ? '<i class="fund-gap"></i>'
             : '<i class="' + (value < 0 ? 'fund-down' : '') + '" style="--fund-offset:' + offset.toFixed(4)
@@ -510,9 +539,11 @@
     if (!bars.length) return '<p class="fund-note">No reported values for the summary chart in this period.</p>';
     const scale = barScale(bars);
     const { low, high, position, zero } = scale;
-    const label = value => valueText(value, 1e6);
+    const displayScale = report.compact ? figures.scaleFor([low, high]) : 1e6;
+    const label = value => reportValue(value, displayScale, report);
     const ticks = low === high ? [0] : [low, ...(zero >= .15 && zero <= .85 ? [0] : []), high];
-    const units = report.currency ? report.currency + ' millions' : 'Millions of reported units';
+    const units = report.compact ? [report.currency, figures.unit(displayScale)].filter(Boolean).join(' ')
+      : report.currency ? report.currency + ' millions' : 'Millions of reported units';
     return '<figure class="fund-breakdown-figure" style="--fund-baseline:' + position(0) + '">'
       + '<figcaption><strong>' + esc(view.title) + '</strong><span>' + esc(units) + '</span></figcaption>'
       + view.lanes.map(row => '<div class="fund-bar-row"><div class="fund-bar-label"><span>' + esc(row.label)
@@ -530,13 +561,15 @@
 
   const signedChange = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 2, signDisplay: 'exceptZero' });
 
-  function changeLabel(series) {
+  function changeLabel(series, displayScale = 1e6, compact = false) {
     const reported = series.filter(({ amount }) => Number.isFinite(amount));
     if (reported.length < 2) return '<span class="fund-missing" aria-label="Two reported periods needed">—</span>';
     const oldest = reported[0], latest = reported.at(-1);
-    const change = (latest.amount - oldest.amount) / 1e6;
+    const amount = latest.amount - oldest.amount;
+    const change = amount / displayScale;
     const direction = change > 0 ? 'increase' : change < 0 ? 'decrease' : 'flat';
-    const label = change && Math.abs(change) < .005 ? (change > 0 ? '+' : '−') + '<0.01' : signedChange.format(change);
+    const label = compact ? (change > 0 ? '+' : change < 0 ? '−' : '') + figures.amount(Math.abs(amount), displayScale)
+      : change && Math.abs(change) < .005 ? (change > 0 ? '+' : '−') + '<0.01' : signedChange.format(change);
     return '<span class="fund-change-value" data-direction="' + direction + '" title="'
       + esc(latest.year) + ' minus ' + esc(oldest.year) + '">' + esc(label) + '</span>';
   }
@@ -568,8 +601,10 @@
     const bars = panels.filter(panel => panel.available).flatMap(({ view }) =>
       view.lanes.flatMap(row => row.bars).filter(segment => Number.isFinite(segment.amount)));
     const scale = barScale(bars);
-    const units = report.currency ? report.currency + ' millions' : 'Millions of reported units';
-    const numberLabel = amount => esc(valueText(amount, 1e6));
+    const displayScale = report.compact ? figures.scaleFor([scale.low, scale.high]) : 1e6;
+    const units = report.compact ? [report.currency, figures.unit(displayScale)].filter(Boolean).join(' ')
+      : report.currency ? report.currency + ' millions' : 'Millions of reported units';
+    const numberLabel = amount => esc(reportValue(amount, displayScale, report));
     const legend = [...new Map(bars.map(segment => [segment.label, segment.colour]))];
     return '<figure class="fund-breakdown fund-comparison" style="--fund-baseline:' + scale.position(0) + '">'
       + '<figcaption><strong>' + esc(reference.title) + '</strong>'
@@ -593,14 +628,14 @@
               + '<span class="fund-visually-hidden">' + esc(segment.label) + ' </span>' + numberLabel(segment.amount) + '</span>'
             ).join('') + '</small>' : '') + '</td>';
         }).join('');
-        const total = changeLabel(series.map(({ year, row }) => ({ year, amount: row?.amount })));
+        const total = changeLabel(series.map(({ year, row }) => ({ year, amount: row?.amount })), displayScale, report.compact);
         const parts = series.find(({ row }) => row?.bars.length > 1)?.row.bars;
         const components = parts ? '<small>' + parts.map(part => (
           '<span><i data-colour="' + part.colour + '" aria-hidden="true"></i>'
           + '<span class="fund-visually-hidden">' + esc(part.label) + ' </span>'
           + changeLabel(series.map(({ year, row }) => ({
             year, amount: row?.bars.find(segment => segment.label === part.label)?.amount
-          }))) + '</span>'
+          })), displayScale, report.compact) + '</span>'
         )).join('') + '</small>' : '';
         return '<tr><th scope="row">' + esc(label) + '</th>' + cells
           + '<td class="fund-change"><b>' + total + '</b>' + components + '</td></tr>';
@@ -610,12 +645,12 @@
       + (reference.note ? '<p class="fund-note">' + esc(reference.note) + '</p>' : '') + '</figure>';
   }
 
-  function reportContent(company, key, id, compareYears = false, grouped = false, quarterly = false) {
+  function reportContent(company, key, id, compareYears = false, grouped = false, quarterly = false, compact = false) {
     const original = quarterly ? company.quarterly?.[key] : company.statements[key];
     if (!original) return { html: '<p class="fund-note">Morningstar supplied no quarterly figures for this statement.</p>' };
     // TSMC's audited FY2025 filings reconcile to the export totals in Taiwan dollars.
     // The provider's field mirrors the listing currency for several other cross-listings.
-    const report = { ...original, currency: id === 'TSM US' ? 'TWD' : '' };
+    const report = { ...original, currency: id === 'TSM US' ? 'TWD' : '', compact };
     const options = report.rows.map((row, index) => ({ row, index })).filter(({ row }) => row[2].some(Number.isFinite));
     const selected = options.find(({ row }) => initialSeries[key].test(row[1])) || options[0];
     const title = key === 'income' ? 'Income statement · ' : '';
@@ -635,11 +670,14 @@
     return {
       report,
       html: '<p class="fund-note">' + title + (quarterly ? 'Quarterly' : 'Annual') + ' · As Originally Reported · Fiscal year ends ' + esc(report.fiscalEnd)
-        + '. Amounts in ' + esc(scale) + ', with shares in millions and per-share figures as reported. '
+        + (compact ? ". M = millions · '000 = thousands. Each line uses a consistent unit. "
+          : '. Amounts in ' + esc(scale) + ', with shares in millions and per-share figures as reported. ')
         + 'Export currency field: ' + esc(original.currency) + '.'
         + (report.periods.includes('TTM') ? ' TTM is trailing 12 months.' : '') + '</p>'
         + summary + (compareYears ? comparisonPlot(report, key, views, quarterly) : '') + chartPanel
-        + table(report, key, grouped) + '<p class="fund-note">Captured ' + esc(quarterly ? company.quarterlyCapturedAt : company.capturedAt.slice(0, 10))
+        + (compact && quarterly && key === 'income'
+          ? '<p class="fund-note">Quarter-over-quarter (QoQ) compares adjacent fiscal quarters using the absolute prior-quarter amount. A dash marks a missing figure or zero comparison base.</p>' : '')
+        + table(report, key, grouped, quarterly) + '<p class="fund-note">Captured ' + esc(quarterly ? company.quarterlyCapturedAt : company.capturedAt.slice(0, 10))
         + ' (SGT). Dashes mark unavailable values.</p>'
     };
   }
@@ -701,7 +739,8 @@
     }
     const key = disclosure.dataset.fundStatement;
     const { html, report } = reportContent(company, key, id,
-      !!disclosure.closest('[data-compare-years]'), !!disclosure.closest('[data-fund-grouped]'), quarterly);
+      !!disclosure.closest('[data-compare-years]'), !!disclosure.closest('[data-fund-grouped]'), quarterly,
+      !!disclosure.closest('[data-compact-statement-figures]'));
     body.innerHTML = html;
     bindTableControls(body);
     const year = body.querySelector('[data-fund-year]');
