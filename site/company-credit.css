@@ -1,5 +1,17 @@
 [data-credit-listing]:empty { display: none; }
 
+.company-research-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  align-items: start;
+  gap: .55rem;
+  margin-block: .65rem;
+}
+
+.company-research-pair .credit-card { margin: 0; background: transparent; }
+.company-research-pair .credit-card p { margin: .55rem 0 0; }
+.company-equity small { display: block; margin-top: .2rem; }
+
 .credit-panel, .credit-card {
   padding: .7rem .9rem;
   margin-block: .65rem;

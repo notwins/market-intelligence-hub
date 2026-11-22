@@ -55,11 +55,11 @@ function combinedChart(pe, pb, ticker) {
     <small>Lines connect observed values. Forecast horizon unspecified.</small>
   </figure>`;
 }
-const state={loaded:false,loading:false,warnings:[],reports:[],news:[],credit:[],resources:{},cards:new Map(),reportData:new Map(),directory:new Map()};
+const state={loaded:false,loading:false,warnings:[],reports:[],news:[],credit:[],resources:{},watchlist:[],cards:new Map(),reportData:new Map(),directory:new Map()};
 async function json(path){const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);try{const r=await fetch(path,{cache:'no-cache',signal:controller.signal});if(!r.ok)throw Error(path+' unavailable');return await r.json();}finally{clearTimeout(timer);}}
 function shell({home = false, cards} = {}) {
   const list = home ? homeCompanies : companies;
-  return `<section class="company-dashboard" data-company-dashboard${home ? ' data-home-companies' : ''} aria-labelledby="company-dashboard-title"><header class="cd-heading"><div>${home ? '<h2 id="company-dashboard-title">Company prices &amp; valuations</h2>' : '<p class="cd-eyebrow">YOUR MAIN WATCHLIST</p><h2 id="company-dashboard-title">Six companies. One view.</h2><p>News, research, credit and valuation — with dates at the source.</p>'}</div><div class="cd-heading-actions">${home ? '<a href="stocks-beta.html">Stocks BETA →</a>' : ''}<button type="button" data-company-refresh>${home ? 'Refresh sources' : 'Refresh'}</button></div></header><p class="cd-status" data-company-status role="status">Loading the latest available sources…</p><div ${home ? 'id="market-rows" class="watchlist-grid"' : 'class="cd-grid"'} data-company-grid>${cards ?? list.map(c=>`<article class="cd-card" data-company="${c.ticker}"><h3>${c.name} <small>${c.ticker}</small></h3><p>Loading company sources…</p></article>`).join('')}</div></section>`;
+  return `<section class="company-dashboard" data-company-dashboard${home ? ' data-home-companies' : ''} aria-labelledby="company-dashboard-title"><header class="cd-heading"><div>${home ? '<h2 id="company-dashboard-title">Company prices &amp; valuations</h2>' : '<p class="cd-eyebrow">YOUR MAIN WATCHLIST</p><h2 id="company-dashboard-title">Six companies. One view.</h2><p>News, research, credit and valuation — with dates at the source.</p>'}</div><div class="cd-heading-actions">${home ? '<a href="stocks-beta.html">Stocks BETA →</a>' : ''}<button type="button" data-company-refresh>${home ? 'Refresh sources' : 'Refresh'}</button>${root.CompanyCredit?.exportLink() || ''}</div></header><p class="cd-status" data-company-status role="status">Loading the latest available sources…</p><div ${home ? 'id="market-rows" class="watchlist-grid"' : 'class="cd-grid"'} data-company-grid>${cards ?? list.map(c=>`<article class="cd-card" data-company="${c.ticker}"><h3>${c.name} <small>${c.ticker}</small></h3><p>Loading company sources…</p></article>`).join('')}</div></section>`;
 }
 function credit(c){const extra=state.reportData.get(c.ticker)?.credit;if(extra)return `<p>${E(extra.spread_description)}</p><p class="cd-note">${E(day(extra.spread_as_of))} · ${link(extra.source,'Credit report · iFAST / FSM')}</p>`;
  const rows=state.credit.filter(r=>c.aliases.some(a=>r.issuer?.toLowerCase()===a.toLowerCase())&&finite(r.issue_spread_bps)).sort((a,b)=>String(b.pricing_date).localeCompare(String(a.pricing_date))),date=rows[0]?.pricing_date,latest=rows.filter(r=>r.pricing_date===date);
@@ -71,8 +71,15 @@ function valuationEvidence(ticker, d, label = 'Valuation dates, values &amp; sou
   const v = d.valuation || {};
   return `<details class="cd-evidence"><summary>${label}</summary><div class="cd-table" tabindex="0"><table><caption>${E(ticker)} valuation observations · multiples (×)</caption><thead><tr><th>Metric</th><th>Date</th><th>Value</th><th>Source</th></tr></thead><tbody>${['pe','pb'].flatMap(k=>(d[k]||[]).slice(-60).map(p=>`<tr><th>${k==='pe'?'P/E':'P/B'}</th><td>${E(p.date)}</td><td>${num(p.value)}</td><td>${link(p.sourceUrl||v.sourceUrl,p.source||'BOS')}</td></tr>`)).join('')||'<tr><td colspan="4">No verified observations</td></tr>'}</tbody></table></div></details>`;
 }
-function reading(c, home){const d=state.cards.get(c.ticker)||{},v=d.valuation||{},r=v.row||{},reports=state.reports.filter(x=>matches(x,c)).sort((a,b)=>(Date.parse(b.research_date)||0)-(Date.parse(a.research_date)||0)),creditReports=reports.filter(x=>/credit|bond|debt/i.test([x.title,x.kind].join(' '))&&!/equity/i.test(x.kind||'')),research=reports.filter(x=>!creditReports.includes(x)).slice(0,2),news=newsFor(state.news,c.ticker),resource=state.resources[c.ticker],analyst=r.researchReportUrl||resource?.url;
-  return `<section class="cd-section"><h4>Latest Reuters &amp; company news</h4>${news.length?'<ul class="cd-news">'+news.map(n=>`<li>${link(n.href,n.title)}<small>${E(day(n.published_at))} · ${E(n.source||'Publisher')}</small></li>`).join('')+'</ul>':'<p class="cd-note">No company-matched headline in the loaded feed. Open all news to check broader coverage.</p>'}</section><section class="cd-section"><h4>Research</h4><ul class="cd-reading">${research.map(x=>`<li>${link(x.href,x.title)}<small>${E(day(x.research_date))}</small></li>`).join('')}${analyst?`<li>${link(analyst, home ? 'Morningstar research PDF' : 'Morningstar research · BOS-hosted PDF')}<small>${E(analyst===resource?.url?day(resource?.report_date):(r.analystReportMonth||'Date in report'))} · publisher report</small></li>`:''}</ul>${!research.length&&!analyst?'<p class="cd-note">No company research loaded.</p>':''}</section><section class="cd-section"><h4>Credit reports &amp; bond spreads</h4>${credit(c)}${creditLinks(c)}${creditReports.slice(0,1).map(x=>`<p>${link(x.href,x.title)} <small>${E(day(x.research_date))}</small></p>`).join('')}<p class="cd-note">${link('search.html?q='+encodeURIComponent(c.ticker+' AND (credit OR bond)'),'Search credit research')} · ${link('v4.html#credit','Bond desk')}</p></section>`;
+function companyResearch(ticker, valuation) {
+  const saved = root.BOSResources?.reportFor(ticker) || state.resources[ticker];
+  const current = valuation?.researchReportUrl;
+  const note = current ? [valuation.researchProvider, valuation.analystReportMonth].filter(Boolean).join(' · ')
+    : [saved?.author, saved?.report_date && day(saved.report_date)].filter(Boolean).join(' · ');
+  return root.CompanyCredit?.researchPair(ticker, {url: current || saved?.url, note}) || '';
+}
+function reading(c){const reports=state.reports.filter(x=>matches(x,c)).sort((a,b)=>(Date.parse(b.research_date)||0)-(Date.parse(a.research_date)||0)),creditReports=reports.filter(x=>/credit|bond|debt/i.test([x.title,x.kind].join(' '))&&!/equity/i.test(x.kind||'')),research=reports.filter(x=>!creditReports.includes(x)).slice(0,2),news=newsFor(state.news,c.ticker);
+  return `<section class="cd-section"><h4>Latest Reuters &amp; company news</h4>${news.length?'<ul class="cd-news">'+news.map(n=>`<li>${link(n.href,n.title)}<small>${E(day(n.published_at))} · ${E(n.source||'Publisher')}</small></li>`).join('')+'</ul>':'<p class="cd-note">No company-matched headline in the loaded feed. Open all news to check broader coverage.</p>'}</section><section class="cd-section"><h4>Related research</h4><ul class="cd-reading">${research.map(x=>`<li>${link(x.href,x.title)}<small>${E(day(x.research_date))}</small></li>`).join('')}</ul>${!research.length?'<p class="cd-note">No company research loaded.</p>':''}</section><section class="cd-section"><h4>Bond spreads &amp; related credit links</h4>${credit(c)}${creditLinks(c)}${creditReports.slice(0,1).map(x=>`<p>${link(x.href,x.title)} <small>${E(day(x.research_date))}</small></p>`).join('')}<p class="cd-note">${link('search.html?q='+encodeURIComponent(c.ticker+' AND (credit OR bond)'),'Search credit research')} · ${link('v4.html#credit','Bond desk')}</p></section>`;
 }
 function card(c) {
   const d = state.cards.get(c.ticker) || {}, q = d.quote || {}, r = d.valuation?.row || {};
@@ -83,7 +90,8 @@ function card(c) {
   <div class="cd-charts">${chart(d.pe||[],'Forward P/E',c.ticker)}${chart(d.pb||[],'Forward P/B',c.ticker)}</div>
   <p class="cd-note">${r.priceAsOf?'BOS consensus estimates · '+E(day(r.priceAsOf))+'. Forecast horizon unspecified.':'Valuation source unavailable.'} Dots show source observations; missing dates are not filled.</p>
   ${valuationEvidence(c.ticker,d,'Chart values &amp; sources')}${root.CompanyFundamentals?.button({ticker:c.ticker,currency:'USD',name:c.name})||''}
-  ${reading(c,false)}
+  ${companyResearch(c.ticker, r)}
+  ${reading(c)}
   ${root.SIReferenceTable?.section(c.ticker)||''}
   <nav class="cd-actions" aria-label="${c.ticker} shortcuts"><a href="stocks-beta.html?companies=${c.ticker}">Price · P/E · P/B charts →</a><a href="v4.html?company=${c.ticker}#earnings">Earnings</a><a href="search.html?q=${c.ticker}">All news &amp; research</a></nav>${root.NvdaArticle?.link(c.ticker) || ''}</article>`;
 }
@@ -104,14 +112,16 @@ function paintHome(host) {
       node.innerHTML = combinedChart(d.pe || [], d.pb || [], ticker) + valuationEvidence(ticker, d);
       if (previousEvidence) node.querySelector('details').open = true;
     }
-    const company = homeCompanies.find(c => c.ticker === ticker);
-    if (!company) continue;
+    const saved = state.watchlist.find(row => row.ticker === ticker);
+    const company = homeCompanies.find(c => c.ticker === ticker) || {
+      ticker, name: saved?.name || ticker, aliases: saved?.name ? [saved.name] : []
+    };
     const research = node.closest('[data-company]').querySelector('[data-company-research]');
-    const wasOpen = research.querySelector('details')?.open;
-    research.innerHTML = `<details class="cd-company-research" ${wasOpen ? 'open' : ''}>
+    const wasOpen = research.querySelector('.cd-company-research')?.open;
+    research.innerHTML = `${companyResearch(ticker, d.valuation?.row)}<details class="cd-company-research" ${wasOpen ? 'open' : ''}>
       <summary>News, research &amp; credit</summary>
-      ${root.ShareStaticData?.html({ticker,currency:'USD'}) || ''}
-      ${reading(company,true)}
+      ${root.ShareStaticData?.html({ticker,currency: saved?.price?.currency || 'USD'}) || ''}
+      ${reading(company)}
       <p class="cd-note">${link('search.html?q='+encodeURIComponent(ticker),'All news & research →')}</p>
     </details>`;
   }
@@ -121,6 +131,7 @@ function paint() {
     const home = host.hasAttribute('data-home-companies');
     if (home) paintHome(host);
     else host.querySelector('[data-company-grid]').innerHTML = companies.map(card).join('');
+    root.CompanyCredit?.paintCards(host);
     host.querySelector('[data-company-status]').textContent = state.loading ? 'Refreshing available sources…' :
       (state.warnings.length ? 'Could not refresh '+[...new Set(state.warnings)].join(', ')+'. Available observations retain their original dates. ' : '') +
       (home ? '' : 'Newest saved company matches are shown. Use Refresh to check the connected feeds.');
@@ -129,7 +140,12 @@ function paint() {
 }
 async function companion(record){if(!record.assets?.['index.html'])return;const url=root.ResearchFeed.destination(record,record.full_report_url),controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);try{const response=await fetch(url,{cache:'no-cache',signal:controller.signal});if(!response.ok)return;const bytes=await response.arrayBuffer(),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');if(hash!==record.full_report_sha256)return;const doc=new DOMParser().parseFromString(new TextDecoder().decode(bytes),'text/html'),node=doc.querySelector('script[type="application/json"]#company-card-data');if(!node)return;const data=JSON.parse(node.textContent);if(!homeCompanies.some(c=>c.ticker===data.ticker))return;state.reportData.set(data.ticker,data);for(const n of data.reuters||[])if(safe(n.url)&&n.scope==='company')state.news.push({id:n.url,title:n.title,href:n.url,published_at:n.published_at,tickers:[data.ticker],source:'Reuters · verified research source'});}catch{state.warnings.push('Report source references');}finally{clearTimeout(timer);}}
 async function directory(record){const expected=record.assets?.['dashboard-sources.js'];if(!expected)return;const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);try{const path=record.full_report_url.replace(/index\.html$/,'dashboard-sources.js'),url=root.ResearchFeed.destination(record,path),response=await fetch(url,{cache:'no-cache',signal:controller.signal});if(!response.ok)throw Error('Source directory unavailable');const bytes=await response.arrayBuffer(),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');if(hash!==expected)throw Error('Source directory changed');const text=new TextDecoder().decode(bytes),prefix='window.MIH_DASHBOARD_SOURCES = ';if(!text.startsWith(prefix)||!text.endsWith(';\n'))throw Error('Source directory format');const data=JSON.parse(text.slice(prefix.length,-2));if(data.schema_version!==1||!Array.isArray(data.companies))throw Error('Source directory schema');for(const row of data.companies){if(!homeCompanies.some(c=>c.ticker===row.ticker))continue;state.directory.set(row.ticker,row);for(const n of row.reuters||[])if(safe(n.url)&&n.publisher==='Reuters'&&n.scope?.startsWith('company'))state.news.push({id:n.url,title:n.title,href:n.url,published_at:n.published_at,tickers:[row.ticker],source:'Reuters · '+n.scope.replaceAll('_',' ')});}}catch{state.warnings.push('Company source directory');}finally{clearTimeout(timer);}}
-async function load(){if(state.loading)return;const list=document.querySelector('[data-home-companies]')?homeCompanies:companies;state.loading=true;state.warnings=[];paint();const paths=['data/desk-data.json','data/credit-catchup-20261104.json','data/watchlist/company-resources.json','data/hourly-news.json','data/research-feed.json'];const results=await Promise.allSettled([...paths.map(json),root.MarketPrices?.refresh(),root.BOSEquity?.refresh(),root.ShareLabData?.load(),root.ShareStaticData?.load()]);const got=i=>results[i].status==='fulfilled'?results[i].value:null;results.forEach((r,i)=>{if(r.status==='rejected')state.warnings.push(paths[i]||'Market data');});const desk=got(0);if(desk){state.reports=[...new Map([...state.reports,...(desk.reports||[])].map(r=>[r.href,r])).values()];state.news=[...state.news,...(desk.news||[])];}if(got(1))state.credit=got(1).rows||[];if(got(2))state.resources=got(2).companies||{};
+async function load(){if(state.loading)return;const home=!!document.querySelector('[data-home-companies]');state.loading=true;state.warnings=[];paint();const paths=['data/desk-data.json','data/credit-catchup-20261104.json','data/watchlist/company-resources.json','data/hourly-news.json','data/research-feed.json'];const results=await Promise.allSettled([...paths.map(json),root.MarketPrices?.refresh(),root.BOSEquity?.refresh(),root.ShareLabData?.load(),root.ShareStaticData?.load()]);const got=i=>results[i].status==='fulfilled'?results[i].value:null;results.forEach((r,i)=>{if(r.status==='rejected')state.warnings.push(paths[i]||'Market data');});const desk=got(0);if(desk){if(Array.isArray(desk.watchlist))state.watchlist=desk.watchlist;state.reports=[...new Map([...state.reports,...(desk.reports||[])].map(r=>[r.href,r])).values()];state.news=[...state.news,...(desk.news||[])];}if(got(1))state.credit=got(1).rows||[];if(got(2))state.resources=got(2).companies||{};
+ const list = home ? [
+   ...homeCompanies,
+   ...state.watchlist.filter(row => !homeCompanies.some(company => company.ticker === row.ticker))
+     .map(row => ({ ticker: row.ticker, name: row.name, aliases: [row.name] }))
+ ] : companies;
  const more=await Promise.allSettled([got(3)&&root.DeskNews?root.DeskNews.load(got(3),list):null,got(4)&&root.ContentDelivery?root.ContentDelivery.research(root.ResearchFeed.validate(got(4))):null]);if(more[0].status==='fulfilled'&&more[0].value){state.news=[...more[0].value.news,...state.news];if(more[0].value.delivery_error)state.warnings.push('Reuters');}else state.warnings.push('Reuters');
  const feed=more[1].status==='fulfilled'?more[1].value:null;if(feed){state.reports=[...feed.records.map(r=>({id:r.id,title:r.title,href:root.ResearchFeed.destination(r,r.full_report_url),research_date:r.cutoff_sgt,kind:r.category,tags:r.tags.map(t=>feed.tags[t].label)})),...state.reports];if(feed.delivery_error)state.warnings.push('Research');await Promise.allSettled(list.map(c=>{const latest=feed.records.filter(r=>matches({...r,tags:r.tags.map(t=>feed.tags[t].label)},c)).sort((a,b)=>b.cutoff_sgt.localeCompare(a.cutoff_sgt)).find(r=>r.id.startsWith('standalone-'));return latest?Promise.allSettled([companion(latest),directory(latest)]):null;}));}else state.warnings.push('Research');
   const homeCharts = document.querySelectorAll('[data-home-companies] [data-company-valuation]');
