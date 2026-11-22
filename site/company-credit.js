@@ -5,11 +5,13 @@
     'report_id', 'issuer', 'issuer_type', 'listing_keys', 'report_date', 'publisher', 'coverage',
     'ratings_as_reported', 'credit_view', 'summary', 'key_metrics', 'risks', 'source_pdf', 'source_pages'
   ];
-  const required = columns.filter(key => !['listing_keys', 'ratings_as_reported', 'credit_view', 'key_metrics', 'risks'].includes(key));
+  const required = columns.filter(key => ![
+    'listing_keys', 'ratings_as_reported', 'credit_view', 'key_metrics', 'risks', 'source_pdf', 'source_pages'
+  ].includes(key));
   const listingKey = value => value.trim().toUpperCase();
   const maxBytes = 1024 * 1024;
   const storageKey = 'market-intel-company-credit-v1';
-  const defaultUrl = 'https://notwins.github.io/market-intelligence-content/data/company-credit-summaries-2026-11-22.csv';
+  const defaultUrl = 'https://notwins.github.io/market-intelligence-content/data/company-credit-summaries-2026-11-22-r2.csv';
 
   function readCsv(text) {
     text = text.replace(/^\ufeff/, '');
@@ -45,10 +47,12 @@
     }
     if (!rows.length) throw new Error('The CSV has no credit reports.');
     const ids = new Set();
+    const reportColumn = header.indexOf('source_report');
     return rows.map((cells, index) => {
       const error = message => new Error(`Report ${index + 1}: ${message}`);
       if (cells.length !== header.length) throw error('the column count differs from the header.');
       const row = Object.fromEntries(columns.map(key => [key, cells[header.indexOf(key)].trim()]));
+      row.source_report = cells[reportColumn]?.trim() || '';
       if (required.some(key => !row[key])) throw error('an issuer, date, summary or other required source field is missing.');
       if (ids.has(row.report_id)) throw error('the report ID is already in the CSV.');
       ids.add(row.report_id);
@@ -56,12 +60,14 @@
       if (!/^\d{4}-\d{2}-\d{2}$/.test(row.report_date) || !Number.isFinite(+parsedDate)
         || parsedDate.toISOString().slice(0, 10) !== row.report_date) throw error('enter a valid report date in YYYY-MM-DD format.');
       try {
-        const source = new URL(row.source_pdf);
+        const source = new URL(row.source_pdf || row.source_report);
         if (source.protocol !== 'https:' || source.username || source.password) throw Error();
       } catch {
-        throw error('enter an HTTPS source PDF URL.');
+        throw error('enter an HTTPS source PDF or report URL.');
       }
-      if (!/^[1-9]\d*(?:(?:\s*[-–]\s*|,\s*)[1-9]\d*)*$/.test(row.source_pages)) throw error('enter the PDF page numbers.');
+      if (row.source_pdf && !/^[1-9]\d*(?:(?:\s*[-–]\s*|,\s*)[1-9]\d*)*$/.test(row.source_pages)) {
+        throw error('enter the PDF page numbers.');
+      }
       if (!['Company', 'Unlisted issuer', 'Sovereign'].includes(row.issuer_type)) throw error('choose a valid issuer type.');
       row.listingKeys = row.listing_keys.split('|').map(listingKey).filter(Boolean);
       if (row.issuer_type === 'Company' ? !row.listingKeys.length : row.listingKeys.length) {
@@ -135,9 +141,12 @@
       ['Key metrics', row.key_metrics], ['Risks to watch', row.risks]]) {
       if (value) facts.append(make('dt', label), make('dd', value));
     }
-    const link = make('a', 'Source PDF · ' + (/^\d+$/.test(row.source_pages) ? 'p. ' : 'pp. ') + row.source_pages);
-    const url = new URL(row.source_pdf);
-    url.hash = 'page=' + row.source_pages.match(/^\d+/)[0];
+    const label = row.source_pdf
+      ? 'Source PDF · ' + (/^\d+$/.test(row.source_pages) ? 'p. ' : 'pp. ') + row.source_pages
+      : 'Source credit report';
+    const link = make('a', label);
+    const url = new URL(row.source_pdf || row.source_report);
+    if (row.source_pdf) url.hash = 'page=' + row.source_pages.match(/^\d+/)[0];
     link.href = url.href;
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
