@@ -75,7 +75,13 @@ const applyOrganizer=()=>q('.tc-organizer form').dispatchEvent(new w.Event('subm
 click('#organize-case .tc-organize-button');
 change('#tc-group-by','coupon');change('#tc-ki-below','80');change('#tc-strike-below','80');
 change('.tc-sort-level [data-tc-level-field]','1');click('#tc-add-level');
-change('.tc-sort-level:last-child [data-tc-level-field]','4');applyOrganizer();
+change('.tc-sort-level:last-child [data-tc-level-field]','4');
+const groupSource=q('#organize-case table'),replacementTable=groupSource.cloneNode(true);
+replacementTable.querySelectorAll('[data-tc-ui]').forEach(node=>node.remove());
+groupSource.replaceWith(replacementTable);await wait();
+assert(q('.tc-organizer').open);
+assert.equal(q('#tc-ki-below').value,'80');
+applyOrganizer();
 assert.deepEqual(shown(),['D','F','A','E']);
 assert.deepEqual(qa('#organize-case [data-tc-group-heading]').map(row=>row.textContent),['Coupon 10% · 3','Coupon 8% · 1']);
 click('#organize-case .tc-organize-button');change('#tc-group-by','shares');applyOrganizer();

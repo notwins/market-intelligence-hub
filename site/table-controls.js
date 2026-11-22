@@ -40,7 +40,7 @@
  const own=node=>node?.nodeType===1&&(node.matches('[data-tc-ui]')||node.closest('[data-tc-ui]'));
  function ingest(records){for(const record of records){if(own(record.target))continue;const table=record.target.nodeType===1?record.target.closest('table'):record.target.parentElement?.closest('table');if(table)pending.add(table);if(record.type==='attributes'&&record.attributeName==='data-table-controls')record.target.querySelectorAll('table').forEach(t=>pending.add(t));for(const node of record.addedNodes||[]){if(node.nodeType!==1||own(node))continue;if(node.matches('table'))pending.add(node);node.querySelectorAll('table').forEach(t=>pending.add(t));}}if(records.length)schedule();}
  function mutate(fn){if(observer){ingest(observer.takeRecords());observer.disconnect();}try{return fn();}finally{observer?.observe(doc.body,observation);}}
- function schedule(){if(!frame)frame=root.requestAnimationFrame(()=>{frame=0;mutate(()=>{for(const state of live)if(!state.table.isConnected){live.delete(state);state.status.remove();state.organizeButton?.remove();}if(active&&(!active.state.table.isConnected||!trigger?.isConnected))close();if(organizing&&!organizing.table.isConnected)organizerDialog.close();const tables=[...pending];pending.clear();tables.forEach(mount);});});}
+ function schedule(){if(!frame)frame=root.requestAnimationFrame(()=>{frame=0;mutate(()=>{for(const state of live)if(!state.table.isConnected){live.delete(state);state.status.remove();state.organizeButton?.remove();}if(active&&(!active.state.table.isConnected||!trigger?.isConnected))close();const tables=[...pending];pending.clear();tables.forEach(mount);if(organizing&&!organizing.table.isConnected)organizerDialog.close();});});}
  function sourceText(cell){if(!cell)return '';return (cell.dataset.tcValue??cell.querySelector('[data-tc-original]')?.textContent??cell.textContent).replace(/\s+/g,' ').trim();}
  function cells(row){
   const prior=sourceCells.get(row);
@@ -208,6 +208,7 @@
    (parent.matches('.si-card-scroll,.si-table-wrap,.table-scroll')?parent:table).before(button);
    state.organizeButton=button;
   }
+  if(organizing&&!organizing.table.isConnected&&state.organizeButton&&companyKey===organizing.companyKey)organizing=state;
   drawLayout(state);
   const scroll=table.parentElement;if(scroll&&/(auto|scroll)/.test(root.getComputedStyle(scroll).overflowX)&&!scroll.hasAttribute('tabindex')){scroll.tabIndex=0;if(!scroll.hasAttribute('role'))scroll.setAttribute('role','region');if(!scroll.hasAttribute('aria-label'))scroll.setAttribute('aria-label',(table.caption?.textContent.trim()||'Data table')+'; scroll horizontally');}
   apply(state,Boolean(state.status.textContent||state.excludedCompanies.size||hasOrganizer(state.organizer)));
