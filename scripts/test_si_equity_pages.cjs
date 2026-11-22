@@ -24,6 +24,25 @@ const quarters=A.fiscalQuarters({income:report,balance,cash:null});
 assert.equal(quarters[0],'Q1 2024');assert.equal(quarters.at(-1),'Q4 2026');
 assert.equal(A.highlights(balance,'balance',quarters).rows.find(r=>r.label==='Total assets').values[0],0);
 assert.equal(A.highlights(report,'income',quarters).rows.find(r=>r.label==='Revenue').values.at(-1),null);
+const growth={currency:'USD',fiscalEnd:'December',periods:['Q3 2023','Q4 2023','Q1 2024','Q2 2024','Q3 2024','Q1 2025','Q3 2026','TTM'],rows:[
+ [0,'Total Revenue',[100000001,100000002,150e6,120e6,120e6,60e6,30e6,1e9]],
+ [0,'Net Income',[-1e5,-5e4,25e3,-5e4,0,7e4,5e4,1e8]],
+ [0,'Gross Profit',[1e6,2e6,3e6,4e6,5e6,6e6,7e6,8e6]],
+]};
+const growthTable=A.highlights(growth,'income'),[revenue,gross,,income]=growthTable.rows;
+assert.equal(growthTable.periods[0],'Q4 2023');
+assert.equal(revenue.scale,1e6);assert.equal(income.scale,1e3);
+assert(revenue.changes[0]>0&&revenue.changes[0]<0.05,'Use the unrounded prior quarter just before the displayed range');
+assert.deepEqual(revenue.changes.slice(2,7),[-20,0,null,null,null]);
+assert.deepEqual(income.changes.slice(0,7),[50,150,-300,100,null,null,null]);
+assert.equal(gross.changes,null);
+const zeroBase=A.highlights({...growth,rows:[[0,'Net Income',[25e3,0,5e4,null,null,null,5e4,null]]]},'income').rows[3];
+assert.equal(zeroBase.changes[1],null,'Growth from a zero base is undefined');
+const growthSvg=A.svg({symbol:'ONE'},{fundamentals:{company:{quarterly:{income:growth}}}});
+assert.equal((growthSvg.match(/>Revenue QoQ</g)||[]).length,2);
+assert.equal((growthSvg.match(/>Net income QoQ</g)||[]).length,2);
+assert(growthSvg.includes('>&#39;000<'));assert(growthSvg.includes('>M<'));
+assert(growthSvg.includes('>≈0%<'));assert(growthSvg.includes('>+150%<'));assert(growthSvg.includes('>−300%<'));
 const bbg=JSON.parse(fs.readFileSync('site/data/beta-shares.json','utf8'));
 const mu=A.ratings(bbg.records.find(r=>r.bbTicker==='MU US'));
 assert(mu.some(r=>r.agency==="Moody's"&&r.scope==='Issuer'&&r.status==='withdrawn'));
@@ -32,7 +51,7 @@ assert(mu.every(r=>r.date===null));assert.equal(A.summary(mu).length,3);
 assert.equal(A.ratings(bbg.records.find(r=>r.bbTicker==='ANET US')).length,0);
 const svg=A.svg({symbol:'ONE',name:'A & B'}, {currency:'USD',creditRatings:mu,
  fundamentals:{company:{quarterlyCapturedAt:'2026-11-22',quarterly:{income:report,balance,cash:null}}}},2,4);
-assert(svg.includes('A &amp; B'));assert(svg.includes('TWD millions'));assert(!svg.includes('TTM'));
+assert(svg.includes('A &amp; B'));assert(svg.includes('>TWD<'));assert(!svg.includes('TTM'));
 assert(svg.includes('Q1 2024 to Q4 2026'));assert(!svg.includes('Q4 2023'));assert(svg.includes('captured 2026-11-22'));
 assert(svg.includes('>—<'));assert.equal((svg.match(/Quarterly statement unavailable/g)||[]).length,1);
 assert(svg.includes('withdrawn'));assert(svg.includes('rating observation dates unavailable'));
@@ -60,4 +79,4 @@ assert(!C.svg(p,{ONE:data}).includes('class="si-probability-cone"'));
 assert(on.includes('not a forecast or barrier-hit probability'));
 const metrics=C.svg({...p,shares:[{symbol:'ONE'},{symbol:'TWO'},{symbol:'THREE'}]});
 assert.equal((metrics.match(/class="si-company-metric"/g)||[]).length,27,'Each metric occupies one row');
-console.log('PASS SI company pages: A4 ordering, aligned fiscal quarters, units and missing figures, scoped ratings and dated 12-month model ranges');
+console.log('PASS SI company pages: A4 ordering, aligned fiscal quarters, rounded units, QoQ growth, scoped ratings and dated 12-month model ranges');
