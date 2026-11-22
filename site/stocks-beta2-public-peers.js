@@ -2,6 +2,7 @@
   'use strict';
 
   const endpoint = 'data/beta2-public-peer-financials-2026-11-22.json';
+  const guidanceEndpoint = 'data/beta2-company-guidance-2026-11-22.json';
   const maxPeers = 4;
   const rows = {
     income: [['sales', 'Revenue / total income'], ['salesPrevious', 'Prior-year revenue / total income'], ['operatingProfit', 'Operating profit'], ['netIncome', 'Net income attributable to owners']],
@@ -49,17 +50,30 @@
   if (typeof module !== 'undefined') module.exports = { financialMetrics, selectedPeers };
   const doc = root.document;
   if (!doc) return;
-  let request;
+  let request, guidanceRequest;
+
+  async function fetchData(path) {
+    const response = await fetch(root.ContentDelivery.CONTENT + path, { signal: AbortSignal.timeout(10000) });
+    if (!response.ok) throw new Error('Public financial data is unavailable.');
+    return response.json();
+  }
 
   function getData() {
     request ??= (async () => {
-      const response = await fetch(root.ContentDelivery.CONTENT + endpoint, { signal: AbortSignal.timeout(10000) });
-      if (!response.ok) throw new Error('The comparison data is unavailable.');
-      const data = await response.json();
+      const data = await fetchData(endpoint);
       if (data?.version !== 1 || !data.listings || !data.companies || !data.tags) throw new Error('Unexpected comparison format.');
       return data;
     })().catch(error => { request = undefined; throw error; });
     return request;
+  }
+
+  function getGuidance() {
+    guidanceRequest ??= (async () => {
+      const data = await fetchData(guidanceEndpoint);
+      if (data?.version !== 1 || !data.asOf || !data.listings || !data.companies) throw new Error('Unexpected guidance format.');
+      return data;
+    })().catch(error => { guidanceRequest = undefined; throw error; });
+    return guidanceRequest;
   }
 
   function node(tag, label, attributes = {}) {
@@ -177,25 +191,86 @@
     paint();
   }
 
-  function mount(details, ticker) {
+  function renderGuidance(panel, data, listing) {
+    const company = data.companies[data.listings[listing]];
+    if (!company?.years.length) {
+      panel.replaceChildren(node('p', company
+        ? 'The reviewed company disclosures did not provide annual guidance for these measures.'
+        : 'Verified annual guidance is pending for this listing.'));
+      const source = sourceLink(company?.source, 'Reviewed disclosure');
+      if (source) panel.append(source);
+      return;
+    }
+    const columns = [['revenue', 'Revenue'], ['cash', 'Cash flow and spending'], ['earnings', 'Earnings']];
+    const wrap = node('div', '', { class: 'sb2-table sb2-guidance-table', role: 'region', 'aria-label': 'Annual company guidance', tabindex: '0' });
+    const table = node('table');
+    const head = node('thead');
+    const headings = node('tr');
+    headings.append(node('th', 'Fiscal period', { scope: 'col' }),
+      ...columns.map(([, label]) => node('th', label, { scope: 'col' })));
+    head.append(headings);
+    const body = node('tbody');
+    for (const year of company.years) {
+      const row = node('tr');
+      const label = node('th', year.period ?? ('FY ' + year.year), { scope: 'row' });
+      const type = { target: 'Management target', scenario: 'Company scenario', guidance: 'Company guidance' };
+      label.append(node('small', type[year.kind]));
+      label.append(node('small', year.date));
+      const source = sourceLink(year.source, 'Company disclosure');
+      if (source) label.append(source);
+      row.append(label);
+      for (const [key] of columns) {
+        const items = year.metrics[key] ?? [];
+        const cell = node('td', items.length ? '' : '–');
+        if (!items.length) cell.setAttribute('aria-label', 'No guidance in this disclosure');
+        for (const [metric, value] of items) {
+          const item = node('div', metric, { class: 'sb2-guidance-item' });
+          item.append(node('strong', value));
+          cell.append(item);
+        }
+        row.append(cell);
+      }
+      body.append(row);
+      if (year.note) {
+        const note = node('tr', '', { class: 'sb2-guidance-note' });
+        note.append(node('td', year.note, { colspan: '4' }));
+        body.append(note);
+      }
+    }
+    table.append(head, body);
+    wrap.append(table);
+    panel.replaceChildren(node('p', 'Fiscal years follow company reporting. Figures reflect disclosures reviewed through ' + data.asOf + '.'), wrap);
+  }
+
+  function mountDetails(details, ticker, read, renderPanel, status, failure, retryText) {
     if (!details) return;
     const panel = details.querySelector('[data-sb2-peer-body]');
     let ready;
     async function load() {
       if (!details.open || ready) return;
       ready = true;
-      panel.replaceChildren(node('p', 'Loading public financial comparisons…', { role: 'status' }));
-      try { render(panel, await getData(), ticker); }
+      panel.replaceChildren(node('p', status, { role: 'status' }));
+      try { renderPanel(panel, await read(), ticker); }
       catch {
         ready = false;
-        const retry = node('button', 'Retry comparison', { type: 'button' });
+        const retry = node('button', retryText, { type: 'button' });
         retry.addEventListener('click', load);
-        panel.replaceChildren(node('p', 'Public financial comparisons could not load.'), retry);
+        panel.replaceChildren(node('p', failure), retry);
       }
     }
     details.addEventListener('toggle', load);
     if (details.open) load();
   }
 
-  root.StocksBeta2PublicPeers = { mount };
+  function mount(details, ticker) {
+    mountDetails(details, ticker, getData, render, 'Loading public financial comparisons…',
+      'Public financial comparisons could not load.', 'Retry comparison');
+  }
+
+  function mountGuidance(details, ticker) {
+    mountDetails(details, ticker, getGuidance, renderGuidance, 'Loading company guidance…',
+      'Company guidance could not load.', 'Retry guidance');
+  }
+
+  root.StocksBeta2PublicPeers = { mount, mountGuidance };
 })(typeof window !== 'undefined' ? window : globalThis);

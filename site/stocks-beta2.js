@@ -633,6 +633,7 @@
       paintMonthlyTable(entry, history.range());
       paintResearch(entry);
       root.StocksBeta2PublicPeers?.mount(element.querySelector('[data-sb2-public-peers]'), company.ticker);
+      root.StocksBeta2PublicPeers?.mountGuidance(element.querySelector('[data-sb2-company-guidance]'), company.ticker);
       element.querySelector('.sb2-expand').addEventListener('click', () => {
         const previous = deck.querySelector('[data-expanded]');
         if (previous) setExpanded(previous, false);
