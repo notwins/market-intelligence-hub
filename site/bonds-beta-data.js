@@ -31,6 +31,7 @@
     if (data.schema_version !== 1 || !Array.isArray(data.instruments) || !data.history) throw Error('Unexpected watchlist format.');
     return new Map(data.instruments.filter(item => validId(item.isin, item.currency)).map(item => {
       const rows = new Map();
+      let latestWSJ = null;
       const history = [...(data.history[item.id] || [])].sort((a, b) => a.observed_at.localeCompare(b.observed_at)
         || (a.retrieved_at || '').localeCompare(b.retrieved_at || ''));
       for (const entry of history) {
@@ -39,8 +40,13 @@
         const bid = Number.isFinite(entry.bid) && entry.bid > 0 ? entry.bid : null;
         const yieldValue = Number.isFinite(entry.yield_pct) ? entry.yield_pct : null;
         if (bid != null || yieldValue != null) rows.set(entry.date, { bid, yield: yieldValue, source });
+        if (item.source === 'WSJ' && entry.source === 'WSJ' && source === 'WSJ_ASK' &&
+            bid !== null && Number.isFinite(entry.ask) && entry.ask >= bid && yieldValue !== null) {
+          latestWSJ = { date: entry.date, bid, ask: entry.ask, yield: yieldValue,
+            retained: data.checks?.[item.id]?.status === 'unavailable' };
+        }
       }
-      return [identity(item.isin, item.currency), { ...item, rows, ar: null, isTreasury: item.source === 'WSJ' }];
+      return [identity(item.isin, item.currency), { ...item, rows, latestWSJ, ar: null, isTreasury: item.source === 'WSJ' }];
     }));
   }
 
@@ -176,6 +182,30 @@
     return combined;
   }
 
+  function mergeWSJSamples(instruments, samples) {
+    if (samples?.schema_version !== 1 || !Array.isArray(samples.quotes)) return instruments;
+    const byTerms = new Map();
+    for (const [key, bond] of instruments) {
+      if (!bond.isTreasury || bond.currency !== 'USD' || !bond.maturity || !Number.isFinite(bond.coupon)) continue;
+      const terms = `${bond.maturity}|${bond.coupon}`;
+      byTerms.set(terms, byTerms.has(terms) ? null : key);
+    }
+    for (const q of samples.quotes) {
+      const key = byTerms.get(`${q.maturity}|${q.coupon_percent}`);
+      const date = q.quote_date || samples.as_of;
+      if (!key || !dateOk(date) || date >= q.maturity || !(Number.isFinite(q.bid_price) && q.bid_price > 0) ||
+          !Number.isFinite(q.ask_price) || q.ask_price < q.bid_price || !Number.isFinite(q.asked_yield_percent)) continue;
+      const bond = instruments.get(key);
+      if (bond.latestWSJ?.date >= date) continue;
+      const latestWSJ = { date, bid: q.bid_price, ask: q.ask_price, yield: q.asked_yield_percent,
+        retained: date < samples.as_of || !!bond.latestWSJ?.retained };
+      const rows = new Map(bond.rows);
+      rows.set(date, { bid: latestWSJ.bid, yield: latestWSJ.yield, source: 'WSJ_ASK' });
+      instruments.set(key, { ...bond, latestWSJ, rows });
+    }
+    return instruments;
+  }
+
   const dayMs = 86400000;
   const utcDate = date => new Date(date + 'T00:00:00Z');
   const tenors = new Map([['DGS1MO', 1 / 12], ['DGS3MO', .25], ['DGS6MO', .5], ['DGS1', 1],
@@ -257,7 +287,7 @@
     });
   }
 
-  const api = { sources, historyStorage, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue,
+  const api = { sources, historyStorage, publicHistory, readHistory, mergeHistory, treasuryCatalogue, mergeCatalogue, mergeWSJSamples,
     annualPriceChanges, fredCurves, loadFredCurves, reconstructedPrices };
   if (typeof module !== 'undefined') module.exports = api;
   root.BondsBetaData = api;

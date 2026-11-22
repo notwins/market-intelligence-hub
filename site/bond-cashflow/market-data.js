@@ -45,6 +45,20 @@ window.BondCashflowMarket = (() => {
     return [...dates.values()].sort((a, b) => a.date.localeCompare(b.date));
   }
 
+  function weeklyHistory(yields, fx) {
+    const points = [];
+    for (const [data, keys] of [
+      [yields, { 'UST 10Y': 'y10', 'UST 20Y': 'y20', 'UST 30Y': 'y30' }],
+      [fx, { 'USD/SGD': 'fx' }]
+    ]) {
+      const columns = data.columns.flatMap(({ id }, i) => keys[id] ? [[keys[id], i]] : []);
+      for (const row of data.observations) {
+        points.push({ date: row.date, ...Object.fromEntries(columns.map(([key, i]) => [key, row.values[i]])) });
+      }
+    }
+    return points.sort((a, b) => a.date.localeCompare(b.date));
+  }
+
   function askHistory(payload) {
     const asks = new Map();
     for (const item of payload.instruments) {
@@ -151,14 +165,17 @@ window.BondCashflowMarket = (() => {
       ],
       [
         'Daily FRED history',
-        json('data/fred-daily.json').then((payload) => ({
-          curves: data.fredCurves(payload),
-          fx: payload.series.filter((s) => s.family === 'fx')
-        }))
+        json('data/fred-daily.json').then(payload => payload.series.filter(s => s.family === 'fx'))
       ],
       [
-        'Monthly FRED history',
-        json('data/history-fed.json').then(monthlyHistory)
+        'FRED Treasury curves',
+        data.loadFredCurves()
+      ],
+      [
+        'FRED chart history',
+        Promise.all(['yields', 'fx'].map(family => FredWeekly.load(family)))
+          .then(([yields, fx]) => ({ points: weeklyHistory(yields.data, fx.data), frequency: 'weekly' }))
+          .catch(() => json('data/history-fed.json').then(payload => ({ points: monthlyHistory(payload), frequency: 'monthly' })))
       ],
       ['Historical event labels', json('bond-cashflow/events.json')]
     ];
@@ -170,8 +187,9 @@ window.BondCashflowMarket = (() => {
       quotes,
       catalogue = new Map(),
       local = new Map(),
-      daily,
-      history = [],
+      fx = [],
+      curves = [],
+      archive,
       events = []
     ] = results.map((r) => r.value);
     const observed = quotes?.observed || new Map();
@@ -184,16 +202,17 @@ window.BondCashflowMarket = (() => {
     );
     const byId = new Map(bonds.map((b) => [b.id, b]));
     const quick = [...observed.keys()].map((k) => byId.get(k));
-    const fx = daily?.fx || [];
+    const history = archive?.points || [];
     return {
       quick,
       catalogue: bonds,
       history,
       events,
-      curves: daily?.curves || [],
+      curves,
       fx,
       missing,
-      historySource: 'Market Intel · FRED monthly averages',
+      historyFrequency: archive?.frequency,
+      historySource: archive?.frequency === 'weekly' ? 'Market Intel · Friday-ending FRED history' : 'Market Intel · FRED monthly averages',
       historyFrom: history[0]?.date || '',
       historyTo: history.at(-1)?.date || '',
       localCount: local.size,
@@ -209,10 +228,8 @@ window.BondCashflowMarket = (() => {
         'https://www.boerse-stuttgart.de/en/products/bonds/stuttgart-fxplus/a283c6-temasek-financial-i-ltd-dl-med--t-nts-2020-20-70-reg-s',
       seriesSources: Object.fromEntries(
         [
-          ['fx', 'EXSIUS'],
-          ['y10', 'GS10'],
-          ['y20', 'GS20'],
-          ['y30', 'GS30']
+          ['fx', archive?.frequency === 'weekly' ? 'DEXSIUS' : 'EXSIUS'],
+          ...[10, 20, 30].map(year => ['y' + year, (archive?.frequency === 'weekly' ? 'DGS' : 'GS') + year])
         ].map(([k, s]) => [k, 'https://fred.stlouisfed.org/series/' + s])
       )
     };

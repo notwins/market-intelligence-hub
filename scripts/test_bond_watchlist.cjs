@@ -111,6 +111,14 @@ assert(archive.every((curve, i) => curve.date === weekly.observations[i].date));
 assert(archive.find(curve => curve.date === '2004-01-02').rates.every(([tenor]) => tenor <= 20));
 assert(archive.find(curve => curve.date === '2006-02-10').rates.some(([tenor]) => tenor === 30));
 const betaList = beta.publicHistory(prices);
+const quoted = prices.instruments.find(item => item.source === 'WSJ' && prices.latest[item.id]);
+const accepted = prices.latest[quoted.id];
+const latestWSJ = betaList.get(quoted.isin + '|USD').latestWSJ;
+assert.deepEqual([latestWSJ.bid, latestWSJ.ask, latestWSJ.yield, latestWSJ.date],
+  [accepted.bid, accepted.ask, accepted.yield_pct, accepted.date]);
+const failed = beta.publicHistory({ ...prices, checks: { ...prices.checks, [quoted.id]: { status: 'unavailable' } } });
+assert.deepEqual(failed.get(quoted.isin + '|USD').latestWSJ, { ...latestWSJ, retained: true });
+assert.equal(betaList.get('US912810TC27|USD').latestWSJ, null);
 let modelCount = 0;
 for (const instrument of betaList.values()) {
   const beforeRows = JSON.stringify([...instrument.rows]);
@@ -162,6 +170,10 @@ console.log('PASS Treasury clean prices, dynamic FRED tenors, the 30-year public
 
 const treasuryDirectory = beta.treasuryCatalogue(JSON.parse(fs.readFileSync('site/data/treasury-catalogue.json', 'utf8')));
 const expanded = beta.mergeCatalogue(betaList, treasuryDirectory);
+const samples = JSON.parse(fs.readFileSync('site/data/wsj-treasury-dashboard.json', 'utf8'));
+const pricedCatalogue = beta.mergeWSJSamples(new Map(expanded), samples);
+assert([...pricedCatalogue.values()].some(bond => bond.latestWSJ && !betaList.has(bond.isin + '|USD')));
+assert.equal(pricedCatalogue.get(quoted.isin + '|USD').latestWSJ.date, accepted.date);
 assert(treasuryDirectory.size > betaList.size);
 assert.equal(treasuryDirectory.get('US912810UY28|USD').termMonths, 360);
 assert.equal(treasuryDirectory.get('US91282CJJ18|USD').termMonths, 120);

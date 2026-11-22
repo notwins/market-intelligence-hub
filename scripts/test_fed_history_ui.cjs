@@ -3,9 +3,9 @@ const C=require('../site/v3-core.js');
 const code=fs.readFileSync(require('node:path').join(__dirname,'../site/v4-tools.js'),'utf8').replace('return{routeSuffix,','return{_test:{loadHistory,chooseHistory,timeData,lineChart,historyControls,toggleEventGroup,chosenEvents,contextControls,getState:()=>X},routeSuffix,');
 const workbook=JSON.parse(fs.readFileSync(require('node:path').join(__dirname,'../site/data/history-v3.json')));
 const sample={schemaVersion:1,status:'provider_snapshot',verified_provider_refresh:true,source_file:'Fed via FRED',archive_path:'history-fed-archive/test.json',series:['USD/SGD','CHF/SGD','UST 10Y','UST 5Y'].map((id,i)=>({id,family:id.includes('/')?'fx':'ust',unit:id.includes('/')?'SGD per unit':'% p.a.',points:[['2020-01-01',1+i],['2020-03-01',2+i],['2020-04-01',3+i]],missing_periods:['2020-02-01'],latest_observation:'2020-04-01',source:'Fed via FRED',source_url:'https://fred.stlouisfed.org/series/GS10'})),recession_context:{periods:[{start:'2020-03-01',end_exclusive:'2020-05-01'}],source:'St. Louis Fed / NBER',source_url:'https://fred.stlouisfed.org/series/USREC',chronology_url:'https://www.nber.org/research/business-cycle-dating',latest_observation:'2020-04-01',convention:'Month following peak through trough'}};
-function setup(published=sample,status={status:'success',last_success:new Date().toISOString()}){
+function setup(published=sample,status={status:'success',last_success:new Date().toISOString()},weekly){
  const responses={'history-v3':workbook,'history-fed':published,'history-fed-status':status};
- const context={window:{},MarketCore:C,USTDecisionEngine:{},USTDecisionImport:{},localStorage:{getItem:()=>null},Intl,Date,URL,location:{href:'https://example.com/v4.html'},matchMedia:()=>({matches:false}),document:{addEventListener(){},documentElement:{style:{getPropertyValue:()=>1},dataset:{}},querySelector:()=>null},fetch:async url=>({ok:!!responses[url.slice(5,-5)],json:async()=>structuredClone(responses[url.slice(5,-5)])})};
+ const context={window:{FredWeekly:weekly},MarketCore:C,USTDecisionEngine:{},USTDecisionImport:{},localStorage:{getItem:()=>null},Intl,Date,URL,location:{href:'https://example.com/v4.html'},matchMedia:()=>({matches:false}),document:{addEventListener(){},documentElement:{style:{getPropertyValue:()=>1},dataset:{}},querySelector:()=>null},fetch:async url=>({ok:!!responses[url.slice(5,-5)],json:async()=>structuredClone(responses[url.slice(5,-5)])})};
  vm.createContext(context);vm.runInContext(code,context);return context.window.MarketV3;
 }
 (async()=>{
@@ -47,5 +47,21 @@ function setup(published=sample,status={status:'success',last_success:new Date()
  state.history.series[1].points=[];html=live.historyView();assert.match(html,/No dated curve observations/);assert.doesNotMatch(html,/NaN|undefined/);
  const failed=setup(null,{status:'failed',last_attempt:'2026-11-03T00:00:00Z'});await failed._test.loadHistory();assert.equal(failed._test.getState().history.series.length,31);assert.match(failed.historyView(),/Latest Fed refresh failed/);
  const invalid=setup({...sample,series:[]});await invalid._test.loadHistory();assert.equal(invalid._test.getState().history.series.length,31);
+ const weeklyReader=require('../site/fred-weekly.js');
+ const weeklyApp=setup(undefined,undefined,{load:async family=>({
+  series:weeklyReader.series(JSON.parse(fs.readFileSync('site/data/fred-weekly-'+family+'.json','utf8')),family)
+ })});
+ await weeklyApp._test.loadHistory();
+ const series=weeklyApp._test.getState().history.series;
+ assert.equal(series.filter(s=>s.family==='fx').length,27);
+ assert.equal(series.filter(s=>s.family==='ust').length,11);
+ weeklyApp.applyRoute('history','fx');
+ const weeklyLines=weeklyApp._test.timeData().lines;
+ assert(weeklyLines[0].points.length>=1500);
+ assert([...weeklyApp._test.lineChart(weeklyLines).matchAll(/<polyline points="([^"]*)"/g)]
+  .some(([, points])=>points.split(' ').length>50));
+ assert.match(weeklyApp.historyView(),/Weekly observations/);
+ weeklyApp.applyRoute('history','curves');
+ assert.match(weeklyApp.historyView(),/USD UST · \d{4}-\d{2}-\d{2}/);
  console.log('PASS weekly source selection, latest dates, original history retention, gap-safe rebasing, recession toggle and failure fallback');
 })().catch(error=>{console.error(error);process.exitCode=1;});

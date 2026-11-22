@@ -76,7 +76,7 @@ async function loadFX(){try{
    const rows=d.observations.slice(-260).filter(row=>Number.isFinite(row.values[i]));
    const last=rows.at(-1);
    if(!last)return `<article class="dashboard-card"><h3>${id}</h3><p class="empty">Weekly FX unavailable.</p></article>`;
-   const points=rows.map(row=>[row.week_ending,row.values[i]]);
+   const points=rows.map(row=>[row.date,row.values[i]]);
    return `<article class="dashboard-card"><div class="eyebrow">FX · WEEK ENDING FRIDAY</div><h3>${id}</h3><p class="dashboard-value">${number(last.values[i],4)} <small>${E(s.unit)}</small></p><p class="observation-date">Observation date ${E(date(last.date))}</p>${D.spark(points,s.unit)}<p class="fine">${s.formula?`Same-date cross from ${E(s.formula)}.`:'New York noon reference rate.'}</p>${link(s.source_url||s.source_urls?.[0],'FRED source')}</article>`;
   }
   const s=d.series.find(s=>s.id===id),p=s?.points?.slice(s.frequency==='daily'?-260:-60)||[],last=p.at(-1);if(!last)return `<article class="dashboard-card"><h3>${id}</h3><p class="empty">Saved FX observations unavailable.</p></article>`;
