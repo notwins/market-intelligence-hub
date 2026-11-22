@@ -163,12 +163,11 @@
 
   if (typeof module !== 'undefined') module.exports = { parse, sections, forecastSection, projectionRow };
   const doc = root.document;
-  const file = doc?.getElementById('sb2-research-file');
-  if (!file) return;
-  const status = doc.getElementById('sb2-research-import-status');
-  const remember = doc.getElementById('sb2-research-remember');
+  const status = doc?.getElementById('sb2-research-import-status');
+  if (!status) return;
   const clear = doc.getElementById('sb2-research-clear');
-  let data = null, publishedRequest;
+  const online = root.StocksBeta2PrivateResearch;
+  let data = null, publishedRequest, generation = 0;
 
   async function forListing(ticker) {
     if (data?.listings[ticker]) return data.listings[ticker];
@@ -187,45 +186,35 @@
 
   root.StocksBeta2Research = { forListing, sections, forecastSection, projectionRow };
 
-  function update(saved) {
-    status.textContent = data ? Object.keys(data.listings).length + ' listings loaded '
-      + (saved ? 'in this browser.' : 'for this visit.') : '';
+  function update(message) {
+    status.textContent = message;
     clear.hidden = !data;
-    remember.checked = saved;
     doc.dispatchEvent(new Event('sb2-research-updated'));
   }
 
   try {
     const saved = root.localStorage.getItem(storageKey);
-    if (saved) { data = parse(saved); update(true); }
-  } catch { status.textContent = 'Choose the research JSON to reload the library.'; }
+    if (saved) { data = parse(saved); update('Saved library · ' + Object.keys(data.listings).length + ' listings'); }
+  } catch { /* Access can still be initialized with the private link. */ }
 
-  file.addEventListener('change', async () => {
-    const selected = file.files[0];
-    if (!selected) return;
-    file.disabled = clear.disabled = remember.disabled = true;
-    try {
-      if (selected.size > maxSize) throw new Error('Choose a research library under 1.5 MB.');
-      const raw = await selected.text();
+  online?.read().then(raw => {
+    if (raw && generation === 0) {
       data = parse(raw);
-      let saved = false;
-      try {
-        if (remember.checked) { root.localStorage.setItem(storageKey, raw); saved = true; }
-        else root.localStorage.removeItem(storageKey);
-      } catch { /* The current visit works even if browser storage is unavailable. */ }
-      update(saved);
-    } catch (error) {
-      status.textContent = error instanceof SyntaxError ? 'The selected file is not valid JSON.' : error.message;
-    } finally {
-      file.value = '';
-      file.disabled = clear.disabled = remember.disabled = false;
+      update('Private online library · ' + Object.keys(data.listings).length + ' listings');
     }
+  }).catch(() => {
+    if (!data && generation === 0) status.textContent = 'The private library is unavailable. Refresh to retry.';
   });
 
-  clear.addEventListener('click', () => {
-    try { root.localStorage.removeItem(storageKey); }
-    catch { status.textContent = 'The remembered copy could not be cleared.'; return; }
-    data = null;
-    update(false);
+  clear.addEventListener('click', async () => {
+    generation += 1;
+    clear.disabled = true;
+    try {
+      await online?.forget();
+      root.localStorage.removeItem(storageKey);
+      data = null;
+      update('Private research access cleared from this browser.');
+    } catch { status.textContent = 'This browser could not clear private research access.'; }
+    finally { clear.disabled = false; }
   });
 })(typeof window !== 'undefined' ? window : globalThis);
