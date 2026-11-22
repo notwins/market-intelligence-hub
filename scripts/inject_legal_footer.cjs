@@ -4,7 +4,8 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
-const navigationVersion = '?v=20261122.navpalette2';
+const navigationVersion = '?v=20261122.navstyle1';
+const settingsVersion = '?v=20261116.settings3&amp;navstyle=1';
 const accessFile = path.join(root, 'data/blueprint-access.json');
 const access = fs.existsSync(accessFile) ? JSON.parse(fs.readFileSync(accessFile, 'utf8')) : null;
 if(access){const owner=new URL(access.owner_url);if(access.schema_version!==1||owner.protocol!=='https:'||owner.username||owner.password||owner.search||owner.hash||!owner.hostname.endsWith('.chatgpt.site'))throw Error('Invalid blueprint access destination');}
@@ -38,9 +39,9 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
-  const bootstrap=path.posix.relative(directory,'blueprint-access.js?v=20261116.settings3');
+  const bootstrap=path.posix.relative(directory,'blueprint-access.js')+settingsVersion;
   if(access&&!content.includes('id="mih-blueprint-access"'))content=content.replace(/<\/head\s*>/i,'<script id="mih-blueprint-access" src="'+bootstrap+'" defer></script></head>');
-  if(access)content=content.replace(/(<script\b[^>]*\bid="mih-blueprint-access"[^>]*\bsrc="[^"]*blueprint-access\.js)(?:\?[^"]*)?"/g,'$1?v=20261116.settings3"');
+  if(access)content=content.replace(/(<script\b[^>]*\bid="mih-blueprint-access"[^>]*\bsrc="[^"]*blueprint-access\.js)(?:\?[^"]*)?"/g,'$1'+settingsVersion+'"');
   if (!/<\/head\s*>/i.test(content)) throw new Error('Cannot attach footer stylesheet: ' + relative);
   if(!content.includes('<link rel="stylesheet" href="'+css+'">'))content = content.replace(/<\/head\s*>/i, '<link rel="stylesheet" href="' + css + '"></head>');
   const footer = marker + '\n<footer class="mih-legal-footer" role="contentinfo"><div>' +
