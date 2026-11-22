@@ -4,22 +4,22 @@ const listeners={},nodes={'si-rows':{innerHTML:''},'si-count':{textContent:''},'
 let renders=0,broken=false;
 const ctx={window:null,console,fetch:async()=>({ok:!broken,json:async()=>payload}),document:{addEventListener:(n,f)=>(listeners[n]??=[]).push(f),getElementById:k=>nodes[k]}};ctx.window=ctx;vm.createContext(ctx);vm.runInContext(read('si-beta2-core.js'),ctx);vm.runInContext(read('si-quick-filter.js'),ctx);vm.runInContext(source,ctx);const si=ctx.MarketSI;
 (async()=>{
- assert(si.acceptable(payload));assert.equal(payload.rows.length,246);assert.equal(payload.rows.filter(r=>r.additional_review).length,23);
+ assert(si.acceptable(payload));assert.equal(payload.rows.length,payload.record_count);assert.equal(payload.rows.filter(r=>r.additional_review).length,payload.additional_review_count);
  assert.deepEqual(payload.rows[0],{reference:'SI-001',shares:['NVDA','AMD','NOW','MRVL'],source_date:'2026-11-05',currency:'SGD',tenor_source_value:9,coupon_pct:15,strike_pct:90,ko_pct:100,ki_pct:50,additional_review:false});
  si.connect(()=>renders++);await new Promise(r=>setTimeout(r,0));assert(renders);
  assert.equal(si.stepDown('SI-226'),1.5);assert.equal(si.stepDown('SI-246'),1.5);
  assert.equal(si.stepDown('SI-006'),2);assert.equal(si.stepDown('SI-050'),3.5);assert.equal(si.stepDown('SI-100'),4.5);
  assert.equal(si.stepDown('SI-017'),null);assert.equal(si.stepDown('SI-225'),2);
  const legacy=structuredClone(payload);delete legacy.ko_step_down_pp;assert(si.acceptable(legacy));
- for(const steps of [null,[],{'SI-006':null},{'SI-247':1.5},{'SI-226':'1.50'},{'SI-226':-1}]){
+ for(const steps of [null,[],{'SI-006':null},{'SI-000':1.5},{'SI-226':'1.50'},{'SI-226':-1}]){
   assert.equal(si.acceptable({...payload,ko_step_down_pp:steps}),false);
  }
- let html=si.view();for(const text of ['SI Pricing','Historical charts','Not live prices','p.a. (assumed)','months','whole percentage points','not a verified annual yield','unconfirmed source coupon basis','issuer terms','23 additional-review rows'])assert(html.includes(text),text);
- assert.equal((html.match(/<tr>/g)||[]).length,247);assert(html.includes('p.a. (screen)'));assert(html.includes('data-table-unit="months"'));assert(html.includes('si-beta2.html?reference=SI-001'));assert(html.includes('data-si-coupon-band="above-12"'));assert(html.includes('data-si-barrier-band='));assert(html.includes('Date not shown'));assert(html.includes('KO step'));assert(html.includes('>2 pp</td>'));assert(html.includes('2026-11-13'));assert(html.includes('Indicative · Photo unverified'));assert(!html.includes('source_excel_row'));assert(!html.includes('IMG_609'));assert(html.includes('tabindex="0" role="region"'));assert(html.includes('scope="col"'));assert(html.includes('scope="row"'));assert(html.includes('data-si-reference-table'));
- listeners.input[0]({target:{id:'si-query',value:'NVDA'}});assert(si.filtered().length>0&&si.filtered().length<246);assert(si.filtered().every(r=>r.shares.includes('NVDA')));assert(nodes['si-count'].textContent.includes('of 246'));assert(!nodes['si-rows'].innerHTML.includes('colspan'));
+ let html=si.view();for(const text of ['SI Pricing','Historical charts','Not live prices','p.a. (assumed)','months','whole percentage points','not a verified annual yield','unconfirmed source coupon basis','issuer terms',`${payload.additional_review_count} additional-review rows`])assert(html.includes(text),text);
+ assert.equal((html.match(/<tr>/g)||[]).length,payload.record_count+1);assert(html.includes('p.a. (screen)'));assert(html.includes('data-table-unit="months"'));assert(html.includes('si-beta2.html?reference=SI-001'));assert(html.includes('data-si-coupon-band="above-12"'));assert(html.includes('data-si-barrier-band='));assert(html.includes('Date not shown'));assert(html.includes('KO step'));assert(html.includes('>2 pp</td>'));assert(html.includes('2026-11-13'));assert(html.includes('Indicative · Photo unverified'));assert(!html.includes('source_excel_row'));assert(!html.includes('IMG_609'));assert(html.includes('tabindex="0" role="region"'));assert(html.includes('scope="col"'));assert(html.includes('scope="row"'));assert(html.includes('data-si-reference-table'));
+ listeners.input[0]({target:{id:'si-query',value:'NVDA'}});assert(si.filtered().length>0&&si.filtered().length<payload.record_count);assert(si.filtered().every(r=>r.shares.includes('NVDA')));assert(nodes['si-count'].textContent.includes(`of ${payload.record_count}`));assert(!nodes['si-rows'].innerHTML.includes('colspan'));
  listeners.change[0]({target:{id:'si-currency',value:'USD'}});assert(si.filtered().every(r=>r.currency==='USD'));listeners.change[0]({target:{id:'si-review-only',checked:true}});assert(si.filtered().every(r=>r.additional_review));
  listeners.input[0]({target:{id:'si-query',value:'<svg onload=alert(1)>'}});assert(nodes['si-rows'].innerHTML.includes('No matching saved SI references for this selection'));assert(!nodes['si-rows'].innerHTML.includes('<svg'));
- listeners.click[0]({target:{closest:s=>s==='[data-si-reset]'?{}:null}});assert.equal(si.filtered().length,246);assert.equal(nodes['si-currency'].value,'All');assert.equal(nodes['si-review-only'].checked,false);
+ listeners.click[0]({target:{closest:s=>s==='[data-si-reset]'?{}:null}});assert.equal(si.filtered().length,payload.record_count);assert.equal(nodes['si-currency'].value,'All');assert.equal(nodes['si-review-only'].checked,false);
  const before=JSON.stringify(payload);
  listeners.input[0]({target:{id:'si-query',value:'Alphabet'}});
  assert(si.filtered().length>0);assert(si.filtered().every(r=>r.shares.includes('GOOGL')),'search accepts approved company names');
@@ -72,5 +72,5 @@ const ctx={window:null,console,fetch:async()=>({ok:!broken,json:async()=>payload
  q.handle({id:'si-join-2',value:'OR'});q.handle({id:'si-share-3',value:'C'});assert.equal(sample.filter(q.matches).length,2);assert(q.expression().includes('(B AND C)'));
  q.reset();q.handle({id:'si-coupon-min',value:'0'});q.handle({id:'si-include-unconfirmed',checked:true});assert.equal(sample.filter(q.matches).length,4,'zero is an actual bound');q.handle({id:'si-step-min',value:'0'});assert.equal(sample.filter(q.matches).length,0,'missing is not zero');
  console.log('PASS compact quick filters, exact basket Boolean logic, range bounds, p.a. coverage, missing terms, reset and immutable source');
- console.log('PASS SI246 allowlist, unverified historical terms, unit/basis limits, filters/reset, safe data, failure retention and Historical charts integration');
+ console.log('PASS SI reference allowlist, unverified historical terms, unit/basis limits, filters/reset, safe data, failure retention and Historical charts integration');
 })().catch(e=>{console.error(e);process.exitCode=1;});

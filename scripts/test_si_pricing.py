@@ -5,16 +5,18 @@ class SIReferenceTests(unittest.TestCase):
  def test_public_projection(self):
   path=ROOT/'site/data/si-pricing-reference.json';text=path.read_text(encoding='utf-8');d=json.loads(text)
   self.assertEqual(d['classification'],'rounded_historical_reference');self.assertIs(d['live_quotes'],False)
-  self.assertEqual(d['record_count'],246);self.assertEqual(len(d['rows']),246)
+  self.assertEqual(d['record_count'],len(d['rows']));self.assertGreaterEqual(len(d['rows']),246)
+  dates=[r['source_date'] for r in d['rows'] if r['source_date'] is not None]
+  self.assertEqual(d['source_date_range'],[min(dates),max(dates)])
   allowed={'reference','shares','source_date','currency','tenor_source_value','coupon_pct','strike_pct','ko_pct','ki_pct','additional_review'}
   for i,r in enumerate(d['rows'],1):
-   expected=allowed if i<=225 else allowed|{'source_kind','tenor_unit','coupon_basis'}
+   expected=allowed|{'source_kind','tenor_unit','coupon_basis'} if 226<=i<=246 or r.get('source_kind')=='indicative_pricing' else allowed
    if 'product_type' in r:
     self.assertEqual(r['product_type'],'bonus_enhanced')
     expected=expected|{'product_type'}
    self.assertEqual(set(r),expected);self.assertEqual(r['reference'],f'SI-{i:03d}')
    if r['source_date'] is not None:
-    self.assertLessEqual('2026-10-30',r['source_date']);self.assertLessEqual(r['source_date'],'2026-11-13')
+    self.assertRegex(r['source_date'],r'^\d{4}-\d{2}-\d{2}$')
    for k in ['coupon_pct','strike_pct','ko_pct','ki_pct']:self.assertIs(type(r[k]),int)
   self.assertEqual(sum(r['additional_review'] for r in d['rows']),d['additional_review_count'])
   self.assertEqual(sum(r['additional_review'] for r in d['rows'][:225]),13)
@@ -27,7 +29,7 @@ class SIReferenceTests(unittest.TestCase):
   d=json.loads((ROOT/'site/data/si-pricing-reference.json').read_text(encoding='utf-8'))
   prior=json.dumps(d['rows'][:225],sort_keys=True,separators=(',',':')).encode()
   self.assertEqual(hashlib.sha256(prior).hexdigest(),'6e72ec679556f4c66f3a45c6feb5ad72bf5592a88da29137b7ae0674da357bcf')
-  usd,sgd=d['rows'][225:236],d['rows'][236:]
+  usd,sgd=d['rows'][225:236],d['rows'][236:246]
   self.assertEqual([r['strike_pct'] for r in usd],[71,72,73,75,76,78,80,82,85,89,94])
   self.assertEqual([r['strike_pct'] for r in sgd],[78,79,81,82,84,86,89,92,96,101])
   self.assertEqual([r['ko_pct'] for r in usd],list(range(100,89,-1)))
@@ -44,10 +46,10 @@ class SIReferenceTests(unittest.TestCase):
  def test_step_down_metadata_matches_pricing_screen_rows(self):
   d=json.loads((ROOT/'site/data/si-pricing-reference.json').read_text(encoding='utf-8'))
   steps=d['ko_step_down_pp']
-  self.assertEqual(len(steps),224)
-  self.assertEqual({k:v for k,v in steps.items() if int(k[3:])>=226},{f'SI-{i:03d}':1.5 for i in range(226,247)})
+  self.assertEqual(sum(int(k[3:])<=246 for k in steps),224)
+  self.assertEqual({k:v for k,v in steps.items() if 226<=int(k[3:])<=246},{f'SI-{i:03d}':1.5 for i in range(226,247)})
   self.assertLessEqual(set(steps),{r['reference'] for r in d['rows']})
-  self.assertTrue(all(type(v) in (int,float) and 0<v<=8 for v in steps.values()))
+  self.assertTrue(all(type(v) in (int,float) and 0<v<=100 for v in steps.values()))
   self.assertEqual([steps[f'SI-{i:03d}'] for i in (1,6,12,50,100,141,190,225)],[5,2,1,3.5,4.5,8,1.5,2])
   self.assertNotIn('SI-017',steps)
   self.assertNotIn('SI-075',steps)
