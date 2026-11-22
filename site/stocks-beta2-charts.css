@@ -79,6 +79,14 @@
 .sb2-peer-section .sb2-table th { white-space:normal; min-width:105px; }
 .sb2-peer-section .sb2-table thead th small,.sb2-peer-section .sb2-table thead th a { display:block; margin-top:3px; font-weight:400; }
 .sb2-peer-section .sb2-table td { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.sb2-guidance-table { max-height:none; overflow-x:auto; }
+.sb2-guidance-table :is(th,td) { padding:7px 9px; font-size:.8rem; white-space:normal; vertical-align:top; }
+.sb2-guidance-table :is(thead th,tbody td) { min-width:116px; }
+.sb2-guidance-table tbody th { min-width:94px; }
+.sb2-guidance-table :is(th small,th a,.sb2-guidance-item strong) { display:block; margin-top:3px; }
+.sb2-guidance-table th small { font-weight:400; }
+.sb2-guidance-item + .sb2-guidance-item { margin-top:8px; }
+.sb2-guidance-table .sb2-guidance-note td { color:var(--muted); }
 .sb2-research h3 { font-size:1.03rem; margin:0 0 8px; }
 .sb2-research h4 { font-size:.92rem; margin:12px 0 4px; }
 .sb2-research p { margin:5px 0; line-height:1.45; font-size:.88rem; }

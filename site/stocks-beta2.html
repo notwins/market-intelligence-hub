@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="company-logos.css">
   <link rel="stylesheet" href="stocks-beta2.css?v=20261122.writeups">
-  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261122.public-peers1">
+  <link rel="stylesheet" href="stocks-beta2-charts.css?v=20261122.company-guidance1">
   <script defer src="company-logos.js?v=20261121.layout1"></script>
   <script defer src="stocks-beta2-charts.js?v=20261122.figures1"></script>
   <link rel="stylesheet" href="stock-price-archive.css?v=1">
@@ -25,12 +25,12 @@
   <script defer src="equity-research-data.js"></script>
   <script defer src="research-feed.js"></script>
   <script defer src="content-source.js"></script>
-  <script defer src="stocks-beta2-public-peers.js?v=20261122.public-peers1"></script>
+  <script defer src="stocks-beta2-public-peers.js?v=20261122.company-guidance1"></script>
   <script defer src="desk-news.js"></script>
   <script defer src="si-beta2-core.js?v=20261121.si2cards1"></script><link rel="stylesheet" href="si-reference-table.css?v=20261122.barriers1"><script defer src="si-reference-table.js?v=20261122.barriers1"></script><script defer src="stock-card-reading.js?v=20261122.figures1&amp;si2cards=1&amp;news=collapse1"></script>
   <script defer src="stocks-beta2-private-research.js?v=1"></script>
   <script defer src="stocks-beta2-research.js?v=20261122.private-research1"></script>
-  <script defer src="stocks-beta2.js?v=20261122.public-peers1"></script>
+  <script defer src="stocks-beta2.js?v=20261122.company-guidance1"></script>
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261121.bonds1"></script>
   <link rel="stylesheet" href="table-controls.css?v=20261121.layout1">
@@ -274,6 +274,10 @@
           <section class="sb2-research" aria-label="Company research">
             <details class="sb2-public-peers" data-sb2-public-peers>
               <summary>Compare public financials</summary>
+              <div data-sb2-peer-body></div>
+            </details>
+            <details class="sb2-public-peers" data-sb2-company-guidance>
+              <summary>Company guidance</summary>
               <div data-sb2-peer-body></div>
             </details>
             <h3>BOS Equity Research</h3>
