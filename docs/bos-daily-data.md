@@ -236,3 +236,20 @@ Pages build. A one-time code change may add a new schema reader; routine daily
 refreshes do not repeat that deployment. Current quote selection keeps exact
 listing/currency guards, dated BOS valuations and the existing Yahoo fallback.
 Historical Yahoo and original workbook series remain intact.
+
+## Daily V4 publisher links
+
+A second job on the same daily schedule updates only
+`publisher-documents/latest.json` on `market-prices`. It runs after the price
+job and can also discover links independently when a valuation import fails.
+The V4 credit and earnings cards read this small file directly. A changed
+edition requires no Pages build. Identical metadata creates no commit.
+
+The writer checks the publisher's dated URLs in Singapore date order, then
+previous weekdays. Each bond list must contain its own date and populated table.
+For equities, it matches the original PDF hash to a verified valuation snapshot
+when available, otherwise it reads the exact USD listing and its PDF annotation.
+Company report dates come from the report's first page. A missing company link
+can use an earlier verified edition, identified on the card. Discovery checks
+up to twelve previous weekdays and retains the last verified data across
+longer gaps. Only dates and publisher links enter the data file.
