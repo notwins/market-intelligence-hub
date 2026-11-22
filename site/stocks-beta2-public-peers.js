@@ -14,7 +14,7 @@
   const average = (a, b) => Number.isFinite(a) && Number.isFinite(b) ? (a + b) / 2 : null;
   const sub = (a, b) => Number.isFinite(a) && Number.isFinite(b) ? a - b : null;
   const amounts = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
-  const ratio = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const ratio = new Intl.NumberFormat('en-GB', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
 
   function financialMetrics(fields, bank) {
     const freeCash = sub(fields.operatingCash, fields.capex);
@@ -173,7 +173,7 @@
     const addLabel = node('label', 'Compare with');
     addLabel.append(selectPeer);
     controls.append(tagLabel, addLabel);
-    panel.replaceChildren(controls, remove, node('p', 'Issuer-reported annual results for fiscal years ended July 2025 to June 2026. Amounts are in millions of each company’s reporting currency.'), output, method);
+    panel.replaceChildren(controls, remove, node('p', 'Each company shows its fiscal year-end and reporting currency. Amounts are in millions.'), output, method);
     paint();
   }
 
