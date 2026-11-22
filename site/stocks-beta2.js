@@ -609,12 +609,12 @@
       element.querySelector('[data-sb2-fundamentals]').innerHTML = root.CompanyFundamentals?.button(company, {
         research: false, compareYears: true
       }) || '';
-      const credit = element.querySelector('[data-credit-listing]');
-      if (credit) {
-        credit.dataset.creditListing = company.ticker;
-        root.CompanyCredit?.paintCard(credit);
-      }
       element.querySelector('.sb2-coverage').textContent = company.observations.length + ' of ' + data.months.length + ' monthly editions';
+    }
+    const credit = element.querySelector('[data-credit-listing]');
+    if (credit) {
+      credit.dataset.creditListing = company.ticker;
+      root.CompanyCredit?.paintCard(credit);
     }
     if (existing) {
       history.remove(existing.element);
