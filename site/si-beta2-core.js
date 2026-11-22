@@ -1,6 +1,7 @@
 /* Private, browser-local SI drafts. Price levels are illustrations, never a payoff engine. */
 (function(root){'use strict';
 const W=800,H=1132,navy='#122b43',blue='#3879ad',muted='#526477',border='#ccd6df';
+const barrierInk=Object.freeze({ko:'#497c31',ki:'#ae3b49',strike:'#7652a3'});
 const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>v===''||v===null||v===undefined?null:Number.isFinite(Number(v))?Number(v):null;
 const fmt=(v,d=2)=>num(v)===null?'Not supplied':Number(v).toLocaleString('en-US',{maximumFractionDigits:d});
@@ -370,10 +371,19 @@ function svg(p,enrichment={},page=1,total=1,{showWatermarks=true,links,chart:opt
  fitted(28,four?98:126,p.shares.map(s=>s.symbol).join('  +  '),535,15,navy,true);text(772,four?97:125,p.source?`Based on ${p.source.reference}`:'Manually entered terms',10,muted,false,'end');
  const left=28,top=four?107:139,rowHeight=four?15:19,rowText=four?11:13,tableWidth=365,columns=[left,left+105,left+176,left+239,left+302,left+365];
  rect(left,top,tableWidth,rowHeight,blue,blue);['Underlying','Reference','KO','KI','Strike'].forEach((v,i)=>text(columns[i]+5,top+rowText,v,9,'#fff',true));
- const count=Math.max(p.shares.length,2);for(let i=0;i<count;i++){const y=top+(i+1)*rowHeight,s=p.shares[i];rect(left,y,tableWidth,rowHeight,i%2?'#f5f8fb':'#fff');if(!s)continue;const r=reference(p,s,enrichment[s.symbol]),l=levels(p,r.value);[s.symbol,fmt(r.value,4),fmt(l.ko,4),fmt(l.ki,4),fmt(l.strike,4)].forEach((v,j)=>fitted(columns[j]+5,y+rowText,v==='Not supplied'?'—':v,columns[j+1]-columns[j]-10,9,j===2?'#497c31':j===3?'#ae3b49':j===4?'#7652a3':navy,j===0));}
+ const levelInk=[navy,navy,barrierInk.ko,barrierInk.ki,barrierInk.strike];
+ const count=Math.max(p.shares.length,2);for(let i=0;i<count;i++){const y=top+(i+1)*rowHeight,s=p.shares[i];rect(left,y,tableWidth,rowHeight,i%2?'#f5f8fb':'#fff');if(!s)continue;const r=reference(p,s,enrichment[s.symbol]),l=levels(p,r.value);[s.symbol,fmt(r.value,4),fmt(l.ko,4),fmt(l.ki,4),fmt(l.strike,4)].forEach((v,j)=>fitted(columns[j]+5,y+rowText,v==='Not supplied'?'—':v,columns[j+1]-columns[j]-10,9,v==='Not supplied'?muted:levelInk[j],j===0));}
  const basis={per_annum:'PA',per_month:' per month',total:' total',unconfirmed:' (basis unconfirmed)'}[p.couponBasis];
  const pairs=[['Tenor',`${fmt(p.months)} months`,'Coupon',`${pct(p.coupon)}${basis}`],['Currency',p.currency,'Initial KO',pct(p.ko)],['KI',pct(p.ki),'Strike',pct(p.strike)],['Monthly step',num(p.step)===null?'Not supplied':fmt(p.step,4)+' pp','Final KO',finalKO(p)===null?'Not calculated':pct(finalKO(p))]];
- pairs.forEach((row,i)=>{const y=top+i*rowHeight;rect(408,y,364,rowHeight,i%2?'#fff':'#f5f8fb');text(414,y+rowText,row[0]+':',9,muted);fitted(487,y+rowText,row[1],96,9,navy,true);text(590,y+rowText,row[2]+':',9,muted);fitted(655,y+rowText,row[3],111,9,navy,true);});
+ const summaryInk={'Initial KO':barrierInk.ko,'Final KO':barrierInk.ko,KI:barrierInk.ki,Strike:barrierInk.strike};
+ pairs.forEach(([leftLabel,leftValue,rightLabel,rightValue],i)=>{
+  const y=top+i*rowHeight,leftInk=summaryInk[leftLabel],rightInk=summaryInk[rightLabel];
+  rect(408,y,364,rowHeight,i%2?'#fff':'#f5f8fb');
+  text(414,y+rowText,leftLabel+':',9,leftInk||muted);
+  fitted(487,y+rowText,leftValue,96,9,leftInk||navy,true);
+  text(590,y+rowText,rightLabel+':',9,rightInk||muted);
+  fitted(655,y+rowText,rightValue,111,9,rightInk||navy,true);
+ });
  fitted(408,four?176:228,`KI: ${p.kiType||'Not supplied'}${p.issuer?' · Issuer: '+p.issuer:''}`,364,8,muted);
  const referenceNote=p.date?`Reference: ${p.date}; manual prices override closes.`:'Reference: saved close or manual price. Levels = reference × %.';
  fitted(28,four?193:244,referenceNote,365,8,muted);
@@ -651,5 +661,5 @@ function pdfLinkUrl(raw){
   (url.hostname==='www.morningstar.com'&&/^\/stocks\/[a-z]+\/[^/]+\/financials$/.test(url.pathname)||
    ['www.apple.com','www.fitchratings.com','www.spglobal.com','ratings.moodys.com'].includes(url.hostname))?url.href:'';}catch{return '';}
 }
-const api={inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,payoffCases,payoffFields,payoffTerms,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,monthsAfter,probabilityCone,coneAnalysis,coneMonths,commonConePairs,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={barrierInk,inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,payoffCases,payoffFields,payoffTerms,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,monthsAfter,probabilityCone,coneAnalysis,coneMonths,commonConePairs,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);

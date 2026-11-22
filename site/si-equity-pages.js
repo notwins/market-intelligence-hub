@@ -216,7 +216,7 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
  const displayCurrency=currencyTools.tradingCurrency(data.currency||data.moaCurrency);
  const definitions=new Set(),translations=new Set(),unconverted=new Set();
  let mixed=false,halfYear=false;
- for(const [section,key,title,top] of [[3,'income','Income statement',454],[4,'balance','Balance sheet',686],[5,'cash','Cash flow',838]]){
+ for(const [section,key,title,top] of [[3,'income','Income statement',452],[4,'balance','Balance sheet',690],[5,'cash','Cash flow',844]]){
   const report=company?.quarterly?.[key];
   const from=currencyTools.reportingCurrency(info?.id,report);
   const table=highlights(report,key,quarters,{listingId:info?.id,target:displayCurrency,fx:data.statementFx?.[from],annual:company?.statements?.[key]});
@@ -272,7 +272,8 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
      figures.number(value,1)+'%':figures.amount(value,row.scale);
     fitted(first+cellWidth*(j+1)-5,y,formatted,cellWidth-6,11,color,row.important||change,'end');
    });
-   y+=change?17.4:13.7;
+   y+=13.7;
+   if(change)y+=6.3; // Blank spacer before the next financial row.
   }
   for(const {start} of years.values()){
    if(start===0)continue;
@@ -358,16 +359,16 @@ function termsSvg(page,data={},number,total){
   const stock=data[share.symbol]||{},ref=C.reference(page,share,stock);
   return {share,stock,ref,levels:C.levels(page,ref.value)};
  });
- const ends=[410,526,641,757];
+ const ends=[410,526,641,757],ink=[navy,C.barrierInk.ko,C.barrierInk.ki,C.barrierInk.strike];
  rect(28,220,744,22,'#eaf2f5');
  text(39,235,'Share / price basis',11,navy,true);
- ['Reference','Initial KO','KI','Strike'].forEach((label,i)=>text(ends[i],235,label,11,navy,true,'end'));
+ ['Reference','Initial KO','KI','Strike'].forEach((label,i)=>text(ends[i],235,label,11,ink[i],true,'end'));
  referenceRows.forEach(({share,stock,ref,levels},i)=>{
   const y=257+i*26;
   if(i%2===0)rect(28,y-11,744,26,'#f4f8fa','#f4f8fa');
   text(39,y,share.symbol+(stock.currency?' · '+stock.currency:''),12,teal,true);
   text(39,y+11,[ref.basis,ref.date].filter(Boolean).join(' · '),9.5,muted);
-  [ref.value,levels.ko,levels.ki,levels.strike].forEach((value,j)=>text(ends[j],y,C.fmt(value,4),12,navy,true,'end'));
+  [ref.value,levels.ko,levels.ki,levels.strike].forEach((value,j)=>text(ends[j],y,C.fmt(value,4),12,value===null?muted:ink[j],true,'end'));
  });
  heading(374,'2','Monthly knock-out levels');
  const final=C.finalKO(page);
@@ -378,7 +379,7 @@ function termsSvg(page,data={},number,total){
   text(28,397,stepText+(page.months>12?' First and final months shown.':''),11,muted);
   const right=referenceRows.map((_,i)=>757-(referenceRows.length-1-i)*140);
   rect(28,408,744,22,'#eaf2f5');
-  text(39,423,'Month',11,navy,true);text(185,423,'KO %',11,navy,true,'end');
+  text(39,423,'Month',11,navy,true);text(185,423,'KO %',11,C.barrierInk.ko,true,'end');
   referenceRows.forEach(({share,stock},i)=>fitted(right[i],423,share.symbol+(stock.currency?' · '+stock.currency:''),134,11,navy,true,'end'));
   const months=page.months<=12?Array.from({length:page.months},(_,i)=>i+1):
    [1,2,3,4,5,null,page.months-4,page.months-3,page.months-2,page.months-1,page.months];
@@ -387,12 +388,15 @@ function termsSvg(page,data={},number,total){
    if(month===null){text(39,y,'…',11,muted);return;}
    const ko=C.finalKO({...page,months:month});
    if(month%2||month===page.months)rect(28,y-11,744,15,month===page.months?'#eaf2f5':'#f4f8fa','#fff');
-   text(39,y,month,11);text(185,y,C.pct(ko),11,teal,true,'end');
-   referenceRows.forEach(({ref},i)=>text(right[i],y,C.fmt(Number.isFinite(ref.value)?ref.value*ko/100:null,4),11,navy,true,'end'));
+   text(39,y,month,11);text(185,y,C.pct(ko),11,C.barrierInk.ko,true,'end');
+   referenceRows.forEach(({ref},i)=>{
+    const value=Number.isFinite(ref.value)?ref.value*ko/100:null;
+    text(right[i],y,C.fmt(value,4),11,value===null?muted:C.barrierInk.ko,true,'end');
+   });
   });
  }else{
   text(28,411,'A monthly schedule needs a confirmed monthly tenor and a supplied step-down.',11,muted);
-  text(28,433,`Entered initial KO ${C.pct(page.ko)} · Final KO ${C.pct(final)}`,11,teal,true);
+  text(28,433,`Entered initial KO ${C.pct(page.ko)} · Final KO ${C.pct(final)}`,11,C.barrierInk.ko,true);
  }
  heading(655,'3','Payoff examples');
  const {examples,notional,source,cashExample,assumedAnnual}=payoffExamples(page);
