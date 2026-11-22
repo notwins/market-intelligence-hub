@@ -3,9 +3,9 @@
 const C=root.SIBetaCore||(typeof require==='function'?require('./si-beta2-core.js'):null);
 const E=C.escape,navy='#122b43',teal='#276976',muted='#526477',border='#d3dfe6';
 const choices={
- income:[['Revenue',/^(?:Total )?Revenue$/i],['Gross profit',/^Gross Profit$/i],
+ income:[['Revenue',/^(?:Total )?Revenue$/i,true],['Gross profit',/^Gross Profit$/i],
   ['Operating income',/^(?:Total Operating Profit\/Loss|Operating Income)$/i],
-  ['Net income',/^Net Income(?:\/Loss)?(?:, Total| Attributable to Parent| After Non-Controlling\/Minority Interests)?$/i],
+  ['Net income',/^Net Income(?:\/Loss)?(?:, Total| Attributable to Parent| After Non-Controlling\/Minority Interests)?$/i,true],
   ['Diluted EPS',/^(?:Diluted EPS|Reported Normalized Diluted EPS|Diluted Earnings Per Share|Earnings Per Share.*Diluted.*)$/i]],
  balance:[['Cash & equivalents',/^(?:Cash (?:And|&) Cash Equivalents|Cash, Cash Equivalents and Short Term Investments)$/i],['Total assets',/^Total Assets$/i],
   ['Total liabilities',/^Total Liabilities$/i],['Total equity',/^Total (?:Equity|Stockholders.? Equity)$/i],['Current assets',/^Total Current Assets$/i]],
@@ -14,32 +14,57 @@ const choices={
   ['Financing cash flow',/^Cash Flow from(?:\/Used in)? Financing Activities$/i],
   ['Ending cash',/^Cash and Cash Equivalents, End of Period$/i],['Change in cash',/^Change in Cash$/i]]
 };
+function quarterIndex(label){
+ const match=/^Q([1-4]) (\d{4})$/.exec(label);
+ return match?Number(match[2])*4+Number(match[1])-1:NaN;
+}
+function quarterLabel(index){
+ return 'Q'+(index%4+1)+' '+Math.floor(index/4);
+}
 function fiscalQuarters(statements){
  let latest=-Infinity;
  for(const report of Object.values(statements||{})){
   report?.periods.forEach((label,index)=>{
-   const match=/^Q([1-4]) (\d{4})$/.exec(label);
-   if(match&&report.rows.some(row=>Number.isFinite(row[2][index]))){
-    latest=Math.max(latest,Number(match[2])*4+Number(match[1])-1);
+   const quarter=quarterIndex(label);
+   if(Number.isFinite(quarter)&&report.rows.some(row=>Number.isFinite(row[2][index]))){
+    latest=Math.max(latest,quarter);
    }
   });
  }
- return Number.isFinite(latest)?Array.from({length:12},(_,i)=>{
-  const quarter=latest-11+i;
-  return 'Q'+(quarter%4+1)+' '+Math.floor(quarter/4);
- }):[];
+ return Number.isFinite(latest)?Array.from({length:12},(_,i)=>quarterLabel(latest-11+i)):[];
 }
 function highlights(report,key,periods=fiscalQuarters({[key]:report})){
  if(!report||!periods.length)return null;
  const indices=periods.map(label=>report.periods.indexOf(label));
- const rows=choices[key].map(([label,pattern])=>{
+ const previous=periods.map(label=>report.periods.indexOf(quarterLabel(quarterIndex(label)-1)));
+ const rows=choices[key].map(([label,pattern,showChange])=>{
   const match=report.rows.find(row=>pattern.test(row[1])&&indices.some(index=>Number.isFinite(row[2][index])));
   const perShare=match&&/per share|\bEPS\b/i.test(match[1]);
   const caption=/Normalized/.test(match?.[1]||'')?'Normalized diluted EPS':/Short Term Investments/.test(match?.[1]||'')?'Cash & short-term investments':label;
-  return {label:caption,reportedLabel:match?.[1],
-   values:indices.map(index=>match?.[2][index]??null),scale:perShare?1:1e6};
+  const values=indices.map(index=>match?.[2][index]??null);
+  const scale=perShare?1:values.some(value=>Math.abs(value)>=1e6)?1e6:1e3;
+  const changes=showChange?values.map((value,i)=>{
+   const prior=match?.[2][previous[i]];
+   if(!Number.isFinite(value)||!Number.isFinite(prior)||prior===0)return null;
+   const change=(value-prior)/Math.abs(prior)*100;
+   return Number.isFinite(change)?change:null;
+  }):null;
+  return {label:caption,reportedLabel:match?.[1],values,scale,changes};
  });
  return rows.some(row=>row.reportedLabel)?{periods,rows,currency:report.currency,fiscalEnd:report.fiscalEnd}:null;
+}
+function formatAmount(value,scale){
+ if(value===null)return '—';
+ const amount=value/scale,magnitude=Math.abs(amount);
+ const decimals=scale===1?2:magnitude<100?1:0;
+ return amount!==0&&magnitude<0.5/10**decimals?'≈0':C.fmt(amount,decimals);
+}
+function formatChange(value){
+ if(value===null)return '—';
+ const magnitude=Math.abs(value);
+ if(value!==0&&magnitude<0.05)return '≈0%';
+ const sign=value>0?'+':value<0?'−':'';
+ return sign+C.fmt(magnitude,1)+'%';
 }
 function ratings(record){
  return (record?.credit||[]).filter(r=>r.raw).map(r=>({...r,source:'Bloomberg supplied snapshot',
@@ -106,7 +131,7 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
  const titles={income:'Income statement',balance:'Balance sheet',cash:'Cash flow'};
  const quarters=fiscalQuarters(company?.quarterly);
  ['income','balance','cash'].forEach((key,section)=>{
-  const top=534+section*169,report=company?.quarterly?.[key],table=highlights(report,key,quarters);
+  const top=[534,729,884][section],report=company?.quarterly?.[key],table=highlights(report,key,quarters);
   heading(top,String(section+3),titles[key]);
   if(table?.fiscalEnd)text(772,top,'Fiscal year end: '+table.fiscalEnd,10,muted,false,'end');
   if(!table){
@@ -120,27 +145,36 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
    return;
   }
   const columns=[333,418,503,588,673,758];
+  const rows=table.rows.flatMap(row=>row.changes?[row,{label:row.label+' QoQ',values:row.changes,isChange:true}]:[row]);
   for(const [band,start] of [0,6].entries()){
-   const y0=top+8+band*70;
+   const y0=top+8+band*(rows.length*10+13);
    rect(28,y0,744,14,'#edf4f6');
-   text(38,y0+10,table.currency+' millions'+(key==='income'?' · EPS per share':''),10,muted,true);
+   text(38,y0+10,table.currency,10,muted,true);
+   text(252,y0+10,'Unit',10,muted,true,'end');
    table.periods.slice(start,start+6).forEach((quarter,i)=>text(columns[i],y0+10,quarter,10,navy,true,'end'));
-   table.rows.forEach((row,i)=>{const y=y0+24+i*11;
-    if(i%2===0)rect(28,y-9,744,11,'#f7fafb','#f7fafb');
-    text(38,y,row.label,10.5,navy,i===0);
-    row.values.slice(start,start+6).forEach((v,j)=>text(columns[j],y,v===null?'—':C.fmt(v/row.scale,2),10.5,v===null?muted:navy,v!==null,'end'));
+   rows.forEach((row,i)=>{const y=y0+21+i*10;
+    if(row.isChange)rect(28,y-8,744,10,'#edf4f6','#edf4f6');
+    text(row.isChange?48:38,y,row.label,10,row.isChange?muted:navy,i===0||row.isChange);
+    const unit=row.isChange?'%':!row.reportedLabel?'':row.scale===1?'per share':row.scale===1e6?'M':"'000";
+    text(252,y,unit,9,muted,false,'end');
+    row.values.slice(start,start+6).forEach((value,j)=>{
+     const color=row.isChange?(value>0?'#23604b':value<0?'#9d313b':muted):(value===null?muted:navy);
+     const formatted=row.isChange?formatChange(value):formatAmount(value,row.scale);
+     fitted(columns[j],y,formatted,75,10,color,value!==null,'end');
+    });
    });
   }
  });
  line(1025);
  const captured=company?.quarterlyCapturedAt;
  text(28,1044,`Morningstar quarterly financials · As Originally Reported${captured?' · captured '+captured:''}`,10,muted);
- text(28,1060,quarters.length?`12 fiscal quarters · ${quarters[0]} to ${quarters.at(-1)} · — means no reported figure`:
+ text(28,1060,quarters.length?`12 fiscal quarters · ${quarters[0]} to ${quarters.at(-1)} · M = millions · '000 = thousands`:
   company?.quarterly?'No fiscal quarters with reported figures.':
   'Connect private statements in Stocks BETA 2 to include the available quarterly figures.',10,muted);
- link(28,1078,'Open full Morningstar financial statements',info?.financialsUrl);
- if(bos)link(28,1096,'Credit research source · '+bos.report_date,bos.source_pdf);
- else text(28,1096,'Agency credit ratings are separate from analyst calls and Morningstar stars.',10,muted);
+ if(quarters.length)text(28,1075,'QoQ = change ÷ absolute prior quarter amount · — = missing figure or zero base for QoQ',10,muted);
+ link(28,1091,'Open full Morningstar financial statements',info?.financialsUrl);
+ if(bos)link(28,1107,'Credit research source · '+bos.report_date,bos.source_pdf);
+ else text(28,1107,'Agency credit ratings are separate from analyst calls and Morningstar stars.',10,muted);
  out.push('</svg>');return out.join('');
 }
 const api={fiscalQuarters,highlights,ratings,summary,plan,svg};root.SIEquityPages=api;if(typeof module!=='undefined')module.exports=api;
