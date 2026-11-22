@@ -4,7 +4,7 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
-const navigationVersion = '?v=20261122.sharesmenu1';
+const navigationVersion = '?v=20261122.navpalette1';
 const accessFile = path.join(root, 'data/blueprint-access.json');
 const access = fs.existsSync(accessFile) ? JSON.parse(fs.readFileSync(accessFile, 'utf8')) : null;
 if(access){const owner=new URL(access.owner_url);if(access.schema_version!==1||owner.protocol!=='https:'||owner.username||owner.password||owner.search||owner.hash||!owner.hostname.endsWith('.chatgpt.site'))throw Error('Invalid blueprint access destination');}

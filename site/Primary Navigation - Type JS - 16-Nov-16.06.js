@@ -13,22 +13,22 @@
     ['Calls', 'v4.html#calls', '✎']
   ];
   const sections = [
-    ['Home', 'desk.html', '⌂'], ['News', 'v4.html#overview', '◫'], ['Shares', 'stocks-beta.html', '▥'],
-    ['Bonds BETA', 'bonds-beta.html', '▥'], ['FRED', 'fred/', '⌁'],
-    ['Master Pivot', 'v4.html#master/pivot', '▦'],
-    ['Historical charts', 'cross-market-history.html', '↗'],
-    ['My Blog', 'market-understanding/', '▤'], ['Markets', 'desk.html#markets', '◫']
+    ['Home', 'desk.html', '⌂', 'blue'], ['News', 'v4.html#overview', '◫', 'orange'],
+    ['Shares', 'stocks-beta.html', '▥', 'green'], ['Bonds BETA', 'bonds-beta.html', '▥', 'maroon'],
+    ['FRED', 'fred/', '⌁', 'purple'], ['Master Pivot', 'v4.html#master/pivot', '▦', 'blue'],
+    ['Historical charts', 'cross-market-history.html', '↗', 'rose'],
+    ['My Blog', 'market-understanding/', '▤', 'orange'], ['Markets', 'desk.html#markets', '◫', 'blue']
   ];
   const moreLinks = [
     ['News and research', [
       ...newsLinks, ['Hourly news', 'v4.html#hourly'], ['Research archive', 'archive.html'],
       ['Research editions', 'research-editions.html'], ['Search library', 'search.html']
-    ]],
+    ], 'orange'],
     ['Stocks, bonds and pricing', [
       ['BOS monthly archive', 'bos-monthly.html'], ['Bond Cashflow Studio', 'bond-cashflow.html'], ['Bonds & shares watchlist', 'v4.html#watchlist'],
       treasury, ['SI pricing', 'v4.html#history/si'], ['SI BETA 2', 'si-beta2.html'],
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
-    ]],
+    ], 'green'],
     ['Historical charts', [
       ['Cross-market history', 'cross-market-history.html'],
       ['SI pricing data', 'v4.html#history/si'], ['SI 2 data', 'si-beta2.html#si-library'],
@@ -36,15 +36,15 @@
       ['FX history', 'v4.html#history/fx'], ['Share prices', 'v4.html#history/shares'],
       ['Event studies', 'v4.html#history/beta2-shares'], ['History pivot', 'v4.html#history/beta4-shares'],
       ['SPX index', 'v4.html#history/spx'], ['Historical FRED', 'historical-fred.html']
-    ]],
+    ], 'rose'],
     ['FRED and rates', [
       ['Historical FRED and Prices', 'historical-fred.html'], ['Fred-1 · Event Replay', 'fred-1.html'],
       ['Fred-2 · Response Matrix', 'fred-2.html'], ['Fred-3 · Transmission Desk', 'fred-3.html'],
       ['V1 Market Desk', 'fred/market-desk.html'], ['V2 Risk Observatory', 'fred/risk-observatory.html'],
       ['V3 Signal Review', 'fred/signal-review.html'], ['V4 Cross-Market Replay', 'fred/cross-market-replay.html'],
       ['Raw FRED data & citations', 'fred/data.html']
-    ]],
-    ['Site', [['Site map', 'site-map.html'], ['External sources', 'external-sources.html'], ['Site tags', 'tag-map.html']]]
+    ], 'purple'],
+    ['Site', [['Site map', 'site-map.html'], ['External sources', 'external-sources.html'], ['Site tags', 'tag-map.html']], 'blue']
   ];
   const jumpGroups = new Map(moreLinks);
   const subsections = new Map([
@@ -66,8 +66,20 @@
     ['My Blog', [['Latest research', 'market-understanding/#main-published-research'], ['Research explained', 'market-understanding/#research-readings'], ['My research', 'market-understanding/#my-research']]],
     ['Markets', [['Stock moves', 'desk.html#stock-moves'], ['Rates and FX', 'desk.html#market-rates'], ['Bond yields', 'desk.html#market-bonds']]]
   ]);
-  function link(label, href, icon) {
+  const routeTones = [
+    [/^(?:stocks-beta2?\.html|bos-monthly\.html|si-beta2\.html|desk\.html#stock-moves|v4\.html#(?:watchlist|history\/(?:shares|si|spx|beta[24]-shares)))/, 'green'],
+    [/^(?:bonds-beta\.html|bond-cashflow\.html|desk\.html#(?:market-bonds|market-rates)|v4\.html#(?:credit|ust|history\/(?:yield|curves|fx)))/, 'maroon'],
+    [/^(?:fred\/|(?:historical-fred|fred-[123]|fred-feed)\.html)/, 'purple'],
+    [/^(?:cross-market-history\.html|desk\.html#full-history|v4\.html#history$)/, 'rose'],
+    [/^(?:v4\.html#(?:overview|earnings|policy|calls|hourly|headlines|reports|research)|market-understanding\/|archive\.html|research-editions\.html)/, 'orange'],
+    [/^(?:v4\.html#(?:master|tools)|saved-securities\.html)/, 'blue']
+  ];
+  const toneFor = (href, fallback) => routeTones.find(([pattern]) => pattern.test(href))?.[1] ?? fallback;
+  const controlRoute = control => control.dataset.view ? 'v4.html#' + control.dataset.view : control.getAttribute('href') || '';
+
+  function link(label, href, icon, tone) {
     const a = document.createElement('a'); a.href = new URL(href, base);
+    if (tone) a.dataset.navTone = tone;
     if (icon) { const span = document.createElement('span'); span.textContent = icon; span.setAttribute('aria-hidden', 'true'); a.append(span); }
     a.append(document.createTextNode(label)); return a;
   }
@@ -98,21 +110,23 @@
     panel.style.left = Math.max(8, Math.min(anchor.left, document.documentElement.clientWidth - panel.offsetWidth - 8)) + 'px';
   }
 
-  sections.forEach(([name, href, icon], index) => {
+  sections.forEach(([name, href, icon, tone], index) => {
     const mainLink = link(name, href, icon);
     mainLink.className = 'hub-primary-link';
     primaryLinks.set(name, mainLink);
     const links = subsections.get(name);
     if (!links?.length) {
+      mainLink.dataset.navTone = tone;
       scroll.append(mainLink);
       return;
     }
     const group = document.createElement('div'); group.className = 'hub-primary-group';
+    group.dataset.navTone = tone;
     const button = document.createElement('button'); button.className = 'hub-primary-toggle';
     const panel = document.createElement('div'); panel.className = 'hub-primary-dropdown';
     panel.id = 'hub-primary-subsections-' + index;
     panel.hidden = true;
-    panel.append(...links.map(([label, route, icon]) => link(label, route, icon)));
+    panel.append(...links.map(([label, route, icon]) => link(label, route, icon, toneFor(route))));
     button.type = 'button';
     button.setAttribute('aria-label', name + ' subsections');
     button.setAttribute('aria-controls', panel.id);
@@ -170,15 +184,22 @@
   more.setAttribute('aria-controls', menu.id);
   menu.classList.add('hub-sections-menu');
   const main = document.createElement('div'); main.className = 'hub-menu-main';
-  sections.forEach(([name, href]) => main.append(link(name, href)));
+  sections.forEach(([name, href, , tone]) => main.append(link(name, href, undefined, tone)));
   const grid = menu.querySelector('.more-grid');
   const destinations = document.createDocumentFragment();
   destinations.append(main);
-  moreLinks.forEach(([title, links]) => {
+  moreLinks.forEach(([title, links, tone]) => {
+    const group = document.createElement('section');
+    group.className = 'hub-menu-group';
+    group.dataset.navTone = tone;
     const heading = document.createElement('h3');
     heading.className = 'more-group-title';
     heading.textContent = title;
-    destinations.append(heading, ...links.map(([name, href]) => link(name, href)));
+    const items = document.createElement('div');
+    items.className = 'hub-menu-items';
+    items.append(...links.map(([name, href]) => link(name, href, undefined, toneFor(href))));
+    group.append(heading, items);
+    destinations.append(group);
   });
   if (old) {
     const label = document.createElement('h3');
@@ -187,6 +208,13 @@
     destinations.append(label);
   }
   grid.prepend(destinations);
+  for (const control of grid.querySelectorAll(':scope > a, :scope > button')) {
+    control.dataset.navTone = toneFor(controlRoute(control), 'blue');
+  }
+  for (const control of document.querySelectorAll('.rail-group:not(.rail-history) > :is(a,button)')) {
+    const tone = toneFor(controlRoute(control));
+    if (tone) control.dataset.navTone = tone;
+  }
   menu.addEventListener('click', e => { if (e.target.closest('a[href]')) menu.close(); });
   menu.addEventListener('close', () => more.focus({preventScroll: true}));
   bar.replaceChildren(scroll, more);
@@ -194,6 +222,7 @@
   if (skip) skip.after(bar);
   else document.body.prepend(bar);
   document.documentElement.classList.add('hub-primary-ready');
+  const workspaceToolbar = document.querySelector('.topbar');
   function active() {
     const relative = location.pathname.slice(base.pathname.length);
     const route = location.hash || '#overview';
@@ -206,6 +235,7 @@
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || relative === 'cross-market-history.html' ? 'Historical charts'
       : onWorkspace && (route === '#hourly' || newsLinks.some(([, href]) => href === 'v4.html' + route)) ? 'News'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
+    if (onWorkspace && workspaceToolbar) workspaceToolbar.dataset.navTone = toneFor(relative + route, 'blue');
     primaryLinks.forEach((a, name) => {
       if (name === key) {
         a.setAttribute('aria-current', 'page');
