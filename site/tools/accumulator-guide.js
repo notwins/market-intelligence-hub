@@ -5,7 +5,7 @@
   const steps = [
     {
       title: 'Pick the two strikes', image: 'strikes', width: 604, height: 452,
-      copy: 'Under <a href="#setup">Pricing &amp; capital</a>, enter a $100.00 trade-day price and $300,000 target. Choose <b>Clear selection</b> in Compare. In the <a href="#library">pricing tables</a>, find the six-month quotes and click <b>98.05%</b> under OCBC SI, then <b>95.12%</b> under JPM SN. Both have a two-month guarantee.',
+      copy: 'The simulator opens at the dated NVDA close with five JPM notes selected. To reproduce this two-note example, enter $100.00 as the trade-day price and $300,000 as the target under <a href="#setup">Pricing &amp; capital</a>. Choose <b>Clear selection</b> in Compare. In the <a href="#library">pricing tables</a>, select the six-month <b>98.05%</b> OCBC SI and <b>95.12%</b> JPM SN. Both have a two-month guarantee.',
       alt: 'Six-month OCBC SI and JPM SN pricing tables. Outlines mark the 98.05% and 95.12% strike buttons.'
     },
     {
@@ -15,7 +15,7 @@
     },
     {
       title: 'See when shares were bought', image: 'chart', width: 1135, height: 406,
-      copy: 'Click <b>$95.12</b> in the comparison funding table to plot the JPM scenario. Turn on <b>Show 80% probability cone</b>. The +1,052 label marks the shares bought. Shading shows a modelled range of future NVDA prices. To try a new path, choose a month, change its price and click <b>Apply price</b>.',
+      copy: 'Choose <b>Plot</b> beside the JPM note in the comparison funding table. The +1,052 label shows how many shares the model buys. Turn on <b>Show 80% probability cone</b> to see a modelled price range. To try another path, drag a monthly dot up or down, or enter a price in the chart and choose <b>Apply price</b>.',
       alt: 'JPM SN chart showing the day-one knock-out, 1,052 purchased shares, strike, knock-out level and shaded NVDA price cone.'
     },
     {

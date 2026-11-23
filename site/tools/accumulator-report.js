@@ -21,8 +21,8 @@
     const date = new Intl.DateTimeFormat('en-SG',{day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Singapore'}).format(new Date());
     const all = state.notes.map((note,index) => ({...note, index, letter:String.fromCharCode(65+index)}));
     const rows = Object.fromEntries(state.rows.map(row => [row.id,row]));
-    const batchSize = 3;
-    const numberOfPages = Math.ceil(all.length / batchSize) * 4;
+    const batchSize = 5;
+    const numberOfPages = Math.ceil(all.length / batchSize) * 5;
     let page = 0;
     let group;
 
@@ -79,6 +79,7 @@
         const cell=typeof content==='object' ? content : {value:content};
         const strings=String(cell.value ?? '').split('\n');
         const bold=header||cell.bold;
+        if(cell.fill) fill(x,top,w,h,cell.fill);
         pen(size,bold,header?white:(cell.color||ink));
         const longest=Math.max(1,...strings.map(v=>doc.getTextWidth(clean(v))));
         const finalSize=Math.min(size,size*(w-4)/longest);
@@ -106,11 +107,22 @@
     const profit=v=>({value:fmt.signedMoney(v),bold:true,color:v<0?rose:forest});
     const asPrice=fmt.price, quantity=fmt.shares, cash=fmt.money;
     const netRate=fmt.signedRate;
-    const KO=(n,i,r)=>r.exits[i].koDay ? 'KO d'+r.exits[i].koDay : 'Maturity d'+n.terms.days;
-    function winner(row) {
-      const ids=row.winners || [];
-      if (ids.length===all.length && ids.length>1) return 'All tied';
-      return ids.map(i=>all[i].letter).join(' / ')||'';
+    function exitTiming(n,i,row) {
+      const event=row.exits[i];
+      return event.koDay ? 'KO M'+event.koMonth+' · d'+event.koDay : 'Maturity M'+n.quote.months+' · d'+event.day;
+    }
+    function matrix(y,firstHeader,firstWidth,body,options={}) {
+      const headers=[firstHeader,...group.map(n=>name(n)+'\n'+fmt.quote(n.quote.strike)+' strike')];
+      return table(y,headers,[firstWidth,...group.map(()=>(width-firstWidth)/group.length)],body,
+        {headerHeight:12,bodySize:9,rowHeight:9,...options});
+    }
+    function rankedResult(row,n) {
+      const v=row.values[n.index];
+      const best=all.length>1 && row.winners.includes(n.index);
+      const worst=all.length>1 && row.losers.includes(n.index);
+      const rank=best&&worst?'ALL TIED':best?'BEST':worst?'WORST':'';
+      return {value:fmt.signedMoney(v.pnl)+'\n'+netRate(v.rate)+(rank?'\n'+rank:''),
+        bold:!!rank,fill:best&&worst?paper:best?mint:worst?blush:null,color:best&&worst?ink:best?forest:worst?rose:ink};
     }
     function overview() {
       let y=startPage('Your NVDA comparison','A funded Normal accumulator buys a scheduled number of NVDA shares at an agreed price. The daily knock-out level determines how long purchases continue.');
@@ -120,36 +132,69 @@
         fill(x,y,58,23,i===0?mint:paper);
         text(label,x+4,y+7,8,muted,true);text(value,x+4,y+16,16,navy,true);
       });
-      y=heading('Indicative terms and actual payment',y+37);
+      if(market.latest) {
+        text('Dated NVDA close on '+market.latest[0]+': '+asPrice(market.latest[1]),margin,y+28,8.7,muted);
+      }
+      y=heading('Indicative terms and actual payment',y+38);
       y=table(y,['Structure','Tenor /\nguarantee','Strike','Daily KO','Shares /\nmonth','Payment'],[26,27,30,28,26,43],
         group.map(n=>[name(n),n.quote.months+'m / '+n.quote.minimum+'m'+(Number.isInteger(n.quote.guaranteedDays)?'\n'+n.quote.guaranteedDays+' quoted days':''),
           asPrice(n.terms.strike)+'\n'+fmt.quote(n.quote.strike),asPrice(n.terms.ko)+'\n'+fmt.quote(n.quote.ko),
-          quantity(n.terms.maximum),{value:cash(n.terms.payment),bold:true}]),{rowHeight:14,headerHeight:12});
+          quantity(n.terms.maximum),{value:cash(n.terms.payment),bold:true}]),{rowHeight:10,headerHeight:10});
       const vintage=group.some(n=>n.quote.months===12) ? ' The 12-month JPM row is an earlier indicative example.' : '';
-      y=wrap('Pricing sheets dated 23 Nov 2026. Strike and KO percentages refer to the trade-day price. All quotes have monthly settlement. JPM issues the structured note (SN). OCBC issues the structured investment (SI).'+vintage,margin,y+1,width,9.3,muted)+6;
+      y=wrap('Indicative quotes, 23 Nov 2026. Percentages refer to the trade-day price. JPM SN is a structured note. OCBC SI is a structured investment. Both settle monthly.'+vintage,margin,y+1,width,9.3,muted,false,4.3)+3;
       const example=group[0], t=example.terms, q=example.quote;
       y=box('How '+example.letter+' is sized',
-        'Target budget ÷ purchase price ÷ months gives '+quantity(t.maximum)+' shares per month after rounding to the nearest whole share. '+quantity(t.maximum)+' × '+asPrice(t.strike)+' × '+q.months+' = '+asPrice(t.committed)+'. The payment rounds up to '+cash(t.payment)+'. Any rounding cash is refundable.',y);
-      y=heading('What happens to your money?',y+1);
-      y=wrap('While the note is active, each eligible daily close below KO earns the scheduled shares at strike. Purchases continue even when the market falls below the strike.',margin,y+3,width);
-      y=wrap('If KO occurs during the guarantee, all guaranteed months of shares are bought. After the guarantee, the model counts shares earned through the trading day before KO. Unused cash comes back.',margin,y+4,width);
-      wrap('Total value equals cash refunded, plus any sale proceeds and the value of shares still held. P&L is total value less the actual payment.',margin,y+4,width,10,forest,true);
+        cash(state.target)+' ÷ '+asPrice(t.strike)+' ÷ '+q.months+' months gives '+quantity(t.maximum)+' shares per month after rounding. '+quantity(t.maximum)+' × '+asPrice(t.strike)+' × '+q.months+' = '+asPrice(t.committed)+'. Payment rounds up to '+cash(t.payment)+'. The difference is refundable.',y);
+      y=wrap('At early KO, guaranteed purchases still go through. After the guarantee, only shares earned before KO are bought. Unused cash comes back. A fall below strike reduces the shares’ value.',margin,y,width,9.7,ink,false,4.5)+5;
+      y=heading('Best and worst scenario for each structure',y);
+      const metric=state.metric, display=metric==='rate'?netRate:fmt.signedMoney;
+      function scenarioExtreme(n,key) {
+        const matches=state.ranges[n.index][key];
+        const first=state.rows[matches[0]];
+        const label=matches.length===1?first.name:matches.length===state.rows.length?'All paths tied':'Paths '+matches.map(j=>j+1).join(', ')+' tied';
+        return {value:label+'\n'+display(first.values[n.index][metric]),bold:true,fill:key==='best'?mint:blush,color:key==='best'?forest:rose};
+      }
+      y=matrix(y,metric==='rate'?'Return on payment':'Dollar P&L',36,[
+        ['Best scenario',...group.map(n=>scenarioExtreme(n,'best'))],
+        ['Worst scenario',...group.map(n=>scenarioExtreme(n,'worst'))]
+      ],{rowHeight:10,headerHeight:11,bodySize:8.7});
+      wrap('These are the highest and lowest of the seven paths on the following page. Other price paths can produce larger losses or gains.',margin,y,width,9.1,muted,false,4.2);
+    }
+    function outcomes() {
+      const metric=state.metric==='rate'?'return on payment':'dollar P&L';
+      let y=startPage('Scenario outcomes','Read across a row to compare the same price path. Each cell gives profit or loss since investment and return on the actual payment.');
+      y=matrix(y,'Scenario',36,state.rows.map((r,i)=>[(i+1)+'. '+r.name,...group.map(n=>rankedResult(r,n))]),{rowHeight:14});
+      const rankNote=all.length>1?'BEST and WORST rank all '+all.length+' selected structures by '+metric+' before rounding. Tied outcomes share the label. A best result can still be a loss.':'Each result compares the total value of this structure with its actual payment.';
+      y=wrap(rankNote,margin,y+1,width,9.3,muted,false,4.5)+4;
+      const r=rows[state.active]||rows.early;
+      const detail=(label,get)=>[label,...group.map(n=>get(r.values[n.index],n))];
+      y=heading('Selected scenario · '+r.name,y+2);
+      y=matrix(y,'USD unless stated',42,[
+        detail('Structure ends',(v,n)=>exitTiming(n,n.index,r)),
+        detail('NVDA at exit',v=>asPrice(v.exitSpot)),
+        detail('Cash refunded',v=>asPrice(v.refund)),
+        detail('Sale proceeds',v=>cash(v.proceeds)),
+        detail('Value of shares held',v=>cash(v.retainedValue)),
+        detail('Total value',v=>({value:cash(v.nav),bold:true})),
+        detail('P&L since investment',v=>profit(v.pnl))
+      ],{rowHeight:7.8});
+      wrap('Total value = refund + sale proceeds + value of shares held. P&L = total value less payment. Dollar totals use full amounts before display rounding.',margin,y,width,9.1,muted,false,4.2);
     }
     function payouts() {
-      let y=startPage('How much comes back?','These three paths use the same NVDA prices for every structure. Each calculation assumes you sell the shares at the observed KO close or at maturity.');
-      const cases=[rows.early,rows.late,rows.down];
-      for (const row of cases) {
-        y=heading(row.name,y+3);
+      let y=startPage('Cash at knock-out or maturity','These paths assume a sale at the observed knock-out (KO) close or maturity close. Each structure follows its own barrier, guarantee and maturity date.');
+      for (const row of [rows.early,rows.late,rows.down]) {
+        y=heading(row.name,y+1);
         const summary=row.id==='down'
-          ? 'NVDA reaches '+asPrice(row.path[row.path.length-1])+' by the earliest maturity and then stays there.'
-          : 'The price jumps to '+asPrice(state.settings.rally)+' on trading day '+(row.id==='early'?state.settings.earlyDay:state.settings.lateDay)+'.';
-        const leader=all.length>1?'    Highest '+(state.metric==='rate'?'return':'P&L')+'*  '+winner(row):'';
-        y=wrap(summary+leader,margin,y+2,width,9.2,muted,false,4.4)-4.4;
-        y=table(y+5,['Structure / exit','Shares\nbought','Sale\nproceeds','Cash\nrefunded','Total value','P&L','Return'],[27,17,29,28,31,28,20],
-          group.map(n=>{const v=row.values[n.index];return [name(n)+'\n'+KO(n,n.index,row),quantity(v.shares),cash(v.proceeds),cash(v.refund),cash(v.nav),profit(v.pnl),netRate(v.rate)];}),
-          {headerHeight:10,rowHeight:11,bodySize:9.1});
+          ? 'Assumed NVDA price at the earliest maturity: '+asPrice(row.path[row.path.length-1])+'. It stays there afterwards.'
+          : 'NVDA moves to '+asPrice(state.settings.rally)+' on trading day '+(row.id==='early'?state.settings.earlyDay:state.settings.lateDay)+'.';
+        y=wrap(summary,margin,y+1,width,9.2,muted,false,4.2);
+        y=table(y,['Structure / exit','Shares\nbought','Sale\nprice','Sale\nproceeds','Cash\nrefunded','Total value','P&L'],[32,16,22,28,26,29,27],
+          group.map(n=>{const v=row.values[n.index],ko=row.exits[n.index].koDay;return [
+            {value:name(n)+'\n'+exitTiming(n,n.index,row),bold:!!ko,fill:ko?mint:null},quantity(v.shares),asPrice(v.exitSpot),
+            cash(v.proceeds),{value:asPrice(v.refund),bold:v.refund>0,fill:v.refund>0?mint:null},cash(v.nav),profit(v.pnl)];}),
+          {headerHeight:9,rowHeight:8.25,bodySize:9});
       }
-      wrap((all.length>1?'*Ranked across all selected structures. ':'')+'Sale proceeds = shares bought × observed sale price. Refund = payment less share cost. A gap above KO uses the observed close. Actual execution may differ.',margin,y+2,width,9.2,muted);
+      wrap('Refund = payment less the cost of shares bought. A lower sale price can increase the loss. Each outcome depends on the assumed path.',margin,y,width,9.2,muted,false,4.3);
     }
 
     function niceStep(raw) {
@@ -231,31 +276,46 @@
       chart({top:y+8,height:55,days:ndays,series:[{points:points(active).slice(0,ndays+1),color:navy}],
         band:haveVol?band:null,marker:active.exits[n.index]?.koDay?{day:active.exits[n.index].koDay,price:active.exits[n.index].price}:null,levels:[{value:n.terms.strike,color:rose,dash:[1.6,1.1]},{value:n.terms.ko,color:forest,dash:[2,1.1]}]});
       y+=79;
-      const range=market.volStart?' from '+market.volStart+' through ':' through ';
+      const range=market.volStart?' between '+market.volStart+' and ':' through ';
       const note=haveVol?'The shaded middle 80% is a model range for NVDA at each future date. It uses '+fmt.rate(market.vol*100)+' annualised volatility from '+market.sessions+' daily log returns'+range+market.latest[0]+', assuming a flat median price. The stock can move outside the range. The band cannot tell you the probability of your note reaching KO or making a profit.'
                           :'A historical-volatility estimate is unavailable. Only the selected scenario, strike and KO are drawn.';
       box('How to read the shaded range',note,y,paper);
     }
     function maturity(){
-      let y=startPage('At maturity and afterwards','A price below strike gives the shares a loss at that price. Holding them keeps both the risk of a further fall and the opportunity to benefit from a recovery.');
-      const w=125/group.length;
-      const matrixHeaders=['Scenario',...group.map(name),'Highest*'];
-      y=table(y,matrixHeaders,[35,...group.map(()=>w),20],
-        [rows.down,rows.flat,rows.near,rows.hold,rows.decu].map(r=>
-          [r.name,...group.map(n=>({value:fmt.signedMoney(r.values[n.index].pnl)+'\n'+netRate(r.values[n.index].rate),color:r.values[n.index].pnl<0?rose:forest,bold:true})),winner(r)]),{rowHeight:13,headerHeight:10});
-      y=wrap('*Ranked across all selected structures by '+(state.metric==='rate'?'return on actual payment':'dollar P&L')+'. Each cell shows P&L since investment and return on payment. In a loss scenario, the highest result is the smallest loss.',margin,y+1,width,9.1,muted,false,4.3)+5;
-      const s=state.settings;
-      const basis=rows[s.followBasisId];
-      y=heading('Two ways to handle shares you still own',y+2);
-      y=wrap('Start with the '+basis.name.toLowerCase()+' case and value remaining shares later at '+asPrice(s.laterSpot)+'. The sale example assumes up to '+quantity(s.saleUnits)+' shares per note sell at '+asPrice(s.saleStrike)+'. An earlier KO leaves the proceeds in cash.',margin,y+2,width,9.8,ink,false,4.7)+2;
-      y=table(y,['Structure','Shares\nsold','Sale\nproceeds','Shares\nkept','Value\nkept','Cash\nrefunded','Total\nvalue'],[24,18,29,18,31,28,32],
-        group.map(n=>{const v=rows.decu.values[n.index];return [name(n),quantity(v.sold),cash(v.proceeds),quantity(v.retained),cash(v.retainedValue),cash(v.refund),cash(v.nav)];}),{rowHeight:10,headerHeight:11});
-      y=wrap('A decumulator is a separate transaction. The training example uses cash funding. Actual sale quantities and timing depend on its own terms. Unsold shares can fall and selling at the agreed strike gives up a larger rebound on those shares.',margin,y+1,width,9.6,ink,false,4.55)+3;
-      box('What can change the result?','Examples assume immediate sales at the stated prices and zero interest on idle cash. Dividends, taxes and trading costs are excluded. Early exit can produce a loss. Issuer default can cause the loss of the full amount invested. Final trade terms govern.',y,blush);
+      const s=state.settings, basis=rows[s.followBasisId];
+      let y=startPage('After the structure ends','Start with the '+basis.name.toLowerCase()+' case. At maturity, shares can be held or sold later. An earlier knock-out leaves the modelled sale proceeds in cash.');
+      y=heading('If you hold the shares',y+1);
+      const hold=rows.hold,dec=rows.decu;
+      const show=(label,get)=>[label,...group.map(n=>get(n,n.index))];
+      y=matrix(y,'Valuation point',46,[
+        show('Original structure ends',(n,i)=>exitTiming(n,i,basis)),
+        show('NVDA at original exit',(n,i)=>asPrice(basis.values[i].exitSpot)),
+        show('Value at original exit',(n,i)=>asPrice(basis.values[i].nav)),
+        show('Shares still held',(n,i)=>quantity(hold.values[i].retained)),
+        show('Later NVDA price',()=>asPrice(s.laterSpot)),
+        show('Later total value',(n,i)=>({value:asPrice(hold.values[i].nav),bold:true})),
+        show('Change since exit',(n,i)=>profit(hold.values[i].change)),
+        show('P&L since investment',(n,i)=>profit(hold.values[i].pnl))
+      ],{rowHeight:8});
+      const example=group[0],i=example.index,held=hold.values[i],original=basis.values[i];
+      y=box('How the change is calculated · '+example.letter,
+        asPrice(held.nav)+' later total value less '+asPrice(original.nav)+' at exit = '+asPrice(held.change)+'. '+
+        (held.retained?quantity(held.retained)+' shares × ('+asPrice(s.laterSpot)+' later price less '+asPrice(original.exitSpot)+' at exit) gives the same change.':'The model already sold the shares at KO. Cash stays flat after exit.'),y);
+      y=heading('If you use a decumulator sale',y+1);
+      y=wrap('Assume up to '+quantity(s.saleUnits)+' shares per structure sell at '+asPrice(s.saleStrike)+'. Remaining shares are valued at '+asPrice(s.laterSpot)+'. A prior KO keeps its original cash proceeds.',margin,y+1,width,9.3,muted,false,4.4);
+      y=matrix(y,'Sale and remaining shares',46,[
+        show('Shares sold / kept',(n,i)=>quantity(dec.values[i].sold)+' / '+quantity(dec.values[i].retained)),
+        show('Sale proceeds',(n,i)=>cash(dec.values[i].proceeds)),
+        show('Cash refunded',(n,i)=>asPrice(dec.values[i].refund)),
+        show('Value of shares kept',(n,i)=>cash(dec.values[i].retainedValue)),
+        show('Total value',(n,i)=>({value:cash(dec.values[i].nav),bold:true})),
+        show('P&L since investment',(n,i)=>profit(dec.values[i].pnl))
+      ],{rowHeight:7.4});
+      wrap('The decumulator is a separate illustrative transaction. Examples exclude dividends, idle-cash interest, costs and taxes. Different execution prices change the result. Issuer default can cause a full loss. Final terms govern.',margin,y,width,9,muted,false,4.3);
     }
     for(let i=0;i<all.length;i+=batchSize){
       group=all.slice(i,i+batchSize);
-      overview();payouts();paths();maturity();
+      overview();outcomes();payouts();paths();maturity();
     }
     return doc;
   }

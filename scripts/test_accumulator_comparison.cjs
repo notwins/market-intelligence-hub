@@ -90,6 +90,25 @@ const catalog = vm.runInNewContext(catalogScript+'; Accumulator', {window:{Accum
 assert(catalog.quotes.every(q => q.label === 'Normal' && q.multiple === 1));
 assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [3,6,9,12]);
 assert.equal(model.terms(catalog.quotes.find(q=>q.product==='OCBC SI' && q.minimum===3), 100, budget).guaranteeDay,61);
+
+// The five-note comparison values a later shareholding separately from maturity.
+const noteA = catalog.quotes.find(q => q.id === 'sn-9-120-1');
+const maturityA = model.simulateDaily(noteA, 125.53, budget, Array(noteA.days).fill(93.87));
+const laterValueA = maturityA.exit.shares * 138.08 + maturityA.exit.refunded;
+assert.equal(maturityA.exit.shares, 2718);
+close(maturityA.exit.value, 255138.92, 'Note A value at maturity');
+close(laterValueA - maturityA.exit.value, 120162.78, 'Change after maturity');
+close(laterValueA - maturityA.payment, 75152.70, 'P&L since payment');
+
+const noteE = catalog.quotes.find(q => q.id === 'nv9086');
+const decline = catalog.scenarios.find(s => s.id === 'fall');
+const stressE = model.simulate(noteE, 125.53, budget, catalog.scale(decline.prices, 125.53));
+assert.equal(stressE.koDay, 0);
+assert.equal(stressE.exit.price, 69.04);
+assert.equal(stressE.exit.shares, 2628);
+close(stressE.exit.refunded, 0.32, 'Cent-level refund in the decline example');
+close(stressE.exit.profit, -118312.56, 'Conditional P&L at $69.04');
+close(2628 * 69 + stressE.exit.refunded - stressE.payment, -118417.68, 'Conditional P&L at exactly $69');
 // Transcribe the working quotes independently of the page's matrix layout. Blank
 // strike cells in an indication must never become a selectable zero or duplicate.
 const quotedStrikes = {
