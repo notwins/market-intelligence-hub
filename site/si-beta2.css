@@ -67,6 +67,10 @@
 
 .share-inputs{grid-template-columns:repeat(2,minmax(0,1fr))}
 .library .si-library-basket{min-width:220px}
+@media (max-width:640px) {
+ .library tbody td:last-child { position: static; }
+ .library thead th:last-child { right: auto; z-index: 1; }
+}
 .si-library-share{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
 .si-library-share img,.si-library-logo-fallback{display:inline-block;width:20px;height:20px;flex:none;object-fit:contain;border-radius:4px;background:#fff}
 .si-library-logo-fallback{border:1px solid #e0e7ec}

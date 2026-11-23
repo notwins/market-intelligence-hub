@@ -48,7 +48,7 @@ const assert = require('node:assert/strict');
         const names = await table.locator('thead th').evaluateAll(nodes => nodes.map(node => node.firstChild.textContent.trim()));
         assert.deepEqual(names, expected, label);
         const row = table.locator('tbody tr').filter({ has: page.getByRole('link', { name: 'Open SI-006 one-pager' }) });
-        const values = await row.locator('td').allTextContents();
+        const values = await row.evaluate(node => Array.from(node.cells, cell => cell.textContent));
         assert.equal(values[3], '11 months');
         assert.equal(values[4], '8% p.a.');
         assert.equal(values[6], '2.00 pp');
