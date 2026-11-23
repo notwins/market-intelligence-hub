@@ -68,11 +68,16 @@ assert(!C.svg(p).includes('BOS research'),'No research fields are invented for a
 
 async function checkPDFLinks(){
  const pixel=Buffer.from(png.split(',')[1],'base64');
- const bytes=await C.pdfFromImages([pixel,pixel],PDFLib,[[],researchLinks]);
+ const publicUrl='https://notwins.github.io/market-intelligence-hub/stocks-beta2.html?ticker=AAPL%20US&research=1';
+ const annotation={left:255,top:1097,right:406,bottom:1111};
+ const bytes=await C.pdfFromImages([pixel,pixel],PDFLib,[[],[
+  ...researchLinks,{...annotation,url:publicUrl},
+  {...annotation,url:publicUrl+'&extra=1'},{...annotation,url:publicUrl.replace('stocks-beta2.html','si-beta2.html')}
+ ]]);
  const pdf=await PDFLib.PDFDocument.load(bytes),key=PDFLib.PDFName.of;
  assert.equal(pdf.getPage(0).node.Annots()?.size()??0,0);
  const annotations=pdf.getPage(1).node.Annots();
- assert.equal(annotations.size(),1);
+ assert.equal(annotations.size(),2);
  const link=pdf.context.lookup(annotations.get(0));
  assert.equal(link.get(key('Subtype')).toString(),'/Link');
  const action=link.get(key('A'));
@@ -80,6 +85,8 @@ async function checkPDFLinks(){
  assert.equal(action.get(key('URI')).decodeText(),report);
  const [left,bottom,right,top]=link.get(key('Rect')).asArray().map(v=>v.asNumber());
  assert(left>400&&right>left&&top>bottom&&top<842,'The call has a usable rectangle on its PDF page');
+ const statementLink=pdf.context.lookup(annotations.get(1));
+ assert.equal(statementLink.get(key('A')).get(key('URI')).decodeText(),publicUrl);
 }
 checkPDFLinks().catch(error=>{console.error(error);process.exitCode=1;});
 const settings=C.chartOptions({years:8,pe:true,pb:true,target:true});

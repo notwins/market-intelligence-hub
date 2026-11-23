@@ -657,9 +657,15 @@ async function pdfFromImages(images,PDFLib,linksByPage=[]){
 }
 function pdfLinkUrl(raw){
  if(bosReportUrl(raw))return bosReportUrl(raw);
- try{const url=new URL(raw);return !url.username&&!url.password&&url.protocol==='https:'&&
-  (url.hostname==='www.morningstar.com'&&/^\/stocks\/[a-z]+\/[^/]+\/financials$/.test(url.pathname)||
-   ['www.apple.com','www.fitchratings.com','www.spglobal.com','ratings.moodys.com'].includes(url.hostname))?url.href:'';}catch{return '';}
+ try{
+  const url=new URL(raw);
+  if(url.username||url.password||url.protocol!=='https:')return '';
+  const publicStatement=url.origin==='https://notwins.github.io'&&
+   url.pathname==='/market-intelligence-hub/stocks-beta2.html'&&!url.hash&&[...url.searchParams].length===2&&
+   url.searchParams.get('research')==='1'&&/^[A-Z0-9./-]+ [A-Z]{2}$/.test(url.searchParams.get('ticker')||'');
+  return (publicStatement||url.hostname==='www.morningstar.com'&&/^\/stocks\/[a-z]+\/[^/]+\/financials$/.test(url.pathname)||
+   ['www.apple.com','www.fitchratings.com','www.spglobal.com','ratings.moodys.com'].includes(url.hostname))?url.href:'';
+ }catch{return '';}
 }
 const api={barrierInk,inlineBarrierLabels,priceHitsBox,segmentHitsBox,barrierLabels,axisScale,monthLabel,payoffCases,payoffFields,payoffTerms,blank,fromReference,validate,finalKO,levels,reference,symbol,svg,pdfFromImages,escape,fmt,pct,num,validMoa,parseMoa,matchMoa,acceptable,loadReferences,isBonusEnhanced,referenceCouponLabel,referenceCouponBand,couponBand,barrierBand,chartOptions,chartWindow,valuationPoints,yearsBefore,monthsAfter,probabilityCone,coneAnalysis,coneMonths,commonConePairs,overlayKeys,W,H};root.SIBetaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof window!=='undefined'?window:globalThis);
