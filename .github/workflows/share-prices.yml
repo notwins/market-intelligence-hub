@@ -4,6 +4,8 @@ on:
   schedule:
     # 08:30 Singapore, after the US close and provider finalization buffer.
     - cron: '30 0 * * *'
+    # 23:00 Singapore, to pick up completed Asian market sessions.
+    - cron: '0 15 * * *'
 permissions:
   contents: write
 concurrency:
