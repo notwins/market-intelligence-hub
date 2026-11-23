@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "id": "20261123T180329SGT",
+  "checkedAt": "2026-11-23T18:03:29+08:00",
+  "sources": {
+    "hub": "5a1c4681827af1a3df54a9c0169e2272aa233c1c",
+    "content": "7a7c2552ede81e292e30aab1c73df14ae3780f3f"
+  },
+  "baseline": "20261123T060050SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 269,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 7,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 197,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    }
+  ],
+  "changes": []
+}
