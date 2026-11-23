@@ -25,3 +25,10 @@
 #sn-comparison #cmp-notice:not(:empty){margin:.5rem 0}
 @media(max-width:650px){#sn-comparison .cmp-results th:first-child{max-width:8rem;min-width:7.3rem}#sn-comparison fieldset{grid-template-columns:repeat(2,minmax(0,1fr))}#sn-comparison .cmp-inputs{grid-template-columns:repeat(2,minmax(0,1fr))}#sn-comparison .cmp-heading{gap:.4rem}#sn-comparison th,#sn-comparison td{padding:.45rem .5rem;min-width:6.5rem}}
 #sn-comparison .cmp-tools{display:flex;gap:.5rem .75rem;align-items:center;flex-wrap:wrap;margin:.3rem 0 .7rem}
+#sn-comparison #cmp-basket{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0}
+#sn-comparison .cmp-picked{display:inline-flex;align-items:center;justify-content:space-between;gap:.6rem;border-color:var(--line);background:var(--soft);color:var(--ink);min-height:36px}
+#sn-comparison .cmp-picked span:last-child{font-size:1.1rem;line-height:1}
+#sn-comparison #cmp-selection-feedback:not(:empty){margin:.35rem 0 .65rem}
+#sn-comparison .cmp-funding th[scope=row],#sn-comparison .cmp-results th[scope=col]{min-width:7.25rem}
+#sn-comparison .cmp-results th small{margin:.25rem 0 0;line-height:1.35}
+@media(max-width:650px){#sn-comparison .cmp-picked{min-height:41px}#sn-comparison .cmp-results th[scope=col]{min-width:7rem}}

@@ -1,5 +1,19 @@
 const assert = require('node:assert/strict');
 const model = require('../site/tools/accumulator-model.js');
+const format = require('../site/tools/accumulator-format.js');
+
+assert.equal(format.money(-0.49), '$0', 'Rounding pennies avoids showing negative zero');
+assert.equal(format.signedMoney(0.49), '$0');
+assert.equal(format.money(-1.50), '-$2', 'Half-dollar losses round away from zero');
+assert.equal(format.signedMoney(1.50), '+$2');
+assert.equal(format.shares(1020), '1,020');
+assert.equal(format.price(100), '$100.00');
+assert.equal(format.quote(98.05), '98.05%');
+assert.equal(format.quote(98.83), '98.83%');
+assert.equal(format.quote(96.70), '96.7%');
+assert.equal(format.rate(4.6757), '4.7%');
+assert.equal(format.signedRate(0.007), '+0.007%');
+assert.equal(format.signedRate(-0.0002), '-0.0002%');
 
 function close(actual, expected, label) {
   assert(Number.isFinite(actual) && Math.abs(actual - expected) < 0.000001,
@@ -76,6 +90,56 @@ const catalog = vm.runInNewContext(catalogScript+'; Accumulator', {window:{Accum
 assert(catalog.quotes.every(q => q.label === 'Normal' && q.multiple === 1));
 assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [3,6,9,12]);
 assert.equal(model.terms(catalog.quotes.find(q=>q.product==='OCBC SI' && q.minimum===3), 100, budget).guaranteeDay,61);
+// Transcribe the working quotes independently of the page's matrix layout. Blank
+// strike cells in an indication must never become a selectable zero or duplicate.
+const quotedStrikes = {
+  'JPM SN': {
+    '9-120-1':87.97, '9-120-2':90.30, '9-105-1':92.41, '9-105-2':97.27,
+    '6-120-1':92.31, '6-120-2':95.12, '6-105-1':95.96, '3-120-1':98.24,
+    '12-120-3':90.86
+  },
+  'OCBC SI': {
+    '9-120-1':93.11, '9-120-2':94.82, '9-120-3':96.70,
+    '9-115-1':92.73, '9-115-2':95.01, '9-115-3':97.20,
+    '9-110-1':94.04, '9-110-2':96.62, '9-110-3':98.83,
+    '6-115-2':98.05, '6-110-1':96.36
+  }
+};
+const counts = {3:61, 6:124, 9:186, 12:251};
+for (const [product, expected] of Object.entries(quotedStrikes)) {
+  const actual = {};
+  for (const q of catalog.quotes.filter(q => q.product === product)) {
+    const key = [q.months, q.ko, q.minimum].join('-');
+    assert(!(key in actual), product + ' has a duplicate quote ' + key);
+    actual[key] = q.strike;
+    const {guaranteeDay, days} = model.terms(q, initialSpot, budget);
+    assert.equal(days, counts[q.months], product + ' total trading days');
+    if (product === 'OCBC SI') assert.equal(guaranteeDay, [0,21,41,61][q.minimum],
+      'SI uses the quoted guaranteed days for ' + key);
+  }
+  assert.deepEqual(actual, expected, product + ' working indicative strike grid');
+}
+
+// Same $115 daily path: both 115% SI variations knock out on day 1; the
+// 120% JPM note continues to accrue all six months. USD costs include cents.
+const mixedCases = [
+  ['si-9-115-2', 351, 300137, 1, 702, 233439.98, 80730, 314169.98],
+  ['si-6-115-2', 510, 300033, 1, 1020, 200022, 117300, 317322],
+  ['sn-6-120-1', 542, 300193, 0, 3252, 0.88, 373980, 373980.88]
+];
+for (const [id, quantity, payment, koDay, acquired, refund, proceeds, nav] of mixedCases) {
+  const q = catalog.quotes.find(entry => entry.id === id);
+  const outcome = model.simulateDaily(q, initialSpot, budget, Array(186).fill(115));
+  assert.equal(outcome.maximum, quantity);
+  assert.equal(outcome.payment, payment);
+  assert.equal(outcome.koDay, koDay);
+  assert.equal(outcome.exit.shares, acquired);
+  close(outcome.exit.shareValue, proceeds, 'Sale at observed daily spot');
+  close(outcome.exit.refunded, refund, 'Separate cash refund');
+  close(outcome.exit.value, nav, 'Total cash including sale');
+  close(outcome.exit.profit, nav-payment, 'Profit over actual payment');
+  checkReconciliation(outcome);
+}
 for (const q of catalog.quotes) {
   const pricePath = Array(q.months).fill(initialSpot);
   const result = model.simulate(q, initialSpot, budget, pricePath);
