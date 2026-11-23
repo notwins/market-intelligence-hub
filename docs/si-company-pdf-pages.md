@@ -21,9 +21,9 @@ repeat the same order for each SI. Both choices are independent browser options.
 ## Financials and research
 
 `CompanyFundamentals.snapshot` resolves the exact listing using the existing directory,
-reads the same browser-local Morningstar import as the stock cards, and loads the
-existing BOS research briefs. Refresh also reads imports saved in another tab.
-No imported statements or private drafts are uploaded or included in the deployment.
+reads the public annual and quarterly statement feed used by the stock cards, and
+loads the existing BOS research briefs. Refresh data checks the same endpoint and
+updates the company profiles in the collection. Private drafts live in the browser.
 
 Equity research and credit research display as two cards above the statements.
 Each statement aligns twelve fiscal slots across one A4 table, newest first.
