@@ -122,10 +122,31 @@ function quote(r) {
 }
 
 const shortQuoteDate = new Intl.DateTimeFormat('en-GB', {day: '2-digit', month: 'short', year: '2-digit', timeZone: 'UTC'});
-function moveQuote(row) {
-  const p = row.price, asOf = p?.as_of?.slice(0, 10);
-  if (!Number.isFinite(p?.value) || !Number.isFinite(Date.parse(asOf))) return '<span aria-label="Price unavailable">—</span>';
-  return `${quote(row)}<time datetime="${E(asOf)}" title="${E(p.status_label || 'Saved price')}">${E(shortQuoteDate.format(Date.parse(asOf)))}</time>`;
+function moveQuoteDate(price) {
+  const asOf = price?.as_of?.slice(0, 10);
+  return Number.isFinite(price?.value) && Number.isFinite(Date.parse(asOf)) ? asOf : '';
+}
+
+function paintMoveDates() {
+  const groups = new Map();
+  for (const {dataset: {moveQuote: ticker, quoteDate}} of document.querySelectorAll('#watch-strip [data-move-quote]')) {
+    if (!quoteDate) continue;
+    if (!groups.has(quoteDate)) groups.set(quoteDate, []);
+    groups.get(quoteDate).push(ticker);
+  }
+
+  const time = date => `<time datetime="${E(date)}">${E(shortQuoteDate.format(Date.parse(date)))}</time>`;
+  const host = $('#stock-move-dates');
+  if (groups.size < 2) {
+    host.innerHTML = groups.size ? `Price date · ${time(groups.keys().next().value)}` : '';
+    return;
+  }
+  const open = host.querySelector('details')?.open;
+  host.innerHTML = `<details${open ? ' open' : ''}>
+    <summary>Price dates by share</summary>
+    <ul>${[...groups].sort(([a], [b]) => b.localeCompare(a)).map(([date, tickers]) =>
+      `<li>${time(date)} · ${E(tickers.join(', '))}</li>`).join('')}</ul>
+  </details>`;
 }
 
 const groupDivider = (groupIndex, periodIndex) => groupIndex > 0 && periodIndex === 0 ? ' class="move-divider"' : '';
@@ -137,8 +158,12 @@ function paintStockMoves(row) {
   const archive = item ? root.StockPriceArchive?.bySymbol(item.ticker, item.currency) : null;
   const saved = priceWatchlist.find(stock => stock.ticker === ticker);
   const [as_of, value] = archive?.closes.at(-1) || [];
-  row.querySelector('[data-move-quote]').innerHTML = moveQuote(archive
-    ? {price: {as_of, value, currency: archive.currency, status_label: 'Imported Yahoo Finance closing price'}} : saved);
+  const displayed = archive ? {price: {as_of, value, currency: archive.currency, status_label: 'Imported Yahoo Finance closing price'}} : saved;
+  const cell = row.querySelector('[data-move-quote]');
+  const quoteDate = moveQuoteDate(displayed.price);
+  cell.dataset.quoteDate = quoteDate;
+  cell.title = quoteDate ? displayed.price.status_label || 'Saved price' : '';
+  cell.innerHTML = quoteDate ? quote(displayed) : '<span aria-label="Price unavailable">—</span>';
   row.querySelectorAll('[data-stock-return]').forEach(cell => cell.remove());
   row.insertAdjacentHTML('beforeend', moveViews[moveView].map((group, groupIndex) => group.periods.map((period, periodIndex) => {
     const move = archive ? archiveYearlyMove(archive, period.lookback)
@@ -153,6 +178,7 @@ function paintStockMoves(row) {
 document.addEventListener('stock-price-archive-updated', () => {
   if (moveView !== 'yearly') return;
   document.querySelectorAll('#watch-strip tbody tr').forEach(paintStockMoves);
+  paintMoveDates();
   if (!refreshing) paintMoveStatus();
 });
 
@@ -173,11 +199,12 @@ function paintMoveView() {
     `<colgroup data-move-columns span="${group.periods.length}"></colgroup>`).join(''));
   table.tHead.innerHTML = `<tr>
     <th class="move-pin-share" scope="col" rowspan="2">Share</th>
-    <th class="move-pin-price" scope="col" rowspan="2">Latest price</th>
+    <th class="move-pin-price" scope="col" rowspan="2" aria-label="Latest price">Price</th>
     ${groups.map((group, i) => `<th scope="colgroup" colspan="${group.periods.length}"${groupDivider(i, 0)} data-move-band="${group.band}">${group.label}</th>`).join('')}
   </tr><tr>${groups.map((group, groupIndex) => group.periods.map((period, periodIndex) =>
     `<th scope="col"${groupDivider(groupIndex, periodIndex)} data-move-band="${group.band}">${period.label}</th>`).join('')).join('')}</tr>`;
   for (const row of table.tBodies[0].rows) paintStockMoves(row);
+  paintMoveDates();
 }
 
 function bindMoveViews() {
@@ -198,6 +225,20 @@ function bindMoveViews() {
   const resize = new ResizeObserver(syncScrollControls);
   resize.observe(strip);
   resize.observe(table);
+
+  let fontStep = 0;
+  const fontButtons = document.querySelectorAll('[data-move-font]');
+  for (const button of fontButtons) {
+    button.addEventListener('click', () => {
+      fontStep += Number(button.dataset.moveFont);
+      table.style.setProperty('--move-scale', 1 + fontStep * 0.08);
+      for (const control of fontButtons) {
+        control.disabled = Number(control.dataset.moveFont) < 0 ? fontStep === -2 : fontStep === 3;
+      }
+      syncScrollControls();
+    });
+    button.disabled = false;
+  }
 
   const buttons = [...document.querySelectorAll('[data-move-view]')];
   for (const button of buttons) {
@@ -273,7 +314,7 @@ function buildMarkets(){
           <b>${E(r.ticker)}</b><span>${E(r.name)}</span>
         </a>
         <span class="stock-move-spark" data-stock-spark="${E(r.ticker)}"></span>
-      </header></th><td class="move-pin-price" data-move-quote="${E(r.ticker)}">${moveQuote(r)}</td>
+      </header></th><td class="move-pin-price" data-move-quote="${E(r.ticker)}"></td>
     </tr>`).join('')}</tbody>
   </table>`;
   paintMoveView();
@@ -359,6 +400,7 @@ async function warmCharts() {
     }
   });
   await Promise.all(workers);
+  paintMoveDates();
 }
 
 function openPrices() {
