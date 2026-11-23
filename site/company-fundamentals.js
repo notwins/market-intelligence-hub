@@ -173,13 +173,16 @@
     });
   }
 
-  async function openArchive(key, bytes) {
+  async function decryptArchive(key, bytes) {
     if (!(bytes instanceof ArrayBuffer) || bytes.byteLength < 29 || bytes.byteLength > 12e6) {
       throw new Error('Invalid encrypted statements');
     }
     const gzip = await root.crypto.subtle.decrypt({ name: 'AES-GCM', iv: bytes.slice(0, 12) }, key, bytes.slice(12));
-    const stream = new Blob([gzip]).stream().pipeThrough(new DecompressionStream('gzip'));
-    const data = JSON.parse(await new Response(stream).text());
+    return new Response(new Blob([gzip]).stream().pipeThrough(new DecompressionStream('gzip')));
+  }
+
+  async function openArchive(key, bytes) {
+    const data = await (await decryptArchive(key, bytes)).json();
     const listings = await directory();
     if (data.version !== 2 || Object.keys(data.companies ?? {}).length !== listings.length) {
       throw new Error('Incomplete statements archive');
@@ -187,12 +190,16 @@
     return unpack(data, listings);
   }
 
-  async function fetchArchive(key, url, timeout) {
+  async function fetchSealed(url, timeout) {
     const response = await root.fetch(url, {
       cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout(timeout)
     });
     if (!response.ok) throw new Error('The private archive is unavailable.');
-    const bytes = await response.arrayBuffer();
+    return response.arrayBuffer();
+  }
+
+  async function fetchArchive(key, url, timeout) {
+    const bytes = await fetchSealed(url, timeout);
     return { bytes, bundle: await openArchive(key, bytes) };
   }
 
@@ -212,59 +219,113 @@
   function bindOnline(panel) {
     if (!panel) return;
     const field = panel.querySelector('[data-fund-access]');
+    const form = panel.querySelector('[data-fund-key-form]');
+    const code = form.querySelector('input');
+    const submit = form.querySelector('button');
     const status = panel.querySelector('[data-fund-online-state]');
+    const download = panel.querySelector('[data-fund-quarterly-download]');
+    const downloadStatus = panel.querySelector('[data-fund-download-status]');
     const forget = panel.querySelector('[data-fund-forget-access]');
-    const prompt = 'Connect this browser once to load annual and quarterly statements automatically.';
-    let busy = false;
+    const source = panel.dataset.fundOnline || privateArchiveUrl;
+    const prompt = 'Unlock each browser once with your private access key.';
+    let busy = false, activeKey, downloading = false;
+    const lockControls = disabled => {
+      field.disabled = code.disabled = submit.disabled = forget.disabled = disabled;
+    };
     const show = (bundle, cached = false) => {
       online = bundle;
       forget.hidden = !bundle;
+      download.hidden = !bundle;
       status.textContent = bundle ? Object.keys(bundle.companies).length
         + ' listings · ' + (cached ? 'Saved private copy' : 'Private online statements ready') : prompt;
       updateImportPanels();
     };
     async function connect(key, savedBytes) {
       busy = true;
-      field.disabled = forget.disabled = true;
+      lockControls(true);
       status.textContent = 'Loading private online statements…';
       try {
-        const { bundle, bytes } = await fetchArchive(key, panel.dataset.fundOnline || privateArchiveUrl, 15000);
+        const { bundle, bytes } = await fetchArchive(key, source, 15000);
+        activeKey = key;
         show(bundle);
         try { await stored('put', { key, bytes }, privateArchiveKey); }
-        catch { status.textContent = 'Private statements ready for this page. Chrome could not remember the connection.'; }
+        catch { status.textContent = 'Private statements ready for this page. This browser could not remember the connection.'; }
       } catch {
-        try { show(await openArchive(key, savedBytes), true); }
+        try {
+          const bundle = await openArchive(key, savedBytes);
+          activeKey = key;
+          show(bundle, true);
+        }
         catch {
-          status.textContent = 'Could not open the private archive. Check the access file or try again.';
+          status.textContent = 'Could not open the private archive. Check your access key or try again.';
         }
       } finally {
         busy = false;
-        field.disabled = forget.disabled = false;
+        lockControls(false);
       }
     }
     status.textContent = prompt;
     stored('get', undefined, privateArchiveKey).then(saved => { if (saved?.key && !busy) connect(saved.key, saved.bytes); }).catch(() => {});
+    async function unlock(value) {
+      const text = value.trim();
+      if (!/^[A-Za-z0-9_-]{43}$/.test(text)) throw new Error('Invalid access key');
+      const bytes = Uint8Array.from(root.atob(text.replace(/-/g, '+').replace(/_/g, '/') + '='), char => char.charCodeAt(0));
+      const key = await root.crypto.subtle.importKey('raw', bytes, 'AES-GCM', false, ['decrypt']);
+      await connect(key);
+    }
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (busy) return;
+      const value = code.value;
+      code.value = '';
+      try { await unlock(value); }
+      catch { status.textContent = 'Paste the key from your Private Fundamentals Access file.'; }
+    });
     field.addEventListener('change', async () => {
       const file = field.files[0];
       if (!file || busy) return;
       try {
         if (file.size > 128) throw new Error();
-        const value = (await file.text()).trim();
-        if (!/^[A-Za-z0-9_-]{43}$/.test(value)) throw new Error();
-        const bytes = Uint8Array.from(root.atob(value.replace(/-/g, '+').replace(/_/g, '/') + '='), char => char.charCodeAt(0));
-        const key = await root.crypto.subtle.importKey('raw', bytes, 'AES-GCM', false, ['decrypt']);
-        await connect(key);
+        await unlock(await file.text());
       } catch { status.textContent = 'Choose the Private Fundamentals Access file.'; }
       finally { field.value = ''; }
+    });
+    download.addEventListener('click', async () => {
+      if (!activeKey || downloading || busy) return;
+      const key = activeKey;
+      const date = Object.values(online?.companies || {}).map(company => company.quarterlyCapturedAt).sort().at(-1);
+      downloading = download.disabled = true;
+      downloadStatus.textContent = 'Preparing the quarterly CSV archive…';
+      try {
+        const bytes = await fetchSealed(new URL('quarterly-csv.bin', source), 20000);
+        const archive = await decryptArchive(key, bytes);
+        const zip = await archive.blob();
+        if (key !== activeKey) return;
+        const url = URL.createObjectURL(zip);
+        const link = doc.createElement('a');
+        link.href = url;
+        link.download = 'Morningstar BETA 2 Quarterly' + (date ? ' ' + date : '') + '.zip';
+        doc.body.append(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+        downloadStatus.textContent = 'Quarterly CSV archive ready.';
+      } catch {
+        downloadStatus.textContent = 'The quarterly CSV archive is unavailable. Try again shortly.';
+      } finally {
+        downloading = download.disabled = false;
+      }
     });
     forget.addEventListener('click', async () => {
       if (busy) return;
       try {
         await stored('delete', undefined, privateArchiveKey);
+        activeKey = null;
+        downloadStatus.textContent = '';
         privateSnapshotRequest = null;
         show(null);
       }
-      catch { status.textContent = 'Chrome could not forget the private access file.'; }
+      catch { status.textContent = 'This browser could not forget the private connection.'; }
     });
   }
 
