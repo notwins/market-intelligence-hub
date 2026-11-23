@@ -48,6 +48,10 @@
 .sb2-fund-import p { max-width:70ch; color:var(--muted); font-size:.88rem; }
 .sb2-file-label { display:grid; gap:4px; width:fit-content; max-width:100%; font-weight:650; font-size:.88rem; }
 .sb2-file-label input { max-width:100%; }
+[data-fund-key-form] { display:flex; flex-wrap:wrap; align-items:end; gap:8px; margin:0 0 12px; }
+[data-fund-key-form] input { width:min(20rem, 100%); padding:.4rem .5rem; }
+[data-fund-quarterly-download] { margin-top:.5rem; }
+[data-fund-download-status]:not(:empty) { margin-inline-start:.4rem; }
 .sb2-fund-import .fund-state:empty { display:none; }
 .sb2-security {
   display:flex; align-items:center; gap:8px; width:100%; padding:10px 6px; border:0;
