@@ -20,7 +20,8 @@
   const fields = ['bbTicker', 'instrumentId', 'ticker', 'publicTicker', 'symbol', 'id'];
   const doc = root.document;
   const figures = root.FinancialDisplay || (typeof module !== 'undefined' ? require('./financial-display.js') : null);
-  let directoryRequest, databaseRequest, loadRequest, researchRequest, memory, online;
+  let directoryRequest, databaseRequest, loadRequest, researchRequest, memory, online, publicStatements;
+  let publicState;
   let privateSnapshotRequest;
   const privateArchiveUrl = 'https://market-intel-fundamentals-vault.vercel.app/statements.bin';
   const privateArchiveKey = 'private-online';
@@ -181,13 +182,49 @@
     return new Response(new Blob([gzip]).stream().pipeThrough(new DecompressionStream('gzip')));
   }
 
-  async function openArchive(key, bytes) {
-    const data = await (await decryptArchive(key, bytes)).json();
+  async function validateCompleteArchive(data) {
     const listings = await directory();
     if (data.version !== 2 || Object.keys(data.companies ?? {}).length !== listings.length) {
       throw new Error('Incomplete statements archive');
     }
     return unpack(data, listings);
+  }
+
+  async function openArchive(key, bytes) {
+    return validateCompleteArchive(await (await decryptArchive(key, bytes)).json());
+  }
+
+  function bindPublic(panel) {
+    if (!panel) return;
+    const status = panel.querySelector('[role="status"]');
+    const retry = panel.querySelector('button');
+    async function refresh() {
+      publicState = 'loading';
+      status.textContent = 'Loading public annual and quarterly statements…';
+      retry.hidden = true;
+      updateImportPanels();
+      try {
+        const response = await root.fetch(panel.dataset.fundPublic, {
+          cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout?.(15000)
+        });
+        if (!response.ok) throw new Error('Statement feed is unavailable');
+        publicStatements = await validateCompleteArchive(await response.json());
+        publicState = 'ready';
+        const companies = Object.values(publicStatements.companies);
+        const captured = companies.map(company => company.quarterlyCapturedAt).sort().at(-1);
+        const date = new Date(captured + 'T00:00:00Z').toLocaleDateString('en-GB', {
+          day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'
+        });
+        status.textContent = companies.length + ' listings · Quarterly capture ' + date + ' SGT';
+      } catch {
+        publicState = 'unavailable';
+        status.textContent = 'The public statements could not load.';
+        retry.hidden = false;
+      }
+      updateImportPanels();
+    }
+    retry.addEventListener('click', refresh);
+    refresh();
   }
 
   async function fetchSealed(url, timeout) {
@@ -227,7 +264,7 @@
     const downloadStatus = panel.querySelector('[data-fund-download-status]');
     const forget = panel.querySelector('[data-fund-forget-access]');
     const source = panel.dataset.fundOnline || privateArchiveUrl;
-    const prompt = 'Unlock each browser once with your private access key.';
+    const prompt = 'Use your private access key to download the original CSV archive.';
     let busy = false, activeKey, downloading = false;
     const lockControls = disabled => {
       field.disabled = code.disabled = submit.disabled = forget.disabled = disabled;
@@ -792,10 +829,14 @@
   function paintStatement(disclosure, id) {
     const body = disclosure.querySelector('[data-fund-body]');
     const quarterly = frequency === 'quarterly';
-    const company = (online ?? memory)?.companies[id];
+    const company = (publicStatements ?? online ?? memory)?.companies[id];
     if (!company || (quarterly && !company.quarterly)) {
-      body.innerHTML = '<p class="fund-note">Connect your statements under '
-        + '<a href="stocks-beta2.html#sb2-fundamentals-import">Stocks BETA 2 statement settings</a>.</p>';
+      body.innerHTML = publicState === 'ready' ? '<p class="fund-note">No statements available for this listing and period.</p>'
+        : publicState === 'loading' ? '<p class="fund-note">Loading public financial statements…</p>'
+        : publicState ? '<p class="fund-note">Public statements could not load. '
+          + '<a href="#sb2-fundamentals-import">Open the statement settings to retry</a>.</p>'
+        : '<p class="fund-note">Connect your statements under '
+          + '<a href="stocks-beta2.html#sb2-fundamentals-import">Stocks BETA 2 statement settings</a>.</p>';
       return;
     }
     const key = disclosure.dataset.fundStatement;
@@ -870,7 +911,17 @@
     revealImport();
     root.addEventListener('hashchange', revealImport);
     bindImport(importPanel);
-    bindOnline(importPanel.querySelector('[data-fund-online]'));
+    bindPublic(importPanel.querySelector('[data-fund-public]'));
+    const originals = importPanel.querySelector('[data-fund-originals]');
+    if (originals) {
+      const loadOriginals = () => {
+        if (!originals.open) return;
+        originals.removeEventListener('toggle', loadOriginals);
+        bindOnline(originals.querySelector('[data-fund-online]'));
+      };
+      originals.addEventListener('toggle', loadOriginals);
+      loadOriginals();
+    } else bindOnline(importPanel.querySelector('[data-fund-online]'));
   }
   const frequencyControl = doc.querySelector('[data-fund-frequency]');
   if (frequencyControl) {
