@@ -290,9 +290,10 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
   [...definitions, ...(mixed||halfYear?['Flow QoQ skips mixed periods. H1/H2 = half-year; FY = full year.']:[])].join(' '),
   unconverted.size?`FX unavailable for ${[...unconverted].join(', ')} to ${displayCurrency}. Amounts shown in reporting currency.`:'',
   ...translations
- ]:['Connect private statements in Stocks BETA 2 to include the available quarterly figures.'];
+ ]:['Public quarterly financials are unavailable for this listing.'];
  footnotes.filter(Boolean).forEach((note,i)=>fitted(28,1034+14*i,note,744,10,muted));
  link(28,1108,'Full Morningstar financial statements',info?.financialsUrl);
+ link(255,1108,'Stocks BETA 2 statements',info?.statementsUrl);
  if(bos)link(445,1108,'BOS credit source · '+bos.report_date,bos.source_pdf);
  out.push('</svg>');return out.join('');
 }

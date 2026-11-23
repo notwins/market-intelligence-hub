@@ -96,6 +96,12 @@ assert(!svg.includes('Extra detail'));assert(!svg.includes('NaN'));assert(!svg.i
 const missing=A.svg({symbol:'MISSING'},{fundamentals:{company:{statements:{income:report}}}});
 assert.equal((missing.match(/Quarterly statement unavailable/g)||[]).length,3);
 assert(missing.includes('No agency rating supplied'));assert(!missing.includes('>0<'));
+{
+ const url='https://notwins.github.io/market-intelligence-hub/stocks-beta2.html?ticker=AAPL%20US&research=1';
+ const links=[];
+ A.svg({symbol:'AAPL'},{fundamentals:{statementsUrl:url}},2,2,{links});
+ assert(links.some(link=>link.url===url),'The company appendix links to that listing’s public statements');
+}
 const monthly=Array.from({length:38},(_,i)=>[C.monthsAfter('2023-08-31',i),100*Math.exp(.012*i+.035*Math.sin(i))]);
 const data={quote:{date:'2026-11-19',close:160},comparisonPrices:[...monthly,['2028-01-01',1e9]],points:monthly};
 const cone=C.probabilityCone(data);assert.equal(cone.end,'2027-11-19');assert(cone.count>=12&&cone.count<=36);
@@ -137,3 +143,31 @@ assert(on.includes('not a forecast or barrier-hit probability'));
 const metrics=C.svg({...p,shares:[{symbol:'ONE'},{symbol:'TWO'},{symbol:'THREE'}]});
 assert.equal((metrics.match(/class="si-company-metric"/g)||[]).length,27,'Each metric occupies one row');
 console.log('PASS SI company pages: A4 ordering, aligned fiscal quarters, rounded units, QoQ growth, scoped ratings and dated 12-month model ranges');
+
+(async()=>{
+ const reportFor=period=>({currency:'USD',fiscalEnd:'Dec 31',periods:[period],rows:[[0,'Total Revenue',[1e6]]]});
+ const statements={balance:reportFor('2025'),cash:reportFor('2025'),income:reportFor('2025')};
+ const quarterly={balance:reportFor('Q4 2025'),cash:reportFor('Q4 2025'),income:reportFor('Q4 2025')};
+ const company={capturedAt:'2026-11-21T07:00:00+08:00',quarterlyCapturedAt:'2026-11-22',statements,quarterly};
+ let feedReads=0;
+ const context={
+  module:{exports:{}},AbortSignal,FinancialDisplay:require('../site/financial-display.js'),
+  indexedDB:{open(){throw new Error('The public lookup must not consult local key storage');}},
+  fetch:async url=>{
+   if(url.includes('company-fundamentals-listings'))return {ok:true,json:async()=>[['AAPL US','XNAS','AAPL','USD']]};
+   if(url.includes('research-briefs'))return {ok:true,json:async()=>({version:1,briefs:{}})};
+   assert.match(url,/\/statements-public\.json$/);
+   feedReads++;
+   return {ok:true,json:async()=>({version:2,source:'Morningstar',companies:{'AAPL US':company}})};
+  }
+ };
+ require('node:vm').runInNewContext(fs.readFileSync('site/company-fundamentals.js','utf8'),context);
+ const fundamentals=context.module.exports;
+ const results=await Promise.all([fundamentals.snapshot('AAPL US'),fundamentals.snapshot('AAPL US')]);
+ assert.equal(feedReads,1,'Coalesce public lookups across company cards');
+ for(const snapshot of results)assert.equal(snapshot.company.quarterly.cash.periods[0],'Q4 2025');
+ assert.equal(await fundamentals.snapshot('AAPL LN'),null,'Reject a different listing');
+ await fundamentals.refreshPublic();
+ assert.equal(feedReads,2,'Refresh checks the public feed again');
+ console.log('PASS public statement snapshots share one anonymous feed and refresh on request');
+})().catch(error=>{console.error(error);process.exitCode=1;});

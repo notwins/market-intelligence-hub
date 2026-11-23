@@ -20,9 +20,9 @@
   const fields = ['bbTicker', 'instrumentId', 'ticker', 'publicTicker', 'symbol', 'id'];
   const doc = root.document;
   const figures = root.FinancialDisplay || (typeof module !== 'undefined' ? require('./financial-display.js') : null);
-  let directoryRequest, databaseRequest, loadRequest, researchRequest, memory, online, publicStatements;
+  let directoryRequest, databaseRequest, loadRequest, researchRequest, memory, publicStatements, publicRequest;
   let publicState;
-  let privateSnapshotRequest;
+  const publicArchiveUrl = 'https://market-intel-fundamentals-vault.vercel.app/statements-public.json';
   const privateArchiveUrl = 'https://market-intel-fundamentals-vault.vercel.app/statements.bin';
   const privateArchiveKey = 'private-online';
   let frequency = 'annual';
@@ -194,30 +194,42 @@
     return validateCompleteArchive(await (await decryptArchive(key, bytes)).json());
   }
 
+  function readPublic(force = false) {
+    if (publicRequest) return publicRequest;
+    if (publicStatements && !force) return Promise.resolve(publicStatements);
+    publicState = 'loading';
+    publicRequest = (async () => {
+      try {
+        const response = await root.fetch(publicArchiveUrl, {
+          cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout?.(10000)
+        });
+        if (!response.ok) throw new Error('Statement feed is unavailable');
+        publicStatements = await validateCompleteArchive(await response.json());
+        publicState = 'ready';
+        return publicStatements;
+      } catch (error) {
+        publicState = publicStatements ? 'ready' : 'unavailable';
+        throw error;
+      }
+    })().finally(() => { publicRequest = null; });
+    return publicRequest;
+  }
+
   function bindPublic(panel) {
     if (!panel) return;
     const status = panel.querySelector('[role="status"]');
     const retry = panel.querySelector('button');
     async function refresh() {
-      publicState = 'loading';
       status.textContent = 'Loading public annual and quarterly statements…';
       retry.hidden = true;
-      updateImportPanels();
       try {
-        const response = await root.fetch(panel.dataset.fundPublic, {
-          cache: 'no-cache', credentials: 'omit', signal: AbortSignal.timeout?.(15000)
-        });
-        if (!response.ok) throw new Error('Statement feed is unavailable');
-        publicStatements = await validateCompleteArchive(await response.json());
-        publicState = 'ready';
-        const companies = Object.values(publicStatements.companies);
+        const companies = Object.values((await readPublic(true)).companies);
         const captured = companies.map(company => company.quarterlyCapturedAt).sort().at(-1);
         const date = new Date(captured + 'T00:00:00Z').toLocaleDateString('en-GB', {
           day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'
         });
         status.textContent = companies.length + ' listings · Quarterly capture ' + date + ' SGT';
       } catch {
-        publicState = 'unavailable';
         status.textContent = 'The public statements could not load.';
         retry.hidden = false;
       }
@@ -240,19 +252,6 @@
     return { bytes, bundle: await openArchive(key, bytes) };
   }
 
-  function readPrivateSnapshot() {
-    if (online) return Promise.resolve(online);
-    return privateSnapshotRequest ??= (async () => {
-      const saved = await stored('get', undefined, privateArchiveKey);
-      if (!saved?.key) return null;
-      try { return (await fetchArchive(saved.key, privateArchiveUrl, 6000)).bundle; }
-      catch { return openArchive(saved.key, saved.bytes); }
-    })().catch(() => null).then(bundle => {
-      if (!bundle) privateSnapshotRequest = null;
-      return bundle;
-    });
-  }
-
   function bindOnline(panel) {
     if (!panel) return;
     const field = panel.querySelector('[data-fund-access]');
@@ -265,17 +264,16 @@
     const forget = panel.querySelector('[data-fund-forget-access]');
     const source = panel.dataset.fundOnline || privateArchiveUrl;
     const prompt = 'Use your private access key to download the original CSV archive.';
-    let busy = false, activeKey, downloading = false;
+    let busy = false, activeKey, archiveBundle, downloading = false;
     const lockControls = disabled => {
       field.disabled = code.disabled = submit.disabled = forget.disabled = disabled;
     };
     const show = (bundle, cached = false) => {
-      online = bundle;
+      archiveBundle = bundle;
       forget.hidden = !bundle;
       download.hidden = !bundle;
       status.textContent = bundle ? Object.keys(bundle.companies).length
         + ' listings · ' + (cached ? 'Saved private copy' : 'Private online statements ready') : prompt;
-      updateImportPanels();
     };
     async function connect(key, savedBytes) {
       busy = true;
@@ -330,7 +328,7 @@
     download.addEventListener('click', async () => {
       if (!activeKey || downloading || busy) return;
       const key = activeKey;
-      const date = Object.values(online?.companies || {}).map(company => company.quarterlyCapturedAt).sort().at(-1);
+      const date = Object.values(archiveBundle?.companies || {}).map(company => company.quarterlyCapturedAt).sort().at(-1);
       downloading = download.disabled = true;
       downloadStatus.textContent = 'Preparing the quarterly CSV archive…';
       try {
@@ -359,7 +357,6 @@
         await stored('delete', undefined, privateArchiveKey);
         activeKey = null;
         downloadStatus.textContent = '';
-        privateSnapshotRequest = null;
         show(null);
       }
       catch { status.textContent = 'This browser could not forget the private connection.'; }
@@ -829,14 +826,18 @@
   function paintStatement(disclosure, id) {
     const body = disclosure.querySelector('[data-fund-body]');
     const quarterly = frequency === 'quarterly';
-    const company = (publicStatements ?? online ?? memory)?.companies[id];
+    if (!publicStatements && publicState !== 'unavailable') {
+      body.innerHTML = '<p class="fund-note" role="status">Loading public financial statements…</p>';
+      readPublic().catch(load).finally(() => {
+        if (disclosure.open && disclosure.isConnected) paintStatement(disclosure, id);
+      });
+      return;
+    }
+    const company = (publicStatements ?? memory)?.companies[id];
     if (!company || (quarterly && !company.quarterly)) {
       body.innerHTML = publicState === 'ready' ? '<p class="fund-note">No statements available for this listing and period.</p>'
-        : publicState === 'loading' ? '<p class="fund-note">Loading public financial statements…</p>'
-        : publicState ? '<p class="fund-note">Public statements could not load. '
-          + '<a href="#sb2-fundamentals-import">Open the statement settings to retry</a>.</p>'
-        : '<p class="fund-note">Connect your statements under '
-          + '<a href="stocks-beta2.html#sb2-fundamentals-import">Stocks BETA 2 statement settings</a>.</p>';
+        : '<p class="fund-note" role="status">Public statements could not load.</p><button type="button">Retry statements</button>';
+      body.querySelector('button')?.addEventListener('click', () => paintStatementAfterRetry(disclosure, id));
       return;
     }
     const key = disclosure.dataset.fundStatement;
@@ -865,6 +866,12 @@
     });
   }
 
+  function paintStatementAfterRetry(disclosure, id) {
+    const retry = readPublic(true);
+    paintStatement(disclosure, id);
+    retry.then(updateImportPanels, () => {});
+  }
+
   function rowsFor([id, mic, symbol], research, label) {
     const source = 'https://www.morningstar.com/stocks/' + mic.toLowerCase() + '/'
       + encodeURIComponent(symbol.toLowerCase()) + '/financials';
@@ -877,26 +884,24 @@
       + '<p class="fund-source"><a href="' + esc(source) + '" target="_blank" rel="noopener noreferrer">Morningstar Financials</a></p></section>';
   }
 
-  // Reuse the statement panels' private connection and exact listing match in the SI exporter.
+  // The SI exporter and statement panels use the same exact listing and public feed.
   async function snapshot(item) {
     const listings = await directory();
     const listing = findListing(item, listings);
     if (!listing) return null;
-    const [privateBundle, , briefs] = await Promise.all([
-      readPrivateSnapshot(), load(), readResearch().catch(() => ({}))
+    const [bundle, briefs] = await Promise.all([
+      readPublic().catch(async () => { await load(); return memory; }), readResearch().catch(() => ({}))
     ]);
-    // Refresh imports made in another tab of this origin when the SI data is refreshed.
-    if (!temporary && !writing) {
-      try { memory = await stored('get'); } catch { /* Keep the session copy. */ }
-    }
     const [id, mic, symbol] = listing;
-    return { id, mic, symbol, company: privateBundle?.companies?.[id] || memory?.companies?.[id] || null,
+    return { id, mic, symbol, company: bundle?.companies?.[id] || null,
       research: briefs[id] || null,
+      statementsUrl: 'https://notwins.github.io/market-intelligence-hub/stocks-beta2.html?ticker='
+        + encodeURIComponent(id) + '&research=1',
       financialsUrl: 'https://www.morningstar.com/stocks/' + mic.toLowerCase() + '/'
         + encodeURIComponent(symbol.toLowerCase()) + '/financials' };
   }
 
-  const api = { button: section, snapshot, findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor, breakdown, statementHierarchy };
+  const api = { button: section, snapshot, refreshPublic: () => readPublic(true), findListing, unpack, unit, table, chart, researchLink, reportContent, rowsFor, breakdown, statementHierarchy };
   root.CompanyFundamentals = api;
   if (typeof module !== 'undefined') module.exports = api;
   if (!doc || !root.customElements) return;
@@ -957,7 +962,7 @@
         this.addEventListener('toggle', event => {
           const detail = event.target;
           if (!detail.matches('[data-fund-statement]') || !detail.open || detail.querySelector('[data-fund-body]').childElementCount) return;
-          load().then(() => { if (detail.open && detail.isConnected) paintStatement(detail, match[0]); });
+          paintStatement(detail, match[0]);
         }, true);
         this.refresh = refresh;
         doc.addEventListener('fundamentals-updated', refresh);

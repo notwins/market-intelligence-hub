@@ -349,7 +349,22 @@ $('page-tabs').addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Hom
 $('duplicate-page').addEventListener('click',()=>{if(active())add(structuredClone(active()));});
 $('remove-page').addEventListener('click',()=>{if(!active()||protectEdits())return;invalidatePDF();removed={page:active(),index:pages.indexOf(active())};loading.delete(activeId);revisions[activeId]=(revisions[activeId]||0)+1;pages=pages.filter(p=>p.id!==activeId);activeId=pages[Math.min(removed.index,pages.length-1)]?.id||'';$('undo-remove').hidden=false;fill(active());persist();render();notice('Page removed. Undo is available.');});
 $('undo-remove').addEventListener('click',()=>{if(!removed||protectEdits())return;if(pages.length>=LIMIT){notice('Remove a page before undoing: the collection already has 30 pages.');return;}invalidatePDF();pages.splice(removed.index,0,removed.page);activeId=removed.page.id;removed=null;$('undo-remove').hidden=true;loading.add(activeId);fill(active());persist();render();enrich(active());});
-$('refresh-page').addEventListener('click',async()=>{const p=active();if(!p||protectEdits())return;invalidatePDF();loading.add(p.id);render();try{await bounded(Promise.all([window.MarketPrices.refresh(true),window.BOSEquity?.refresh(true),C.overlayKeys.some(key=>chart[key])?window.ShareLabData?.load(true):null]),'Data refresh timed out.');}catch{notice('Some data could not refresh. Available saved data will be used.');}if(pages.includes(p))enrich(p);else{loading.delete(p.id);render();}});
+$('refresh-page').addEventListener('click',async()=>{
+ const p=active();
+ if(!p||protectEdits())return;
+ invalidatePDF();
+ pages.forEach(page=>loading.add(page.id));
+ render();
+ try{
+  await bounded(Promise.all([
+   window.MarketPrices.refresh(true),window.BOSEquity?.refresh(true),window.CompanyFundamentals?.refreshPublic?.(),
+   C.overlayKeys.some(key=>chart[key])?window.ShareLabData?.load(true):null
+  ]),'Data refresh timed out.');
+ }catch{notice('Some data could not refresh. Available saved data will be used.');}
+ if(!pages.includes(p))loading.delete(p.id);
+ pages.forEach(enrich);
+ if(!pages.length)render();
+});
 const referenceTable=window.SIReferenceTable;
 const urlParams=new URLSearchParams(window.location?.search||'');
 let refs=[],referenceSteps={},referenceLoading=false,referenceError=false,libraryCurrency='All',libraryCompany=referenceTable?.codeFor(urlParams.get('company'))||'';
