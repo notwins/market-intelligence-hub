@@ -2,9 +2,9 @@
   "schema_version": 1,
   "source": "The Wall Street Journal — U.S. Treasury Quotes",
   "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-  "as_of": "2026-11-20",
+  "as_of": "2026-11-23",
   "time_precision": "date_only",
-  "verified_on_sgt": "2026-11-22",
+  "verified_on_sgt": "2026-11-24",
   "basis": "WSJ Asked yield column, percent per annum, for six individually quoted Treasury securities. Not auction rates, executable quotes or constant-maturity par estimates. Bill Bid/Asked discount-rate columns are not used as yields.",
   "selection_note": "Illustrative maturity samples, not a claim that issues are on-the-run or exact constant maturities. Each sample is matched by maturity and, for notes and bonds, coupon.",
   "quotes": [
@@ -13,56 +13,56 @@
       "kind": "bill",
       "maturity": "2027-05-13",
       "coupon_percent": null,
-      "asked_yield_percent": 4.398,
-      "quote_date": "2026-11-20"
+      "asked_yield_percent": 4.445,
+      "quote_date": "2026-11-23"
     },
     {
       "term": "~1Y",
       "kind": "bill",
       "maturity": "2027-10-28",
       "coupon_percent": null,
-      "asked_yield_percent": 4.477,
-      "quote_date": "2026-11-20"
+      "asked_yield_percent": 4.536,
+      "quote_date": "2026-11-23"
     },
     {
       "term": "2Y",
       "kind": "note",
       "maturity": "2028-11-15",
       "coupon_percent": 3.5,
-      "asked_yield_percent": 4.602,
-      "quote_date": "2026-11-20",
-      "bid_price": 97.90625,
-      "ask_price": 97.9375
+      "asked_yield_percent": 4.659,
+      "quote_date": "2026-11-23",
+      "bid_price": 97.8046875,
+      "ask_price": 97.8359375
     },
     {
       "term": "5Y",
       "kind": "note",
       "maturity": "2031-11-15",
       "coupon_percent": 1.375,
-      "asked_yield_percent": 4.71,
-      "quote_date": "2026-11-20",
-      "bid_price": 85.3046875,
-      "ask_price": 85.3515625
+      "asked_yield_percent": 4.738,
+      "quote_date": "2026-11-23",
+      "bid_price": 85.203125,
+      "ask_price": 85.25
     },
     {
       "term": "10Y",
       "kind": "note",
       "maturity": "2036-11-15",
       "coupon_percent": 5,
-      "asked_yield_percent": 4.906,
-      "quote_date": "2026-11-20",
-      "bid_price": 100.671875,
-      "ask_price": 100.734375
+      "asked_yield_percent": 4.914,
+      "quote_date": "2026-11-23",
+      "bid_price": 100.60546875,
+      "ask_price": 100.66796875
     },
     {
       "term": "~30Y",
       "kind": "bond",
       "maturity": "2056-08-15",
       "coupon_percent": 5.125,
-      "asked_yield_percent": 5.3,
-      "quote_date": "2026-11-20",
-      "bid_price": 97.3203125,
-      "ask_price": 97.3828125
+      "asked_yield_percent": 5.294,
+      "quote_date": "2026-11-23",
+      "bid_price": 97.40625,
+      "ask_price": 97.46875
     }
   ]
 }

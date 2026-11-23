@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "source_commit": "ca106408f3d965b7cedc38c04b99b9a5dd3253aa",
-  "built_at": "2026-11-23T00:58:57.594882+00:00",
+  "source_commit": "c193d3cdbe6d6e13b1ed1ec01d4c7cb370f8ef41",
+  "built_at": "2026-11-23T23:47:47.694107+00:00",
   "coverage": {
     "archive": "All legacy published research HTML in this checkout; companion assets remain attached. New independent editions are merged by ContentDelivery in the browser.",
     "chronology": "First added to the public repository; not a verified Pages upload time. Unknown introduction dates sort last. Source/research dates remain separate.",
@@ -8644,14 +8644,15 @@
         }
       ],
       "news_ids": [
+        "38b391e53632ae354f0d",
         "a268e0be475b976f8df8",
+        "65b9981a110e5cc75f2c",
         "222a4ccbcc2e285e29c2",
         "4775d7241fd99a38d8ea",
         "79235bd9bdd266fd29c5",
+        "4cdd7a44db5febec9a64",
         "33d2adfa6988a1d7edc0",
-        "dfad396e395366d8cf56",
-        "217af01994c8f912f3b5",
-        "739ba3dabf39fa4a60b3"
+        "dfad396e395366d8cf56"
       ],
       "research_href": "search.html?q=NVDA"
     },
@@ -11788,8 +11789,7 @@
       ],
       "news_ids": [
         "8cb80ad37a4ac75c78f3",
-        "4775d7241fd99a38d8ea",
-        "1622d32af847f6459d97"
+        "4775d7241fd99a38d8ea"
       ],
       "research_href": "search.html?q=GOOGL"
     },
@@ -30924,7 +30924,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS2",
       "source_series": "DGS2",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-22T08:57:54+08:00",
+      "last_attempt": "2026-11-23T09:00:30+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -31061,7 +31061,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS5",
       "source_series": "DGS5",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-22T08:57:54+08:00",
+      "last_attempt": "2026-11-23T09:00:30+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -31198,7 +31198,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS10",
       "source_series": "DGS10",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-22T08:57:54+08:00",
+      "last_attempt": "2026-11-23T09:00:30+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -31335,7 +31335,7 @@
       "source_url": "https://fred.stlouisfed.org/series/DGS30",
       "source_series": "DGS30",
       "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-22T08:57:54+08:00",
+      "last_attempt": "2026-11-23T09:00:30+08:00",
       "history": [
         {
           "date": "2026-09-29",
@@ -31650,10 +31650,34 @@
   ],
   "news": [
     {
+      "id": "38b391e53632ae354f0d",
+      "title": "US seeks answers on Nvidia's sale of chips to China, Bessent says",
+      "href": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQcm1fbVJENmFGZU81bGR4WXVfeDMwdWdaY0xNbmVBN3hmaXVVeVBLelJxT3dubnROYnVkM2NCRXRfcFFvMGNtZ0FlM3c5LWt1WUVGclQzY1ZJTVBCR2d2dXozSXRqN0VIM1NsV0d2YVJLRjJpRnlIcVRNSlZqeURwLWhKa1V4dUNvWDdlZmNoMnQxQ1d6WlVGalNpdjVSZm9PMXRzUA?oc=5",
+      "published_at": "2026-11-22T17:53:07+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "a268e0be475b976f8df8",
       "title": "EXCLUSIVE: Nvidia's accounting is a focus of US SEC investigation, sources say",
       "href": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPMzlPdFVTT2cyVkhmMFVKNWZ1MnpNT0NLcURnblg4THMwUWNuYTRBLWUxU0ZSSUR5bk1zNnBmVlhIUjByNkN6TzVBNC1uaXQxM0dwY2FkMzZQdm00a0xyMXo3NFNpSUNPdERZWU82aGZLa0lNZHpMOXVnVDBVQW9lMmNrWEVRczVYS1Racm1NNlNERDBJeTFJRG1pZVRfTC1LTy1pNjhpVzRaeGRrY25kSzQ1aDNUUQ?oc=5",
-      "published_at": "2026-11-20T19:13:00+00:00",
+      "published_at": "2026-11-21T03:08:01+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "65b9981a110e5cc75f2c",
+      "title": "Nvidia a buy; wait for better Anthropic entry points, says investor",
+      "href": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBkVExaS3BKTWxvbnRJbXRMbmFOcmlmV2VkUm1JeEZmTUs3eWVrQXA5ZXFNd3FBd1Z5WU9OTE9JUDhtVGNMM0stSkctTXJsYTBkTkFqajE4bGExNVUycDZHREVCNE1sVTQ?oc=5",
+      "published_at": "2026-11-20T22:46:23+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -31686,6 +31710,18 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
+      "id": "d6f787c082b799f1e603",
+      "title": "Rare photos of uncontacted Amazon tribes",
+      "href": "https://news.google.com/rss/articles/CBMiigFBVV95cUxObU8tOUk2VEtzR2I1NWRKMUloSk41a3NmT0ZNald5Zm9uaUlPbUVvSmhXVHZqMzVTeHdoRnpMS2FMWTIyNmxVRjdWckxjZC1vVGlHSkZsQVQxSWhVbHdrMm51ZW1WLWppMFhIeHMtUTRoVXpkdmdfc3lEeU5MbkwwYXNCM3o1OVM2QVE?oc=5",
+      "published_at": "2026-11-20T18:10:00+00:00",
+      "tickers": [
+        "AMZN"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "4775d7241fd99a38d8ea",
       "title": "Nvidia's share slide knocks it below Alphabet in valuation",
       "href": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOR1lHWVFlSnZTcW9OVTZGU0lwdDdreE5TSm94Z0FTZDktRHRLOEU0LVBTTHpOZ1lYYmFCZ041UWUtTEh6VEFhczZFd2xlSjNLRlNNMHhDd2tFcDl2N1BIMndRY1VaN09HeHowT0hVblhkd1ZpUGxTakdwVFk4cjFWTzlTRnJQeWNGUW92YUxWUG9XR3BzM0hrZDdaWU5vUHJyMVdRcDktdWNMSUlkLS1Nek1SZjYxQQ?oc=5",
@@ -31711,24 +31747,12 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "d6f787c082b799f1e603",
-      "title": "Rare photos of uncontacted Amazon tribes",
-      "href": "https://news.google.com/rss/articles/CBMiigFBVV95cUxObU8tOUk2VEtzR2I1NWRKMUloSk41a3NmT0ZNald5Zm9uaUlPbUVvSmhXVHZqMzVTeHdoRnpMS2FMWTIyNmxVRjdWckxjZC1vVGlHSkZsQVQxSWhVbHdrMm51ZW1WLWppMFhIeHMtUTRoVXpkdmdfc3lEeU5MbkwwYXNCM3o1OVM2QVE?oc=5",
-      "published_at": "2026-11-20T08:00:00+00:00",
+      "id": "4cdd7a44db5febec9a64",
+      "title": "COMMENTARY: Anthropic's super-sized debut, Nvidia China crisis and a GTA heist: The financial week in five charts",
+      "href": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOVmJmc0cwcmVlWHdBSGh1cGhsNkVsUTNJTFJ2LVlvS2dzOUllbVFob25MVFZDcS0wYVB2ck91S1ctbEtIRFdKTHE3M2JERTdSSUxad041ZncwaWpuTWpFMXBVWmxwMC1OcTF0VG96UGg3MjFjV29nSVpBUEZ0SVU3OHB5RVdQOHBqelVnX3NTY2Job2ZuWXVGWlFLVGVfRkVBUWdvWDNBRlVST0JWNTdBTzBRV005NFRKM3Iza3FDQ3hUN3Z1dS1BSlFWRkluX2E5X01OYzVCR1hsd1lJZzV4Vg?oc=5",
+      "published_at": "2026-11-20T11:50:00+00:00",
       "tickers": [
-        "AMZN"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "1622d32af847f6459d97",
-      "title": "Indonesia asks Google to clarify removal of 19,000 YouTube channels, ministry says",
-      "href": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxNQ0ZsN0xYRkZoQm8wbW9kQ3ctdmpDNUdRUV9DdDJ5NWdGbXIxV3kwN2JrM3pqUWlxRnp6X085Z2JVWlplZmswb0VJb1hzQlZnVm5sMnc3ZFlOZ2FBWkxKcjd2aWFUVk9hSV8xcVZWU3dtU1YwVm9DOG9nTlZUdGVXMWJsYzBENDVxLUFvT2VRMV8weDlpa2VObzVualJBUkFCaHRieExxUFpPS0VfbURGdTQwSkFfUkZmMmVkUDNhTHFUNjJaMldqWg?oc=5",
-      "published_at": "2026-11-20T04:58:00+00:00",
-      "tickers": [
-        "GOOGL"
+        "NVDA"
       ],
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
@@ -31757,33 +31781,9 @@
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "217af01994c8f912f3b5",
-      "title": "Nvidia retreats as strong outlook fails to dispel uncertainty",
-      "href": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNNlVnb2FaQlk2WUUtQ3dtaUlBRF9oSnFadkhYVUNwSzRKdnFQNENDUmgyMXBFV1NKaDhUcXJYTGF3Z21LM1F0OEZMVTJZU0lhWHlhOHBCb0t5WVRmMVRMU1ZCRTlJRUpYRlFCZ3RBYVV4WlF0Nms2Q1NvbkVjU0p5NVVQbmFrdzdfZmdLdVgxZnZBUkRGbkpZMTNR?oc=5",
-      "published_at": "2026-11-19T10:39:39+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "739ba3dabf39fa4a60b3",
-      "title": "Stocks slip with eyes on Anthropic and Nvidia, oil prices slide",
-      "href": "https://news.google.com/rss/articles/CBMie0FVX3lxTFB6allzaTc1SU8zUmVIeXRZRkU2dE9reVo1MXBLSllnX0lsb1FmemdwR2RnNzZvQ0tqSzR6cTgzVHI2bGlYWWxxLTJWY3V4OXBrczR5OXF5ZkdNQnBfak1tYUs1NlVOQVVSLTdacXdnaEt0Y2VHVmM4NEN2WQ?oc=5",
-      "published_at": "2026-11-19T01:29:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     }
   ],
-  "news_generated_at": "2026-11-22T08:57:54+08:00",
+  "news_generated_at": "2026-11-23T09:00:30+08:00",
   "news_status": "ok",
   "calls": [
     {
