@@ -171,4 +171,28 @@ close(monthlyHit.exit.price,120,'First daily closing price at KO');
 close(monthlyHit.rows[0].price,140,'User-entered month-end price remains available');
 assert.throws(()=>model.simulateDaily(quote,initialSpot,budget,[]));
 
+const {buyAndHold} = require('../site/tools/accumulator-benchmark.js');
+const {analyze} = require('../site/tools/accumulator-history-risk.js');
+const flatInvestment = buyAndHold(stressE.payment, 125.53, 125.53);
+assert.equal(flatInvestment.shares, 2387);
+close(flatInvestment.remainingCash, 109.89, 'Cash left after buying whole NVDA shares');
+close(flatInvestment.pnl, 0, 'Flat direct stock position');
+close(buyAndHold(stressE.payment, 125.53, 69).pnl, -134937.11, 'Same-funded outright stock at $69');
+close(buyAndHold(stressE.payment, 125.53, 150.64).pnl, 59937.57, 'Same-funded outright stock at KO');
+
+const monthlyPrices = [
+  ['2026-01-31',100], ['2026-02-28',55], ['2026-03-31',101],
+  ['2026-04-30',80], ['2026-05-31',97], ['2026-06-30',50],
+  ['2026-07-15',1]
+];
+const risk = analyze(monthlyPrices, '2026-07-15', 100, 55).rows[0];
+assert.deepEqual([risk.months,risk.total,risk.endHits,risk.touchHits], [3,3,1,2],
+  'Endpoint, early decline then recovery, exact threshold and incomplete last month');
+const missingMonth = monthlyPrices.filter(([date]) => date !== '2026-02-28');
+assert.equal(analyze(missingMonth,'2026-07-15',100,55).rows[0].total,1,
+  'A missing month invalidates every window that spans it');
+assert.equal(analyze(monthlyPrices, '2026-07-15', 100, 105), null, 'A rise is outside the downside analysis');
+
+require('./test_accumulator_scenario_paths.cjs');
+
 console.log('PASS Normal accumulator whole-share sizing, rounding cash, daily knock-out, timing, maturity and NAV reconciliation');
