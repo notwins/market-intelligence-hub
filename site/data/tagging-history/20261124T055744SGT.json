@@ -1,0 +1,209 @@
+{
+  "schema": 1,
+  "id": "20261124T055744SGT",
+  "checkedAt": "2026-11-24T05:57:44+08:00",
+  "sources": {
+    "hub": "5872f33c9e6d0741d772be8c2b22b0fbb7feba6d",
+    "content": "3c3274ce70a3ae33beb1c84c3a2e69588c2adfa0"
+  },
+  "baseline": "20261123T180329SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 271,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 7,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 199,
+      "changed": 3,
+      "tags": 3,
+      "colour": 3,
+      "logos": 0
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261120-CRWD-ZS-ACQUISITION-TALKS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "CrowdStrike agrees to a US$43.9bn all-stock Zscaler acquisition, advancing retained talks",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "ticker.entity.crwd",
+          "ticker.entity.zs"
+        ],
+        "colour": null,
+        "logos": [
+          "CRWD",
+          "ZS"
+        ]
+      },
+      "after": {
+        "tags": [
+          "event.mergers_acquisitions",
+          "ticker.entity.crwd",
+          "ticker.entity.zs"
+        ],
+        "colour": {
+          "tag": "event.mergers_acquisitions",
+          "light": "#86198F",
+          "dark": "#F0ABFC",
+          "chips": {
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": [
+          "CRWD",
+          "ZS"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261123-HEDGE-FUNDS-WEEK-20NOV-DELEVERAGING",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Hedge funds cut equity exposure after losses in the week ended 20 November",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.global_cross_border",
+          "sector.asset_management",
+          "sector.consumer_discretionary",
+          "sector.financials_banking",
+          "ticker.goldman_sachs_gs",
+          "ticker.jpmorgan_jpm"
+        ],
+        "colour": {
+          "tag": "ticker.jpmorgan_jpm",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "sector.consumer_discretionary": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "ticker.goldman_sachs_gs": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "ticker.jpmorgan_jpm": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261123-US-FLASH-PMI-NOV-SLOWDOWN",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "US flash PMI slows to 54.6 in November while remaining above the expansion threshold",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.global_cross_border",
+          "geo.united_states",
+          "macro.pmi_ism"
+        ],
+        "colour": {
+          "tag": "geo.global_cross_border",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
