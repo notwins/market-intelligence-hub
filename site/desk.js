@@ -400,6 +400,7 @@ function route() {
     else a.removeAttribute('aria-current');
   });
   target?.scrollIntoView({block:'start'});
+  root.dispatchEvent(new Event('hub-desk-route'));
   if (company || id === 'market-bonds') target?.focus({preventScroll:true});
 }
 function setupDeskTabs() {

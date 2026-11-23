@@ -79,6 +79,8 @@
 
   const base = new URL('./', document.currentScript.src);
   const pagePath = location.pathname.slice(base.pathname.length);
+  const onDesk = pagePath === 'desk.html';
+  const mobileDock = onDesk && matchMedia('(max-width:760px)');
   const credit = ['Bonds & credit', 'v4.html#credit', '▤'];
   const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
   const watchlist = ['Bonds & shares watchlist', 'v4.html#watchlist'];
@@ -174,6 +176,7 @@
 
   function closeMenu() {
     if (!openMenu) return;
+    if (onDesk) openMenu.panel.hidePopover?.();
     openMenu.panel.hidden = true;
     openMenu.button.setAttribute('aria-expanded', 'false');
     openMenu = undefined;
@@ -187,7 +190,8 @@
       closeMenu();
       return;
     }
-    panel.style.top = anchor.bottom + 'px';
+    panel.style.top = mobileDock?.matches ? 'auto' : anchor.bottom + 'px';
+    panel.style.bottom = mobileDock?.matches ? window.innerHeight - anchor.top + 'px' : 'auto';
     panel.style.left = Math.max(8, Math.min(anchor.left, document.documentElement.clientWidth - panel.offsetWidth - 8)) + 'px';
   }
 
@@ -207,6 +211,7 @@
     const panel = document.createElement('div'); panel.className = 'hub-primary-dropdown';
     panel.id = 'hub-primary-subsections-' + index;
     panel.hidden = true;
+    if (onDesk) panel.setAttribute('popover', 'manual');
     panel.append(...links.map(([label, route, icon]) => link(label, route, icon, toneFor(route))));
     button.type = 'button';
     button.setAttribute('aria-label', name + ' subsections');
@@ -219,6 +224,7 @@
       if (openMenu?.group !== group) closeMenu();
       openMenu = {group, panel, button, pinned};
       panel.hidden = false;
+      if (onDesk) panel.showPopover?.();
       button.setAttribute('aria-expanded', 'true');
       positionMenu();
     }
@@ -251,7 +257,32 @@
     e.preventDefault();
   });
   scroll.addEventListener('scroll', positionMenu, {passive: true});
-  window.addEventListener('scroll', positionMenu, {passive: true});
+  if (onDesk) {
+    const marketsTab = document.getElementById('tab-markets');
+    let turningPoint = Math.max(0, window.scrollY);
+    let compact = false;
+    function setCompact(value, y) {
+      compact = value;
+      turningPoint = y;
+      root.classList.toggle('hub-desk-scrolled-down', value);
+      if (value && !mobileDock.matches) closeMenu();
+    }
+    function updateScrollDirection() {
+      // Clamp Safari's overscroll so a bounce cannot reverse the detected direction.
+      const limit = Math.max(0, root.scrollHeight - root.clientHeight);
+      const y = Math.min(limit, Math.max(0, window.scrollY));
+      if (marketsTab.getAttribute('aria-selected') !== 'true' || y === 0) setCompact(false, y);
+      else if (compact && turningPoint - y >= 8) setCompact(false, y);
+      else if (!compact && y - turningPoint >= 8) setCompact(true, y);
+      else turningPoint = compact ? Math.max(turningPoint, y) : Math.min(turningPoint, y);
+      positionMenu();
+    }
+    window.addEventListener('scroll', updateScrollDirection, {passive: true});
+    window.addEventListener('hub-desk-route', () => setCompact(false, Math.max(0, window.scrollY)));
+    root.classList.add('hub-desk-nav');
+  } else {
+    window.addEventListener('scroll', positionMenu, {passive: true});
+  }
   more.type = 'button'; more.classList.add('hub-primary-more'); more.textContent = 'Jump to';
   more.setAttribute('aria-haspopup', 'dialog');
   let menu = document.querySelector('dialog#more:has(.more-grid)');
