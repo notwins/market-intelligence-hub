@@ -22,7 +22,7 @@
 
   root.innerHTML = `
     <div class="heading"><div><h2 id="sn-compare-title">Compare SI and SN payouts</h2>
-      <p>See what each structure pays on the same NVDA price path. Each starts with your budget and rounds to a whole monthly share quantity.</p>
+      <p>Compare what a lower buying price is worth when NVDA falls, stays flat or rallies. Each note uses the same price path. The payout detail also shows what buying NVDA outright would earn on the same payment.</p>
     </div></div>
     <div class="cmp-tools"><a href="#library">Choose strikes in pricing tables</a><button type="button" id="cmp-clear">Clear selection</button></div>
     <div id="cmp-basket" aria-label="Selected structures"></div>
@@ -38,7 +38,7 @@
         <table><thead><tr><th scope="col">Structure</th><th scope="col">Tenor / guarantee</th><th scope="col">Strike</th><th scope="col">KO</th><th scope="col">Shares / month</th><th scope="col">Payment</th><th scope="col">vs. target</th></tr></thead><tbody id="cmp-terms"></tbody></table>
       </div>
       <details class="cmp-assumptions"><summary>Scenario prices &amp; observation days</summary>
-        <p>Leave a field empty to use the value shown as its placeholder. Day 1 is the first simulated trading day.</p>
+        <p>Blank fields use the five original JPM notes as the reference. Adding or removing notes keeps these price paths fixed. Day 1 is the first simulated trading day.</p>
         <div class="cmp-inputs">
           <label>Early rally · trading day<input id="cmp-early" type="number" min="1" step="1"></label>
           <label>Later rally · trading day<input id="cmp-late" type="number" min="1" step="1"></label>
@@ -51,7 +51,7 @@
       <div class="cmp-heading"><h3>Scenario outcomes</h3><label>Rank by <select id="cmp-rank"><option value="pnl">Dollar P&amp;L</option><option value="rate">Return on payment</option></select></label></div>
       <p class="small" id="cmp-criteria"></p>
       <div class="tableScroll cmp-results" tabindex="0" aria-label="Payout comparison by scenario"><table id="cmp-grid"></table></div>
-      <details class="cmp-assumptions cmp-range"><summary>Best and worst scenarios for each structure</summary><div id="cmp-range-list"></div></details>
+      <details class="cmp-assumptions cmp-range"><summary>Best and worst of the five contract scenarios</summary><div id="cmp-range-list"></div></details>
       <h3 id="cmp-detail-title" tabindex="-1"></h3><p class="small" id="cmp-description"></p>
       <div class="tableScroll cmp-results" tabindex="0" aria-labelledby="cmp-detail-title"><table id="cmp-detail"></table></div>
       <details class="cmp-assumptions"><summary>Cash and share breakdown</summary><div class="tableScroll cmp-results" tabindex="0" aria-label="Cash and share calculation inputs"><table id="cmp-breakdown"></table></div></details>
@@ -63,7 +63,7 @@
           <label>Decumulator sale strike · USD<input id="cmp-sale-strike" type="number" min="0.01" max="1000000" step="0.01"></label>
           <label>Shares assumed sold per structure<input id="cmp-sale-units" type="number" min="0" max="10000000000" step="1"></label>
         </div>
-        <p>The decumulator example assumes the stated quantity actually sells at its sale strike. We cap sales at available shares and value unsold shares at the later NVDA price. The training example is cash-funded by selling the shares and subscribing with the proceeds. This is a hypothetical sale allocation. An actual quote sets the sale quantity, timing and settlement. Unsold shares can fall further, and shares sold at the strike miss any larger rebound.</p>
+        <p>The decumulator example assumes the stated quantity actually sells at its sale strike. The default sale request is half the smallest full-tenor quantity across the original five JPM quotes, rounded down. Each sale is capped at available shares. Unsold shares use the later NVDA price. The training example is cash-funded by selling the shares and subscribing with the proceeds. This is a hypothetical sale allocation. An actual quote sets the sale quantity, timing and settlement. Unsold shares can fall further, and shares sold at the strike miss any larger rebound.</p>
       </details>
       <p class="small cmp-foot">A normal accumulator buys its full scheduled share quantity at the strike. A daily KO in the guarantee fills the guaranteed months. After the guarantee, a mid-month KO keeps whole shares accrued through the preceding trading day. The model spreads shares across each month’s observation days and returns payment less the cost of all shares bought.</p>
       <p class="small cmp-foot">Each comparison assumes USD cash earns 0% after refund or sale. Sale proceeds at KO use the observed market price, including any gap above the barrier. Actual execution and settlement can differ. Holding shares keeps the downside as well as any recovery.</p>
@@ -87,41 +87,42 @@
     return field.value === '' ? fallback : field.valueAsNumber;
   }
 
-  function scenarioPaths(notes, spot) {
-    const earliest = Math.min(...notes.map(n => n.terms.days));
-    const horizon = Math.max(...notes.map(n => n.terms.days));
-    const firstMinimum = Math.min(...notes.map(n => n.terms.guaranteeDay));
-    const lastMinimum = Math.max(...notes.map(n => n.terms.guaranteeDay));
-    const lowestKO = Math.min(...notes.map(n => n.terms.ko));
-    const lowestStrike = Math.min(...notes.map(n => n.terms.strike));
+  function scenarioPaths(spot, quoteTerms) {
+    const referenceTerms = initial.map(id => quoteTerms.get(id));
+    const rampDay = Math.min(...referenceTerms.map(t => t.days));
+    const horizon = Math.max(...quotes.map(q => q.days));
+    const firstMinimum = Math.min(...referenceTerms.map(t => t.guaranteeDay));
+    const lastMinimum = Math.max(...referenceTerms.map(t => t.guaranteeDay));
+    const lowestKO = Math.min(...referenceTerms.map(t => t.ko));
+    const lowestStrike = Math.min(...referenceTerms.map(t => t.strike));
     ['early', 'late'].forEach(id => byId('cmp-' + id).max = String(horizon));
     const early = read('early', Math.max(1, Math.ceil(firstMinimum / 2)));
-    const late = read('late', Math.min(horizon, Math.max(lastMinimum + 1, Math.floor((earliest + lastMinimum) / 2))));
-    const rally = read('rally', Math.max(...notes.map(n => n.terms.ko)));
+    const late = read('late', Math.min(horizon, Math.max(lastMinimum + 1, Math.floor((rampDay + lastMinimum) / 2))));
+    const rally = read('rally', Math.max(...referenceTerms.map(t => t.ko)));
     const down = read('down', Math.max(0, Math.min(cents(lowestStrike) - 1, Math.round(lowestStrike * 85)) / 100));
     const useBp = byId('cmp-gap').value === 'bp';
     const reference = byId('cmp-reference');
     const previous = reference.value;
-    reference.innerHTML = '<option value="lowest">Lowest selected KO</option>' +
-      notes.map((n, i) => `<option value="${n.quote.id}">${label(n,i)} · ${price(n.terms.ko)}</option>`).join('');
-    const referenceIndex = notes.findIndex(n => n.quote.id === previous);
-    reference.value = referenceIndex < 0 ? 'lowest' : previous;
-    const referenceName = referenceIndex < 0 ? 'the lowest selected KO' : label(notes[referenceIndex],referenceIndex) + '’s KO';
-    const koCents = cents(referenceIndex < 0 ? lowestKO : notes[referenceIndex].terms.ko);
+    reference.innerHTML = '<option value="lowest">Lowest KO of the five original JPM quotes</option>' +
+      quotes.map(q => `<option value="${q.id}">${quoteLabel(q)} · ${price(quoteTerms.get(q.id).ko)}</option>`).join('');
+    const referenceQuote = quoteById.get(previous);
+    reference.value = referenceQuote ? referenceQuote.id : 'lowest';
+    const referenceName = referenceQuote ? quoteLabel(referenceQuote) + '’s KO' : 'the lowest KO of the five original JPM quotes';
+    const koCents = cents(referenceQuote ? quoteTerms.get(referenceQuote.id).ko : lowestKO);
     const near = Math.max(0, useBp ? Math.min(koCents - 1, Math.round(koCents * .9999)) : koCents - 1) / 100;
     const jump = day => Array.from({length:horizon}, (_, i) => i + 1 < day ? spot : rally);
     const glide = end => Array.from({length:horizon}, (_, i) => {
-      const fraction = Math.min(1, (i + 1) / earliest);
+      const fraction = Math.min(1, (i + 1) / rampDay);
       return cents(spot + (end - spot) * fraction) / 100;
     });
-    const ramp = `NVDA moves from ${price(spot)} to the stated price by trading day ${earliest}, then stays there through the longest tenor.`;
-    currentSettings = {earlyDay:early, lateDay:late, rally, down, near, referenceId:reference.value, gap:byId('cmp-gap').value};
+    const ramp = `NVDA moves from ${price(spot)} to the stated price by trading day ${rampDay}, then stays there. A shorter note ends at its own earlier close.`;
+    currentSettings = {earlyDay:early, lateDay:late, rally, down, near, rampDay, nearReferenceLabel:referenceName, referenceId:reference.value, gap:byId('cmp-gap').value};
     return [
       {id:'early', name:'Early KO', short:'Earlier rally', path:jump(early), description:`NVDA holds at ${price(spot)} until it moves to ${price(rally)} on day ${early}. Each accumulator uses its own KO and guaranteed period.`},
       {id:'late', name:'Later KO', short:'Later rally', path:jump(late), description:`NVDA holds at ${price(spot)} until it moves to ${price(rally)} on day ${late}. A shorter investment may already have matured. The detail table shows when each investment ends.`},
-      {id:'down', name:'Below strike', short:'Maturity', path:glide(down), description:`Maturity case at ${price(down)}. ${ramp}`},
+      {id:'down', name:'Below strike', short:'Maturity', path:glide(down), description:`The selected downside target is ${price(down)}. ${ramp}`},
       {id:'flat', name:'Trade-day spot', short:'Maturity', path:glide(spot), description:`NVDA stays at its trade-day price of ${price(spot)} through every daily observation.`},
-      {id:'near', name:'Just below KO', short:'Maturity', path:glide(near), description:`Maturity case at ${price(near)}, ${useBp ? '0.01% below ' + referenceName + ', rounded to the nearest cent with at least a one-cent gap' : '$0.01 below ' + referenceName}. A structure with a lower barrier can knock out earlier. ${ramp}`}
+      {id:'near', name:'Below reference KO', short:'Maturity', path:glide(near), description:`Target ${price(near)}, ${useBp ? '0.01% below ' + referenceName + ', rounded to the nearest cent with at least a one-cent gap' : '$0.01 below ' + referenceName}. A structure with a lower barrier can knock out earlier. ${ramp}`}
     ];
   }
 
@@ -152,23 +153,32 @@
   }
 
   function compare(notes, spot) {
-    const paths = scenarioPaths(notes, spot);
+    // Reference prices and dates depend on quoted terms. Use an adequate sizing
+    // budget here so that a valid small holding in one quote can still be tested.
+    const quoteTerms = new Map(quotes.map(q => [q.id, model.terms(q, spot, Math.max(1, spot * q.months))]));
+    const paths = scenarioPaths(spot, quoteTerms);
     const rows = paths.map(s => {
       const sims = notes.map(n => model.simulateDaily(n.quote, spot, n.target, s.path));
-      let name = s.name;
+      let name = s.name, short = s.short;
       if (s.id === 'early' || s.id === 'late') {
-        name = s.short;
+        if (cents(currentSettings.rally) <= cents(spot)) short = s.id === 'early' ? 'Earlier price step' : 'Later price step';
+        name = short;
         if (sims.every(sim => sim.koDay && sim.koDay <= sim.guaranteeDay)) name = 'KO within guarantee';
-        if (sims.every(sim => sim.koDay > sim.guaranteeDay && sim.koDay < sim.days)) name = 'KO after guarantee';
+        if (sims.every(sim => sim.koDay > sim.guaranteeDay)) name = 'KO after guarantee';
       } else if (s.id === 'down' && sims.some(sim => sim.koDay || sim.exit.price >= sim.strike)) {
         name = 'Custom maturity price';
       }
-      return {...s, name, sims, values:sims.map(exitValues)};
+      if (['down','flat','near'].includes(s.id) && sims.some(sim => sim.koDay)) short = 'KO possible';
+      return {...s, name, short, sims, values:sims.map(exitValues)};
     });
     const basis = rows.find(r => r.id === byId('cmp-origin').value);
     const later = read('recovery', cents(spot * 1.10) / 100);
     const saleStrike = read('sale-strike', Math.max(0.01, cents(spot * 1.05) / 100));
-    const saleUnits = read('sale-units', Math.floor(Math.min(...basis.sims.map(s => s.exit.shares)) / 2));
+    const scheduledShares = initial.map(id => {
+      const q = quoteById.get(id);
+      return Math.round(cents(notes[0].target) / (cents(quoteTerms.get(id).strike) * q.months)) * q.months;
+    });
+    const saleUnits = read('sale-units', Math.floor(Math.min(...scheduledShares) / 2));
     Object.assign(currentSettings, {followBasisId:basis.id, laterSpot:later, saleStrike, saleUnits});
     const common = `Use ${basis.name.toLowerCase()} as the exit scenario. Any shares held after maturity are valued later at ${price(later)}. An earlier KO leaves its assumed sale proceeds in cash.`;
     for (const dec of [false, true]) {
@@ -177,6 +187,14 @@
         id:dec ? 'decu' : 'hold', name, short:'After maturity', follow:true, path:basis.path, basisName:basis.name, sims:basis.sims,
         description: common + (dec ? ` Assume up to ${units(saleUnits)} shares from each investment sell at ${price(saleStrike)}. Mark all remaining shares at ${price(later)}.` : ' Keep all shares delivered at maturity and add their later value to refunded cash.'),
         values:basis.sims.map((s, i) => afterMaturity(s, basis.values[i], later, saleStrike, saleUnits, dec))
+      });
+    }
+    for (const row of rows) {
+      row.values.forEach((v,i) => {
+        const mark = row.follow ? later : row.sims[i].exit.price;
+        const direct = window.AccumulatorBenchmark.buyAndHold(v.payment, spot, mark);
+        v.direct = {start:spot, mark, quantity:direct.shares, residualCash:direct.remainingCash,
+          nav:direct.value, pnl:direct.pnl, noteAdvantage:(cents(v.pnl) - cents(direct.pnl)) / 100};
       });
     }
     return rows;
@@ -193,7 +211,8 @@
     exitPnl:'P&L when the structure ends', laterSpot:'Later NVDA valuation price', shares:'Shares bought at strike',
     spent:'Capital used at strike', refund:'Cash refunded', sold:'Shares assumed sold', proceeds:'Assumed sale proceeds',
     retained:'Shares still held', retainedValue:'Value of shares still held', nav:'Total value', pnl:'P&L since investment',
-    rate:'Return on actual payment', change:'Change since the structure ended'
+    rate:'Return on actual payment', change:'Change since the structure ended',
+    directPnl:'P&L buying NVDA outright', noteAdvantage:'Note P&L less outright P&L'
   };
 
   function resultButton(rowId, i, key, displayed, name=labels[key]) {
@@ -239,10 +258,12 @@
         case 'refund': displayed=price(amount);break;
         case 'shares': case 'sold': case 'retained': displayed=units(amount);break;
         case 'rate': displayed=signedPct(amount);break;
+        case 'directPnl': amount=value.direct.pnl;displayed=signed(amount);break;
+        case 'noteAdvantage': amount=value.direct.noteAdvantage;displayed=signed(amount);break;
         case 'pnl': case 'change': displayed=signed(amount);break;
         default: displayed=money(amount);
       }
-      const colour = ['pnl','rate','change','exitPnl'].includes(key) ? cellClass(amount) : '';
+      const colour = ['pnl','rate','change','exitPnl','directPnl','noteAdvantage'].includes(key) ? cellClass(amount) : '';
       const accent = key === 'timing' && sim.koDay ? 'cmp-ko' : key === 'refund' && amount > 0 ? 'cmp-refund' : '';
       return `<td class="${colour} ${accent}">${resultButton(row.id,i,key,displayed,name)}</td>`;
     });
@@ -252,17 +273,18 @@
   function renderGrid(notes, rows) {
     const metric = byId('cmp-rank').value;
     const asValue = metric === 'pnl' ? signed : signedPct;
-    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Compare dollar P&L' : 'Compare percentage return on actual payment') + ' within each price scenario. Rankings use the calculated amounts before display rounding. The best result can still be a loss. These rankings cover the scenarios shown. Tap a result for the maths.';
+    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Compare dollar P&L' : 'Compare percentage return on actual payment') + ' within each price scenario. A lower strike reduces the price paid for each share. An earlier knock-out can leave more cash to reinvest and fewer shares in a rally. The first five scenarios rank results at each note’s own exit. The last two use the later share valuation. Each best result can still be a loss.';
     byId('cmp-grid').innerHTML = `<thead><tr><th scope="col">Scenario</th>${header(notes)}</tr></thead><tbody>` + rows.map(r => {
       const {best,worst} = extremes(r.values,metric);
-      return `<tr class="${r.id === active ? 'cmp-active' : ''}"><th scope="row"><button type="button" data-cmp-case="${r.id}" aria-pressed="${r.id === active}" aria-controls="cmp-detail">${r.name}</button><small>${r.short}</small></th>` +
+      const group = r.id === 'early' ? 'While the note is active · five contract outcomes' : r.id === 'hold' ? 'After the note ends · two optional share strategies' : '';
+      return (group ? sectionRow(group,notes.length) : '') + `<tr class="${r.id === active ? 'cmp-active' : ''}"><th scope="row"><button type="button" data-cmp-case="${r.id}" aria-pressed="${r.id === active}" aria-controls="cmp-detail">${r.name}</button><small>${r.short}</small></th>` +
         r.values.map((v,i) => {
           const tag=extremeLabel(best,worst,notes.length,i);
           const colour=tag.endsWith('best')||tag==='Best'?'cmp-best':tag.endsWith('worst')||tag==='Worst'?'cmp-worst':'';
           return `<td class="${colour} ${cellClass(v.pnl)}">${resultButton(r.id,i,metric,asValue(v[metric]))}${tag ? `<span class="cmp-extreme">${tag}</span>` : ''}</td>`;
         }).join('') + '</tr>';
     }).join('') + '</tbody>';
-    renderRanges(notes,rows,metric);
+    renderRanges(notes,rows.filter(r=>!r.follow),metric);
     const row = rows.find(r => r.id === active);
     byId('cmp-detail-title').textContent = row.name + ' · payout detail';
     byId('cmp-description').textContent = row.description + (row.follow ? ' P&L measures the gain or loss since purchase. Change since the structure ended measures the difference from its exit value.' : ' P&L measures the gain or loss on your actual payment.');
@@ -274,8 +296,15 @@
       : ['payment','exitSpot','shares','spent','sold','proceeds'];
     const headings = '<thead><tr><th scope="col">USD unless stated</th>' + header(notes) + '</tr></thead>';
     const table = fields => headings + '<tbody>' + fields.map(key=>detailRow(key,row,notes)).join('') + '</tbody>';
-    byId('cmp-detail').innerHTML = table(summary);
+    const comparisonDates = row.follow ? 'Both positions valued at the later observation. Cash earns 0%.' : 'Both positions valued on that note’s exit day.';
+    byId('cmp-detail').innerHTML = table(summary) + '<tbody>' +
+      sectionRow('Buy NVDA outright with the same payment',notes.length,comparisonDates+' Whole shares. Excludes dividends, interest and fees.') +
+      detailRow('directPnl',row,notes) + detailRow('noteAdvantage',row,notes) + '</tbody>';
     byId('cmp-breakdown').innerHTML = table(details);
+  }
+
+  function sectionRow(title, quoteCount, detail='') {
+    return `<tr class="cmp-section-row"><th colspan="${quoteCount+1}">${title}${detail ? '<small>'+detail+'</small>' : ''}</th></tr>`;
   }
 
   function workings(key, row, i) {
@@ -336,6 +365,21 @@
       case 'nav':return [refund,soldWhy,proceeds,retainedValue,total];
       case 'pnl':return [total,pnl,...(v.retained?['The portion attributable to the shares still held is unrealised at the selected later price.']:[])];
       case 'rate':return [total,pnl,returnOnPayment];
+      case 'directPnl':
+      case 'noteAdvantage':{
+        const d = v.direct;
+        const markDay = row.follow ? 'the later valuation' : `the note’s exit on trading day ${end.day}`;
+        const steps = [
+          `Start with the same ${cash(t.payment)} payment. Buy ${u(d.quantity)} whole NVDA shares at ${cash(d.start)} on day zero and keep ${cash(d.residualCash)} change.`,
+          `At ${markDay}, ${u(d.quantity)} shares × ${cash(d.mark)} + ${cash(d.residualCash)} cash = ${cash(d.nav)}.`,
+          `${cash(d.nav)} value − ${cash(t.payment)} paid = ${cash(d.pnl)} P&L on the direct purchase.`
+        ];
+        if(row.follow && sim.koDay) steps.push(`The note sold on day ${sim.koDay} and kept the proceeds and refund in cash. Direct ownership kept the shares until the later price.`);
+        if(key==='noteAdvantage') steps.push(`${cash(v.pnl)} note P&L − ${cash(d.pnl)} outright P&L = ${cash(d.noteAdvantage)}. `+
+          (d.noteAdvantage>0?'The note finished ahead.':d.noteAdvantage<0?'Owning NVDA outright finished ahead.':'The two outcomes were equal.'));
+        steps.push('Both alternatives exclude dividends, fees and taxes. Idle USD earns 0%.');
+        return steps;
+      }
       case 'change':{
         const compare=[exitShares,exitValue,total,change];
         if(!sim.koDay&&row.id==='hold')compare.push(`Equivalently, ${u(v.shares)} held shares × (${cash(later)} later − ${cash(end.price)} at maturity) = ${cash(v.change)}. The same refund appears in both valuations and cancels.`);
@@ -444,7 +488,8 @@
         winners:best, losers:worst,
         exits:sims.map(s => ({day:s.exit.day, koDay:s.koDay, koMonth:s.koMonth, shares:s.exit.shares, price:s.exit.price}))};
     });
-    const ranges = currentNotes.map((note,i) => extremes(currentRows.map(row => row.values[i]), metric));
+    const contractRows = currentRows.filter(row=>!row.follow);
+    const ranges = currentNotes.map((note,i) => extremes(contractRows.map(row => row.values[i]), metric));
     const result = {notes:currentNotes, rows, ranges, spot:byId('spot').valueAsNumber,
       target:byId('capital').valueAsNumber, active, metric, settings:currentSettings};
     // Give consumers independent data, including the paths and quote records.

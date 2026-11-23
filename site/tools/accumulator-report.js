@@ -22,7 +22,7 @@
     const all = state.notes.map((note,index) => ({...note, index, letter:String.fromCharCode(65+index)}));
     const rows = Object.fromEntries(state.rows.map(row => [row.id,row]));
     const batchSize = 5;
-    const numberOfPages = Math.ceil(all.length / batchSize) * 5;
+    const numberOfPages = Math.ceil(all.length / batchSize) * 5 + 1;
     let page = 0;
     let group;
 
@@ -57,7 +57,8 @@
       const y=wrap(subtitle,margin,43,width,10.5,muted,false,5.1);
       rule(margin,279,195,279);
       text('USD   |   Report generated '+date+' SGT',margin,285,8.2,muted);
-      text('Notes '+group.map(n=>n.letter).join(', ')+'    /    '+page+' of '+numberOfPages,195,285,8.2,muted,false,'right');
+      const scope=group ? 'Notes '+group.map(n=>n.letter).join(', ') : 'Shared NVDA context';
+      text(scope+'    /    '+page+' of '+numberOfPages,195,285,8.2,muted,false,'right');
       return y+4;
     }
     function heading(label,y) {
@@ -125,7 +126,7 @@
         bold:!!rank,fill:best&&worst?paper:best?mint:worst?blush:null,color:best&&worst?ink:best?forest:worst?rose:ink};
     }
     function overview() {
-      let y=startPage('Your NVDA comparison','A funded Normal accumulator buys a scheduled number of NVDA shares at an agreed price. The daily knock-out level determines how long purchases continue.');
+      let y=startPage('Your NVDA comparison','For an investor prepared to buy NVDA over time, the note fixes the purchase price today. Purchases continue below that price and can end early in a rally.');
       const cells=[['TARGET BUDGET',cash(state.target)],['TRADE-DAY PRICE',asPrice(state.spot)],['STRUCTURES SELECTED',quantity(all.length)]];
       cells.forEach(([label,value],i)=>{
         const x=margin+i*61;
@@ -145,25 +146,26 @@
       const example=group[0], t=example.terms, q=example.quote;
       y=box('How '+example.letter+' is sized',
         cash(state.target)+' ÷ '+asPrice(t.strike)+' ÷ '+q.months+' months gives '+quantity(t.maximum)+' shares per month after rounding. '+quantity(t.maximum)+' × '+asPrice(t.strike)+' × '+q.months+' = '+asPrice(t.committed)+'. Payment rounds up to '+cash(t.payment)+'. The difference is refundable.',y);
-      y=wrap('At early KO, guaranteed purchases still go through. After the guarantee, only shares earned before KO are bought. Unused cash comes back. A fall below strike reduces the shares’ value.',margin,y,width,9.7,ink,false,4.5)+5;
-      y=heading('Best and worst scenario for each structure',y);
+      const gap=state.spot-t.strike;
+      y=wrap('At the trade-day price, '+example.letter+' buys each scheduled share '+asPrice(Math.abs(gap))+(gap>=0?' below':' above')+' spot. If all shares are bought, a sale at '+asPrice(t.strike)+' breaks even before costs. A knock-out returns unused cash and ends further purchases.',margin,y,width,9.7,ink,false,4.5)+5;
+      y=heading('Best and worst at the end of each note',y);
       const metric=state.metric, display=metric==='rate'?netRate:fmt.signedMoney;
       function scenarioExtreme(n,key) {
         const matches=state.ranges[n.index][key];
         const first=state.rows[matches[0]];
-        const label=matches.length===1?first.name:matches.length===state.rows.length?'All paths tied':'Paths '+matches.map(j=>j+1).join(', ')+' tied';
+        const label=matches.length===1?first.name:matches.length===state.rows.filter(r=>!r.follow).length?'All exits tied':'Paths '+matches.map(j=>j+1).join(', ')+' tied';
         return {value:label+'\n'+display(first.values[n.index][metric]),bold:true,fill:key==='best'?mint:blush,color:key==='best'?forest:rose};
       }
       y=matrix(y,metric==='rate'?'Return on payment':'Dollar P&L',36,[
         ['Best scenario',...group.map(n=>scenarioExtreme(n,'best'))],
         ['Worst scenario',...group.map(n=>scenarioExtreme(n,'worst'))]
       ],{rowHeight:10,headerHeight:11,bodySize:8.7});
-      wrap('These are the highest and lowest of the seven paths on the following page. Other price paths can produce larger losses or gains.',margin,y,width,9.1,muted,false,4.2);
+      wrap('Only the five contract-exit paths are ranked here. The last two scenarios on the next page show separate shareholding decisions after maturity. Other paths can produce larger losses or gains.',margin,y,width,9.1,muted,false,4.2);
     }
     function outcomes() {
       const metric=state.metric==='rate'?'return on payment':'dollar P&L';
-      let y=startPage('Scenario outcomes','Read across a row to compare the same price path. Each cell gives profit or loss since investment and return on the actual payment.');
-      y=matrix(y,'Scenario',36,state.rows.map((r,i)=>[(i+1)+'. '+r.name,...group.map(n=>rankedResult(r,n))]),{rowHeight:14});
+      let y=startPage('Scenario outcomes','Compare the effect of each strike and guarantee on the same stock path. Rows 1-5 end at knock-out or maturity. Rows 6-7 include a later shareholding decision.');
+      y=matrix(y,'Scenario',36,state.rows.map((r,i)=>[(i+1)+'. '+r.name,...group.map(n=>rankedResult(r,n))]),{rowHeight:13.2});
       const rankNote=all.length>1?'BEST and WORST rank all '+all.length+' selected structures by '+metric+' before rounding. Tied outcomes share the label. A best result can still be a loss.':'Each result compares the total value of this structure with its actual payment.';
       y=wrap(rankNote,margin,y+1,width,9.3,muted,false,4.5)+4;
       const r=rows[state.active]||rows.early;
@@ -176,16 +178,18 @@
         detail('Sale proceeds',v=>cash(v.proceeds)),
         detail('Value of shares held',v=>cash(v.retainedValue)),
         detail('Total value',v=>({value:cash(v.nav),bold:true})),
-        detail('P&L since investment',v=>profit(v.pnl))
-      ],{rowHeight:7.8});
-      wrap('Total value = refund + sale proceeds + value of shares held. P&L = total value less payment. Dollar totals use full amounts before display rounding.',margin,y,width,9.1,muted,false,4.2);
+        detail('P&L since investment',v=>profit(v.pnl)),
+        detail('Buy NVDA outright · P&L',v=>profit(v.direct.pnl)),
+        detail('Note minus direct stock',v=>profit(v.direct.noteAdvantage))
+      ],{rowHeight:6.9});
+      wrap('Direct stock uses each note’s payment to buy whole shares at the starting price, keeps spare cash and measures P&L at the same valuation point. Cash earns 0%. Dividends, fees and tax are excluded.',margin,y,width,9.1,muted,false,4.2);
     }
     function payouts() {
-      let y=startPage('Cash at knock-out or maturity','These paths assume a sale at the observed knock-out (KO) close or maturity close. Each structure follows its own barrier, guarantee and maturity date.');
+      let y=startPage('Cash at knock-out or maturity','A rally can release cash for the next investment. Separate the refund of unused capital from proceeds on shares assumed sold at knock-out (KO) or maturity.');
       for (const row of [rows.early,rows.late,rows.down]) {
         y=heading(row.name,y+1);
         const summary=row.id==='down'
-          ? 'Assumed NVDA price at the earliest maturity: '+asPrice(row.path[row.path.length-1])+'. It stays there afterwards.'
+          ? 'NVDA moves towards '+asPrice(state.settings.down)+' by trading day '+state.settings.rampDay+'. Shorter notes can end before that day.'
           : 'NVDA moves to '+asPrice(state.settings.rally)+' on trading day '+(row.id==='early'?state.settings.earlyDay:state.settings.lateDay)+'.';
         y=wrap(summary,margin,y+1,width,9.2,muted,false,4.2);
         y=table(y,['Structure / exit','Shares\nbought','Sale\nprice','Sale\nproceeds','Cash\nrefunded','Total value','P&L'],[32,16,22,28,26,29,27],
@@ -243,7 +247,7 @@
       }
     }
     function paths() {
-      let y=startPage('The NVDA price paths','Read the price from left to right. The first chart shows the three assumed paths. The second places the selected scenario inside a range based on observed price volatility.');
+      let y=startPage('The NVDA price paths','The timing of a rally changes how many discounted shares you collect. Follow the earlier and later rallies, then compare their payouts on the previous page.');
       y=heading('Three paths used for the payouts',y+2)+2;
       const cases=[rows.early,rows.late,rows.down], colors=[forest,rose,navy], names=['Earlier rally','Later rally','Maturity case'];
       const horizon=cases[0].path.length;
@@ -255,7 +259,7 @@
       chart({top:y+6,height:53,days:horizon,series:cases.map((r,i)=>({points:points(r),color:colors[i],dash:i===1?[1.5,1.1]:[]}))});
       y+=78;
       const n=group[0], active=rows[state.active]||rows.early, ndays=n.terms.days;
-      y=heading('Probability cone for '+name(n),y)+2;
+      y=heading('Illustrative volatility range for '+name(n),y)+2;
       y=wrap('Selected path: '+active.name+(active.follow?' (original accumulator)':'')+'. Strike '+asPrice(n.terms.strike)+' and KO '+asPrice(n.terms.ko)+'.',margin,y,width,9.5,muted,false,4.6);
       const haveVol=Number.isFinite(market.vol)&&market.vol>=0;
       const band={upper:[],lower:[]};
@@ -313,10 +317,72 @@
       ],{rowHeight:7.4});
       wrap('The decumulator is a separate illustrative transaction. Examples exclude dividends, idle-cash interest, costs and taxes. Different execution prices change the result. Issuer default can cause a full loss. Final terms govern.',margin,y,width,9,muted,false,4.3);
     }
+    function downsideEvidence(){
+      group=null;
+      let y=startPage('What would a sharp fall require?','Use past stock moves to judge the size of a decline. Use reported earnings to see which valuation would support the test price.');
+      const input=document.getElementById('nv-stress-price');
+      const valid=input && input.value!=='' && input.checkValidity() && Number.isSafeInteger(Math.round(input.valueAsNumber*100)) && input.valueAsNumber>=0;
+      const test=valid?input.valueAsNumber:null;
+      const close=market.latest?Math.round(market.latest[1]*100)/100:null;
+      const finance=window.AccumulatorNvdaFinancialData;
+      const history=window.AccumulatorHistoryRisk;
+      const risk=valid && market.latest && history ? history.analyze(market.ordered,market.latest[0],close,test) : null;
+      if(test===null || !(close>0)){
+        box('Choose the prices to compare','Set a valid sale price in NVIDIA at the stress price and load a dated NVDA close to compare the size of the move and its earnings valuation.',y,paper);
+        return;
+      }
+      y=heading('From the dated close to your test price',y+2);
+      const change=Math.abs(test/close-1)*100;
+      const direction=test<close?'decline':test>close?'increase':'change';
+      const basis=asPrice(close)+' dated '+market.latest[0]+' to '+asPrice(test)+' is a '+change.toFixed(2)+'% '+direction+'.';
+      y=wrap(basis+' This uses the market close even when the trade-day price was entered manually.',margin,y+2,width,10,ink,false,4.8)+5;
+      const plotted=window.AccumulatorMarket.getStressContext?.();
+      const example=all.find(n=>n.quote.id===plotted?.quoteId)||all[0];
+      if(test<example.terms.ko){
+        const shares=example.terms.maximum*example.quote.months;
+        const payment=example.terms.payment;
+        const refund=example.terms.roundingCash;
+        const proceeds=(shares*Math.round(test*100)+Math.round(refund*100))/100;
+        const label=proceeds<payment?'loss':'gain';
+        y=wrap(name(example)+' · If no knock-out occurs, '+quantity(shares)+' shares sold at '+asPrice(test)+' plus '+asPrice(refund)+' refunded gives '+asPrice(proceeds)+'. Against '+cash(payment)+' paid, the '+label+' is '+asPrice(Math.abs(proceeds-payment))+'.',margin,y,width,10,ink,true,4.6)+4;
+      }else{
+        y=wrap('For '+name(example)+', the test close reaches the daily KO at '+asPrice(example.terms.ko)+'. The trading day of the first trigger determines the shares acquired and the refund.',margin,y,width,9.8,ink,false,4.5)+3;
+      }
+      if(risk){
+        const tenors=new Set(all.map(n=>n.quote.months));
+        const frequency=(hits,total)=>total?hits+' / '+total+'  ('+(100*hits/total).toFixed(1)+'%)':'No complete windows';
+        y=table(y,['Selected tenor','Ended down this much','A month closed down this much'],[42,64,74],
+          risk.rows.filter(r=>tenors.has(r.months)).map(r=>[r.months+' months',frequency(r.endHits,r.total),frequency(r.touchHits,r.total)]),
+          {rowHeight:9,headerHeight:10});
+        y=wrap('Split-adjusted monthly closes, '+risk.startMonth+' to '+risk.endMonth+'. Each window starts at a month-end. The last column counts windows that reached the decline at any later month-end before or at the horizon. Overlapping windows share months. Daily lows can be lower. These observations cannot give the chance of loss or knock-out on a new note.',margin,y,width,9.45,muted,false,4.45)+4;
+      }else{
+        y=wrap(test>=close?'The test price is at or above the dated close. Choose a lower price to compare historical declines.':'The available monthly history does not provide a complete window for the requested decline.',margin,y,width,9.6,muted,false,4.5)+5;
+      }
+      if(finance){
+        const {income,cashFlow}=finance, eps=income.trailingDilutedEps;
+        y=heading('What the earnings would have to support',y+1);
+        const billion=x=>'$'+(x/1000).toFixed(3)+'bn';
+        y=wrap(finance.quarter+', ended '+finance.periodEnd+': '+billion(income.revenue)+' revenue, '+billion(income.netIncome)+' net income and '+billion(cashFlow.operating)+' cash from operations. Trailing diluted earnings were '+asPrice(eps)+' per share. The dated close valued those earnings at '+(close/eps).toFixed(2)+'×.',margin,y+2,width,9.8,ink,false,4.5)+3;
+        y=table(y,['Illustrative earnings','EPS used*','P/E at '+asPrice(test)],[75,40,65],
+          [[1,'Trailing EPS unchanged'],[0.75,'EPS falls 25%'],[0.5,'EPS falls 50%']].map(([factor,caption])=>[caption,asPrice(eps*factor),(test/(eps*factor)).toFixed(2)+'×']),
+          {rowHeight:8.2,headerHeight:9});
+        y=wrap('* EPS is shown to cents. P/E uses unrounded scenario earnings. Lower earnings or a lower price for each dollar of earnings can bring the share price down. Historical earnings provide no price floor.',margin,y,width,9.4,muted,false,4.3)+4;
+        y=heading('Data and methods',y+1);
+        const links=[['NVIDIA SEC exhibit · quarterly financial statements',finance.sources[0].url],
+          ['NVIDIA EPS · Q1 FY2027',finance.earningsQuarters[1].url],['NVIDIA EPS · Q2 FY2027',finance.earningsQuarters[2].url],
+          ['NVIDIA EPS · Q4 FY2026',finance.earningsQuarters[0].url],['NVDA split-adjusted close history · Yahoo Finance','https://finance.yahoo.com/quote/NVDA/history/']];
+        links.forEach(([label,url],j)=>{
+          const col=j%2, row=Math.floor(j/2), x=margin+col*95;
+          pen(8.5,false,forest);
+          doc.textWithLink(clean(label),x,y+3+row*5,{url});
+        });
+      }
+    }
     for(let i=0;i<all.length;i+=batchSize){
       group=all.slice(i,i+batchSize);
       overview();outcomes();payouts();paths();maturity();
     }
+    downsideEvidence();
     return doc;
   }
 

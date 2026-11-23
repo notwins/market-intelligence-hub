@@ -38,6 +38,9 @@
 #sn-comparison .cmp-results tbody .cmp-worst{background:#f7eae4;color:#753d34}
 #sn-comparison .cmp-extreme{display:block;font-size:.72rem;font-weight:700;letter-spacing:.01em;line-height:1.2}
 #sn-comparison .cmp-key-row{font-weight:700}
+#sn-comparison .cmp-results .cmp-section-row th{position:static;text-align:left;background:#edf3f4;color:#293e4d;border-top:2px solid #ccdadd;padding:.5rem .65rem;font-weight:700}
+#sn-comparison .cmp-section-row small{line-height:1.35;margin-top:.18rem}
+@media(max-width:650px){#sn-comparison .cmp-section-row small{max-width:clamp(200px,76vw,27rem)}}
 #sn-comparison .cmp-results td.cmp-refund{background:#e9f2eb}
 #sn-comparison .cmp-results td.cmp-ko{background:#f5eae2}
 #sn-comparison .cmp-funding th [data-cmp-plot]{display:block;min-height:28px;margin:.2rem 0 0;font-size:.78rem;padding:.1em .55em}
