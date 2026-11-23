@@ -40,7 +40,7 @@
  const own=node=>node?.nodeType===1&&(node.matches('[data-tc-ui]')||node.closest('[data-tc-ui]'));
  function ingest(records){for(const record of records){if(own(record.target))continue;const table=record.target.nodeType===1?record.target.closest('table'):record.target.parentElement?.closest('table');if(table)pending.add(table);if(record.type==='attributes'&&record.attributeName==='data-table-controls')record.target.querySelectorAll('table').forEach(t=>pending.add(t));for(const node of record.addedNodes||[]){if(node.nodeType!==1||own(node))continue;if(node.matches('table'))pending.add(node);node.querySelectorAll('table').forEach(t=>pending.add(t));}}if(records.length)schedule();}
  function mutate(fn){if(observer){ingest(observer.takeRecords());observer.disconnect();}try{return fn();}finally{observer?.observe(doc.body,observation);}}
- function schedule(){if(!frame)frame=root.requestAnimationFrame(()=>{frame=0;mutate(()=>{for(const state of live)if(!state.table.isConnected){live.delete(state);state.status.remove();state.organizeButton?.remove();}if(active&&(!active.state.table.isConnected||!trigger?.isConnected))close();const tables=[...pending];pending.clear();tables.forEach(mount);if(organizing&&!organizing.table.isConnected)organizerDialog.close();});});}
+ function schedule(){if(!frame)frame=root.requestAnimationFrame(()=>{frame=0;mutate(()=>{for(const state of live)if(!state.table.isConnected){live.delete(state);state.status.remove();state.organizeButton?.remove();state.quickGroupButton?.remove();}if(active&&(!active.state.table.isConnected||!trigger?.isConnected))close();const tables=[...pending];pending.clear();tables.forEach(mount);if(organizing&&!organizing.table.isConnected)organizerDialog.close();});});}
  function sourceText(cell){if(!cell)return '';return (cell.dataset.tcValue??cell.querySelector('[data-tc-original]')?.textContent??cell.textContent).replace(/\s+/g,' ').trim();}
  function cells(row){
   const prior=sourceCells.get(row);
@@ -163,7 +163,7 @@
   table.querySelectorAll('[data-tc-button],[data-tc-grip]').forEach(control=>control.remove());
   table.querySelectorAll('.tc-filtered,.tc-heat,.tc-focus,[data-tc-font],[data-tc-band]').forEach(node=>{node.classList.remove('tc-filtered','tc-heat','tc-focus');delete node.dataset.tcFont;delete node.dataset.tcBand;delete node.dataset.tcScale;});
   table.querySelectorAll('[data-tc-original]').forEach(original=>{original.parentElement.querySelector('[data-tc-formatted]')?.remove();while(original.firstChild)original.before(original.firstChild);original.remove();});
-  table.classList.remove('tc-table');state.status.remove();state.organizeButton?.remove();live.delete(state);states.delete(table);
+  table.classList.remove('tc-table');state.status.remove();state.organizeButton?.remove();state.quickGroupButton?.remove();live.delete(state);states.delete(table);
  }
  function mount(table){
   if(!table.isConnected)return;
@@ -205,8 +205,25 @@
    button.type='button';button.className='tc-organize-button';button.dataset.tcUi='';button.setAttribute('aria-haspopup','dialog');
    button.addEventListener('click',()=>openOrganizer(state));
    const parent=table.parentElement;
-   (parent.matches('.si-card-scroll,.si-table-wrap,.table-scroll')?parent:table).before(button);
+   const anchor=parent.matches('.si-card-scroll,.si-table-wrap,.table-scroll')?parent:table;
+   anchor.before(button);
    state.organizeButton=button;
+   const preset=['coupon','ko','ki','strike'];
+   if(preset.every(field=>state.fields.has(field))){
+    const quick=doc.createElement('button');
+    quick.type='button';quick.className='tc-quick-group';quick.dataset.tcUi='';
+    quick.textContent='Quick group';
+    quick.title='Group by coupon, sort by coupon then KO, and show KI and Strike below 80%';
+    quick.addEventListener('click',()=>mutate(()=>{
+     const levels=preset.slice(0,2).map(field=>({index:state.fields.get(field),descending:true}));
+     Object.assign(state.organizer,{group:'coupon',levels,ki:80,strike:80});
+     state.sort=null;
+     state.restoreOrder=true;
+     apply(state);
+    }));
+    anchor.before(quick);
+    state.quickGroupButton=quick;
+   }
   }
   if(organizing&&!organizing.table.isConnected&&state.organizeButton&&companyKey===organizing.companyKey)organizing=state;
   drawLayout(state);
@@ -225,7 +242,7 @@
    for(const row of rows){const cell=at(row,index);const raw=sourceText(cell),value=scalar(raw)?.value;
     cell.classList.toggle('tc-bold',!!config.bold);
     cell.classList.toggle('tc-heat',heat&&Number.isFinite(value));cell.classList.toggle('tc-focus',state.focus===index);
-    if(heat&&Number.isFinite(value)){const bound=Math.max(Math.abs(min),Math.abs(max));cell.dataset.tcBand=String(heatBand(value,config.info.change?-bound:min,config.info.change?bound:max));cell.dataset.tcScale=config.info.change?'change':'level';}else{delete cell.dataset.tcBand;delete cell.dataset.tcScale;}
+    if(heat&&Number.isFinite(value)){const bound=Math.max(Math.abs(min),Math.abs(max));cell.dataset.tcBand=String(heatBand(value,config.info.change?-bound:min,config.info.change?bound:max));cell.dataset.tcScale=config.header.dataset.tcHeatPreference||(config.info.change?'change':'level');}else{delete cell.dataset.tcBand;delete cell.dataset.tcScale;}
     if(config.font==='original')delete cell.dataset.tcFont;else cell.dataset.tcFont=config.font;
     let original=cell.querySelector('[data-tc-original]'),formatted=cell.querySelector('[data-tc-formatted]');
     // Only explicitly typed, plain scalar percentage changes may be reformatted.
@@ -510,7 +527,7 @@
   query('tc-structure').textContent=state.fixedRows?'This table keeps its source row structure.':'';
   query('tc-heat').checked=config.heat&&config.info.numeric;query('tc-heat').disabled=!config.info.numeric;
   query('tc-bold').checked=!!config.bold;
-  const bound=Math.max(Math.abs(config.range.min),Math.abs(config.range.max));query('tc-heat-note').textContent=config.info.numeric?(config.info.change?'Purple (negative) ← 0 → Blue (positive). Symmetric range: '+(-bound)+' to '+bound:'Low → high. Blue intensity shows magnitude. Range: '+config.range.min+' to '+config.range.max)+(config.info.unit?' '+config.info.unit:'')+'. Range uses all loaded rows before column filters. Colors do not show investment merit. Missing values are uncolored.':'Heat scale needs single numeric values with consistent units. Mixed text, identifiers and missing-only columns are not scaled.';
+  const bound=Math.max(Math.abs(config.range.min),Math.abs(config.range.max));query('tc-heat-note').textContent=config.info.numeric?(config.info.change?'Purple (negative) ← 0 → Blue (positive). Symmetric range: '+(-bound)+' to '+bound:(config.header.dataset.tcHeatPreference==='lower'?'Lower values are green and higher values are red. Range: ':'Low → high. Blue intensity shows magnitude. Range: ')+config.range.min+' to '+config.range.max)+(config.info.unit?' '+config.info.unit:'')+'. Range uses all loaded rows before column filters. Colors do not show investment merit. Missing values are uncolored.':'Heat scale needs single numeric values with consistent units. Mixed text, identifiers and missing-only columns are not scaled.';
   query('tc-font').value=config.font;query('tc-focus').checked=state.focus===index;query('tc-percent-label').hidden=!config.info.percent;query('tc-percent').checked=config.percent;
  }
  function open(state,index,button){if(!dialog?.isConnected)createDialog();dialog.querySelector('#tc-company-search').value='';trigger=button;active={state,index};mutate(()=>{mount(state.table);sync();});if(!active||states.get(state.table)!==state)return;if(!dialog.open)dialog.showModal();(dialog.querySelector('#tc-company-filter:not([hidden]) #tc-company-search')||dialog.querySelector('#tc-layout:not([hidden]) button:not([disabled]),#tc-layout:not([hidden]) input,[data-tc-sort="asc"]:not([disabled]),#tc-font'))?.focus();}

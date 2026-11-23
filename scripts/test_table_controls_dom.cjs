@@ -90,6 +90,9 @@ assert.equal(qa('#organize-case tbody tr.tc-filtered').length,2);
 click('#organize-case .tc-organize-button');click('#tc-organizer-reset');
 assert.deepEqual(shown(),['A','B','C','D','E','F']);
 assert.equal(qa('#organize-case [data-tc-group-heading]').length,0);
+click('#organize-case .tc-quick-group');
+assert.deepEqual(shown(),['D','F','A','E']);
+assert.deepEqual(qa('#organize-case [data-tc-group-heading]').map(row=>row.textContent),['Coupon 10% · 3','Coupon 8% · 1']);
 // Real SI search, notes and the shared column controls can be used together.
 const payload=JSON.parse(fs.readFileSync('site/data/si-pricing-reference.json','utf8'));w.fetch=async()=>({ok:true,json:async()=>payload});w.eval(fs.readFileSync('site/si-beta2-core.js','utf8'));w.eval(fs.readFileSync('site/si-pricing.js','utf8'));w.MarketSI.connect(()=>{d.body.innerHTML=w.MarketSI.view();});await wait();await wait();const sourceRows=qa('#si-rows tr').length;assert(sourceRows>=225);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,11);q('.si-records').open=true;
 input('#si-query','NVDA');await wait();assert(qa('#si-rows tr').length<sourceRows);assert.equal(qa('[data-si-reference-table] [data-tc-button]').length,11);assert(q('.si-notice').textContent.includes('unconfirmed source coupon basis and tenor units'));click('[data-si-reset]');await wait();assert.equal(qa('#si-rows tr').length,sourceRows);
