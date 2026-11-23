@@ -17,11 +17,10 @@
       throw Error('Check the tenor, number of trading days and guaranteed period.');
     }
 
-    // Model month ends. Only the first three ends in this SI indication are quoted.
     const monthEnds = Array.from({length: months}, (_, i) => Math.round(days * (i + 1) / months));
-    if (quote.product === 'OCBC SI' && months === 9 && days === 186) {
-      monthEnds.splice(0, 3, 21, 41, 61);
-    }
+    const quotedEnds = quote.knownMonthEnds ?? (quote.product === 'OCBC SI' && months === 9 && days === 186 ? [21, 41, 61] : []);
+    // Retain known observation dates. Estimate only dates omitted from the quote.
+    quotedEnds.forEach((end, index) => { monthEnds[index] = end; });
     return {days, monthEnds, guaranteeDay: minimum ? monthEnds[minimum - 1] : 0};
   }
 

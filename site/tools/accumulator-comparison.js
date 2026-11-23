@@ -4,38 +4,39 @@
   const root = document.getElementById('sn-comparison');
   if (!root) return;
   const model = window.AccumulatorModel;
-  const quotes = Accumulator.quotes.filter(q => q.product === 'JPM SN' && q.multiple === 1);
-  const initial = ['sn-6-120-1', 'sn-6-120-2'];
+  const quotes = Accumulator.quotes.filter(q => q.multiple === 1);
+  const quoteById = new Map(quotes.map(q => [q.id, q]));
+  const initial = ['si-9-120-1', 'sn-9-120-1'];
   const selected = new Set(initial.filter(id => quotes.some(q => q.id === id)));
   if (selected.size < 2) quotes.slice(0, 2).forEach(q => selected.add(q.id));
-  const wholeUSD = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
-  const unitUSD = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', minimumFractionDigits:2, maximumFractionDigits:2});
-  const integers = new Intl.NumberFormat('en-US', {maximumFractionDigits:0});
-  const money = n => wholeUSD.format(Math.abs(n) < 0.5 ? 0 : n);
-  const signed = n => (n > 0 && Math.abs(n) >= 0.5 ? '+' : '') + money(n);
-  const pct = n => (Object.is(Number(n.toFixed(1)), -0) ? '0.0' : n.toFixed(1)) + '%';
-  const signedPct = n => (n >= 0.05 ? '+' : '') + pct(n);
+  const {money, signedMoney:signed, quote:quotePct, price, shares:units, signedRate:signedPct} = window.AccumulatorFormat;
   const cents = n => Math.round((n + Number.EPSILON) * 100);
   const byId = id => document.getElementById(id);
   const cellClass = n => n < 0 ? 'negative' : n > 0 ? 'positive' : '';
-  const label = index => 'SN ' + String.fromCharCode(65 + index);
+  const letter = index => String.fromCharCode(65 + index);
+  const label = (note, index) => letter(index) + ' · ' + note.quote.product;
+  const quoteLabel = q => q.product + ' · ' + quotePct(q.strike) + ' strike · ' + q.months + 'M · ' + quotePct(q.ko) + ' KO · ' + q.minimum + 'M guarantee';
   let active = 'early';
   let currentRows = [];
   let currentNotes = [];
+  let currentSettings = null;
 
   root.innerHTML = `
-    <div class="heading"><div><h2 id="sn-compare-title">Compare JPM structured notes</h2>
-      <p>Apply one NVDA price path to the selected normal accumulators. Each uses the target budget and starting share price entered above.</p>
+    <div class="heading"><div><h2 id="sn-compare-title">Compare SI and SN payouts</h2>
+      <p>See what each structure pays on the same NVDA price path. Each starts with your budget and rounds to a whole monthly share quantity.</p>
     </div></div>
-    <div class="cmp-tools"><button type="button" id="cmp-add-current">Add current chart note</button><span id="cmp-current" class="small"></span></div>
-    <details class="cmp-selector"><summary id="cmp-selection-count">Choose notes</summary>
+    <div class="cmp-tools"><a href="#library">Choose strikes in pricing tables</a><button type="button" id="cmp-clear">Clear selection</button></div>
+    <div id="cmp-basket" aria-label="Selected structures"></div>
+    <p id="cmp-selection-feedback" class="small" aria-live="polite" aria-atomic="true"></p>
+    <details class="cmp-selector"><summary id="cmp-selection-count">Choose structures</summary>
       <fieldset id="cmp-choices"><legend>Include in comparison</legend></fieldset>
+      <div class="cmp-tools"><button type="button" id="cmp-add-current">Add the chart selection</button><span id="cmp-current" class="small"></span></div>
     </details>
     <div id="cmp-notice" class="small" role="status"></div>
     <div id="cmp-content">
-      <p class="small">Select a strike to plot that note on the highlighted scenario below. For a follow-on strategy, the chart shows the original SN through its maturity.</p>
-      <div class="tableScroll cmp-funding" tabindex="0" aria-label="Selected note terms and funded amounts">
-        <table><thead><tr><th scope="col">Note</th><th scope="col">Tenor / guarantee</th><th scope="col">Strike</th><th scope="col">KO</th><th scope="col">Shares / month</th><th scope="col">Payment</th><th scope="col">vs. target</th></tr></thead><tbody id="cmp-terms"></tbody></table>
+      <p class="small">Tap a scenario to see the cash and shares. Tap a dollar strike in the table below to plot that structure on the selected price path.</p>
+      <div class="tableScroll cmp-funding" tabindex="0" aria-label="Selected structure terms and funded amounts">
+        <table><thead><tr><th scope="col">Structure</th><th scope="col">Tenor / guarantee</th><th scope="col">Strike</th><th scope="col">KO</th><th scope="col">Shares / month</th><th scope="col">Payment</th><th scope="col">vs. target</th></tr></thead><tbody id="cmp-terms"></tbody></table>
       </div>
       <details class="cmp-assumptions"><summary>Scenario prices &amp; observation days</summary>
         <p>Leave a field empty to use the value shown as its placeholder. Day 1 is the first simulated trading day.</p>
@@ -59,15 +60,15 @@
           <label>Starting maturity case<select id="cmp-origin"><option value="down">Below strike</option><option value="flat">Trade-day spot</option></select></label>
           <label>Later NVDA price · USD<input id="cmp-recovery" type="number" min="0" max="1000000" step="0.01"></label>
           <label>Decumulator sale strike · USD<input id="cmp-sale-strike" type="number" min="0.01" max="1000000" step="0.01"></label>
-          <label>Shares assumed sold per SN<input id="cmp-sale-units" type="number" min="0" max="10000000000" step="1"></label>
+          <label>Shares assumed sold per structure<input id="cmp-sale-units" type="number" min="0" max="10000000000" step="1"></label>
         </div>
         <p>The decumulator example assumes the stated quantity actually sells at its sale strike. We cap sales at available shares and value unsold shares at the later NVDA price. The training example is cash-funded by selling the shares and subscribing with the proceeds. This is a hypothetical sale allocation. An actual quote sets the sale quantity, timing and settlement. Unsold shares can fall further, and shares sold at the strike miss any larger rebound.</p>
       </details>
-      <p class="small cmp-foot">The normal note buys its monthly share quantity at the strike. A daily KO in the guarantee fills the guaranteed months. After the guarantee, a mid-month KO keeps whole shares accrued through the preceding trading day. The model spreads shares across each month’s observation days and returns payment less the cost of all shares bought.</p>
+      <p class="small cmp-foot">A normal accumulator buys its full scheduled share quantity at the strike. A daily KO in the guarantee fills the guaranteed months. After the guarantee, a mid-month KO keeps whole shares accrued through the preceding trading day. The model spreads shares across each month’s observation days and returns payment less the cost of all shares bought.</p>
       <p class="small cmp-foot">Each comparison assumes USD cash earns 0% after refund or sale. Sale proceeds at KO use the observed market price, including any gap above the barrier. Actual execution and settlement can differ. Holding shares keeps the downside as well as any recovery.</p>
     </div>`;
 
-  byId('cmp-choices').innerHTML = quotes.map(q => `<label><input type="checkbox" data-cmp-quote="${q.id}" ${selected.has(q.id) ? 'checked' : ''}><span><b>${pct(q.strike)} strike</b> · ${q.months}M<small>${pct(q.ko)} KO · ${q.minimum}M guarantee</small></span></label>`).join('');
+  byId('cmp-choices').innerHTML = quotes.map(q => `<label><input type="checkbox" data-cmp-quote="${q.id}"><span><b>${q.product} · ${quotePct(q.strike)}</b><small>${q.months}M tenor · ${quotePct(q.ko)} KO · ${q.minimum}M guarantee</small></span></label>`).join('');
 
   function read(id, fallback) {
     const field = byId('cmp-' + id);
@@ -94,10 +95,10 @@
     const reference = byId('cmp-reference');
     const previous = reference.value;
     reference.innerHTML = '<option value="lowest">Lowest selected KO</option>' +
-      notes.map((n, i) => `<option value="${n.quote.id}">${label(i)} · ${unitUSD.format(n.terms.ko)}</option>`).join('');
+      notes.map((n, i) => `<option value="${n.quote.id}">${label(n,i)} · ${price(n.terms.ko)}</option>`).join('');
     const referenceIndex = notes.findIndex(n => n.quote.id === previous);
     reference.value = referenceIndex < 0 ? 'lowest' : previous;
-    const referenceName = referenceIndex < 0 ? 'the lowest selected KO' : label(referenceIndex) + '’s KO';
+    const referenceName = referenceIndex < 0 ? 'the lowest selected KO' : label(notes[referenceIndex],referenceIndex) + '’s KO';
     const koCents = cents(referenceIndex < 0 ? lowestKO : notes[referenceIndex].terms.ko);
     const near = Math.max(0, useBp ? Math.min(koCents - 1, Math.round(koCents * .9999)) : koCents - 1) / 100;
     const jump = day => Array.from({length:horizon}, (_, i) => i + 1 < day ? spot : rally);
@@ -105,13 +106,14 @@
       const fraction = Math.min(1, (i + 1) / earliest);
       return cents(spot + (end - spot) * fraction) / 100;
     });
-    const ramp = `NVDA moves from ${unitUSD.format(spot)} to the stated price by trading day ${earliest}, then stays there through the longest tenor.`;
+    const ramp = `NVDA moves from ${price(spot)} to the stated price by trading day ${earliest}, then stays there through the longest tenor.`;
+    currentSettings = {earlyDay:early, lateDay:late, rally, down, near, referenceId:reference.value, gap:byId('cmp-gap').value};
     return [
-      {id:'early', name:'Early KO', short:'Earlier rally', path:jump(early), description:`NVDA holds at ${unitUSD.format(spot)} until it moves to ${unitUSD.format(rally)} on day ${early}. Each note checks its own KO and minimum period.`},
-      {id:'late', name:'Later KO', short:'Later rally', path:jump(late), description:`NVDA holds at ${unitUSD.format(spot)} until it moves to ${unitUSD.format(rally)} on day ${late}. A shorter note may already have matured. The detail table gives the actual exit for each note.`},
-      {id:'down', name:'Below strike', short:'Maturity', path:glide(down), description:`Maturity case at ${unitUSD.format(down)}. ${ramp}`},
-      {id:'flat', name:'Trade-day spot', short:'Maturity', path:glide(spot), description:`NVDA stays at its trade-day price of ${unitUSD.format(spot)} through every daily observation.`},
-      {id:'near', name:'Just below KO', short:'Maturity', path:glide(near), description:`Maturity case at ${unitUSD.format(near)}, ${useBp ? '0.01% below ' + referenceName + ', rounded to the nearest cent with at least a one-cent gap' : '$0.01 below ' + referenceName}. Notes with a lower barrier can knock out earlier. ${ramp}`}
+      {id:'early', name:'Early KO', short:'Earlier rally', path:jump(early), description:`NVDA holds at ${price(spot)} until it moves to ${price(rally)} on day ${early}. Each accumulator uses its own KO and guaranteed period.`},
+      {id:'late', name:'Later KO', short:'Later rally', path:jump(late), description:`NVDA holds at ${price(spot)} until it moves to ${price(rally)} on day ${late}. A shorter investment may already have matured. The detail table shows when each investment ends.`},
+      {id:'down', name:'Below strike', short:'Maturity', path:glide(down), description:`Maturity case at ${price(down)}. ${ramp}`},
+      {id:'flat', name:'Trade-day spot', short:'Maturity', path:glide(spot), description:`NVDA stays at its trade-day price of ${price(spot)} through every daily observation.`},
+      {id:'near', name:'Just below KO', short:'Maturity', path:glide(near), description:`Maturity case at ${price(near)}, ${useBp ? '0.01% below ' + referenceName + ', rounded to the nearest cent with at least a one-cent gap' : '$0.01 below ' + referenceName}. A structure with a lower barrier can knock out earlier. ${ramp}`}
     ];
   }
 
@@ -157,73 +159,81 @@
     const basis = rows.find(r => r.id === byId('cmp-origin').value);
     const later = read('recovery', cents(spot * 1.10) / 100);
     const saleStrike = read('sale-strike', Math.max(0.01, cents(spot * 1.05) / 100));
-    const units = read('sale-units', Math.floor(Math.min(...basis.sims.map(s => s.exit.shares)) / 2));
-    const common = `From the ${basis.name.toLowerCase()} maturity case, value shares later at ${unitUSD.format(later)}. An earlier KO leaves its assumed sale proceeds in cash.`;
+    const saleUnits = read('sale-units', Math.floor(Math.min(...basis.sims.map(s => s.exit.shares)) / 2));
+    Object.assign(currentSettings, {followBasisId:basis.id, laterSpot:later, saleStrike, saleUnits});
+    const common = `From the ${basis.name.toLowerCase()} maturity case, value shares later at ${price(later)}. An earlier KO leaves its assumed sale proceeds in cash.`;
     for (const dec of [false, true]) {
       const name = dec ? 'Decumulator sale' : 'Hold the shares';
       rows.push({
-        id:dec ? 'decu' : 'hold', name, short:'After maturity', follow:true, path:basis.path, basisName:basis.name,
-        description: common + (dec ? ` Assume up to ${integers.format(units)} shares per note sell at ${unitUSD.format(saleStrike)}. Mark all remaining shares at ${unitUSD.format(later)}.` : 'Keep all shares delivered at maturity and add their later value to refunded cash.'),
-        values:basis.sims.map((s, i) => afterMaturity(s, basis.values[i], later, saleStrike, units, dec))
+        id:dec ? 'decu' : 'hold', name, short:'After maturity', follow:true, path:basis.path, basisName:basis.name, sims:basis.sims,
+        description: common + (dec ? ` Assume up to ${units(saleUnits)} shares from each investment sell at ${price(saleStrike)}. Mark all remaining shares at ${price(later)}.` : 'Keep all shares delivered at maturity and add their later value to refunded cash.'),
+        values:basis.sims.map((s, i) => afterMaturity(s, basis.values[i], later, saleStrike, saleUnits, dec))
       });
     }
     return rows;
   }
 
   function header(notes) {
-    return notes.map((n, i) => `<th scope="col">${label(i)}<small>${pct(n.quote.strike)} strike</small></th>`).join('');
+    return notes.map((n, i) => `<th scope="col">${label(n,i)}<small>${quotePct(n.quote.strike)} strike · ${n.quote.months}M<br>${quotePct(n.quote.ko)} KO · ${n.quote.minimum}M guarantee</small></th>`).join('');
   }
 
-  function verdict(values, metric) {
-    // Dollar differences are compared to cents. Rates use the exact P&L and funded payment.
+  function winnerIndices(values, metric) {
     const scores = values.map(v => metric === 'pnl' ? cents(v.pnl) : v.rate);
     const top = Math.max(...scores);
-    const winners = scores.flatMap((s, i) => Math.abs(s - top) < 1e-9 ? [i] : []);
-    const names = winners.map(label).join(' / ');
-    if (winners.length === scores.length) return 'All tied';
-    if (winners.length > 1) return names + ' tie';
-    return names;
+    return scores.flatMap((s, i) => Math.abs(s - top) < 1e-9 ? [i] : []);
+  }
+
+  function verdict(notes, values, metric) {
+    const winners = winnerIndices(values, metric);
+    if (winners.length === notes.length && notes.length > 1) return 'All tied';
+    const names = winners.map(i => label(notes[i], i)).join(' / ');
+    return winners.length > 1 ? names + ' tie' : names;
   }
 
   function renderGrid(notes, rows) {
     const metric = byId('cmp-rank').value;
     const asValue = metric === 'pnl' ? signed : signedPct;
-    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Dollar P&L uses each note’s actual payment.' : 'Return is P&L divided by that note’s actual payment.') + ' The highest outcome wins each row, including the smallest loss. Rankings use values before display rounding. Select a scenario to inspect its payout.';
-    byId('cmp-grid').innerHTML = `<thead><tr><th scope="col">Scenario</th>${header(notes)}<th scope="col">Highest ${metric === 'pnl' ? 'P&amp;L' : 'return'}</th></tr></thead><tbody>` + rows.map(r =>
+    const showRank = notes.length > 1;
+    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Dollar profit or loss compares what you receive with the amount you paid.' : 'Percentage return divides profit or loss by the amount paid for each structure.') + (showRank ? ' The highest result can be the smallest loss. Ranking uses the full calculation before rounding.' : ' Add another strike to see which structure comes out ahead.') + ' Tap a scenario for its payout.';
+    byId('cmp-grid').innerHTML = `<thead><tr><th scope="col">Scenario</th>${header(notes)}${showRank ? '<th scope="col">Highest ' + (metric === 'pnl' ? 'P&amp;L' : 'return') + '</th>' : ''}</tr></thead><tbody>` + rows.map(r =>
       `<tr class="${r.id === active ? 'cmp-active' : ''}"><th scope="row"><button type="button" data-cmp-case="${r.id}" aria-pressed="${r.id === active}" aria-controls="cmp-detail">${r.name}</button><small>${r.short}</small></th>` +
-      r.values.map(v => `<td class="${cellClass(v.pnl)}">${asValue(v[metric])}</td>`).join('') + `<td class="cmp-winner">${verdict(r.values, metric)}</td></tr>`
+      r.values.map(v => `<td class="${cellClass(v.pnl)}">${asValue(v[metric])}</td>`).join('') + (showRank ? `<td class="cmp-winner">${verdict(notes, r.values, metric)}</td>` : '') + '</tr>'
     ).join('') + '</tbody>';
     const row = rows.find(r => r.id === active);
     byId('cmp-detail-title').textContent = row.name + ' · payout detail';
     byId('cmp-description').textContent = row.description;
     const fields = [
-      ['Exit of original SN','timing',String], ['NVDA at exit','exitSpot',v => unitUSD.format(v)],
-      ['Shares bought','shares',v => integers.format(v)], ['Capital used at strike','spent',money],
-      ['Cash refunded','refund',money], ['Shares assumed sold','sold',v => integers.format(v)], ['Assumed sale proceeds','proceeds',money]
+      ['Original structure ends','timing',String], ['NVDA at exit','exitSpot',v => price(v)],
+      ['Shares bought','shares',v => units(v)], ['Capital used at strike','spent',money],
+      ['Cash refunded','refund',money], ['Shares assumed sold','sold',v => units(v)], ['Assumed sale proceeds','proceeds',money]
     ];
-    if (row.follow) fields.push(['Shares still held','retained',v => integers.format(v)],['Market value of shares held','retainedValue',money]);
+    if (row.follow) fields.push(['Shares still held','retained',v => units(v)],['Market value of shares held','retainedValue',money]);
     fields.push(['Total value','nav',money],['P&L since investment','pnl',signed],['Return on payment','rate',signedPct]);
-    if (row.follow) fields.push(['Change since SN exit','change',signed]);
+    if (row.follow) fields.push(['Change since structure ended','change',signed]);
     byId('cmp-detail').innerHTML = '<thead><tr><th scope="col">USD unless stated</th>' + header(notes) + '</tr></thead><tbody>' +
       fields.map(([desc,key,fmt]) => `<tr><th scope="row">${desc}</th>` + row.values.map(v => `<td class="${key === 'pnl' || key === 'rate' || key === 'change' ? cellClass(v[key]) : ''}">${fmt(v[key])}</td>`).join('') + '</tr>').join('') + '</tbody>';
   }
 
-  function render() {
+  function updateTables() {
     currentRows = [];
     currentNotes = [];
-    const selectQuotes = quotes.filter(q => selected.has(q.id));
-    byId('cmp-selection-count').textContent = 'Choose notes · ' + selectQuotes.length + ' selected';
+    currentSettings = null;
+    const selectQuotes = Array.from(selected, id => quoteById.get(id));
+    root.querySelectorAll('[data-cmp-quote]').forEach(box => { box.checked = selected.has(box.dataset.cmpQuote); });
+    byId('cmp-basket').innerHTML = selectQuotes.map((q,i) => `<button class="cmp-picked" type="button" data-cmp-remove="${q.id}" aria-label="Remove ${quoteLabel(q)}"><span>${letter(i)} · ${q.product} <b>${quotePct(q.strike)}</b> · ${q.months}M</span><span aria-hidden="true">×</span></button>`).join('');
+    byId('cmp-clear').disabled = !selectQuotes.length;
+    byId('cmp-selection-count').textContent = 'Edit selection · ' + selectQuotes.length + ' selected';
     const current = quotes.find(q => q.id === byId('quote').value);
     const addCurrent = byId('cmp-add-current');
     addCurrent.disabled = !current || selected.has(current.id);
-    byId('cmp-current').textContent = !current ? 'Choose a JPM SN in the pricing chart to add it here.' :
-      (selected.has(current.id) ? 'Already comparing' : 'Chart selection') + ' · ' + pct(current.strike) + ' strike · ' + current.months + 'M · ' + current.minimum + 'M guarantee';
+    byId('cmp-current').textContent = !current ? 'Select a structure in the price chart.' :
+      (selected.has(current.id) ? 'In comparison' : 'Chart selection') + ' · ' + quoteLabel(current);
     const notice = byId('cmp-notice');
     const content = byId('cmp-content');
     notice.textContent = '';
     content.hidden = true;
-    if (selectQuotes.length < 2) {
-      notice.textContent = 'Select at least two JPM notes to compare payouts.';
+    if (!selectQuotes.length) {
+      notice.textContent = 'Tap a strike in either pricing table. Add a second strike to compare outcomes.';
       return;
     }
     const spotField = byId('spot'), targetField = byId('capital');
@@ -235,13 +245,13 @@
     let notes;
     try {
       notes = selectQuotes.map(quote => ({quote, target, terms:model.terms(quote, spot, target)}));
-      if (notes.some(n => n.terms.maximum < 1)) throw Error('Increase the target budget to size at least one share per month for every selected note.');
+      if (notes.some(n => n.terms.maximum < 1)) throw Error('Increase the target budget to size at least one share per month for every selection.');
     } catch (e) {
       notice.textContent = e.message;
       return;
     }
     content.hidden = false;
-    byId('cmp-terms').innerHTML = notes.map(({quote, terms:t}, i) => `<tr><th scope="row">${label(i)}</th><td>${quote.months}M / ${quote.minimum}M</td><td><button type="button" data-cmp-plot="${quote.id}" aria-label="Plot ${label(i)} at ${unitUSD.format(t.strike)} on the selected scenario">${unitUSD.format(t.strike)}</button><small>${pct(quote.strike)}</small></td><td>${unitUSD.format(t.ko)}<small>${pct(quote.ko)}</small></td><td>${integers.format(t.maximum)}</td><td>${money(t.payment)}</td><td>${signed(t.payment - target)}</td></tr>`).join('');
+    byId('cmp-terms').innerHTML = notes.map(({quote, terms:t}, i) => `<tr><th scope="row">${label({quote},i)}</th><td>${quote.months}M / ${quote.minimum}M</td><td><button type="button" data-cmp-plot="${quote.id}" aria-label="Plot ${label({quote},i)} at ${price(t.strike)} on the selected scenario">${price(t.strike)}</button><small>${quotePct(quote.strike)}</small></td><td>${price(t.ko)}<small>${quotePct(quote.ko)}</small></td><td>${units(t.maximum)}</td><td>${money(t.payment)}</td><td>${signed(t.payment - target)}</td></tr>`).join('');
     try {
       currentRows = compare(notes, spot);
       currentNotes = notes;
@@ -253,32 +263,77 @@
     }
   }
 
-  byId('cmp-add-current').addEventListener('click', () => {
-    const id = byId('quote').value;
-    if (!quotes.some(q => q.id === id)) return;
-    selected.add(id);
-    root.querySelector('[data-cmp-quote="' + id + '"]').checked = true;
-    render();
-  });
+  function render() {
+    updateTables();
+    document.dispatchEvent(new CustomEvent('accumulator:comparison-updated'));
+  }
 
+  function getSnapshot() {
+    if (!currentRows.length || !currentNotes.length) return null;
+    const metric = byId('cmp-rank').value;
+    const rows = currentRows.map(({id,name,short,description,path,follow,basisName,sims,values}) => ({
+      id, name, short, description, path, follow:!!follow, basisName, values,
+      winners:winnerIndices(values, metric),
+      exits:sims.map(s => ({day:s.exit.day, koDay:s.koDay, koMonth:s.koMonth, shares:s.exit.shares, price:s.exit.price}))
+    }));
+    const result = {notes:currentNotes, rows, spot:byId('spot').valueAsNumber,
+      target:byId('capital').valueAsNumber, active, metric, settings:currentSettings};
+    // Give consumers independent data, including the paths and quote records.
+    return JSON.parse(JSON.stringify(result));
+  }
+  window.AccumulatorComparison = Object.freeze({getSnapshot});
+
+  function selectionChanged(message) {
+    render();
+    byId('cmp-selection-feedback').textContent = message;
+    document.dispatchEvent(new CustomEvent('accumulator:selection', {detail:{ids:[...selected]}}));
+  }
+
+  function add(id) {
+    const quote = quoteById.get(id);
+    if (!quote) return;
+    const included = selected.has(id);
+    selected.add(id);
+    selectionChanged(quoteLabel(quote) + (included ? ' is already in the comparison.' : ' added to comparison.'));
+  }
+
+  function remove(id) {
+    if (!selected.delete(id)) return;
+    selectionChanged(quoteLabel(quoteById.get(id)) + ' removed.');
+  }
+
+  byId('cmp-add-current').addEventListener('click', () => add(byId('quote').value));
+  byId('cmp-clear').addEventListener('click', () => {
+    selected.clear();
+    selectionChanged('Selection cleared.');
+    root.querySelector('.cmp-tools a')?.focus({preventScroll:true});
+  });
+  document.addEventListener('accumulator:add-quote', e => add(e.detail?.quoteId));
   root.addEventListener('change', e => {
     const id = e.target.dataset.cmpQuote;
     if (id) {
-      if (e.target.checked) selected.add(id);
-      else selected.delete(id);
-    }
-    if (e.target.tagName === 'SELECT' || id) render();
+      if (e.target.checked) add(id);
+      else remove(id);
+    } else if (e.target.tagName === 'SELECT') render();
   });
   root.addEventListener('input', e => {
     if (e.target.type === 'number') render();
   });
   root.addEventListener('click', e => {
+    const removal = e.target.closest('[data-cmp-remove]');
+    if (removal) {
+      const next = removal.nextElementSibling?.dataset.cmpRemove ?? removal.previousElementSibling?.dataset.cmpRemove;
+      remove(removal.dataset.cmpRemove);
+      const focus = next ? root.querySelector('[data-cmp-remove="' + next + '"]') : root.querySelector('.cmp-tools a');
+      focus?.focus({preventScroll:true});
+      return;
+    }
     const plot = e.target.closest('[data-cmp-plot]');
     if (plot) {
       const note = currentNotes.find(n => n.quote.id === plot.dataset.cmpPlot);
       const row = currentRows.find(r => r.id === active);
       if (!note || !row) return;
-      const name = row.follow ? row.name + ' · original SN only · ' + row.basisName : row.name;
+      const name = row.follow ? row.name + ' · original structure · ' + row.basisName : row.name;
       document.dispatchEvent(new CustomEvent('accumulator:plot-comparison', {
         detail:{quoteId:note.quote.id, daily:row.path.slice(0, note.terms.days), name}
       }));
@@ -292,5 +347,5 @@
     byId('cmp-detail-title').scrollIntoView({block:'nearest'});
   });
   document.addEventListener('accumulator:inputs', render);
-  render();
+  selectionChanged('');
 })();
