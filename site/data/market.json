@@ -288,6 +288,6 @@
   "source": "Federal Reserve H.15, retrieved via FRED",
   "source_url": "https://fred.stlouisfed.org/series/DGS10",
   "checked_at": "2026-11-13T08:58:14+08:00",
-  "last_attempt": "2026-11-22T08:57:54+08:00",
+  "last_attempt": "2026-11-23T09:00:30+08:00",
   "message": "Treasury refresh failed; last verified observations retained."
 }
