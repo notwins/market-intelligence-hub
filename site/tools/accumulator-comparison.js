@@ -6,9 +6,8 @@
   const model = window.AccumulatorModel;
   const quotes = Accumulator.quotes.filter(q => q.multiple === 1);
   const quoteById = new Map(quotes.map(q => [q.id, q]));
-  const initial = ['si-9-120-1', 'sn-9-120-1'];
-  const selected = new Set(initial.filter(id => quotes.some(q => q.id === id)));
-  if (selected.size < 2) quotes.slice(0, 2).forEach(q => selected.add(q.id));
+  const initial = ['sn-9-120-1', 'sn-9-120-2', 'sn-9-105-1', 'sn-6-120-1', 'nv9086'];
+  const selected = new Set(initial.filter(id => quoteById.has(id)));
   const {money, signedMoney:signed, quote:quotePct, price, shares:units, signedRate:signedPct} = window.AccumulatorFormat;
   const cents = n => Math.round((n + Number.EPSILON) * 100);
   const byId = id => document.getElementById(id);
@@ -34,7 +33,7 @@
     </details>
     <div id="cmp-notice" class="small" role="status"></div>
     <div id="cmp-content">
-      <p class="small">Tap a scenario to see the cash and shares. Tap a dollar strike in the table below to plot that structure on the selected price path.</p>
+      <p class="small">Tap a figure for its calculation. Use Plot to see the selected scenario on the price chart.</p>
       <div class="tableScroll cmp-funding" tabindex="0" aria-label="Selected structure terms and funded amounts">
         <table><thead><tr><th scope="col">Structure</th><th scope="col">Tenor / guarantee</th><th scope="col">Strike</th><th scope="col">KO</th><th scope="col">Shares / month</th><th scope="col">Payment</th><th scope="col">vs. target</th></tr></thead><tbody id="cmp-terms"></tbody></table>
       </div>
@@ -52,8 +51,10 @@
       <div class="cmp-heading"><h3>Scenario outcomes</h3><label>Rank by <select id="cmp-rank"><option value="pnl">Dollar P&amp;L</option><option value="rate">Return on payment</option></select></label></div>
       <p class="small" id="cmp-criteria"></p>
       <div class="tableScroll cmp-results" tabindex="0" aria-label="Payout comparison by scenario"><table id="cmp-grid"></table></div>
+      <details class="cmp-assumptions cmp-range"><summary>Best and worst scenarios for each structure</summary><div id="cmp-range-list"></div></details>
       <h3 id="cmp-detail-title" tabindex="-1"></h3><p class="small" id="cmp-description"></p>
       <div class="tableScroll cmp-results" tabindex="0" aria-labelledby="cmp-detail-title"><table id="cmp-detail"></table></div>
+      <details class="cmp-assumptions"><summary>Cash and share breakdown</summary><div class="tableScroll cmp-results" tabindex="0" aria-label="Cash and share calculation inputs"><table id="cmp-breakdown"></table></div></details>
       <details class="cmp-assumptions"><summary>Holding or selling shares after maturity</summary>
         <p>Choose the maturity price, then compare keeping all shares with selling a chosen quantity through an illustrative decumulator. Both use the same later NVDA price.</p>
         <div class="cmp-inputs">
@@ -66,7 +67,14 @@
       </details>
       <p class="small cmp-foot">A normal accumulator buys its full scheduled share quantity at the strike. A daily KO in the guarantee fills the guaranteed months. After the guarantee, a mid-month KO keeps whole shares accrued through the preceding trading day. The model spreads shares across each month’s observation days and returns payment less the cost of all shares bought.</p>
       <p class="small cmp-foot">Each comparison assumes USD cash earns 0% after refund or sale. Sale proceeds at KO use the observed market price, including any gap above the barrier. Actual execution and settlement can differ. Holding shares keeps the downside as well as any recovery.</p>
-    </div>`;
+    </div>
+    <dialog class="cmp-calculation" id="cmp-calculation" aria-labelledby="cmp-calculation-title" aria-describedby="cmp-calculation-context">
+      <form method="dialog"><button type="submit" aria-label="Close calculation">Close</button></form>
+      <p class="small" id="cmp-calculation-context"></p>
+      <h3 id="cmp-calculation-title"></h3>
+      <ol id="cmp-calculation-steps"></ol>
+      <p class="small" id="cmp-calculation-note"></p>
+    </dialog>`;
 
   byId('cmp-choices').innerHTML = quotes.map(q => `<label><input type="checkbox" data-cmp-quote="${q.id}"><span><b>${q.product} · ${quotePct(q.strike)}</b><small>${q.months}M tenor · ${quotePct(q.ko)} KO · ${q.minimum}M guarantee</small></span></label>`).join('');
 
@@ -121,7 +129,7 @@
     const e = sim.exit;
     return {
       timing: sim.koDay ? 'KO day ' + sim.koDay + (sim.koDay <= sim.guaranteeDay ? ' · in guarantee' : ' · after guarantee') : 'Maturity · day ' + e.day,
-      shares:e.shares, spent:e.spent, refund:e.refunded, exitSpot:e.price,
+      payment:sim.payment, shares:e.shares, spent:e.spent, refund:e.refunded, exitSpot:e.price,
       sold:e.shares, proceeds:e.shareValue, retained:0, retainedValue:0,
       nav:e.value, pnl:e.profit, rate:e.rate
     };
@@ -131,14 +139,15 @@
     if (base.koDay) return {...follow, change:0};
     const {shares, refunded, value, spent, day, price} = base.exit;
     const sold = isDecumulator ? Math.min(units, shares) : 0;
-    const proceeds = sold * saleStrike;
+    const proceedsCents = sold * cents(saleStrike);
     const retained = shares - sold;
-    const retainedValue = retained * laterSpot;
-    const nav = refunded + proceeds + retainedValue;
-    const pnl = nav - base.payment;
+    const retainedCents = retained * cents(laterSpot);
+    const navCents = cents(refunded) + proceedsCents + retainedCents;
+    const pnlCents = navCents - base.payment * 100;
     return {
-      timing:'Held at maturity · day ' + day, shares, spent, refund:refunded, exitSpot:price,
-      sold, proceeds, retained, retainedValue, nav, pnl, rate:100 * pnl / base.payment, change:nav - value
+      timing:'Held at maturity · day ' + day, payment:base.payment, shares, spent, refund:refunded, exitSpot:price,
+      sold, proceeds:proceedsCents / 100, retained, retainedValue:retainedCents / 100,
+      nav:navCents / 100, pnl:pnlCents / 100, rate:pnlCents / base.payment, change:(navCents - cents(value)) / 100
     };
   }
 
@@ -161,12 +170,12 @@
     const saleStrike = read('sale-strike', Math.max(0.01, cents(spot * 1.05) / 100));
     const saleUnits = read('sale-units', Math.floor(Math.min(...basis.sims.map(s => s.exit.shares)) / 2));
     Object.assign(currentSettings, {followBasisId:basis.id, laterSpot:later, saleStrike, saleUnits});
-    const common = `From the ${basis.name.toLowerCase()} maturity case, value shares later at ${price(later)}. An earlier KO leaves its assumed sale proceeds in cash.`;
+    const common = `Use ${basis.name.toLowerCase()} as the exit scenario. Any shares held after maturity are valued later at ${price(later)}. An earlier KO leaves its assumed sale proceeds in cash.`;
     for (const dec of [false, true]) {
       const name = dec ? 'Decumulator sale' : 'Hold the shares';
       rows.push({
         id:dec ? 'decu' : 'hold', name, short:'After maturity', follow:true, path:basis.path, basisName:basis.name, sims:basis.sims,
-        description: common + (dec ? ` Assume up to ${units(saleUnits)} shares from each investment sell at ${price(saleStrike)}. Mark all remaining shares at ${price(later)}.` : 'Keep all shares delivered at maturity and add their later value to refunded cash.'),
+        description: common + (dec ? ` Assume up to ${units(saleUnits)} shares from each investment sell at ${price(saleStrike)}. Mark all remaining shares at ${price(later)}.` : ' Keep all shares delivered at maturity and add their later value to refunded cash.'),
         values:basis.sims.map((s, i) => afterMaturity(s, basis.values[i], later, saleStrike, saleUnits, dec))
       });
     }
@@ -177,41 +186,195 @@
     return notes.map((n, i) => `<th scope="col">${label(n,i)}<small>${quotePct(n.quote.strike)} strike · ${n.quote.months}M<br>${quotePct(n.quote.ko)} KO · ${n.quote.minimum}M guarantee</small></th>`).join('');
   }
 
-  function winnerIndices(values, metric) {
-    const scores = values.map(v => metric === 'pnl' ? cents(v.pnl) : v.rate);
-    const top = Math.max(...scores);
-    return scores.flatMap((s, i) => Math.abs(s - top) < 1e-9 ? [i] : []);
+  const labels = {
+    tenure:'Tenor and guarantee', strike:'Strike price', ko:'Knock-out level',
+    monthly:'Shares bought per complete month', payment:'Actual payment', difference:'Payment versus target',
+    timing:'When the structure ends', exitSpot:'NVDA at the end of the structure', exitValue:'Value when the structure ends',
+    exitPnl:'P&L when the structure ends', laterSpot:'Later NVDA valuation price', shares:'Shares bought at strike',
+    spent:'Capital used at strike', refund:'Cash refunded', sold:'Shares assumed sold', proceeds:'Assumed sale proceeds',
+    retained:'Shares still held', retainedValue:'Value of shares still held', nav:'Total value', pnl:'P&L since investment',
+    rate:'Return on actual payment', change:'Change since the structure ended'
+  };
+
+  function resultButton(rowId, i, key, displayed, name=labels[key]) {
+    return `<button type="button" class="cmp-number" data-work-key="${key}" data-work-case="${rowId}" data-work-note="${i}" aria-haspopup="dialog" aria-label="${name}, structure ${letter(i)}, ${displayed}. Show calculation">${displayed}</button>`;
   }
 
-  function verdict(notes, values, metric) {
-    const winners = winnerIndices(values, metric);
-    if (winners.length === notes.length && notes.length > 1) return 'All tied';
-    const names = winners.map(i => label(notes[i], i)).join(' / ');
-    return winners.length > 1 ? names + ' tie' : names;
+  function extremes(values, metric) {
+    const scores = values.map(v => metric === 'pnl' ? cents(v.pnl) : cents(v.pnl) / v.payment);
+    const matches = target => scores.flatMap((score,i) => score === target ? [i] : []);
+    return {best:matches(Math.max(...scores)), worst:matches(Math.min(...scores))};
+  }
+
+  function extremeLabel(best, worst, total, i) {
+    if (total < 2) return '';
+    if (best.length === total) return 'All tied';
+    if (best.includes(i)) return best.length > 1 ? 'Joint best' : 'Best';
+    if (worst.includes(i)) return worst.length > 1 ? 'Joint worst' : 'Worst';
+    return '';
+  }
+
+  function renderRanges(notes, rows, metric) {
+    const display = metric === 'pnl' ? signed : signedPct;
+    byId('cmp-range-list').innerHTML = notes.map((note, i) => {
+      const {best,worst} = extremes(rows.map(row => row.values[i]), metric);
+      const show = indexes => indexes.map(j => `${rows[j].name} ${resultButton(rows[j].id, i, metric, display(rows[j].values[i][metric]))}`).join(' / ');
+      return `<div><strong>${label(note,i)}</strong>${best.length === rows.length ? `<span>All scenarios tie at ${show([best[0]])}</span>` : `<span>Best · ${show(best)}</span><span>Worst · ${show(worst)}</span>`}</div>`;
+    }).join('');
+  }
+
+  function detailRow(key, row, notes) {
+    const name = key === 'nav' ? (row.follow ? 'Total value at later valuation' : 'Total value at exit') : labels[key];
+    const keyRow = ['nav','pnl','rate'].includes(key);
+    const cells = row.values.map((value, i) => {
+      const sim = row.sims[i];
+      let amount = value[key], displayed;
+      switch (key) {
+        case 'timing': displayed = sim.koDay ? `KO · M${sim.koMonth} · day ${sim.koDay}` : `Maturity · M${notes[i].quote.months} · day ${sim.exit.day}`;break;
+        case 'exitValue': displayed = money(sim.exit.value);break;
+        case 'exitPnl': amount=sim.exit.profit;displayed=signed(amount);break;
+        case 'payment': displayed=money(sim.payment);break;
+        case 'exitSpot': displayed=price(amount);break;
+        case 'laterSpot': displayed = value.retained ? price(currentSettings.laterSpot) : 'All cash';break;
+        case 'refund': displayed=price(amount);break;
+        case 'shares': case 'sold': case 'retained': displayed=units(amount);break;
+        case 'rate': displayed=signedPct(amount);break;
+        case 'pnl': case 'change': displayed=signed(amount);break;
+        default: displayed=money(amount);
+      }
+      const colour = ['pnl','rate','change','exitPnl'].includes(key) ? cellClass(amount) : '';
+      const accent = key === 'timing' && sim.koDay ? 'cmp-ko' : key === 'refund' && amount > 0 ? 'cmp-refund' : '';
+      return `<td class="${colour} ${accent}">${resultButton(row.id,i,key,displayed,name)}</td>`;
+    });
+    return `<tr${keyRow ? ' class="cmp-key-row"' : ''}><th scope="row">${name}</th>${cells.join('')}</tr>`;
   }
 
   function renderGrid(notes, rows) {
     const metric = byId('cmp-rank').value;
     const asValue = metric === 'pnl' ? signed : signedPct;
-    const showRank = notes.length > 1;
-    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Dollar profit or loss compares what you receive with the amount you paid.' : 'Percentage return divides profit or loss by the amount paid for each structure.') + (showRank ? ' The highest result can be the smallest loss. Ranking uses the full calculation before rounding.' : ' Add another strike to see which structure comes out ahead.') + ' Tap a scenario for its payout.';
-    byId('cmp-grid').innerHTML = `<thead><tr><th scope="col">Scenario</th>${header(notes)}${showRank ? '<th scope="col">Highest ' + (metric === 'pnl' ? 'P&amp;L' : 'return') + '</th>' : ''}</tr></thead><tbody>` + rows.map(r =>
-      `<tr class="${r.id === active ? 'cmp-active' : ''}"><th scope="row"><button type="button" data-cmp-case="${r.id}" aria-pressed="${r.id === active}" aria-controls="cmp-detail">${r.name}</button><small>${r.short}</small></th>` +
-      r.values.map(v => `<td class="${cellClass(v.pnl)}">${asValue(v[metric])}</td>`).join('') + (showRank ? `<td class="cmp-winner">${verdict(notes, r.values, metric)}</td>` : '') + '</tr>'
-    ).join('') + '</tbody>';
+    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Compare dollar P&L' : 'Compare percentage return on actual payment') + ' within each price scenario. Rankings use the calculated amounts before display rounding. The best result can still be a loss. These rankings cover the scenarios shown. Tap a result for the maths.';
+    byId('cmp-grid').innerHTML = `<thead><tr><th scope="col">Scenario</th>${header(notes)}</tr></thead><tbody>` + rows.map(r => {
+      const {best,worst} = extremes(r.values,metric);
+      return `<tr class="${r.id === active ? 'cmp-active' : ''}"><th scope="row"><button type="button" data-cmp-case="${r.id}" aria-pressed="${r.id === active}" aria-controls="cmp-detail">${r.name}</button><small>${r.short}</small></th>` +
+        r.values.map((v,i) => {
+          const tag=extremeLabel(best,worst,notes.length,i);
+          const colour=tag.endsWith('best')||tag==='Best'?'cmp-best':tag.endsWith('worst')||tag==='Worst'?'cmp-worst':'';
+          return `<td class="${colour} ${cellClass(v.pnl)}">${resultButton(r.id,i,metric,asValue(v[metric]))}${tag ? `<span class="cmp-extreme">${tag}</span>` : ''}</td>`;
+        }).join('') + '</tr>';
+    }).join('') + '</tbody>';
+    renderRanges(notes,rows,metric);
     const row = rows.find(r => r.id === active);
     byId('cmp-detail-title').textContent = row.name + ' · payout detail';
-    byId('cmp-description').textContent = row.description;
-    const fields = [
-      ['Original structure ends','timing',String], ['NVDA at exit','exitSpot',v => price(v)],
-      ['Shares bought','shares',v => units(v)], ['Capital used at strike','spent',money],
-      ['Cash refunded','refund',money], ['Shares assumed sold','sold',v => units(v)], ['Assumed sale proceeds','proceeds',money]
-    ];
-    if (row.follow) fields.push(['Shares still held','retained',v => units(v)],['Market value of shares held','retainedValue',money]);
-    fields.push(['Total value','nav',money],['P&L since investment','pnl',signed],['Return on payment','rate',signedPct]);
-    if (row.follow) fields.push(['Change since structure ended','change',signed]);
-    byId('cmp-detail').innerHTML = '<thead><tr><th scope="col">USD unless stated</th>' + header(notes) + '</tr></thead><tbody>' +
-      fields.map(([desc,key,fmt]) => `<tr><th scope="row">${desc}</th>` + row.values.map(v => `<td class="${key === 'pnl' || key === 'rate' || key === 'change' ? cellClass(v[key]) : ''}">${fmt(v[key])}</td>`).join('') + '</tr>').join('') + '</tbody>';
+    byId('cmp-description').textContent = row.description + (row.follow ? ' P&L measures the gain or loss since purchase. Change since the structure ended measures the difference from its exit value.' : ' P&L measures the gain or loss on your actual payment.');
+    const summary = row.follow
+      ? ['timing','exitValue','exitPnl','change','nav','pnl','rate']
+      : ['timing','refund','nav','pnl','rate'];
+    const details = row.follow
+      ? ['payment','exitSpot','laterSpot','shares','spent','refund','sold','proceeds','retained','retainedValue']
+      : ['payment','exitSpot','shares','spent','sold','proceeds'];
+    const headings = '<thead><tr><th scope="col">USD unless stated</th>' + header(notes) + '</tr></thead>';
+    const table = fields => headings + '<tbody>' + fields.map(key=>detailRow(key,row,notes)).join('') + '</tbody>';
+    byId('cmp-detail').innerHTML = table(summary);
+    byId('cmp-breakdown').innerHTML = table(details);
+  }
+
+  function workings(key, row, i) {
+    const note=currentNotes[i], q=note.quote, t=note.terms, sim=row.sims[i], v=row.values[i];
+    const spot=byId('spot').valueAsNumber, end=sim.exit, later=currentSettings.laterSpot;
+    const afterMaturity=row.follow && !sim.koDay;
+    const cash=price, u=units;
+    const pct=n=>Number.isInteger(n)?n+'%':n.toLocaleString('en-US',{maximumFractionDigits:6})+'%';
+    const origin = sim.koDay
+      ? `Day ${end.day} in month ${end.month} is the first close at or above the ${cash(t.ko)} knock-out. The observed close is ${cash(end.price)}.`
+      : `No observed close reached the ${cash(t.ko)} knock-out. The contract matured in month ${q.months} on trading day ${end.day} at ${cash(end.price)}.`;
+    const monthly = `Divide the ${cash(note.target)} target by (${cash(t.strike)} strike × ${q.months} months). Round to the nearest whole share to get ${u(t.maximum)} shares per month.`;
+    const committed = `${u(t.maximum)} shares × ${q.months} months × ${cash(t.strike)} = ${cash(t.committed)} committed.`;
+    const paid = `Round ${cash(t.committed)} up to a whole dollar for the actual payment of ${cash(t.payment)}. The ${cash(t.roundingCash)} difference remains refundable.`;
+    const sizing=[monthly,committed,paid];
+    const position = [origin];
+    if (!sim.koDay) position.push(`${u(t.maximum)} shares per month × ${q.months} completed months = ${u(v.shares)} shares.`);
+    else if(sim.koDay<=t.guaranteeDay) position.push(`The knock-out is within the guarantee ending on day ${t.guaranteeDay}. ${q.minimum} guaranteed months × ${u(t.maximum)} shares per month = ${u(v.shares)} shares, including ${u(end.extra)} guaranteed shares added on the trigger.`);
+    else {
+      const m=sim.koMonth-1, prior=m?t.monthEnds[m-1]:0, sessions=t.monthEnds[m]-prior, elapsed=sim.koDay-prior-1;
+      position.push(`${m} completed months × ${u(t.maximum)} shares = ${u(m*t.maximum)} shares.`,
+        `In the trigger month, ${elapsed} of ${sessions} sessions earned shares before KO. Round ${u(t.maximum)} × ${elapsed} ÷ ${sessions} down to ${u(Math.floor(t.maximum*elapsed/sessions))} shares. The total is ${u(v.shares)} shares.`);
+    }
+    const spent=`${u(v.shares)} shares bought × ${cash(t.strike)} strike = ${cash(v.spent)} used to buy shares.`;
+    const refund=`${cash(t.payment)} paid − ${cash(v.spent)} used at strike = ${cash(v.refund)} cash returned.`;
+    const exitShares=`${u(v.shares)} shares × ${cash(end.price)} exit price = ${cash(end.shareValue)} share value when the structure ends.`;
+    const exitValue=`${cash(end.shareValue)} in shares + ${cash(v.refund)} refund = ${cash(end.value)} at the contract end.`;
+    const soldWhy = !afterMaturity ? `The exit scenario assumes all ${u(v.shares)} shares sell at the observed ${cash(end.price)} close.`
+      : row.id==='hold' ? `You chose to hold all ${u(v.shares)} shares delivered at maturity, so zero shares sell.`
+        : `Use the smaller of ${u(currentSettings.saleUnits)} assumed sales and ${u(v.shares)} available shares. This sells ${u(v.sold)} shares at ${cash(currentSettings.saleStrike)}.`;
+    const salePrice=afterMaturity?currentSettings.saleStrike:end.price;
+    const proceeds = v.sold ? `${u(v.sold)} shares sold × ${cash(salePrice)} = ${cash(v.proceeds)} sale proceeds.` : 'Zero shares sold gives $0.00 in proceeds.';
+    const retained=`${u(v.shares)} shares bought − ${u(v.sold)} sold = ${u(v.retained)} shares held.`;
+    const retainedValue = v.retained ? `${u(v.retained)} shares held × ${cash(later)} later price = ${cash(v.retainedValue)} in shares.` : 'No shares remain, so their market value is $0.00.';
+    const total=`${cash(v.refund)} refunded + ${cash(v.proceeds)} sale proceeds + ${cash(v.retainedValue)} in shares held = ${cash(v.nav)} total value.`;
+    const pnl=`${cash(v.nav)} total value − ${cash(t.payment)} actual payment = ${cash(v.pnl)} P&L since investment.`;
+    const returnOnPayment=`${cash(v.pnl)} P&L ÷ ${cash(t.payment)} actual payment × 100 = ${pct(v.rate)} (up to six decimals).`;
+    const change=`${cash(v.nav)} later total − ${cash(end.value)} when the note ended = ${cash(v.change ?? 0)} since the contract ended.`;
+    switch(key){
+      case 'tenure': return [`The quote specifies a ${q.months}-month tenor and a ${q.minimum}-month guaranteed buying period.`,`The model uses ${t.days} trading days and ends the guarantee on trading day ${t.guaranteeDay}. The final trade calendar governs.`];
+      case 'strike': return [`Trade-day price = ${cash(spot)}. The quote sets the buying price at ${quotePct(q.strike)} of that price.`,`${cash(spot)} × ${quotePct(q.strike)}, rounded to cents = ${cash(t.strike)} per share.`];
+      case 'ko': return [`Knock-out is ${quotePct(q.ko)} of the trade-day price.`,`${cash(spot)} × ${quotePct(q.ko)}, rounded to cents = ${cash(t.ko)}. Daily closes are checked against this level.`];
+      case 'monthly': return [`Buying price per share = ${cash(t.strike)}. The tenor is ${q.months} months.`,monthly];
+      case 'payment': return sizing;
+      case 'difference': return [...sizing,`${cash(t.payment)} actual payment − ${cash(note.target)} target = ${cash(t.payment-note.target)} difference.`];
+      case 'timing':return [`Contract schedule = ${q.months} months, ${t.days} modelled trading days. The guarantee runs through day ${t.guaranteeDay}.`,origin,...(row.follow?[sim.koDay?'The assumed KO sale leaves cash.':'Any later price change belongs to the shares held after maturity. The note has already ended.']:[])];
+      case 'exitSpot': return [origin,`The daily scenario path on day ${end.day} supplies the ${cash(end.price)} exit price.`];
+      case 'exitValue': return [origin,exitShares,refund,exitValue];
+      case 'exitPnl': return [exitValue,`${cash(end.value)} exit value − ${cash(t.payment)} paid = ${cash(end.profit)} P&L when the note ended.`];
+      case 'laterSpot':return [origin,v.retained?`The later-price scenario input is ${cash(later)} per share. It applies to ${u(v.retained)} retained shares.`:'All shares have been sold. A later NVDA price change leaves the cash proceeds unchanged.'];
+      case 'shares':return [monthly,...position];
+      case 'spent':return [...position,spent];
+      case 'refund':return [paid,spent,refund,'This refund is returned principal. It enters total value once.'];
+      case 'sold':return [origin,soldWhy];
+      case 'proceeds':return [soldWhy,proceeds];
+      case 'retained':return [soldWhy,retained];
+      case 'retainedValue':return [soldWhy,retained,retainedValue];
+      case 'nav':return [refund,soldWhy,proceeds,retainedValue,total];
+      case 'pnl':return [total,pnl,...(v.retained?['The portion attributable to the shares still held is unrealised at the selected later price.']:[])];
+      case 'rate':return [total,pnl,returnOnPayment];
+      case 'change':{
+        const compare=[exitShares,exitValue,total,change];
+        if(!sim.koDay&&row.id==='hold')compare.push(`Equivalently, ${u(v.shares)} held shares × (${cash(later)} later − ${cash(end.price)} at maturity) = ${cash(v.change)}. The same refund appears in both valuations and cancels.`);
+        if(sim.koDay)compare.push('The model sold all shares at KO and assumes 0% interest on cash.');
+        return compare;
+      }
+      default:return [];
+    }
+  }
+
+  let calculationOpener;
+  function openCalculation({title,context,steps,opener,note}) {
+    const dialog = byId('cmp-calculation');
+    calculationOpener = opener || document.activeElement;
+    byId('cmp-calculation-title').textContent = title;
+    byId('cmp-calculation-context').textContent = context;
+    byId('cmp-calculation-note').textContent = note ?? 'Amounts below one dollar are included. Summary rows round each figure separately.';
+    byId('cmp-calculation-steps').replaceChildren(...steps.map(text => {
+      const li = document.createElement('li');
+      li.textContent = text;
+      return li;
+    }));
+    if (!dialog.open) dialog.showModal();
+  }
+  window.AccumulatorCalculationDialog = Object.freeze({open:openCalculation});
+  byId('cmp-calculation').addEventListener('close', () => {
+    if (calculationOpener?.isConnected) calculationOpener.focus({preventScroll:true});
+    calculationOpener = null;
+  });
+
+  function showCalculation(control) {
+    const row = currentRows.find(r => r.id === control.dataset.workCase);
+    const i = Number(control.dataset.workNote), key = control.dataset.workKey;
+    if (!row || !currentNotes[i]) return;
+    const steps = workings(key,row,i);
+    if (!steps.length) return;
+    const funding = ['tenure','strike','ko','monthly','payment','difference'].includes(key);
+    const context = label(currentNotes[i],i) + ' · ' + quotePct(currentNotes[i].quote.strike) + ' strike · ' + (funding ? 'Funding terms' : row.name);
+    openCalculation({title:labels[key],context,steps,opener:control});
   }
 
   function updateTables() {
@@ -251,15 +414,19 @@
       return;
     }
     content.hidden = false;
-    byId('cmp-terms').innerHTML = notes.map(({quote, terms:t}, i) => `<tr><th scope="row">${label({quote},i)}</th><td>${quote.months}M / ${quote.minimum}M</td><td><button type="button" data-cmp-plot="${quote.id}" aria-label="Plot ${label({quote},i)} at ${price(t.strike)} on the selected scenario">${price(t.strike)}</button><small>${quotePct(quote.strike)}</small></td><td>${price(t.ko)}<small>${quotePct(quote.ko)}</small></td><td>${units(t.maximum)}</td><td>${money(t.payment)}</td><td>${signed(t.payment - target)}</td></tr>`).join('');
+    byId('cmp-terms').innerHTML = notes.map((note,i) => {
+      const {quote:q,terms:t}=note, count=q.months+'M / '+q.minimum+'M';
+      const cell=(k,value)=>resultButton(active,i,k,value);
+      return `<tr><th scope="row">${label(note,i)}<button type="button" data-cmp-plot="${q.id}" aria-label="Plot ${label(note,i)} on the selected scenario">Plot</button></th><td>${cell('tenure',count)}</td><td>${cell('strike',price(t.strike))}<small>${quotePct(q.strike)}</small></td><td>${cell('ko',price(t.ko))}<small>${quotePct(q.ko)}</small></td><td>${cell('monthly',units(t.maximum))}</td><td>${cell('payment',money(t.payment))}</td><td>${cell('difference',signed(t.payment-target))}</td></tr>`;
+    }).join('');
     try {
       currentRows = compare(notes, spot);
       currentNotes = notes;
       renderGrid(notes, currentRows);
     } catch (e) {
       notice.textContent = e.message;
-      root.querySelectorAll('[data-cmp-plot]').forEach(button => { button.disabled = true; });
-      for (const id of ['cmp-grid','cmp-detail','cmp-detail-title','cmp-description','cmp-criteria']) byId(id).textContent = '';
+      root.querySelectorAll('[data-cmp-plot], [data-work-key]').forEach(button => { button.disabled = true; });
+      for (const id of ['cmp-grid','cmp-detail','cmp-breakdown','cmp-range-list','cmp-detail-title','cmp-description','cmp-criteria']) byId(id).textContent = '';
     }
   }
 
@@ -271,12 +438,14 @@
   function getSnapshot() {
     if (!currentRows.length || !currentNotes.length) return null;
     const metric = byId('cmp-rank').value;
-    const rows = currentRows.map(({id,name,short,description,path,follow,basisName,sims,values}) => ({
-      id, name, short, description, path, follow:!!follow, basisName, values,
-      winners:winnerIndices(values, metric),
-      exits:sims.map(s => ({day:s.exit.day, koDay:s.koDay, koMonth:s.koMonth, shares:s.exit.shares, price:s.exit.price}))
-    }));
-    const result = {notes:currentNotes, rows, spot:byId('spot').valueAsNumber,
+    const rows = currentRows.map(({id,name,short,description,path,follow,basisName,sims,values}) => {
+      const {best,worst} = extremes(values,metric);
+      return {id, name, short, description, path, follow:!!follow, basisName, values,
+        winners:best, losers:worst,
+        exits:sims.map(s => ({day:s.exit.day, koDay:s.koDay, koMonth:s.koMonth, shares:s.exit.shares, price:s.exit.price}))};
+    });
+    const ranges = currentNotes.map((note,i) => extremes(currentRows.map(row => row.values[i]), metric));
+    const result = {notes:currentNotes, rows, ranges, spot:byId('spot').valueAsNumber,
       target:byId('capital').valueAsNumber, active, metric, settings:currentSettings};
     // Give consumers independent data, including the paths and quote records.
     return JSON.parse(JSON.stringify(result));
@@ -320,6 +489,8 @@
     if (e.target.type === 'number') render();
   });
   root.addEventListener('click', e => {
+    const calculation = e.target.closest('[data-work-key]');
+    if (calculation) { showCalculation(calculation); return; }
     const removal = e.target.closest('[data-cmp-remove]');
     if (removal) {
       const next = removal.nextElementSibling?.dataset.cmpRemove ?? removal.previousElementSibling?.dataset.cmpRemove;
