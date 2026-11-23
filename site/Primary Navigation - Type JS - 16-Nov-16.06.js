@@ -80,7 +80,8 @@
   const base = new URL('./', document.currentScript.src);
   const pagePath = location.pathname.slice(base.pathname.length);
   const onDesk = pagePath === 'desk.html';
-  const mobileDock = onDesk && matchMedia('(max-width:760px)');
+  const mobileDock = matchMedia('(max-width:760px)');
+  const hasMobileDock = () => onDesk || root.classList.contains('hub-tools-nav');
   const credit = ['Bonds & credit', 'v4.html#credit', '▤'];
   const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
   const watchlist = ['Bonds & shares watchlist', 'v4.html#watchlist'];
@@ -92,7 +93,7 @@
     ['Calls', 'v4.html#calls', '✎']
   ];
   const sections = [
-    ['Home', 'desk.html', '⌂', 'blue'], ['News', 'v4.html#overview', '◫', 'orange'],
+    ['Home', 'desk.html', '⌂', 'blue'], ['Tools', 'v4.html#tools', '↗', 'blue'], ['News', 'v4.html#overview', '◫', 'orange'],
     ['Shares', 'stocks-beta.html', '▥', 'green'], ['Bonds BETA', 'bonds-beta.html', '▥', 'maroon'],
     ['FRED', 'fred/', '⌁', 'purple'], ['Master Pivot', 'v4.html#master/pivot', '▦', 'blue'],
     ['Historical charts', 'cross-market-history.html', '↗', 'rose'],
@@ -128,6 +129,11 @@
   const jumpGroups = new Map(moreLinks);
   const subsections = new Map([
     ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
+    ['Tools', [
+      ['All tools & simulators', 'v4.html#tools'],
+      ['Accumulator 3D pricing', 'tools/accumulator-3d.html'],
+      ['Accumulator simulator', 'tools/accumulator.html']
+    ]],
     ['News', newsLinks],
     ['Shares', [
       ['Stocks BETA', 'stocks-beta.html', '▥'],
@@ -176,7 +182,7 @@
 
   function closeMenu() {
     if (!openMenu) return;
-    if (onDesk) openMenu.panel.hidePopover?.();
+    if (openMenu.panel.hasAttribute('popover')) openMenu.panel.hidePopover?.();
     openMenu.panel.hidden = true;
     openMenu.button.setAttribute('aria-expanded', 'false');
     openMenu = undefined;
@@ -190,8 +196,9 @@
       closeMenu();
       return;
     }
-    panel.style.top = mobileDock?.matches ? 'auto' : anchor.bottom + 'px';
-    panel.style.bottom = mobileDock?.matches ? window.innerHeight - anchor.top + 'px' : 'auto';
+    const docked = hasMobileDock() && mobileDock.matches;
+    panel.style.top = docked ? 'auto' : anchor.bottom + 'px';
+    panel.style.bottom = docked ? window.innerHeight - anchor.top + 'px' : 'auto';
     panel.style.left = Math.max(8, Math.min(anchor.left, document.documentElement.clientWidth - panel.offsetWidth - 8)) + 'px';
   }
 
@@ -211,7 +218,6 @@
     const panel = document.createElement('div'); panel.className = 'hub-primary-dropdown';
     panel.id = 'hub-primary-subsections-' + index;
     panel.hidden = true;
-    if (onDesk) panel.setAttribute('popover', 'manual');
     panel.append(...links.map(([label, route, icon]) => link(label, route, icon, toneFor(route))));
     button.type = 'button';
     button.setAttribute('aria-label', name + ' subsections');
@@ -224,7 +230,12 @@
       if (openMenu?.group !== group) closeMenu();
       openMenu = {group, panel, button, pinned};
       panel.hidden = false;
-      if (onDesk) panel.showPopover?.();
+      if (hasMobileDock()) {
+        panel.setAttribute('popover', 'manual');
+        panel.showPopover?.();
+      } else {
+        panel.removeAttribute('popover');
+      }
       button.setAttribute('aria-expanded', 'true');
       positionMenu();
     }
@@ -341,7 +352,9 @@
     const onWorkspace = relative === 'v4.html';
     const shares = ['stocks-beta.html', 'stocks-beta2.html', 'bos-monthly.html', 'si-beta2.html'].includes(relative)
       || (onWorkspace && route === '#history/si');
-    const key = shares ? 'Shares'
+    const tools = relative.startsWith('tools/') || (onWorkspace && route === '#tools');
+    root.classList.toggle('hub-tools-nav', tools);
+    const key = tools ? 'Tools' : shares ? 'Shares'
       : relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
       : ['bonds-beta.html','bond-cashflow.html'].includes(relative) || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || relative === 'cross-market-history.html' ? 'Historical charts'
