@@ -8,7 +8,7 @@
   const quoteById = new Map(quotes.map(q => [q.id, q]));
   const initial = ['sn-9-120-1', 'sn-9-120-2', 'sn-9-105-1', 'sn-6-120-1', 'sn-9-130-1'];
   const selected = new Set(initial.filter(id => quoteById.has(id)));
-  const {money, signedMoney:signed, quote:quotePct, price, shares:units, signedRate:signedPct} = window.AccumulatorFormat;
+  const {money, signedMoney, returnMoney:signed, quote:quotePct, price, shares:units, signedRate:signedPct} = window.AccumulatorFormat;
   const cents = n => Math.round((n + Number.EPSILON) * 100);
   const byId = id => document.getElementById(id);
   const cellClass = n => n < 0 ? 'negative' : n > 0 ? 'positive' : '';
@@ -253,9 +253,9 @@
         case 'exitValue': displayed = money(sim.exit.value);break;
         case 'exitPnl': amount=sim.exit.profit;displayed=signed(amount);break;
         case 'payment': displayed=money(sim.payment);break;
-        case 'exitSpot': displayed=price(amount);break;
-        case 'laterSpot': displayed = value.retained ? price(currentSettings.laterSpot) : 'All cash';break;
-        case 'refund': displayed=price(amount);break;
+        case 'exitSpot': displayed=money(amount);break;
+        case 'laterSpot': displayed = value.retained ? money(currentSettings.laterSpot) : 'All cash';break;
+        case 'refund': displayed=money(amount);break;
         case 'shares': case 'sold': case 'retained': displayed=units(amount);break;
         case 'rate': displayed=signedPct(amount);break;
         case 'directPnl': amount=value.direct.pnl;displayed=signed(amount);break;
@@ -273,7 +273,7 @@
   function renderGrid(notes, rows) {
     const metric = byId('cmp-rank').value;
     const asValue = metric === 'pnl' ? signed : signedPct;
-    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Compare dollar P&L' : 'Compare percentage return on actual payment') + ' within each price scenario. A lower strike reduces the price paid for each share. An earlier knock-out can leave more cash to reinvest and fewer shares in a rally. The first five scenarios rank results at each note’s own exit. The last two use the later share valuation. Each best result can still be a loss.';
+    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Compare dollar P&L' : 'Compare percentage return on actual payment') + ' within each price scenario. P&L and percentage returns round down to whole numbers. Rankings use the underlying amounts. A lower strike reduces the price paid for each share. An earlier knock-out can leave more cash to reinvest and fewer shares in a rally. The first five scenarios rank results at each note’s own exit. The last two use the later share valuation. Each best result can still be a loss.';
     byId('cmp-grid').innerHTML = `<thead><tr><th scope="col">Scenario</th>${header(notes)}</tr></thead><tbody>` + rows.map(r => {
       const {best,worst} = extremes(r.values,metric);
       const group = r.id === 'early' ? 'While the note is active · five contract outcomes' : r.id === 'hold' ? 'After the note ends · two optional share strategies' : '';
@@ -312,7 +312,6 @@
     const spot=byId('spot').valueAsNumber, end=sim.exit, later=currentSettings.laterSpot;
     const afterMaturity=row.follow && !sim.koDay;
     const cash=price, u=units;
-    const pct=n=>Number.isInteger(n)?n+'%':n.toLocaleString('en-US',{maximumFractionDigits:6})+'%';
     const origin = sim.koDay
       ? `Day ${end.day} in month ${end.month} is the first close at or above the ${cash(t.ko)} knock-out. The observed close is ${cash(end.price)}.`
       : `No observed close reached the ${cash(t.ko)} knock-out. The contract matured in month ${q.months} on trading day ${end.day} at ${cash(end.price)}.`;
@@ -341,7 +340,7 @@
     const retainedValue = v.retained ? `${u(v.retained)} shares held × ${cash(later)} later price = ${cash(v.retainedValue)} in shares.` : 'No shares remain, so their market value is $0.00.';
     const total=`${cash(v.refund)} refunded + ${cash(v.proceeds)} sale proceeds + ${cash(v.retainedValue)} in shares held = ${cash(v.nav)} total value.`;
     const pnl=`${cash(v.nav)} total value − ${cash(t.payment)} actual payment = ${cash(v.pnl)} P&L since investment.`;
-    const returnOnPayment=`${cash(v.pnl)} P&L ÷ ${cash(t.payment)} actual payment × 100 = ${pct(v.rate)} (up to six decimals).`;
+    const returnOnPayment=`${cash(v.pnl)} P&L ÷ ${cash(t.payment)} actual payment × 100 gives ${signedPct(v.rate)} when rounded down to a whole percent.`;
     const change=`${cash(v.nav)} later total − ${cash(end.value)} when the note ended = ${cash(v.change ?? 0)} since the contract ended.`;
     switch(key){
       case 'tenure': return [`The quote specifies a ${q.months}-month tenor and a ${q.minimum}-month guaranteed buying period.`,`The model uses ${t.days} trading days and ends the guarantee on trading day ${t.guaranteeDay}. The final trade calendar governs.`];
@@ -461,7 +460,7 @@
     byId('cmp-terms').innerHTML = notes.map((note,i) => {
       const {quote:q,terms:t}=note, count=q.months+'M / '+q.minimum+'M';
       const cell=(k,value)=>resultButton(active,i,k,value);
-      return `<tr><th scope="row">${label(note,i)}<button type="button" data-cmp-plot="${q.id}" aria-label="Plot ${label(note,i)} on the selected scenario">Plot</button></th><td>${cell('tenure',count)}</td><td>${cell('strike',price(t.strike))}<small>${quotePct(q.strike)}</small></td><td>${cell('ko',price(t.ko))}<small>${quotePct(q.ko)}</small></td><td>${cell('monthly',units(t.maximum))}</td><td>${cell('payment',money(t.payment))}</td><td>${cell('difference',signed(t.payment-target))}</td></tr>`;
+      return `<tr><th scope="row">${label(note,i)}<button type="button" data-cmp-plot="${q.id}" aria-label="Plot ${label(note,i)} on the selected scenario">Plot</button></th><td>${cell('tenure',count)}</td><td>${cell('strike',price(t.strike))}<small>${quotePct(q.strike)}</small></td><td>${cell('ko',price(t.ko))}<small>${quotePct(q.ko)}</small></td><td>${cell('monthly',units(t.maximum))}</td><td>${cell('payment',money(t.payment))}</td><td>${cell('difference',signedMoney(t.payment-target))}</td></tr>`;
     }).join('');
     try {
       currentRows = compare(notes, spot);

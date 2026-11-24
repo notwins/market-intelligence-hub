@@ -105,7 +105,7 @@
     }
 
     const name=n=>n.letter+'  '+n.quote.product;
-    const profit=v=>({value:fmt.signedMoney(v),bold:true,color:v<0?rose:forest});
+    const profit=v=>({value:fmt.returnMoney(v),bold:true,color:v<0?rose:forest});
     const asPrice=fmt.price, quantity=fmt.shares, cash=fmt.money;
     const netRate=fmt.signedRate;
     function exitTiming(n,i,row) {
@@ -122,7 +122,7 @@
       const best=all.length>1 && row.winners.includes(n.index);
       const worst=all.length>1 && row.losers.includes(n.index);
       const rank=best&&worst?'ALL TIED':best?'BEST':worst?'WORST':'';
-      return {value:fmt.signedMoney(v.pnl)+'\n'+netRate(v.rate)+(rank?'\n'+rank:''),
+      return {value:fmt.returnMoney(v.pnl)+'\n'+netRate(v.rate)+(rank?'\n'+rank:''),
         bold:!!rank,fill:best&&worst?paper:best?mint:worst?blush:null,color:best&&worst?ink:best?forest:worst?rose:ink};
     }
     function overview() {
@@ -149,7 +149,7 @@
       const gap=state.spot-t.strike;
       y=wrap('At the trade-day price, '+example.letter+' buys each scheduled share '+asPrice(Math.abs(gap))+(gap>=0?' below':' above')+' spot. If all shares are bought, a sale at '+asPrice(t.strike)+' breaks even before costs. A knock-out returns unused cash and ends further purchases.',margin,y,width,9.7,ink,false,4.5)+5;
       y=heading('Best and worst at the end of each note',y);
-      const metric=state.metric, display=metric==='rate'?netRate:fmt.signedMoney;
+      const metric=state.metric, display=metric==='rate'?netRate:fmt.returnMoney;
       function scenarioExtreme(n,key) {
         const matches=state.ranges[n.index][key];
         const first=state.rows[matches[0]];
@@ -167,14 +167,14 @@
       let y=startPage('Scenario outcomes','Compare the effect of each strike and guarantee on the same stock path. Rows 1-5 end at knock-out or maturity. Rows 6-7 include a later shareholding decision.');
       y=matrix(y,'Scenario',36,state.rows.map((r,i)=>[(i+1)+'. '+r.name,...group.map(n=>rankedResult(r,n))]),{rowHeight:13.2});
       const rankNote=all.length>1?'BEST and WORST rank all '+all.length+' selected structures by '+metric+' before rounding. Tied outcomes share the label. A best result can still be a loss.':'Each result compares the total value of this structure with its actual payment.';
-      y=wrap(rankNote,margin,y+1,width,9.3,muted,false,4.5)+4;
+      y=wrap('P&L and percentage returns round down to whole numbers. '+rankNote,margin,y+1,width,9.3,muted,false,4.5)+4;
       const r=rows[state.active]||rows.early;
       const detail=(label,get)=>[label,...group.map(n=>get(r.values[n.index],n))];
       y=heading('Selected scenario · '+r.name,y+2);
       y=matrix(y,'USD unless stated',42,[
         detail('Structure ends',(v,n)=>exitTiming(n,n.index,r)),
-        detail('NVDA at exit',v=>asPrice(v.exitSpot)),
-        detail('Cash refunded',v=>asPrice(v.refund)),
+        detail('NVDA at exit',v=>cash(v.exitSpot)),
+        detail('Cash refunded',v=>cash(v.refund)),
         detail('Sale proceeds',v=>cash(v.proceeds)),
         detail('Value of shares held',v=>cash(v.retainedValue)),
         detail('Total value',v=>({value:cash(v.nav),bold:true})),
@@ -194,8 +194,8 @@
         y=wrap(summary,margin,y+1,width,9.2,muted,false,4.2);
         y=table(y,['Structure / exit','Shares\nbought','Sale\nprice','Sale\nproceeds','Cash\nrefunded','Total value','P&L'],[32,16,22,28,26,29,27],
           group.map(n=>{const v=row.values[n.index],ko=row.exits[n.index].koDay;return [
-            {value:name(n)+'\n'+exitTiming(n,n.index,row),bold:!!ko,fill:ko?mint:null},quantity(v.shares),asPrice(v.exitSpot),
-            cash(v.proceeds),{value:asPrice(v.refund),bold:v.refund>0,fill:v.refund>0?mint:null},cash(v.nav),profit(v.pnl)];}),
+            {value:name(n)+'\n'+exitTiming(n,n.index,row),bold:!!ko,fill:ko?mint:null},quantity(v.shares),cash(v.exitSpot),
+            cash(v.proceeds),{value:cash(v.refund),bold:v.refund>0,fill:v.refund>0?mint:null},cash(v.nav),profit(v.pnl)];}),
           {headerHeight:9,rowHeight:8.25,bodySize:9});
       }
       wrap('Refund = payment less the cost of shares bought. A lower sale price can increase the loss. Each outcome depends on the assumed path.',margin,y,width,9.2,muted,false,4.3);
@@ -293,11 +293,11 @@
       const show=(label,get)=>[label,...group.map(n=>get(n,n.index))];
       y=matrix(y,'Valuation point',46,[
         show('Original structure ends',(n,i)=>exitTiming(n,i,basis)),
-        show('NVDA at original exit',(n,i)=>asPrice(basis.values[i].exitSpot)),
-        show('Value at original exit',(n,i)=>asPrice(basis.values[i].nav)),
+        show('NVDA at original exit',(n,i)=>cash(basis.values[i].exitSpot)),
+        show('Value at original exit',(n,i)=>cash(basis.values[i].nav)),
         show('Shares still held',(n,i)=>quantity(hold.values[i].retained)),
-        show('Later NVDA price',()=>asPrice(s.laterSpot)),
-        show('Later total value',(n,i)=>({value:asPrice(hold.values[i].nav),bold:true})),
+        show('Later NVDA price',()=>cash(s.laterSpot)),
+        show('Later total value',(n,i)=>({value:cash(hold.values[i].nav),bold:true})),
         show('Change since exit',(n,i)=>profit(hold.values[i].change)),
         show('P&L since investment',(n,i)=>profit(hold.values[i].pnl))
       ],{rowHeight:8});
@@ -310,7 +310,7 @@
       y=matrix(y,'Sale and remaining shares',46,[
         show('Shares sold / kept',(n,i)=>quantity(dec.values[i].sold)+' / '+quantity(dec.values[i].retained)),
         show('Sale proceeds',(n,i)=>cash(dec.values[i].proceeds)),
-        show('Cash refunded',(n,i)=>asPrice(dec.values[i].refund)),
+        show('Cash refunded',(n,i)=>cash(dec.values[i].refund)),
         show('Value of shares kept',(n,i)=>cash(dec.values[i].retainedValue)),
         show('Total value',(n,i)=>({value:cash(dec.values[i].nav),bold:true})),
         show('P&L since investment',(n,i)=>profit(dec.values[i].pnl))
@@ -342,9 +342,10 @@
         const shares=example.terms.maximum*example.quote.months;
         const payment=example.terms.payment;
         const refund=example.terms.roundingCash;
-        const proceeds=(shares*Math.round(test*100)+Math.round(refund*100))/100;
-        const label=proceeds<payment?'loss':'gain';
-        y=wrap(name(example)+' · If no knock-out occurs, '+quantity(shares)+' shares sold at '+asPrice(test)+' plus '+asPrice(refund)+' refunded gives '+asPrice(proceeds)+'. Against '+cash(payment)+' paid, the '+label+' is '+asPrice(Math.abs(proceeds-payment))+'.',margin,y,width,10,ink,true,4.6)+4;
+        const proceedsCents=shares*Math.round(test*100)+Math.round(refund*100);
+        const proceeds=proceedsCents/100;
+        const pnl=(proceedsCents-payment*100)/100;
+        y=wrap(name(example)+' · If no knock-out occurs, '+quantity(shares)+' shares sold at '+asPrice(test)+' plus '+cash(refund)+' refunded gives '+cash(proceeds)+'. Against '+cash(payment)+' paid, P&L is '+fmt.returnMoney(pnl)+'.',margin,y,width,10,ink,true,4.6)+4;
       }else{
         y=wrap('For '+name(example)+', the test close reaches the daily KO at '+asPrice(example.terms.ko)+'. The trading day of the first trigger determines the shares acquired and the refund.',margin,y,width,9.8,ink,false,4.5)+3;
       }

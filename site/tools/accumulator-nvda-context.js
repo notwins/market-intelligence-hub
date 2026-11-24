@@ -10,7 +10,7 @@
   const amount = v => Number.isFinite(v) ? money.format(v) : 'Unavailable';
   const number = v => Number.isFinite(v) ? numbers.format(v) : 'Unavailable';
   const rate = v => number(v) + '%';
-  const signedMoney = v => (v > 0 ? '+' : '') + amount(v);
+  const {money:cash, returnMoney, signedRate} = window.AccumulatorFormat;
   const cents = value => Math.round((value + Number.EPSILON * value) * 100);
   const escape = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const shortDate = d => new Intl.DateTimeFormat('en-GB', {timeZone:'UTC',day:'numeric',month:'short',year:'numeric'}).format(new Date(d+'T00:00:00Z'));
@@ -266,7 +266,7 @@
     const name=escape(product)+' · '+number(tenor)+' months';
     if(knockOutDay){
       box.dataset.outcome=context.pnl<0?'loss':context.pnl>0?'gain':'neutral';
-      box.innerHTML='<strong>'+name+' · Sold on knock-out day '+number(knockOutDay)+'</strong><div>The decline path already sold '+number(exitShares)+' shares at '+amount(exitPrice)+' and refunded '+amount(refund)+'. The modeled exit value was '+amount(context.exitValue)+' and P&amp;L was '+signedMoney(context.pnl)+'. A later stock price leaves this cash payout unchanged.</div>';
+      box.innerHTML='<strong>'+name+' · Sold on knock-out day '+number(knockOutDay)+'</strong><div>The decline path already sold '+number(exitShares)+' shares at '+amount(exitPrice)+' and refunded '+cash(refund)+'. The modeled exit value was '+cash(context.exitValue)+' and P&amp;L was '+returnMoney(context.pnl)+'. A later stock price leaves this cash payout unchanged.</div>';
       return;
     }
     if(Number.isFinite(knockOutPrice) && cents(test)>=cents(knockOutPrice)){
@@ -275,11 +275,12 @@
     }
     const proceedsCents=exitShares*cents(test);
     const payout=(proceedsCents+cents(refund))/100;
-    const pnl=(proceedsCents+cents(refund)-cents(payment))/100;
+    const pnlCents=proceedsCents+cents(refund)-cents(payment);
+    const pnl=pnlCents/100;
     box.dataset.outcome=pnl<0?'loss':pnl>0?'gain':'neutral';
     const label=pnl<0?'Loss':pnl>0?'Gain':'Break-even';
-    const title=label+' at '+amount(test)+(pnl===0?'':' · '+amount(Math.abs(pnl))+' ('+rate(Math.abs(pnl/payment*100))+' of payment)');
-    box.innerHTML='<strong>'+title+'</strong><div>'+name+' · Assume the sustained-decline path reaches maturity and the same shares are sold at the test price.</div><div class="nv-work">'+number(exitShares)+' shares × '+amount(test)+' = '+amount(proceedsCents/100)+' sale proceeds. Add '+amount(refund)+' refunded cash = '+amount(payout)+' received. Subtract '+amount(payment)+' paid = '+signedMoney(pnl)+' P&amp;L.</div><div class="nv-note">If NVDA reached $0.00 at maturity on this path, the shareholding would be worthless. The modeled refund would leave a loss of '+amount(payment-refund)+'.</div>';
+    const title=label+' at '+amount(test)+(pnl===0?'':' · '+returnMoney(pnl)+' ('+signedRate(pnlCents/payment)+' of payment)');
+    box.innerHTML='<strong>'+title+'</strong><div>'+name+' · Assume the sustained-decline path reaches maturity and the same shares are sold at the test price.</div><div class="nv-work">'+number(exitShares)+' shares × '+amount(test)+' = '+cash(proceedsCents/100)+' in sale proceeds (nearest dollar). Including '+cash(refund)+' of refunded cash, the payout is '+cash(payout)+'. The return on '+cash(payment)+' paid is '+returnMoney(pnl)+'.</div><div class="nv-note">If NVDA reached $0.00 at maturity on this path, the shareholding would be worthless. The modeled refund would leave a loss of '+cash(Math.ceil((cents(payment)-cents(refund))/100))+'.</div>';
   }
 
   function refresh() {

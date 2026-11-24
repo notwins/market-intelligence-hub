@@ -11,9 +11,18 @@ assert.equal(format.price(100), '$100.00');
 assert.equal(format.quote(98.05), '98.05%');
 assert.equal(format.quote(98.83), '98.83%');
 assert.equal(format.quote(96.70), '96.7%');
-assert.equal(format.rate(4.6757), '4.7%');
-assert.equal(format.signedRate(0.007), '+0.007%');
-assert.equal(format.signedRate(-0.0002), '-0.0002%');
+assert.equal(format.rate(4.6757), '5%');
+assert.equal(format.signedRate(0.007), '0%');
+assert.equal(format.signedRate(-0.0002), '-1%');
+
+for (const [raw, money, rate] of [
+  [4.99,'+$4','+4%'], [-4.01,'-$5','-5%'], [-0.01,'-$1','-1%'],
+  [0.99,'$0','0%'], [0,'$0','0%'], [-0,'$0','0%'], [-3,'-$3','-3%'],
+  [NaN,'—','—'], [Infinity,'—','—'], [null,'—','—']
+]) {
+  assert.equal(format.returnMoney(raw), money);
+  assert.equal(format.signedRate(raw), rate);
+}
 
 function close(actual, expected, label) {
   assert(Number.isFinite(actual) && Math.abs(actual - expected) < 0.000001,

@@ -22,12 +22,17 @@
   }
 
   function rate(value) {
+    return Number.isFinite(value) ? integer.format(Math.abs(value) < 0.5 ? 0 : value) + '%' : dash;
+  }
+
+  function returnMoney(value) {
+    return Number.isFinite(value) ? signedMoney(Math.floor(value)) : dash;
+  }
+
+  function signedRate(value) {
     if (!Number.isFinite(value)) return dash;
-    if (value === 0) return '0.0%';
-    const size = Math.abs(value);
-    if (size < 0.00001) return value.toExponential(1) + '%';
-    const decimals = size >= 0.1 ? 1 : Math.ceil(-Math.log10(size));
-    return value.toFixed(decimals) + '%';
+    const rounded = Math.floor(value);
+    return (rounded > 0 ? '+' : '') + rate(rounded);
   }
 
   function quote(value) {
@@ -39,8 +44,7 @@
   }
 
   const format = {
-    money, signedMoney, price, rate, quote,
-    signedRate: value => (Number.isFinite(value) && value > 0 ? '+' : '') + rate(value),
+    money, signedMoney, returnMoney, price, rate, quote, signedRate,
     shares: value => Number.isFinite(value) ? integer.format(value === 0 ? 0 : value) : dash
   };
 
