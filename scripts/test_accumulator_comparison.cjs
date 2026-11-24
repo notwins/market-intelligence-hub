@@ -97,7 +97,7 @@ const html = fs.readFileSync(require.resolve('../site/tools/accumulator.html'), 
 const catalogScript = html.match(/<script id="accumulator-model">([\s\S]*?)<\/script>/)[1];
 const catalog = vm.runInNewContext(fs.readFileSync(require.resolve('../site/tools/accumulator-quotes.js'),'utf8')+'\n'+catalogScript+'; Accumulator', {window:{AccumulatorModel:model}});
 assert(catalog.quotes.every(q => q.label === 'Normal' && q.multiple === 1));
-assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [6,9]);
+assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [6,9,12]);
 assert.equal(model.terms(catalog.quotes.find(q=>q.product==='OCBC SI' && q.minimum===3), 100, budget).guaranteeDay,61);
 
 // The five-note comparison values a later shareholding separately from maturity.
@@ -122,6 +122,10 @@ close(2628 * 69 + stressE.exit.refunded - stressE.payment, -118417.68, 'Conditio
 // strike cells in an indication must never become a selectable zero or duplicate.
 const quotedStrikes = {
   'JPM SN': {
+    '12-130-1':89.84, '12-130-2':90.45, '12-130-3':91.4,
+    '12-120-1':87.21, '12-120-2':88.6, '12-120-3':90.4,
+    '12-110-1':87.35, '12-110-2':90.47, '12-110-3':93.33,
+    '12-105-1':92.96, '12-105-2':96.5, '12-105-3':99.04,
     '9-130-1':93.14, '9-130-2':93.85, '9-130-3':94.94,
     '9-120-1':90.56, '9-120-2':92.09, '9-120-3':94.02, '9-105-1':95.31, '9-105-2':98.91,
     '6-130-1':96.76, '6-130-2':97.79, '6-130-3':99.59,
@@ -132,7 +136,7 @@ const quotedStrikes = {
     '9-110-1':96.08, '9-110-2':97.98, '6-120-1':98.30, '6-110-1':98.13
   }
 };
-const counts = {6:123, 9:186};
+const counts = {6:123, 9:186, 12:251};
 for (const [product, expected] of Object.entries(quotedStrikes)) {
   const actual = {};
   for (const q of catalog.quotes.filter(q => q.product === product)) {

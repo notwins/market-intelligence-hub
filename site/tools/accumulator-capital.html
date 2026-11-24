@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="../Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css">
   <link rel="stylesheet" href="accumulator-capital.css?v=whole1">
   <script defer src="../Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261124-capital"></script>
-  <script defer src="accumulator-capital.js?v=whole1"></script>
+  <script defer src="accumulator-quotes.js?v=20261124-12m"></script>
+  <script defer src="accumulator-capital.js?v=12m"></script>
 </head>
 <body>
 <a class="skip-link" href="#calculator">Skip to calculator</a>
@@ -27,6 +28,11 @@
   <div class="workspace" id="calculator">
     <section class="inputs surface" aria-labelledby="inputs-title">
       <div class="section-head"><h2 id="inputs-title">OCBC SI inputs</h2><span>Normal · 1×</span></div>
+      <div id="sn-quote-picker" hidden>
+        <label for="sn-quote">Load a 12-month JPM SN indication</label>
+        <select id="sn-quote"><option value="">Choose knock-out and guarantee</option></select>
+        <p class="hint">NVDA · 251 trading days · 24 November 2026. Four-month guarantees have no quoted strike.</p>
+      </div>
       <fieldset class="basis">
         <legend>Sizing method</legend>
         <label><input type="radio" name="basis" value="monthly" checked> Monthly shares</label>

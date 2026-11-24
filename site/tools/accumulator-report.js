@@ -141,8 +141,7 @@
         group.map(n=>[name(n),n.quote.months+'m / '+n.quote.minimum+'m'+(Number.isInteger(n.quote.guaranteedDays)?'\n'+n.quote.guaranteedDays+' quoted days':''),
           asPrice(n.terms.strike)+'\n'+fmt.quote(n.quote.strike),asPrice(n.terms.ko)+'\n'+fmt.quote(n.quote.ko),
           quantity(n.terms.maximum),{value:cash(n.terms.payment),bold:true}]),{rowHeight:10,headerHeight:10});
-      const vintage=group.some(n=>n.quote.months===12) ? ' The 12-month JPM row is an earlier indicative example.' : '';
-      y=wrap('Indicative quotes, 24 Nov 2026. Percentages refer to the trade-day price. JPM SN is a structured note. OCBC SI is a structured investment. Both settle monthly.'+vintage,margin,y+1,width,9.3,muted,false,4.3)+3;
+      y=wrap('Indicative quotes, 24 Nov 2026. Percentages refer to the trade-day price. JPM SN is a structured note. OCBC SI is a structured investment. Both settle monthly.',margin,y+1,width,9.3,muted,false,4.3)+3;
       const example=group[0], t=example.terms, q=example.quote;
       y=box('How '+example.letter+' is sized',
         cash(state.target)+' ÷ '+asPrice(t.strike)+' ÷ '+q.months+' months gives '+quantity(t.maximum)+' shares per month after rounding. '+quantity(t.maximum)+' × '+asPrice(t.strike)+' × '+q.months+' = '+asPrice(t.committed)+'. Payment rounds up to '+cash(t.payment)+'. The difference is refundable.',y);

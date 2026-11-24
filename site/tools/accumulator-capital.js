@@ -95,6 +95,27 @@
   let issuer;
   let copyText = '';
 
+  const quotePicker = byId('sn-quote');
+  for (const row of window.AccumulatorQuotes.find(table => table.id === 'sn').rows.filter(row => row.months === 12)) {
+    row.strikes.forEach((strike, index) => {
+      if (strike === null) return;
+      const option = new Option(row.ko + '% KO · ' + (index + 1) + 'M guarantee · ' + strike + '% strike', row.ko + '-' + (index + 1));
+      option.dataset.strike = strike;
+      option.dataset.months = row.months;
+      option.dataset.days = row.days;
+      quotePicker.add(option);
+    });
+  }
+  quotePicker.addEventListener('change', () => {
+    if (!quotePicker.value) return;
+    const option = quotePicker.selectedOptions[0];
+    const s = states.sn;
+    if (s.currency !== 'USD' || !s.spot) s.spot = example('sn').spot;
+    Object.assign(s, {currency:'USD', method:'derived', months:option.dataset.months, days:option.dataset.days, level:option.dataset.strike});
+    quotePicker.value = '';
+    renderInputs();
+  });
+
   function keys(s) {
     return {
       term:issuer === 'sn' && s.basis === 'daily' ? 'days' : 'months',
@@ -105,6 +126,7 @@
 
   function renderInputs() {
     const s = states[issuer], daily = s.basis === 'daily', noteDaily = daily && issuer === 'sn';
+    byId('sn-quote-picker').hidden = issuer !== 'sn';
     byId('inputs-title').textContent = names[issuer] + ' inputs';
     byId('term-label').textContent = noteDaily ? 'Enter the quoted trading-day count' : 'Set the tenor';
     byId('term-unit').textContent = noteDaily ? 'trading days' : 'months';
