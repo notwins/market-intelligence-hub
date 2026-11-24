@@ -23,6 +23,11 @@
     return (grouped ? integer(BigInt(units)) : units) + (fraction ? '.' + fraction : '');
   }
 
+  function wholeAmount({n, scale}) {
+    const divisor = 10n ** BigInt(scale);
+    return integer((n + divisor / 2n) / divisor);
+  }
+
   function strikeFromLevel(spot, level, issuer) {
     const n = spot.n * level.n;
     const scale = spot.scale + level.scale + 2;
@@ -59,7 +64,7 @@
     const atStrike = count => ({n:count * strike.n, scale:strike.scale});
     const exact = atStrike(shares);
     const divisor = 10n ** BigInt(exact.scale);
-    const cash = amount => state.currency + ' ' + display(amount, 2);
+    const cash = amount => state.currency + ' ' + wholeAmount(amount);
     const price = state.currency + ' ' + display(strike, 4);
     const rows = [['Strike per share', price]];
     if (daily && issuer === 'si') rows.push(['Sizing shares per month', integer(quantity * SI_SIZING_DAYS)]);
@@ -73,10 +78,11 @@
     factors.push(integer(quantity) + units, price);
     if (noteDaily) {
       headline = 'Rounded note notional';
-      rows.push(['Exact share cost', cash(exact)]);
+      rows.push(['Share cost before funding round-up', cash(exact)]);
       amount = cash({n:(exact.n + divisor - 1n) / divisor, scale:0});
     }
-    return {headline, amount, equation:factors.join(' × ') + (noteDaily ? ' · rounded up to a whole dollar' : ''), rows};
+    const exactCost = state.currency + ' ' + display(exact);
+    return {headline, amount, exactCost, equation:factors.join(' × ') + (noteDaily ? ' · rounded up to a whole dollar' : ''), rows};
   }
 
   if (typeof module !== 'undefined' && module.exports) module.exports = {calculate, example};
@@ -139,6 +145,8 @@
       byId('result-title').textContent = result.headline;
       byId('capital').textContent = result.amount;
       byId('equation').textContent = result.equation;
+      byId('exact-details').hidden = false;
+      byId('exact-cost').textContent = result.exactCost;
       for (const [label, value] of result.rows) {
         const row = document.createElement('div');
         const dt = document.createElement('dt'), dd = document.createElement('dd');
@@ -147,12 +155,14 @@
         byId('breakdown').append(row);
       }
       copyText = [byId('result-kicker').textContent + ' · Normal 1×', result.headline + ' · ' + result.amount,
-        result.equation, ...result.rows.map(([label,value]) => label + ' · ' + value), byId('note-body').textContent].join('\n');
+        result.equation, 'Exact full-tenor share cost · ' + result.exactCost, ...result.rows.map(([label,value]) => label + ' · ' + value), byId('note-body').textContent].join('\n');
       byId('copy').disabled = false;
     } catch (error) {
       if (!error.field) throw error;
       byId('result-title').textContent = 'Capital calculation';
       byId('capital').textContent = '—';
+      byId('exact-details').hidden = true;
+      byId('exact-cost').textContent = '';
       byId('equation').textContent = error.message;
       byId('input-error').textContent = error.message;
       byId(error.field).setAttribute('aria-invalid','true');

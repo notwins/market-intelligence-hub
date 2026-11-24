@@ -61,6 +61,9 @@ body { margin:0; }
 .skip-link:not(:focus) { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
 @media(max-width:720px) { .sizer { width:calc(100% - 24px); padding-top:16px; } .workspace { grid-template-columns:minmax(0,1fr); gap:12px; } .intro { margin:16px 0; } .issuers { margin-bottom:12px; } .issuers a { padding:8px 10px; } .sizer .step { padding:12px 0; } }
 @media print { .sizer { width:100%; } .hub-primary-nav,.crumbs,.skip-link,.copy-status,#copy { display:none !important; } .workspace { display:block; } .result { margin-top:12px; break-inside:avoid; } }
+#exact-details { margin:0 0 16px; }
+#exact-details summary { cursor:pointer; color:var(--teal); }
+#exact-cost { overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
 #manual-copy { margin-top:10px; width:100%; padding:8px; font:inherit; }
 
 .sizer .mobile-result { display:none; }

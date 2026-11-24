@@ -6,9 +6,9 @@
   <title>Normal accumulator capital calculators | Market Intelligence Hub</title>
   <meta name="description" content="Calculate the full-tenor capital for an OCBC SI or JPM structured note from whole shares and a quoted strike.">
   <link rel="stylesheet" href="../Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css">
-  <link rel="stylesheet" href="accumulator-capital.css">
+  <link rel="stylesheet" href="accumulator-capital.css?v=whole1">
   <script defer src="../Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261124-capital"></script>
-  <script defer src="accumulator-capital.js"></script>
+  <script defer src="accumulator-capital.js?v=whole1"></script>
 </head>
 <body>
 <a class="skip-link" href="#calculator">Skip to calculator</a>
@@ -71,6 +71,7 @@
         <p class="amount" id="capital" aria-live="polite" aria-atomic="true"></p>
         <p class="equation" id="equation"></p>
         <dl id="breakdown"></dl>
+        <details id="exact-details" hidden><summary>Exact share cost before rounding</summary><p id="exact-cost"></p></details>
         <button id="copy" type="button">Copy calculation</button><span class="copy-status" id="copy-status" role="status"></span>
         <textarea hidden readonly id="manual-copy" aria-label="Calculation to copy" rows="7"></textarea>
       </div>
