@@ -1,0 +1,5606 @@
+{
+  "schema": 1,
+  "id": "20261124T193803SGT",
+  "checkedAt": "2026-11-24T19:38:03+08:00",
+  "sources": {
+    "hub": "be1aebe22f58bb243d971912d7263fbda95377f3",
+    "content": "1fedd3a57fcbc49da178dda60b0e566d1c057a06"
+  },
+  "baseline": "20261124T175950SGT",
+  "rollbackCommit": null,
+  "comparison": "Prior accepted states plus verified public sweep deltas; archive states retained from the last full-inventory check where intervening sweeps covered a subset",
+  "checked": 3518,
+  "sections": [
+    {
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "checked": 17,
+      "changed": 16,
+      "tags": 16,
+      "colour": 9,
+      "logos": 16
+    },
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 8,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "checked": 3225,
+      "changed": 143,
+      "tags": 143,
+      "colour": 102,
+      "logos": 27
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 203,
+      "changed": 2,
+      "tags": 2,
+      "colour": 2,
+      "logos": 1
+    }
+  ],
+  "changes": [
+    {
+      "key": "company:0bfa96beceb2e178e2ed",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Rene Haas to remain CEO of chipmaker Arm through 2033 amid Nvidia top job chatter",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:3022bc5c7274f1ece8d3",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Wall Street soars on Huang's return to Nvidia, Treasury yields rise",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "macro.treasury_yields_rates",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "macro.treasury_yields_rates",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "macro.treasury_yields_rates": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:38b391e53632ae354f0d",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "US seeks answers on Nvidia's sale of chips to China, Bessent says",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "geo.united_states",
+          "person.scott_bessent",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "person.scott_bessent": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:42bd6dd8a6255d720c91",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Trump tells CNBC he was represented at Nvidia board, spoke to Huang",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:46e98ccbceefb45ef00a",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "VIEW Nvidia reinstates Jensen Huang as CEO, igniting tech surge",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.entity.person.jensen-huang",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA",
+          "PERSON:JENSEN-HUANG"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:4f65d63f784668964e80",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "How Nvidia\u2019s billion-dollar turnaround in China is threatened by Huang\u2019s exit",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:7fefb2ea2d24b0774bc2",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Huang's stunning Nvidia return sparks relief for battered AI trade",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:826ecb3c12588bf91d74",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "AI rally set to add $2 trillion to Nasdaq-100 as Huang returns to Nvidia helm",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "ticker.nvidia_nvda",
+          "light": "#6D28D9",
+          "dark": "#DDD6FE",
+          "chips": {
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:85108535109e6970cec4",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "UK midcaps outperform as Nvidia sparks global risk-on rally",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.global_cross_border",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.global_cross_border",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:876f9b36fd548a19730b",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Wall Street rebounds as Jensen Huang returns as Nvidia CEO",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.entity.person.jensen-huang",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA",
+          "PERSON:JENSEN-HUANG"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:b1a71fad4672f45dc443",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "US lawmakers criticize Nvidia decision to reinstate Huang as CEO",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:ca55a4081988a38a5ae6",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "COMMENTARY: TRADING DAY Market euphoria as Huang returns to Nvidia",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:d9448853bbccce5cc794",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Trump flexes influence after midterm losses with intervention at Nvidia",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:e39f258a6bf96339176d",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Huang returns as Nvidia CEO after Trump intervention in abrupt board reversal",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:ed6ad9e1aea09542ef20",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Trump saw Nvidia's Huang as protector of open-weight AI models, sources say",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "sector.artificial_intelligence",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "company:febcb3697ac15808d451",
+      "section": "Archive",
+      "subsection": "Company news cards",
+      "title": "Political and corporate leaders react to Huang's return as Nvidia CEO",
+      "href": "https://notwins.github.io/market-intelligence-hub/desk.html#archive",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:0265364d544a5eee9532",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "CAF endorses Infantino for re-election as FIFA president",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.elections_results"
+        ],
+        "colour": {
+          "tag": "event.elections_results",
+          "light": "#7E22CE",
+          "dark": "#D8B4FE",
+          "chips": {
+            "event.elections_results": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:02d490383cd248dc0639",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Euro zone consumer confidence rises to -16.9 in November",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "macro.consumer_confidence"
+        ],
+        "colour": {
+          "tag": "macro.consumer_confidence",
+          "light": "#0E7490",
+          "dark": "#67E8F9",
+          "chips": {
+            "macro.consumer_confidence": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:05d883d1a1dd22c25f4b",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Consortium in talks to buy LCY's $600 million China chip chemicals business, people say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "sector.materials_chemicals"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "sector.materials_chemicals": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:05de2d34dbca62226289",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "UnitedHealth sues US government over lowered Medicare Advantage star ratings",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states",
+          "ticker.entity.unh"
+        ],
+        "colour": null,
+        "logos": [
+          "UNH"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:06866765832f06d3f153",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Three Russian missiles flew into Poland Friday, prosecutors say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:08e7b816193dfc592fea",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Britain says SpaceX restrictions in Ukraine 'dented confidence and trust'",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.ukraine",
+          "geo.united_kingdom",
+          "ticker.entity.spcx"
+        ],
+        "colour": {
+          "tag": "geo.united_kingdom",
+          "light": "#6D28D9",
+          "dark": "#C4B5FD",
+          "chips": {
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "geo.united_kingdom": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "SPCX"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:0ae3e802565f1bc1f8cc",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Kyiv's restaurant owners brace for tough winter as war pressures mount",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.war_geopolitical_escalation",
+          "geo.ukraine"
+        ],
+        "colour": {
+          "tag": "geo.ukraine",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:0bfa96beceb2e178e2ed",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Rene Haas to remain CEO of chipmaker Arm through 2033 amid Nvidia top job chatter",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:0cfc648d37246826c279",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "China calls on Switzerland to help resolve EU trade rift, oppose 'Taiwan independence'",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.options_derivatives",
+          "geo.euro_area_eu",
+          "geo.mainland_china",
+          "geo.switzerland",
+          "geo.taiwan"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "asset.options_derivatives": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.switzerland": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "geo.taiwan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:0e67b70534db5fa3fd50",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Disney movie 'Hexed' explores female power through witches and family bonds",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.fixed_income_bonds"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:0f020b5260f4447dca9e",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "PODCAST: AI's tough crowd",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:0f17b41a954a879ef223",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EXCLUSIVE: Denmark pushes EU to tighten travel curbs on Russians after foiled plot",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu",
+          "sector.travel_tourism"
+        ],
+        "colour": {
+          "tag": "sector.travel_tourism",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "sector.travel_tourism": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:122b9b962e31a498ca45",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "North Carolina win gives Democrats biggest US House majority since early 1990s",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:12f3b8b4049ea1455238",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Indonesia formulating plan for 70% of mining firms' benefits to go to the state",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.indonesia",
+          "sector.materials_chemicals"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "sector.materials_chemicals": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:14a7ac03ad90b1804bbe",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "UK government to make case for greater public control of utilities",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_kingdom",
+          "sector.utilities_power"
+        ],
+        "colour": {
+          "tag": "sector.utilities_power",
+          "light": "#92400E",
+          "dark": "#FDE68A",
+          "chips": {
+            "sector.utilities_power": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:17acea54575bde9ae579",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COP31 climate talks collapse as EU and others reject deal",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:183bfc170a7051cf0df5",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Congo halts cobalt exports again to tackle oversupply, support prices, industry regulator says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "macro.trade_data"
+        ],
+        "colour": {
+          "tag": "macro.trade_data",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "macro.trade_data": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:18b27373d8386c93e5cf",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Nepal PM Balendra Shah to visit India, meet Modi",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india",
+          "person.narendra_modi"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "person.narendra_modi": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:190c0a5936bc6d24252d",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Indian rupee could rise to 91.50/$ on equity inflows, HDFC Bank's treasury head says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.hdb",
+          "geo.india"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "company.hdb": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:1ac3f722d9f387cfd402",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Dollar jumps on hawkish Fed bets, AI rally",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "institution.federal_reserve",
+          "sector.artificial_intelligence"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:1ca2582dbb264ad84562",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Australia to treat AI as key foreign policy challenge",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.australia",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "geo.australia",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "geo.australia": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:1eb7d46397df7c3d6ec7",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US files action to recover over $1 billion in cryptocurrency stolen in Binance hack",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.cryptocurrency",
+          "geo.united_states"
+        ],
+        "colour": {
+          "tag": "asset.cryptocurrency",
+          "light": "#86198F",
+          "dark": "#F0ABFC",
+          "chips": {
+            "asset.cryptocurrency": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:20a94b0bf59552cf1641",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Indonesian president submits names of VP candidates to parliament",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.indonesia"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:2127a36d3bb55fec52cb",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COMMENTARY: Oil's Iran war recovery masks a stubborn diesel shortage",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.oil_crude",
+          "event.war_geopolitical_escalation"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:21ea663ff8b34c3c4ed0",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Russia's sports comeback hits a European wall",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:26e45ef6ce554100114c",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Gold rises as bargain hunters step in after steep weekly drop",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.gold"
+        ],
+        "colour": {
+          "tag": "asset.gold",
+          "light": "#92400E",
+          "dark": "#FDE68A",
+          "chips": {
+            "asset.gold": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:27bc40f7bd11f123cd37",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "PODCAST: Huang reinstated, Ukraine hits Russian ship, Black Friday AI (Updated)",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia",
+          "geo.ukraine",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "geo.ukraine",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:2b1dff03c65008cd4a93",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Iran says it will use all its tools to confront US naval blockade",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:2b29a3eb7e9f552a2af6",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "India's Hindalco reappoints Satish Pai as MD, names Mahindra's Hemant Sikka his deputy",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:2cf909f6032f78b31c90",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Indonesia central bank says MSCI talks with Prabowo support rupiah",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.indonesia"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:2db2e4776ebe33b82913",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EXCLUSIVE: Some US banks tighten AI-agent controls on concern about models escaping safeguards",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states",
+          "sector.artificial_intelligence",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "sector.financials_banking",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:2e807cc2163c67e13a1e",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Hungary PM Magyar says he will travel to Ukraine 'soon'",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.ukraine",
+          "sector.travel_tourism"
+        ],
+        "colour": {
+          "tag": "sector.travel_tourism",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "sector.travel_tourism": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:3022bc5c7274f1ece8d3",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Wall Street soars on Huang's return to Nvidia, Treasury yields rise",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "macro.treasury_yields_rates",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "macro.treasury_yields_rates",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "macro.treasury_yields_rates": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:30b4b126f000240a1c47",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Indian central bank plans to tap broker apps to boost retail trading in government bonds, sources say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.fixed_income_bonds",
+          "geo.india",
+          "sector.retail_e_commerce"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "sector.retail_e_commerce": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:30edbce6f744059e5177",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Australia criticises US Congressional Budget Office over AUKUS comments",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.australia",
+          "geo.united_states"
+        ],
+        "colour": {
+          "tag": "geo.australia",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "geo.australia": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:30eeda368160f553a0bc",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Search for Indonesia factory fire missing to resume Monday, police remove 24 body bags",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.indonesia"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:36103f522fdd1a8fe76e",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Nigeria's SEC approves Dangote refinery's IPO share distribution plan, sources say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.ipo_listing"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:36466745fb3d39c87cf8",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "UK's Next flags cyber breach at online supplier, says no customer data compromised",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_kingdom"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:36cb1905931397e9223d",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump thinks China will buy another 250 Boeing airplanes",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "person.donald_trump",
+          "ticker.entity.ba"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "BA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:38b391e53632ae354f0d",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US seeks answers on Nvidia's sale of chips to China, Bessent says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "geo.united_states",
+          "person.scott_bessent",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "person.scott_bessent": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:38ecf181104e218ac110",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump orders US Army to pause lead azide detonation in Iowa",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states",
+          "person.donald_trump"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:38f6d1d46bc92a83edd9",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "ABB to acquire Germany's Ziehl-Abegg for $2.65 billion",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:39a1d81330d1d32b9cd3",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "France's 2027 economic growth forecast of 1% at risk of being downgraded, minister says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.france",
+          "macro.gdp_economic_growth"
+        ],
+        "colour": {
+          "tag": "geo.france",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "macro.gdp_economic_growth": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:3c5318394b3bd94d7e61",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US intelligence chief says Putin is 'not America's friend in Ukraine'",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.ukraine",
+          "geo.united_states",
+          "person.vladimir_putin"
+        ],
+        "colour": {
+          "tag": "person.vladimir_putin",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "geo.united_states": {
+              "text": "#1D4ED8",
+              "background": "#EFF6FF",
+              "dark_text": "#93C5FD",
+              "dark_background": "#172554"
+            },
+            "person.vladimir_putin": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:3f8236918d9a62079f0a",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Paolo Bulgari, architect of jeweller's rise to global luxury brand, dies at 89",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.global_cross_border"
+        ],
+        "colour": {
+          "tag": "geo.global_cross_border",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:3fc39e38f841b404e428",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Audi to incur $550 million loss at China site, says Handelsblatt",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:3ffa0edc993086ee9406",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "South Korea president nominates new foreign minister, spy chief amid US worries",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.south_korea",
+          "geo.united_states"
+        ],
+        "colour": {
+          "tag": "geo.south_korea",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "geo.south_korea": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:42bd6dd8a6255d720c91",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump tells CNBC he was represented at Nvidia board, spoke to Huang",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:438dbe7deb7490e0dee9",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EU academy platform disabled after cyber attack on Commission, spokesperson says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:43a8a1fdbd3bed1cda12",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COMMENTARY: AI bust hurts Chinese stocks far more than GDP",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.equities_shares",
+          "macro.gdp_economic_growth",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "asset.equities_shares",
+          "light": "#0E7490",
+          "dark": "#67E8F9",
+          "chips": {
+            "asset.equities_shares": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:45d4de16209a261190b3",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "The US-China AI war accelerates",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.war_geopolitical_escalation",
+          "geo.mainland_china",
+          "geo.united_states",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:46e98ccbceefb45ef00a",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "VIEW Nvidia reinstates Jensen Huang as CEO, igniting tech surge",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.entity.person.jensen-huang",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA",
+          "PERSON:JENSEN-HUANG"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:47c9af6de0052e3fb683",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump hosts gala for meme coin investors as his token plunges to record lows",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:4b66fa653b8e4f0ef8d4",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Delta flights faced brief delays at Atlanta airport over automated system issue",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "extra.019"
+        ],
+        "colour": {
+          "tag": "extra.019",
+          "light": "#0E7490",
+          "dark": "#67E8F9",
+          "chips": {
+            "extra.019": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:4cdd7a44db5febec9a64",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COMMENTARY: Anthropic's super-sized debut, Nvidia China crisis and a GTA heist: The financial week in five charts",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "ticker.entity.ant",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": [
+          "ANT",
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:4f65d63f784668964e80",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "How Nvidia\u2019s billion-dollar turnaround in China is threatened by Huang\u2019s exit",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:51e3c7b1c0aabd862009",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Schools across Germany, Denmark receive bomb threats",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:567f4596da4612c3273c",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "France's Macron earmarks \u20ac350 million for civil aviation research",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.france",
+          "person.emmanuel_macron"
+        ],
+        "colour": {
+          "tag": "geo.france",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "person.emmanuel_macron": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:59c6dfcae357d136b88f",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Applied Digital signs $5.4 billion AI data center lease with hyperscaler",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence",
+          "ticker.entity.apld"
+        ],
+        "colour": null,
+        "logos": [
+          "APLD"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:5a381619c3a581080926",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "At least 11 die after drinking adulterated alcohol in India's Manipur state",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:5ad652a549e82cd433e7",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Oil gains on Iran war worries and short-covering ahead of Thanksgiving holiday",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.oil_crude",
+          "event.war_geopolitical_escalation"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:5e3a5a1674efa1b8b695",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COMMENTARY: The West challenges China's critical minerals dominance with unglamorous tungsten",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:5e62904fbac3671e9aa3",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Alleged drug lord 'El Chapo Isidro' will be tried in Mexico despite US extradition request",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:65b9981a110e5cc75f2c",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Nvidia a buy; wait for better Anthropic entry points, says investor",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.entity.ant",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "ticker.nvidia_nvda",
+          "light": "#6D28D9",
+          "dark": "#DDD6FE",
+          "chips": {
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "ANT",
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:666e9fb57957caed2b02",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "CrowdStrike snaps up Zscaler in $44 billion deal as cyber threats mount",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.entity.crwd",
+          "ticker.entity.zs"
+        ],
+        "colour": null,
+        "logos": [
+          "CRWD",
+          "ZS"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:676f470443dd85d89f5d",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Lower turnout at largely peaceful marches across France",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.france"
+        ],
+        "colour": {
+          "tag": "geo.france",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:67be5e988d1dccede61f",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "German business activity growth accelerates in November, PMI shows",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany",
+          "macro.pmi_ism"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:6acca8de771720126ca4",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Indonesia says 24 killed in factory blaze as rescuers search for dozens missing",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.indonesia"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:6d21d9ef6b2010149a9a",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Macron proposes reviving plan to enshrine fiscal rules in French constitution",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.france",
+          "person.emmanuel_macron"
+        ],
+        "colour": {
+          "tag": "person.emmanuel_macron",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "person.emmanuel_macron": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:6e5ad784fd18d8fe92ae",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "China opposes US FCC ban on Chinese telecoms' direct access to US phone numbers",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "geo.united_states",
+          "sector.telecoms_media"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "sector.telecoms_media": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:70a4e471ba6bb9a265f7",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Europe's STOXX logs strongest day in over six months on tech boost",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu"
+        ],
+        "colour": {
+          "tag": "geo.euro_area_eu",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.euro_area_eu": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:757f3ca9315fff36cc77",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "AI tools help brands curb Black Friday deals, from clothes to skincare",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:7653e1c44091eae93366",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Morgan Stanley turns most bullish on stocks since April after last week's selloff",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.equities_shares",
+          "company.ms",
+          "ticker.entity.ms"
+        ],
+        "colour": {
+          "tag": "company.ms",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "asset.equities_shares": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            },
+            "company.ms": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": [
+          "MS"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:766350bf50f8336a9ff5",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Tata Steel to sell tubes business, Tata Steel Colors stake to APL Apollo for up to $3 billion",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.materials_chemicals"
+        ],
+        "colour": {
+          "tag": "sector.materials_chemicals",
+          "light": "#92400E",
+          "dark": "#FDE68A",
+          "chips": {
+            "sector.materials_chemicals": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:7ef9208a2bbdb5338f72",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Brazil's Braskem reaches agreement with creditors on restructuring plan, sources say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.brazil"
+        ],
+        "colour": {
+          "tag": "geo.brazil",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.brazil": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:7f50e45f6ad2d85de55e",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump, Xi agreed that military AI decisions should involve humans, Bessent says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "person.scott_bessent",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "person.scott_bessent": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:7fcd5f24e23e623d322a",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "OpenAI scientist proposes industry AI limits tied to model intelligence metric",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:7fefb2ea2d24b0774bc2",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Huang's stunning Nvidia return sparks relief for battered AI trade",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:80616e0767db627aa912",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Yemen's Houthis say they attacked Saudi Rabigh oil refinery",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.oil_crude"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:826ecb3c12588bf91d74",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "AI rally set to add $2 trillion to Nasdaq-100 as Huang returns to Nvidia helm",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "ticker.nvidia_nvda",
+          "light": "#6D28D9",
+          "dark": "#DDD6FE",
+          "chips": {
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:8457c7542f28ce463887",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "SoftBank\u2019s Son explored $1 trillion buyout of SK Hynix, the Information reports",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.mergers_acquisitions",
+          "ticker.entity.000660.ks"
+        ],
+        "colour": {
+          "tag": "event.mergers_acquisitions",
+          "light": "#86198F",
+          "dark": "#F0ABFC",
+          "chips": {
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": [
+          "000660.KS"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:84cc73b6837f0d873779",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "December rate hike may not be enough but not in a rush to move again: ECB's Simkus",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "institution.european_central_bank"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:85108535109e6970cec4",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "UK midcaps outperform as Nvidia sparks global risk-on rally",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.global_cross_border",
+          "geo.united_kingdom",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "geo.global_cross_border",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:876f9b36fd548a19730b",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Wall Street rebounds as Jensen Huang returns as Nvidia CEO",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.entity.person.jensen-huang",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA",
+          "PERSON:JENSEN-HUANG"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:8803ada35a8c00dc49d0",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Financials drag Indian shares down on profit-taking after four-week rally",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.equities_shares",
+          "geo.india",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "sector.financials_banking",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:88fafaaa1c1fc959078b",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "White House moves to potentially replace blocked Trump judicial nominee, source says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:8db86b8b1ebceddc7e92",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Tajikistan becomes fourth country to withdraw from ICC since US diplomatic push",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:8e3d0180b6e26146ad06",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Hedge funds post worst week since April 2025, sparks defensive shift",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.asset_management"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:8e7f8b388346283cd17d",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Kalshi pauses operations in Utah after adverse federal court ruling",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.regulatory_legal_decision"
+        ],
+        "colour": {
+          "tag": "event.regulatory_legal_decision",
+          "light": "#7E22CE",
+          "dark": "#D8B4FE",
+          "chips": {
+            "event.regulatory_legal_decision": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:8e98b87239386945f747",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "DTGGe.SG Stock Analysis: Prediction, Earnings, Dividend",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.buybacks_dividends"
+        ],
+        "colour": {
+          "tag": "event.buybacks_dividends",
+          "light": "#166534",
+          "dark": "#86EFAC",
+          "chips": {
+            "event.buybacks_dividends": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:943591113943732b175a",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Russia to spend $576 million on building ferries to secure supplies to Kaliningrad exclave",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:96f3fc6f23e7a578caf8",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "CAS to release Senegal Africa Cup of Nations title appeal decision on Tuesday",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.africa"
+        ],
+        "colour": {
+          "tag": "geo.africa",
+          "light": "#166534",
+          "dark": "#86EFAC",
+          "chips": {
+            "geo.africa": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:9a837681b6096c7fc109",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "UK police evacuate 12,000 people from concert after release of 'unknown substance'",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_kingdom"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:9a83fc0a69e02cb6333c",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Stellantis recalls over 82,000 Ram trucks over ABS software risk",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.asset_backed_securities",
+          "sector.software_cybersecurity"
+        ],
+        "colour": {
+          "tag": "sector.software_cybersecurity",
+          "light": "#86198F",
+          "dark": "#F0ABFC",
+          "chips": {
+            "sector.software_cybersecurity": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:9c1c161609d88cff4527",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Russian cargo ship under tow after being hit by drones arrives in St Petersburg",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:9c9ee3c7e108b57e7b83",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "French hard-left leader Melenchon gains in presidential runoff opinion poll",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.france"
+        ],
+        "colour": {
+          "tag": "geo.france",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:9da85b32c1e3453a355f",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Saudi Arabia says it intercepts three Houthi missiles targeting Riyadh",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.gulf_gcc"
+        ],
+        "colour": {
+          "tag": "geo.gulf_gcc",
+          "light": "#854D0E",
+          "dark": "#FDE68A",
+          "chips": {
+            "geo.gulf_gcc": {
+              "text": "#854D0E",
+              "background": "#FEFCE8",
+              "dark_text": "#FDE68A",
+              "dark_background": "#422006"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:9dd6ba3035d867148446",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Rupee retreats with stocks as rally takes a breather, positive bias lingers",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.equities_shares"
+        ],
+        "colour": {
+          "tag": "asset.equities_shares",
+          "light": "#0E7490",
+          "dark": "#67E8F9",
+          "chips": {
+            "asset.equities_shares": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:9e9eaf222af1ac138de3",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EU opens antitrust investigation into Coca-Cola bottler CCEP",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu",
+          "ticker.entity.ko"
+        ],
+        "colour": null,
+        "logos": [
+          "KO"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:a03dc793774aa5ec77f1",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Anthropic launches Claude Ship to help developers ship code faster",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.entity.ant"
+        ],
+        "colour": null,
+        "logos": [
+          "ANT"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:a07dbd3d4650b4b955e1",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "China sets 2030 targets to boost support for older people, childcare",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:a2269559924c1257b018",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "India considers rice export duties as domestic prices rise, sources say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:a4bd6074f32b2a057a35",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COMMENTARY: The wind has finally shown up in Germany, and fossil fuels feel it",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:a64e818c8f79ce9354ec",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US Democrats require 2028 candidates to reject dark money to make debate stage",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:a8c8f9a99304c11d2f50",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EXCLUSIVE: US discussing military training for Syrian forces",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:a981f121f725f06ca0e6",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "At least 4 killed in Russian drone attacks on Kyiv region, officials say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia",
+          "geo.ukraine"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:abaf01c811553a676c87",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Russia starts towing ship hit by drones in Baltic, Finland says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:b1a71fad4672f45dc443",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US lawmakers criticize Nvidia decision to reinstate Huang as CEO",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:b24d6ae4464e8ece002e",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US intelligence chief predicts more tech outages as systems undergo upgrades",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:b3e2f5f033c1e42dc8e9",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US business activity growth eases further in November, survey shows",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:b4a85762eee005fb0001",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump sees difficulties ahead if Schumer leads Senate",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:b51318fa5c51af6dbe74",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump criticizes Governor Newsom for commuting California death sentences",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:b553eb5b093f278093f8",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "South Korea vows to stabilise stock market after KOSPI drops 5%",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.south_korea"
+        ],
+        "colour": {
+          "tag": "geo.south_korea",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "geo.south_korea": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:b8d70bc84d89f3e6954a",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Thailand plans to block exports of chemicals used in Myanmar rare earth mining",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "macro.trade_data",
+          "sector.materials_chemicals"
+        ],
+        "colour": {
+          "tag": "macro.trade_data",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "macro.trade_data": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "sector.materials_chemicals": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:bae5bd2951ec2cf298c0",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "US imposes sanctions on dozens linked to Iran's shadow banking networks",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.sanctions",
+          "geo.united_states",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "event.sanctions",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "event.sanctions": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:bca6caf2b36682e30493",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "As Trump courts Xi and Putin, middle powers make their own moves",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "person.vladimir_putin"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "person.vladimir_putin": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:c0321dc8362196837b03",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump says nuclear arms limits with China, Russia will be very hard to achieve",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "geo.russia",
+          "person.donald_trump"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:c068b9c70c544cc058cc",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EXCLUSIVE: JD Vance's ties to prized Venezuelan oil contract under investigation by US Senate panel",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.oil_crude",
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:c4655f3d275193366bec",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COMMENTARY: AI bubble burst could put Fed rate cuts on the table",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "institution.federal_reserve",
+          "sector.artificial_intelligence"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:c73864a3bc48007b074d",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EU and Indonesia sign trade deal after 10 years of negotiations",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.euro_area_eu",
+          "geo.indonesia"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:ca55a4081988a38a5ae6",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "COMMENTARY: TRADING DAY Market euphoria as Huang returns to Nvidia",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:d210f733b5a3d06c04b2",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "German automakers face winter of discontent as union battles loom",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:d76f728f20382e353255",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Xi hails 'comprehensive turnaround' in China-Australia ties",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.australia",
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.australia": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:d9448853bbccce5cc794",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump flexes influence after midterm losses with intervention at Nvidia",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:da66b5c3fac852e23f2c",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "South African rand gains as commodity prices rise and dollar weakens",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.africa"
+        ],
+        "colour": {
+          "tag": "geo.africa",
+          "light": "#166534",
+          "dark": "#86EFAC",
+          "chips": {
+            "geo.africa": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:dfecba890b0052310f0b",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Correction or deeper reckoning? Investors seek signs US stock selling will abate",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:e0bf8f676ef80e0a0028",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Zelenskiy says intelligence shows Russia planning new strikes on Ukraine",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.russia",
+          "geo.ukraine"
+        ],
+        "colour": {
+          "tag": "geo.russia",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:e39f258a6bf96339176d",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Huang returns as Nvidia CEO after Trump intervention in abrupt board reversal",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:e5200c986e39f59312b6",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Foreign inflows lend support to rupee, bonds; oil in focus",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.fixed_income_bonds",
+          "asset.oil_crude"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:e5f5e550f3cd33edd4ed",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "EXCLUSIVE: Canada and Qatar to sign investment pact on Tuesday, source says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.canada",
+          "geo.gulf_gcc"
+        ],
+        "colour": {
+          "tag": "geo.canada",
+          "light": "#1D4ED8",
+          "dark": "#93C5FD",
+          "chips": {
+            "geo.canada": {
+              "text": "#1D4ED8",
+              "background": "#EFF6FF",
+              "dark_text": "#93C5FD",
+              "dark_background": "#172554"
+            },
+            "geo.gulf_gcc": {
+              "text": "#854D0E",
+              "background": "#FEFCE8",
+              "dark_text": "#FDE68A",
+              "dark_background": "#422006"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:e7ff0cfcda98ae5c7b98",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Canadian dollar falls for third straight week as stock market selloff deepens",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.canada"
+        ],
+        "colour": {
+          "tag": "geo.canada",
+          "light": "#1D4ED8",
+          "dark": "#93C5FD",
+          "chips": {
+            "geo.canada": {
+              "text": "#1D4ED8",
+              "background": "#EFF6FF",
+              "dark_text": "#93C5FD",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:e8a32df1d57888441926",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Ukraine sinks Russian warship in Libya as conflict spreads beyond Europe",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.war_geopolitical_escalation",
+          "geo.euro_area_eu",
+          "geo.russia",
+          "geo.ukraine"
+        ],
+        "colour": {
+          "tag": "geo.ukraine",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "event.war_geopolitical_escalation": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.euro_area_eu": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "geo.russia": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.ukraine": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:e8a8da1b1f9afc4c6b02",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Taiwan loosens margin call rules in bid to steady AI-spooked market",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "extra.009",
+          "geo.taiwan",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "geo.taiwan",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "extra.009": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.taiwan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:ea6c543bf176e96f163c",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "UK's Capita pension woes force CEO exit and cash call; shares hit 35-year low",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.cash_deposits",
+          "asset.equities_shares",
+          "geo.united_kingdom"
+        ],
+        "colour": {
+          "tag": "asset.cash_deposits",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "asset.cash_deposits": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:eccc3ce4c0bc70dd760a",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "UK raises concerns with India over high Scotch tariffs, commerce secretary says",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.tariffs_trade_restrictions",
+          "geo.india",
+          "geo.united_kingdom"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "event.tariffs_trade_restrictions": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:ed31f9071e71783ddd47",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Euro zone growth holds steady but France's deepening downturn clouds outlook, PMI shows",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.france",
+          "macro.pmi_ism"
+        ],
+        "colour": {
+          "tag": "geo.france",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:ed38d1f00c72b6634f93",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "India Inc rushes to raise $2.7 billion debt ahead of expected RBI rate hike",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india",
+          "institution.reserve_bank_of_india"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:ed6ad9e1aea09542ef20",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Trump saw Nvidia's Huang as protector of open-weight AI models, sources say",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "person.donald_trump",
+          "sector.artificial_intelligence",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "person.donald_trump",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "person.donald_trump": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "daily:eee99aa02d5230afeeaa",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Citi's $35-billion UK error could complicate exit from US regulatory penalty box",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_kingdom",
+          "geo.united_states",
+          "ticker.citigroup_c"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:f1e7e53142f43b625026",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Worst week since 2020: Asian stocks take full force of AI jitters",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.equities_shares",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "asset.equities_shares",
+          "light": "#0E7490",
+          "dark": "#67E8F9",
+          "chips": {
+            "asset.equities_shares": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:f7263ea7684051cf9488",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Morning Bid: AI, caramba!",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "sector.artificial_intelligence"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "kinds": [
+        "tags"
+      ]
+    },
+    {
+      "key": "daily:f7fda170b90bf40a0881",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "India's Tata Steel to take control of APL Apollo in deal worth up to $3.47 billion",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india",
+          "sector.materials_chemicals"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "sector.materials_chemicals": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "daily:febcb3697ac15808d451",
+      "section": "Archive",
+      "subsection": "Daily headlines",
+      "title": "Political and corporate leaders react to Huang's return as Nvidia CEO",
+      "href": "https://notwins.github.io/market-intelligence-hub/archive.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "ticker.nvidia_nvda"
+        ],
+        "colour": null,
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261124-SANOFI-INSMED-41BN-ACQUISITION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Sanofi agrees US$41bn Insmed acquisition, with closing and earnings benefits still prospective",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.cash_deposits",
+          "company.sny",
+          "event.mergers_acquisitions",
+          "geo.france",
+          "sector.pharmaceuticals_biotech",
+          "ticker.entity.insm"
+        ],
+        "colour": {
+          "tag": "company.sny",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "asset.cash_deposits": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "company.sny": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.france": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "sector.pharmaceuticals_biotech": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": [
+          "INSM"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261124-VW-WAGE-TALKS-STRIKE-RISK",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Volkswagen opens wage talks seeking cost cuts as strike risk approaches",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
