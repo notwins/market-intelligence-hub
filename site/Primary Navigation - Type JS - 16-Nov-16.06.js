@@ -131,6 +131,7 @@
     ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
     ['Tools', [
       ['All tools & simulators', 'v4.html#tools'],
+      ['Normal accumulator capital', 'tools/accumulator-capital.html'],
       ['Accumulator 3D pricing', 'tools/accumulator-3d.html'],
       ['Accumulator simulator', 'tools/accumulator.html']
     ]],
