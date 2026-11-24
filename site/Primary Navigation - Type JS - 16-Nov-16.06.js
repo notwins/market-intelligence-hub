@@ -132,6 +132,7 @@
     ['Tools', [
       ['All tools & simulators', 'v4.html#tools'],
       ['Normal accumulator capital', 'tools/accumulator-capital.html', '▦'],
+      ['SI Capital Flow & SOFR', 'tools/accumulator-si-flow.html', '∿'],
       ['Accumulator 3D pricing', 'tools/accumulator-3d.html', '⬡'],
       ['Accumulator simulator', 'tools/accumulator.html', '∿']
     ]],
@@ -153,7 +154,7 @@
     ['Markets', [['Stock moves', 'desk.html#stock-moves'], ['Rates and FX', 'desk.html#market-rates'], ['Bond yields', 'desk.html#market-bonds']]]
   ]);
   const routeTones = [
-    [/^tools\/accumulator(?:-capital|-3d)?\.html$/, 'green'],
+    [/^tools\/accumulator(?:-capital|-3d|-si-flow)?\.html$/, 'green'],
     [/^(?:stocks-beta2?\.html|bos-monthly\.html|si-beta2\.html|desk\.html#(?:stock-moves|main-company-cards)|v4\.html#history\/(?:shares|si|spx|beta[24]-shares))/, 'green'],
     [/^(?:bonds-beta\.html|bond-cashflow\.html|desk\.html#(?:market-bonds|yield-curves)|v4\.html#(?:credit|ust|history\/(?:yield|curves)))/, 'maroon'],
     [/^(?:fred\/|(?:historical-fred|fred-[123]|fred-feed)\.html)/, 'purple'],
