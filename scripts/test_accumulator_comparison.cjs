@@ -86,13 +86,13 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const html = fs.readFileSync(require.resolve('../site/tools/accumulator.html'), 'utf8');
 const catalogScript = html.match(/<script id="accumulator-model">([\s\S]*?)<\/script>/)[1];
-const catalog = vm.runInNewContext(catalogScript+'; Accumulator', {window:{AccumulatorModel:model}});
+const catalog = vm.runInNewContext(fs.readFileSync(require.resolve('../site/tools/accumulator-quotes.js'),'utf8')+'\n'+catalogScript+'; Accumulator', {window:{AccumulatorModel:model}});
 assert(catalog.quotes.every(q => q.label === 'Normal' && q.multiple === 1));
-assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [3,6,9,12]);
+assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [6,9]);
 assert.equal(model.terms(catalog.quotes.find(q=>q.product==='OCBC SI' && q.minimum===3), 100, budget).guaranteeDay,61);
 
 // The five-note comparison values a later shareholding separately from maturity.
-const noteA = catalog.quotes.find(q => q.id === 'sn-9-120-1');
+const noteA = {months:9,days:186,strike:87.97,ko:120,minimum:1};
 const maturityA = model.simulateDaily(noteA, 125.53, budget, Array(noteA.days).fill(93.87));
 const laterValueA = maturityA.exit.shares * 138.08 + maturityA.exit.refunded;
 assert.equal(maturityA.exit.shares, 2718);
@@ -100,7 +100,7 @@ close(maturityA.exit.value, 255138.92, 'Note A value at maturity');
 close(laterValueA - maturityA.exit.value, 120162.78, 'Change after maturity');
 close(laterValueA - maturityA.payment, 75152.70, 'P&L since payment');
 
-const noteE = catalog.quotes.find(q => q.id === 'nv9086');
+const noteE = {months:12,days:251,strike:90.86,ko:120,minimum:3};
 const decline = catalog.scenarios.find(s => s.id === 'fall');
 const stressE = model.simulate(noteE, 125.53, budget, catalog.scale(decline.prices, 125.53));
 assert.equal(stressE.koDay, 0);
@@ -113,18 +113,17 @@ close(2628 * 69 + stressE.exit.refunded - stressE.payment, -118417.68, 'Conditio
 // strike cells in an indication must never become a selectable zero or duplicate.
 const quotedStrikes = {
   'JPM SN': {
-    '9-120-1':87.97, '9-120-2':90.30, '9-105-1':92.41, '9-105-2':97.27,
-    '6-120-1':92.31, '6-120-2':95.12, '6-105-1':95.96, '3-120-1':98.24,
-    '12-120-3':90.86
+    '9-130-1':93.14, '9-130-2':93.85, '9-130-3':94.94,
+    '9-120-1':90.56, '9-120-2':92.09, '9-120-3':94.02, '9-105-1':95.31, '9-105-2':98.91,
+    '6-130-1':96.76, '6-130-2':97.79, '6-130-3':99.59,
+    '6-120-1':94.39, '6-120-2':96.33, '6-120-3':99.09
   },
   'OCBC SI': {
-    '9-120-1':93.11, '9-120-2':94.82, '9-120-3':96.70,
-    '9-115-1':92.73, '9-115-2':95.01, '9-115-3':97.20,
-    '9-110-1':94.04, '9-110-2':96.62, '9-110-3':98.83,
-    '6-115-2':98.05, '6-110-1':96.36
+    '9-120-1':95.89, '9-120-2':96.89, '9-120-3':98.25,
+    '9-110-1':96.08, '9-110-2':97.98, '6-120-1':98.30, '6-110-1':98.13
   }
 };
-const counts = {3:61, 6:124, 9:186, 12:251};
+const counts = {6:123, 9:186};
 for (const [product, expected] of Object.entries(quotedStrikes)) {
   const actual = {};
   for (const q of catalog.quotes.filter(q => q.product === product)) {
@@ -133,7 +132,7 @@ for (const [product, expected] of Object.entries(quotedStrikes)) {
     actual[key] = q.strike;
     const {guaranteeDay, days} = model.terms(q, initialSpot, budget);
     assert.equal(days, counts[q.months], product + ' total trading days');
-    if (product === 'OCBC SI') assert.equal(guaranteeDay, [0,21,41,61][q.minimum],
+    if (product === 'OCBC SI') assert.equal(guaranteeDay, [0,21,40,61][q.minimum],
       'SI uses the quoted guaranteed days for ' + key);
   }
   assert.deepEqual(actual, expected, product + ' working indicative strike grid');
@@ -147,7 +146,9 @@ const mixedCases = [
   ['sn-6-120-1', 542, 300193, 0, 3252, 0.88, 373980, 373980.88]
 ];
 for (const [id, quantity, payment, koDay, acquired, refund, proceeds, nav] of mixedCases) {
-  const q = catalog.quotes.find(entry => entry.id === id);
+  const [,tenor,barrier,minimum] = id.split('-');
+  const q = {months:Number(tenor), days:tenor==='6'?124:186, ko:Number(barrier), minimum:Number(minimum),
+    strike:{'si-9-115-2':95.01,'si-6-115-2':98.05,'sn-6-120-1':92.31}[id]};
   const outcome = model.simulateDaily(q, initialSpot, budget, Array(186).fill(115));
   assert.equal(outcome.maximum, quantity);
   assert.equal(outcome.payment, payment);
