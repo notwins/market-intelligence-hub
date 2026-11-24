@@ -9,6 +9,74 @@ window.AccumulatorQuotes = [
     ],
     "rows": [
       {
+        "months": 12,
+        "ko": 130,
+        "strikes": [
+          89.84,
+          90.45,
+          91.4,
+          null
+        ],
+        "days": 251,
+        "guarantees": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "months": 12,
+        "ko": 120,
+        "strikes": [
+          87.21,
+          88.6,
+          90.4,
+          null
+        ],
+        "days": 251,
+        "guarantees": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "months": 12,
+        "ko": 110,
+        "strikes": [
+          87.35,
+          90.47,
+          93.33,
+          null
+        ],
+        "days": 251,
+        "guarantees": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "months": 12,
+        "ko": 105,
+        "strikes": [
+          92.96,
+          96.5,
+          99.04,
+          null
+        ],
+        "days": 251,
+        "guarantees": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
         "months": 9,
         "ko": 130,
         "strikes": [

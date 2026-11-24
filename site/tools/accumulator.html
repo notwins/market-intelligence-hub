@@ -126,13 +126,13 @@
 <script src="accumulator-benchmark.js?v=1"></script>
 <script src="accumulator-model.js?v=3"></script>
 <script src="accumulator-ledger-workings.js?v=1"></script>
-<script src="accumulator-quotes.js?v=20261124"></script><script id="accumulator-model">
+<script src="accumulator-quotes.js?v=20261124-12m"></script><script id="accumulator-model">
 'use strict';
 const Accumulator = (() => {
   const pricingTables = window.AccumulatorQuotes;
   const quoteId = (table, row, minimum) => [table.id, row.months, row.ko, minimum].join('-');
   const tableQuotes = pricingTables.flatMap(table =>
-    table.rows.flatMap(row => table.guarantees.flatMap((minimum, column) => {
+    table.rows.flatMap(row => (row.guarantees || table.guarantees).flatMap((minimum, column) => {
       const strike = row.strikes[column];
       return strike === null ? [] : [{
         id:quoteId(table,row,minimum), product:table.label, months:row.months, days:row.days,
@@ -231,7 +231,7 @@ function renderPricingTable(table){
   const tenors=[...new Set(table.rows.map(row=>row.months))];
   el(table.id+'Quotes').innerHTML=tenors.map(months=>{
     const rows=table.rows.filter(v=>v.months===months);
-    const markup=tenorTable(table,months,rows);
+    const markup=tenorTable(table,months,rows,rows[0].guarantees || table.guarantees);
     return rows.every(row=>row.strikes.every(strike=>strike===null))
       ? '<details><summary>'+months+'-month requests with no strike</summary>'+markup+'</details>' : markup;
   }).join('');
@@ -629,7 +629,7 @@ if(location.protocol==='https:'||location.protocol==='http:'){
 <script src="accumulator-comparison.js?v=20261124-round"></script>
 <script src="accumulator-guide.js?v=20261124" defer></script>
 <script src="../vendor/jspdf-4.2.0.umd.min.js" defer></script>
-<script src="accumulator-report.js?v=20261124-round" defer></script>
+<script src="accumulator-report.js?v=20261124-12m" defer></script>
 <script src="accumulator-nvda-financial-data.js?v=1" defer></script>
 <script src="accumulator-history-risk.js?v=1" defer></script>
 <script src="accumulator-nvda-context.js?v=3" defer></script>
