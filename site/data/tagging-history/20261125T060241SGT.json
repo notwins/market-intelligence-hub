@@ -1,0 +1,311 @@
+{
+  "schema": 1,
+  "id": "20261125T060241SGT",
+  "checkedAt": "2026-11-25T06:02:41+08:00",
+  "sources": {
+    "hub": "72316232393621a48b97d1df7f87f8d3d0bc939f",
+    "content": "6c6d5c6bfcac476e1f2518284eaaf9ab0d7c0f5c"
+  },
+  "baseline": "20261124T193803SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 282,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 8,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 209,
+      "changed": 6,
+      "tags": 6,
+      "colour": 6,
+      "logos": 1
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261124-BRAZIL-FISCAL-PACKAGE-HOUSE-APPROVAL",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Brazil lower house approves fiscal package; presidential signature remains pending",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.brazil"
+        ],
+        "colour": {
+          "tag": "geo.brazil",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.brazil": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261124-DLTR-Q3-REVENUE-GUIDANCE-RAISE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Dollar Tree raises FY2026 adjusted EPS outlook to US$8.05–8.25",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.guidance_change",
+          "macro.corporate_earnings_metrics"
+        ],
+        "colour": {
+          "tag": "event.guidance_change",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "event.guidance_change": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "macro.corporate_earnings_metrics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261124-GERMANY-IFO-NOV-906",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "German Ifo confidence rises for a seventh month, with an uneven sector recovery",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany",
+          "sector.infrastructure_construction"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "sector.infrastructure_construction": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261124-JAPAN-FY2027-BUDGET-BOJ-INDEPENDENCE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Japan draft budget guideline backs fiscal sustainability and BOJ autonomy",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.japan",
+          "institution.bank_of_japan"
+        ],
+        "colour": {
+          "tag": "geo.japan",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "geo.japan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "institution.bank_of_japan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261124-TSMC-TEXAS-226BN-FAB-TAX-APPLICATION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "TSMC seeks tax relief for a proposed US$22.6bn Texas semiconductor facility",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.taiwan",
+          "sector.semiconductors",
+          "ticker.entity.tsm"
+        ],
+        "colour": {
+          "tag": "geo.taiwan",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "geo.taiwan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "sector.semiconductors": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "TSM"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261124-UK-FCA-AI-AGENT-REGULATED-SERVICES",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "UK FCA warns AI-agent providers to assess financial-services authorisation",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_kingdom",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "geo.united_kingdom",
+          "light": "#6D28D9",
+          "dark": "#C4B5FD",
+          "chips": {
+            "geo.united_kingdom": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "sector.artificial_intelligence": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
