@@ -6,7 +6,7 @@
   const model = window.AccumulatorModel;
   const quotes = Accumulator.quotes.filter(q => q.multiple === 1);
   const quoteById = new Map(quotes.map(q => [q.id, q]));
-  const initial = ['sn-9-120-1', 'sn-9-120-2', 'sn-9-105-1', 'sn-6-120-1', 'nv9086'];
+  const initial = ['sn-9-120-1', 'sn-9-120-2', 'sn-9-105-1', 'sn-6-120-1', 'sn-9-130-1'];
   const selected = new Set(initial.filter(id => quoteById.has(id)));
   const {money, signedMoney:signed, quote:quotePct, price, shares:units, signedRate:signedPct} = window.AccumulatorFormat;
   const cents = n => Math.round((n + Number.EPSILON) * 100);
