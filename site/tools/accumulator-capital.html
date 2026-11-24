@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Normal accumulator capital calculators | Market Intelligence Hub</title>
+  <meta name="description" content="Calculate the full-tenor capital for an OCBC SI or JPM structured note from whole shares and a quoted strike.">
+  <link rel="stylesheet" href="../Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css">
+  <link rel="stylesheet" href="accumulator-capital.css">
+  <script defer src="../Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261124-capital"></script>
+  <script defer src="accumulator-capital.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#calculator">Skip to calculator</a>
+<main class="sizer">
+  <nav class="crumbs" aria-label="Breadcrumb"><a href="../v4.html#tools">Tools</a> / <a href="accumulator.html">Accumulators</a></nav>
+  <header class="intro">
+    <h1>Normal accumulator capital</h1>
+    <p>Choose how many whole shares to buy each month. See how much capital that commits at your quoted strike over the full tenor.</p>
+  </header>
+  <nav class="issuers" aria-label="Choose calculator">
+    <a id="si-link" href="#si" aria-current="page"><strong>OCBC SI</strong><span>Structured investment</span></a>
+    <a id="sn-link" href="#sn"><strong>JPM SN</strong><span>Structured note</span></a>
+  </nav>
+  <button class="mobile-result" id="view-result" type="button"><span id="mobile-label">Full-tenor capital</span><strong id="mobile-value"></strong><span class="detail-label">View details</span></button>
+  <noscript>Enable JavaScript to calculate capital as you edit the inputs.</noscript>
+  <div class="workspace" id="calculator">
+    <section class="inputs surface" aria-labelledby="inputs-title">
+      <div class="section-head"><h2 id="inputs-title">OCBC SI inputs</h2><span>Normal · 1×</span></div>
+      <fieldset class="basis">
+        <legend>Sizing method</legend>
+        <label><input type="radio" name="basis" value="monthly" checked> Monthly shares</label>
+        <label><input type="radio" name="basis" value="daily"> Daily worksheet</label>
+      </fieldset>
+      <div class="step">
+        <div class="num" aria-hidden="true">1</div><div>
+          <label id="term-label" for="term">Set the tenor</label>
+          <div class="entry"><input id="term" type="text" inputmode="numeric" autocomplete="off" aria-describedby="term-unit"><span id="term-unit">months</span></div>
+          <p class="hint" id="term-help"></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num" aria-hidden="true">2</div><div>
+          <label id="quantity-label" for="quantity">Choose whole shares per month</label>
+          <div class="entry"><input id="quantity" type="text" inputmode="numeric" autocomplete="off" aria-describedby="quantity-unit"><span id="quantity-unit">shares / month</span></div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="num" aria-hidden="true">3</div><div>
+          <div class="step-title">Enter the purchase strike</div>
+          <label class="minor" for="price-method">Strike source</label>
+          <select id="price-method"><option value="direct">Final strike per share</option><option value="derived">Initial price × strike level</option></select>
+          <div id="direct-fields">
+            <label class="minor" for="strike">Final strike per share</label>
+            <div class="entry"><input id="strike" type="text" inputmode="decimal" autocomplete="off"><span class="currency-unit">USD</span></div>
+          </div>
+          <div class="pair" id="derived-fields" hidden>
+            <div><label class="minor" for="spot">Initial price</label><div class="entry"><input id="spot" type="text" inputmode="decimal" autocomplete="off"><span class="currency-unit">USD</span></div></div>
+            <div><label class="minor" for="level">Strike level</label><div class="entry"><input id="level" type="text" inputmode="decimal" autocomplete="off"><span>%</span></div></div>
+          </div>
+          <p class="hint" id="strike-help"></p>
+        </div>
+      </div>
+      <div class="foot-controls"><label for="currency">Quote currency</label><select id="currency"><option>USD</option><option>SGD</option><option>HKD</option></select></div>
+      <p class="input-error" id="input-error" aria-live="polite"></p>
+    </section>
+    <aside class="summary" aria-labelledby="result-title">
+      <div class="result">
+        <p class="result-kicker" id="result-kicker">OCBC SI · Monthly shares</p>
+        <h2 id="result-title" tabindex="-1">Full-tenor capital</h2>
+        <p class="amount" id="capital" aria-live="polite" aria-atomic="true"></p>
+        <p class="equation" id="equation"></p>
+        <dl id="breakdown"></dl>
+        <button id="copy" type="button">Copy calculation</button><span class="copy-status" id="copy-status" role="status"></span>
+        <textarea hidden readonly id="manual-copy" aria-label="Calculation to copy" rows="7"></textarea>
+      </div>
+      <div class="basis-note"><h3 id="note-title"></h3><p id="note-body"></p></div>
+    </aside>
+  </div>
+  <details class="reference"><summary>Example inputs and trade terms</summary>
+    <p>The starting examples use the Hub’s USD 165.05 NVDA close on 23 November 2026 and its 24 November 2026 indications for nine months, a 120% knock-out and one guaranteed month. The SI strike level is 95.89% and the SN level is 90.56%. The example monthly target is 100 shares. Replace the inputs with your quote.</p>
+    <p>A daily contract can settle monthly while accruing a different number of shares each month. A knock-out may shorten purchases, subject to any guaranteed period. If the market price falls below strike, you can still have to buy at the higher strike.</p>
+    <p><a href="accumulator.html#library">Hub pricing tables</a> · <a href="https://www.ifec.org.hk/web/en/blog/2022/12/accumulators-and-decumulators-2.page">IFEC guide to accumulator contracts</a></p>
+  </details>
+</main>
+</body>
+</html>
