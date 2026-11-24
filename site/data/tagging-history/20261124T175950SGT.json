@@ -1,0 +1,330 @@
+{
+  "schema": 1,
+  "id": "20261124T175950SGT",
+  "checkedAt": "2026-11-24T17:59:50+08:00",
+  "sources": {
+    "hub": "edb1097f2d0f8037f931a6b72225f14dc8b64b1d",
+    "content": "6dac5e398ba95167c6968435ea0be6155798b4dd"
+  },
+  "baseline": "20261124T055744SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 274,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 8,
+      "changed": 1,
+      "tags": 1,
+      "colour": 1,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 201,
+      "changed": 3,
+      "tags": 3,
+      "colour": 3,
+      "logos": 0
+    }
+  ],
+  "changes": [
+    {
+      "key": "content:standalone-leveraged-etf-etn-recovery-gap-2026-11-24",
+      "section": "Research",
+      "subsection": "Independent reports",
+      "title": "The recovery gap: SOXL, SOXX and leveraged ETF / ETN risk",
+      "href": "https://notwins.github.io/market-intelligence-content/research/standalone-leveraged-etf-etn-recovery-gap-2026-11-24/index.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.exchange_traded_funds",
+          "asset.options_derivatives",
+          "geo.mainland_china",
+          "geo.united_states",
+          "sector.semiconductors"
+        ],
+        "colour": {
+          "tag": "asset.exchange_traded_funds",
+          "light": "#0E7490",
+          "dark": "#67E8F9",
+          "chips": {
+            "asset.exchange_traded_funds": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            },
+            "asset.options_derivatives": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.united_states": {
+              "text": "#1D4ED8",
+              "background": "#EFF6FF",
+              "dark_text": "#93C5FD",
+              "dark_background": "#172554"
+            },
+            "sector.semiconductors": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261120-US-TREASURY-SG-MY-IRAN-SANCTIONS-COMPLIANCE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "US sanctions add a concrete development to retained Iran-compliance warnings",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "asset.usd_sgd",
+          "event.sanctions",
+          "geo.malaysia",
+          "geo.singapore",
+          "geo.united_states",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "event.sanctions",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "asset.usd_sgd": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "event.sanctions": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.malaysia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "geo.singapore": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.sanctions",
+          "geo.global_cross_border",
+          "geo.hong_kong",
+          "geo.singapore",
+          "geo.united_states",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "event.sanctions",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "event.sanctions": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "geo.hong_kong": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.singapore": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261123-BRAZIL-2027-GROWTH-INFLATION-FORECAST-REVISION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Brazil lowers its 2027 growth forecast to 1.8% and lifts inflation forecast to 4.5%",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.elections_results",
+          "geo.brazil",
+          "macro.gdp_economic_growth"
+        ],
+        "colour": {
+          "tag": "geo.brazil",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "event.elections_results": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            },
+            "geo.brazil": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "macro.gdp_economic_growth": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261123-RAIZEN-CAPITALIZATION-NEAR-UPPER-RANGE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Sources expect Raizen capital raising near its upper target; proceeds remain unconfirmed",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.shel",
+          "event.default_restructuring",
+          "geo.brazil"
+        ],
+        "colour": {
+          "tag": "geo.brazil",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "company.shel": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            },
+            "event.default_restructuring": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.brazil": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
