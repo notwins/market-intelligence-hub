@@ -6,6 +6,17 @@ const f={schema_version:1,generation:1,revision:hash,verified_at_sgt:r.verified_
 R.validate(f);assert.equal(R.selected(f.records,'alpha bonds',f.tags).length,1);assert.equal(R.selected(f.records,'unknown',f.tags).length,0);
 const html=R.cards(f.records,f.tags,'../');assert(html.includes('Alpha &lt;study&gt;'));assert(html.includes('../research/'+id+'/index.html'));assert(!html.includes('Quick read'));
 assert.equal(R.libraryEntries(f)[0].href,r.full_report_url);
+// My Thoughts selects a reviewed category without changing report destinations
+// or suppressing the edition in the existing full-library search.
+const thought={...r,id:'standalone-leverage-2026-11-14',title:'SOXL and SOXX: volatility decay',category:'My Thoughts',full_report_url:'research/standalone-leverage-2026-11-14/index.html',delivery_base:'https://notwins.github.io/market-intelligence-content/'};
+const thoughtsFeed={...f,records:[thought]};R.validate(thoughtsFeed);
+assert.deepEqual(R.thoughts([r,thought]),[thought]);
+assert.equal(R.thoughts([{...thought,category:' my thoughts '}]).length,1);
+assert.equal(R.thoughts([{...thought,category:'Not my thoughts'}]).length,0);
+assert.equal(R.selected(thoughtsFeed.records,'soxl',thoughtsFeed.tags).length,1);
+assert.equal(R.selected(thoughtsFeed.records,'my thoughts',thoughtsFeed.tags).length,1);
+assert(R.cards(R.thoughts(thoughtsFeed.records),thoughtsFeed.tags,'../').includes(thought.delivery_base+thought.full_report_url));
+assert.equal(R.libraryEntries(thoughtsFeed)[0].href,thought.delivery_base+thought.full_report_url);
 for(const candidate of [{...f,records:[r,r],generation:2},{...f,records:[],generation:0},{...f,records:[{...r,full_report_url:'javascript:evil'}]},{...f,records:[{...r,quick_read:{edition_id:'other'}}]}])assert.throws(()=>R.retain(f,candidate));
 const brief={...r,assets:{...r.assets,'brief.html':'b'.repeat(64)},quick_read:{edition_id:id,full_report_sha256:hash,url:`research/${id}/brief.html`,sha256:'b'.repeat(64)}};
 const bf={...f,records:[brief]};R.validate(bf);const card=R.cards(bf.records,bf.tags);assert(card.includes('Quick read'));assert(card.includes('Open brief'));

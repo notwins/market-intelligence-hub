@@ -36,23 +36,42 @@ document.addEventListener('click',event=>{
 window.addEventListener('hashchange',()=>reveal(location.hash,true));
 reveal(location.hash,Boolean(location.hash));
 
+// Read category-labelled editions from the validated independent feed. The
+// existing video review stays here without copying new report data into the UI.
+const thoughts=document.createElement('section');
+thoughts.className='mu-writeups';
+thoughts.id='my-thoughts';
+thoughts.hidden=true;
+thoughts.setAttribute('aria-labelledby','my-thoughts-title');
+thoughts.innerHTML=`
+  <div class="mu-writeups-heading"><div><h2 id="my-thoughts-title">My thoughts</h2></div></div>
+  <div class="mu-writeups-grid" data-thoughts-feed hidden></div>
+  <div class="mu-writeups-grid" data-thoughts-legacy></div>`;
+latest.after(thoughts);
+const thoughtsFeed=thoughts.querySelector('[data-thoughts-feed]');
+const thoughtsLegacy=thoughts.querySelector('[data-thoughts-legacy]');
+function renderThoughts(feed){
+ const reader=window.ResearchFeed;if(!reader?.thoughts)return;
+ try{reader.validate(feed);}catch{return;}
+ const records=reader.thoughts(feed.records);
+ thoughtsFeed.innerHTML=reader.cards(records,feed.tags,'../');
+ thoughtsFeed.hidden=!records.length;
+ thoughts.hidden=!records.length&&!thoughtsLegacy.children.length;
+ if(!thoughts.hidden&&location.hash==='#my-thoughts')reveal(location.hash,true);
+}
+window.addEventListener('mih-research-feed-updated',event=>renderThoughts(event.detail));
+renderThoughts(window.MIH_RESEARCH_FEED);
+
 function addNvidiaReading() {
  const link=window.NvdaArticle.link('NVDA');
- const section=document.createElement('section');
- section.className='mu-writeups';
- section.id='my-thoughts';
- section.setAttribute('aria-labelledby','my-thoughts-title');
- section.innerHTML=`
-  <div class="mu-writeups-heading"><div><h2 id="my-thoughts-title">My thoughts</h2></div></div>
-  <div class="mu-writeups-grid">
+ thoughtsLegacy.innerHTML=`
    <article class="mu-writeup">
     <p class="mu-eyebrow"><time datetime="2026-11-18">18 Nov 2026</time> · Video review</p>
     <h3>The risk inside the jacket</h3>
     <p>A personal reading of Patrick Boyle’s Nvidia episode, covering disclosure, chip export controls, succession and financing.</p>
     ${link}
-   </article>
-  </div>`;
- latest.after(section);
+   </article>`;
+ thoughts.hidden=false;
  root.querySelector('[data-main-research="research-nvda-2026-11-05"]')?.insertAdjacentHTML('beforeend',link);
  if(location.hash==='#my-thoughts')reveal(location.hash,true);
 }
