@@ -1,6 +1,12 @@
 {
-  "updated_at": "2026-11-23T09:00:30+08:00",
+  "updated_at": "2026-11-24T09:01:04+08:00",
   "days": [
+    {
+      "date": "2026-11-24",
+      "count": 240,
+      "path": "data/archive/2026-11-24.json",
+      "type": "First successful daily headline snapshot"
+    },
     {
       "date": "2026-11-23",
       "count": 237,
