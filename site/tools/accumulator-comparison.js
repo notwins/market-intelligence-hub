@@ -26,19 +26,19 @@
     </div></div>
     <div class="cmp-tools"><a href="#library">Choose strikes in pricing tables</a><button type="button" id="cmp-clear">Clear selection</button></div>
     <div id="cmp-basket" aria-label="Selected structures"></div>
-    <p id="cmp-selection-feedback" class="small" aria-live="polite" aria-atomic="true"></p>
+    <p id="cmp-selection-feedback" aria-live="polite" aria-atomic="true"></p>
     <details class="cmp-selector"><summary id="cmp-selection-count">Choose structures</summary>
       <fieldset id="cmp-choices"><legend>Include in comparison</legend></fieldset>
-      <div class="cmp-tools"><button type="button" id="cmp-add-current">Add the chart selection</button><span id="cmp-current" class="small"></span></div>
+      <div class="cmp-tools"><button type="button" id="cmp-add-current">Add the chart selection</button><span id="cmp-current"></span></div>
     </details>
-    <div id="cmp-notice" class="small" role="status"></div>
+    <div id="cmp-notice" role="status"></div>
     <div id="cmp-content">
-      <p class="small">Tap a figure for its calculation. Use Plot to see the selected scenario on the price chart.</p>
+      <p>Tap a figure for its calculation. Use Plot to see the selected scenario on the price chart.</p>
       <div class="tableScroll cmp-funding" tabindex="0" aria-label="Selected structure terms and funded amounts">
         <table><thead><tr><th scope="col">Structure</th><th scope="col">Tenor / guarantee</th><th scope="col">Strike</th><th scope="col">KO</th><th scope="col">Shares / month</th><th scope="col">Payment</th><th scope="col">vs. target</th></tr></thead><tbody id="cmp-terms"></tbody></table>
       </div>
       <details class="cmp-assumptions"><summary>Scenario prices &amp; observation days</summary>
-        <p>Blank fields use the five original JPM notes as the reference. Adding or removing notes keeps these price paths fixed. Day 1 is the first simulated trading day.</p>
+        <p>Leave a field blank to use its default. Day 1 is the first simulated trading day.</p>
         <div class="cmp-inputs">
           <label>Early rally · trading day<input id="cmp-early" type="number" min="1" step="1"></label>
           <label>Later rally · trading day<input id="cmp-late" type="number" min="1" step="1"></label>
@@ -49,10 +49,10 @@
         </div>
       </details>
       <div class="cmp-heading"><h3>Scenario outcomes</h3><label>Rank by <select id="cmp-rank"><option value="pnl">Dollar P&amp;L</option><option value="rate">Return on payment</option></select></label></div>
-      <p class="small" id="cmp-criteria"></p>
+      <p id="cmp-criteria"></p>
       <div class="tableScroll cmp-results" tabindex="0" aria-label="Payout comparison by scenario"><table id="cmp-grid"></table></div>
       <details class="cmp-assumptions cmp-range"><summary>Best and worst of the five contract scenarios</summary><div id="cmp-range-list"></div></details>
-      <h3 id="cmp-detail-title" tabindex="-1"></h3><p class="small" id="cmp-description"></p>
+      <h3 id="cmp-detail-title" tabindex="-1"></h3><p id="cmp-description"></p>
       <div class="tableScroll cmp-results" tabindex="0" aria-labelledby="cmp-detail-title"><table id="cmp-detail"></table></div>
       <details class="cmp-assumptions"><summary>Cash and share breakdown</summary><div class="tableScroll cmp-results" tabindex="0" aria-label="Cash and share calculation inputs"><table id="cmp-breakdown"></table></div></details>
       <details class="cmp-assumptions"><summary>Holding or selling shares after maturity</summary>
@@ -63,10 +63,7 @@
           <label>Decumulator sale strike · USD<input id="cmp-sale-strike" type="number" min="0.01" max="1000000" step="0.01"></label>
           <label>Shares assumed sold per structure<input id="cmp-sale-units" type="number" min="0" max="10000000000" step="1"></label>
         </div>
-        <p>The decumulator example assumes the stated quantity actually sells at its sale strike. The default sale request is half the smallest full-tenor quantity across the original five JPM quotes, rounded down. Each sale is capped at available shares. Unsold shares use the later NVDA price. The training example is cash-funded by selling the shares and subscribing with the proceeds. This is a hypothetical sale allocation. An actual quote sets the sale quantity, timing and settlement. Unsold shares can fall further, and shares sold at the strike miss any larger rebound.</p>
       </details>
-      <p class="small cmp-foot">A normal accumulator buys its full scheduled share quantity at the strike. A daily KO in the guarantee fills the guaranteed months. After the guarantee, a mid-month KO keeps whole shares accrued through the preceding trading day. The model spreads shares across each month’s observation days and returns payment less the cost of all shares bought.</p>
-      <p class="small cmp-foot">Each comparison assumes USD cash earns 0% after refund or sale. Sale proceeds at KO use the observed market price, including any gap above the barrier. Actual execution and settlement can differ. Holding shares keeps the downside as well as any recovery.</p>
     </div>
     <dialog class="cmp-calculation" id="cmp-calculation" aria-labelledby="cmp-calculation-title" aria-describedby="cmp-calculation-context">
       <form method="dialog"><button type="submit" aria-label="Close calculation">Close</button></form>
@@ -75,6 +72,17 @@
       <ol id="cmp-calculation-steps"></ol>
       <p class="small" id="cmp-calculation-note"></p>
     </dialog>`;
+
+  const comparisonNotes = byId('comparison-method-notes');
+  const notesMarkup = `
+    <p>Blank scenario fields use the five original JPM notes as the reference. Adding or removing notes keeps these price paths fixed.</p>
+    <p>P&amp;L and percentage returns round down to whole numbers. Rankings use the underlying amounts. A lower strike reduces the price paid for each share. An earlier knock-out can leave more cash to reinvest and fewer shares in a rally. The first five scenarios rank results at each note’s own exit. The last two use the later share valuation.</p>
+    <p>P&amp;L measures the gain or loss on the actual payment since purchase. Change since the structure ended measures the difference from its exit value. The direct NVDA comparison uses whole shares and excludes dividends, interest and fees.</p>
+    <p>A normal accumulator buys its full scheduled share quantity at the strike. A daily KO in the guarantee fills the guaranteed months. After the guarantee, a mid-month KO keeps whole shares accrued through the preceding trading day. The model spreads shares across each month’s observation days and returns payment less the cost of all shares bought.</p>
+    <p>Each comparison assumes USD cash earns 0% after refund or sale. Sale proceeds at KO use the observed market price, including any gap above the barrier. Actual execution and settlement can differ. Holding shares keeps the downside as well as any recovery.</p>
+    <p>The decumulator example assumes the stated quantity actually sells at its sale strike. The default sale request is half the smallest full-tenor quantity across the original five JPM quotes, rounded down. Each sale is capped at available shares. Unsold shares use the later NVDA price. The training example is cash-funded by selling the shares and subscribing with the proceeds. This is a hypothetical sale allocation. An actual quote sets the sale quantity, timing and settlement. Unsold shares can fall further, and shares sold at the strike miss any larger rebound.</p>`;
+  if (comparisonNotes) comparisonNotes.innerHTML = notesMarkup;
+  else root.insertAdjacentHTML('beforeend', notesMarkup);
 
   byId('cmp-choices').innerHTML = quotes.map(q => `<label><input type="checkbox" data-cmp-quote="${q.id}"><span><b>${q.product} · ${quotePct(q.strike)}</b><small>${q.months}M tenor · ${quotePct(q.ko)} KO · ${q.minimum}M guarantee</small></span></label>`).join('');
 
@@ -273,7 +281,7 @@
   function renderGrid(notes, rows) {
     const metric = byId('cmp-rank').value;
     const asValue = metric === 'pnl' ? signed : signedPct;
-    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Compare dollar P&L' : 'Compare percentage return on actual payment') + ' within each price scenario. P&L and percentage returns round down to whole numbers. Rankings use the underlying amounts. A lower strike reduces the price paid for each share. An earlier knock-out can leave more cash to reinvest and fewer shares in a rally. The first five scenarios rank results at each note’s own exit. The last two use the later share valuation. Each best result can still be a loss.';
+    byId('cmp-criteria').textContent = (metric === 'pnl' ? 'Compare dollar P&L' : 'Compare percentage return on actual payment') + ' within each price scenario. The best result can still be a loss.';
     byId('cmp-grid').innerHTML = `<thead><tr><th scope="col">Scenario</th>${header(notes)}</tr></thead><tbody>` + rows.map(r => {
       const {best,worst} = extremes(r.values,metric);
       const group = r.id === 'early' ? 'While the note is active · five contract outcomes' : r.id === 'hold' ? 'After the note ends · two optional share strategies' : '';
@@ -287,7 +295,7 @@
     renderRanges(notes,rows.filter(r=>!r.follow),metric);
     const row = rows.find(r => r.id === active);
     byId('cmp-detail-title').textContent = row.name + ' · payout detail';
-    byId('cmp-description').textContent = row.description + (row.follow ? ' P&L measures the gain or loss since purchase. Change since the structure ended measures the difference from its exit value.' : ' P&L measures the gain or loss on your actual payment.');
+    byId('cmp-description').textContent = row.description;
     const summary = row.follow
       ? ['timing','exitValue','exitPnl','change','nav','pnl','rate']
       : ['timing','refund','nav','pnl','rate'];
@@ -296,9 +304,9 @@
       : ['payment','exitSpot','shares','spent','sold','proceeds'];
     const headings = '<thead><tr><th scope="col">USD unless stated</th>' + header(notes) + '</tr></thead>';
     const table = fields => headings + '<tbody>' + fields.map(key=>detailRow(key,row,notes)).join('') + '</tbody>';
-    const comparisonDates = row.follow ? 'Both positions valued at the later observation. Cash earns 0%.' : 'Both positions valued on that note’s exit day.';
+    const comparisonDates = row.follow ? 'Both positions valued at the later observation.' : 'Both positions valued on that note’s exit day.';
     byId('cmp-detail').innerHTML = table(summary) + '<tbody>' +
-      sectionRow('Buy NVDA outright with the same payment',notes.length,comparisonDates+' Whole shares. Excludes dividends, interest and fees.') +
+      sectionRow('Buy NVDA outright with the same payment',notes.length,comparisonDates) +
       detailRow('directPnl',row,notes) + detailRow('noteAdvantage',row,notes) + '</tbody>';
     byId('cmp-breakdown').innerHTML = table(details);
   }

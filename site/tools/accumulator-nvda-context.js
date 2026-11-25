@@ -25,14 +25,18 @@
     <div id="nv-stress-result" class="nv-outcome" aria-live="polite"></div>
     <h3>How often has NVDA fallen this far?</h3>
     <div id="nv-history-frequency"></div>
-    <p id="nv-history-longer" class="nv-note" hidden></p>
+    <p id="nv-history-longer" hidden></p>
     <details class="nv-horizons" id="nv-horizon-panel" hidden><summary>Compare 3, 6, 9 and 12 months</summary>
       <div id="nv-horizon-table"></div></details>
-    <p id="nv-history-method" class="nv-note"></p>
     <h3>Ten years of NVDA prices</h3><p id="nv-price-context"></p>
     <figure class="nv-graph"><figcaption class="nv-chart-key"><span>NVDA monthly close · USD</span><span>Test sale price</span></figcaption><div id="nv-history-chart"></div></figure>
-    <p id="nv-history-details" class="nv-note"></p>
+    <p id="nv-history-details"></p>
     <section id="nv-accounts"></section>`;
+  const methodNotes = byId('nvda-method-notes');
+  const noteSections = '<p id="nv-history-method"></p><p id="nv-chart-method"></p><div id="nv-accounts-method"></div>';
+  if (methodNotes) methodNotes.innerHTML = noteSections;
+  else mount.insertAdjacentHTML('beforeend', noteSections);
+
   const input = byId('nv-stress-price');
   const validTest = () => input.value !== '' && input.checkValidity() && Number.isSafeInteger(cents(input.valueAsNumber)) && input.valueAsNumber >= 0;
   const card = (name,value,formula) => '<details class="nv-card"><summary>'+escape(name)+'<strong>'+escape(value)+'</strong></summary><p>'+escape(formula)+'</p></details>';
@@ -44,12 +48,25 @@
   }
   function renderAccounts() {
     const target = byId('nv-accounts');
-    if (!finance) {target.innerHTML='<p class="nv-note">The sourced company accounts are unavailable in this copy.</p>';return;}
+    const historySource = '<a href="https://finance.yahoo.com/quote/NVDA/history/" target="_blank" rel="noopener noreferrer">Dated NVDA close history</a>';
+    const accountsNotes = byId('nv-accounts-method');
+    if (!finance) {
+      target.innerHTML='<p>The sourced company accounts are unavailable in this copy.</p>';
+      accountsNotes.innerHTML='<p>'+historySource+'</p>';
+      return;
+    }
     const {balance:b,income:i,cashFlow:c} = finance;
     const dates=finance.quarter+' ended '+shortDate(finance.periodEnd)+' · USD millions';
+    const sourceLinks=finance.sources.map(s=>'<a href="'+escape(s.url)+'" target="_blank" rel="noopener noreferrer">'+escape(s.label)+'</a>');
+    accountsNotes.innerHTML='<p>The financial statements cover the unaudited stand-alone quarter. The balance sheet records amounts at quarter-end.</p>'+
+      '<p>Balance-sheet estimates use '+number(b.sharesOutstanding)+' million shares outstanding as of '+shortDate(b.sharesOutstandingDate)+'. Quarterly earnings measures use the reported weighted-average share count.</p>'+
+      '<p>GAAP diluted EPS over the last four quarters was '+finance.earningsQuarters.map(q=>amount(q.eps)).join(' + ')+' = '+amount(i.trailingDilutedEps)+' per share. P/E divides share price by annual earnings per share. The earnings cuts are what-if assumptions. Price and earnings can fall together, so a lower share price can still command a higher multiple.</p>'+
+      '<p>The fair value estimate assumes earnings equal the trailing four quarters. A change in earnings, growth expectations or the return investors require changes the estimated value. The share price can fall below book value.</p>'+
+      '<p>Dollar and percentage displays use rounded values. Calculations use the underlying figures.</p>'+
+      '<p>Sources · '+[...sourceLinks,historySource].join(' · ')+'</p>';
     target.innerHTML = '<h3>What earnings would support the test price?</h3><div id="nv-valuation-scenarios"></div>'+
       '<h3>NVIDIA’s three financial statements</h3><p>'+finance.quarter+' operating cash flow was <strong>'+billions.format(c.operating/1000)+'bn</strong> on <strong>'+billions.format(i.netIncome/1000)+'bn</strong> of net income. That is about '+rate(c.operating/i.netIncome*100)+' of reported profit in cash from operations. Future earnings and the multiple investors pay for them can both fall.</p>'+
-      '<p class="nv-note">'+dates+' · Published '+shortDate(finance.published)+'. These unaudited figures cover the stand-alone quarter. The balance sheet records amounts at quarter-end.</p><div class="nv-statements">'+
+      '<p>'+dates+' · Published '+shortDate(finance.published)+'.</p><div class="nv-statements">'+
       statement('Income statement',[
         ['Revenue',i.revenue],['Cost of revenue',i.costOfRevenue],['Gross profit',i.grossProfit],
         ['Operating expenses',i.operatingExpenses],['Operating income',i.operatingIncome],
@@ -88,11 +105,9 @@
         ['Cash dividends',c.dividends],['Taxes paid on employee share plans',c.employeeStockPlanTaxPayments],['Groq payments',c.groqPayments],
         ['Debt repaid',c.debtRepayment],['Principal paid on equipment and intangibles',c.capitalPrincipalPayments],['Other financing',c.otherFinancing]
       ])+
-      '</div><h3>What backs one share?</h3><p class="nv-note">Select any measure to see the figures and calculation. Balance-sheet estimates use '+number(b.sharesOutstanding)+' million shares outstanding as of '+shortDate(b.sharesOutstandingDate)+'. Quarterly earnings measures use the reported weighted-average share count.</p>'+
+      '</div><h3>What backs one share?</h3><p>Select any measure to see the figures and calculation.</p>'+
       '<div id="nv-metric-grid" class="nv-chipgrid"></div><p class="nv-book" id="nv-book-check"></p>'+
-      '<h3>Your earnings-based fair value</h3><p id="nv-earnings-note" class="nv-note"></p><div class="nv-fair"><label for="nv-fair-pe">Your fair P/E multiple<input id="nv-fair-pe" type="number" min="0.01" step="any" inputmode="decimal" placeholder="Enter a multiple"></label><output id="nv-fair-result" for="nv-fair-pe nv-stress-price" aria-live="polite"></output></div>'+
-      '<p class="nv-note">This estimate assumes earnings equal the trailing four quarters. A change in earnings, growth expectations or the return investors require changes the estimated value. The share price can fall below book value.</p>'+
-      '<p class="nv-refs">Sources · '+finance.sources.map(s=>'<a href="'+escape(s.url)+'" target="_blank" rel="noopener noreferrer">'+escape(s.label)+'</a>').join(' · ')+' · <a href="https://finance.yahoo.com/quote/NVDA/history/" target="_blank" rel="noopener noreferrer">Dated NVDA close history</a>. Dollar and percentage displays use rounded values. Calculations use the underlying figures.</p>';
+      '<h3>Your earnings-based fair value</h3><p id="nv-earnings-note"></p><div class="nv-fair"><label for="nv-fair-pe">Your fair P/E multiple<input id="nv-fair-pe" type="number" min="0.01" step="any" inputmode="decimal" placeholder="Enter a multiple"></label><output id="nv-fair-result" for="nv-fair-pe nv-stress-price" aria-live="polite"></output></div>';
     byId('nv-fair-pe').addEventListener('input', updateFairValue);
   }
 
@@ -115,8 +130,7 @@
       const scenarioEps=eps*fraction;
       return '<tr><th scope="row">'+label+'</th><td>'+annualEps.format(scenarioEps)+'</td><td>'+number(test/scenarioEps)+'×</td></tr>';
     }).join('');
-    holder.innerHTML='<p>'+intro+'</p><table class="nv-evidence-table" aria-label="Earnings assumptions and implied price to earnings multiple"><thead><tr><th scope="col">Annual earnings assumption</th><th scope="col">EPS</th><th scope="col">P/E at '+amount(test)+'</th></tr></thead><tbody>'+rows+'</tbody></table>'+
-      '<p class="nv-note">P/E divides share price by annual earnings per share. The earnings cuts are what-if assumptions. Price and earnings can fall together, so a lower share price can still command a higher multiple.</p>';
+    holder.innerHTML='<p>'+intro+'</p><table class="nv-evidence-table" aria-label="Earnings assumptions and implied price to earnings multiple"><thead><tr><th scope="col">Annual earnings assumption</th><th scope="col">EPS</th><th scope="col">P/E at '+amount(test)+'</th></tr></thead><tbody>'+rows+'</tbody></table>';
   }
   function updateFairValue() {
     if (!finance) return;
@@ -127,7 +141,7 @@
       return;
     }
     const test = input.valueAsNumber;
-    byId('nv-earnings-note').textContent=amount(test)+' implies a trailing P/E of '+number(test/eps)+'×. GAAP diluted EPS over the last four quarters was '+finance.earningsQuarters.map(q=>amount(q.eps)).join(' + ')+' = '+amount(eps)+' per share.';
+    byId('nv-earnings-note').textContent=amount(test)+' implies a trailing P/E of '+number(test/eps)+'× at '+amount(eps)+' in annual diluted earnings per share.';
     if(!pe.value || !pe.checkValidity() || !Number.isFinite(pe.valueAsNumber) || pe.valueAsNumber<=0){out.textContent='Enter the P/E you believe is fair to compare your estimate with the test price.';return;}
     const fair=pe.valueAsNumber*eps, diff=test-fair;
     out.textContent='Estimated value = '+amount(eps)+' × '+number(pe.valueAsNumber)+' = '+amount(fair)+' per share. The test price is '+gap(test,fair)+' your estimate'+(diff?' ('+rate(Math.abs(diff)/fair*100)+(diff>0?' premium).':' discount).'):'.');
@@ -243,8 +257,8 @@
   function renderHistory(market,test) {
     const points=historyWindow(market);
     drawChart(points,test);
-    const intro=byId('nv-price-context'), footer=byId('nv-history-details');
-    if(points.length<2){intro.textContent='Dated prices are unavailable.';footer.textContent='';return;}
+    const intro=byId('nv-price-context'), footer=byId('nv-history-details'), method=byId('nv-chart-method');
+    if(points.length<2){intro.textContent='Dated prices are unavailable.';footer.textContent='';method.textContent='';return;}
     let high=points[0], peak=high, trough=high, maxDrawdown=0;
     for(const point of points){
       if(point[1]>high[1]) high=point;
@@ -254,7 +268,8 @@
     const [date]=market.latest;
     intro.textContent='The largest drop between a peak and a later monthly close in this window was '+rate(maxDrawdown*100)+', from '+amount(peak[1])+' ('+endMonth(peak[0])+') to '+amount(trough[1])+' ('+endMonth(trough[0])+').';
     const atOrBelow=test===null?null:points.filter(p=>p[1]<=test).at(-1);
-    footer.textContent=(test===null?'':atOrBelow?'The latest plotted close at or below '+amount(test)+' was '+amount(atOrBelow[1])+' in '+endMonth(atOrBelow[0])+'. ':'All plotted closes were higher than '+amount(test)+'. ')+'The chart joins split-adjusted monthly closes from '+endMonth(points[0][0])+' through '+shortDate(date)+'. Its last point includes the latest available close.';
+    footer.textContent=test===null?'':atOrBelow?'The latest plotted close at or below '+amount(test)+' was '+amount(atOrBelow[1])+' in '+endMonth(atOrBelow[0])+'. ':'All plotted closes were higher than '+amount(test)+'.';
+    method.textContent='The chart joins split-adjusted monthly closes from '+endMonth(points[0][0])+' through '+shortDate(date)+'. Its last point includes the latest available close.';
   }
 
   function renderStress(context,test) {
@@ -280,7 +295,7 @@
     box.dataset.outcome=pnl<0?'loss':pnl>0?'gain':'neutral';
     const label=pnl<0?'Loss':pnl>0?'Gain':'Break-even';
     const title=label+' at '+amount(test)+(pnl===0?'':' · '+returnMoney(pnl)+' ('+signedRate(pnlCents/payment)+' of payment)');
-    box.innerHTML='<strong>'+title+'</strong><div>'+name+' · Assume the sustained-decline path reaches maturity and the same shares are sold at the test price.</div><div class="nv-work">'+number(exitShares)+' shares × '+amount(test)+' = '+cash(proceedsCents/100)+' in sale proceeds (nearest dollar). Including '+cash(refund)+' of refunded cash, the payout is '+cash(payout)+'. The return on '+cash(payment)+' paid is '+returnMoney(pnl)+'.</div><div class="nv-note">If NVDA reached $0.00 at maturity on this path, the shareholding would be worthless. The modeled refund would leave a loss of '+cash(Math.ceil((cents(payment)-cents(refund))/100))+'.</div>';
+    box.innerHTML='<strong>'+title+'</strong><div>'+name+' · Assume the sustained-decline path reaches maturity and the same shares are sold at the test price.</div><div class="nv-work">'+number(exitShares)+' shares × '+amount(test)+' = '+cash(proceedsCents/100)+' in sale proceeds (nearest dollar). Including '+cash(refund)+' of refunded cash, the payout is '+cash(payout)+'. The return on '+cash(payment)+' paid is '+returnMoney(pnl)+'.</div><div>If NVDA reached $0.00 at maturity on this path, the shareholding would be worthless. The modeled refund would leave a loss of '+cash(Math.ceil((cents(payment)-cents(refund))/100))+'.</div>';
   }
 
   function refresh() {
