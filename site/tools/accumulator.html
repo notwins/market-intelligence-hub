@@ -66,6 +66,8 @@
 
 #overview .heading{margin-bottom:5px}
 #overview .legend{margin:4px 0 7px}
+#overview .legend .hist::before{border-color:#6D28D9}
+#overviewHistoryNote{margin:6px 0}
 #overviewScroll{flex:1;min-width:0;overflow-x:auto;overscroll-behavior-x:contain}
 #overviewPlot svg{display:block}
 #overview .tableScroll{margin:6px 0}
@@ -101,8 +103,9 @@
 <section class="panel" id="overview" aria-labelledby="overviewTitle" hidden>
 <div class="heading"><div><h2 id="overviewTitle">Price path, share purchases &amp; P&amp;L</h2><p class="small" id="overviewTerms"></p></div></div>
 <div class="inline quick" id="overviewPaths" aria-label="Simulate a price path"></div>
-<div class="legend"><span class="path">NVDA · drag a monthly dot</span><span class="strike">Strike</span><span class="ko">Knock-out</span></div>
-<div class="chartFrame"><div class="axis" id="overviewAxis" aria-hidden="true"></div><div id="overviewScroll" tabindex="0" aria-label="Simulated monthly price chart"><div id="overviewPlot"></div></div></div>
+<div class="legend"><span class="hist">Historical NVDA close</span><span class="path">Simulated NVDA · drag a monthly dot</span><span class="strike">Strike</span><span class="ko">Knock-out</span></div>
+<div class="chartFrame"><div class="axis" id="overviewAxis" aria-hidden="true"></div><div id="overviewScroll" tabindex="0" aria-label="Historical and simulated NVDA prices. Scroll horizontally to explore." aria-describedby="overviewHistoryNote"><div id="overviewPlot"></div></div></div>
+<p class="small" id="overviewHistoryNote"></p>
 <div class="tableScroll" tabindex="0" aria-label="Share purchases and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th>Cash refunded · USD</th><th>Total value · USD</th><th>P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
 <h3>What if you sell the delivered shares at a different price?</h3><p id="saleBasis" class="small"></p>
 <div class="tableScroll" tabindex="0" aria-label="Alternative sale prices for the same shares"><table><thead><tr><th>NVDA sale price</th><th>Shares</th><th>Market value</th><th>Share profit / loss</th><th>Cash refunded</th><th>Total value</th><th>Total P&amp;L</th></tr></thead><tbody id="saleRange"></tbody></table></div>
@@ -211,7 +214,8 @@ const chosen=()=>A.quotes.find(q=>q.id===el('quote').value);
 const data=JSON.parse(el('historySnapshot').textContent);
 let market=A.history(data.monthly,data.daily), origin='Saved Hub close';
 let stressContext=null,usingDatedSpot=true,previousInputs='';
-let chartScale=null,overviewScale=null,drag=null;
+const chartScales=new Map();
+let drag=null;
 window.AccumulatorMarket={getState:()=>({...market,source:origin}),getStressContext:()=>stressContext};
 let ratios=A.scenarios[0].prices.slice(), preset='recover', month=1, spot,capital;
 let simulation=null,tradeX=0,unit=60,dailyOverride=null,comparisonPath=null,sourceNotice='';
@@ -443,8 +447,10 @@ function drawChart(){
 }
 function drawPriceChart(compact){
   const months=simulation.rows.length;
-  const years=compact?0:Number(el('years').value);
-  const history=years?market.ordered.slice(-years*12):[];
+  const plot=el(compact?'overviewPlot':'plot');
+  const plotWidth=plot.parentElement.clientWidth;
+  const historyMonths=compact?12:12*Number(el('years').value);
+  const history=historyMonths?market.ordered.slice(-historyMonths):[];
   const last=market.latest,haveCone=Number.isFinite(market.vol);
   el('band').disabled=!haveCone;
   const show=!compact&&el('band').checked&&haveCone;
@@ -452,13 +458,15 @@ function drawPriceChart(compact){
   const rows=simulation.rows,values=[spot,simulation.ko,...simulation.daily,...history.map(p=>p[1])];
   if(show)values.push(A.cone(spot,market.vol,months)[1]);
   const maximum=Math.max(...values);
-  const step=drag?.scale.step||niceStep(maximum),top=drag?.scale.top||Math.ceil(maximum*1.06/step)*step;
-  if(compact)overviewScale={step,top};else chartScale={step,top};
-  const H=compact?174:289,yt=29,yb=H-43,y=v=>yb-(yb-yt)*v/top;
-  const hSpacing=history.length<=12?21:history.length<=60?13:9;
+  const lockedScale=drag?.plot===plot?drag.scale:null;
+  const step=lockedScale?.step||niceStep(maximum),top=lockedScale?.top||Math.ceil(maximum*1.06/step)*step;
+  const H=289,yt=29,yb=H-43,y=v=>yb-(yb-yt)*v/top;
+  chartScales.set(plot,{step,top,heightRatio:(yb-yt)/H});
+  const historyWidth=Math.max(120,Math.min(230,plotWidth*.22));
+  const hSpacing=compact?historyWidth/Math.max(1,history.length-1):history.length<=12?21:history.length<=60?13:9;
   const hp=18,historyEnd=history.length?hp+(history.length-1)*hSpacing:0;
-  const startX=history.length?historyEnd+55:28;
-  const spacing=Math.max(compact?44:65,(el(compact?'overviewScroll':'plotScroll').clientWidth-startX-46)/months);
+  const startX=history.length?historyEnd+(compact?28:55):28;
+  const spacing=Math.max(compact?44:65,(plotWidth-startX-46)/months);
   if(!compact){tradeX=startX;unit=spacing;}
   const sx=i=>startX+i*spacing,w=Math.ceil(sx(months)+46);
   const attrs=(x)=>Number(x).toFixed(2);
@@ -474,10 +482,21 @@ function drawPriceChart(compact){
   el(compact?'overviewAxis':'axis').innerHTML='<svg width="100%" height="'+H+'">'+axis+'</svg>';
   let svg='<rect width="'+w+'" height="'+H+'" fill="#fbfdfd"/>'+grid;
   if(history.length){
-    svg+=label(hp,16,'NVDA HISTORY','font-size="10" fill="#526b7c" font-weight="700"');
-    svg+=poly(history.map((p,i)=>[hp+i*hSpacing,y(p[1])]),'#617d93',2.4);
+    const historyColour=compact?'#6D28D9':'#617d93';
+    svg+=label(hp,16,'NVDA HISTORY','font-size="10" fill="'+historyColour+'" font-weight="700"');
+    svg+=poly(history.map((p,i)=>[hp+i*hSpacing,y(p[1])]),historyColour,2.4);
     const interval=Math.ceil(80/hSpacing);
-    history.forEach((p,i)=>{if(i%interval===0)svg+=label(hp+i*hSpacing,yb+20,p[0].slice(0,7),'font-size="11" fill="#536975"');});
+    const lastIndex=history.length-1;
+    history.forEach((p,i)=>{
+      if(i%interval===0&&(!compact||i===0||(lastIndex-i)*hSpacing>=84)){
+        svg+=label(hp+i*hSpacing,yb+20,p[0].slice(0,7),'font-size="11" fill="#536975"');
+      }
+    });
+    if(compact){
+      const [date,price]=history[lastIndex];
+      svg+='<circle cx="'+attrs(historyEnd)+'" cy="'+attrs(y(price))+'" r="3.5" fill="'+historyColour+'"><title>'+date+' · '+exact(price)+'</title></circle>';
+      if(lastIndex)svg+=label(historyEnd,yb+20,date.slice(0,7),'font-size="11" fill="#536975" text-anchor="end"');
+    }
   }
   svg+=line(startX,yt-5,startX,yb,'#9fb1b8','stroke-dasharray="3 3"');
   svg+=label(startX+7,16,'SIMULATED DAILY CLOSES','font-size="10" fill="#176b68" font-weight="700"');
@@ -522,9 +541,12 @@ function drawPriceChart(compact){
     svg+='<circle class="handle-hit" cx="'+x+'" cy="'+py+'" r="21" fill="transparent"/></g>';
     svg+=label(x,yb+20,'M'+r.month,'font-size="12" fill="#294656" text-anchor="middle"');
   });
-  el(compact?'overviewPlot':'plot').innerHTML='<svg width="'+w+'" height="'+H+'" aria-label="NVDA history, simulated price path and share purchases">'+svg+'</svg>';
-  if(compact)return;
-  el('chartNote').textContent='The price axis is USD per share. The time axis shows historical months, then months 1–'+months+'. '+(years?'History ends at '+exact(last[1])+' on '+last[0]+'. The simulation starts separately at '+exact(spot)+'. ':'')+'Drag a dot vertically or enter a price below. On a focused dot, use ↑ or ↓ for $1 steps, or hold Shift for $10 steps. The dotted line follows NVDA after the shares are sold.';
+  plot.innerHTML='<svg width="'+w+'" height="'+H+'" aria-label="NVDA history, simulated price path and share purchases">'+svg+'</svg>';
+  if(compact){
+    el('overviewHistoryNote').textContent='Historical NVDA closes through '+last[0]+' ('+origin+'). The simulation starts at '+exact(spot)+'.';
+    return;
+  }
+  el('chartNote').textContent='The price axis is USD per share. The time axis shows historical months, then months 1–'+months+'. '+(history.length?'History ends at '+exact(last[1])+' on '+last[0]+'. The simulation starts separately at '+exact(spot)+'. ':'')+'Drag a dot vertically or enter a price below. On a focused dot, use ↑ or ↓ for $1 steps, or hold Shift for $10 steps. The dotted line follows NVDA after the shares are sold.';
   el('method').textContent=haveCone?'The 10th–90th percentile band uses '+fmt.rate(market.vol*100)+' annualised volatility from '+market.sessions+' daily log returns through '+last[0]+'. Daily sample volatility is multiplied by √252. At month m the endpoints are starting price × exp(±1.28155 × volatility × √(m/12)). Changing the history window only changes the chart view.':'At least 60 usable daily returns are needed for the cone.';
 }
 function jump(where){
@@ -622,7 +644,6 @@ document.addEventListener('accumulator:plot-comparison',event=>{
 });
 for(const plot of [el('plot'),el('overviewPlot')]) bindPriceHandles(plot);
 function bindPriceHandles(plot){
-const compact=plot.id==='overviewPlot';
 plot.addEventListener('pointerdown',event=>{
   const handle=event.target.closest('[data-price-handle]');
   if(!handle||!simulation||drag||event.button!==0||event.isPrimary===false)return;
@@ -630,7 +651,8 @@ plot.addEventListener('pointerdown',event=>{
   if(!bounds.height)return;
   event.preventDefault();
   const index=Number(handle.dataset.month);
-  drag={id:event.pointerId,index,startY:event.clientY,startPrice:simulation.rows[index-1].price,scale:compact?overviewScale:chartScale,pixels:bounds.height*(compact?102/174:217/289),frame:0,y:event.clientY,moved:false};
+  const scale=chartScales.get(plot);
+  drag={id:event.pointerId,plot,index,startY:event.clientY,startPrice:simulation.rows[index-1].price,scale,pixels:bounds.height*scale.heightRatio,frame:0,y:event.clientY,moved:false};
   plot.setPointerCapture(event.pointerId);
   selectMonth(index);
 });
