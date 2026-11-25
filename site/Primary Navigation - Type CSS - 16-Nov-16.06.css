@@ -208,3 +208,5 @@ html[data-nav-size=compact] .bottom-nav.hub-primary {
   border:1px solid var(--hub-nav-border);border-radius:7px;background:var(--hub-nav-sub);color:var(--hub-nav-ink);
 }
 :where(html[data-nav-style=sections]) .dashboard-links>a[data-nav-tone]:hover { background:var(--hub-nav-main);color:var(--hub-nav-ink); }
+
+.hub-primary a.gold-tools-divider { border-top: 1px solid #cfc8b4; margin-top: 4px; padding-top: 8px; }

@@ -1,0 +1,43 @@
+* { box-sizing: border-box }
+:root { color-scheme: light; font: 16px/1.5 "Segoe UI", system-ui, sans-serif; color: #192c34; background: #f5f5f1 }
+body { margin: 0 }
+main, .gold-nav { max-width: 1100px; margin: auto; padding: 18px clamp(16px,4vw,46px) }
+.gold-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 22px; border-bottom: 1px solid #d1d7cf }
+a { color: #245958; text-underline-offset: 3px }
+.gold-nav a { font-size: .9rem; text-decoration: none }
+.gold-nav a:first-child { font-weight: 750; margin-right: auto }
+.gold-nav a[aria-current] { color: #795b12; text-decoration: underline }
+h1, h2, h3, p { margin: 0 }
+h1 { font-family: Georgia,serif; font-size: clamp(2.2rem,5vw,3.6rem); font-weight: 500; line-height: 1.14; margin: 16px 0 7px }
+h2 { font-size: 1.22rem; margin: 0 0 12px }
+h3 { font-size: 1rem }
+.intro, .hint, figcaption { color: #506266 }
+.intro { max-width: 76ch; margin-bottom: 24px }
+.panel, figure { min-width: 0; background: #fff; border: 1px solid #d7dcd6; border-radius: 12px; padding: clamp(15px,2.5vw,23px); margin: 0 0 16px }
+.controls, .metrics { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,155px),1fr)); gap: 12px }
+label { display: grid; align-content: start; gap: 5px; font-size: .84rem; font-weight: 650 }
+input, select { width: 100%; min-width: 0; border: 1px solid #a2b1aa; border-radius: 6px; padding: 8px; font: inherit; color: #192c34; background: white }
+input:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #317d73 }
+.hint, figcaption, .sources { font-size: .88rem }
+.hint { margin-top: 10px }
+.metrics { margin-bottom: 18px }
+.metric { padding: 12px; background: #eff3ed; border-left: 3px solid #99782f; overflow-wrap: anywhere }
+.metric span, .metric strong { display: block }
+.metric span { font-size: .8rem; color: #415651 }
+.metric strong { font-size: 1.12rem }
+svg.plot { width: 100%; display: block }
+.plot text { fill: #4d605d; font: 12px "Segoe UI",sans-serif }
+.plot .grid { stroke: #dde3dd }
+.quote { font: 600 1.45rem Georgia,serif; color: #253d37 }
+.chart-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px }
+.chart-grid figure { margin: 0 }
+.source-links { display: flex; gap: 8px 18px; flex-wrap: wrap; margin: 8px 0 14px }
+.history-cut { border: 0; border-top: 1px solid #d7dcd6; margin: 20px 0 }
+.table-wrap { overflow-x: auto }
+table { width: 100%; border-collapse: collapse; font-size: .87rem; font-variant-numeric: tabular-nums }
+th, td { text-align: right; padding: 7px; white-space: nowrap; border-bottom: 1px solid #e3e6e0 }
+th:first-child,td:first-child { text-align: left }
+caption { text-align: left; font-weight: bold; margin-bottom: 5px }
+[role=alert] { color: #8b3025 }
+[hidden] { display: none !important }
+@media(max-width:740px) { .chart-grid {grid-template-columns:1fr} .gold-nav { gap: 6px 14px } }

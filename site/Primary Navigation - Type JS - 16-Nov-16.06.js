@@ -110,7 +110,7 @@
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
     ], 'green'],
     ['Historical charts', [
-      ['Cross-market history', 'cross-market-history.html'],
+      ['Cross-market history', 'cross-market-history.html'], ['Gold charts', 'tools/gold-charts.html'],
       ['SI pricing data', 'v4.html#history/si'], ['SI 2 data', 'si-beta2.html#si-library'],
       ['Yield history', 'v4.html#history/yield'], ['Historical curves', 'v4.html#history/curves'],
       ['FX history', 'v4.html#history/fx'], ['Share prices', 'v4.html#history/shares'],
@@ -131,10 +131,12 @@
     ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
     ['Tools', [
       ['All tools & simulators', 'v4.html#tools'],
-      ['Normal accumulator capital', 'tools/accumulator-capital.html', '▦'],
-      ['SI Capital Flow & SOFR', 'tools/accumulator-si-flow.html', '∿'],
-      ['Accumulator 3D pricing', 'tools/accumulator-3d.html', '⬡'],
-      ['Accumulator simulator', 'tools/accumulator.html', '∿']
+      ['NVDA Normal accumulator capital', 'tools/accumulator-capital.html', '▦'],
+      ['NVDA SI Capital Flow & SOFR', 'tools/accumulator-si-flow.html', '∿'],
+      ['NVDA Accumulator 3D pricing', 'tools/accumulator-3d.html', '⬡'],
+      ['NVDA Accumulator', 'tools/accumulator.html', '∿'],
+      ['XAU fixed coupon note', 'tools/xau-fcn.html', '◇'],
+      ['GLD ETF accumulator', 'tools/gld-accumulator.html', '∿']
     ]],
     ['News', newsLinks],
     ['Shares', [
@@ -172,6 +174,7 @@
   function link(label, href, icon, tone) {
     const a = document.createElement('a'); a.href = new URL(href, base);
     if (tone) a.dataset.navTone = tone;
+    if (href === 'tools/xau-fcn.html') a.classList.add('gold-tools-divider');
     if (icon) { const span = document.createElement('span'); span.textContent = icon; span.setAttribute('aria-hidden', 'true'); a.append(span); }
     a.append(document.createTextNode(label)); return a;
   }
