@@ -1,11 +1,13 @@
 """Refresh the Hub's metal histories and keep immutable provider files in the owner's archive."""
 import argparse
 import csv
+import gzip
 import hashlib
 import io
 import json
 import os
 import subprocess
+import struct
 import tempfile
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
@@ -13,7 +15,7 @@ from pathlib import Path
 
 PUBLIC = Path(__file__).resolve().parents[1] / 'site/data/metals'
 FRED = 'https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSIUS'
-SPOT = 'https://fairfindr.com/data/spot-prices.csv'
+SPOT = 'https://data.forexsb.com/datafeed/data/dukascopy/XAUUSD30.lb.gz'
 CHART = 'https://query1.finance.yahoo.com/v8/finance/chart/'
 OHLC = ['open', 'high', 'low', 'close']
 
@@ -73,10 +75,10 @@ def table(raw):
     return csv.DictReader(io.StringIO(raw.decode('utf-8-sig')), skipinitialspace=True)
 
 
-def merged(name, columns, additions):
+def merged(name, columns, additions, preserve=True):
     rows = {}
     path = PUBLIC / name
-    if path.exists():
+    if preserve and path.exists():
         for row in table(path.read_bytes()):
             rows[row['date']] = [row[c] for c in columns]
     rows.update(additions)
@@ -87,6 +89,39 @@ def merged(name, columns, additions):
     writer.writerow(['date', *columns])
     writer.writerows([d, *rows[d]] for d in sorted(rows))
     return stream.getvalue().encode()
+
+
+def bullion(folder, cutoff):
+    rows = {}
+    for row in table((folder / 'XAU-XAG-daily-20-years-with-SGD.csv').read_bytes()):
+        rows[row['date_utc']] = [price(row[f'xau_{key}_usd_per_troy_oz']) for key in OHLC] + [row['source']]
+    if len(rows) < 6000 or min(rows) != '2006-11-26':
+        raise ValueError('Expected twenty years of daily USD bullion prices')
+    # Retain published history if the source later shortens its rolling window.
+    prior = PUBLIC / 'xau-spot.csv'
+    if prior.exists():
+        for row in table(prior.read_bytes()):
+            if row.get('source') and row['date'] not in rows:
+                rows[row['date']] = [price(row[k]) for k in ('open_usd', 'high_usd', 'low_usd', 'usd_per_oz')] + [row['source']]
+    raw = fetch(SPOT, 'XAUUSD30.lb.gz', folder)
+    bars = gzip.decompress(raw) if raw.startswith(b'\x1f\x8b') else raw
+    # Forex Software's spread record: minutes since 2000 UTC, OHLC in thousandths, volume, spread.
+    recent = {}
+    previous = -1
+    for minute, op, high, low, close, volume, _ in struct.iter_unpack('<7i', bars):
+        if minute <= previous or not low <= min(op,close) <= max(op,close) <= high or low <= 0:
+            raise ValueError('Unexpected XAUUSD bar layout')
+        previous = minute
+        day = (date(2000, 1, 1) + timedelta(days=minute // 1440)).isoformat()
+        if volume <= 0 or day < '2026-01-01' or day >= cutoff.isoformat():
+            continue
+        o, h, l, c = [Decimal(n)/1000 for n in (op, high, low, close)]
+        bar = recent.setdefault(day, [o, h, l, c, 'Forex Software'])
+        bar[1:4] = [max(bar[1], h), min(bar[2], l), c]
+    overlap = sorted(recent.keys() & rows.keys())
+    if not overlap or abs(recent[overlap[-1]][3] - rows[overlap[-1]][3]) > Decimal('.10'):
+        raise ValueError('USD bullion series and rolling bars failed the closing-price overlap check')
+    return {**rows, **recent}
 
 
 def refresh(folder):
@@ -111,8 +146,7 @@ def refresh(folder):
         raise ValueError('GLD feed returned an incomplete twenty-year window')
     fx = {r['observation_date']: price(r['DEXSIUS']) for r in table(fetch(FRED, 'DEXSIUS.csv', folder))
           if r['DEXSIUS'] not in ('', '.') and r['observation_date'] < cutoff.isoformat()}
-    spot = {r['date_utc']: price(r['close_usd_per_troy_oz']) for r in table(fetch(SPOT, 'spot-prices.csv', folder))
-            if r['symbol'] == 'XAU' and r['date_utc'] < cutoff.isoformat()}
+    spot = bullion(folder, cutoff)
     if not spot or not fx or not (spot.keys() & fx.keys()):
         raise ValueError('Missing overlapping spot and FX observations')
     outputs = {
@@ -121,12 +155,10 @@ def refresh(folder):
         'dexsius.csv': merged('dexsius.csv', ['sgd_per_usd'], {d: [r] for d, r in fx.items()}),
     }
     # Rejoin all preserved observations, including FRED releases arriving after the gold close.
-    historical = PUBLIC / 'xau-spot.csv'
-    if historical.exists():
-        spot = {**{r['date']: price(r['usd_per_oz']) for r in table(historical.read_bytes())}, **spot}
     fx = {r['date']: price(r['sgd_per_usd']) for r in table(outputs['dexsius.csv'])}
-    derived = {d: [v, fx[d], v * fx[d]] if d in fx else [v, '', ''] for d, v in spot.items()}
-    outputs['xau-spot.csv'] = merged('xau-spot.csv', ['usd_per_oz', 'sgd_per_usd', 'sgd_per_oz'], derived)
+    derived = {d: [*bar, fx[d], bar[3] * fx[d]] if d in fx else [*bar, '', ''] for d, bar in spot.items()}
+    outputs['xau-spot.csv'] = merged('xau-spot.csv', ['open_usd','high_usd','low_usd','usd_per_oz',
+                                    'source','sgd_per_usd','sgd_per_oz'], derived, preserve=False)
     for name, data in outputs.items():
         atomic(folder / name, data)
         atomic(PUBLIC / name, data)
