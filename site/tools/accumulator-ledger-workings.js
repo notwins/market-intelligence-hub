@@ -3,6 +3,7 @@
   'use strict';
 
   const names = {
+    mark:'NVDA valuation price', cumulative:'Total shares bought', pnl:'Profit or loss on payment',
     price: 'Month-end NVDA price',
     bought: 'Shares bought this month',
     cost: 'Capital used this month',
@@ -13,7 +14,7 @@
     refunded: 'Cash refunded to date',
     value: 'Total value at month-end'
   };
-  const columns = [null, 'price', null, 'bought', 'cost', 'refund', 'sold', 'remaining', 'held', 'refunded', 'value'];
+  const columns = [null, 'price', null, 'bought', 'cost', 'refund', 'sold', 'remaining', 'held', 'refunded', 'value', 'cumulative', 'pnl'];
   const states = new WeakMap();
 
   function workings(state, month, field) {
@@ -35,6 +36,20 @@
     let steps;
 
     switch (field) {
+      case 'mark':
+        if (atExit) {
+          steps=['The assumed sale at '+saleDay+' uses the simulated close of '+usd(exit.price)+'.'];
+          break;
+        }
+        return workings(state,month,'price');
+      case 'cumulative':
+        steps=[units(openingShares)+' shares purchased before this month + '+units(row.bought)+' purchased this month = '+units(row.shares)+' total shares bought.'];
+        break;
+      case 'pnl': {
+        const value=exited?exit.value:row.value;
+        steps=[...workings(state,month,'value').steps,usd(value)+' total value − '+usd(sim.payment)+' actual payment = '+usd(value-sim.payment)+' profit or loss.'];
+        break;
+      }
       case 'price':
         steps = [
           'Month ' + month + ' ends on simulated trading day ' + row.day + '.',
@@ -148,11 +163,11 @@
     if (details) window.AccumulatorCalculationDialog.open({...details, opener: button});
   }
 
-  function bind(body, state) {
+  function bind(body, state, fields=columns) {
     if (!states.has(body)) body.addEventListener('click', handleClick);
     states.set(body, state);
     for (const row of body.rows) {
-      columns.forEach((field, i) => {
+      fields.forEach((field, i) => {
         if (!field) return;
         const cell = row.cells[i];
         const value = cell.textContent;
