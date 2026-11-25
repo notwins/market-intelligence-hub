@@ -1,0 +1,234 @@
+{
+  "schema": 1,
+  "id": "20261126T060558SGT",
+  "checkedAt": "2026-11-26T06:05:58+08:00",
+  "sources": {
+    "hub": "3654d72d3504577625440a7e4604b90383b91cdd",
+    "content": "b5302542d8e90bb0ed4e8a8c33f1bcdf3f79c4d3"
+  },
+  "baseline": "20261125T180236SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 286,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 8,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 213,
+      "changed": 4,
+      "tags": 4,
+      "colour": 4,
+      "logos": 2
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261125-AI-CREDIT-CDS-DISTRESS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "AI credit stress spreads across borrowers as CoreWeave bond yields approach 18%",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.9984_t",
+          "sector.artificial_intelligence",
+          "ticker.entity.crwv",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "company.9984_t",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "company.9984_t": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "CRWV"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261125-BOE-BAILEY-ENERGY-INFLATION-PEAK",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Bailey says stable energy prices could lower the projected UK inflation peak",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_kingdom",
+          "institution.bank_of_england",
+          "person.andrew_bailey"
+        ],
+        "colour": {
+          "tag": "person.andrew_bailey",
+          "light": "#6D28D9",
+          "dark": "#C4B5FD",
+          "chips": {
+            "institution.bank_of_england": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "person.andrew_bailey": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261125-CHF-SAFE-HAVEN-FX-RISK-OFF",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Swiss franc gains against the dollar as risk aversion supports safe-haven demand",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.entity.currency.chf",
+          "asset.usd_chf",
+          "geo.switzerland"
+        ],
+        "colour": {
+          "tag": "geo.switzerland",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "asset.usd_chf": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "geo.switzerland": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            }
+          }
+        },
+        "logos": [
+          "CURRENCY:CHF"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261125-US-OCT-NEW-HOME-SALES-701K",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "US October new-home sales rise 14.2% as builders cut prices",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.united_states",
+          "macro.mortgage_rates"
+        ],
+        "colour": {
+          "tag": "macro.mortgage_rates",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "macro.mortgage_rates": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
