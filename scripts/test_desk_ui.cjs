@@ -215,10 +215,11 @@ test('home chart shortcuts preserve all real historical destinations and accessi
  const nav=require('../site/history-navigation.js'),html=nav.html();
  assert.equal(nav.items.length,8);for(const route of ['historical-fred.html','fred-1.html','fred-2.html','fred-3.html'])assert(html.includes(route));assert(html.includes('v4.html#history/beta4-shares'));assert(html.includes('aria-hidden="true"'));assert(!html.includes('javascript:'));
 });
-test('history directory shares three groups and the same destinations across rail, toolbar and home',()=>{
- const fs=require('node:fs'),nav=require('../site/history-navigation.js');assert.deepEqual(nav.groups.map(g=>g.id),['bonds','shares','fred']);
+test('history directory shares four groups and the same destinations across rail, toolbar and home',()=>{
+ const fs=require('node:fs'),nav=require('../site/history-navigation.js');assert.deepEqual(nav.groups.map(g=>g.id),['bonds','shares','gold','fred']);
  const all=nav.groups.flatMap(g=>g.items);assert.equal(new Set(all.map(i=>i[0])).size,all.length);
- const [bonds,shares,fred]=nav.groups;
+ const [bonds,shares,gold,fred]=nav.groups;
+ assert.deepEqual(gold.items.map(i=>i[3]),['tools/gold-charts.html']);
  assert.deepEqual(shares.items.map(i=>i[0]),['stocks-beta','stocks-beta2','shares','si','beta2-shares','beta4-shares','spx','si-beta2']);
  assert.deepEqual(bonds.items.slice(0,3).map(item=>item[3]),['bonds-beta.html','v4.html#credit','v4.html#ust']);
  assert(!bonds.items.some(i=>['si','si-beta2'].includes(i[0])));

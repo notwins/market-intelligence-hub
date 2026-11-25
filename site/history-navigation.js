@@ -21,6 +21,9 @@ const groups=[
   ['spx','SPX index','trend'],
   ['si-beta2','SI beta 2','bond','si-beta2.html']
  ]},
+ {id:'gold',label:'Gold',icon:'trend',items:[
+  ['gold-prices','Gold price history','trend','tools/gold-charts.html']
+ ]},
  {id:'fred',label:'Historical FRED',icon:'fred',items:[
   ['fred-dashboard','FRED dashboard','fred','fred/'],
   ['fred-market-desk','V1 Market Desk','fred','fred/market-desk.html'],
