@@ -104,7 +104,7 @@ html[data-nav-style=professional] .modebar button[aria-selected=true] { backgrou
   font: 550 .875rem/1.15 var(--font); text-decoration: none;
 }
 .desk-anchors a:hover, #markets .desk-anchors a:hover, #full-history .desk-anchors a:hover { background: #e9ebdf; border-color: var(--teal); }
-.desk-plate { min-height: 12rem; position: relative; overflow: hidden; border-radius: 5px; background: #efc3a6; }
+.desk-plate { min-width: 0; width: 100%; min-height: 12rem; position: relative; overflow: hidden; border-radius: 5px; background: #efc3a6; }
 #markets .desk-plate { background: #c7d7bf; }
 #full-history .desk-plate { background: #d5d1e3; }
 .desk-plate img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
