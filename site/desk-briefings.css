@@ -1,0 +1,113 @@
+/* Daily reports share the existing desk typography and motion preference. */
+#briefing > #daily-dashboards, #briefing > #hourly-briefings {
+  margin-block: clamp(1.5rem,3.4vw,3rem);
+  padding: 0; border: 0;
+}
+#briefing > #main-news { display: block; }
+.briefing-sticky { background: var(--paper); padding: .75rem 0; }
+.briefing-heading, .briefing-reader-head { display: flex; align-items: end; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+.briefing-heading .desk-kicker { margin: 0 0 .4rem; color: var(--rust); }
+.briefing-heading h2, .briefing-reader-head h2 {
+  margin: 0; font: 500 clamp(1.9rem,3vw,3.2rem)/1.08 var(--display); letter-spacing: -.045em;
+}
+.briefing-picker { display: flex; gap: .5rem; align-items: center; color: var(--muted); font-size: .85rem; }
+.briefing-picker select { padding: .3rem .55rem; font-size: .875rem; min-height: 40px; }
+.briefing-status { color: var(--muted); font-size: .86rem; margin: .5rem 0 .95rem; }
+.briefing-track, #hourly-briefings .daily-desk-editions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
+.briefing-track:empty { display: none; }
+.briefing-track:focus-visible { outline-offset: 1px; }
+.briefing-track > article { min-width: 0; }
+.dashboard-brief {
+  --brief-tone: #f1d9c7; --brief-ink: #753f2b;
+  display: grid; grid-template-columns: minmax(0,.65fr) minmax(0,1.35fr); align-content: stretch;
+  background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 8px;
+}
+.dashboard-brief[data-topic=bonds] { --brief-tone: #dce6d7; --brief-ink: #3b5842; }
+.dashboard-brief[data-topic=earnings] { --brief-tone: #e2ddec; --brief-ink: #574d6a; }
+.dashboard-brief[data-topic=economy] { --brief-tone: #d8e5e8; --brief-ink: #355762; }
+.brief-identity { background: var(--brief-tone); color: var(--brief-ink); border-radius: 7px 0 0 7px; padding: clamp(1rem,2.4vw,2.2rem); }
+.brief-emblem { display: grid; place-items: center; width: 2.7rem; height: 2.7rem; border-radius: 50%; border: 1px solid currentColor; margin-bottom: 1.25rem; }
+.brief-emblem svg { width: 1.45rem; height: 1.45rem; }
+.brief-identity h3 { margin: 0; font: 500 clamp(1.6rem,2.7vw,2.8rem)/1.06 var(--display); letter-spacing: -.045em; }
+.brief-identity p { margin: .6rem 0 0; font-size: .85rem; }
+.brief-story { padding: clamp(1rem,2.4vw,2.2rem); }
+.brief-summary, .briefing-standfirst { max-width: 70ch; margin: 0 0 .8rem; font: 470 clamp(1.08rem,1.45vw,1.45rem)/1.4 var(--display); }
+.brief-watch { padding: .7rem 0 .15rem; border-top: 1px solid var(--line); }
+.brief-watch strong { color: var(--brief-ink); font-size: .85rem; }
+.brief-watch p { color: var(--muted); font-size: .94rem; margin: .15rem 0 .75rem; max-width: 72ch; }
+.brief-story button { min-height: 40px; padding: .45rem .9rem; font-size: .9rem; }
+.briefing-sequence:not(.briefing-deck) .dashboard-brief { display: flex; flex-direction: column; }
+.briefing-sequence:not(.briefing-deck) .brief-identity { border-radius: 7px 7px 0 0; }
+.briefing-sequence:not(.briefing-deck) .brief-emblem { float: right; margin: 0 0 .5rem .65rem; }
+.briefing-deck .briefing-track, #hourly-briefings.briefing-deck .briefing-track {
+  display: flex; flex-direction: row; align-items: stretch; position: relative; gap: 0; max-width: 100%; overflow-x: auto;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #9aa693 transparent;
+}
+.briefing-deck .briefing-track > article { flex: 0 0 100%; box-sizing: border-box; scroll-snap-align: start; scroll-snap-stop: always; margin: 0; }
+.briefing-deck.briefing-pinned { height: var(--brief-height); }
+.briefing-pinned .briefing-sticky { position: sticky; top: var(--brief-top); }
+:is(#hourly-briefings,#daily-dashboards).briefing-pinned .briefing-track { overflow: clip; scroll-snap-type: none; overscroll-behavior: auto; }
+.briefing-pinned .briefing-track > article {
+  transform: translateX(var(--brief-offset,0%));
+  transition: transform .4s cubic-bezier(.22,.72,.25,1);
+}
+.briefing-pager { display: flex; gap: .7rem; align-items: center; justify-content: flex-end; padding-top: .65rem; }
+.briefing-pager button { width: 44px; min-height: 40px; padding: 0; border: 1px solid #a9b19f; border-radius: 6px; background: var(--card); color: var(--ink); font: 600 1.6rem/1 var(--font); }
+.briefing-pager button:disabled { cursor: default; opacity: .42; }
+.briefing-pager output { font: 600 .875rem/1 var(--font); font-variant-numeric: tabular-nums; }
+#hourly-briefings .briefing-track { margin-top: .8rem; }
+#hourly-briefings .daily-edition { padding: clamp(1.15rem,2.8vw,2.5rem); }
+#hourly-briefings .daily-edition h3 { font-size: clamp(1.5rem,2.3vw,2.1rem); }
+#hourly-briefings .daily-edition-summary { font-size: 1rem; max-width: 68ch; }
+#dashboard-report-dialog { width: min(55rem,calc(100% - 1.4rem)); padding: 0; max-height: 87dvh; overscroll-behavior: contain; background: var(--card); }
+.briefing-reader-head { align-items: center; position: sticky; top: 0; z-index: 1; padding: 1rem clamp(1rem,3vw,2.4rem); background: var(--paper); border-bottom: 1px solid var(--line); }
+.briefing-reader-head .desk-kicker { margin-bottom: .35rem; }
+.briefing-reader-head h2 { font-size: clamp(1.5rem,2.5vw,2.3rem); }
+#dashboard-report-body { padding: 1.45rem clamp(1rem,3vw,2.4rem); line-height: 1.55; }
+#dashboard-report-body h3 { font: 550 1.3rem var(--display); margin: 1.35rem 0 .4rem; }
+#dashboard-report-body ul { padding-left: 1.2rem; margin: .35rem 0; }
+#dashboard-report-body li + li { margin-top: .4rem; }
+#dashboard-report-body p:not(.briefing-standfirst) { font-size: 1rem; }
+#chart-shortcuts { margin: 3rem 0 0; padding-top: 2rem; border-top: 1px solid var(--line); }
+#chart-shortcuts .desk-kicker { margin-bottom: .45rem; }
+#chart-shortcuts .history-directory { grid-template-columns: repeat(2,minmax(0,1fr)); gap: .8rem; align-items: stretch; }
+#chart-shortcuts .history-featured {
+  justify-content: flex-start; min-height: 64px; background: #364738; color: #fff; border: 0; padding: 1rem 1.2rem;
+  font: 550 clamp(1.05rem,1.7vw,1.5rem)/1.2 var(--display); border-radius: 6px;
+}
+#chart-shortcuts .history-featured:hover { background: #485c49; }
+#chart-shortcuts .history-directory-group { --family:#475e4a; --wash:#e6edde; background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 0; }
+#chart-shortcuts [data-history-group=shares] { --family:#794836; --wash:#f2e4d7; }
+#chart-shortcuts [data-history-group=gold] { --family:#71571e; --wash:#f1e8ca; }
+#chart-shortcuts [data-history-group=fred] { --family:#584d67; --wash:#e6e1ed; }
+#chart-shortcuts .history-directory-group h3 { display: flex; margin: 0; gap: .6rem; color: var(--family); background: var(--wash); padding: .85rem 1rem; border-radius: 5px 5px 0 0; font: 550 1.35rem/1.15 var(--display); }
+#chart-shortcuts .history-directory-group > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); padding: .45rem; gap: 0 .4rem; }
+#chart-shortcuts .history-directory-group a { font: 500 .9rem/1.3 var(--font); color: var(--ink); padding: .45rem; background: transparent; border-radius: 3px; }
+#chart-shortcuts .history-directory-group a:hover { background: var(--wash); text-decoration: underline; }
+#chart-shortcuts .history-directory-group a svg { color: var(--family); }
+@media (min-width: 1000px) {
+  #chart-shortcuts .history-directory {
+    grid-template-columns: .95fr 1.05fr 1.2fr;
+    grid-template-areas: "feature feature feature" "bonds shares fred" "gold shares fred";
+  }
+  #chart-shortcuts .history-featured { grid-area: feature; }
+  #chart-shortcuts [data-history-group=bonds] { grid-area: bonds; }
+  #chart-shortcuts [data-history-group=shares] { grid-area: shares; }
+  #chart-shortcuts [data-history-group=gold] { grid-area: gold; }
+  #chart-shortcuts [data-history-group=fred] { grid-area: fred; }
+  #chart-shortcuts .history-directory-group > div { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 660px) {
+  .briefing-track, #hourly-briefings .daily-desk-editions, #chart-shortcuts .history-directory { grid-template-columns: minmax(0,1fr); }
+  .dashboard-brief { display: flex; flex-direction: column; }
+  .brief-identity { padding: .85rem 1rem; border-radius: 7px 7px 0 0; }
+  .brief-emblem { float: right; margin: 0 0 .4rem .7rem; }
+  .brief-identity h3 { font-size: 1.65rem; }
+  .brief-story { padding: .9rem 1rem; }
+}
+@media print {
+  .briefing-deck.briefing-pinned { height: auto; }
+  .briefing-pinned .briefing-sticky { position: static; }
+  .briefing-deck .briefing-track, #hourly-briefings.briefing-deck .briefing-track { display: block; overflow: visible; }
+  .briefing-pager { display: none; }
+}

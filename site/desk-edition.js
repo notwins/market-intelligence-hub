@@ -121,7 +121,7 @@
   }
   const targets = '.desk-hero-copy, .desk-plate, #briefing > section > .section-head, ' +
     '#markets > section > .section-head, #markets > section > h2, #full-history-frame, #archive > summary, ' +
-    '#daily-desk-editions > .daily-edition, #markets .dashboard-grid > .dashboard-card';
+    '#markets .dashboard-grid > .dashboard-card';
   const frame = document.getElementById('full-history-frame');
   let stopHistory;
   function styleHistory() {
@@ -153,20 +153,20 @@
     styleHistory();
     window.removeEventListener('scroll', updateProgress);
     window.removeEventListener('resize', updateProgress);
-    root.classList.remove('desk-motion');
+    root.classList.toggle('desk-motion', enabled && !reduce.matches);
+    window.dispatchEvent(new Event('desk-motion-change'));
     toggle.checked = enabled && !reduce.matches;
     toggle.disabled = reduce.matches;
     hint.textContent = reduce.matches
       ? 'Your device’s reduced-motion setting pauses desk animations.'
-      : 'Sections fade in, selected cards slide in from the sides, and a line shows your reading progress.';
+      : 'Scroll down through briefing cards, or swipe them sideways on mobile. A line shows your reading progress.';
     if (!enabled || reduce.matches) return;
-    root.classList.add('desk-motion');
     if (!nativeProgress) {
       updateProgress();
       window.addEventListener('scroll', updateProgress, {passive: true});
       window.addEventListener('resize', updateProgress);
     }
-    stopDesk = observeEntries(document, targets, '#daily-desk-editions, #markets .dashboard-grid');
+    stopDesk = observeEntries(document, targets, '#markets .dashboard-grid');
   }
   toggle.addEventListener('change', () => {
     enabled = toggle.checked;
