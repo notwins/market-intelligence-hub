@@ -1,6 +1,8 @@
+// Keep each issuer's latest uploaded grid active. Archive it only when a replacement grid for that issuer is supplied.
 window.AccumulatorQuotes = [
   {
     "id": "sn",
+    "asOf": "2026-11-24",
     "label": "JPM SN",
     "guarantees": [
       1,
@@ -175,6 +177,7 @@ window.AccumulatorQuotes = [
   },
   {
     "id": "si",
+    "asOf": "2026-11-24",
     "label": "OCBC SI",
     "guarantees": [
       1,
