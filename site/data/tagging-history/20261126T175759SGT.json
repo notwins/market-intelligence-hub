@@ -1,0 +1,566 @@
+{
+  "schema": 1,
+  "id": "20261126T175759SGT",
+  "checkedAt": "2026-11-26T17:57:59+08:00",
+  "sources": {
+    "hub": "9d5da5bd524cc990ead709149b8f1250dd8fd402",
+    "content": "bac445bf40c3b5c7f763d08fab08170a59359c93"
+  },
+  "baseline": "20261126T060558SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 294,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 8,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 221,
+      "changed": 9,
+      "tags": 9,
+      "colour": 9,
+      "logos": 1
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261116-UNICREDIT-COMMERZBANK-EU-US-APPROVAL",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "UniCredit clears final regulatory step for Commerzbank share acquisition",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "company.ucg_mi",
+          "event.guidance_change",
+          "event.mergers_acquisitions",
+          "geo.germany"
+        ],
+        "colour": {
+          "tag": "event.mergers_acquisitions",
+          "light": "#86198F",
+          "dark": "#F0ABFC",
+          "chips": {
+            "company.ucg_mi": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "event.guidance_change": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.ucg_mi",
+          "event.mergers_acquisitions",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "company.ucg_mi",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "company.ucg_mi": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261125-FSB-GSIB-CAPITAL-BUFFER-BNP-MUFG",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "BNP Paribas moves to a higher systemic-bank capital buffer",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.bnp_pa",
+          "geo.global_cross_border",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "geo.global_cross_border",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "company.bnp_pa": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-ASEAN3-DIGITAL-PAYMENTS-WORKING-GROUP",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "ASEAN+3 creates a working group on cross-border digital payments",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.cryptocurrency",
+          "geo.asean",
+          "geo.global_cross_border",
+          "geo.japan",
+          "geo.mainland_china",
+          "geo.south_korea"
+        ],
+        "colour": {
+          "tag": "geo.global_cross_border",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "asset.cryptocurrency": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "geo.japan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.south_korea": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-AUSTRALIA-Q3-CAPEX-DATACENTRES",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Australia’s third-quarter business investment rises 12.2% on data-centre demand",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.options_derivatives",
+          "geo.australia",
+          "sector.telecoms_media"
+        ],
+        "colour": {
+          "tag": "geo.australia",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "asset.options_derivatives": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "geo.australia": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "sector.telecoms_media": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-BOJ-TAMURA-FASTER-HIKES",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "BOJ board member Tamura signals readiness for faster hikes if inflation overshoots",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.japan",
+          "institution.bank_of_japan"
+        ],
+        "colour": {
+          "tag": "institution.bank_of_japan",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "geo.japan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "institution.bank_of_japan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-BOK-RATE-HIKE-325",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Bank of Korea’s divided vote and projections clarify the tightening outlook",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.options_derivatives",
+          "geo.south_korea",
+          "institution.bank_of_korea"
+        ],
+        "colour": {
+          "tag": "institution.bank_of_korea",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "asset.options_derivatives": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "institution.bank_of_korea": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-JAPAN-CRE-Q3-INVESTMENT-RECORD",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Japanese commercial property investment reaches a quarterly record",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.japan",
+          "sector.property_real_estate",
+          "sector.transport_logistics",
+          "sector.travel_tourism"
+        ],
+        "colour": {
+          "tag": "geo.japan",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "geo.japan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "sector.property_real_estate": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "sector.transport_logistics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "sector.travel_tourism": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-SATS-AI-AIR-CARGO-DEMAND",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "SATS reports resilient AI cargo demand despite technology-market volatility",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.global_cross_border",
+          "geo.singapore",
+          "macro.corporate_earnings_metrics",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "geo.singapore",
+          "light": "#047857",
+          "dark": "#6EE7B7",
+          "chips": {
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "geo.singapore": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            },
+            "macro.corporate_earnings_metrics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-SINGTEL-VIETTEL-SUBMARINE-CABLE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Viettel and Singtel begin construction of a regional submarine cable",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.singapore",
+          "geo.vietnam",
+          "sector.infrastructure_construction",
+          "sector.telecoms_media",
+          "ticker.entity.z74.si",
+          "ticker.singtel_z74"
+        ],
+        "colour": {
+          "tag": "sector.infrastructure_construction",
+          "light": "#334155",
+          "dark": "#CBD5E1",
+          "chips": {
+            "geo.singapore": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            },
+            "geo.vietnam": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            },
+            "sector.infrastructure_construction": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "sector.telecoms_media": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "ticker.singtel_z74": {
+              "text": "#047857",
+              "background": "#ECFDF5",
+              "dark_text": "#6EE7B7",
+              "dark_background": "#064E3B"
+            }
+          }
+        },
+        "logos": [
+          "Z74.SI"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    }
+  ]
+}
