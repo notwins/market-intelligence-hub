@@ -7,6 +7,8 @@
   const pricingFile = el('pricing-file');
   const pricingStatus = el('pricing-status');
   const clearPricing = el('clear-pricing');
+  const hostedPricing = el('hosted-pricing');
+  const emptyPricingStatus = pricingStatus.textContent;
   const supportedTenors = [...el('months').options].map(option => Number(option.value));
   const dateLabel = date => new Intl.DateTimeFormat('en-GB', {
     dateStyle: 'long', timeZone: 'UTC'
@@ -48,18 +50,17 @@
     if (!el('capital').value) el('capital').focus();
   }
 
-  function displayPricing(pricing, persisted = true) {
+  function displayPricing(pricing, storage = 'Saved in this browser.') {
     const summary = el('pricing-terms');
     const wrapper = el('pricing-table');
     wrapper.replaceChildren();
     summary.hidden = wrapper.hidden = clearPricing.hidden = !pricing;
     if (!pricing) {
-      pricingStatus.textContent = 'Pricing is stored in this browser.';
+      pricingStatus.textContent = emptyPricingStatus;
       return;
     }
     const {rows, requestDate, upfrontFeeBps, koPlusOne, offset} = pricing;
     const quoted = rows.filter(row => row.strike !== null).length;
-    const storage = persisted ? 'Saved in this browser.' : 'Loaded for this page only.';
     pricingStatus.textContent = `${quoted} quoted strikes. ${storage} Select a strike to use historical GLD closes.`;
     summary.textContent = `Pricing request ${dateLabel(requestDate)} · Normal · Monthly settlement · Upfront fee ${upfrontFeeBps} bp · KO+1 ${koPlusOne ? 'yes' : 'no'} · Offset ${Metals.format(offset, 1)}`;
 
@@ -111,10 +112,15 @@
   }
 
   try {
-    const saved = localStorage.getItem(pricingKey);
-    if (saved) displayPricing(readPricing(saved));
+    if (hostedPricing) {
+      displayPricing(readPricing(hostedPricing.textContent), 'Saved in SI Private.');
+    } else {
+      const saved = localStorage.getItem(pricingKey);
+      if (saved) displayPricing(readPricing(saved));
+    }
   } catch {
-    pricingStatus.textContent = 'Saved pricing is unavailable. Select a GLD pricing file to load it.';
+    pricingStatus.textContent = hostedPricing ? 'Saved GLD pricing is unavailable. Reload to try again.' :
+      'Browser pricing is unavailable. Select a GLD pricing file to load it.';
   }
   pricingFile.addEventListener('change', async () => {
     const [file] = pricingFile.files;
@@ -126,7 +132,7 @@
       let persisted = true;
       try { localStorage.setItem(pricingKey, JSON.stringify(pricing)); }
       catch { persisted = false; }
-      displayPricing(pricing, persisted);
+      displayPricing(pricing, persisted ? 'Saved in this browser.' : 'Loaded for this page only.');
     } catch {
       pricingStatus.textContent = 'This file could not be loaded. Select a valid GLD accumulator pricing JSON file.';
     } finally {
