@@ -12,3 +12,42 @@
  .atlas-header{gap:8px;padding:10px;height:82px}.atlas-brand,.audience{display:none}.atlas-title h1{font-size:17px}.atlas-title p{font-size:9px}.atlas-header>button>span{display:inline}.atlas-header>button{font-size:11px;padding:7px}.return-hub{font-size:11px;padding:7px}.atlas-shell{height:calc(100dvh - 114px);grid-template-columns:82px minmax(0,1fr)}.atlas-sidebar{padding:12px 5px}.refresh-controls{display:none}#views button{padding:8px 3px;min-height:65px;font-size:20px}#views button span{display:block;font-size:9px;line-height:1.35;margin-top:5px;letter-spacing:0}#views button small{display:none}#map-search{font-size:9px;padding:7px 3px}.view-header{padding:12px 10px;display:block;min-height:155px}.view-header h2{font-size:16px}.view-actions{margin-top:9px;flex-direction:row;gap:6px}.view-actions button{font-size:10px;min-height:38px;padding:7px 9px}.view-header p:last-child{line-height:1.5}.atlas-inspector.open{top:82px;bottom:32px;width:calc(100% - 82px)}.atlas-footer{height:32px;font-size:7px}.atlas-footer a{font-size:8px}.atlas-footer>span:first-child{max-width:120px}.atlas-sidebar.controls-open{top:82px;bottom:32px}.atlas-sidebar.controls-open .refresh-controls{display:block}.atlas-sidebar.controls-open #views button{min-height:52px}.atlas-sidebar.controls-open #views button span{font-size:12px;margin-top:0}.atlas-sidebar.controls-open #views button small{font-size:9px}#search-results{left:82px;top:82px;width:calc(100% - 92px)}.canvas-controls{left:8px;bottom:16px;padding:3px}.canvas-controls button{padding:5px;min-width:38px}.canvas-controls output{min-width:37px}#mini-wrap{right:8px;width:88px}#list-panel{padding:9px}.list-node{padding:11px}.list-node strong{font-size:12px}.list-node small{font-size:10px;line-height:1.5}
 }
 @media(max-width:360px){.atlas-header>button{font-size:10px;padding:6px}.atlas-title h1{font-size:15px}.atlas-title p{font-size:8px}.return-hub{font-size:10px;padding:6px}.atlas-shell{grid-template-columns:72px minmax(0,1fr)}.atlas-inspector.open{width:calc(100% - 72px)}.view-actions{gap:4px}.view-actions button{padding:6px 7px;font-size:9px}.canvas-controls{left:5px}.canvas-controls output{min-width:32px}#search-results{left:72px;width:calc(100% - 82px)}}
+/* The Blueprint uses the Hub's typography, stone background and illustrated controls. */
+@font-face{font-family:"DM Sans";src:url("https://notwins.github.io/market-intelligence-hub/assets/desk/dm-sans.woff2") format("woff2");font-weight:100 1000;font-display:swap}
+@font-face{font-family:"STIX Two Text";src:url("https://notwins.github.io/market-intelligence-hub/assets/desk/stix-two-text.woff2") format("woff2");font-weight:400 700;font-display:swap}
+:root{
+  --bg:#f8f7f2;--panel:#f0efe6;--card:#fffefa;--border:#d0d0c4;--ink:#252823;--muted:#525b51;
+  --cyan:#395846;--grid:#4a5a4824;--shadow:#29372916;--atlas-serif:"STIX Two Text",Georgia,serif;
+  font-family:"DM Sans",system-ui,sans-serif;
+}
+.atlas-header{gap:clamp(10px,2vw,28px);background:#f8f7f2}
+.atlas-brand{min-width:0;letter-spacing:-.035em;font:600 clamp(1.1rem,1.8vw,1.55rem)/1.08 var(--atlas-serif)}
+.atlas-mark{display:inline-block;flex:none;width:1.9rem;height:1.9rem;position:relative;border:0;border-radius:50%;background:repeating-linear-gradient(-27deg,#723b28 0 2px,transparent 2px 3.6px),#f1c3a3;box-shadow:none}
+.atlas-mark::after{content:"";position:absolute;inset:28% -12%;border:1px solid #613c2b;border-radius:50%;transform:rotate(-29deg)}
+.atlas-title h1,.view-header h2,.atlas-inspector h2,dialog h2{font-family:var(--atlas-serif);font-weight:550;letter-spacing:-.045em}
+.atlas-title h1{font-size:clamp(1.45rem,2.4vw,2.3rem);margin-bottom:2px}
+.atlas-title p{font-size:12px}
+.atlas-title{border-left:1px solid var(--border);padding-left:clamp(10px,1.5vw,22px)}
+.audience{border-color:#b8c4b1;background:#e7ebdf;white-space:nowrap;letter-spacing:.06em}
+.atlas-analytics{display:inline-flex;align-items:center;gap:.42rem;padding:.55rem .7rem;border:1px solid #afbdae;border-radius:5px;background:#e7ebdf;color:#294536;text-decoration:none;font-size:13px;font-weight:650;white-space:nowrap}
+.atlas-analytics:hover{background:#d9e3d6}
+.atlas-control-icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+.view-header{background:linear-gradient(115deg,#f6f1e6,#f8f7f2 65%);padding-block:19px}
+.view-header h2{font-size:clamp(1.45rem,2.25vw,2.35rem);line-height:1.12}
+.view-header p:last-child{font-size:.81rem}
+.atlas-sidebar nav button.active{background:#dfe8da;border-color:#9eaf9c;color:#254536}
+.map-node{border-radius:8px;box-shadow:0 3px 12px var(--shadow)}
+.map-node:hover{box-shadow:0 4px 15px #29372927}
+.map-node .node-meta{letter-spacing:.07em}
+.map-node strong{font:620 1.15em/1.17 var(--atlas-serif)}
+.map-node.selected{box-shadow:0 0 0 2px var(--cyan),0 4px 15px var(--shadow)}
+@media(max-width:960px){.atlas-brand span:last-child{display:none}.atlas-title{border:0;padding-left:0}}
+@media(max-width:750px){
+ .atlas-title h1{font-size:clamp(1.05rem,4.6vw,1.55rem);margin-bottom:0}
+ .atlas-title p{font-size:.64rem;line-height:1.25}
+ .atlas-analytics{min-height:36px;padding:.35rem .44rem;font-size:.73rem}
+ .atlas-control-icon{width:14px;height:14px}
+ .view-header h2{font-size:clamp(1.16rem,4.7vw,1.5rem)}
+ .view-header p:last-child{font-size:.72rem}
+}
+@media(max-width:365px){.atlas-analytics svg{display:none}}

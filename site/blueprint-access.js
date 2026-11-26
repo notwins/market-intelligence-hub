@@ -12,7 +12,13 @@ function links(host) {
  section.className='display-section bp-settings-links';
  const heading=document.createElement('h3');
  heading.textContent='Site tools';
- section.append(heading,make(false),make(true));
+ const usage=document.createElement('a');
+ usage.href=new URL('/analytics',settings.owner_url).href;
+ usage.target='_blank';
+ usage.rel='noopener noreferrer';
+ usage.textContent='Usage analytics';
+ usage.title='Owner Blueprint password required';
+ section.append(heading,make(false),make(true),usage);
  host.append(section);
 }
 function open(button){opener=button;document.querySelector('#hub-sections[open]')?.close();customDialog.showModal();customDialog.querySelector('button').focus();}
