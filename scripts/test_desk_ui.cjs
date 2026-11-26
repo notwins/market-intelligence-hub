@@ -549,5 +549,14 @@ test('Stacked USD and share views keep a fixed set of direct peers, gaps and sig
  assert.deepEqual(zero.quarters[0],{total:0,reason:'Peer total is zero'});
 });
 
+test('Quarter inspection exposes USD, consistent shares and the complete matched peer total',()=>{
+ const {peerQuarter}=require('../site/stocks-beta3-quarterly-charts.js');
+ const cohort=[{amounts:[90,20,0,25]},{amounts:[-10,null,0,75]}];
+ assert.deepEqual(peerQuarter(cohort,0),{amounts:[90,-10],total:80,shares:[90,-10]});
+ assert.deepEqual(peerQuarter(cohort,1),{amounts:[20,null],total:null,shares:null});
+ assert.deepEqual(peerQuarter(cohort,2),{amounts:[0,0],total:0,shares:null});
+ assert.deepEqual(peerQuarter(cohort,3),{amounts:[25,75],total:100,shares:[25,75]});
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
