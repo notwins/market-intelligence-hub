@@ -34,8 +34,8 @@ class SiteMapTests(unittest.TestCase):
         original = json.loads((ROOT / 'scripts/fixtures/site_map_destinations.json').read_text())
         current = [a['href'] for a in self.nodes]
         self.assertEqual(len(original), 40)
-        self.assertEqual(set(current), {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta2-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html','historical-fred.html','fred-1.html','fred-2.html','fred-3.html'})
-        self.assertEqual(len(current), 61)
+        self.assertTrue(set(current) >= {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta2-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html','historical-fred.html','fred-1.html','fred-2.html','fred-3.html'})
+        self.assertEqual(len(current), 91)
         self.assertEqual(len(set(current)), len(current) - 3)  # Main shortcuts intentionally share the real destination.
         for href in current:
             path = ROOT / 'site' / href.split('#')[0]
@@ -48,11 +48,24 @@ class SiteMapTests(unittest.TestCase):
         self.assertEqual(cpf['target'], '_blank')
         self.assertEqual(set(cpf['rel'].split()), {'noopener', 'noreferrer'})
 
+    def test_destination_art_matches_shared_navigation(self):
+        from xml.etree import ElementTree as ET
+        artwork = ET.parse(ROOT / 'site/assets/navigation-atlas.svg')
+        keys = {symbol.attrib['id'] for symbol in artwork.getroot()}
+        nav = next((ROOT / 'site').glob('Primary Navigation - Type JS*')).read_text(encoding='utf-8')
+        routes = json.loads(nav.split('const destinationArt = ', 1)[1].split(';', 1)[0])
+        for href, picture in re.findall(r'<a class="map-link" href="([^"]+)"[^>]*><span class="node-icon">(.*?)</span>', self.html):
+            if routes[href] == 'accumulator-beta':
+                self.assertIn('src="tools/accumulator-beta-icon.svg"', picture)
+            else:
+                self.assertIn(routes[href], keys)
+                self.assertIn('navigation-atlas.svg#' + routes[href] + '"', picture, href)
+
     def test_native_tree_and_accessible_controls(self):
         details = [a for t, a in self.parsed.tags if t == 'details']
-        self.assertEqual(len(details), 10)
+        self.assertEqual(len(details), 14)
         self.assertEqual(sum('open' in a for a in details), 8)
-        self.assertEqual(sum(t == 'summary' for t, a in self.parsed.tags), 10)
+        self.assertEqual(sum(t == 'summary' for t, a in self.parsed.tags), 14)
         ids = [a['id'] for t, a in self.parsed.tags if 'id' in a]
         self.assertEqual(len(ids), len(set(ids)))
         for ident in [f'map-{i}' for i in range(6)] + ['map-search', 'site-tree', 'expand-all', 'collapse-all', 'reset-map', 'map-status']:

@@ -96,6 +96,9 @@
           for (const picture of copy.querySelectorAll('use[href^="assets/navigation-atlas.svg#"]')) {
             picture.setAttribute('href', new URL(picture.getAttribute('href'), mapURL).href);
           }
+          for (const logo of copy.querySelectorAll('img.destination-picture[src="tools/accumulator-beta-icon.svg"]')) {
+            logo.src = new URL(logo.getAttribute('src'), mapURL).href;
+          }
           copy.querySelectorAll('details').forEach(n => { n.open = false; });
           fragment.append(copy);
         }

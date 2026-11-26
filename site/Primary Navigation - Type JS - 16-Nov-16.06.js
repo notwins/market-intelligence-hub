@@ -140,7 +140,7 @@
   ];
   const jumpGroups = new Map(moreLinks);
   const subsections = new Map([
-    ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
+    ['Home', [['Daily desk', 'desk.html#daily'], ['Daily automation reports', 'desk.html#daily-dashboards'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
     ['Tools', [
       accumulatorBeta,
       ['All tools & simulators', 'v4.html#tools'],
@@ -169,6 +169,77 @@
     ['My Blog', [['Latest research', 'market-understanding/#main-published-research'], ['Research explained', 'market-understanding/#research-readings'], ['My research', 'market-understanding/#my-research']]],
     ['Markets', [['Stock moves', 'desk.html#stock-moves'], ['Rates and FX', 'desk.html#market-rates'], ['Bond yields', 'desk.html#market-bonds']]]
   ]);
+  const additionalSubsections = [
+    ["Home", [
+      ["Company news", "desk.html#reading"],
+      ["Version 2", "v2.html"],
+    ]],
+    ["Tools", [
+      ["CPF LIFE & RA Modelling", "tools/cpf-life-ra.html"],
+      ["Coloured tag & event tree", "tag-map.html"],
+      ["V3 Colour map & research templates", "colour-templates-v3/"],
+      ["Colour & tag reference", "colour-reference.html"],
+      ["External sources", "external-sources.html"],
+      ["Data & uploads", "v4.html#feeds"],
+    ]],
+    ["News", [
+      ["Scheduled reports", "v4.html#reports"],
+      ["Reuters coverage", "v4.html#headlines"],
+      ["White Papers & Research Papers", "v4.html#research"],
+      ["Hourly news", "v4.html#hourly"],
+      ["Research archive", "archive.html"],
+      ["Revisions and Part 2 companions", "research-editions.html"],
+      ["Search articles & tags", "search.html"],
+    ]],
+    ["Bonds BETA", [
+      ["Bonds BETA", "bonds-beta.html"],
+    ]],
+    ["Shares", [
+      ["BOS monthly archive", "bos-monthly.html"],
+      ["SI BETA 2", "si-beta2.html"],
+      ["Saved securities", "saved-securities.html"],
+    ]],
+    ["Master Pivot", [
+      ["Security master", "v4.html#master"],
+    ]],
+    ["Historical charts", [
+      ["Full history desk", "desk.html#full-history"],
+      ["Historical charts", "v4.html#history"],
+    ]],
+    ["My Blog", [
+      ["Gold buyers, forecasts & SGD returns", "research/xau-gold-outlook-2026-11-06/"],
+      ["Alphabet company research", "research/googl/"],
+      ["Wealth inequality", "research/wealth-inequality-2026-11-04/"],
+      ["Sharpe, portfolios & leverage", "research/wealth-inequality-2026-11-04/sharpe.html"],
+      ["CPF OA vs Temasek 2070", "research/cpf-oa-temasek-2070-2026-11-04/"],
+      ["CPF LIFE after 55", "research/cpf-life-after-55-2026-11-04/"],
+    ]],
+  ];
+  for (const [name, links] of additionalSubsections) subsections.set(name, [...subsections.get(name), ...links]);
+
+  // Complete Jump to from the same subsection lists as the header.
+  const jumpSections = [
+    ['Daily desk', ['Home', 'Markets'], 'blue', 'home'],
+    ['Tools', ['Tools'], 'blue', 'tools'],
+    ['Stocks, bonds and pricing', ['Shares', 'Bonds BETA', 'Master Pivot'], 'green', 'shares'],
+    ['News and research', ['News'], 'orange', 'news'],
+    ['Historical charts', ['Historical charts'], 'rose', 'history'],
+    ['My Blog', ['My Blog'], 'orange', 'pen']
+  ];
+  const listed = new Set(moreLinks.flatMap(([, links]) => links.map(([, href]) => href)));
+  for (const [title, names, tone, art] of jumpSections) {
+    const group = moreLinks.find(([label]) => label === title);
+    const links = group ? [...group[1]] : [];
+    for (const name of names) {
+      for (const item of subsections.get(name)) {
+        if (listed.has(item[1])) continue;
+        links.push(item);
+        listed.add(item[1]);
+      }
+    }
+    if (group) group[1] = links;
+    else if (links.length) moreLinks.push([title, links, tone, art]);
+  }
   const routeTones = [
     [/^tools\/accumulator(?:-beta|-capital|-3d|-si-flow)?\.html$/, 'green'],
     [/^(?:stocks-beta[23]?\.html|bos-monthly\.html|si-beta2\.html|nvda-history\.html|desk\.html#(?:stock-moves|main-company-cards)|v4\.html#history\/(?:shares|si|spx|beta[24]-shares))/, 'green'],
@@ -182,8 +253,11 @@
   const toneFor = (href, fallback) => routeTones.find(([pattern]) => pattern.test(href))?.[1] ?? fallback;
   function controlRoute(control) {
     if (control.dataset.view) return 'v4.html#' + control.dataset.view;
-    const href = control.getAttribute('href') || '';
-    return href.startsWith('#') ? pagePath + href : href;
+    const href = control.getAttribute('href');
+    if (!href) return '';
+    const url = new URL(href, location.href);
+    return url.origin === base.origin && url.pathname.startsWith(base.pathname)
+      ? url.pathname.slice(base.pathname.length) + url.hash : url.href;
   }
 
   const destinationArt = {
@@ -194,24 +268,24 @@
     "fred/cross-market-replay.html": "replay",
     "fred/data.html": "database",
     "desk.html": "home",
-    "desk.html#daily": "briefing",
-    "desk.html#daily-dashboards": "calendar",
+    "desk.html#daily": "sunrise",
+    "desk.html#daily-dashboards": "dashboard",
     "desk.html#reading": "buildings",
-    "desk.html#watchlist-end-day": "watch",
+    "desk.html#watchlist-end-day": "closebell",
     "desk.html#archive": "library",
     "desk.html#markets": "markets",
-    "desk.html#stock-moves": "ticker",
-    "desk.html#market-rates": "fx",
-    "desk.html#market-bonds": "yield",
-    "desk.html#full-history": "history",
+    "desk.html#stock-moves": "movers",
+    "desk.html#market-rates": "quotes",
+    "desk.html#market-bonds": "maturity",
+    "desk.html#full-history": "chronicle",
     "market-understanding/": "pen",
-    "market-understanding/#main-published-research": "papers",
+    "market-understanding/#main-published-research": "journal",
     "market-understanding/#research-readings": "book",
     "market-understanding/#my-research": "notebook",
     "v4.html#history": "history",
     "v4.html#calls": "calls",
-    "v4.html#master": "map",
-    "v4.html#master/explore": "search",
+    "v4.html#master": "catalog",
+    "v4.html#master/explore": "security",
     "v4.html#master/pivot": "pivot",
     "v4.html#master/watchlists": "watch",
     "v4.html#master/screens": "screen",
@@ -225,7 +299,7 @@
     "v4.html#history/spx": "index",
     "v4.html#history/si": "pricing",
     "historical-fred.html": "timeline",
-    "fred-1.html": "event",
+    "fred-1.html": "rewind",
     "fred-2.html": "matrix",
     "fred-3.html": "network",
     "v4.html#ust": "treasury",
@@ -238,12 +312,12 @@
     "v4.html#hourly": "hourly",
     "v4.html#headlines": "wire",
     "v4.html#research": "papers",
-    "research/xau-gold-outlook-2026-11-06/": "gold",
+    "research/xau-gold-outlook-2026-11-06/": "prospect",
     "research-editions.html": "editions",
-    "research/googl/": "buildings",
+    "research/googl/": "browser",
     "research/wealth-inequality-2026-11-04/": "scales",
     "research/wealth-inequality-2026-11-04/sharpe.html": "strategy",
-    "research/cpf-oa-temasek-2070-2026-11-04/": "compare",
+    "research/cpf-oa-temasek-2070-2026-11-04/": "balance",
     "research/cpf-life-after-55-2026-11-04/": "retire",
     "tools/cpf-life-ra.html": "calc",
     "v4.html#tools": "tools",
@@ -255,18 +329,18 @@
     "v4.html#feeds": "upload",
     "archive.html": "archive",
     "saved-securities.html": "saved",
-    "v2.html": "history",
+    "v2.html": "legacy",
     "stocks-beta.html": "shares",
     "stocks-beta2.html": "compare",
     "stocks-beta3.html": "filing",
     "nvda-history.html": "chip",
     "si-beta2.html": "vault",
-    "si-beta2.html#si-library": "vault",
+    "si-beta2.html#si-library": "cabinet",
     "bonds-beta.html": "bonds",
-    "bonds-beta.html#bb-cards": "bonds",
+    "bonds-beta.html#bb-cards": "certificates",
     "bond-cashflow.html": "cashflow",
     "bos-monthly.html": "folio",
-    "tools/accumulator-beta.html": "chart",
+    "tools/accumulator-beta.html": "accumulator-beta",
     "tools/accumulator-capital.html": "capital",
     "tools/accumulator-si-flow.html": "flow",
     "tools/accumulator-3d.html": "cube",
@@ -277,7 +351,7 @@
     "cross-market-history.html": "cross",
     "cross-market-history-beta2.html": "exchange",
     "site-map.html": "map",
-    "blueprint.html": "map",
+    "blueprint.html": "blueprint",
     "v4.html#home": "home",
     "v4.html#tags": "tags",
     "v4.html#sources": "source",
@@ -326,6 +400,7 @@
   function addIcon(control, key, brandedIcon) {
     if (control.querySelector(':scope > .hub-nav-icon, :scope > .accumulator-beta-icon')) return;
     control.dataset.navArt = key;
+    brandedIcon ??= key === 'accumulator-beta' ? accumulatorBeta[2] : undefined;
     if (brandedIcon?.src) {
       const image = document.createElement('img');
       image.className = 'accumulator-beta-icon';
@@ -377,7 +452,7 @@
   }
 
   sections.forEach(([name, href, art, tone], index) => {
-    const mainLink = link(name, href, {art});
+    const mainLink = link(name, href);
     mainLink.className = 'hub-primary-link';
     primaryLinks.set(name, mainLink);
     const links = subsections.get(name);
@@ -388,7 +463,7 @@
     }
     const group = document.createElement('div'); group.className = 'hub-primary-group';
     group.dataset.navTone = tone;
-    group.dataset.navArt = art;
+    group.dataset.navArt = mainLink.dataset.navArt;
     const button = document.createElement('button'); button.className = 'hub-primary-toggle';
     const panel = document.createElement('div'); panel.className = 'hub-primary-dropdown';
     panel.id = 'hub-primary-subsections-' + index;
@@ -485,7 +560,7 @@
   const menuHeading = menu.querySelector('.dialog-head h2');
   if (menuHeading) addIcon(menuHeading, 'jump');
   const main = document.createElement('div'); main.className = 'hub-menu-main';
-  sections.forEach(([name, href, art, tone]) => main.append(link(name, href, {art, tone})));
+  sections.forEach(([name, href, art, tone]) => main.append(link(name, href, {tone})));
   const grid = menu.querySelector('.more-grid');
   const destinations = document.createDocumentFragment();
   destinations.append(main);
@@ -533,7 +608,7 @@
   }
   const sectionTabs = document.querySelector('.top-subsections');
   if (sectionTabs) {
-    const tabArt = {explore: 'search', pivot: 'pivot', watchlists: 'watch', screens: 'screen', review: 'review'};
+    const tabArt = {explore: 'security', pivot: 'pivot', watchlists: 'watch', screens: 'screen', review: 'review'};
     function decorateSubsections() {
       if (sectionTabs.classList.contains('history-menu-toolbar')) return;
       for (const tab of sectionTabs.querySelectorAll(':scope > [data-tab]')) {

@@ -38,7 +38,7 @@ const groups=[
   ['fred-cross-market-replay','V4 Cross-Market Replay','replay','fred/cross-market-replay.html'],
   ['fred-data','All tables · σ','database','fred/data.html'],
   ['fred-history','FRED history','timeline','historical-fred.html'],
-  ['fred-1','Fred-1 · Event Replay','event','fred-1.html'],
+  ['fred-1','Fred-1 · Event Replay','rewind','fred-1.html'],
   ['fred-2','Fred-2 · Response Matrix','matrix','fred-2.html'],
   ['fred-3','Fred-3 · Transmission Desk','network','fred-3.html']
  ]}
