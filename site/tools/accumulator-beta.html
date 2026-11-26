@@ -315,7 +315,7 @@ const chartScales=new Map();
 let drag=null;
 window.AccumulatorMarket={getState:()=>({...market,source:origin}),getStressContext:()=>stressContext};
 let ratios=A.scenarios[0].prices.slice(), preset='recover', month=1, spot,capital;
-let simulation=null,tradeX=0,unit=60,dailyOverride=null,comparisonPath=null,sourceNotice='';
+let simulation=null,tradeX=0,unit=60,dailyOverride=null,comparisonPath=null,sourceNotice='',scenarioResults=[];
 function updateClientSheet(){
   const q=chosen();
   el('sheet-selection').textContent=simulation
@@ -325,7 +325,7 @@ function updateClientSheet(){
   el('sheet-status').textContent='';
 }
 window.AccumulatorMarket.getClientSelection=()=>simulation && ({
-  quote:chosen(),spot,capital,simulation,path:el('pathName').textContent,usingDatedSpot
+  quote:chosen(),spot,capital,simulation,path:el('pathName').textContent,usingDatedSpot,scenarioResults
 });
 const explanations={
  recover:'The price dips and then recovers. The share count follows the schedule. The recovery changes the value of the shares acquired at strike.',
@@ -545,15 +545,18 @@ function showQuoteCase(q, rally) {
   el('quote-case').hidden = false;
 }
 function renderScenarios(q){
-  const results=A.scenarios.map(s=>({s,m:dailySimulation(q,spot,capital,A.scale(s.prices.slice(0,q.months),spot))}));
+  const results=A.scenarios.map(s=>{
+    const m=dailySimulation(q,spot,capital,A.scale(s.prices.slice(0,q.months),spot));
+    return {s,m,outright:window.AccumulatorBenchmark.buyAndHold(m.payment,spot,m.exit.price)};
+  });
+  scenarioResults=results;
   showQuoteCase(q,results.find(({s})=>s.id==='rally').m);
   const profits=results.map(({m})=>m.exit.profit);
   const high=Math.max(...profits),low=Math.min(...profits);
-  el('scenarios').innerHTML=results.map(({s,m})=>{
+  el('scenarios').innerHTML=results.map(({s,m,outright})=>{
     const e=m.exit,rank=high===low?'Tied across all three paths':e.profit===high?'Best of these three paths':e.profit===low?'Worst of these three paths':'';
     const cls=high===low?'':e.profit===high?' best-path':e.profit===low?' worst-path':'';
     const risk=s.id==='fall'?' The assumed exit is '+exact(e.price)+'. At $0 the shares would be worthless.':'';
-    const outright=window.AccumulatorBenchmark.buyAndHold(m.payment,spot,e.price);
     const advantage=(Math.round(e.profit*100)-Math.round(outright.pnl*100))/100;
     const comparison=advantage===0?'Both finish with the same value.':'Note P&L minus direct-share P&L is '+signedCash(advantage)+'.';
     return '<article class="scenario'+cls+'"><h3>'+s.name+(rank?'<span class="rank">'+rank+'</span>':'')+'</h3><strong class="return '+(e.profit<0?'negative':'positive')+'">'+percent(e.rate)+'</strong><small><span class="scenario-profit">'+signedCash(e.profit)+' P&amp;L on '+cash(m.payment)+' paid</span>Exit value <b>'+cash(e.value)+'</b> · '+count.format(e.shares)+' shares sold · '+cash(e.refunded)+' refunded<br>Sale price '+exact(e.price)+' · '+(m.koMonth?'KO on day '+m.koDay+' (M'+m.koMonth+')':'Maturity on day '+e.day+' (M'+e.month+')')+'</small><p>'+explanations[s.id]+risk+'</p><p class="direct-case">Buying NVDA outright gives <b>'+signedCash(outright.pnl)+' P&amp;L</b>. '+comparison+'</p><button data-scenario="'+s.id+'" aria-pressed="'+(!comparisonPath&&!dailyOverride&&s.id===preset)+'">Load scenario</button></article>';
@@ -874,13 +877,14 @@ if(location.protocol==='https:'||location.protocol==='http:'){
 <dialog id="beta-quick-pdf" aria-labelledby="beta-quick-title" aria-describedby="beta-quick-help">
   <form>
     <h2 id="beta-quick-title">Quick PDF</h2>
-    <p id="beta-quick-help">Export the current inputs, results, charts and any details you’ve opened.</p>
+    <p id="beta-quick-help">Create a short client brief from the selected sections and current figures.</p>
     <p class="beta-pdf-style">Page style <strong id="beta-quick-style"></strong></p>
     <fieldset>
       <legend>Sections to include</legend>
       <label class="beta-whole-page"><input type="checkbox" id="beta-quick-all" checked autofocus>Whole page</label>
       <div id="beta-quick-sections"></div>
     </fieldset>
+    <label><input type="checkbox" id="beta-quick-appendix">Add full tables, charts and open details</label>
     <p id="beta-quick-status" role="status"></p>
     <div class="beta-pdf-actions">
       <button type="button" id="beta-quick-close">Cancel</button>
@@ -889,5 +893,6 @@ if(location.protocol==='https:'||location.protocol==='http:'){
   </form>
 </dialog>
 <script src="accumulator-beta-appearance.js?v=20261127" defer></script>
-<script src="accumulator-beta-quick-pdf.js?v=20261127-ko" defer></script>
+<script src="accumulator-beta-quick-brief.js?v=20261127" defer></script>
+<script src="accumulator-beta-quick-pdf.js?v=20261127-brief" defer></script>
 </body></html>
