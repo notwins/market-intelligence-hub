@@ -9,6 +9,8 @@
   let quoteId;
   let simulation;
   let onSaleChange;
+  let capitalTranches;
+  let salePlan;
 
   function monthlyLedger(deliverySales, soldBeforeExit) {
     const {exit, payment, rows} = simulation;
@@ -54,8 +56,11 @@
     byId('monthly-cash-refund').textContent = money(exit.refunded);
     spentBand.style.flexBasis = (100 * exit.spent / payment) + '%';
     refundBand.style.flexBasis = (100 * exit.refunded / payment) + '%';
-    byId('monthly-cash-tranches').innerHTML = tranches.map(({month, quantity}) => {
-      const cashBack = (fundingPerTranche - quantity * strikeCents) / 100;
+    capitalTranches = tranches.map(tranche => ({
+      ...tranche,
+      cashBack: (fundingPerTranche - tranche.quantity * strikeCents) / 100
+    }));
+    byId('monthly-cash-tranches').innerHTML = capitalTranches.map(({month, quantity, cashBack}) => {
       const refunded = !quantity ? ' cash-tranche--refunded' : '';
       const returned = money(cashBack);
       return `<article class="cash-tranche${refunded}">
@@ -103,7 +108,8 @@
     if (!valid || !Number.isSafeInteger(proceedsCents)) {
       status.textContent = 'Enter a valid price in USD cents for each selected delivery.';
       scope.hidden = true;
-      onSaleChange(null);
+      salePlan = null;
+      onSaleChange(salePlan);
       return;
     }
 
@@ -116,7 +122,9 @@
     status.textContent = soldShares
       ? shares(soldShares) + ' sold early · ' + money(proceedsCents / 100) + ' proceeds'
       : '';
-    onSaleChange({soldShares, proceedsCents, remainingShares, remainingValueCents, exitValueCents, pnlCents, ledger});
+    const deliveries = Array.from(deliverySales, ([month, sale]) => ({month, ...sale}));
+    salePlan = {deliveries, soldShares, proceedsCents, remainingShares, remainingValueCents, exitValueCents, pnlCents, ledger};
+    onSaleChange(salePlan);
   }
 
   function render(next, activeQuoteId, saleChange) {
@@ -172,6 +180,7 @@
   }
   window.AccumulatorMonthlyCash = {
     render, restoreChoices,
+    getOverview: () => ({tranches: capitalTranches, salePlan}),
     captureChoices: () => Array.from(sales.rows, row => {
       const [sell, entered] = row.querySelectorAll('input');
       return [Number(row.dataset.delivery), {sell:sell.checked, enteredPrice:sell.checked?entered.value:choices.get(Number(row.dataset.delivery))?.enteredPrice}];

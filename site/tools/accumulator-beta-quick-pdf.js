@@ -190,6 +190,11 @@
       }
       if (node.nodeType !== Node.ELEMENT_NODE || !visible(node)) return;
       const tag = node.tagName.toUpperCase();
+      if (node.id === 'beta-overview-notes' && (selected.has('overview') || selected.has('ledger'))) {
+        if (node.open) visit(node.querySelector('#nvda-overlay-details'));
+        return;
+      }
+      if (node.classList.contains('delivery-sales') && section.key === 'overview') return;
       if (node.classList.contains('chartFrame')) {
         if (section.key !== 'overview' || !selected.has('chartTitle')) content.push(...chartBlocks(node));
         return;
@@ -341,7 +346,7 @@
       doc.setTextColor(colour[tone]);
     }
 
-    function page() {
+    function page(title = 'Supporting detail') {
       doc.addPage();
       doc.setFillColor(colour.hero);
       doc.rect(0, 0, pageWidth, 15, 'F');
@@ -354,7 +359,7 @@
       }
       logo('NVDA', pageWidth - margin - 9, 3, 9);
       font(11, 'ink', 'bold', 'times');
-      doc.text('Supporting detail', margin, 10);
+      doc.text(title, margin, 10);
       y = 22;
     }
 
@@ -485,6 +490,40 @@
       }
       y += 4;
     });
+
+    if (view?.calculationNotes) {
+      packBookmark('Exact overview calculations');
+      page('Calculation notes');
+      heading({text:'Exact overview calculations'});
+      const fmt = window.AccumulatorFormat;
+      const {simulation: sim, spot} = view.live;
+      const {exit} = sim;
+      const {salePlan} = view;
+      const cents = value => fmt.price(value / 100);
+      paragraph('USD throughout. The overview uses whole dollars. The calculations below use exact cents.');
+      paragraph('Starting price ' + fmt.price(spot) + ' · Strike ' + fmt.price(sim.strike) + ' · Knock-out level ' + fmt.price(sim.ko));
+      paragraph('Cost value · ' + fmt.shares(exit.shares) + ' shares × ' + fmt.price(sim.strike) + ' = ' + fmt.price(exit.spent));
+      for (const note of view.calculationNotes) paragraph(note);
+      if (salePlan) {
+        const {deliveries, proceedsCents, remainingShares, remainingValueCents, exitValueCents, pnlCents} = salePlan;
+        if (deliveries.length) {
+          heading({text:'Delivery sale proceeds'});
+          for (const {month, quantity, priceCents} of deliveries) {
+            paragraph('M' + month + ' · ' + fmt.shares(quantity) + ' shares × ' + cents(priceCents) +
+              ' = ' + cents(quantity * priceCents));
+          }
+        }
+        heading({text:'Exit value and P&L'});
+        paragraph('Remaining shares sold at exit · ' + fmt.shares(remainingShares) + ' × ' + fmt.price(exit.price) +
+          ' = ' + cents(remainingValueCents));
+        paragraph('Exit value · ' + cents(proceedsCents) + ' early proceeds + ' + cents(remainingValueCents) +
+          ' at exit + ' + fmt.price(exit.refunded) + ' cash refunded = ' + cents(exitValueCents));
+        paragraph('P&L · ' + cents(exitValueCents) + ' exit value − ' + fmt.price(sim.payment) +
+          ' upfront payment = ' + cents(pnlCents), 10, pnlCents < 0 ? 'negative' : 'ink', 'bold');
+      } else {
+        paragraph('Exit value and P&L are unavailable. Enter a valid USD price for every selected delivery.');
+      }
+    }
 
     const pages = doc.getNumberOfPages();
     for (let number = 1; number <= pages; number++) {
