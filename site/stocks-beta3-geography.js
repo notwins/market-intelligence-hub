@@ -58,9 +58,11 @@
   const normalize = label => label.normalize('NFKD').toLowerCase()
     .replace(/[\u0300-\u036f.'’]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 
+  const isRounding = label => /^(?:rounding difference|rounding adjustment|rounding)$/.test(normalize(label));
+
   function category(label, allLabels) {
     if (lookup.has(label)) return lookup.get(label);
-    if (/\b(eliminations?|hedging|reconciliation)\b/.test(label)) return 'adjustments';
+    if (isRounding(label)||/\b(eliminations?|hedging|reconciliation)\b/.test(label)) return 'adjustments';
     // Keep regions that span more than one top-level group intact.
     if ((/\basia\b|\bapac\b|\boceania\b|\baustralia\b/.test(label) &&
         /\bafrica\b|\bmiddle east\b|\beurope\b|\blatin america\b|\bworld\b|\band other\b/.test(label)) ||
@@ -120,7 +122,11 @@
   }
 
   function change(view, items, earlier) {
-    if(!view.geographyBase||!items?.length||items.length!==earlier?.length)return null;
+    if(!view.geographyBase)return null;
+    const real = entries => (entries||[]).filter(item=>!isRounding(item.label));
+    items=real(items);
+    earlier=real(earlier);
+    if(!items.length||items.length!==earlier.length)return null;
     const signature = entries => entries.map(item => scopeKey(item.label)).sort().join('|');
     if(signature(items)!==signature(earlier))return null;
     const sum = entries => entries.reduce((total, item) => total + item.value, 0);
