@@ -46,6 +46,7 @@
       body.append(node('h3','Sources'), sources);
     }
     dialog.showModal();
+    document.dispatchEvent(new CustomEvent('hub-report-open', {detail: key}));
     body.parentElement.scrollTop = 0;
   }
   dialog.querySelector('[data-close-dashboard]').addEventListener('click', () => dialog.close());
