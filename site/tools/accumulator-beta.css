@@ -155,7 +155,7 @@
 #overview #summary article:nth-child(3) strong { color: var(--beta-tertiary); }
 #overview #summary article:nth-child(4) { background: var(--beta-refund-light); }
 #overview #summary article:nth-child(4) strong { color: var(--beta-refund); }
-#overview #summary article:last-child { grid-column: 1 / -1; background: var(--beta-panel); }
+#overview #summary article:nth-child(n+5) { background: var(--beta-panel); }
 #overview #summary article:has(.positive) { background: var(--beta-gain); }
 #overview #summary article:has(.negative) { background: var(--beta-loss); }
 .delivery-sales > p:not([hidden]) { margin-top: 5px; }

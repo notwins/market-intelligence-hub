@@ -184,5 +184,28 @@
     return svg;
   }
 
-  window.AccumulatorNvdaChart = {mount, pricingTerms, markers, day};
+  function updateChartSale(simulation, month, salePlan) {
+    const {exit} = simulation;
+    const fmt = window.AccumulatorFormat;
+    const card = document.getElementById('chart-sale-pnl');
+    const result = card.querySelector('strong');
+    const basis = card.querySelector('small');
+    let pnl = '—', description = 'Check the delivery sale prices.', tone = '';
+    if (salePlan) {
+      const chartPrice = simulation.rows[month - 1].price;
+      const priceDifferenceCents = Math.round(chartPrice * 100) - Math.round(exit.price * 100);
+      const {remainingShares, pnlCents} = salePlan;
+      const alternateCents = pnlCents + remainingShares * priceDifferenceCents;
+      pnl = fmt.returnMoney(alternateCents / 100);
+      tone = alternateCents < 0 ? 'negative' : alternateCents > 0 ? 'positive' : '';
+      description = remainingShares
+        ? 'M' + month + ' close · ' + fmt.price(chartPrice) + ' per share · ' + fmt.shares(remainingShares) + ' shares at exit'
+        : 'No shares remain to sell at exit.';
+    }
+    if (result.textContent !== pnl) result.textContent = pnl;
+    if (basis.textContent !== description) basis.textContent = description;
+    result.className = tone;
+  }
+
+  window.AccumulatorNvdaChart = {mount, pricingTerms, markers, day, updateChartSale};
 })();
