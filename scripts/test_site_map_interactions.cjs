@@ -55,7 +55,8 @@ assert.equal(families.filter(n => !n.hidden)[1].classes.has('right-branch'), tru
 assert(families.filter(n => !n.hidden).every(n => n.querySelector('details').open));
 click('clear-search'); assert(input.focused); assert.equal(input.value, ''); assert(details.every(d => !d.open)); assert(nodes.every(n => !n.hidden));
 click('expand-all'); assert(details.every(d => d.open));
-search('structured-investment references'); assert(status.textContent.startsWith('1 matching destination'));
+search('structured-investment references'); assert(status.textContent.startsWith('2 matching destinations'));
+assert(nodes.some(n => !n.hidden && n.querySelector(':scope > .map-link').attrs.href === 'si-beta2.html#si-library'));
 const target = nodes.find(n => n.querySelector(':scope > .map-link').attrs.href === 'v4.html#history/si');
 assert(!target.hidden); assert(!target.parentElement.closest('.map-node').hidden);
 assert(target.parentElement.closest('details').open);
