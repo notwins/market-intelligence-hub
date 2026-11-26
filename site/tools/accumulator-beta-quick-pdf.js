@@ -290,6 +290,7 @@
     const tokens = {
       ink: '--ink', muted: '--muted', line: '--line', accent: '--teal', soft: '--soft',
       panel: '--beta-panel', hero: '--beta-hero', positive: '--beta-positive', negative: '--beta-negative',
+      gain: '--beta-gain', loss: '--beta-loss',
       secondary: '--beta-secondary', secondaryLight: '--beta-secondary-light',
       tertiary: '--beta-tertiary', tertiaryLight: '--beta-tertiary-light',
       refund: '--beta-refund', refundLight: '--beta-refund-light', ko: '--lav'
