@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.quarter-geo">
+  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.geo-stack">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="stocks-beta3-scroll.js?v=1"></script>
   <script defer src="content-source.js"></script>
@@ -17,9 +17,9 @@
   <link rel="stylesheet" href="si-share-picker.css">
   <script defer src="si-share-picker.js?v=3"></script>
   <script defer src="stocks-beta3-disclosures.js?v=20261127.quarter-scale"></script>
-  <script defer src="stocks-beta3-geography.js?v=20261127.quarter-geo"></script>
+  <script defer src="stocks-beta3-geography.js?v=20261127.geo-stack"></script>
   <script defer src="stocks-beta3-marks.js?v=20261127.quarter-geo"></script>
-  <script defer src="stocks-beta3-details.js?v=20261127.share-rounding-geo"></script>
+  <script defer src="stocks-beta3-details.js?v=20261127.geo-stack"></script>
   <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=20261127.quarter-readout">
   <script defer src="shares-quarterly-core.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-quarterly-charts.js?v=20261127.quarter-readout"></script>
@@ -74,6 +74,15 @@
           </article>
           <section class="annual-subsection" id="quarter-revenue-mix" aria-labelledby="quarter-revenue-title">
             <h3 id="quarter-revenue-title">Quarterly revenue mix</h3>
+            <figure class="panel quarter-geo-stack" id="quarter-geo-stack" aria-labelledby="quarter-geo-stack-title">
+              <header class="geo-stack-heading">
+                <div><h4 id="quarter-geo-stack-title">Revenue by region · peer comparison</h4><p id="quarter-geo-stack-status"></p></div>
+                <label>Show <select id="quarter-geo-stack-mode"><option value="usd">USD</option><option value="share">% of revenue</option></select></label>
+              </header>
+              <ul id="quarter-geo-stack-legend" class="geo-stack-legend" aria-label="Revenue regions"></ul>
+              <div id="quarter-geo-stack-plot" class="horizontal geo-stack-scroll" role="region" aria-label="Stacked revenue bars by company, scroll horizontally" tabindex="0"></div>
+              <p id="quarter-geo-stack-readout" class="geo-stack-readout" aria-live="polite"></p>
+            </figure>
             <div class="annual-geo-control quarter-geo-controls">
               <a href="#heading-quarter-geography">Compare geography in a table</a>
               <label>Geography <select id="quarter-geo-filter"><option value="grouped">Grouped regions</option><option value="grouped-detail">Grouped + markets</option><optgroup label="As filed"><option value="all">As filed · all areas</option><option value="country">Countries and markets</option><option value="region">Regions</option><option value="other">Other and adjustments</option></optgroup></select></label>
