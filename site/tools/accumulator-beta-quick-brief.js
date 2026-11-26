@@ -29,7 +29,7 @@
       deal: has('setup', 'client-sheet'),
       chart: has('overview', 'chartTitle'),
       capital: has('overview', 'ledger'),
-      delivery: has('overview'),
+      overview: has('overview'),
       scenario: has('scenario-returns'),
       compare: has('compare'),
       library: has('library'),
@@ -42,9 +42,19 @@
     };
     if (view.deal) view.setupError = read('#setupError');
     if (view.library || view.compare) view.comparison = window.AccumulatorComparison?.getSnapshot();
-    if (view.delivery) {
-      view.deliverySummary = read('#delivery-sales-status');
-      view.deliveryIssue = !document.getElementById('beta-sale-sensitivity').hidden ? '' : 'Check the selected delivery sale prices.';
+    if (live && view.capital) {
+      Object.assign(view, window.AccumulatorMonthlyCash.getOverview());
+      const {ordered, daily, latest} = window.AccumulatorMarket.getState();
+      if (view.overview && latest && document.querySelector('#overview [data-nvda-overlay="prices"]').checked) {
+        const cutoff = new Date(latest[0] + 'T00:00:00Z');
+        cutoff.setUTCFullYear(cutoff.getUTCFullYear() - 1);
+        const first = cutoff.toISOString().slice(0, 10);
+        const firstDaily = daily[0]?.[0];
+        view.history = ordered.filter(([day]) => day >= first && (!firstDaily || day < firstDaily))
+          .concat(daily.filter(([day]) => day >= first));
+      }
+      view.calculationNotes = ['monthly-cash-reconcile', 'monthly-cash-rounding', 'monthly-cash-timing', 'overviewHistoryNote']
+        .filter(id => !document.getElementById(id).hidden).map(id => read('#' + id)).filter(Boolean);
     }
     if (view.stress) {
       Object.assign(view, captureStress());
@@ -175,31 +185,45 @@
       y += height + 5;
     }
 
-    function pricePath(showPathName) {
-      heading(showPathName ? 'The price path' : 'Daily closes and deal levels', showPathName ? live.path : '', 89);
-      const plotTop = y + 5;
-      const plotHeight = 55;
-      const plotLeft = margin + 20;
-      const plotRight = w - margin - 5;
+    function drawPricePath(left, top, span, height, compact = false) {
+      const history = compact ? view.history || [] : [];
+      const hasHistory = history.length > 1;
+      const plotTop = top + (compact ? 13 : 6);
+      const plotHeight = height - (compact ? 32 : 14);
+      const plotLeft = left + (compact ? 16 : 20);
+      const plotRight = left + span - 6;
+      const start = hasHistory ? plotLeft + (plotRight - plotLeft) * .3 : plotLeft;
       const closes = [live.spot, ...sim.daily];
-      const levels = [...closes, sim.strike, sim.ko];
+      const levels = [...closes, sim.strike, sim.ko, ...history.map(([, value]) => value)];
       const low = Math.min(...levels);
       const high = Math.max(...levels);
       const padding = Math.max(.01, (high - low) * .11);
       const floor = Math.max(0, low - padding);
       const ceiling = high + padding;
-      const x = day => plotLeft + (plotRight - plotLeft) * day / sim.days;
+      const x = day => start + (plotRight - start) * day / sim.days;
       const v = price => plotTop + (ceiling - price) * plotHeight / (ceiling - floor);
-      fill('panel', margin, y - 1, width, 69, 2);
+      fill('panel', left, top, span, height, 2);
+      if (compact) text('NVDA price path', left + 4, top + 7, 11, 'accent', {weight:'bold'});
       if (sim.koDay && sim.koDay < sim.days) fill('refundLight', x(sim.koDay), plotTop, plotRight - x(sim.koDay), plotHeight);
       for (let tick = 0; tick <= 4; tick++) {
         const value = floor + (ceiling - floor) * tick / 4;
         rule('line', plotLeft, v(value), plotRight);
-        text(value < 10 ? fmt.price(value) : fmt.money(value), plotLeft - 3, v(value) + .9, 8, 'muted', {align:'right'});
+        text(!compact && value < 10 ? fmt.price(value) : fmt.money(value), plotLeft - 2, v(value) + .9, compact ? 7 : 8, 'muted', {align:'right'});
+      }
+      if (hasHistory) {
+        const first = Date.parse(history[0][0]);
+        const days = Date.parse(history.at(-1)[0]) - first;
+        const historyX = day => plotLeft + (start - plotLeft - 3) * (Date.parse(day) - first) / days;
+        for (let index = 1; index < history.length; index++) {
+          const [before, prior] = history[index - 1];
+          const [day, price] = history[index];
+          rule('secondary', historyX(before), v(prior), historyX(day), v(price), .45);
+        }
+        text(history[0][0].slice(0, 7), plotLeft, plotTop + plotHeight + 4.5, 7, 'muted');
       }
       doc.setLineDashPattern([1.7, 1.4], 0);
-      rule('tertiary', plotLeft, v(sim.strike), plotRight, v(sim.strike), .45);
-      rule('ko', plotLeft, v(sim.ko), plotRight, v(sim.ko), .45);
+      rule('tertiary', start, v(sim.strike), plotRight, v(sim.strike), .45);
+      rule('ko', start, v(sim.ko), plotRight, v(sim.ko), .45);
       doc.setLineDashPattern([], 0);
       const end = sim.koDay || sim.days;
       function drawCloseLine(from, to, tone, stroke) {
@@ -220,20 +244,121 @@
       doc.setFillColor(colour.accent);
       doc.circle(x(end), v(closes[end]), 1.5, 'F');
       const labels = [{day:0, name:'Start'}, ...sim.monthEnds.map((day, index) => ({day, name:'M' + (index + 1)}))];
-      labels.filter((_, i) => sim.monthEnds.length <= 6 || i % 2 === 0 || i === labels.length - 1).forEach(({day, name}) =>
-        text(name, x(day), plotTop + plotHeight + 5, 8, 'muted', {align:'center'}));
-      y += 72;
-      const legend = [['accent','Modelled close'], ['tertiary','Strike'], ['ko','Knock-out level']];
-      if (sim.koDay) legend.push(['refund','After knock-out']);
-      const gap = width / legend.length;
+      const tickStep = compact && labels.length > 9 ? 3 : 2;
+      labels.filter((_, i) => sim.monthEnds.length <= 6 || i === labels.length - 1 ||
+        (i % tickStep === 0 && (!compact || i < labels.length - 2))).forEach(({day, name}) =>
+        text(name, x(day), plotTop + plotHeight + 4.5, compact ? 7 : 8, 'muted', {align:'center'}));
+      const legend = [['accent','Modelled close'], ['tertiary','Strike'], ['ko','Knock-out']];
+      if (hasHistory) legend.push(['secondary','NVDA history']);
+      if (end < sim.days) legend.push(['refund','After knock-out']);
+      const legendLeft = left + (compact ? 4 : 0);
+      const legendTop = compact ? top + height - 10 : top + height + 4;
+      const columns = compact ? 3 : legend.length;
+      const gap = (span - (compact ? 8 : 0)) / columns;
       legend.forEach(([tone, label], index) => {
-        const start = margin + index * gap;
-        if (index) doc.setLineDashPattern([1.7, 1.4], 0);
-        rule(tone, start, y + 1, start + 7, y + 1, .7);
+        const lineX = legendLeft + index % columns * gap;
+        const lineY = legendTop + Math.floor(index / columns) * 4.7;
+        if (tone !== 'accent' && tone !== 'secondary') doc.setLineDashPattern([1.7, 1.4], 0);
+        rule(tone, lineX, lineY, lineX + 5, lineY, .6);
         doc.setLineDashPattern([], 0);
-        text(label, start + 9, y + 2.2, 8, 'muted');
+        text(label, lineX + 6.5, lineY + 1, compact ? 7 : 8, 'muted');
       });
-      y += 9;
+    }
+
+    function pricePath(showPathName) {
+      heading(showPathName ? 'The price path' : 'Daily closes and deal levels', showPathName ? live.path : '', 98);
+      drawPricePath(margin, y, width, 69);
+      y += 82;
+    }
+
+    function capitalBar(left, top, span, height, fraction) {
+      fill('refund', left, top, span, height, .6);
+      if (fraction) fill('accent', left, top, span * fraction, height, .6);
+    }
+
+    function overview() {
+      const topHeight = 71;
+      const bottomHeight = 62;
+      heading(view.deal ? 'Current overview' : 'Price path, share purchases & P&L',
+        view.deal ? live.path : '', topHeight + bottomHeight + 28);
+      const {exit, payment, maximum} = sim;
+      const {tranches, salePlan} = view;
+      const gap = 4;
+      const chartWidth = 103;
+      const capitalWidth = width - chartWidth - gap;
+      const right = margin + chartWidth + gap;
+      drawPricePath(margin, y, chartWidth, topHeight, true);
+      fill('panel', right, y, capitalWidth, topHeight, 2);
+      text('Where capital goes', right + 4, y + 7, 11, 'accent', {weight:'bold'});
+      const innerWidth = capitalWidth - 8;
+      capitalBar(right + 4, y + 10, innerWidth, 2, exit.spent / payment);
+      const half = (innerWidth - 2) / 2;
+      [['Shares at cost', exit.spent, 'accent', 'soft'], ['Cash returned', exit.refunded, 'refund', 'refundLight']].forEach(([label, amount, tone, background], index) => {
+        const left = right + 4 + index * (half + 2);
+        fill(background, left, y + 14, half, 12, 1);
+        text(label, left + 2, y + 18.2, 7, 'muted');
+        fitted(fmt.money(amount), left + 2, y + 23.4, half - 4, 11.5, tone, 'times');
+      });
+      const tileWidth = (innerWidth - 4) / 3;
+      tranches.forEach(({month, quantity, cashBack}, index) => {
+        const left = right + 4 + index % 3 * (tileWidth + 2);
+        const top = y + 28 + Math.floor(index / 3) * 10.15;
+        fill(quantity ? 'soft' : 'refundLight', left, top, tileWidth, 9, 1);
+        text('M' + month + (quantity ? '' : ' refund'), left + 1.4, top + 3.2, 6.7, 'muted');
+        fitted(quantity ? fmt.shares(quantity) + ' shares' : fmt.money(cashBack),
+          left + 1.4, top + 6.7, tileWidth - 2.8, 7.8, quantity ? 'accent' : 'refund');
+        capitalBar(left + 1.4, top + 7.5, tileWidth - 2.8, .65, quantity / maximum);
+      });
+      y += topHeight + gap;
+
+      const cardWidth = (width - gap) / 2;
+      fill('panel', margin, y, cardWidth, bottomHeight, 2);
+      text('Exit summary', margin + 4, y + 7, 11, 'accent', {weight:'bold'});
+      const tile = (cardWidth - 10) / 2;
+      const pnl = salePlan?.pnlCents;
+      const metrics = [
+        ['Total shares bought', fmt.shares(exit.shares), 'accent'],
+        ['Exit value', salePlan ? fmt.money(salePlan.exitValueCents / 100) : 'Unavailable', 'secondary'],
+        ['Cost value', fmt.money(exit.spent), 'accent'],
+        ['Cash refunded', fmt.money(exit.refunded), 'refund'],
+        ['P&L', salePlan ? fmt.returnMoney(pnl / 100) : 'Unavailable',
+          pnl < 0 ? 'negative' : pnl > 0 ? 'positive' : 'ink']
+      ];
+      metrics.forEach(([label, amount, tone], index) => {
+        const span = index === 4 ? cardWidth - 8 : tile;
+        const left = margin + 4 + index % 2 * (tile + 2);
+        const top = y + 10 + Math.floor(index / 2) * 16;
+        const background = {refund:'refundLight', secondary:'secondaryLight', positive:'gain', negative:'loss'}[tone] || 'soft';
+        fill(background, left, top, span, 14, 1);
+        text(label, left + 2.5, top + 4.6, 8, 'muted');
+        fitted(amount, left + 2.5, top + 11.5, span - 5, 15, tone, 'times');
+      });
+
+      const salesLeft = margin + cardWidth + gap;
+      fill('panel', salesLeft, y, cardWidth, bottomHeight, 2);
+      text('Sell shares on delivery', salesLeft + 4, y + 7, 11, 'accent', {weight:'bold'});
+      if (!salePlan?.soldShares) {
+        wrap(salePlan ? 'No delivery sales selected. Shares are held until exit.' :
+          'Check the selected delivery sale prices. Exit value and P&L are unavailable.',
+          salesLeft + 4, y + 13, cardWidth - 8, 9, 'muted');
+      } else {
+        text(fmt.shares(salePlan.soldShares) + ' shares sold early', salesLeft + 4, y + 14, 9, 'muted');
+        fitted(fmt.money(salePlan.proceedsCents / 100) + ' proceeds', salesLeft + 4, y + 21, cardWidth - 8, 14, 'refund', 'times');
+        const columns = [salesLeft + 5, salesLeft + 36, salesLeft + 58, salesLeft + cardWidth - 5];
+        fill('refundLight', salesLeft + 3, y + 25, cardWidth - 6, 6, 1);
+        ['Delivery', 'Shares', 'Sale price', 'Proceeds'].forEach((label, index) =>
+          text(label, columns[index], y + 29.1, 7.6, 'refund', {align:index ? 'right' : 'left', weight:'bold'}));
+        const shown = salePlan.deliveries.slice(0, 4);
+        shown.forEach(({month, quantity, priceCents}, index) => {
+          const baseline = y + 35 + index * 5.1;
+          ['M' + month, fmt.shares(quantity), fmt.money(priceCents / 100), fmt.money(quantity * priceCents / 100)]
+            .forEach((label, column) => text(label, columns[column], baseline, 8, 'ink', {align:column ? 'right' : 'left'}));
+        });
+        if (salePlan.deliveries.length > shown.length) {
+          text('All delivery sales are listed in the calculation notes.', salesLeft + 4, y + 57, 7.2, 'muted');
+        }
+      }
+      y += bottomHeight + 7;
     }
 
     function capital() {
@@ -246,16 +371,15 @@
       y += 12;
       text('Spent buying shares', margin, y + 2, 9, 'muted');
       text('Cash refunded', w - margin, y + 2, 9, 'muted', {align:'right'});
-      fitted(fmt.price(exit.spent), margin, y + 10, width / 2 - 3, 16, 'tertiary', 'times');
-      text(fmt.price(exit.refunded), w - margin, y + 10, 16, 'refund', {align:'right', weight:'bold', family:'times'});
+      fitted(fmt.money(exit.spent), margin, y + 10, width / 2 - 3, 16, 'tertiary', 'times');
+      text(fmt.money(exit.refunded), w - margin, y + 10, 16, 'refund', {align:'right', weight:'bold', family:'times'});
       y += 16;
+      const {salePlan} = view;
+      const pnl = salePlan?.pnlCents;
       cards([
-        ['SHARES ACQUIRED', fmt.shares(exit.shares)], ['VALUE AT EXIT', fmt.money(exit.value)],
-        ['P&L ON PAYMENT', fmt.returnMoney(exit.profit), exit.profit < 0 ? 'negative' : 'positive']
+        ['SHARES ACQUIRED', fmt.shares(exit.shares)], ['VALUE AT EXIT', salePlan ? fmt.money(salePlan.exitValueCents / 100) : 'Unavailable'],
+        ['P&L ON PAYMENT', salePlan ? fmt.returnMoney(pnl / 100) : 'Unavailable', pnl < 0 ? 'negative' : pnl > 0 ? 'positive' : 'ink']
       ]);
-      if (view.delivery && (view.deliverySummary || view.deliveryIssue)) {
-        y = wrap(view.deliveryIssue || view.deliverySummary, margin, y, width, 9.5, 'muted') + 5;
-      }
     }
 
     function scenarios() {
@@ -331,7 +455,7 @@
 
     const deal = view.deal && sim;
     const path = view.chart && sim;
-    const outcomes = sim && (view.capital || view.scenario);
+    const outcomes = sim && ((view.capital && !view.overview) || view.scenario);
     const evidence = view.compare || view.library || view.stress || view.archive || view.guide || view.after || view.notes;
     if (view.deal || path) {
       const quote = live?.quote;
@@ -349,12 +473,13 @@
       } else if (view.deal) {
         y = wrap(view.setupError || 'Enter a valid starting price and budget for a priced illustration.', margin, y, width) + 10;
       }
-      if (path) pricePath(Boolean(deal));
+      if (path && view.overview) overview();
+      else if (path) pricePath(Boolean(deal));
       if (deal || path) callout('Capital at risk', risk);
     }
     if (outcomes) {
       page('Follow the money');
-      if (view.capital) capital();
+      if (view.capital && !view.overview) capital();
       if (view.scenario) scenarios();
       if (!deal && !path) callout('Capital at risk', risk);
     }
