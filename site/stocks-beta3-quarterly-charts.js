@@ -67,6 +67,7 @@
     '#555798', '#a74149', '#287c86', '#885b32', '#656586', '#596853',
     '#c66837', '#245289', '#914477', '#847324', '#137b4c', '#89564d'];
   const fmt = new Intl.NumberFormat('en-SG', {maximumFractionDigits: 1});
+  const billions = new Intl.NumberFormat('en-SG', {maximumFractionDigits: 2});
   const whole = new Intl.NumberFormat('en-SG', {maximumFractionDigits: 0});
   const day = new Intl.DateTimeFormat('en-GB', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'});
   const settings = new WeakMap();
@@ -127,6 +128,12 @@
     const numberFormat = detail ? whole : fmt;
     if (n && Math.abs(n) < (detail ? .5 : .05)) return (n < 0 ? '−' : '') + '<' + (detail ? '1' : '0.1') + unit;
     return textNumber(n, numberFormat) + unit;
+  }
+
+  function billionsNumber(value) {
+    const amount = value / 1000;
+    return amount && Math.abs(amount) < .005
+      ? (amount < 0 ? '−<0.01' : '<0.01') : textNumber(amount, billions);
   }
 
   function domain(nums, tick = 3) {
@@ -402,12 +409,12 @@
     const present = rows.filter(row=>finite(row.n)&&row.n>=0).sort((a,b)=>b.n-a.n||a.i-b.i);
     const total = present.reduce((sum,row)=>sum+row.n,0);
     const share = row=>present.includes(row)&&total>0?100*row.n/total:null;
-    const table = details([...present,...rows.filter(row=>!present.includes(row))], 'Direct peer revenue share',
+    const ordered = [...present,...rows.filter(row=>!present.includes(row))];
+    const table = details(ordered, 'Direct peer revenue share',
       ['Revenue','Share of reported peer revenue'],row=>[
         {text:printed(row.n,'amount','USD',true),note:!finite(row.n)?unavailable(row.company,'revenue'):row.n<0?'Negative revenue excluded from the share calculation.':null},
         printed(share(row),'share','')
       ],true);
-    if (total<=0) return '<p class="sq-empty">No positive comparable revenue to show a share.</p>'+table;
     let before=0;
     const stops=present.filter(row=>row.n>0).map(row=>{
       const end=before+share(row);
@@ -415,11 +422,15 @@
       before=end;
       return stop;
     }).join(',');
-    const labels=present.map((row,i)=>'<li class="'+(row.active?'sq-active':'')+'"><span class="sq-pie-mark" style="--mark:'+row.color+'"></span>'+
-      (i<3?logo(row.company):'')+'<span>'+esc(row.ticker)+'</span><strong>'+esc(printed(share(row),'share',''))+'</strong></li>').join('');
+    const labels=ordered.map((row,i)=>'<li class="'+(row.active?'sq-active':'')+'"><span class="sq-share-company">'+
+      '<span class="sq-pie-mark" aria-hidden="true" style="--mark:'+row.color+'"></span>'+(i<3&&i<present.length?logo(row.company):'')+
+      '<span>'+esc(row.ticker)+'</span></span><strong class="sq-share-amount">'+(finite(row.n)?'USD '+esc(billionsNumber(row.n))+' bn':'—')+'</strong>'+
+      '<span class="sq-share-percent">'+esc(printed(share(row),'share',''))+'</span></li>').join('');
     const basis='<div class="sq-chart-meta"><span>'+present.length+'/'+rows.length+' direct peers reporting</span><span>Selected peer group</span></div>';
-    return basis+'<div class="sq-share-view"><div class="sq-donut" role="img" aria-label="Share of reported revenue among selected direct peers" style="--sq-stops:'+stops+'">'+
-      '<div><strong>'+esc(printed(total,'amount','USD'))+'</strong><small>Peer revenue</small></div></div><ol>'+labels+'</ol></div>'+table;
+    const donut=total>0?'<div class="sq-donut" role="img" aria-label="Share of reported revenue among selected direct peers" style="--sq-stops:'+stops+'">'+
+      '<div><strong>'+esc(billionsNumber(total))+'</strong><small>Peer revenue<br>USD bn</small></div></div>':'';
+    const empty=total<=0?'<p class="sq-empty">No positive comparable revenue to show a share.</p>':'';
+    return basis+empty+'<div class="sq-share-view">'+donut+'<ol>'+labels+'</ol></div>'+table;
   }
 
   function shareOfMagnitude(values){
