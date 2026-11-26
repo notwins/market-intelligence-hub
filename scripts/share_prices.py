@@ -129,6 +129,18 @@ def validate_points(points, cutoff):
         raise ValueError('Duplicate or unsorted dates')
 
 
+class UnverifiedProviderIdentity(ValueError):
+    """The response cannot be attributed to the registered instrument."""
+
+
+# These exact Yahoo restatements were checked against the adjacent accepted
+# observations. Keep the archived close and accept new dates on the same basis.
+REVIEWED_OVERLAPS = {
+    ('ndx', '2026-11-17'): (27001.78515625, 27001.779296875),
+    ('tcehy', '2026-11-16'): (49.52000045776367, 49.529998779296875),
+}
+
+
 def yahoo(instrument, start, now):
     symbol = instrument['ticker']
     begin = int(dt.datetime.combine(dt.date.fromisoformat(start), dt.time(), UTC).timestamp())
@@ -139,7 +151,15 @@ def yahoo(instrument, start, now):
         payload = json.load(response)
     series = payload['chart']['result'][0]
     meta = series['meta']
-    if meta['symbol'].upper() != symbol.upper() or meta.get('currency') != instrument['currency']:
+    currency_matches = meta.get('currency') == instrument['currency']
+    if instrument.get('id') == 'move':
+        name = meta.get('longName', meta.get('shortName', ''))
+        if (meta['symbol'].upper() != '^MOVE' or meta.get('instrumentType') != 'INDEX'
+                or not re.search(r'\bICE\b.*\bMOVE\b|\bBofA\b.*\bMOVE\b|Merrill Lynch Option Volatility Estimate', name, re.I)):
+            raise UnverifiedProviderIdentity('Yahoo MOVE metadata does not identify the ICE BofA index')
+        # Yahoo can return a USD market currency for this dimensionless index.
+        currency_matches = instrument['currency'] == '' and meta.get('currency') in ('', 'USD', None)
+    if meta['symbol'].upper() != symbol.upper() or not currency_matches:
         raise ValueError('Provider symbol/currency mismatch')
     if instrument.get('identity_name') and instrument['identity_name'].lower() not in meta.get('longName', meta.get('shortName', '')).lower():
         raise ValueError('Provider issuer-name mismatch')
@@ -331,10 +351,17 @@ def merge(root, observations, statuses, now):
             known.update(chunk['series'].get(identity, []))
         # A changed overlapping close can indicate a split/provider revision.
         # Hold this instrument for explicit reconciliation instead of splicing bases.
-        if any(date in known and not math.isclose(price, known[date], rel_tol=1e-7, abs_tol=1e-7) for date, price in points):
+        if any(date in known and not math.isclose(price, known[date], rel_tol=1e-7, abs_tol=1e-7)
+               and not (quote['status'] in ('provider_checked', 'provider_lag')
+                        and REVIEWED_OVERLAPS.get((identity, date)) == (known[date], price))
+               for date, price in points):
             quote['status'] = 'basis_review'
             errors.append(identity + ': overlapping close changed; reconcile history before appending')
             continue
+        if quote['status'] == 'provider_lag':
+            if not any(date in known for date, _ in points):
+                quote['status'] = 'basis_review'
+            continue  # The response contained no newer session; retain the accepted tail.
         for date, price in points:
             if date in known:
                 continue
@@ -369,11 +396,16 @@ def update(root, now):
         start = (dt.date.fromisoformat(quotes[item['id']]['date']) - dt.timedelta(days=10)).isoformat()
         try:
             points, _ = yahoo(item, start, now)
-            if not any(point[0] == quotes[item['id']]['date'] for point in points):
+            accepted_date = quotes[item['id']]['date']
+            if points and points[-1][0] < accepted_date:
+                return item['id'], points, 'provider_lag'
+            if not any(point[0] == accepted_date for point in points):
                 # Require continuity with the existing listing before adding a new
                 # tail. A missing overlap may be a relisting or provider-basis change.
                 return item['id'], [], 'basis_review'
             return item['id'], points, 'provider_checked'
+        except UnverifiedProviderIdentity:
+            return item['id'], [], 'source_unverified'
         except Exception:
             # Provider response bodies may contain unwanted content; retain only status.
             return item['id'], [], 'fetch_failed'

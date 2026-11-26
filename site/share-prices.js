@@ -46,7 +46,15 @@ function svg(lines,levels=[],events=[],opts={}){
 }
 async function series(symbol){await refresh();const item=resolve(symbol);if(!item)throw Error('This exact listing is not available in the shared price feed.');return {item,quote:quotes[item.id],...await history(item)};}
 async function earnings(){if(!manifest?.events)return [];const data=await read(manifest.events);if(data.schema_version!==1||!Array.isArray(data.events)||data.events.some(e=>!resolve(e.ticker)||!/^\d{4}-\d{2}-\d{2}$/.test(e.date)||!sourceUrl(e.source_url)||e.timing!=='date_only'))throw Error('Earnings dates failed validation');return data.events;}
-function status(q){const age=Math.floor((Date.now()-Date.parse(q.date+'T23:59:59Z'))/86400000);return ['fetch_failed','basis_review'].includes(q.status)?(q.status==='basis_review'?'History needs reconciliation; retained close.':'Refresh failed; retained close.'):(age>7?`Last observation is ${age} days old.`:q.status==='manual_source'?'Source awaits a new verified upload.':'Daily closing price');}
+function status(q){
+ if(q.status==='source_unverified')return 'Source identity could not be verified; retained close.';
+ if(q.status==='basis_review')return 'History needs reconciliation; retained close.';
+ if(q.status==='fetch_failed')return 'Refresh failed; retained close.';
+ if(q.status==='provider_lag')return 'Provider returned an older window; retained close.';
+ const age=Math.floor((Date.now()-Date.parse(q.date+'T23:59:59Z'))/86400000);
+ if(age>7)return `Last observation is ${age} days old.`;
+ return q.status==='manual_source'?'Source awaits a new verified upload.':'Daily closing price';
+}
 async function paint(el){const symbol=el.dataset.priceSymbol,item=resolve(symbol)||root.BOSEquity?.itemFor(symbol),version=(manifest?.latest.sha256||'none')+'|'+(manifest?.events?.sha256||'')+'|'+siRevision+'|'+error+'|'+(root.BOSEquity?.version()||'')+'|'+(root.ShareStaticData?.version()||'');const key=el.dataset.priceKey,period=preferences.get(key)||el.dataset.priceDefaultPeriod||'1M';if(el.dataset.priceVersion===version+'|'+period)return;el.dataset.priceVersion=version+'|'+period;
  if(!item){el.innerHTML=`<p class="mp-muted"><b>${E(symbol)}</b> · ${manifest?'This exact listing is not in the price feed. No substitute listing is used.':E(error||'Loading closing prices…')}</p>`;return;}
  const showIssuerDetails=!el.hasAttribute('data-price-hide-issuer-details');

@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from pathlib import Path
-from share_prices import write_snapshot, publish_manifest, load, merge, read_ref, validate_feed, upload, update, yahoo, import_events
+from share_prices import write_snapshot, publish_manifest, load, merge, read_ref, validate_feed, upload, update, yahoo, import_events, UnverifiedProviderIdentity
 
 
 class PriceFeedTests(unittest.TestCase):
@@ -35,6 +35,30 @@ class PriceFeedTests(unittest.TestCase):
         result = merge(self.root, {'a': [['2026-11-12', 50], ['2026-11-13', 51]]}, {'a': 'provider_checked'}, self.now)
         self.assertEqual(result['inserted'], 0)
         self.assertEqual(result['statuses'], {'basis_review': 1})
+
+    def test_reviewed_yahoo_overlap_keeps_archive_and_appends_new_date(self):
+        with patch.dict('share_prices.REVIEWED_OVERLAPS', {('a', '2026-11-12'): (100, 100.01)}):
+            result = merge(self.root, {'a': [['2026-11-12', 100.01], ['2026-11-13', 103]]},
+                           {'a': 'provider_checked'}, self.now)
+            self.assertEqual(result['inserted'], 1)
+            refused = merge(self.root, {'a': [['2026-11-12', 100.02]]}, {'a': 'provider_checked'}, self.now)
+            self.assertEqual(refused['statuses'], {'basis_review': 1})
+        manifest = validate_feed(self.root)
+        original = read_ref(self.root, read_ref(self.root, manifest['register'])['instruments'][0]['history'])
+        self.assertEqual(original['daily'], [['2026-11-12', 100]])
+
+    def test_move_requires_an_ice_index_identity(self):
+        item = {'id': 'move', 'ticker': '^MOVE', 'currency': ''}
+        meta = {'symbol': '^MOVE', 'currency': 'USD', 'instrumentType': 'INDEX', 'exchangeTimezoneName': 'UTC'}
+        series = {'meta': meta, 'timestamp': [int((self.now-dt.timedelta(days=1)).timestamp())],
+                  'indicators': {'quote': [{'close': [100]}]}}
+        payload = {'chart': {'result': [series]}}
+        with patch('share_prices.urllib.request.urlopen', side_effect=lambda *a, **k: io.BytesIO(json.dumps(payload).encode())):
+            meta['longName'] = 'Northern Trust iBoxx 5-Year Tar'
+            with self.assertRaises(UnverifiedProviderIdentity):
+                yahoo(item, '2026-11-12', self.now)
+            meta['longName'] = 'ICE BofA MOVE Index'
+            self.assertEqual(yahoo(item, '2026-11-12', self.now)[0], [['2026-11-13', 100]])
 
     def test_future_and_duplicate_rejected_before_manifest_promotion(self):
         original = (self.root/'manifest.json').read_bytes()
@@ -112,6 +136,20 @@ class PriceFeedTests(unittest.TestCase):
             result = update(self.root, self.now)
         self.assertEqual(result['inserted'], 0)
         self.assertEqual(result['statuses'], {'basis_review': 1})
+
+    def test_older_provider_window_retains_newer_accepted_close(self):
+        manifest = load(self.root/'manifest.json')
+        registry = read_ref(self.root, manifest['register'])
+        registry['instruments'][0]['automatic'] = True
+        manifest['register'] = write_snapshot(self.root, 'register', 'Instruments', registry, self.now)
+        publish_manifest(self.root, manifest)
+        merge(self.root, {'a': [['2026-11-13', 105]]}, {'a': 'provider_checked'}, self.now)
+        with patch('share_prices.yahoo', return_value=([['2026-11-12', 100]], {})):
+            self.assertEqual(update(self.root, self.now)['statuses'], {'provider_lag': 1})
+        quote = read_ref(self.root, validate_feed(self.root)['latest'])['quotes']['a']
+        self.assertEqual(quote['date'], '2026-11-13')
+        with patch('share_prices.yahoo', return_value=([['2026-11-11', 100]], {})):
+            self.assertEqual(update(self.root, self.now)['statuses'], {'basis_review': 1})
 
     def test_current_session_waits_for_close_and_buffer(self):
         item = {'ticker': 'TEST', 'currency': 'USD'}
