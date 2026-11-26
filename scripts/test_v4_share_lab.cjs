@@ -75,6 +75,11 @@ function environment({dataFailure=false,batch=false,bosFailure=false,mobile=fals
  assert(pivotView.includes('id="'+route+'"'));
  const tabsAt=pivotView.indexOf('class="subnav history-tabs"');
  assert(tabsAt>=0 && tabsAt<pivotView.indexOf('id="'+route+'"'));
+ routerContext.window.MarketSI={view:()=>'<article id="si-reference-fixture">SI reference</article>'};
+ router.applyRoute('history','si');
+ const siView=router.historyView();
+ assert(siView.includes('data-tab="si"') && siView.includes('SI Pricing'));
+ assert(siView.includes('id="si-reference-fixture"'), 'SI tab must render the SI pricing reader');
  router.applyRoute('history','yield');
  const loadingView=router.historyView();
  assert(loadingView.includes('role="status"') && loadingView.indexOf('class="subnav history-tabs"')<loadingView.indexOf('role="status"'));
