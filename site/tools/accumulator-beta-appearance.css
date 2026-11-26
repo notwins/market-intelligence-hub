@@ -518,6 +518,14 @@
 .accumulator-beta #beta-quick-pdf form { padding: clamp(14px, 4vw, 26px); }
 .accumulator-beta #beta-quick-title { font-family: var(--beta-display-font); font-size: 1.8rem; }
 .accumulator-beta #beta-quick-help { margin: 5px 0 10px; color: var(--muted); }
+.accumulator-beta .beta-pdf-edition { margin: 8px 0 5px; }
+.accumulator-beta #beta-quick-pdf .beta-pdf-edition label {
+  display: block;
+  padding: 0 0 4px;
+  min-height: 0;
+  cursor: default;
+}
+.accumulator-beta .beta-pdf-edition select { color: var(--ink); font-weight: 700; }
 .accumulator-beta .beta-pdf-style {
   display: flex;
   justify-content: space-between;

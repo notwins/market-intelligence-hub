@@ -95,7 +95,7 @@
 <link rel="stylesheet" href="accumulator-nvda-chart.css?v=20261126">
 <link rel="stylesheet" href="../stocks-beta3-quarterly-charts.css?v=1">
 <link rel="stylesheet" href="accumulator-beta-nvda-analysis.css?v=20261127">
-<link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127-tables">
+<link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127-pdf-pack">
 </head>
 <body class="accumulator-beta">
 <div class="top"><nav class="wrap" aria-label="Breadcrumb"><a href="../desk.html">Market Intel</a><span>/</span><a href="../v4.html#tools">Tools</a><span>/</span><a href="accumulator.html">Accumulator</a><span>/</span><b aria-current="page">Beta 2</b><span>/</span><a href="accumulator-3d.html">3D pricing</a></nav></div>
@@ -961,14 +961,24 @@ if(location.protocol==='https:'||location.protocol==='http:'){
 <dialog id="beta-quick-pdf" aria-labelledby="beta-quick-title" aria-describedby="beta-quick-help">
   <form>
     <h2 id="beta-quick-title">Quick PDF</h2>
+    <div class="beta-pdf-edition">
+      <label for="beta-quick-edition">PDF version</label>
+      <select id="beta-quick-edition" aria-describedby="beta-quick-help" autofocus>
+        <option value="client">Client one-pager</option>
+        <option value="brief" selected>Section brief</option>
+        <option value="equity">NVIDIA equity report</option>
+        <option value="competitors">Competitor analysis</option>
+        <option value="pack">All-in-one accumulator pack</option>
+      </select>
+    </div>
     <p id="beta-quick-help">Create a short client brief from the selected sections and current figures.</p>
     <p class="beta-pdf-style">Page style <strong id="beta-quick-style"></strong></p>
     <fieldset>
       <legend>Sections to include</legend>
-      <label class="beta-whole-page"><input type="checkbox" id="beta-quick-all" checked autofocus>Whole page</label>
+      <label class="beta-whole-page"><input type="checkbox" id="beta-quick-all" checked>Whole page</label>
       <div id="beta-quick-sections"></div>
     </fieldset>
-    <label><input type="checkbox" id="beta-quick-appendix">Add full tables, charts and open details</label>
+    <label id="beta-quick-appendix-option"><input type="checkbox" id="beta-quick-appendix">Add full tables, charts and open details</label>
     <p id="beta-quick-status" role="status"></p>
     <div class="beta-pdf-actions">
       <button type="button" id="beta-quick-close">Cancel</button>
@@ -977,6 +987,8 @@ if(location.protocol==='https:'||location.protocol==='http:'){
   </form>
 </dialog>
 <script src="accumulator-beta-appearance.js?v=20261127" defer></script>
-<script src="accumulator-beta-quick-brief.js?v=20261127-fundamentals" defer></script>
-<script src="accumulator-beta-quick-pdf.js?v=20261127-tables" defer></script>
+<script src="accumulator-beta-quick-brief.js?v=20261127-pack" defer></script>
+<script src="accumulator-beta-pdf-editions.js?v=20261127" defer></script>
+<script src="accumulator-beta-pdf-research.js?v=20261127" defer></script>
+<script src="accumulator-beta-quick-pdf.js?v=20261127-pack" defer></script>
 </body></html>

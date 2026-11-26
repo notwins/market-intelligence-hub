@@ -59,7 +59,7 @@
     return view;
   }
 
-  function render({doc, colour, view, style, stamp, logo, printText}) {
+  function render({doc, colour, view, style, stamp, logo, printText, append = false}) {
     const w = doc.internal.pageSize.getWidth();
     const margin = 15;
     const width = w - 2 * margin;
@@ -104,7 +104,8 @@
       return top + lines.length * size * .44;
     }
     function page(title, subtitle) {
-      if (!first) doc.addPage();
+      if (!first || append) doc.addPage();
+      append = false;
       fill('accent', 0, 0, w * .5, 2.2);
       fill('secondary', w * .5, 0, w * .28, 2.2);
       fill('tertiary', w * .78, 0, w * .22, 2.2);
