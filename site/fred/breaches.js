@@ -131,7 +131,7 @@
     const start = state.page*pageSize;
     get('breach-events').innerHTML = list.length ? `<div class="event-grid">${list.slice(start,start+pageSize).map(event=>{
       const item = state.byId.get(event.id);
-      return `<button type="button" class="event heat-${event.threshold} ${event.z<0?'negative':'positive'}" data-event="${E(event.key)}" aria-pressed="${event.key===state.selection?.key}">
+      return `<button type="button" data-topic="${E(item.mainGroup)}" class="event heat-${event.threshold} ${event.z<0?'negative':'positive'}" data-event="${E(event.key)}" aria-pressed="${event.key===state.selection?.key}">
         <span class="event-date">${E(event.period.label)} · ${E(eventLabel(event))}</span><strong>${E(item.name)}</strong>
         <span class="event-meta">${E(item.mainGroup)} ${badge(event.z,event.threshold)}</span>
       </button>`;
@@ -154,7 +154,7 @@
       return `<li><div><strong>${E(item.name)}</strong><small>${E(metricName(item.metric))} · ${E(B.period(item.latest.date,item.frequency).label)}</small><small>${E(text)}</small></div>${badge(item.latest.z,threshold)}
         ${event?`<button type="button" data-event="${E(event.key)}">Replay</button>`:''}</li>`;
     });
-    return `<article class="group-card" aria-labelledby="breach-group-card-${index}">
+    return `<article data-topic="${E(group)}" class="group-card" aria-labelledby="breach-group-card-${index}">
       <h4 class="group-card-head heat-${threshold} ${lead.latest.z<0?'negative':'positive'}" id="breach-group-card-${index}">${head}</h4>
       ${summary}${context.length?`<p class="group-market"><strong>Near the ${E(lead.crossing.period.label)} breach</strong> ${E(context.join(' · '))}</p>`:''}
       <ul class="signal-list">${rows.slice(0,5).join('')}</ul>
