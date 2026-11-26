@@ -13,7 +13,7 @@ class E{
 const data=JSON.parse(fs.readFileSync('site/data/research-register.json')),standard=JSON.parse(fs.readFileSync('site/data/external-source-standard.json'));
 async function main(){
  const nodes={};for(const id of ['controls','results','count','checked','totals','pending-note','loading'])nodes[`[data-research-${id}]`]=new E('div');
- const host={querySelector:q=>nodes[q]};
+ const host={querySelector:q=>nodes[q],closest:selector=>selector==='.market-understanding'?{}:null};
  const context={URL,URLSearchParams,Intl,Date,Map,Set,location:{search:'?research-status=pending'},document:{currentScript:{src:'https://example.test/hub/research-register.js'},getElementById:id=>id==='my-research'?host:null,createElement:name=>new E(name)},fetch:async url=>({ok:true,json:async()=>String(url).endsWith('research-register.json')?data:standard})};
  context.globalThis=context;vm.createContext(context);vm.runInContext(fs.readFileSync('site/research-register.js','utf8'),context);
  await new Promise(r=>setTimeout(r,10));
@@ -21,6 +21,8 @@ async function main(){
  assert.equal(results.children.length,data.entries.filter(x=>x.state==='pending').length);
  const selectors=controls.querySelectorAll('select'),query=controls.querySelectorAll('input')[0],buttons=controls.querySelectorAll('button');
  assert.equal(selectors[0].value,'pending');assert.equal(nodes['[data-research-pending-note]'].hidden,false);
+ assert(results.querySelectorAll('details').every(d=>d.open));assert.equal(buttons[0].attributes['aria-pressed'],'true');
+ buttons[0].events.click();assert(results.querySelectorAll('details').every(d=>!d.open));assert.equal(buttons[0].attributes['aria-pressed'],'false');
  buttons[0].events.click();assert(results.querySelectorAll('details').every(d=>d.open));assert.equal(buttons[0].attributes['aria-pressed'],'true');
  buttons[1].events.click();assert.equal(selectors[0].value,'published');assert.equal(results.children.length,data.entries.filter(x=>x.state==='published').length);assert(nodes['[data-research-pending-note]'].hidden);
  query.value='SPX collar';query.events.input();
