@@ -792,84 +792,84 @@
       "observation_id": "8e4c23a97c294edfa8b41053"
     },
     "US87973RAW07": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25T08:07:55Z",
+      "date": "2026-11-26",
+      "observed_at": "2026-11-26T08:03:14Z",
       "time_precision": "second",
-      "bid": 49.702,
-      "ask": 50.223,
-      "yield_pct": 5.584,
-      "ask_yield_pct": 5.529,
+      "bid": 49.77,
+      "ask": 50.28,
+      "yield_pct": 5.577,
+      "ask_yield_pct": 5.523,
       "yield_basis": "Bid yield to worst",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/US87973RAW07",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/US87973RAW07",
-      "source_sha256": "7e8b66cc4fae9fecf8c0bdcfb1a16c0e217f7ea1206720a277f3ee914f5f5a6b",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "cb6b29772a37cf18670a0c0b"
+      "source_sha256": "c351599076dba782eccc30c0b27fbebeb6e6c99c181f53ca37fef704a2cd240a",
+      "retrieved_at": "2026-11-26T23:54:51Z",
+      "observation_id": "ef7d6d00f9a1292d1edbe74b"
     },
     "AU000XCLWAP3": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25T08:07:55Z",
+      "date": "2026-11-26",
+      "observed_at": "2026-11-26T08:03:15Z",
       "time_precision": "second",
-      "bid": 84.308,
-      "ask": 84.451,
-      "yield_pct": 4.941,
-      "ask_yield_pct": 4.924,
+      "bid": 84.367,
+      "ask": 84.526,
+      "yield_pct": 4.935,
+      "ask_yield_pct": 4.916,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/AU000XCLWAP3",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/AU000XCLWAP3",
-      "source_sha256": "c4a4452dd81705968da8534f222b0c5fa65b022b35b46733849f14420a790ef3",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "390f6a6f77543cd817f6eabd"
+      "source_sha256": "6b75c1c1ccdffff0b75e8130c7833f7af473e5988007cb904e75bd720a8d4377",
+      "retrieved_at": "2026-11-26T23:54:51Z",
+      "observation_id": "1cbe05fa54641bd04dc678dd"
     },
     "NC22300W": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25T08:07:55Z",
+      "date": "2026-11-26",
+      "observed_at": "2026-11-26T08:03:14Z",
       "time_precision": "second",
-      "bid": 112.45,
-      "ask": 113.925,
-      "yield_pct": 2.538,
-      "ask_yield_pct": 2.488,
+      "bid": 112.39,
+      "ask": 113.865,
+      "yield_pct": 2.54,
+      "ask_yield_pct": 2.49,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NC22300W",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NC22300W",
-      "source_sha256": "1277e0b1b71dcb4d39bf64c89475bba52da92767e8f63f7739dfe286dc934197",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "abe633c637d9af71adc9d810"
+      "source_sha256": "ec6f1c835351d76d7ba486f6e8fd8e0f0a5203b04c7eb37670adede640c1e94b",
+      "retrieved_at": "2026-11-26T23:54:51Z",
+      "observation_id": "a939b1bc9ad9963dd49ddbfd"
     },
     "NZ13100V": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25T08:07:54Z",
+      "date": "2026-11-26",
+      "observed_at": "2026-11-26T08:03:15Z",
       "time_precision": "second",
-      "bid": 108.094,
-      "ask": 108.437,
-      "yield_pct": 2.085,
-      "ask_yield_pct": 2.032,
+      "bid": 108.066,
+      "ask": 108.445,
+      "yield_pct": 2.088,
+      "ask_yield_pct": 2.03,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NZ13100V",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NZ13100V",
-      "source_sha256": "ec763422303e744cbf052dd8f03138869fe17cc76c3d53e8b8c27694495c2e51",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "df73a6ef2116a15a09d703cf"
+      "source_sha256": "8ae9c2229d633317638d6c2094661f02764c42c895a80e7218170fdc80441c83",
+      "retrieved_at": "2026-11-26T23:54:51Z",
+      "observation_id": "6f25b8259e16728a501ac212"
     },
     "NX24100T": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25T08:07:55Z",
+      "date": "2026-11-26",
+      "observed_at": "2026-11-26T09:49:37Z",
       "time_precision": "second",
-      "bid": 108.633,
-      "ask": 108.983,
+      "bid": 108.627,
+      "ask": 108.99,
       "yield_pct": 2.113,
-      "ask_yield_pct": 2.064,
+      "ask_yield_pct": 2.061952,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NX24100T",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NX24100T",
-      "source_sha256": "888ce5d53501b11dc65c2bd0e3f3bc9b8dc7eddc592a1c5df22bce0061534c4e",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "998074e8bdbf5e6bb848c6ea"
+      "source_sha256": "3e36821fb8c01ad811c7b64d5100515b6c217252e8a1a412dec9b445f5482b38",
+      "retrieved_at": "2026-11-26T23:54:51Z",
+      "observation_id": "758932aa12a7862dcdbf5372"
     }
   },
   "history": {
@@ -5106,6 +5106,22 @@
         "source_sha256": "7e8b66cc4fae9fecf8c0bdcfb1a16c0e217f7ea1206720a277f3ee914f5f5a6b",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "cb6b29772a37cf18670a0c0b"
+      },
+      {
+        "date": "2026-11-26",
+        "observed_at": "2026-11-26T08:03:14Z",
+        "time_precision": "second",
+        "bid": 49.77,
+        "ask": 50.28,
+        "yield_pct": 5.577,
+        "ask_yield_pct": 5.523,
+        "yield_basis": "Bid yield to worst",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/US87973RAW07",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/US87973RAW07",
+        "source_sha256": "c351599076dba782eccc30c0b27fbebeb6e6c99c181f53ca37fef704a2cd240a",
+        "retrieved_at": "2026-11-26T23:54:51Z",
+        "observation_id": "ef7d6d00f9a1292d1edbe74b"
       }
     ],
     "AU000XCLWAP3": [
@@ -5252,6 +5268,22 @@
         "source_sha256": "c4a4452dd81705968da8534f222b0c5fa65b022b35b46733849f14420a790ef3",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "390f6a6f77543cd817f6eabd"
+      },
+      {
+        "date": "2026-11-26",
+        "observed_at": "2026-11-26T08:03:15Z",
+        "time_precision": "second",
+        "bid": 84.367,
+        "ask": 84.526,
+        "yield_pct": 4.935,
+        "ask_yield_pct": 4.916,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/AU000XCLWAP3",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/AU000XCLWAP3",
+        "source_sha256": "6b75c1c1ccdffff0b75e8130c7833f7af473e5988007cb904e75bd720a8d4377",
+        "retrieved_at": "2026-11-26T23:54:51Z",
+        "observation_id": "1cbe05fa54641bd04dc678dd"
       }
     ],
     "NC22300W": [
@@ -5398,6 +5430,22 @@
         "source_sha256": "1277e0b1b71dcb4d39bf64c89475bba52da92767e8f63f7739dfe286dc934197",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "abe633c637d9af71adc9d810"
+      },
+      {
+        "date": "2026-11-26",
+        "observed_at": "2026-11-26T08:03:14Z",
+        "time_precision": "second",
+        "bid": 112.39,
+        "ask": 113.865,
+        "yield_pct": 2.54,
+        "ask_yield_pct": 2.49,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NC22300W",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NC22300W",
+        "source_sha256": "ec6f1c835351d76d7ba486f6e8fd8e0f0a5203b04c7eb37670adede640c1e94b",
+        "retrieved_at": "2026-11-26T23:54:51Z",
+        "observation_id": "a939b1bc9ad9963dd49ddbfd"
       }
     ],
     "NZ13100V": [
@@ -5544,6 +5592,22 @@
         "source_sha256": "ec763422303e744cbf052dd8f03138869fe17cc76c3d53e8b8c27694495c2e51",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "df73a6ef2116a15a09d703cf"
+      },
+      {
+        "date": "2026-11-26",
+        "observed_at": "2026-11-26T08:03:15Z",
+        "time_precision": "second",
+        "bid": 108.066,
+        "ask": 108.445,
+        "yield_pct": 2.088,
+        "ask_yield_pct": 2.03,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NZ13100V",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NZ13100V",
+        "source_sha256": "8ae9c2229d633317638d6c2094661f02764c42c895a80e7218170fdc80441c83",
+        "retrieved_at": "2026-11-26T23:54:51Z",
+        "observation_id": "6f25b8259e16728a501ac212"
       }
     ],
     "NX24100T": [
@@ -5690,181 +5754,197 @@
         "source_sha256": "888ce5d53501b11dc65c2bd0e3f3bc9b8dc7eddc592a1c5df22bce0061534c4e",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "998074e8bdbf5e6bb848c6ea"
+      },
+      {
+        "date": "2026-11-26",
+        "observed_at": "2026-11-26T09:49:37Z",
+        "time_precision": "second",
+        "bid": 108.627,
+        "ask": 108.99,
+        "yield_pct": 2.113,
+        "ask_yield_pct": 2.061952,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NX24100T",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NX24100T",
+        "source_sha256": "3e36821fb8c01ad811c7b64d5100515b6c217252e8a1a412dec9b445f5482b38",
+        "retrieved_at": "2026-11-26T23:54:51Z",
+        "observation_id": "758932aa12a7862dcdbf5372"
       }
     ]
   },
   "checks": {
     "US91282CJJ18": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US91282CJZ59": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US91282CMM00": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810FT08": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810PT97": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810PU60": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810PX00": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QC53": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QE10": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QN19": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810QQ40": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TC27": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "unavailable",
       "message": "Exact coupon/maturity match unavailable; no substitute bond used"
     },
     "US912810QW18": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TM09": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TW80": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TZ12": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RJ97": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RK60": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810UL07": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RM27": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RP57": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810RQ31": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810UV88": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SA79": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SD19": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SF66": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SL35": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810SZ21": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US912810TL26": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
-      "result": "New source observation"
+      "result": "Source unchanged; actual quote date retained"
     },
     "US87973RAW07": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
       "result": "New source observation"
     },
     "AU000XCLWAP3": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
       "result": "New source observation"
     },
     "NC22300W": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
       "result": "New source observation"
     },
     "NZ13100V": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
       "result": "New source observation"
     },
     "NX24100T": {
-      "checked_at": "2026-11-25T23:48:47Z",
+      "checked_at": "2026-11-26T23:54:51Z",
       "status": "ok",
       "result": "New source observation"
     }
   },
-  "checked_at": "2026-11-25T23:48:47Z",
+  "checked_at": "2026-11-26T23:54:51Z",
   "status": "partial"
 }
