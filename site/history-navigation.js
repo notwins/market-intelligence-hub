@@ -1,8 +1,8 @@
 /* One history directory for the rail, chart toolbar and home shortcuts. */
 (function(root){'use strict';
 const atlas = root.document?.currentScript?.src
-  ? new URL('assets/navigation-atlas.svg', root.document.currentScript.src).href
-  : 'assets/navigation-atlas.svg';
+  ? new URL('assets/navigation-atlas.svg?v=2', root.document.currentScript.src).href
+  : 'assets/navigation-atlas.svg?v=2';
 function icon(key) {
   return '<svg class="history-nav-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><use href="'+atlas+'#'+key+'"/></svg>';
 }

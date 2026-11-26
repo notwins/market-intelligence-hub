@@ -393,7 +393,7 @@
     svg.setAttribute('focusable', 'false');
     svg.classList.add('hub-nav-icon');
     const picture = document.createElementNS(ns, 'use');
-    picture.setAttribute('href', new URL('assets/navigation-atlas.svg#' + key, base).href);
+    picture.setAttribute('href', new URL('assets/navigation-atlas.svg?v=2#' + key, base).href);
     svg.append(picture);
     return svg;
   }
@@ -687,7 +687,7 @@
     for (const control of grid.querySelectorAll(':scope > a, :scope > button')) {
       const route = controlRoute(control);
       control.dataset.navTone = toneFor(route, 'blue');
-      addIcon(control, control.hasAttribute('data-site-settings-open') || control.id === 'display-settings-open' ? 'settings' : artFor(route));
+      addIcon(control, control.matches('[data-site-settings-open], [data-display-open], #display-settings-open') ? 'settings' : artFor(route));
     }
   }
   decorateJumpShortcuts();
