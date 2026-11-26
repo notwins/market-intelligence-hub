@@ -7,8 +7,16 @@ if(!latest||!library)return;
 root.dataset.libraryReady='true';
 const original=Array.from(root.children);
 const entry=document.createElement('header');entry.className='library-entry';
-entry.innerHTML='<nav aria-label="Where we are"><a href="../desk.html">Home</a><span aria-hidden="true"> / </span><span aria-current="page">Research Explained</span><a class="library-map" href="../site-map.html" data-site-map>Site map</a></nav><h1>Research Explained</h1><p>Read the latest reports, find a past write-up, or learn the basics.</p><div class="library-choices"><a href="#main-published-research"><b>Latest reports <span aria-hidden="true">→</span></b><span>Full reports and matching Quick reads</span></a><a href="#my-research"><b>My blog write-ups <span aria-hidden="true">→</span></b><span>Search past editions by topic or date</span></a><a href="../external-sources.html"><b>Official papers <span aria-hidden="true">→</span></b><span>Open the original source documents</span></a></div>';
+entry.innerHTML=`
+  <nav class="library-breadcrumb" aria-label="Where we are"><a href="../desk.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">My Blog</span><a class="library-map" href="../site-map.html" data-site-map>Site map</a></nav>
+  <div class="ws-hero">
+    <div class="ws-intro"><p class="ws-kicker">Research library</p><h1>Research Explained</h1><p class="ws-deck">Read the latest reports, find a past write-up, or learn the basics.</p>
+    <nav class="ws-jumps" aria-label="Research collections"><a href="#my-thoughts">My thoughts</a><a href="#library-news">Reuters briefs</a><a href="#library-basics">Market basics</a></nav></div>
+    <div class="ws-plate"><img src="../assets/desk/reading-journal.png" width="1280" height="610" alt=""></div>
+  </div>
+  <nav class="library-choices" aria-label="Research workspaces"><a href="#main-published-research"><b>Latest reports</b><span>Full reports and matching Quick reads</span></a><a href="#my-research"><b>My blog write-ups</b><span>Search past editions by topic or date</span></a><a href="../external-sources.html"><b>Official papers</b><span>Open the original source documents</span></a></nav>`;
 root.prepend(entry);entry.after(latest);
+import('./research-workspaces.js?v=1');
 function group(id,title,description,nodes){
  const section=document.createElement('details');section.className='library-group';section.id=id;
  const summary=document.createElement('summary');const label=document.createElement('strong');label.textContent=title;const sub=document.createElement('span');sub.textContent=description;summary.append(label,sub);section.append(summary);

@@ -1,0 +1,179 @@
+/* Shared editorial surfaces, activated only in the library or the Calls view. */
+@font-face { font-family:"Workspace Sans"; src:url("assets/desk/dm-sans.woff2") format("woff2"); font-weight:100 1000; font-display:swap; }
+@font-face { font-family:"Workspace Serif"; src:url("assets/desk/stix-two-text.woff2") format("woff2"); font-weight:400 700; font-display:swap; }
+:is(.ws-blog,.ws-calls) {
+  --ws-font:"Workspace Sans",system-ui,sans-serif; --ws-display:"Workspace Serif",Georgia,serif;
+  --ws-paper:#f8f7f2; --ws-card:#fffdf8; --ws-ink:#272924; --ws-muted:#545b53; --ws-rule:#cccfc3;
+  --ws-color:#644757; --ws-tint:#eee6ea; --ws-line:#cbbac3;
+}
+.ws-calls { --ws-color:#395541; --ws-tint:#e5ebde; --ws-line:#bac7b3; }
+:is(.ws-blog,.ws-calls) body { background:var(--ws-paper); }
+:is(.ws-blog,.ws-calls) .bottom-nav.hub-primary { align-items:center; gap:.4rem; background:#fcfbf6; border-bottom-color:var(--ws-rule); box-shadow:none; }
+html[data-nav-style=professional]:is(.ws-blog,.ws-calls) .hub-primary-group { background:#f4f4ed; border:1px solid #dbdfd3; border-radius:5px; }
+html[data-nav-style=professional]:is(.ws-blog,.ws-calls) .hub-primary-group:has(>[aria-current]) { background:var(--ws-tint); border-color:var(--ws-line); }
+:is(.ws-blog,.ws-calls) .hub-primary > .hub-primary-more, .ws-settings {
+  display:inline-flex; align-items:center; justify-content:center; box-sizing:border-box; flex:none;
+  min-height:44px; margin:0; border:1px solid #364035; border-radius:5px; box-shadow:none;
+  background:#364035; color:#fff; font:600 .9rem/1.1 var(--ws-font)!important;
+}
+.ws-settings { width:44px; border-color:#b8bdae; background:#f6f6ee; color:#344331; cursor:pointer; }
+.ws-settings svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.65; stroke-linecap:round; stroke-linejoin:round; }
+.ws-motion-option { padding:.8rem 1rem; margin:1rem 0; border:1px solid var(--ws-line); border-radius:6px; background:var(--ws-tint); }
+.ws-motion-option label { display:flex; align-items:center; justify-content:space-between; gap:1rem; min-height:42px; cursor:pointer; font:650 1rem var(--ws-font); }
+.ws-motion-option input { width:1.3rem; height:1.3rem; min-height:0; accent-color:var(--ws-color); }
+.ws-motion-option p { font:400 .875rem/1.45 var(--ws-font); margin:.2rem 0; color:var(--ws-muted); }
+
+/* Mastheads and anchors */
+:is(.ws-blog .library-entry,.ws-calls .calls-edition) .ws-hero {
+  display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); align-items:center;
+  gap:clamp(1.5rem,4vw,4.8rem); padding:clamp(1.1rem,2.6vw,2.6rem) 0; border-bottom:1px solid var(--ws-rule);
+}
+.ws-hero .ws-intro { min-width:0; }
+:is(.ws-blog .library-entry,.ws-calls .calls-edition) .ws-kicker {
+  display:flex; align-items:center; gap:.65rem; margin:0 0 .9rem; color:var(--ws-color);
+  font:700 .76rem/1.4 var(--ws-font); letter-spacing:.13em; text-transform:uppercase;
+}
+.ws-kicker::before { content:""; width:1.7rem; border-top:2px solid currentColor; }
+.ws-blog .library-entry h1,.ws-calls .calls-edition .ws-hero h2 {
+  margin:0 0 .6rem; padding:0; color:var(--ws-ink); font:460 clamp(2.9rem,5.25vw,6rem)/1 var(--ws-display); letter-spacing:-.055em;
+}
+:is(.ws-blog .library-entry,.ws-calls .calls-edition) .ws-deck {
+  max-width:47ch; margin:0; font:420 clamp(1rem,1.3vw,1.2rem)/1.5 var(--ws-font); color:var(--ws-muted);
+}
+.ws-calls .calls-edition .ws-deck strong { color:var(--ws-ink); font-weight:580; }
+.ws-hero .ws-plate { overflow:hidden; border-radius:5px; min-width:0; background:#e2d4dc; }
+.ws-calls .ws-hero .ws-plate { aspect-ratio:1280 / 610; background:#cdd9ca url("assets/desk/review-compass.png") center / contain no-repeat; }
+.ws-blog .ws-hero .ws-plate { max-height:clamp(12rem,18vw,16rem); }
+.ws-blog .ws-hero .ws-plate img { height:100%; max-height:inherit; object-fit:contain; }
+.ws-plate img { display:block; width:100%; height:auto; }
+:is(.ws-blog .library-entry,.ws-calls .calls-edition) .ws-jumps { display:flex; flex-wrap:wrap; justify-content:flex-start; gap:.4rem; margin:1.15rem 0 0; }
+.ws-blog .ws-jumps a,.ws-calls .ws-jumps button {
+  display:inline-flex; align-items:center; min-height:40px; padding:.45rem .75rem; border:1px solid #b7bcae;
+  border-radius:5px; color:var(--ws-ink); background:transparent; cursor:pointer; font:550 .875rem/1.25 var(--ws-font); text-decoration:none;
+}
+.ws-blog .ws-jumps a:hover,.ws-calls .ws-jumps button:hover { background:var(--ws-tint); border-color:var(--ws-color); }
+:is(.ws-blog,.ws-calls) :is(.ws-jumps a,.ws-jumps button,.ws-settings,.library-choices a):focus-visible { outline:3px solid #875a32; outline-offset:3px; }
+
+/* Library contents, including dynamically delivered editions. */
+.ws-blog body { margin:0; }
+.ws-blog #market-understanding { --mu-bg:var(--ws-paper); --mu-ink:var(--ws-ink); --mu-muted:var(--ws-muted); --mu-line:var(--ws-rule);
+  box-sizing:border-box; width:100%; max-width:100rem; margin:auto; padding:0 clamp(1rem,4.2vw,5rem) 3rem; color:var(--ws-ink); background:var(--ws-paper); font-family:var(--ws-font);
+}
+.ws-blog .library-entry { padding:0; margin:0; border:0; border-radius:0; background:transparent; }
+.ws-blog .library-breadcrumb { padding:.7rem 0; gap:.6rem; border-bottom:1px solid var(--ws-rule); color:var(--ws-muted); font:550 .88rem/1.3 var(--ws-font); }
+.ws-blog .library-breadcrumb a { color:var(--ws-color); }
+.ws-blog .library-map { min-height:34px; margin-left:auto; }
+.ws-blog .library-choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin:0; border-bottom:1px solid var(--ws-rule); }
+.ws-blog .library-choices a { position:relative; display:block; padding:1rem 2rem 1rem 1.2rem; color:var(--ws-ink); border:0; border-right:1px solid var(--ws-rule); border-radius:0; background:transparent; }
+.ws-blog .library-choices a:first-child { padding-left:0; }
+.ws-blog .library-choices a:last-child { border-right:0; }
+.ws-blog .library-choices a::after { content:""; position:absolute; right:.95rem; top:45%; width:.43rem; height:.43rem; border:solid var(--ws-color); border-width:1.5px 1.5px 0 0; transform:rotate(45deg); }
+.ws-blog .library-choices b { display:block; font:560 1.3rem/1.2 var(--ws-display); letter-spacing:-.02em; }
+.ws-blog .library-choices a>span { display:block; margin-top:.28rem; font:.88rem/1.45 var(--ws-font); color:var(--ws-muted); }
+.ws-blog .library-choices a:hover { background:#efeee7; }
+.ws-blog #market-understanding > .mu-writeups { margin:0; padding:clamp(1.7rem,3vw,3rem) 0; background:transparent; color:var(--ws-ink); border:0; border-bottom:1px solid var(--ws-rule); }
+.ws-blog .mu-writeups-heading { align-items:center; gap:.7rem 1.2rem; }
+.ws-blog .mu-writeups-heading .mu-eyebrow { color:var(--ws-color); font:650 .75rem/1.4 var(--ws-font); text-transform:uppercase; letter-spacing:.12em; }
+.ws-blog .mu-writeups-heading h2,.ws-blog .rr-heading h2 { color:var(--ws-ink); margin:.35rem 0 .6rem; font:500 clamp(2.05rem,3.4vw,3.5rem)/1.08 var(--ws-display); letter-spacing:-.045em; }
+.ws-blog .mu-writeups-heading p { margin:.3rem 0; max-width:81ch; color:var(--ws-muted); }
+.ws-blog .mu-writeups-heading > a { color:var(--ws-color); white-space:nowrap; }
+.ws-blog #automated-research { margin:1rem 0; border-color:var(--ws-rule); }
+.ws-blog #automated-research .rf-controls { display:grid; grid-template-columns:minmax(14rem,32rem) max-content max-content; justify-content:start; align-items:center; gap:.4rem .7rem; }
+.ws-blog #automated-research .rf-controls label { grid-column:1/-1; }
+.ws-blog #automated-research .rf-controls label { flex:1 1 22rem; font:600 .875rem/1.4 var(--ws-font); }
+.ws-blog #automated-research input,.ws-blog .rr-controls :is(input,select) { background:#fffefa; border:1px solid #aeb5a7; color:var(--ws-ink); border-radius:5px; }
+.ws-blog #automated-research .rf-controls button { padding:.5rem .85rem; border:1px solid #614e59; border-radius:5px; background:#614e59; color:white; font:600 .875rem/1.3 var(--ws-font); }
+.ws-blog #automated-research .rf-controls a,.ws-blog .library-next a { color:var(--ws-color); }
+.ws-blog .mu-writeups-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(.7rem,1.2vw,1.25rem); align-items:stretch; }
+.ws-blog .mu-writeups .mu-writeup { min-width:0; padding:clamp(1rem,1.7vw,1.8rem); background-color:var(--ws-card); border:1px solid var(--ws-rule); border-top:3px solid var(--ws-line); border-radius:6px; }
+.ws-blog #automated-research .mu-writeups-grid > article:first-child { grid-column:span 2; background-color:#f0e8e9; border-top-color:#896878; }
+.ws-blog .mu-writeups .mu-writeup h3 { margin:.6rem 0; color:var(--ws-ink); font:525 clamp(1.4rem,2vw,2.05rem)/1.15 var(--ws-display); letter-spacing:-.035em; }
+.ws-blog #automated-research article:first-child h3 { font-size:clamp(1.75rem,2.8vw,2.85rem); max-width:34ch; }
+.ws-blog .mu-writeups .mu-writeup h3 a { color:inherit; }
+.ws-blog .mu-writeups .mu-writeup .mu-eyebrow { font:.79rem/1.45 var(--ws-font); color:var(--ws-muted); letter-spacing:.035em; }
+.ws-blog .mu-writeup p { line-height:1.5; }
+.ws-blog .mu-writeup .mu-card-actions { gap:.4rem .8rem; }
+.ws-blog .library-next { margin-top:1.25rem; padding:.8rem 1rem; background:#eeece6; border-left:2px solid var(--ws-line); border-radius:0; color:var(--ws-ink); }
+.ws-blog .library-group { margin:.7rem 0; border:1px solid var(--ws-rule); border-radius:6px; background:var(--ws-card); }
+.ws-blog .library-group > summary { padding:1rem 1.2rem; color:var(--ws-color); }
+.ws-blog .library-group > summary strong { font:550 1.45rem/1.3 var(--ws-display); letter-spacing:-.025em; }
+.ws-blog .library-group > summary span { font:.9rem/1.45 var(--ws-font); color:var(--ws-muted); }
+.ws-blog :is(.mu-writeups,.library-group,[id="my-research"]) { scroll-margin-top:calc(var(--hub-primary-height,56px) + .75rem); }
+
+/* Keep the V4 shell and all its destinations available while giving Calls its own paper and ink. */
+.ws-calls .shell, .ws-calls .content { background:var(--ws-paper); }
+.ws-calls .rail { background:#27382f; }
+.ws-calls .content .overview-switch { margin-top:0; }
+.ws-calls .content .hub-extra-links { margin-block:.45rem; }
+.ws-calls #view .calls-edition { --w-ink:var(--ws-ink); --w-muted:var(--ws-muted); --w-card:var(--ws-card); --w-line:var(--ws-rule); --w-link:var(--ws-color);
+  margin:0; padding:0; border:0; border-radius:0; color:var(--ws-ink); background:transparent; font-family:var(--ws-font);
+}
+.ws-calls .calls-edition .ws-hero { grid-template-columns:minmax(0,1.2fr) minmax(0,.85fr); }
+.ws-calls .calls-edition .ws-hero h2 { font-size:clamp(2.65rem,4.6vw,5.6rem); }
+.ws-calls .calls-edition .ws-deck { font-size:1rem; max-width:58ch; }
+.ws-calls .calls-edition .feed-freshness:empty { display:none; }
+.ws-calls .calls-edition :is(.calls-companies,.calls-ledger,#nvda-covered-call-moomoo-guide) { margin:clamp(1.6rem,3vw,3.2rem) 0; }
+.ws-calls .calls-edition :is(.calls-companies,.calls-ledger) > h3, .ws-calls #nvda-covered-call-title { margin:0 0 .65rem; color:var(--ws-ink); font:520 clamp(1.8rem,2.7vw,3rem)/1.11 var(--ws-display); letter-spacing:-.035em; }
+.ws-calls .calls-edition [id$="-title"] { scroll-margin-top:calc(var(--hub-primary-height,56px) + var(--sticky-topbar-height,64px) + 1.5rem); }
+.ws-calls .calls-companies .watchlist-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.85rem; }
+.ws-calls .calls-companies .watchlist-card { min-width:0; border:1px solid #c9d1c2; border-top:3px solid #869981; border-radius:6px; padding:clamp(1rem,1.4vw,1.55rem); background-color:#f1f3ea; }
+.ws-calls .calls-companies .watchlist-card:nth-child(2) { background-color:#f1eeea; border-top-color:#a58d7e; }
+.ws-calls .calls-companies .watchlist-card:nth-child(3) { background-color:#edebf1; border-top-color:#9c91ad; }
+.ws-calls .calls-companies .watchlist-card h4 { margin:.6rem 0; font:550 clamp(1.35rem,2vw,2rem)/1.18 var(--ws-display); }
+.ws-calls .calls-companies h4 a { color:var(--ws-ink); text-decoration:none; }
+.ws-calls .calls-companies h4 a:hover { text-decoration:underline; }
+.ws-calls .calls-edition .watchlist-label { color:var(--ws-muted); font-size:.79rem; letter-spacing:.055em; }
+.ws-calls .calls-ledger { border-top:1px solid var(--ws-rule); padding-top:1.5rem; }
+.ws-calls .calls-ledger > .watchlist-card { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); column-gap:clamp(1rem,3vw,3rem); align-items:start;
+  margin:.8rem 0; padding:clamp(1rem,1.6vw,1.65rem); border:1px solid var(--ws-rule); border-radius:5px; background:var(--ws-card); }
+.ws-calls .calls-ledger > .watchlist-card > .watchlist-card-head { grid-column:1; grid-row:span 3; display:flex; flex-direction:column; align-items:flex-start; gap:.5rem; }
+.ws-calls .calls-ledger .watchlist-card-head h3 { color:var(--ws-ink); font:530 clamp(1.4rem,2vw,2rem)/1.16 var(--ws-display); }
+.ws-calls .calls-ledger .watchlist-card > :is(p,a,details) { grid-column:2; }
+.ws-calls .calls-ledger .watchlist-card > details { grid-column:1/-1; }
+.ws-calls .calls-edition .watchlist-badge { background:#e5eadf; color:#374f3b; border:1px solid #c9d1c2; }
+.ws-calls #nvda-covered-call-moomoo-guide { border:1px solid var(--ws-rule); border-top:3px solid #81917e; background:var(--ws-card); border-radius:6px; padding:clamp(1rem,2.5vw,2.5rem); }
+.ws-calls #nvda-covered-call-moomoo-guide ol { padding:1rem 1rem 1rem 2.6rem; border-radius:5px; background:#eef0e7; }
+.ws-calls #nvda-covered-call-moomoo-guide li { padding:.2rem .3rem; }
+.ws-calls #nvda-covered-call-moomoo-guide > p { max-width:85ch; }
+.ws-calls .top-controls #display-settings-open { display:none; }
+
+@media(max-width:1050px) {
+  .ws-blog .mu-writeups-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .ws-blog #automated-research .mu-writeups-grid > article:first-child { grid-column:auto; }
+  .ws-calls .calls-companies .watchlist-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr)); }
+}
+@media(max-width:760px) {
+  .ws-blog #market-understanding { padding-inline:clamp(.85rem,4vw,1.5rem); }
+  :is(.ws-blog .library-entry,.ws-calls .calls-edition) .ws-hero { grid-template-columns:minmax(0,1fr); gap:.9rem; padding:1.1rem 0; }
+  .ws-hero .ws-plate { height:clamp(7.25rem,25vw,11rem); }
+  .ws-hero .ws-plate img { height:100%; object-fit:contain; }
+  .ws-calls .ws-hero .ws-plate { width:100%; aspect-ratio:auto; }
+  .ws-blog .library-entry h1, .ws-calls .calls-edition .ws-hero h2 { font-size:clamp(2.55rem,9vw,4rem); }
+  .ws-blog .library-choices { grid-template-columns:1fr; }
+  .ws-blog .library-choices a,.ws-blog .library-choices a:first-child { padding:.68rem 1.8rem .68rem .25rem; border:0; border-bottom:1px solid var(--ws-rule); }
+  .ws-blog .library-choices a:last-child { border:0; }
+  .ws-blog .library-choices b { font-size:1.15rem; }
+  .ws-blog .library-choices a>span { margin:.15rem 0 0; }
+  .ws-calls .calls-ledger > .watchlist-card { display:block; }
+  .ws-calls .calls-ledger .watchlist-card-head { margin-bottom:.75rem; }
+  .ws-calls .calls-edition [id$="-title"] { scroll-margin-top:calc(var(--hub-primary-height,56px) + 6rem); }
+}
+@media(max-width:580px) {
+  .ws-blog .mu-writeups-grid { grid-template-columns:minmax(0,1fr); }
+  .ws-blog .library-choices { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .ws-blog .library-choices a,.ws-blog .library-choices a:first-child { padding:.65rem .35rem; min-height:44px; display:flex; align-items:center; justify-content:center; border:0; border-right:1px solid var(--ws-rule); text-align:center; }
+  .ws-blog .library-choices a:last-child { border:0; }
+  .ws-blog .library-choices a::after { display:none; }
+  .ws-blog .library-choices b { font-size:1rem; }
+  .ws-blog .library-choices a>span { position:absolute; clip-path:inset(50%); width:1px; height:1px; overflow:hidden; }
+  .ws-blog #automated-research .rf-controls { display:flex; align-items:center; }
+  .ws-blog #automated-research .rf-controls input { width:100%; }
+  .ws-blog #automated-research .rf-controls label { flex-basis:100%; }
+  .ws-blog .mu-writeups-heading { display:block; }
+  .ws-blog .library-group>section { margin:.4rem; padding:.6rem; }
+}
+@media print {
+  .ws-plate,.ws-settings,.ws-motion-option,.ws-jumps,.library-choices { display:none!important; }
+  .ws-blog #market-understanding,.ws-calls .calls-edition { padding:0; background:white; }
+  .ws-calls .calls-edition .ws-hero { display:block; }
+}
