@@ -62,7 +62,13 @@
           ratios,
           balance: read('[data-valuation-balance]'),
           earnings: read('[data-valuation-earnings]'),
-          implications: read('.nv-fundamentals-implied > span')
+          implications: read('.nv-fundamentals-implied > span'),
+          sensitivity: Array.from(fundamentals.querySelectorAll('.nv-fundamentals-sensitivity table tr'), row => ({
+            cells: Array.from(row.cells, cell => cell.textContent.trim()),
+            aboveBenchmark: row.hasAttribute('data-above-benchmark')
+          })),
+          sensitivityBasis: read('.nv-fundamentals-sensitivity-basis'),
+          sensitivityComparison: read('.nv-fundamentals-sensitivity-comparison')
         };
       }
       view.valuation = Array.from(document.querySelectorAll('.nvda-valuation-summary > *'), node => node.textContent.trim()).join('  /  ');
@@ -374,13 +380,34 @@
             space(22, title);
             y = wrap(paragraph, margin, y, width, 9.6) + 4;
           }
+          if (fundamentals.sensitivity.length) {
+            const sensitivityTitle = 'If earnings and free cash flow fall';
+            space(50, sensitivityTitle);
+            text(sensitivityTitle, margin, y + 4, 13, 'ink', {weight:'bold', family:'times'});
+            y = wrap(fundamentals.sensitivityBasis, margin, y + 7, width, 9.3, 'muted') + 2;
+            fundamentals.sensitivity.forEach(({cells, aboveBenchmark}, index) => {
+              if (index === 0 || aboveBenchmark) fill(index === 0 ? 'soft' : 'tertiaryLight', margin, y, width, 5);
+              const weight = index === 0 ? 'bold' : 'normal';
+              text(cells[0], margin + 2, y + 3.5, 9.3, 'ink', {weight});
+              text(cells[1], margin + width * .66, y + 3.5, 9.3, 'ink', {weight, align:'right'});
+              text(cells[2], w - margin - 2, y + 3.5, 9.3, 'ink', {weight, align:'right'});
+              y += 5;
+              rule('line', margin, y, w - margin);
+            });
+            y = wrap(fundamentals.sensitivityComparison, margin, y + 2, width, 9.3, 'muted') + 1;
+          }
         }
       }
       if (view.after) reference('After shares are delivered', 'Holding keeps the stock exposure. Covered calls or a decumulator add separate terms and trade-offs.', 'after');
       if (view.archive) reference('Earlier pricing', view.archiveDate || 'The archive lists prior indicative terms.', 'pricing-archive');
       if (view.guide) reference('Use the simulator', 'Change the price path to test a purchase schedule or a knock-out date.', 'accumulator-guide');
       if (view.notes) reference('Terms and assumptions', 'Illustrative gross results use the modelled closes. Review the issuer terms, observation schedule and sources.', 'notes-and-terms');
-      if (!(deal || path || outcomes)) callout('Capital at risk', risk);
+      if (!(deal || path || outcomes)) {
+        if (view.stressFundamentals?.sensitivity.length && y + 24 > bottom) {
+          space(5.5, 'Capital at risk');
+          y = wrap('Capital at risk. ' + risk, margin, y, width, 8.5, 'tertiary', 'bold') + 1.5;
+        } else callout('Capital at risk', risk);
+      }
     }
     if (first) page('NVDA structured note');
   }
