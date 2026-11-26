@@ -8,6 +8,7 @@
   const keyFor=(kind,row)=>'mix-'+kind+'-'+row.type+'-'+row.name.toLowerCase();
   const sharePercent=new Intl.NumberFormat('en-SG',{style:'percent',maximumFractionDigits:0});
   const displayShare=value=>F(value)?sharePercent.format(Math.abs(value)<.5?0:value/100):'—';
+  const axisNumber=new Intl.NumberFormat('en-GB',{maximumFractionDigits:2});
   const geographyModes=['grouped','grouped-detail'];
   const geoMode=()=>$('geo-filter').value;
   const grouped=()=>geographyModes.includes(geoMode());
@@ -144,7 +145,9 @@
     revenueUsd:annualFields.revenueUsd,cashUsd:annualFields.cashUsd,cashAssets:['Cash / assets','percent'],
     ...Object.fromEntries(Object.entries(annualFields).slice(6))
   };
+  const geographyColors={usa:palette[0],apac:palette[1],other:palette[2]};
   const cashColor='#177969';
+  let stackContext=null;
   function filingView(view,h){
     const fxDate=view.year?.end||(h.quarter&&view.hasQuarter?h.mappedEnd:null);
     return {...view,usdRate:h.rate(view.company.currency,fxDate)};
@@ -253,8 +256,7 @@
       const label=item=>item.type+'|'+D.canonical(item.label,item.type).toLowerCase();
       const labels=D.mixRows(views,k).map(item=>label({label:item.name,type:item.type}));
       const colors=new Map(labels.map((name,index)=>[name,palette[index%palette.length]]));
-      const geoColors={usa:palette[0],apac:palette[1],other:palette[2]};
-      const color=item=>geoColors[item.id]||colors.get(label(item))||palette[0];
+      const color=item=>geographyColors[item.id]||colors.get(label(item))||palette[0];
       const id=prefix+'filing-mix-'+k;
       return '<section class="annual-breakdown" aria-labelledby="'+id+'"><header class="annual-breakdown-head">'+
         '<h4 id="'+id+'">'+esc(title)+'</h4><span>'+count+'/'+views.length+' companies · '+usdLabel(h)+'</span></header>'+
@@ -284,8 +286,63 @@
         '<thead><tr><th scope="col">Payment window</th>'+headers+'</tr></thead><tbody>'+body+'</tbody></table></div></article>';
     }).join(''):'<p class="annual-empty">No maturity schedules are available for this annual period.</p>';
   }
+  function renderGeographyStack(){
+    if(!stackContext)return;
+    const {views,h,tickers}=stackContext;
+    const mode=$('quarter-geo-stack-mode').value;
+    const {regions,companies,min,max,ticks}=G.stack(views,mode);
+    const format=mode==='share'?h.pct:value=>usdAmount(value,h);
+    const axis=mode==='share'?value=>value+'%':value=>axisNumber.format(value/(h.unit==='bn'?1000:1));
+    const span=max-min;
+    const height=value=>(value-min)/span*100;
+    const available=companies.filter(co=>!co.reason).length;
+    $('quarter-geo-stack-status').textContent=[h.periodLabel,mode==='share'?'% of disclosed revenue':usdLabel(h),
+      available+'/'+companies.length+' companies with figures'].filter(Boolean).join(' · ');
+    $('quarter-geo-stack-legend').innerHTML=regions.map(({id,name})=>
+      '<li><i aria-hidden="true" style="--region-color:'+geographyColors[id]+'"></i>'+esc(name)+'</li>').join('');
+    const grid=(available?ticks:[]).map(tick=>'<div class="geo-stack-tick'+(tick===0?' geo-stack-zero':'')+'" style="--tick:'+height(tick)+
+      '%"><span>'+esc(axis(tick))+'</span></div>').join('');
+    const columns=companies.map(({view,parts,reason},i)=>{
+      const company=view.company.name;
+      let positive=0,negative=0;
+      const segments=parts.filter(part=>F(part.value)&&part.value!==0).map(part=>{
+        const start=part.value>0?positive:negative+part.value;
+        if(part.value>0)positive+=part.value;
+        else negative+=part.value;
+        const label=company+' · '+part.name+' · '+format(part.value);
+        return '<button type="button" class="geo-stack-segment" data-stack-company="'+i+'" data-stack-region="'+part.id+
+          '" aria-label="'+esc(label)+'" title="'+esc(label+(part.reported?' · '+part.reported:''))+
+          '" style="--bottom:'+height(start)+'%;--size:'+Math.abs(part.value)/span*100+'%;--region-color:'+geographyColors[part.id]+'"></button>';
+      }).join('');
+      const label=(tickers[i]||company).split(' ')[0];
+      const note=reason||(!segments?'Reported zero':'');
+      return '<div class="geo-stack-company" data-stack-company-id="'+esc(view.id)+'"><div class="geo-stack-bar">'+
+        (note?'<span class="geo-stack-missing">'+esc(note)+'</span>':segments)+'</div>'+
+        '<div class="geo-stack-name" title="'+esc(company)+'">'+h.logo(view.id,company)+'<strong aria-label="'+esc(company)+'">'+esc(label)+'</strong></div></div>';
+    }).join('');
+    $('quarter-geo-stack-plot').innerHTML='<div class="geo-stack-plot" style="--companies:'+companies.length+
+      '"><div class="geo-stack-grid" aria-hidden="true">'+grid+'</div>'+columns+'</div>';
+    const out=$('quarter-geo-stack-readout');
+    const selected=companies.find(co=>!co.reason);
+    out.textContent=selected?stackReadout(selected,format):'No geographic breakdown is available for this quarter.';
+  }
+
+  function stackReadout({view,parts},format){
+    const values=parts.map(row=>row.name+' '+(F(row.value)?format(row.value):'—'));
+    return view.company.name+' · '+values.join(' · ');
+  }
+
+  function showStackSegment(event){
+    const segment=event.target.closest('[data-stack-region]');
+    if(segment)$('quarter-geo-stack-readout').textContent=segment.title;
+  }
+
+  $('quarter-geo-stack-mode').addEventListener('change',renderGeographyStack);
+  for(const event of ['mouseover','focusin','click'])$('quarter-geo-stack-plot').addEventListener(event,showStackSegment);
   function renderQuarter(c,h){
     const views=c.quarterNotes.map((view,i)=>({...filingView(view,h),focus:i===0}));
+    stackContext={views,h,tickers:c.ticker};
+    renderGeographyStack();
     renderRanking(c,h,views);
     renderRevenue(views,h);
   }
