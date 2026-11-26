@@ -19,7 +19,7 @@ body.nvda-history-page { margin: 0; color: var(--nv-ink); background: var(--nv-p
 .nv-skip { position: fixed; z-index: 30000; top: 6px; left: 6px; padding: 10px 16px; background: white; transform: translateY(-180%); }
 .nv-skip:focus { transform: none; }
 .nv-shell { width: min(1280px, calc(100% - 96px)); margin-inline: auto; }
-.nv-main [id]:is(section,header) { scroll-margin-top: calc(var(--hub-primary-height, 56px) + 60px); }
+.nv-main [id]:is(section,header) { scroll-margin-top: 60px; }
 .nv-hero { border-bottom: 1px solid #cedcc7; background: #eef3e7; position: relative; }
 .nv-crumb { display: flex; align-items: center; gap: 12px; padding: 22px 0 16px; color: var(--nv-muted); font-size: .84rem; }
 .nv-crumb a { text-decoration: none; }
@@ -41,7 +41,7 @@ body.nvda-history-page { margin: 0; color: var(--nv-ink); background: var(--nv-p
 .nv-hero-image img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
 .nv-hero-image figcaption { position: absolute; bottom: 0; inset-inline: 0; display: flex; justify-content: space-between; gap: 10px; font-size: .75rem; padding: 26px 16px 12px; color: #e5edde; background: linear-gradient(transparent,#101710e0); }
 .nv-hero-foot { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; padding: 15px 0; border-top: 1px solid #cbd9c4; font-size: .84rem; color: var(--nv-muted); }
-.nv-jump { position: sticky; top: var(--hub-primary-height, 56px); z-index: 20; background: #fafbf5f5; border-bottom: 1px solid var(--nv-line); backdrop-filter: blur(12px); }
+.nv-jump { position: sticky; top: var(--hub-primary-height, 0px); z-index: 20; background: #fafbf5f5; border-bottom: 1px solid var(--nv-line); backdrop-filter: blur(12px); }
 .nv-jump .nv-shell { display: flex; gap: 22px; overflow-x: auto; scrollbar-width: thin; }
 .nv-jump a { color: #4d5b50; white-space: nowrap; text-decoration: none; font-size: .84rem; padding: 14px 1px 11px; border-bottom: 3px solid transparent; }
 .nv-jump a:hover, .nv-jump a[aria-current] { color: #18291e; border-color: #79a658; }

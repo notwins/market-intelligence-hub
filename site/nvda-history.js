@@ -406,6 +406,7 @@
       for (const link of navigation) {
         if ($(link.hash.slice(1)).getBoundingClientRect().top <= offset) active = link;
       }
+      if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) active = navigation.at(-1);
       navigation.forEach(link => link === active ? link.setAttribute("aria-current", "location") : link.removeAttribute("aria-current"));
     };
     addEventListener("scroll", () => {
