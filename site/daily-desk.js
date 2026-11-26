@@ -14,6 +14,17 @@
   const stamp = value => dateLabel.format(new Date(value));
   const dayLabel = day => stamp(day + 'T12:00:00+08:00');
   const compactDate = new Intl.DateTimeFormat('en-GB', {day: 'numeric', month: 'short', timeZone: 'UTC'});
+  const headlineDate = new Intl.DateTimeFormat('en-GB', {day: 'numeric', month: 'short', timeZone: 'Asia/Singapore'});
+  const countryNames = new Intl.DisplayNames(['en'], {type: 'region'});
+  const flagCodes = 'AR AU BR CA CH CN DE ES EU FR GB HK ID IN IT JP KR LY MX MY NZ PH PL SA SE SG TH TW US VN ZA'.split(' ');
+  const countries = new Map(flagCodes.flatMap(code => [[code, code], [countryNames.of(code).toUpperCase(), code]]));
+  countries.set('UK', 'GB');
+  countries.set('U.S.', 'US');
+  countries.set('USA', 'US');
+  countries.set('EUROZONE', 'EU');
+  const initialHeadlines = 5;
+  const recentHeadlines = 15;
+  let expanded = false;
   const sections = [
     ['economy', 'Economy'],
     ['credit', 'Bonds & credit'],
@@ -39,7 +50,7 @@
         const saved = stories.get(story.story_id);
         if (!saved || (story.version || 0) > (saved.version || 0)) {
           const original = edition.sources?.find(s => root.Desk.canonical(s.url) === root.Desk.canonical(href));
-          stories.set(story.story_id, {...story, href, category: topicFor(story), published: original?.published_at || original?.published_date});
+          stories.set(story.story_id, {...story, href, cutoff: edition.cutoff, category: topicFor(story), published: original?.published_at || original?.published_date});
         }
       }
     }
@@ -95,6 +106,82 @@
     return article;
   }
 
+  function headlineBadges(slot, story) {
+    const tags = String(story.topic || '').split('/').map(tag => tag.trim());
+    const catalogue = root.CompanyLogos?.data;
+    const identities = catalogue ? root.CompanyLogos.infer({title: story.headline, tags}, catalogue) : [];
+    slot.innerHTML = catalogue ? root.CompanyLogos.html(identities.slice(0, 2), catalogue, {size: 20}) : '';
+    if (identities.length) return;
+    const code = tags.map(tag => countries.get(tag.toUpperCase())).find(Boolean);
+    if (code) {
+      const flag = document.createElement('img');
+      flag.src = 'assets/news-flags/' + code.toLowerCase() + '.svg';
+      flag.className = 'daily-headline-flag';
+      flag.alt = countryNames.of(code);
+      flag.title = flag.alt;
+      slot.append(flag);
+    }
+  }
+
+  function headlineRow(edition, story, index) {
+    const row = document.createElement('li');
+    if (!index) row.className = 'daily-headline-lead';
+    const control = button('', 'daily-headline-button', trigger => openEdition(edition, trigger, story));
+    const identity = document.createElement('span');
+    identity.className = 'daily-headline-identity';
+    headlineBadges(identity, story);
+    const title = document.createElement('span');
+    title.textContent = story.headline;
+    const hasSourceTime = typeof story.published === 'string' && /T\d{2}:\d{2}.*(?:Z|[+-]\d{2}:?\d{2})$/i.test(story.published) && Number.isFinite(Date.parse(story.published));
+    const time = document.createElement('time');
+    time.dateTime = hasSourceTime ? story.published : story.cutoff;
+    const date = new Date(time.dateTime);
+    time.textContent = (hasSourceTime ? '' : 'Briefing · ') + headlineDate.format(date) + ' · ' + timeLabel.format(date) + ' SGT';
+    time.title = (hasSourceTime ? 'Source publication' : 'Hourly briefing cutoff') + ' · ' + stamp(date);
+    control.append(identity, title, time);
+    row.append(control);
+    return row;
+  }
+
+  function renderHeadlines(days) {
+    const list = document.createElement('ol');
+    list.id = 'daily-headline-list';
+    list.className = 'daily-headlines';
+    const seenIds = new Set(), seenUrls = new Set(), entries = [];
+    for (const edition of days.values()) {
+      for (const story of edition.stories) {
+        const url = root.Desk.canonical(story.href);
+        if (seenIds.has(story.story_id) || seenUrls.has(url)) continue;
+        seenIds.add(story.story_id);
+        seenUrls.add(url);
+        entries.push({edition, story});
+        if (entries.length === recentHeadlines) break;
+      }
+      if (entries.length === recentHeadlines) break;
+    }
+    const rows = entries.map(({edition, story}, index) => headlineRow(edition, story, index));
+    list.append(...rows);
+    headlines.replaceChildren(list);
+    if (!root.CompanyLogos?.data) {
+      document.addEventListener('mih-logo-catalogue', () => {
+        if (list.isConnected) rows.forEach((row, i) => headlineBadges(row.querySelector('.daily-headline-identity'), entries[i].story));
+      }, {once: true});
+    }
+    if (rows.length <= initialHeadlines) return;
+    const toggle = button('', 'outline daily-headline-toggle', () => {
+      expanded = !expanded;
+      update();
+    });
+    toggle.setAttribute('aria-controls', list.id);
+    function update() {
+      rows.slice(initialHeadlines).forEach(row => { row.hidden = !expanded; });
+      toggle.setAttribute('aria-expanded', String(expanded));
+      toggle.textContent = expanded ? 'Show fewer headlines' : 'Show more headlines (' + (rows.length - initialHeadlines) + ')';
+    }
+    update();
+    headlines.append(toggle);
+  }
+
   function render(feed) {
     const days = groupDays(feed);
     const day = days.keys().next().value;
@@ -105,15 +192,7 @@
     const latest = days.get(day);
     const previousDay = new Date(Date.parse(day) - 86400000).toISOString().slice(0, 10);
     status.textContent = `Latest cutoff ${dayLabel(day)} · ${timeLabel.format(new Date(latest.cutoff))} SGT${feed.delivery_error ? ' · showing the saved feed' : ''}`;
-    const list = document.createElement('ol');
-    list.className = 'daily-headlines';
-    for (const [index, story] of latest.stories.slice(0, 4).entries()) {
-      const row = document.createElement('li');
-      if (!index) row.className = 'daily-headline-lead';
-      row.append(button(story.headline, 'daily-headline-button', trigger => openEdition(latest, trigger, story)));
-      list.append(row);
-    }
-    headlines.replaceChildren(list);
+    renderHeadlines(days);
     cards.replaceChildren(editionCard('Latest', day, latest), editionCard('Yesterday', previousDay, days.get(previousDay)));
   }
 
