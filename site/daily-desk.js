@@ -94,7 +94,7 @@
     const article = document.createElement('article');
     article.className = 'daily-edition';
     const {E} = root.Desk;
-    article.innerHTML = `<p class="daily-edition-label">${label}</p>
+    article.innerHTML = `<p class="daily-edition-label">${root.HistoryNavigation?.icon('hourly') || ''}${label}</p>
       <h3>${day ? dayLabel(day) : 'Edition unavailable'}</h3>
       <p class="fine">${edition ? `Cutoff ${timeLabel.format(new Date(edition.cutoff))} SGT · ${edition.stories.length} sourced stories` : 'No saved briefing for this date.'}</p>`;
     if (edition) {

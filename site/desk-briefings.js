@@ -63,7 +63,11 @@
       const emblem = node('span', undefined, 'brief-emblem');
       emblem.setAttribute('aria-hidden', 'true');
       emblem.innerHTML = window.HistoryNavigation.icon(icon);
-      identity.append(emblem, node('h3',title), node('p',dateText(edition.date)));
+      const illustration = node('img', undefined, 'brief-illustration');
+      illustration.src = 'assets/desk/report-' + key + '.webp';
+      illustration.alt = ''; illustration.width = 120; illustration.height = 120;
+      illustration.loading = 'lazy';
+      identity.append(illustration, emblem, node('h3',title), node('p',dateText(edition.date)));
       const story = node('div', undefined, 'brief-story');
       story.append(node('p',report.summary,'brief-summary'));
       if (report.watch.length) {
@@ -72,6 +76,7 @@
         story.append(watch);
       }
       const action = node('button','Read report');
+      action.className = 'card-primary-action';
       action.type = 'button';
       action.setAttribute('aria-label','Read ' + title + ' report');
       action.addEventListener('click',() => openReport(edition,key,title));

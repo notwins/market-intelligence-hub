@@ -30,6 +30,15 @@
     const theme = themeFor(card);
     if (!Object.hasOwn(themes, theme) || card.dataset.cardArt === theme) return;
     const identity = card.querySelector('.brief-identity');
+    const thumbnail = identity?.querySelector('.brief-illustration');
+    if (thumbnail) {
+      // Each report has its own artwork; a dated editorial override takes precedence.
+      thumbnail.src = new URL(theme === briefing[card.dataset.topic]
+        ? 'assets/desk/report-' + card.dataset.topic + '.webp'
+        : 'assets/card-art/' + theme + '.jpg', base);
+      card.dataset.cardArt = theme;
+      return;
+    }
     const host = identity || card;
     let figure = host.querySelector(':scope > .card-artwork');
     if (!figure) {

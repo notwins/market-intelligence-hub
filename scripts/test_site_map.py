@@ -35,9 +35,14 @@ class SiteMapTests(unittest.TestCase):
         current = [a['href'] for a in self.nodes]
         self.assertEqual(len(original), 40)
         self.assertTrue(set(current) >= {'desk.html#'+part for part in ('daily','reading','archive')} | set(original) | {'v4.html#master', 'v4.html#history', 'v4.html#history/shares', 'v4.html#history/beta2-shares','v4.html#history/beta4-shares','fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html','historical-fred.html','fred-1.html','fred-2.html','fred-3.html'})
-        self.assertEqual(len(current), 91)
+        self.assertEqual(len(current), 99)
         self.assertEqual(len(set(current)), len(current) - 3)  # Main shortcuts intentionally share the real destination.
         for href in current:
+            if href.startswith('https://'):
+                loader = (ROOT / 'site/site-navigation.js').read_text(encoding='utf-8')
+                allowed = json.loads(loader.split('const externalTools = new Set(', 1)[1].split(');', 1)[0])
+                self.assertIn(href, allowed)
+                continue
             path = ROOT / 'site' / href.split('#')[0]
             self.assertTrue(path.exists(), href)
             if href.startswith('v4.html#'):
@@ -63,9 +68,9 @@ class SiteMapTests(unittest.TestCase):
 
     def test_native_tree_and_accessible_controls(self):
         details = [a for t, a in self.parsed.tags if t == 'details']
-        self.assertEqual(len(details), 14)
+        self.assertEqual(len(details), 15)
         self.assertEqual(sum('open' in a for a in details), 8)
-        self.assertEqual(sum(t == 'summary' for t, a in self.parsed.tags), 14)
+        self.assertEqual(sum(t == 'summary' for t, a in self.parsed.tags), 15)
         ids = [a['id'] for t, a in self.parsed.tags if 'id' in a]
         self.assertEqual(len(ids), len(set(ids)))
         for ident in [f'map-{i}' for i in range(6)] + ['map-search', 'site-tree', 'expand-all', 'collapse-all', 'reset-map', 'map-status']:
