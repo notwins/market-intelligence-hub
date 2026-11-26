@@ -108,10 +108,12 @@
       endingCash: 29089
     },
     earningsQuarters: [
-      {end: '2026-01-25', quarter: 'Q4 FY2026', eps: 1.76, url: fourthQuarterUrl},
-      {end: '2026-04-26', quarter: 'Q1 FY2027', eps: 2.39, url: firstQuarterUrl},
-      {end: '2026-07-26', quarter: 'Q2 FY2027', eps: 2.46, url: priorFilingUrl},
-      {end: '2026-10-25', quarter: 'Q3 FY2027', eps: 2.70, url: supplementalUrl}
+      {end: '2026-01-25', published: '2026-02-25', quarter: 'Q4 FY2026', eps: 1.76, url: fourthQuarterUrl},
+      {end: '2026-04-26', published: '2026-05-20', quarter: 'Q1 FY2027', eps: 2.39, url: firstQuarterUrl},
+      {end: '2026-07-26', published: '2026-08-26', quarter: 'Q2 FY2027', eps: 2.46, url: priorFilingUrl,
+        releaseUrl: 'https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027'},
+      {end: '2026-10-25', published: '2026-11-17', quarter: 'Q3 FY2027', eps: 2.70, url: supplementalUrl,
+        releaseUrl: 'https://www.sec.gov/Archives/edgar/data/1045810/000104581026000088/nvda-20261117.htm'}
     ],
     lastReportedEbita: {
       periodEnd: '2026-07-26',

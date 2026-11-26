@@ -1,0 +1,66 @@
+.nvda-overlay-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 16px;
+}
+
+.nvda-overlay-controls .check {
+  color: var(--ink);
+  font-size: .875rem;
+  min-height: 36px;
+  cursor: pointer;
+}
+
+.nvda-overlay-controls input { margin: 0; }
+.chartpanel .legend, #overview .legend { font-size: .875rem; }
+.legend .nvda-earnings-key::before { width: 10px; border-top: 2px dotted #23639e; }
+.legend .nvda-calls-key::before { width: 12px; border-top: 3px solid #156653; }
+.legend .nvda-target-key::before { border-top: 2px dashed #a34621; }
+.nvda-term-product { color: #176463; font-weight: 750; }
+.nvda-term-strike { color: #79511d; font-weight: 750; }
+.nvda-term-ko { color: #634980; font-weight: 750; }
+.nvda-term-path { color: #226288; font-weight: 650; }
+.nvda-term-divider { color: #63788a; }
+
+[data-nvda-overlay-status] { margin: 5px 0; }
+.nvda-overlay-details { margin: 3px 0 10px; }
+.nvda-overlay-details p { margin: 4px 0; }
+.nvda-overlay-details strong { color: var(--ink); }
+.nvda-overlay-details strong::after { content: " · "; }
+
+.nvda-chart-valuation {
+  background: #f3f8fb;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  margin: 8px 0 12px;
+  padding: 8px 12px;
+  font-size: .875rem;
+}
+
+.nvda-valuation-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 16px;
+}
+
+.nvda-valuation-summary b {
+  color: #176463;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  margin-left: 3px;
+}
+
+.nvda-valuation-date { color: var(--muted); }
+.nvda-chart-valuation details { margin: 3px 0 0; }
+.nvda-chart-valuation summary { width: fit-content; }
+.nvda-valuation-table { max-width: 29rem; }
+.nvda-valuation-table th[scope="row"] { background: transparent; font-size: inherit; font-weight: 550; }
+.nvda-valuation-table p { margin-bottom: 0; }
+
+@media (max-width: 480px) {
+  .nvda-overlay-controls { display: grid; grid-template-columns: repeat(2, minmax(0, auto)); gap: 0 12px; }
+  .nvda-overlay-controls .check { min-height: 40px; }
+  .nvda-valuation-summary > strong, .nvda-valuation-date { flex-basis: 100%; }
+}
