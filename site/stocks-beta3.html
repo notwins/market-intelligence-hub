@@ -8,11 +8,14 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=1">
+  <link rel="stylesheet" href="stocks-beta3.css?v=2">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="content-source.js"></script>
-  <script defer src="stocks-beta3-model.js?v=1"></script>
-  <script defer src="stocks-beta3.js?v=1"></script>
+  <script defer src="stocks-beta2-private-research.js?v=1"></script>
+  <script defer src="stocks-beta2-research.js?v=20261126.peers"></script>
+  <script defer src="stocks-beta3-comparison.js?v=2"></script>
+  <script defer src="stocks-beta3-model.js?v=2"></script>
+  <script defer src="stocks-beta3.js?v=2"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -21,14 +24,16 @@
     <header class="filings-intro">
       <div><p class="section-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg> Shares Beta 3</p>
         <h1>SEC 10-K &amp; annual filings</h1></div>
-      <nav class="section-links" aria-label="Filing comparison sections"><a href="#statements">Financial statements</a><a href="#checklist">Fundamentals checklist <span aria-hidden="true">↓</span></a></nav>
+      <nav class="section-links" aria-label="Filing comparison sections"><a href="#statements">Valuation &amp; statements</a><a href="#checklist">Fundamentals checklist</a></nav>
     </header>
     <p id="load-status" role="status">Loading annual filings…</p><button id="retry" type="button" hidden>Retry loading filings</button>
     <div id="filing-app" hidden>
       <section class="filing-controls panel" aria-label="Comparison settings">
         <div class="control-group"><span id="focus-label">Focus company</span><button id="choose-company" class="picker-control" type="button" aria-haspopup="dialog" aria-labelledby="focus-label focus-name"><strong id="focus-name"></strong><span aria-hidden="true">⌄</span></button></div>
         <div class="control-group peer-control"><span id="peer-label">Competitors</span><button id="choose-peers" class="picker-control" type="button" aria-haspopup="dialog" aria-labelledby="peer-label peer-name"><span id="peer-name"></span><span class="edit-affordance">Edit</span></button></div>
+        <label class="control-group">Automatic peer count<select id="peer-count"><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
         <label class="control-group">Fiscal period<select id="period"><option value="latest">Latest reported</option></select></label>
+        <div class="peer-context"><span id="peer-basis"></span><button type="button" id="open-bos" aria-haspopup="dialog" hidden>BOS comparison</button></div>
       </section>
       <section id="comparison" aria-label="Company comparison">
         <div class="sticky-companies"><div class="horizontal" id="company-scroll" tabindex="0" aria-label="Company columns, horizontal scroll"><div class="compare-grid company-grid" id="companies"></div></div></div>
@@ -36,12 +41,19 @@
           <article class="panel chart-panel"><header><h2>Peer comparison</h2><label class="sr-only" for="bar-metric">Peer comparison metric</label><select id="bar-metric"></select></header><div id="bars"></div></article>
           <article class="panel chart-panel"><header><h2>Annual trend</h2><label class="sr-only" for="trend-metric">Annual trend metric</label><select id="trend-metric"></select></header><div id="trend"></div></article>
         </section>
-        <section class="filing-section" id="statements"><header class="block-heading"><h2>Financial statements</h2><label>Units <select id="units"><option value="bn">Billions</option><option value="mn">Millions</option></select></label></header>
-          <div class="table-panel panel horizontal" id="statement-scroll" tabindex="0" aria-label="Financial statement columns, horizontal scroll"><table id="statement-table"><caption class="sr-only">Annual financial statements and ratios by company</caption></table></div>
+        <section class="filing-section" id="statements"><header class="block-heading"><h2>Valuation &amp; financial statements</h2></header>
+          <div class="comparison-tools"><label>Amounts <select id="units"><option value="bn">Billions</option><option value="mn">Millions</option></select></label>
+            <label>Show <select id="row-filter"><option value="all">All rows</option><option value="focus">Highlighted rows</option></select></label>
+            <details id="table-layout"><summary>Table layout</summary><div class="layout-controls">
+              <label>Row height <output for="row-height" id="row-height-value"></output><input id="row-height" type="range" min="28" max="76" step="2"></label>
+              <label>Item column width <output for="item-width" id="item-width-value"></output><input id="item-width" type="range" min="100" max="330" step="5"></label>
+              <label>Company column width <output for="company-width" id="company-width-value"></output><input id="company-width" type="range" min="115" max="260" step="5"></label>
+              <button id="reset-layout" type="button">Reset layout</button></div></details></div>
+          <div id="statement-groups"></div>
         </section>
         <section class="filing-section" id="checklist"><header class="block-heading"><h2>Fundamentals checklist</h2></header>
           <div class="check-result" id="check-result" aria-live="polite"></div>
-          <div class="table-panel panel horizontal" id="check-scroll" tabindex="0" aria-label="Fundamentals checklist columns, horizontal scroll"><table id="check-table"><caption class="sr-only">Fundamentals checklist results by company</caption></table></div>
+          <div class="matrix-section" data-section="checklist"><h3 class="pinned-section"><span>Checklist measures</span></h3><div class="table-panel panel horizontal" id="check-scroll" tabindex="0" aria-label="Fundamentals checklist columns, horizontal scroll"><table id="check-table"><caption class="sr-only">Fundamentals checklist results by company</caption></table></div></div>
         </section>
       </section>
       <footer id="filing-footer"><h2>Sources &amp; methodology</h2><div id="sources"></div>
@@ -55,5 +67,6 @@
     <div id="peer-draft"></div><div id="picker-list" class="picker-list"></div>
     <div class="picker-actions" id="picker-actions"><button type="button" id="auto-peers">Use automatic peers</button><button type="button" class="apply" id="apply-peers">Apply peers</button></div>
   </div></dialog>
+  <dialog id="bos-dialog" aria-labelledby="bos-title"><div class="dialog-inner"><header><h2 id="bos-title">BOS peer comparison</h2><button id="close-bos" type="button" aria-label="Close BOS comparison">×</button></header><div id="bos-content"></div></div></dialog>
 </body>
 </html>

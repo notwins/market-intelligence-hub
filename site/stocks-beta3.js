@@ -1,230 +1,324 @@
 (() => {
   'use strict';
-  const M = window.FilingComparison;
-  const $ = id => document.getElementById(id);
-  const escape = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  const colors = ['#176a5a','#446ba2','#9a6330','#79568f'];
-  const endpoint = 'data/shares-beta3-annual-filings-2026-11-26.json';
-  const state = {data:null,focus:'',custom:null,period:'latest',unit:'bn',bar:'operatingMargin',trend:'netMargin',picker:'',draft:[]};
-  const columnColors = colors.map(c => `--company-color:${c}`);
-  const date = iso => iso ? new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(iso+'T00:00:00Z')) : '';
-  const num = (n,digits=1) => new Intl.NumberFormat('en-GB',{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(n);
-  const pct = n => Number.isFinite(n) ? num(Number(n.toFixed(1)))+'%' : '—';
+  const M=window.FilingComparison, E=window.SharesComparison, $=id=>document.getElementById(id);
+  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const colors=['#176b5a','#41679b','#9a602b','#76558d','#a5455a','#267a89','#646b30','#584c89','#a45132','#3f6b41','#784a66'];
+  const defaultFocus=['peTTM','peFY','evEbitda','proxyEvEbitda','forwardPE','qGrowth','qNetMargin','revenue','operatingIncome','netIncome','ebitda','totalDebt','equity','operatingCashFlow','freeCashFlow','revenueGrowth','operatingMargin','roe','fcfMargin'];
+  const state={data:null,focus:'',custom:null,size:5,period:'latest',unit:'bn',filter:'all',stars:new Set(defaultFocus),hidden:new Set(),
+    bar:'operatingMargin',trend:'netMargin',picker:'',draft:[],published:null,privateData:null};
+  const num=(n,digits=1)=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(n);
+  const pct=n=>Number.isFinite(n)?num(Number(n.toFixed(1)))+'%':'—';
+  const times=n=>Number.isFinite(n)?num(n,2)+'×':'—';
+  const date=iso=>iso?new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(iso+'T00:00:00Z')):'';
+  const cmult=new Set(['currentRatio','debtEquity','assetTurnover','cashConversion']);
+  const allLabels={...M.fields,...M.labels,...E.marketLabels,...E.quarterLabels};
+  const opt=(v,label)=>`<option value="${esc(v)}">${esc(label)}</option>`;
   function amount(n) {
-    if (!Number.isFinite(n)) return '—';
-    const v = n/(state.unit==='bn'?1000:1);
-    if (v && Math.abs(v)<.01) return (v<0?'−':'')+'<0.01';
-    return num(v, Math.abs(v)<10 ? 2 : 1);
+    if(!Number.isFinite(n))return '—';
+    const v=n/(state.unit==='bn'?1000:1);
+    return v && Math.abs(v)<0.01?(v<0?'−':'')+'<0.01':num(v,Math.abs(v)<10?2:1);
   }
-  const company = id => state.data.companies[id];
-  const listing = () => state.data.listings.find(item=>item.ticker===state.focus);
-  const peers = () => state.custom ?? M.initialPeers(state.data,listing().id);
-  const ids = () => [listing().id,...peers()];
-  const label = (id,i) => i===0 ? state.focus : company(id).ticker;
-  const safeLink = (url,title) => {
-    try { if (new URL(url).protocol !== 'https:') return escape(title); }
-    catch { return escape(title); }
-    return `<a href="${escape(url)}" target="_blank" rel="noopener noreferrer">${escape(title)} ↗</a>`;
-  };
-  function setQuery() {
-    const url = new URL(location.href);
-    url.searchParams.set('ticker',state.focus);
-    if (state.custom===null) url.searchParams.delete('peers'); else url.searchParams.set('peers',state.custom.join(','));
-    if (state.period==='latest') url.searchParams.delete('year'); else url.searchParams.set('year',state.period);
-    history.replaceState(null,'',url);
+  function link(url,text) {
+    try {if(new URL(url).protocol!=='https:')return esc(text);}catch{return esc(text);}
+    return `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(text)}</a>`;
   }
-  function option(value,title) {return `<option value="${escape(value)}">${escape(title)}</option>`;}
-  function render() {
-    const currentIds=ids(), cos=currentIds.map(company);
-    const periods=M.periods(cos);
-    if(state.period!=='latest' && !periods.includes(state.period)) state.period='latest';
-    $('period').innerHTML=option('latest','Latest reported')+periods.map(y=>option(y,'FY ending in '+y)).join('');
-    $('period').value=state.period;
-    const years=cos.map(c=>M.yearFor(c,state.period));
-    $('comparison').style.setProperty('--columns',cos.length);
-    $('focus-name').textContent=cos[0].name+' · '+state.focus;
-    $('peer-name').textContent=cos.slice(1).map(c=>c.name).join(' · ') || 'Add competitors';
-    const score=M.checklist(cos,years);
-    $('companies').innerHTML=`<div class="column-label"><strong>Company</strong><small>${escape(cos[0].industry)}</small></div>`+
-      currentIds.map((id,i)=>`<div class="company-id" style="${columnColors[i]}">${score.winners.includes(i)?`<span class="head-leader" title="${score.winners.length>1?'Joint checklist leader':'Checklist leader'}" aria-label="${score.winners.length>1?'Joint checklist leader':'Checklist leader'}">✓</span>`:''}<span class="company-name">${escape(cos[i].name)}</span><small>${escape(label(id,i))} · ${escape(cos[i].currency)}</small><small>${years[i]?escape(date(years[i].end)):'No fiscal year'}</small></div>`).join('');
-    const financial=cos.some(M.financial);
-    const chartKeys=financial?['roe','roa','revenueGrowth','profitGrowth']:['operatingMargin','netMargin','grossMargin','revenueGrowth','profitGrowth','roe','roa','fcfMargin'];
-    for(const [component,defaultMetric] of [['bar',financial?'roe':'operatingMargin'],['trend',financial?'roa':'netMargin']]){
-      const available=chartKeys.filter(k=>cos.some(c=>c.years.some(y=>Number.isFinite(M.metric(c,y,k)))));
-      const options=available.length?available:chartKeys;
-      if(!options.includes(state[component])) state[component]=options.includes(defaultMetric)?defaultMetric:options[0];
-      const select=$(component+'-metric');select.innerHTML=options.map(k=>option(k,M.labels[k])).join('');select.value=state[component];
+  const lookup=id=>Object.hasOwn(state.data.companies,id)?state.data.companies[id]:undefined;
+  const listing=()=>state.data.listings.find(l=>l.ticker===state.focus);
+  function getBOS() {
+    const l=listing(), aliases=[l.ticker,lookup(l.id).ticker,...state.data.listings.filter(x=>x.id===l.id).map(x=>x.ticker)];
+    for(const lib of [state.privateData,state.published])for(const alias of aliases){
+      const r=lib?.listings?.[alias]?.peers;if(r)return r;
     }
-    renderBars(currentIds,years);renderTrend(currentIds);
-    renderTables(cos,years,score);
-    renderSources(cos,years);
-    setQuery();
+    return null;
   }
-  function chartScale(values) {
-    const lo=Math.min(0,...values), hi=Math.max(0,...values);
-    const raw=(hi-lo || 4)/4;
-    const order=10**Math.floor(Math.log10(raw));
-    const step=([1,2,2.5,5,10].find(k=>k*order>=raw)||10)*order;
-    const min=Math.floor(lo/step)*step, max=hi===lo?min+step*4:Math.ceil(hi/step)*step;
-    const ticks=Array.from({length:Math.round((max-min)/step)+1},(_,i)=>min+i*step);
-    return {min,max,ticks};
+  function comparison() {
+    const focus=listing(), report=getBOS(), members=E.reportMembers(state.data,report,focus.id);
+    const mapped=members.filter(x=>!x.subject&&x.id).map(x=>x.id);
+    const candidates=E.candidates(state.data,focus.id,mapped);
+    const peers=state.custom??Array.from(candidates.keys()).slice(0,state.size);
+    const ids=[focus.id,...peers], companies=ids.map(lookup), ticker=companies.map((c,i)=>i===0?state.focus:c.ticker);
+    const periods=M.periods(companies);
+    if(state.period!=='latest'&&!periods.includes(state.period))state.period='latest';
+    const years=companies.map(c=>M.yearFor(c,state.period));
+    const views=ids.map((id,i)=>E.valueView(state.data,id,ticker[i],years[i],state.period));
+    return {ids,companies,ticker,peers,years,views,periods,report,members,candidates,score:M.checklist(companies,years)};
   }
-  const axisValue=n=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(Math.abs(n)<1e-8?0:n)+'%';
-  function renderBars(currentIds,years) {
-    const key=state.bar, values=currentIds.map((id,i)=>M.metric(company(id),years[i],key));
-    const valid=values.filter(Number.isFinite);
+  function updateURL() {
+    const u=new URL(location.href);
+    u.searchParams.set('ticker',state.focus);
+    for(const [k,v] of [['peers',state.custom?.join(',')],['count',state.size===5?null:state.size],['year',state.period==='latest'?null:state.period]]){
+      if(v==null)u.searchParams.delete(k);else u.searchParams.set(k,v);
+    }
+    history.replaceState(null,'',u);
+  }
+  function value(c,i,key) {
+    return Object.hasOwn(E.marketLabels,key)||Object.hasOwn(E.quarterLabels,key)?c.views[i].values[key]:M.metric(c.companies[i],c.years[i],key);
+  }
+  function render() {
+    const c=comparison(), cos=c.companies;
+    $('period').innerHTML=opt('latest','Latest reported')+c.periods.map(y=>opt(y,'FY ending in '+y)).join('');$('period').value=state.period;
+    $('peer-count').value=String(state.size);$('comparison').style.setProperty('--columns',cos.length);
+    $('focus-name').textContent=cos[0].name+' · '+state.focus;
+    $('peer-name').textContent=c.peers.length?c.peers.map(id=>lookup(id).name).join(' · '):'Add competitors';
+    const reason=id=>c.candidates.get(id)||'Selected peer';
+    const tally=new Map();for(const id of c.peers){const name=reason(id);tally.set(name,(tally.get(name)||0)+1);}
+    const basis=Array.from(tally,([k,v])=>v+' '+({'BOS report peer':'from the BOS report','Industry peer':'industry','Related industry':'related industry','Selected peer':'manually added'}[k])).join(' · ');
+    $('peer-basis').textContent=(state.custom?'Selected comparison':'Automatic comparison')+(basis?' · '+basis:'')+(state.custom===null&&c.peers.length<state.size?' · '+c.peers.length+' available':'');
+    $('open-bos').hidden=!c.report;
+    $('companies').innerHTML=`<div class="column-label"><strong>Comparison item</strong><small>${esc(cos[0].industry)}</small></div>`+
+      cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-name">${esc(co.name)}</span><small>${esc(c.ticker[i])} · ${esc(co.currency)}</small><small>${c.years[i]?esc(date(c.years[i].end)):'No filing for period'}</small><small class="peer-role">${i===0?'Focus company':esc(reason(c.ids[i]))}</small></div>`).join('');
+    const financial=cos.some(M.financial), ratioKeys=financial?['roe','roa','revenueGrowth','profitGrowth']:['operatingMargin','netMargin','grossMargin','roe','roa','revenueGrowth','profitGrowth','fcfMargin','cashMargin'];
+    const trail=ratioKeys.filter(k=>cos.some(co=>co.years.some(y=>Number.isFinite(M.metric(co,y,k)))));
+    const comparisonKeys=[...E.multiples,'earningsYield','qGrowth','qOperatingMargin','qNetMargin']
+      .filter(k=>c.views.some(v=>Number.isFinite(v.values[k])));
+    for(const [component,options,fallback] of [['bar',[...trail,...comparisonKeys],financial?'roe':'operatingMargin'],['trend',trail,financial?'roa':'netMargin']]) {
+      const available=options.length?options:ratioKeys;
+      if(!available.includes(state[component]))state[component]=available.includes(fallback)?fallback:available[0];
+      const select=$(component+'-metric');select.innerHTML=available.map(k=>opt(k,allLabels[k])).join('');select.value=state[component];
+    }
+    renderBars(c);renderTrend(c);renderTables(c);renderSources(c);updateURL();
+  }
+  function scale(values) {
+    const lo=Math.min(0,...values),hi=Math.max(0,...values),raw=(hi-lo||4)/4,order=10**Math.floor(Math.log10(raw));
+    const step=([1,2,2.5,5,10].find(n=>n*order>=raw)||10)*order;
+    const min=Math.floor(lo/step)*step,max=lo===hi?min+4*step:Math.ceil(hi/step)*step;
+    return {min,max,ticks:Array.from({length:Math.round((max-min)/step)+1},(_,i)=>min+i*step)};
+  }
+  const axis=n=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2,notation:Math.abs(n)>=10000?'compact':'standard'}).format(Math.abs(n)<1e-8?0:n);
+  function renderBars(c) {
+    const k=state.bar,values=c.ids.map((_,i)=>value(c,i,k)),valid=values.filter(Number.isFinite),multiple=E.multiples.has(k);
     if(!valid.length){$('bars').innerHTML='<p class="chart-empty">No reported values for this period.</p>';return;}
-    const scale=chartScale(valid), left=94,right=409;
-    const x=v=>left+(v-scale.min)/(scale.max-scale.min)*(right-left);
-    const h=170, rowHeight=131/values.length;
-    const ticks=scale.ticks.map(v=>`<line class="${v===0?'zero-line':'axis-line'}" x1="${x(v)}" x2="${x(v)}" y1="4" y2="143"/><text x="${x(v)}" y="162" text-anchor="middle">${axisValue(v)}</text>`).join('');
-    const bars=values.map((v,i)=>{
-      const y=7+(i+.5)*rowHeight,symbol=label(currentIds[i],i);
-      const title=company(currentIds[i]).name+' · '+M.labels[key]+' · '+pct(v);
-      const bar=Number.isFinite(v)?`<rect x="${Math.min(x(v),x(0))}" y="${y-8}" width="${Math.max(1,Math.abs(x(v)-x(0)))}" height="16" rx="3" fill="${colors[i]}"/>`:'';
-      return `<g><title>${escape(title)}</title><text x="0" y="${y+4}">${escape(symbol)}</text>${bar}<text class="bar-value" x="478" y="${y+4}" text-anchor="end">${pct(v)}</text></g>`;
-    }).join('');
-    $('bars').innerHTML=`<svg viewBox="0 0 480 ${h}" role="img" aria-label="${escape(M.labels[key]+' by company. '+currentIds.map((id,i)=>company(id).name+' '+pct(values[i])).join(', '))}">${ticks}${bars}</svg>`;
+    const s=scale(valid),fmt=multiple?times:pct,left=87,right=405,x=v=>left+(v-s.min)/(s.max-s.min)*(right-left);
+    const line=Math.max(18,Math.min(28,132/c.ids.length)),base=12+c.ids.length*line;
+    const ticks=s.ticks.map(v=>`<line class="${v===0?'zero-line':'axis-line'}" x1="${x(v)}" x2="${x(v)}" y1="4" y2="${base}"/><text x="${x(v)}" y="${base+18}" text-anchor="middle">${axis(v)}${multiple?'×':'%'}</text>`).join('');
+    const bars=values.map((v,i)=>{const y=8+(i+.5)*line;return `<g><title>${esc(c.companies[i].name+' · '+allLabels[k]+' · '+fmt(v))}</title><text x="0" y="${y+4}">${esc(c.ticker[i])}</text>${Number.isFinite(v)?`<rect x="${Math.min(x(0),x(v))}" y="${y-6}" width="${Math.max(1,Math.abs(x(v)-x(0)))}" height="12" rx="3" fill="${colors[i]}"/>`:''}<text class="bar-value" x="477" y="${y+4}" text-anchor="end">${fmt(v)}</text></g>`;}).join('');
+    $('bars').innerHTML=`<svg viewBox="0 0 480 ${base+24}" role="img" aria-label="${esc(allLabels[k]+'. '+c.companies.map((co,i)=>co.name+' '+fmt(values[i])).join(', '))}">${ticks}${bars}</svg>`;
   }
-  function renderTrend(currentIds) {
-    const key=state.trend, end=state.period==='latest'?'9999':state.period;
-    const series=currentIds.map(id=>company(id).years.filter(y=>y.end.slice(0,4)<=end).slice(0,3).map(y=>({year:+y.end.slice(0,4),date:y.end,value:M.metric(company(id),y,key)})));
-    const xYears=[...new Set(series.flat().map(p=>p.year))].sort((a,b)=>a-b);
-    const valid=series.flat().map(p=>p.value).filter(Number.isFinite);
-    if(!valid.length){$('trend').innerHTML='<p class="chart-empty">No reported values through this fiscal year.</p>';return;}
-    const chart=chartScale(valid), left=54,right=460,top=10,base=135;
-    const x=year=>xYears.length<2?(left+right)/2:left+(year-xYears[0])/(xYears.at(-1)-xYears[0])*(right-left);
-    const y=v=>base-(v-chart.min)/(chart.max-chart.min)*(base-top);
-    const grid=chart.ticks.map(v=>`<line class="${v===0?'zero-line':'axis-line'}" x1="${left}" x2="${right}" y1="${y(v)}" y2="${y(v)}"/><text x="${left-7}" y="${y(v)+4}" text-anchor="end">${axisValue(v)}</text>`).join('');
-    const years=xYears.map(year=>`<text x="${x(year)}" y="154" text-anchor="middle">${year}</text>`).join('');
-    const lines=series.map((points,i)=>{
-      let previous;
-      return points.slice().reverse().map(p=>{
-        if(!Number.isFinite(p.value)){previous=undefined;return '';}
-        const segment=previous && p.year===previous.year+1?`<line x1="${x(previous.year)}" x2="${x(p.year)}" y1="${y(previous.value)}" y2="${y(p.value)}" stroke="${colors[i]}" stroke-width="2.7"/>`:'';
-        previous=p;
-        const title=company(currentIds[i]).name+' · '+date(p.date)+' · '+pct(p.value);
-        return segment+`<circle tabindex="0" role="button" aria-label="${escape(title)}" cx="${x(p.year)}" cy="${y(p.value)}" r="4.5" fill="${colors[i]}" stroke="white" stroke-width="1.5"><title>${escape(title)}</title></circle>`;
+  function renderTrend(c) {
+    const k=state.trend,end=state.period==='latest'?'9999':state.period;
+    const series=c.companies.map((co,i)=>state.hidden.has(c.ids[i])?[]:co.years.filter(y=>y.end.slice(0,4)<=end).slice(0,3).map(y=>({year:+y.end.slice(0,4),end:y.end,v:M.metric(co,y,k)})));
+    const years=Array.from(new Set(series.flat().map(p=>p.year))).sort((a,b)=>a-b),valid=series.flat().map(p=>p.v).filter(Number.isFinite);
+    let plot='<p class="chart-empty">No visible values for this metric and period.</p>';
+    if(valid.length){
+      const s=scale(valid),left=55,right=461,base=135,top=10,x=yr=>years.length<2?(left+right)/2:left+(yr-years[0])/(years.at(-1)-years[0])*(right-left),y=v=>base-(v-s.min)/(s.max-s.min)*(base-top);
+      const grid=s.ticks.map(v=>`<line class="${v===0?'zero-line':'axis-line'}" x1="${left}" x2="${right}" y1="${y(v)}" y2="${y(v)}"/><text x="${left-7}" y="${y(v)+4}" text-anchor="end">${axis(v)}%</text>`).join('');
+      const labels=years.map(yr=>`<text x="${x(yr)}" y="154" text-anchor="middle">${yr}</text>`).join('');
+      const lines=series.map((pts,i)=>{let prev;return pts.slice().reverse().map(p=>{
+        if(!Number.isFinite(p.v)){prev=null;return '';}
+        const seg=prev&&p.year===prev.year+1?`<line stroke="${colors[i]}" stroke-width="2.5" x1="${x(prev.year)}" x2="${x(p.year)}" y1="${y(prev.v)}" y2="${y(p.v)}"/>`:'';
+        prev=p;const title=c.companies[i].name+' · '+date(p.end)+' · '+pct(p.v);
+        return seg+`<circle tabindex="0" role="button" aria-label="${esc(title)}" cx="${x(p.year)}" cy="${y(p.v)}" r="4.4" fill="${colors[i]}" stroke="white" stroke-width="1.3"><title>${esc(title)}</title></circle>`;}).join('');}).join('');
+      plot=`<svg viewBox="0 0 480 161" role="group" aria-label="${esc(allLabels[k])} by fiscal year">${grid}${labels}${lines}</svg>`;
+    }
+    const legend=c.ids.map((id,i)=>`<button type="button" data-series="${esc(id)}" aria-pressed="${!state.hidden.has(id)}" aria-label="${esc('Show '+c.companies[i].name+' trend')}"><i class="dot" style="--company-color:${colors[i]}"></i>${esc(c.ticker[i])}</button>`).join('');
+    $('trend').innerHTML=plot+'<div class="chart-legend">'+legend+'</div><output class="trend-readout" aria-live="polite"></output>';
+  }
+  function trendPoint(e) {const p=e.target.closest('circle[aria-label]');if(!p||e.type==='keydown'&&!['Enter',' '].includes(e.key))return;if(e.type==='keydown')e.preventDefault();$('trend').querySelector('output').textContent=p.getAttribute('aria-label');}
+  for(const e of ['click','focusin','keydown'])$('trend').addEventListener(e,trendPoint);
+  $('trend').addEventListener('click',e=>{const b=e.target.closest('[data-series]');if(!b)return;const id=b.dataset.series;if(state.hidden.has(id))state.hidden.delete(id);else state.hidden.add(id);renderTrend(comparison());Array.from($('trend').querySelectorAll('[data-series]')).find(x=>x.dataset.series===id)?.focus({preventScroll:true});});
+
+
+  function head(c,title) {
+    return `<caption class="sr-only">${esc(title)}</caption><thead class="sr-only"><tr><th scope="col">Comparison item</th>${c.companies.map(co=>`<th scope="col">${esc(co.name)}</th>`).join('')}</tr></thead>`;
+  }
+  function best(values,lower=false,digits=1) {
+    const r=values.map(n=>Number.isFinite(n)?Number(n.toFixed(digits)):null),usable=r.filter(Number.isFinite);
+    if(usable.length<2)return [];
+    const lead=lower?Math.min(...usable):Math.max(...usable);
+    return r.flatMap((n,i)=>n===lead?[i]:[]);
+  }
+  function rowCells(key,title,values,fmt,winners=[],interactive=true) {
+    const starred=state.stars.has(key)&&interactive;
+    const star=interactive?`<button class="row-star" type="button" data-star="${esc(key)}" aria-pressed="${starred}" aria-label="${esc((starred?'Remove highlight from ':'Highlight ')+title)}" title="${starred?'Remove row highlight':'Highlight row'}">${starred?'★':'☆'}</button>`:'';
+    return `<tr data-row="${esc(key)}" class="${starred?'focus-row':''}"><th scope="row">${star}<span>${esc(title)}</span></th>${values.map((v,i)=>{
+      const win=winners.includes(i),s=fmt(v,i),mark=win?`<span class="win-mark" title="${winners.length>1?'Joint leader':'Leader'}" aria-label="Leader">✓</span>`:'';
+      return `<td class="${win?'winner':s==='—'||s==='N/M'?'unavailable':''}">${mark}${esc(s)}</td>`;
+    }).join('')}</tr>`;
+  }
+  function renderTables(c) {
+    const display=(key,fmt,rank,lower=false)=>{
+      if(state.filter==='focus'&&!state.stars.has(key))return '';
+      const vals=c.ids.map((_,i)=>value(c,i,key));
+      const wins=rank?best(vals,lower,E.multiples.has(key)||cmult.has(key)?2:1):[];
+      return rowCells(key,allLabels[key],vals,(v,i)=>c.views[i].nm.has(key)?'N/M':fmt(v,i),wins);
+    };
+    const textRow=(k,title,fn)=>rowCells(k,title,c.ids.map((_,i)=>fn(i)),v=>v||'—',[],false);
+    const headers=[
+      ['valuation','Market valuation',[
+        textRow('market-asof','Market value date',i=>date(c.views[i].m?.date)),
+        ...(c.views.some(v=>v.m?.quoteDate&&v.m.quoteDate!==v.m.date)?[textRow('quote-asof','Share price date',i=>date(c.views[i].m?.quoteDate))]:[]),
+        display('quotePrice',(v,i)=>Number.isFinite(v)?num(v,2)+' '+(c.views[i].m?.quoteUnit||''):'—'),
+        display('cap',amount),display('ev',amount),
+        ...['peTTM','peFY','evEbitda','proxyEvEbitda','evEbit','priceBook','priceSales'].map(k=>display(k,times,true,true)),
+        display('earningsYield',pct,true),
+        textRow('consensus-date','Consensus price date',i=>date(c.views[i].m?.forwardDate)),
+        display('forwardPE',times,true,true)
+      ]],
+      ['quarterly','Quarterly & trailing results',[
+        textRow('quarter-period','Fiscal quarter',i=>c.views[i].q.period),
+        display('qRevenue',amount),display('qGrowth',pct,true),display('qOperatingMargin',pct,true),display('qNetMargin',pct,true),
+        ...(state.period==='latest'?[textRow('trailing-period','Trailing period',i=>c.views[i].q.ended?date(c.views[i].q.ended):c.views[i].q.period),display('ttmRevenue',amount),display('ttmNetCommon',amount)]:[])
+      ]],
+      ...M.groups.map(([title,keys],i)=>[['income','balance','cash'][i],title,keys.map(k=>display(k,amount))]),
+      ['ratios','Financial ratios',Object.keys(M.labels).map(k=>display(k,cmult.has(k)?times:pct,!cmult.has(k)&&k!=='equityRatio'))]
+    ];
+    const scrollLeft=$('company-scroll').scrollLeft;
+    $('statement-groups').innerHTML=headers.map(([id,title,rows],i)=>{
+      if(!rows.some(Boolean))return '';
+      return `<section class="matrix-section" data-section="${id}" aria-labelledby="heading-${id}"><h3 class="pinned-section" id="heading-${id}"><span>${esc(title)}</span></h3><div class="horizontal table-panel" data-sync-scroll tabindex="0" id="${i===0?'statement-scroll':'scroll-'+id}" aria-label="${esc(title)} columns"><table id="${i===0?'statement-table':'table-'+id}">${head(c,title)}<tbody>${rows.join('')}</tbody></table></div></section>`;
+    }).join('');
+    const sc=c.score,format=n=>Number.isFinite(n)?new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(n):'—';
+    const names=new Intl.ListFormat('en-GB',{style:'long',type:'conjunction'}).format(sc.winners.map(i=>c.companies[i].name));
+    const summary=sc.counted?(names+(sc.winners.length>1?' share the lead':' leads the checklist')):'No comparable score';
+    const detail=sc.counted?`${format(sc.scores[sc.winners[0]])} of ${sc.counted} available points · ${sc.counted} of ${sc.rows.length} criteria scored`:
+      c.ids.length===1?'Choose a competitor to score the checklist.':'No checklist measure is available for every selected company in this period.';
+    $('check-result').innerHTML=`<strong>${esc(summary)}</strong>${esc(detail)}`;
+    $('check-table').innerHTML=head(c,'Fundamentals checklist')+'<tbody>'+sc.rows.map(r=>rowCells(r.key,M.labels[r.key],r.values,pct,r.winners,false)).join('')+
+      rowCells('score','Checklist points',sc.counted?sc.scores:c.ids.map(()=>null),format,sc.winners,false)+'</tbody>';
+    for(const el of document.querySelectorAll('[data-sync-scroll],#check-scroll'))el.scrollLeft=scrollLeft;
+  }
+  function renderSources(c) {
+    const x=state.data.expansion;
+    $('sources').innerHTML=c.companies.map((co,i)=>{
+      const y=c.years[i],v=c.views[i],m=v.m;
+      const refs=Object.entries(y?.refs||{}).filter(([k])=>M.fields[k]||['preferredEquity','noncontrollingInterest','dilutedEps','bookCommon'].includes(k)).map(([k,ref])=>{
+        const raw=String(ref), file=raw.match(/^(R\d+\.htm)\b/i);
+        const urls=Array.from(new Set(raw.match(/https:\/\/[^\s;]+/g)||[]));
+        if(file&&co.filingUrl.includes('sec.gov/Archives/'))urls.unshift(new URL(file[1],co.filingUrl).href);
+        const short=raw.replace(/https:\/\/[^\s;]+/g,'').replace(/\s+;/g,';').trim();
+        const content=urls.length?link(urls[0],short||'Filing reference')+urls.slice(1).map((url,n)=>' · '+link(url,'Source '+(n+2))).join(''):esc(short);
+        const title=M.fields[k]||({dilutedEps:'Diluted EPS',preferredEquity:'Preferred equity',noncontrollingInterest:'Noncontrolling interest',bookCommon:'Common book equity'}[k]);
+        return `<li><b>${esc(title)}</b> · ${content}</li>`;
       }).join('');
+      const market=m?`<p><b>Market inputs.</b> ${esc(m.method||'')}${m.date?' · '+esc(date(m.date)):''}${m.anchorDate?' · Anchor '+esc(date(m.anchorDate)):''}${m.shareDate?' · Share count '+esc(date(m.shareDate)):''}${m.fxDate?' · FX '+esc(date(m.fxDate)):''}. ${(m.sources||[]).map(s=>link(s.url,s.label)).join(' · ')}</p>`:'';
+      const notes=Array.from(new Set(Object.values(co.notes||{}).flat().filter(s=>typeof s==='string')));
+      return `<details class="source-card"><summary>${esc(co.name)} · ${esc(co.form)}</summary><p>Report period ended ${esc(date(co.period))}${co.filed?' · Filed or published '+esc(date(co.filed)):''}.</p><p>${co.sources.map(s=>link(s.url,s.label)).join(' · ')}</p>${market}${v.q.source?`<p>${link(v.q.source,v.q.sourceLabel||'Morningstar financial statements')} · ${v.q.ended?'Filed':'Snapshot'} ${esc(date(v.q.asOf))}.</p>`:''}${refs?`<p><b>Figures for ${esc(date(y.end))}</b></p><ul>${refs}</ul>`:''}${notes.length?`<ul>${notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul>`:''}</details>`;
     }).join('');
-    const legend=currentIds.map((id,i)=>`<span><i class="dot" style="${columnColors[i]}"></i>${escape(label(id,i))}</span>`).join('');
-    $('trend').innerHTML=`<svg viewBox="0 0 480 161" role="group" aria-label="${escape(M.labels[key])} by fiscal year">${grid}${years}${lines}</svg><div class="chart-legend">${legend}</div><output class="trend-readout" aria-live="polite"></output>`;
+    const r=c.report;
+    const bosRef=r?`<p><b>BOS peer comparison.</b> ${link(r.source+'#page='+r.page,'Original comparison, page '+r.page)} · ${esc(date(r.date))}.</p>`:'';
+    $('method-text').innerHTML=bosRef+`<p>Filing snapshot checked ${esc(date(state.data.asOf))}. The 110 focus listings represent 97 issuers. Share classes and exchange listings for one issuer share its financial statements. Automatic selection starts with matched companies from the Beta 2 BOS report and continues with industry peers, then related industries. The selection stops when those candidates run out. Editing peers lets you choose up to ten. The BOS comparison preserves the report’s own group and dates. Connected Beta 2 research supplies its detailed table on this browser.</p>
+    <p>Each column shows its filing currency and fiscal year-end. Amounts follow the units control. Share prices use the displayed quotation unit. Market values are estimates where a filed share count is multiplied by a close or an earlier equity value is updated by the change in price and FX. Each company’s source panel identifies its dates and method. Reported forward P/E comes from the dated consensus comparison.</p>
+    <p>Trailing P/E divides equity market value by trailing 12-month earnings available to common shareholders. Filed-year P/E uses annual common earnings, or verified matching per-share figures where available. Earnings yield is the inverse of filed-year P/E. Price/sales uses revenue. Price/book uses common book equity. A multiple with nonpositive earnings or enterprise value is shown as N/M. Valuation rows highlight the lowest comparable positive multiple or the highest earnings yield. Valuations carry no fundamentals checklist points.</p>
+    <p>Enterprise value includes common equity market value, interest-bearing debt, preferred equity and noncontrolling interests, less cash. The EV proxy uses common equity market value plus debt less cash. EBITDA is filing-reported or operating profit plus verified depreciation and amortisation. For Petrobras, the market value includes common and participating preferred shares at their respective prices. Each multiple uses the named denominator. Banks, financial groups and REITs omit the enterprise multiples.</p>
+    <p>Morningstar’s quarterly figures use fiscal-quarter labels. Year-on-year growth compares the same fiscal quarter one year earlier. Morningstar supplies the published trailing figures for focus listings. For filing peers with a verified interim comparison, trailing results add the current fiscal year to date to the last annual result and subtract the prior-year comparative. A historical fiscal-year selection shows the associated fourth quarter and dated historical market observations when available. Historical market prices are never paired with earnings from a later filing without a verified publication date.</p>
+    <p>Growth requires a positive prior-year base. Margins divide the measure by revenue. Returns use net income to owners and average opening and closing equity or assets. Free cash flow subtracts cash purchases of PP&amp;E from operating cash flow. Cash conversion divides operating cash flow by net income. Asset turnover uses average assets. A dash marks a missing or inapplicable amount.</p>
+    <p>Stars highlight rows you want to follow. Green checks mark leaders among comparable available values at the displayed precision. Checklist points require a figure for every company. Tied companies split a point. Financial institutions and REITs use revenue growth, profit growth, return on equity and return on assets. Company dates, accounting standards and business mix can differ.</p>
+    <p>Sources include SEC 10-K, 20-F and 40-F filings and annual reports from other markets. SpaceX uses its audited IPO prospectus. ${link('https://market-intel-fundamentals-vault.vercel.app/statements-public.json','Public Beta 2 statement snapshot')}</p>`;
   }
-  function showTrendPoint(event) {
-    const point=event.target.closest('circle[aria-label]');
-    if(!point || (event.type==='keydown' && !['Enter',' '].includes(event.key)))return;
-    if(event.type==='keydown')event.preventDefault();
-    $('trend').querySelector('.trend-readout').textContent=point.getAttribute('aria-label');
+  function renderBOS() {
+    const c=comparison(),r=c.report;if(!r)return;
+    $('bos-title').textContent='BOS comparison · '+c.companies[0].name;
+    const covered=c.members.filter(m=>!m.subject&&m.id).length,peers=c.members.filter(m=>!m.subject);
+    let content=`<p class="report-date">${esc(date(r.date))} · ${peers.length} report peers · ${covered} with filing coverage</p>`;
+    if(r.rows?.length&&r.columns?.length) {
+      const cols=r.rows;
+      const data=r.columns.map((key,i)=>`<tr><th scope="row">${esc(key)}</th>${cols.map(row=>'<td>'+esc(row[i+1]??'—')+'</td>').join('')}</tr>`).join('');
+      content+=`<div class="report-matrix" tabindex="0" aria-label="BOS report table"><table><caption class="sr-only">Source comparison as reported on ${esc(date(r.date))}</caption><thead><tr><th scope="col">Report item</th>${cols.map(row=>'<th scope="col">'+esc(row[0])+'</th>').join('')}</tr></thead><tbody>${data}</tbody></table></div>`;
+    } else if(peers.length) {
+      content+='<ul class="report-peers">'+peers.map(m=>`<li><b>${esc(m.name)}</b><span>${m.id?'Filing available':'Report only'}</span></li>`).join('')+'</ul>';
+    }
+    if(r.summary)content+='<p>'+esc(r.summary)+'</p>';
+    content+='<p class="report-source">'+link(r.source+'#page='+r.page,'Open BOS comparison, page '+r.page)+(r.analysisPage&&r.analysisPage!==r.page?' · '+link(r.source+'#page='+r.analysisPage,'Competitive analysis'):'')+'</p>';
+    $('bos-content').innerHTML=content;
   }
-  for(const event of ['click','focusin','keydown']) $('trend').addEventListener(event,showTrendPoint);
-  function tableHead(companies,title) {
-    return `<caption class="sr-only">${title}</caption><thead class="sr-only"><tr><th scope="col">Measure</th>${companies.map(c=>`<th scope="col">${escape(c.name)}</th>`).join('')}</tr></thead>`;
-  }
-  function row(title,values,formatter,winners=[],css='') {
-    const cells=values.map((v,i)=>{
-      const win=winners.includes(i);
-      const mark=win?`<span class="win-mark" aria-label="${winners.length>1?'Joint leader':'Leader'}">✓</span>`:'';
-      return `<td class="${win?'winner':Number.isFinite(v)?'':'unavailable'}">${mark}${escape(formatter(v))}</td>`;
-    }).join('');
-    return `<tr class="${css}"><th scope="row">${escape(title)}</th>${cells}</tr>`;
-  }
-  function renderTables(cos,years,score) {
-    const valueFor=key=>cos.map((c,i)=>M.metric(c,years[i],key));
-    const sections=M.groups.map(([title,keys])=>[title,keys.map(k=>row(M.fields[k],valueFor(k),amount)).join('')]);
-    const ratioKeys=cos.some(M.financial)?M.criteria(cos):Object.keys(M.labels);
-    sections.push(['Financial ratios',ratioKeys.map(k=>{
-      const vals=valueFor(k),format=k==='currentRatio'?v=>Number.isFinite(v)?num(v,2)+'×':'—':pct;
-      return row(M.labels[k],vals,format,k==='currentRatio'?[]:M.leaders(vals));
-    }).join('')]);
-    $('statement-table').innerHTML=tableHead(cos,'Annual financial statements and ratios')+sections.map(([title,rows])=>`<tbody><tr class="group-row"><th scope="rowgroup" colspan="${cos.length+1}">${escape(title)}</th></tr>${rows}</tbody>`).join('');
-    const price=v=>Number.isFinite(v)?new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(v):'—';
-    const result=new Intl.ListFormat('en-GB',{style:'long',type:'conjunction'}).format(score.winners.map(i=>cos[i].name));
-    const count=score.counted, title=count?(result+(score.winners.length>1?' share the lead':' leads the checklist')):'No comparable score';
-    const description=count?`${price(score.scores[score.winners[0]])} of ${count} available points · ${count} of ${score.rows.length} criteria scored`:
-      cos.length===1?'Choose a competitor to score the checklist.':'The selected period has no checklist measure available for every company.';
-    $('check-result').innerHTML=`<strong>${escape(title)}</strong>${escape(description)}`;
-    $('check-table').innerHTML=tableHead(cos,'Fundamentals checklist')+'<tbody>'+score.rows.map(r=>row(M.labels[r.key],r.values,pct,r.winners)).join('')+
-      row('Checklist points',count?score.scores:cos.map(()=>null),price,score.winners,'total')+'</tbody>';
-  }
-  function renderSources(cos,years) {
-    $('sources').innerHTML=cos.map((c,i)=>{
-      const year=years[i],src=c.sources;
-      const links=src.map(s=>safeLink(s.url,s.label)).join(' · ');
-      const refs=Object.entries(year?.refs||{}).filter(([key])=>M.fields[key]).map(([key,ref])=>{
-        const secTable=String(ref).match(/^((?:R|r)\d+\.htm)\b/i);
-        const reference=secTable && c.filingUrl && c.filingUrl.includes('sec.gov/Archives/')?safeLink(new URL(secTable[1],c.filingUrl).href,ref):escape(ref);
-        return `<li><b>${escape(M.fields[key])}</b> · ${reference}</li>`;
-      }).join('');
-      const notes=[...new Set(Object.values(c.notes||{}).flat().filter(v=>typeof v==='string'))];
-      const noteRows=notes.map(v=>`<li>${escape(v)}</li>`).join('');
-      return `<details class="source-card"><summary>${escape(c.name)} · ${escape(c.form)}</summary><p>Report period ended ${escape(date(c.period))}${c.filed?' · Filed or published '+escape(date(c.filed)):''}.</p><p>${links}</p>${refs?`<p><b>Figures for ${escape(date(year.end))}</b></p><ul>${refs}</ul>`:''}${noteRows?`<ul>${noteRows}</ul>`:''}</details>`;
-    }).join('');
-    $('method-text').innerHTML=`<p>Filing snapshot checked ${escape(date(state.data.asOf))}. The 110 covered listings represent 97 issuers. Cross-listed shares use the same consolidated statements. Automatic competitors share business activities. The picker also includes industry benchmarks outside the 110. You can change the peer group.</p>
-      <p>Each column uses the currency shown in its header. Amounts are in the selected units. Fiscal years can end in different months. “Latest reported” uses each issuer’s latest available annual period. Choosing a year compares periods ending in that calendar year. A dash means the filing lacks a comparable figure or the calculation does not apply.</p>
-      <p>Revenue and profit growth use the preceding annual period and require a positive starting value. Margins divide the measure by revenue. Returns divide net income to owners by average opening and closing equity or assets. Free cash flow subtracts cash purchases of property, plant and equipment from operating cash flow. Current ratio divides current assets by current liabilities.</p>
-      <p>Green checks mark the highest comparable percentage at one decimal place. Every company must have a value for the criterion to count. Tied companies share one point. The checklist sums these points. A check beside a company name marks an overall checklist leader. Financial institutions and REITs use revenue growth, profit growth, return on equity and return on assets. Nominal amounts and current ratios carry no points.</p>
-      <p>The filing links include SEC 10-K, 20-F and 40-F filings, annual reports from other markets, and supporting statements where applicable. SpaceX uses the audited annual statements in its final IPO prospectus. Accounting standards, business mix and fiscal calendars can affect comparisons.</p>`;
-  }
+
+
   function openPicker(mode) {
-    state.picker=mode;state.draft=[...peers()];$('picker-title').textContent=mode==='focus'?'Choose a focus company':'Choose competitors';
+    const c=comparison();state.picker=mode;state.draft=[...c.peers];
+    $('picker-title').textContent=mode==='focus'?'Choose a focus company':'Choose competitors';
     $('picker-actions').hidden=mode==='focus';$('peer-draft').hidden=mode==='focus';$('company-search').value='';
     renderPicker();$('picker').showModal();$('company-search').focus();
   }
   function renderPicker() {
-    const query=$('company-search').value.trim().toLowerCase(),focusMode=state.picker==='focus',data=state.data;
-    let entries=focusMode?data.listings.map(l=>({id:l.id,ticker:l.ticker,name:l.name||company(l.id).name,value:l.ticker})):
-      Object.entries(data.companies).filter(([id])=>id!==listing().id).map(([id,c])=>({id,ticker:c.ticker,name:c.name,value:id}));
-    const normalize=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');
-    entries=entries.filter(e=>(e.name+' '+company(e.id).name+' '+e.ticker+' '+e.id).toLowerCase().includes(query)||
-      normalize(e.ticker).includes(normalize(query))&&!!normalize(query));
-    if(!focusMode) entries.sort((a,b)=>Number(state.draft.includes(b.id))-Number(state.draft.includes(a.id))||
-      Number(company(listing().id).peers.includes(b.id))-Number(company(listing().id).peers.includes(a.id))||a.name.localeCompare(b.name));
-    $('peer-draft').textContent=state.draft.length+' of 3 selected'+(state.draft.length?' · '+state.draft.map(id=>company(id).name).join(' / '):'');
-    $('picker-list').innerHTML=entries.length?entries.map(e=>{
-      const selected=focusMode?e.ticker===state.focus:state.draft.includes(e.id), benchmark=!focusMode&&company(e.id).benchmark;
-      return `<button type="button" data-value="${escape(e.value)}" class="${selected?'is-selected':''}" ${focusMode?'':'aria-pressed="'+selected+'"'} ${!focusMode&&!selected&&state.draft.length===3?'disabled':''}><span>${selected?'✓ ':''}${escape(e.name)}</span><small>${escape(e.ticker)}${benchmark?' · Peer':''}</small></button>`;
+    const query=$('company-search').value.trim().toLowerCase(),focusMode=state.picker==='focus',data=state.data,c=comparison();
+    let items=focusMode?data.listings.map(l=>({id:l.id,ticker:l.ticker,name:l.name||lookup(l.id).name,value:l.ticker})):
+      Object.entries(data.companies).filter(([id])=>id!==listing().id).map(([id,co])=>({id,ticker:co.ticker,name:co.name,value:id}));
+    const collapsed=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');
+    items=items.filter(e=>(e.name+' '+lookup(e.id).name+' '+e.ticker+' '+e.id).toLowerCase().includes(query)||!!collapsed(query)&&collapsed(e.ticker).includes(collapsed(query)));
+    if(!focusMode) {
+      const priority=new Map(Array.from(c.candidates.keys(),(id,i)=>[id,i]));
+      items.sort((a,b)=>Number(state.draft.includes(b.id))-Number(state.draft.includes(a.id))||(priority.get(a.id)??999)-(priority.get(b.id)??999)||a.name.localeCompare(b.name));
+    }
+    $('peer-draft').textContent=state.draft.length+' of '+E.MAX_PEERS+' peers selected';
+    $('picker-list').innerHTML=items.length?items.map(e=>{
+      const selected=focusMode?e.ticker===state.focus:state.draft.includes(e.id);
+      const source=focusMode?'':c.candidates.get(e.id)||'Additional company';
+      return `<button type="button" data-value="${esc(e.value)}" class="${selected?'is-selected':''}" ${focusMode?'':'aria-pressed="'+selected+'"'} ${!focusMode&&!selected&&state.draft.length>=E.MAX_PEERS?'disabled':''}><span>${selected?'✓ ':''}${esc(e.name)}</span><small>${esc(e.ticker)}${source?' · '+esc(source):''}</small></button>`;
     }).join(''):'<p>No companies match your search.</p>';
+  }
+  function focusCompany(ticker) {
+    state.focus=ticker;state.custom=null;state.period='latest';state.bar='operatingMargin';state.trend='netMargin';state.hidden.clear();$('company-scroll').scrollLeft=0;
   }
   $('picker-list').addEventListener('click',event=>{
     const b=event.target.closest('button[data-value]');if(!b)return;
-    const value=b.dataset.value;
-    if(state.picker==='focus'){
-      state.focus=value;state.custom=null;state.period='latest';state.bar='operatingMargin';state.trend='netMargin';$('picker').close();render();
-    } else {
-      if(state.draft.includes(value)) state.draft=state.draft.filter(k=>k!==value);
-      else if(state.draft.length<3) state.draft.push(value);
-      renderPicker();const active=Array.from($('picker-list').querySelectorAll('button')).find(button=>button.dataset.value===value);active?.focus({preventScroll:true});
-    }
+    const v=b.dataset.value;
+    if(state.picker==='focus'){focusCompany(v);$('picker').close();render();return;}
+    if(state.draft.includes(v))state.draft=state.draft.filter(k=>k!==v);else if(state.draft.length<E.MAX_PEERS)state.draft.push(v);
+    renderPicker();Array.from($('picker-list').querySelectorAll('button')).find(a=>a.dataset.value===v)?.focus({preventScroll:true});
   });
   $('choose-company').onclick=()=>openPicker('focus');$('choose-peers').onclick=()=>openPicker('peers');
   $('close-picker').onclick=()=>$('picker').close();$('company-search').oninput=renderPicker;
-  $('auto-peers').onclick=()=>{state.custom=null;$('picker').close();render();};
-  $('apply-peers').onclick=()=>{state.custom=[...state.draft];$('picker').close();render();};
+  $('auto-peers').onclick=()=>{state.custom=null;state.hidden.clear();$('picker').close();render();};
+  $('apply-peers').onclick=()=>{state.custom=[...state.draft];state.hidden.clear();$('picker').close();render();};
+  $('peer-count').onchange=e=>{state.size=E.count(e.target.value);state.custom=null;state.hidden.clear();render();};
   $('period').onchange=e=>{state.period=e.target.value;render();};
-  $('units').onchange=e=>{state.unit=e.target.value;render();};
-  $('bar-metric').onchange=e=>{state.bar=e.target.value;renderBars(ids(),ids().map(id=>M.yearFor(company(id),state.period)));};
-  $('trend-metric').onchange=e=>{state.trend=e.target.value;renderTrend(ids());};
-  const scrollers=['company-scroll','statement-scroll','check-scroll'].map($);
-  scrollers.forEach(scroller=>scroller.addEventListener('scroll',()=>{
-    for(const other of scrollers) if(Math.abs(other.scrollLeft-scroller.scrollLeft)>1)other.scrollLeft=scroller.scrollLeft;
-  },{passive:true}));
-  new ResizeObserver(([entry])=>$('comparison').style.setProperty('--company-head-height',Math.ceil(entry.contentRect.height+2)+'px')).observe($('companies'));
-  async function load() {
-    $('load-status').textContent='Loading annual filings…';$('retry').hidden=true;
-    try {
-      const response=await fetch(window.ContentDelivery.CONTENT+endpoint,{signal:AbortSignal.timeout(30000)});
-      if(!response.ok)throw Error('Unavailable');
-      const data=await response.json();
-      if(!Array.isArray(data.listings)||!data.companies||data.listings.length!==110)throw Error('Invalid coverage');
-      state.data=data;
-      const q=new URLSearchParams(location.search), input=(q.get('ticker')||'GOOG US').toUpperCase();
-      state.focus=(data.listings.find(l=>l.ticker===input||l.id===input)||data.listings.find(l=>l.ticker==='GOOG US')||data.listings[0]).ticker;
-      if(q.has('peers')) state.custom=[...new Set(q.get('peers').split(','))].filter(id=>id!==listing().id&&company(id)).slice(0,3);
-      state.period=q.get('year')||'latest';
-      render();$('filing-app').hidden=false;$('load-status').hidden=true;
-    } catch(error) {
-      $('load-status').hidden=false;$('load-status').textContent='Annual filing data could not be loaded.';$('retry').hidden=false;console.error('Shares Beta 3',error);
+  $('units').onchange=e=>{state.unit=e.target.value;renderTables(comparison());};
+  $('row-filter').onchange=e=>{state.filter=e.target.value;renderTables(comparison());};
+  $('bar-metric').onchange=e=>{state.bar=e.target.value;renderBars(comparison());};
+  $('trend-metric').onchange=e=>{state.trend=e.target.value;renderTrend(comparison());};
+  $('open-bos').onclick=()=>{renderBOS();$('bos-dialog').showModal();};$('close-bos').onclick=()=>$('bos-dialog').close();
+  $('statement-groups').addEventListener('click',e=>{
+    const b=e.target.closest('[data-star]');if(!b)return;
+    const key=b.dataset.star;
+    if(state.stars.has(key))state.stars.delete(key);else state.stars.add(key);
+    renderTables(comparison());
+    const next=Array.from($('statement-groups').querySelectorAll('[data-star]')).find(x=>x.dataset.star===key);
+    (next||$('row-filter')).focus({preventScroll:true});
+  });
+  const scrollerSelector='[data-sync-scroll],#company-scroll,#check-scroll', assigned=new WeakMap();
+  document.addEventListener('scroll',e=>{
+    const el=e.target;if(!el.matches?.(scrollerSelector))return;
+    const x=el.scrollLeft;
+    if(assigned.has(el)&&Math.abs(assigned.get(el)-x)<1){assigned.delete(el);return;}
+    for(const other of document.querySelectorAll(scrollerSelector))if(other!==el&&Math.abs(other.scrollLeft-x)>1){
+      other.scrollLeft=x;assigned.set(other,other.scrollLeft);
     }
+  },{capture:true,passive:true});
+  const mobile=matchMedia('(max-width:720px)');
+  const sizes=[['row-height','--row-height',40,36],['item-width','--metric-width',205,130],['company-width','--company-min',172,145]];
+  const customized=new Set();
+  function layout(reset=false) {
+    for(const [id,prop,desk,phone] of sizes) {
+      const el=$(id);if(reset||!customized.has(id))el.value=String(mobile.matches?phone:desk);
+      $('comparison').style.setProperty(prop,el.value+'px');$(id+'-value').textContent=el.value+' px';
+    }
+    $('comparison').classList.toggle('fixed-company-width',customized.has('company-width'));
+  }
+  sizes.forEach(([id])=>$(id).oninput=()=>{customized.add(id);layout();});
+  $('reset-layout').onclick=()=>{customized.clear();layout(true);};mobile.addEventListener('change',()=>layout());
+  new ResizeObserver(()=>$('comparison').style.setProperty('--company-head-height',Math.ceil(document.querySelector('.sticky-companies').getBoundingClientRect().height)+'px')).observe(document.querySelector('.sticky-companies'));
+  layout(true);
+  async function json(name) {
+    const res=await fetch(window.ContentDelivery.CONTENT+'data/'+name,{signal:AbortSignal.timeout(30000)});
+    if(!res.ok)throw Error('Unavailable '+name);return res.json();
+  }
+  let generation=0;
+  async function load(){
+    const current=++generation; $('load-status').hidden=false;$('load-status').textContent='Loading filing and market comparisons…';$('retry').hidden=true;
+    try {
+      const lib=window.StocksBeta2PeerLibrary;
+      const [base,extra,pub]=await Promise.all([json('shares-beta3-annual-filings-2026-11-26.json'),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published()]);
+      if(current!==generation)return;
+      if(!Array.isArray(base.listings)||base.listings.length!==110||!base.companies)throw Error('Invalid filing coverage');
+      if(extra&&extra.version!==1)throw Error('Invalid comparison data');
+      state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
+      const q=new URLSearchParams(location.search),input=(q.get('ticker')||'GOOG US').toUpperCase();
+      state.focus=(base.listings.find(l=>l.ticker===input||l.id===input)||base.listings.find(l=>l.ticker==='GOOG US')||base.listings[0]).ticker;
+      state.size=E.count(q.get('count'));state.custom=q.has('peers')?Array.from(new Set(q.get('peers').split(','))).filter(id=>id!==listing().id&&lookup(id)).slice(0,E.MAX_PEERS):null;
+      state.period=q.get('year')||'latest';render();$('filing-app').hidden=false;$('load-status').hidden=!!extra;
+      if(!extra){$('load-status').textContent='Annual filings loaded. Market and expanded peer data could not be loaded.';$('retry').hidden=false;}
+      lib?.connected().then(privateData=>{if(current===generation&&privateData){state.privateData=privateData;render();if($('bos-dialog').open)renderBOS();}});
+    } catch(error){$('load-status').hidden=false;$('load-status').textContent='Comparison data could not be loaded.';$('retry').hidden=false;console.error('Shares Beta 3',error);}
   }
   $('retry').onclick=load;load();
 })();

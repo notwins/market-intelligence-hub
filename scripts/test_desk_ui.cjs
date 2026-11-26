@@ -271,5 +271,46 @@ test('Shares Beta 3 compares like periods, splits ties and scores only common fu
  assert.equal(M.metric(issuer,latest,'profitGrowth'),null);
  assert.equal(M.checklist([issuer],[latest]).counted,0);
 });
+test('Shares Beta 3 gives BOS matches priority, resolves listing aliases and compares up to ten distinct competitors',()=>{
+ const E=require('../site/stocks-beta3-comparison.js'),companies={};
+ for(let i=0;i<13;i++)companies['C'+i]={name:'Company '+i,ticker:'T'+i+' US',peers:[],years:[],currency:'USD'};
+ companies.C0.peers=['C2','C3'];
+ const names=Object.keys(companies),data=E.prepare({companies,listings:[{ticker:'T0 US',id:'C0',name:'Class A'}]},{
+  aliases:{names:{'Foreign Co':'FOREIGN','Company one':'C1'},symbols:{},ambiguousSymbols:['DUAL']},
+  peerGroups:{groups:{bank:{members:names,related:[]}},companies:{C0:{groups:['bank']}}}
+ });
+ const report={subject:'Company 0',columns:['Ticker','P/E'],rows:[['Company 0','T0','16'],['Company one','T1','10'],['Foreign Co','T2','9']]};
+ const members=E.reportMembers(data,report,'C0');
+ assert.equal(members[0].subject,true);assert.equal(members[1].id,'C1');assert.equal(members[2].id,null);
+ const selected=E.select(data,'C0',10,['C1','C1','C0']);
+ assert.deepEqual(selected.slice(0,3),['C1','C2','C3']);assert.equal(selected.length,10);assert.equal(new Set(selected).size,10);
+ assert.equal(E.select(data,'C0',5).length,5);assert.equal(E.count('99'),5);
+});
+test('Shares Beta 3 calculates dated equity and enterprise multiples without assuming missing inputs',()=>{
+ const E=require('../site/stocks-beta3-comparison.js');
+ const y={end:'2025-12-31',values:{netCommon:20,revenue:80,operatingIncome:25,ebitda:50,totalDebt:30,cash:20,preferredEquity:2,noncontrollingInterest:3,equity:102}};
+ const company={ticker:'T US',currency:'USD',filed:'2026-02-02',period:y.end,model:'operating',years:[y]};
+ const market={date:'2026-11-25',currency:'USD',cap:200,forwardPE:8};
+ const quarter={period:'Q3 2026',values:{revenue:100,netIncome:15}};
+ const data={companies:{T:company},expansion:{market:{'T US':{latest:market,history:{[y.end]:{...market,date:'2025-12-31'}}}},quarters:{'T US':{currency:'USD',asOf:'2026-11-22',quarters:[{period:'Q3 2025',values:{revenue:80}},quarter],ttm:{netCommon:25}}}}};
+ const view=()=>E.valueView(data,'T','T US',y,'latest');
+ let v=view().values;
+ assert.equal(v.peTTM,8);assert.equal(v.peFY,10);assert.equal(v.ev,215);assert.equal(v.evEbitda,4.3);assert.equal(v.proxyEvEbitda,4.2);assert.equal(v.priceBook,2);assert.equal(v.qGrowth,25);
+ assert.equal(E.valueView(data,'T','T US',y,'2025').values.peFY,undefined);
+ delete y.values.noncontrollingInterest;v=view().values;assert.equal(v.evEbitda,undefined);assert.equal(v.proxyEvEbitda,4.2);
+ market.date='2026-11-10';assert.equal(view().values.peTTM,undefined);assert.equal(view().values.peFY,10);
+ y.values.netCommon=-1;assert(view().nm.has('peFY'));
+ market.currency='GBP';assert.equal(view().values.peFY,undefined);
+ market.currency='USD';company.model='bank';assert.equal(view().values.proxyEvEbitda,undefined);
+ delete y.values.netCommon;market.priceBasisOK=true;market.quoteCurrency='USD';market.quotePrice=72;market.epsEnd=y.end;market.priceEps=9;y.values.dilutedEps=72;
+ assert.equal(view().values.peFY,8);market.priceBasisOK=false;assert.equal(view().values.peFY,undefined);
+ delete data.expansion.quarters['T US'];company.model='operating';market.date='2026-11-25';
+ data.expansion.interim={T:{ended:'2026-09-30',filed:'2026-11-12',source:'https://www.sec.gov/example.htm',currency:'USD',values:{netCommon:10,revenue:85}}};
+ assert.equal(view().values.peTTM,20);assert.equal(view().values.ttmRevenue,85);
+ market.date='2026-11-11';assert.equal(view().values.peTTM,undefined);
+ market.date='2026-11-25';market.includesPreferred=true;y.values.noncontrollingInterest=3;
+ assert.equal(view().values.peTTM,undefined);assert.equal(view().values.ev,213);
+});
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
+

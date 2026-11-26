@@ -163,24 +163,35 @@
 
   if (typeof module !== 'undefined') module.exports = { parse, sections, forecastSection, projectionRow };
   const doc = root.document;
+  let publishedRequest;
+  function publishedLibrary() {
+    const base = root.ContentDelivery?.CONTENT;
+    if (!base || doc?.getElementById('sb2-embedded-data')) return Promise.resolve(null);
+    publishedRequest ??= root.fetch(base + publishedPath, { signal: AbortSignal.timeout(8000) })
+      .then(response => {
+        if (!response.ok) throw new Error('Published equity research is unavailable.');
+        return response.text();
+      }).then(raw => parse(raw, true)).catch(() => { publishedRequest = null; return null; });
+    return publishedRequest;
+  }
+  function savedLibrary() {
+    try { const raw = root.localStorage.getItem(storageKey); return raw ? parse(raw) : null; }
+    catch { return null; }
+  }
+  async function connectedLibrary() {
+    try { const raw = await root.StocksBeta2PrivateResearch?.read(); return raw ? parse(raw) : null; }
+    catch { return null; }
+  }
+  root.StocksBeta2PeerLibrary = { published: publishedLibrary, saved: savedLibrary, connected: connectedLibrary };
   const status = doc?.getElementById('sb2-research-import-status');
   if (!status) return;
   const clear = doc.getElementById('sb2-research-clear');
   const online = root.StocksBeta2PrivateResearch;
-  let data = null, publishedRequest, generation = 0;
+  let data = null, generation = 0;
 
   async function forListing(ticker) {
     if (data?.listings[ticker]) return data.listings[ticker];
-    const base = root.ContentDelivery?.CONTENT;
-    if (!base || doc.getElementById('sb2-embedded-data')) return undefined;
-    publishedRequest ??= root.fetch(base + publishedPath, { signal: AbortSignal.timeout(6500) })
-      .then(response => {
-        if (!response.ok) throw new Error('Published equity research is unavailable.');
-        return response.text();
-      })
-      .then(raw => parse(raw, true))
-      .catch(() => null);
-    const published = await publishedRequest;
+    const published = await publishedLibrary();
     return data?.listings[ticker] || published?.listings[ticker];
   }
 
