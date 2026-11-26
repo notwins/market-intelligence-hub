@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.usd1">
+  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.annual">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="stocks-beta3-scroll.js?v=1"></script>
   <script defer src="content-source.js"></script>
@@ -16,15 +16,15 @@
   <script defer src="stocks-beta2-research.js?v=20261126.peers"></script>
   <link rel="stylesheet" href="si-share-picker.css">
   <script defer src="si-share-picker.js?v=3"></script>
-  <script defer src="stocks-beta3-disclosures.js?v=3"></script>
-  <script defer src="stocks-beta3-details.js?v=20261127.usd1"></script>
+  <script defer src="stocks-beta3-disclosures.js?v=20261127.annual"></script>
+  <script defer src="stocks-beta3-details.js?v=20261127.annual"></script>
   <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=20261127.usd1">
   <script defer src="shares-quarterly-core.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-quarterly-charts.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-comparison.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-model.js?v=4"></script>
-  <script defer src="stocks-beta3-usd.js?v=1"></script>
-  <script defer src="stocks-beta3.js?v=20261127.usd1"></script>
+  <script defer src="stocks-beta3-usd.js?v=20261127.annual"></script>
+  <script defer src="stocks-beta3.js?v=20261127.annual"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -57,12 +57,29 @@
           </fieldset>
           <div id="quarterly-charts"></div>
         </section>
-        <section id="disclosure-charts" class="filing-section" aria-label="Filing analysis charts"><header class="block-heading"><h2>Solvency and filing detail</h2></header>
-          <div class="disclosure-workbench"><article class="panel ranking-panel" id="solvency-ranking"><header><h3>Annual solvency ranking</h3><label class="sr-only" for="ranking-metric">Rank companies by</label><select id="ranking-metric"></select></header><p id="ranking-caption"></p><ol id="rank-diagram" class="rank-diagram"></ol><p id="ranking-method"></p></article>
-          <div class="report-charts"><label class="diagram-company-label" for="diagram-company">Inspect filing <select id="diagram-company"></select></label>
-           <article class="panel note-chart"><header><h3>Annual revenue mix</h3><label class="sr-only" for="distribution-kind">Revenue breakdown</label><select id="distribution-kind"></select></header><div id="revenue-diagram"></div></article>
-           <article class="panel note-chart"><header><h3>Maturity ladder</h3><label class="sr-only" for="schedule-kind">Payment schedule</label><select id="schedule-kind"></select></header><div id="maturity-diagram"></div></article>
-          </div></div></section>
+        <section id="disclosure-charts" class="filing-section" aria-labelledby="annual-filing-title">
+          <header class="block-heading annual-overview-heading">
+            <h2 id="annual-filing-title">Annual filing comparison</h2>
+            <nav class="section-links" aria-label="Annual filing comparison">
+              <a href="#solvency-ranking">Solvency &amp; scale</a>
+              <a href="#annual-revenue-mix">Revenue mix</a>
+              <a href="#annual-maturity">Maturities</a>
+            </nav>
+          </header>
+          <article class="panel annual-panel annual-solvency" id="solvency-ranking" aria-labelledby="solvency-heading">
+            <h3 id="solvency-heading">Annual solvency ranking &amp; USD scale</h3>
+            <p id="ranking-caption"></p>
+            <div id="rank-diagram" class="horizontal annual-scroll" role="region" aria-label="Sortable annual solvency comparison" tabindex="0"></div>
+          </article>
+          <section class="annual-subsection" id="annual-revenue-mix" aria-labelledby="annual-revenue-title">
+            <h3 id="annual-revenue-title">Annual revenue mix</h3>
+            <div id="revenue-diagram"></div>
+          </section>
+          <section class="annual-subsection" id="annual-maturity" aria-labelledby="annual-maturity-title">
+            <h3 id="annual-maturity-title">Maturity ladders</h3>
+            <div id="maturity-diagram"></div>
+          </section>
+        </section>
         <section class="filing-section" id="statements"><header class="block-heading"><h2>Valuation &amp; financial statements</h2></header>
           <div class="comparison-tools"><label>Jump to table <select id="jump-table"><option value="">Choose table</option></select></label><label>USD amounts <select id="units"><option value="bn">Billions</option><option value="mn">Millions</option></select></label>
             <label>Show <select id="row-filter"><option value="all">All rows</option><option value="focus">Highlighted rows</option></select></label>

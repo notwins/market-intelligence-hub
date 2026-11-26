@@ -113,7 +113,7 @@
     const order=k=>{const x=standard.indexOf(k);return x<0?99:x;};
     return [...out.values()].sort((a,b)=>order(a.key)-order(b.key));
   }
-  const api={labels,times,percentages,rows,lower,families,kinds,buckets,groupLabels,division,yearView,standings,ranking,mixRows,maturityRows};
+  const api={labels,times,percentages,rows,lower,families,kinds,buckets,groupLabels,division,yearView,standings,ranking,canonical,mixRows,maturityRows};
   root.FilingNotes=api;
   if(typeof module!=='undefined')module.exports=api;
 })(typeof window==='undefined'?globalThis:window);

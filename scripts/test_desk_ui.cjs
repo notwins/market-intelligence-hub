@@ -436,5 +436,21 @@ test('Bonus companies preserve the direct peers and supplements retain earlier o
   assert.match(U.quarterlyReason('peTTM',{ttm:{values:{netCommon:-1}}},null,'operating'),/negative/);
 });
 
+test('Annual solvency shows USD amounts on the same conversion basis as the detailed statements',()=>{
+  const U=require('../site/stocks-beta3-usd.js');
+  const feed={currencies:{TWD:{points:[['2025-12-31',1/32],['2026-01-05',.04]]}}};
+  const v={assets:320,liabilities:128,totalDebt:64,operatingCashFlow:0,revenue:176};
+  const fx=U.rate(feed,'TWD','2025-12-31').factor;
+  const amount=U.annualScale(v,fx);
+  assert.equal(amount.assetsUsd,U.convert(feed,v.assets,'TWD','2025-12-31'));
+  assert.equal(amount.netAssetsUsd,6);
+  assert.equal(amount.debtUsd,2);
+  assert.equal(amount.cashFlowUsd,0);
+  assert.equal(amount.revenueUsd,5.5);
+  assert.equal(amount.cashUsd,null);
+  assert.equal(U.annualScale(v,undefined).netAssetsUsd,null);
+  assert.equal(U.annualScale({assets:320},fx).netAssetsUsd,null);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

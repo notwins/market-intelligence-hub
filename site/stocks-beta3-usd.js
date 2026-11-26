@@ -50,6 +50,14 @@
   function valuesInUsd(feed,values,currency,end){
     return {...values,...Object.fromEntries(money.filter(key=>Object.hasOwn(values,key)).map(key=>[key,convert(feed,values[key],currency,end)]))};
   }
+  function annualScale(values,factor){
+    const dollar=value=>finite(value)&&finite(factor)?value*factor:null;
+    return {
+      assetsUsd:dollar(values.assets),netAssetsUsd:dollar(scaleRows(values).netAssets),
+      cashUsd:dollar(values.cash),debtUsd:dollar(values.totalDebt),
+      revenueUsd:dollar(values.revenue),cashFlowUsd:dollar(values.operatingCashFlow)
+    };
+  }
   function peers(focus,direct,bonus) {
     const main=[...new Set([focus,...direct])];
     return [...main,...names.filter(id=>bonus.includes(id)&&!main.includes(id))];
@@ -100,8 +108,7 @@
     const through=record.observations.indexOf(observation);
     return {...record,observations:record.observations.slice(0,through+1),ttm};
   }
-  const api={choices,matchedBalance,mergeRecord,recordForObservation,integer,rate,convert,scaleRows,valuesInUsd,peers,quarterlyReason};
+  const api={choices,matchedBalance,mergeRecord,recordForObservation,integer,rate,convert,scaleRows,valuesInUsd,annualScale,peers,quarterlyReason};
   root.SharesBeta3Usd=api;
   if(typeof module!=='undefined')module.exports=api;
 })(typeof window==='undefined'?globalThis:window);
-
