@@ -66,6 +66,7 @@
   const retry = get('sb2-retry');
   const embedded = get('sb2-embedded-data');
   const pageQuery = new URLSearchParams(root.location.search);
+  const historyEmbed = root.parent !== root && pageQuery.get('view') === 'nvda-history';
   const researchView = pageQuery.get('research') === '1';
   const groups = [...doc.querySelectorAll('[data-group]')];
   const format = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 4 });
@@ -165,6 +166,7 @@
   }, true);
 
   function saveComparison() {
+    if (historyEmbed) return;
     try {
       root.localStorage.setItem(comparisonKey, JSON.stringify({
         columns: columnChoice.value,
@@ -182,6 +184,7 @@
   }
 
   function readComparison() {
+    if (historyEmbed) return null;
     try {
       return JSON.parse(root.localStorage.getItem(comparisonKey));
     } catch {
@@ -718,7 +721,7 @@
     const displayed = [...cards.values()].find(card => companyKey(card.company) === companyKey(company));
     const entry = displayed || placeCard(freeSlot(), company);
     if (researchView && company.group !== 'shared') revealResearch(entry.element);
-    else entry.element.querySelector('.sb2-company-heading').focus();
+    else if (!historyEmbed) entry.element.querySelector('.sb2-company-heading').focus();
   }
 
   async function loadPriceCompanies() {
