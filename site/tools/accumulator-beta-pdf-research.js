@@ -107,7 +107,7 @@
     return {common,maps};
   }
 
-  function equity(w, data, market, live, stressPrice) {
+  function equity(w, data, market, {stressPrice, stressResult, stressPayout, stressPath, stressExample}) {
     const {income:i,balance:b,cashFlow:c,periodEnd,quarter,sources} = f();
     const {filings, growth, latest} = data.companies.NVDA;
     const marketDate = market.latest?.[0];
@@ -219,14 +219,11 @@
       w.cards([{label:'TEST PRICE',value:price(stressPrice)},{label:'IMPLIED TRAILING P/E',value:multiple(ratio(stressPrice,trailingEps))},
         {label:'IMPLIED TRAILING P/B',value:multiple(ratio(stressPrice,book))}], 142, {height:27,size:19});
     } else w.paragraph('Enter a test price in the simulator to add price-specific multiples.', 148);
-    if (live) {
-      const fall = live.scenarioResults.find(row=>row.s.id==='fall')?.m;
-      if (fall) {
-        const e = fall.exit;
-        w.heading('Sustained decline in the selected note', 190);
-        w.cards([{label:'MODELLED EXIT PRICE',value:price(e.price)},{label:'SHARES ACQUIRED',value:formats.shares(e.shares)},
-          {label:'GROSS NOTE P&L',value:formats.returnMoney(e.profit),tone:e.profit < 0 ? 'negative' : 'positive'}], 196, {height:26,size:18});
-      }
+    w.heading('Selected note at the test price', 187);
+    let stressY = w.paragraph(stressResult || 'Choose a valid note and test price to show the modelled outcome.',
+      196, {size:10.2,tone:'ink',weight:'bold'}) + 2;
+    for (const text of [stressPayout, stressPath, stressExample]) {
+      if (text) stressY = w.paragraph(text, stressY, {size:8.6}) + 1.5;
     }
     w.note('Risk to capital', riskText, 242, 24);
 

@@ -17,6 +17,7 @@
   const endMonth = d => new Intl.DateTimeFormat('en-GB', {timeZone:'UTC',month:'short',year:'numeric'}).format(new Date(d+'T00:00:00Z'));
   const finance = window.AccumulatorNvdaFinancialData;
   const byId = id => document.getElementById(id);
+  const includeExample = mount.hasAttribute('data-stress-price-evidence');
   let customTestPrice = false;
 
   mount.innerHTML = `<h2>NVIDIA at the stress price</h2>
@@ -26,6 +27,7 @@
     <h3>How often has NVDA fallen this far?</h3>
     <div id="nv-history-frequency"></div>
     <p id="nv-history-longer" hidden></p>
+    ${includeExample ? '<p id="nv-history-example" class="nv-note" hidden></p>' : ''}
     <details class="nv-horizons" id="nv-horizon-panel" hidden><summary>Compare 3, 6, 9 and 12 months</summary>
       <div id="nv-horizon-table"></div></details>
     <h3>Ten years of NVDA prices</h3><p id="nv-price-context"></p>
@@ -215,6 +217,8 @@
   function renderHistoricalFrequency(market,context,test) {
     const box=byId('nv-history-frequency'), panel=byId('nv-horizon-panel'), method=byId('nv-history-method');
     const longer=byId('nv-history-longer');
+    const example=byId('nv-history-example');
+    if(example){example.hidden=true;example.textContent='';}
     longer.hidden=true;
     panel.hidden=true;
     method.textContent='';
@@ -227,7 +231,7 @@
       box.textContent=amount(test)+' is at or above the dated close of '+amount(close)+'. Choose a lower sale price to measure how often a comparable decline occurred.';
       return;
     }
-    const evidence=window.AccumulatorHistoryRisk?.analyze(market.ordered,date,close,test);
+    const evidence=window.AccumulatorHistoryRisk?.analyze(market.ordered,date,close,test,10,{includeExample});
     if(!evidence){
       box.textContent='Too few complete, consecutive monthly closes are available to measure this decline.';
       return;
@@ -241,11 +245,24 @@
     box.innerHTML='<p>'+basis+'</p>'+(row?.total?'<div class="nv-frequency-pair"><div><span>At the end of '+row.months+' months</span><strong>'+frequency(row.endHits,row.total,row.endPct)+'</strong><small>Historical periods finished down at least this much.</small></div>'+
       '<div><span>At any month-end within '+row.months+' months</span><strong>'+frequency(row.touchHits,row.total,row.touchPct)+'</strong><small>Historical periods reached this decline, including those that later recovered.</small></div></div>':'<p>Choose a priced note to see the comparison for its tenor.</p>');
     if(row?.total){
-      const wider=window.AccumulatorHistoryRisk.analyze(market.ordered,date,close,test,20);
+      const wider=window.AccumulatorHistoryRisk.analyze(market.ordered,date,close,test,20,{includeExample});
       const sample=wider?.rows.find(r=>r.months===row.months);
       if(sample?.total>row.total && wider.startMonth<evidence.startMonth){
         longer.textContent='Over the longer '+endMonth(wider.startMonth+'-01')+'–'+endMonth(wider.endMonth+'-01')+' record, '+frequency(sample.endHits,sample.total,sample.endPct)+' of '+row.months+'-month periods finished down this much and '+frequency(sample.touchHits,sample.total,sample.touchPct)+' reached the decline at a month-end.';
         longer.hidden=false;
+      }
+      if(example){
+        const match=row.example||sample?.example;
+        if(match){
+          const drop=rate(100*(1-match.close.price/match.start.price));
+          const timing=match.month===row.months?'at the end of '+row.months+' months':
+            'at month '+match.month+' of a '+row.months+'-month window';
+          example.textContent='Historical example: NVDA closed at '+amount(match.start.price)+' on '+shortDate(match.start.label)+
+            ' and '+amount(match.close.price)+' on '+shortDate(match.close.label)+', a '+drop+' fall '+timing+'.';
+        } else {
+          example.textContent='The available history contains zero comparable month-end declines in complete '+row.months+'-month windows.';
+        }
+        example.hidden=false;
       }
     }
     byId('nv-horizon-table').innerHTML='<table class="nv-evidence-table" aria-label="Historical relative declines over complete monthly windows"><thead><tr><th scope="col">Holding period</th><th scope="col">At final month-end</th><th scope="col">At any month-end</th></tr></thead><tbody>'+

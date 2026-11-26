@@ -61,10 +61,10 @@
         '<span>Forward P/E <b>' + multiple(basis.pe) + '</b></span><span>Forward P/B <b>' + multiple(basis.pb) +
         '</b></span><span class="nvda-valuation-date">BOS edition · ' + edition + '</span></div>';
       byId('nvda-multiple-assumptions').textContent =
-        'The dashed lines divide each sustained-decline share price by fixed denominators implied by the ' + edition +
+        'The dashed lines divide each simulated share price by fixed denominators implied by the ' + edition +
         ' BOS edition: ' + price(basis.earnings) + ' forward earnings per share and ' + price(basis.book) +
         ' forward book value per share, based on the ' + dateLabel(basis.quote) + ' close of ' + price(basis.price) +
-        '. The simulation begins at the starting price above. Earnings and book value can change in a real decline.';
+        '. A custom maturity price keeps the same starting price and scales the preset’s move at each month to reach your test price. Earnings and book value can change in a real decline.';
     } else summary.textContent = 'No BOS edition has a matching price, forward P/E and forward P/B for the simulation.';
     const table = byId('nvda-bos-data');
     table.querySelector('tbody').replaceChildren(...prices.slice().reverse().map(point =>
@@ -95,43 +95,52 @@
     const basis = history.basis;
     if (!basis || !context?.downsidePath?.length) return null;
     const value = stressPrice.valueAsNumber;
-    const test = !context.knockOutDay && stressPrice.checkValidity() && Number.isFinite(value) &&
-      value >= 0 && value < context.knockOutPrice && Math.abs(value - context.exitPrice) >= .005 ? value : null;
-    const path = context.downsidePath.map(point =>
-      ({...point, pe:point.price / basis.earnings, pb:point.price / basis.book}));
-    const endpoint = test === null ? null : {month:context.tenor, price:test, pe:test / basis.earnings, pb:test / basis.book};
-    return {context, path, endpoint, months:context.tenor, lines:[
-      {color:peColour, points:path.map(point=>({month:point.month, value:point.pe})),
-        test:endpoint && {month:endpoint.month, value:endpoint.pe}},
-      {color:pbColour, points:path.map(point=>({month:point.month, value:point.pb})),
-        test:endpoint && {month:endpoint.month, value:endpoint.pb}}
+    if (!stressPrice.checkValidity() || !Number.isSafeInteger(Math.round(value * 100)) || value < 0 ||
+        (!context.knockOutDay && value >= context.knockOutPrice)) return null;
+    const custom = !context.knockOutDay && Math.abs(value - context.exitPrice) >= .005;
+    const originalMove = context.exitPrice - context.spot;
+    const path = context.downsidePath.map(({month, price: presetPrice}) => {
+      let simulated = presetPrice;
+      if (custom) {
+        const fraction = originalMove ? (presetPrice - context.spot) / originalMove : month / context.tenor;
+        simulated = month === context.tenor ? value :
+          Math.round((context.spot + (value - context.spot) * fraction) * 100) / 100;
+      }
+      return {month, price:simulated, pe:simulated / basis.earnings, pb:simulated / basis.book};
+    });
+    return {context, path, test:value, custom, months:context.tenor, lines:[
+      {color:peColour, points:path.map(point=>({month:point.month, value:point.pe}))},
+      {color:pbColour, points:path.map(point=>({month:point.month, value:point.pb}))}
     ]};
   }
 
   function displayScenario(model) {
     const context = model?.context;
-    const test = model?.endpoint?.price;
+    const test = model?.test;
     if (context === previousStress && test === previousTest) return;
     previousStress = context;
     previousTest = test;
     const summary = byId('nvda-multiple-scenario');
     const details = byId('nvda-model-data');
-    document.querySelector('.nvda-legend-model').hidden = !model;
-    byId('nvda-test-legend').hidden = !model?.endpoint;
+    const legend = document.querySelector('.nvda-legend-model');
+    legend.hidden = !model;
     summary.hidden = details.hidden = !model;
-    if (!model) return;
-    const {path, endpoint} = model;
+    if (!model) {
+      summary.textContent = '';
+      return;
+    }
+    const {path, custom} = model;
     const exit = path.at(-1);
     const exitLabel = context.knockOutDay ? 'Knock-out on trading day ' + context.knockOutDay : 'Month ' + context.tenor + ' maturity';
     const values = point => [price(point.price), multiple(point.pe), multiple(point.pb)];
-    const description = point => price(point.price) + ' · P/E ' + multiple(point.pe) + ' · P/B ' + multiple(point.pb);
-    summary.textContent = 'Sustained decline · ' + exitLabel + ' · ' + description(exit) +
-      (endpoint ? ' | Separate test price at maturity · ' + description(endpoint) : '');
+    const pathName = custom ? 'Maturity test path' : 'Sustained decline';
+    legend.textContent = pathName;
+    summary.textContent = pathName + ' · ' + exitLabel + ' · ' + price(exit.price) +
+      ' · Forward P/E ' + multiple(exit.pe) + ' · Forward P/B ' + multiple(exit.pb);
     const rows = path.map((point,i) => {
       const label = i === 0 ? 'Trade start' : i === path.length - 1 ? exitLabel : 'Month ' + point.month;
       return tableRow(label, values(point));
     });
-    if (endpoint) rows.push(tableRow('Test price at maturity', values(endpoint)));
     details.querySelector('tbody').replaceChildren(...rows);
   }
 

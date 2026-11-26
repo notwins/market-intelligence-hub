@@ -94,7 +94,7 @@
 <link rel="stylesheet" href="accumulator-beta.css?v=20261127-ko">
 <link rel="stylesheet" href="accumulator-nvda-chart.css?v=20261126">
 <link rel="stylesheet" href="../stocks-beta3-quarterly-charts.css?v=1">
-<link rel="stylesheet" href="accumulator-beta-nvda-analysis.css?v=20261127">
+<link rel="stylesheet" href="accumulator-beta-nvda-analysis.css?v=20261127-test-price">
 <link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127-subtle-heat">
 </head>
 <body class="accumulator-beta">
@@ -206,7 +206,7 @@
 <div class="tableScroll" tabindex="0" aria-label="Monthly capital and share movements"><table id="movements"><thead><tr><th>Month</th><th>Month-end<br>price · USD</th><th>Event</th><th>Shares<br>bought</th><th>Capital<br>used · USD</th><th>Cash refunded<br>USD</th><th>Share sale<br>proceeds · USD</th><th>Capital left<br>in note · USD</th><th>Shares<br>held</th><th>Refunded<br>to date · USD</th><th>Holdings<a href="#holdings-note" aria-label="How holdings are valued"><sup>1</sup></a><br>USD</th><th>Total shares<br>bought</th><th>P&amp;L<br>USD</th></tr></thead><tbody id="rows"></tbody></table></div>
 <div class="heading sub"><h3 id="endingMonth">At the end of month 12</h3></div><div class="metrics" id="summary"></div><p id="valuation" class="formula"></p><p id="exitValue" class="small"></p></section>
 <section class="panel" aria-labelledby="scenario-returns"><div class="heading"><div><h2 id="scenario-returns">Three scenarios to try</h2><p>Compare the note with buying whole NVDA shares at the start and keeping the change in cash. Both use the same payment and assume a sale at the same knock-out or maturity close.</p></div></div><div class="scenario-grid" id="scenarios"></div></section>
-<section id="nvda-stress-context" class="panel" aria-label="NVDA financial statements and stress price"></section>
+<section id="nvda-stress-context" class="panel" aria-label="NVDA financial statements and stress price" data-stress-price-evidence></section>
 <template id="nvda-beta-analysis-template">
   <section class="nvda-analysis" id="nvda-beta-analysis" aria-labelledby="nvda-beta-analysis-title">
     <div class="nvda-analysis-head">
@@ -231,7 +231,7 @@
       <figcaption><h4>Forward P/E and P/B</h4></figcaption>
       <div class="nvda-chart-valuation" id="nvda-chart-valuation" role="status">Loading NVDA forward P/E and P/B…</div>
       <div class="nvda-analysis-legend" id="nvda-multiple-legend" hidden>
-        <span class="nvda-legend-pe">P/E</span><span class="nvda-legend-pb">P/B</span><span class="nvda-legend-model" hidden>Sustained decline</span><span class="nvda-legend-test" id="nvda-test-legend" hidden>Test price at maturity</span><span>Shared scale (×)</span>
+        <span class="nvda-legend-pe">P/E</span><span class="nvda-legend-pb">P/B</span><span class="nvda-legend-model" hidden>Sustained decline</span><span>Shared scale (×)</span>
       </div>
       <canvas id="nvda-bos-multiples" aria-label="Historical forward P/E and P/B with simulated decline lines" tabindex="0" hidden></canvas>
       <p id="nvda-multiple-selected"></p>
@@ -927,8 +927,8 @@ if(location.protocol==='https:'||location.protocol==='http:'){
 <script src="../vendor/jspdf-4.2.0.umd.min.js" defer></script>
 <script src="accumulator-beta-report.js?v=20261126-ko" defer></script>
 <script src="accumulator-nvda-financial-data.js?v=20261126-earnings" defer></script>
-<script src="accumulator-history-risk.js?v=1" defer></script>
-<script src="accumulator-nvda-context.js?v=20261126-notes" defer></script>
+<script src="accumulator-history-risk.js?v=20261127-test-price" defer></script>
+<script src="accumulator-nvda-context.js?v=20261127-test-price" defer></script>
 <script src="accumulator-beta-stress-fundamentals.js?v=20261127" defer></script>
 <script src="../financial-display.js" defer></script>
 <script src="../stocks-beta2-charts.js?v=20261127-stress" defer></script>
@@ -936,7 +936,7 @@ if(location.protocol==='https:'||location.protocol==='http:'){
 <script src="../stocks-beta2-public-peers.js" defer></script>
 <script src="../shares-quarterly-core.js?v=1" defer></script>
 <script src="../stocks-beta3-quarterly-charts.js?v=1" defer></script>
-<script src="accumulator-beta-nvda-analysis.js?v=20261127" defer></script>
+<script src="accumulator-beta-nvda-analysis.js?v=20261127-test-price" defer></script>
 <script src="accumulator-client-sheet.js?v=20261126-research" defer></script>
 <dialog id="beta-columns" aria-labelledby="beta-columns-title">
   <form>
@@ -987,8 +987,8 @@ if(location.protocol==='https:'||location.protocol==='http:'){
   </form>
 </dialog>
 <script src="accumulator-beta-appearance.js?v=20261127" defer></script>
-<script src="accumulator-beta-quick-brief.js?v=20261127-pack" defer></script>
+<script src="accumulator-beta-quick-brief.js?v=20261127-test-price" defer></script>
 <script src="accumulator-beta-pdf-editions.js?v=20261127" defer></script>
-<script src="accumulator-beta-pdf-research.js?v=20261127-sources" defer></script>
-<script src="accumulator-beta-quick-pdf.js?v=20261127-pack" defer></script>
+<script src="accumulator-beta-pdf-research.js?v=20261127-test-price" defer></script>
+<script src="accumulator-beta-quick-pdf.js?v=20261127-test-price" defer></script>
 </body></html>
