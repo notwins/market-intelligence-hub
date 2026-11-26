@@ -1,7 +1,7 @@
 /* Annual filing comparisons and detailed statement table groups. */
 (function(root){
   'use strict';
-  const D=root.FilingNotes,G=root.FilingGeography,F=Number.isFinite;
+  const D=root.FilingNotes,G=root.FilingGeography,Marks=root.FilingMarks,F=Number.isFinite;
   const palette=['#196a60','#4976a1','#c18a46','#80669c','#577b54','#a35f69','#3c818d','#96844a','#617387','#9f745e','#6b679a','#9b9864'];
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const $=id=>document.getElementById(id);
@@ -19,16 +19,53 @@
     for(const kind of Object.keys(D.kinds)){
       if(kind==='geography'&&grouped()){
         const rows=geoRows(c.notes);
-        out.push(...rows.filter(r=>r.depth===0||(r.depth===1&&Number.isFinite(r.cells[0]?.n))).map(geoKey));
+        const highlighted=rows=>rows.filter(r=>r.depth===0||(r.depth===1&&F(r.cells[0]?.n))).map(geoKey);
+        out.push(...highlighted(rows),...highlighted(geoRows(c.quarterNotes||[])).map(key=>'quarter-'+key));
       }else{
-        out.push(...reportedRows(c.notes,kind).filter(r=>r.cells[0]?.n>0).slice(0,2).map(r=>keyFor(kind,r)));
+        const highlights=views=>reportedRows(views,kind).filter(r=>r.cells[0]?.n>0).slice(0,2).map(r=>keyFor(kind,r));
+        out.push(...highlights(c.notes));
+        if(kind==='geography')out.push(...highlights(c.quarterNotes||[]).map(key=>'quarter-'+key));
       }
     }
     return out;
   }
+  function growthText(change,pct) {
+    if(!F(change?.value))return '—';
+    return (change.value>0?'+':'')+pct(change.value);
+  }
+  const growthLabel=mode=>mode==='qoq'?'QoQ':'YoY';
+  const growthClass=change=>change?.value>0?'gain':change?.value<0?'loss':'';
+  function quarterGeography(c,h) {
+    if(!c.isQuarter)return null;
+    const {row,text,show,amount,pct,fmtDate,quarterPct,growthBasis}=h;
+    const views=c.quarterNotes;
+    const mode=$('mix-units').value;
+    const geographic=views.map(v=>v.geo.geography);
+    const items=grouped()?geoRows(views):reportedRows(views,'geography');
+    const label=growthLabel(growthBasis);
+    const records=items.map(r=>{
+      const key='quarter-'+(grouped()?geoKey(r):keyFor('geography',r));
+      if(!show(key))return '';
+      return row(key,r.name,r.cells,(cell,i)=>{
+        if(!cell)return '—';
+        const change=grouped()?cell.change:G.reportedChange(views[i],cell.label);
+        const tip=cell.label+(change?' · Compared with '+fmtDate(change.end):'');
+        const share=pct(cell.p);
+        return {main:mode==='share'?share:amount(cell.n,i,views[i].end),
+          sub:mode==='both'?share:'',growth:growthText(change,quarterPct)+' '+label,growthClass:growthClass(change),tip};
+      });
+    });
+    const rows=[
+      text('quarter-geo-end','Quarter ended',i=>geographic[i]?fmtDate(views[i].end):''),
+      row('quarter-geo-disclosed','Disclosed revenue base',geographic.map(d=>d?.total),(amountValue,i)=>amount(amountValue,i,views[i].end),[],false),
+      ...records
+    ];
+    return ['quarter-geography','Quarterly revenue by country and region · '+label,rows];
+  }
   function groups(c,h) {
     const {row,text,show,amount,pct,times,best,fmtDate,period}=h, views=c.notes;
-    const sections=[];
+    const quarterly=quarterGeography(c,h);
+    const sections=quarterly?[quarterly]:[];
     function financial(group,title,keys){
       const records=keys.map(k=>{
         const vals=views.map(v=>v.v[k]);
@@ -54,7 +91,7 @@
         reportedRows(views,kind).filter(r=>show(keyFor(kind,r))).map(r=>row(keyFor(kind,r),r.name,r.cells,(cell,i)=>valueMix(cell,mixMode,i)));
       if(records.length){
         const sum=distributions.map(d=>d?d.total:null);
-        sections.push([kind,title,[row('scope-'+kind,'Disclosed revenue base',sum,amount,[],false),...records]]);
+        sections.push([kind,c.isQuarter&&kind==='geography'?'Annual '+title.toLowerCase():title,[row('scope-'+kind,'Disclosed revenue base',sum,amount,[],false),...records]]);
       }
     }
     if(period==='latest'){
@@ -146,7 +183,7 @@
       const [label,style]=fields[k],isSort=key===k;
       return '<th scope="col" class="annual-metric annual-'+style+'"'+(isSort?' aria-sort="'+(ascending?'ascending':'descending')+'"':'')+'>'+
         '<button type="button" data-annual-sort="'+k+'" data-ascending="'+D.lower.has(k)+'" aria-label="Sort by '+esc(label)+'">'+
-        esc(label)+(isSort?'<span aria-hidden="true">'+(ascending?'▲':'▼')+'</span>':'')+'</button></th>';
+        Marks.row(k,label)+esc(label)+(isSort?'<span aria-hidden="true">'+(ascending?'▲':'▼')+'</span>':'')+'</button></th>';
     }).join('');
     const body=rows.map(r=>{
       const leader=r.rank===1,focus=r.i===0;
@@ -176,26 +213,34 @@
       return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+total+
         '<p class="annual-empty">'+message+'</p></article>';
     }
-    const groupedGeography=!h.quarter&&kind==='geography'&&grouped();
+    const groupedGeography=kind==='geography'&&grouped();
+    const showGrowth=h.quarter&&kind==='geography';
     const items=groupedGeography?geoRows([view]).map(r=>({
-      label:r.name,id:r.id,depth:r.depth,value:r.cells[0]?.n,p:r.cells[0]?.p,source:r.cells[0]?.label
-    })):disclosure.items.filter(item=>h.quarter||kind!=='geography'||geoMode()==='all'||item.type===geoMode())
-      .slice().sort((a,b)=>b.value-a.value).map(item=>({...item,p:D.division(item.value,disclosure.total,100)}));
+      label:r.name,id:r.id,depth:r.depth,value:r.cells[0]?.n,p:r.cells[0]?.p,source:r.cells[0]?.label,change:r.cells[0]?.change
+    })):disclosure.items.filter(item=>kind!=='geography'||geoMode()==='all'||item.type===geoMode())
+      .slice().sort((a,b)=>b.value-a.value).map(item=>({...item,p:D.division(item.value,disclosure.total,100),
+        change:showGrowth?G.reportedChange(view,item.label):null}));
     const positive=items.filter(item=>item.value>0&&(!groupedGeography||item.depth===0));
     const sum=positive.reduce((total,item)=>total+item.value,0);
     const segment=positive.map(it=>'<i title="'+esc(it.label+' · '+h.pct(it.p))+'" style="width:'+
       (it.value/sum*100)+'%;background:'+color(it)+'"></i>').join('');
     const body=items.map(item=>'<tr'+(groupedGeography?' class="annual-geo-'+item.depth+'"':'')+'><th scope="row">'+
       (!groupedGeography||item.depth===0?'<span class="annual-dot" style="--dot:'+color(item)+'" aria-hidden="true"></span>':'')+
-      esc(item.label)+'</th><td'+(item.source?' title="'+esc(item.source)+'"':'')+'>'+esc(usdAmount(usd(item.value,rate),h))+
-      '</td><td>'+percent(item.p,h.pct)+'</td></tr>').join('');
+      '<span class="filing-row-label">'+(kind==='geography'?Marks.geography(item.label):'')+
+      '<span>'+esc(item.label)+'</span></span></th><td'+(item.source?' title="'+esc(item.source)+'"':'')+'>'+esc(usdAmount(usd(item.value,rate),h))+
+      '</td><td>'+percent(item.p,h.pct)+'</td>'+
+      (showGrowth?'<td class="geography-change '+growthClass(item.change)+'"'+
+        (item.change?' title="'+esc('Compared with '+h.fmtDate(item.change.end))+'"':'')+'>'+esc(growthText(item.change,h.pct))+'</td>':'')+'</tr>').join('');
     return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+
       '<p class="annual-mix-total"><strong>'+esc(usdAmount(usd(disclosure.total,rate),h))+'</strong><span>disclosed revenue</span></p>'+
       (sum?'<div class="mix-strip" aria-hidden="true">'+segment+'</div>':'')+
-      '<table class="annual-mix-table"><caption class="sr-only">'+esc(view.company.name)+' · '+esc(D.kinds[kind])+'</caption>'+
-      '<thead><tr><th scope="col">'+(groupedGeography?'Geographic group':'Reported breakdown')+'</th><th scope="col">'+usdLabel(h)+'</th><th scope="col">Share</th></tr></thead><tbody>'+body+'</tbody></table>'+
+      '<table class="annual-mix-table'+(showGrowth?' quarter-geography-card':'')+'"><caption class="sr-only">'+esc(view.company.name)+' · '+esc(D.kinds[kind])+'</caption>'+
+      '<thead><tr><th scope="col">'+(groupedGeography?'Geographic group':'Reported breakdown')+'</th><th scope="col">'+usdLabel(h)+'</th><th scope="col">Share</th>'+
+      (showGrowth?'<th scope="col">'+growthLabel(h.growthBasis)+'</th>':'')+'</tr></thead><tbody>'+body+'</tbody></table>'+
       (F(rate)?'':'<p class="annual-empty">USD conversion unavailable.</p>')+
-      (h.quarter?'<p class="quarter-filing-source">'+h.link(disclosure.source,'Revenue source')+'</p>':'')+'</article>';
+      (h.quarter?'<p class="quarter-filing-source">'+h.link(disclosure.source,'Revenue source')+
+        (showGrowth&&view.geographyBase&&items.some(item=>item.change)?' · '+h.link(view.geographyBase.disclosure.source,
+          growthLabel(h.growthBasis)+' base · '+h.fmtDate(view.geographyBase.end)):'')+'</p>':'')+'</article>';
   }
   function renderRevenue(views,h){
     const categories=Object.entries(D.kinds).filter(([k])=>views.some(v=>v.geo[k]));
@@ -225,7 +270,7 @@
       const body=rows.map(({name,cells})=>{
         const amounts=cells.map((cell,i)=>usd(cell?.n,views[i].usdRate));
         const max=Math.max(0,...amounts.filter(F).map(Math.abs));
-        return '<tr><th scope="row">'+esc(name)+'</th>'+amounts.map((amount,i)=>{
+        return '<tr><th scope="row"><span class="filing-row-label">'+Marks.mark('clock')+'<span>'+esc(name)+'</span></span></th>'+amounts.map((amount,i)=>{
           const bar=F(amount)&&max?'<span class="annual-bar" aria-hidden="true"><i style="--bar:'+Math.abs(amount)/max*100+
             '%;--bar-color:'+(amount<0?'#a35f69':cashColor)+'"></i></span>':'';
           return '<td'+(i===0?' class="annual-focus"':'')+(cells[i]?.label?' title="'+esc(cells[i].label)+'"':'')+'>'+esc(usdAmount(amount,h))+bar+'</td>';

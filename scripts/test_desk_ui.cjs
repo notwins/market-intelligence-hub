@@ -498,5 +498,32 @@ test('Quarterly filings require their own disclosure and preserve compatible bal
  assert.equal(D.quarterView(data,'T',company,null,'2025-Q3').hasQuarter,false);
 });
 
+test('Quarterly geography compares like scope across matching three-month windows',()=>{
+ const G=require('../site/stocks-beta3-geography.js');
+ const geography=(a,b,c,basis,source='https://www.sec.gov/example')=>({kind:'geography',total:a+b+c,comparisonBasis:basis,source,
+   items:[{label:'United States',value:a},{label:'Taiwan',value:b},{label:'China (including Hong Kong)',value:c}]});
+ const current=geography(60,30,10,'customer HQ');
+ const reports={
+  '2025-10-26':{revenue:[geography(30,25,5,'customer HQ')]},
+  '2026-07-26':{revenue:[geography(50,20,8,'customer HQ','https://www.sec.gov/previous')]},
+  '2026-04-26':{revenue:[geography(45,18,7,'customer HQ')]},
+ };
+ const view=mode=>({id:'NVDA-US',geo:{geography:current},geographyBase:G.prior(reports,'2026-10-25',current,mode)});
+ const region=(v,name)=>G.rows([v]).find(row=>row.id===name).cells[0];
+ assert.equal(region(view('yoy'),'usa').change.value,100);
+ assert.equal(region(view('qoq'),'usa').change.value,20);
+ assert.equal(region(view('qoq'),'apac').change.value,100*12/28);
+ assert.equal(view('qoq').geographyBase.end,'2026-07-26');
+ assert.equal(G.reportedChange(view('yoy'),'Taiwan').value,20);
+ const different=geography(60,30,10,'shipping','https://www.sec.gov/different');
+ assert.equal(G.prior(reports,'2026-10-25',different,'qoq'),null);
+ const incompatible={...current,items:current.items.map(row=>row.label.startsWith('China')?{...row,label:'Greater China'}:row)};
+ assert.equal(region({...view('qoq'),geo:{geography:incompatible}},'apac').change,null);
+ assert.equal(G.prior({'2026-04-26':reports['2026-04-26']},'2026-10-25',current,'qoq'),null);
+ const zero=geography(0,25,5,'customer HQ');
+ const withZero={...view('yoy'),geographyBase:{end:'2025-10-26',disclosure:zero}};
+ assert.equal(region(withZero,'usa').change,null);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

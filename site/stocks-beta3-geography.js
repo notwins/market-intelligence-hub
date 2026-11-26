@@ -58,9 +58,11 @@
   const normalize = label => label.normalize('NFKD').toLowerCase()
     .replace(/[\u0300-\u036f.'’]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
 
+  const isRounding = label => /^(?:rounding difference|rounding adjustment|rounding)$/.test(normalize(label));
+
   function category(label, allLabels) {
     if (lookup.has(label)) return lookup.get(label);
-    if (/\b(eliminations?|hedging|reconciliation)\b/.test(label)) return 'adjustments';
+    if (isRounding(label)||/\b(eliminations?|hedging|reconciliation)\b/.test(label)) return 'adjustments';
     // Keep regions that span more than one top-level group intact.
     if ((/\basia\b|\bapac\b|\boceania\b|\baustralia\b/.test(label) &&
         /\bafrica\b|\bmiddle east\b|\beurope\b|\blatin america\b|\bworld\b|\band other\b/.test(label)) ||
@@ -81,6 +83,82 @@
     return 'unallocated';
   }
 
+  const isoDay = /^\d{4}-\d{2}-\d{2}$/;
+  const daysBetween = (a, b) => (Date.parse(a) - Date.parse(b)) / 86400000;
+  const groupOf = (date, reports) => reports[date]?.revenue?.find(group => group.kind === 'geography');
+  function sameBasis(current, base) {
+    const a=current.comparisonBasis, b=base.comparisonBasis;
+    if(a&&b)return a===b;
+    // A generic caption does not establish that independent filings use the same allocation method.
+    const stated=normalize(current.basis||'');
+    return stated===normalize(base.basis||'')&&/customer|shipment|shipping|billing|headquarters|destination|resident|geographical attribution/.test(stated);
+  }
+
+  function prior(reports, end, disclosure, growthBasis) {
+    if(!disclosure||!isoDay.test(end||''))return null;
+    const mode=growthBasis==='qoq'?'qoq':'yoy';
+    const [min,max,target]=mode==='qoq'?[75,108,91]:[350,380,365];
+    const candidates=Object.keys(reports).filter(date=>{
+      const days=daysBetween(end,date);
+      return isoDay.test(date)&&days>=min&&days<=max;
+    }).sort((a,b)=>Math.abs(daysBetween(end,a)-target)-Math.abs(daysBetween(end,b)-target));
+    for(const date of candidates){
+      const group=groupOf(date,reports);
+      if(!group)continue;
+      const tiedToCurrent=group.comparableTo?.includes(end)||Boolean(group.source&&group.source===disclosure.source);
+      if(tiedToCurrent||sameBasis(disclosure,group))return {end:date,disclosure:group};
+    }
+    return null;
+  }
+
+  function scopeKey(label){
+    const key=normalize(label);
+    if(knownMarkets.usa.slice(0,8).includes(key))return 'united states';
+    if(['china includes hong kong','china including hong kong','china hong kong'].includes(key))return 'china including hong kong';
+    if(['republic of korea','korea','south korea'].includes(key))return 'south korea';
+    if(['emea','europe middle east africa','europe middle east and africa','europe the middle east and africa','europe the middle east and africa emea','europe middle east and africa emea'].includes(key))return 'emea';
+    if(['asia pacific','asia pacific apac','apac'].includes(key))return 'asia pacific';
+    return key;
+  }
+
+  function change(view, items, earlier) {
+    if(!view.geographyBase)return null;
+    const real = entries => (entries||[]).filter(item=>!isRounding(item.label));
+    items=real(items);
+    earlier=real(earlier);
+    if(!items.length||items.length!==earlier.length)return null;
+    const signature = entries => entries.map(item => scopeKey(item.label)).sort().join('|');
+    if(signature(items)!==signature(earlier))return null;
+    const sum = entries => entries.reduce((total, item) => total + item.value, 0);
+    if(![...items,...earlier].every(item=>Number.isFinite(item.value)))return null;
+    const base=sum(earlier);
+    if(base<=0)return null;
+    return {value:100*(sum(items)-base)/base,end:view.geographyBase.end,source:view.geographyBase.disclosure.source};
+  }
+
+  function reportedChange(view,label){
+    const current=view.geo.geography?.items?.filter(item=>item.label===label);
+    if(current?.length!==1)return null;
+    const previous=view.geographyBase?.disclosure.items.filter(item=>scopeKey(item.label)===scopeKey(label));
+    return change(view,current,previous);
+  }
+
+  function mergeData(base, extra) {
+    if(extra?.version!==1)return base;
+    const issuers={...base?.issuers};
+    for(const [id,reports] of Object.entries(extra.issuers||{})){
+      const merged={...issuers[id]};
+      for(const [date,report] of Object.entries(reports)){
+        const old=merged[date];
+        const revenue=new Map((old?.revenue||[]).map(group=>[group.kind,group]));
+        for(const group of report.revenue||[])revenue.set(group.kind,group);
+        merged[date]={...old,...report,revenue:[...revenue.values()]};
+      }
+      issuers[id]=merged;
+    }
+    return {...extra,...base,issuers};
+  }
+
   function partition(view) {
     const entries = view.geo.geography?.items || [];
     const markets = entries.map(item => anchoredMarkets[view.id]?.[normalize(item.label)] || item.label);
@@ -99,25 +177,30 @@
 
   function rows(views, details = false) {
     const partitions = views.map(partition);
-    function row(id, name, depth, itemLists, parent) {
+    const bases = views.map(view => view.geographyBase?
+      partition({id:view.id,geo:{geography:view.geographyBase.disclosure}}):new Map());
+    function row(id, name, depth, itemLists, priorLists, parent) {
       return {
         id, name, depth, parent,
         cells: itemLists.map((entries, index) => {
           if (!entries?.length) return null;
           const n = entries.reduce((sum, item) => sum + item.value, 0);
           const total = views[index].geo.geography.total;
-          return { n, p: total > 0 ? 100 * n / total : null, label: entries.map(item => item.label).join(' · ') };
+          return { n, p: total > 0 ? 100 * n / total : null, label: entries.map(item => item.label).join(' · '),
+            change:change(views[index],entries,priorLists[index]) };
         })
       };
     }
     const result = [];
     for (const { id, name, children } of groups) {
       const leaves = children.length ? children.map(([key]) => key) : [id];
-      result.push(row(id, name, 0, partitions.map(group => leaves.flatMap(key => group.get(key) || []))));
+      const getLeaves = group => leaves.flatMap(key => group.get(key) || []);
+      result.push(row(id, name, 0, partitions.map(getLeaves), bases.map(getLeaves)));
       for (const [key, title] of children) {
         const lists = partitions.map(group => group.get(key) || []);
         if (!lists.some(list => list.length)) continue;
-        result.push(row(key, title, 1, lists, id));
+        const priorLists = bases.map(group => group.get(key) || []);
+        result.push(row(key, title, 1, lists, priorLists, id));
         if (!details || key === 'japan') continue;
         const markets = new Map();
         for (const item of lists.flat()) {
@@ -126,15 +209,15 @@
         }
         if (markets.size === 1 && [...markets.values()][0] === title) continue;
         for (const [normalized, market] of [...markets].sort((a, b) => a[1].localeCompare(b[1]))) {
-          const entries = lists.map(list => list.filter(item => normalize(item.market) === normalized));
-          result.push(row(key + '-' + normalized.replace(/ /g, '-'), market, 2, entries, key));
+          const getMarket = list => list.filter(item => normalize(item.market) === normalized);
+          result.push(row(key + '-' + normalized.replace(/ /g, '-'), market, 2, lists.map(getMarket), priorLists.map(getMarket), key));
         }
       }
     }
     return result;
   }
 
-  const api = { rows };
+  const api = { rows, prior, reportedChange, mergeData, normalize };
   root.FilingGeography = api;
   if (typeof module !== 'undefined') module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);

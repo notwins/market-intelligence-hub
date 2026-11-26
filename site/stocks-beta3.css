@@ -311,9 +311,9 @@ html.beta3-nav-hidden{--beta3-nav-top:0px;scroll-padding-top:0}
 .annual-geo-control{display:flex;justify-content:flex-end;margin:0 0 8px}
 .annual-geo-control label{display:flex;align-items:center;gap:8px;font-size:.85rem;color:#365a55;font-weight:650}
 .annual-geo-control select{padding:6px 9px;border:1px solid #b9ceca;border-radius:6px;background:#fff;color:#21433d;font:inherit}
-#table-geography tr[data-row^="geo-summary-"]>*{background:#e3f0eb;color:#254c43;font-weight:750;border-top:1px solid #bbd6cd}
-#table-geography tr[data-row^="geo-sub-"] th span{padding-left:10px}
-#table-geography tr[data-row^="geo-market-"] th span{padding-left:22px;font-weight:500}
+:is(#table-geography,#table-quarter-geography) tr[data-row*="geo-summary-"]>*{background:#e3f0eb;color:#254c43;font-weight:750;border-top:1px solid #bbd6cd}
+:is(#table-geography,#table-quarter-geography) tr[data-row*="geo-sub-"] th>.filing-row-label{padding-left:10px}
+:is(#table-geography,#table-quarter-geography) tr[data-row*="geo-market-"] th>.filing-row-label{padding-left:22px;font-weight:500}
 .annual-mix-table .annual-geo-0>*{background:#e7f2ed;font-weight:750}
 .annual-mix-table .annual-geo-1 th{padding-left:18px}
 .annual-mix-table .annual-geo-2 th{padding-left:30px;font-weight:500}
@@ -331,3 +331,24 @@ html.beta3-nav-hidden{--beta3-nav-top:0px;scroll-padding-top:0}
 .annual-mix-table thead th:nth-child(3){width:23%}
 #quarter-rank-diagram .annual-company small{white-space:normal}
 #quarter-rank-diagram .annual-company small a{white-space:nowrap}
+.filing-row-label{display:inline-flex;align-items:center;gap:5px;max-width:100%;min-width:0;vertical-align:middle}
+.filing-row-label>span:last-child{min-width:0;overflow-wrap:anywhere}
+.filing-row-icon{width:14px;height:14px;flex:0 0 14px;color:#40746a;vertical-align:-2px;margin-inline-end:2px}
+.filing-flags{display:inline-flex;gap:2px;flex:0 0 auto;align-items:center}
+.filing-flags img{display:block;width:15px;height:11px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px #223b361c}
+.quarter-geo-controls{align-items:center;flex-wrap:wrap;gap:8px 13px}
+.quarter-geo-controls>a{margin-inline-end:auto;color:#245e55;font-size:.85rem}
+#table-quarter-geography td{flex-wrap:wrap;align-content:center;gap:2px 5px}
+.cell-growth{display:block;flex:0 0 100%;text-align:right;color:#536c65;font-size:.8em;font-variant-numeric:tabular-nums}
+:is(.cell-growth,.geography-change).gain{color:#176b4a}
+:is(.cell-growth,.geography-change).loss{color:#ad4057}
+.annual-mix-table.quarter-geography-card thead th:nth-child(2){width:24%}
+.annual-mix-table.quarter-geography-card thead th:nth-child(3){width:15%}
+.annual-mix-table.quarter-geography-card thead th:nth-child(4){width:18%}
+.annual-mix-table.quarter-geography-card td{font-size:.75rem;padding-inline-start:4px}
+@media(max-width:720px){
+ :is(#table-geography,#table-quarter-geography) tr[data-row*="geo-sub-"] th>.filing-row-label{padding-left:3px}
+ :is(#table-geography,#table-quarter-geography) tr[data-row*="geo-market-"] th>.filing-row-label{padding-left:8px}
+ .filing-row-label{gap:3px}
+ .filing-flags img{width:13px;height:10px}
+}
