@@ -775,4 +775,20 @@
       <path fill="none" d="M15 7h3v9H7v-2m5-4h3"/>
     </g>
   </symbol>
+  <symbol id="menu-drawer" viewBox="0 0 32 32">
+    <rect x="2" y="2" width="28" height="28" rx="7" fill="#E4EDF6"/>
+    <path d="M7 9h18M7 16h18M7 23h18" fill="none" stroke="#284C70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="rail-collapse" viewBox="0 0 32 32">
+    <rect x="2" y="2" width="28" height="28" rx="7" fill="#E4EDF6"/>
+    <path d="M12 6v20m10-15-5 5 5 5M5 8h3m-3 8h3m-3 8h3" fill="none" stroke="#284C70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="rail-expand" viewBox="0 0 32 32">
+    <rect x="2" y="2" width="28" height="28" rx="7" fill="#E4EDF6"/>
+    <path d="M12 6v20m5-15 5 5-5 5M5 8h3m-3 8h3m-3 8h3" fill="none" stroke="#284C70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="editorial-art" viewBox="0 0 32 32">
+    <rect x="2" y="2" width="28" height="28" rx="7" fill="#E4EDF6"/>
+    <path d="m7 22 5-6 4 4 4-6 5 8zM10 11h.01" fill="none" stroke="#284C70" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
 </svg>
