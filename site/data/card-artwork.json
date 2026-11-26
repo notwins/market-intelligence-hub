@@ -1,0 +1,30 @@
+{
+  "briefings": {
+    "2026-11-25": {
+      "bonds": "credit",
+      "earnings": "equities",
+      "economy": "macro",
+      "news": "macro"
+    },
+    "2026-11-26": {
+      "bonds": "credit",
+      "earnings": "equities",
+      "economy": "macro",
+      "news": "macro"
+    }
+  },
+  "reports": {
+    "bond-credit-full-2026-11-26": "credit",
+    "central-banks-policy-full-2026-11-27": "credit",
+    "standalone-beta2-share-events-2026-11-15": "equities",
+    "standalone-beta2-share-events-2026-11-15-r2": "equities",
+    "standalone-beta2-share-events-2026-11-15-r3": "equities",
+    "standalone-beta2-share-events-2026-11-15-r4": "equities",
+    "standalone-fred-sigma-breaches-2026-11-18": "macro",
+    "standalone-leveraged-etf-etn-recovery-gap-2026-11-24": "equities",
+    "standalone-nvidia-after-jensen-2026-11-18": "equities",
+    "standalone-watchlist-end-day-2026-11-20": "equities",
+    "us-earnings-full-2026-11-26": "equities"
+  },
+  "schema_version": 1
+}

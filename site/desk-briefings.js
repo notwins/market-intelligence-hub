@@ -58,6 +58,7 @@
       const report = edition.reports[key];
       const card = node('article', undefined, 'dashboard-brief');
       card.dataset.topic = key;
+      card.dataset.artDate = edition.date;
       const identity = node('div', undefined, 'brief-identity');
       const emblem = node('span', undefined, 'brief-emblem');
       emblem.setAttribute('aria-hidden', 'true');
