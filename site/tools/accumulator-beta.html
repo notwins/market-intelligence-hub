@@ -92,11 +92,21 @@
 </style>
 <link rel="stylesheet" href="accumulator-beta.css?v=20261126-deliveries">
 <link rel="stylesheet" href="accumulator-nvda-chart.css?v=20261126">
+<link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127">
 </head>
 <body class="accumulator-beta">
 <div class="top"><nav class="wrap" aria-label="Breadcrumb"><a href="../desk.html">Market Intel</a><span>/</span><a href="../v4.html#tools">Tools</a><span>/</span><a href="accumulator.html">Accumulator</a><span>/</span><b aria-current="page">Beta 2</b><span>/</span><a href="accumulator-3d.html">3D pricing</a></nav></div>
 <main class="wrap">
 <header class="hero"><div><p class="eyebrow">EQUITY STRUCTURED NOTES</p><h1><img class="beta-page-icon" src="accumulator-beta-icon.svg" width="42" height="42" alt="">NVDA Accumulator <span class="beta-version">Beta 2</span></h1><p>Would you buy NVIDIA shares at a discount to their starting price? A JPM note or OCBC structured investment fixes that buying price. You commit to the purchases even through a fall, while a rally can end them early.</p><nav class="section-links" aria-label="Simulator sections"><a href="accumulator-capital.html">Size capital from shares</a><a href="#library">Choose quotes</a><a href="#compare">KO comparison</a><a href="#chartTitle">Edit price path</a><a href="#delivery-sales-title">Sell on delivery</a><a href="#nvda-stress-context">Downside evidence</a><a href="#client-sheet">Client PDF</a><a href="#notes-and-terms">Notes &amp; terms</a></nav></div><div class="hero-side"><span>Underlying</span><strong>NVDA</strong><small>NVIDIA · Nasdaq · USD</small></div></header>
+<div class="beta-display" aria-label="Accumulator display and export">
+  <div class="beta-styles" role="group" aria-label="Page colour style">
+    <span class="beta-style-label" aria-hidden="true">Page style</span>
+    <button type="button" data-beta-style="harbour" aria-pressed="true">Harbour</button>
+    <button type="button" data-beta-style="sage" aria-pressed="false">Sage</button>
+    <button type="button" data-beta-style="plum" aria-pressed="false">Plum</button>
+  </div>
+  <button type="button" class="primary" id="beta-quick-open" aria-haspopup="dialog" disabled>Quick PDF</button>
+</div>
 <section class="panel" aria-labelledby="setup"><div class="heading"><h2 id="setup">Pricing &amp; capital</h2><a href="#accumulator-guide">How to use</a></div>
 <div class="inputs"><label>Indicative structure<select id="quote"></select></label><label>Starting price · USD<input id="spot" type="number" placeholder="Dated NVDA close" min="0.01" max="100000" step="0.01" required></label><label>Target budget · USD<input id="capital" type="number" value="300000" min="0.01" max="1000000000" step="0.01" required></label></div>
 <div class="inline actions"><button type="button" id="close">Use dated NVDA close</button><button id="reset">Restore $100 example</button><span id="marketStatus" class="small" role="status"></span></div>
@@ -847,4 +857,23 @@ if(location.protocol==='https:'||location.protocol==='http:'){
 <script src="../financial-display.js" defer></script>
 <script src="../stocks-beta2-charts.js?v=20261122.figures1" defer></script>
 <script src="accumulator-client-sheet.js?v=20261126-research" defer></script>
+<dialog id="beta-quick-pdf" aria-labelledby="beta-quick-title" aria-describedby="beta-quick-help">
+  <form>
+    <h2 id="beta-quick-title">Quick PDF</h2>
+    <p id="beta-quick-help">Export the current inputs, results, charts and any details you’ve opened.</p>
+    <p class="beta-pdf-style">Page style <strong id="beta-quick-style"></strong></p>
+    <fieldset>
+      <legend>Sections to include</legend>
+      <label class="beta-whole-page"><input type="checkbox" id="beta-quick-all" checked autofocus>Whole page</label>
+      <div id="beta-quick-sections"></div>
+    </fieldset>
+    <p id="beta-quick-status" role="status"></p>
+    <div class="beta-pdf-actions">
+      <button type="button" id="beta-quick-close">Cancel</button>
+      <button type="submit" class="primary" id="beta-quick-download">Download PDF</button>
+    </div>
+  </form>
+</dialog>
+<script src="accumulator-beta-appearance.js?v=20261127" defer></script>
+<script src="accumulator-beta-quick-pdf.js?v=20261127" defer></script>
 </body></html>
