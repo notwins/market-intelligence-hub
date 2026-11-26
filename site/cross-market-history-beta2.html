@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Replay recent market events across gold, benchmark yields, sectors and the Market Intel watchlist.">
+  <title>Cross-Market History Beta 2 · Market Intel</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="cross-market-history-beta2.css?v=1">
+  <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
+  <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.cross-market-beta2"></script>
+  <script defer src="watchlist-membership.js"></script>
+  <script defer data-price-render-only src="share-prices.js"></script>
+  <script defer src="cross-market-history-beta2-events.js?v=1"></script>
+  <script defer src="cross-market-history-beta2-data.js?v=1"></script>
+  <script defer src="cross-market-history-beta2.js?v=1"></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="desk.html">Market Intel</a>
+    <nav aria-label="Historical workspaces">
+      <a href="cross-market-history.html">Cross-Market History · Beta 1</a>
+      <a href="tools/gold-charts.html">Gold charts</a>
+      <a href="v4.html#history">Historical Data</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="replay-intro" aria-labelledby="page-title">
+      <div class="title-line">
+        <h1 id="page-title">Cross-Market History</h1>
+        <span class="version">Beta 2</span>
+      </div>
+      <p>Replay market events across gold, equities, yields, sectors and the Hub watchlist.</p>
+    </section>
+
+    <section class="event-panel" aria-labelledby="event-picker-label">
+      <div class="event-picker">
+        <label id="event-picker-label" for="event-select">Choose an event</label>
+        <select id="event-select"></select>
+        <div class="event-navigation">
+          <button id="older-event" type="button">Older event</button>
+          <button id="newer-event" type="button">Newer event</button>
+        </div>
+      </div>
+      <div class="event-context">
+        <div id="event-meta" class="event-meta"></div>
+        <h2 id="event-title"></h2>
+        <p id="event-summary"></p>
+      </div>
+    </section>
+    <p class="load-status" id="load-status" role="status">Loading price and yield histories…</p>
+    <div id="replay" hidden>
+      <section class="surface chart-panel" id="price-path" aria-labelledby="chart-title">
+        <div class="surface-heading">
+          <div>
+            <h2 id="chart-title" tabindex="-1">Market reaction</h2>
+            <p id="chart-dates"></p>
+          </div>
+          <button id="clear-focus" class="action" type="button" hidden>Show group</button>
+        </div>
+        <div class="chart-controls">
+          <fieldset id="chart-group">
+            <legend>Chart series</legend>
+            <button type="button" data-group="prices" aria-pressed="true">Prices &amp; FX</button>
+            <button type="button" data-group="yields" aria-pressed="false">Yields</button>
+            <button type="button" data-group="sectors" aria-pressed="false">Sectors</button>
+            <button type="button" data-group="shares" aria-pressed="false">Watchlist</button>
+          </fieldset>
+          <fieldset id="chart-window">
+            <legend>Trading sessions</legend>
+            <button type="button" data-window="1" aria-pressed="false">1</button>
+            <button type="button" data-window="5" aria-pressed="true">5</button>
+            <button type="button" data-window="20" aria-pressed="false">20</button>
+            <button type="button" data-window="60" aria-pressed="false">60</button>
+          </fieldset>
+        </div>
+        <figure id="reaction-figure"></figure>
+        <ul id="chart-legend" class="chart-legend" aria-label="Plotted series"></ul>
+      </section>
+
+      <section class="surface table-panel" aria-labelledby="market-title">
+        <div class="surface-heading"><h2 id="market-title">Market moves</h2></div>
+        <div id="market-table"></div>
+      </section>
+      <section class="surface table-panel" aria-labelledby="sector-title">
+        <div class="surface-heading"><h2 id="sector-title">US sector proxies</h2></div>
+        <div id="sector-table"></div>
+      </section>
+      <section class="surface table-panel" aria-labelledby="watchlist-title">
+        <div class="surface-heading"><h2 id="watchlist-title">Watchlist shares</h2></div>
+        <div id="share-table"></div>
+      </section>
+    </div>
+    <noscript><p>Enable JavaScript to replay events. <a href="cross-market-history.html">Open Cross-Market History Beta 1</a>.</p></noscript>
+    <section class="methods" id="methods" aria-labelledby="methods-title">
+      <h2 id="methods-title">Sources and methods</h2>
+      <p id="event-source"></p>
+      <p>Each column measures the cumulative change from the last available observation before the reaction date to the latest qualifying observation by the 1st, 5th, 20th or 60th S&amp;P 500 session. A reaction date can follow the announcement when it was made after US market hours or on a weekend. Singapore and US markets close at different times, so the same date can reflect different information.</p>
+      <p>Shares, sector proxies, spot gold and FX are shown as percentage changes in their quoted currencies. Share price changes exclude dividends and currency conversion. Treasury and SGS changes are in basis points. USD/SGD rises when the US dollar strengthens against the Singapore dollar. Timing alone cannot establish that an event caused a price move.</p>
+      <p>W marks a weekly result and M marks a monthly one. Shares use the source’s dated weekly periods. Hover over a result for the two observation dates. Weekly data qualify from five sessions onward and monthly data from 60. Daily observations may lag a cutoff by up to four calendar days, weekly by eight and monthly by 35. A dash means comparable observations are missing. Pending means the benchmark session has yet to appear in the saved data.</p>
+      <p id="sector-method"></p>
+      <p><a href="tools/gold-charts.html">Hub gold price history</a> · <a href="v4.html#history/spx">Hub S&amp;P 500 history</a> · <a href="https://www.federalreserve.gov/releases/h15/">Federal Reserve H.15</a> · <a href="https://www.federalreserve.gov/releases/h10/">Federal Reserve H.10</a> · <a href="https://eservices.mas.gov.sg/statistics/fdanet/SgsBenchmarkIssuePrices.aspx">MAS daily SGS closing yields</a> · <a href="https://data.gov.sg/datasets/d_5fe5a4bb4a1ecc4d8a56a095832e2b24/view">MAS month-end SGS yields via SingStat</a> · <a href="desk.html#watchlist-end-day">Hub watchlist</a></p>
+    </section>
+  </main>
+  <footer class="page-footer"><a href="desk.html">Market Intel</a><a href="#page-title">Back to top</a></footer>
+</body>
+</html>
