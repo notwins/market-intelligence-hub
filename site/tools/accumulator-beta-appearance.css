@@ -215,6 +215,8 @@
 .accumulator-beta :is(.quote-case strong, .monthly-cash-totals dd, .metrics strong, .scenario .return) {
   font-family: var(--beta-display-font);
   letter-spacing: -.01em;
+}
+.accumulator-beta :is(.monthly-cash-totals dd, .metrics strong, .scenario .return) {
   color: var(--beta-deep);
 }
 .accumulator-beta .quote-case {
