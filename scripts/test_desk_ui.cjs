@@ -549,5 +549,36 @@ test('Stacked USD and share views keep a fixed set of direct peers, gaps and sig
  assert.deepEqual(zero.quarters[0],{total:0,reason:'Peer total is zero'});
 });
 
+test('Quarter inspection exposes USD, consistent shares and the complete matched peer total',()=>{
+ const {peerQuarter}=require('../site/stocks-beta3-quarterly-charts.js');
+ const cohort=[{amounts:[90,20,0,25]},{amounts:[-10,null,0,75]}];
+ assert.deepEqual(peerQuarter(cohort,0),{amounts:[90,-10],total:80,shares:[90,-10]});
+ assert.deepEqual(peerQuarter(cohort,1),{amounts:[20,null],total:null,shares:null});
+ assert.deepEqual(peerQuarter(cohort,2),{amounts:[0,0],total:0,shares:null});
+ assert.deepEqual(peerQuarter(cohort,3),{amounts:[25,75],total:100,shares:[25,75]});
+});
+
+test('Regional stacks share an axis, retain the selected cohort and use disclosed denominators',()=>{
+ const G=require('../site/stocks-beta3-geography.js');
+ const view=(id,usdRate,total,items)=>({id,usdRate,geo:{geography:items?{total,items:items.map(([label,value])=>({label,value}))}:null}});
+ const views=[
+   view('A',2,100,[['United States',60],['Taiwan',40],['Hedging gains (losses)',-5]]),
+   view('B',1,100,[['Americas',40],['Asia Pacific',60]]),
+   view('C',1,0,null),
+   view('D',null,100,[['Japan',25],['Europe',75]]),
+ ];
+ const usd=G.stack(views,'usd'),share=G.stack(views,'share');
+ assert.deepEqual(usd.companies.map(c=>c.view.id),['A','B','C','D']);
+ assert.deepEqual(usd.companies[0].parts.map(p=>p.value),[120,80,-10]);
+ assert.equal(usd.companies[1].parts[0].value,null);
+ assert.equal(usd.companies[1].parts[2].value,40);
+ assert.equal(usd.companies[2].reason,'No geography reported');
+ assert.equal(usd.companies[3].reason,'USD conversion unavailable');
+ assert.deepEqual(share.companies[3].parts.map(p=>p.value),[null,25,75]);
+ assert.equal(share.companies[0].parts[0].value,60);
+ assert.ok(share.max>=100&&share.min<=-5&&share.ticks.includes(0));
+ assert.ok(usd.max>=200&&usd.min<=-10);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

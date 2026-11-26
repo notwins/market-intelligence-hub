@@ -459,13 +459,57 @@
     const preferred=focus?matchedGroup(focus):[];
     const cohort=preferred.length?preferred:matchedGroup();
     const quarters=slots.map((slot,i)=>{
-      const nums=cohort.map(row=>row.amounts[i]);
-      if (nums.length<2||!nums.every(finite)) return {reason:'Missing comparable figure'};
-      const total=nums.reduce((sum,n)=>sum+n,0);
-      const values=mode==='share'?shareOfMagnitude(nums):nums;
+      const {amounts,shares,total}=peerQuarter(cohort,i);
+      if (total===null) return {reason:'Missing comparable figure'};
+      const values=mode==='share'?shares:amounts;
       return values?{total,values}:{total,reason:'Peer total is zero'};
     });
     return {rows,slots,cohort,quarters};
+  }
+
+  function peerQuarter(cohort,index) {
+    const amounts=cohort.map(row=>row.amounts[index]);
+    const complete=amounts.length>=2&&amounts.every(finite);
+    const total=complete?amounts.reduce((sum,n)=>sum+n,0):null;
+    return {amounts,total,shares:complete?shareOfMagnitude(amounts):null};
+  }
+
+  function quarterReadout(stack,index) {
+    const {cohort,slots}=stack;
+    const {amounts,shares,total}=peerQuarter(cohort,index);
+    const completeness=amounts.filter(finite).length;
+    const amount=n=>printed(n,'amount','USD',true);
+    const percent=n=>printed(n,'share','');
+    const rows=cohort.map((row,i)=>{
+      const name=row.company.name||row.ticker;
+      return '<tr'+(row.active?' class="sq-active"':'')+'><th scope="row" title="'+esc(name)+'"><span class="sq-quarter-key" style="--mark:'+row.color+'"></span>'+esc(row.ticker)+
+        '</th><td>'+esc(amount(amounts[i]))+'</td><td>'+esc(percent(shares?.[i]))+'</td></tr>';
+    }).join('');
+    const signed=amounts.some(n=>finite(n)&&n<0);
+    const note=total===null?completeness+'/'+cohort.length+' matched peers reporting. The group total and shares require a figure from each peer.':
+      !shares?'Shares are unavailable when every peer reports zero.':
+      signed?'Shares use the sum of absolute amounts. The total includes losses.':'';
+    const netShare=shares?.reduce((sum,n)=>sum+n,0);
+    return '<h4>'+esc(slots[index].label)+'</h4>'+
+      '<table><caption class="sr-only">'+esc(slots[index].label)+' direct peer figures</caption>'+
+      '<thead><tr><th scope="col">Company</th><th scope="col">USD amount</th><th scope="col">% share</th></tr></thead>'+
+      '<tbody>'+rows+'</tbody><tfoot><tr><th scope="row">'+(signed?'Net total':'Quarter total')+'</th><td>'+esc(amount(total))+
+      '</td><td>'+esc(percent(netShare))+'</td></tr></tfoot></table>'+
+      (note?'<p class="sq-quarter-note">'+esc(note)+'</p>':'');
+  }
+
+  function selectPeerQuarter(button,state) {
+    const ordinal=Number(button.dataset.sqQuarter);
+    if (state.areaQuarter===ordinal&&button.getAttribute('aria-pressed')==='true') return;
+    const group=button.parentElement;
+    const area=group.closest('#direct-peer-area');
+    const {slots}=state.areaStack;
+    const index=slots.findIndex(slot=>slot.ordinal===ordinal);
+    if (index<0) return;
+    state.areaQuarter=ordinal;
+    for(const item of group.children)item.setAttribute('aria-pressed',item===button);
+    area.querySelector('.sq-quarter-guide').style.setProperty('--tick',index/(slots.length-1)*100+'%');
+    area.querySelector('.sq-quarter-readout').innerHTML=quarterReadout(state.areaStack,index);
   }
 
   function stackSamples(quarters, share=false) {
@@ -509,8 +553,11 @@
     }).join('');
   }
 
-  function portrayPeerArea(allRows,measure,mode,through) {
-    const {rows,slots,cohort,quarters}=peerStack(allRows,measure,mode,through);
+  function portrayPeerArea(state) {
+    const {areaMeasure:measure,areaMode:mode}=state;
+    const stack=peerStack(state.rows,measure,mode,state.through);
+    state.areaStack=stack;
+    const {rows,slots,cohort,quarters}=stack;
     const label=areaMeasures[measure], share=mode==='share';
     const unit=share?'%':'amount';
     const format=n=>share?printed(n,'share',''):printed(n,'amount','USD',true);
@@ -531,9 +578,15 @@
       quarters.map(q=>figureCell(format(share?q.values?.reduce((sum,n)=>sum+n,0):q.total))).join('')+'</tr>'+
       '</tbody></table></div>'+reportingNotes(cohort)+'</details>';
     const extents=quarters.flatMap(q=>q.values?[q.values.reduce((sum,n)=>sum+Math.max(n,0),0),q.values.reduce((sum,n)=>sum+Math.min(n,0),0)]:[]);
-    if (!extents.length) return '<p class="sq-empty">The matched peers have zero totals or incomplete data for this view.</p>'+table;
-    const limits=share?{min:extents.some(n=>n<0)?-100:0,max:extents.some(n=>n>0)?100:0,step:25}:domain(extents);
+    const limits=share?{min:extents.some(n=>n<0)?-100:0,max:!extents.length||extents.some(n=>n>0)?100:0,step:25}:domain(extents);
     const x=i=>i/(slots.length-1)*100, y=n=>100-position(n,limits);
+    const previous=slots.findIndex(slot=>slot.ordinal===state.areaQuarter);
+    const recent=quarters.findLastIndex(q=>finite(q.total));
+    const selected=previous>=0?previous:Math.max(0,recent);
+    state.areaQuarter=slots[selected].ordinal;
+    const columns=slots.map((_,i)=>i===0||i===slots.length-1?'1fr':'2fr').join(' ');
+    const buttons=slots.map((slot,i)=>'<button type="button" data-sq-quarter="'+slot.ordinal+'" aria-label="'+esc(slot.label)+
+      '" aria-controls="sq-quarter-readout" aria-pressed="'+(i===selected)+'"></button>').join('');
     const xLabels=slots.map((slot,i)=>'<span class="'+(i===0?'sq-start':i===slots.length-1?'sq-end':i%2?'sq-minor':'')+'" style="--tick:'+x(i)+'%">'+esc(slot.abbreviated)+'</span>').join('');
     const guide=ticks(limits).map(n=>'<i class="sq-yline'+(n===0?' sq-zero':'')+'" style="--tick:'+position(n,limits)+'%"><span>'+esc(printed(n,unit,''))+'</span></i>').join('');
     const gaps=quarters.map((q,i)=>q.values?'':'<i class="sq-area-gap" style="--tick:'+x(i)+'%" title="'+esc(slots[i].label+' · '+q.reason)+'"><span>Gap</span></i>').join('');
@@ -554,9 +607,13 @@
     const legend=cohort.map(row=>'<span'+(row.active?' class="sq-active"':'')+'><i style="--mark:'+row.color+'"></i>'+esc(row.ticker)+'</span>').join('');
     const scoreNote=share&&signed?'<p class="sq-reporting-currencies">Share divides each value by the sum of the peers’ absolute values. Negative values appear below zero.</p>':'';
     return '<div class="sq-chart-meta"><span>'+cohort.length+'/'+rows.length+' in matched peer group</span><span>'+axisLabel+' · Calendar quarters</span></div>'+
-      '<div class="sq-trend-inner sq-area-inner" role="img" aria-label="'+esc(label+' by calendar quarter · '+axisLabel)+'">'+
-      '<div class="sq-scatter-plot sq-trend-plot" aria-hidden="true">'+guide+'<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+shapes+
-      '</svg>'+gaps+'<div class="sq-scatter-x">'+xLabels+'</div></div></div><div class="sq-legend">'+legend+'</div>'+scoreNote+
+      '<div class="sq-area-inspection"><div class="sq-area-main"><div class="sq-trend-inner sq-area-inner">'+
+      '<div class="sq-scatter-plot sq-trend-plot">'+guide+'<svg viewBox="0 0 100 100" preserveAspectRatio="none" role="img" aria-label="'+esc(label+' by calendar quarter · '+axisLabel)+'">'+shapes+
+      '</svg>'+gaps+'<span class="sq-quarter-guide" aria-hidden="true" style="--tick:'+x(selected)+'%"></span>'+
+      '<div class="sq-quarter-targets" role="group" aria-label="Inspect a quarter" style="grid-template-columns:'+columns+'">'+buttons+'</div>'+
+      '<div class="sq-scatter-x" aria-hidden="true">'+xLabels+'</div></div></div><div class="sq-legend">'+legend+'</div>'+scoreNote+
+      '<p class="sq-quarter-note">Hover or tap a quarter for USD amounts and shares.</p>'+
+      '</div><section class="sq-quarter-readout" id="sq-quarter-readout" aria-label="Selected quarter figures">'+quarterReadout(stack,selected)+'</section></div>'+
       (skipped.length?'<p class="sq-reporting-currencies">Outside the matched group · '+esc(skipped.join(', '))+'</p>':'')+table;
   }
 
@@ -566,7 +623,7 @@
     return '<article id="direct-peer-area" class="sq-card sq-revenue-area" data-sq-card="'+areaId+'"><header><h3>Direct peer financials over time</h3>'+
       '<div class="sq-area-controls"><div class="sq-switches" role="group" aria-label="Stacked area metric">'+options+'</div>'+
       '<div class="sq-switches sq-area-units" role="group" aria-label="Stacked area units">'+modes+'</div></div></header>'+
-      '<div class="sq-card-body">'+portrayPeerArea(state.rows,state.areaMeasure,state.areaMode,state.through)+'</div></article>';
+      '<div class="sq-card-body">'+portrayPeerArea(state)+'</div></article>';
   }
 
   function cardHtml(id, title, group, active, rows) {
@@ -594,7 +651,23 @@
     if (!state) {
       state = {selected: new Map(), rows, areaMeasure:'revenue', areaMode:'usd'};
       settings.set(container, state);
+      function onQuarter(event) {
+        const button=event.target.closest('[data-sq-quarter]');
+        if (button) selectPeerQuarter(button,state);
+      }
+      container.addEventListener('pointerover',event=>{
+        if (event.pointerType==='mouse') onQuarter(event);
+      });
+      container.addEventListener('focusin',onQuarter);
+      container.addEventListener('keydown',event=>{
+        const button=event.target.closest('[data-sq-quarter]');
+        if (!button||!['ArrowLeft','ArrowRight'].includes(event.key)) return;
+        event.preventDefault();
+        const next=event.key==='ArrowLeft'?button.previousElementSibling:button.nextElementSibling;
+        next?.focus();
+      });
       container.addEventListener('click', event => {
+        onQuarter(event);
         const button = event.target.closest('[data-sq-metric],[data-sq-area-measure],[data-sq-area-mode]');
         const card = button?.closest('[data-sq-card]');
         if (!card || !container.contains(card)) return;
@@ -606,7 +679,7 @@
           if (button.dataset.sqAreaMeasure) state.areaMeasure=button.dataset.sqAreaMeasure;
           else state.areaMode=button.dataset.sqAreaMode;
           group=button.parentElement;
-          plot=portrayPeerArea(state.rows,state.areaMeasure,state.areaMode,state.through);
+          plot=portrayPeerArea(state);
         } else {
           const key=button.dataset.sqMetric;
           state.selected.set(id,key);
@@ -649,7 +722,7 @@
     }
   }
 
-  const api = {render,peerStack,stackSamples};
+  const api = {render,peerStack,stackSamples,peerQuarter};
   root.SharesQuarterlyCharts = api;
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);

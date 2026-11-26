@@ -217,7 +217,34 @@
     return result;
   }
 
-  const api = { rows, prior, reportedChange, mergeData, normalize };
+  function stack(views, mode){
+    const regions=rows(views).filter(row=>row.depth===0);
+    const companies=views.map((view,index)=>{
+      const hasDisclosure=Boolean(view.geo.geography);
+      const parts=regions.map(region=>{
+        const cell=region.cells[index];
+        const value=mode==='share'?cell?.p:Number.isFinite(view.usdRate)?cell?.n*view.usdRate:null;
+        return {id:region.id,name:region.name,value:Number.isFinite(value)?value:null,reported:cell?.label};
+      });
+      const numbers=parts.map(part=>part.value).filter(Number.isFinite);
+      const positive=numbers.reduce((sum,n)=>sum+Math.max(n,0),0);
+      const negative=numbers.reduce((sum,n)=>sum+Math.min(n,0),0);
+      const reason=!hasDisclosure?'No geography reported':!numbers.length?
+        (mode==='share'?'Revenue base unavailable':'USD conversion unavailable'):'';
+      return {view,parts,positive,negative,reason};
+    });
+    const top=Math.max(mode==='share'?100:0,...companies.map(co=>co.positive));
+    const bottom=Math.min(0,...companies.map(co=>co.negative));
+    const raw=(top-bottom||1)/4;
+    const scale=10**Math.floor(Math.log10(raw));
+    const step=([1,2,2.5,5,10].find(n=>n*scale>=raw)||10)*scale;
+    const min=Math.floor(bottom/step)*step;
+    const max=Math.ceil((top||step)/step)*step;
+    const ticks=Array.from({length:Math.round((max-min)/step)+1},(_,i)=>Number((min+i*step).toPrecision(12)));
+    return {regions,companies,min,max,ticks};
+  }
+
+  const api = { rows, stack, prior, reportedChange, mergeData, normalize };
   root.FilingGeography = api;
   if (typeof module !== 'undefined') module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);
