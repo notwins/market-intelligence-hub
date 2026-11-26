@@ -1,0 +1,14 @@
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {reportURL}=require('../site/credit-dashboard-popup.js');
+const local='research/bond-credit-full-2026-11-14/';
+const remote='https://notwins.github.io/market-intelligence-content/research/bond-credit-full-2026-11-26/index.html';
+assert.equal(reportURL(local),'https://notwins.github.io/market-intelligence-hub/'+local);
+assert.equal(reportURL(remote),remote);
+for(const url of ['https://evil.test/market-intelligence-content/research/bond-credit-full-2026-11-26/index.html','https://notwins.github.io/market-intelligence-hub/research/us-earnings-full-2026-11-14/index.html',remote+'?x=1',remote+'#s1','javascript:alert(1)',local+'extra.html',null])assert.equal(reportURL(url),'');
+const desk=fs.readFileSync(path.join(__dirname,'../site/desk.js'),'utf8');
+assert(desk.includes("r.full_edition?.completeness_verified===true&&r.full_edition.channel==='credit'"));
+assert(desk.includes("credit-dashboard-link"));
+const html=fs.readFileSync(path.join(__dirname,'../site/desk.html'),'utf8');
+assert(html.includes('credit-dashboard-popup.js')&&html.includes('credit-dashboard-popup.css'));
+console.log('Verified credit popup URL gate and desk integration passed');
