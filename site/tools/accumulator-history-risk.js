@@ -39,30 +39,39 @@
     return monthly;
   }
 
-  function countWindows(monthly, months, thresholdRatio) {
+  function countWindows(monthly, months, thresholdRatio, includeExample) {
     let total = 0, endHits = 0, touchHits = 0;
+    let finalExample, touchExample;
     for (const [start, observation] of monthly) {
       const boundary = observation.price * thresholdRatio;
       const tolerance = 4 * Number.EPSILON * boundary;
-      let touched = false;
+      let firstTouch;
       for (let offset = 1; offset <= months; offset++) {
         const next = monthly.get(start + offset);
         if (!next) break;
         const hit = next.price <= boundary + tolerance;
-        if (hit) touched = true;
+        if (hit && !firstTouch) firstTouch = {close:next, month:offset};
         if (offset === months) {
           total++;
           if (hit) endHits++;
-          if (touched) touchHits++;
+          if (firstTouch) touchHits++;
+          if (includeExample && hit && (!finalExample || next.label > finalExample.close.label)) {
+            finalExample = {start:observation, close:next, month:offset};
+          }
+          if (includeExample && firstTouch && (!touchExample || observation.label > touchExample.start.label)) {
+            touchExample = {start:observation, ...firstTouch};
+          }
         }
       }
     }
-    return {months, total, endHits, touchHits,
+    const result = {months, total, endHits, touchHits,
       endPct: total ? 100 * endHits / total : null,
       touchPct: total ? 100 * touchHits / total : null};
+    if (includeExample) result.example = finalExample || touchExample || null;
+    return result;
   }
 
-  function analyze(points, asOfDate, referencePrice, testPrice, historyYears = 10) {
+  function analyze(points, asOfDate, referencePrice, testPrice, historyYears = 10, {includeExample = false} = {}) {
     const asOf = parseDate(asOfDate);
     if (!asOf || !Array.isArray(points) || !Number.isInteger(historyYears) || historyYears < 1 ||
         !Number.isFinite(referencePrice) || !Number.isFinite(testPrice)) return null;
@@ -72,7 +81,7 @@
     if (referencePrice <= 0 || testPrice < 0 || testPrice >= referencePrice) return null;
     const thresholdRatio = testPrice / referencePrice;
     const monthly = completedCloses(points, asOf, historyYears);
-    const rows = tenors.map(months => countWindows(monthly, months, thresholdRatio));
+    const rows = tenors.map(months => countWindows(monthly, months, thresholdRatio, includeExample));
     if (!rows.some(row => row.total)) return null;
     const first = monthly.get(Math.min(...monthly.keys()));
     const last = monthly.get(Math.max(...monthly.keys()));

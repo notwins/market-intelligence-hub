@@ -9,6 +9,18 @@
   const risk = 'The commitment to buy at strike can produce losses if NVIDIA falls. Issuer default can cause a total loss.';
   const timing = sim => sim.koDay ? 'Knock-out on day ' + sim.koDay : 'Maturity in month ' + sim.exit.month;
 
+  function captureStress() {
+    const input = document.getElementById('nv-stress-price');
+    const price = input?.valueAsNumber;
+    return {
+      stressPrice: input?.checkValidity() && Number.isSafeInteger(Math.round(price * 100)) ? price : null,
+      stressResult: read('#nv-stress-result strong'),
+      stressPayout: read('#nv-stress-result .nv-work'),
+      stressExample: read('#nv-history-example'),
+      stressPath: read('#nvda-multiple-scenario')
+    };
+  }
+
   function capture(sections) {
     const selected = new Set(sections.map(section => section.key));
     const has = (...keys) => keys.some(key => selected.has(key));
@@ -35,7 +47,7 @@
       view.deliveryIssue = !document.getElementById('beta-sale-sensitivity').hidden ? '' : 'Check the selected delivery sale prices.';
     }
     if (view.stress) {
-      view.stressResult = read('#nv-stress-result strong');
+      Object.assign(view, captureStress());
       view.stressBasis = read('#nv-history-frequency > p').split(' The note uses')[0];
       view.stressFrequency = Array.from(document.querySelectorAll('.nv-frequency-pair > div'), node => ({
         value: node.querySelector('strong').textContent.trim(),
@@ -345,6 +357,11 @@
           y = wrap(view.stressBasis && 'Historical comparison: ' + view.stressBasis, margin, y, width, 9.2, 'muted') + 3;
           cards(view.stressFrequency.map(({label,value}) => [label.replace(/^At the end of /,'End of ').replace(/^At any /,'Any '), value]));
         }
+        for (const point of [view.stressExample, view.stressPath]) {
+          if (!point) continue;
+          space(19, 'Test the downside');
+          y = wrap(point, margin, y, width, 9.2, 'muted') + 4;
+        }
         if (view.valuation) y = wrap(view.valuation, margin, y, width, 8.8, 'muted') + 5;
         const fundamentals = view.stressFundamentals;
         if (fundamentals) {
@@ -368,5 +385,5 @@
     if (first) page('NVDA structured note');
   }
 
-  window.AccumulatorQuickBrief = {capture, render};
+  window.AccumulatorQuickBrief = {capture, captureStress, render};
 })();

@@ -304,7 +304,7 @@
     .replace(/\u2265/g, '>=').replace(/\u2264/g, '<=')
     .replace(/\u2713/g, '[selected]').replace(/\u25b2/g, '+').replace(/\u25bc/g, '-');
 
-  async function createPdf(mode, style, colour, view, snapshot, market, live, stressPrice) {
+  async function createPdf(mode, style, colour, view, snapshot, market, live, stress) {
     if (!window.jspdf?.jsPDF) throw new Error('The PDF library could not load. Reload the page and try again.');
     const doc = new window.jspdf.jsPDF({format: 'a4', unit: 'mm', compress: true, putOnlyUsedFonts: true});
     const margin = 13;
@@ -449,7 +449,7 @@
     }
     if (mode === 'equity' || mode === 'pack') {
       packBookmark('NVIDIA equity report');
-      window.AccumulatorPdfResearch.equity(writer, research, market, live, stressPrice);
+      window.AccumulatorPdfResearch.equity(writer, research, market, stress);
     }
     if (mode === 'competitors' || mode === 'pack') {
       packBookmark('Competitor analysis');
@@ -521,9 +521,8 @@
       const selected = new Set(chosen.map(section => section.key));
       const snapshot = reportWithSections && appendix.checked ?
         chosen.map(section => collect(section, selected)).filter(section => section.content.length) : [];
-      const stressInput = byId('nv-stress-price');
-      const stressPrice = stressInput?.checkValidity() ? stressInput.valueAsNumber : null;
-      const missed = await createPdf(mode, style, colours, view, snapshot, window.AccumulatorMarket.getState(), live, stressPrice);
+      const stress = mode === 'equity' || mode === 'pack' ? window.AccumulatorQuickBrief.captureStress() : null;
+      const missed = await createPdf(mode, style, colours, view, snapshot, window.AccumulatorMarket.getState(), live, stress);
       status.textContent = missed ? 'PDF downloaded. Some source data or figures were unavailable.' : 'PDF downloaded.';
     } catch (error) {
       status.textContent = error instanceof Error && error.message.startsWith('The PDF library') ?
