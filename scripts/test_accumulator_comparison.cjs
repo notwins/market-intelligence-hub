@@ -58,6 +58,20 @@ function singleBarrierDay(day, hitPrice, latestPrice = 80) {
   return Array.from({length:120}, (_,i) => i+1 < day ? 100 : i+1 === day ? hitPrice : latestPrice);
 }
 
+const dailyQuote = {sizing:'daily', months:3, days:61, minimum:1, strike:90, ko:110,
+  knownMonthEnds:[19,40,61]};
+const dailySize = model.terms(dailyQuote, 300, budget);
+assert.equal(dailySize.dailyShares, 18, 'GLD selects the daily quantity closest to the target');
+assert.equal(dailySize.payment, 296460);
+const dailyMaturity = model.simulateDaily(dailyQuote, 300, budget, Array(61).fill(300));
+assert.equal(dailyMaturity.end.shares, 1098, 'The same number of shares accrues each session');
+assert.equal(dailyMaturity.rows[0].shares, 342, 'The first month uses the actual number of sessions');
+checkReconciliation(dailyMaturity);
+const dailyKo = model.simulateDaily({...dailyQuote, dailyShares:17}, 300, budget, [330,...Array(60).fill(300)]);
+assert.equal(dailyKo.payment, 279990);
+assert.equal(dailyKo.exit.shares, 323, 'The daily override applies across the guaranteed sessions');
+checkReconciliation(dailyKo);
+
 const early = model.simulateDaily(quote, initialSpot, budget, singleBarrierDay(1,120));
 assert.equal(early.koDay, 1, 'Barrier equality on first trading day');
 assert.equal(early.exit.shares, 978, 'Two guaranteed months even for a first-day knock-out');

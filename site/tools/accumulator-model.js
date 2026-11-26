@@ -37,17 +37,23 @@
     const strikeCents = Math.round(spotCents * numberInCents(quote.strike) / 10000);
     const koCents = Math.round(spotCents * numberInCents(quote.ko) / 10000);
     if (strikeCents < 1 || koCents < 1) throw Error('Strike and knock-out prices must be at least one cent.');
-    const lotCents = strikeCents * quote.months;
-    const monthlyShares = Math.round(numberInCents(target) / lotCents);
-    if (!monthlyShares) throw Error('Increase target capital to size at least one whole share per month.');
-    const committedCents = monthlyShares * lotCents;
+    const daily = quote.sizing === 'daily';
+    const lotCents = strikeCents * (daily ? schedule.days : quote.months);
+    const nearest = Math.round(numberInCents(target) / lotCents);
+    const shares = daily ? (quote.dailyShares ?? Math.max(1, nearest)) : nearest;
+    if (!Number.isSafeInteger(shares) || shares < 1) {
+      throw Error(daily ? 'Enter at least one whole share per trading day.' :
+        'Increase target capital to size at least one whole share per month.');
+    }
+    const committedCents = shares * lotCents;
     if (!Number.isSafeInteger(committedCents) || committedCents > Number.MAX_SAFE_INTEGER - 100) {
       throw Error('Enter a smaller target capital.');
     }
     const payment = Math.ceil(committedCents / 100);
     return {
       ...schedule, strike: strikeCents / 100, ko: koCents / 100,
-      base: monthlyShares, maximum: monthlyShares, committed: committedCents / 100,
+      base: shares, maximum: shares, committed: committedCents / 100,
+      ...(daily && {dailyShares: shares}),
       payment, roundingCash: (payment * 100 - committedCents) / 100
     };
   }
@@ -123,7 +129,8 @@
           koMonth = month;
           // A trigger earns no new daily allocation. The minimum still covers all
           // promised months, including unearned shares in the current month.
-          extra = Math.max(0, t.maximum * quote.minimum - shares);
+          const guaranteedShares = t.dailyShares ? t.dailyShares * t.guaranteeDay : t.maximum * quote.minimum;
+          extra = Math.max(0, guaranteedShares - shares);
           shares += extra;
           refundCents = paymentCents - shares * strikeCents;
           status = day <= t.guaranteeDay ? 'KO within guarantee' : 'Knock-out';
@@ -133,7 +140,8 @@
           const sessions = endDay - priorDay;
           // Distribute each whole monthly lot cumulatively across observation days.
           // A completed month always earns exactly the quoted monthly quantity.
-          shares = openingShares + Math.floor(t.maximum * elapsed / sessions);
+          const acquired = t.dailyShares ? t.dailyShares * elapsed : Math.floor(t.maximum * elapsed / sessions);
+          shares = openingShares + acquired;
         }
       }
 

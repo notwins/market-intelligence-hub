@@ -3,17 +3,19 @@
   const el = id => document.getElementById(id);
   const form = el('terms'), result = el('result');
   const money = n => 'USD ' + Metals.format(n);
-  const pricingKey = 'market-intel.gld-accumulator-pricing.v1';
-  const pricingFile = el('pricing-file');
   const pricingStatus = el('pricing-status');
-  const clearPricing = el('clear-pricing');
   const hostedPricing = el('hosted-pricing');
-  const emptyPricingStatus = pricingStatus.textContent;
+  const monthPrices = el('month-prices');
+  const monthOverrides = new Map();
+  const spotOverrides = new Map();
   const supportedTenors = [...el('months').options].map(option => Number(option.value));
   const dateLabel = date => new Intl.DateTimeFormat('en-GB', {
     dateStyle: 'long', timeZone: 'UTC'
   }).format(new Date(date + 'T00:00:00Z'));
   let history = [];
+  let activeQuote;
+  let scenarioDays;
+  let tradeDateEdited = false;
 
   function readPricing(text) {
     const pricing = JSON.parse(text.replace(/^\uFEFF/, ''));
@@ -39,29 +41,27 @@
     return pricing;
   }
 
-  function applyQuote(quote) {
-    el('mode').value = 'history';
+  function applyQuote(quote, button) {
+    activeQuote?.setAttribute('aria-pressed', 'false');
+    activeQuote = button;
+    button.setAttribute('aria-pressed', 'true');
     el('months').value = quote.months;
     el('minimum').value = quote.guarantee;
     el('ko').value = quote.ko;
     el('strike').value = quote.strike;
+    scenarioDays = String(quote.days);
     configure();
-    if (history.length) render();
-    if (!el('capital').value) el('capital').focus();
+    render();
   }
 
-  function displayPricing(pricing, storage = 'Saved in this browser.') {
+  function displayPricing(pricing) {
     const summary = el('pricing-terms');
     const wrapper = el('pricing-table');
-    wrapper.replaceChildren();
-    summary.hidden = wrapper.hidden = clearPricing.hidden = !pricing;
-    if (!pricing) {
-      pricingStatus.textContent = emptyPricingStatus;
-      return;
-    }
     const {rows, requestDate, upfrontFeeBps, koPlusOne, offset} = pricing;
     const quoted = rows.filter(row => row.strike !== null).length;
-    pricingStatus.textContent = `${quoted} quoted strikes. ${storage} Select a strike to use historical GLD closes.`;
+    pricingStatus.textContent = quoted
+      ? 'Choose a quoted strike to fill the terms below. You can edit the terms after selecting a quote.'
+      : 'This pricing request has no quoted strikes. Enter your own terms below.';
     summary.textContent = `Pricing request ${dateLabel(requestDate)} · Normal · Monthly settlement · Upfront fee ${upfrontFeeBps} bp · KO+1 ${koPlusOne ? 'yes' : 'no'} · Offset ${Metals.format(offset, 1)}`;
 
     const guarantees = [...new Set(rows.map(row => row.guarantee))].sort((a, b) => a - b);
@@ -81,6 +81,7 @@
       heading.append(th);
     }
     const body = table.createTBody();
+    const buttons = new Map();
     for (const group of groups.values()) {
       const {months, ko, days} = group.values().next().value;
       const row = body.insertRow();
@@ -104,50 +105,17 @@
         button.type = 'button';
         button.textContent = `${Metals.format(quote.strike)}%`;
         button.setAttribute('aria-label', `${button.textContent} strike, ${months} month tenor, ${ko}% knock-out, ${guarantee} month guarantee`);
-        button.addEventListener('click', () => applyQuote(quote));
+        button.setAttribute('aria-pressed', 'false');
+        button.addEventListener('click', () => applyQuote(quote, button));
+        buttons.set(quote, button);
         cell.append(button);
       }
     }
-    wrapper.append(table);
+    wrapper.replaceChildren(table);
+    summary.hidden = wrapper.hidden = false;
+    const first = rows.find(row => row.strike !== null);
+    if (first) applyQuote(first, buttons.get(first));
   }
-
-  try {
-    if (hostedPricing) {
-      displayPricing(readPricing(hostedPricing.textContent), 'Saved in SI Private.');
-    } else {
-      const saved = localStorage.getItem(pricingKey);
-      if (saved) displayPricing(readPricing(saved));
-    }
-  } catch {
-    pricingStatus.textContent = hostedPricing ? 'Saved GLD pricing is unavailable. Reload to try again.' :
-      'Browser pricing is unavailable. Select a GLD pricing file to load it.';
-  }
-  pricingFile.addEventListener('change', async () => {
-    const [file] = pricingFile.files;
-    if (!file) return;
-    pricingFile.disabled = clearPricing.disabled = true;
-    try {
-      if (file.size > 256 * 1024) throw Error('Pricing file is too large.');
-      const pricing = readPricing(await file.text());
-      let persisted = true;
-      try { localStorage.setItem(pricingKey, JSON.stringify(pricing)); }
-      catch { persisted = false; }
-      displayPricing(pricing, persisted ? 'Saved in this browser.' : 'Loaded for this page only.');
-    } catch {
-      pricingStatus.textContent = 'This file could not be loaded. Select a valid GLD accumulator pricing JSON file.';
-    } finally {
-      pricingFile.value = '';
-      pricingFile.disabled = clearPricing.disabled = false;
-    }
-  });
-  clearPricing.addEventListener('click', () => {
-    displayPricing(null);
-    try { localStorage.removeItem(pricingKey); }
-    catch {
-      pricingStatus.textContent = 'Pricing cleared from this page. Browser storage could not be checked.';
-    }
-    pricingFile.focus();
-  });
 
   function anniversary(day, months) {
     const d = new Date(day+'T00:00:00Z');
@@ -157,74 +125,113 @@
   }
   function monthlyInputs() {
     const count = Number(el('months').value);
-    const previous = [...el('month-prices').querySelectorAll('input')].map(input => input.value);
-    el('month-prices').replaceChildren();
-    for (let m = 0; m < count; m++) {
+    monthPrices.replaceChildren();
+    if (el('mode').value === 'history') return;
+    for (let m = 1; m <= count; m++) {
       const label = document.createElement('label');
-      label.textContent = 'Month '+(m+1);
+      label.textContent = 'Month '+m;
       const input = document.createElement('input');
-      Object.assign(input,{type:'number', min:'0', max:'1000000', step:'any', required:true,
-        disabled:el('mode').value !== 'scenario', value:previous[m] ?? el('spot').value});
+      Object.assign(input,{type:'number', min:'0', max:'1000000', step:'any', required:true});
+      input.dataset.month = m;
       label.append(input);
-      el('month-prices').append(label);
+      monthPrices.append(label);
     }
-    el('minimum').max = String(count);
   }
+
+  function updateReference(trade) {
+    const mode = el('mode').value;
+    const reference = mode === 'history' ? trade : history.at(-1);
+    const spot = el('spot');
+    const shown = String(spotOverrides.get(mode) ?? reference?.close ?? '');
+    if (spot.value !== shown) spot.value = shown;
+    el('price-reference').textContent = reference
+      ? `GLD close on ${reference.date} · ${money(reference.close)} per share. You can edit the starting price.`
+      : 'Enter a starting GLD price.';
+    for (const input of monthPrices.querySelectorAll('input')) {
+      const close = monthOverrides.get(input.dataset.month) ?? spot.value;
+      if (input.value !== close) input.value = close;
+    }
+  }
+
   function configure() {
     const scenario = el('mode').value === 'scenario';
-    el('start-label').hidden = scenario;
-    el('start').disabled = scenario;
-    el('spot-label').hidden = !scenario;
-    el('spot').disabled = !scenario;
-    el('spot').required = scenario;
+    const months = Number(el('months').value);
+    const start = el('start');
+    const days = el('days');
+    el('start-label').hidden = start.disabled = scenario;
+    days.readOnly = !scenario;
+    days.min = el('minimum').max = String(months);
+    if (scenario) days.value = scenarioDays ?? AccumulatorModel.observationSchedule({months, minimum: 0}).days;
     el('path').hidden = !scenario;
     monthlyInputs();
-    if (!history.length) return;
-    const latest = history.at(-1).date;
-    const lastStart = history.findLast(r => anniversary(r.date, Number(el('months').value)) <= latest);
-    el('start').min = history[0].date;
-    el('start').max = lastStart.date;
-    if (!el('start').value || el('start').value > lastStart.date) el('start').value = lastStart.date;
+    const lastStart = history.findLast(r => anniversary(r.date, months) <= history.at(-1).date);
+    start.min = history[0]?.date ?? '';
+    start.max = lastStart?.date ?? '';
+    if (!tradeDateEdited) start.value = lastStart?.date ?? '';
   }
+
+  function replayFor(months) {
+    const first = history.findIndex(r => r.date >= el('start').value);
+    const trade = el('start').value && history[first];
+    if (!trade) return {};
+    const lastDay = anniversary(trade.date, months);
+    if (lastDay > history.at(-1).date) return {trade};
+    return {trade, observations: history.slice(first+1).filter(r => r.date <= lastDay)};
+  }
+
+  function renderHistory() {
+    Metals.showHistory(el('price-history'), history, 'close', 'Historical GLD daily closes in USD',
+      'USD / share', '#305b86');
+  }
+
   function render() {
     const historical = el('mode').value === 'history';
-    el('period').textContent = historical ? 'Replay begins on the first trading close on or after the trade date. Monthly observations end on the last trading close on or before each monthly anniversary.' :
-      'The scenario uses the NVDA simulator’s estimated trading-day schedule and linearly interpolates daily closes between your monthly inputs.';
-    if (!form.checkValidity()) {
-      result.textContent = 'Enter valid capital, strike, knock-out and guaranteed months to see the outcome.';
-      return;
-    }
+    const months = Number(el('months').value);
+    const {trade, observations} = historical ? replayFor(months) : {};
+    const sharesInput = el('daily-shares');
+    const sizing = el('share-sizing');
+    const period = el('period');
+    period.textContent = historical ? 'Replay begins at the first trading close on or after the trade date.' :
+      'Scenario closes are interpolated between monthly prices. You can change the number of trading observations.';
+    if (historical) el('days').value = observations?.length ?? '';
+    updateReference(trade);
+    sharesInput.placeholder = 'Auto';
+    sizing.textContent = 'Leave shares blank to size automatically.';
     try {
-      const months = Number(el('months').value);
-      const quote = {months, minimum:el('minimum').valueAsNumber,strike:el('strike').valueAsNumber,ko:el('ko').valueAsNumber};
-      let spot, daily, observations;
+      if (historical && !observations?.length) {
+        throw Error(history.length ? 'Choose a trade date with enough GLD history for the full tenor.' :
+          'GLD history is unavailable. Choose Monthly scenario to enter your own prices.');
+      }
+      if (!form.checkValidity()) throw Error('Enter valid accumulator terms and prices to see the outcome.');
+      const target = el('capital').valueAsNumber;
+      const spot = el('spot').valueAsNumber;
+      const quote = {months, minimum:el('minimum').valueAsNumber, strike:el('strike').valueAsNumber,
+        ko:el('ko').valueAsNumber, days:el('days').valueAsNumber, sizing:'daily',
+        dailyShares:sharesInput.value ? sharesInput.valueAsNumber : undefined};
+      let daily;
       if (historical) {
-        const first = history.findIndex(r => r.date >= el('start').value);
-        if (first < 0) throw Error('Choose a trade date in the downloaded history.');
-        const trade = history[first];
-        spot = trade.close;
-        const lastDay = anniversary(trade.date, months);
-        if (lastDay > history.at(-1).date) throw Error('Choose an earlier trade date for a complete tenor.');
-        observations = history.slice(first+1).filter(r => r.date <= lastDay);
         quote.knownMonthEnds = Array.from({length:months}, (_,i) =>
           observations.findLastIndex(r => r.date <= anniversary(trade.date,i+1))+1);
-        quote.days = observations.length;
         daily = observations.map(r => r.close);
-        el('period').textContent += ' Replay: '+trade.date+' ('+money(spot)+') to '+observations.at(-1).date+' · '+daily.length+' trading sessions.';
+        period.textContent += ` ${trade.date} to ${observations.at(-1).date} · ${daily.length} trading sessions.`;
       } else {
-        spot = el('spot').valueAsNumber;
-        daily = AccumulatorModel.monthlyPath(quote,spot,[...el('month-prices').querySelectorAll('input')].map(i=>i.valueAsNumber));
+        daily = AccumulatorModel.monthlyPath(quote,spot,[...monthPrices.querySelectorAll('input')].map(i=>i.valueAsNumber));
       }
-      const sim = AccumulatorModel.simulateDaily(quote,spot,el('capital').valueAsNumber,daily);
+      const sim = AccumulatorModel.simulateDaily(quote,spot,target,daily);
+      sharesInput.placeholder = String(sim.dailyShares);
+      const difference = sim.payment - target;
+      const comparison = difference === 0 ? 'matches target capital' :
+        `${money(Math.abs(difference))} ${difference > 0 ? 'above' : 'below'} target`;
+      sizing.textContent = `${sharesInput.value ? 'Manual' : 'Auto'} sizing · ${sim.dailyShares.toLocaleString('en-US')} shares per trading day · ${sim.days} observations at ${money(sim.strike)} strike · ${money(sim.payment)} initial payment (${comparison}).`;
       const hold = AccumulatorBenchmark.buyAndHold(sim.payment,spot,daily.at(-1));
       const ko = sim.koDay ? (historical ? observations[sim.koDay-1].date : 'Day '+sim.koDay) : 'No knock-out';
       const path = [spot,...daily].map((p,i)=>[i,p]);
       const plot = Metals.chart(path,'GLD share price with strike and knock-out levels',{
-        ticks:[[0,'Trade'],[daily.length,'Day '+daily.length]],
+        ticks:historical ? [[0,trade.date],[daily.length,observations.at(-1).date]] : [[0,'Trade'],[daily.length,'Day '+daily.length]],
         guides:[{name:'Strike',value:sim.strike,color:'#24766b'},{name:'Knock-out',value:sim.ko,color:'#a95634'}]});
       const ledger = sim.rows.map(r => '<tr><td>'+r.month+(historical?' · '+observations[r.day-1].date:'')+'</td><td>'+Metals.format(r.price)+'</td><td>'+r.bought+'</td><td>'+r.shares+'</td><td>'+Metals.format(r.refund)+'</td><td>'+r.status+'</td></tr>').join('');
       result.innerHTML = Metals.metrics([
-        ['Initial payment',money(sim.payment)],['Shares per month',String(sim.base)],['Knock-out observation',ko],
+        ['Initial payment',money(sim.payment)],['Shares per trading day',String(sim.dailyShares)],['Knock-out observation',ko],
         ['GLD shares acquired',String(sim.end.shares)],['Cash refunded',money(sim.end.refunded)],
         ['Final value',money(sim.end.value)],['Accumulator profit / loss',money(sim.profit)],['Buy-and-hold profit / loss',money(hold.pnl)]
       ])+'<h3>GLD path · USD per share</h3>'+plot+'<p class="hint">Strike '+money(sim.strike)+' (teal dashed) · Knock-out '+money(sim.ko)+' (rust dashed)</p>'+
@@ -232,15 +239,30 @@
     } catch(error) { result.textContent = error.message; }
   }
   form.addEventListener('submit', e => e.preventDefault());
-  try {
-    history = await Metals.series('gld');
-    el('history-coverage').textContent = `GLD daily closes · ${dateLabel(history[0].date)} to ${dateLabel(history.at(-1).date)}.`;
-    el('spot').value = history.at(-1).close;
-    configure();
-    form.addEventListener('input', e => {
-      if (e.target === el('months') || e.target === el('mode')) configure();
-      render();
-    });
+  form.addEventListener('input', ({target: input}) => {
+    const {id, value} = input;
+    if (input.dataset.month) monthOverrides.set(input.dataset.month, value);
+    if (id === 'spot') spotOverrides.set(el('mode').value, value);
+    if (id === 'start') tradeDateEdited = Boolean(value);
+    if (id === 'days') scenarioDays = value;
+    if (id === 'months') scenarioDays = undefined;
+    if (['months','strike','ko','minimum','days'].includes(id)) {
+      activeQuote?.setAttribute('aria-pressed', 'false');
+      activeQuote = undefined;
+    }
+    if (id === 'mode' || id === 'months') configure();
     render();
-  } catch(error) { result.textContent = error.message; }
+  });
+  el('history-range').addEventListener('change', renderHistory);
+  configure();
+  if (hostedPricing) {
+    pricingStatus.hidden = false;
+    try { displayPricing(readPricing(hostedPricing.textContent)); }
+    catch { pricingStatus.textContent = 'Saved GLD pricing is unavailable. Enter your own terms below.'; }
+  }
+  try { history = await Metals.series('gld'); }
+  catch { /* Monthly scenario still works with manually entered prices. */ }
+  configure();
+  renderHistory();
+  render();
 })();

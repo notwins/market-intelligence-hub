@@ -1,15 +1,19 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>XAU fixed coupon note | Market Intel</title><link rel="stylesheet" href="metals.css"><script defer src="metals-common.js"></script><script defer src="xau-fcn.js"></script></head>
-<body><nav class="gold-nav" aria-label="Gold workspace"><a href="../v4.html#tools">Market Intel · Tools</a><a href="gold-charts.html">Gold charts</a><a href="xau-fcn.html" aria-current="page">XAU fixed coupon note</a><a href="gld-accumulator.html">GLD accumulator</a></nav>
-<main><h1>XAU fixed coupon note</h1><p class="intro">Model a cash-settled note on one troy ounce of gold as the price reference. Choose USD or SGD and enter your note terms.</p>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>XAU SI / CLCI | Market Intel</title><link rel="stylesheet" href="metals.css?v=20261126.goldterms1"><script defer src="metals-common.js?v=20261126.goldterms1"></script><script defer src="xau-fcn.js?v=20261126.goldterms1"></script></head>
+<body><nav class="gold-nav" aria-label="Gold workspace"><a href="../v4.html#tools">Market Intel · Tools</a><a href="gold-charts.html">Gold charts</a><a href="xau-fcn.html" aria-current="page">XAU SI / CLCI</a><a href="gld-accumulator.html">GLD accumulator</a></nav>
+<main><h1>XAU SI / CLCI</h1><p class="intro">Model a cash-settled gold-linked fixed coupon note in USD or SGD.</p>
 <section class="panel"><h2>Note terms</h2><form id="terms" class="controls">
 <label>Note and reference currency<select id="currency"><option>USD</option><option>SGD</option></select></label>
-<label>Principal<input id="principal" type="number" min="0.01" max="1000000000000" step="any" required placeholder="Enter principal"></label>
+<label>Principal<input id="principal" type="number" value="165000" min="0.01" max="1000000000000" step="any" required aria-describedby="principal-hint"></label>
 <label>Initial gold price / oz<input id="initial" type="number" min="0.01" max="1000000" step="any" required></label>
 <label>Strike (% of initial)<input id="strike" type="number" min=".01" max="100" step="any" required placeholder="Enter strike"></label>
 <label>Fixed coupon (% p.a.)<input id="coupon" type="number" min="0" max="100" step="any" required placeholder="Enter annual rate"></label>
 <label>Tenor (months)<input id="months" type="number" min="1" max="120" step="1" required placeholder="Enter tenor"></label>
 <label>Final gold price / oz<input id="final" type="number" min="0" max="1000000" step="any" required></label>
-</form><p class="hint" id="basis"></p></section>
+</form><p class="hint" id="principal-hint"></p><p class="hint" id="basis" role="status"></p></section>
+<figure class="panel" id="price-history" aria-labelledby="history-title">
+<div class="history-heading"><h2 id="history-title">Gold spot price history</h2><label>Chart range<select id="history-range"><option value="1">1 year</option><option value="5">5 years</option><option value="">All history</option></select></label></div>
+<div class="history-plot">Loading gold history…</div><figcaption></figcaption>
+</figure>
 <section class="panel"><h2>Maturity payoff</h2><div id="result" aria-live="polite">Enter the note terms to calculate.</div></section>
 <p class="hint">Illustrative maturity-only structure with a fixed simple coupon and no early redemption. Below strike, principal redemption equals principal × final gold price ÷ strike price. At or above strike, principal is repaid in full. Coupon income assumes the issuer pays throughout the tenor. Fees and issuer default are excluded.</p></main></body></html>
