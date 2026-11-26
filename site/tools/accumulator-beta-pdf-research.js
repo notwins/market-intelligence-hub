@@ -61,10 +61,12 @@
     ]);
     const companies = {};
     const market = {};
+    const bundle = quarterly.status === 'fulfilled' ? quarterly.value : null;
+    const history = archive.status === 'fulfilled' ? archive.value?.data : null;
     for (const symbol of tickers) {
-      const entry = quarterly.status === 'fulfilled' && core.listing(quarterly.value, symbol + ' US');
-      const filings = entry?.observations.filter(row => /^10-[QK]/.test(row.kind))
-        .map(observation => core.view(entry, {observation})).filter(row => row?.ended) || [];
+      const entry = core.listing(bundle, symbol + ' US');
+      const filings = (entry?.observations || []).filter(row => /^10-[QK]/.test(row.kind))
+        .map(observation => core.view(entry, {observation})).filter(row => row?.ended);
       if (symbol === 'NVDA') {
         for (const snapshot of [...nvdaHistory,finSnapshot()]) {
           if (!filings.some(row => row.ended === snapshot.ended)) filings.push(snapshot);
@@ -76,11 +78,10 @@
       const prior = latest && filings.find(row => row.period.startsWith(fiscalQuarter) && row.ended.slice(0,4) === String(Number(latest.ended.slice(0,4)) - 1));
       const growth = latest?.values.revenueGrowth ?? (prior && latest ? margin(latest.values.revenue - prior.values.revenue, prior.values.revenue) : null);
       companies[symbol] = {filings, latest, growth};
-      const data = archive.status === 'fulfilled' && archive.value?.data;
-      const listing = data && data.securities.find(row => row.ticker === symbol + ' US' && row.currency === 'USD');
+      const listing = history?.securities.find(row => row.ticker === symbol + ' US' && row.currency === 'USD');
       if (!listing || adjustments.status !== 'fulfilled') continue;
       const api = window.StocksBeta2Charts;
-      const adjusted = api.chartHistory(data, listing, adjustments.value);
+      const adjusted = api.chartHistory(history, listing, adjustments.value);
       const points = metric => api.historyPoints(adjusted.data, adjusted.company, metric, 0, adjusted.data.months.length - 1)
         .filter(row => row.value > 0);
       market[symbol] = {prices:points('price'), pe:points('forward_pe'), pb:points('forward_pb')};
