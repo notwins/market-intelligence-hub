@@ -4,7 +4,6 @@
   const iso = value => new Date(value + 'T00:00:00Z');
   const date = value => Number.isFinite(iso(value).getTime()) ?
     new Intl.DateTimeFormat('en-GB', {day:'numeric', month:'short', year:'numeric', timeZone:'UTC'}).format(iso(value)) : 'Unavailable';
-  const month = value => new Intl.DateTimeFormat('en-GB', {month:'short', year:'2-digit', timeZone:'UTC'}).format(new Date(value));
   const monthWithYear = new Intl.DateTimeFormat('en-GB', {month:'short', year:'numeric', timeZone:'UTC'});
   const riskText = 'Purchases at strike can produce losses when NVDA falls. A knock-out ends further purchases, subject to the guarantee. Issuer default can cause a total loss.';
 
@@ -111,7 +110,7 @@
       return y + (rows.length + 1) * rowHeight;
     }
 
-    function chart(series, y, height, {axis = value => fmt.money(value), dateAxis = month, zero = false} = {}) {
+    function chart(series, y, height, {axis = value => fmt.money(value), dateAxis = monthWithYear.format, zero = false} = {}) {
       const valid = series.map(item => ({...item, values:item.values.map(([day, value]) => [Date.parse(day), value])
         .filter(([x, v]) => Number.isFinite(x) && Number.isFinite(v)).sort((a,b) => a[0]-b[0])})).filter(item=>item.values.length>=2);
       fill('panel', left, y, width, height, 2);
@@ -198,7 +197,7 @@
     w.paragraph('Gross illustrations on upfront cash, assuming disposal at the modelled exit price.', 160, {size:8.8});
     const points = history(market);
     w.heading('NVDA price history  /  3 years', 173);
-    w.chart([{tone:'accent',values:points}], 180, 60, {dateAxis:day => monthWithYear.format(day)});
+    w.chart([{tone:'accent',values:points}], 180, 60);
     const range = points.length > 1 ? date(points[0][0]) + ' to ' + date(points.at(-1)[0]) : 'History unavailable';
     w.paragraph(range + '  /  Split-adjusted USD closes  /  ' + (market.source || 'Hub history'), 244, {size:8});
     w.note('Capital at risk', riskText, 253, 22);
