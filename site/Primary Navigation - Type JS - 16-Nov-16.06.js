@@ -320,6 +320,7 @@
     "research/cpf-oa-temasek-2070-2026-11-04/": "balance",
     "research/cpf-life-after-55-2026-11-04/": "retire",
     "tools/cpf-life-ra.html": "calc",
+    "tools/mortgage.html": "calc",
     "v4.html#tools": "tools",
     "tag-map.html": "tags",
     "colour-templates-v3/": "palette",
@@ -420,6 +421,14 @@
     a.append(document.createTextNode(label));
     return a;
   }
+  const chapterArt = {
+    'mu-starting-point': 'book', 'mu-singapore-growth': 'index', 'mu-inflation-sgd': 'fx',
+    'mu-ai-financing': 'chip', 'mu-equity-concentration': 'shares', 'mu-bond-duration': 'maturity',
+    'mu-credit-spread': 'credit', 'mu-fx-return': 'quotes', 'mu-public-finances': 'balance',
+    'mu-mas-accounts': 'policy', 'mu-gic-temasek': 'buildings', 'mu-temasek-bonds': 'bonds',
+    'mu-alternatives-liquidity': 'vault', 'mu-private-credit': 'cashflow', 'mu-portfolio-actions': 'strategy',
+    'mu-audit': 'review', 'mu-glossary': 'library', 'mu-sources': 'source', 'mu-disclosures': 'papers'
+  };
   function decorateSideMenus() {
     const railLabels = {
       'rail-group-1': 'news', 'rail-group-2': 'editions', 'rail-group-3': 'book',
@@ -427,14 +436,6 @@
       'rail-group-securities': 'security', 'rail-group-fred': 'fred'
     };
     const blueprintViews = {overview: 'blueprint', pages: 'map', flows: 'flow', changes: 'history', software: 'tools'};
-    const chapterArt = {
-      'mu-starting-point': 'book', 'mu-singapore-growth': 'index', 'mu-inflation-sgd': 'fx',
-      'mu-ai-financing': 'chip', 'mu-equity-concentration': 'shares', 'mu-bond-duration': 'maturity',
-      'mu-credit-spread': 'credit', 'mu-fx-return': 'quotes', 'mu-public-finances': 'balance',
-      'mu-mas-accounts': 'policy', 'mu-gic-temasek': 'buildings', 'mu-temasek-bonds': 'bonds',
-      'mu-alternatives-liquidity': 'vault', 'mu-private-credit': 'cashflow', 'mu-portfolio-actions': 'strategy',
-      'mu-audit': 'review', 'mu-glossary': 'library', 'mu-sources': 'source', 'mu-disclosures': 'papers'
-    };
     function useSideArt(control, key) {
       const existing = control.querySelector(':scope > svg.history-nav-icon use');
       if (existing) {
@@ -695,7 +696,8 @@
     const route = controlRoute(control);
     const tone = toneFor(route);
     if (tone) control.dataset.navTone = tone;
-    addIcon(control, artFor(route, control.closest('.dashboard-links') ? 'report' : 'map'));
+    const label = control.matches('.tool-link') ? control.querySelector('strong') || control : control;
+    addIcon(label, artFor(route, control.closest('.dashboard-links') ? 'report' : 'map'));
   }
   const sectionTabs = document.querySelector('.top-subsections');
   if (sectionTabs) {
@@ -858,11 +860,14 @@
   window.addEventListener('resize', active);
   requestAnimationFrame(active);
 
-  const page = pagePath.replace(/^fred\/index\.html$/, 'fred/');
-  if (/^(?:stocks-beta[23]?|nvda-history|si-beta2|bos-monthly|bonds-beta|bond-cashflow|historical-fred|fred-[123]|fred-feed|v4)\.html$/.test(page) || page.startsWith('fred/')) {
-    const content = page === 'v4.html' ? document.getElementById('view') : document.body;
-    if (content) import(new URL('workspace-icons.js?v=1', base).href).then(({mountWorkspaceIcons}) => {
-      mountWorkspaceIcons({root: content, page, destinationArt, controlRoute, navigationIcon: destinationPicture});
+  const page = pagePath.replace(/^(fred|market-understanding|colour-templates-v3)\/index\.html$/, '$1/');
+  const standalone = /^(?:stocks-beta[23]?|nvda-history|si-beta2|bos-monthly|bonds-beta|bond-cashflow|historical-fred|fred-[123]|fred-feed|cross-market-history(?:-beta2)?|archive|research-editions|search|tag-map|colour-reference|external-sources|desk|v4)\.html$/;
+  if (standalone.test(page) || page.startsWith('fred/') || page.startsWith('tools/') ||
+      page === 'market-understanding/' || page === 'colour-templates-v3/') {
+    const content = page === 'v4.html' ? document.getElementById('view')
+      : page === 'desk.html' ? document.getElementById('full-history') : document.body;
+    if (content) import(new URL('workspace-icons.js?v=2', base).href).then(({mountWorkspaceIcons}) => {
+      mountWorkspaceIcons({root: content, page, destinationArt, chapterArt, controlRoute, navigationIcon: destinationPicture});
     });
   }
 })();

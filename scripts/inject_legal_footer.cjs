@@ -4,7 +4,7 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
-const navigationVersion = '?v=20261127.menu-art1';
+const navigationVersion = '?v=20261127.pageicons2';
 const settingsVersion = '?v=20261127.usage1';
 const accessFile = path.join(root, 'data/blueprint-access.json');
 const access = fs.existsSync(accessFile) ? JSON.parse(fs.readFileSync(accessFile, 'utf8')) : null;
