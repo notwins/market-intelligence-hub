@@ -36,7 +36,8 @@
     if (node.tagName === 'BUTTON' && !table && !node.classList.contains('cmp-picked')) return '';
     const text = Array.from(node.childNodes, child => textOf(child, table)).join('');
     const selected = table && node.tagName === 'BUTTON' && node.getAttribute('aria-pressed') === 'true';
-    return selected ? text + ' [selected]' : text + (node.matches('small, li') ? ' ' : '');
+    if (node.matches('small')) return ' ' + text + ' ';
+    return selected ? text + ' [selected]' : text + (node.matches('li') ? ' ' : '');
   }
 
   function currentStyle() {
@@ -150,9 +151,9 @@
 
   function collect(section, selected) {
     const content = [];
-    let insideDetails = false;
+    let includeText = false;
     const pushText = (text, kind = 'text', logo) => {
-      if (text && insideDetails) content.push({kind, text, logo});
+      if (text && includeText) content.push({kind, text, logo});
     };
     function visit(node) {
       if (node.nodeType === Node.TEXT_NODE) {
@@ -175,12 +176,12 @@
         if (tag === 'IMG' && node.currentSrc) content.push({kind: 'image', url: node.currentSrc, label: node.alt});
         return;
       }
-      if (tag === 'DETAILS') {
-        if (!node.open) return;
-        const previous = insideDetails;
-        insideDetails = true;
+      if (tag === 'DETAILS' || node.id === 'nvda-beta-analysis') {
+        if (tag === 'DETAILS' && !node.open) return;
+        const previous = includeText;
+        includeText = true;
         for (const child of node.children) visit(child);
-        insideDetails = previous;
+        includeText = previous;
         return;
       }
       if (node === section.heading) return;
@@ -201,7 +202,7 @@
         pushText(tidy(textOf(node)));
         return;
       }
-      if (node.matches('.legend, .nv-chart-key, .termstrip, .nvda-valuation-summary, #cmp-basket')) {
+      if (node.matches('.legend, .nv-chart-key, .termstrip, .nvda-valuation-summary, .nvda-analysis-legend, #cmp-basket')) {
         pushText(Array.from(node.children).map(child => tidy(textOf(child))).filter(Boolean).join('  /  '), 'value');
         return;
       }

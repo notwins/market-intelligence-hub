@@ -187,7 +187,7 @@
     return value > upper1 ? 'Between +1 and +2 SD' : 'Between −1 and −2 SD';
   }
 
-  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice, formatAxis, axisGutter = 0 } = {}) {
+  function drawPlot(canvas, series, dates, { from, to, cursor, axis }, { cone, bands, researchTarget, isPrice, formatAxis, axisGutter = 0, scenario } = {}) {
     const width = canvas.clientWidth, height = canvas.clientHeight;
     if (!width || !height) return null;
     const narrow = width < 500 && axis !== 'days';
@@ -202,6 +202,10 @@
     values.push(...levels.map(level => level.value));
     if (researchTarget) values.push(researchTarget.value);
     if (series.some(line => line.area)) values.push(0);
+    if (scenario) {
+      values.push(0, ...scenario.lines.flatMap(line => line.points.map(point => point.value)));
+      for (const line of scenario.lines) if (line.test) values.push(line.test.value);
+    }
     const low = Math.min(...values), high = Math.max(...values);
     const pad = low === high ? Math.max(Math.abs(low) / 10, .1) : 0;
     const step = niceStep(high - low + 2 * pad, 4);
@@ -223,7 +227,8 @@
     }
     const labelRoom = endpoints.length ? Math.max(...endpoints.map(item => ctx.measureText(item.label).width)) + 13 : 0;
     const right = width - 12 - labelRoom, top = 11, bottom = height - 28;
-    const historicalRight = cone ? (first === last ? left : right - (right - left) * .38) : right;
+    const historicalRight = cone || scenario ? (first === last ? left : right - (right - left) * .38) : right;
+    const scenarioX = month => historicalRight + month / scenario.months * (right - historicalRight);
     const x = instant => first === last ? (left + historicalRight) / 2 : left + (instant - first) / (last - first) * (historicalRight - left);
     const y = value => bottom - (value - min) / (max - min) * (bottom - top);
     const tick = (x1, y1, x2, y2, color) => {
@@ -234,6 +239,11 @@
       ctx.lineTo(x2, y2);
       ctx.stroke();
     };
+    if (scenario) {
+      ctx.fillStyle = '#f2f5fa';
+      ctx.fillRect(historicalRight, top, right - historicalRight, bottom - top);
+      tick(historicalRight, top, historicalRight, bottom, '#a5b5ca');
+    }
     ctx.fillStyle = '#4e6569';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
@@ -351,6 +361,42 @@
       }
       if (line.dash) ctx.setLineDash([]);
     }
+    if (scenario) {
+      for (const {color, points, test} of scenario.lines) {
+        ctx.strokeStyle = ctx.fillStyle = color;
+        ctx.lineWidth = 2.25;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        points.forEach(({month, value}, i) => {
+          if (i) ctx.lineTo(scenarioX(month), y(value));
+          else ctx.moveTo(scenarioX(month), y(value));
+        });
+        ctx.stroke();
+        ctx.setLineDash([]);
+        for (const point of [points[0], points.at(-1)]) {
+          if (!point) continue;
+          ctx.beginPath();
+          ctx.arc(scenarioX(point.month), y(point.value), 3, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+        if (test) {
+          ctx.beginPath();
+          ctx.arc(scenarioX(test.month), y(test.value), 4.5, 0, 2 * Math.PI);
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+      ctx.fillStyle = '#435b78';
+      ctx.textAlign = 'right';
+      if (right - historicalRight >= 68) ctx.fillText('Simulated', right - 8, top + 12);
+      ctx.fillText('M' + scenario.months, right, height - 10);
+      const midway = Math.floor(scenario.months / 2);
+      if (midway && right - historicalRight >= 94) {
+        ctx.textAlign = 'center';
+        ctx.fillText('M' + midway, scenarioX(midway), height - 10);
+      }
+    }
     if (researchTarget) {
       ctx.setLineDash([6, 3]);
       tick(left, y(researchTarget.value), right, y(researchTarget.value), researchTargetColor);
@@ -365,7 +411,7 @@
       ctx.fillText(label, right + 9, spaced);
       labelY = spaced;
     });
-    return { forIndex: index => x(time(dates[index][2])), forValue: y, top, bottom, coneStart: cone ? historicalRight : Infinity };
+    return { forIndex: index => x(time(dates[index][2])), forValue: y, top, bottom, coneStart: cone || scenario ? historicalRight : Infinity };
   }
 
   function mountHistory(data, { saved, previousChart, changeRange, save, adjustments }) {

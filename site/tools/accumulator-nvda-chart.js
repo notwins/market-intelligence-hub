@@ -51,10 +51,10 @@
       const listing = data.securities.find(item => item.ticker === ticker && item.currency === 'USD');
       if (!listing) throw Error('NVDA archive unavailable');
       archive = {data, listing};
-      showValuation();
+      if (valuation) showValuation();
       return archive;
     }).catch(() => {
-      valuation.innerHTML = '<p>Forward P/E and P/B are unavailable. ' + marketLink + '</p>';
+      if (valuation) valuation.innerHTML = '<p>Forward P/E and P/B are unavailable. ' + marketLink + '</p>';
       return null;
     });
 
@@ -162,7 +162,7 @@
       return {earnings, house, fairValue};
     }
 
-    return {enabled, overlays};
+    return {enabled, overlays, archive: archiveRequest};
   }
 
   function markers(events, x, top, bottom, line, label) {
