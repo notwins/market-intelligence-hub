@@ -139,7 +139,8 @@
           align: style.textAlign === 'center' ? 'center' : style.textAlign === 'right' ? 'right' : 'left',
           background: Array.from(style.backgroundColor.match(/\d+(?:\.\d+)?/g) || [], Number),
           tone: cell.matches('.negative, .cmp-worst') || cell.querySelector('.negative') ? 'negative' :
-            cell.matches('.positive, .refund-cell, .cmp-refund, .cmp-best') || cell.querySelector('.positive') ? 'positive' : 'ink'
+            cell.matches('.refund-cell, .cmp-refund') ? 'refund' :
+            cell.matches('.positive, .cmp-best') || cell.querySelector('.positive') ? 'positive' : 'ink'
         };
       })
     })).filter(row => row.cells.length);
@@ -251,7 +252,7 @@
       ink: '--ink', muted: '--muted', line: '--line', accent: '--teal', soft: '--soft',
       panel: '--beta-panel', hero: '--beta-hero', positive: '--beta-positive', negative: '--beta-negative',
       secondary: '--beta-secondary', secondaryLight: '--beta-secondary-light',
-      tertiary: '--beta-tertiary', tertiaryLight: '--beta-tertiary-light'
+      tertiary: '--beta-tertiary', tertiaryLight: '--beta-tertiary-light', refund: '--beta-refund'
     };
     return Object.fromEntries(Object.entries(tokens).map(([key, token]) => [key, style.getPropertyValue(token).trim()]));
   }
