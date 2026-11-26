@@ -22,9 +22,9 @@
   --beta-history: #536d7a;
   --beta-cone: #a9ccd8;
   --beta-focus: #1c6390;
-  --beta-positive: #0b4026;
+  --beta-positive: #285942;
   --beta-gain: #e7f2eb;
-  --beta-negative: #5f1029;
+  --beta-negative: #78374c;
   --beta-loss: #f9eeee;
   --beta-ko: #eee8f6;
 }
@@ -439,12 +439,12 @@
 }
 .accumulator-beta td[data-beta-heat^="gain"] { --heat-ink: var(--beta-positive); }
 .accumulator-beta td[data-beta-heat^="loss"] { --heat-ink: var(--beta-negative); }
-.accumulator-beta td[data-beta-heat="gain-1"] { --heat-fill: #e1f1e5; }
-.accumulator-beta td[data-beta-heat="gain-2"] { --heat-fill: #b6dec2; }
-.accumulator-beta td[data-beta-heat="gain-3"] { --heat-fill: #79bf95; }
-.accumulator-beta td[data-beta-heat="loss-1"] { --heat-fill: #f8e2e8; }
-.accumulator-beta td[data-beta-heat="loss-2"] { --heat-fill: #f0baca; }
-.accumulator-beta td[data-beta-heat="loss-3"] { --heat-fill: #e38ea7; }
+.accumulator-beta td[data-beta-heat="gain-1"] { --heat-fill: #f0f7f2; }
+.accumulator-beta td[data-beta-heat="gain-2"] { --heat-fill: #e6f1ea; }
+.accumulator-beta td[data-beta-heat="gain-3"] { --heat-fill: #daebe1; }
+.accumulator-beta td[data-beta-heat="loss-1"] { --heat-fill: #fbf3f5; }
+.accumulator-beta td[data-beta-heat="loss-2"] { --heat-fill: #f6e9ed; }
+.accumulator-beta td[data-beta-heat="loss-3"] { --heat-fill: #eedde4; }
 .accumulator-beta #sn-comparison td[data-beta-heat] small { color: inherit; }
 .accumulator-beta :is(.beta-column-heading, #sn-comparison .cmp-results th .beta-column-heading) {
   min-height: 32px;
