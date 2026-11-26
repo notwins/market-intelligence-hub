@@ -1,27 +1,96 @@
 <!DOCTYPE html><html lang="en-SG"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>NVDA accumulator pricing in 3D · JPM SN and OCBC SI</title>
 <style>
-:root{--paper:#f7f6f0;--white:#fffefa;--ink:#17384b;--forest:#205b4d;--muted:#42606a;--edge:#cfd9d2;--rose:#89583f;--ui:#e9eee7}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.47 "Segoe UI",Inter,Arial,sans-serif}button,input,select{font:inherit}main{max-width:1190px;margin:auto;padding:30px clamp(13px,3.2vw,40px) 26px}header{border-top:3px solid var(--forest);padding-top:15px}h1,h2,p{margin:0}h1{font:600 clamp(2.15rem,5.5vw,4.15rem)/1.06 Georgia,serif;letter-spacing:-.043em;margin:7px 0 9px}h2{font-size:clamp(1.06rem,2.4vw,1.3rem);line-height:1.2}header p{max-width:78ch;color:var(--muted);font-size:1.02rem}.kicker,.label{font-size:.78rem;color:var(--forest);font-weight:750;letter-spacing:.075em;text-transform:uppercase}.controls{display:flex;align-items:end;flex-wrap:wrap;gap:10px 25px;margin:22px 0 14px;padding:12px 0 16px;border-block:1px solid var(--edge)}label.control{display:grid;gap:5px;font-weight:650;font-size:.83rem}select,button{color:var(--ink);border:1px solid #adbeb4;border-radius:6px;background:var(--white);min-height:39px;font-size:.94rem}select{padding:6px 28px 6px 9px}button{padding:6px 12px;cursor:pointer}select:focus-visible,summary:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--rose);outline-offset:3px}.camera{display:flex;align-items:center;flex-wrap:wrap;gap:5px 13px;margin:0 0 0 auto}.camera label{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:7px}.camera input{width:82px;accent-color:var(--forest);margin:0}.camera button{min-height:32px;font-size:.8rem}.help{font-size:.92rem;color:var(--muted);margin:2px 0 13px}.plots{display:grid;grid-template-columns:1fr 1fr;gap:17px}.card{min-width:0;border:1px solid var(--edge);border-top:3px solid #244b65;border-radius:10px;background:var(--white);overflow:hidden;display:flex;flex-direction:column}.card.si{border-top-color:var(--forest)}.cardheader{padding:16px 17px 0;display:flex;justify-content:space-between;align-items:baseline;gap:7px;flex-wrap:wrap}.cardheader .count{font-size:.81rem;color:var(--muted)}.si h2{color:var(--forest)}.plot{width:100%;position:relative;aspect-ratio:460/350;display:flex;align-items:center;justify-content:center}.plot svg{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.plot svg:active{cursor:grabbing}.plot svg:focus-visible{outline:2px solid var(--rose);outline-offset:-2px}.plot svg g:focus-visible{outline:none}.plot svg g:focus-visible circle:last-child{stroke:#111;stroke-width:3}.plot svg g[data-quote]{cursor:pointer}.empty{margin:12%;color:var(--muted);text-align:center}.readout{display:flex;align-items:center;gap:13px;background:#eff2f0;padding:10px 17px}.si .readout{background:#eaf1e9}.value{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.035em}.si .value{color:var(--forest)}.value.missing{font-size:1.2rem}.readout .terms{display:block;color:var(--muted);font-size:.84rem}.key{display:block;font-size:.71rem;color:#455a60;font-weight:700;letter-spacing:.04em;text-transform:uppercase}details{border-top:1px solid var(--edge);padding:10px 17px}summary{cursor:pointer;font-weight:650;font-size:.87rem}table{border-collapse:collapse;width:100%;margin-top:8px;font-size:.84rem;font-variant-numeric:tabular-nums}th,td{text-align:right;padding:5px 0;border-top:1px solid var(--edge)}th:first-child,td:first-child{text-align:left}th{font-size:.75rem;color:var(--muted)}.comparison{margin-top:14px;background:#ebeee4;border-left:3px solid var(--forest);padding:11px 15px;font-weight:650}.notes{margin-top:13px;color:var(--muted);font-size:.88rem}.notes p+p{margin-top:4px}footer{margin-top:20px;padding-top:11px;border-top:1px solid var(--edge);color:var(--muted);font-size:.79rem}a{color:var(--forest)}[hidden]{display:none!important}
+:root{--paper:#f7f6f0;--white:#fffefa;--ink:#17384b;--forest:#205b4d;--muted:#42606a;--edge:#cfd9d2;--rose:#89583f;--ui:#e9eee7}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.47 "Segoe UI",Inter,Arial,sans-serif}button,input,select{font:inherit}main{max-width:1190px;margin:auto;padding:30px clamp(13px,3.2vw,40px) 26px}header{border-top:3px solid var(--forest);padding-top:15px}h1,h2,p{margin:0}h1{font:600 clamp(2.15rem,5.5vw,4.15rem)/1.06 Georgia,serif;letter-spacing:-.043em;margin:7px 0 9px}h2{font-size:clamp(1.06rem,2.4vw,1.3rem);line-height:1.2}header p{max-width:78ch;color:var(--muted);font-size:1.02rem}.kicker,.label{font-size:.78rem;color:var(--forest);font-weight:750;letter-spacing:.075em;text-transform:uppercase}.controls{display:flex;align-items:end;flex-wrap:wrap;gap:10px 25px;margin:22px 0 14px;padding:12px 0 16px;border-block:1px solid var(--edge)}label.control{display:grid;gap:5px;font-weight:650;font-size:.83rem}select,button{color:var(--ink);border:1px solid #adbeb4;border-radius:6px;background:var(--white);min-height:39px;font-size:.94rem}select{padding:6px 28px 6px 9px}button{padding:6px 12px;cursor:pointer}select:focus-visible,summary:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--rose);outline-offset:3px}.camera{display:flex;align-items:center;flex-wrap:wrap;gap:5px 13px;margin:0 0 0 auto}.camera label{font-size:.82rem;color:var(--muted);display:flex;align-items:center;gap:7px}.camera input{width:82px;accent-color:var(--forest);margin:0}.camera button{min-height:32px;font-size:.8rem}.help{font-size:.92rem;color:var(--muted);margin:2px 0 13px}.plots{display:grid;grid-template-columns:1fr 1fr;gap:17px}.card{min-width:0;border:1px solid var(--edge);border-top:3px solid #244b65;border-radius:10px;background:var(--white);overflow:hidden;display:flex;flex-direction:column}.card.si{border-top-color:var(--forest)}.cardheader{padding:16px 17px 0;display:flex;justify-content:space-between;align-items:baseline;gap:7px;flex-wrap:wrap}.cardheader .count{font-size:.81rem;color:var(--muted)}.si h2{color:var(--forest)}.plot{width:100%;position:relative;aspect-ratio:460/350;display:flex;align-items:center;justify-content:center}.plot svg{display:block;width:100%;height:100%;cursor:grab}.plot svg:active{cursor:grabbing}.plot svg:focus-visible{outline:2px solid var(--rose);outline-offset:-2px}.plot svg g:focus-visible{outline:none}.plot svg g:focus-visible circle:last-child{stroke:#111;stroke-width:3}.plot svg g[data-quote]{cursor:pointer}.empty{margin:12%;color:var(--muted);text-align:center}.readout{display:flex;align-items:center;gap:13px;background:#eff2f0;padding:10px 17px}.si .readout{background:#eaf1e9}.value{font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.035em}.si .value{color:var(--forest)}.value.missing{font-size:1.2rem}.readout .terms{display:block;color:var(--muted);font-size:.84rem}.key{display:block;font-size:.71rem;color:#455a60;font-weight:700;letter-spacing:.04em;text-transform:uppercase}details{border-top:1px solid var(--edge);padding:10px 17px}summary{cursor:pointer;font-weight:650;font-size:.87rem}table{border-collapse:collapse;width:100%;margin-top:8px;font-size:.84rem;font-variant-numeric:tabular-nums}th,td{text-align:right;padding:5px 0;border-top:1px solid var(--edge)}th:first-child,td:first-child{text-align:left}th{font-size:.75rem;color:var(--muted)}.comparison{margin-top:14px;background:#ebeee4;border-left:3px solid var(--forest);padding:11px 15px;font-weight:650}.notes{margin-top:13px;color:var(--muted);font-size:.88rem}.notes p+p{margin-top:4px}footer{margin-top:20px;padding-top:11px;border-top:1px solid var(--edge);color:var(--muted);font-size:.79rem}a{color:var(--forest)}[hidden]{display:none!important}
+.controls{align-items:start;column-gap:26px}
+.controls .camera{width:100%;justify-content:flex-start;margin-left:0}
+.tenor-control{min-width:0;margin:0;padding:0;border:0}
+.tenor-control legend{margin-bottom:5px;padding:0;font-weight:650;font-size:.83rem}
+.tenor-buttons{display:flex;flex-wrap:wrap;gap:6px}
+.tenor-buttons button{min-height:44px;padding:5px 9px;font-size:.83rem}
+.tenor-buttons button:disabled{opacity:.58;cursor:default}
+.tenor-buttons [data-tenor]{display:inline-flex;align-items:center;gap:6px;font-weight:650}
+.tenor-buttons [data-tenor][aria-pressed="true"]{background:#e9eee7;border-color:#819a8c}
+.tenor-buttons [data-tenor][aria-pressed="false"]{color:var(--muted);text-decoration:line-through}
+.tenor-swatch{width:.7rem;height:.7rem;border-radius:50%;background:var(--tenor-colour)}
+[aria-pressed="false"] .tenor-swatch{background:transparent;border:1.5px solid var(--tenor-colour)}
+.tenor-note{font-size:.78rem;color:var(--muted);margin-top:4px}
+.controls select{max-width:100%;min-height:44px}
+.camera button{min-height:44px}
+.camera .view-picker{display:inline-flex;align-items:center;justify-content:space-between;gap:8px;min-width:158px;padding:6px 8px 6px 12px}
+.view-picker svg{width:20px;height:20px;flex:none}
+.plot svg{touch-action:pan-y pinch-zoom;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.plot svg text{pointer-events:none}
+.rows table{margin-bottom:6px}
 @media(max-width:850px){.camera{margin-left:0}}
 @media(max-width:700px){.plots{grid-template-columns:1fr;gap:12px}.controls{gap:10px 12px}.camera{width:100%;justify-content:flex-start}.camera label{font-size:.78rem}.help{font-size:.88rem}.readout{gap:12px}.cardheader{padding:13px 13px 0}.cardheader .count{font-size:.75rem}main{padding-top:17px}.controls{margin:15px 0 10px}.value{font-size:1.65rem}}
 @media(max-width:390px){.camera input{width:64px}.camera{gap:4px 8px}select{font-size:.86rem;padding-right:15px}.controls{gap:9px}}
+@media(max-width:700px){
+  .controls .camera{display:grid;grid-template-columns:max-content max-content;gap:8px 10px;justify-items:start}
+  .tenor-buttons{gap:4px}
+  .tenor-buttons button{padding-inline:6px}
+  .tenor-swatch{width:.575rem;height:.575rem}
+}
 @media print{body{background:white}.camera,.help,details{display:none}.plots{grid-template-columns:1fr 1fr}main{padding:0}.controls{border-top:0}h1{font-size:32pt}.card{break-inside:avoid}}
 </style><meta name="description" content="Compare NVDA accumulator strikes on two interactive 3D charts for JPM structured notes and OCBC structured investments."><link rel="stylesheet" href="../Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261123.tools3d"><script defer src="../Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261123.tools3d"></script></head><body><main><header><div class="kicker">NVDA &nbsp;/&nbsp; Indicative desk quotes &nbsp;/&nbsp; 24 Nov 2026</div><h1>Accumulator pricing in 3D</h1><p>Each dot shows one quoted buying price, called the <b>strike</b>. A lower dot means a cheaper price per share. The two floor axes show the knock-out level and the length of the guaranteed buying period.</p></header>
-<p class="help" id="close-date">NVDA regular close · 2026-11-23 · USD 165.05</p><section class="controls" aria-label="Chart controls"><label class="control" for="tenor">Contract length<select id="tenor"><option value="3">3 months</option><option value="6">6 months</option><option value="9" selected>9 months</option><option value="12">12 months</option></select></label><label class="control" for="pair">Highlight these terms<select id="pair"></select></label>
-<div class="camera" aria-label="Camera controls"><label for="turn">Rotate <input id="turn" type="range" min="-180" max="180" value="31" step="1"></label><label for="tilt">Tilt <input id="tilt" type="range" min="8" max="60" value="23" step="1"></label><button type="button" id="reset">Reset view</button></div></section>
-<p class="help">Drag either model to rotate both. Tap a dot to compare the same terms across issuers. The rose-gold ring marks your selection.</p><noscript><p class="help">Enable JavaScript to view the charts and exact quote tables.</p></noscript>
-<div class="plots"><article class="card sn" data-issuer="sn"><div class="cardheader"><h2>JPM structured note (SN)</h2><span class="count">8 quotes · 9 months</span></div><div class="plot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 350" aria-label="JPM structured note (SN) three-dimensional plot" role="group" tabindex="0"></svg><p class="empty" hidden>No priced combination appears on the supplied sheet for this issuer and tenor.</p></div><div class="readout"><strong class="value">90.56%</strong><div><span class="key">Selected strike</span><span class="terms">120% knock-out · 1-month guarantee</span></div></div><details><summary>Exact quotes for this tenor</summary><div class="rows"></div></details></article><article class="card si" data-issuer="si"><div class="cardheader"><h2>OCBC structured investment (SI)</h2><span class="count">5 quotes · 9 months</span></div><div class="plot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 350" aria-label="OCBC structured investment (SI) three-dimensional plot" role="group" tabindex="0"></svg><p class="empty" hidden>No priced combination appears on the supplied sheet for this issuer and tenor.</p></div><div class="readout"><strong class="value">95.89%</strong><div><span class="key">Selected strike</span><span class="terms">120% knock-out · 1-month guarantee</span></div></div><details><summary>Exact quotes for this tenor</summary><div class="rows"></div></details></article></div>
+<p class="help" id="close-date">NVDA regular close · 2026-11-23 · USD 165.05</p>
+<section class="controls" aria-label="Chart controls">
+  <fieldset class="tenor-control" aria-describedby="tenor-note">
+    <legend>Contract lengths shown</legend>
+    <div class="tenor-buttons" id="tenor-buttons"></div>
+    <p class="tenor-note" id="tenor-note"></p>
+  </fieldset>
+  <label class="control" for="pair">Highlight these terms<select id="pair"></select></label>
+  <div class="camera" role="group" aria-label="Camera controls">
+    <button type="button" id="next-view" class="view-picker" aria-label="Next view">
+      <span id="current-view" aria-live="polite">3D view</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" id="reset">Reset view</button>
+    <label for="turn">Rotate <input id="turn" type="range" min="-180" max="180" value="31" step="1"></label>
+    <label for="tilt">Tilt <input id="tilt" type="range" min="0" max="60" value="23" step="1"></label>
+  </div>
+</section>
+<p class="help">Toggle a contract length to hide or show it. Drag or swipe sideways to rotate both charts. Tap a dot to compare issuers.</p>
+<noscript><p class="help">Enable JavaScript to view the charts and exact quote tables.</p></noscript>
+<div class="plots">
+  <article class="card sn" data-issuer="sn">
+    <div class="cardheader"><h2>JPM structured note (SN)</h2><span class="count"></span></div>
+    <div class="plot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 350" aria-label="JPM structured note pricing chart" role="group" tabindex="0"></svg><p class="empty" hidden></p></div>
+    <div class="readout"><strong class="value"></strong><div><span class="key">Selected strike</span><span class="terms"></span></div></div>
+    <details><summary>Exact quotes for visible tenors</summary><div class="rows"></div></details>
+  </article>
+  <article class="card si" data-issuer="si">
+    <div class="cardheader"><h2>OCBC structured investment (SI)</h2><span class="count"></span></div>
+    <div class="plot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 350" aria-label="OCBC structured investment pricing chart" role="group" tabindex="0"></svg><p class="empty" hidden></p></div>
+    <div class="readout"><strong class="value"></strong><div><span class="key">Selected strike</span><span class="terms"></span></div></div>
+    <details><summary>Exact quotes for visible tenors</summary><div class="rows"></div></details>
+  </article>
+</div>
 <div id="comparison" class="comparison" aria-live="polite">JPM SN quoted a buying price 5.33 percentage points lower on these terms.</div>
 <div class="notes"><p><b>Reading the axes.</b> Both strike and knock-out are percentages of the initial NVDA price. A 120% knock-out is 20% above that price. The guarantee is measured in months.</p>
-<p><b>Reading the lines.</b> Follow a solid line to change the guarantee at a fixed knock-out. Follow a dashed line to change the knock-out at a fixed guarantee. Only the dots carry a quoted price.</p>
+<p><b>Reading the lines.</b> Colour identifies the contract length. Solid lines vary the guarantee at a fixed knock-out. Dashed lines vary the knock-out at a fixed guarantee. Each dot is a quote, and a ring marks your selection.</p>
 <p><b>Reading the price.</b> A lower strike reduces what you pay per delivered share. Your overall gain or loss also depends on how many shares you receive and what they are worth when you sell.</p></div>
-<footer>Source: <a href="accumulator.html">Market Intel accumulator pricing tables</a>, 24 November 2026. The two models cover all 33 indicative Normal quotes. Ringed values are historical indications. Confirm tradeable terms with the desk. &nbsp;·&nbsp; <a href="../v4.html#tools">Back to Intel Tools</a></footer><section class="panel" id="pricing-archive"><h2>Pricing archive</h2><details><summary>23 November 2026 · Previous indicative strikes</summary><h3>JPM SN</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>87.97%</td><td>90.30%</td></tr><tr><td>9M</td><td>186</td><td>105%</td><td>92.41%</td><td>97.27%</td></tr><tr><td>6M</td><td>124</td><td>120%</td><td>92.31%</td><td>95.12%</td></tr><tr><td>6M</td><td>124</td><td>105%</td><td>95.96%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>120%</td><td>98.24%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>105%</td><td>—</td><td>—</td></tr></tbody></table></div><h3>OCBC SI</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th><th>3M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>93.11%</td><td>94.82%</td><td>96.70%</td></tr><tr><td>9M</td><td>186</td><td>115%</td><td>92.73%</td><td>95.01%</td><td>97.20%</td></tr><tr><td>9M</td><td>186</td><td>110%</td><td>94.04%</td><td>96.62%</td><td>98.83%</td></tr><tr><td>6M</td><td>124</td><td>115%</td><td>—</td><td>98.05%</td><td>—</td></tr><tr><td>6M</td><td>124</td><td>110%</td><td>96.36%</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>110%</td><td>—</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>105%</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div><p>— No numerical strike in the prior grid. The previous nine-month SI used 21, 41 and 61 guaranteed trading days for 1M, 2M and 3M respectively.</p></details><details><summary>Earlier sheet · 12-month JPM SN</summary><p>90.86% strike · 120% KO · 3-month guarantee · 251 trading days.</p></details></section></main>
+<footer>Source: <a href="accumulator.html">Market Intel accumulator pricing tables</a>, 24 November 2026. The two models cover all 33 indicative Normal quotes. Confirm tradeable terms with the desk. &nbsp;·&nbsp; <a href="../v4.html#tools">Back to Intel Tools</a></footer><section class="panel" id="pricing-archive"><h2>Pricing archive</h2><details><summary>23 November 2026 · Previous indicative strikes</summary><h3>JPM SN</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>87.97%</td><td>90.30%</td></tr><tr><td>9M</td><td>186</td><td>105%</td><td>92.41%</td><td>97.27%</td></tr><tr><td>6M</td><td>124</td><td>120%</td><td>92.31%</td><td>95.12%</td></tr><tr><td>6M</td><td>124</td><td>105%</td><td>95.96%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>120%</td><td>98.24%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>105%</td><td>—</td><td>—</td></tr></tbody></table></div><h3>OCBC SI</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th><th>3M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>93.11%</td><td>94.82%</td><td>96.70%</td></tr><tr><td>9M</td><td>186</td><td>115%</td><td>92.73%</td><td>95.01%</td><td>97.20%</td></tr><tr><td>9M</td><td>186</td><td>110%</td><td>94.04%</td><td>96.62%</td><td>98.83%</td></tr><tr><td>6M</td><td>124</td><td>115%</td><td>—</td><td>98.05%</td><td>—</td></tr><tr><td>6M</td><td>124</td><td>110%</td><td>96.36%</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>110%</td><td>—</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>105%</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div><p>— No numerical strike in the prior grid. The previous nine-month SI used 21, 41 and 61 guaranteed trading days for 1M, 2M and 3M respectively.</p></details><details><summary>Earlier sheet · 12-month JPM SN</summary><p>90.86% strike · 120% KO · 3-month guarantee · 251 trading days.</p></details></section></main>
 <script src="accumulator-quotes.js?v=20261124-12m"></script><script>
-const allQuotes = window.AccumulatorQuotes.flatMap(t => t.rows.flatMap(r => r.strikes.flatMap((v,i) =>
-  v === null ? [] : [{issuer:t.id,tenor:r.months,ko:r.ko,g:i+1,cents:Math.round(v*100)}])));
-const plotColours = {sn:'#244b65', si:'#22604f'};
+const allQuotes = window.AccumulatorQuotes.flatMap(issuer => issuer.rows.flatMap(row =>
+  row.strikes.flatMap((strike, index) => strike === null ? [] : [{
+    issuer: issuer.id,
+    tenor: row.months,
+    ko: row.ko,
+    g: (row.guarantees ?? issuer.guarantees)[index],
+    cents: Math.round(strike * 100)
+  }])));
+const tenorColours = new Map([[3, '#59636f'], [6, '#883d77'], [9, '#235e9b'], [12, '#217157']]);
+const visibleTenors = new Set(tenorColours.keys());
+const quoteKey = ({tenor, ko, g}) => [tenor, ko, g].join('-');
 let closePrice = 165.05;
-const initialCamera = {turn: 31, tilt: 23};
-const chartWidth = 460, chartHeight = 350;
+const views = [
+  {label: '3D view', turn: 31, tilt: 23},
+  {label: 'Strike vs knock-out', turn: 0, tilt: 0, axis: 'ko'},
+  {label: 'Strike vs guarantee', turn: 90, tilt: 0, axis: 'g'}
+];
+let presetIndex = 0;
+let camera = views[presetIndex];
 function projectPoint(ko, guarantee, strike, camera) {
   const a = camera.turn * Math.PI / 180, e = camera.tilt * Math.PI / 180;
   const x = (ko - 117.5) / 12.5 * 112;
@@ -31,8 +100,7 @@ function projectPoint(ko, guarantee, strike, camera) {
   return {x:228 + x*Math.cos(a) + y*Math.sin(a),
           y:167 + depth*Math.sin(e) - z*Math.cos(e), depth:depth*Math.cos(e)+z*Math.sin(e)};
 }
-function makePlot(issuer, quotes, camera, selection) {
-  const colour = plotColours[issuer];
+function makePlot(quotes, camera, selection) {
   const a = camera.turn*Math.PI/180;
   const nearX = Math.sin(a)>=0?130:105, farX = 235-nearX;
   const nearY = Math.cos(a)>=0?1:3, farY = 4-nearY;
@@ -42,129 +110,240 @@ function makePlot(issuer, quotes, camera, selection) {
   const line = (u,v,stroke,w=1,extra='')=>'<line x1="'+u.x+'" y1="'+u.y+'" x2="'+v.x+'" y2="'+v.y+'" stroke="'+stroke+'" stroke-width="'+w+'" '+extra+'/>';
   const face = (points,fill)=>'<polygon points="'+points.map(xy).join(' ')+'" fill="'+fill+'"/>';
   const txt = (p,t,anchor='middle',size=12,weight=500,fill='#4c6068')=>'<text x="'+p.x+'" y="'+p.y+'" text-anchor="'+anchor+'" font-family="Arial, sans-serif" font-size="'+size+'" font-weight="'+weight+'" fill="'+fill+'">'+t+'</text>';
-  const parts=[face([pt(105,1,85),pt(130,1,85),pt(130,3,85),pt(105,3,85)],'#edf0e9'),
-               face([pt(105,farY,85),pt(130,farY,85),pt(130,farY,100),pt(105,farY,100)],'#f2f3ee'),
-               face([pt(farX,1,85),pt(farX,3,85),pt(farX,3,100),pt(farX,1,100)],'#f5f5ef')];
   const grid='#cfd8cf', axis='#a8b7ab';
-  for (const x of [105,110,120,130]) {
-    parts.push(line(pt(x,1,85),pt(x,3,85),grid),line(pt(x,farY,85),pt(x,farY,100),grid,.8));
+  const strikeTicks = [85, 90, 95, 100];
+  const koTicks = [105, 110, 120, 130];
+  const guaranteeTicks = [1, 2, 3];
+  const parts = ['<g aria-hidden="true" pointer-events="none">'];
+  if (camera.axis) {
+    const byKnockOut = camera.axis === 'ko';
+    const ticks = byKnockOut ? koTicks : guaranteeTicks;
+    const axisPoint = (tick, strike) => byKnockOut ? pt(tick, 2, strike) : pt(117.5, tick, strike);
+    const left = ticks[0], right = ticks.at(-1);
+    parts.push(face([axisPoint(left,85),axisPoint(right,85),axisPoint(right,100),axisPoint(left,100)],'#f2f3ee'));
+    for (const z of strikeTicks) {
+      const p = axisPoint(left,z);
+      parts.push(line(p,axisPoint(right,z),grid),txt({x:p.x-8,y:p.y+3},z+'%','end',12));
+    }
+    for (const tick of ticks) {
+      const p = axisPoint(tick,85);
+      parts.push(line(p,axisPoint(tick,100),grid),txt({x:p.x,y:p.y+19},tick+(byKnockOut?'%':'m'),'middle',12));
+    }
+    const base = axisPoint(left,85), top = axisPoint(left,100);
+    parts.push(line(base,top,axis,1.5),line(base,axisPoint(right,85),axis,1.5));
+    parts.push(txt({x:top.x,y:top.y-14},'Strike','end',13,700));
+    parts.push(txt({x:228,y:base.y+41},byKnockOut?'Knock-out':'Guarantee','middle',13,700));
+  } else {
+    parts.push(face([pt(105,1,85),pt(130,1,85),pt(130,3,85),pt(105,3,85)],'#edf0e9'),
+               face([pt(105,farY,85),pt(130,farY,85),pt(130,farY,100),pt(105,farY,100)],'#f2f3ee'),
+               face([pt(farX,1,85),pt(farX,3,85),pt(farX,3,100),pt(farX,1,100)],'#f5f5ef'));
+    for (const x of koTicks) {
+      parts.push(line(pt(x,1,85),pt(x,3,85),grid),line(pt(x,farY,85),pt(x,farY,100),grid,.8));
+    }
+    for (const y of guaranteeTicks) {
+      parts.push(line(pt(105,y,85),pt(130,y,85),grid),line(pt(farX,y,85),pt(farX,y,100),grid,.8));
+    }
+    for (const z of strikeTicks) {
+      parts.push(line(pt(farX,1,z),pt(farX,3,z),grid,.8),line(pt(105,farY,z),pt(130,farY,z),grid,.8));
+    }
+    parts.push(line(pt(leftX,leftY,85),pt(leftX,leftY,100),axis,1.5),line(pt(105,nearY,85),pt(130,nearY,85),axis,1.2),line(pt(nearX,1,85),pt(nearX,3,85),axis,1.2));
+    for(const z of strikeTicks){
+      const p=pt(leftX,leftY,z);parts.push(txt({x:p.x-8,y:p.y+3},z+'%','end',11));
+    }
+    const ztop=pt(leftX,leftY,100);
+    parts.push(txt({x:ztop.x-5,y:ztop.y-10},'Strike','end',12,700));
+    for(const x of koTicks) {
+      const p=pt(x,nearY,85);parts.push(txt({x:p.x,y:p.y+15},x+'%','middle',11));
+    }
+    const xmid=pt(117.5,nearY,85);
+    parts.push(txt({x:xmid.x,y:xmid.y+37},'Knock-out','middle',13,700));
+    const frontMid=pt(nearX,2,85);
+    const way=frontMid.x>228?1:-1;
+    for(const y of guaranteeTicks) {
+      const p=pt(nearX,y,85);parts.push(txt({x:p.x+way*15,y:p.y-1},y+'m',way>0?'start':'end',11));
+    }
+    parts.push(txt({x:frontMid.x+way*26,y:frontMid.y+23},'Guarantee',way>0?'start':'end',12,700));
   }
-  for (const y of [1,2,3]) {
-    parts.push(line(pt(105,y,85),pt(130,y,85),grid),line(pt(farX,y,85),pt(farX,y,100),grid,.8));
-  }
-  for (const z of [85,90,95,100]) {
-    parts.push(line(pt(farX,1,z),pt(farX,3,z),grid,.8),line(pt(105,farY,z),pt(130,farY,z),grid,.8));
-  }
-  parts.push(line(pt(leftX,leftY,85),pt(leftX,leftY,100),axis,1.5),line(pt(105,nearY,85),pt(130,nearY,85),axis,1.2),line(pt(nearX,1,85),pt(nearX,3,85),axis,1.2));
-  for(const z of [85,90,95,100]){
-    const p=pt(leftX,leftY,z);parts.push(txt({x:p.x-8,y:p.y+3},z+'%','end',11));
-  }
-  const ztop=pt(leftX,leftY,100);
-  parts.push(txt({x:ztop.x-5,y:ztop.y-10},'Strike','end',12,700));
-  for(const x of [105,110,120,130]) {
-    const p=pt(x,nearY,85);parts.push(txt({x:p.x,y:p.y+15},x+'%','middle',11));
-  }
-  const xmid=pt(117.5,nearY,85);
-  parts.push(txt({x:xmid.x,y:xmid.y+37},'Knock-out','middle',13,700));
-  const frontMid=pt(nearX,2,85);
-  const way=frontMid.x>228?1:-1;
-  for(const y of [1,2,3]) {
-    const p=pt(nearX,y,85);parts.push(txt({x:p.x+way*15,y:p.y-1},y+'m',way>0?'start':'end',11));
-  }
-  parts.push(txt({x:frontMid.x+way*26,y:frontMid.y+23},'Guarantee',way>0?'start':'end',12,700));
+  parts.push('</g>');
   const edges=[];
   function addEdges(fixed, varying, dash) {
     const groups=new Map();
-    for(const q of quotes){if(!groups.has(q[fixed]))groups.set(q[fixed],[]);groups.get(q[fixed]).push(q);}
+    for (const quote of quotes) {
+      const key = quote.tenor + '-' + quote[fixed];
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(quote);
+    }
     for(const entries of groups.values()){
       entries.sort((u,v)=>u[varying]-v[varying]);
       for(let i=1;i<entries.length;i++){
         const q=entries[i-1],r=entries[i];
         const u=pt(q.ko,q.g,q.cents/100),v=pt(r.ko,r.g,r.cents/100);
-        edges.push({d:(u.depth+v.depth)/2,html:line(u,v,colour,2.15,dash?'stroke-dasharray="5 4"':'')});
+        const style = 'data-tenor-line="'+q.tenor+'" pointer-events="none"'+(dash?' stroke-dasharray="5 4"':'');
+        edges.push({d:(u.depth+v.depth)/2,html:line(u,v,tenorColours.get(q.tenor),2.15,style)});
       }
     }
   }
   addEdges('g','ko',true);addEdges('ko','g',false);
-  const marks=quotes.map(q=>({q,p:pt(q.ko,q.g,q.cents/100)})).sort((a,b)=>a.p.depth-b.p.depth);
-  for(const {q,p} of marks){
-    const sel=q.ko===selection.ko&&q.g===selection.g;
-    if(sel)parts.push(line(pt(q.ko,q.g,85),p,'#94634c',1.5,'stroke-dasharray="3 3"'));
+  const marks = quotes.map(q => ({q, p:pt(q.ko,q.g,q.cents/100), selected:quoteKey(q) === selection}))
+    .sort((a,b) => Number(a.selected)-Number(b.selected) || a.p.depth-b.p.depth);
+  const selected = marks.find(mark => mark.selected);
+  if (selected) {
+    const {q,p} = selected;
+    parts.push(line(pt(q.ko,q.g,85),p,'#94634c',1.5,'stroke-dasharray="3 3" pointer-events="none"'));
   }
   parts.push(...edges.sort((a,b)=>a.d-b.d).map(e=>e.html));
-  for(const {q,p} of marks){
-    const sel=q.ko===selection.ko&&q.g===selection.g;
-    const title=q.ko+'% knock-out, '+q.g+'-month guarantee, '+(q.cents/100).toFixed(2)+'% strike';
-    parts.push('<g data-quote="'+q.ko+'-'+q.g+'" role="button" aria-label="'+title+'" tabindex="0"><title>'+title+'</title><circle cx="'+p.x+'" cy="'+p.y+'" r="11" fill="#ffffff" fill-opacity="0" pointer-events="all"/>');
-    if(sel)parts.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="8.2" fill="white" stroke="#a26647" stroke-width="2.2"/>');
-    parts.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="4.9" fill="'+colour+'" stroke="#fffefa" stroke-width="1.6"/></g>');
+  for (const {q,p,selected} of marks) {
+    const title = q.tenor+'-month contract, '+q.ko+'% knock-out, '+q.g+'-month guarantee, '+(q.cents/100).toFixed(2)+'% strike';
+    parts.push('<g data-quote="'+quoteKey(q)+'" role="button" aria-label="'+title+'" aria-pressed="'+selected+'" tabindex="0"><title>'+title+'</title><circle cx="'+p.x+'" cy="'+p.y+'" r="11" fill="transparent" pointer-events="all"/>');
+    if (selected) parts.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="8.2" fill="none" stroke="#a26647" stroke-width="2.2"/>');
+    parts.push('<circle cx="'+p.x+'" cy="'+p.y+'" r="4.9" fill="'+tenorColours.get(q.tenor)+'" stroke="#fffefa" stroke-width="1.6"/></g>');
   }
   return parts.join('');
 }
-function tenorQuotes(all,issuer,tenor){return all.filter(q=>q.issuer===issuer&&q.tenor===tenor);}
-function allPairs(rows,tenor){
-  const pairs=new Map();for(const q of rows.filter(q=>q.tenor===tenor))pairs.set(q.ko+'-'+q.g,{ko:q.ko,g:q.g});
-  return [...pairs.values()].sort((a,b)=>a.ko-b.ko||a.g-b.g);
-}
-function quoteTable(rows){
-  if(!rows.length)return '<p class="muted">The supplied sheet contains no priced combination at this tenor.</p>';
-  return '<table><thead><tr><th scope="col">Knock-out</th><th scope="col">Guarantee</th><th scope="col">Strike</th></tr></thead><tbody>'+
-    [...rows].sort((a,b)=>a.ko-b.ko||a.g-b.g).map(q=>'<tr><td>'+q.ko+'%</td><td>'+q.g+' month'+(q.g===1?'':'s')+'</td><td>'+(q.cents/100).toFixed(2)+'%</td></tr>').join('')+'</tbody></table>';
+const compareQuotes = (a,b) => a.tenor-b.tenor || a.ko-b.ko || a.g-b.g;
+function quoteTable(rows) {
+  return '<table><thead><tr><th scope="col">Tenor</th><th scope="col">Knock-out</th><th scope="col">Guarantee</th><th scope="col">Strike</th></tr></thead><tbody>'+
+    rows.map(q => '<tr><td>'+q.tenor+'M</td><td>'+q.ko+'%</td><td>'+q.g+' month'+(q.g===1?'':'s')+'</td><td>'+(q.cents/100).toFixed(2)+'%</td></tr>').join('')+'</tbody></table>';
 }
 
-const plots=[...document.querySelectorAll('.card')];
-const tenorControl=document.getElementById('tenor'), pairControl=document.getElementById('pair');
-const camera={...initialCamera};let tenor=9,selection={ko:120,g:1};
-const turn=document.getElementById('turn'),tilt=document.getElementById('tilt');
-function draw(){
-  for(const card of plots){
-    const issuer=card.dataset.issuer,qs=tenorQuotes(allQuotes,issuer,tenor);
-    const svg=card.querySelector('svg');
-    svg.innerHTML=qs.length?makePlot(issuer,qs,camera,selection):'';
+const plots = [...document.querySelectorAll('.plots .card')].map(card => ({
+  issuer: card.dataset.issuer,
+  svg: card.querySelector('svg'),
+  empty: card.querySelector('.empty'),
+  count: card.querySelector('.count'),
+  rows: card.querySelector('.rows'),
+  value: card.querySelector('.value'),
+  terms: card.querySelector('.terms'),
+  quotes: []
+}));
+const tenorButtons = document.getElementById('tenor-buttons');
+const pairControl = document.getElementById('pair');
+const currentView = document.getElementById('current-view');
+const turn = document.getElementById('turn'), tilt = document.getElementById('tilt');
+let selection = '9-120-1';
+
+for (const [tenor, colour] of tenorColours) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.dataset.tenor = tenor;
+  button.setAttribute('aria-label', tenor+' months');
+  button.style.setProperty('--tenor-colour', colour);
+  button.innerHTML = '<span class="tenor-swatch" aria-hidden="true"></span>'+tenor+'M';
+  button.addEventListener('click', () => {
+    if (visibleTenors.has(tenor)) visibleTenors.delete(tenor);
+    else visibleTenors.add(tenor);
+    updateVisibleQuotes();
+  });
+  tenorButtons.append(button);
+}
+const showAll = document.createElement('button');
+showAll.type = 'button';
+showAll.textContent = 'Show all';
+showAll.addEventListener('click', () => {
+  for (const tenor of tenorColours.keys()) visibleTenors.add(tenor);
+  updateVisibleQuotes();
+});
+tenorButtons.append(showAll);
+const unquotedTenors = [...tenorColours.keys()].filter(tenor => !allQuotes.some(q => q.tenor === tenor));
+if (unquotedTenors.length) {
+  document.getElementById('tenor-note').textContent = 'No quoted strikes for '+unquotedTenors.map(tenor => tenor+'M').join(', ')+'.';
+}
+
+function draw() {
+  for (const {svg, quotes} of plots) {
+    svg.innerHTML = quotes.length ? makePlot(quotes,camera,selection) : '';
   }
 }
-function setCamera(az,el){
-  camera.turn=((az+180)%360+360)%360-180;
-  camera.tilt=Math.max(8,Math.min(60,el));
-  turn.value=Math.round(camera.turn);tilt.value=Math.round(camera.tilt);draw();
+function setCamera(view) {
+  camera = view;
+  turn.value = Math.round(view.turn);
+  tilt.value = Math.round(view.tilt);
+  if (currentView.textContent !== view.label) currentView.textContent = view.label;
+  draw();
 }
-function updateDetails(){
-  const matches={};
-  for(const card of plots){
-    const id=card.dataset.issuer,qs=tenorQuotes(allQuotes,id,tenor);
-    const match=qs.find(q=>q.ko===selection.ko&&q.g===selection.g);matches[id]=match;
-    const value=card.querySelector('.value');
-    value.textContent=match?(match.cents/100).toFixed(2)+'%':'No quote';
-    value.classList.toggle('missing',!match);
-    card.querySelector('.terms').textContent=(match?'USD '+(closePrice*match.cents/10000).toFixed(2)+' per share · ':'')+(qs.length?selection.ko+'% knock-out · '+selection.g+'-month guarantee':'No priced terms');
-    card.querySelector('.count').textContent=qs.length+' quote'+(qs.length===1?'':'s')+' · '+tenor+' months';
-    card.querySelector('.empty').hidden=qs.length>0;
-    card.querySelector('svg').hidden=qs.length===0;
-    card.querySelector('.rows').innerHTML=quoteTable(qs);
+function setPreset(index) {
+  presetIndex = index;
+  setCamera(views[presetIndex]);
+}
+function rotate(turn, tilt) {
+  setCamera({
+    label: 'Custom 3D view',
+    turn: ((turn+180)%360+360)%360-180,
+    tilt: Math.max(0, Math.min(60, tilt))
+  });
+}
+function updateDetails() {
+  const [tenor, ko, guarantee] = selection.split('-');
+  const terms = selection ? tenor+'-month contract · '+ko+'% knock-out · '+guarantee+'-month guarantee' : 'No quoted terms visible';
+  const matches = {};
+  for (const plot of plots) {
+    const match = plot.quotes.find(q => quoteKey(q) === selection);
+    matches[plot.issuer] = match;
+    plot.value.textContent = match ? (match.cents/100).toFixed(2)+'%' : 'No quote';
+    plot.value.classList.toggle('missing', !match);
+    const usd = match ? 'USD '+(closePrice*match.cents/10000).toFixed(2)+' per share · ' : '';
+    plot.terms.textContent = usd + terms;
   }
-  const compare=document.getElementById('comparison');
-  if(matches.sn&&matches.si){
-    const d=matches.si.cents-matches.sn.cents;
-    compare.textContent=d?(d>0?'JPM SN':'OCBC SI')+' quoted a buying price '+(Math.abs(d)/100).toFixed(2)+' percentage points lower on these terms.':'Both issuers quoted the same strike on these terms.';
-  }else if(!matches.sn&&!matches.si){compare.textContent='Neither issuer supplied a strike at this tenor.';}else{
-    const name=matches.sn?'JPM SN':'OCBC SI';compare.textContent='Only '+name+' supplied a strike for this combination.';
+  const compare = document.getElementById('comparison');
+  if (matches.sn && matches.si) {
+    const difference = matches.si.cents - matches.sn.cents;
+    compare.textContent = difference
+      ? (difference > 0 ? 'JPM SN' : 'OCBC SI')+' quoted a buying price '+(Math.abs(difference)/100).toFixed(2)+' percentage points lower on these terms.'
+      : 'Both issuers quoted the same strike on these terms.';
+  } else if (matches.sn || matches.si) {
+    compare.textContent = 'Only '+(matches.sn ? 'JPM SN' : 'OCBC SI')+' supplied a strike for this combination.';
+  } else {
+    compare.textContent = visibleTenors.size ? 'Neither issuer has a quote for the visible contract lengths.' : 'Choose a contract length to show quotes.';
   }
 }
-function choose(ko,g){selection={ko,g};pairControl.value=ko+'-'+g;draw();updateDetails();}
-function changeTenor(){
-  tenor=Number(tenorControl.value);const options=allPairs(allQuotes,tenor);
-  pairControl.innerHTML=options.map(p=>'<option value="'+p.ko+'-'+p.g+'">'+p.ko+'% KO · '+p.g+'-month guarantee</option>').join('');
-  pairControl.disabled=!options.length;
-  if (!options.length){draw();updateDetails();return;}
-  const p=options.find(p=>p.ko===selection.ko&&p.g===selection.g)||options[0];choose(p.ko,p.g);
+function choose(key) {
+  selection = key;
+  pairControl.value = selection;
+  draw();
+  updateDetails();
 }
-tenorControl.addEventListener('change',changeTenor);
-pairControl.addEventListener('change',()=>choose(...pairControl.value.split('-').map(Number)));
-turn.addEventListener('input',()=>setCamera(Number(turn.value),camera.tilt));
-tilt.addEventListener('input',()=>setCamera(camera.turn,Number(tilt.value)));
-document.getElementById('reset').addEventListener('click',()=>setCamera(initialCamera.turn,initialCamera.tilt));
-for(const card of plots){
-  const svg=card.querySelector('svg');let drag=null;
+function updateVisibleQuotes() {
+  const visibleQuotes = allQuotes.filter(q => visibleTenors.has(q.tenor)).sort(compareQuotes);
+  const options = new Map(visibleQuotes.map(q => [quoteKey(q), q]));
+  for (const button of tenorButtons.querySelectorAll('[data-tenor]')) {
+    button.setAttribute('aria-pressed', visibleTenors.has(Number(button.dataset.tenor)));
+  }
+  showAll.disabled = visibleTenors.size === tenorColours.size;
+  pairControl.replaceChildren();
+  for (const tenor of [...visibleTenors].sort((a,b) => a-b)) {
+    const group = document.createElement('optgroup');
+    group.label = tenor+' months';
+    for (const [key, q] of options) {
+      if (q.tenor === tenor) group.append(new Option(tenor+'M · '+q.ko+'% KO · '+q.g+'M guarantee', key));
+    }
+    if (group.children.length) pairControl.append(group);
+  }
+  pairControl.disabled = !options.size;
+  if (!options.size) pairControl.append(new Option('No visible quotes', ''));
+
+  const emptyMessage = visibleTenors.size ? 'No quoted strikes for the visible contract lengths.' : 'All contract lengths are hidden.';
+  for (const plot of plots) {
+    plot.quotes = visibleQuotes.filter(q => q.issuer === plot.issuer);
+    const count = plot.quotes.length;
+    plot.count.textContent = count+' quote'+(count === 1 ? '' : 's');
+    plot.empty.textContent = emptyMessage;
+    plot.empty.hidden = count > 0;
+    plot.svg.toggleAttribute('hidden', !count);
+    plot.rows.innerHTML = count ? quoteTable(plot.quotes) : '<p>'+emptyMessage+'</p>';
+  }
+  const [, ko, guarantee] = selection.split('-').map(Number);
+  const sameTerms = [...options.values()].find(q => q.ko === ko && q.g === guarantee);
+  const fallback = sameTerms ?? options.values().next().value;
+  choose(options.has(selection) ? selection : fallback ? quoteKey(fallback) : '');
+}
+
+pairControl.addEventListener('change', () => choose(pairControl.value));
+turn.addEventListener('input', () => rotate(Number(turn.value),camera.tilt));
+tilt.addEventListener('input', () => rotate(camera.turn,Number(tilt.value)));
+document.getElementById('next-view').addEventListener('click', () => setPreset((presetIndex+1)%views.length));
+document.getElementById('reset').addEventListener('click', () => setPreset(0));
+for (const {svg} of plots) {
+  let drag = null;
   svg.addEventListener('pointerdown',e=>{
     if(e.button!==0||drag)return;
     drag={id:e.pointerId,x:e.clientX,y:e.clientY,az:camera.turn,el:camera.tilt,quote:e.target.closest('[data-quote]')?.dataset.quote,moved:false};
@@ -173,28 +352,30 @@ for(const card of plots){
   svg.addEventListener('pointermove',e=>{
     if(!drag||e.pointerId!==drag.id)return;
     const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
-    if(Math.hypot(dx,dy)>4)drag.moved=true;
-    if(drag.moved)setCamera(drag.az+dx*.55,drag.el-dy*.33);
+    if (Math.hypot(dx,dy) <= 4 && !drag.moved) return;
+    if (e.pointerType === 'touch' && !drag.moved && Math.abs(dx) <= Math.abs(dy)) return;
+    drag.moved = true;
+    rotate(drag.az+dx*.55,drag.el-dy*.33);
   });
   svg.addEventListener('pointerup',e=>{
     if(!drag||drag.id!==e.pointerId)return;
     const last=drag;drag=null;
     if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);
-    if(!last.moved&&last.quote)choose(...last.quote.split('-').map(Number));
+    if (!last.moved && last.quote && Math.hypot(e.clientX-last.x,e.clientY-last.y) <= 4) choose(last.quote);
   });
   svg.addEventListener('pointercancel',()=>{drag=null});
   svg.addEventListener('lostpointercapture',()=>{drag=null});
   svg.addEventListener('keydown',e=>{
     const mark=e.target.closest('[data-quote]');
     if(mark&&(e.key==='Enter'||e.key===' ')){
-      e.preventDefault();const quote=mark.dataset.quote;choose(...quote.split('-').map(Number));
+      e.preventDefault();const quote=mark.dataset.quote;choose(quote);
       svg.querySelector('[data-quote="'+quote+'"]')?.focus();return;
     }
     const step={ArrowLeft:[-7,0],ArrowRight:[7,0],ArrowUp:[0,4],ArrowDown:[0,-4]}[e.key];
-    if(step){e.preventDefault();setCamera(camera.turn+step[0],camera.tilt+step[1]);svg.focus();}
+    if(step){e.preventDefault();rotate(camera.turn+step[0],camera.tilt+step[1]);svg.focus();}
   });
 }
-changeTenor();
+updateVisibleQuotes();
 if (/^https?:$/.test(location.protocol)) {
   const feed = document.createElement('script');
   feed.src = '../share-prices.js';
