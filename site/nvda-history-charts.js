@@ -78,7 +78,7 @@
     for (let i = 0; i < labelCount; i++) {
       const index = labelCount === 1 ? 0 : Math.round(i * (count - 1) / (labelCount - 1));
       ctx.textAlign = i === 0 ? "left" : i === labelCount - 1 ? "right" : "center";
-      ctx.fillText(date(dates[index], true), x(index), bottom + 19);
+      ctx.fillText(model.axisLabels?.[index] ?? date(dates[index], true), x(index), bottom + 19);
     }
     for (const s of series) {
       ctx.strokeStyle = s.color;
@@ -86,6 +86,7 @@
       ctx.lineWidth = 2.25;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
+      ctx.setLineDash(s.dash || []);
       if (bars) {
         const bar = Math.min((right - left) / Math.max(count, 1) * .64, 25);
         const baseline = y(Math.max(floor, Math.min(0, ceil)));
@@ -145,7 +146,7 @@
   function updateSelection(plot, active) {
     plot.active = Math.min(plot.model.dates.length - 1, Math.max(0, active));
     const selected = plot.model.dates[plot.active];
-    const period = span(date(selected), "strong");
+    const period = span(plot.model.selectionLabels?.[plot.active] ?? date(selected), "strong");
     plot.summary.replaceChildren(period);
     for (const s of plot.model.series) {
       const row = span("");
@@ -158,6 +159,7 @@
     const extra = plot.model.extra?.[plot.active];
     if (extra) plot.summary.append(span(extra));
     redraw(plot);
+    plot.model.onSelect?.(plot.active);
   }
 
   function createPlot(container) {
@@ -177,7 +179,7 @@
       const { chartLeft, chartRight } = plot.position;
       const last = plot.model.dates.length - 1;
       const relative = event.clientX - canvas.getBoundingClientRect().left;
-      const index = Math.round((relative - chartLeft) / (chartRight - chartLeft) * last);
+      const index = Math.max(0, Math.min(last, Math.round((relative - chartLeft) / (chartRight - chartLeft) * last)));
       if (index !== plot.active) updateSelection(plot, index);
     };
     canvas.addEventListener("pointermove", event => { if (event.pointerType === "mouse") point(event); });
@@ -206,7 +208,7 @@
     if (!limits) return;
     plot.canvas.setAttribute("aria-label", model.title + ". Use the left and right arrow keys to review dates.");
     const last = model.dates.findLastIndex((_, index) => model.series.some(s => Number.isFinite(s.values[index])));
-    updateSelection(plot, last);
+    updateSelection(plot, model.active ?? last);
   }
 
   window.NvidiaCharts = { render, date };

@@ -425,6 +425,7 @@
     }
     marketKpis();
     window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, fmt, dollar, element, options });
+    window.NvidiaStatementComparisons.mount({ financial, groups, companyCell, usd, element, options });
   }
 
   function scrollEnhancements() {
