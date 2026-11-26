@@ -397,20 +397,19 @@
     svg.append(picture);
     return svg;
   }
+  function destinationPicture(key, brandedIcon = key === 'accumulator-beta' ? accumulatorBeta[2] : null) {
+    if (!brandedIcon?.src) return navigationIcon(key);
+    const image = document.createElement('img');
+    image.className = 'accumulator-beta-icon';
+    image.src = new URL(brandedIcon.src, base);
+    image.alt = '';
+    image.width = image.height = 24;
+    return image;
+  }
   function addIcon(control, key, brandedIcon) {
     if (control.querySelector(':scope > .hub-nav-icon, :scope > .accumulator-beta-icon')) return;
     control.dataset.navArt = key;
-    brandedIcon ??= key === 'accumulator-beta' ? accumulatorBeta[2] : undefined;
-    if (brandedIcon?.src) {
-      const image = document.createElement('img');
-      image.className = 'accumulator-beta-icon';
-      image.src = new URL(brandedIcon.src, base);
-      image.alt = '';
-      image.width = image.height = 24;
-      control.prepend(image);
-    } else {
-      control.prepend(navigationIcon(key));
-    }
+    control.prepend(destinationPicture(key, brandedIcon));
   }
   function link(label, href, {art = artFor(href), tone, brandedIcon} = {}) {
     const a = document.createElement('a');
@@ -710,12 +709,12 @@
     decorateSubsections();
     new MutationObserver(decorateSubsections).observe(sectionTabs, {childList:true});
   }
-  const reportTabArt = {0: 'pivot', 10: 'chart', 11: 'bonds', 12: 'markets', 13: 'book', 14: 'archive'};
+  const reportTabArt = {0: 'pivot', 10: 'chart', 11: 'bonds', 12: 'fx', 13: 'notebook', 14: 'database'};
   for (const tab of document.querySelectorAll('.report-tabs > [role=tab]')) {
-    addIcon(tab, tab.id === 'compareTab' ? 'history' : reportTabArt[tab.dataset.page] || 'chart');
+    addIcon(tab, tab.id === 'compareTab' ? 'compare' : reportTabArt[tab.dataset.page] || 'chart');
   }
   for (const tab of document.querySelectorAll('.record-tabs > [role=tab]')) {
-    addIcon(tab, tab.id === 'native-tab' ? 'archive' : 'chart');
+    addIcon(tab, tab.id === 'native-tab' ? 'database' : 'chart');
   }
   menu.addEventListener('click', e => { if (e.target.closest('a[href]')) menu.close(); });
   menu.addEventListener('close', () => more.focus({preventScroll: true}));
@@ -763,4 +762,12 @@
   window.addEventListener('hashchange', active);
   window.addEventListener('resize', active);
   requestAnimationFrame(active);
+
+  const page = pagePath.replace(/^fred\/index\.html$/, 'fred/');
+  if (/^(?:stocks-beta[23]?|nvda-history|si-beta2|bos-monthly|bonds-beta|bond-cashflow|historical-fred|fred-[123]|fred-feed|v4)\.html$/.test(page) || page.startsWith('fred/')) {
+    const content = page === 'v4.html' ? document.getElementById('view') : document.body;
+    if (content) import(new URL('workspace-icons.js?v=1', base).href).then(({mountWorkspaceIcons}) => {
+      mountWorkspaceIcons({root: content, page, destinationArt, controlRoute, navigationIcon: destinationPicture});
+    });
+  }
 })();
