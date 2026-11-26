@@ -5,14 +5,28 @@
   if (location.origin !== 'https://notwins.github.io' || !location.pathname.startsWith(hub)
       || window.top !== window.self) return;
   const page = location.pathname.slice(hub.length).replace(/\/$/, '/index.html');
+  const preference = 'mih-usage-disabled';
+  const privateSignal = () => navigator.globalPrivacyControl || navigator.doNotTrack === '1' || window.doNotTrack === '1';
+  const choice = document.querySelector('[data-usage-opt-out]');
+  if (choice) {
+    const status = document.querySelector('[data-usage-status]');
+    try { choice.checked = privateSignal() || localStorage.getItem(preference) === '1'; }
+    catch { status.textContent = 'The browser could not load this setting.'; }
+    choice.disabled = !!privateSignal();
+    if (choice.disabled) status.textContent = 'Your browser privacy signal has turned off usage counts.';
+    choice.addEventListener('change', () => {
+      try { localStorage.setItem(preference, choice.checked ? '1' : '0'); }
+      catch { status.textContent = 'The browser could not save this setting.'; }
+    });
+  }
   if (!/^[a-z0-9][a-z0-9./-]{1,125}$/.test(page) || !page.endsWith('.html')
       || page === 'index.html' || /(?:^|\/)(?:data|legal)\//.test(page)
       || /(?:preview|backup|connect)\.html$/.test(page)) return;
   const service = 'https://market-intelligence-blueprint-winston.winstonnggw.chatgpt.site/analytics/event';
   function record(category, metric) {
-    if (navigator.globalPrivacyControl || navigator.doNotTrack === '1' || document.prerendering) return;
+    if (privateSignal() || document.prerendering) return;
     try {
-      if (localStorage.getItem('mih-usage-disabled') === '1') return;
+      if (localStorage.getItem(preference) === '1') return;
       fetch(service, {
         method: 'POST', body: JSON.stringify([category, metric]), keepalive: true,
         credentials: 'omit', referrerPolicy: 'no-referrer'
@@ -35,10 +49,10 @@
       if (Object.hasOwn(deskTabs, key)) selected = 'desk/' + deskTabs[key];
     } else if (page === 'bond-cashflow.html') {
       const sheet = document.querySelector('[role="tab"][data-page][aria-selected="true"]')?.dataset.page;
-      if (/^(?:[0-9]|1[0-4])$/.test(sheet)) name = 'cashflow/sheet-'+sheet;
+      if (/^(?:[0-9]|1[0-4])$/.test(sheet)) selected = 'cashflow/sheet-'+sheet;
     } else if (page === 'v4.html') {
       const key = location.hash.slice(1) || 'overview';
-      if (tabs.has(key)) selected = 'v4/' + key;
+      if (tabs.has(key)) selected = 'workspace/' + key;
     }
     if (selected && selected !== lastTab) {
       lastTab = selected;
@@ -67,7 +81,7 @@
     const stamp = Date.now();
     if (stamp - lastToolAction < 180) return;
     lastToolAction = stamp;
-    record('tool', page.replace(/\.html$/, '') + '/' + action);
+    record('tool', page.replace(/^tools\//, '').replace(/\.html$/, '').replaceAll('/', '-') + '/' + action);
   }
   function bindActions() {
     document.addEventListener('click', event => {
@@ -78,24 +92,24 @@
         const report = url.origin === location.origin && publicReport.exec(url.pathname);
         if (report) record('report', 'research/' + report[1]);
         if (link.hasAttribute('download')) toolAction('download');
-        else if (url.origin === location.origin && url.pathname.startsWith(hub + 'data/') && /\.csv$/i.test(url.pathname)) toolAction('download-csv');
+        else if (url.origin === location.origin && url.pathname.startsWith(hub + 'data/') && /\.csv$/i.test(url.pathname)) toolAction('download');
       }
       const button = event.target.closest('button');
       if (!button || button.type === 'submit') return;
-      if (interactiveTool && button.matches('#download, #download-pdf, #comparePdf, [data-export], [data-download]')) toolAction('export');
-      if (interactiveTool && button.matches('[data-compare], [data-scenario], [data-chart-mode], #compareTab')) toolAction('change-comparison');
+      if (interactiveTool && button.matches('#download, #download-pdf, #comparePdf, [data-export], [data-download]')) toolAction('download');
+      if (interactiveTool && button.matches('[data-compare], [data-scenario], [data-chart-mode], #compareTab')) toolAction('change-control');
     });
     if (interactiveTool) {
       document.addEventListener('submit', event => {
-        if (event.submitter?.matches('#beta-quick-download')) toolAction('export');
+        if (event.submitter?.matches('#beta-quick-download')) toolAction('download');
         else if (editsModel && event.target instanceof HTMLFormElement && event.target.querySelector('input[type="number"]')) toolAction('calculate');
       });
       document.addEventListener('change', event => {
         if (!event.isTrusted || !(event.target instanceof Element)) return;
         if (editsModel && event.target.matches('input[type="number"], input[type="range"], select')) {
-          toolAction('change-scenario');
+          toolAction('change-control');
         } else if (event.target.matches('select.tenor, #compareLeft, #compareRight, [data-compare], [data-chart-series]')) {
-          toolAction('change-comparison');
+          toolAction('change-control');
         }
       });
     }
@@ -112,7 +126,7 @@
     addEventListener('hashchange', countTab);
     const deskTablist = document.querySelector('.modebar [role="tablist"]');
     if (page === 'desk.html' && deskTablist) {
-      new MutationObserver(countTab).observe(deskTablist, {
+      new MutationObserver(countTab).observe(tablist, {
         subtree: true, attributes: true, attributeFilter: ['aria-selected']
       });
     }

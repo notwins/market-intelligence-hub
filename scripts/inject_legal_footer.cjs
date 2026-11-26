@@ -23,7 +23,7 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   const directory = path.posix.dirname(relative);
   if (!content.includes('id="mih-usage"') && !/(?:-preview|-backup)\.html$/i.test(relative)) {
     const script = path.posix.relative(directory, 'hub-usage.js');
-    content = content.replace(/<\/head\s*>/i, '<script id="mih-usage" defer src="' + script + '?v=1"></script></head>');
+    content = content.replace(/<\/head\s*>/i, '<script id="mih-usage" defer src="' + script + '?v=2"></script></head>');
   }
   // Shared navigation belongs to mutable UI shells, never frozen reports.
   if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html)$/.test(relative)
@@ -41,9 +41,6 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
     if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   }
   content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
-  const usageScript = path.posix.relative(directory, 'hub-usage.js') + '?v=1';
-  if (!content.includes('id="mih-usage"')) content = content.replace(/<\/head\s*>/i,
-    '<script id="mih-usage" defer src="' + usageScript + '"></script></head>');
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
   const bootstrap=path.posix.relative(directory,'blueprint-access.js')+settingsVersion;
