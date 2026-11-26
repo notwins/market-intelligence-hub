@@ -7,7 +7,7 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=2">
+<link rel="stylesheet" href="nvda-history.css?v=3">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
 <script defer src="nvda-history-charts.js?v=1"></script>
@@ -62,9 +62,11 @@
   </div>
   <article class="nv-panel nv-reveal">
     <div class="nv-panel-head"><div><h3>Statement explorer</h3><p id="nv-sheet-date" class="nv-muted"></p></div>
-      <div class="nv-controls"><label>Filing period<select id="nv-filing-select"></select></label><label>Statement<select id="nv-statement"><option>Income statement</option><option>Balance sheet</option><option>Cash flow</option><option value="Ratios and growth">Margins &amp; ratios</option></select></label></div>
+      <div class="nv-controls"><label>Filing period<select id="nv-filing-select"></select></label><label>Statement<select id="nv-statement"><option>Income statement</option><option>Balance sheet</option><option>Cash flow</option><option value="Ratios and growth">Margins &amp; ratios</option></select></label>
+        <label>Display<select id="nv-statement-units"><option value="compact">Compact</option><option value="millions">USD millions</option></select></label></div>
     </div>
-    <div class="nv-table-scroll" role="region" aria-label="Financial statements" tabindex="0"><table class="nv-table">
+    <p class="nv-horizontal-note" id="nv-statement-scroll-note">Scroll sideways to compare changes <span aria-hidden="true">↔</span></p>
+    <div class="nv-table-scroll" role="region" aria-label="Financial statements" aria-describedby="nv-statement-scroll-note" tabindex="0"><table class="nv-table nv-statement-table">
       <thead><tr><th scope="col">Line item</th><th scope="col">Actual</th><th scope="col">QoQ change</th><th scope="col">QoQ growth</th><th scope="col">YoY change</th><th scope="col">YoY growth</th></tr></thead><tbody id="nv-statement-rows"></tbody>
     </table></div>
     <p id="nv-filing-source" class="nv-note"></p>
@@ -93,10 +95,11 @@
         <label>Sort by<select id="nv-peer-sort"><option value="revenue">Revenue</option><option value="income">Net income</option><option value="assets">Assets</option><option value="liabilities">Liabilities</option><option value="margin">Gross margin</option><option value="growth">Revenue growth</option><option value="cap">Market cap</option><option value="pe">Trailing P/E</option><option value="pb">P/B</option><option value="yield">Dividend yield</option></select></label>
       </div>
     </div>
-    <div class="nv-table-scroll nv-peer-scroll" role="region" aria-label="Peer company comparison" tabindex="0"><table class="nv-table nv-peer-table">
+    <p class="nv-horizontal-note" id="nv-peer-scroll-note">Scroll sideways for more metrics <span aria-hidden="true">↔</span></p>
+    <div class="nv-table-scroll nv-peer-scroll" role="region" aria-label="Peer company comparison" aria-describedby="nv-peer-scroll-note" tabindex="0"><table class="nv-table nv-peer-table">
       <thead><tr><th scope="col">Company</th><th scope="col">Filing end</th><th scope="col">Revenue<br><small>USD bn</small></th><th scope="col">Net income<br><small>USD bn</small></th><th scope="col">Assets<br><small>USD bn</small></th><th scope="col">Liabilities<br><small>USD bn</small></th><th scope="col">Gross margin</th><th scope="col" id="nv-peer-growth-label">Revenue YoY</th><th scope="col">Market cap<br><small>USD bn</small></th><th scope="col">P/E TTM</th><th scope="col">P/B</th><th scope="col">Yield TTM</th></tr></thead><tbody id="nv-peer-rows"></tbody>
     </table></div>
-    <p class="nv-note">The NVIDIA row stays at the top. Monetary totals use reported figures and the applicable period FX. Missing values appear as a dash.</p>
+    <p class="nv-note">The NVIDIA row stays at the top. Monetary totals use reported figures and the applicable period FX. Select a filing date to view its source where available. A dash marks an unavailable value. An asterisk marks liabilities calculated as assets less total equity for a verified filing.</p>
   </article>
   <article class="nv-panel nv-reveal nv-peer-chart-box">
     <div class="nv-panel-head"><div><h3>Indexed price comparison</h3><p class="nv-muted">100 at the first shared month · local-currency prices</p></div>
@@ -156,10 +159,10 @@
       <label>Find a line item<input type="search" id="lab-search" placeholder="e.g. cash flow"></label>
     </div>
     <div class="nv-table-scroll lab-scroll" tabindex="0" role="region" aria-label="Historical financial and monthly comparison, scroll to see all companies"><table class="nv-table lab-table"><thead id="lab-head"></thead><tbody id="lab-rows"></tbody></table></div>
-    <p class="nv-note">NVIDIA appears first. Statement amounts show each issuer’s currency in millions. USD comparison rows use millions of US dollars. Scroll across for more companies, or choose a smaller group. A dash means the archive has no value.</p>
+    <p class="nv-note">NVIDIA appears first. Statement amounts show each issuer’s currency in millions. USD comparison rows use millions of US dollars. A dagger marks a verified liabilities balance derived from assets less equity. Scroll across for more companies, or choose a smaller group. A dash means the archive has no value.</p>
   </article>
   <article class="nv-panel nv-reveal lab-spaced">
-    <div class="nv-panel-head"><div><h3>Compare the trend</h3><p class="nv-muted">Calendar-quarter buckets · actual fiscal ends in the chart readout</p></div>
+    <div class="nv-panel-head"><div><h3>Compare the trend</h3><p class="nv-muted">Nearest calendar quarter-end · actual fiscal ends in the chart readout</p></div>
     <div class="nv-controls"><label>Measure<select id="lab-trend-metric"></select></label><label>Compare with<select id="lab-trend-peer"></select></label></div></div>
     <div class="nv-chart nv-chart-small" id="lab-trend"></div>
   </article>
@@ -185,7 +188,7 @@
     <p id="sim-error" role="status" hidden>Enter a positive share price of at least $0.01.</p>
     <div id="sim-results"><div class="lab-verdict" aria-live="polite"><h3 id="sim-headline"></h3><p id="sim-reading"></p></div>
     <div class="nv-table-scroll" tabindex="0" role="region" aria-label="NVIDIA share-price scenarios and peer median"><table class="nv-table lab-table"><thead id="sim-head"></thead><tbody id="sim-rows"></tbody></table></div>
-    <p class="nv-note">Green highlights mark a lower multiple or a higher yield than the selected peer median. Each median excludes NVIDIA. Counts show how many eligible peers NVIDIA beats at the selected price.</p>
+    <p class="nv-note">Green highlights mark a lower multiple or a higher yield than the selected peer median. Each median excludes NVIDIA. Counts show how many eligible peers NVIDIA beats at the selected price. The parity price is the NVDA share price that would match the peer median.</p>
     <div class="nv-panel-head lab-spaced"><div><h3>Which peers trade above or below NVIDIA?</h3><p class="nv-muted" id="sim-rank-summary"></p></div><div class="nv-controls"><label>Rank by<select id="sim-metric"></select></label></div></div>
     <div class="nv-table-scroll lab-ranks" tabindex="0" role="region" aria-label="Individual peer valuation rankings"><table class="nv-table nv-peer-table"><thead><tr><th>Company</th><th id="sim-rank-name">Ratio</th><th>Quote date</th><th>Compared with NVIDIA</th></tr></thead><tbody id="sim-ranks"></tbody></table></div></div>
     <details class="lab-method"><summary>Calculation basis and dates</summary><p id="sim-basis"></p><p>Market cap scales with price at the archived share count. Trailing P/E and P/B scale from the market close. Forward multiples and forward dividend yield use the BOS quote as their starting price. Earnings yield is 100 divided by trailing P/E. Cash and forward dividend yields move inversely with price.</p><p>Price/sales and cash-flow multiples use four consecutive standalone quarters disclosed by each issuer’s closing quote. Free cash flow is operating cash flow less capital expenditure. ¹ Enterprise value is estimated market cap plus reported interest-bearing debt less cash and equivalents. EBITDA is the archive’s operating income plus depreciation and amortization proxy.</p><p>Multiples require positive denominators. Loss-making peers have no trailing P/E ranking. Zero dividend yields count, and free cash flow yields can be negative. Industry mix, expected growth and capital needs can explain different multiples.</p></details>

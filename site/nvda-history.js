@@ -36,6 +36,20 @@
     ["BOS market cap", "BOS Market Cap USD bn", "cap"],
   ];
   const valuationKeys = ["Estimated or Observed Market Cap USD bn", "P/E TTM x", "P/B Latest Filed x", "Cash Dividend Yield TTM %"];
+  const keyRows = new Set([
+    "Revenue", "Gross profit", "Operating income", "Net income to parent",
+    "Total assets", "Total liabilities", "Total equity", "Operating cash flow", "Free cash flow",
+    "Gross margin %", "Operating margin %", "Net margin %", "Total debt",
+  ]);
+  const performanceRows = new Set([
+    "Revenue", "Gross profit", "Operating income", "Net income to parent", "Consolidated net income",
+    "Operating cash flow", "Free cash flow", "Gross margin %", "Operating margin %", "Net margin %",
+  ]);
+  // These balance sheets were reconciled against the linked SEC filings.
+  // Match the actual fiscal end so the calculation applies only to that filing.
+  const verifiedLiabilityPeriods = {
+    AMD: "2026-09-26", INTC: "2026-09-26", AMZN: "2026-09-30", ORCL: "2026-08-31", HPE: "2026-07-31",
+  };
   let financial, market, companies, logos, descriptors, monthKeys, nvidiaPeriods;
 
   const actual = (period, field, i = 0) => financial.periods[period]?.[field]?.[i] ?? null;
@@ -146,9 +160,22 @@
     return element("td", value, tone);
   }
 
+  function statementAmount(value, type, displayInMillions) {
+    if (type !== "money" || !Number.isFinite(value)) return financialAmount(value, type);
+    if (value === 0) return "$0";
+    if (displayInMillions) return dollar(value, 6) + "M";
+    const absolute = Math.abs(value);
+    if (absolute >= 1000) return dollar(scaleBn(value)) + "B";
+    if (absolute >= 1) return dollar(value) + "M";
+    if (absolute >= .001) return dollar(value * 1000) + "K";
+    return dollar(value * 1000000);
+  }
+
   function filingSheet() {
     const period = $("nv-filing-select").value;
     const group = $("nv-statement").value;
+    const displayInMillions = $("nv-statement-units").value === "millions";
+    const formatAmount = (amount, type) => statementAmount(amount, type, displayInMillions);
     const date = endDate(period);
     const dateParts = [charts.date(date), actual(period, "Form or source type")];
     $("nv-sheet-date").textContent = dateParts.filter(Boolean).join(" · ");
@@ -157,7 +184,8 @@
       if (desc.group !== group) continue;
       const value = actual(period, desc.field);
       if (value === null) continue;
-      const row = element("tr");
+      const row = element("tr", "", keyRows.has(desc.name) ? "nv-key-row" : "");
+      const tone = performanceRows.has(desc.name) ? "change" : "";
       const th = element("th", desc.name);
       th.scope = "row";
       const qAmount = change(period, desc, "QoQ", "amount");
@@ -165,11 +193,11 @@
       const yAmount = change(period, desc, "YoY", "amount");
       const yGrowth = change(period, desc, "YoY", "rate");
       const changeUnit = desc.type === "pct" ? "points" : desc.type;
-      row.append(th, td(financialAmount(value, desc.type)),
-        td(signed(qAmount, n => financialAmount(n, changeUnit)), "change", qAmount),
-        td(signed(qGrowth, n => withUnit(n, "%")), "change", qGrowth),
-        td(signed(yAmount, n => financialAmount(n, changeUnit)), "change", yAmount),
-        td(signed(yGrowth, n => withUnit(n, "%")), "change", yGrowth));
+      row.append(th, td(formatAmount(value, desc.type)),
+        td(signed(qAmount, n => formatAmount(n, changeUnit)), tone, qAmount),
+        td(signed(qGrowth, n => withUnit(n, "%")), tone, qGrowth),
+        td(signed(yAmount, n => formatAmount(n, changeUnit)), tone, yAmount),
+        td(signed(yGrowth, n => withUnit(n, "%")), tone, yGrowth));
       output.append(row);
     }
     $("nv-statement-rows").replaceChildren(output);
@@ -248,6 +276,23 @@
     return Number.isFinite(source) && rate > 0 ? scaleBn(source / rate) : null;
   }
 
+  function peerLiabilities(period, index, end) {
+    const group = "Balance sheet";
+    const filed = usd(period, "Total liabilities", group, index);
+    if (filed !== null) return { liabilities: filed, calculatedLiabilities: false };
+
+    const company = companies[index];
+    if (!end || verifiedLiabilityPeriods[company.ticker] !== end || company.currency !== "USD") {
+      return { liabilities: null, calculatedLiabilities: false };
+    }
+    const assets = actual(period, nativeField(group, "Total assets"), index);
+    const equity = actual(period, nativeField(group, "Total equity"), index);
+    if (!Number.isFinite(assets) || !Number.isFinite(equity) || assets < equity) {
+      return { liabilities: null, calculatedLiabilities: false };
+    }
+    return { liabilities: scaleBn(assets - equity), calculatedLiabilities: true };
+  }
+
   function companyCell(company) {
     const result = element("th");
     result.scope = "row";
@@ -283,10 +328,11 @@
     const rows = companies.map((company, index) => ({
       company, index,
       end: endDate(period, index),
+      source: actual(period, "Source document", index),
       revenue: usd(period, "Revenue", "Income statement", index),
       income: usd(period, "Net income to parent", "Income statement", index),
       assets: usd(period, "Total assets", "Balance sheet", index),
-      liabilities: usd(period, "Total liabilities", "Balance sheet", index),
+      ...peerLiabilities(period, index, endDate(period, index)),
       margin: actual(period, "Ratios and growth / Gross margin %", index),
       growth: growth(period, "Revenue", growthBasis, "growth (%)", index),
       cap: mkt(month, valuationKeys[0], index), pe: mkt(month, valuationKeys[1], index),
@@ -298,8 +344,24 @@
     for (const row of [rows[0], ...ranked]) {
       const tr = element("tr", "", row.index === 0 ? "nv-focus" : "");
       tr.dataset.company = row.company.ticker;
-      tr.append(companyCell(row.company), td(charts.date(row.end)), td(fmt(row.revenue)), td(fmt(row.income)),
-        td(fmt(row.assets)), td(fmt(row.liabilities)), td(withUnit(row.margin, "%")),
+      const date = charts.date(row.end);
+      const dateCell = td(date);
+      if (row.end && row.source) {
+        const link = element("a", date);
+        link.href = row.source;
+        link.setAttribute("aria-label", row.company.name + " filing for " + date);
+        dateCell.replaceChildren(link);
+      }
+      const liabilityCell = td(fmt(row.liabilities));
+      if (row.calculatedLiabilities) {
+        const marker = element("sup", "*");
+        marker.setAttribute("aria-hidden", "true");
+        liabilityCell.append(marker);
+        liabilityCell.title = "Calculated from the " + charts.date(row.end) + " filing as assets less total equity.";
+        liabilityCell.setAttribute("aria-label", fmt(row.liabilities) + " billion US dollars, calculated as assets less total equity");
+      }
+      tr.append(companyCell(row.company), dateCell, td(fmt(row.revenue)), td(fmt(row.income)),
+        td(fmt(row.assets)), liabilityCell, td(withUnit(row.margin, "%")),
         td(signed(row.growth, n => withUnit(n, "%")), "change", row.growth),
         td(fmt(row.cap)), td(withUnit(row.pe, "×")), td(withUnit(row.pb, "×")), td(withUnit(row.yield, "%")));
       result.append(tr);
@@ -359,7 +421,7 @@
     options($("nv-line-peer"), companies.slice(1).map(company => [company.ticker, company.name + " · " + company.ticker]), "AMD");
     for (const [controls, render] of [
       [["nv-frequency", "nv-fin-metric", "nv-fin-mode"], financialPlot],
-      [["nv-filing-select", "nv-statement"], filingSheet],
+      [["nv-filing-select", "nv-statement", "nv-statement-units"], filingSheet],
       [["nv-market-metric", "nv-market-range"], marketPlot],
       [["nv-peer-group", "nv-peer-period", "nv-peer-month", "nv-peer-growth", "nv-peer-sort"], comparePeers],
       [["nv-line-peer", "nv-peer-range"], peerPlot],
@@ -377,7 +439,7 @@
       };
     }
     marketKpis();
-    window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, fmt, dollar, element, options });
+    window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, peerLiabilities, fmt, dollar, element, options });
   }
 
   function scrollEnhancements() {

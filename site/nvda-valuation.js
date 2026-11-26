@@ -79,5 +79,20 @@
     const ties = available.filter(peer => value === peer).length;
     return { median: midpoint, total: available.length, better: valid(value) ? better : null, ties: valid(value) ? ties : null };
   }
-  root.NvidiaValuation = { metrics, companyBasis, valuations, compare, median };
+  function parityPrice(base, metric, target) {
+    if (!valid(target) || !(base.price > 0)) return null;
+    const ref = valuations(base, base.price)[metric.id];
+    if (!valid(ref)) return null;
+    let price;
+    if (metric.id === "evSales" || metric.id === "evEbitda") {
+      const denominator = metric.id === "evSales" ? base.sales : base.ebitda;
+      price = (target * denominator - base.debt + base.cash) / base.cap * base.price;
+    } else if (metric.higher) {
+      price = base.price * ref / target;
+    } else {
+      price = base.price * target / ref;
+    }
+    return valid(price) && price > 0 ? price : null;
+  }
+  root.NvidiaValuation = { metrics, companyBasis, valuations, compare, median, parityPrice };
 })(typeof window === "undefined" ? module.exports : window);
