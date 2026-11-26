@@ -5,7 +5,7 @@
   const D=window.FilingNotes, Notes=window.FilingNotesView, Q=window.SharesQuarterlyCore, USD=window.SharesBeta3Usd;
   const colors=['#176b5a','#41679b','#9a602b','#76558d','#a5455a','#267a89','#646b30','#584c89','#a45132','#3f6b41','#784a66','#4c596f','#966545','#6d497d','#8a752f','#216a80','#a44a64'];
   const defaultFocus=['peTTM','peFY','evEbitda','proxyEvEbitda','forwardPE','qGrowth','qNetMargin','revenue','operatingIncome','netIncome','ebitda','totalDebt','equity','operatingCashFlow','freeCashFlow','revenueGrowth','operatingMargin','roe','fcfMargin'];
-  const state={data:null,focus:'',custom:null,size:9,period:'latest',bonus:[],fx:null,supplement:{},growth:'yoy',unit:'bn',filter:'all',stars:new Set(defaultFocus),
+  const state={data:null,focus:'',custom:null,size:9,period:'latest',bonus:[],fx:null,supplement:{},quarterEndMarkets:{},growth:'yoy',unit:'bn',filter:'all',stars:new Set(defaultFocus),
     draft:[],quarterly:null,peerQuarterly:{},published:null,privateData:null,details:{},diagramCompany:'',autoFocus:new Set(),dropped:new Set()};
   ['core-revenue','core-netIncome','core-operatingCashFlow','core-freeCashFlow','core-cash','core-totalDebt','core-revenueGrowth','core-netMargin','core-fcfMargin','core-roe','core-roa','core-currentRatio','core-liabAssets','solvency-rank','solvency-score','recent-cash','recent-disclosedCash','recent-cashIncludingRestricted','recent-cashShort','note-cash','note-cashShort','note-treasuries','note-assets','note-ppe','note-totalDebt','note-liabilities','note-leasesTotal','note-interestCover','note-equityAssets','note-debtCoverage','note-cet1','note-firstDebtDue','note-shortDebtShare','note-dueCash','due-debt-y1','due-debt-y2','due-debt-total','due-operatingLease-y1','due-financeLease-y1','due-allLeases-y1'].forEach(k=>state.stars.add(k));
   const highlighted=k=>state.stars.has(k)||(state.autoFocus.has(k)&&!state.dropped.has(k));
@@ -85,7 +85,8 @@
     });
     const snapshotCalendar=state.data.asOf.slice(0,4)+'-Q'+Math.ceil(Number(state.data.asOf.slice(5,7))/3);
     const views=ids.map((id,i)=>E.valueView(state.data,id,ticker[i],years[i],state.period,current[i],{
-      alignedQuarter:isQuarter,useLatestMarket:isQuarter&&(calendar===latest?.quarter||calendar===snapshotCalendar)&&
+      alignedQuarter:isQuarter,quarterMarket:isQuarter&&current[i]?state.quarterEndMarkets[calendar]?.[id]:null,
+      useLatestMarket:isQuarter&&(calendar===latest?.quarter||calendar===snapshotCalendar)&&
         Boolean(current[i]&&current[i].observation===records[i]?.observations.at(-1))
     }));
     const check=isQuarter?(co,i,key)=>current[i]?.values[key]:undefined;
@@ -446,10 +447,10 @@
     try {
       const lib=window.StocksBeta2PeerLibrary;
       const [base,extra,pub,disclosures,quarterly,peers,fx,supplement]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published().catch(()=>null),json('shares-beta3-disclosures-2026-11-26.json').catch(()=>null),Q.load().catch(()=>null),Q.peerFilings().catch(()=>({})),json('beta3-usd-fx-2026-11-27.json').catch(()=>null),
-        json('shares-beta3-semiconductor-interim-2026-11-27-v2.json').catch(()=>null)]);
+        json('shares-beta3-semiconductor-interim-2026-11-27-v3.json').catch(()=>null)]);
       if(current!==generation)return;
       if(extra&&extra.version!==1)throw Error('Invalid comparison data');
-      state.fx=fx?.version===1?fx:null;state.supplement=supplement?.issuers||{};state.quarterly=quarterly;state.peerQuarterly=peers;state.details=disclosures?.version===1?disclosures:{};state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
+      state.fx=fx?.version===1?fx:null;state.supplement=supplement?.issuers||{};state.quarterEndMarkets=supplement?.quarterEndMarkets||{};state.quarterly=quarterly;state.peerQuarterly=peers;state.details=disclosures?.version===1?disclosures:{};state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
       const q=new URLSearchParams(location.search),input=(q.get('ticker')||'GOOG US').toUpperCase();
       state.focus=(base.listings.find(l=>l.ticker===input||l.id===input)||base.listings.find(l=>l.ticker==='GOOG US')||base.listings[0]).ticker;
       state.bonus=(q.get('bonus')||'').split(',').filter(id=>Object.hasOwn(USD.choices,id));
