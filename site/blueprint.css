@@ -51,3 +51,32 @@
  .view-header p:last-child{font-size:.72rem}
 }
 @media(max-width:365px){.atlas-analytics svg{display:none}}
+
+/* Canvas navigation and in-place card details. */
+#viewport{overscroll-behavior:contain}
+#viewport .map-node{cursor:grab}
+#viewport.grabbing,#viewport.grabbing .map-node{cursor:grabbing}
+#viewport.arranging .map-node{cursor:move}
+#arrange-map[aria-pressed=true]{background:#dfe8da;border-color:#78927e;color:#294936}
+#mini-wrap{cursor:crosshair}
+#minimap{display:block;width:100%;height:auto}
+.inspector-head{position:sticky;top:0;z-index:1;margin-top:-8px;padding-block:8px;background:var(--panel)}
+.inspector-actions{display:flex;align-items:center;gap:10px}
+.inspector-head .inspector-actions button{font:650 .85rem/1 "DM Sans",system-ui,sans-serif;min-height:40px;padding:0 8px}
+.inspector-head .inspector-actions #close-inspector{font-size:1.5rem}
+details.detail-section{margin-top:12px;padding-top:0}
+.detail-section summary{padding:11px 4px;cursor:pointer;font-size:.85rem;font-weight:680;color:var(--ink)}
+.detail-section[open] summary{margin-bottom:4px}
+.detail-section button{margin:0;font-size:.85rem;min-height:40px}
+.detail-section button small{font-size:.75rem}
+.atlas-inspector #detail-content p{font-size:.87rem}
+#detail-content .detail-open{min-height:40px}
+.inspector-head button[hidden]{display:none}
+.detail-original{display:block;margin-top:22px;font-size:.85rem;color:var(--cyan);text-underline-offset:3px}
+.atlas-inspector:focus{outline:none}
+@media(max-width:750px){
+ .atlas-inspector.open{top:auto;right:0;bottom:0;width:100%;max-height:min(62dvh,500px);border:1px solid var(--border);border-radius:14px 14px 0 0;padding:16px 18px max(16px,env(safe-area-inset-bottom));box-shadow:0 -8px 40px #2528222d;overscroll-behavior:contain}
+ .canvas-controls{bottom:10px}
+ #mini-wrap{bottom:58px}
+}
+@media(prefers-reduced-motion:reduce){.map-node{transition:none}}
