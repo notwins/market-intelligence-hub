@@ -1,4 +1,4 @@
-/* Grouped filing tables and the three peer-disclosure charts. */
+/* Annual filing comparisons and detailed statement table groups. */
 (function(root){
   'use strict';
   const D=root.FilingNotes,F=Number.isFinite;
@@ -6,7 +6,6 @@
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const $=id=>document.getElementById(id);
   const keyFor=(kind,row)=>'mix-'+kind+'-'+row.type+'-'+row.name.toLowerCase();
-  const flags={country:'Country / market',region:'Region',other:'Other / reconciliation',segment:'Business segment',product:'Product / service'};
   function focusKeys(c){
     const out=[];
     for(const kind of Object.keys(D.kinds)){
@@ -78,56 +77,127 @@
     }
     return sections;
   }
-  function chartControls(c,state,opt){
-    const index=c.ids.indexOf(state.diagramCompany);if(index<0)state.diagramCompany=c.ids[0];
-    $('diagram-company').innerHTML=c.companies.map((co,i)=>opt(c.ids[i],co.name)).join('');$('diagram-company').value=state.diagramCompany;
-    const v=c.notes[c.ids.indexOf(state.diagramCompany)];
-    function setup(id,map,available){
-      const e=$(id),old=e.value;const keys=Object.keys(map).filter(k=>available(k));
-      e.innerHTML=keys.map(k=>opt(k,map[k])).join('');e.disabled=!keys.length;
-      if(keys.includes(old))e.value=old;
-    }
-    setup('distribution-kind',D.kinds,k=>v.geo[k]);
-    setup('schedule-kind',D.families,k=>v.sch[k]);
-    const model=c.companies[0].model;
-    const measures=['equityAssets','netAssetsRatio','cashFlowAssets','currentRatio','debtAssets','interestCover','debtCoverage','cet1','totalCapitalRatio'];
-    const ranks={score:'Overall solvency score',...Object.fromEntries(measures.map(k=>[k,D.labels[k]]))};
-    setup('ranking-metric',ranks,k=>k==='score'||c.notes.filter(q=>q.company.model===model&&F(q.v[k])).length>=2);
+  const annualFields={
+    score:['Score / 100','score'],netAssetsRatio:['Net assets / assets','percent'],netAssetsUsd:['Net assets','usd'],
+    assetsUsd:['Total assets','usd'],revenueUsd:['Revenue','usd'],cashUsd:['Cash','usd'],debtUsd:['Debt','usd'],
+    debtAssets:['Debt / assets','percent'],equityAssets:['Owners’ equity / assets','percent'],
+    cashFlowUsd:['Operating cash flow','usd'],cashFlowAssets:['Operating cash flow / assets','percent'],
+    currentRatio:['Current ratio','multiple'],interestCover:['Interest cover','multiple'],
+    debtCoverage:['Cash flow / debt','percent'],cet1:['CET1','percent'],totalCapitalRatio:['Total capital ratio','percent']
+  };
+  const cashColor='#177969';
+  function filingView(view,h){
+    return {...view,usdRate:h.rate(view.company.currency,view.year?.end)};
   }
-  function renderCharts(c,state,h){
-    const {pct,times,amount,fmtDate,logo}=h;
-    const metric=$('ranking-metric').value||'score',rank=D.ranking(c.notes,metric);
-    const rows=c.ids.map((id,i)=>({id,i,entry:rank.ranks[i],v:rank.values[i]})).filter(r=>rank.eligible[r.i])
-      .sort((a,b)=>(a.entry?.rank??999)-(b.entry?.rank??999)||a.i-b.i);
-    const metricValue=v=>!F(v)?'—':metric==='score'?v.toFixed(0):D.times.has(metric)?times(v):pct(v);
-    $('ranking-caption').textContent=D.groupLabels[rank.model]+' · '+rank.cohort+' in this comparison'+(metric==='score'?' · '+rank.common.length+' shared measures':'');
-    $('ranking-method').textContent=metric==='score'&&rank.common.length<2?'An overall score needs two shared measures and two comparable companies.':'';
-    const valid=rows.map(r=>r.v).filter(F),min=Math.min(0,...valid),max=Math.max(0,...valid);
-    $('rank-diagram').innerHTML=rows.map(r=>{
-      const size=F(r.v)?(metric==='score'?r.v:max===min?0:Math.abs(r.v)/(max-min)*100):0;
-      const pos=metric==='score'?0:max===min?0:(Math.min(r.v||0,0)-min)/(max-min)*100;
-      return '<li class="'+(r.entry?.rank===1?'rank-leader':'')+'"><span class="rank-number">'+(r.entry?'#'+r.entry.rank:'—')+'</span>'+logo(r.id,c.companies[r.i].name)+'<div class="rank-copy"><b>'+esc(c.companies[r.i].name)+'</b><span class="rank-track"><i style="inset-inline-start:'+pos+'%;width:'+Math.min(100,size)+'%;background:'+palette[r.i%palette.length]+'"></i></span></div><strong>'+esc(metricValue(r.v))+(metric==='score'&&F(r.v)?'<small> / 100</small>':'')+'</strong></li>';
+  function usd(value,rate){return F(value)&&F(rate)?value*rate:null;}
+  function percent(value,pct){return '<span class="filing-percent">'+esc(pct(value))+'</span>';}
+  function usdLabel(h){return 'USD '+(h.unit==='bn'?'bn':'mn');}
+  function usdAmount(value,h){
+    return F(value)?(value<0?'−$':'$')+h.amount(Math.abs(value)):'—';
+  }
+  function companyMark(view,h){
+    const name=view.company.name;
+    return '<span class="annual-company">'+h.logo(view.id,name)+'<span><strong>'+esc(name)+'</strong><small>'+
+      (view.year?esc(h.fmtDate(view.year.end)):'Annual period unavailable')+'</small></span></span>';
+  }
+  function renderRanking(c,h,views=c.notes.map(view=>filingView(view,h))){
+    const rank=D.ranking(views);
+    const rows=views.map((view,i)=>({
+      view,i,rank:rank.ranks[i]?.rank,
+      values:{...view.v,...h.scale(view.v,view.usdRate),score:rank.scores[i]}
+    }));
+    const keys=Object.keys(annualFields).filter(k=>!['cet1','totalCapitalRatio'].includes(k)||rows.some(r=>F(r.values[k])));
+    const {key,ascending}=keys.includes(h.sort.key)?h.sort:{key:'score',ascending:false};
+    const sortable=row=>F(row.values[key]);
+    rows.sort((a,b)=>Number(sortable(b))-Number(sortable(a))||
+      (sortable(a)&&sortable(b)?(a.values[key]-b.values[key])*(ascending?1:-1):0)||a.i-b.i);
+    const scale=Math.max(0,...rows.map(r=>Math.abs(r.values.netAssetsUsd||0)));
+    $('ranking-caption').textContent=c.companies.length+' companies · '+usdLabel(h)+' · '+D.groupLabels[rank.model]+' score based on '+rank.common.length+(rank.common.length===1?' shared measure':' shared measures');
+    const headers=keys.map(k=>{
+      const [label,style]=annualFields[k],isSort=key===k;
+      return '<th scope="col" class="annual-metric annual-'+style+'"'+(isSort?' aria-sort="'+(ascending?'ascending':'descending')+'"':'')+'>'+
+        '<button type="button" data-annual-sort="'+k+'" data-ascending="'+D.lower.has(k)+'" aria-label="Sort by '+esc(label)+'">'+
+        esc(label)+(isSort?'<span aria-hidden="true">'+(ascending?'▲':'▼')+'</span>':'')+'</button></th>';
     }).join('');
-    const i=c.ids.indexOf(state.diagramCompany),view=c.notes[i];
-    const geo=view.geo[$('distribution-kind').value],payment=view.sch[$('schedule-kind').value];
-    if(geo){
-      const items=geo.items.slice().sort((a,b)=>b.value-a.value);
-      const positives=items.filter(r=>r.value>0),sum=positives.reduce((s,r)=>s+r.value,0);
-      const strip=positives.map((it,j)=>'<i title="'+esc(it.label+' · '+pct(D.division(it.value,geo.total,100)))+'" style="width:'+(100*it.value/sum)+'%;background:'+palette[j%palette.length]+'"></i>').join('');
-      $('revenue-diagram').innerHTML='<div class="mix-total"><strong>'+esc(amount(geo.total,i,view.year.end))+'</strong><span>'+esc(fmtDate(view.year.end))+'</span></div><div class="mix-strip" aria-hidden="true">'+strip+'</div><ul class="diagram-list">'+items.map((it,j)=>'<li><i style="background:'+palette[j%palette.length]+'"></i><span>'+esc(it.label)+'</span><b>'+esc(amount(it.value,i,view.year.end))+'</b><strong>'+esc(pct(D.division(it.value,geo.total,100)))+'</strong></li>').join('')+'</ul>';
-    }else $('revenue-diagram').innerHTML='<p class="diagram-empty">A revenue breakdown is unavailable for this company and period.</p>';
-    if(payment){
-      const max=Math.max(1,...payment.items.map(o=>Math.abs(o.value)));
-      const label='USD · as of '+fmtDate(view.year.end);
-      const when=o=>{
-        const base=Number(view.year.end.slice(0,4));
-        if(/^y[1-5]$/.test(o.bucket)&&!(/\b(?:19|20)\d\d\b/.test(o.label)))return o.label+' · FY '+(base+Number(o.bucket[1]));
-        return o.label;
-      };
-      const list=payment.items.map((o,j)=>'<li><div><span>'+esc(when(o))+'</span><b>'+esc(amount(o.value,i,view.year.end))+'</b></div><span class="ladder-track"><i style="width:'+100*Math.abs(o.value)/max+'%;background:'+palette[o.value<0?5:j===0?2:0]+'"></i></span></li>').join('');
-      $('maturity-diagram').innerHTML='<p class="diagram-dateline">'+esc(label)+'</p><ol class="ladder-chart">'+list+'</ol>';
-    }else $('maturity-diagram').innerHTML='<p class="diagram-empty">A maturity schedule is unavailable for this company and period.</p>';
+    const body=rows.map(r=>{
+      const leader=r.rank===1,focus=r.i===0;
+      const cells=keys.map(k=>{
+        const v=r.values[k], style=annualFields[k][1];
+        const formatted=style==='usd'?esc(usdAmount(v,h)):style==='percent'?percent(v,h.pct):
+          style==='multiple'?esc(h.times(v)):F(v)?esc(v.toFixed(0)):'—';
+        const scaleBar=k==='netAssetsUsd'&&F(v)?'<span class="annual-bar" aria-hidden="true"><i style="--bar:'+Math.abs(v)/(scale||1)*100+'%;--bar-color:'+(v<0?'#a35f69':cashColor)+'"></i></span>':'';
+        const score=k==='score'&&r.rank?'<small class="annual-rank">#'+r.rank+'</small>':'';
+        return '<td class="annual-'+style+(k==='netAssetsUsd'?' annual-emphasis':'')+'">'+formatted+score+scaleBar+'</td>';
+      }).join('');
+      return '<tr data-annual-id="'+esc(r.view.id)+'" class="'+(focus?'annual-focus ':'')+(leader?'annual-leader':'')+'"><th scope="row">'+companyMark(r.view,h)+'</th>'+cells+'</tr>';
+    }).join('');
+    $('rank-diagram').innerHTML='<table class="annual-matrix annual-rank-table"><caption class="sr-only">Annual solvency measures and scale in '+usdLabel(h)+'. Each heading sorts its column.</caption>'+
+      '<thead><tr><th scope="col">Company / FY end</th>'+headers+'</tr></thead><tbody>'+body+'</tbody></table>';
   }
+  function revenueCard(view,kind,h,color){
+    const disclosure=view.geo[kind];
+    const heading=companyMark(view,h);
+    const klass='panel annual-mix-card'+(view.focus?' annual-focus':'');
+    if(!disclosure)return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+
+      '<p class="annual-empty">No comparable breakdown reported.</p></article>';
+    const rate=view.usdRate;
+    const items=disclosure.items.slice().sort((a,b)=>b.value-a.value);
+    const positive=items.filter(item=>item.value>0);
+    const sum=positive.reduce((total,item)=>total+item.value,0);
+    const segment=positive.map(it=>'<i title="'+esc(it.label+' · '+h.pct(D.division(it.value,disclosure.total,100)))+'" style="width:'+
+      (it.value/sum*100)+'%;background:'+color(it)+'"></i>').join('');
+    const body=items.map(item=>'<tr><th scope="row"><span class="annual-dot" style="--dot:'+color(item)+'" aria-hidden="true"></span>'+
+      esc(item.label)+'</th><td>'+esc(usdAmount(usd(item.value,rate),h))+'</td><td>'+percent(D.division(item.value,disclosure.total,100),h.pct)+'</td></tr>').join('');
+    return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+
+      '<p class="annual-mix-total"><strong>'+esc(usdAmount(usd(disclosure.total,rate),h))+'</strong><span>disclosed revenue</span></p>'+
+      (sum?'<div class="mix-strip" aria-hidden="true">'+segment+'</div>':'')+
+      '<table class="annual-mix-table"><caption class="sr-only">'+esc(view.company.name)+' · '+esc(D.kinds[kind])+'</caption>'+
+      '<thead><tr><th scope="col">Reported breakdown</th><th scope="col">'+usdLabel(h)+'</th><th scope="col">Share</th></tr></thead><tbody>'+body+'</tbody></table>'+
+      (F(rate)?'':'<p class="annual-empty">USD conversion unavailable.</p>')+'</article>';
+  }
+  function renderRevenue(views,h){
+    const categories=Object.entries(D.kinds).filter(([k])=>views.some(v=>v.geo[k]));
+    $('revenue-diagram').innerHTML=categories.length?categories.map(([k,title])=>{
+      const count=views.filter(v=>v.geo[k]).length;
+      const label=item=>item.type+'|'+D.canonical(item.label,item.type).toLowerCase();
+      const labels=D.mixRows(views,k).map(item=>label({label:item.name,type:item.type}));
+      const colors=new Map(labels.map((name,index)=>[name,palette[index%palette.length]]));
+      const color=item=>colors.get(label(item))||palette[0];
+      return '<section class="annual-breakdown" aria-labelledby="annual-mix-'+k+'"><header class="annual-breakdown-head">'+
+        '<h4 id="annual-mix-'+k+'">'+esc(title)+'</h4><span>'+count+'/'+views.length+' companies · '+usdLabel(h)+'</span></header>'+
+        '<div class="annual-mix-grid">'+views.map(v=>revenueCard(v,k,h,color)).join('')+'</div></section>';
+    }).join(''):'<p class="annual-empty">No comparable revenue breakdowns are available for this annual period.</p>';
+  }
+  function renderMaturities(views,h){
+    const families=Object.entries(D.families).filter(([k])=>views.some(v=>v.sch[k]));
+    $('maturity-diagram').innerHTML=families.length?families.map(([k,title])=>{
+      const counts=views.filter(v=>v.sch[k]).length;
+      const headers=views.map(view=>'<th scope="col" data-annual-id="'+esc(view.id)+'">'+companyMark(view,h)+'</th>').join('');
+      const periods=D.maturityRows(views,k);
+      const totals=views.map(v=>v.sch[k]?{n:v.sch[k].total}:null);
+      const rows=totals.some(cell=>F(cell?.n))?[...periods,{name:'Total scheduled payments',cells:totals}]:periods;
+      const body=rows.map(({name,cells})=>{
+        const amounts=cells.map((cell,i)=>usd(cell?.n,views[i].usdRate));
+        const max=Math.max(0,...amounts.filter(F).map(Math.abs));
+        return '<tr><th scope="row">'+esc(name)+'</th>'+amounts.map((amount,i)=>{
+          const bar=F(amount)&&max?'<span class="annual-bar" aria-hidden="true"><i style="--bar:'+Math.abs(amount)/max*100+
+            '%;--bar-color:'+(amount<0?'#a35f69':cashColor)+'"></i></span>':'';
+          return '<td'+(i===0?' class="annual-focus"':'')+(cells[i]?.label?' title="'+esc(cells[i].label)+'"':'')+'>'+esc(usdAmount(amount,h))+bar+'</td>';
+        }).join('')+'</tr>';
+      }).join('');
+      return '<article class="panel annual-panel annual-schedule" aria-labelledby="annual-schedule-'+k+'">'+
+        '<header class="annual-breakdown-head"><h4 id="annual-schedule-'+k+'">'+esc(title)+'</h4><span>'+counts+'/'+views.length+' companies · '+usdLabel(h)+'</span></header>'+
+        '<div class="horizontal annual-scroll" role="region" aria-label="'+esc(title)+'" tabindex="0"><table class="annual-matrix annual-maturity-table">'+
+        '<thead><tr><th scope="col">Payment window</th>'+headers+'</tr></thead><tbody>'+body+'</tbody></table></div></article>';
+    }).join(''):'<p class="annual-empty">No maturity schedules are available for this annual period.</p>';
+  }
+  function renderCharts(c,h){
+    const views=c.notes.map((view,i)=>({...filingView(view,h),focus:i===0}));
+    renderRanking(c,h,views);
+    renderRevenue(views,h);
+    renderMaturities(views,h);
+  }
+
   function sourceList(c,i,data,link,fmtDate){
     const v=c.notes[i],url=s=>typeof s==='number'?data.sources[s]:s;
     const refs=[];
@@ -143,5 +213,5 @@
     if(mark!=null)refs.push('<li><b>Company logo</b> · '+link(url(mark),v.company.name)+'</li>');
     return refs.length?'<details class="filing-note-refs"><summary>Revenue, balance sheet and maturity references</summary><ul>'+refs.join('')+'</ul></details>':'';
   }
-  root.FilingNotesView={focusKeys,groups,chartControls,renderCharts,sourceList};
+  root.FilingNotesView={focusKeys,groups,renderRanking,renderCharts,sourceList};
 })(window);

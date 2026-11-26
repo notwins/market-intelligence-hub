@@ -6,7 +6,7 @@
   const colors=['#176b5a','#41679b','#9a602b','#76558d','#a5455a','#267a89','#646b30','#584c89','#a45132','#3f6b41','#784a66','#4c596f','#966545','#6d497d','#8a752f','#216a80','#a44a64'];
   const defaultFocus=['peTTM','peFY','evEbitda','proxyEvEbitda','forwardPE','qGrowth','qNetMargin','revenue','operatingIncome','netIncome','ebitda','totalDebt','equity','operatingCashFlow','freeCashFlow','revenueGrowth','operatingMargin','roe','fcfMargin'];
   const state={data:null,focus:'',custom:null,size:9,period:'latest',bonus:[],fx:null,supplement:{},quarterEndMarkets:{},growth:'yoy',unit:'bn',filter:'all',stars:new Set(defaultFocus),
-    draft:[],quarterly:null,peerQuarterly:{},published:null,privateData:null,details:{},diagramCompany:'',autoFocus:new Set(),dropped:new Set()};
+    draft:[],quarterly:null,peerQuarterly:{},published:null,privateData:null,details:{},annualSort:{key:'score',ascending:false},autoFocus:new Set(),dropped:new Set()};
   ['core-revenue','core-netIncome','core-operatingCashFlow','core-freeCashFlow','core-cash','core-totalDebt','core-revenueGrowth','core-netMargin','core-fcfMargin','core-roe','core-roa','core-currentRatio','core-liabAssets','solvency-rank','solvency-score','recent-cash','recent-disclosedCash','recent-cashIncludingRestricted','recent-cashShort','note-cash','note-cashShort','note-treasuries','note-assets','note-ppe','note-totalDebt','note-liabilities','note-leasesTotal','note-interestCover','note-equityAssets','note-debtCoverage','note-cet1','note-firstDebtDue','note-shortDebtShare','note-dueCash','due-debt-y1','due-debt-y2','due-debt-total','due-operatingLease-y1','due-financeLease-y1','due-allLeases-y1'].forEach(k=>state.stars.add(k));
   const highlighted=k=>state.stars.has(k)||(state.autoFocus.has(k)&&!state.dropped.has(k));
   const pct=n=>USD.integer(n,'%');
@@ -136,7 +136,7 @@
     $('companies').innerHTML='<div class="column-label"><strong>Comparison item</strong></div>'+
       cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-brand">${logo(c.ids[i],co.name)}<span class="company-name" title="${esc(co.name)}">${esc(co.name)}</span>${c.bonus[i]?'<small class="bonus-tag">Bonus</small>':''}</span></div>`).join('');
     renderCompanyContext(c,reason);
-    renderDashboard(c);Notes.chartControls(c,state,opt);drawNotes(c);renderTables(c);renderSources(c);updateURL();
+    renderDashboard(c);drawNotes(c);renderTables(c);renderSources(c);updateURL();
   }
   function renderCompanyContext(c,reason) {
     const labels=['Company','Listing','Reported in','FX used','Fiscal period','Period end','Peer selection','Industry'];
@@ -210,7 +210,9 @@
     const star=interactive?`<button class="row-star" type="button" data-star="${esc(key)}" aria-pressed="${starred}" aria-label="${esc((starred?'Remove highlight from ':'Highlight ')+title)}" title="${starred?'Remove row highlight':'Highlight row'}">${starred?'★':'☆'}</button>`:'';
     return `<tr data-row="${esc(key)}" class="${starred?'focus-row':''}"><th scope="row">${star}<span>${esc(title)}</span></th>${values.map((v,i)=>{
       const win=winners.includes(i),formatted=fmt(v,i),detail=formatted&&typeof formatted==='object'?formatted:null,s=detail?detail.main:formatted,mark=win?`<span class="win-mark" title="${winners.length>1?'Joint leader':'Leader'}" aria-label="Leader">✓</span>`:'';
-      return `<td class="${win?'winner':s==='—'||s==='N/M'?'unavailable':''}"${detail?.tip?' title="'+esc(detail.tip)+'"':''}>${mark}${esc(s)}${detail?.sub?'<small class="cell-share">'+esc(detail.sub)+'</small>':''}</td>`;
+      const cellText=value=>typeof value==='string'&&value.endsWith('%')
+        ?'<span class="filing-percent">'+esc(value)+'</span>':esc(value);
+      return `<td class="${win?'winner':s==='—'||s==='N/M'?'unavailable':''}"${detail?.tip?' title="'+esc(detail.tip)+'"':''}>${mark}${cellText(s)}${detail?.sub?'<small class="cell-share">'+cellText(detail.sub)+'</small>':''}</td>`;
     }).join('')}</tr>`;
   }
   function renderTables(c) {
@@ -313,7 +315,7 @@
     const r=c.report;
     const bosRef=r?`<p><b>BOS peer comparison.</b> ${link(r.source+'#page='+r.page,'Original comparison, page '+r.page)} · ${esc(date(r.date))}.</p>`:'';
     $('method-text').innerHTML=bosRef+`<p>Filing snapshot checked ${esc(date(state.data.asOf))}. The 110 focus listings represent 97 issuers. Share classes and exchange listings for one issuer share its financial statements. Automatic selection starts with matched companies from the Beta 2 BOS report and continues with industry peers, then related industries. The selection stops when those candidates run out. Editing peers lets you choose up to ten. The BOS comparison preserves the report’s own group and dates. Connected Beta 2 research supplies its detailed table on this browser.</p>
-    <p>Tables show whole numbers. Amounts are translated into USD at the latest available exchange rate on or before the period end, or the quote date for market values. A fiscal label without an exact date uses its mapped calendar quarter end. Reporting currencies and the rates’ dates are listed under Compared companies. ${link(state.fx?.sourceUrl,'Federal Reserve H.10 exchange rates')}. Bonus companies appear alongside the comparison and do not count toward the direct-peer revenue share or checklist. Market values are estimates where a filed share count is multiplied by a close or an earlier equity value is updated by the change in price and FX. Each company’s source panel identifies its dates and method. Reported forward P/E comes from the dated consensus comparison.</p>
+    <p>The financial statement tables show whole numbers. The annual comparison also shows fractional USD amounts for scale. Net assets equal total assets less total liabilities. Amounts are translated into USD at the latest available exchange rate on or before the period end, or the quote date for market values. A fiscal label without an exact date uses its mapped calendar quarter end. Reporting currencies and the rates’ dates are listed under Compared companies. ${link(state.fx?.sourceUrl,'Federal Reserve H.10 exchange rates')}. Bonus companies appear alongside the comparison and do not count toward the direct-peer revenue share or checklist. Market values are estimates where a filed share count is multiplied by a close or an earlier equity value is updated by the change in price and FX. Each company’s source panel identifies its dates and method. Reported forward P/E comes from the dated consensus comparison.</p>
     <p>Trailing P/E divides equity market value by trailing 12-month earnings available to common shareholders. Filed-year P/E uses annual common earnings, or verified matching per-share figures where available. Earnings yield is the inverse of filed-year P/E. Price/sales uses revenue. Price/book uses common book equity. A multiple with nonpositive earnings or enterprise value is shown as N/M. Valuation rows highlight the lowest comparable positive multiple or the highest earnings yield. Valuations carry no fundamentals checklist points.</p>
     <p>Enterprise value includes common equity market value, interest-bearing debt, preferred equity and noncontrolling interests, less cash. The EV proxy uses common equity market value plus debt less cash. EBITDA is filing-reported or operating profit plus verified depreciation and amortisation. For Petrobras, the market value includes common and participating preferred shares at their respective prices. Each multiple uses the named denominator. Banks, financial groups and REITs omit the enterprise multiples.</p>
     <p>Core comparisons use the latest confirmed quarterly data in the 26 November snapshot. Source priority is a Form 10-Q, a verified fiscal fourth-quarter bridge or a current issuer release, followed by the dated Morningstar quarterly statements. Additional peers can use verified SEC interim filing facts. Rows show reporting currencies. The quarter selector groups actual period-end dates by calendar quarter. Where the source provides a fiscal label only, Beta 3 maps it using the issuer’s verified filing calendar. Growth uses the same fiscal quarter a year earlier for YoY and the immediately preceding fiscal quarter for QoQ. A missing period or nonpositive base leaves growth blank. Historical quarter valuations require a matching dated market observation. Quarterly cash flows use standalone quarters or comparable year-to-date differences. Trailing returns use twelve months of earnings and same-quarter year-over-year average balances. Morningstar trailing figures enter core ratios when the last four consecutive quarterly figures reconcile to the vendor total. Valuation ratios require a market observation on or after the relevant source date. Historical fiscal-year selections use audited annual statements and the dated market observations.</p>
@@ -348,9 +350,20 @@
     const path=assetFile(id);
     return path?'<img class="note-logo" alt="" title="'+esc(name)+'" src="assets/'+esc(path)+'" width="27" height="27" loading="lazy">':'<span class="note-logo initials" aria-hidden="true">'+esc((name||id).slice(0,2))+'</span>';
   }
-  function drawNotes(c){
-    Notes.renderCharts(c,state,{pct,times,amount:(v,i,end)=>amount(usd(c,i,v,end)),fmtDate:date,logo});
+  const annualNumbers=[1,2].map(digits=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:digits,maximumFractionDigits:digits}));
+  function annualDisplay(){
+    const num=(value,digits)=>annualNumbers[digits-1].format(value);
+    const amount=value=>{
+      const scaled=value/(state.unit==='bn'?1000:1);
+      if(scaled!==0&&Math.abs(scaled)<0.01)return '<0.01';
+      return num(scaled,Math.abs(scaled)<10?2:1);
+    };
+    const share=value=>Number.isFinite(value)?num(value,1)+'%':'—';
+    const multiple=value=>Number.isFinite(value)?num(value,2)+'×':'—';
+    return {pct:share,times:multiple,amount,fmtDate:date,logo,unit:state.unit,sort:state.annualSort,
+      rate:(currency,end)=>USD.rate(state.fx,currency,end)?.factor,scale:USD.annualScale};
   }
+  function drawNotes(c){Notes.renderCharts(c,annualDisplay());}
   function capLabel(n){if(!Number.isFinite(n))return '';const unit=n>=1e6?'T':n>=1e3?'B':'M';return 'US$'+USD.integer(n/(unit==='T'?1e6:unit==='B'?1e3:1))+unit;}
   const pickerOptions={escape:esc,logoBase:'assets/',allowCustom:false};
   const focusPicker=window.SISharePicker.mount($('focus-picker'),pickerOptions);
@@ -373,7 +386,7 @@
     if(!$('peer-editor').hidden)renderPeerEditor();
   }
   function focusCompany(ticker){
-    state.focus=ticker;state.custom=null;state.period='latest';state.diagramCompany='';$('company-scroll').scrollLeft=0;
+    state.focus=ticker;state.custom=null;state.period='latest';$('company-scroll').scrollLeft=0;
   }
   $('choose-company').addEventListener('change',()=>{const t=$('choose-company').value;if(t!==state.focus&&state.data.listings.some(x=>x.ticker===t)){closePeers();focusCompany(t);render();}});
   function renderPeerEditor(){
@@ -392,8 +405,14 @@
   $('cancel-peers').onclick=()=>{closePeers();$('choose-peers').focus();};
   $('auto-peers').onclick=()=>{state.custom=null;closePeers();render();};
   $('apply-peers').onclick=()=>{state.custom=[...state.draft];closePeers();render();};
-  $('diagram-company').onchange=()=>{state.diagramCompany=$('diagram-company').value;const c=comparison();Notes.chartControls(c,state,opt);drawNotes(c);};
-  for(const id of ['distribution-kind','schedule-kind','ranking-metric'])$(id).onchange=()=>drawNotes(comparison());
+  $('rank-diagram').addEventListener('click',event=>{
+    const target=event.target.closest('button[data-annual-sort]');
+    if(!target)return;
+    const key=target.dataset.annualSort;
+    state.annualSort={key,ascending:key===state.annualSort.key?!state.annualSort.ascending:target.dataset.ascending==='true'};
+    Notes.renderRanking(comparison(),annualDisplay());
+    $('rank-diagram').querySelector('[data-annual-sort="'+key+'"]').focus({preventScroll:true});
+  });
   for(const id of ['mix-units','geo-filter'])$(id).onchange=()=>renderTables(comparison());
 
   $('bonus-choices').onclick=e=>{
