@@ -78,6 +78,23 @@ html[data-nav-style=professional] .hub-primary .hub-primary-link { background: t
 }
 .modebar [role=tablist] { padding: 0; gap: .25rem; border-radius: 0; background: none; }
 .modebar button { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; min-height: 42px; padding: .45rem .85rem; border-radius: 4px; border: 1px solid transparent; font: 600 .925rem/1.2 var(--font); }
+.modebar [data-mode="briefing"] { --icon-ink: #713d2c; --icon-paper: #f4ddca; --icon-wash: #dfa583; }
+.modebar [data-mode="markets"] { --icon-ink: #34543e; --icon-paper: #e0e8d8; --icon-wash: #a0bca0; }
+.modebar [data-mode="full-history"] { --icon-ink: #514765; --icon-paper: #e8e4ee; --icon-wash: #bbb3ce; }
+.desk-tab-icon {
+  display: block; flex: none; width: 1.95rem; height: 1.95rem; padding: .125rem; border-radius: .38rem;
+  color: var(--icon-ink); background: var(--icon-paper); fill: none; stroke: currentColor;
+  stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
+}
+.desk-tab-icon .tab-wash { fill: var(--icon-wash); }
+.desk-tab-icon .tab-page { fill: #fffdf7; }
+.desk-tab-icon .tab-solid { fill: currentColor; stroke-width: 1.2; }
+.desk-tab-icon .tab-trace { stroke-width: 2.15; }
+@media (forced-colors: active) {
+  .desk-tab-icon { color: ButtonText; background: ButtonFace; }
+  .desk-tab-icon :is(.tab-wash,.tab-page) { fill: Canvas; }
+  .desk-tab-icon .tab-solid { fill: ButtonText; }
+}
 .modebar button span { font-size: inherit; }
 html[data-nav-style=professional] .modebar button[aria-selected=true] { background: #303a30; color: #fff; }
 .modebar button:hover { border-color: #bfc5b7; }
@@ -195,8 +212,10 @@ input:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visibl
   .desk-gear { width: 44px; }
   .hub-desk-nav.hub-primary-ready { scroll-padding-top: 3.7rem; }
 }
-@media (max-width: 370px) {
-  .modebar button .desk-icon { display: none; }
+@media (max-width: 425px) {
+  .modebar [role=tablist] { display: grid; grid-template-columns: .72fr 1.48fr 1fr; }
+  .modebar button { flex-direction: column; justify-content: flex-start; gap: .15rem; padding: .25rem .1rem; white-space: normal; text-align: center; }
+  .modebar .desk-tab-icon { width: 1.55rem; height: 1.55rem; padding: .05rem; }
 }
 @media (max-width: 455px) {
   .daily-desk-editions { grid-template-columns: 1fr; }
