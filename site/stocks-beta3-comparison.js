@@ -65,7 +65,8 @@
   }
   const marketLabels={quotePrice:'Share price',cap:'Equity market value',ev:'Enterprise value',peTTM:'P/E · trailing 12 months',peFY:'P/E · filed fiscal year',forwardPE:'P/E · consensus forward',evEbitda:'EV / EBITDA · filed fiscal year',proxyEvEbitda:'EV proxy / EBITDA · filed fiscal year',evEbit:'EV / operating profit · filed fiscal year',priceBook:'Price / book · filed fiscal year',priceSales:'Price / sales · filed fiscal year',earningsYield:'Earnings yield · filed fiscal year'};
   const quarterLabels={qRevenue:'Revenue / total income',qGrowth:'Revenue growth year on year',qOperatingMargin:'Operating margin',qNetMargin:'Net margin to owners',ttmRevenue:'Trailing 12-month revenue',ttmNetCommon:'Trailing 12-month common earnings'};
-  const multiples=new Set(['peTTM','peFY','forwardPE','evEbitda','proxyEvEbitda','evEbit','priceBook','priceSales']);
+  const coreMarketLabels={peTTMLatest:"P/E · trailing 12 months",priceSalesTTM:"Price / sales · trailing 12 months",priceBookLatest:"Price / common book · latest quarter",evEbitdaTTM:"EV / EBITDA · trailing 12 months",proxyEvEbitdaTTM:"EV proxy / EBITDA · trailing 12 months",evEbitTTM:"EV / operating profit · trailing 12 months"};
+  const multiples=new Set([...Object.keys(coreMarketLabels),'peTTM','peFY','forwardPE','evEbitda','proxyEvEbitda','evEbit','priceBook','priceSales']);
   function quotient(n,d) {return valid(n)&&valid(d)&&d>0 ? n/d : null;}
   function quarterView(record,year,latest) {
     if(!record)return {values:{}};
@@ -78,9 +79,15 @@
     const growth=valid(v.revenue)&&valid(prev?.values.revenue)?scale(v.revenue-prev.values.revenue,prev.values.revenue):null;
     return {period:observation.period,currency:record.currency,asOf:record.asOf,source:record.source,values:{qRevenue:v.revenue,qGrowth:growth,qOperatingMargin:scale(v.operatingIncome,v.revenue),qNetMargin:scale(v.netIncome,v.revenue),ttmRevenue:ttm?.revenue,ttmNetCommon:ttm?.netCommon}};
   }
-  function valueView(data,id,ticker,year,period) {
+  function valueView(data,id,ticker,year,period,core) {
     const c=data.companies[id],latest=period==='latest',x=data.expansion||{};
     const q=quarterView(x.quarters?.[ticker]||x.quarters?.[c.ticker],year,latest);
+    if(core){
+      const {period,currency,ended,asOf,source,kind,values}=core;
+      Object.assign(q,{period,currency,ended,asOf,source,sourceLabel:kind});
+      q.values={qRevenue:values.revenue,qGrowth:values.revenueGrowth,qOperatingMargin:values.operatingMargin,
+        qNetMargin:values.netMargin,ttmRevenue:values.ttmRevenue,ttmNetCommon:values.ttmNetCommon};
+    }
     const interim=latest&&!q.source?x.interim?.[id]:null;
     if(interim&&interim.currency===c.currency){
       Object.assign(q,{asOf:interim.filed,ended:interim.ended,source:interim.source,sourceLabel:'SEC interim filing',currency:interim.currency});
@@ -102,7 +109,28 @@
       if(n<=0||d<=0){nm.add(k);return;}
       values[k]=n/d;
     }
-    if(latest && q.asOf && m.date>=q.asOf && q.currency===m.currency)multiple('peTTM',commonCapital,q.values.ttmNetCommon);
+    if(latest && q.asOf && m.date>=q.asOf && q.currency===m.currency){
+      if(!core||core.ttm){
+        multiple('peTTM',commonCapital,q.values.ttmNetCommon);
+        multiple('peTTMLatest',commonCapital,q.values.ttmNetCommon);
+      }
+      if(core){
+        const balance=core.reportBalance, trailing=core.ttm?.values||{};
+        const preferred=m.includesPreferred?0:balance.preferredEquity;
+        const book=valid(balance.bookCommon)?balance.bookCommon:valid(balance.equity)&&valid(preferred)?balance.equity-preferred:null;
+        multiple('priceBookLatest',commonCapital,book);
+        multiple('priceSalesTTM',capital,trailing.revenue);
+        if(c.model==='operating'&&[capital,balance.totalDebt,balance.cash].every(valid)){
+          const proxy=capital+balance.totalDebt-balance.cash;
+          multiple('proxyEvEbitdaTTM',proxy,trailing.ebitda);
+          if([preferred,balance.noncontrollingInterest].every(valid)){
+            const enterprise=proxy+preferred+balance.noncontrollingInterest;
+            multiple('evEbitdaTTM',enterprise,trailing.ebitda);
+            multiple('evEbitTTM',enterprise,trailing.operatingIncome);
+          }
+        }
+      }
+    }
     if(asFiled) {
       const common=valid(inputs.netCommon)?inputs.netCommon:null;
       multiple('peFY',commonCapital,common);
@@ -126,7 +154,7 @@
     }
     return {values,nm,q,m};
   }
-  const api={MAX_PEERS,DEFAULT_PEERS,prepare,reportMembers,candidates,count,select,marketLabels,quarterLabels,multiples,quarterView,valueView,quotient};
+  const api={MAX_PEERS,DEFAULT_PEERS,prepare,reportMembers,candidates,count,select,marketLabels,coreMarketLabels,quarterLabels,multiples,quarterView,valueView,quotient};
   root.SharesComparison=api;
   if(typeof module!=='undefined')module.exports=api;
 })(typeof window==='undefined'?globalThis:window);

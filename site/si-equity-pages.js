@@ -282,8 +282,12 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
   }
  }
  line(1003);
- const captured=company?.quarterlyCapturedAt;
- text(28,1019,`Morningstar · As Originally Reported${captured?' · captured '+captured:''}`,10,muted);
+ const captured=company?.quarterlyCapturedAt,core=company?.coreQuarter;
+ const hasFiling=core?.kind&&core.kind!=='Morningstar';
+ const statementSource=hasFiling
+  ? core.periodLabel+' · '+core.kind+' · Morningstar statement history'
+  : 'Morningstar · As Originally Reported'+(captured?' · captured '+captured:'');
+ fitted(28,1019,statementSource,744,10,muted);
  const footnotes=quarters.length?[
   `12 fiscal periods · ${quarters[0]} to ${quarters.at(-1)} · M = millions · '000 = thousands · — = unavailable`,
   'QoQ = change ÷ absolute prior quarter, before FX. Net profit margin = net income ÷ revenue.',
@@ -292,7 +296,9 @@ function svg(share,data={},page=2,total=2,{showWatermarks=true,links=[],source='
   ...translations
  ]:['Public quarterly financials are unavailable for this listing.'];
  footnotes.filter(Boolean).forEach((note,i)=>fitted(28,1034+14*i,note,744,10,muted));
- link(28,1108,'Full Morningstar financial statements',info?.financialsUrl);
+ if(hasFiling)link(28,1108,'Latest '+core.kind+' source',core.source);
+ else link(28,1108,'Full Morningstar financial statements',info?.financialsUrl);
+ if(hasFiling)link(630,1108,'Morningstar history',info?.financialsUrl);
  link(255,1108,'Stocks BETA 2 statements',info?.statementsUrl);
  if(bos)link(445,1108,'BOS credit source · '+bos.report_date,bos.source_pdf);
  out.push('</svg>');return out.join('');

@@ -78,11 +78,11 @@
     const best = Math.max(...rounded);
     return rounded.flatMap((v,i) => v === best ? [i] : []);
   }
-  function checklist(companies, years) {
+  function checklist(companies, years, measure=(c,i,key)=>metric(c,years[i],key)) {
     const scores = companies.map(() => 0);
     let counted = 0;
     const rows = criteria(companies).map(key => {
-      const values = companies.map((c,i) => metric(c,years[i],key));
+      const values = companies.map((c,i) => measure(c,i,key));
       const winners = leaders(values);
       if (winners.length) {
         counted++;

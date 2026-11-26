@@ -16,7 +16,8 @@
   }));
   const mixedFlowPeriods = new Set(['3988 HK', '601988 CH', '857 HK', '601857 CH', '939 HK', '601939 CH']);
   const semiannualFlowPeriods = new Set(['BHP LN', 'BHP AU', 'WIL SP', 'YZJSGD SP']);
-  const reportingCurrency = (id, report) => report && (reportingCurrencies.get(id) || report.currency);
+  const reportingCurrency = (id, report) => report && (report.normalizedCurrency
+    ? report.currency : reportingCurrencies.get(id) || report.currency);
   const tradingCurrency = code => /^(GBX|GBp)$/.test(code) ? 'GBP' : /^[A-Z]{3}$/.test(code || '') ? code : '';
 
   function translation(archive, from, to, asOf) {

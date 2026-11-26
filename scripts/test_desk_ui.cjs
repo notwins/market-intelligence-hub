@@ -347,5 +347,34 @@ test('Solvency ranks use shared evidence, matched business models, fair ties and
 });
 
 
+test('Quarterly comparisons preserve periods and calculate from aligned filing scopes',()=>{
+  const Q=require('../site/shares-quarterly-core.js');
+  const source='https://www.sec.gov/company-report';
+  const prior={period:'Q3 2025',source,balance:{assets:80,equity:40},values:{revenue:60,netIncome:5}};
+  const latest={period:'Q3 2026',kind:'10-Q',source,end:'2026-09-30',filed:'2026-11-05',priorBalanceEnd:'2025-12-31',
+    balance:{assets:100,equity:50,cash:20,currentAssets:25,currentLiabilities:10,totalDebt:40},priorBalance:{assets:120,equity:90},
+    values:{revenue:75,netIncome:15,operatingIncome:30,operatingCashFlow:20,capex:5},
+    ytd:{operatingCashFlow:60}};
+  const record={currency:'USD',observations:[prior,latest],ttm:{end:latest.end,values:{netIncome:30,revenue:275,operatingCashFlow:50}}};
+  const q=Q.view(record,{currency:'USD',model:'operating'}); const v=q.values;
+  assert.equal(v.revenueGrowth,25);assert.equal(v.operatingMargin,40);assert.equal(v.fcfMargin,20);
+  assert.equal(v.currentRatio,2.5);assert.equal(v.cashDebt,50);assert.equal(v.debtCoverage,125);
+  assert.equal(v.roe,100*30/45);assert.equal(v.ttmNetCommon,undefined);
+  assert.equal(q.ytd.operatingCashFlow,60);assert.equal(v.operatingCashFlow,20);
+  assert.equal(Q.view(record,{currency:'JPY'}),null);
+  assert.equal(Q.view(record,{model:'bank'}).values.currentRatio,null);
+  assert.equal(Q.view(record,{observation:prior}).values.ttmRevenue,undefined);
+  assert.equal(Q.view({...record,ttm:{end:'2026-06-30',values:{netCommon:100}}}).values.ttmNetCommon,undefined);
+});
+test('Morningstar trailing figures must match four consecutive quarterly observations',()=>{
+  const Q=require('../site/shares-quarterly-core.js');
+  const series=[1,2,3,4].map(n=>({period:'Q'+n+' 2026',source:'https://www.morningstar.com/',values:{revenue:n,netCommon:2}}));
+  const record={currency:'SGD',observations:series,ttm:{kind:'Morningstar',period:'Q4 2026',values:{revenue:500,netCommon:8}}};
+  const current=Q.view(record);
+  assert.equal(current.values.ttmRevenue,undefined);
+  assert.equal(current.values.ttmNetCommon,8);
+  assert.equal(Q.view({...record,observations:series.slice(1)}).ttm,null);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

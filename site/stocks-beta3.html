@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=3">
+  <link rel="stylesheet" href="stocks-beta3.css?v=4">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="content-source.js"></script>
   <script defer src="stocks-beta2-private-research.js?v=1"></script>
@@ -17,9 +17,12 @@
   <script defer src="si-share-picker.js?v=3"></script>
   <script defer src="stocks-beta3-disclosures.js?v=3"></script>
   <script defer src="stocks-beta3-details.js?v=3"></script>
-  <script defer src="stocks-beta3-comparison.js?v=2"></script>
-  <script defer src="stocks-beta3-model.js?v=3"></script>
-  <script defer src="stocks-beta3.js?v=3"></script>
+  <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=1">
+  <script defer src="shares-quarterly-core.js?v=1"></script>
+  <script defer src="stocks-beta3-quarterly-charts.js?v=1"></script>
+  <script defer src="stocks-beta3-comparison.js?v=3"></script>
+  <script defer src="stocks-beta3-model.js?v=4"></script>
+  <script defer src="stocks-beta3.js?v=4"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -28,28 +31,28 @@
     <header class="filings-intro">
       <div><p class="section-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg> Shares Beta 3</p>
         <h1>SEC 10-K &amp; annual filings</h1></div>
-      <nav class="section-links" aria-label="Filing comparison sections"><a href="#solvency-ranking">Solvency ranking</a><a href="#statements">Valuation &amp; statements</a><a href="#checklist">Fundamentals checklist</a></nav>
+      <nav class="section-links" aria-label="Filing comparison sections"><a href="#quarterly-dashboard">Quarterly charts</a><a href="#solvency-ranking">Annual solvency</a><a href="#statements">Valuation &amp; statements</a><a href="#checklist">Fundamentals checklist</a></nav>
     </header>
     <p id="load-status" role="status">Loading annual filings…</p><button id="retry" type="button" hidden>Retry loading filings</button>
     <div id="filing-app" hidden>
       <section class="filing-controls panel" aria-label="Comparison settings">
         <div class="control-group" id="focus-picker"><div class="share-picker"><label for="choose-company">Focus company</label><div class="share-picker-field"><input id="choose-company" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="choose-company-list" autocomplete="off" placeholder="Company or ticker"><button type="button" aria-label="Show focus company options" aria-controls="choose-company-list"><span aria-hidden="true"></span></button></div><div id="choose-company-list" class="share-picker-list" role="listbox" aria-label="Focus company" hidden></div></div></div>
         <div class="control-group peer-control"><span id="peer-label">Competitors</span><button id="choose-peers" class="picker-control" type="button" aria-expanded="false" aria-controls="peer-editor" aria-labelledby="peer-label peer-name"><span id="peer-name"></span><span class="edit-affordance">Edit</span></button></div>
-        <label class="control-group">Automatic peer count<select id="peer-count"><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
-        <label class="control-group">Fiscal period<select id="period"><option value="latest">Latest reported</option></select></label>
+        <label class="control-group">Automatic peer count<select id="peer-count"><option>5</option><option>6</option><option>7</option><option>8</option><option selected>9</option><option>10</option></select></label>
+        <label class="control-group">Comparison period<select id="period"><option value="latest">Latest quarter</option></select></label>
         <div id="peer-editor" hidden><div id="peer-picker"><div class="share-picker"><label for="peer-add">Add competitor</label><div class="share-picker-field"><input id="peer-add" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="peer-add-list" autocomplete="off" placeholder="Company or ticker"><button type="button" aria-label="Show add competitor options" aria-controls="peer-add-list"><span aria-hidden="true"></span></button></div><div id="peer-add-list" class="share-picker-list" role="listbox" aria-label="Add competitor" hidden></div></div></div><div class="selected-peers" id="selected-peers"></div><div class="peer-actions"><span id="peer-draft"></span><button type="button" id="auto-peers">Use automatic peers</button><button type="button" id="cancel-peers">Cancel</button><button type="button" id="apply-peers" class="apply">Apply peers</button></div></div>
         <div class="peer-context"><span id="peer-basis"></span><button type="button" id="open-bos" aria-haspopup="dialog" hidden>BOS comparison</button></div>
       </section>
       <section id="comparison" aria-label="Company comparison">
         <div class="sticky-companies"><div class="horizontal" id="company-scroll" tabindex="0" aria-label="Company columns, horizontal scroll"><div class="compare-grid company-grid" id="companies"></div></div></div>
-        <section class="charts-grid" aria-label="Filing charts">
-          <article class="panel chart-panel"><header><h2>Peer comparison</h2><label class="sr-only" for="bar-metric">Peer comparison metric</label><select id="bar-metric"></select></header><div id="bars"></div></article>
-          <article class="panel chart-panel"><header><h2>Annual trend</h2><label class="sr-only" for="trend-metric">Annual trend metric</label><select id="trend-metric"></select></header><div id="trend"></div></article>
+        <section class="filing-section" id="quarterly-dashboard" aria-labelledby="quarterly-dashboard-title">
+          <header class="block-heading"><h2 id="quarterly-dashboard-title">Quarterly comparison charts</h2></header>
+          <div id="quarterly-charts"></div>
         </section>
         <section id="disclosure-charts" class="filing-section" aria-label="Filing analysis charts"><header class="block-heading"><h2>Solvency and filing detail</h2></header>
-          <div class="disclosure-workbench"><article class="panel ranking-panel" id="solvency-ranking"><header><h3>Solvency ranking</h3><label class="sr-only" for="ranking-metric">Rank companies by</label><select id="ranking-metric"></select></header><p id="ranking-caption"></p><ol id="rank-diagram" class="rank-diagram"></ol><p id="ranking-method"></p></article>
+          <div class="disclosure-workbench"><article class="panel ranking-panel" id="solvency-ranking"><header><h3>Annual solvency ranking</h3><label class="sr-only" for="ranking-metric">Rank companies by</label><select id="ranking-metric"></select></header><p id="ranking-caption"></p><ol id="rank-diagram" class="rank-diagram"></ol><p id="ranking-method"></p></article>
           <div class="report-charts"><label class="diagram-company-label" for="diagram-company">Inspect filing <select id="diagram-company"></select></label>
-           <article class="panel note-chart"><header><h3>Revenue mix</h3><label class="sr-only" for="distribution-kind">Revenue breakdown</label><select id="distribution-kind"></select></header><div id="revenue-diagram"></div></article>
+           <article class="panel note-chart"><header><h3>Annual revenue mix</h3><label class="sr-only" for="distribution-kind">Revenue breakdown</label><select id="distribution-kind"></select></header><div id="revenue-diagram"></div></article>
            <article class="panel note-chart"><header><h3>Maturity ladder</h3><label class="sr-only" for="schedule-kind">Payment schedule</label><select id="schedule-kind"></select></header><div id="maturity-diagram"></div></article>
           </div></div></section>
         <section class="filing-section" id="statements"><header class="block-heading"><h2>Valuation &amp; financial statements</h2></header>
