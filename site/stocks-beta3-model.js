@@ -101,7 +101,17 @@
   function periods(companies) {
     return [...new Set(companies.flatMap(c => c.years.map(y => y.end.slice(0,4))))].sort().reverse();
   }
-  const api = {fields,labels,groups,metric,yearFor,priorYear,financial,criteria,leaders,checklist,initialPeers,periods};
+  async function loadPublished() {
+    const path = 'data/shares-beta3-annual-filings-2026-11-26.json';
+    const response = await root.fetch(root.ContentDelivery.CONTENT + path, { signal: AbortSignal.timeout(30000) });
+    if (!response.ok) throw Error('Annual filing data is unavailable.');
+    const data = await response.json();
+    if (!Array.isArray(data.listings) || data.listings.length !== 110 || !data.companies) {
+      throw Error('Invalid annual filing coverage.');
+    }
+    return data;
+  }
+  const api = {fields,labels,groups,metric,yearFor,priorYear,financial,criteria,leaders,checklist,initialPeers,periods,loadPublished};
   root.FilingComparison = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);
