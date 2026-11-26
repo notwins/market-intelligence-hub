@@ -376,5 +376,33 @@ test('Morningstar trailing figures must match four consecutive quarterly observa
   assert.equal(Q.view({...record,observations:series.slice(1)}).ttm,null);
 });
 
+test('Calendar quarters align different fiscal labels and keep the newest Form 10-Q as the default',()=>{
+  const Q=require('../site/shares-quarterly-core.js');
+  const source='https://www.sec.gov/company-report';
+  const obs=(period,end,kind='10-Q')=>({period,end,kind,source,values:{}});
+  const alphabet={observations:[obs('Q2 2026',null,'Morningstar'),obs('Q3 2026','2026-09-30'),obs('Q4 2026','2026-12-31','Issuer quarterly results')]};
+  const apple={observations:[obs('Q3 2026','2026-06-27'),obs('Q4 2026','2026-09-26','10-K bridge')]};
+  const microsoft={observations:[obs('Q1 2027','2026-09-30'),obs('Q2 2027','2026-12-31','Issuer quarterly results')]};
+  const indexes=[alphabet,apple,microsoft].map(record=>Q.quarterIndex(record,null,'2027-01-31'));
+  assert.equal(indexes[0].get('2026-Q2').period,'Q2 2026');
+  assert.equal(indexes[1].get('2026-Q3').period,'Q4 2026');
+  assert.equal(indexes[2].get('2026-Q3').period,'Q1 2027');
+  const result=Q.comparisonQuarters(indexes);
+  assert.deepEqual(result.latest,{quarter:'2026-Q3',coverage:3,has10Q:true});
+  assert.equal(result.quarters[0].quarter,'2026-Q4');
+  assert.equal(Q.comparisonQuarters([new Map()]).latest,undefined);
+});
+test('QoQ uses adjacent standalone quarters and YoY uses the comparable year-ago period',()=>{
+  const Q=require('../site/shares-quarterly-core.js');
+  const source='https://www.sec.gov/company-report';
+  const obs=(period,end,revenue)=>({period,end,kind:'10-Q',source,values:{revenue,netIncome:revenue}});
+  const a=obs('Q3 2025','2025-09-30',80),b=obs('Q2 2026','2026-06-30',100),c=obs('Q3 2026','2026-09-30',120);
+  const record={currency:'USD',observations:[a,b,c]};
+  assert.equal(Q.view(record,{growthBasis:'yoy'}).values.revenueGrowth,50);
+  assert.equal(Q.view(record,{growthBasis:'qoq'}).values.revenueGrowth,20);
+  assert.equal(Q.view({...record,observations:[a,c]},{growthBasis:'qoq'}).values.revenueGrowth,null);
+  assert.equal(Q.view({...record,observations:[a,{...b,values:{revenue:-1}},c]},{growthBasis:'qoq'}).values.revenueGrowth,null);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

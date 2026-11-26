@@ -98,6 +98,49 @@
   function listing(bundle,ticker,issuer){
     return (ticker&&Object.hasOwn(bundle?.listings||{},ticker)?bundle.listings[ticker]:null)||bundle?.issuers?.get(issuer);
   }
+  function fiscalOrdinal(period){
+    const match=periodPattern.exec(period||'');
+    return match?4*Number(match[2])+Number(match[1])-1:NaN;
+  }
+  function calendarQuarter(end){
+    return iso.test(end||'')?end.slice(0,4)+'-Q'+Math.ceil(Number(end.slice(5,7))/3):null;
+  }
+  function labelQuarter(key){
+    return key?'Q'+key.slice(-1)+' '+key.slice(0,4):'';
+  }
+  function quarterIndex(record,annualEnd,asOf){
+    const result=new Map();
+    if(!record)return result;
+    const observations=record.observations.filter(item=>periodPattern.test(item.period)&&validSource(item.source));
+    const anchors=observations.filter(item=>iso.test(item.end||'')).map(item=>[fiscalOrdinal(item.period),item.end]);
+    if(iso.test(annualEnd||'')&&!anchors.length)anchors.push([fiscalOrdinal('Q4 '+annualEnd.slice(0,4)),annualEnd]);
+    const priority={'10-Q':4,'6-K':3,'Issuer quarterly results':3,'10-K bridge':2,Morningstar:1};
+    for(const item of observations){
+      let end=item.end;
+      if(!iso.test(end||'')){
+        const target=fiscalOrdinal(item.period);
+        const nearest=anchors.reduce((best,anchor)=>!best||Math.abs(anchor[0]-target)<Math.abs(best[0]-target)?anchor:best,null);
+        if(!nearest)continue;
+        const month=Number(nearest[1].slice(5,7))-1+3*(target-nearest[0]);
+        const estimate=new Date(Date.UTC(Number(nearest[1].slice(0,4)),month+1,0));
+        end=estimate.toISOString().slice(0,10);
+      }
+      if(asOf&&end>asOf)continue;
+      const calendar=calendarQuarter(end), previous=result.get(calendar);
+      if(!previous||(priority[item.kind]??0)>(priority[previous.kind]??0))result.set(calendar,item);
+    }
+    return result;
+  }
+  function comparisonQuarters(indexes){
+    const entries=new Map();
+    for(const index of indexes)for(const [quarter,obs] of index){
+      const item=entries.get(quarter)||{quarter,coverage:0,has10Q:false};
+      item.coverage++;item.has10Q ||= obs.kind==='10-Q';entries.set(quarter,item);
+    }
+    const quarters=[...entries.values()].sort((a,b)=>b.quarter.localeCompare(a.quarter));
+    const latest=quarters.find(item=>item.has10Q)||quarters[0];
+    return {quarters,latest};
+  }
   function verifyTrailing(trailing,observation,observations){
     if(trailing?.kind!=='Morningstar')return trailing;
     const key=period=>{const match=periodPattern.exec(period||'');return match?4*Number(match[2])+Number(match[1]):NaN;};
@@ -113,7 +156,7 @@
     }
     return Object.keys(values).length?{...trailing,values}:null;
   }
-  function view(record,{currency,period='latest',year,model,observation}={}){
+  function view(record,{currency,period='latest',year,model,observation,growthBasis='yoy'}={}){
     if(!record||(currency&&record.currency!==currency))return null;
     const observations=record.observations;
     const o=observation||(period==='latest'?observations.at(-1):observations.find(v=>v.period==='Q4 '+year));
@@ -122,7 +165,11 @@
     const prev=observations.find(v=>v.period==='Q'+q+' '+(Number(fy)-1));
     const trailingRecord=period==='latest'&&o===observations.at(-1)&&(!record.ttm?.end||!o.end||record.ttm.end===o.end)?record.ttm:null;
     const ttm=verifyTrailing(trailingRecord,o,observations);
-    const values=o.values||{}, prior={...prev?.values,...o.priorValues}, balance=o.balance||{};
+    const values=o.values||{}, balance=o.balance||{};
+    const preceding=observations.find(v=>fiscalOrdinal(v.period)===fiscalOrdinal(o.period)-1);
+    const gap=o.end&&preceding?.end?(Date.parse(o.end)-Date.parse(preceding.end))/86400000:null;
+    const prior=growthBasis==='qoq'?(gap===null||(gap>=75&&gap<=106)?preceding?.values||{}:{}):
+      {...prev?.values,...o.priorValues};
     const endBalance={...balance,equity:balance.equity??balance.totalEquity};
     const sameQuarterEnd=o.priorQuarterBalanceEnd||o.priorBalanceEnd;
     const comparisonGap=o.end&&sameQuarterEnd?(Date.parse(o.end)-Date.parse(sameQuarterEnd))/86400000:null;
@@ -160,7 +207,7 @@
     };
     return {observation:o,values:raw,currency:record.currency,ttm,period:o.period,periodLabel:o.period+(o.end?' · '+o.end:''),
       kind:o.kind,source:o.source,asOf:o.filed||record.asOf||'2026-11-22',ended:o.end,
-      reportBalance:balance,ytd:o.ytd,priorYtd:o.priorYtd};
+      reportBalance:balance,ytd:o.ytd,priorYtd:o.priorYtd,growthBasis};
   }
   const line=(f,...p)=>[f,p];
   const statementRows={
@@ -249,7 +296,7 @@
       +rows.filter(([,value])=>finite(value)).map(([label,value,fmt])=>'<div><dt>'+esc(label)+'</dt><dd>'+esc(fmt(value))+'</dd></div>').join('')
       +'</dl></section>';
   }
-  const api={load,peerFilings,listing,view,overlay,card,get data(){return data;}};
+  const api={load,peerFilings,listing,view,quarterIndex,comparisonQuarters,labelQuarter,overlay,card,get data(){return data;}};
   root.SharesQuarterlyCore=api;
   if(typeof module!=='undefined')module.exports=api;
 })(typeof window==='undefined'?globalThis:window);
