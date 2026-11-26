@@ -107,6 +107,18 @@
   color: var(--ink);
   font-weight: 700;
 }
+.nv-fundamentals-sensitivity tr[data-custom-sensitivity] [data-benchmark-tone="positive"] {
+  background: var(--beta-gain);
+  color: var(--beta-positive);
+}
+.nv-fundamentals-sensitivity tr[data-custom-sensitivity] [data-benchmark-tone="negative"] {
+  background: var(--beta-loss);
+  color: var(--beta-negative);
+}
+.nv-fundamentals-sensitivity tr[data-custom-sensitivity] [data-benchmark-tone="neutral"] {
+  background: var(--beta-panel);
+  color: var(--ink);
+}
 .nv-fundamentals-sensitivity tr[data-custom-sensitivity] small span { display: block; }
 .nv-fundamentals-sensitivity-comparison { color: var(--ink); }
 .nv-fundamentals-custom-comparison:not(:empty) { margin-top: .35rem; font-weight: 650; }

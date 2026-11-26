@@ -70,19 +70,25 @@
     row.querySelector('[data-fcf-cut]').textContent = 'FCF ' + cutText(fcfCut);
     const {pe, yieldRate, cells} = scenarioMetrics(test, cap,
       epsCut === null ? null : eps * (1 - epsCut), fcfCut === null ? null : fcf * (1 - fcfCut));
-    row.querySelectorAll('td').forEach((cell, index) => { cell.textContent = cells[index]; });
+    const valueCells = row.querySelectorAll('td');
+    valueCells.forEach((cell, index) => { cell.textContent = cells[index]; });
+    const [, , peCell, yieldCell] = valueCells;
+    peCell.dataset.benchmarkTone = 'neutral';
+    yieldCell.dataset.benchmarkTone = 'neutral';
 
     const notes = [];
     if (test && reference) {
-      const compare = (label, value, benchmark, format) => {
+      const compare = (cell, label, value, benchmark, format, preferLower) => {
         const simulated = format(value);
         const dated = format(benchmark);
-        return label + (simulated === dated ? ' matches the close at ' + dated :
-          (value < benchmark ? ' is lower (' : ' is higher (') + simulated + ' vs ' + dated + ')') + '.';
+        if (simulated === dated) return label + ' matches the close at ' + dated + '.';
+        const lower = value < benchmark;
+        cell.dataset.benchmarkTone = lower === preferLower ? 'positive' : 'negative';
+        return label + (lower ? ' is lower (' : ' is higher (') + simulated + ' vs ' + dated + ').';
       };
       if (pe !== null || yieldRate !== null) notes.push('Custom vs. dated close.');
-      if (pe !== null) notes.push(compare('P/E', pe, reference.price / eps, multiple));
-      if (yieldRate !== null) notes.push(compare('FCF yield', yieldRate, fcf / reference.cap, value => percent.format(value)));
+      if (pe !== null) notes.push(compare(peCell, 'P/E', pe, reference.price / eps, multiple, true));
+      if (yieldRate !== null) notes.push(compare(yieldCell, 'FCF yield', yieldRate, fcf / reference.cap, percent.format, false));
     } else if (test) {
       notes.push('A dated close is needed to compare the custom ratios.');
     }

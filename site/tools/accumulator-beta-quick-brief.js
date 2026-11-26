@@ -65,6 +65,7 @@
           implications: read('.nv-fundamentals-implied > span'),
           sensitivity: Array.from(fundamentals.querySelectorAll('.nv-fundamentals-sensitivity table tr'), row => ({
             cells: Array.from(row.cells, cell => cell.textContent.trim()),
+            benchmarkTones: Array.from(row.cells, cell => cell.dataset.benchmarkTone),
             aboveBenchmark: row.hasAttribute('data-above-benchmark'),
             crossover: row.hasAttribute('data-crossover'),
             custom: row.hasAttribute('data-custom-sensitivity')
@@ -391,14 +392,23 @@
             text(sensitivityTitle, margin, y + 4, 13, 'ink', {weight:'bold', family:'times'});
             y = wrap(fundamentals.sensitivityBasis, margin, y + 7, width, 9.3, 'muted') + 2;
             const rightEdges = [.44, .65, .81, 1];
-            fundamentals.sensitivity.forEach(({cells, aboveBenchmark, crossover, custom}, index) => {
+            const benchmarkFills = {positive: 'gain', negative: 'loss', neutral: 'panel'};
+            fundamentals.sensitivity.forEach(({cells, benchmarkTones, aboveBenchmark, crossover, custom}, index) => {
               const shade = index === 0 || custom ? 'soft' : crossover ? 'secondaryLight' : aboveBenchmark ? 'tertiaryLight' : null;
               if (shade) fill(shade, margin, y, width, 5);
               const weight = index === 0 || crossover || custom ? 'bold' : 'normal';
               const tone = crossover ? 'secondary' : 'ink';
               text(cells[0], margin + 2, y + 3.5, 9.3, tone, {weight});
-              cells.slice(1).forEach((value, column) => text(value, margin + width * rightEdges[column] - 2,
-                y + 3.5, 9.3, tone, {weight, align:'right'}));
+              cells.slice(1).forEach((value, column) => {
+                const benchmarkTone = benchmarkTones[column + 1];
+                const right = margin + width * rightEdges[column];
+                if (benchmarkTone) {
+                  const left = margin + width * (rightEdges[column - 1] ?? 0);
+                  fill(benchmarkFills[benchmarkTone], left, y, right - left, 5);
+                }
+                text(value, right - 2, y + 3.5, 9.3, benchmarkTone === 'neutral' ? 'ink' : benchmarkTone || tone,
+                  {weight, align:'right'});
+              });
               y += 5;
               rule('line', margin, y, w - margin);
             });
