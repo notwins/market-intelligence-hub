@@ -478,3 +478,12 @@ html[data-nav-style=professional] .hub-primary .hub-primary-group[data-nav-art]:
     outline:2px solid Highlight; outline-offset:-2px;
   }
 }
+/* In-page artwork stays inside the original label and click target. */
+.workspace-icon {
+  display:inline-block; width:1.15em; height:1.15em; min-width:1.15em;
+  max-width:27px; max-height:27px; margin-inline-end:.35em; vertical-align:-.2em;
+  flex:none; pointer-events:none; box-sizing:border-box;
+}
+h1 .workspace-icon { width:.8em; height:.8em; min-width:0; max-width:38px; max-height:38px; margin-inline-end:.22em; vertical-align:baseline; }
+:is(h2,h3) .workspace-icon { min-width:0; margin-inline-end:.3em; }
+@media print { .workspace-icon { display:none !important; } }
