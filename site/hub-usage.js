@@ -112,8 +112,9 @@
     record('page', page);
     countTab();
     addEventListener('hashchange', countTab);
-    const deskTablist = document.querySelector('.modebar [role="tablist"]');
-    if (page === 'desk.html' && deskTablist) {
+    const tablist = page === 'desk.html' ? document.querySelector('.modebar [role="tablist"]')
+      : page === 'bond-cashflow.html' ? document.querySelector('[role="tablist"]') : null;
+    if (tablist) {
       new MutationObserver(countTab).observe(tablist, {
         subtree: true, attributes: true, attributeFilter: ['aria-selected']
       });
