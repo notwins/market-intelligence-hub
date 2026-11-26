@@ -7,9 +7,9 @@
     // The preserved blog HTML already loads this script. Give it the shared bar without rewriting the page.
     const css = document.createElement('link');
     css.rel = 'stylesheet';
-    css.href = new URL('Primary Navigation - Type CSS - 16-Nov-16.06.css?v=20261127.atlas1', sharedBase);
+    css.href = new URL('Primary Navigation - Type CSS - 16-Nov-16.06.css?v=20261127.atlas2', sharedBase);
     const js = document.createElement('script');
-    js.src = new URL('Primary Navigation - Type JS - 16-Nov-16.06.js?v=20261127.atlas1', sharedBase);
+    js.src = new URL('Primary Navigation - Type JS - 16-Nov-16.06.js?v=20261127.atlas2', sharedBase);
     document.head.append(css, js);
   }
   // Reuse this existing loader on current research landings without rewriting
@@ -93,7 +93,7 @@
             const url = new URL(a.getAttribute('href'), mapURL);
             if (url.origin !== mapURL.origin) a.remove(); else a.href = url.href;
           });
-          for (const picture of copy.querySelectorAll('use[href^="assets/navigation-atlas.svg#"]')) {
+          for (const picture of copy.querySelectorAll('use[href^="assets/navigation-atlas.svg?v=2#"]')) {
             picture.setAttribute('href', new URL(picture.getAttribute('href'), mapURL).href);
           }
           for (const logo of copy.querySelectorAll('img.destination-picture[src="tools/accumulator-beta-icon.svg"]')) {
