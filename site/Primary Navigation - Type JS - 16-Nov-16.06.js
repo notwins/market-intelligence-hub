@@ -421,6 +421,103 @@
     a.append(document.createTextNode(label));
     return a;
   }
+  function decorateSideMenus() {
+    const railLabels = {
+      'rail-group-1': 'news', 'rail-group-2': 'editions', 'rail-group-3': 'book',
+      'rail-group-history': 'history', 'rail-group-0': 'pivot',
+      'rail-group-securities': 'security', 'rail-group-fred': 'fred'
+    };
+    const blueprintViews = {overview: 'blueprint', pages: 'map', flows: 'flow', changes: 'history', software: 'tools'};
+    const chapterArt = {
+      'mu-starting-point': 'book', 'mu-singapore-growth': 'index', 'mu-inflation-sgd': 'fx',
+      'mu-ai-financing': 'chip', 'mu-equity-concentration': 'shares', 'mu-bond-duration': 'maturity',
+      'mu-credit-spread': 'credit', 'mu-fx-return': 'quotes', 'mu-public-finances': 'balance',
+      'mu-mas-accounts': 'policy', 'mu-gic-temasek': 'buildings', 'mu-temasek-bonds': 'bonds',
+      'mu-alternatives-liquidity': 'vault', 'mu-private-credit': 'cashflow', 'mu-portfolio-actions': 'strategy',
+      'mu-audit': 'review', 'mu-glossary': 'library', 'mu-sources': 'source', 'mu-disclosures': 'papers'
+    };
+    function useSideArt(control, key) {
+      const existing = control.querySelector(':scope > svg.history-nav-icon use');
+      if (existing) {
+        control.dataset.navArt = existing.getAttribute('href').split('#').at(-1);
+      } else {
+        addIcon(control, key);
+      }
+      control.classList.add('hub-side-item');
+    }
+    function clearLegacyGlyph(control) {
+      control.querySelector(':scope > .nav-glyph')?.remove();
+      const first = control.firstChild;
+      // Some legacy controls put a bare symbol directly before their label.
+      if (first?.nodeType === 3 && /^\s*[^\p{Letter}\p{Number}\s]{1,3}\s*$/u.test(first.textContent)) first.remove();
+    }
+    for (const rail of document.querySelectorAll('.rail > nav:not(#section-jump)')) {
+      rail.classList.add('hub-side-menu');
+      for (const heading of rail.querySelectorAll('.rail-group-label')) {
+        const key = railLabels[heading.id] || 'map';
+        heading.dataset.navArt = key;
+        useSideArt(heading.querySelector('a') || heading, key);
+      }
+      for (const control of rail.querySelectorAll('a,button,summary')) {
+        if (control.classList.contains('hub-side-item') || control.closest('#section-jump')) continue;
+        clearLegacyGlyph(control);
+        const route = controlRoute(control);
+        const tone = toneFor(route);
+        if (tone) control.dataset.navTone = tone;
+        useSideArt(control, artFor(route, 'map'));
+      }
+      const syncCurrent = () => {
+        for (const button of rail.querySelectorAll('button[data-view]')) {
+          if (button.classList.contains('active')) button.setAttribute('aria-current', 'page');
+          else button.removeAttribute('aria-current');
+        }
+      };
+      syncCurrent();
+      new MutationObserver(syncCurrent).observe(rail, {subtree:true, attributes:true, attributeFilter:['class']});
+    }
+
+    const directory = document.querySelector('.desk-directory');
+    if (directory) {
+      directory.classList.add('hub-side-directory');
+      useSideArt(directory.querySelector('summary'), 'map');
+      for (const heading of directory.querySelectorAll('[data-side-heading]')) useSideArt(heading, heading.dataset.sideHeading);
+      for (const control of directory.querySelectorAll('a[data-desk-nav]')) useSideArt(control, artFor(controlRoute(control), 'map'));
+    }
+
+    for (const side of document.querySelectorAll('.mu-nav,.readside')) {
+      const research = side.classList.contains('mu-nav');
+      side.classList.add('hub-side-reading');
+      useSideArt(side.querySelector('h2'), research ? 'book' : 'library');
+      const localLinks = [...side.querySelectorAll('a[href^="#"]')];
+      for (const link of side.querySelectorAll('a[href]')) {
+        if (research) link.querySelector(':scope > span')?.setAttribute('aria-hidden', 'true');
+        const fragment = link.hash.slice(1);
+        const key = chapterArt[fragment] || (/bond/.test(fragment) ? 'bonds' : /shares|equity/.test(fragment) ? 'shares'
+          : /privacy|account|consent/.test(fragment) ? 'lock' : /sources?|dates?|verif/.test(fragment) ? 'source'
+            : /risk/.test(fragment) ? 'radar' : 'papers');
+        useSideArt(link, link.getAttribute('href').startsWith('#') ? key : artFor(controlRoute(link), 'library'));
+      }
+      const syncChapter = () => {
+        for (const link of localLinks) {
+          if (link.hash === location.hash) link.setAttribute('aria-current', 'location');
+          else link.removeAttribute('aria-current');
+        }
+      };
+      syncChapter();
+      window.addEventListener('hashchange', syncChapter);
+    }
+
+    for (const button of document.querySelectorAll('.atlas-sidebar #views button[data-view]')) {
+      clearLegacyGlyph(button);
+      useSideArt(button, blueprintViews[button.dataset.view] || 'blueprint');
+    }
+    for (const [selector, key] of [['.attention-panel .rail-heading h2', 'radar'], ['.series-panel .rail-heading h2', 'database']]) {
+      const heading = document.querySelector('.monitor-rail ' + selector);
+      if (heading) useSideArt(heading, key);
+    }
+  }
+  decorateSideMenus();
+
   const old = document.querySelector('.bottom-nav');
   const bar = old || document.createElement('nav');
   const more = old?.querySelector('button#more-btn') || document.createElement('button');
@@ -595,16 +692,11 @@
   }
   decorateJumpShortcuts();
   new MutationObserver(decorateJumpShortcuts).observe(grid, {childList:true});
-  for (const control of document.querySelectorAll('.rail-group:not(.rail-history) > :is(a,button), .dashboard-links > a:not(.history-featured), .desk-directory nav a, .tool-links > a.tool-link')) {
-    const tone = toneFor(controlRoute(control));
+  for (const control of document.querySelectorAll('.dashboard-links > a:not(.history-featured), .tool-links > a.tool-link')) {
+    const route = controlRoute(control);
+    const tone = toneFor(route);
     if (tone) control.dataset.navTone = tone;
-    if (control.matches('.rail-group > *')) {
-      const leadingGlyph = control.firstChild;
-      if (leadingGlyph?.nodeType === Node.TEXT_NODE && control.querySelector('span') &&
-          /^[^\p{L}\p{N}]+$/u.test(leadingGlyph.textContent)) leadingGlyph.remove();
-      control.querySelector(':scope > .nav-glyph')?.remove();
-    }
-    addIcon(control, artFor(controlRoute(control), control.closest('.dashboard-links') ? 'report' : 'map'));
+    addIcon(control, artFor(route, control.closest('.dashboard-links') ? 'report' : 'map'));
   }
   const sectionTabs = document.querySelector('.top-subsections');
   if (sectionTabs) {
