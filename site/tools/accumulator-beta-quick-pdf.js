@@ -36,7 +36,8 @@
     if (node.tagName === 'BUTTON' && !table && !node.classList.contains('cmp-picked')) return '';
     const text = Array.from(node.childNodes, child => textOf(child, table)).join('');
     const selected = table && node.tagName === 'BUTTON' && node.getAttribute('aria-pressed') === 'true';
-    return selected ? text + ' [selected]' : text + (node.matches('small, li') ? ' ' : '');
+    if (node.matches('small')) return ' ' + text + ' ';
+    return selected ? text + ' [selected]' : text + (node.matches('li') ? ' ' : '');
   }
 
   function currentStyle() {
