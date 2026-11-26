@@ -20,6 +20,8 @@ input, select { width: 100%; min-width: 0; border: 1px solid #a2b1aa; border-rad
 input:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #317d73 }
 .pricing-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 10px 14px }
 .pricing-controls label { width: min(100%, 21rem) }
+.pricing-controls + .pricing-controls { margin-top: 12px }
+.pricing-saved-link { display: inline-block; padding: 8px 13px; border-radius: 6px; background: #245958; color: #fff; font-weight: 650; text-decoration: none }
 .pricing-controls button, #pricing-table button { border: 1px solid #a2b1aa; border-radius: 6px; padding: 7px 10px; font: inherit; color: #245958; background: #f0f5f0; cursor: pointer }
 .pricing-controls button:focus-visible, #pricing-table button:focus-visible { outline: 3px solid #317d73 }
 #pricing-table { margin-top: 12px }
