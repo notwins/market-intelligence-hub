@@ -50,9 +50,9 @@
     const order = element('select'); order.id = 'research-order';
     [['newest','Newest report date first'], ['oldest','Oldest report date first']].forEach(([value,label]) => { const option = element('option',label); option.value = value; order.append(option); });
     [[state,'Show'],[query,'Search research'],[category,'Topic'],[order,'Sort']].forEach(([control,text]) => { const label = element('label', text); label.htmlFor = control.id; label.append(control); controls.append(label); });
-    const descriptions = element('button','Show descriptions','rr-description-toggle'); descriptions.type = 'button'; descriptions.setAttribute('aria-pressed','false'); controls.append(descriptions);
+    let expanded = Boolean(host.closest('.market-understanding'));
+    const descriptions = element('button',expanded?'Hide descriptions':'Show descriptions','rr-description-toggle'); descriptions.type = 'button'; descriptions.setAttribute('aria-pressed',String(expanded)); controls.append(descriptions);
     const reset = element('button','Reset','rr-reset'); reset.type = 'button'; controls.append(reset);
-    let expanded = false;
     const tagChip = id => {
       const tag = tags.get(id); if (!tag) return null;
       const chip = element('button',tag.label,'rr-tag'); chip.type = 'button'; chip.title = 'Filter by ' + tag.label;
