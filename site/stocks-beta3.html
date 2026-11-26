@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.quarter-scale">
+  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.quarter-geo">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="stocks-beta3-scroll.js?v=1"></script>
   <script defer src="content-source.js"></script>
@@ -17,15 +17,16 @@
   <link rel="stylesheet" href="si-share-picker.css">
   <script defer src="si-share-picker.js?v=3"></script>
   <script defer src="stocks-beta3-disclosures.js?v=20261127.quarter-scale"></script>
-  <script defer src="stocks-beta3-geography.js?v=20261127.geography"></script>
-  <script defer src="stocks-beta3-details.js?v=20261127.quarter-scale"></script>
+  <script defer src="stocks-beta3-geography.js?v=20261127.quarter-geo"></script>
+  <script defer src="stocks-beta3-marks.js?v=20261127.quarter-geo"></script>
+  <script defer src="stocks-beta3-details.js?v=20261127.quarter-geo"></script>
   <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=20261127.usd1">
   <script defer src="shares-quarterly-core.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-quarterly-charts.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-comparison.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-model.js?v=4"></script>
   <script defer src="stocks-beta3-usd.js?v=20261127.quarter-scale"></script>
-  <script defer src="stocks-beta3.js?v=20261127.quarter-scale"></script>
+  <script defer src="stocks-beta3.js?v=20261127.quarter-geo"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -73,6 +74,11 @@
           </article>
           <section class="annual-subsection" id="quarter-revenue-mix" aria-labelledby="quarter-revenue-title">
             <h3 id="quarter-revenue-title">Quarterly revenue mix</h3>
+            <div class="annual-geo-control quarter-geo-controls">
+              <a href="#heading-quarter-geography">Compare geography in a table</a>
+              <label>Geography <select id="quarter-geo-filter"><option value="grouped">Grouped regions</option><option value="grouped-detail">Grouped + markets</option><optgroup label="As filed"><option value="all">As filed · all areas</option><option value="country">Countries and markets</option><option value="region">Regions</option><option value="other">Other and adjustments</option></optgroup></select></label>
+              <label>Growth <select id="quarter-geo-growth"><option value="yoy">YoY</option><option value="qoq">QoQ</option></select></label>
+            </div>
             <div id="quarter-revenue-diagram"></div>
           </section>
         </section>
