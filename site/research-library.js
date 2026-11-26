@@ -16,7 +16,7 @@ entry.innerHTML=`
   </div>
   <nav class="library-choices" aria-label="Research workspaces"><a href="#main-published-research"><b>Latest reports</b><span>Full reports and matching Quick reads</span></a><a href="#my-research"><b>My blog write-ups</b><span>Search past editions by topic or date</span></a><a href="../external-sources.html"><b>Official papers</b><span>Open the original source documents</span></a></nav>`;
 root.prepend(entry);entry.after(latest);
-import('./research-workspaces.js?v=1');
+import('./research-workspaces.js?v=2');
 function group(id,title,description,nodes){
  const section=document.createElement('details');section.className='library-group';section.id=id;
  const summary=document.createElement('summary');const label=document.createElement('strong');label.textContent=title;const sub=document.createElement('span');sub.textContent=description;summary.append(label,sub);section.append(summary);

@@ -1,7 +1,7 @@
-/* Reading-library and Calls presentation. Data rendering stays with the page owners. */
+/* Editorial workspace presentation. Data rendering stays with the page owners. */
 const sheet = document.createElement('link');
 sheet.rel = 'stylesheet';
-sheet.href = new URL('./research-workspaces.css?v=1', import.meta.url).href;
+sheet.href = new URL('./research-workspaces.css?v=2', import.meta.url).href;
 document.head.append(sheet);
 
 const html = document.documentElement;
@@ -57,7 +57,10 @@ gear.addEventListener('click', () => {
 const targets = [
   '.ws-intro', '.ws-plate', '.library-choices a', '.mu-writeups-heading h2',
   '.mu-writeups-grid > article', '.library-group > summary', '.rr-results > li',
-  '.calls-companies > h3', '.calls-ledger > h3', '.calls-edition .watchlist-card'
+  '.calls-companies > h3', '.calls-ledger > h3', '.calls-edition .watchlist-card',
+  '.featured-research', '.cd-heading h2', '.cd-card', '.publication-heading h2',
+  '.briefing-lead > article', '.market-snapshot h2', '.overview-card-grid > *',
+  '.latest-quick-reads h2', '.latest-quick-card', '#view > .section .section-title h2'
 ].join(',');
 const seen = new Set();
 const running = new Set();
@@ -80,7 +83,7 @@ function observePage() {
       const identity = target.className + ':' + id.trim().slice(0,160);
       if (seen.has(identity) || target.matches(':focus-within')) continue;
       seen.add(identity);
-      const card = target.matches('.ws-plate, article, li, .library-choices a');
+      const card = target.matches('.ws-plate, article, li, .library-choices a, .latest-quick-card, .overview-card-grid > *');
       const step = Math.min(28, Math.max(8, innerWidth * .023));
       const x = card ? step * (target.matches(':nth-child(even)') ? -1 : 1) : 0;
       const animation = target.animate([
@@ -91,19 +94,21 @@ function observePage() {
       animation.finished.catch(() => {}).finally(() => running.delete(animation));
     }
   }, {rootMargin:'0px 0px -3% 0px'});
+  function visit(node, action) {
+    if (node.nodeType !== 1) return;
+    if (node.matches(targets)) action(node);
+    if (node.childElementCount) node.querySelectorAll(targets).forEach(action);
+  }
   const register = node => entryObserver.observe(node);
+  const unregister = node => entryObserver.unobserve(node);
   page.querySelectorAll(targets).forEach(register);
   dataObserver = new MutationObserver(records => {
     for (const record of records) {
-      for (const node of record.removedNodes) {
-        if (node.nodeType === 1) entryObserver.unobserve(node);
-      }
-      for (const node of record.addedNodes) {
-        if (node.nodeType === 1 && node.matches(targets)) register(node);
-      }
+      record.removedNodes.forEach(node => visit(node, unregister));
+      record.addedNodes.forEach(node => visit(node, register));
     }
   });
-  page.querySelectorAll('.mu-writeups-grid,.rr-results').forEach(grid => dataObserver.observe(grid, {childList:true}));
+  dataObserver.observe(page, {childList:true, subtree:true});
 }
 function applyPreference() {
   stopEffects();
@@ -126,12 +131,15 @@ window.addEventListener('storage', event => {
 });
 
 function syncPage() {
-  const next = library || view?.querySelector('.calls-edition');
+  const calls = view?.querySelector('.calls-edition');
+  const briefing = Boolean(view?.querySelector('.briefing-masthead'));
+  const next = library || calls || (briefing ? view : null);
   if (next === page) return;
-  if (!next || !page) seen.clear();
+  if (!calls || !html.classList.contains('ws-calls')) seen.clear();
   page = next;
   html.classList.toggle('ws-blog', Boolean(library));
-  html.classList.toggle('ws-calls', Boolean(page && !library));
+  html.classList.toggle('ws-calls', Boolean(calls));
+  html.classList.toggle('ws-briefing', briefing);
   if (page) mountChrome();
   else {
     gear.remove();
