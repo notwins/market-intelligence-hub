@@ -1,0 +1,133 @@
+.accumulator-beta .wrap {
+  width: calc(100% - clamp(20px, 3.2vw, 72px));
+}
+
+.accumulator-beta .top nav {
+  flex-wrap: wrap;
+  gap: 3px 11px;
+  padding-block: 7px;
+}
+
+.beta-version {
+  display: inline-block;
+  vertical-align: middle;
+  padding: .35em .65em;
+  border-radius: .45em;
+  background: var(--soft);
+  color: #245759;
+  font-size: .32em;
+  font-weight: 700;
+  letter-spacing: normal;
+  white-space: nowrap;
+}
+
+.beta-overview-grid {
+  display: grid;
+  grid-template-areas: "ledger" "checklist" "sale";
+  gap: 12px;
+  margin-top: 8px;
+  align-items: start;
+}
+
+.beta-overview-grid > * { min-width: 0; }
+.beta-share-ledger { grid-area: ledger; }
+.beta-sale-range { grid-area: sale; }
+
+#overview .beta-share-ledger { margin: 0; }
+#overview .beta-share-ledger th { white-space: normal; }
+#overview .beta-share-ledger table { min-width: 46rem; }
+#overview .beta-sale-range h3 { margin-top: 0; }
+
+.monthly-cash {
+  grid-area: checklist;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f8fbfc;
+}
+
+.monthly-cash-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+
+#overview .monthly-cash h3 { margin: 0; }
+.monthly-cash-heading > span { color: var(--muted); font-size: .76rem; }
+
+.monthly-cash-totals {
+  display: grid;
+  grid-template-columns: minmax(0, .72fr) repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  margin: 10px 0 7px;
+}
+
+.monthly-cash-totals div {
+  padding: 6px 7px;
+  border-radius: 6px;
+  background: #eaf4ef;
+}
+
+.monthly-cash-totals div:last-child { background: #e8f2f8; }
+.monthly-cash-totals dt { color: var(--muted); font-size: .73rem; line-height: 1.25; }
+.monthly-cash-totals dd {
+  margin: 4px 0 0;
+  font-size: .875rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.monthly-cash-bar {
+  height: 6px;
+  display: flex;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #e2e9ee;
+}
+
+.monthly-cash-bar span:first-child { background: #518371; }
+.monthly-cash-bar span:last-child { background: #87a9bb; }
+
+.monthly-cash .tableScroll { background: #fff; }
+#overview .monthly-cash table { min-width: 0; }
+.monthly-cash th, .monthly-cash td { padding: 3px 5px; font-size: .78rem; }
+.monthly-cash th { white-space: normal; }
+.monthly-cash th:nth-child(3) { text-align: right; }
+.monthly-cash label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 25px;
+  font-size: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.monthly-cash input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: var(--teal);
+}
+
+.monthly-cash tr[data-exit] { background: #eaf4f7; }
+.monthly-cash tr[data-post-ko] { color: var(--muted); }
+.monthly-cash > p:last-child { margin-top: 8px; }
+
+@media (min-width: 1100px) {
+  .beta-overview-grid {
+    grid-template-columns: minmax(0, 1fr) clamp(344px, 29vw, 520px);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "ledger checklist" "sale checklist";
+    column-gap: clamp(14px, 1.35vw, 25px);
+  }
+}
+
+@media (max-width: 700px) {
+  #overview .monthly-cash .tableScroll { max-height: none; }
+  .monthly-cash { padding: 10px; }
+  .monthly-cash label { min-height: 34px; }
+}

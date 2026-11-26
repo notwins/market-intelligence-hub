@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en-SG">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Compare NVDA accumulator notes and track the cash used for shares and refunds by month.">
+<title>NVDA Accumulator Beta 2 | Market Intelligence Hub</title>
+<link rel="stylesheet" href="accumulator-comparison.css?v=5">
+<link rel="stylesheet" href="accumulator-nvda-context.css?v=2">
+<link rel="stylesheet" href="accumulator-guide.css?v=1">
+<style>:root{color-scheme:light;--paper:#F2F6FA;--ink:#172A42;--muted:#4A5C6E;--line:#D8E2EB;--equity:#0E7490;--risk:#B91C1C;--teal:#306162;--soft:#E9F5F6;--lav:#665778;--ochre:#86602e;font:16px/1.5 "Inter",system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}.wrap{width:min(1180px,calc(100% - 48px));margin:auto}.top{background:#fff;border-bottom:1px solid var(--line)}nav.wrap{display:flex;gap:11px;align-items:center;min-height:48px;font-size:.875rem}a{color:var(--equity);text-underline-offset:3px}nav a{text-decoration:none}nav span{color:#97a8ae}.hero{padding:36px 8px 28px;display:flex;align-items:center;justify-content:space-between;gap:28px}.hero h1{font-size:clamp(2.2rem,5.2vw,3.75rem);line-height:1.05;letter-spacing:-.055em;margin:4px 0 12px}.hero p{margin:0;max-width:710px;color:var(--muted);font-size:1.06rem}.hero .eyebrow{font-size:.74rem;font-weight:800;letter-spacing:.15em;color:var(--equity)}.hero-side{min-width:178px;border-left:3px solid #98b7bf;padding:4px 0 4px 20px;display:grid}.hero-side span,.hero-side small{color:var(--muted)}.hero-side strong{font-size:1.8rem;color:var(--equity);letter-spacing:-.04em}.panel{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px 25px;margin:0 0 15px;box-shadow:0 3px 12px #284c5b06;min-width:0}h2,h3,p{margin:0}h2{font-size:clamp(1.24rem,2.5vw,1.55rem);line-height:1.22;letter-spacing:-.033em}h3{font-size:1.06rem;line-height:1.32}.heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.heading p,.panel>p,.aftergrid p,.scenario p{color:var(--muted)}.heading p{margin-top:5px}.heading a{font-size:.875rem}.inputs,.editor{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:14px;align-items:end}label{display:grid;gap:4px;font-size:.875rem;font-weight:650}input,select,button{font:inherit;color:inherit}input:not([type=checkbox]),select{width:100%;height:44px;border:1px solid #a3b7be;background:#fff;border-radius:7px;padding:7px 10px;font-size:1rem}button{border-radius:7px;border:1px solid #b8cbcf;background:#f7fafa;font-size:.875rem;font-weight:600;padding:6px 13px;cursor:pointer;min-height:34px}button:hover{background:#e3efef}button:disabled{opacity:.55;cursor:default}.primary,button[aria-pressed=true]{background:var(--teal);color:white;border-color:var(--teal)}.primary{min-height:44px}.primary:hover,button[aria-pressed=true]:hover{background:#125957}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #387fb8;outline-offset:2px}.inline,.legend,.chart-tools,.termstrip{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}.inline span,.small,.jump{color:var(--muted);font-size:.855rem}.actions,.quick,.jump{margin-top:12px}.termstrip{margin-top:16px;background:var(--soft);border-radius:9px;padding:10px 14px;gap:8px 21px}.termstrip b{color:#165955}.termstrip span{font-size:.92rem}details{margin-top:12px;color:var(--muted);font-size:.9rem}summary{cursor:pointer;font-weight:620;color:var(--ink)}details p{margin:8px 0;max-width:95ch}.editor{grid-template-columns:minmax(130px,200px) minmax(160px,245px) auto;justify-content:start}.chip{font-size:.8rem;border-radius:99px;background:#edf2f6;color:#455e70;padding:4px 10px;font-weight:650}.month-result,.formula{margin-top:13px!important;border-left:3px solid #8ab7ae;padding:6px 12px;background:#f4f8f7}.chart-tools{gap:12px 22px;align-items:end}.chart-tools select{width:137px}.check{display:flex;align-items:center;gap:7px;min-height:44px}.check input{width:17px;height:17px;accent-color:var(--teal)}.legend{font-size:.82rem;margin:12px 0;gap:8px 16px}.legend span{display:inline-flex;align-items:center;gap:5px}.legend span:before{content:"";width:17px;border-top:3px solid}.hist:before{color:#617d93}.path:before{color:#0b7377}.strike:before{color:var(--ochre);border-top-style:dashed!important}.ko:before{color:var(--lav);border-top-style:dashed!important}.band:before{color:#c3dcdf;border-top-width:8px!important}.chartFrame{display:flex;background:#f9fbfc;border:1px solid #dbe5e8;border-radius:9px;overflow:hidden;min-width:0}.axis{width:54px;flex:0 0 54px;background:#f4f8f9;border-right:1px solid #d4e0e3;z-index:1}.axis svg,#plot svg{display:block}#plotScroll{flex:1;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}#plot svg text,.axis svg text{font-family:inherit}#plot svg [data-month]{cursor:pointer}#plot svg [data-month]:focus{outline:2px solid var(--teal)}.jump button{font-size:.8rem;min-height:30px}.chartpanel>.small,.panel>.small{margin-top:11px}.tableScroll{overflow-x:auto;max-width:100%;border:1px solid #dce6e7;border-radius:9px}table{border-collapse:collapse;width:100%;font-size:.87rem;font-variant-numeric:tabular-nums}th,td{text-align:right;padding:8px 10px;border-bottom:1px solid #e0e8eb;white-space:nowrap}th{color:#4e6570;background:#f0f5f6;font-size:.785rem}th:first-child,td:first-child,th:nth-child(3),#rows td:nth-child(3){text-align:left}#library th:nth-child(3){text-align:right}tbody tr:last-child td{border-bottom:0}#rows tr.active td{background:#eaf5f1}#rows button{min-height:29px;padding:2px 8px}.sub{margin:19px 0 8px}.metrics,.scenario-grid,.aftergrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.metrics article,.scenario,.aftergrid article{border:1px solid var(--line);padding:12px;border-radius:9px}.metrics article{background:#f6f9fa}.metrics span,.scenario small{display:block;color:var(--muted);font-size:.82rem}.metrics strong{font-size:clamp(1.05rem,2.25vw,1.65rem);letter-spacing:-.035em;overflow-wrap:anywhere}.scenario-grid,.aftergrid{grid-template-columns:repeat(3,minmax(0,1fr))}.scenario{display:flex;flex-direction:column;align-items:flex-start;gap:9px}.scenario .return{font-size:1.65rem;line-height:1.1;letter-spacing:-.03em;font-weight:700}.positive{color:#216858}.negative,.error{color:var(--risk)}.scenario p,.aftergrid p{font-size:.92rem}.scenario button{margin-top:auto}.aftergrid{margin-top:14px}.aftergrid p{margin-top:6px}.risk{margin-top:12px!important;padding:12px 14px;background:#faf2f1;border-radius:8px;color:#6f3f3b!important}.error{padding:10px 0}.formula{font-variant-numeric:tabular-nums}#library{margin-bottom:36px}[hidden]{display:none!important}
+@media(max-width:700px){.wrap{width:calc(100% - 20px)}.hero{padding:24px 4px 18px}.hero-side{display:none}.hero p{font-size:1rem}.panel{padding:16px 13px;border-radius:11px}.inputs{grid-template-columns:1fr 1fr;gap:10px}.inputs label:first-child{grid-column:1/-1}.editor{grid-template-columns:1fr 1.2fr}.editor .primary{grid-column:1/-1}.heading{align-items:flex-start}.metrics{grid-template-columns:1fr 1fr}.scenario-grid,.aftergrid{grid-template-columns:1fr}.scenario{display:grid;grid-template-columns:1fr auto;align-items:center}.scenario .return{justify-self:end}.scenario small,.scenario p{grid-column:1/-1}.scenario button{justify-self:start}.chart-tools{align-items:center;gap:6px 14px}.chart-tools .small{flex-basis:100%}.inline{gap:7px}.chartFrame{margin-left:-4px;margin-right:-4px}.axis{width:49px;flex-basis:49px}.heading a{white-space:nowrap}}
+#library{margin-bottom:15px;scroll-margin-top:12px}
+#library .quote-grids{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+#library .quote-issuer{border-top:3px solid var(--teal);padding-top:12px;min-width:0}
+#library .quote-issuer.sn{border-color:var(--ink)}
+#library .quote-issuer h3{font-size:1.12rem}
+#library .pricing-note,#library .quote-grid-note{font-size:.875rem;color:var(--muted);margin:.35rem 0 .65rem}
+#library .quote-term{font-size:.96rem;margin:1rem 0 .35rem}
+#library .priceMatrix{table-layout:fixed}
+#library .priceMatrix th,#library .priceMatrix td{text-align:center;white-space:normal;padding:6px 4px}
+#library .priceMatrix thead th{line-height:1.2;font-weight:700}
+#library .priceMatrix thead small{display:block;margin-top:3px;font-size:.76rem;line-height:1.1;font-weight:500}
+#library .priceMatrix tbody th{background:#fff;color:var(--ink)}
+#library .unquoted{display:inline-block;font-size:.76rem;color:var(--muted)}
+#library .strike-button{width:100%;max-width:112px;min-height:40px;padding:.3rem .1rem;font-variant-numeric:tabular-nums;font-weight:700;font-size:.92rem}
+#library .strike-button[aria-pressed=true]::after{content:" ✓";font-size:.8em}
+#library .quote-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:.65rem .85rem;margin:.75rem 0;background:var(--soft);border-radius:8px}
+#library .quote-actions a{font-weight:650}
+#pricingStatus{color:var(--teal);font-weight:650}
+#compare .report-actions{border-top:1px solid var(--line);padding-top:14px;margin-top:16px}
+#chartTitle{scroll-margin-top:14px}
+@media(max-width:800px){#library .quote-grids{grid-template-columns:1fr}#library .quote-actions{position:sticky;top:0;z-index:3;gap:5px 12px;box-shadow:0 1px 0 var(--line)}#library .quote-actions a{font-size:.85rem}}
+:is(#plot,#overviewPlot) svg [data-price-handle]{touch-action:none;cursor:ns-resize;outline:none}
+:is(#plot,#overviewPlot) svg [data-price-handle]:focus-visible .handle-hit{stroke:#172a42;stroke-width:2;stroke-dasharray:3 2}
+:is(#plot,#overviewPlot) svg [data-price-handle] text{pointer-events:none}
+.month-editor{border-top:1px solid var(--line);margin-top:16px;padding-top:16px}
+.month-editor .heading{margin-bottom:9px}
+#rows tr.ko-row td.event-cell,#rows tr.ko-row td:first-child{background:#eee9f6;color:#4a3267;font-weight:700}
+#rows tr td.refund-cell{background:#e2f3eb;color:#185b42;font-weight:700}
+#rows tr.maturity-row td.event-cell{font-weight:700}
+:is(#movements,#overview) button.ledger-figure{display:inline-block;min-height:0;min-width:0;padding:4px 2px;border:0;border-radius:3px;background:transparent;color:inherit;font:inherit;text-decoration:underline dotted;text-underline-offset:3px;white-space:nowrap}
+:is(#movements,#overview) button.ledger-figure:hover,:is(#movements,#overview) button.ledger-figure:focus-visible{background:#e4efef}
+.scenario.best-path{border-top:3px solid #25664f}
+.scenario.worst-path{border-top:3px solid #9d3b39}
+.scenario .rank{font-size:.77rem;font-weight:700;color:#345952;display:block}
+.scenario.worst-path .rank{color:#932f2f}
+.scenario .scenario-profit{display:block;font-weight:700}
+.hero .section-links{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:14px}
+.section-links a{display:inline-flex;align-items:center;min-height:32px;font-size:.9rem;font-weight:650}
+.quote-case{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:1rem 0 0;padding:.85rem 0;border-block:1px solid var(--line)}
+.quote-case article{padding:0 1rem;border-left:1px solid var(--line)}
+.quote-case article:first-child{border-left:0;padding-left:0}
+.quote-case h3{font-size:.875rem;color:var(--muted)}
+.quote-case strong{display:block;margin:.12rem 0;font-size:1.28rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.quote-case p,.scenario .direct-case{font-size:.875rem;color:var(--muted)}
+.scenario .direct-case{border-top:1px solid var(--line);padding-top:.5rem;align-self:stretch}
+@media(max-width:700px){
+ .quote-case{grid-template-columns:1fr;gap:.65rem}
+ .quote-case article,.quote-case article:first-child{padding:0;border:0}
+ .quote-case article{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;align-items:baseline}
+ .quote-case strong{margin:0;font-size:1.04rem}
+ .quote-case p{grid-column:1/-1}
+ .hero .section-links{gap:1px 14px;margin-top:8px}
+}
+
+#overview .heading{margin-bottom:5px}
+#overview .legend{margin:4px 0 7px}
+#overview .legend .hist::before{border-color:#6D28D9}
+#overviewHistoryNote{margin:6px 0}
+#overviewScroll{flex:1;min-width:0;overflow-x:auto;overscroll-behavior-x:contain}
+#overviewPlot svg{display:block}
+#overview .tableScroll{margin:6px 0}
+#overview .quick{margin:5px 0}
+#overview .quick button{padding:4px 9px}
+@media(max-width:700px){#overview .tableScroll{max-height:34vh}#overview th{position:sticky;top:0}#overview th{white-space:normal;line-height:1.15}#overview .tableScroll table{min-width:35rem}}
+#overview th,#overview td{padding:4px 7px;text-align:right}
+#overview th:first-child,#overview td:first-child{text-align:left}
+#overview h3{margin:14px 0 3px}
+#overview .ko-row td:first-child{background:#eee9f6;color:#4a3267;font-weight:700}
+#overview td.refund-cell{background:#e2f3eb;color:#185b42}
+#overview tr.active td:first-child{box-shadow:inset 3px 0 var(--teal)}
+#notes-and-terms{scroll-margin-top:1rem}
+#notes-and-terms h2{margin-bottom:1rem}
+#notes-and-terms details{border-top:1px solid var(--line);margin:0;padding:.6rem 0;font-size:1rem;color:var(--ink)}
+#notes-and-terms summary{cursor:pointer;font-weight:650;padding:.18rem 0}
+#notes-and-terms p{max-width:80ch;margin:.6rem 0;line-height:1.6;font-size:1rem;color:var(--ink)}
+#notes-and-terms p:empty{display:none}
+#notes-and-terms h3{margin:1rem 0 .35rem}
+#marketStatus,#overviewTerms,#overviewHistoryNote,#saleBasis,#chartTerms,#graphSource,#chartNote,#historyStamp,#exitValue,#library .pricing-note,.quote-case p{font-size:.9375rem;color:var(--ink)}
+</style>
+<link rel="stylesheet" href="accumulator-beta.css?v=20261126-beta2">
+</head>
+<body class="accumulator-beta">
+<div class="top"><nav class="wrap" aria-label="Breadcrumb"><a href="../desk.html">Market Intel</a><span>/</span><a href="../v4.html#tools">Tools</a><span>/</span><a href="accumulator.html">Accumulator</a><span>/</span><b aria-current="page">Beta 2</b><span>/</span><a href="accumulator-3d.html">3D pricing</a></nav></div>
+<main class="wrap">
+<header class="hero"><div><p class="eyebrow">EQUITY STRUCTURED NOTES</p><h1>NVDA Accumulator <span class="beta-version">Beta 2</span></h1><p>Would you buy NVIDIA shares at a discount to their starting price? A JPM note or OCBC structured investment fixes that buying price. You commit to the purchases even through a fall, while a rally can end them early.</p><nav class="section-links" aria-label="Simulator sections"><a href="accumulator-capital.html">Size capital from shares</a><a href="#library">Choose quotes</a><a href="#compare">Compare payouts</a><a href="#chartTitle">Edit price path</a><a href="#monthly-cash-title">Monthly cash</a><a href="#nvda-stress-context">Downside evidence</a><a href="#client-sheet">Client PDF</a><a href="#notes-and-terms">Notes &amp; terms</a></nav></div><div class="hero-side"><span>Underlying</span><strong>NVDA</strong><small>NVIDIA · Nasdaq · USD</small></div></header>
+<section class="panel" aria-labelledby="setup"><div class="heading"><h2 id="setup">Pricing &amp; capital</h2><a href="#accumulator-guide">How to use</a></div>
+<div class="inputs"><label>Indicative structure<select id="quote"></select></label><label>Starting price · USD<input id="spot" type="number" placeholder="Dated NVDA close" min="0.01" max="100000" step="0.01" required></label><label>Target budget · USD<input id="capital" type="number" value="300000" min="0.01" max="1000000000" step="0.01" required></label></div>
+<div class="inline actions"><button type="button" id="close">Use dated NVDA close</button><button id="reset">Restore $100 example</button><span id="marketStatus" class="small" role="status"></span></div>
+<div class="quote-case" id="quote-case" role="group" aria-label="Economics of the selected quote" hidden>
+  <article><h3>Saving per share at the start</h3><strong id="case-saving"></strong><p id="case-saving-note"></p></article>
+  <article><h3>If NVDA finishes flat</h3><strong id="case-flat"></strong><p id="case-flat-note"></p></article>
+  <article><h3>Refund on the rally path</h3><strong id="case-refund"></strong><p id="case-refund-note"></p></article>
+</div>
+<div id="termStrip" class="termstrip"></div>
+<p id="setupError" class="error" role="alert" hidden></p></section>
+<section class="panel" id="overview" aria-labelledby="overviewTitle" hidden>
+<div class="heading"><div><h2 id="overviewTitle">Price path, share purchases &amp; P&amp;L</h2><p class="small" id="overviewTerms"></p></div></div>
+<div class="inline quick" id="overviewPaths" aria-label="Simulate a price path"></div>
+<div class="legend"><span class="hist">Historical NVDA close</span><span class="path">Simulated NVDA · drag a monthly dot</span><span class="strike">Strike</span><span class="ko">Knock-out</span></div>
+<div class="chartFrame"><div class="axis" id="overviewAxis" aria-hidden="true"></div><div id="overviewScroll" tabindex="0" aria-label="Historical and simulated NVDA prices. Scroll horizontally to explore." aria-describedby="overviewHistoryNote"><div id="overviewPlot"></div></div></div>
+<p class="small" id="overviewHistoryNote"></p>
+<div class="beta-overview-grid">
+<div class="tableScroll beta-share-ledger" tabindex="0" aria-label="Share purchases and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th>Cash needed for shares · USD</th><th>Cash refunded · USD</th><th>Total value · USD</th><th>P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
+<aside class="monthly-cash" aria-labelledby="monthly-cash-title">
+  <div class="monthly-cash-heading"><h3 id="monthly-cash-title">Monthly cash checklist</h3><span>USD</span></div>
+  <p class="small">Tick months to total their purchases and refunds.</p>
+  <dl class="monthly-cash-totals" aria-live="polite">
+    <div><dt>Shares bought</dt><dd id="monthly-cash-shares"></dd></div>
+    <div><dt>Cash needed for shares</dt><dd id="monthly-cash-spent"></dd></div>
+    <div><dt>Cash refunded</dt><dd id="monthly-cash-refund"></dd></div>
+  </dl>
+  <div class="monthly-cash-bar" aria-hidden="true"><span></span><span></span></div>
+  <div class="tableScroll" tabindex="0" aria-label="Select months for the cash totals">
+    <table>
+      <thead><tr><th scope="col"><label><input type="checkbox" id="monthly-cash-all" aria-label="Include all months" checked> Month</label></th><th scope="col">Shares</th><th scope="col">Cash for shares</th><th scope="col">Refund</th></tr></thead>
+      <tbody id="monthly-cash-rows"></tbody>
+    </table>
+  </div>
+  <p class="small">Purchases draw from the initial <strong id="monthly-cash-payment"></strong> payment. Any unused cash is returned at KO or maturity.</p>
+</aside>
+<div class="beta-sale-range">
+<h3>What if you sell the delivered shares at a different price?</h3><p id="saleBasis" class="small"></p>
+<div class="tableScroll" tabindex="0" aria-label="Alternative sale prices for the same shares"><table><thead><tr><th>NVDA sale price</th><th>Shares</th><th>Market value</th><th>Share profit / loss</th><th>Cash refunded</th><th>Total value</th><th>Total P&amp;L</th></tr></thead><tbody id="saleRange"></tbody></table></div>
+</div></div>
+</section>
+<section class="panel" id="library" aria-labelledby="pricingTitle">
+<div class="heading"><div><h2 id="pricingTitle">Choose strikes to compare</h2><p><strong id="quote-dates">Indicative quotes</strong></p><p>A lower strike buys shares more cheaply. The guarantee sets your minimum purchases even if the note ends early. Compare that commitment alongside the discount. Your invested capital is at risk.</p></div></div>
+<div class="quote-actions"><span id="pricingStatus" role="status"></span><a href="#compare">View comparison</a><a href="#chartTitle">View price graph</a><a href="#accumulator-guide">Step-by-step guide</a></div>
+<div class="quote-grids">
+<section class="quote-issuer sn" aria-labelledby="snTitle"><h3 id="snTitle">JPM SN · Structured note</h3><p class="pricing-note">Normal · Monthly settlement · KO+1 settlement cycle · Quoted offset 7</p><div id="snQuotes"></div><div id="quotesTable"></div></section>
+<section class="quote-issuer si" aria-labelledby="siTitle"><h3 id="siTitle">OCBC SI · Structured investment</h3><p class="pricing-note">Normal · Monthly settlement · KO+1 settlement cycle</p><div id="siQuotes"></div></section>
+</div>
+</section>
+<section class="panel" id="compare" aria-label="Compare SI and SN quotes"><div id="sn-comparison"></div>
+<div class="report-actions inline"><button type="button" id="generate-report" class="primary">Download scenario PDF</button><span id="report-status" role="status"></span></div></section>
+<section class="panel" id="accumulator-guide" aria-label="Step-by-step guide"></section>
+<div id="sim">
+<section class="panel chartpanel" aria-labelledby="chartTitle"><div class="heading"><div><h2 id="chartTitle" tabindex="-1">Price path &amp; share purchases</h2><p>Drag a monthly dot above the knock-out line to see when purchases stop. Pull it below strike to see what buying at the fixed price costs during a fall.</p><p id="chartTerms" class="small"></p><p id="graphSource" class="small" role="status"></p></div></div>
+<div class="chart-tools"><label>NVDA history<select id="years"><option value="0">Hide history</option><option value="1" selected>1 year</option><option value="3">3 years</option><option value="5">5 years</option><option value="10">10 years</option><option value="20">20 years</option></select></label><label class="check"><input type="checkbox" id="band">Show 80% probability cone</label><span id="historyStamp" class="small"></span></div>
+<div class="legend"><span class="hist">Historical close</span><span class="path">Simulated price</span><span class="strike">Strike</span><span class="ko">Knock-out</span><span class="band" id="bandLegend" hidden>10th–90th percentiles</span></div>
+<div class="chartFrame"><div class="axis" id="axis" aria-hidden="true"></div><div id="plotScroll" tabindex="0" aria-label="Price chart. Scroll horizontally to explore history and future months"><div id="plot"></div></div></div>
+<div class="inline jump"><span>Jump to</span><button data-jump="history">History</button><button data-jump="start">Trade start</button><button data-jump="end" id="endJump">Month 12</button></div>
+<p class="small" id="chartNote"></p>
+<div class="month-editor" role="group" aria-labelledby="edit"><div class="heading"><h3 id="edit">Simulate a monthly price</h3><span id="pathName" class="chip"></span></div>
+<form id="editForm" class="editor"><label>Month to edit<select id="month"></select></label><label>Simulated NVDA price · USD<input id="price" type="number" min="0" max="1000000" step="0.01" required></label><button class="primary" type="submit">Apply price</button></form>
+<div class="inline quick"><span>Set this month to</span><button data-price="down">10% below strike</button><button data-price="strike">Strike</button><button data-price="ko">Knock-out</button></div>
+<details id="overrideDetails"><summary>Set a single trading-day close</summary>
+<p>Use a price spike to test a knock-out between two month ends. Every other daily close follows the original path. Loading a preset or another quote clears the override.</p>
+<form id="dayForm" class="editor"><label>Trading day<input type="number" id="dayIndex" min="1" max="251" step="1" value="10" required></label><label>Daily close · USD<input type="number" id="dayPrice" min="0" max="1000000" step="0.01" required></label><button type="submit" class="primary">Apply daily close</button></form>
+<div class="inline quick"><button type="button" id="clearDay" disabled>Clear override</button><span id="dayStatus" role="status"></span></div></details>
+<div class="inline quick" id="quickPaths" aria-label="Quick scenario prices"></div>
+<div id="monthResult" class="month-result" aria-live="polite"></div></div>
+</section>
+<section class="panel" aria-labelledby="ledger"><div class="heading"><div><h2 id="ledger">Capital &amp; share movements</h2><p>See how much of your payment goes into shares and how much comes back as unspent cash. The highlighted knock-out month gives the trigger day and price. Green refund cells show capital returned. Tap any amount for the calculation.</p></div></div>
+<div class="tableScroll" tabindex="0" aria-label="Monthly capital and share movements"><table id="movements"><thead><tr><th>Month</th><th>Month-end<br>price · USD</th><th>Event</th><th>Shares<br>bought</th><th>Capital<br>used · USD</th><th>Cash refunded<br>USD</th><th>Share sale<br>proceeds · USD</th><th>Capital left<br>in note · USD</th><th>Shares<br>held</th><th>Refunded<br>to date · USD</th><th>Holdings<a href="#holdings-note" aria-label="How holdings are valued"><sup>1</sup></a><br>USD</th><th>Total shares<br>bought</th><th>P&amp;L<br>USD</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="heading sub"><h3 id="endingMonth">At the end of month 12</h3></div><div class="metrics" id="summary"></div><p id="valuation" class="formula"></p><p id="exitValue" class="small"></p></section>
+<section class="panel" aria-labelledby="scenario-returns"><div class="heading"><div><h2 id="scenario-returns">Three scenarios to try</h2><p>Compare the note with buying whole NVDA shares at the start and keeping the change in cash. Both use the same payment and assume a sale at the same knock-out or maturity close.</p></div></div><div class="scenario-grid" id="scenarios"></div></section>
+<section id="nvda-stress-context" class="panel" aria-label="NVDA financial statements and stress price"></section>
+</div>
+<section class="panel" aria-labelledby="after"><div class="heading"><h2 id="after">If you receive shares below strike</h2></div><p>Your purchase price is the strike. After delivery you own NVIDIA shares. The price can recover or fall further. Decide how much stock you want to keep and what sale price you would accept.</p><div class="aftergrid"><article><h3>Keep the shares</h3><p>You retain the full effect of later price moves. A fall below the strike is a loss at today’s valuation, even if you continue to hold.</p></article><article><h3>Write a covered call</h3><p>A call premium can offset part of the loss. You keep the stock downside and may have to sell at the call strike if assigned, giving up a larger rebound on those shares.</p></article><article><h3>Consider a decumulator</h3><p>A separate sale note can sell share-equivalent quantities at an agreed price over time. You may sell below a rising market. Check funding, remaining exposure and issuer risk.</p></article></div><p class="risk"><strong>Capital is at risk.</strong> If the normal note runs to maturity, the investor purchases the full scheduled share quantity. A falling share price reduces its value, and worthless shares can mean losing the amount invested in them. Issuer default can cause a total loss. Early exit can return less than the capital committed.</p></section>
+<section class="panel" id="client-sheet" aria-labelledby="clientSheetTitle">
+<div class="heading"><div><h2 id="clientSheetTitle">Client pricing &amp; payoff sheet</h2><p id="sheet-selection"></p></div></div>
+<p>Page one shows your selected terms, capital required, and what you could gain or lose. Add a second page for NVDA price and valuation history, financial results and peer comparisons.</p>
+<div class="report-actions inline"><button type="button" class="primary" id="sheet-pricing">Download 1-page PDF</button><button type="button" id="sheet-research">Download 2-page PDF with research</button></div>
+<p id="sheet-status" role="status"></p></section>
+<section class="panel" id="pricing-archive"><h2>Pricing archive</h2><details><summary>23 November 2026 · Previous indicative strikes</summary><h3>JPM SN</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>87.97%</td><td>90.30%</td></tr><tr><td>9M</td><td>186</td><td>105%</td><td>92.41%</td><td>97.27%</td></tr><tr><td>6M</td><td>124</td><td>120%</td><td>92.31%</td><td>95.12%</td></tr><tr><td>6M</td><td>124</td><td>105%</td><td>95.96%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>120%</td><td>98.24%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>105%</td><td>—</td><td>—</td></tr></tbody></table></div><h3>OCBC SI</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th><th>3M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>93.11%</td><td>94.82%</td><td>96.70%</td></tr><tr><td>9M</td><td>186</td><td>115%</td><td>92.73%</td><td>95.01%</td><td>97.20%</td></tr><tr><td>9M</td><td>186</td><td>110%</td><td>94.04%</td><td>96.62%</td><td>98.83%</td></tr><tr><td>6M</td><td>124</td><td>115%</td><td>—</td><td>98.05%</td><td>—</td></tr><tr><td>6M</td><td>124</td><td>110%</td><td>96.36%</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>110%</td><td>—</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>105%</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div><p>— No numerical strike in the prior grid.</p></details><details><summary>Earlier sheet · 12-month JPM SN</summary><p>90.86% strike · 120% KO · 3-month guarantee · 251 trading days.</p></details></section>
+<section class="panel" id="notes-and-terms" aria-labelledby="notesTitle">
+<h2 id="notesTitle">Notes, assumptions &amp; sources</h2>
+<details><summary>Indicative strikes and guarantee periods</summary>
+<p>Strike and KO are percentages of the trade-day price. A 90.56% strike buys each delivered share at a 9.44% discount to the initial NVDA price.</p>
+<p>OCBC’s quoted guarantee days are shown above the strikes. JPM quotes guarantee periods in months. Its day-by-day examples use an estimated trading calendar.</p>
+<p>In the 23 November archive, the nine-month SI used 21, 41 and 61 guaranteed trading days for 1M, 2M and 3M respectively.</p>
+</details>
+<details><summary>How share sizing and daily knock-out work</summary>
+<p id="sizingDetail"></p>
+<p>Round the purchase strike to cents. Divide the target budget by the strike and the number of months, then round to the nearest whole share for each month. The monthly quantity × strike × tenor gives the share purchase commitment. Round that commitment up to the next whole dollar for the payment. This can put the payment a little above or below the target.</p>
+<p>A normal accumulator buys the full scheduled quantity while active, including when NVDA trades above the purchase strike. The purchase price stays at the strike. The chart joins your month-end prices with evenly spaced daily closes and checks every trading day. A daily close at or above the knock-out level ends accumulation, subject to the minimum period.</p>
+<p>For an early knock-out, the model counts all guaranteed shares and refunds unused cash. After the minimum, purchases through the trading day before knock-out count. Each month’s whole-share quantity accrues across its model trading days. At a partial month, cumulative entitlement is rounded down to whole shares. The default exit assumes the shares sell at the knock-out close or, if there is no knock-out, at the maturity close. Actual fixing schedules, share allocation and settlement dates follow the final terms.</p></details>
+<details><summary>Holdings, cash refunds and P&amp;L</summary>
+<p>All amounts in USD. Total P&amp;L = share market value + cash refunded − actual payment. The refund returns unused capital. It adds to your proceeds and counts once.</p>
+<p id="holdings-note">Holdings value includes shares still held at the month-end price, sale proceeds and refunds received to date, and capital still in the note at face value. Cash and simulated prices display to the nearest dollar. P&amp;L and percentage returns round down. Tap a figure for the underlying calculation. An early unwind can have a different value.</p>
+</details>
+<details><summary>Probability cone</summary><p id="method"></p><p>The shaded range is a model interval for the share price at each future month. It assumes independent normal log returns and a flat median price. It does not estimate the chance of a knock-out or a positive note return. Large gaps, volatility changes and unusual returns can put actual prices outside the cone.</p></details>
+<details><summary>Comparing payouts and reinvestment scenarios</summary>
+<div id="comparison-method-notes"></div></details>
+<details><summary>NVDA price history, valuation and financial sources</summary>
+<div id="nvda-method-notes"></div></details>
+<h3>Scenario limits and further reading</h3>
+<p>Scenarios are educational and use USD. Actual sale prices can differ. Examples exclude dividends, interest, taxes and trading costs. Reference levels can change before a trade.</p>
+<p><a href="https://finance.yahoo.com/quote/NVDA/history/">NVDA price history</a> · <a href="https://www.moneysense.gov.sg/investments/understanding-structured-notes/">MoneySense on structured notes</a> · <a href="https://www.optionseducation.org/strategies/all-strategies/covered-call-buy-write">OIC on covered calls</a>.</p>
+</section>
+</main><script type="application/json" id="historySnapshot">{"monthly":[["2006-11-30",0.6165],["2006-12-31",0.616833],["2007-01-31",0.510833],["2007-02-28",0.516667],["2007-03-31",0.479667],["2007-04-30",0.548167],["2007-05-31",0.577333],["2007-06-30",0.6885],["2007-07-31",0.762667],["2007-08-31",0.852667],["2007-09-30",0.906],["2007-10-31",0.8845],["2007-11-30",0.7885],["2007-12-31",0.8505],["2008-01-31",0.61475],["2008-02-29",0.53475],["2008-03-31",0.49475],["2008-04-30",0.51375],["2008-05-31",0.6175],["2008-06-30",0.468],["2008-07-31",0.286],["2008-08-31",0.316],["2008-09-30",0.26775],["2008-10-31",0.219],["2008-11-30",0.18675],["2008-12-31",0.20175],["2009-01-31",0.19875],["2009-02-28",0.207],["2009-03-31",0.2465],["2009-04-30",0.287],["2009-05-31",0.26075],["2009-06-30",0.28225],["2009-07-31",0.32325],["2009-08-31",0.363],["2009-09-30",0.37575],["2009-10-31",0.299],["2009-11-30",0.3265],["2009-12-31",0.467],["2010-01-31",0.38475],["2010-02-28",0.405],["2010-03-31",0.435],["2010-04-30",0.39275],["2010-05-31",0.3285],["2010-06-30",0.25525],["2010-07-31",0.22975],["2010-08-31",0.23325],["2010-09-30",0.292],["2010-10-31",0.3005],["2010-11-30",0.34025],["2010-12-31",0.385],["2011-01-31",0.598],["2011-02-28",0.5665],["2011-03-31",0.4615],["2011-04-30",0.5],["2011-05-31",0.501],["2011-06-30",0.3985],["2011-07-31",0.34575],["2011-08-31",0.33275],["2011-09-30",0.31275],["2011-10-31",0.37],["2011-11-30",0.39075],["2011-12-31",0.3465],["2012-01-31",0.36925],["2012-02-29",0.37875],["2012-03-31",0.385],["2012-04-30",0.325],["2012-05-31",0.31075],["2012-06-30",0.3455],["2012-07-31",0.3385],["2012-08-31",0.35075],["2012-09-30",0.3335],["2012-10-31",0.2995],["2012-11-30",0.29925],["2012-12-31",0.3065],["2013-01-31",0.3065],["2013-02-28",0.3165],["2013-03-31",0.32075],["2013-04-30",0.34425],["2013-05-31",0.36175],["2013-06-30",0.351],["2013-07-31",0.361],["2013-08-31",0.36875],["2013-09-30",0.389],["2013-10-31",0.37975],["2013-11-30",0.39],["2013-12-31",0.4005],["2014-01-31",0.3925],["2014-02-28",0.4595],["2014-03-31",0.44775],["2014-04-30",0.46175],["2014-05-31",0.475],["2014-06-30",0.4635],["2014-07-31",0.4375],["2014-08-31",0.48625],["2014-09-30",0.46125],["2014-10-31",0.4885],["2014-11-30",0.52425],["2014-12-31",0.50125],["2015-01-31",0.48],["2015-02-28",0.5515],["2015-03-31",0.52325],["2015-04-30",0.555],["2015-05-31",0.55325],["2015-06-30",0.50275],["2015-07-31",0.49875],["2015-08-31",0.562],["2015-09-30",0.61625],["2015-10-31",0.70925],["2015-11-30",0.793],["2015-12-31",0.824],["2016-01-31",0.73225],["2016-02-29",0.784],["2016-03-31",0.89075],["2016-04-30",0.88825],["2016-05-31",1.168],["2016-06-30",1.17525],["2016-07-31",1.4275],["2016-08-31",1.5335],["2016-09-30",1.713],["2016-10-31",1.779],["2016-11-30",2.305],["2016-12-31",2.6685],["2017-01-31",2.7295],["2017-02-28",2.537],["2017-03-31",2.72325],["2017-04-30",2.6075],["2017-05-31",3.60875],["2017-06-30",3.614],["2017-07-31",4.06275],["2017-08-31",4.236],["2017-09-30",4.46925],["2017-10-31",5.17025],["2017-11-30",5.01775],["2017-12-31",4.8375],["2018-01-31",6.145],["2018-02-28",6.05],["2018-03-31",5.78975],["2018-04-30",5.6225],["2018-05-31",6.30475],["2018-06-30",5.9225],["2018-07-31",6.1215],["2018-08-31",7.017],["2018-09-30",7.0255],["2018-10-31",5.27075],["2018-11-30",4.08575],["2018-12-31",3.3375],["2019-01-31",3.59375],["2019-02-28",3.8565],["2019-03-31",4.489],["2019-04-30",4.525],["2019-05-31",3.3865],["2019-06-30",4.10575],["2019-07-31",4.218],["2019-08-31",4.18775],["2019-09-30",4.35175],["2019-10-31",5.0255],["2019-11-30",5.4185],["2019-12-31",5.8825],["2020-01-31",5.91075],["2020-02-29",6.75175],["2020-03-31",6.59],["2020-04-30",7.307],["2020-05-31",8.8755],["2020-06-30",9.49775],["2020-07-31",10.61475],["2020-08-31",13.3745],["2020-09-30",13.5305],["2020-10-31",12.534],["2020-11-30",13.4015],["2020-12-31",13.055],["2021-01-31",12.98975],["2021-02-28",13.7145],["2021-03-31",13.34825],["2021-04-30",15.0095],["2021-05-31",16.244499],["2021-06-30",20.002501],["2021-07-31",19.499001],["2021-08-31",22.385],["2021-09-30",20.716],["2021-10-31",25.566999],["2021-11-30",32.675999],["2021-12-31",29.410999],["2022-01-31",24.486],["2022-02-28",24.385],["2022-03-31",27.285999],["2022-04-30",18.547001],["2022-05-31",18.672001],["2022-06-30",15.159],["2022-07-31",18.163],["2022-08-31",15.094],["2022-09-30",12.139],["2022-10-31",13.497],["2022-11-30",16.923],["2022-12-31",14.614],["2023-01-31",19.537001],["2023-02-28",23.216],["2023-03-31",27.777],["2023-04-30",27.749001],["2023-05-31",37.834],["2023-06-30",42.301998],["2023-07-31",46.729],["2023-08-31",49.355],["2023-09-30",43.499001],["2023-10-31",40.779999],["2023-11-30",46.77],["2023-12-31",49.521999],["2024-01-31",61.527],["2024-02-29",79.112],["2024-03-31",90.356003],["2024-04-30",86.402],["2024-05-31",109.633003],["2024-06-30",123.540001],["2024-07-31",117.019997],["2024-08-31",119.370003],["2024-09-30",121.440002],["2024-10-31",132.759995],["2024-11-30",138.25],["2024-12-31",134.289993],["2025-01-31",120.07],["2025-02-28",124.919998],["2025-03-31",108.379997],["2025-04-30",108.919998],["2025-05-31",135.130005],["2025-06-30",157.990005],["2025-07-31",177.869995],["2025-08-31",174.179993],["2025-09-30",186.580002],["2025-10-31",202.490005],["2025-11-30",177.0],["2025-12-31",186.5],["2026-01-31",191.130005],["2026-02-28",177.190002],["2026-03-31",174.399994],["2026-04-30",199.570007],["2026-05-31",211.139999],["2026-06-30",200.089996],["2026-07-31",200.75],["2026-08-31",220.779999],["2026-09-30",228.380005],["2026-10-31",204.639999],["2026-11-13",162.850006]],"daily":[["2025-11-14",190.169998],["2025-11-17",186.600006],["2025-11-18",181.360001],["2025-11-19",186.520004],["2025-11-20",180.639999],["2025-11-21",178.880005],["2025-11-24",182.550003],["2025-11-25",177.820007],["2025-11-26",180.259995],["2025-11-28",177.0],["2025-12-01",179.919998],["2025-12-02",181.460007],["2025-12-03",179.589996],["2025-12-04",183.380005],["2025-12-05",182.410004],["2025-12-08",185.550003],["2025-12-09",184.970001],["2025-12-10",183.779999],["2025-12-11",180.929993],["2025-12-12",175.020004],["2025-12-15",176.289993],["2025-12-16",177.720001],["2025-12-17",170.940002],["2025-12-18",174.139999],["2025-12-19",180.990005],["2025-12-22",183.690002],["2025-12-23",189.210007],["2025-12-24",188.610001],["2025-12-26",190.529999],["2025-12-29",188.220001],["2025-12-30",187.539993],["2025-12-31",186.5],["2026-01-02",188.850006],["2026-01-05",188.119995],["2026-01-06",187.240005],["2026-01-07",189.110001],["2026-01-08",185.039993],["2026-01-09",184.860001],["2026-01-12",184.940002],["2026-01-13",185.809998],["2026-01-14",183.139999],["2026-01-15",187.050003],["2026-01-16",186.229996],["2026-01-20",178.070007],["2026-01-21",183.320007],["2026-01-22",184.839996],["2026-01-23",187.669998],["2026-01-26",186.470001],["2026-01-27",188.520004],["2026-01-28",191.520004],["2026-01-29",192.509995],["2026-01-30",191.130005],["2026-02-02",185.610001],["2026-02-03",180.339996],["2026-02-04",174.190002],["2026-02-05",171.880005],["2026-02-06",185.410004],["2026-02-09",190.039993],["2026-02-10",188.539993],["2026-02-11",190.050003],["2026-02-12",186.940002],["2026-02-13",182.809998],["2026-02-17",184.970001],["2026-02-18",187.979996],["2026-02-19",187.899994],["2026-02-20",189.820007],["2026-02-23",191.550003],["2026-02-24",192.850006],["2026-02-25",195.559998],["2026-02-26",184.889999],["2026-02-27",177.190002],["2026-03-02",182.479996],["2026-03-03",180.050003],["2026-03-04",183.039993],["2026-03-05",183.339996],["2026-03-06",177.820007],["2026-03-09",182.649994],["2026-03-10",184.770004],["2026-03-11",186.029999],["2026-03-12",183.139999],["2026-03-13",180.25],["2026-03-16",183.220001],["2026-03-17",181.929993],["2026-03-18",180.399994],["2026-03-19",178.559998],["2026-03-20",172.699997],["2026-03-23",175.639999],["2026-03-24",175.199997],["2026-03-25",178.679993],["2026-03-26",171.240005],["2026-03-27",167.520004],["2026-03-30",165.169998],["2026-03-31",174.399994],["2026-04-01",175.75],["2026-04-02",177.389999],["2026-04-06",177.639999],["2026-04-07",178.100006],["2026-04-08",182.080002],["2026-04-09",183.910004],["2026-04-10",188.630005],["2026-04-13",189.309998],["2026-04-14",196.509995],["2026-04-15",198.869995],["2026-04-16",198.350006],["2026-04-17",201.679993],["2026-04-20",202.059998],["2026-04-21",199.880005],["2026-04-22",202.5],["2026-04-23",199.639999],["2026-04-24",208.270004],["2026-04-27",216.610001],["2026-04-28",213.169998],["2026-04-29",209.25],["2026-04-30",199.570007],["2026-05-01",198.449997],["2026-05-04",198.479996],["2026-05-05",196.5],["2026-05-06",207.830002],["2026-05-07",211.5],["2026-05-08",215.199997],["2026-05-11",219.440002],["2026-05-12",220.779999],["2026-05-13",225.830002],["2026-05-14",235.740005],["2026-05-15",225.320007],["2026-05-18",222.320007],["2026-05-19",220.610001],["2026-05-20",223.470001],["2026-05-21",219.509995],["2026-05-22",215.330002],["2026-05-26",214.860001],["2026-05-27",212.600006],["2026-05-28",214.25],["2026-05-29",211.139999],["2026-06-01",224.360001],["2026-06-02",222.820007],["2026-06-03",214.75],["2026-06-04",218.660004],["2026-06-05",205.100006],["2026-06-08",208.639999],["2026-06-09",208.190002],["2026-06-10",200.419998],["2026-06-11",204.869995],["2026-06-12",205.190002],["2026-06-15",212.449997],["2026-06-16",207.410004],["2026-06-17",204.649994],["2026-06-18",210.690002],["2026-06-22",208.649994],["2026-06-23",200.039993],["2026-06-24",199.0],["2026-06-25",195.740005],["2026-06-26",192.529999],["2026-06-29",194.970001],["2026-06-30",200.089996],["2026-07-01",197.580002],["2026-07-02",194.830002],["2026-07-06",195.550003],["2026-07-07",196.929993],["2026-07-08",204.119995],["2026-07-09",202.779999],["2026-07-10",210.960007],["2026-07-13",203.529999],["2026-07-14",211.800003],["2026-07-15",212.5],["2026-07-16",207.399994],["2026-07-17",202.809998],["2026-07-20",203.279999],["2026-07-21",207.289993],["2026-07-22",212.059998],["2026-07-23",208.759995],["2026-07-24",206.839996],["2026-07-27",196.509995],["2026-07-28",197.009995],["2026-07-29",190.009995],["2026-07-30",195.039993],["2026-07-31",200.75],["2026-08-03",206.639999],["2026-08-04",211.940002],["2026-08-05",219.220001],["2026-08-06",218.990005],["2026-08-07",223.960007],["2026-08-10",217.550003],["2026-08-11",217.5],["2026-08-12",224.089996],["2026-08-13",225.300003],["2026-08-14",225.160004],["2026-08-17",225.009995],["2026-08-18",219.740005],["2026-08-19",217.559998],["2026-08-20",216.850006],["2026-08-21",214.720001],["2026-08-24",208.479996],["2026-08-25",213.050003],["2026-08-26",209.660004],["2026-08-27",227.979996],["2026-08-28",217.550003],["2026-08-31",220.779999],["2026-09-01",217.440002],["2026-09-02",224.410004],["2026-09-03",228.449997],["2026-09-04",230.360001],["2026-09-08",225.729996],["2026-09-09",223.669998],["2026-09-10",218.360001],["2026-09-11",218.289993],["2026-09-14",210.960007],["2026-09-15",212.169998],["2026-09-16",213.899994],["2026-09-17",219.339996],["2026-09-18",222.270004],["2026-09-21",227.380005],["2026-09-22",228.869995],["2026-09-23",225.509995],["2026-09-24",224.580002],["2026-09-25",225.070007],["2026-09-28",228.860001],["2026-09-29",227.210007],["2026-09-30",228.380005],["2026-10-01",230.860001],["2026-10-02",233.949997],["2026-10-05",238.899994],["2026-10-06",239.240005],["2026-10-07",237.470001],["2026-10-08",230.479996],["2026-10-09",229.279999],["2026-10-12",226.320007],["2026-10-13",228.520004],["2026-10-14",221.300003],["2026-10-15",217.229996],["2026-10-16",214.130005],["2026-10-19",217.089996],["2026-10-20",216.470001],["2026-10-21",221.970001],["2026-10-22",212.210007],["2026-10-23",210.960007],["2026-10-26",216.0],["2026-10-27",217.940002],["2026-10-28",215.380005],["2026-10-29",213.660004],["2026-10-30",204.639999],["2026-11-02",202.059998],["2026-11-03",206.690002],["2026-11-04",200.130005],["2026-11-05",181.600006],["2026-11-06",186.639999],["2026-11-09",178.669998],["2026-11-10",168.889999],["2026-11-11",173.729996],["2026-11-12",166.190002],["2026-11-13",162.850006],["2026-11-16",156.139999],["2026-11-17",155.460007],["2026-11-18",150.960007],["2026-11-19",145.979996],["2026-11-20",125.529999],["2026-11-23",165.05]],"source":"https://finance.yahoo.com/quote/NVDA/history/"}</script>
+<script src="accumulator-format.js?v=2"></script>
+<script src="accumulator-benchmark.js?v=1"></script>
+<script src="accumulator-model.js?v=3"></script>
+<script src="accumulator-ledger-workings.js?v=overview2"></script>
+<script src="accumulator-beta.js?v=20261126-beta2"></script>
+<script src="accumulator-quotes.js?v=20261126-asof"></script><script id="accumulator-model">
+'use strict';
+const Accumulator = (() => {
+  const pricingTables = window.AccumulatorQuotes;
+  const quoteId = (table, row, minimum) => [table.id, row.months, row.ko, minimum].join('-');
+  const tableQuotes = pricingTables.flatMap(table =>
+    table.rows.flatMap(row => (row.guarantees || table.guarantees).flatMap((minimum, column) => {
+      const strike = row.strikes[column];
+      return strike === null ? [] : [{
+        id:quoteId(table,row,minimum), product:table.label, asOf:table.asOf, months:row.months, days:row.days,
+        label:'Normal', strike, ko:row.ko, multiple:1, minimum,
+        knownMonthEnds:table.guaranteeDays?.[row.months] || [], guaranteedDays:table.guaranteeDays?.[row.months]?.[column] ?? null
+      }];
+    }))
+  );
+  function indicationDates(quotes){
+    const dates=[...new Set(quotes.map(q=>q.asOf))];
+    const label=date=>date ? new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(date+'T00:00:00Z')) : 'date unavailable';
+    if(dates.length===1)return label(dates[0]);
+    return [...new Set(quotes.map(q=>(q.product||q.label)+' '+label(q.asOf)))].join(' / ');
+  }
+  const earlierQuotes = [];
+  const quotes = [...tableQuotes, ...earlierQuotes];
+  const scenarios = [
+    {id:'recover', name:'Dip, then recover', prices:[90,75,90,94,96,98,95,97,99,100,101,100]},
+    {id:'rally', name:'Rally & knock-out', prices:[110,135,130,128,127,125,130,135,137,138,139,140]},
+    {id:'fall', name:'Sustained decline', prices:[95,88,82,78,74,72,70,68,65,62,60,55]}
+  ];
+  const precision = n => Number(n.toFixed(6));
+  const scale = (prices,spot) => prices.map(p=>precision(spot*p/100));
+  const {terms,simulate}=window.AccumulatorModel;
+  function history(monthly,daily){
+    const byMonth=new Map();
+    [...monthly,...daily].forEach(p=>{
+      const key=p[0].slice(0,7),prev=byMonth.get(key);
+      if(!prev||prev[0]<=p[0]) byMonth.set(key,p);
+    });
+    const ordered=[...byMonth.values()].sort((a,b)=>a[0].localeCompare(b[0]));
+    const recent=daily.slice(-253),returns=[];
+    for(let i=1;i<recent.length;i++){
+      const gap=Date.parse(recent[i][0])-Date.parse(recent[i-1][0]);
+      if(gap>0&&gap<=7*86400000) returns.push(Math.log(recent[i][1]/recent[i-1][1]));
+    }
+    const mean=returns.reduce((a,b)=>a+b,0)/returns.length;
+    const variance=returns.reduce((a,b)=>a+(b-mean)**2,0)/(returns.length-1);
+    const vol=returns.length>=60?Math.sqrt(252*variance):null;
+    return {ordered,latest:daily[daily.length-1],vol,volStart:recent[0]?.[0] || null,sessions:returns.length};
+  }
+  function cone(spot,vol,month){
+    const step=1.2815515655446004*vol*Math.sqrt(month/12);
+    return [spot*Math.exp(-step),spot*Math.exp(step)];
+  }
+  return {quotes,earlierQuotes,pricingTables,quoteId,indicationDates,scenarios,scale,terms,simulate,history,cone,precision};
+})();
+</script>
+<script>
+'use strict';
+const A=Accumulator, el=id=>document.getElementById(id);
+const fmt=window.AccumulatorFormat;
+const dollars=fmt.money, exact=fmt.price, percent=fmt.signedRate;
+const count={format:fmt.shares};
+const tagged=(tag,content)=>'<'+tag+'>'+content+'</'+tag+'>';
+const chosen=()=>A.quotes.find(q=>q.id===el('quote').value);
+const data=JSON.parse(el('historySnapshot').textContent);
+let market=A.history(data.monthly,data.daily), origin='Saved Hub close';
+let stressContext=null,usingDatedSpot=true,previousInputs='';
+const chartScales=new Map();
+let drag=null;
+window.AccumulatorMarket={getState:()=>({...market,source:origin}),getStressContext:()=>stressContext};
+let ratios=A.scenarios[0].prices.slice(), preset='recover', month=1, spot,capital;
+let simulation=null,tradeX=0,unit=60,dailyOverride=null,comparisonPath=null,sourceNotice='';
+function updateClientSheet(){
+  const q=chosen();
+  el('sheet-selection').textContent=simulation
+    ? q.product+' · '+q.months+' months · '+fmt.quote(q.strike)+' strike · '+fmt.quote(q.ko)+' knock-out · '+q.minimum+'-month guarantee · '+dollars(simulation.payment)+' payment'
+    : 'Enter a valid starting price and budget under Pricing & capital to prepare the sheet.';
+  el('sheet-pricing').disabled=el('sheet-research').disabled=!simulation;
+  el('sheet-status').textContent='';
+}
+window.AccumulatorMarket.getClientSelection=()=>simulation && ({
+  quote:chosen(),spot,capital,simulation,path:el('pathName').textContent,usingDatedSpot
+});
+const explanations={
+ recover:'The price dips and then recovers. The share count follows the schedule. The recovery changes the value of the shares acquired at strike.',
+ rally:'The rally reaches knock-out. Guaranteed purchases still apply and remaining capital comes back. The model sells the shares at the knock-out close.',
+ fall:'The price keeps falling. Each purchase still goes through at strike, even when NVIDIA is cheaper in the market. The shares can be worth less than the payment at maturity.'
+};
+const defaultQuoteId='sn-9-120-1';
+const cash=fmt.money, signedCash=fmt.returnMoney;
+function strikeButton(id,strike,description){
+  const name=description+' at '+fmt.quote(strike)+' strike';
+  return '<button type="button" class="strike-button" data-quote="'+id+'" data-name="'+name+'" aria-pressed="false" aria-label="Add '+name+' to comparison">'+fmt.quote(strike)+'</button>';
+}
+function displayLedger(sim){
+  const sale=sim.exit.shares*sim.exit.price;
+  return sim.rows.slice(0,sim.exit.month).map(r=>{
+    const atExit=r.month===sim.exit.month, sold=r.month>=sim.exit.month;
+    return {...r, sold:atExit?sale:0, held:sold?0:r.shares, value:sold?sim.exit.value:r.value};
+  });
+}
+function tenorTable(table, months, rows, guarantees=table.guarantees, earlier=false){
+  const days=rows[0].days;
+  const title=months+' months'+(days?' · '+days+' trading days':'')+(earlier?' · earlier quote':'');
+  const columns=guarantees.map(guarantee=>{
+    const actualDays=table.guaranteeDays?.[months]?.[guarantee-1];
+    return '<th scope="col">'+guarantee+'-month guarantee'+(actualDays?'<small>'+actualDays+' days</small>':'')+'</th>';
+  });
+  const body=rows.map(row=>{
+    const cells=row.strikes.map((strike,column)=>{
+      if(strike===null) return '<td><span class="unquoted">'+(row.missing?.[column] || 'No strike supplied')+'</span></td>';
+      const minimum=guarantees[column];
+      const description=table.label+', '+months+' months, '+fmt.quote(row.ko)+' KO, '+minimum+'-month guarantee';
+      const id=row.quoteId || A.quoteId(table,row,minimum);
+      return '<td>'+strikeButton(id,strike,description)+'</td>';
+    });
+    return '<tr><th scope="row">'+fmt.quote(row.ko)+'</th>'+cells.join('')+'</tr>';
+  });
+  return '<h4 class="quote-term">'+title+'</h4><div class="tableScroll" tabindex="0" aria-label="'+table.label+', '+title+'"><table class="priceMatrix"><thead><tr><th scope="col">KO</th>'+columns.join('')+'</tr></thead><tbody>'+body.join('')+'</tbody></table></div>';
+}
+function renderPricingTable(table){
+  const tenors=[...new Set(table.rows.map(row=>row.months))];
+  el(table.id+'Quotes').innerHTML=tenors.map(months=>{
+    const rows=table.rows.filter(v=>v.months===months);
+    const markup=tenorTable(table,months,rows,rows[0].guarantees || table.guarantees);
+    return rows.every(row=>row.strikes.every(strike=>strike===null))
+      ? '<details><summary>'+months+'-month requests with no strike</summary>'+markup+'</details>' : markup;
+  }).join('');
+}
+function populate(){
+  el('quote').innerHTML=A.quotes.map(q=>'<option value="'+q.id+'">'+q.product+' · '+q.months+'M · '+fmt.quote(q.strike)+' strike / '+fmt.quote(q.ko)+' KO · '+q.minimum+'M guarantee'+(q.id==='nv9086'?' · earlier quote':'')+'</option>').join('');
+  el('quote').value=defaultQuoteId;
+  el('quote-dates').textContent='Indicative quotes · '+A.indicationDates(A.pricingTables);
+  A.pricingTables.forEach(renderPricingTable);
+  const sn=A.pricingTables.find(t=>t.id==='sn');
+  el('quotesTable').innerHTML=A.earlierQuotes.map(q=>tenorTable(sn,q.months,[{days:q.days,ko:q.ko,strikes:[q.strike],quoteId:q.id}],[q.minimum],true)).join('');
+  el('overviewPaths').innerHTML=el('quickPaths').innerHTML=A.scenarios.map(s=>'<button data-scenario="'+s.id+'">'+s.name+'</button>').join('');
+}
+let compared=new Set();
+document.addEventListener('accumulator:selection',event=>{
+  const ids=event.detail?.ids;
+  if(!Array.isArray(ids))return;
+  compared=new Set(ids);
+  document.querySelectorAll('#library [data-quote]').forEach(button=>{
+    const added=compared.has(button.dataset.quote);
+    button.setAttribute('aria-pressed',String(added));
+    button.setAttribute('aria-label',added ? button.dataset.name+' is in the comparison. Load this graph.' : 'Add '+button.dataset.name+' to comparison');
+  });
+  el('pricingStatus').textContent=compared.size+' selected';
+});
+function selectMonth(n,focus=false){
+  month=n; el('month').value=n;
+  el('price').value=simulation.rows[n-1].price.toFixed(2);
+  drawSelection(); drawChart();
+  if(focus){el('edit').scrollIntoView({block:'nearest'});el('price').focus({preventScroll:true});}
+}
+function drawSelection(){
+  const r=simulation.rows[month-1];
+  el('monthResult').innerHTML='<strong>Month '+month+' · '+r.status+'</strong> &nbsp; '+count.format(r.bought)+' shares bought at '+exact(simulation.strike)+' · '+cash(r.cost)+' used · '+cash(r.refund)+' refunded.'+(r.extra?' Includes '+count.format(r.extra)+' shares for remaining minimum-period fixings.':'');
+  for(const tr of document.querySelectorAll('#rows tr,#overviewRows tr')) tr.classList.toggle('active',Number(tr.dataset.row)===month);
+}
+function leaveComparison(){
+  if(comparisonPath) sourceNotice='The graph now uses the editable monthly path.';
+  comparisonPath=null;
+}
+function assignScenario(id){
+  const s=A.scenarios.find(v=>v.id===id);
+  if(!s)return;
+  leaveComparison();dailyOverride=null;ratios=s.prices.slice();preset=id;render();
+}
+function dailySimulation(q, spot, target, anchors, override=null, imported=null){
+  const daily=imported?imported.daily.slice():window.AccumulatorModel.monthlyPath(q,spot,anchors).map(v=>Math.round((v+Number.EPSILON*v)*100)/100);
+  if(override) daily[override.day-1]=override.price;
+  return {...window.AccumulatorModel.simulateDaily(q,spot,target,daily),daily};
+}
+function render(){
+  const q=chosen();
+  if(dailyOverride && dailyOverride.quoteId!==q.id) dailyOverride=null;
+  const months=q.months;
+  month=Math.min(month,months);
+  if(el('month').options.length!==months){
+    el('month').innerHTML=Array.from({length:months},(_,i)=>'<option value="'+(i+1)+'">Month '+(i+1)+'</option>').join('');
+  }
+  el('endingMonth').textContent='Exit value and return';
+  el('endJump').textContent='Month '+months;
+  spot=el('spot').valueAsNumber; capital=el('capital').valueAsNumber;
+  if(comparisonPath && (comparisonPath.quoteId!==q.id || comparisonPath.spot!==spot)) leaveComparison();
+  const inputs=[q.id,spot,capital].join('|');
+  if(inputs!==previousInputs){
+    previousInputs=inputs;
+    document.dispatchEvent(new Event('accumulator:inputs'));
+  }
+  const error=el('setupError');
+  try{
+    if(!el('spot').checkValidity()||!el('capital').checkValidity()) throw Error('Enter a starting price and capital within the displayed input limits, in USD cents.');
+    simulation=dailySimulation(q,spot,capital,A.scale(ratios.slice(0,months),spot),dailyOverride,comparisonPath);
+  }catch(e){
+    simulation=null;updateStress(null);error.textContent=e.message;error.hidden=false;el('sim').hidden=true;el('overview').hidden=true;el('quote-case').hidden=true;el('termStrip').textContent='';el('sizingDetail').textContent='';el('method').textContent='';updateClientSheet();return;
+  }
+  error.hidden=true;el('sim').hidden=false;el('overview').hidden=false;
+  updateClientSheet();
+  el('dayIndex').max=simulation.days;
+  if(el('dayIndex').valueAsNumber>simulation.days) el('dayIndex').value=simulation.days;
+  if(!el('dayPrice').value) el('dayPrice').value=simulation.ko.toFixed(2);
+  el('clearDay').disabled=!dailyOverride;
+  el('dayStatus').textContent=dailyOverride?'Day '+dailyOverride.day+' close set to '+exact(dailyOverride.price)+'.':'Available trading days 1–'+simulation.days+'.';
+  const difference=simulation.payment-capital;
+  const budgetGap=difference===0?'on target':exact(Math.abs(difference))+(difference>0?' over target':' under target');
+  el('termStrip').innerHTML=['Strike <b>'+exact(simulation.strike)+'</b>','Daily knock-out <b>'+exact(simulation.ko)+'</b>','Monthly quantity <b>'+count.format(simulation.maximum)+' shares</b>','Actual payment <b>'+dollars(simulation.payment)+'</b> ('+budgetGap+')'].map(x=>tagged('span',x)).join('');
+  el('sizingDetail').textContent=count.format(simulation.maximum)+' shares × '+exact(simulation.strike)+' × '+months+' months = '+exact(simulation.committed)+' committed. Payment rounded up to '+dollars(simulation.payment)+' ('+(difference===0?'on target':dollars(Math.abs(difference))+(difference>0?' over':' under')+' target')+'). Any cash left from rounding is refunded.';
+  el('chartTerms').textContent=q.product+' · '+months+' months · '+q.minimum+'-month guarantee'+(q.id==='nv9086'?' · Earlier quote':'')+' · Quoted strike '+fmt.quote(q.strike)+' ('+exact(simulation.strike)+') · Daily KO '+fmt.quote(q.ko)+' ('+exact(simulation.ko)+')';
+  el('graphSource').textContent=comparisonPath?'Comparison path · '+comparisonPath.name+'. This chart values the original accumulator through knock-out or maturity. Any later hold or decumulator outcome is shown in the comparison table.':sourceNotice;
+  el('pathName').textContent=comparisonPath?comparisonPath.name:(A.scenarios.find(s=>s.id===preset)?.name||'Custom price path')+(dailyOverride?' · day '+dailyOverride.day+' override':'');
+  document.querySelectorAll('#quickPaths button,#overviewPaths button').forEach(b=>b.setAttribute('aria-pressed',String(!dailyOverride && b.dataset.scenario===preset)));
+  el('rows').innerHTML=displayLedger(simulation).map(r=>{
+    const knockedOut=r.month===simulation.koMonth;
+    const event=knockedOut?r.status+' · day '+simulation.koDay+' at '+dollars(simulation.exit.price):r.status;
+    const rowClass=knockedOut?'ko-row':r.status==='Maturity'?'maturity-row':'';
+    const cells=[dollars(r.price),event,count.format(r.bought),dollars(r.cost),cash(r.refund),dollars(r.sold),dollars(r.remaining),count.format(r.held),cash(r.refunded),dollars(r.value),count.format(r.shares),signedCash(Math.round((r.value-simulation.payment)*100)/100)];
+    return '<tr data-row="'+r.month+'" class="'+rowClass+'"><td><button data-edit="'+r.month+'" aria-label="Edit month '+r.month+'">M'+r.month+'</button></td>'+cells.map((value,index)=>{
+      const cls=index===1?'event-cell':index===4&&r.refund>0?'refund-cell':'';
+      return '<td class="'+cls+'">'+value+'</td>';
+    }).join('')+'</tr>';
+  }).join('');
+  window.AccumulatorLedgerWorkings?.bind(el('rows'),{simulation,quote:q,spot,target:capital});
+  const exit=simulation.exit;
+  const metrics=[['Shares bought',count.format(exit.shares)],['Cash refunded',cash(exit.refunded)],['Exit value',cash(exit.value)],['P&L on payment',signedCash(exit.profit)+' ('+percent(exit.rate)+')']];
+  el('summary').innerHTML=metrics.map(([label,v],i)=>'<article><span>'+label+'</span><strong class="'+(i===3?(exit.profit<0?'negative':'positive'):'')+'">'+v+'</strong></article>').join('');
+  const exitDay=simulation.koMonth?'knock-out on day '+simulation.koDay+' (month '+exit.month+')':'maturity on day '+exit.day+' (month '+months+')';
+  el('valuation').textContent='At '+exitDay+', '+count.format(exit.shares)+' shares × '+exact(exit.price)+' gives sale proceeds of '+cash(exit.shareValue)+'. With refunded cash of '+cash(exit.refunded)+', the exit value is '+cash(exit.value)+'.';
+  el('exitValue').textContent='Exit P&L is '+signedCash(exit.profit)+' after deducting the payment of '+cash(simulation.payment)+'.';
+  updateOverview();
+  renderScenarios(q);
+  selectMonth(month);
+}
+function updateOverview(){
+  const sim=simulation, exit=sim.exit;
+  const exitLabel=sim.koDay?'KO on day '+sim.koDay:'Maturity';
+  el('overviewTerms').textContent=el('chartTerms').textContent+' · '+el('pathName').textContent;
+  el('overviewRows').innerHTML=displayLedger(sim).map(r=>{
+    const ended=r.month===exit.month;
+    const pnl=Math.round((r.value-sim.payment)*100)/100;
+    const rowTitle='M'+r.month+(ended?' · '+exitLabel:'');
+    return '<tr data-row="'+r.month+'" class="'+(ended&&sim.koDay?'ko-row':'')+'"><td>'+rowTitle+'</td><td>'+dollars(ended?exit.price:r.price)+'</td><td>'+fmt.shares(r.bought)+'</td><td>'+fmt.shares(r.shares)+'</td><td>'+exact(r.cost)+'</td><td class="'+(r.refund>0?'refund-cell':'')+'">'+cash(r.refund)+'</td><td>'+cash(r.value)+'</td><td class="'+(pnl<0?'negative':'positive')+'">'+signedCash(pnl)+'</td></tr>';
+  }).join('');
+  const quote=chosen();
+  window.AccumulatorLedgerWorkings?.bind(el('overviewRows'),{simulation:sim,quote,spot,target:capital},[null,'mark','bought','cumulative','cost','refund','value','pnl']);
+  window.AccumulatorMonthlyCash.render(sim,quote.id);
+  el('saleBasis').textContent=exitLabel+' · Month '+exit.month+' · '+fmt.shares(exit.shares)+' shares bought at '+exact(sim.strike)+'. The path assumes a sale at '+exact(exit.price)+'. Below, only the sale price changes.';
+  const step=niceStep(Math.max(5,exit.price/2));
+  const centre=Math.round(exit.price/step)*step;
+  const prices=new Set([0,Math.round(exit.price), Math.round(sim.strike)]);
+  for(let i=-3;i<=3;i++) prices.add(Math.max(0,centre+i*step));
+  el('saleRange').innerHTML=[...prices].sort((a,b)=>a-b).map(price=>{
+    const marketCents=exit.shares*price*100;
+    const profit=(marketCents-Math.round(exit.spent*100))/100;
+    const value=(marketCents+Math.round(exit.refunded*100))/100;
+    const pnl=Math.round((value-sim.payment)*100)/100;
+    return '<tr><td>'+cash(price)+'</td><td>'+fmt.shares(exit.shares)+'</td><td>'+cash(marketCents/100)+'</td><td>'+signedCash(profit)+'</td><td>'+cash(exit.refunded)+'</td><td>'+cash(value)+'</td><td class="'+(pnl<0?'negative':'positive')+'">'+signedCash(pnl)+'</td></tr>';
+  }).join('');
+}
+function updateStress(value,force=false){
+  if(!force&&JSON.stringify(value)===JSON.stringify(stressContext))return;
+  stressContext=value;
+  document.dispatchEvent(new CustomEvent('accumulator:stress-context',{detail:value}));
+}
+function showQuoteCase(q, rally) {
+  const terms = simulation;
+  const spotCents = Math.round(spot * 100);
+  const savingCents = spotCents - Math.round(terms.strike * 100);
+  const fullShares = terms.maximum * q.months;
+  const reference = usingDatedSpot ? 'the '+market.latest[0]+' close' : 'your starting price';
+  el('case-saving').textContent = exact(savingCents / 100);
+  const gap = savingCents === 0 ? 'equals' : 'is '+fmt.quote(savingCents / spotCents * 100)+' below';
+  el('case-saving-note').textContent = 'The '+exact(terms.strike)+' strike '+gap+' '+reference+' of '+exact(spot)+'.';
+  if (spot < terms.ko) {
+    el('case-flat').textContent = signedCash(fullShares * savingCents / 100)+' P&L';
+    el('case-flat-note').textContent = 'With no knock-out, all '+count.format(fullShares)+' shares sell at '+exact(spot)+'. Break-even is '+exact(terms.strike)+' per share before costs. A lower sale price creates a loss.';
+  } else {
+    el('case-flat').textContent = 'Knock-out';
+    el('case-flat-note').textContent = 'At the rounded starting price, the first unchanged daily close already meets the '+exact(terms.ko)+' knock-out level.';
+  }
+  el('case-refund').textContent = cash(rally.exit.refunded);
+  el('case-refund-note').textContent = rally.koDay
+    ? 'Day '+rally.koDay+' knock-out buys '+count.format(rally.exit.shares)+' of the '+count.format(fullShares)+' scheduled shares. Only shares bought participate in the rally up to the assumed sale.'
+    : 'All '+count.format(rally.exit.shares)+' shares are bought through maturity on this path. Any unused cash is returned.';
+  el('quote-case').hidden = false;
+}
+function renderScenarios(q){
+  const results=A.scenarios.map(s=>({s,m:dailySimulation(q,spot,capital,A.scale(s.prices.slice(0,q.months),spot))}));
+  showQuoteCase(q,results.find(({s})=>s.id==='rally').m);
+  const profits=results.map(({m})=>m.exit.profit);
+  const high=Math.max(...profits),low=Math.min(...profits);
+  el('scenarios').innerHTML=results.map(({s,m})=>{
+    const e=m.exit,rank=high===low?'Tied across all three paths':e.profit===high?'Best of these three paths':e.profit===low?'Worst of these three paths':'';
+    const cls=high===low?'':e.profit===high?' best-path':e.profit===low?' worst-path':'';
+    const risk=s.id==='fall'?' The assumed exit is '+exact(e.price)+'. At $0 the shares would be worthless.':'';
+    const outright=window.AccumulatorBenchmark.buyAndHold(m.payment,spot,e.price);
+    const advantage=(Math.round(e.profit*100)-Math.round(outright.pnl*100))/100;
+    const comparison=advantage===0?'Both finish with the same value.':'Note P&L minus direct-share P&L is '+signedCash(advantage)+'.';
+    return '<article class="scenario'+cls+'"><h3>'+s.name+(rank?'<span class="rank">'+rank+'</span>':'')+'</h3><strong class="return '+(e.profit<0?'negative':'positive')+'">'+percent(e.rate)+'</strong><small><span class="scenario-profit">'+signedCash(e.profit)+' P&amp;L on '+cash(m.payment)+' paid</span>Exit value <b>'+cash(e.value)+'</b> · '+count.format(e.shares)+' shares sold · '+cash(e.refunded)+' refunded<br>Sale price '+exact(e.price)+' · '+(m.koMonth?'KO on day '+m.koDay+' (M'+m.koMonth+')':'Maturity on day '+e.day+' (M'+e.month+')')+'</small><p>'+explanations[s.id]+risk+'</p><p class="direct-case">Buying NVDA outright gives <b>'+signedCash(outright.pnl)+' P&amp;L</b>. '+comparison+'</p><button data-scenario="'+s.id+'" aria-pressed="'+(!comparisonPath&&!dailyOverride&&s.id===preset)+'">Load scenario</button></article>';
+  }).join('');
+  const m=results.find(({s})=>s.id==='fall').m,e=m.exit;
+  updateStress({quoteId:q.id,product:q.product,spot,referenceMode:usingDatedSpot?'dated':'manual',payment:m.payment,exitPrice:e.price,exitShares:e.shares,refund:e.refunded,exitValue:e.value,pnl:e.profit,tenor:q.months,knockOutDay:m.koDay,knockOutPrice:m.ko});
+}
+function niceStep(max){
+  const raw=Math.max(1,max/5),power=10**Math.floor(Math.log10(raw));
+  return ([1,2,5,10].find(x=>x*power>=raw)||10)*power;
+}
+function drawChart(){
+  if(!simulation)return;
+  drawPriceChart(false);
+  drawPriceChart(true);
+}
+function drawPriceChart(compact){
+  const months=simulation.rows.length;
+  const plot=el(compact?'overviewPlot':'plot');
+  const plotWidth=plot.parentElement.clientWidth;
+  const historyMonths=compact?12:12*Number(el('years').value);
+  const history=historyMonths?market.ordered.slice(-historyMonths):[];
+  const last=market.latest,haveCone=Number.isFinite(market.vol);
+  el('band').disabled=!haveCone;
+  const show=!compact&&el('band').checked&&haveCone;
+  if(!compact)el('bandLegend').hidden=!show;
+  const rows=simulation.rows,values=[spot,simulation.ko,...simulation.daily,...history.map(p=>p[1])];
+  if(show)values.push(A.cone(spot,market.vol,months)[1]);
+  const maximum=Math.max(...values);
+  const lockedScale=drag?.plot===plot?drag.scale:null;
+  const step=lockedScale?.step||niceStep(maximum),top=lockedScale?.top||Math.ceil(maximum*1.06/step)*step;
+  const H=289,yt=29,yb=H-43,y=v=>yb-(yb-yt)*v/top;
+  chartScales.set(plot,{step,top,heightRatio:(yb-yt)/H});
+  const historyWidth=Math.max(120,Math.min(230,plotWidth*.22));
+  const hSpacing=compact?historyWidth/Math.max(1,history.length-1):history.length<=12?21:history.length<=60?13:9;
+  const hp=18,historyEnd=history.length?hp+(history.length-1)*hSpacing:0;
+  const startX=history.length?historyEnd+(compact?28:55):28;
+  const spacing=Math.max(compact?44:65,(plotWidth-startX-46)/months);
+  if(!compact){tradeX=startX;unit=spacing;}
+  const sx=i=>startX+i*spacing,w=Math.ceil(sx(months)+46);
+  const attrs=(x)=>Number(x).toFixed(2);
+  const line=(x1,y1,x2,y2,stroke,extra='')=>'<line x1="'+attrs(x1)+'" y1="'+attrs(y1)+'" x2="'+attrs(x2)+'" y2="'+attrs(y2)+'" stroke="'+stroke+'" '+extra+'/>';
+  const label=(x,y1,t,extra='')=>'<text x="'+attrs(x)+'" y="'+attrs(y1)+'" '+extra+'>'+t+'</text>';
+  const points=arr=>arr.map(p=>p.map(attrs).join(',')).join(' ');
+  const poly=(arr,color,width,dash='')=>'<polyline points="'+points(arr)+'" fill="none" stroke="'+color+'" stroke-linejoin="round" stroke-width="'+width+'" stroke-dasharray="'+dash+'"/>';
+  let grid='',axis=label(43,15,'USD','text-anchor="end" font-weight="700" fill="#536975" font-size="11"');
+  for(let v=0;v<=top;v+=step){
+    grid+=line(0,y(v),w,y(v),'#d9e4e6');
+    axis+=label(44,y(v)+4,count.format(v),'text-anchor="end" font-size="12" fill="#4d6570"');
+  }
+  el(compact?'overviewAxis':'axis').innerHTML='<svg width="100%" height="'+H+'">'+axis+'</svg>';
+  let svg='<rect width="'+w+'" height="'+H+'" fill="#fbfdfd"/>'+grid;
+  if(history.length){
+    const historyColour=compact?'#6D28D9':'#617d93';
+    svg+=label(hp,16,'NVDA HISTORY','font-size="10" fill="'+historyColour+'" font-weight="700"');
+    svg+=poly(history.map((p,i)=>[hp+i*hSpacing,y(p[1])]),historyColour,2.4);
+    const interval=Math.ceil(80/hSpacing);
+    const lastIndex=history.length-1;
+    history.forEach((p,i)=>{
+      if(i%interval===0&&(!compact||i===0||(lastIndex-i)*hSpacing>=84)){
+        svg+=label(hp+i*hSpacing,yb+20,p[0].slice(0,7),'font-size="11" fill="#536975"');
+      }
+    });
+    if(compact){
+      const [date,price]=history[lastIndex];
+      svg+='<circle cx="'+attrs(historyEnd)+'" cy="'+attrs(y(price))+'" r="3.5" fill="'+historyColour+'"><title>'+date+' · '+exact(price)+'</title></circle>';
+      if(lastIndex)svg+=label(historyEnd,yb+20,date.slice(0,7),'font-size="11" fill="#536975" text-anchor="end"');
+    }
+  }
+  svg+=line(startX,yt-5,startX,yb,'#9fb1b8','stroke-dasharray="3 3"');
+  svg+=label(startX+7,16,'SIMULATED DAILY CLOSES','font-size="10" fill="#176b68" font-weight="700"');
+  if(show){
+    const upper=[],lower=[];
+    for(let i=0;i<=months;i+=.25){const b=A.cone(spot,market.vol,i);upper.push([sx(i),y(b[1])]);lower.push([sx(i),y(b[0])]);}
+    svg+='<polygon points="'+points(upper.concat(lower.reverse()))+'" fill="#b8d9da" opacity=".52"/>';
+  }
+  svg+=line(startX,y(simulation.strike),sx(months),y(simulation.strike),'#86602e','stroke-dasharray="5 4" stroke-width="1.6"');
+  svg+=line(startX,y(simulation.ko),sx(months),y(simulation.ko),'#665778','stroke-dasharray="8 4" stroke-width="1.6"');
+  const pointX=(day,monthIndex)=>{
+    const prior=monthIndex?simulation.monthEnds[monthIndex-1]:0;
+    return sx(monthIndex+(day-prior)/(simulation.monthEnds[monthIndex]-prior));
+  };
+  const path=[[startX,y(spot)]];
+  rows.forEach((row,i)=>{
+    const prior=i?simulation.monthEnds[i-1]:0;
+    for(let day=prior+1;day<=simulation.monthEnds[i];day++) path.push([pointX(day,i),y(simulation.daily[day-1])]);
+  });
+  const exit=simulation.koMonth||months;
+  if(simulation.koDay){
+    const d=simulation.koDay,[x,py]=path[d];
+    svg+=poly(path.slice(0,d+1),'#0b7377',3);
+    svg+=poly(path.slice(d),'#69888a',2,'5 4');
+    svg+='<g><title>Knock-out on trading day '+d+' at '+exact(simulation.exit.price)+'</title><circle cx="'+x+'" cy="'+py+'" r="6" fill="white" stroke="#665778" stroke-width="2"/></g>';
+    svg+=label(x,Math.min(yb-6,py+20),'KO day '+d,'text-anchor="middle" font-size="11" fill="#665778" font-weight="700" stroke="white" stroke-width="3" paint-order="stroke"');
+  }else svg+=poly(path,'#0b7377',3);
+  if(dailyOverride && dailyOverride.day!==simulation.koDay){
+    const [x,py]=path[dailyOverride.day];
+    svg+='<circle cx="'+x+'" cy="'+py+'" r="4" fill="white" stroke="#665778" stroke-width="2"><title>Edited day '+dailyOverride.day+' at '+exact(dailyOverride.price)+'</title></circle>';
+    svg+=label(x,Math.min(yb-6,py+20),'Day '+dailyOverride.day,'text-anchor="middle" font-size="11" fill="#665778" font-weight="700" stroke="white" stroke-width="3" paint-order="stroke"');
+  }
+  svg+=label(startX,yb+20,'Start','font-size="11" fill="#536975" text-anchor="middle"');
+  rows.forEach(r=>{
+    const x=sx(r.month),py=y(r.price),active=r.month===month;
+    const title='Month '+r.month+', '+dollars(r.price)+', '+count.format(r.bought)+' shares bought, '+cash(r.refund)+' refunded';
+    svg+='<g data-month="'+r.month+'" data-price-handle tabindex="0" role="slider" aria-orientation="vertical" aria-label="Month '+r.month+' closing price in USD" aria-valuemin="0" aria-valuemax="1000000" aria-valuenow="'+r.price+'" aria-valuetext="'+title+'"><title>'+title+' · Drag vertically or use the arrow keys</title>';
+    if(active)svg+='<circle cx="'+x+'" cy="'+py+'" r="9" fill="#daeeeb" stroke="#3b8f83"/>';
+    svg+='<circle cx="'+x+'" cy="'+py+'" r="4" fill="'+(r.month<=exit?'#0b7377':'#69888a')+'"/>';
+    if(r.bought||r.month===simulation.koMonth)svg+=label(x,Math.max(yt+8,py-13),'+'+count.format(r.bought),'font-weight="700" text-anchor="middle" fill="#185a57" font-size="11" stroke="white" stroke-width="3" paint-order="stroke"');
+    if(active)svg+=label(x,py>yb-20?py-28:py+22,dollars(r.price),'text-anchor="middle" font-size="12" font-weight="700" fill="#172a42" stroke="white" stroke-width="4" paint-order="stroke"');
+    svg+='<circle class="handle-hit" cx="'+x+'" cy="'+py+'" r="21" fill="transparent"/></g>';
+    svg+=label(x,yb+20,'M'+r.month,'font-size="12" fill="#294656" text-anchor="middle"');
+  });
+  plot.innerHTML='<svg width="'+w+'" height="'+H+'" aria-label="NVDA history, simulated price path and share purchases">'+svg+'</svg>';
+  if(compact){
+    el('overviewHistoryNote').textContent='Historical NVDA closes through '+last[0]+' ('+origin+'). The simulation starts at '+exact(spot)+'.';
+    return;
+  }
+  el('chartNote').textContent=(history.length?'History ends at '+exact(last[1])+' on '+last[0]+'. The simulation starts separately at '+exact(spot)+'. ':'')+'Drag a dot vertically or enter a price below. On a focused dot, use ↑ or ↓ for $1 steps, or hold Shift for $10 steps. The dotted line follows NVDA after the shares are sold.';
+  el('method').textContent=haveCone?'The 10th–90th percentile band uses '+fmt.rate(market.vol*100)+' annualised volatility from '+market.sessions+' daily log returns through '+last[0]+'. Daily sample volatility is multiplied by √252. At month m the endpoints are starting price × exp(±1.28155 × volatility × √(m/12)). Changing the history window only changes the chart view.':'At least 60 usable daily returns are needed for the cone.';
+}
+function jump(where){
+  const sc=el('plotScroll');
+  const left=where==='history'?0:where==='start'?Math.max(0,tradeX-26):sc.scrollWidth;
+  sc.scrollTo({left,behavior:'auto'});
+}
+function marketLabel(){
+  const p=market.latest;
+  el('marketStatus').textContent=origin+' · '+p[0]+' · '+exact(p[1]);
+  el('historyStamp').textContent='Dated closes through '+p[0];
+}
+async function refreshHistory(){
+  if(!window.MarketPrices)return;
+  try{
+    const {base,daily,item}=await MarketPrices.series('NVDA');
+    if(item.ticker!=='NVDA'||item.currency!=='USD'||!daily.length) return;
+    const next=A.history(base.monthly,daily);
+    if(next.latest[0]<market.latest[0])return;
+    market=next;origin='Hub feed';marketLabel();
+    if(usingDatedSpot)el('spot').value=market.latest[1].toFixed(2);
+    render();updateStress(stressContext,true);
+  }catch{/* The dated snapshot stays usable when the Hub feed cannot be reached. */}
+}
+function editPrice(value,preview=false){
+  if(!simulation||!Number.isFinite(value)||value<0||value>1000000)return;
+  leaveComparison();
+  if(dailyOverride?.day===simulation.monthEnds[month-1])dailyOverride=null;
+  ratios[month-1]=Math.round(value*100)/spot;preset='custom';
+  if(!preview){render();return;}
+  const q=chosen();
+  simulation=dailySimulation(q,spot,capital,A.scale(ratios.slice(0,q.months),spot),dailyOverride);
+  updateOverview();
+  selectMonth(month);
+}
+populate();marketLabel();el('spot').value=market.latest[1].toFixed(2);render();jump('start');
+el('quote').addEventListener('change',render);
+el('spot').addEventListener('input',()=>{usingDatedSpot=false;render();});
+el('capital').addEventListener('input',render);
+el('close').addEventListener('click',()=>{usingDatedSpot=true;el('spot').value=market.latest[1].toFixed(2);render();});
+el('reset').addEventListener('click',()=>{
+  usingDatedSpot=false;el('quote').value=defaultQuoteId;el('spot').value=100;el('capital').value=300000;
+  month=1;assignScenario('recover');jump('start');
+});
+el('dayForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!simulation || !el('dayForm').checkValidity()) return;
+  leaveComparison();
+  dailyOverride={day:el('dayIndex').valueAsNumber,price:el('dayPrice').valueAsNumber,quoteId:chosen().id};
+  render();
+});
+el('clearDay').addEventListener('click',()=>{dailyOverride=null;render();});
+el('month').addEventListener('change',()=>selectMonth(Number(el('month').value)));
+el('editForm').addEventListener('submit',e=>{e.preventDefault();editPrice(el('price').valueAsNumber);});
+el('years').addEventListener('change',()=>{drawChart();jump(Number(el('years').value)?'history':'start');});
+el('band').addEventListener('change',drawChart);
+document.addEventListener('click',e=>{
+  const node=e.target.closest('[data-scenario],[data-quote],[data-edit],[data-month],[data-price],[data-jump]');
+  if(!node)return;
+  if(node.dataset.quote){
+    const id=node.dataset.quote, already=compared.has(id);
+    el('quote').value=id;leaveComparison();dailyOverride=null;sourceNotice='';
+    render();
+    document.dispatchEvent(new CustomEvent('accumulator:add-quote',{detail:{quoteId:id}}));
+    const q=chosen();
+    el('pricingStatus').textContent=q.product+' '+fmt.quote(q.strike)+(already?' already selected':' added')+' · '+compared.size+' selected';
+    if(simulation) jump('start');
+  }else if(node.dataset.scenario){
+    assignScenario(node.dataset.scenario);
+    if(node.closest('#scenarios')||e.target.closest('.scenario'))el('edit').scrollIntoView();
+  }else if(node.dataset.edit)selectMonth(Number(node.dataset.edit),true);
+  else if(node.dataset.month)selectMonth(Number(node.dataset.month));
+  else if(node.dataset.jump)jump(node.dataset.jump);
+  else if(node.dataset.price)editPrice({down:A.precision(simulation.strike*.9),strike:simulation.strike,ko:simulation.ko}[node.dataset.price]);
+});
+document.addEventListener('accumulator:plot-comparison',event=>{
+  const pick=event.detail;
+  const q=A.quotes.find(row=>row.id===pick?.quoteId);
+  if(!q || !Array.isArray(pick.daily) || !Number.isFinite(spot) || spot<=0) return;
+  const {days,monthEnds}=window.AccumulatorModel.observationSchedule(q);
+  const daily=pick.daily.slice(0,days);
+  if(daily.length!==days || !daily.every(price=>Number.isFinite(price) && price>=0))return;
+  comparisonPath={quoteId:q.id,spot,daily,name:String(pick.name||'Comparison scenario')};
+  sourceNotice='';dailyOverride=null;preset='custom';
+  monthEnds.forEach((day,index)=>{ratios[index]=daily[day-1]*100/spot;});
+  el('quote').value=q.id;
+  render();
+  if(!simulation)return;
+  selectMonth(simulation.exit.month);
+  const sc=el('plotScroll');
+  const from=simulation.exit.month>1?monthEnds[simulation.exit.month-2]:0;
+  const monthFraction=(simulation.exit.day-from)/(monthEnds[simulation.exit.month-1]-from);
+  sc.scrollTo({left:Math.max(0,tradeX+(simulation.exit.month-1+monthFraction)*unit-sc.clientWidth/2),behavior:'auto'});
+  el('chartTitle').focus({preventScroll:true});el('chartTitle').scrollIntoView({block:'start'});
+});
+for(const plot of [el('plot'),el('overviewPlot')]) bindPriceHandles(plot);
+function bindPriceHandles(plot){
+plot.addEventListener('pointerdown',event=>{
+  const handle=event.target.closest('[data-price-handle]');
+  if(!handle||!simulation||drag||event.button!==0||event.isPrimary===false)return;
+  const bounds=handle.ownerSVGElement.getBoundingClientRect();
+  if(!bounds.height)return;
+  event.preventDefault();
+  const index=Number(handle.dataset.month);
+  const scale=chartScales.get(plot);
+  drag={id:event.pointerId,plot,index,startY:event.clientY,startPrice:simulation.rows[index-1].price,scale,pixels:bounds.height*scale.heightRatio,frame:0,y:event.clientY,moved:false};
+  plot.setPointerCapture(event.pointerId);
+  selectMonth(index);
+});
+function dragPrice(y){
+  const price=drag.startPrice+(drag.startY-y)*drag.scale.top/drag.pixels;
+  return Math.max(0,Math.min(1000000,drag.scale.top,Math.round(price*100)/100));
+}
+function updateDrag(){
+  drag.frame=0;
+  const price=dragPrice(drag.y);
+  if(drag.moved&&price!==simulation.rows[month-1].price)editPrice(price,true);
+}
+plot.addEventListener('pointermove',event=>{
+  if(!drag||event.pointerId!==drag.id)return;
+  drag.y=event.clientY;
+  drag.moved=drag.moved||Math.abs(drag.y-drag.startY)>=2;
+  if(drag.moved&&!drag.frame)drag.frame=requestAnimationFrame(updateDrag);
+});
+function finishDrag(event){
+  if(!drag||event.pointerId!==drag.id)return;
+  if(drag.frame)cancelAnimationFrame(drag.frame);
+  if(event.type==='pointerup'){
+    drag.y=event.clientY;
+    drag.moved=drag.moved||Math.abs(drag.y-drag.startY)>=2;
+    updateDrag();
+  }
+  const {id,moved}=drag;drag=null;
+  if(plot.hasPointerCapture(id))plot.releasePointerCapture(id);
+  if(moved)render();else drawChart();
+}
+plot.addEventListener('pointerup',finishDrag);
+plot.addEventListener('pointercancel',finishDrag);
+plot.addEventListener('lostpointercapture',finishDrag);
+plot.addEventListener('keydown',event=>{
+  const handle=event.target.closest('[data-price-handle]');
+  if(!handle||!simulation)return;
+  const key=event.key,index=Number(handle.dataset.month);
+  if(key==='Enter'||key===' '){event.preventDefault();selectMonth(index,true);return;}
+  if(!['ArrowUp','ArrowDown','ArrowRight','ArrowLeft'].includes(key))return;
+  event.preventDefault();
+  if(key==='ArrowRight'||key==='ArrowLeft'){
+    selectMonth(Math.max(1,Math.min(simulation.rows.length,index+(key==='ArrowRight'?1:-1))));
+  }else{
+    month=index;
+    editPrice(Math.max(0,Math.min(1000000,simulation.rows[index-1].price+(key==='ArrowUp'?1:-1)*(event.shiftKey?10:1))));
+  }
+  plot.querySelector('[data-month="'+month+'"]')?.focus({preventScroll:true});
+});
+}
+let resizeTimer;
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(drawChart,100);});
+if(location.protocol==='https:'||location.protocol==='http:'){
+  const lib=document.createElement('script');lib.src='../share-prices.js';lib.setAttribute('data-price-render-only','');lib.onload=refreshHistory;document.head.append(lib);
+}
+</script>
+<script src="accumulator-comparison.js?v=20261126-notes"></script>
+<script src="accumulator-guide.js?v=20261124" defer></script>
+<script src="../vendor/jspdf-4.2.0.umd.min.js" defer></script>
+<script src="accumulator-report.js?v=20261126-asof" defer></script>
+<script src="accumulator-nvda-financial-data.js?v=1" defer></script>
+<script src="accumulator-history-risk.js?v=1" defer></script>
+<script src="accumulator-nvda-context.js?v=20261126-notes" defer></script>
+<script src="../financial-display.js" defer></script>
+<script src="../stocks-beta2-charts.js?v=20261122.figures1" defer></script>
+<script src="accumulator-client-sheet.js?v=20261126-research" defer></script>
+</body></html>
