@@ -1,0 +1,34 @@
+.orbit-map { --space:#091921; --starlight:#e0f1e8; margin:3.5rem 0 1.5rem; border:1px solid #b9c9c5; border-radius:16px; overflow:hidden; background:#f3f6f1; color:#19332f; }
+.orbit-map[hidden], .orbit-map [hidden] {display:none!important}
+.orbit-heading {display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:clamp(1rem,3vw,2rem);border-bottom:1px solid #c8d5ce}
+.orbit-heading h2 {font:500 clamp(1.8rem,4vw,3.15rem)/1.08 Georgia,serif;letter-spacing:-.04em;margin:0}
+.orbit-heading p,.orbit-caption {font-size:.9rem;color:#465d56;margin:.45rem 0 0}
+.orbit-map button,.orbit-map select {min-height:42px;font:inherit;cursor:pointer}
+.orbit-heading button,.orbit-tools button {border:1px solid #aec2b9;border-radius:24px;padding:.45rem .9rem;background:#fff;color:#244037;font-size:.83rem}
+.orbit-heading button {flex:none}
+.orbit-layout {display:grid;grid-template-columns:minmax(0,1fr) minmax(205px,26%);align-items:stretch}
+.orbit-stage {position:relative;isolation:isolate;background:radial-gradient(ellipse at 45% 55%,#183844 0%,#101f2a 47%,#08131b 85%);color:var(--starlight);min-width:0;height:clamp(360px,43vw,580px)}
+.orbit-stage canvas {display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.orbit-stage canvas:active {cursor:grabbing}
+.orbit-stage canvas:focus-visible {outline-offset:-4px}
+.orbit-tools {position:absolute;bottom:12px;left:12px;display:flex;gap:6px}
+.orbit-tools button {color:#e6ede6;background:#142c34e6;border-color:#5d777c}
+.orbit-panel {min-width:0;border-left:1px solid #c8d5ce;padding:1rem;background:#f8faf6;display:flex;flex-direction:column;max-height:clamp(360px,43vw,580px);box-sizing:border-box}
+.orbit-panel label {display:block;font-size:.8rem;font-weight:650}
+.orbit-panel select {display:block;width:100%;margin:.35rem 0 0;border:1px solid #a7bab2;background:white;border-radius:6px;color:#203d36;padding:.32rem .45rem}
+.orbit-panel h3 {font:500 1.35rem/1.18 Georgia,serif;margin:1rem 0 .15rem}
+.orbit-panel .orbit-caption {margin:0 0 .55rem}
+.orbit-panel [data-orbit-list] {overflow:auto;min-height:0;scrollbar-width:thin}
+.orbit-panel .orbit-item {display:flex;align-items:center;gap:.55rem;min-height:42px;width:100%;box-sizing:border-box;border:0;border-top:1px solid #d5dfd8;padding:.42rem .15rem;background:transparent;color:#274237;text-align:left;text-decoration:none;font:600 .84rem/1.28 system-ui}
+.orbit-panel .orbit-item:hover,.orbit-panel .orbit-item:focus-visible {background:#e8f0e9}
+.orbit-item::after {content:'›';margin-left:auto;padding-right:.25rem}
+.orbit-item .destination-picture {width:25px!important;height:25px!important;flex:none;stroke:none}
+.orbit-map :focus-visible {outline:2px solid #3081a3;outline-offset:-2px}
+@media(max-width:720px){.orbit-layout{grid-template-columns:1fr}.orbit-stage{height:clamp(310px,82vw,440px)}.orbit-panel{border-left:0;border-top:1px solid #c8d5ce;max-height:330px}.orbit-heading{align-items:flex-start}.orbit-heading button{padding:.4rem .6rem}.orbit-panel select{min-height:44px}}
+@media print{.orbit-map{display:none!important}}
+
+.orbit-tools button[data-orbit-zoom]{min-width:42px;font-size:1.05rem}
+.orbit-tools button:disabled,.orbit-heading button:disabled{opacity:.65;cursor:default}
+.orbit-shortcut{display:inline-flex;align-items:center;min-height:44px;font-weight:650}
+
+.orbit-stage {background:radial-gradient(ellipse at 73% 29%,#27314780,transparent 35%),radial-gradient(ellipse at 22% 68%,#23494380,transparent 42%),radial-gradient(ellipse at 48% 53%,#122c37,#08121c 77%)}

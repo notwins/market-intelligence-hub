@@ -261,6 +261,15 @@
   }
 
   const destinationArt = {
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/v6.5/": "folio",
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/v6.6/": "review",
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/new/": "compare",
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/v6.6/#heat": "matrix",
+    "https://bond-loan-simulator-winston.winstonnggw.chatgpt.site/": "calc",
+    "https://bond-cashflow-studio-winst.winstonnggw.chatgpt.site/": "cashflow",
+    "https://winston-options-lab.winstonnggw.chatgpt.site/": "strategy",
+    "https://clubs.winstonnggw.chatgpt.site/": "layers",
+
     "fred/": "fred",
     "fred/market-desk.html": "monitor",
     "fred/risk-observatory.html": "radar",
@@ -817,7 +826,7 @@
   installCollapsibleMenu();
   if (document.querySelector('#featured-cards,[data-feed-cards],#dashboard-report-cards')) {
     const artwork = document.createElement('script');
-    artwork.src = new URL('card-artwork.js?v=1', base);
+    artwork.src = new URL('card-artwork.js?v=2', base);
     document.head.append(artwork);
   }
   const workspaceToolbar = document.querySelector('.topbar');

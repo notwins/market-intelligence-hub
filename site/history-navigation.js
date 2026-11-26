@@ -52,7 +52,11 @@ function itemHTML(item,current,where){const [id,label,key,external]=item,inside=
  if(inside&&where==='toolbar')return '<button type="button" class="history-nav-item'+(selected?' active':'')+'" '+attrs+tone+'>'+body+'</button>';
  return '<a class="history-nav-item" href="'+(external||'v4.html#history/'+id)+'" data-history-id="'+id+'"'+tone+'>'+body+'</a>';
 }
-function html(){return '<nav class="history-shortcuts history-directory" aria-label="Historical charts">'+featured+groups.map(g=>'<section class="history-directory-group" data-history-group="'+g.id+'"><h3>'+icon(g.icon)+g.label+'</h3><div>'+g.items.map(i=>itemHTML(i,'','home')).join('')+'</div></section>').join('')+'</nav>';}
+const groupLandings = {bonds:'v4.html#history/curves', shares:'stocks-beta.html', gold:'tools/gold-charts.html', fred:'fred/'};
+function html(){
+ const cards=groups.map(group=>'<section class="history-directory-group" data-history-group="'+group.id+'"><h3><a class="history-card-link" href="'+groupLandings[group.id]+'">'+icon(group.icon)+'<span>'+group.label+'</span></a></h3><div>'+group.items.map(item=>itemHTML(item,'','home')).join('')+'</div></section>');
+ return '<nav class="history-shortcuts history-directory" aria-label="Historical charts">'+featured+cards.join('')+'</nav>';
+}
 function sidebar(){return '<div class="rail-group rail-history" role="group" aria-labelledby="rail-group-history"><div class="rail-group-label" id="rail-group-history"><a href="#history" data-view="history">History</a></div>'+featured+groups.map(g=>'<details class="rail-history-section" data-history-group="'+g.id+'"'+(g.id==='bonds'?' open':'')+'><summary>'+icon(g.icon)+'<span>'+g.label+'</span><span class="rail-history-count">'+g.items.length+'</span><svg class="history-menu-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>'+g.items.map(i=>itemHTML(i,'','rail')).join('')+'</details>').join('')+'</div>';}
 function toolbar(current){return featured+groups.map(g=>'<details class="history-menu-group" data-history-group="'+g.id+'"'+(g.items.some(i=>i[0]===current)?' data-active-group="true"':'')+'><summary>'+icon(g.icon)+'<span>'+g.label+'</span><svg class="history-menu-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary><div class="history-menu-links">'+g.items.map(i=>itemHTML(i,current,'toolbar')).join('')+'</div></details>').join('');}
 let lastRoute;

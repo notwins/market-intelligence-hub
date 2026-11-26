@@ -17,6 +17,16 @@
   try{if(document.head&&!document.getElementById('mih-blueprint-access')){const script=document.createElement('script');script.id='mih-blueprint-access';script.src=new URL('blueprint-access.js?v=20261116.settings2',document.currentScript.src).href;script.defer=true;document.head.append(script);}}catch{}
   if (!document.querySelector('[data-site-map]') || !window.HTMLDialogElement) return;
   const mapURL = new URL('site-map.html', document.currentScript.src);
+  const externalTools = new Set([
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/v6.5/",
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/v6.6/",
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/new/",
+    "https://portfolio-simulation-winst.winstonnggw.chatgpt.site/v6.6/#heat",
+    "https://bond-loan-simulator-winston.winstonnggw.chatgpt.site/",
+    "https://bond-cashflow-studio-winst.winstonnggw.chatgpt.site/",
+    "https://winston-options-lab.winstonnggw.chatgpt.site/",
+    "https://clubs.winstonnggw.chatgpt.site/"
+]);
   const blueprintURL = new URL('blueprint.html', mapURL);
   let dialog, opener, loading, loaded = false, followingLink = false;
   function close() { dialog.close(); }
@@ -91,7 +101,10 @@
           });
           copy.querySelectorAll('a[href]').forEach(a => {
             const url = new URL(a.getAttribute('href'), mapURL);
-            if (url.origin !== mapURL.origin) a.remove(); else a.href = url.href;
+            if (url.origin === mapURL.origin) a.href = url.href;
+            else if (externalTools.has(url.href)) {
+              a.href = url.href; a.target = '_blank'; a.rel = 'noopener noreferrer';
+            } else a.remove();
           });
           for (const picture of copy.querySelectorAll('use[href^="assets/navigation-atlas.svg?v=2#"]')) {
             picture.setAttribute('href', new URL(picture.getAttribute('href'), mapURL).href);
@@ -104,6 +117,14 @@
         }
         content.replaceChildren(fragment);
         HubSiteMap.mount({querySelector:s=>content.querySelector(s),getElementById:id=>content.querySelector('#'+id)});
+        const orbit = content.querySelector('.orbit-map');
+        if (orbit) {
+          if (!document.querySelector('link[href*="orbit-map.css"]')) {
+            const style = document.createElement('link');
+            style.rel = 'stylesheet'; style.href = new URL('orbit-map.css?v=1', mapURL); document.head.append(style);
+          }
+          import(new URL('orbit-map.js?v=1', mapURL).href).then(module => module.mount(orbit)).catch(() => {});
+        }
         loaded = true;
         if (shouldRecoverFocus()) content.querySelector('#map-search').focus();
       } catch {
