@@ -19,6 +19,8 @@
   font:700 1.2rem/1 system-ui,sans-serif;
 }
 .hub-primary .hub-primary-dropdown[hidden]{display:none}
+.accumulator-beta-icon { flex:none; vertical-align:middle; }
+.hub-sections-menu .accumulator-beta-icon { margin-right:6px; }
 .hub-primary .hub-primary-dropdown a{display:flex;align-items:center;gap:8px;min-height:40px;padding:7px 10px;border-radius:5px;color:#243e4a;font:inherit;text-decoration:none;white-space:normal}
 .hub-primary .hub-primary-dropdown a:hover,.hub-primary .hub-primary-toggle:hover{background:#e7f1f3}
 .bottom-nav.hub-primary>.hub-primary-more{flex:0 0 auto;border-left:1px solid #d9e3e7;border-radius:0;padding-inline:12px!important;background:#fff;box-shadow:-7px 0 10px #fff}
@@ -232,6 +234,8 @@ html[data-nav-size=compact] .bottom-nav.hub-primary {
 .tool-links > a.tool-link { --hub-mark:var(--hub-mark-tools); --tool-fill:#f2f7fc; --tool-ink:#244d6a; --tool-line:#a9c4d8; background:var(--tool-fill); border-color:var(--tool-line); border-top:3px solid var(--tool-line); }
 .tool-links > a[href="bond-cashflow.html"] { --tool-fill:#faf4f6; --tool-ink:#6e3548; --tool-line:#c9a3b0; --hub-mark:var(--hub-mark-maroon); }
 .tool-links > a[href*="tools/accumulator"] { --tool-fill:#f1f8f3; --tool-ink:#285b48; --tool-line:#aacabb; --hub-mark:var(--hub-mark-green); }
+.tool-links > a[href="tools/accumulator-beta.html"] { --hub-mark:url("tools/accumulator-beta-icon.svg"); }
+.tool-links > a[href="tools/accumulator-beta.html"] strong { display:flex; align-items:center; gap:7px; }
 .tool-links > a[href*="mortgage.html"] { --tool-fill:#f2f7fc; --tool-ink:#244d6a; --tool-line:#a9c4d8; --hub-mark:var(--hub-mark-home); }
 .tool-links > a[href*="cpf-life-ra.html"] { --tool-fill:#f1f8f3; --tool-ink:#285b48; --tool-line:#aacabb; --hub-mark:var(--hub-mark-maroon); }
 .tool-links > a[href*="portfolio-simulation"] { --tool-fill:#f2f7fc; --tool-ink:#244d6a; --tool-line:#a9c4d8; --hub-mark:var(--hub-mark-blue); }

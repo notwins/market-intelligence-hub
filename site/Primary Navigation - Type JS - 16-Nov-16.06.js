@@ -86,6 +86,7 @@
   const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
   const filingsLink = ['Shares Beta 3 · 10-K filings', 'stocks-beta3.html', '▤'];
   const siPrivateLink = ['SI Private', 'https://si-private.winstonnggw.chatgpt.site/', '🔒'];
+  const accumulatorBeta = ['NVDA Accumulator Beta 2', 'tools/accumulator-beta.html', {src:'tools/accumulator-beta-icon.svg'}];
   const watchlist = ['Bonds & shares watchlist', 'v4.html#watchlist'];
   const crossMarketRoute = /^cross-market-history(?:-beta2)?\.html(?:#|$)/;
   const newsLinks = [
@@ -112,7 +113,7 @@
       treasury, ['SI pricing', 'v4.html#history/si'], ['SI BETA 2', 'si-beta2.html'],
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
     ], 'green'],
-    ['Tools', [siPrivateLink], 'blue'],
+    ['Tools', [accumulatorBeta, siPrivateLink], 'blue'],
     ['Historical charts', [
       ['Cross-market history', 'cross-market-history.html'], ['Cross-Market History Beta 2', 'cross-market-history-beta2.html'],
       ['Gold charts', 'tools/gold-charts.html'],
@@ -135,6 +136,7 @@
   const subsections = new Map([
     ['Home', [['Daily desk', 'desk.html#daily'], ['Watchlist news', 'desk.html#watchlist-end-day'], ['Article archive', 'desk.html#archive']]],
     ['Tools', [
+      accumulatorBeta,
       ['All tools & simulators', 'v4.html#tools'],
       ['NVDA Normal accumulator capital', 'tools/accumulator-capital.html', '▦'],
       ['NVDA SI Capital Flow & SOFR', 'tools/accumulator-si-flow.html', '∿'],
@@ -162,7 +164,7 @@
     ['Markets', [['Stock moves', 'desk.html#stock-moves'], ['Rates and FX', 'desk.html#market-rates'], ['Bond yields', 'desk.html#market-bonds']]]
   ]);
   const routeTones = [
-    [/^tools\/accumulator(?:-capital|-3d|-si-flow)?\.html$/, 'green'],
+    [/^tools\/accumulator(?:-beta|-capital|-3d|-si-flow)?\.html$/, 'green'],
     [/^(?:stocks-beta[23]?\.html|bos-monthly\.html|si-beta2\.html|desk\.html#(?:stock-moves|main-company-cards)|v4\.html#history\/(?:shares|si|spx|beta[24]-shares))/, 'green'],
     [/^(?:bonds-beta\.html|bond-cashflow\.html|desk\.html#(?:market-bonds|yield-curves)|v4\.html#(?:credit|ust|history\/(?:yield|curves)))/, 'maroon'],
     [/^(?:fred\/|(?:historical-fred|fred-[123]|fred-feed)\.html)/, 'purple'],
@@ -182,7 +184,19 @@
     const a = document.createElement('a'); a.href = new URL(href, base);
     if (tone) a.dataset.navTone = tone;
     if (href === 'tools/xau-fcn.html') a.classList.add('gold-tools-divider');
-    if (icon) { const span = document.createElement('span'); span.textContent = icon; span.setAttribute('aria-hidden', 'true'); a.append(span); }
+    if (icon?.src) {
+      const image = document.createElement('img');
+      image.className = 'accumulator-beta-icon';
+      image.src = new URL(icon.src, base);
+      image.alt = '';
+      image.width = image.height = 24;
+      a.append(image);
+    } else if (icon) {
+      const span = document.createElement('span');
+      span.textContent = icon;
+      span.setAttribute('aria-hidden', 'true');
+      a.append(span);
+    }
     a.append(document.createTextNode(label)); return a;
   }
   const old = document.querySelector('.bottom-nav');
@@ -335,7 +349,7 @@
     items.className = 'hub-menu-items';
     items.append(...links.map(item => {
       const [name, href, icon] = item;
-      return link(name, href, item === filingsLink || item === siPrivateLink ? icon : undefined, toneFor(href));
+      return link(name, href, item === filingsLink || item === siPrivateLink || item === accumulatorBeta ? icon : undefined, toneFor(href));
     }));
     group.append(heading, items);
     destinations.append(group);
