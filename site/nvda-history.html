@@ -7,10 +7,10 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=2">
+<link rel="stylesheet" href="nvda-history.css?v=3">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
 <script defer src="nvda-history-charts.js?v=1"></script>
-<script defer src="nvda-history.js?v=2"></script>
+<script defer src="nvda-history.js?v=3"></script>
 </head>
 <body class="nvda-history-page">
 <a class="nv-skip" href="#main">Skip to analysis</a>
@@ -59,9 +59,11 @@
   </div>
   <article class="nv-panel nv-reveal">
     <div class="nv-panel-head"><div><h3>Statement explorer</h3><p id="nv-sheet-date" class="nv-muted"></p></div>
-      <div class="nv-controls"><label>Filing period<select id="nv-filing-select"></select></label><label>Statement<select id="nv-statement"><option>Income statement</option><option>Balance sheet</option><option>Cash flow</option><option value="Ratios and growth">Margins &amp; ratios</option></select></label></div>
+      <div class="nv-controls"><label>Filing period<select id="nv-filing-select"></select></label><label>Statement<select id="nv-statement"><option>Income statement</option><option>Balance sheet</option><option>Cash flow</option><option value="Ratios and growth">Margins &amp; ratios</option></select></label>
+        <label>Display<select id="nv-statement-units"><option value="compact">Compact</option><option value="millions">USD millions</option></select></label></div>
     </div>
-    <div class="nv-table-scroll" role="region" aria-label="Financial statements" tabindex="0"><table class="nv-table">
+    <p class="nv-horizontal-note" id="nv-statement-scroll-note">Scroll sideways to compare changes <span aria-hidden="true">↔</span></p>
+    <div class="nv-table-scroll" role="region" aria-label="Financial statements" aria-describedby="nv-statement-scroll-note" tabindex="0"><table class="nv-table nv-statement-table">
       <thead><tr><th scope="col">Line item</th><th scope="col">Actual</th><th scope="col">QoQ change</th><th scope="col">QoQ growth</th><th scope="col">YoY change</th><th scope="col">YoY growth</th></tr></thead><tbody id="nv-statement-rows"></tbody>
     </table></div>
     <p id="nv-filing-source" class="nv-note"></p>
@@ -90,10 +92,11 @@
         <label>Sort by<select id="nv-peer-sort"><option value="revenue">Revenue</option><option value="income">Net income</option><option value="assets">Assets</option><option value="liabilities">Liabilities</option><option value="margin">Gross margin</option><option value="growth">Revenue growth</option><option value="cap">Market cap</option><option value="pe">Trailing P/E</option><option value="pb">P/B</option><option value="yield">Dividend yield</option></select></label>
       </div>
     </div>
-    <div class="nv-table-scroll nv-peer-scroll" role="region" aria-label="Peer company comparison" tabindex="0"><table class="nv-table nv-peer-table">
+    <p class="nv-horizontal-note" id="nv-peer-scroll-note">Scroll sideways for more metrics <span aria-hidden="true">↔</span></p>
+    <div class="nv-table-scroll nv-peer-scroll" role="region" aria-label="Peer company comparison" aria-describedby="nv-peer-scroll-note" tabindex="0"><table class="nv-table nv-peer-table">
       <thead><tr><th scope="col">Company</th><th scope="col">Filing end</th><th scope="col">Revenue<br><small>USD bn</small></th><th scope="col">Net income<br><small>USD bn</small></th><th scope="col">Assets<br><small>USD bn</small></th><th scope="col">Liabilities<br><small>USD bn</small></th><th scope="col">Gross margin</th><th scope="col" id="nv-peer-growth-label">Revenue YoY</th><th scope="col">Market cap<br><small>USD bn</small></th><th scope="col">P/E TTM</th><th scope="col">P/B</th><th scope="col">Yield TTM</th></tr></thead><tbody id="nv-peer-rows"></tbody>
     </table></div>
-    <p class="nv-note">The NVIDIA row stays at the top. Monetary totals use reported figures and the applicable period FX. Missing values appear as a dash.</p>
+    <p class="nv-note">The NVIDIA row stays at the top. Monetary totals use reported figures and the applicable period FX. Select a filing date to view its source where available. A dash marks an unavailable value. An asterisk marks liabilities calculated as assets less total equity for a verified filing.</p>
   </article>
   <article class="nv-panel nv-reveal nv-peer-chart-box">
     <div class="nv-panel-head"><div><h3>Indexed price comparison</h3><p class="nv-muted">100 at the first shared month · local-currency prices</p></div>
