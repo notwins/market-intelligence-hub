@@ -91,7 +91,7 @@
 #notes-and-terms h3{margin:1rem 0 .35rem}
 #marketStatus,#overviewTerms,#overviewHistoryNote,#saleBasis,#chartTerms,#graphSource,#chartNote,#historyStamp,#exitValue,#library .pricing-note,.quote-case p{font-size:.9375rem;color:var(--ink)}
 </style>
-<link rel="stylesheet" href="accumulator-beta.css?v=20261127-ko">
+<link rel="stylesheet" href="accumulator-beta.css?v=20261127-compact-overview">
 <link rel="stylesheet" href="accumulator-nvda-chart.css?v=20261126">
 <link rel="stylesheet" href="../stocks-beta3-quarterly-charts.css?v=1">
 <link rel="stylesheet" href="accumulator-beta-nvda-analysis.css?v=20261127-test-price">
@@ -132,41 +132,45 @@
 </div>
 <div class="legend"><span class="hist">Historical NVDA close</span><span class="path">Simulated NVDA · drag a monthly dot</span><span class="strike">Strike</span><span class="ko">Knock-out</span><span class="after-ko" id="overviewAfterKo" hidden>After KO · purchases ended</span><span class="nvda-earnings-key" data-nvda-legend="earnings" hidden>Earnings · E</span><span class="nvda-calls-key" data-nvda-legend="calls" hidden>BOS calls · Buy / Hold / Sell</span><span class="nvda-target-key" data-nvda-legend="target" hidden></span></div>
 <div class="beta-chart-capital">
-<div class="beta-overview-chart">
 <div class="chartFrame"><div class="axis" id="overviewAxis" aria-hidden="true"></div><div id="overviewScroll" tabindex="0" aria-label="Historical and simulated NVDA prices. Scroll horizontally to explore." aria-describedby="overviewHistoryNote"><div id="overviewPlot"></div></div></div>
-<p class="beta-ko-summary" id="overviewKoSummary" role="status" hidden></p>
-<p class="small" id="overviewHistoryNote"></p>
-<p class="small" data-nvda-overlay-status role="status" hidden></p>
-<details class="nvda-overlay-details" id="nvda-overlay-details" hidden><summary>Chart overlay dates and sources</summary><div></div></details>
-</div>
 <aside class="monthly-cash" aria-labelledby="monthly-cash-title">
-  <div class="monthly-cash-heading"><h3 id="monthly-cash-title">Where capital goes</h3><span>Principal only · USD</span></div>
+  <h3 id="monthly-cash-title">Where capital goes</h3>
   <div class="monthly-cash-bar" aria-hidden="true"><span></span><span></span></div>
   <dl class="monthly-cash-totals">
     <div><dt>Shares at cost</dt><dd id="monthly-cash-spent"></dd></div>
     <div><dt>Cash returned</dt><dd id="monthly-cash-refund"></dd></div>
   </dl>
   <div id="monthly-cash-tranches" class="monthly-cash-tranches"></div>
-  <p id="monthly-cash-reconcile" class="small"></p>
-  <p id="monthly-cash-rounding" class="small" hidden></p>
 </aside>
 </div>
+<p class="beta-ko-summary" id="overviewKoSummary" role="status" hidden></p>
+<p class="small" data-nvda-overlay-status role="status" hidden></p>
 <div class="beta-overview-grid">
-<div class="tableScroll beta-share-ledger" tabindex="0" aria-label="Share purchases and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th>Cash needed for shares · USD</th><th>Cash refunded · USD</th><th>Total value · USD</th><th>P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
+<div class="beta-exit-summary" role="group" aria-labelledby="endingMonth">
+  <h3 id="endingMonth">Exit summary</h3>
+  <div class="metrics" id="summary">
+    <article><span>Total shares bought</span><strong id="overview-total-shares"></strong></article>
+    <article><span>Exit value</span><strong id="overview-exit-value"></strong></article>
+    <article><span>Cost value</span><strong id="overview-cost-value"></strong></article>
+    <article><span>Cash refunded</span><strong id="overview-cash-refunded"></strong></article>
+    <article><span>P&amp;L</span><strong id="overview-pnl"></strong></article>
+  </div>
+</div>
 <section class="delivery-sales" aria-labelledby="delivery-sales-title">
   <h3 id="delivery-sales-title">Sell shares on delivery</h3>
   <p class="small">Choose any delivery before KO or maturity to sell those shares. The default sale price is that month’s modelled close. Sale proceeds are held in cash.</p>
   <p class="small" id="delivery-sales-empty" hidden></p>
   <div class="tableScroll" id="delivery-sales-table" tabindex="0" aria-label="Early sale choices and prices by delivery month">
-    <table><thead><tr><th scope="col">Delivery</th><th scope="col">Shares</th><th scope="col">Sell on delivery</th><th scope="col">Sale price · USD</th></tr></thead><tbody id="delivery-sales-rows"></tbody></table>
+    <table><thead><tr><th scope="col">Delivery</th><th scope="col">Shares</th><th scope="col">Sell</th><th scope="col">Sale price · USD</th></tr></thead><tbody id="delivery-sales-rows"></tbody></table>
   </div>
   <p class="small" id="delivery-sales-status" role="status"></p>
-  <p class="small" id="delivery-sales-scope" hidden>The purchase ledger uses the modelled path with an exit sale. The exit-price table below includes your delivery sales.</p>
 </section>
+</div>
+<div class="tableScroll beta-share-ledger" tabindex="0" aria-label="Share purchases and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th>Cash needed for shares · USD</th><th>Cash refunded · USD</th><th>Total value · USD</th><th>P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
 <div class="beta-sale-range">
-<h3>What if you sell at a different price at exit?</h3><p id="saleBasis" class="small"></p>
+<h3>What if you sell at a different price at exit?</h3>
 <div id="beta-sale-sensitivity" class="tableScroll" tabindex="0" aria-label="Alternative exit prices for shares held until exit"><table><thead><tr><th>NVDA sale price</th><th>Shares sold at exit</th><th>Market value at exit</th><th id="beta-early-proceeds" hidden>Earlier sale proceeds</th><th>Share profit / loss</th><th>Cash refunded</th><th>Total value</th><th>Total P&amp;L</th></tr></thead><tbody id="saleRange"></tbody></table></div>
-</div></div>
+</div>
 </section>
 <section class="panel" id="library" aria-labelledby="pricingTitle">
 <div class="heading"><div><h2 id="pricingTitle">Choose strikes to compare</h2><p><strong id="quote-dates">Indicative quotes</strong></p><p>A lower strike buys shares more cheaply. The guarantee sets your minimum purchases even if the note ends early. Compare that commitment alongside the discount. Your invested capital is at risk.</p></div></div>
@@ -205,7 +209,7 @@
 </section>
 <section class="panel" aria-labelledby="ledger"><div class="heading"><div><h2 id="ledger">Capital &amp; share movements</h2><p>See how much of your payment goes into shares and how much comes back as unspent cash. The highlighted knock-out month gives the trigger day and price. Tinted refund cells show capital returned. Tap any amount for the calculation.</p></div></div>
 <div class="tableScroll" tabindex="0" aria-label="Monthly capital and share movements"><table id="movements"><thead><tr><th>Month</th><th>Month-end<br>price · USD</th><th>Event</th><th>Shares<br>bought</th><th>Capital<br>used · USD</th><th>Cash refunded<br>USD</th><th>Share sale<br>proceeds · USD</th><th>Capital left<br>in note · USD</th><th>Shares<br>held</th><th>Refunded<br>to date · USD</th><th>Holdings<a href="#holdings-note" aria-label="How holdings are valued"><sup>1</sup></a><br>USD</th><th>Total shares<br>bought</th><th>P&amp;L<br>USD</th></tr></thead><tbody id="rows"></tbody></table></div>
-<div class="heading sub"><h3 id="endingMonth">At the end of month 12</h3></div><div class="metrics" id="summary"></div><p id="valuation" class="formula"></p><p id="exitValue" class="small"></p></section>
+</section>
 <section class="panel" aria-labelledby="scenario-returns"><div class="heading"><div><h2 id="scenario-returns">Three scenarios to try</h2><p>Compare the note with buying whole NVDA shares at the start and keeping the change in cash. Both use the same payment and assume a sale at the same knock-out or maturity close.</p></div></div><div class="scenario-grid" id="scenarios"></div></section>
 <section id="nvda-stress-context" class="panel" aria-label="NVDA financial statements and stress price" data-stress-price-evidence></section>
 <template id="nvda-beta-analysis-template">
@@ -258,6 +262,14 @@
 <section class="panel" id="pricing-archive"><h2>Pricing archive</h2><details><summary>23 November 2026 · Previous indicative strikes</summary><h3>JPM SN</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>87.97%</td><td>90.30%</td></tr><tr><td>9M</td><td>186</td><td>105%</td><td>92.41%</td><td>97.27%</td></tr><tr><td>6M</td><td>124</td><td>120%</td><td>92.31%</td><td>95.12%</td></tr><tr><td>6M</td><td>124</td><td>105%</td><td>95.96%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>120%</td><td>98.24%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>105%</td><td>—</td><td>—</td></tr></tbody></table></div><h3>OCBC SI</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th><th>3M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>93.11%</td><td>94.82%</td><td>96.70%</td></tr><tr><td>9M</td><td>186</td><td>115%</td><td>92.73%</td><td>95.01%</td><td>97.20%</td></tr><tr><td>9M</td><td>186</td><td>110%</td><td>94.04%</td><td>96.62%</td><td>98.83%</td></tr><tr><td>6M</td><td>124</td><td>115%</td><td>—</td><td>98.05%</td><td>—</td></tr><tr><td>6M</td><td>124</td><td>110%</td><td>96.36%</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>110%</td><td>—</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>105%</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div><p>— No numerical strike in the prior grid.</p></details><details><summary>Earlier sheet · 12-month JPM SN</summary><p>90.86% strike · 120% KO · 3-month guarantee · 251 trading days.</p></details></section>
 <section class="panel" id="notes-and-terms" aria-labelledby="notesTitle">
 <h2 id="notesTitle">Notes, assumptions &amp; sources</h2>
+<details id="beta-overview-notes" hidden><summary>Overview calculations and chart sources</summary>
+<p>Overview cards show whole shares and rounded dollars. The calculations use exact cents. Displayed rounded amounts can differ by a dollar when added.</p>
+<p id="monthly-cash-reconcile"></p><p id="monthly-cash-rounding" hidden></p><p id="monthly-cash-timing" hidden></p>
+<p id="saleBasis"></p><p id="valuation"></p><p id="exitValue"></p>
+<p id="delivery-sales-scope" hidden>The purchase ledger shows the original modelled exit. The exit summary and exit-price table include your delivery sales.</p>
+<p id="overviewHistoryNote"></p>
+<details class="nvda-overlay-details" id="nvda-overlay-details" hidden><summary>Chart overlay dates and sources</summary><div></div></details>
+</details>
 <details><summary>Indicative strikes and guarantee periods</summary>
 <p>Strike and KO are percentages of the trade-day price. A 90.56% strike buys each delivered share at a 9.44% discount to the initial NVDA price.</p>
 <p>OCBC’s quoted guarantee days are shown above the strikes. JPM quotes guarantee periods in months. Its day-by-day examples use an estimated trading calendar.</p>
@@ -287,7 +299,7 @@
 <script src="accumulator-benchmark.js?v=1"></script>
 <script src="accumulator-beta-model.js?v=20261126-ko"></script>
 <script src="accumulator-beta-ledger-workings.js?v=20261126-ko"></script>
-<script src="accumulator-beta.js?v=20261127-saved-setups"></script>
+<script src="accumulator-beta.js?v=20261127-compact-overview"></script>
 <script src="accumulator-beta-saved-setups.js?v=20261127"></script>
 <script src="accumulator-beta-table-view.js?v=20261127-saved-setups"></script>
 <script src="accumulator-quotes.js?v=20261126-asof"></script><script id="accumulator-model">
@@ -560,7 +572,6 @@ function render(){
   if(el('month').options.length!==months){
     el('month').innerHTML=Array.from({length:months},(_,i)=>'<option value="'+(i+1)+'">Month '+(i+1)+'</option>').join('');
   }
-  el('endingMonth').textContent='Exit value and return';
   el('endJump').textContent='Month '+months;
   spot=el('spot').valueAsNumber; capital=el('capital').valueAsNumber;
   if(comparisonPath && (comparisonPath.quoteId!==q.id || comparisonPath.spot!==spot)) leaveComparison();
@@ -574,7 +585,7 @@ function render(){
     if(!el('spot').checkValidity()||!el('capital').checkValidity()) throw Error('Enter a starting price and capital within the displayed input limits, in USD cents.');
     simulation=dailySimulation(q,spot,capital,A.scale(ratios.slice(0,months),spot),dailyOverride,comparisonPath);
   }catch(e){
-    simulation=null;updateStress(null);error.textContent=e.message;error.hidden=false;el('sim').hidden=true;el('overview').hidden=true;el('quote-case').hidden=true;el('termStrip').textContent='';el('sizingDetail').textContent='';el('method').textContent='';updateClientSheet();return;
+    simulation=null;updateStress(null);error.textContent=e.message;error.hidden=false;el('sim').hidden=true;el('overview').hidden=true;el('beta-overview-notes').hidden=true;el('quote-case').hidden=true;el('termStrip').textContent='';el('sizingDetail').textContent='';el('method').textContent='';updateClientSheet();return;
   }
   error.hidden=true;el('sim').hidden=false;el('overview').hidden=false;
   updateClientSheet();
@@ -604,41 +615,49 @@ function render(){
     }).join('')+'</tr>';
   }).join('');
   window.AccumulatorLedgerWorkings?.bind(el('rows'),{simulation,quote:q,spot,target:capital});
-  const exit=simulation.exit;
-  const metrics=[['Shares bought',count.format(exit.shares)],['Cash refunded',cash(exit.refunded)],['Exit value',cash(exit.value)],['P&L on payment',signedCash(exit.profit)+' ('+percent(exit.rate)+')']];
-  el('summary').innerHTML=metrics.map(([label,v],i)=>'<article><span>'+label+'</span><strong class="'+(i===3?(exit.profit<0?'negative':'positive'):'')+'">'+v+'</strong></article>').join('');
-  const exitDay=simulation.koMonth?'knock-out on day '+simulation.koDay+' (month '+exit.month+')':'maturity on day '+exit.day+' (month '+months+')';
-  el('valuation').textContent='At '+exitDay+', '+count.format(exit.shares)+' shares × '+exact(exit.price)+' gives sale proceeds of '+cash(exit.shareValue)+'. With refunded cash of '+cash(exit.refunded)+', the exit value is '+cash(exit.value)+'.';
-  el('exitValue').textContent='Exit P&L is '+signedCash(exit.profit)+' after deducting the payment of '+cash(simulation.payment)+'.';
   updateOverview();
   renderScenarios(q);
   selectMonth(month);
 }
 function updateOverview(){
   const sim=simulation, exit=sim.exit;
+  el('beta-overview-notes').hidden=false;
   const exitLabel=sim.koDay?'KO on day '+sim.koDay:'Maturity';
   el('overviewTerms').innerHTML=nvdaChart.pricingTerms(chosen(),sim,el('pathName').textContent);
   el('overviewRows').innerHTML=displayLedger(sim).map(r=>{
     const ended=r.month===exit.month;
     const pnl=Math.round((r.value-sim.payment)*100)/100;
     const rowTitle='M'+r.month+(ended?' · '+exitLabel:'');
-    return '<tr data-row="'+r.month+'" class="'+(ended&&sim.koDay?'ko-row':'')+'"><td>'+rowTitle+'</td><td>'+dollars(ended?exit.price:r.price)+'</td><td>'+fmt.shares(r.bought)+'</td><td>'+fmt.shares(r.shares)+'</td><td>'+exact(r.cost)+'</td><td class="'+(r.refund>0?'refund-cell':'')+'">'+cash(r.refund)+'</td><td>'+cash(r.value)+'</td><td'+window.AccumulatorBetaTable.heat(pnl,sim.payment)+'>'+signedCash(pnl)+'</td></tr>';
+    return '<tr data-row="'+r.month+'" class="'+(ended&&sim.koDay?'ko-row':'')+'"><td>'+rowTitle+'</td><td>'+dollars(ended?exit.price:r.price)+'</td><td>'+fmt.shares(r.bought)+'</td><td>'+fmt.shares(r.shares)+'</td><td>'+dollars(r.cost)+'</td><td class="'+(r.refund>0?'refund-cell':'')+'">'+cash(r.refund)+'</td><td>'+cash(r.value)+'</td><td'+window.AccumulatorBetaTable.heat(pnl,sim.payment)+'>'+signedCash(pnl)+'</td></tr>';
   }).join('');
   const quote=chosen();
   window.AccumulatorLedgerWorkings?.bind(el('overviewRows'),{simulation:sim,quote,spot,target:capital},[null,'mark','bought','cumulative','cost','refund','value','pnl']);
   window.AccumulatorMonthlyCash.render(sim,quote.id,updateSaleRange);
 }
 function updateSaleRange(salePlan){
-  el('beta-sale-sensitivity').hidden=!salePlan;
-  if(!salePlan){el('saleBasis').textContent='Check the delivery sale prices to see the exit outcomes.';return;}
   const sim=simulation, exit=sim.exit;
+  const pnlField=el('overview-pnl');
+  const pnlCents=salePlan?.pnlCents ?? 0;
+  el('overview-total-shares').textContent=fmt.shares(exit.shares);
+  el('overview-cost-value').textContent=dollars(exit.spent);
+  el('overview-cash-refunded').textContent=dollars(exit.refunded);
+  el('overview-exit-value').textContent=salePlan?dollars(salePlan.exitValueCents/100):'—';
+  pnlField.textContent=salePlan?signedCash(pnlCents/100):'—';
+  pnlField.className=pnlCents<0?'negative':pnlCents>0?'positive':'';
+  el('beta-sale-sensitivity').hidden=!salePlan;
+  if(!salePlan){
+    el('saleBasis').textContent='Check the delivery sale prices to see the exit outcomes.';
+    el('valuation').textContent=el('exitValue').textContent='';
+    return;
+  }
   const exitLabel=sim.koDay?'KO on day '+sim.koDay:'Maturity';
-  const {soldShares, proceedsCents}=salePlan;
-  const remainingShares=exit.shares-soldShares;
+  const {soldShares, proceedsCents, remainingShares, remainingValueCents, exitValueCents}=salePlan;
   el('beta-early-proceeds').hidden=!soldShares;
   const early=soldShares?fmt.shares(soldShares)+' shares sold earlier for '+exact(proceedsCents/100)+'. ':'';
-  el('saleBasis').textContent=exitLabel+' · Month '+exit.month+' · '+fmt.shares(exit.shares)+' shares bought at '+exact(sim.strike)+'. '+early+
-    fmt.shares(remainingShares)+' shares remain for the exit sale. The modelled exit price is '+exact(exit.price)+'.';
+  el('saleBasis').textContent=exitLabel+' · Month '+exit.month+' · '+fmt.shares(exit.shares)+' shares bought at '+exact(sim.strike)+'. '+early;
+  el('valuation').textContent='Exit sale: '+fmt.shares(remainingShares)+' shares × '+exact(exit.price)+' = '+exact(remainingValueCents/100)+
+    '. Total exit value including cash refunded'+(soldShares?' and early sale proceeds':'')+' is '+exact(exitValueCents/100)+'.';
+  el('exitValue').textContent='Exit P&L is '+exact(pnlCents/100)+' after deducting the payment of '+exact(sim.payment)+'.';
   const step=niceStep(Math.max(5,exit.price/2));
   const centre=Math.round(exit.price/step)*step;
   const prices=new Set([0,Math.round(exit.price), Math.round(sim.strike)]);
@@ -648,7 +667,7 @@ function updateSaleRange(salePlan){
     const profit=(marketCents+proceedsCents-Math.round(exit.spent*100))/100;
     const value=(marketCents+proceedsCents+Math.round(exit.refunded*100))/100;
     const pnl=Math.round((value-sim.payment)*100)/100;
-    const saleCell=soldShares?'<td>'+exact(proceedsCents/100)+'</td>':'<td hidden></td>';
+    const saleCell=soldShares?'<td>'+dollars(proceedsCents/100)+'</td>':'<td hidden></td>';
     const heat=window.AccumulatorBetaTable.heat;
     return '<tr><td>'+cash(price)+'</td><td>'+fmt.shares(remainingShares)+'</td><td>'+cash(marketCents/100)+'</td>'+saleCell+'<td'+heat(profit,sim.payment)+'>'+signedCash(profit)+'</td><td class="'+(exit.refunded>0?'refund-cell':'')+'">'+cash(exit.refunded)+'</td><td>'+cash(value)+'</td><td'+heat(pnl,sim.payment)+'>'+signedCash(pnl)+'</td></tr>';
   }).join('');
@@ -710,8 +729,9 @@ function niceStep(max){
 function drawChart(){
   if(!simulation)return;
   const {koDay,exit}=simulation;
-  const summary=koDay?'Knock-out · Day '+koDay+' · Month '+exit.month+' · '+exact(exit.price)+' KO price · '+count.format(exit.shares)+' shares bought in total · '+exact(exit.refunded)+' cash refunded':'';
   for(const id of ['overviewKoSummary','chartKoSummary']){
+    const display=id==='overviewKoSummary'?dollars:exact;
+    const summary=koDay?'Knock-out · Day '+koDay+' · Month '+exit.month+' · '+display(exit.price)+' KO price · '+count.format(exit.shares)+' shares bought in total · '+display(exit.refunded)+' cash refunded':'';
     const status=el(id);
     status.hidden=!koDay;
     if(status.textContent!==summary)status.textContent=summary;
@@ -745,7 +765,8 @@ function drawPriceChart(compact){
   const lockedScale=drag?.plot===plot?drag.scale:null;
   const step=lockedScale?.step||niceStep(maximum),top=lockedScale?.top||Math.ceil(maximum*1.06/step)*step;
   const markerRows=Number(Boolean(events.earnings.length))+Number(Boolean(events.house.length));
-  const H=289+19*markerRows,yt=29,yb=246,y=v=>yb-(yb-yt)*v/top;
+  const chartHeight=compact?350:289;
+  const H=chartHeight+19*markerRows,yt=29,yb=chartHeight-43,y=v=>yb-(yb-yt)*v/top;
   chartScales.set(plot,{step,top,heightRatio:(yb-yt)/H});
   const historyWidth=Math.max(142,Math.min(260,plotWidth*.23));
   const hSpacing=history.length<=13?21:history.length<=61?13:9;
