@@ -22,9 +22,9 @@
   --beta-history: #536d7a;
   --beta-cone: #a9ccd8;
   --beta-focus: #1c6390;
-  --beta-positive: #24634e;
+  --beta-positive: #0b4026;
   --beta-gain: #e7f2eb;
-  --beta-negative: #963b3f;
+  --beta-negative: #5f1029;
   --beta-loss: #f9eeee;
   --beta-ko: #eee8f6;
 }
@@ -330,7 +330,7 @@
   background: var(--beta-ko);
   color: var(--lav);
 }
-.accumulator-beta :is(#rows tr td.refund-cell, #overview td.refund-cell, #sn-comparison .cmp-results td.cmp-refund) {
+.accumulator-beta :is(#rows tr td.refund-cell, #overview td.refund-cell, #saleRange td.refund-cell, #sn-comparison .cmp-results td.cmp-refund) {
   background: var(--beta-refund-light);
   color: var(--beta-refund);
 }
@@ -419,6 +419,90 @@
 .accumulator-beta main svg [fill="#fbfdfd"] { fill: var(--beta-subtle); }
 .accumulator-beta main svg :is([fill="#536975"], [fill="#4d6570"], [fill="#4c6371"], [fill="#294656"]) { fill: var(--muted); }
 .accumulator-beta main svg [fill="#172a42"] { fill: var(--ink); }
+
+.accumulator-beta .beta-ko-summary {
+  margin: 9px 0;
+  padding: 9px 12px;
+  border-inline-start: 3px solid var(--beta-refund);
+  border-radius: 6px;
+  background: var(--beta-refund-light);
+  color: var(--beta-refund);
+  font-weight: 720;
+  font-variant-numeric: tabular-nums;
+}
+
+.accumulator-beta table { color: var(--ink); }
+.accumulator-beta :is(td[data-beta-heat], #sn-comparison .cmp-results tbody td[data-beta-heat]) {
+  color: var(--heat-ink, var(--ink));
+  background: var(--heat-fill, var(--beta-panel));
+  font-weight: 700;
+}
+.accumulator-beta td[data-beta-heat^="gain"] { --heat-ink: var(--beta-positive); }
+.accumulator-beta td[data-beta-heat^="loss"] { --heat-ink: var(--beta-negative); }
+.accumulator-beta td[data-beta-heat="gain-1"] { --heat-fill: #e1f1e5; }
+.accumulator-beta td[data-beta-heat="gain-2"] { --heat-fill: #b6dec2; }
+.accumulator-beta td[data-beta-heat="gain-3"] { --heat-fill: #79bf95; }
+.accumulator-beta td[data-beta-heat="loss-1"] { --heat-fill: #f8e2e8; }
+.accumulator-beta td[data-beta-heat="loss-2"] { --heat-fill: #f0baca; }
+.accumulator-beta td[data-beta-heat="loss-3"] { --heat-fill: #e38ea7; }
+.accumulator-beta #sn-comparison td[data-beta-heat] small { color: inherit; }
+.accumulator-beta :is(.beta-column-heading, #sn-comparison .cmp-results th .beta-column-heading) {
+  min-height: 32px;
+  max-width: 100%;
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: inherit;
+  text-align: inherit;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.accumulator-beta :is(.beta-column-heading, #sn-comparison .cmp-results th .beta-column-heading):hover {
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.accumulator-beta .beta-column-hidden { display: none; }
+.accumulator-beta .beta-column-emphasis {
+  box-shadow: inset 2px 0 var(--beta-secondary-edge), inset -2px 0 var(--beta-secondary-edge);
+  font-weight: 800;
+}
+.accumulator-beta :is(.beta-table-sized, #overview .beta-share-ledger table.beta-table-sized) {
+  width: var(--beta-table-width);
+  min-width: 0;
+  table-layout: fixed;
+}
+.accumulator-beta :is(.beta-table-sized, #sn-comparison .beta-table-sized) :is(th, td) {
+  min-width: 0;
+  max-width: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.accumulator-beta #beta-columns {
+  width: min(430px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 1px solid var(--beta-hero-edge);
+  border-radius: 12px;
+  background: var(--beta-panel);
+  color: var(--ink);
+}
+.accumulator-beta #beta-columns::backdrop { background: #15263788; }
+.accumulator-beta #beta-columns form { display: grid; gap: 12px; padding: 18px; }
+.accumulator-beta #beta-columns-title { font-family: var(--beta-display-font); }
+.accumulator-beta :is(.beta-column-flags, .beta-column-actions) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+}
+.accumulator-beta .beta-column-flags label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+}
+.accumulator-beta .beta-column-actions:last-child { justify-content: flex-end; }
 
 .accumulator-beta #beta-quick-pdf {
   width: min(550px, calc(100% - 24px));

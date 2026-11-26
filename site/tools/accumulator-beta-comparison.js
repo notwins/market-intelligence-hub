@@ -12,6 +12,7 @@
   const cents = n => Math.round((n + Number.EPSILON) * 100);
   const byId = id => document.getElementById(id);
   const cellClass = n => n < 0 ? 'negative' : n > 0 ? 'positive' : '';
+  const heat = (pnl, payment) => window.AccumulatorBetaTable?.heat(pnl, payment) || '';
   const letter = index => String.fromCharCode(65 + index);
   const label = (note, index) => letter(index) + ' · ' + note.quote.product;
   const quoteLabel = q => q.product + ' · ' + quotePct(q.strike) + ' strike · ' + q.months + 'M · ' + quotePct(q.ko) + ' KO · ' + q.minimum + 'M guarantee';
@@ -243,7 +244,7 @@
   }
 
   function header(notes) {
-    return notes.map((n, i) => `<th scope="col">${label(n,i)}<small>${quotePct(n.quote.strike)} strike · ${n.quote.months}M<br>${quotePct(n.quote.ko)} KO · ${n.quote.minimum}M guarantee</small></th>`).join('');
+    return notes.map((n, i) => `<th scope="col" data-beta-column="${n.quote.id}">${label(n,i)}<small>${quotePct(n.quote.strike)} strike · ${n.quote.months}M<br>${quotePct(n.quote.ko)} KO · ${n.quote.minimum}M guarantee</small></th>`).join('');
   }
 
   const labels = {
@@ -311,9 +312,11 @@
         case 'pnl': case 'change': displayed=signed(amount);break;
         default: displayed=money(amount);
       }
-      const colour = ['pnl','rate','change','exitPnl','directPnl','noteAdvantage'].includes(key) ? cellClass(amount) : '';
+      const performance = ['pnl','rate','change','exitPnl','directPnl','noteAdvantage'].includes(key);
+      const colour = performance ? cellClass(amount) : '';
       const accent = key === 'timing' && sim.koDay ? 'cmp-ko' : key === 'refund' && amount > 0 ? 'cmp-refund' : '';
-      return `<td class="${colour} ${accent}">${resultButton(row.id,i,key,displayed,name)}</td>`;
+      const shading = performance ? heat(key === 'rate' ? value.pnl : amount, sim.payment) : '';
+      return `<td class="${colour} ${accent}"${shading}>${resultButton(row.id,i,key,displayed,name)}</td>`;
     });
     return `<tr${keyRow ? ' class="cmp-key-row"' : ''}><th scope="row">${name}</th>${cells.join('')}</tr>`;
   }
@@ -335,7 +338,7 @@
           if (!v) return '<td aria-label="Scenario does not apply"></td>';
           const tag=extremeLabel(best,worst,count,i);
           const colour=tag.endsWith('best')||tag==='Best'?'cmp-best':tag.endsWith('worst')||tag==='Worst'?'cmp-worst':'';
-          return `<td class="${colour} ${cellClass(v.pnl)}">${resultButton(r.id,i,metric,asValue(v[metric]))}${v.shareLabel ? `<small>${v.shareLabel}</small>` : ''}${tag ? `<span class="cmp-extreme">${tag}</span>` : ''}</td>`;
+          return `<td class="${colour} ${cellClass(v.pnl)}"${heat(v.pnl, notes[i].terms.payment)}>${resultButton(r.id,i,metric,asValue(v[metric]))}${v.shareLabel ? `<small>${v.shareLabel}</small>` : ''}${tag ? `<span class="cmp-extreme">${tag}</span>` : ''}</td>`;
         }).join('') + '</tr>';
     }).join('') + '</tbody>';
     renderRanges(notes,rows.filter(r=>!r.follow),metric);

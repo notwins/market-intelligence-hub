@@ -140,7 +140,9 @@
           text: tidy(textOf(cell, true)), span: cell.colSpan,
           align: style.textAlign === 'center' ? 'center' : style.textAlign === 'right' ? 'right' : 'left',
           background: Array.from(style.backgroundColor.match(/\d+(?:\.\d+)?/g) || [], Number),
-          tone: cell.matches('.negative, .cmp-worst') || cell.querySelector('.negative') ? 'negative' :
+          tone: cell.dataset.betaHeat ? (cell.dataset.betaHeat.startsWith('loss') ? 'negative' :
+            cell.dataset.betaHeat.startsWith('gain') ? 'positive' : 'ink') :
+            cell.matches('.negative, .cmp-worst') || cell.querySelector('.negative') ? 'negative' :
             cell.matches('.refund-cell, .cmp-refund') ? 'refund' :
             cell.matches('.positive, .cmp-best') || cell.querySelector('.positive') ? 'positive' : 'ink'
         };
@@ -164,6 +166,12 @@
       const tag = node.tagName.toUpperCase();
       if (node.classList.contains('chartFrame')) {
         if (section.key !== 'overview' || !selected.has('chartTitle')) content.push(...chartBlocks(node));
+        return;
+      }
+      if (node.classList.contains('beta-ko-summary')) {
+        if (section.key !== 'overview' || !selected.has('chartTitle')) {
+          content.push({kind: 'value', text: tidy(node.textContent), tone: 'refund'});
+        }
         return;
       }
       if (tag === 'TABLE') {
@@ -421,7 +429,7 @@
           if (block.label) paragraph(block.label, 8.5, 'muted');
           doc.addImage(image.data, 'PNG', margin, y, imageHeight * image.ratio, imageHeight);
           y += imageHeight + 3.5;
-        } else paragraph(block.text, 9.5, 'ink', block.kind === 'value' ? 'bold' : 'normal');
+        } else paragraph(block.text, 9.5, block.tone || 'ink', block.kind === 'value' ? 'bold' : 'normal');
       }
       y += 4;
     });
