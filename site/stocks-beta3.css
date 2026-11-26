@@ -237,3 +237,10 @@ html.beta3-nav-hidden{--beta3-nav-top:0px;scroll-padding-top:0}
 .comparison-context thead{background:#ebf3f0;color:#314e4a}
 .comparison-context tbody tr+tr{border-top:1px solid #e3ece9}
 @media(prefers-reduced-motion:reduce){.filings-page > .hub-primary{transition:none}}
+.bonus-companies{grid-column:1/-1;min-width:0;margin:0;padding:4px 0;border:0}
+.bonus-companies legend{font-size:12px;font-weight:700;color:#405a5a}
+#bonus-choices{display:flex;flex-wrap:wrap;gap:5px}
+#bonus-choices button{font-size:12px;font-weight:700;min-height:32px;padding:3px 11px;border:1px solid #b5cbca;color:#315654;background:#f9fbfb}
+#bonus-choices button[aria-pressed=true]{background:#197063;border-color:#197063;color:white}
+#bonus-choices button:disabled{background:#eaf3ef;color:#375e53;border-color:#c5dbd2;cursor:default}
+.company-brand .bonus-tag{font-size:9px;color:#4b635e;text-transform:uppercase;font-weight:700}

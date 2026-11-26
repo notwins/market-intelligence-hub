@@ -14,6 +14,14 @@
     ['position', 'Balance sheet structure', ['balanceMix', 'assets', 'liabilities']],
     ['profile', 'Growth vs profitability', ['growthOperating', 'growthNet', 'growthGross']]
   ];
+  const sizeLayouts = [
+    ['size-assets', 'Total assets', ['assets']],
+    ['size-liabilities', 'Total liabilities', ['liabilities']],
+    ['size-revenue', 'Revenue', ['revenue']],
+    ['size-cash', 'Cash and equivalents', ['cash']],
+    ['size-income', 'Net income', ['netIncome']],
+    ['sales-share', 'Share of direct peer revenue', ['revenueShare']]
+  ];
   const metric = {
     revenueGrowth: ['Revenue growth', '%'], profitGrowth: ['Earnings growth', '%'],
     revenue: ['Reported revenue', 'amount'], operatingMargin: ['Operating margin', '%'],
@@ -27,6 +35,8 @@
     peTTM: ['Trailing P/E', '×', 'lower'], evEbitda: ['EV / EBITDA', '×', 'lower'],
     priceBook: ['Price / book', '×', 'lower'], assets: ['Total assets', 'amount'],
     liabilities: ['Total liabilities', 'amount'], cash: ['Cash and equivalents', 'amount'],
+    netIncome: ['Net income', 'amount'], revenueShare: ['Revenue share', 'donut'],
+    revenueArea: ['USD revenue', 'area'],
     balanceMix: ['Liabilities & net assets', 'mix'], growthOperating: ['Operating margin', 'profile', 'operatingMargin'],
     growthNet: ['Net margin', 'profile', 'netMargin'], growthGross: ['Gross margin', 'profile', 'grossMargin'],
     cet1: ['Common equity Tier 1', '%'], totalCapitalRatio: ['Total regulatory capital', '%'],
@@ -53,10 +63,10 @@
     cashFlowMargin: 'operatingCashFlowMargin', fcf: 'freeCashFlow'};
   const comparableModel = new Set(['returns', 'funding', 'valuation']);
   const seriesColors = ['#096657', '#5a77a1', '#a05c36', '#805782', '#617a35',
-    '#555798', '#a74149', '#287c86', '#885b32', '#656586', '#596853'];
+    '#555798', '#a74149', '#287c86', '#885b32', '#656586', '#596853',
+    '#c66837', '#245289', '#914477', '#847324', '#137b4c', '#89564d'];
   const fmt = new Intl.NumberFormat('en-SG', {maximumFractionDigits: 1});
-  const exact = new Intl.NumberFormat('en-SG', {maximumFractionDigits: 6});
-  const precise = new Intl.NumberFormat('en-SG', {maximumFractionDigits: 3});
+  const whole = new Intl.NumberFormat('en-SG', {maximumFractionDigits: 0});
   const day = new Intl.DateTimeFormat('en-GB', {day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC'});
   const settings = new WeakMap();
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[char]));
@@ -108,10 +118,12 @@
     if (!finite(n)) return '—';
     if (unit === 'amount') {
       const bn = !detail && Math.abs(n) >= 1000;
-      return (currency ? currency + ' ' : '') + textNumber(n / (bn ? 1000 : 1), detail ? exact : fmt) + (bn ? 'bn' : 'm');
+      const amount = n / (bn ? 1000 : 1);
+      const number = detail && amount && Math.abs(amount) < .5 ? (amount < 0 ? '−<1' : '<1') : textNumber(amount, detail ? whole : fmt);
+      return (currency ? currency + ' ' : '') + number + (bn ? 'bn' : 'm');
     }
-    const numberFormat = detail ? precise : fmt;
-    if (n && Math.abs(n) < (detail ? .0005 : .05)) return (n < 0 ? '−' : '') + '<' + (detail ? '0.001' : '0.1') + unit;
+    const numberFormat = detail ? whole : fmt;
+    if (n && Math.abs(n) < (detail ? .5 : .05)) return (n < 0 ? '−' : '') + '<' + (detail ? '1' : '0.1') + unit;
     return textNumber(n, numberFormat) + unit;
   }
 
@@ -147,7 +159,30 @@
       ticker: shortTicker(company), color: seriesColors[i % seriesColors.length]}));
   }
 
-  function details(rows, title, columns, figureRow) {
+  function unavailable(company, key) {
+    return company.missing?.[key] || 'No comparable figure for the selected period.';
+  }
+
+  function figureCell(output) {
+    const cell = typeof output === 'string' ? {text:output} : output;
+    return '<td>' + esc(cell.text) + (cell.note ? '<small class="sq-figure-note">' + esc(cell.note) + '</small>' : '') + '</td>';
+  }
+
+  function reportingNotes(rows) {
+    const foreign = rows.filter(({company}) => company.reportingCurrency &&
+      company.reportingCurrency !== company.currency);
+    if (!foreign.length) return '';
+    const group = new Map();
+    for (const {company,ticker} of foreign) {
+      const codes = group.get(company.reportingCurrency) || [];
+      codes.push(ticker);
+      group.set(company.reportingCurrency,codes);
+    }
+    return '<p class="sq-reporting-currencies">Original reporting currencies · ' +
+      esc([...group].map(([code,tickers])=>code+' ('+tickers.join(', ')+')').join(' · ')) + '</p>';
+  }
+
+  function details(rows, title, columns, figureRow, showCurrencies = false) {
     return '<details class="sq-figures"><summary>Figures <span>' + rows.length + ' companies</span></summary>' +
       '<div class="sq-table-wrap" tabindex="0" role="region" aria-label="' + esc(title + ' figures') + '"><table><caption class="sr-only">' + esc(title) + '</caption><thead><tr><th scope="col">Company</th><th scope="col">Period</th>' +
       columns.map(label => '<th scope="col">' + esc(label) + '</th>').join('') + '</tr></thead><tbody>' +
@@ -157,8 +192,8 @@
         return '<tr' + (row.active ? ' class="sq-active"' : '') + '><th scope="row"><span>' + esc(co.name || row.ticker) +
           '</span><small>' + esc(co.ticker || co.id) + '</small></th><td>' + esc(period || '—') +
           (co.basisLabel ? '<small>' + esc(co.basisLabel) + '</small>' : '') + '</td>' +
-          figureRow(row).map(output => '<td>' + esc(output) + '</td>').join('') + '</tr>';
-      }).join('') + '</tbody></table></div></details>';
+          figureRow(row).map(figureCell).join('') + '</tr>';
+      }).join('') + '</tbody></table></div>' + (showCurrencies ? reportingNotes(rows) : '') + '</details>';
   }
 
   function portrayBars(rows, key, card) {
@@ -169,9 +204,10 @@
     const valueLabel = row => printed(row.n, unit, row.company.currency, true);
     const components = (breakdowns[key] || []).filter(field => rowsWithValues.some(row => finite(value(row.company, field))));
     const table = details(rowsWithValues, label, [label, ...components.map(field => amounts[field])], row => [
-      valueLabel(row), ...components.map(field => printed(value(row.company, field), 'amount', row.company.currency, true))
-    ]);
-    if (!present.length) return '<p class="sq-empty">No comparable figures for this period.</p>' + table;
+      {text:valueLabel(row),note:finite(row.n)?null:unavailable(row.company,key)},
+      ...components.map(field => printed(value(row.company, field), 'amount', row.company.currency, true))
+    ],unit==='amount'||components.length>0);
+    if (!present.length) return '<p class="sq-empty">No comparable figures for this period. Expand Figures for the reasons.</p>' + table;
     if (unit === 'amount' && (currencies.size !== 1 || currencies.has(''))) {
       const byCurrency = new Map();
       for (const row of present) {
@@ -200,7 +236,7 @@
       const datum = printed(row.n, unit, '', false);
       const leading = marked.has(row.i);
       const within = sameModel(row.company);
-      const hint = [row.company.name, valueLabel(row), dateLabel(row.company.periodLabel)].filter(Boolean).join(' · ');
+      const hint = [row.company.name, finite(row.n)?valueLabel(row):unavailable(row.company,key), dateLabel(row.company.periodLabel)].filter(Boolean).join(' · ');
       const color = row.active ? '#0e6255' : leading ? 'var(--sq-strong)' : 'var(--sq-mid)';
       const flag = row.active ? ' sq-active' : (!within ? ' sq-other-model' : '');
       return '<li class="sq-strip' + flag + (leading ? ' sq-top' : '') + '" title="' + esc(hint) + '">' +
@@ -209,7 +245,8 @@
         '<span class="sq-track" aria-hidden="true">' + grid.lines +
         (finite(row.n) ? '<i class="sq-bar' + (row.n < 0 ? ' sq-negative' : '') + '" style="--left:' + Math.min(zero, x) +
           '%;--size:' + Math.abs(x - zero) + '%;--fill:' + color + '"></i>' : '') + '</span>' +
-        '<data' + (finite(row.n) ? ' value="' + row.n + '"' : '') + '>' + esc(datum) + '</data></li>';
+        (finite(row.n) ? '<data value="' + row.n + '">' + esc(datum) + '</data>' :
+          '<span class="sq-missing" role="img" aria-label="'+esc(unavailable(row.company,key))+'">—</span>') + '</li>';
     }).join('');
     const comparable = comparableModel.has(card) && present.some(row => !sameModel(row.company));
     const scope = comparable ? ' · focus business model first' : '';
@@ -231,9 +268,10 @@
     const ordered = [...withData].sort((a, b) => (a.ratio ?? Infinity) - (b.ratio ?? Infinity) || a.i - b.i);
     const top = new Set(valid.slice().sort((a, b) => a.ratio - b.ratio || a.i - b.i).slice(0, 3).map(row => row.i));
     const table = details(ordered, 'Assets and liabilities', ['Total assets', 'Liabilities', 'Net assets / assets'], row => [
-      printed(row.assets, 'amount', row.company.currency, true), printed(row.liabilities, 'amount', row.company.currency, true),
+      {text:printed(row.assets,'amount',row.company.currency,true),note:finite(row.assets)?null:unavailable(row.company,'assets')},
+      {text:printed(row.liabilities,'amount',row.company.currency,true),note:finite(row.liabilities)?null:unavailable(row.company,'liabilities')},
       printed(finite(row.ratio) ? 100 - row.ratio : null, '%', '', true)
-    ]);
+    ],true);
     if (!valid.length) return '<p class="sq-empty">No comparable asset and liability figures for this period.</p>' + table;
     return '<div class="sq-chart-meta"><span>' + valid.length + '/' + rows.length + ' figures</span><span>Lowest liability share first</span></div>' +
       '<ol class="sq-microbars" aria-label="Liabilities as a percentage of total assets by company">' + ordered.map(row => {
@@ -253,7 +291,8 @@
     const withData = rows.map(row => ({...row, x: value(row.company, 'revenueGrowth'), y: value(row.company, yKey)}));
     const present = withData.filter(row => finite(row.x) && finite(row.y));
     const table = details(withData, 'Revenue growth and ' + label.toLowerCase(), ['Revenue growth', label], row =>
-      [printed(row.x, '%', '', true), printed(row.y, '%', '', true)]);
+      [{text:printed(row.x,'%', '',true),note:finite(row.x)?null:unavailable(row.company,'revenueGrowth')},
+        {text:printed(row.y,'%', '',true),note:finite(row.y)?null:unavailable(row.company,yKey)}]);
     if (!present.length) return '<p class="sq-empty">No companies have both measures for this period.</p>' + table;
     const xb = domain(present.map(row => row.x)), yb = domain(present.map(row => row.y));
     const xGrid = axis(xb, '%', '');
@@ -284,26 +323,33 @@
     return new Map(points.map(({ordinal, observation}) => [ordinal, observation]));
   }
 
-  function portrayTrends(rows, key) {
-    const [label, , source] = metric[key];
+  function quarterSlots(rows) {
     const ordinals = rows.flatMap(row => [...row.history.keys()]);
-    if (!ordinals.length) return '<p class="sq-empty">Quarterly trends are unavailable.</p>';
+    if (!ordinals.length) return [];
+
     const end = Math.max(...ordinals);
     const length = Math.min(8, end - Math.min(...ordinals) + 1);
     const start = end - length + 1;
-    const slots = Array.from({length}, (_, pos) => {
+    return Array.from({length}, (_, pos) => {
       const ordinal = start + pos;
       const year = Math.floor(ordinal / 4);
       const quarter = 'Q' + (ordinal % 4 + 1);
       return {ordinal, label: quarter + ' ' + year, abbreviated: quarter + ' ’' + String(year).slice(-2)};
     });
+  }
+
+  function portrayTrends(rows, key) {
+    const [label, , source] = metric[key];
+    const slots = quarterSlots(rows);
+    if (!slots.length) return '<p class="sq-empty">Quarterly trends are unavailable.</p>';
+    const length = slots.length;
     const series = rows.map(row => ({
       ...row, points: slots.map(slot => row.history.get(slot.ordinal) || null),
       nums: slots.map(slot => value(row.history.get(slot.ordinal) || {}, source))
     }));
     const usable = series.filter(row => row.nums.some(finite));
     const table = '<details class="sq-figures"><summary>Figures <span>' + rows.length + ' companies</span></summary>' +
-      '<div class="sq-table-wrap" tabindex="0" role="region" aria-label="' + esc(label + ' by fiscal quarter') + '"><table><caption class="sr-only">' + esc(label + ' by fiscal quarter') + '</caption>' +
+      '<div class="sq-table-wrap" tabindex="0" role="region" aria-label="' + esc(label + ' by calendar quarter') + '"><table><caption class="sr-only">' + esc(label + ' by calendar quarter') + '</caption>' +
       '<thead><tr><th scope="col">Company</th>' + slots.map(slot => '<th scope="col">' + slot.label + '</th>').join('') + '</tr></thead><tbody>' +
       series.map(row => '<tr' + (row.active ? ' class="sq-active"' : '') + '><th scope="row">' + esc(row.company.name) +
         '<small>' + esc(row.company.ticker) + '</small></th>' + row.nums.map((n, j) => {
@@ -337,19 +383,106 @@
     const labels = slots.map((slot, i) => '<span title="' + slot.label + '" class="' + (i === 0 ? 'sq-start' :
       i === length - 1 ? 'sq-end' : i % 2 === 1 ? 'sq-minor' : '') + '" style="--tick:' + x(i) + '%">' + slot.abbreviated + '</span>').join('');
     const vertical = slots.map((_, i) => '<i style="--tick:' + x(i) + '%"></i>').join('');
-    return '<div class="sq-chart-meta"><span>' + usable.length + '/' + rows.length + ' companies</span><span>Fiscal quarters</span></div>' +
-      '<div class="sq-trend-inner" role="img" aria-label="' + esc(label + ' by fiscal quarter') + '">' +
+    return '<div class="sq-chart-meta"><span>' + usable.length + '/' + rows.length + ' companies</span><span>Calendar quarters</span></div>' +
+      '<div class="sq-trend-inner" role="img" aria-label="' + esc(label + ' by calendar quarter') + '">' +
       '<div class="sq-scatter-plot sq-trend-plot" aria-hidden="true">' + yLines + vertical +
       '<svg viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" aria-hidden="true">' + lines +
       '</svg>' + points + '<div class="sq-scatter-x">' + labels + '</div></div></div>' +
       '<div class="sq-legend">' + legend + '</div>' + table;
   }
 
+  function peerRevenue(rows) {
+    return rows.filter(row => !row.company.isBonus);
+  }
+
+  function portrayRevenueShare(allRows) {
+    const rows = peerRevenue(allRows).map(row => ({...row,n:value(row.company,'revenue')}));
+    const present = rows.filter(row=>finite(row.n)&&row.n>=0).sort((a,b)=>b.n-a.n||a.i-b.i);
+    const total = present.reduce((sum,row)=>sum+row.n,0);
+    const share = row=>present.includes(row)&&total>0?100*row.n/total:null;
+    const table = details([...present,...rows.filter(row=>!present.includes(row))], 'Direct peer revenue share',
+      ['Revenue','Share of reported peer revenue'],row=>[
+        {text:printed(row.n,'amount','USD',true),note:!finite(row.n)?unavailable(row.company,'revenue'):row.n<0?'Negative revenue excluded from the share calculation.':null},
+        printed(share(row),'%','',true)
+      ],true);
+    if (total<=0) return '<p class="sq-empty">No positive comparable revenue to show a share.</p>'+table;
+    let before=0;
+    const stops=present.filter(row=>row.n>0).map(row=>{
+      const end=before+share(row);
+      const stop=row.color+' '+before+'% '+end+'%';
+      before=end;
+      return stop;
+    }).join(',');
+    const labels=present.map((row,i)=>'<li class="'+(row.active?'sq-active':'')+'"><span class="sq-pie-mark" style="--mark:'+row.color+'"></span>'+
+      (i<3?logo(row.company):'')+'<span>'+esc(row.ticker)+'</span><strong>'+esc(printed(share(row),'%','',true))+'</strong></li>').join('');
+    const basis='<div class="sq-chart-meta"><span>'+present.length+'/'+rows.length+' direct peers reporting</span><span>Selected peer group</span></div>';
+    return basis+'<div class="sq-share-view"><div class="sq-donut" role="img" aria-label="Share of reported revenue among selected direct peers" style="--sq-stops:'+stops+'">'+
+      '<div><strong>'+esc(printed(total,'amount','USD'))+'</strong><small>Peer revenue</small></div></div><ol>'+labels+'</ol></div>'+table;
+  }
+
+  function portrayRevenueArea(allRows) {
+    const rows=peerRevenue(allRows), slots=quarterSlots(rows);
+    if (slots.length<2) return '<p class="sq-empty">Stacked revenue needs at least two quarterly observations.</p>';
+    const lookup=(row,slot)=>value(row.history.get(slot.ordinal)||{},'revenue');
+    const available=(row,slot)=>finite(lookup(row,slot))&&lookup(row,slot)>=0;
+    const end=slots.at(-1);
+    // Fix the cohort using the latest plotted quarter and its best-covered earlier match.
+    // A missing observation anywhere else breaks the stack for the entire quarter.
+    const candidates=slots.slice(0,-1).map(slot=>rows.filter(row=>available(row,end)&&available(row,slot)));
+    const cohort=candidates.reduce((best,group)=>group.length>=best.length?group:best,[]);
+    const totals=slots.map(slot=>cohort.length&&cohort.every(row=>available(row,slot))?
+      cohort.reduce((total,row)=>total+lookup(row,slot),0):null);
+    const skipped=rows.filter(row=>!cohort.includes(row)).map(row=>row.ticker);
+    const table='<details class="sq-figures"><summary>Figures <span>'+cohort.length+' matched companies</span></summary>'+
+      '<div class="sq-table-wrap" tabindex="0" role="region" aria-label="Direct peer revenue by calendar quarter"><table><caption class="sr-only">Direct peer quarterly revenue in USD</caption>'+
+      '<thead><tr><th scope="col">Company</th>'+slots.map(slot=>'<th scope="col">'+esc(slot.label)+'</th>').join('')+'</tr></thead><tbody>'+
+      cohort.map(row=>'<tr'+(row.active?' class="sq-active"':'')+'><th scope="row">'+esc(row.company.name)+'<small>'+esc(row.ticker)+'</small></th>'+
+        slots.map(slot=>figureCell({text:printed(lookup(row,slot),'amount','USD',true),note:available(row,slot)?null:'Comparable USD revenue unavailable.'})).join('')+'</tr>').join('')+
+      '<tr><th scope="row">Matched total</th>'+totals.map(total=>figureCell(printed(total,'amount','USD',true))).join('')+'</tr>'+
+      '</tbody></table></div>'+reportingNotes(cohort)+'</details>';
+    if (cohort.length<2) return '<p class="sq-empty">Two or more direct peers need comparable USD revenue in the same two quarters.</p>';
+    const limits=domain(totals.filter(finite)), x=i=>i/(slots.length-1)*100;
+    const y=n=>100-position(n,limits);
+    const xLabels=slots.map((slot,i)=>'<span class="'+(i===0?'sq-start':i===slots.length-1?'sq-end':i%2?'sq-minor':'')+'" style="--tick:'+x(i)+'%">'+esc(slot.abbreviated)+'</span>').join('');
+    const guide=ticks(limits).map(n=>'<i class="sq-yline" style="--tick:'+position(n,limits)+'%"><span>'+esc(printed(n,'amount',''))+'</span></i>').join('');
+    const gaps=totals.map((total,i)=>finite(total)?'':'<i class="sq-area-gap" style="--tick:'+x(i)+'%" title="'+esc(slots[i].label+' · Missing comparable revenue')+'"><span>Gap</span></i>').join('');
+    const cumulative=slots.map(()=>0);
+    const shapes=cohort.map(row=>{
+      const points=slots.map((slot,i)=>{
+        if(!finite(totals[i]))return null;
+        const bottom=cumulative[i];
+        cumulative[i]+=lookup(row,slot);
+        return {x:x(i),top:y(cumulative[i]),bottom:y(bottom)};
+      });
+      const runs=[];
+      let run=[];
+      for(const point of [...points,null]){
+        if(point){run.push(point);continue;}
+        if(run.length)runs.push(run);
+        run=[];
+      }
+      return '<g fill="'+row.color+'" stroke="'+row.color+'">'+runs.map(segment=>{
+        if(segment.length===1){
+          const point=segment[0];
+          return '<line x1="'+point.x+'" x2="'+point.x+'" y1="'+point.top+'" y2="'+point.bottom+'" stroke-width="7" vector-effect="non-scaling-stroke"></line>';
+        }
+        const edge=(pt,field)=>pt.x+','+pt[field];
+        return '<polygon stroke="none" points="'+segment.map(pt=>edge(pt,'top')).concat(segment.slice().reverse().map(pt=>edge(pt,'bottom'))).join(' ')+'"></polygon>';
+      }).join('')+'</g>';
+    }).join('');
+    const legend=cohort.map(row=>'<span'+(row.active?' class="sq-active"':'')+'><i style="--mark:'+row.color+'"></i>'+esc(row.ticker)+'</span>').join('');
+    return '<div class="sq-chart-meta"><span>'+cohort.length+'/'+rows.length+' direct peers in matched group</span><span>USD · Calendar quarters</span></div>'+
+      '<div class="sq-trend-inner sq-area-inner" role="img" aria-label="Stacked area of quarterly revenue for a fixed group of direct peers in US dollars">'+
+      '<div class="sq-scatter-plot sq-trend-plot" aria-hidden="true">'+guide+'<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+shapes+
+      '</svg>'+gaps+'<div class="sq-scatter-x">'+xLabels+'</div></div></div><div class="sq-legend">'+legend+'</div>'+
+      (skipped.length?'<p class="sq-reporting-currencies">Outside the matched group · '+esc(skipped.join(', '))+'</p>':'')+table;
+  }
+
   function cardHtml(id, title, group, active, rows) {
     const controls = group.map(key => '<button type="button" data-sq-metric="' + key + '" aria-pressed="' + (key === active) + '">' +
       esc(metric[key][0]) + '</button>').join('');
     return '<article class="sq-card sq-' + id + '" data-sq-card="' + id + '"><header><h3>' + esc(title) +
-      '</h3><div class="sq-switches" role="group" aria-label="' + esc(title + ' measures') + '">' + controls + '</div></header>' +
+      '</h3>' + (group.length>1?'<div class="sq-switches" role="group" aria-label="' + esc(title + ' measures') + '">' + controls + '</div>':'') + '</header>' +
       '<div class="sq-card-body">' + chart(active, rows, id) + '</div></article>';
   }
 
@@ -358,6 +491,8 @@
     if (kind === 'mix') return portrayBalance(rows);
     if (kind === 'profile') return portrayProfile(rows, key);
     if (kind === 'trend') return portrayTrends(rows, key);
+    if (kind === 'donut') return portrayRevenueShare(rows);
+    if (kind === 'area') return portrayRevenueArea(rows);
     return portrayBars(rows, key, id);
   }
 
@@ -379,9 +514,9 @@
         state.selected.set(id, key);
         for (const item of card.querySelectorAll('[data-sq-metric]')) item.setAttribute('aria-pressed', item === button);
         const body = card.querySelector('.sq-card-body');
-        const preserve = body.querySelector('.sq-figures').open;
+        const preserve = body.querySelector('.sq-figures')?.open;
         body.innerHTML = chart(key, state.rows, id);
-        if (preserve) body.querySelector('.sq-figures').open = true;
+        if (preserve && body.querySelector('.sq-figures')) body.querySelector('.sq-figures').open = true;
       });
     }
     const open = new Set([...container.querySelectorAll('.sq-figures[open]')].map(item => item.closest('[data-sq-card]').dataset.sqCard));
@@ -391,7 +526,9 @@
     const head = '<header class="sq-head"><div>' + (standalone ? '<h2>Fundamentals at a glance</h2>' : '') + '<p>' + esc(period+(data.growthBasis==='qoq'?' · Growth QoQ':data.growthBasis==='yoy'?' · Growth YoY':'')) + '</p></div>' +
       '<span class="sq-count">' + rows.length + (rows.length === 1 ? ' company' : ' companies') + '</span></header>';
     container.classList.add('shares-quarterly-charts');
-    const cards = rows.some(row => row.history.size >= 2) ? [...layouts, trendLayout] : layouts;
+    const cards = [...sizeLayouts,...layouts];
+    if (rows.some(row=>!row.company.isBonus&&row.history.size>=2)) cards.push(['revenue-area','Direct peer revenue over time',['revenueArea']]);
+    if (rows.some(row=>row.history.size>=2)) cards.push(trendLayout);
     container.innerHTML = head + '<div class="sq-grid">' + cards.map(([id, title, base]) => {
       const group = options(id, companies[0], base);
       const current = state.selected.get(id);

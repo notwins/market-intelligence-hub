@@ -156,7 +156,7 @@
     }
     return Object.keys(values).length?{...trailing,values}:null;
   }
-  function view(record,{currency,period='latest',year,model,observation,growthBasis='yoy'}={}){
+  function view(record,{currency,period='latest',year,model,observation,balanceFields,growthBasis='yoy'}={}){
     if(!record||(currency&&record.currency!==currency))return null;
     const observations=record.observations;
     const o=observation||(period==='latest'?observations.at(-1):observations.find(v=>v.period==='Q4 '+year));
@@ -165,7 +165,7 @@
     const prev=observations.find(v=>v.period==='Q'+q+' '+(Number(fy)-1));
     const trailingRecord=period==='latest'&&o===observations.at(-1)&&(!record.ttm?.end||!o.end||record.ttm.end===o.end)?record.ttm:null;
     const ttm=verifyTrailing(trailingRecord,o,observations);
-    const values=o.values||{}, balance=o.balance||{};
+    const values=o.values||{}, balance={...balanceFields,...o.balance};
     const preceding=observations.find(v=>fiscalOrdinal(v.period)===fiscalOrdinal(o.period)-1);
     const gap=o.end&&preceding?.end?(Date.parse(o.end)-Date.parse(preceding.end))/86400000:null;
     const prior=growthBasis==='qoq'?(gap===null||(gap>=75&&gap<=106)?preceding?.values||{}:{}):
