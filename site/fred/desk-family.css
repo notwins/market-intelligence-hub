@@ -1,0 +1,173 @@
+/* Shared with the FRED catalogue and the main desk through locally hosted type. */
+@font-face {
+  font-family:"DM Sans"; src:url("../assets/desk/dm-sans.woff2") format("woff2");
+  font-weight:100 1000; font-display:swap;
+}
+@font-face {
+  font-family:"STIX Two Text"; src:url("../assets/desk/stix-two-text.woff2") format("woff2");
+  font-weight:400 700; font-display:swap;
+}
+:root {
+  --desk-paper:#f8f7f2; --desk-card:#fffefa; --desk-ink:#252823;
+  --desk-muted:#575e55; --desk-line:#cfcec3; --desk-rust:#8c422d; --desk-green:#3c5747;
+  --desk-serif:"STIX Two Text",Georgia,serif; --desk-sans:"DM Sans",system-ui,sans-serif;
+  --desk-gutter:clamp(1rem,3vw,3rem);
+  --ink:var(--desk-ink); --muted:var(--desk-muted); --line:var(--desk-line);
+  --paper:var(--desk-paper); --card:var(--desk-card); --signal-paper:var(--desk-card); --signal-border:var(--desk-line);
+}
+body,body.hf,body.observatory,body.breach-page {background:var(--desk-paper);color:var(--desk-ink);font-family:var(--desk-sans)}
+button,input,select {font-family:inherit}
+.fred-home > header,.breach-nav,.hf-header,.masthead,.fred-hub-links {background:var(--desk-paper);border-color:var(--desk-line)}
+:is(.fred-home,.breach-page) header .brand,.hf-header .hf-brand,.masthead .brand :is(strong,b) {
+  font:600 clamp(1.05rem,1.55vw,1.45rem)/1.1 var(--desk-serif);letter-spacing:-.035em;color:var(--desk-ink)
+}
+:is(.fred-home,.breach-page) header .brand {display:inline-flex;align-items:center;gap:.65rem}
+:is(.fred-home,.breach-page) header .brand::before,.masthead .brand-symbol,.masthead .brand-mark {
+  content:"";display:inline-block;flex:none;width:1.65rem;height:1.65rem;border:1px solid #9c6e52;border-radius:50%;
+  background:repeating-linear-gradient(-27deg,#723b28 0 2px,transparent 2px 3.6px),#f1c3a3
+}
+.masthead :is(.brand-symbol,.brand-mark) i {display:none}
+:is(.fred-home,.breach-page,.fred-feed) main,.hf .hf-shell,html[data-version=desk] main,.observatory .workspace {
+  width:100%;max-width:104rem;margin-inline:auto;padding-inline:var(--desk-gutter)
+}
+.fred-home main,.breach-page main,.hf .hf-shell,html[data-version=desk] main {padding-top:clamp(1.15rem,2.2vw,2.25rem)}
+:is(.fred-home,.fred-feed,.breach-page,body.hf,.observatory,html[data-version=desk]) h1 {
+  font:500 clamp(2.3rem,4.5vw,4rem)/1.04 var(--desk-serif);letter-spacing:-.05em;margin:.35rem 0 .65rem
+}
+.page-heading {display:block}
+:is(.fred-home,.observatory,html[data-version=desk],.hf,.fred-feed) :is(.eyebrow,.hf-kicker) {color:var(--desk-rust);letter-spacing:.12em}
+:is(.intro-top,.page-heading,.intro-title,.hf-title,.breach-hero) p:not(.eyebrow,.stamp) {font:400 clamp(.97rem,1.15vw,1.12rem)/1.5 var(--desk-sans);color:var(--desk-muted)}
+:is(.fred-home,.breach-page,.hf,.fred-feed,.observatory,html[data-version=desk]) :is(h2,h3,h4) {font-family:var(--desk-serif)}
+:is(.design-copy,.info-card,.archive-bar,.panel-head,.groups-panel,.market-section,.rail-heading,.section-heading,.section-line) :is(h2,h3) {
+  font-size:clamp(1.2rem,1.8vw,1.65rem);font-weight:550;letter-spacing:-.025em
+}
+.fred-home .design,.fred-home .info-card,.fred-home .archive-bar,.chart-card,.market-card,.hf-panel {
+  background:var(--desk-card);border-color:var(--desk-line);border-radius:7px;box-shadow:none
+}
+.fred-home .intro-top {padding-bottom:1rem;border-bottom:1px solid var(--desk-line)}
+.fred-home .stamp {padding:4.8rem .9rem .7rem;border:1px solid var(--desk-line);border-radius:6px;white-space:normal;background:var(--desk-card) url("../assets/desk/sheets.png") center top / 100% 4.2rem no-repeat}
+.fred-home .stamp span {font-weight:650}
+.fred-home .preview {background:#e6e2ed}
+.fred-home .preview.sage {background:#e2e8db}
+.fred-home .facts span {background:transparent;border:0;padding:.25rem 0}
+.fred-home .facts {gap:.4rem 1.5rem}
+.fred-home .design-copy p,.fred-home .info-card p:not(.eyebrow) {font-size:1rem}
+.fred-home .design-copy .eyebrow {font-size:.75rem}
+:is(.fred-home,.breach-page) .button,.fred-feed :is(#reload,#download) {background:var(--desk-green);border-color:var(--desk-green);color:white}
+:is(.fred-home,.breach-page) .button.secondary {color:var(--desk-green);background:var(--desk-card);border-color:var(--desk-line)}
+.fred-home .info-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+.fred-home .info-card:last-child {grid-column:1/-1}
+.observatory .page-intro,.observatory .command-bar {max-width:104rem;margin-inline:auto;padding-inline:var(--desk-gutter)}
+.observatory .page-intro {padding-block:1.3rem}
+.observatory .command-bar {margin-bottom:1.2rem}
+:is(.chart-grid,.chart-wall,.event-grid,.research-grid,.market-grid),
+.replay-page :is(.event-grid,.research-grid,.market-grid) {
+  grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.8rem,1.4vw,1.45rem)
+}
+:is(.metric-grid,.headline-cards,.archive-metric-grid,.all-series-grid,.hf-kpis) {
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:.8rem
+}
+.chart-card {padding:clamp(.85rem,1.35vw,1.35rem)}
+.chart-head h3,.chart-head h3 span,.group-card-head strong,.market-card h4,.hf-panel header :is(h2,h3) {
+  font:550 clamp(1.1rem,1.5vw,1.45rem)/1.2 var(--desk-serif);letter-spacing:-.02em
+}
+.chart-card .chart-svg {display:block;width:100%;height:auto;aspect-ratio:520 / 178}
+.chart-card .chart-legend button,.panel-selector select {font-size:.82rem;min-height:1.9rem}
+.chart-card .chart-note {font-size:.76rem;line-height:1.45;white-space:normal}
+.chart-card .holder-bars {height:auto}
+:is(.headline-metrics,.headline-section,.archive-metrics) .metric-card {padding:.85rem 1rem}
+:is(.headline-metrics,.headline-section,.archive-metrics) .metric-value,.hf-kpi .hf-value {
+  padding-right:2.75rem;font:550 clamp(1.55rem,2.4vw,2.2rem)/1.16 var(--desk-serif);letter-spacing:-.035em
+}
+:is(.headline-metrics,.headline-section,.archive-metrics) .metric-top {font-size:.9rem;min-height:1.45rem}
+:is(.headline-metrics,.headline-section,.archive-metrics) :is(.metric-date,.metric-change) {font-size:.75rem}
+.breach-page .event {padding:.85rem 3.8rem .85rem 1rem;min-height:7rem}
+.breach-page .event strong {font:550 1.2rem/1.2 var(--desk-serif)}
+.breach-page :is(.event-date,.event-meta,.market-card p,.group-copy,.signal-list li small) {font-size:.8rem}
+.breach-page .signal-list li strong {font-size:.9rem}
+.breach-page .market-card {padding:1rem}
+.hf .hf-grid > .hf-panel {grid-column:span 6}
+.hf .hf-grid > :is(.hf-panel.wide,.hf-panel.full) {grid-column:1/-1}
+.hf .hf-landing {grid-template-columns:repeat(2,minmax(0,1fr))}
+.hf .hf-landing a:last-child {grid-column:1/-1}
+.hf .hf-landing strong {font:550 1.55rem/1.2 var(--desk-serif)}
+.hf .hf-landing a p,.hf .hf-panel p {font-size:.85rem}
+.hf-panel h2 svg {vertical-align:middle}
+.hf-kpi h3 {font:600 .8rem/1.35 var(--desk-sans)}
+.fred-feed #history {background:var(--desk-card);border-color:var(--desk-line);border-radius:7px}
+.fred-feed main > nav a,.fred-home nav a,.breach-nav a {color:var(--desk-green)}
+.fred-feed label {min-width:0}
+
+/* The same line drawings used in the dataset catalogue. */
+:root {
+  --mark-bank:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m2 9 10-6 10 6z M3 20h18 M6 11v6 M10 11v6 M14 11v6 M18 11v6'/%3E%3C/svg%3E");
+  --mark-bond:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 5h16v12H4z M7 9h10 M7 13h5 M13 17v4l2-1 2 1v-4'/%3E%3C/svg%3E");
+  --mark-chart:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 20h18 M5 16v-5h3v5z M11 16V7h3v9z M17 16V3h3v13z'/%3E%3C/svg%3E");
+  --mark-fx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7h17l-4-4 M21 17H4l4 4 M20 7l-4 4 M4 17l4-4'/%3E%3C/svg%3E");
+  --mark-trade:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12h20 M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z M12 2q-9 10 0 20 9-10 0-20z'/%3E%3C/svg%3E");
+  --mark-home:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 10 9-7 9 7 M5 9v11h5v-7h4v7h5V9'/%3E%3C/svg%3E");
+  --mark-rates:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 3h12l4 4v14H4z M15 3v5h5 M8 12h8 M8 16h6'/%3E%3C/svg%3E");
+  --mark-prices:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 20h18 M5 16l5-6 4 2 6-8 M15 4h5v5'/%3E%3C/svg%3E");
+  --mark-jobs:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8h18v12H3z M8 8V5h8v3 M3 12l9 2 9-2 M10 14v2h4v-2'/%3E%3C/svg%3E");
+  --mark-funding:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 7q3-3 6 0t6 0t8 0 M2 12q3-3 6 0t6 0t8 0 M2 17q3-3 6 0t6 0t8 0'/%3E%3C/svg%3E");
+  --mark-commodity:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 2C9 7 5 11 5 15a7 7 0 0 0 14 0c0-4-4-8-7-13z M9 15a3 3 0 0 0 3 3'/%3E%3C/svg%3E");
+  --topic-mark:var(--mark-chart);
+}
+[data-topic="Banks & lending"],[data-topic="Loans"] {--topic-mark:var(--mark-bank)}
+[data-topic="Credit & bonds"],[data-topic="Credit"] {--topic-mark:var(--mark-bond)}
+[data-topic="Equities"] {--topic-mark:var(--mark-chart)}
+[data-topic="Currencies"],[data-topic="FX"] {--topic-mark:var(--mark-fx)}
+[data-topic="Trade & external accounts"],[data-topic="Trade"] {--topic-mark:var(--mark-trade)}
+[data-topic="Property & housing"],[data-topic="CRE"] {--topic-mark:var(--mark-home)}
+[data-topic="Treasury & government debt"],[data-topic="Rates"] {--topic-mark:var(--mark-rates)}
+[data-topic="Inflation"] {--topic-mark:var(--mark-prices)}
+[data-topic="Economy & jobs"],[data-topic="Growth"] {--topic-mark:var(--mark-jobs)}
+[data-topic="Liquidity & funding"],[data-topic="Liquidity"] {--topic-mark:var(--mark-funding)}
+[data-topic="Commodities"] {--topic-mark:var(--mark-commodity)}
+.fred-home .design:has(a[href="risk-observatory.html"]),.observatory .intro-title {--topic-mark:var(--mark-bank)}
+.fred-home .design:has(a[href="signal-review.html"]),.signal-page .breach-hero {--topic-mark:var(--mark-prices)}
+.fred-home .design:has(a[href="cross-market-replay.html"]),.replay-page .breach-hero {--topic-mark:var(--mark-trade)}
+.hf-landing a[href*="fred-2"],.hf[data-view="2"] {--topic-mark:var(--mark-bond)}
+.hf-landing a[href*="fred-3"],.hf[data-view="3"] {--topic-mark:var(--mark-trade)}
+.fred-feed {--topic-mark:var(--mark-fx)}
+/* Keep marks in reserved heading or value space, clear of controls and plots. */
+:is(.design-copy,.hf-landing a,.event,.hf-kpi .hf-value,.metric-grid .metric-value,.headline-cards .metric-value,.archive-metric-grid .metric-value,.fred-feed #history h2) {position:relative}
+.design-copy,.hf-landing a {padding-right:4.4rem}
+:is(.design-copy,.hf-landing a,.event,.hf-kpi .hf-value,.metric-grid .metric-value,.headline-cards .metric-value,.archive-metric-grid .metric-value,.fred-feed #history h2)::after {
+  content:"";position:absolute;right:.5rem;top:50%;transform:translateY(-50%);
+  width:2.3rem;height:2.3rem;background:var(--desk-green);opacity:.15;mask:var(--topic-mark) center / contain no-repeat;pointer-events:none
+}
+:is(.design-copy,.hf-landing a)::after {width:3.3rem;height:3.3rem;top:1rem;right:1rem;transform:none}
+.hf .hf-landing a {padding-right:5rem}
+.fred-feed #history h2 {padding-right:3rem}
+:is(.chart-head h3,.group-card-head strong,.fred-home .info-card h3,.page-heading .eyebrow,.intro-title .eyebrow,.breach-hero h1,.fred-feed .eyebrow)::before {
+  content:"";display:inline-block;width:.92em;height:.92em;margin-right:.4em;vertical-align:-.03em;
+  background:var(--desk-rust);mask:var(--topic-mark) center / contain no-repeat;pointer-events:none
+}
+.breach-hero h1::before {width:.65em;height:.65em}
+@media (max-width:900px) {
+  :is(.chart-grid,.chart-wall,.event-grid,.research-grid,.market-grid,.fred-home .info-grid,.fred-home .design-grid,.hf .hf-landing),
+  .replay-page :is(.event-grid,.research-grid,.market-grid) {grid-template-columns:minmax(0,1fr)}
+  .hf .hf-grid > .hf-panel {grid-column:1/-1}
+  .fred-home .stamp {background-size:5.2rem 100%;background-position:left;padding:.55rem .8rem .55rem 5.9rem}
+}
+@media (max-width:600px) {
+  :is(.metric-grid,.headline-cards,.archive-metric-grid,.hf-kpis) {grid-template-columns:minmax(0,1fr)}
+  .fred-home .facts {margin:1rem 0}
+  .fred-home header nav,.breach-nav nav {gap:.35rem .8rem}
+  .fred-home .intro-top {gap:.5rem}
+  .breach-page .event {min-height:5.5rem}
+  .hf-panel header :is(h2,h3) {overflow-wrap:anywhere}
+}
+/* Even rows for the eight headline readings and six historical summary metrics. */
+@media (min-width:1101px) {
+  .metric-grid,.headline-cards {grid-template-columns:repeat(4,minmax(0,1fr))}
+  .hf-kpis {grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+.hf-explorer-layout > * {min-width:0}
+.hf-native-source {overflow-wrap:anywhere}
+.fred-feed .controls :is(input,select) {width:100%;min-width:0}
+@media (max-width:600px) {
+  .hf-explorer-layout {grid-template-columns:minmax(0,1fr)}
+  .observatory .masthead {height:auto;min-height:3.5rem;gap:.5rem;flex-wrap:wrap;padding-block:.5rem}
+}
