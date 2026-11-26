@@ -1,0 +1,17 @@
+/* Scoped to the complete-credit-edition reader; other desk cards stay unchanged. */
+#daily-cards .report-card:has(.credit-dashboard-link){cursor:pointer}
+#daily-cards .credit-dashboard-link{font-weight:700;color:#166534}
+#mih-credit-popup{box-sizing:border-box;position:fixed;inset:0;margin:auto;padding:0;width:min(1180px,96vw);max-width:96vw;height:94vh;height:94dvh;max-height:94dvh;overflow:hidden;border:1px solid #d6dfde;border-radius:20px;background:#fefdfb;color:#253238;box-shadow:0 24px 90px #132c3840;font:15px/1.45 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overscroll-behavior:contain}
+#mih-credit-popup[open]{display:flex;flex-direction:column}
+#mih-credit-popup::backdrop{background:#132c3866}
+#mih-credit-popup .credit-popup-head{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 20px;background:#eef2ee;border-bottom:1px solid #d6dfde}
+#mih-credit-popup .credit-popup-kicker{font-size:11px;font-weight:750;letter-spacing:.08em;color:#547076;margin:0 0 3px}
+#mih-credit-popup h2{font-size:clamp(18px,2.3vw,26px);line-height:1.2;margin:0;overflow-wrap:anywhere}
+#mih-credit-popup #mih-credit-popup-cutoff{font-size:12px;margin:5px 0 0;color:#53636a;overflow-wrap:anywhere}
+#mih-credit-popup .credit-popup-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;flex:none}
+#mih-credit-popup .credit-popup-actions>*{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 12px;border:1px solid #a4ab9e;border-radius:9px;font:600 13px/1.2 system-ui,sans-serif;color:#253238;background:white;text-decoration:none;cursor:pointer}
+#mih-credit-popup .credit-popup-direct{color:#166534}
+#mih-credit-popup [data-credit-close]{background:#075f59;color:white;border-color:#075f59}
+#mih-credit-popup iframe{display:block;flex:1 1 auto;min-height:0;width:100%;border:0;background:#fefdfb}
+#mih-credit-popup :focus-visible{outline:3px solid #825500;outline-offset:2px}
+@media(max-width:700px){#mih-credit-popup{width:100vw;max-width:100vw;height:100vh;height:100dvh;max-height:100dvh;border-radius:0;border:0}#mih-credit-popup .credit-popup-head{display:block;padding:12px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left))}#mih-credit-popup .credit-popup-actions{margin-top:8px}#mih-credit-popup .credit-popup-actions>*{flex:1 1 auto;padding:8px 7px}}
