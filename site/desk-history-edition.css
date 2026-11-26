@@ -22,7 +22,16 @@
 .embedded-history :is(.hero-links,#episode-index) a { color: #514761; text-underline-offset: .18em; }
 .embedded-history #episode-index a { background: #faf9f6; border: 1px solid #c9c4cd; border-radius: 4px; padding: .45rem .65rem; }
 .embedded-history .hero-links button { border-color: #52485e; background: #52485e; }
-@media (prefers-reduced-motion: no-preference) {
+@media screen and (prefers-reduced-motion: no-preference) {
+  .core > .panel { --history-slide: clamp(.6rem, 2.6vw, 2.25rem); }
+  .core > .panel:nth-child(even) { --history-slide: clamp(-2.25rem, -2.6vw, -.6rem); }
+  html.desk-motion .core > .desk-enter:not(:focus-within) {
+    animation: history-card-entry .62s cubic-bezier(.21,.71,.25,1) backwards;
+  }
+  @keyframes history-card-entry {
+    from { opacity: .4; transform: translateX(var(--history-slide)); }
+    to { opacity: 1; transform: none; }
+  }
   @supports (animation-timeline: view()) {
     html.desk-motion .episode-head, html.desk-motion .panel > h3 {
       animation: history-entry linear both; animation-timeline: view(); animation-range: entry 0% entry 100%;
