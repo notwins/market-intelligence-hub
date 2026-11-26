@@ -104,12 +104,19 @@
         const segment=previous && p.year===previous.year+1?`<line x1="${x(previous.year)}" x2="${x(p.year)}" y1="${y(previous.value)}" y2="${y(p.value)}" stroke="${colors[i]}" stroke-width="2.7"/>`:'';
         previous=p;
         const title=company(currentIds[i]).name+' · '+date(p.date)+' · '+pct(p.value);
-        return segment+`<circle tabindex="0" aria-label="${escape(title)}" cx="${x(p.year)}" cy="${y(p.value)}" r="4.5" fill="${colors[i]}" stroke="white" stroke-width="1.5"><title>${escape(title)}</title></circle>`;
+        return segment+`<circle tabindex="0" role="button" aria-label="${escape(title)}" cx="${x(p.year)}" cy="${y(p.value)}" r="4.5" fill="${colors[i]}" stroke="white" stroke-width="1.5"><title>${escape(title)}</title></circle>`;
       }).join('');
     }).join('');
     const legend=currentIds.map((id,i)=>`<span><i class="dot" style="${columnColors[i]}"></i>${escape(label(id,i))}</span>`).join('');
-    $('trend').innerHTML=`<svg viewBox="0 0 480 161" role="group" aria-label="${escape(M.labels[key])} by fiscal year">${grid}${years}${lines}</svg><div class="chart-legend">${legend}</div>`;
+    $('trend').innerHTML=`<svg viewBox="0 0 480 161" role="group" aria-label="${escape(M.labels[key])} by fiscal year">${grid}${years}${lines}</svg><div class="chart-legend">${legend}</div><output class="trend-readout" aria-live="polite"></output>`;
   }
+  function showTrendPoint(event) {
+    const point=event.target.closest('circle[aria-label]');
+    if(!point || (event.type==='keydown' && !['Enter',' '].includes(event.key)))return;
+    if(event.type==='keydown')event.preventDefault();
+    $('trend').querySelector('.trend-readout').textContent=point.getAttribute('aria-label');
+  }
+  for(const event of ['click','focusin','keydown']) $('trend').addEventListener(event,showTrendPoint);
   function tableHead(companies,title) {
     return `<caption class="sr-only">${title}</caption><thead class="sr-only"><tr><th scope="col">Measure</th>${companies.map(c=>`<th scope="col">${escape(c.name)}</th>`).join('')}</tr></thead>`;
   }
