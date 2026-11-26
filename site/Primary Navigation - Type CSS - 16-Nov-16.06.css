@@ -232,7 +232,8 @@ html[data-nav-size=compact] .bottom-nav.hub-primary {
 .tool-links > a[href*="cpf-life-ra.html"] { --tool-fill:#f1f8f3; --tool-ink:#285b48; --tool-line:#aacabb; --hub-mark:var(--hub-mark-maroon); }
 .tool-links > a[href*="portfolio-simulation"] { --tool-fill:#f2f7fc; --tool-ink:#244d6a; --tool-line:#a9c4d8; --hub-mark:var(--hub-mark-blue); }
 .tool-links > a[href*="tools/xau-fcn.html"], .tool-links > a[href*="tools/gld-accumulator.html"], .tool-links > a[href*="tools/gold-charts.html"] { --tool-fill:#fdf5ed; --tool-ink:#7b491f; --tool-line:#ddba98; --hub-mark:var(--hub-mark-gold); }
-.tool-links > a.tool-link strong { color:var(--tool-ink); }
+.tool-links > a.tool-link strong { color:var(--tool-ink); align-items:center; justify-content:flex-start; }
+.tool-links > a.tool-link strong > span[aria-hidden="true"]:last-child { margin-inline-start:auto; }
 :is(.tool-links > a.tool-link, .rail-group > a, .rail-group > button, .rail nav details > summary, .hub-extra-links > summary, #section-jump-panel, #section-jump .section-jump-list button) { position:relative; isolation:isolate; }
 :is(.tool-links > a.tool-link, .rail-group > a, .rail-group > button, .rail nav details > summary, .hub-extra-links > summary, #section-jump-panel, #section-jump .section-jump-list button)::before {
   content:""; position:absolute; z-index:-1; pointer-events:none; right:10px; top:50%; transform:translateY(-50%); width:38px; height:38px;
