@@ -52,7 +52,10 @@ jobs:
           manifest = json.loads((root/'manifest.json').read_text())
           latest = json.loads((root/manifest['latest']['path']).read_text())
           failures = {k:v['status'] for k,v in latest['quotes'].items() if v['status'] in ('fetch_failed','basis_review')}
+          unverified = {k:v['date'] for k,v in latest['quotes'].items() if v['status'] == 'source_unverified'}
           print('Exceptions:', failures)
+          if unverified:
+              print(f'::warning title=Unverified index source::Retained verified closes for {unverified}')
           if failures:
               raise SystemExit('Some instruments need attention; prior valid closes were retained with their actual dates.')
           PY
