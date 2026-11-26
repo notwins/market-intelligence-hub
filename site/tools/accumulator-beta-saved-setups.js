@@ -54,18 +54,28 @@
       button.addEventListener('click', handler);
       return button;
     }
-    function saveRecord(snapshot, name, parent, feedback = status) {
-      const saved = entries();
-      const date = new Date().toISOString();
-      const id = crypto.randomUUID?.() || date + '-' + Math.random().toString(36).slice(2);
-      const record = {id, date, description: name.trim(), ...snapshot};
-      if (parent) {
-        const familyId = parent.familyId || parent.id;
-        const latest = saved.reduce((highest, item) => (item.familyId || item.id) === familyId
-          ? Math.max(highest, versionOfRecord(item)) : highest, versionOfRecord(parent));
-        Object.assign(record, {familyId, version: latest + 1, parentId: parent.id, parentTitle: titleOf(parent)});
+    async function updateLibrary(update) {
+      try {
+        const operation = () => update(entries());
+        return navigator.locks ? await navigator.locks.request(prefix + 'setups', operation) : operation();
+      } catch {
+        return null;
       }
-      if (!write('setups', [record, ...saved])) {
+    }
+    async function saveRecord(snapshot, name, parent, feedback = status) {
+      const record = await updateLibrary(saved => {
+        const date = new Date().toISOString();
+        const id = crypto.randomUUID?.() || date + '-' + Math.random().toString(36).slice(2);
+        const copy = {id, date, description: name.trim(), ...snapshot};
+        if (parent) {
+          const familyId = parent.familyId || parent.id;
+          const latest = saved.reduce((highest, item) => (item.familyId || item.id) === familyId
+            ? Math.max(highest, versionOfRecord(item)) : highest, versionOfRecord(parent));
+          Object.assign(copy, {familyId, version: latest + 1, parentId: parent.id, parentTitle: titleOf(parent)});
+        }
+        return write('setups', [copy, ...saved]) ? copy : null;
+      });
+      if (!record) {
         feedback.textContent = 'This browser could not save the setup. Check that site storage is available.';
         return null;
       }
@@ -145,9 +155,11 @@
           feedback.setAttribute('role', 'status');
           buttons.append(save, cancel);
           editor.append(label, buttons, feedback);
-          editor.addEventListener('submit', event => {
+          editor.addEventListener('submit', async event => {
             event.preventDefault();
-            saveRecord({setup, style: record.style, layouts: record.layouts}, input.value, record, feedback);
+            save.disabled = true;
+            await saveRecord({setup, style: record.style, layouts: record.layouts}, input.value, record, feedback);
+            save.disabled = false;
           });
           actions.hidden = true;
           actions.after(editor);
@@ -155,9 +167,12 @@
         });
         edit.setAttribute('aria-label', 'Edit description for ' + title + ', ' + time.textContent);
         const remove = action('Remove', () => {
-          const confirm = action('Confirm remove', () => {
-            if (!write('setups', entries().filter(item => item.id !== record.id))) {
+          const confirm = action('Confirm remove', async () => {
+            confirm.disabled = true;
+            const removed = await updateLibrary(saved => write('setups', saved.filter(item => item.id !== record.id)));
+            if (!removed) {
               status.textContent = 'This browser could not update saved setups.';
+              confirm.disabled = false;
               return;
             }
             showList();
@@ -205,18 +220,22 @@
       showWorkingSetup();
       description.focus();
     });
-    form.addEventListener('submit', event => {
+    form.addEventListener('submit', async event => {
       event.preventDefault();
       const setup = window.AccumulatorBetaScenario.capture();
       if (!setup) return;
       const style = window.AccumulatorBetaAppearance.current();
       const layouts = window.AccumulatorBetaTable.captureLayouts();
-      const record = saveRecord({setup, style, layouts}, description.value, loaded);
+      const parent = loaded;
+      const name = description.value;
+      saveButton.disabled = true;
+      const record = await saveRecord({setup, style, layouts}, name, parent);
+      saveButton.disabled = false;
       if (!record) return;
-      if (loaded) {
+      if (parent && loaded === parent) {
         loaded = record;
         showWorkingSetup();
-      } else description.value = '';
+      } else if (!parent && description.value === name) description.value = '';
     });
     window.addEventListener('storage', event => {
       if (dialog.open && !list.querySelector('.beta-setup-description-edit') &&
