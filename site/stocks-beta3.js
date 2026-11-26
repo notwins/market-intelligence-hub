@@ -174,10 +174,20 @@
       }
       const current=c.current[i],annual=c.years[i];
       const record=c.records[i];
+      const comparativeBalances=(record?.observations||[]).flatMap(o=>[
+        {end:o.priorQuarterBalanceEnd,fields:o.priorQuarterBalance},
+        {end:o.priorBalanceEnd,fields:o.priorBalance}
+      ]).filter(item=>item.end&&item.fields);
       const history=c.isQuarter?Array.from(c.indexes[i]).filter(([key])=>key<=c.calendar).sort(([a],[b])=>a.localeCompare(b)).slice(-8).map(([key,observation])=>{
-        const view=Q.view(record,{model:co.model,observation,growthBasis:state.growth});
-        return {label:Q.labelQuarter(key),end:observation.end,periodLabel:view?.periodLabel,
-          values:USD.valuesInUsd(state.fx,view?.values||{},co.currency,observation.end||quarterEnd(key))};
+        const supplement=[...comparativeBalances,c.notes[i].current].find(source=>{
+          if(!source?.end||source.end.slice(0,4)+'-Q'+Math.ceil(Number(source.end.slice(5,7))/3)!==key)return false;
+          return USD.matchedBalance({...observation,end:observation.end||source.end},source);
+        });
+        const view=Q.view(record,{model:co.model,observation,
+          balanceFields:supplement?.fields,growthBasis:state.growth});
+        const details=D.quarterView(state.quarterDetails,c.ids[i],co,view,key);
+        return {label:Q.labelQuarter(key),end:details.end||supplement?.end,periodLabel:view?.periodLabel,
+          values:USD.valuesInUsd(state.fx,details.hasQuarter?details.v:view?.values||{},co.currency,details.end||supplement?.end||quarterEnd(key))};
       }):[];
       const translated=USD.valuesInUsd(state.fx,values,co.currency,columnEnd(c,i));
       const missing={};

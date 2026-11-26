@@ -304,7 +304,7 @@
 .sq-card:is(.sq-size-assets,.sq-size-liabilities,.sq-size-revenue,.sq-size-cash,.sq-size-income,.sq-sales-share) h3 {margin-bottom:0;}
 .sq-card:is(.sq-size-assets,.sq-size-liabilities,.sq-revenue-area) {--sq-strong:#477190;--sq-mid:#9bb8cb;--sq-wash:#eef4f9;--sq-dark:#375c74;}
 .sq-card:is(.sq-size-income,.sq-sales-share) {--sq-strong:#5c679f;--sq-mid:#aab2d3;--sq-wash:#f0f0f8;--sq-dark:#454975;}
-.sq-revenue-area {grid-column:1/-1;}
+.sq-revenue-area {grid-column:1/-1;scroll-margin-top:calc(var(--hub-primary-height,52px) + var(--company-head-height,55px) + 8px);}
 .sq-area-inner {padding-left:56px;}
 .sq-area-inner .sq-trend-plot {height:225px;}
 .sq-area-gap {position:absolute;left:var(--tick);height:100%;top:0;width:1px;opacity:.8;border-left:1px dashed #82948f;}
@@ -328,3 +328,6 @@
   .sq-area-inner .sq-trend-plot {height:159px;}
   .sq-area-inner .sq-scatter-x .sq-minor {display:none;}
 }
+.sq-area-controls {display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;}
+.sq-area-units {padding-inline-start:9px;border-inline-start:1px solid var(--sq-rule);}
+@media (max-width:480px) {.sq-area-units {padding-inline-start:0;border-inline-start:0;}}

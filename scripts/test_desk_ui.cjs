@@ -525,5 +525,29 @@ test('Quarterly geography compares like scope across matching three-month window
  assert.equal(region(withZero,'usa').change,null);
 });
 
+test('Stacked USD and share views keep a fixed set of direct peers, gaps and signed income',()=>{
+ const {peerStack,stackSamples}=require('../site/stocks-beta3-quarterly-charts.js');
+ const q=[8104,8105,8106,8107]; // 2026 Q1–Q4
+ const row=(i,values,bonus=false)=>({i,ticker:'C'+i,company:{isBonus:bonus},
+   history:new Map(values.map((value,j)=>[q[j],{values:{netIncome:value,assets:value===null?null:Math.abs(value)*10}}]))});
+ const rows=[row(0,[90,null,60,-20]), row(1,[-10,30,40,80]),row(2,[null,300,null,null]),row(3,[999,999,999,999],true)];
+ const dollars=peerStack(rows,'netIncome','usd','Q4 2026');
+ const share=peerStack(rows,'netIncome','share','Q4 2026');
+ assert.deepEqual(dollars.cohort.map(r=>r.i),[0,1]);
+ assert.deepEqual(share.cohort.map(r=>r.i),[0,1]);
+ assert.deepEqual(dollars.quarters[0],{total:80,values:[90,-10]});
+ assert.equal(dollars.quarters[1].reason,'Missing comparable figure');
+ assert.deepEqual(share.quarters[3],{total:60,values:[-20,80]});
+ assert.deepEqual(share.quarters[0].values,[90,-10]);
+ const mid=stackSamples(share.quarters,true).find(p=>p?.x>2&&p.x<3);
+ assert.deepEqual(mid.values,[0,100]);
+ assert.equal(stackSamples(share.quarters,true)[1],null);
+ const assets=peerStack(rows,'assets','share','Q3 2026');
+ assert.equal(assets.slots.at(-1).label,'Q3 2026');
+ assert.deepEqual(assets.quarters.at(-1).values,[60,40]);
+ const zero=peerStack([row(0,[0,0]),row(1,[0,0])],'netIncome','share','Q2 2026');
+ assert.deepEqual(zero.quarters[0],{total:0,reason:'Peer total is zero'});
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
