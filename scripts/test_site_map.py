@@ -59,7 +59,7 @@ class SiteMapTests(unittest.TestCase):
                 self.assertIn('src="tools/accumulator-beta-icon.svg"', picture)
             else:
                 self.assertIn(routes[href], keys)
-                self.assertIn('navigation-atlas.svg#' + routes[href] + '"', picture, href)
+                self.assertIn('navigation-atlas.svg?v=2#' + routes[href] + '"', picture, href)
 
     def test_native_tree_and_accessible_controls(self):
         details = [a for t, a in self.parsed.tags if t == 'details']
