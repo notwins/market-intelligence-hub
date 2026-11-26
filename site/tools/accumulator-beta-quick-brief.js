@@ -65,7 +65,8 @@
           implications: read('.nv-fundamentals-implied > span'),
           sensitivity: Array.from(fundamentals.querySelectorAll('.nv-fundamentals-sensitivity table tr'), row => ({
             cells: Array.from(row.cells, cell => cell.textContent.trim()),
-            aboveBenchmark: row.hasAttribute('data-above-benchmark')
+            aboveBenchmark: row.hasAttribute('data-above-benchmark'),
+            crossover: row.hasAttribute('data-crossover')
           })),
           sensitivityBasis: read('.nv-fundamentals-sensitivity-basis'),
           sensitivityComparison: read('.nv-fundamentals-sensitivity-comparison')
@@ -376,21 +377,26 @@
           cards(fundamentals.ratios.slice(0, 3));
           const [, book] = fundamentals.ratios[3];
           const balance = fundamentals.balance + (book === '—' ? '' : ' Price to book at the test price is ' + book + '.');
-          for (const paragraph of [balance, fundamentals.earnings, fundamentals.implications]) {
+          const hasCrossover = fundamentals.sensitivity.some(row => row.crossover);
+          for (const paragraph of [balance, fundamentals.earnings, hasCrossover ? '' : fundamentals.implications]) {
+            if (!paragraph) continue;
             space(22, title);
             y = wrap(paragraph, margin, y, width, 9.6) + 4;
           }
           if (fundamentals.sensitivity.length) {
             const sensitivityTitle = 'If earnings and free cash flow fall';
-            space(50, sensitivityTitle);
+            space(25 + 5 * fundamentals.sensitivity.length, sensitivityTitle);
             text(sensitivityTitle, margin, y + 4, 13, 'ink', {weight:'bold', family:'times'});
             y = wrap(fundamentals.sensitivityBasis, margin, y + 7, width, 9.3, 'muted') + 2;
-            fundamentals.sensitivity.forEach(({cells, aboveBenchmark}, index) => {
-              if (index === 0 || aboveBenchmark) fill(index === 0 ? 'soft' : 'tertiaryLight', margin, y, width, 5);
-              const weight = index === 0 ? 'bold' : 'normal';
-              text(cells[0], margin + 2, y + 3.5, 9.3, 'ink', {weight});
-              text(cells[1], margin + width * .66, y + 3.5, 9.3, 'ink', {weight, align:'right'});
-              text(cells[2], w - margin - 2, y + 3.5, 9.3, 'ink', {weight, align:'right'});
+            const rightEdges = [.44, .65, .81, 1];
+            fundamentals.sensitivity.forEach(({cells, aboveBenchmark, crossover}, index) => {
+              const shade = index === 0 ? 'soft' : crossover ? 'secondaryLight' : aboveBenchmark ? 'tertiaryLight' : null;
+              if (shade) fill(shade, margin, y, width, 5);
+              const weight = index === 0 || crossover ? 'bold' : 'normal';
+              const tone = crossover ? 'secondary' : 'ink';
+              text(cells[0], margin + 2, y + 3.5, 9.3, tone, {weight});
+              cells.slice(1).forEach((value, column) => text(value, margin + width * rightEdges[column] - 2,
+                y + 3.5, 9.3, tone, {weight, align:'right'}));
               y += 5;
               rule('line', margin, y, w - margin);
             });
