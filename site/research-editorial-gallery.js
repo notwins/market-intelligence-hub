@@ -3,15 +3,15 @@ const library = document.querySelector('[data-library-ready]');
 const base = new URL('./', import.meta.url);
 const style = document.createElement('link');
 style.rel = 'stylesheet';
-style.href = new URL('research-editorial-gallery.css?v=1', base);
+style.href = new URL('research-editorial-gallery.css?v=2', base);
 document.head.append(style);
 const sections = [
-  ['main-published-research', 'Latest reports', 'briefing'],
-  ['my-thoughts', 'My thoughts', 'pen'],
-  ['library-all', 'All editions', 'archive'],
-  ['library-news', 'Reuters briefs', 'wire'],
-  ['library-older', 'Earlier research', 'folio'],
-  ['library-basics', 'Market basics', 'book']
+  ['main-published-research', 'Latest reports'],
+  ['my-thoughts', 'My thoughts'],
+  ['library-all', 'All editions'],
+  ['library-news', 'Reuters briefs'],
+  ['library-older', 'Earlier research'],
+  ['library-basics', 'Market basics']
 ];
 
 const themes = [
@@ -92,26 +92,21 @@ function decorateCard(card) {
   card.style.setProperty('--research-ink', ink);
   card.style.setProperty('--research-tint', tint);
   if (!hasOriginal) card.prepend(cover);
-  else card.querySelector('h3').prepend(icon(mark, 'research-existing-icon'));
+  // The heading receives its destination icon from the shared workspace navigation.
 }
 
 const nav = document.createElement('nav');
 nav.className = 'research-collection-rail';
 nav.setAttribute('aria-label', 'Browse research collections');
-const links = sections.map(([id, label, symbol]) => {
+const links = sections.map(([id, label]) => {
   const a = document.createElement('a');
   a.href = '#' + id;
-  a.append(icon(symbol, 'research-rail-icon'), document.createTextNode(label));
+  a.textContent = label;
   nav.append(a);
   return [document.getElementById(id), a];
 });
 library.querySelector('.library-entry').after(nav);
 library.classList.add('research-gallery');
-
-for (const [id, , symbol] of sections) {
-  const heading = document.querySelector('#' + id + ' > summary, #' + id + ' > .mu-writeups-heading h2');
-  if (heading) heading.prepend(icon(symbol, 'research-heading-icon'));
-}
 
 library.querySelectorAll(cardSelector).forEach(decorateCard);
 new MutationObserver(records => {

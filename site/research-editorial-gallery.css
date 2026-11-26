@@ -20,7 +20,7 @@
 .research-gallery .research-collection-rail a:is(:hover,[aria-current]) {
   color:#36513f; background:#e4ebdd; border-color:#b8c7b3;
 }
-.research-rail-icon,.research-heading-icon,.research-cover-icon,.research-existing-icon {
+.research-cover-icon {
   flex:none; width:1.42rem; height:1.42rem; color:inherit;
   --art-wash:#cad6bf; --art-paper:#f8f7f2; --art-ink:currentColor;
   --nav-fill:#cbd8c5; --nav-paper:#f8f7f2; --nav-ink:currentColor;
@@ -30,9 +30,6 @@
 }
 .research-gallery :is(.mu-writeups,.library-group,#my-research,.mu-chapter) {
   scroll-margin-top:calc(var(--hub-primary-height,54px) + 3.9rem);
-}
-.research-gallery .research-heading-icon {
-  width:1.8rem; height:1.8rem; margin-inline-end:.55rem; color:#765748; vertical-align:middle;
 }
 .research-gallery .library-group > summary { background:#f0eee4; border-radius:5px; }
 .research-gallery .library-group > summary strong { vertical-align:middle; }
@@ -75,7 +72,6 @@ html.ws-blog .research-gallery .mu-writeups .mu-writeup[data-cover-design]:hover
 }
 .research-gallery [data-cover-frame="1"] .research-cover-icon { right:auto; left:.66rem; }
 .research-gallery [data-cover-frame="2"] .research-cover-icon { bottom:auto; top:.68rem; }
-.research-gallery .research-existing-icon { margin-inline-end:.4em; vertical-align:middle; color:var(--research-ink); }
 html.ws-blog .research-gallery #my-thoughts .mu-writeup[data-cover-design] {
   background-color:#fffbf0; background-image:repeating-linear-gradient(0deg,transparent 0 27px,#eae3c9 28px);
 }
@@ -118,7 +114,6 @@ html.ws-blog .research-gallery #my-research .rr-results {
 }
 @media(max-width:850px) {
   .research-gallery .research-collection-rail a { padding:.25rem .53rem; font-size:.82rem; }
-  .research-gallery .research-heading-icon { width:1.5rem; height:1.5rem; }
 }
 @media(max-width:580px) {
   html.ws-blog .research-gallery #my-research .rr-results { grid-template-columns:minmax(0,1fr); }
@@ -127,5 +122,4 @@ html.ws-blog .research-gallery #my-research .rr-results {
   .research-gallery .library-group > summary span { margin-inline-start:0; }
 }
 @media print {
- .research-gallery .research-collection-rail,.research-gallery .research-cover,.research-gallery .research-heading-icon,.research-gallery .research-existing-icon { display:none!important; }
-}
+ .research-gallery .research-collection-rail,.research-gallery .research-cover,.research-gallery .research-heading-icon,}
