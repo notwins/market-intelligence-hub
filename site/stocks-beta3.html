@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Compare annual filings, financial statements and fundamentals for the Market Intel Top 110 and their industry peers.">
+  <title>Shares Beta 3 · 10-K &amp; annual filings · Market Intel</title>
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="stocks-beta.css">
+  <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
+  <link rel="stylesheet" href="stocks-beta3.css?v=1">
+  <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
+  <script defer src="content-source.js"></script>
+  <script defer src="stocks-beta3-model.js?v=1"></script>
+  <script defer src="stocks-beta3.js?v=1"></script>
+</head>
+<body class="filings-page">
+  <a class="skip" href="#main">Skip to filing comparison</a>
+  <header class="sb-mast"><a href="desk.html"><b>M.</b> MARKET INTEL</a><nav aria-label="Shares pages"><a href="stocks-beta.html">Shares</a><a href="stocks-beta2.html">Stocks Beta 2</a></nav></header>
+  <main id="main" class="filings-main">
+    <header class="filings-intro">
+      <div><p class="section-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg> Shares Beta 3</p>
+        <h1>10-K &amp; annual filings</h1></div>
+      <nav class="section-links" aria-label="Filing comparison sections"><a href="#statements">Financial statements</a><a href="#checklist">Fundamentals checklist <span aria-hidden="true">↓</span></a></nav>
+    </header>
+    <p id="load-status" role="status">Loading annual filings…</p><button id="retry" type="button" hidden>Retry loading filings</button>
+    <div id="filing-app" hidden>
+      <section class="filing-controls panel" aria-label="Comparison settings">
+        <div class="control-group"><span id="focus-label">Focus company</span><button id="choose-company" class="picker-control" type="button" aria-haspopup="dialog" aria-labelledby="focus-label focus-name"><strong id="focus-name"></strong><span aria-hidden="true">⌄</span></button></div>
+        <div class="control-group peer-control"><span id="peer-label">Competitors</span><button id="choose-peers" class="picker-control" type="button" aria-haspopup="dialog" aria-labelledby="peer-label peer-name"><span id="peer-name"></span><span class="edit-affordance">Edit</span></button></div>
+        <label class="control-group">Fiscal period<select id="period"><option value="latest">Latest reported</option></select></label>
+      </section>
+      <section id="comparison" aria-label="Company comparison">
+        <div class="sticky-companies"><div class="horizontal" id="company-scroll" tabindex="0" aria-label="Company columns, horizontal scroll"><div class="compare-grid company-grid" id="companies"></div></div></div>
+        <section class="charts-grid" aria-label="Filing charts">
+          <article class="panel chart-panel"><header><h2>Peer comparison</h2><label class="sr-only" for="bar-metric">Peer comparison metric</label><select id="bar-metric"></select></header><div id="bars"></div></article>
+          <article class="panel chart-panel"><header><h2>Annual trend</h2><label class="sr-only" for="trend-metric">Annual trend metric</label><select id="trend-metric"></select></header><div id="trend"></div></article>
+        </section>
+        <section class="filing-section" id="statements"><header class="block-heading"><h2>Financial statements</h2><label>Units <select id="units"><option value="bn">Billions</option><option value="mn">Millions</option></select></label></header>
+          <div class="table-panel panel horizontal" id="statement-scroll" tabindex="0" aria-label="Financial statement columns, horizontal scroll"><table id="statement-table"><caption class="sr-only">Annual financial statements and ratios by company</caption></table></div>
+        </section>
+        <section class="filing-section" id="checklist"><header class="block-heading"><h2>Fundamentals checklist</h2></header>
+          <div class="check-result" id="check-result" aria-live="polite"></div>
+          <div class="table-panel panel horizontal" id="check-scroll" tabindex="0" aria-label="Fundamentals checklist columns, horizontal scroll"><table id="check-table"><caption class="sr-only">Fundamentals checklist results by company</caption></table></div>
+        </section>
+      </section>
+      <footer id="filing-footer"><h2>Sources &amp; methodology</h2><div id="sources"></div>
+        <details class="method"><summary>How the comparison works</summary><div id="method-text"></div></details>
+      </footer>
+    </div>
+  </main>
+  <dialog id="picker" aria-labelledby="picker-title"><div class="dialog-inner">
+    <header><h2 id="picker-title">Choose a company</h2><button type="button" id="close-picker" aria-label="Close">×</button></header>
+    <label for="company-search">Company or ticker</label><input id="company-search" type="search" autocomplete="off" placeholder="Search companies">
+    <div id="peer-draft"></div><div id="picker-list" class="picker-list"></div>
+    <div class="picker-actions" id="picker-actions"><button type="button" id="auto-peers">Use automatic peers</button><button type="button" class="apply" id="apply-peers">Apply peers</button></div>
+  </div></dialog>
+</body>
+</html>
