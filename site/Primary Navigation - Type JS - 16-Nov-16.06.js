@@ -85,6 +85,7 @@
   const credit = ['Bonds & credit', 'v4.html#credit', '▤'];
   const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
   const filingsLink = ['Shares Beta 3 · 10-K filings', 'stocks-beta3.html', '▤'];
+  const nvidiaHistory = ['NVIDIA Historical', 'nvda-history.html', '↗'];
   const siPrivateLink = ['SI Private', 'https://si-private.winstonnggw.chatgpt.site/', '🔒'];
   const accumulatorBeta = ['NVDA Accumulator Beta 2', 'tools/accumulator-beta.html', {src:'tools/accumulator-beta-icon.svg'}];
   const watchlist = ['Bonds & shares watchlist', 'v4.html#watchlist'];
@@ -119,7 +120,7 @@
       ['Gold charts', 'tools/gold-charts.html'],
       ['SI pricing data', 'v4.html#history/si'], ['SI 2 data', 'si-beta2.html#si-library'],
       ['Yield history', 'v4.html#history/yield'], ['Historical curves', 'v4.html#history/curves'],
-      ['FX history', 'v4.html#history/fx'], ['Share prices', 'v4.html#history/shares'],
+      ['FX history', 'v4.html#history/fx'], ['Share prices', 'v4.html#history/shares'], nvidiaHistory,
       ['Event studies', 'v4.html#history/beta2-shares'], ['History pivot', 'v4.html#history/beta4-shares'],
       ['SPX index', 'v4.html#history/spx'], ['Historical FRED', 'historical-fred.html']
     ], 'rose'],
@@ -149,7 +150,7 @@
     ['Shares', [
       ['Stocks BETA', 'stocks-beta.html', '▥'],
       ['Stocks BETA 2', 'stocks-beta2.html', '▥'],
-      filingsLink,
+      filingsLink, nvidiaHistory,
       ['SI pricing', 'v4.html#history/si', '▧'],
       ['SI beta 2', 'si-beta2.html#si-library', '▧']
     ]],
@@ -165,7 +166,7 @@
   ]);
   const routeTones = [
     [/^tools\/accumulator(?:-beta|-capital|-3d|-si-flow)?\.html$/, 'green'],
-    [/^(?:stocks-beta[23]?\.html|bos-monthly\.html|si-beta2\.html|desk\.html#(?:stock-moves|main-company-cards)|v4\.html#history\/(?:shares|si|spx|beta[24]-shares))/, 'green'],
+    [/^(?:stocks-beta[23]?\.html|bos-monthly\.html|si-beta2\.html|nvda-history\.html|desk\.html#(?:stock-moves|main-company-cards)|v4\.html#history\/(?:shares|si|spx|beta[24]-shares))/, 'green'],
     [/^(?:bonds-beta\.html|bond-cashflow\.html|desk\.html#(?:market-bonds|yield-curves)|v4\.html#(?:credit|ust|history\/(?:yield|curves)))/, 'maroon'],
     [/^(?:fred\/|(?:historical-fred|fred-[123]|fred-feed)\.html)/, 'purple'],
     [crossMarketRoute, 'rose'],
@@ -380,7 +381,7 @@
     const relative = pagePath;
     const route = location.hash || '#overview';
     const onWorkspace = relative === 'v4.html';
-    const shares = ['stocks-beta.html', 'stocks-beta2.html', 'stocks-beta3.html', 'bos-monthly.html', 'si-beta2.html'].includes(relative)
+    const shares = ['stocks-beta.html', 'stocks-beta2.html', 'stocks-beta3.html', 'bos-monthly.html', 'si-beta2.html', 'nvda-history.html'].includes(relative)
       || (onWorkspace && route === '#history/si');
     const tools = relative.startsWith('tools/') || (onWorkspace && route === '#tools');
     root.classList.toggle('hub-tools-nav', tools);
