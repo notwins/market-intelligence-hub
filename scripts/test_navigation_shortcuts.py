@@ -25,9 +25,13 @@ class NavigationShortcutsTests(unittest.TestCase):
  def test_map_targets_exist_and_match_live_route_tabs(self):
   p=Links();p.feed((ROOT/'site-map.html').read_text())
   config=ROOT/'data/blueprint-access.json';owner=json.loads(config.read_text())['owner_url'] if config.exists() else None
+  loader=(ROOT/'site-navigation.js').read_text(encoding='utf-8')
+  external_tools=set(json.loads(loader.split('const externalTools = new Set(',1)[1].split(');',1)[0]))
+  self.assertEqual(len(external_tools),8)
+  self.assertTrue(external_tools.issubset(p.links))
   for href in p.links:
    if href.startswith('https://'):
-    self.assertEqual(href,owner,'Only the configured protected owner entry may be external');continue
+    self.assertIn(href,external_tools | {owner});continue
    path,_,anchor=href.partition('#');self.assertTrue((ROOT/path).exists(),href)
    if path=='v4.html' and anchor:self.valid_route(anchor)
   tools=(ROOT/'v4-tools.js').read_text()
