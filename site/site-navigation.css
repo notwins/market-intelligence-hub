@@ -46,7 +46,7 @@
   width:34px; height:34px; border:0; background:transparent; padding:0;
 }
 #hub-map-dialog .map-link .node-icon:has(.destination-picture) { width:29px; height:29px; display:inline-flex; }
-#hub-map-dialog :is(.family-icon,.node-icon) svg.destination-picture { width:100%; height:100%; }
+#hub-map-dialog :is(.family-icon,.node-icon) .destination-picture { width:100%; height:100%; stroke:none; }
 #hub-map-dialog .map-link:hover .map-title { text-decoration:underline; text-underline-offset:3px; }
 @media(max-width:650px) {
   #hub-map-dialog .map-link .node-icon:has(.destination-picture) { width:25px; height:25px; }
