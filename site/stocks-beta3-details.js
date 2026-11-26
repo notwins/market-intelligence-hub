@@ -6,6 +6,8 @@
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const $=id=>document.getElementById(id);
   const keyFor=(kind,row)=>'mix-'+kind+'-'+row.type+'-'+row.name.toLowerCase();
+  const sharePercent=new Intl.NumberFormat('en-SG',{style:'percent',maximumFractionDigits:0});
+  const displayShare=value=>F(value)?sharePercent.format(Math.abs(value)<.5?0:value/100):'—';
   const geographyModes=['grouped','grouped-detail'];
   const geoMode=()=>$('geo-filter').value;
   const grouped=()=>geographyModes.includes(geoMode());
@@ -37,7 +39,7 @@
   const growthClass=change=>change?.value>0?'gain':change?.value<0?'loss':'';
   function quarterGeography(c,h) {
     if(!c.isQuarter)return null;
-    const {row,text,show,amount,pct,fmtDate,quarterPct,growthBasis}=h;
+    const {row,text,show,amount,fmtDate,quarterPct,growthBasis}=h;
     const views=c.quarterNotes;
     const mode=$('mix-units').value;
     const geographic=views.map(v=>v.geo.geography);
@@ -50,7 +52,7 @@
         if(!cell)return '—';
         const change=grouped()?cell.change:G.reportedChange(views[i],cell.label);
         const tip=cell.label+(change?' · Compared with '+fmtDate(change.end):'');
-        const share=pct(cell.p);
+        const share=displayShare(cell.p);
         return {main:mode==='share'?share:amount(cell.n,i,views[i].end),
           sub:mode==='both'?share:'',growth:growthText(change,quarterPct)+' '+label,growthClass:growthClass(change),tip};
       });
@@ -80,8 +82,8 @@
     }
     function valueMix(cell,style,i){
       if(!cell)return '—';
-      if(style==='share')return {main:pct(cell.p),tip:cell.label};
-      return {main:amount(cell.n,i),sub:style==='both'&&F(cell.p)?pct(cell.p):'',tip:cell.label};
+      if(style==='share')return {main:displayShare(cell.p),tip:cell.label};
+      return {main:amount(cell.n,i),sub:style==='both'&&F(cell.p)?displayShare(cell.p):'',tip:cell.label};
     }
     const mixMode=$('mix-units').value;
     for(const [kind,title] of Object.entries(D.kinds)){
@@ -222,13 +224,13 @@
         change:showGrowth?G.reportedChange(view,item.label):null}));
     const positive=items.filter(item=>item.value>0&&(!groupedGeography||item.depth===0));
     const sum=positive.reduce((total,item)=>total+item.value,0);
-    const segment=positive.map(it=>'<i title="'+esc(it.label+' · '+h.pct(it.p))+'" style="width:'+
+    const segment=positive.map(it=>'<i title="'+esc(it.label+' · '+displayShare(it.p))+'" style="width:'+
       (it.value/sum*100)+'%;background:'+color(it)+'"></i>').join('');
     const body=items.map(item=>'<tr'+(groupedGeography?' class="annual-geo-'+item.depth+'"':'')+'><th scope="row">'+
       (!groupedGeography||item.depth===0?'<span class="annual-dot" style="--dot:'+color(item)+'" aria-hidden="true"></span>':'')+
       '<span class="filing-row-label">'+(kind==='geography'?Marks.geography(item.label):'')+
       '<span>'+esc(item.label)+'</span></span></th><td'+(item.source?' title="'+esc(item.source)+'"':'')+'>'+esc(usdAmount(usd(item.value,rate),h))+
-      '</td><td>'+percent(item.p,h.pct)+'</td>'+
+      '</td><td>'+percent(item.p,displayShare)+'</td>'+
       (showGrowth?'<td class="geography-change '+growthClass(item.change)+'"'+
         (item.change?' title="'+esc('Compared with '+h.fmtDate(item.change.end))+'"':'')+'>'+esc(growthText(item.change,h.pct))+'</td>':'')+'</tr>').join('');
     return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+
