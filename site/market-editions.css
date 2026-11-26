@@ -1,0 +1,158 @@
+/* Shared editorial treatment for the equity and fixed-income desks. */
+@font-face {
+  font-family: "Market Edition Serif";
+  src: url("assets/desk/stix-two-text.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Market Edition Sans";
+  src: url("assets/desk/dm-sans.woff2") format("woff2");
+  font-display: swap;
+}
+:root {
+  --edition-serif: "Market Edition Serif", Georgia, serif;
+  --edition-sans: "Market Edition Sans", system-ui, sans-serif;
+  --edition-ticker: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 16h18v4H3z M5 15V9h2V6h2v3h2v6 M14 5h6v7h-6z M15 3v2m3-2v2 M6 18h3m3 0h2'/%3E%3C/svg%3E");
+  --edition-chart: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 3v17h18 M6 15l4-5 4 2 6-7 M16 5h4v4'/%3E%3C/svg%3E");
+  --edition-folio: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l12-3 3 14-12 3z M8 8l5-1m-4 4 6-1 M19 6l3 15-14 2'/%3E%3C/svg%3E");
+  --edition-temple: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 9l10-6 10 6z M4 20h16 M3 22h18 M6 11v7m4-7v7m4-7v7m4-7v7'/%3E%3C/svg%3E");
+  --edition-dividers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 7a2 2 0 1 0 4 0a2 2 0 1 0-4 0 M12 2v3m-1 4L4 21m9-12 7 12 M6 14q6 5 12 0'/%3E%3C/svg%3E");
+  --edition-seal: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4h18v13h-6m-8 0H3z M6 7h11m-11 3h5 M12 14a3 3 0 1 0 6 0a3 3 0 1 0-6 0 M13 17l-1 5 3-2 3 2-1-5'/%3E%3C/svg%3E");
+}
+
+/* The same three editions have a distinct plate and mark for each market. */
+[data-market="shares"][data-edition="exchange"], #stock-moves, [data-history-topic="spx"] {
+  --edition-art: url("assets/desk/shares-exchange.webp"); --edition-mark: var(--edition-ticker);
+}
+[data-market="bonds"][data-edition="exchange"], #market-bonds, [data-market-view="credit"] {
+  --edition-art: url("assets/desk/bonds-exchange.webp"); --edition-mark: var(--edition-temple);
+}
+[data-market="shares"][data-edition="analytical"], #main-company-cards,
+[data-history-topic="si"], [data-history-topic="shares"], [data-history-topic="beta4-shares"] {
+  --edition-art: url("assets/desk/shares-analytical.webp"); --edition-mark: var(--edition-chart);
+}
+[data-market="bonds"][data-edition="analytical"], #yield-curves, [data-market-view="ust"], [data-history-topic="curves"] {
+  --edition-art: url("assets/desk/bonds-analytical.webp"); --edition-mark: var(--edition-dividers);
+}
+[data-market="shares"][data-edition="archive"], [data-history-topic="beta2-shares"], .nvda-history-page #sources {
+  --edition-art: url("assets/desk/shares-archive.webp"); --edition-mark: var(--edition-folio);
+}
+.bb-card, .bond-watchlist, [data-history-topic="yield"] {
+  --edition-art: url("assets/desk/bonds-archive.webp"); --edition-mark: var(--edition-seal);
+}
+
+[data-edition="exchange"], #stock-moves, #market-bonds, [data-market-view="credit"] {
+  --edition-tone: #924625; --edition-paper: #fbf1e6; --edition-rule: #d8b99c;
+}
+[data-edition="analytical"], #main-company-cards, #yield-curves, [data-market-view="ust"] {
+  --edition-tone: #215967; --edition-paper: #edf3f2; --edition-rule: #adc9cb;
+}
+[data-edition="archive"], .bb-card, .bond-watchlist, .nvda-history-page #sources {
+  --edition-tone: #75475b; --edition-paper: #f7f0eb; --edition-rule: #d3bfbb;
+}
+@media screen {
+  body[data-edition] { background-color: #f8f7f2; font-family: var(--edition-sans); }
+  body[data-edition] main {
+    box-sizing: border-box; width: 100%; max-width: 116rem; margin-inline: auto;
+    padding-inline: clamp(.875rem, 1.4vw, 1.75rem);
+  }
+
+  /* Keep existing buttons and navigation in normal flow beside the art. */
+  body[data-edition] main .market-cover {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(12rem, 28%);
+    column-gap: clamp(1rem, 4vw, 5rem); row-gap: .65rem; align-items: center;
+    padding: clamp(1.15rem, 2.3vw, 2.35rem); margin: 0 0 1.35rem;
+    background: var(--edition-paper); color: #292a28;
+    border: 1px solid var(--edition-rule); border-block-start: 3px solid var(--edition-tone);
+    border-radius: 6px;
+  }
+  .market-cover > * { grid-column: 1; min-width: 0; }
+  .market-cover > :first-child { align-self: end; }
+  .market-cover > :nth-child(2) { justify-self: start; align-self: start; }
+  .market-cover > .section-links, .market-cover > .bb-file-actions { justify-content: flex-start; flex-wrap: wrap; }
+  body[data-edition] .market-cover::after {
+    content: ""; grid-column: 2; grid-row: 1 / span 2; align-self: stretch;
+    min-height: clamp(9rem, 13vw, 15rem); border-radius: 4px;
+    background: var(--edition-art) center 48% / cover no-repeat;
+  }
+  body[data-edition] .market-cover h1 {
+    margin: .1em 0; color: #272925;
+    font: 500 clamp(2.45rem, 4.6vw, 5.1rem)/.99 var(--edition-serif); letter-spacing: -.055em;
+  }
+  .market-cover :is(.eyebrow,.sb-eyebrow,.section-tag) { color: var(--edition-tone); }
+  .market-cover > div > p:not([class]) { max-width: 68ch; color: #414644; font-size: 1rem; line-height: 1.5; }
+  .market-cover h1 > .workspace-icon { display: none; }
+  .market-cover h1::before {
+    content: ""; display: inline-block; width: .72em; height: .72em; margin-inline-end: .22em;
+    background: var(--edition-tone); mask: var(--edition-mark) center / contain no-repeat;
+  }
+  .market-cover .intro-action { width: auto; max-width: 100%; }
+
+  .edition-jumps { display: flex; gap: .45rem 1.3rem; align-items: center; flex-wrap: wrap; margin: .25rem 0 1.15rem; }
+  .edition-jumps a { color: var(--edition-tone); font-weight: 650; text-underline-offset: .23em; padding-block: .3rem; }
+  body[data-edition] :is(section[id],div[id],h2[id],form[id]) { scroll-margin-top: 1.3rem; }
+
+  .bb-cards:not([data-columns]), .bb-cards[data-columns="auto"] {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 34rem), 1fr));
+  }
+  .bb-card.sb2-panel { border-top: 2px solid var(--edition-rule); }
+  .bb-card .bb-figure canvas { height: clamp(11rem, 14vw, 15.5rem); }
+  [data-market="shares"] .sq-grid, [data-market="shares"] .charts-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 34rem), 1fr));
+  }
+  .sb2-main:has(#sb2-card-columns option[value="auto"]:checked) .sb2-deck {
+    --sb2-card-min-width: 520px; --sb2-cone-card-min-width: 570px;
+  }
+  [data-market="shares"] .sb2-market-pair { grid-template-columns: repeat(auto-fit, minmax(min(100%, 31rem), 1fr)); }
+  body[data-market] :is(.sb-card,.sb2-panel,.chart-panel,.price-panel,.sq-card) { min-width: 0; }
+  body[data-market] :is(.sb2-detail,.sb-card,.price-panel,.filing-section) { scroll-margin-block-start: 1.25rem; }
+
+  /* Marks occupy header space only. Plot, legend and touch areas remain clear. */
+  :where([data-market],.bond-watchlist,.nv-sources) :is(.bb-card-head,.sb2-history,.sb2-research,.sb2-peer-heading,.block-heading,.price-panel,.panel-heading,
+      .sb-section,.section-title,.sb-watchlist-table,.bw-heading,.nv-sources,.sb2-company-heading) > :is(h2,h3),
+  :where([data-market],.bond-watchlist) :is(.bb-card-head,.bw-heading,.panel-heading) > div > h2 {
+    font-family: var(--edition-serif, Georgia); letter-spacing: -.02em;
+  }
+  :is([data-market], .bond-watchlist, .nv-sources) :is(.bb-card-head h2,.sb2-history h3,.sb2-research h3,
+    .sb2-peer-heading h2,.block-heading h2,.price-panel h2,.panel-heading h2,.sb-section h3,.section-title h2,
+    #sb-watchlist-title,.bw-heading h2,.nv-sources h2,.sb2-company-heading h2) {
+    position: relative; padding-inline-end: 2.8rem;
+  }
+  :is([data-market], .bond-watchlist, .nv-sources) :is(.bb-card-head h2,.sb2-history h3,.sb2-research h3,
+    .sb2-peer-heading h2,.block-heading h2,.price-panel h2,.panel-heading h2,.sb-section h3,.section-title h2,
+    #sb-watchlist-title,.bw-heading h2,.nv-sources h2,.sb2-company-heading h2)::after {
+    content: ""; position: absolute; inset-inline-end: .15rem; top: 50%; transform: translateY(-50%) rotate(-9deg);
+    width: 2.15rem; height: 2.15rem; opacity: .18; background: var(--edition-tone);
+    mask: var(--edition-mark) center / contain no-repeat; pointer-events: none;
+  }
+  .sb-section, .sb2-valuation, #quarterly-dashboard, .price-panel { --edition-mark: var(--edition-chart); }
+  .sb2-research, #statements, #checklist { --edition-mark: var(--edition-folio); }
+
+  /* Reuse the art within the existing multi-purpose desk and router. */
+  :is([data-market-view="credit"],[data-market-view="ust"]) > .page-head,
+  :is(#stock-moves,#yield-curves) > .section-head, #main-company-cards .cd-heading,
+  #market-bonds .daily-ust-heading, .bond-watchlist .bw-heading, .nvda-history-page #sources > :first-child {
+    padding: clamp(.85rem, 1.6vw, 1.45rem);
+    padding-inline-end: calc(clamp(4.2rem, 12vw, 11rem) + 1rem);
+    background: var(--edition-art) right center / clamp(4.2rem, 12vw, 11rem) auto no-repeat, var(--edition-paper);
+    border-inline-start: 3px solid var(--edition-tone); border-radius: 4px; color: #292a28;
+  }
+  :is([data-market-view="credit"],[data-market-view="ust"]) > .page-head h1 {
+    font-family: var(--edition-serif); letter-spacing: -.04em;
+  }
+  :is([data-market-view="credit"],[data-market-view="ust"]) > .page-head :is(h1,p,.eyebrow) { color: #283d3d; }
+  :is([data-history-topic="shares"],[data-history-topic="spx"],[data-history-topic="si"],[data-history-topic="beta2-shares"],
+    [data-history-topic="beta4-shares"],[data-history-topic="curves"],[data-history-topic="yield"]) .history-engraving {
+    background-image: var(--edition-art); background-position: center 46%; background-size: cover;
+  }
+  @media (max-width: 45rem) {
+    body[data-edition] main .market-cover { grid-template-columns: minmax(0, 1fr) 25%; padding: 1rem; column-gap: .75rem; }
+    body[data-edition] .market-cover::after { min-height: 5.5rem; grid-row: 1; }
+    .market-cover > :nth-child(2) { grid-column: 1 / -1; }
+    body[data-edition] .market-cover h1 { font-size: clamp(1.85rem, 7vw, 3rem); }
+    body[data-market="bonds"] .bb-cards { grid-template-columns: minmax(0, 1fr); }
+  }
+}
+
+body.presentation main .market-cover, body.presentation .edition-jumps { display: none; }
+@media print { .edition-jumps { display: none; } }

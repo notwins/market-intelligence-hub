@@ -15,8 +15,9 @@
   <script defer data-price-model-only src="Bond%20Prices%20-%20Type%20JS%20-%2016-Nov-03.10.js?v=20261122.weekly-charts"></script>
   <script defer src="bonds-beta-data.js?v=20261122.weekly-charts"></script>
   <script defer src="bonds-beta.js?v=20261122.weekly-charts"></script>
+<link rel="stylesheet" href="market-editions.css?v=1">
 </head>
-<body>
+<body data-market="bonds" data-edition="exchange">
   <a class="skip" href="#main">Skip to bond charts</a>
   <header class="sb-mast">
     <a href="desk.html"><b>M.</b> MARKET INTEL</a>
@@ -27,9 +28,9 @@
     </nav>
   </header>
   <main id="main" class="sb2-main bb-main">
-    <header class="sb2-intro bb-intro">
+    <header class="sb2-intro bb-intro market-cover">
       <div><h1>Bonds BETA</h1><p>Compare bond prices and yields for Temasek, U.S. Treasuries and your bond watchlist.</p></div>
-      <div class="bb-file-actions"><a class="bb-cashflow-open" href="bond-cashflow.html">Bond Cashflow Studio</a>
+      <div class="bb-file-actions"><a class="bb-cashflow-open" href="#bb-cards">Jump to bond charts</a><a class="bb-cashflow-open" href="bond-cashflow.html">Bond Cashflow Studio</a>
         <button id="bb-open" type="button">Open and remember CSV</button>
         <input id="bb-file" type="file" accept=".csv,text/csv" hidden>
         <button id="bb-clear" type="button" hidden>Forget history on this browser</button>
