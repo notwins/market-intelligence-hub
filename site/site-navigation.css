@@ -40,3 +40,14 @@
 @media(max-width:650px){.hub-blueprint-link{font-size:13px;padding:8px 10px}.mast:has(.hub-blueprint-link){flex-wrap:wrap;row-gap:8px}.mast-actions:has(.hub-blueprint-link){flex:1 1 100%;justify-content:flex-start;gap:8px}.topbar .hub-blueprint-link{max-width:100%}}
 #hub-map-dialog .child-nodes:has(>.article-node){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px}#hub-map-dialog .child-nodes:has(>.article-node)>.map-node{grid-column:1/-1;border:0;padding:0}#hub-map-dialog .child-nodes:has(>.article-node)>.article-node{grid-column:auto}#hub-map-dialog .article-node .map-link{height:100%}#hub-map-dialog .article-node .node-icon{display:none}#hub-map-dialog .article-node .map-description{font-size:11px}#hub-map-dialog .article-node .map-title{font-size:13px}
 @media print{.hub-map-trigger,.hub-blueprint-link,#hub-map-dialog{display:none!important}}
+
+#hub-map-dialog :is(.family-icon,.node-icon):has(.destination-picture) {
+  display:inline-flex; align-items:center; justify-content:center; flex:none;
+  width:34px; height:34px; border:0; background:transparent; padding:0;
+}
+#hub-map-dialog .map-link .node-icon:has(.destination-picture) { width:29px; height:29px; display:inline-flex; }
+#hub-map-dialog :is(.family-icon,.node-icon) svg.destination-picture { width:100%; height:100%; }
+#hub-map-dialog .map-link:hover .map-title { text-decoration:underline; text-underline-offset:3px; }
+@media(max-width:650px) {
+  #hub-map-dialog .map-link .node-icon:has(.destination-picture) { width:25px; height:25px; }
+}

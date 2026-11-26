@@ -186,25 +186,112 @@
     return href.startsWith('#') ? pagePath + href : href;
   }
 
-  const artwork = {
-    home: ['M4 10 12 3l8 7v10H4z', 'M2.5 11 12 3l9.5 8M9 20v-6h6v6M16.5 6V4h2v3.7'],
-    tools: ['M4 7h16v12H4z', 'M8 7V4h8v3M4 12h16m-10 0v2h4v-2M4 7h16v12H4z'],
-    news: ['M4 4h14v15H4z', 'M18 8h3v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h15v13a2 2 0 0 0 2 2M6.5 8h7M7 12h2m3 0h2M7 15h2m3 0h2'],
-    shares: ['M4 13h4v6H4zm6-4h4v10h-4zm6-5h4v15h-4z', 'M2 20h20M4 16h4m2-3h4m2-4h4'],
-    bonds: ['M4 4h16v14H4z', 'M7 8h10M7 11h5m4 0a2.3 2.3 0 1 0 0 4.6 2.3 2.3 0 0 0 0-4.6Zm-1.5 4.1-.6 5 2.1-1.3 2.1 1.3-.6-5'],
-    fred: ['M3 8 12 3l9 5zM5 17h14v3H5z', 'M3 8 12 3l9 5v2H3zm3 2v7m4-7v7m4-7v7m4-7v7M3 20h18M5 17h14'],
-    pivot: ['M4 4h16v5H4zM4 9h5v11H4z', 'M4 4h16v16H4zm5 0v16M4 9h16m-11 5.5h11m-5.5-5.5v11'],
-    history: ['M5.6 8a8 8 0 1 1 .4 10.2', 'M3 5v5h5M12 7v5l3 1.5m-9.4-5a8 8 0 1 1 .4 10.2'],
-    book: ['M3 5c3.8-.3 6.8.9 9 3 2.2-2.1 5.2-3.3 9-3v13c-3.8-.1-6.5.8-9 2.5-2.5-1.7-5.2-2.6-9-2.5Z', 'M12 8v12m-6-11 3 1.1M6 13l3 1.1m6-4.1 3-1.1m-3 5.1 3-1.1'],
-    markets: ['M4 10h4v7H4zm6-4h4v8h-4zm6 3h4v7h-4z', 'M2.5 21h19M6 7v3m0 7v2m6-16v3m0 8v3m6-11v3m0 7v3'],
-    jump: ['M4 4h6v6H4zm0 10h6v6H4zm10 0h6v6h-6z', 'M14 4h6v6h-6zm3 1.5v3m-1.5-1.5h3'],
-    map: ['M9 3h6v5H9zM3 15h6v5H3zm12 0h6v5h-6z', 'M12 8v4M6 15v-3h12v3'],
-    search: ['M10.5 4a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Z', 'm15.5 15.5 5 5'],
-    lock: ['M5 10h14v10H5z', 'M8 10V7a4 4 0 0 1 8 0v3m-4 4v3'],
-    settings: ['M10 3h4l.6 2.5 2 .9 2.4-.9 2 3.5-1.8 1.7v2.6l1.8 1.7-2 3.5-2.4-.9-2 .9L14 21h-4l-.6-2.5-2-.9-2.4.9-2-3.5 1.8-1.7v-2.6L3 9l2-3.5 2.4.9 2-.9Z', 'M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z'],
-    gold: ['M7 7h10l4 11H3Z', 'M6 14h12m-9-4h6'],
-    chart: ['M4 18 9 11l4 3 6-8v12z', 'M3 4v16h18M5 16l4-5 4 3 6-8'],
-    archive: ['M5 8h14v12H5zM3 4h18v4H3z', 'M9 12h6']
+  const destinationArt = {
+    "fred/": "fred",
+    "fred/market-desk.html": "monitor",
+    "fred/risk-observatory.html": "radar",
+    "fred/signal-review.html": "signal",
+    "fred/cross-market-replay.html": "replay",
+    "fred/data.html": "database",
+    "desk.html": "home",
+    "desk.html#daily": "briefing",
+    "desk.html#daily-dashboards": "calendar",
+    "desk.html#reading": "buildings",
+    "desk.html#watchlist-end-day": "watch",
+    "desk.html#archive": "library",
+    "desk.html#markets": "markets",
+    "desk.html#stock-moves": "ticker",
+    "desk.html#market-rates": "fx",
+    "desk.html#market-bonds": "yield",
+    "desk.html#full-history": "history",
+    "market-understanding/": "pen",
+    "market-understanding/#main-published-research": "papers",
+    "market-understanding/#research-readings": "book",
+    "market-understanding/#my-research": "notebook",
+    "v4.html#history": "history",
+    "v4.html#calls": "calls",
+    "v4.html#master": "map",
+    "v4.html#master/explore": "search",
+    "v4.html#master/pivot": "pivot",
+    "v4.html#master/watchlists": "watch",
+    "v4.html#master/screens": "screen",
+    "v4.html#master/review": "review",
+    "v4.html#history/yield": "yield",
+    "v4.html#history/shares": "ticker",
+    "v4.html#history/beta2-shares": "event",
+    "v4.html#history/beta4-shares": "layers",
+    "v4.html#history/fx": "fx",
+    "v4.html#history/curves": "curves",
+    "v4.html#history/spx": "index",
+    "v4.html#history/si": "pricing",
+    "historical-fred.html": "timeline",
+    "fred-1.html": "event",
+    "fred-2.html": "matrix",
+    "fred-3.html": "network",
+    "v4.html#ust": "treasury",
+    "v4.html#watchlist": "bookmark",
+    "v4.html#overview": "briefing",
+    "v4.html#earnings": "earnings",
+    "v4.html#credit": "credit",
+    "v4.html#policy": "policy",
+    "v4.html#reports": "calendar",
+    "v4.html#hourly": "hourly",
+    "v4.html#headlines": "wire",
+    "v4.html#research": "papers",
+    "research/xau-gold-outlook-2026-11-06/": "gold",
+    "research-editions.html": "editions",
+    "research/googl/": "buildings",
+    "research/wealth-inequality-2026-11-04/": "scales",
+    "research/wealth-inequality-2026-11-04/sharpe.html": "strategy",
+    "research/cpf-oa-temasek-2070-2026-11-04/": "compare",
+    "research/cpf-life-after-55-2026-11-04/": "retire",
+    "tools/cpf-life-ra.html": "calc",
+    "v4.html#tools": "tools",
+    "tag-map.html": "tags",
+    "colour-templates-v3/": "palette",
+    "colour-reference.html": "swatch",
+    "search.html": "search",
+    "external-sources.html": "source",
+    "v4.html#feeds": "upload",
+    "archive.html": "archive",
+    "saved-securities.html": "saved",
+    "v2.html": "history",
+    "stocks-beta.html": "shares",
+    "stocks-beta2.html": "compare",
+    "stocks-beta3.html": "filing",
+    "nvda-history.html": "chip",
+    "si-beta2.html": "vault",
+    "si-beta2.html#si-library": "vault",
+    "bonds-beta.html": "bonds",
+    "bonds-beta.html#bb-cards": "bonds",
+    "bond-cashflow.html": "cashflow",
+    "bos-monthly.html": "folio",
+    "tools/accumulator-beta.html": "chart",
+    "tools/accumulator-capital.html": "capital",
+    "tools/accumulator-si-flow.html": "flow",
+    "tools/accumulator-3d.html": "cube",
+    "tools/accumulator.html": "ladder",
+    "tools/xau-fcn.html": "coupon",
+    "tools/gld-accumulator.html": "etf",
+    "tools/gold-charts.html": "gold",
+    "cross-market-history.html": "cross",
+    "cross-market-history-beta2.html": "exchange",
+    "site-map.html": "map",
+    "blueprint.html": "map",
+    "v4.html#home": "home",
+    "v4.html#tags": "tags",
+    "v4.html#sources": "source",
+    "v4.html#bonds": "bonds",
+    "v4.html#markets": "markets",
+    "v4.html#search": "search",
+    "desk.html#main-company-cards": "buildings",
+    "desk.html#main-news": "news",
+    "desk.html#yield-curves": "curves",
+    "desk.html#briefing": "briefing",
+    "desk.html#market-history": "history",
+    "desk.html#historical-charts": "history",
+    "desk.html#reports": "calendar",
+    "desk.html#hourly-briefings": "hourly"
   };
   const routeArtwork = [
     [/^desk\.html#(?:markets|stock-moves|main-company-cards|market-rates)/, 'markets'],
@@ -223,21 +310,17 @@
     [/^cross-market-history|^desk\.html#full-history|^v4\.html#history/, 'history'],
     [/^desk\.html$/, 'home']
   ];
-  const artFor = (href, fallback = 'chart') => routeArtwork.find(([pattern]) => pattern.test(href))?.[1] ?? fallback;
+  const artFor = (href, fallback = 'chart') => destinationArt[href] ?? routeArtwork.find(([pattern]) => pattern.test(href))?.[1] ?? fallback;
   function navigationIcon(key) {
     const ns = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(ns, 'svg');
-    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('viewBox', '0 0 32 32');
     svg.setAttribute('aria-hidden', 'true');
     svg.setAttribute('focusable', 'false');
     svg.classList.add('hub-nav-icon');
-    const [fill, detail] = artwork[key];
-    for (const [shape, className] of [[fill, 'hub-nav-icon-fill'], [detail, 'hub-nav-icon-detail']]) {
-      const path = document.createElementNS(ns, 'path');
-      path.setAttribute('d', shape);
-      path.classList.add(className);
-      svg.append(path);
-    }
+    const picture = document.createElementNS(ns, 'use');
+    picture.setAttribute('href', new URL('assets/navigation-atlas.svg#' + key, base).href);
+    svg.append(picture);
     return svg;
   }
   function addIcon(control, key, brandedIcon) {
@@ -437,13 +520,20 @@
   }
   decorateJumpShortcuts();
   new MutationObserver(decorateJumpShortcuts).observe(grid, {childList:true});
-  for (const control of document.querySelectorAll('.rail-group:not(.rail-history) > :is(a,button), .dashboard-links > a:not(.history-featured)')) {
+  for (const control of document.querySelectorAll('.rail-group:not(.rail-history) > :is(a,button), .dashboard-links > a:not(.history-featured), .desk-directory nav a, .tool-links > a.tool-link')) {
     const tone = toneFor(controlRoute(control));
     if (tone) control.dataset.navTone = tone;
+    if (control.matches('.rail-group > *')) {
+      const leadingGlyph = control.firstChild;
+      if (leadingGlyph?.nodeType === Node.TEXT_NODE && control.querySelector('span') &&
+          /^[^\p{L}\p{N}]+$/u.test(leadingGlyph.textContent)) leadingGlyph.remove();
+      control.querySelector(':scope > .nav-glyph')?.remove();
+    }
+    addIcon(control, artFor(controlRoute(control), control.closest('.dashboard-links') ? 'report' : 'map'));
   }
   const sectionTabs = document.querySelector('.top-subsections');
   if (sectionTabs) {
-    const tabArt = {explore: 'search', pivot: 'pivot', watchlists: 'book', screens: 'map', review: 'archive'};
+    const tabArt = {explore: 'search', pivot: 'pivot', watchlists: 'watch', screens: 'screen', review: 'review'};
     function decorateSubsections() {
       if (sectionTabs.classList.contains('history-menu-toolbar')) return;
       for (const tab of sectionTabs.querySelectorAll(':scope > [data-tab]')) {
