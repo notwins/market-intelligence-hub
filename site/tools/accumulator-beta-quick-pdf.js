@@ -4,6 +4,7 @@
   const modal = byId('beta-quick-pdf');
   const form = modal.querySelector('form');
   const whole = byId('beta-quick-all');
+  const appendix = byId('beta-quick-appendix');
   const list = byId('beta-quick-sections');
   const status = byId('beta-quick-status');
   const open = byId('beta-quick-open');
@@ -147,10 +148,11 @@
     return {kind: 'table', label: table.getAttribute('aria-label') || table.closest('.tableScroll')?.getAttribute('aria-label'), rows, accent};
   }
 
-  function collect(section) {
+  function collect(section, selected) {
     const content = [];
+    let insideDetails = false;
     const pushText = (text, kind = 'text', logo) => {
-      if (text) content.push({kind, text, logo});
+      if (text && insideDetails) content.push({kind, text, logo});
     };
     function visit(node) {
       if (node.nodeType === Node.TEXT_NODE) {
@@ -160,11 +162,11 @@
       if (node.nodeType !== Node.ELEMENT_NODE || !visible(node)) return;
       const tag = node.tagName.toUpperCase();
       if (node.classList.contains('chartFrame')) {
-        content.push(...chartBlocks(node));
+        if (section.key !== 'overview' || !selected.has('chartTitle')) content.push(...chartBlocks(node));
         return;
       }
       if (tag === 'TABLE') {
-        content.push(snapshotTable(node));
+        if (!node.closest('.beta-share-ledger') || !selected.has('ledger')) content.push(snapshotTable(node));
         return;
       }
       if (tag === 'SVG' || tag === 'CANVAS' || tag === 'IMG') {
@@ -174,9 +176,11 @@
         return;
       }
       if (tag === 'DETAILS') {
-        for (const child of node.children) {
-          if (node.open || child.tagName === 'SUMMARY') visit(child);
-        }
+        if (!node.open) return;
+        const previous = insideDetails;
+        insideDetails = true;
+        for (const child of node.children) visit(child);
+        insideDetails = previous;
         return;
       }
       if (node === section.heading) return;
@@ -252,7 +256,8 @@
       ink: '--ink', muted: '--muted', line: '--line', accent: '--teal', soft: '--soft',
       panel: '--beta-panel', hero: '--beta-hero', positive: '--beta-positive', negative: '--beta-negative',
       secondary: '--beta-secondary', secondaryLight: '--beta-secondary-light',
-      tertiary: '--beta-tertiary', tertiaryLight: '--beta-tertiary-light', refund: '--beta-refund'
+      tertiary: '--beta-tertiary', tertiaryLight: '--beta-tertiary-light',
+      refund: '--beta-refund', refundLight: '--beta-refund-light', ko: '--lav'
     };
     return Object.fromEntries(Object.entries(tokens).map(([key, token]) => [key, style.getPropertyValue(token).trim()]));
   }
@@ -264,7 +269,7 @@
     .replace(/\u2265/g, '>=').replace(/\u2264/g, '<=')
     .replace(/\u2713/g, '[selected]').replace(/\u25b2/g, '+').replace(/\u25bc/g, '-');
 
-  async function createPdf(style, colour, snapshot) {
+  async function createPdf(style, colour, view, snapshot) {
     if (!window.jspdf?.jsPDF) throw new Error('The PDF library could not load. Reload the page and try again.');
     const doc = new window.jspdf.jsPDF({format: 'a4', unit: 'mm', compress: true, putOnlyUsedFonts: true});
     const margin = 13;
@@ -296,10 +301,10 @@
       doc.setTextColor(colour[tone]);
     }
 
-    function page(first = false) {
-      if (!first) doc.addPage();
+    function page() {
+      doc.addPage();
       doc.setFillColor(colour.hero);
-      doc.rect(0, 0, pageWidth, first ? 39 : 15, 'F');
+      doc.rect(0, 0, pageWidth, 15, 'F');
       let x = 0;
       for (const [tone, fraction] of [['accent', .5], ['secondary', .28], ['tertiary', .22]]) {
         const bandWidth = pageWidth * fraction;
@@ -307,14 +312,10 @@
         doc.rect(x, 0, bandWidth, 2.2, 'F');
         x += bandWidth;
       }
-      logo('NVDA', pageWidth - margin - (first ? 26 : 9), 3, first ? 26 : 9);
-      font(first ? 23 : 11, 'ink', 'bold', 'times');
-      doc.text('NVDA Accumulator Beta 2', margin, first ? 19 : 10);
-      if (first) {
-        font(9, 'muted');
-        doc.text('Quick PDF  /  ' + style + ' colour style  /  ' + stamp, margin, 29);
-      }
-      y = first ? 46 : 22;
+      logo('NVDA', pageWidth - margin - 9, 3, 9);
+      font(11, 'ink', 'bold', 'times');
+      doc.text('Supporting detail', margin, 10);
+      y = 22;
     }
 
     function room(height) {
@@ -396,7 +397,8 @@
       y += 3.4;
     }
 
-    page(true);
+    window.AccumulatorQuickBrief.render({doc, colour, view, style, stamp, logo, printText});
+    if (snapshot.length) page();
     snapshot.forEach(({title, content}) => {
       room(26);
       doc.setDrawColor(colour.accent);
@@ -443,14 +445,17 @@
     if (busy || !chosen.length) return;
     busy = true;
     form.querySelector('fieldset').disabled = true;
+    appendix.disabled = true;
     close.disabled = true;
     updateSelection();
     status.textContent = 'Preparing PDF…';
     try {
       const style = currentStyle();
       const colours = themeColours();
-      const snapshot = chosen.map(collect);
-      const missed = await createPdf(style, colours, snapshot);
+      const view = window.AccumulatorQuickBrief.capture(chosen);
+      const selected = new Set(chosen.map(section => section.key));
+      const snapshot = appendix.checked ? chosen.map(section => collect(section, selected)).filter(section => section.content.length) : [];
+      const missed = await createPdf(style, colours, view, snapshot);
       status.textContent = missed ? 'PDF downloaded. Some figures were unavailable.' : 'PDF downloaded.';
     } catch (error) {
       status.textContent = error instanceof Error && error.message.startsWith('The PDF library') ?
@@ -458,6 +463,7 @@
     } finally {
       busy = false;
       form.querySelector('fieldset').disabled = false;
+      appendix.disabled = false;
       close.disabled = false;
       updateSelection();
     }
