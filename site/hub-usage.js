@@ -38,7 +38,7 @@
       if (/^(?:[0-9]|1[0-4])$/.test(sheet)) name = 'cashflow/sheet-'+sheet;
     } else if (page === 'v4.html') {
       const key = location.hash.slice(1) || 'overview';
-      if (tabs.has(key)) selected = 'v4/' + key;
+      if (tabs.has(key)) selected = 'workspace/' + key;
     }
     if (selected && selected !== lastTab) {
       lastTab = selected;
@@ -67,7 +67,8 @@
     const stamp = Date.now();
     if (stamp - lastToolAction < 180) return;
     lastToolAction = stamp;
-    record('tool', page.replace(/\.html$/, '') + '/' + action);
+    const name = page.split('/').at(-1).replace(/\.html$/, '');
+    record('tool', name + '/' + action);
   }
   function bindActions() {
     document.addEventListener('click', event => {
@@ -78,24 +79,24 @@
         const report = url.origin === location.origin && publicReport.exec(url.pathname);
         if (report) record('report', 'research/' + report[1]);
         if (link.hasAttribute('download')) toolAction('download');
-        else if (url.origin === location.origin && url.pathname.startsWith(hub + 'data/') && /\.csv$/i.test(url.pathname)) toolAction('download-csv');
+        else if (url.origin === location.origin && url.pathname.startsWith(hub + 'data/') && /\.csv$/i.test(url.pathname)) toolAction('download');
       }
       const button = event.target.closest('button');
       if (!button || button.type === 'submit') return;
-      if (interactiveTool && button.matches('#download, #download-pdf, #comparePdf, [data-export], [data-download]')) toolAction('export');
-      if (interactiveTool && button.matches('[data-compare], [data-scenario], [data-chart-mode], #compareTab')) toolAction('change-comparison');
+      if (interactiveTool && button.matches('#download, #download-pdf, #comparePdf, [data-export], [data-download]')) toolAction('download');
+      if (interactiveTool && button.matches('[data-compare], [data-scenario], [data-chart-mode], #compareTab')) toolAction('change-control');
     });
     if (interactiveTool) {
       document.addEventListener('submit', event => {
-        if (event.submitter?.matches('#beta-quick-download')) toolAction('export');
+        if (event.submitter?.matches('#beta-quick-download')) toolAction('download');
         else if (editsModel && event.target instanceof HTMLFormElement && event.target.querySelector('input[type="number"]')) toolAction('calculate');
       });
       document.addEventListener('change', event => {
         if (!event.isTrusted || !(event.target instanceof Element)) return;
         if (editsModel && event.target.matches('input[type="number"], input[type="range"], select')) {
-          toolAction('change-scenario');
+          toolAction('change-control');
         } else if (event.target.matches('select.tenor, #compareLeft, #compareRight, [data-compare], [data-chart-series]')) {
-          toolAction('change-comparison');
+          toolAction('change-control');
         }
       });
     }
