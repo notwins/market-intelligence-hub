@@ -220,7 +220,7 @@ test('history directory shares four groups and the same destinations across rail
  const all=nav.groups.flatMap(g=>g.items);assert.equal(new Set(all.map(i=>i[0])).size,all.length);
  const [bonds,shares,gold,fred]=nav.groups;
  assert.deepEqual(gold.items.map(i=>i[3]),['tools/gold-charts.html']);
- assert.deepEqual(shares.items.map(i=>i[0]),['stocks-beta','stocks-beta2','shares','si','beta2-shares','beta4-shares','spx','si-beta2']);
+ assert.deepEqual(shares.items.map(i=>i[0]),['stocks-beta','stocks-beta2','stocks-beta3','shares','si','beta2-shares','beta4-shares','spx','si-beta2']);
  assert.deepEqual(bonds.items.slice(0,3).map(item=>item[3]),['bonds-beta.html','v4.html#credit','v4.html#ust']);
  assert(!bonds.items.some(i=>['si','si-beta2'].includes(i[0])));
  assert.deepEqual(fred.items.slice(0,6).map(i=>i[3]),['fred/','fred/market-desk.html','fred/risk-observatory.html','fred/signal-review.html','fred/cross-market-replay.html','fred/data.html']);
@@ -243,6 +243,33 @@ test('main news leads the sidebar and contains Calls and My Blog once',()=>{
  assert(main.includes('href="market-understanding/"'));assert(main.includes('My Blog'));
  assert.equal((rail.match(/data-view="calls"/g)||[]).length,1);assert.equal((rail.match(/href="market-understanding\/"/g)||[]).length,1);
  assert(!rail.includes('Research Explained'));
+});
+test('Shares Beta 3 compares like periods, splits ties and scores only common fundamentals',()=>{
+ const M=require('../site/stocks-beta3-model.js');
+ const annual=(end,values)=>({end,values});
+ const group=[1,2].map(scale=>({model:'operating',years:[
+  annual('2025-12-31',{revenue:120*scale,operatingIncome:24*scale,netIncome:12*scale,equity:70*scale,assets:120*scale,operatingCashFlow:8*scale,capex:8*scale}),
+  annual('2024-12-31',{revenue:100*scale,netIncome:10*scale,equity:50*scale,assets:100*scale})
+ ]}));
+ const [issuer]=group, latest=M.yearFor(issuer,'latest');
+ assert.equal(M.metric(issuer,latest,'roe'),20);
+ assert.equal(M.metric(issuer,latest,'freeCashFlow'),0);
+ assert.equal(M.yearFor(issuer,'2023'),undefined);
+ assert.deepEqual(M.initialPeers({companies:{A:{peers:['A','B','B','missing']},B:{}}},'A'),['B']);
+ let scores=M.checklist(group,group.map(c=>c.years[0]));
+ assert.equal(scores.counted,6);assert.deepEqual(scores.winners,[0,1]);assert.deepEqual(scores.scores,[3,3]);
+ delete group[1].years[0].values.capex;
+ scores=M.checklist(group,group.map(c=>c.years[0]));
+ assert.equal(scores.counted,5);assert.deepEqual(scores.rows.at(-1).winners,[]);
+ assert.deepEqual(M.leaders([2.01,2.04,-1]),[0,1]);assert.deepEqual(M.leaders([null,2]),[]);
+ const bank={...issuer,model:'bank'};
+ assert.equal(M.metric(bank,latest,'freeCashFlow'),null);
+ assert.deepEqual(M.criteria([bank]),['revenueGrowth','profitGrowth','roe','roa']);
+ const gaps={years:[latest,annual('2023-12-31',{revenue:100})]};
+ assert.equal(M.metric(gaps,latest,'revenueGrowth'),null);
+ issuer.years[1].values.netIncome=-10;
+ assert.equal(M.metric(issuer,latest,'profitGrowth'),null);
+ assert.equal(M.checklist([issuer],[latest]).counted,0);
 });
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
