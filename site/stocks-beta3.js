@@ -446,7 +446,7 @@
     try {
       const lib=window.StocksBeta2PeerLibrary;
       const [base,extra,pub,disclosures,quarterly,peers,fx,supplement]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published().catch(()=>null),json('shares-beta3-disclosures-2026-11-26.json').catch(()=>null),Q.load().catch(()=>null),Q.peerFilings().catch(()=>({})),json('beta3-usd-fx-2026-11-27.json').catch(()=>null),
-        json('shares-beta3-semiconductor-interim-2026-11-27.json').catch(()=>null)]);
+        json('shares-beta3-semiconductor-interim-2026-11-27-v2.json').catch(()=>null)]);
       if(current!==generation)return;
       if(extra&&extra.version!==1)throw Error('Invalid comparison data');
       state.fx=fx?.version===1?fx:null;state.supplement=supplement?.issuers||{};state.quarterly=quarterly;state.peerQuarterly=peers;state.details=disclosures?.version===1?disclosures:{};state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
