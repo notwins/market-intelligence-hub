@@ -15,8 +15,7 @@
     Markets: 'M4 17V6 M2 9h4v5H2z M12 20V9 M10 12h4v5h-4z M20 15V3 M18 6h4v6h-4z',
     Settings: 'm10 3-.5 2.1-2 .9-2-.7-2 3.4 1.6 1.5-.1 2.3-1.5 1.5 2 3.4 2.1-.6 2 .9.5 2.1h4l.5-2.1 2-.9 2.1.6 2-3.4-1.6-1.5v-2.3l1.6-1.5-2-3.4-2.1.7-2-.9L14 3z M15 11.8a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
     Search: 'M16 16l5 5 M18 11a7 7 0 1 1-14 0 7 7 0 0 1 14 0',
-    Jump: 'M4 5h5v5H4z M14 5h5v5h-5z M4 15h5v5H4z M14 15h5v5h-5z',
-    History: 'M3 11a9 9 0 1 1 2 7 M3 5v6h6 M12 7v5l4 2'
+    Jump: 'M4 5h5v5H4z M14 5h5v5h-5z M4 15h5v5H4z M14 15h5v5h-5z'
   };
   function icon(name) {
     const ns = 'http://www.w3.org/2000/svg';
@@ -51,9 +50,6 @@
     }
     jump.prepend(icon('Jump'));
     document.querySelector('.desk-mast .search-link')?.prepend(icon('Search'));
-    for (const [id, name] of [['briefing','My Blog'], ['markets','Markets'], ['full-history','History']]) {
-      document.getElementById('tab-' + id).prepend(icon(name));
-    }
     const gear = document.createElement('button');
     gear.type = 'button';
     gear.className = 'desk-gear';
