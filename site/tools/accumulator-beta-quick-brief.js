@@ -394,7 +394,7 @@
               y += 5;
               rule('line', margin, y, w - margin);
             });
-            y = wrap(fundamentals.sensitivityComparison, margin, y + 3, width, 9.3, 'muted') + 4;
+            y = wrap(fundamentals.sensitivityComparison, margin, y + 2, width, 9.3, 'muted') + 1;
           }
         }
       }
@@ -403,8 +403,9 @@
       if (view.guide) reference('Use the simulator', 'Change the price path to test a purchase schedule or a knock-out date.', 'accumulator-guide');
       if (view.notes) reference('Terms and assumptions', 'Illustrative gross results use the modelled closes. Review the issuer terms, observation schedule and sources.', 'notes-and-terms');
       if (!(deal || path || outcomes)) {
-        if (view.stressFundamentals?.sensitivity.length && y + 24 > bottom && y + 12 <= bottom) {
-          y = wrap('Capital at risk. ' + risk, margin, y, width, 9, 'tertiary', 'bold') + 3;
+        if (view.stressFundamentals?.sensitivity.length && y + 24 > bottom) {
+          space(5.5, 'Capital at risk');
+          y = wrap('Capital at risk. ' + risk, margin, y, width, 8.5, 'tertiary', 'bold') + 1.5;
         } else callout('Capital at risk', risk);
       }
     }
