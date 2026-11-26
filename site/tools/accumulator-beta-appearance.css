@@ -74,6 +74,13 @@
 
 .accumulator-beta .top { background: var(--beta-panel); }
 .accumulator-beta nav span { color: var(--muted); }
+.accumulator-beta .mih-legal-footer {
+  background: var(--beta-panel);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.accumulator-beta .mih-legal-footer p { color: var(--muted); }
+.accumulator-beta .mih-legal-footer a { color: var(--equity); }
 
 .accumulator-beta .hero {
   position: relative;
