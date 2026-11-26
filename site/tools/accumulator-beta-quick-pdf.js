@@ -3,6 +3,9 @@
   const byId = id => document.getElementById(id);
   const modal = byId('beta-quick-pdf');
   const form = modal.querySelector('form');
+  const edition = byId('beta-quick-edition');
+  const help = byId('beta-quick-help');
+  const sectionControls = form.querySelector('fieldset');
   const whole = byId('beta-quick-all');
   const appendix = byId('beta-quick-appendix');
   const list = byId('beta-quick-sections');
@@ -13,6 +16,18 @@
   const selection = new Map();
   let sections = [];
   let busy = false;
+  const editions = {
+    client: {title:'NVDA Accumulator - Client One-Pager', suffix:'Client-One-Pager',
+      help:'Discount, cash needed, three outcomes and three years of NVIDIA prices.'},
+    brief: {title:'NVDA Accumulator Beta 2 - Quick PDF', suffix:'',
+      help:'Create a short client brief from the selected sections and current figures.'},
+    equity: {title:'NVIDIA Equity Report', suffix:'NVIDIA-Equity-Report',
+      help:'Review the business, reported results, three statements, valuation and downside.'},
+    competitors: {title:'NVIDIA Competitor Analysis', suffix:'Competitor-Analysis',
+      help:'Compare NVIDIA, AMD, Broadcom and Intel, with a look at cloud-designed chips.'},
+    pack: {title:'NVDA Accumulator - All-in-One Pack', suffix:'All-in-One-Pack',
+      help:'Include the client sheet, accumulator analysis, NVIDIA equity report and competitor analysis.'}
+  };
 
   const skip = 'script, style, [hidden], [aria-hidden="true"], dialog, nav, .report-actions, .heading > a, .quote-actions a, .cmp-tools a, [data-cmp-plot]';
   const inline = /^(A|ABBR|B|BR|BUTTON|CODE|EM|I|INPUT|OUTPUT|SELECT|SMALL|SPAN|STRONG|SUB|SUP|TIME)$/;
@@ -49,7 +64,13 @@
     const count = inputs.filter(input => input.checked).length;
     whole.checked = count === inputs.length && count > 0;
     whole.indeterminate = count > 0 && count < inputs.length;
-    download.disabled = busy || count === 0;
+    const mode = edition.value;
+    const priced = mode === 'client' || mode === 'pack';
+    const needsInputs = priced && !window.AccumulatorMarket.getClientSelection();
+    sectionControls.hidden = mode !== 'brief';
+    byId('beta-quick-appendix-option').hidden = mode !== 'brief' && mode !== 'pack';
+    help.textContent = needsInputs ? 'Enter a valid starting price and budget to export this version.' : editions[mode].help;
+    download.disabled = busy || needsInputs || (mode === 'brief' && count === 0);
   }
 
   open.disabled = false;
@@ -78,6 +99,11 @@
   });
 
   modal.addEventListener('change', event => {
+    if (event.target === edition) {
+      status.textContent = '';
+      updateSelection();
+      return;
+    }
     if (event.target === whole) {
       list.querySelectorAll('input').forEach(input => { input.checked = whole.checked; });
     }
@@ -278,7 +304,7 @@
     .replace(/\u2265/g, '>=').replace(/\u2264/g, '<=')
     .replace(/\u2713/g, '[selected]').replace(/\u25b2/g, '+').replace(/\u25bc/g, '-');
 
-  async function createPdf(style, colour, view, snapshot) {
+  async function createPdf(mode, style, colour, view, snapshot, market, live, stressPrice) {
     if (!window.jspdf?.jsPDF) throw new Error('The PDF library could not load. Reload the page and try again.');
     const doc = new window.jspdf.jsPDF({format: 'a4', unit: 'mm', compress: true, putOnlyUsedFonts: true});
     const margin = 13;
@@ -288,10 +314,14 @@
     const stamp = new Intl.DateTimeFormat('en-SG', {
       dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Singapore'
     }).format(new Date()) + ' SGT';
-    const logos = Object.fromEntries(await Promise.all(['NVDA', 'JPM', 'O39.SI'].map(async name =>
-      [name, await rasterize({url: '../assets/company-logos/' + name + '.webp'}).catch(() => null)])));
-    const images = new Map(await Promise.all(snapshot.flatMap(section => section.content).filter(block => block.kind === 'image')
-      .map(async block => [block, await rasterize(block).catch(() => null)])));
+    const needsResearch = ['equity', 'competitors', 'pack'].includes(mode);
+    const [logos, images, research] = await Promise.all([
+      Promise.all(['NVDA', 'JPM', 'O39.SI'].map(async name =>
+        [name, await rasterize({url: '../assets/company-logos/' + name + '.webp'}).catch(() => null)])).then(Object.fromEntries),
+      Promise.all(snapshot.flatMap(section => section.content).filter(block => block.kind === 'image')
+        .map(async block => [block, await rasterize(block).catch(() => null)])).then(rows => new Map(rows)),
+      needsResearch ? window.AccumulatorPdfResearch.load() : null
+    ]);
     const missedFigures = Array.from(images.values()).filter(image => !image).length;
     let y = 0;
 
@@ -406,8 +436,29 @@
       y += 3.4;
     }
 
-    window.AccumulatorQuickBrief.render({doc, colour, view, style, stamp, logo, printText});
-    if (snapshot.length) page();
+    const packBookmark = (title, pageNumber = doc.getNumberOfPages() + 1) => {
+      if (mode === 'pack') doc.outline?.add(null, title, {pageNumber});
+    };
+    const writer = window.AccumulatorPdfEditions.writer({doc, colour, stamp, logo, printText});
+    packBookmark('Client one-pager', 1);
+    if (mode === 'client' || mode === 'pack') window.AccumulatorPdfEditions.client(writer, live, market);
+    if (mode === 'brief' || mode === 'pack') {
+      packBookmark('Accumulator analysis');
+      const brief = mode === 'pack' ? {...view, deal:false} : view;
+      window.AccumulatorQuickBrief.render({doc, colour, view:brief, style, stamp, logo, printText, append:mode === 'pack'});
+    }
+    if (mode === 'equity' || mode === 'pack') {
+      packBookmark('NVIDIA equity report');
+      window.AccumulatorPdfResearch.equity(writer, research, market, live, stressPrice);
+    }
+    if (mode === 'competitors' || mode === 'pack') {
+      packBookmark('Competitor analysis');
+      window.AccumulatorPdfResearch.competitors(writer, research);
+    }
+    if (snapshot.length) {
+      packBookmark('Supporting tables and notes');
+      page();
+    }
     snapshot.forEach(({title, content}) => {
       room(26);
       doc.setDrawColor(colour.accent);
@@ -443,17 +494,21 @@
       doc.text(`Market Intelligence Hub  /  ${style}`, margin, bottom + 9);
       doc.text(`${number} / ${pages}`, pageWidth - margin, bottom + 9, {align: 'right'});
     }
-    doc.setProperties({title: 'NVDA Accumulator Beta 2 - Quick PDF', subject: style + ' page style'});
-    doc.save('NVDA-Accumulator-Beta-2-' + style + '.pdf');
-    return missedFigures;
+    const version = editions[mode];
+    doc.setProperties({title:version.title, subject:style + ' page style', author:'Market Intelligence Hub'});
+    doc.save(['NVDA-Accumulator-Beta-2', version.suffix, style].filter(Boolean).join('-') + '.pdf');
+    return Boolean(missedFigures || research?.partial);
   }
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    const chosen = sections.filter(section => selection.get(section.key) ?? true);
-    if (busy || !chosen.length) return;
+    const mode = edition.value;
+    const chosen = mode === 'pack' ? sections : sections.filter(section => selection.get(section.key) ?? true);
+    const live = window.AccumulatorMarket.getClientSelection();
+    if (busy || (mode === 'brief' && !chosen.length) || (['client', 'pack'].includes(mode) && !live)) return;
     busy = true;
-    form.querySelector('fieldset').disabled = true;
+    sectionControls.disabled = true;
+    edition.disabled = true;
     appendix.disabled = true;
     close.disabled = true;
     updateSelection();
@@ -461,17 +516,22 @@
     try {
       const style = currentStyle();
       const colours = themeColours();
-      const view = window.AccumulatorQuickBrief.capture(chosen);
+      const reportWithSections = mode === 'brief' || mode === 'pack';
+      const view = reportWithSections ? window.AccumulatorQuickBrief.capture(chosen) : null;
       const selected = new Set(chosen.map(section => section.key));
-      const snapshot = appendix.checked ? chosen.map(section => collect(section, selected)).filter(section => section.content.length) : [];
-      const missed = await createPdf(style, colours, view, snapshot);
-      status.textContent = missed ? 'PDF downloaded. Some figures were unavailable.' : 'PDF downloaded.';
+      const snapshot = reportWithSections && appendix.checked ?
+        chosen.map(section => collect(section, selected)).filter(section => section.content.length) : [];
+      const stressInput = byId('nv-stress-price');
+      const stressPrice = stressInput?.checkValidity() ? stressInput.valueAsNumber : null;
+      const missed = await createPdf(mode, style, colours, view, snapshot, window.AccumulatorMarket.getState(), live, stressPrice);
+      status.textContent = missed ? 'PDF downloaded. Some source data or figures were unavailable.' : 'PDF downloaded.';
     } catch (error) {
       status.textContent = error instanceof Error && error.message.startsWith('The PDF library') ?
         error.message : 'The PDF could not be created. Please try again.';
     } finally {
       busy = false;
-      form.querySelector('fieldset').disabled = false;
+      sectionControls.disabled = false;
+      edition.disabled = false;
       appendix.disabled = false;
       close.disabled = false;
       updateSelection();
