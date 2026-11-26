@@ -14,8 +14,8 @@
   <script defer src="cross-market-history-beta2-events.js?v=1"></script>
   <script defer src="cross-market-history-beta2-data.js?v=1"></script>
   <script defer src="cross-market-history-beta2.js?v=1"></script>
-</head>
-<body>
+<link rel="stylesheet" href="history-gallery.css?v=1"></head>
+<body class="history-replay">
   <header class="masthead">
     <a class="brand" href="desk.html">Market Intel</a>
     <nav aria-label="Historical workspaces">
@@ -26,12 +26,12 @@
   </header>
   <main id="main">
     <section class="replay-intro" aria-labelledby="page-title">
-      <div class="title-line">
+      <div class="cover-copy"><div class="title-line">
         <h1 id="page-title">Cross-Market History</h1>
         <span class="version">Beta 2</span>
       </div>
       <p>Replay market events across gold, equities, yields, sectors and the Hub watchlist.</p>
-    </section>
+    </div><div aria-hidden="true" class="history-engraving ticker"></div></section>
 
     <section class="event-panel" aria-labelledby="event-picker-label">
       <div class="event-picker">
@@ -49,7 +49,7 @@
       </div>
     </section>
     <p class="load-status" id="load-status" role="status">Loading price and yield histories…</p>
-    <div id="replay" hidden>
+    <div id="replay" hidden><nav class="history-jumps" aria-label="Replay sections"><a href="#price-path">Price chart</a><a href="#market-title">Market moves</a><a href="#sector-title">US sectors</a><a href="#watchlist-title">Watchlist</a><a href="#methods">Methods</a></nav>
       <section class="surface chart-panel" id="price-path" aria-labelledby="chart-title">
         <div class="surface-heading">
           <div>

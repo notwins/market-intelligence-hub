@@ -67,9 +67,17 @@ function environment({dataFailure=false,batch=false,bosFailure=false,mobile=fals
  const css=fs.readFileSync('site/v4-share-lab.css','utf8');assert(css.includes('17px * var(--chart-text-scale,1)')&&css.includes('21px * var(--chart-text-scale,1)'),'desktop and mobile axes honor independent chart text scale');assert(css.includes('var(--surface,')&&css.includes('var(--soft,')&&css.includes('var(--accent,'),'shared Hub palette controls apply');assert(css.includes('data-display-columns=one')&&css.includes('data-display-columns=four')&&css.includes('var(--card-pad,'),'card density and column controls apply');
  for(const name of ['v4-share-lab.js','v4-share-lab.css','share-lab-data.js'])assert(html.includes(name),'registered shared asset: '+name);
  const route='beta4-shares';
- const start=routes.indexOf("if(X.historyTab==='beta4-shares')"),end=routes.indexOf("if(X.historyTab==='beta2-shares')",start);
- const renderRoute=new Function('X','tabs',routes.slice(start,end));
- assert(renderRoute({historyTab:route},'').includes('id="'+route+'"'));
+ const routerContext={window:{},MarketCore:require('../site/v3-core.js'),USTDecisionEngine:{},USTDecisionImport:{},document:{addEventListener(){}}};
+ vm.runInNewContext(routes,routerContext);
+ const router=routerContext.window.MarketV3;
+ router.applyRoute('history',route);
+ const pivotView=router.historyView();
+ assert(pivotView.includes('id="'+route+'"'));
+ const tabsAt=pivotView.indexOf('class="subnav history-tabs"');
+ assert(tabsAt>=0 && tabsAt<pivotView.indexOf('id="'+route+'"'));
+ router.applyRoute('history','yield');
+ const loadingView=router.historyView();
+ assert(loadingView.includes('role="status"') && loadingView.indexOf('class="subnav history-tabs"')<loadingView.indexOf('role="status"'));
  assert(html.includes('history/'+route)&&mobile.includes(route));
  for(const retired of ['beta-shares','beta3-shares']) {
   assert(!html.includes('data-view="history/'+retired+'"'));

@@ -4,6 +4,15 @@
   const status = document.querySelector('#market-status');
   if (window.self !== window.top && new URLSearchParams(location.search).get('embed') === '1') {
     document.body.classList.add('embedded-history');
+    // The main desk owns the outer scroll. Refit after images, tables and disclosures resize.
+    const frame = window.frameElement;
+    if (frame?.id === 'full-history-frame') {
+      const fit = () => {
+        const height = Math.ceil(document.body.getBoundingClientRect().height);
+        if (height > 0 && frame.style.height !== height+'px') frame.style.height = height+'px';
+      };
+      new ResizeObserver(fit).observe(document.body);
+    }
     document.querySelector('main').addEventListener('click', event => {
       const link = event.target.closest('a[href]');
       if (link && !link.getAttribute('href').startsWith('#')) link.target = '_top';
@@ -12,7 +21,15 @@
   const guide = document.querySelector('#reading-guide');
   const guideButton = document.querySelector('#open-reading-guide');
   guideButton.hidden = false;
-  guideButton.addEventListener('click', () => guide.showModal());
+  guideButton.addEventListener('click', () => {
+    const frame = window.frameElement;
+    if (frame?.id === 'full-history-frame') {
+      const top = Math.max(0,-frame.getBoundingClientRect().top);
+      guide.style.setProperty('--guide-top',top+16+'px');
+      guide.style.setProperty('--guide-height',Math.max(120,frame.ownerDocument.documentElement.clientHeight-32)+'px');
+    }
+    guide.showModal();
+  });
   guide.querySelectorAll('[data-guide-jump]').forEach(anchor => anchor.addEventListener('click', () => guide.close()));
   const colors = ['#114fa9', '#087e72', '#6843a6', '#b66a08', '#b63d56', '#676f87', '#233044'];
   const equityColors = ['#086b58', '#247821', '#007398', '#2354ac', '#4a50a4',
@@ -94,7 +111,7 @@
   }
 
   function panel(card, title, unit, series, description, opts) {
-    return '<section class="panel"><h3>' + esc(title) + ' <small>' + esc(unit) + '</small></h3><p class="caption">' + description +
+    return '<section class="panel" data-subject="'+esc(opts?.subject || 'macro')+'"><h3>' + esc(title) + ' <small>' + esc(unit) + '</small></h3><p class="caption">' + description +
       '</p>' + figure(card, series, unit, title, opts) + '</section>';
   }
 
@@ -230,20 +247,20 @@
     const extra = macro[notes[card.events[0]?.id]?.extra || 'USD/SGD'];
     return [
       panel(card,'US employment','%',[F('UNRATE',0,33),F('PAYEMS',1,33,'4 4')],
-        'Unemployment rate and payroll growth from the same month a year earlier.'),
-      panel(card,'US inflation','% YoY',[F('CPIAUCSL',0,33),F('PCEPI',1,33,'4 4'),F('PCEPILFE',2,33,'2 4')],
+        'Unemployment rate and payroll growth from the same month a year earlier.', {subject:'jobs'}),
+      panel(card,'US inflation','% YoY',[F('CPIAUCSL',0,33),F('PCEPI',1,33,'4 4', {subject:'inflation'}),F('PCEPILFE',2,33,'2 4')],
         'Headline CPI, headline PCE and core PCE.'),
       panel(card,'US credit stress','%',[F('DRCRELEXFACBS',0,96),F('BAMLH0A0HYM2',4,7,'4 4')],
-        'Quarterly bank CRE delinquency and daily high-yield spreads. These measure different kinds of stress.'),
+        'Quarterly bank CRE delinquency and daily high-yield spreads. These measure different kinds of stress.', {subject:'credit'}),
       panel(card,'What’s out of the norm?','σ',anomalies.map((s,i) => ({
         ...chartLine(s.label,s.points,colors[i],s.grain === 'quarterly' ? 96 : 33,i ? '4 4' : ''),peak:s.peak
-      })), signal + ' ' + stats, {reference:[-2,0,2]}),
+      })), signal + ' ' + stats, {reference:[-2,0,2],subject:'signal'}),
       panel(card,extra.label,extra.unit,[chartLine(extra.label,extra.points,colors[2],extra.grain === 'weekly' ? 9 : 7)],
         extra.caption + ' ' + link(extra.source,'Source'))
     ].join('');
   }
 
-  function renderCard(card,sources) {
+  function renderCard(card,sources,next) {
     const title = card.current ? 'Current market' : notes[card.events[0].id]?.title || card.events[0].label;
     const markers = card.current ? '<span class="tag">Today · Singapore</span>' : card.events.map((e,i) =>
       '<a class="tag" href="#marker-' + esc(e.id) + '"><b>' + (i+1) + '</b> ' + day(e.date) + ' · ' + esc(e.label) + '</a>').join('');
@@ -259,7 +276,8 @@
       '</p><div class="yield-plot">' + figure(card,yieldLines(card,'10Y',sources),'% p.a.','UST and SGS 10Y yields') + '</div>' +
       (card.current ? eventNotes(card,sources) : '') + '</section>' + equitySection(card,sources) + '</div>' +
       (card.current ? '' : '<div class="event-notes">' + eventNotes(card,sources) + '</div>') +
-      '<div class="macro">' + plotMacro(card,sources) + '</div></article>';
+      '<div class="macro">' + plotMacro(card,sources) + '</div><nav class="episode-turn" aria-label="Episode navigation">' +
+      link('#episode-index','Episode list') + (next ? link('#'+next.id,'Next episode · '+next.events[0].date.slice(0,4)) : link('#sgs-report','SGS research report')) + '</nav></article>';
   }
 
   function assemble(events, fed, sgs, mas, spx, monitor, history, today, weekly) {
@@ -368,7 +386,7 @@
     }
     const cards = M.groupEvents(sources.events,today);
     const container = document.querySelector('#market-episodes');
-    container.innerHTML = cards.map(c => renderCard(c,sources)).join('');
+    container.innerHTML = cards.map((c,i) => renderCard(c,sources,cards[i+1])).join('');
     document.querySelector('#episode-index').innerHTML = cards.map(c =>
       link('#'+c.id,c.current ? 'Current market' : c.events[0].date.slice(0,4)+' · '+(notes[c.events[0].id]?.title || c.events[0].label))).join('');
     document.querySelector('#report-evidence').innerHTML = report(sources,cards);
