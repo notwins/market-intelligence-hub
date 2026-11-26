@@ -22,7 +22,6 @@
     const date = Date.parse(pricing?.requestDate);
     if (pricing?.kind !== 'gld-accumulator-pricing' || pricing.version !== 1 ||
         !Number.isFinite(date) || new Date(date).toISOString().slice(0, 10) !== pricing.requestDate ||
-        !Number.isInteger(pricing.upfrontFeeBps) || pricing.upfrontFeeBps < 0 ||
         pricing.settlementFrequency !== 'monthly' || typeof pricing.koPlusOne !== 'boolean' ||
         !Number.isFinite(pricing.offset) || !Array.isArray(pricing.rows) || !pricing.rows.length) {
       throw Error('Invalid GLD pricing header.');
@@ -57,12 +56,12 @@
   function displayPricing(pricing) {
     const summary = el('pricing-terms');
     const wrapper = el('pricing-table');
-    const {rows, requestDate, upfrontFeeBps, koPlusOne, offset} = pricing;
+    const {rows, requestDate, koPlusOne, offset} = pricing;
     const quoted = rows.filter(row => row.strike !== null).length;
     pricingStatus.textContent = quoted
       ? 'Choose a quoted strike to fill the terms below. You can edit the terms after selecting a quote.'
       : 'This pricing request has no quoted strikes. Enter your own terms below.';
-    summary.textContent = `Pricing request ${dateLabel(requestDate)} · Normal · Monthly settlement · Upfront fee ${upfrontFeeBps} bp · KO+1 ${koPlusOne ? 'yes' : 'no'} · Offset ${Metals.format(offset, 1)}`;
+    summary.textContent = `Pricing request ${dateLabel(requestDate)} · Normal · Monthly settlement · KO+1 ${koPlusOne ? 'yes' : 'no'} · Offset ${Metals.format(offset, 1)}`;
 
     const guarantees = [...new Set(rows.map(row => row.guarantee))].sort((a, b) => a - b);
     const groups = new Map();
@@ -119,7 +118,7 @@
 
   async function loadPricing() {
     try {
-      const response = await fetch('../data/metals/gld-accumulator-pricing.json');
+      const response = await fetch('../data/metals/gld-accumulator-pricing.json?v=20261126.pricing3');
       if (!response.ok) throw Error('Pricing request failed');
       displayPricing(readPricing(await response.text()));
     } catch {

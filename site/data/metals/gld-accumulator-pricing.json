@@ -2,7 +2,6 @@
   "kind": "gld-accumulator-pricing",
   "version": 1,
   "requestDate": "2026-11-25",
-  "upfrontFeeBps": 300,
   "settlementFrequency": "monthly",
   "koPlusOne": true,
   "offset": 7,
