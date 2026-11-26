@@ -53,10 +53,8 @@ class SIReferenceTests(unittest.TestCase):
   self.assertEqual([steps[f'SI-{i:03d}'] for i in (1,6,12,50,100,141,190,225)],[5,2,1,3.5,4.5,8,1.5,2])
   self.assertNotIn('SI-017',steps)
   self.assertNotIn('SI-075',steps)
- def test_placement_and_original_exclusion(self):
-  tools=(ROOT/'site/v4-tools.js').read_text();self.assertIn("['si','SI Pricing']",tools)
-  self.assertIn("const tab=X.historyTab",tools)
-  self.assertIn("if(tab==='si')content=window.MarketSI?.view()",tools)
+ def test_original_exclusion(self):
+  # test_si_pricing.cjs exercises the rendered tab and its reference reader.
   public=[p.name for p in (ROOT/'site').rglob('*') if p.is_file()]
   self.assertNotIn('Structured_Investment_Reader.html',public)
   self.assertNotIn('FinIQ_SI_225_Rows_PHOTO_QC_Pricing_Locked.xlsx',public)
