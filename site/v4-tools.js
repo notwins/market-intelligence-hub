@@ -144,8 +144,8 @@ function timeData(second=false){const fx=X.historyTab==='fx',a=X.history.series.
  return{a,b,lines:sets};
 }
 function historyView(){
- const topics=[['yield','Yield history'],['shares','Share prices'],['beta2-shares','Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','SI Pricing']];
- const tab=X.historyTab, title=topics.find(item=>item[0]===tab)?.[1]||'Historical charts';
+ const topics=[['yield','Yield history'],['shares','Share prices'],['beta2-shares','▤ Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']];
+ const tab=X.historyTab, title=topics.find(item=>item[0]===tab)?.[1].replace(/^[▤▧] /,'')||'Historical charts';
  const descriptions={yield:'Compare yields and spreads across maturities and observation dates.',shares:'Compare selected shares, dated valuation observations and reported earnings.',fx:'Compare exchange rates over a shared period using native rates or a common index.',curves:'Compare Treasury and Singapore government yield curves on two observation dates.',spx:'Explore the saved S&P 500 index history and its source coverage.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
  const jump=['yield','fx','curves'].includes(tab);
  const intro='<header class="history-opener"><div>'+head('Historical charts',title,t(descriptions[tab]||''))+
@@ -156,7 +156,7 @@ function historyView(){
  if(tab==='beta4-shares')content='<section id="beta4-shares" aria-label="Share history pivot"></section>';
  else if(tab==='beta2-shares')content=window.Beta2Shares.view();
  else if(tab==='shares')content=(window.MarketPrices?.historyPanel()||'<p>Share history unavailable.</p>')+(window.BOSEquity?.panel('history')||'');
- else if(tab==='si')content=window.MarketSI?.view()||'<p>SI reference unavailable.</p>';
+ else if(X.historyTab==='si')content=window.MarketSI?.view()||'<p>SI reference unavailable.</p>';
  else if(!X.history)content=loading('history');
  else {
   const watch=tab!=='fx'&&tab!=='spx'?bondWatchPanel('history'):'';
