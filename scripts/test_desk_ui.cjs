@@ -404,5 +404,33 @@ test('QoQ uses adjacent standalone quarters and YoY uses the comparable year-ago
   assert.equal(Q.view({...record,observations:[a,{...b,values:{revenue:-1}},c]},{growthBasis:'qoq'}).values.revenueGrowth,null);
 });
 
+test('Beta 3 translates reporting currencies on or before the period end and rounds presentation only',()=>{
+  const U=require('../site/stocks-beta3-usd.js');
+  const feed={currencies:{TWD:{points:[['2026-09-29',.03],['2026-09-30',1/31.85],['2026-10-01',.04]]},
+    GBP:{points:[['2026-09-30',1.25]]}}};
+  assert.equal(U.rate(feed,'TWD','2026-09-28'),null);
+  assert.equal(U.rate(feed,'TWD','2026-09-30').date,'2026-09-30');
+  assert.equal(U.convert(feed,3550,'GBp','2026-09-30'),44.375);
+  assert.equal(U.integer(U.convert(feed,10052887.514,'TWD','2026-09-30'),'m'),'315,632m');
+  const values=U.valuesInUsd(feed,{assets:10052887.514,debtAssets:44.4},'TWD','2026-09-30');
+  assert.equal(values.debtAssets,44.4);
+  assert.equal(U.integer(0.25,'%'),'<1%');assert.equal(U.integer(0,'%'),'0%');
+  assert.equal(U.scaleRows({assets:10,liabilities:6,currentAssets:5,currentLiabilities:2,cash:1,totalDebt:3,shortInvestments:4}).netDebt,2);
+  assert.equal(U.scaleRows({assets:10}).workingCapital,null);
+});
+test('Bonus companies preserve the direct peers and supplements retain earlier observations and trailing values',()=>{
+  const U=require('../site/stocks-beta3-usd.js');
+  assert.deepEqual(U.peers('NVDA-US',['AAPL-US'],['TSLA-US','AAPL-US','GOOG-US']),['NVDA-US','AAPL-US','GOOG-US','TSLA-US']);
+  const record={currency:'USD',ttm:{end:'2026-09-30',values:{netCommon:8}},
+    observations:[{period:'Q2 2026',end:'2026-06-30',values:{revenue:4}},{period:'Q3 2026',end:'2026-09-30',values:{revenue:5}}]};
+  const extra={currency:'USD',observations:[{period:'Q3 2026',values:{netCommon:2}},{period:'Q4 2026',end:'2026-12-31',values:{revenue:6}}]};
+  const merged=U.mergeRecord(record,extra);
+  assert.equal(merged.observations.length,3);
+  assert.equal(merged.observations[1].values.revenue,5);
+  assert.equal(merged.ttm,undefined);
+  assert.equal(U.recordForObservation(merged,merged.observations[1]).ttm.values.netCommon,8);
+  assert.match(U.quarterlyReason('peTTM',{ttm:{values:{netCommon:-1}}},null,'operating'),/negative/);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

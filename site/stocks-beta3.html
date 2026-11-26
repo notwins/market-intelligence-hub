@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=6">
+  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.usd1">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="stocks-beta3-scroll.js?v=1"></script>
   <script defer src="content-source.js"></script>
@@ -17,13 +17,14 @@
   <link rel="stylesheet" href="si-share-picker.css">
   <script defer src="si-share-picker.js?v=3"></script>
   <script defer src="stocks-beta3-disclosures.js?v=3"></script>
-  <script defer src="stocks-beta3-details.js?v=3"></script>
-  <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=1">
+  <script defer src="stocks-beta3-details.js?v=20261127.usd1"></script>
+  <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=20261127.usd1">
   <script defer src="shares-quarterly-core.js?v=2"></script>
-  <script defer src="stocks-beta3-quarterly-charts.js?v=2"></script>
+  <script defer src="stocks-beta3-quarterly-charts.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-comparison.js?v=4"></script>
   <script defer src="stocks-beta3-model.js?v=4"></script>
-  <script defer src="stocks-beta3.js?v=6"></script>
+  <script defer src="stocks-beta3-usd.js?v=1"></script>
+  <script defer src="stocks-beta3.js?v=20261127.usd1"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -42,6 +43,7 @@
         <label class="control-group">Automatic peer count<select id="peer-count"><option>5</option><option>6</option><option>7</option><option>8</option><option selected>9</option><option>10</option></select></label>
         <label class="control-group">Comparison period<select id="period"><option value="latest">Latest 10-Q quarter</option></select></label>
         <div id="peer-editor" hidden><div id="peer-picker"><div class="share-picker"><label for="peer-add">Add competitor</label><div class="share-picker-field"><input id="peer-add" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="peer-add-list" autocomplete="off" placeholder="Company or ticker"><button type="button" aria-label="Show add competitor options" aria-controls="peer-add-list"><span aria-hidden="true"></span></button></div><div id="peer-add-list" class="share-picker-list" role="listbox" aria-label="Add competitor" hidden></div></div></div><div class="selected-peers" id="selected-peers"></div><div class="peer-actions"><span id="peer-draft"></span><button type="button" id="auto-peers">Use automatic peers</button><button type="button" id="cancel-peers">Cancel</button><button type="button" id="apply-peers" class="apply">Apply peers</button></div></div>
+        <fieldset class="bonus-companies"><legend>Bonus companies</legend><div id="bonus-choices"></div></fieldset>
         <div class="peer-context"><span id="peer-basis"></span><button type="button" id="open-bos" aria-haspopup="dialog" hidden>BOS comparison</button></div>
       </section>
       <section id="comparison" aria-label="Company comparison">
@@ -62,7 +64,7 @@
            <article class="panel note-chart"><header><h3>Maturity ladder</h3><label class="sr-only" for="schedule-kind">Payment schedule</label><select id="schedule-kind"></select></header><div id="maturity-diagram"></div></article>
           </div></div></section>
         <section class="filing-section" id="statements"><header class="block-heading"><h2>Valuation &amp; financial statements</h2></header>
-          <div class="comparison-tools"><label>Jump to table <select id="jump-table"><option value="">Choose table</option></select></label><label>Amounts <select id="units"><option value="bn">Billions</option><option value="mn">Millions</option></select></label>
+          <div class="comparison-tools"><label>Jump to table <select id="jump-table"><option value="">Choose table</option></select></label><label>USD amounts <select id="units"><option value="bn">Billions</option><option value="mn">Millions</option></select></label>
             <label>Show <select id="row-filter"><option value="all">All rows</option><option value="focus">Highlighted rows</option></select></label>
             <label>Geography <select id="geo-filter"><option value="all">All reported areas</option><option value="country">Countries and markets</option><option value="region">Regions</option><option value="other">Other and adjustments</option></select></label>
             <label>Breakdowns <select id="mix-units"><option value="both">Amount and %</option><option value="amount">Amount only</option><option value="share">% only</option></select></label>
