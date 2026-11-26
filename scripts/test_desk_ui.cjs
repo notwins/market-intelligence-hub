@@ -304,6 +304,12 @@ test('Shares Beta 3 calculates dated equity and enterprise multiples without ass
  market.currency='USD';company.model='bank';assert.equal(view().values.proxyEvEbitda,undefined);
  delete y.values.netCommon;market.priceBasisOK=true;market.quoteCurrency='USD';market.quotePrice=72;market.epsEnd=y.end;market.priceEps=9;y.values.dilutedEps=72;
  assert.equal(view().values.peFY,8);market.priceBasisOK=false;assert.equal(view().values.peFY,undefined);
+ delete data.expansion.quarters['T US'];company.model='operating';market.date='2026-11-25';
+ data.expansion.interim={T:{ended:'2026-09-30',filed:'2026-11-12',source:'https://www.sec.gov/example.htm',currency:'USD',values:{netCommon:10,revenue:85}}};
+ assert.equal(view().values.peTTM,20);assert.equal(view().values.ttmRevenue,85);
+ market.date='2026-11-11';assert.equal(view().values.peTTM,undefined);
+ market.date='2026-11-25';market.includesPreferred=true;y.values.noncontrollingInterest=3;
+ assert.equal(view().values.peTTM,undefined);assert.equal(view().values.ev,213);
 });
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;

@@ -81,11 +81,18 @@
   function valueView(data,id,ticker,year,period) {
     const c=data.companies[id],latest=period==='latest',x=data.expansion||{};
     const q=quarterView(x.quarters?.[ticker]||x.quarters?.[c.ticker],year,latest);
+    const interim=latest&&!q.source?x.interim?.[id]:null;
+    if(interim&&interim.currency===c.currency){
+      Object.assign(q,{asOf:interim.filed,ended:interim.ended,source:interim.source,sourceLabel:'SEC interim filing',currency:interim.currency});
+      q.values.ttmRevenue=interim.values.revenue;
+      q.values.ttmNetCommon=interim.values.netCommon;
+    }
     const book=x.market?.[ticker]||x.market?.[c.ticker]||x.market?.[id];
     const m=latest?book?.latest:book?.history?.[year?.end];
     const values={...q.values}, nm=new Set(), inputs=year?.values||{};
     if(!m)return {values,nm,q,m:null};
     const cap=m.cap,capital=valid(cap)&&cap>0 && m.currency===c.currency?cap:null;
+    const commonCapital=m.includesPreferred?null:capital;
     const knownBy=year?.knownBy||(year?.end===c.period?c.filed:null);
     const asFiled=Boolean(year&&knownBy&&m.date>=knownBy);
     values.cap=m.currency===c.currency?cap:null;
@@ -95,10 +102,10 @@
       if(n<=0||d<=0){nm.add(k);return;}
       values[k]=n/d;
     }
-    if(latest && q.asOf && m.date>=q.asOf && q.currency===m.currency)multiple('peTTM',capital,q.values.ttmNetCommon);
+    if(latest && q.asOf && m.date>=q.asOf && q.currency===m.currency)multiple('peTTM',commonCapital,q.values.ttmNetCommon);
     if(asFiled) {
       const common=valid(inputs.netCommon)?inputs.netCommon:null;
-      multiple('peFY',capital,common);
+      multiple('peFY',commonCapital,common);
       if(!valid(values.peFY)&&!nm.has('peFY')&&m.priceBasisOK&&m.quoteCurrency===c.currency){
         const eps=m.epsEnd===year.end&&valid(m.priceEps)?m.priceEps:inputs.dilutedEps;
         multiple('peFY',m.quotePrice,eps);
@@ -106,11 +113,12 @@
       if(valid(values.peFY))values.earningsYield=100/values.peFY;
       const commonEquity=valid(inputs.bookCommon)?inputs.bookCommon:
         valid(inputs.equity)&&valid(inputs.preferredEquity)?inputs.equity-inputs.preferredEquity:null;
-      multiple('priceBook',capital,commonEquity);multiple('priceSales',capital,inputs.revenue);
+      multiple('priceBook',commonCapital,commonEquity);multiple('priceSales',capital,inputs.revenue);
       if(c.model==='operating') {
         let enterprise=valid(m.enterprise)&&m.currency===c.currency?m.enterprise:null;
-        if(enterprise===null && [capital,inputs.totalDebt,inputs.cash,inputs.preferredEquity,inputs.noncontrollingInterest].every(valid))
-          enterprise=capital+inputs.totalDebt+inputs.preferredEquity+inputs.noncontrollingInterest-inputs.cash;
+        const preferred=m.includesPreferred?0:inputs.preferredEquity;
+        if(enterprise===null && [capital,inputs.totalDebt,inputs.cash,preferred,inputs.noncontrollingInterest].every(valid))
+          enterprise=capital+inputs.totalDebt+preferred+inputs.noncontrollingInterest-inputs.cash;
         values.ev=enterprise;
         multiple('evEbitda',enterprise,inputs.ebitda);multiple('evEbit',enterprise,inputs.operatingIncome);
         if([capital,inputs.totalDebt,inputs.cash].every(valid))multiple('proxyEvEbitda',capital+inputs.totalDebt-inputs.cash,inputs.ebitda);
