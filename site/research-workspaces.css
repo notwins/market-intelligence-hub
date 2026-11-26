@@ -233,6 +233,10 @@ html[data-nav-style=professional]:is(.ws-blog,.ws-calls,.ws-briefing) .hub-prima
 }
 .ws-blog #automated-research .mu-writeups-grid > article:first-child h3 { line-height:1.05; }
 .ws-blog .mu-writeups .mu-writeup[data-main-research] { border:1px solid #cbbfb4; border-left:double 7px var(--mih-card-accent,#9a7560); border-radius:2px 7px 7px 2px; box-shadow:inset 4px 0 #eee5d7,0 2px 0 -1px #d8d0bf; background-color:#faf4e9; }
+/* Editions from both sources share the notebook's reading spread. */
+.ws-blog #my-thoughts:not([hidden]) { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,24rem),1fr)); gap:1rem; }
+.ws-blog #my-thoughts .mu-writeups-heading { grid-column:1/-1; }
+.ws-blog #my-thoughts > .mu-writeups-grid:not([hidden]) { display:contents; }
 .ws-blog #my-thoughts .mu-writeups-grid > article {
   padding-left:clamp(1.6rem,2.4vw,2.5rem); border-radius:2px; border:1px solid #d9cda5;
   background-color:#fcf6dc; background-image:linear-gradient(90deg,transparent 0 13px,#d6ac9b 13px 14px,transparent 14px),repeating-linear-gradient(0deg,transparent 0 27px,#e8dfbf 27px 28px);
@@ -253,7 +257,7 @@ html[data-nav-style=professional]:is(.ws-blog,.ws-calls,.ws-briefing) .hub-prima
 .ws-calls .calls-companies [data-equity-cover] :is(h4,p) { margin:.1rem 0 .4rem; }
 .ws-calls .calls-companies [data-equity-cover] > .watchlist-report-link { margin-top:auto; }
 .ws-calls .calls-edition .watchlist-report-link { color:#fffdf8; background:#3b5344; border-radius:4px; }
-.ws-calls .calls-ledger > .watchlist-card[data-review-type] { --ticket:#778275; border:1px solid #bbc5b8; border-left:5px solid var(--ticket); border-radius:3px; }
+.ws-calls .calls-ledger > :where(.watchlist-card)[data-review-type] { --ticket:#778275; border:1px solid #bbc5b8; border-left:5px solid var(--ticket); border-radius:3px; }
 .ws-calls .calls-ledger [data-review-type] .watchlist-card-head { border-right:1px dashed var(--ticket); padding-right:1rem; align-self:stretch; }
 .ws-calls .calls-ledger > [data-review-type="Historical closed-trade review"] { --ticket:#497460; background-color:#f0f5ec; }
 .ws-calls .calls-ledger > [data-review-type="Hypothetical strategy comparison"] { --ticket:#89704e; background-color:#f7f1e6; border-left-style:double; border-left-width:9px; }
