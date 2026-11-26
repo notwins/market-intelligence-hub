@@ -2,12 +2,15 @@
   'use strict';
   const M=window.FilingComparison, E=window.SharesComparison, $=id=>document.getElementById(id);
   const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const D=window.FilingNotes, Notes=window.FilingNotesView;
   const colors=['#176b5a','#41679b','#9a602b','#76558d','#a5455a','#267a89','#646b30','#584c89','#a45132','#3f6b41','#784a66'];
   const defaultFocus=['peTTM','peFY','evEbitda','proxyEvEbitda','forwardPE','qGrowth','qNetMargin','revenue','operatingIncome','netIncome','ebitda','totalDebt','equity','operatingCashFlow','freeCashFlow','revenueGrowth','operatingMargin','roe','fcfMargin'];
   const state={data:null,focus:'',custom:null,size:5,period:'latest',unit:'bn',filter:'all',stars:new Set(defaultFocus),hidden:new Set(),
-    bar:'operatingMargin',trend:'netMargin',picker:'',draft:[],published:null,privateData:null};
+    bar:'operatingMargin',trend:'netMargin',draft:[],published:null,privateData:null,details:{},diagramCompany:'',autoFocus:new Set(),dropped:new Set()};
+  ['solvency-rank','solvency-score','recent-cash','recent-disclosedCash','recent-cashIncludingRestricted','recent-cashShort','note-cash','note-cashShort','note-treasuries','note-assets','note-ppe','note-totalDebt','note-liabilities','note-leasesTotal','note-interestCover','note-equityAssets','note-debtCoverage','note-cet1','note-firstDebtDue','note-shortDebtShare','note-dueCash','due-debt-y1','due-debt-y2','due-debt-total','due-operatingLease-y1','due-financeLease-y1','due-allLeases-y1'].forEach(k=>state.stars.add(k));
+  const highlighted=k=>state.stars.has(k)||(state.autoFocus.has(k)&&!state.dropped.has(k));
   const num=(n,digits=1)=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(n);
-  const pct=n=>Number.isFinite(n)?num(Number(n.toFixed(1)))+'%':'—';
+  const pct=n=>!Number.isFinite(n)?'—':n!==0&&Math.abs(n)<0.005?(n<0?'−':'')+'<0.01%':num(n,Math.abs(n)>0&&Math.abs(n)<0.05?2:1)+'%';
   const times=n=>Number.isFinite(n)?num(n,2)+'×':'—';
   const date=iso=>iso?new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(iso+'T00:00:00Z')):'';
   const cmult=new Set(['currentRatio','debtEquity','assetTurnover','cashConversion']);
@@ -41,7 +44,8 @@
     if(state.period!=='latest'&&!periods.includes(state.period))state.period='latest';
     const years=companies.map(c=>M.yearFor(c,state.period));
     const views=ids.map((id,i)=>E.valueView(state.data,id,ticker[i],years[i],state.period));
-    return {ids,companies,ticker,peers,years,views,periods,report,members,candidates,score:M.checklist(companies,years)};
+    const notes=ids.map((id,i)=>D.yearView(state.details,id,companies[i],years[i]));
+    return {ids,companies,ticker,peers,years,views,periods,report,members,candidates,notes,periodLatest:state.period==='latest',score:M.checklist(companies,years)};
   }
   function updateURL() {
     const u=new URL(location.href);
@@ -58,7 +62,8 @@
     const c=comparison(), cos=c.companies;
     $('period').innerHTML=opt('latest','Latest reported')+c.periods.map(y=>opt(y,'FY ending in '+y)).join('');$('period').value=state.period;
     $('peer-count').value=String(state.size);$('comparison').style.setProperty('--columns',cos.length);
-    $('focus-name').textContent=cos[0].name+' · '+state.focus;
+    state.autoFocus=new Set(Notes.focusKeys(c));
+    updateFocusPicker();
     $('peer-name').textContent=c.peers.length?c.peers.map(id=>lookup(id).name).join(' · '):'Add competitors';
     const reason=id=>c.candidates.get(id)||'Selected peer';
     const tally=new Map();for(const id of c.peers){const name=reason(id);tally.set(name,(tally.get(name)||0)+1);}
@@ -66,7 +71,7 @@
     $('peer-basis').textContent=(state.custom?'Selected comparison':'Automatic comparison')+(basis?' · '+basis:'')+(state.custom===null&&c.peers.length<state.size?' · '+c.peers.length+' available':'');
     $('open-bos').hidden=!c.report;
     $('companies').innerHTML=`<div class="column-label"><strong>Comparison item</strong><small>${esc(cos[0].industry)}</small></div>`+
-      cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-name">${esc(co.name)}</span><small>${esc(c.ticker[i])} · ${esc(co.currency)}</small><small>${c.years[i]?esc(date(c.years[i].end)):'No filing for period'}</small><small class="peer-role">${i===0?'Focus company':esc(reason(c.ids[i]))}</small></div>`).join('');
+      cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-brand">${logo(c.ids[i],co.name)}<span class="company-name">${esc(co.name)}</span></span><small>${esc(c.ticker[i])} · ${esc(co.currency)}</small><small>${c.years[i]?esc(date(c.years[i].end)):'No filing for period'}</small><small class="peer-role">${i===0?'Focus company':esc(reason(c.ids[i]))}</small></div>`).join('');
     const financial=cos.some(M.financial), ratioKeys=financial?['roe','roa','revenueGrowth','profitGrowth']:['operatingMargin','netMargin','grossMargin','roe','roa','revenueGrowth','profitGrowth','fcfMargin','cashMargin'];
     const trail=ratioKeys.filter(k=>cos.some(co=>co.years.some(y=>Number.isFinite(M.metric(co,y,k)))));
     const comparisonKeys=[...E.multiples,'earningsYield','qGrowth','qOperatingMargin','qNetMargin']
@@ -76,7 +81,7 @@
       if(!available.includes(state[component]))state[component]=available.includes(fallback)?fallback:available[0];
       const select=$(component+'-metric');select.innerHTML=available.map(k=>opt(k,allLabels[k])).join('');select.value=state[component];
     }
-    renderBars(c);renderTrend(c);renderTables(c);renderSources(c);updateURL();
+    renderBars(c);renderTrend(c);Notes.chartControls(c,state,opt);drawNotes(c);renderTables(c);renderSources(c);updateURL();
   }
   function scale(values) {
     const lo=Math.min(0,...values),hi=Math.max(0,...values),raw=(hi-lo||4)/4,order=10**Math.floor(Math.log10(raw));
@@ -128,16 +133,16 @@
     return r.flatMap((n,i)=>n===lead?[i]:[]);
   }
   function rowCells(key,title,values,fmt,winners=[],interactive=true) {
-    const starred=state.stars.has(key)&&interactive;
+    const starred=highlighted(key)&&interactive;
     const star=interactive?`<button class="row-star" type="button" data-star="${esc(key)}" aria-pressed="${starred}" aria-label="${esc((starred?'Remove highlight from ':'Highlight ')+title)}" title="${starred?'Remove row highlight':'Highlight row'}">${starred?'★':'☆'}</button>`:'';
     return `<tr data-row="${esc(key)}" class="${starred?'focus-row':''}"><th scope="row">${star}<span>${esc(title)}</span></th>${values.map((v,i)=>{
-      const win=winners.includes(i),s=fmt(v,i),mark=win?`<span class="win-mark" title="${winners.length>1?'Joint leader':'Leader'}" aria-label="Leader">✓</span>`:'';
-      return `<td class="${win?'winner':s==='—'||s==='N/M'?'unavailable':''}">${mark}${esc(s)}</td>`;
+      const win=winners.includes(i),formatted=fmt(v,i),detail=formatted&&typeof formatted==='object'?formatted:null,s=detail?detail.main:formatted,mark=win?`<span class="win-mark" title="${winners.length>1?'Joint leader':'Leader'}" aria-label="Leader">✓</span>`:'';
+      return `<td class="${win?'winner':s==='—'||s==='N/M'?'unavailable':''}"${detail?.tip?' title="'+esc(detail.tip)+'"':''}>${mark}${esc(s)}${detail?.sub?'<small class="cell-share">'+esc(detail.sub)+'</small>':''}</td>`;
     }).join('')}</tr>`;
   }
   function renderTables(c) {
     const display=(key,fmt,rank,lower=false)=>{
-      if(state.filter==='focus'&&!state.stars.has(key))return '';
+      if(state.filter==='focus'&&!highlighted(key))return '';
       const vals=c.ids.map((_,i)=>value(c,i,key));
       const wins=rank?best(vals,lower,E.multiples.has(key)||cmult.has(key)?2:1):[];
       return rowCells(key,allLabels[key],vals,(v,i)=>c.views[i].nm.has(key)?'N/M':fmt(v,i),wins);
@@ -159,6 +164,7 @@
         display('qRevenue',amount),display('qGrowth',pct,true),display('qOperatingMargin',pct,true),display('qNetMargin',pct,true),
         ...(state.period==='latest'?[textRow('trailing-period','Trailing period',i=>c.views[i].q.ended?date(c.views[i].q.ended):c.views[i].q.period),display('ttmRevenue',amount),display('ttmNetCommon',amount)]:[])
       ]],
+      ...Notes.groups(c,{row:rowCells,text:textRow,show:k=>state.filter!=='focus'||highlighted(k),amount,pct,times,best,fmtDate:date,period:state.period}),
       ...M.groups.map(([title,keys],i)=>[['income','balance','cash'][i],title,keys.map(k=>display(k,amount))]),
       ['ratios','Financial ratios',Object.keys(M.labels).map(k=>display(k,cmult.has(k)?times:pct,!cmult.has(k)&&k!=='equityRatio'))]
     ];
@@ -167,6 +173,7 @@
       if(!rows.some(Boolean))return '';
       return `<section class="matrix-section" data-section="${id}" aria-labelledby="heading-${id}"><h3 class="pinned-section" id="heading-${id}"><span>${esc(title)}</span></h3><div class="horizontal table-panel" data-sync-scroll tabindex="0" id="${i===0?'statement-scroll':'scroll-'+id}" aria-label="${esc(title)} columns"><table id="${i===0?'statement-table':'table-'+id}">${head(c,title)}<tbody>${rows.join('')}</tbody></table></div></section>`;
     }).join('');
+    $('jump-table').innerHTML=opt('','Choose table')+headers.filter(([,title,rows])=>rows.some(Boolean)).map(([id,title])=>opt(id,title)).join('')+opt('checklist','Fundamentals checklist');
     const sc=c.score,format=n=>Number.isFinite(n)?new Intl.NumberFormat('en-GB',{maximumFractionDigits:2}).format(n):'—';
     const names=new Intl.ListFormat('en-GB',{style:'long',type:'conjunction'}).format(sc.winners.map(i=>c.companies[i].name));
     const summary=sc.counted?(names+(sc.winners.length>1?' share the lead':' leads the checklist')):'No comparable score';
@@ -178,7 +185,6 @@
     for(const el of document.querySelectorAll('[data-sync-scroll],#check-scroll'))el.scrollLeft=scrollLeft;
   }
   function renderSources(c) {
-    const x=state.data.expansion;
     $('sources').innerHTML=c.companies.map((co,i)=>{
       const y=c.years[i],v=c.views[i],m=v.m;
       const refs=Object.entries(y?.refs||{}).filter(([k])=>M.fields[k]||['preferredEquity','noncontrollingInterest','dilutedEps','bookCommon'].includes(k)).map(([k,ref])=>{
@@ -192,7 +198,7 @@
       }).join('');
       const market=m?`<p><b>Market inputs.</b> ${esc(m.method||'')}${m.date?' · '+esc(date(m.date)):''}${m.anchorDate?' · Anchor '+esc(date(m.anchorDate)):''}${m.shareDate?' · Share count '+esc(date(m.shareDate)):''}${m.fxDate?' · FX '+esc(date(m.fxDate)):''}. ${(m.sources||[]).map(s=>link(s.url,s.label)).join(' · ')}</p>`:'';
       const notes=Array.from(new Set(Object.values(co.notes||{}).flat().filter(s=>typeof s==='string')));
-      return `<details class="source-card"><summary>${esc(co.name)} · ${esc(co.form)}</summary><p>Report period ended ${esc(date(co.period))}${co.filed?' · Filed or published '+esc(date(co.filed)):''}.</p><p>${co.sources.map(s=>link(s.url,s.label)).join(' · ')}</p>${market}${v.q.source?`<p>${link(v.q.source,v.q.sourceLabel||'Morningstar financial statements')} · ${v.q.ended?'Filed':'Snapshot'} ${esc(date(v.q.asOf))}.</p>`:''}${refs?`<p><b>Figures for ${esc(date(y.end))}</b></p><ul>${refs}</ul>`:''}${notes.length?`<ul>${notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul>`:''}</details>`;
+      return `<details class="source-card"><summary>${esc(co.name)} · ${esc(co.form)}</summary><p>Report period ended ${esc(date(co.period))}${co.filed?' · Filed or published '+esc(date(co.filed)):''}.</p><p>${co.sources.map(s=>link(s.url,s.label)).join(' · ')}</p>${market}${v.q.source?`<p>${link(v.q.source,v.q.sourceLabel||'Morningstar financial statements')} · ${v.q.ended?'Filed':'Snapshot'} ${esc(date(v.q.asOf))}.</p>`:''}${refs?`<p><b>Figures for ${esc(date(y.end))}</b></p><ul>${refs}</ul>`:''}${Notes.sourceList(c,i,state.details,link,date)}${notes.length?`<ul>${notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul>`:''}</details>`;
     }).join('');
     const r=c.report;
     const bosRef=r?`<p><b>BOS peer comparison.</b> ${link(r.source+'#page='+r.page,'Original comparison, page '+r.page)} · ${esc(date(r.date))}.</p>`:'';
@@ -203,6 +209,9 @@
     <p>Morningstar’s quarterly figures use fiscal-quarter labels. Year-on-year growth compares the same fiscal quarter one year earlier. Morningstar supplies the published trailing figures for focus listings. For filing peers with a verified interim comparison, trailing results add the current fiscal year to date to the last annual result and subtract the prior-year comparative. A historical fiscal-year selection shows the associated fourth quarter and dated historical market observations when available. Historical market prices are never paired with earnings from a later filing without a verified publication date.</p>
     <p>Growth requires a positive prior-year base. Margins divide the measure by revenue. Returns use net income to owners and average opening and closing equity or assets. Free cash flow subtracts cash purchases of PP&amp;E from operating cash flow. Cash conversion divides operating cash flow by net income. Asset turnover uses average assets. A dash marks a missing or inapplicable amount.</p>
     <p>Stars highlight rows you want to follow. Green checks mark leaders among comparable available values at the displayed precision. Checklist points require a figure for every company. Tied companies split a point. Financial institutions and REITs use revenue growth, profit growth, return on equity and return on assets. Company dates, accounting standards and business mix can differ.</p>
+    <p>The share selectors order issuer equity values from largest to smallest in USD. The latest balance sheet identifies the newest verified reporting period in this snapshot. The cash observation has its own reporting date. A cash-flow closing balance follows the issuer’s cash-flow definition and may include restricted cash. Annual cash, securities and maturity schedules use the chosen fiscal year. U.S. Treasury holdings use the portfolio and measurement basis in the filing. Broader government portfolios can include agency or other sovereign securities. Cash equivalents and securities can overlap.</p>
+    <p>Revenue shares use the total in the issuer’s disclosure. Geographic boundaries and product lines follow its definitions. Signed eliminations and hedges reconcile some totals. The colour strip shows positive components. Maturities run from the date on the filing. Grouped ranges retain their boundaries. Payments within an elapsed or ongoing fiscal year may already have been made.</p>
+    <p>Solvency scores compare peers with the focus company’s business model. Capital strength uses owners’ equity divided by assets when all eligible peers report it. Otherwise it uses net assets (assets less liabilities) divided by assets when available across the group. Each shared measure gives 100 points to the strongest and zero to the weakest. Ties receive their average position. The overall score averages at least two shared measures. This comparison uses ${esc(D.ranking(c.notes).common.map(k=>D.labels[k]).join(', ')||'no shared measures')}. Regulatory capital uses the group’s reported basis. The percentages use year-end balance sheet amounts. Interest coverage divides operating profit by positive annual interest expense. First-year coverage divides fiscal year-end cash by disclosed first-year debt payments.</p>
     <p>Sources include SEC 10-K, 20-F and 40-F filings and annual reports from other markets. SpaceX uses its audited IPO prospectus. ${link('https://market-intel-fundamentals-vault.vercel.app/statements-public.json','Public Beta 2 statement snapshot')}</p>`;
   }
   function renderBOS() {
@@ -223,54 +232,73 @@
   }
 
 
-  function openPicker(mode) {
-    const c=comparison();state.picker=mode;state.draft=[...c.peers];
-    $('picker-title').textContent=mode==='focus'?'Choose a focus company':'Choose competitors';
-    $('picker-actions').hidden=mode==='focus';$('peer-draft').hidden=mode==='focus';$('company-search').value='';
-    renderPicker();$('picker').showModal();$('company-search').focus();
+  const assetFile=id=>state.details.issuers?.[id]?.logo;
+  function logo(id,name){
+    const path=assetFile(id);
+    return path?'<img class="note-logo" alt="" title="'+esc(name)+'" src="assets/'+esc(path)+'" width="27" height="27" loading="lazy">':'<span class="note-logo initials" aria-hidden="true">'+esc((name||id).slice(0,2))+'</span>';
   }
-  function renderPicker() {
-    const query=$('company-search').value.trim().toLowerCase(),focusMode=state.picker==='focus',data=state.data,c=comparison();
-    let items=focusMode?data.listings.map(l=>({id:l.id,ticker:l.ticker,name:l.name||lookup(l.id).name,value:l.ticker})):
-      Object.entries(data.companies).filter(([id])=>id!==listing().id).map(([id,co])=>({id,ticker:co.ticker,name:co.name,value:id}));
-    const collapsed=s=>s.toLowerCase().replace(/[^a-z0-9]/g,'');
-    items=items.filter(e=>(e.name+' '+lookup(e.id).name+' '+e.ticker+' '+e.id).toLowerCase().includes(query)||!!collapsed(query)&&collapsed(e.ticker).includes(collapsed(query)));
-    if(!focusMode) {
-      const priority=new Map(Array.from(c.candidates.keys(),(id,i)=>[id,i]));
-      items.sort((a,b)=>Number(state.draft.includes(b.id))-Number(state.draft.includes(a.id))||(priority.get(a.id)??999)-(priority.get(b.id)??999)||a.name.localeCompare(b.name));
-    }
-    $('peer-draft').textContent=state.draft.length+' of '+E.MAX_PEERS+' peers selected';
-    $('picker-list').innerHTML=items.length?items.map(e=>{
-      const selected=focusMode?e.ticker===state.focus:state.draft.includes(e.id);
-      const source=focusMode?'':c.candidates.get(e.id)||'Additional company';
-      return `<button type="button" data-value="${esc(e.value)}" class="${selected?'is-selected':''}" ${focusMode?'':'aria-pressed="'+selected+'"'} ${!focusMode&&!selected&&state.draft.length>=E.MAX_PEERS?'disabled':''}><span>${selected?'✓ ':''}${esc(e.name)}</span><small>${esc(e.ticker)}${source?' · '+esc(source):''}</small></button>`;
-    }).join(''):'<p>No companies match your search.</p>';
+  function drawNotes(c){Notes.renderCharts(c,state,{pct,times,amount,fmtDate:date,logo});}
+  function capLabel(n){if(!Number.isFinite(n))return '';const unit=n>=1e6?'T':n>=1e3?'B':'M';return 'US$'+num(n/(unit==='T'?1e6:unit==='B'?1e3:1),n>=1e6?2:1)+unit;}
+  const pickerOptions={escape:esc,logoBase:'assets/',allowCustom:false};
+  const focusPicker=window.SISharePicker.mount($('focus-picker'),pickerOptions);
+  const peersPicker=window.SISharePicker.mount($('peer-picker'),pickerOptions);
+  let previousPickerData=null;
+  function pickerEntry(id,ticker,name){
+    const co=lookup(id),sizes=state.details.sizesUsdM||{},cap=(sizes[ticker]||sizes[id])?.value,words=[ticker,name,co.name,...(ticker===co.ticker?[id]:[])];
+    return {ticker,name,cap,aliases:[],logo:assetFile(id),meta:capLabel(cap),search:[...words,...words.map(w=>w.replace(/[^A-Z0-9]/gi,''))].join(' ').toUpperCase()};
   }
-  function focusCompany(ticker) {
-    state.focus=ticker;state.custom=null;state.period='latest';state.bar='operatingMargin';state.trend='netMargin';state.hidden.clear();$('company-scroll').scrollLeft=0;
+  function bySize(rows){
+    const sorted=rows.sort((a,b)=>(b.cap??-1)-(a.cap??-1)||a.name.localeCompare(b.name)||a.ticker.localeCompare(b.ticker));
+    return [{label:'Largest to smallest · equity value (USD)',entries:sorted.filter(v=>Number.isFinite(v.cap))},{label:'Market value unavailable',entries:sorted.filter(v=>!Number.isFinite(v.cap))}].filter(g=>g.entries.length);
   }
-  $('picker-list').addEventListener('click',event=>{
-    const b=event.target.closest('button[data-value]');if(!b)return;
-    const v=b.dataset.value;
-    if(state.picker==='focus'){focusCompany(v);$('picker').close();render();return;}
-    if(state.draft.includes(v))state.draft=state.draft.filter(k=>k!==v);else if(state.draft.length<E.MAX_PEERS)state.draft.push(v);
-    renderPicker();Array.from($('picker-list').querySelectorAll('button')).find(a=>a.dataset.value===v)?.focus({preventScroll:true});
-  });
-  $('choose-company').onclick=()=>openPicker('focus');$('choose-peers').onclick=()=>openPicker('peers');
-  $('close-picker').onclick=()=>$('picker').close();$('company-search').oninput=renderPicker;
-  $('auto-peers').onclick=()=>{state.custom=null;state.hidden.clear();$('picker').close();render();};
-  $('apply-peers').onclick=()=>{state.custom=[...state.draft];state.hidden.clear();$('picker').close();render();};
+  function updateFocusPicker(){
+    $('choose-company').value=state.focus;
+    if(previousPickerData!==state.details){
+      focusPicker.update(bySize(state.data.listings.map(l=>pickerEntry(l.id,l.ticker,lookup(l.id).name))));
+      previousPickerData=state.details;
+    }else focusPicker.sync();
+    if(!$('peer-editor').hidden)renderPeerEditor();
+  }
+  function focusCompany(ticker){
+    state.focus=ticker;state.custom=null;state.period='latest';state.bar='operatingMargin';state.trend='netMargin';state.diagramCompany='';state.hidden.clear();$('company-scroll').scrollLeft=0;
+  }
+  $('choose-company').addEventListener('change',()=>{const t=$('choose-company').value;if(t!==state.focus&&state.data.listings.some(x=>x.ticker===t)){closePeers();focusCompany(t);render();}});
+  function renderPeerEditor(){
+    const full=state.draft.length>=E.MAX_PEERS;
+    const items=Object.entries(state.data.companies).filter(([id])=>id!==listing().id&&!state.draft.includes(id));
+    $('peer-add').value='';$('peer-add').disabled=full;$('peer-picker').querySelector('button').disabled=full;
+    peersPicker.update(bySize(items.map(([id,co])=>pickerEntry(id,co.ticker,co.name))));
+    $('peer-draft').textContent=state.draft.length+' / '+E.MAX_PEERS+' selected';
+    $('selected-peers').innerHTML=state.draft.map(id=>'<button type="button" data-remove="'+esc(id)+'" aria-label="Remove '+esc(lookup(id).name)+'">'+logo(id,lookup(id).name)+esc(lookup(id).name)+' <b aria-hidden="true">×</b></button>').join('');
+  }
+  function closePeers(){peersPicker.close();$('peer-editor').hidden=true;$('choose-peers').setAttribute('aria-expanded','false');}
+  $('choose-peers').onclick=()=>{if(!$('peer-editor').hidden){closePeers();return;}state.draft=[...comparison().peers];$('peer-editor').hidden=false;$('choose-peers').setAttribute('aria-expanded','true');renderPeerEditor();};
+  $('peer-add').addEventListener('change',()=>{const t=$('peer-add').value,id=Object.keys(state.data.companies).find(k=>lookup(k).ticker===t);
+    if(id&&id!==listing().id&&!state.draft.includes(id)&&state.draft.length<E.MAX_PEERS){state.draft.push(id);renderPeerEditor();}});
+  $('selected-peers').onclick=event=>{const id=event.target.closest('[data-remove]')?.dataset.remove;if(id){state.draft=state.draft.filter(k=>k!==id);renderPeerEditor();$('peer-add').focus();}};
+  $('cancel-peers').onclick=()=>{closePeers();$('choose-peers').focus();};
+  $('auto-peers').onclick=()=>{state.custom=null;state.hidden.clear();closePeers();render();};
+  $('apply-peers').onclick=()=>{state.custom=[...state.draft];state.hidden.clear();closePeers();render();};
+  $('diagram-company').onchange=()=>{state.diagramCompany=$('diagram-company').value;const c=comparison();Notes.chartControls(c,state,opt);drawNotes(c);};
+  for(const id of ['distribution-kind','schedule-kind','ranking-metric'])$(id).onchange=()=>drawNotes(comparison());
+  for(const id of ['mix-units','geo-filter'])$(id).onchange=()=>renderTables(comparison());
+
   $('peer-count').onchange=e=>{state.size=E.count(e.target.value);state.custom=null;state.hidden.clear();render();};
   $('period').onchange=e=>{state.period=e.target.value;render();};
-  $('units').onchange=e=>{state.unit=e.target.value;renderTables(comparison());};
+  $('units').onchange=e=>{state.unit=e.target.value;const c=comparison();renderTables(c);drawNotes(c);};
   $('row-filter').onchange=e=>{state.filter=e.target.value;renderTables(comparison());};
+  $('jump-table').onchange=e=>{
+    const choice=e.target.value;if(!choice)return;
+    const el=choice==='checklist'?$('checklist'):document.querySelector('[data-section="'+choice+'"]');
+    if(el)el.scrollIntoView({block:'start'});e.target.value='';
+  };
   $('bar-metric').onchange=e=>{state.bar=e.target.value;renderBars(comparison());};
   $('trend-metric').onchange=e=>{state.trend=e.target.value;renderTrend(comparison());};
   $('open-bos').onclick=()=>{renderBOS();$('bos-dialog').showModal();};$('close-bos').onclick=()=>$('bos-dialog').close();
   $('statement-groups').addEventListener('click',e=>{
     const b=e.target.closest('[data-star]');if(!b)return;
     const key=b.dataset.star;
-    if(state.stars.has(key))state.stars.delete(key);else state.stars.add(key);
+    if(highlighted(key)){state.stars.delete(key);state.dropped.add(key);}else{state.stars.add(key);state.dropped.delete(key);}
     renderTables(comparison());
     const next=Array.from($('statement-groups').querySelectorAll('[data-star]')).find(x=>x.dataset.star===key);
     (next||$('row-filter')).focus({preventScroll:true});
@@ -307,18 +335,17 @@
     const current=++generation; $('load-status').hidden=false;$('load-status').textContent='Loading filing and market comparisons…';$('retry').hidden=true;
     try {
       const lib=window.StocksBeta2PeerLibrary;
-      const [base,extra,pub]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published()]);
+      const [base,extra,pub,disclosures]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published(),json('shares-beta3-disclosures-2026-11-26.json').catch(()=>null)]);
       if(current!==generation)return;
       if(extra&&extra.version!==1)throw Error('Invalid comparison data');
-      state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
+      state.details=disclosures?.version===1?disclosures:{};state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
       const q=new URLSearchParams(location.search),input=(q.get('ticker')||'GOOG US').toUpperCase();
       state.focus=(base.listings.find(l=>l.ticker===input||l.id===input)||base.listings.find(l=>l.ticker==='GOOG US')||base.listings[0]).ticker;
       state.size=E.count(q.get('count'));state.custom=q.has('peers')?Array.from(new Set(q.get('peers').split(','))).filter(id=>id!==listing().id&&lookup(id)).slice(0,E.MAX_PEERS):null;
-      state.period=q.get('year')||'latest';render();$('filing-app').hidden=false;$('load-status').hidden=!!extra;
-      if(!extra){$('load-status').textContent='Annual filings loaded. Market and expanded peer data could not be loaded.';$('retry').hidden=false;}
+      state.period=q.get('year')||'latest';render();$('filing-app').hidden=false;$('load-status').hidden=!!extra&&!!disclosures;
+      if(!extra||!disclosures){$('load-status').textContent='Some comparison data could not be loaded.';$('retry').hidden=false;}
       lib?.connected().then(privateData=>{if(current===generation&&privateData){state.privateData=privateData;render();if($('bos-dialog').open)renderBOS();}});
     } catch(error){$('load-status').hidden=false;$('load-status').textContent='Comparison data could not be loaded.';$('retry').hidden=false;console.error('Shares Beta 3',error);}
   }
   $('retry').onclick=load;load();
 })();
-
