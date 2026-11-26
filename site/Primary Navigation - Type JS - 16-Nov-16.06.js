@@ -86,6 +86,7 @@
   const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
   const filingsLink = ['Shares Beta 3 · 10-K filings', 'stocks-beta3.html', '▤'];
   const watchlist = ['Bonds & shares watchlist', 'v4.html#watchlist'];
+  const crossMarketRoute = /^cross-market-history(?:-beta2)?\.html(?:#|$)/;
   const newsLinks = [
     ['Daily briefing', 'v4.html#overview', '◫'],
     ['US earnings', 'v4.html#earnings', '◈'],
@@ -111,7 +112,8 @@
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
     ], 'green'],
     ['Historical charts', [
-      ['Cross-market history', 'cross-market-history.html'], ['Gold charts', 'tools/gold-charts.html'],
+      ['Cross-market history', 'cross-market-history.html'], ['Cross-Market History Beta 2', 'cross-market-history-beta2.html'],
+      ['Gold charts', 'tools/gold-charts.html'],
       ['SI pricing data', 'v4.html#history/si'], ['SI 2 data', 'si-beta2.html#si-library'],
       ['Yield history', 'v4.html#history/yield'], ['Historical curves', 'v4.html#history/curves'],
       ['FX history', 'v4.html#history/fx'], ['Share prices', 'v4.html#history/shares'],
@@ -162,7 +164,8 @@
     [/^(?:stocks-beta[23]?\.html|bos-monthly\.html|si-beta2\.html|desk\.html#(?:stock-moves|main-company-cards)|v4\.html#history\/(?:shares|si|spx|beta[24]-shares))/, 'green'],
     [/^(?:bonds-beta\.html|bond-cashflow\.html|desk\.html#(?:market-bonds|yield-curves)|v4\.html#(?:credit|ust|history\/(?:yield|curves)))/, 'maroon'],
     [/^(?:fred\/|(?:historical-fred|fred-[123]|fred-feed)\.html)/, 'purple'],
-    [/^(?:cross-market-history\.html|desk\.html#full-history|v4\.html#history$)/, 'rose'],
+    [crossMarketRoute, 'rose'],
+    [/^(?:desk\.html#full-history|v4\.html#history$)/, 'rose'],
     [/^(?:v4\.html#(?:overview|earnings|policy|calls|hourly|headlines|reports|research)|market-understanding\/|archive\.html|research-editions\.html)/, 'orange'],
     [/^(?:v4\.html#(?:master|tools|watchlist|history\/fx)|desk\.html#market-rates|saved-securities\.html)/, 'blue']
   ];
@@ -365,7 +368,7 @@
     const key = tools ? 'Tools' : shares ? 'Shares'
       : relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
       : ['bonds-beta.html','bond-cashflow.html'].includes(relative) || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA'
-      : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || relative === 'cross-market-history.html' ? 'Historical charts'
+      : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || crossMarketRoute.test(relative) ? 'Historical charts'
       : onWorkspace && (route === '#hourly' || newsLinks.some(([, href]) => href === 'v4.html' + route)) ? 'News'
       : relative === 'desk.html' && location.hash === '#markets' ? 'Markets' : relative === 'desk.html' || relative === '' ? 'Home' : '';
     if (onWorkspace && workspaceToolbar) workspaceToolbar.dataset.navTone = toneFor(relative + route, 'blue');

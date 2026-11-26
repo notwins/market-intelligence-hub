@@ -23,8 +23,8 @@
   countries.set('USA', 'US');
   countries.set('EUROZONE', 'EU');
   const initialHeadlines = 5;
-  const recentHeadlines = 15;
-  let expanded = false;
+  const recentHeadlines = 50;
+  let mainVisible = initialHeadlines;
   const sections = [
     ['economy', 'Economy'],
     ['credit', 'Bonds & credit'],
@@ -126,12 +126,22 @@
   function headlineRow(edition, story, index) {
     const row = document.createElement('li');
     if (!index) row.className = 'daily-headline-lead';
-    const control = button('', 'daily-headline-button', trigger => openEdition(edition, trigger, story));
+    const control = edition ? button('', 'daily-headline-button', trigger => openEdition(edition, trigger, story)) : document.createElement('a');
+    if (!edition) {
+      control.className = 'daily-headline-button';
+      control.href = story.href;
+    }
     const identity = document.createElement('span');
     identity.className = 'daily-headline-identity';
     headlineBadges(identity, story);
     const title = document.createElement('span');
     title.textContent = story.headline;
+    if (story.reasons?.length) {
+      const why = document.createElement('small');
+      why.className = 'highlight-reasons';
+      why.textContent = story.reasons.join(' · ');
+      title.append(why);
+    }
     const hasSourceTime = typeof story.published === 'string' && /T\d{2}:\d{2}.*(?:Z|[+-]\d{2}:?\d{2})$/i.test(story.published) && Number.isFinite(Date.parse(story.published));
     const time = document.createElement('time');
     time.dateTime = hasSourceTime ? story.published : story.cutoff;
@@ -144,9 +154,6 @@
   }
 
   function renderHeadlines(days) {
-    const list = document.createElement('ol');
-    list.id = 'daily-headline-list';
-    list.className = 'daily-headlines';
     const seenIds = new Set(), seenUrls = new Set(), entries = [];
     for (const edition of days.values()) {
       for (const story of edition.stories) {
@@ -159,27 +166,76 @@
       }
       if (entries.length === recentHeadlines) break;
     }
-    const rows = entries.map(({edition, story}, index) => headlineRow(edition, story, index));
-    list.append(...rows);
-    headlines.replaceChildren(list);
+    pagedHeadlines(headlines, 'daily-headline-list', entries, mainVisible, count => { mainVisible = count; });
+  }
+
+  function pagedHeadlines(host, id, entries, startingCount = initialHeadlines, onChange = () => {}) {
+    const list = document.createElement('ol');
+    list.id = id;
+    list.className = 'daily-headlines';
+    host.replaceChildren(list);
+    let count = Math.min(startingCount, entries.length);
+    const more = button('', 'outline', () => change(count + 10));
+    const fewer = button('Show fewer', 'outline', () => {
+      change(initialHeadlines);
+      more.focus();
+    });
+    for (const control of [more, fewer]) control.setAttribute('aria-controls', id);
+    const controls = document.createElement('div');
+    controls.className = 'headline-controls';
+    controls.append(more, fewer);
+    host.append(controls);
+    function change(next) {
+      count = Math.min(next, entries.length);
+      onChange(count);
+      draw();
+      if (more.hidden && !fewer.hidden) fewer.focus();
+    }
+    function draw() {
+      for (let i = list.children.length; i < count; i++) {
+        list.append(headlineRow(entries[i].edition, entries[i].story, i));
+      }
+      while (list.children.length > count) list.lastElementChild.remove();
+      more.hidden = count >= entries.length;
+      more.textContent = 'Show ' + Math.min(10, entries.length - count) + ' more';
+      fewer.hidden = count <= initialHeadlines;
+      for (const control of [more, fewer]) control.setAttribute('aria-expanded', String(count > initialHeadlines));
+    }
+    draw();
     if (!root.CompanyLogos?.data) {
       document.addEventListener('mih-logo-catalogue', () => {
-        if (list.isConnected) rows.forEach((row, i) => headlineBadges(row.querySelector('.daily-headline-identity'), entries[i].story));
+        if (list.isConnected) Array.from(list.children).forEach((row, i) => headlineBadges(row.querySelector('.daily-headline-identity'), entries[i].story));
       }, {once: true});
     }
-    if (rows.length <= initialHeadlines) return;
-    const toggle = button('', 'outline daily-headline-toggle', () => {
-      expanded = !expanded;
-      update();
-    });
-    toggle.setAttribute('aria-controls', list.id);
-    function update() {
-      rows.slice(initialHeadlines).forEach(row => { row.hidden = !expanded; });
-      toggle.setAttribute('aria-expanded', String(expanded));
-      toggle.textContent = expanded ? 'Show fewer headlines' : 'Show more headlines (' + (rows.length - initialHeadlines) + ')';
+  }
+
+  async function loadHighlights() {
+    const host = document.querySelector('#highlight-headlines');
+    const note = document.querySelector('#highlight-status');
+    const search = document.querySelector('#highlight-search');
+    try {
+      const response = await fetch(new URL('data/market-highlights.json', root.ContentDelivery.CONTENT), {cache: 'no-store', signal: AbortSignal.timeout(15000)});
+      if (!response.ok) throw Error('Highlights unavailable');
+      const archive = await response.json();
+      if (archive.schema_version !== 1 || !Array.isArray(archive.entries) || !Number.isFinite(Date.parse(archive.through))) throw Error('Invalid archive');
+      const entries = archive.entries.filter(r => typeof r.headline === 'string' && Array.isArray(r.reasons) && Number.isFinite(Date.parse(r.cutoff)) && typeof r.href === 'string' && r.href.startsWith('https://') && root.Desk.safeHref(r.href));
+      function filter() {
+        const terms = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+        const matches = entries.filter(r => {
+          const text = [r.headline, r.topic, ...r.reasons].join(' ').toLowerCase();
+          return terms.every(t => text.includes(t));
+        });
+        note.textContent = (terms.length ? matches.length + ' matches' : entries.length + ' saved highlights') + ' · Through ' + headlineDate.format(new Date(archive.through)) + ' · ' + timeLabel.format(new Date(archive.through)) + ' SGT';
+        if (matches.length) pagedHeadlines(host, 'highlight-list', matches.slice(0, 55).map(story => ({story})));
+        else host.textContent = terms.length ? 'No saved headlines match this search.' : 'No highlights selected yet.';
+      }
+      search.disabled = false;
+      search.addEventListener('input', filter);
+      filter();
+    } catch {
+      note.textContent = 'The saved highlights could not be loaded.';
+      host.replaceChildren(button('Retry', 'outline', loadHighlights));
     }
-    update();
-    headlines.append(toggle);
   }
 
   function render(feed) {
@@ -287,4 +343,5 @@
   dialog.querySelector('[data-briefing-close]').addEventListener('click', () => dialog.close());
   dialog.addEventListener('close', () => opener?.focus());
   root.DailyDesk = {render};
+  loadHighlights();
 })(window);

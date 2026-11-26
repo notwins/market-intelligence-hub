@@ -1,7 +1,14 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GLD ETF accumulator | Market Intel</title><link rel="stylesheet" href="metals.css"><script defer src="metals-common.js"></script><script defer src="accumulator-model.js"></script><script defer src="accumulator-benchmark.js"></script><script defer src="gld-accumulator.js"></script></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GLD ETF accumulator | Market Intel</title><link rel="stylesheet" href="metals.css?v=20261126.gldpricing1"><script defer src="metals-common.js"></script><script defer src="accumulator-model.js"></script><script defer src="accumulator-benchmark.js"></script><script defer src="gld-accumulator.js?v=20261126.gldpricing1"></script></head>
 <body><nav class="gold-nav" aria-label="Gold workspace"><a href="../v4.html#tools">Market Intel · Tools</a><a href="gold-charts.html">Gold charts</a><a href="xau-fcn.html">XAU fixed coupon note</a><a href="gld-accumulator.html" aria-current="page">GLD accumulator</a></nav>
 <main><h1>GLD ETF accumulator</h1><p class="intro">Replay a funded Normal accumulator against GLD trading days, or model your own price path. Enter the terms from your quote to see shares acquired, cash refunded and the outcome against buying GLD outright.</p>
+<section class="panel" aria-labelledby="pricing-title">
+<h2 id="pricing-title">GLD accumulator pricing</h2>
+<div class="pricing-controls"><label>Import pricing file (.json)<input id="pricing-file" type="file" accept=".json,application/json" aria-describedby="pricing-status"></label><button id="clear-pricing" type="button" hidden>Remove pricing file</button></div>
+<p id="pricing-status" class="hint" role="status">Pricing is stored in this browser.</p>
+<p id="pricing-terms" class="hint" hidden></p>
+<div id="pricing-table" class="table-wrap" hidden></div>
+</section>
 <section class="panel"><h2>Accumulator terms</h2><form id="terms">
 <div class="controls">
 <label>Price path<select id="mode"><option value="history">Historical GLD closes</option><option value="scenario">Monthly scenario</option></select></label>
@@ -13,7 +20,7 @@
 <label>Tenor<select id="months"><option value="3">3 months</option><option value="6" selected>6 months</option><option value="9">9 months</option><option value="12">12 months</option></select></label>
 <label>Guaranteed months<input id="minimum" type="number" min="0" step="1" max="6" required placeholder="Enter 0 or more"></label>
 </div><div id="path" hidden><hr class="history-cut"><h3>Monthly closing prices (USD)</h3><div id="month-prices" class="controls"></div></div></form>
-<p id="period" class="hint"></p></section>
+<p id="history-coverage" class="hint"></p><p id="period" class="hint"></p></section>
 <section class="panel"><h2>Accumulator outcome</h2><div id="result" aria-live="polite">Loading GLD history…</div></section>
-<p class="hint">The funded Normal model sizes whole shares per month and rounds the initial payment up to a whole dollar. A daily close at or above knock-out ends purchases and triggers the guarantee and refund calculation. Shares are marked through the end of the comparison period. Fees and funding interest are excluded.</p>
+<p class="hint">The funded Normal model sizes whole shares per month and rounds the initial payment up to a whole dollar. A daily close at or above knock-out ends purchases and triggers the guarantee and refund calculation. Shares are marked through the end of the comparison period. Historical replay uses actual GLD trading dates. Fees, funding interest, KO+1 settlement timing and quote offsets are excluded from the calculation.</p>
 <div class="source-links"><a href="../data/metals/gld.csv" download>Download GLD daily history</a><a href="accumulator.html">Open NVDA accumulator</a></div></main></body></html>

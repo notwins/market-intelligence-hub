@@ -3,7 +3,146 @@
   const el = id => document.getElementById(id);
   const form = el('terms'), result = el('result');
   const money = n => 'USD ' + Metals.format(n);
+  const pricingKey = 'market-intel.gld-accumulator-pricing.v1';
+  const pricingFile = el('pricing-file');
+  const pricingStatus = el('pricing-status');
+  const clearPricing = el('clear-pricing');
+  const supportedTenors = [...el('months').options].map(option => Number(option.value));
+  const dateLabel = date => new Intl.DateTimeFormat('en-GB', {
+    dateStyle: 'long', timeZone: 'UTC'
+  }).format(new Date(date + 'T00:00:00Z'));
   let history = [];
+
+  function readPricing(text) {
+    const pricing = JSON.parse(text.replace(/^\uFEFF/, ''));
+    const date = Date.parse(pricing?.requestDate);
+    if (pricing?.kind !== 'gld-accumulator-pricing' || pricing.version !== 1 ||
+        !Number.isFinite(date) || new Date(date).toISOString().slice(0, 10) !== pricing.requestDate ||
+        !Number.isInteger(pricing.upfrontFeeBps) || pricing.upfrontFeeBps < 0 ||
+        pricing.settlementFrequency !== 'monthly' || typeof pricing.koPlusOne !== 'boolean' ||
+        !Number.isFinite(pricing.offset) || !Array.isArray(pricing.rows) || !pricing.rows.length) {
+      throw Error('Invalid GLD pricing header.');
+    }
+    const keys = new Set();
+    for (const row of pricing.rows) {
+      const {months, ko, days, guarantee, strike} = row ?? {};
+      const key = [months, ko, guarantee].join('/');
+      if (!supportedTenors.includes(months) || !Number.isFinite(ko) || ko <= 100 || ko > 1000 ||
+          !Number.isInteger(days) || days < 1 || !Number.isInteger(guarantee) || guarantee < 0 || guarantee > months ||
+          (strike !== null && (!Number.isFinite(strike) || strike <= 0 || strike > 100)) || keys.has(key)) {
+        throw Error('Invalid GLD pricing row.');
+      }
+      keys.add(key);
+    }
+    return pricing;
+  }
+
+  function applyQuote(quote) {
+    el('mode').value = 'history';
+    el('months').value = quote.months;
+    el('minimum').value = quote.guarantee;
+    el('ko').value = quote.ko;
+    el('strike').value = quote.strike;
+    configure();
+    if (history.length) render();
+    if (!el('capital').value) el('capital').focus();
+  }
+
+  function displayPricing(pricing, persisted = true) {
+    const summary = el('pricing-terms');
+    const wrapper = el('pricing-table');
+    wrapper.replaceChildren();
+    summary.hidden = wrapper.hidden = clearPricing.hidden = !pricing;
+    if (!pricing) {
+      pricingStatus.textContent = 'Pricing is stored in this browser.';
+      return;
+    }
+    const {rows, requestDate, upfrontFeeBps, koPlusOne, offset} = pricing;
+    const quoted = rows.filter(row => row.strike !== null).length;
+    const storage = persisted ? 'Saved in this browser.' : 'Loaded for this page only.';
+    pricingStatus.textContent = `${quoted} quoted strikes. ${storage} Select a strike to use historical GLD closes.`;
+    summary.textContent = `Pricing request ${dateLabel(requestDate)} · Normal · Monthly settlement · Upfront fee ${upfrontFeeBps} bp · KO+1 ${koPlusOne ? 'yes' : 'no'} · Offset ${Metals.format(offset, 1)}`;
+
+    const guarantees = [...new Set(rows.map(row => row.guarantee))].sort((a, b) => a - b);
+    const groups = new Map();
+    for (const row of rows) {
+      const key = [row.months, row.ko, row.days].join('/');
+      if (!groups.has(key)) groups.set(key, new Map());
+      groups.get(key).set(row.guarantee, row);
+    }
+    const table = document.createElement('table');
+    table.createCaption().textContent = 'Strike by guaranteed period';
+    const heading = table.createTHead().insertRow();
+    for (const label of ['Tenor', 'KO', 'Quoted days', ...guarantees.map(months => `${months}M`)]) {
+      const th = document.createElement('th');
+      th.scope = 'col';
+      th.textContent = label;
+      heading.append(th);
+    }
+    const body = table.createTBody();
+    for (const group of groups.values()) {
+      const {months, ko, days} = group.values().next().value;
+      const row = body.insertRow();
+      const tenor = document.createElement('th');
+      tenor.scope = 'row';
+      tenor.textContent = `${months}M`;
+      row.append(tenor);
+      row.insertCell().textContent = `${ko}%`;
+      row.insertCell().textContent = days;
+      for (const guarantee of guarantees) {
+        const quote = group.get(guarantee);
+        const cell = row.insertCell();
+        if (quote?.strike == null) {
+          const unquoted = document.createElement('span');
+          unquoted.setAttribute('aria-label', 'No strike quoted');
+          unquoted.textContent = '—';
+          cell.append(unquoted);
+          continue;
+        }
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = `${Metals.format(quote.strike)}%`;
+        button.setAttribute('aria-label', `${button.textContent} strike, ${months} month tenor, ${ko}% knock-out, ${guarantee} month guarantee`);
+        button.addEventListener('click', () => applyQuote(quote));
+        cell.append(button);
+      }
+    }
+    wrapper.append(table);
+  }
+
+  try {
+    const saved = localStorage.getItem(pricingKey);
+    if (saved) displayPricing(readPricing(saved));
+  } catch {
+    pricingStatus.textContent = 'Saved pricing is unavailable. Select a GLD pricing file to load it.';
+  }
+  pricingFile.addEventListener('change', async () => {
+    const [file] = pricingFile.files;
+    if (!file) return;
+    pricingFile.disabled = clearPricing.disabled = true;
+    try {
+      if (file.size > 256 * 1024) throw Error('Pricing file is too large.');
+      const pricing = readPricing(await file.text());
+      let persisted = true;
+      try { localStorage.setItem(pricingKey, JSON.stringify(pricing)); }
+      catch { persisted = false; }
+      displayPricing(pricing, persisted);
+    } catch {
+      pricingStatus.textContent = 'This file could not be loaded. Select a valid GLD accumulator pricing JSON file.';
+    } finally {
+      pricingFile.value = '';
+      pricingFile.disabled = clearPricing.disabled = false;
+    }
+  });
+  clearPricing.addEventListener('click', () => {
+    displayPricing(null);
+    try { localStorage.removeItem(pricingKey); }
+    catch {
+      pricingStatus.textContent = 'Pricing cleared from this page. Browser storage could not be checked.';
+    }
+    pricingFile.focus();
+  });
+
   function anniversary(day, months) {
     const d = new Date(day+'T00:00:00Z');
     const end = new Date(Date.UTC(d.getUTCFullYear(),d.getUTCMonth()+months+1,0));
@@ -89,6 +228,7 @@
   form.addEventListener('submit', e => e.preventDefault());
   try {
     history = await Metals.series('gld');
+    el('history-coverage').textContent = `GLD daily closes · ${dateLabel(history[0].date)} to ${dateLabel(history.at(-1).date)}.`;
     el('spot').value = history.at(-1).close;
     configure();
     form.addEventListener('input', e => {

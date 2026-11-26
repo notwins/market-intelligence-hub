@@ -18,6 +18,12 @@ h3 { font-size: 1rem }
 label { display: grid; align-content: start; gap: 5px; font-size: .84rem; font-weight: 650 }
 input, select { width: 100%; min-width: 0; border: 1px solid #a2b1aa; border-radius: 6px; padding: 8px; font: inherit; color: #192c34; background: white }
 input:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #317d73 }
+.pricing-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 10px 14px }
+.pricing-controls label { width: min(100%, 21rem) }
+.pricing-controls button, #pricing-table button { border: 1px solid #a2b1aa; border-radius: 6px; padding: 7px 10px; font: inherit; color: #245958; background: #f0f5f0; cursor: pointer }
+.pricing-controls button:focus-visible, #pricing-table button:focus-visible { outline: 3px solid #317d73 }
+#pricing-table { margin-top: 12px }
+#pricing-table tbody th { font-weight: 600 }
 .hint, figcaption, .sources { font-size: .88rem }
 .hint { margin-top: 10px }
 .metrics { margin-bottom: 18px }
