@@ -21,7 +21,6 @@ input:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid 
 .history-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 16px; margin-bottom: 8px }
 .history-heading h2 { margin: 0 }
 .history-heading label { min-width: 8rem }
-.pricing-saved-link { display: inline-block; padding: 8px 13px; border-radius: 6px; background: #245958; color: #fff; font-weight: 650; text-decoration: none }
 #pricing-table button { border: 1px solid #a2b1aa; border-radius: 6px; padding: 7px 10px; font: inherit; color: #245958; background: #f0f5f0; cursor: pointer }
 #pricing-table button:focus-visible { outline: 3px solid #317d73 }
 #pricing-table button[aria-pressed="true"] { background: #245958; color: #fff }

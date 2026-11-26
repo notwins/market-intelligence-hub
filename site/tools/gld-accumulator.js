@@ -4,7 +4,6 @@
   const form = el('terms'), result = el('result');
   const money = n => 'USD ' + Metals.format(n);
   const pricingStatus = el('pricing-status');
-  const hostedPricing = el('hosted-pricing');
   const monthPrices = el('month-prices');
   const monthOverrides = new Map();
   const spotOverrides = new Map();
@@ -14,6 +13,7 @@
   }).format(new Date(date + 'T00:00:00Z'));
   let history = [];
   let activeQuote;
+  let termsEdited = false;
   let scenarioDays;
   let tradeDateEdited = false;
 
@@ -114,7 +114,17 @@
     wrapper.replaceChildren(table);
     summary.hidden = wrapper.hidden = false;
     const first = rows.find(row => row.strike !== null);
-    if (first) applyQuote(first, buttons.get(first));
+    if (first && !termsEdited) applyQuote(first, buttons.get(first));
+  }
+
+  async function loadPricing() {
+    try {
+      const response = await fetch('../data/metals/gld-accumulator-pricing.json');
+      if (!response.ok) throw Error('Pricing request failed');
+      displayPricing(readPricing(await response.text()));
+    } catch {
+      pricingStatus.textContent = 'Saved GLD pricing is unavailable. Enter your own terms below.';
+    }
   }
 
   function anniversary(day, months) {
@@ -247,6 +257,7 @@
     if (id === 'days') scenarioDays = value;
     if (id === 'months') scenarioDays = undefined;
     if (['months','strike','ko','minimum','days'].includes(id)) {
+      termsEdited = true;
       activeQuote?.setAttribute('aria-pressed', 'false');
       activeQuote = undefined;
     }
@@ -255,11 +266,7 @@
   });
   el('history-range').addEventListener('change', renderHistory);
   configure();
-  if (hostedPricing) {
-    pricingStatus.hidden = false;
-    try { displayPricing(readPricing(hostedPricing.textContent)); }
-    catch { pricingStatus.textContent = 'Saved GLD pricing is unavailable. Enter your own terms below.'; }
-  }
+  loadPricing();
   try { history = await Metals.series('gld'); }
   catch { /* Monthly scenario still works with manually entered prices. */ }
   configure();
