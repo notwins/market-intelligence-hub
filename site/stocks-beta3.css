@@ -338,7 +338,8 @@ html.beta3-nav-hidden{--beta3-nav-top:0px;scroll-padding-top:0}
 .filing-flags img{display:block;width:15px;height:11px;object-fit:cover;border-radius:2px;box-shadow:0 0 0 1px #223b361c}
 .quarter-geo-controls{align-items:center;flex-wrap:wrap;gap:8px 13px}
 .quarter-geo-controls>a{margin-inline-end:auto;color:#245e55;font-size:.85rem}
-.cell-growth{display:block;margin-top:3px;color:#536c65;font-size:.75em;font-variant-numeric:tabular-nums}
+#table-quarter-geography td{flex-wrap:wrap;align-content:center;gap:2px 5px}
+.cell-growth{display:block;flex:0 0 100%;text-align:right;color:#536c65;font-size:.8em;font-variant-numeric:tabular-nums}
 :is(.cell-growth,.geography-change).gain{color:#176b4a}
 :is(.cell-growth,.geography-change).loss{color:#ad4057}
 .annual-mix-table.quarter-geography-card thead th:nth-child(2){width:24%}
