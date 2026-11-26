@@ -23,7 +23,7 @@
   const fieldLabel = key => key.slice(key.indexOf(" / ") + 3);
   const cleanLabel = key => (key.includes(" / ") ? fieldLabel(key) : key).replace(" (million in reporting currency)", " · local M")
     .replace(" (reporting currency per ordinary share)", " · local / share").replace(" (million shares)", " · M shares");
-  function mount({ financial, market, groups, companyCell, usd, peerLiabilities, fmt, dollar, element, options }) {
+  function mount({ financial, market, groups, companyCell, usd, fmt, dollar, element, options }) {
     const companies = financial.companies;
     const months = Object.keys(market.months).sort();
     const latestMonth = months.at(-1);
@@ -65,9 +65,9 @@
       let count = 0, previous = "";
       for (const field of selected) {
         const values = (field.market ? marketPeriod : period)[field.key];
-        const liabilities = field.key === "Balance sheet / Total liabilities (million in reporting currency)";
-        const verified = liabilities ? ix.map(i => peerLiabilities($("lab-period").value, i, period["Period ending"]?.[i])) : [];
-        if (!ix.some(i => values?.[i] != null) && !verified.some(v => v.calculatedLiabilities)) continue;
+        const basis = field.key === "Balance sheet / Total liabilities (million in reporting currency)"
+          ? period["Total liabilities calculation basis"] : null;
+        if (!ix.some(i => values?.[i] != null)) continue;
         if (previous !== field.group) {
           const tr = element("tr", "", "lab-divider"), th = element("th", field.group);
           th.colSpan = ix.length + 1; tr.append(th); body.append(tr); previous = field.group;
@@ -75,14 +75,16 @@
         const tr = element("tr"), th = element("th", cleanLabel(field.key)); th.scope = "row"; tr.append(th);
         for (const i of ix) {
           const val = values?.[i], td = element("td");
-          if (val == null && liabilities && verified[ix.indexOf(i)].calculatedLiabilities) {
-            td.textContent = fmt(verified[ix.indexOf(i)].liabilities * 1000) + "†";
-            td.title = "Verified total assets less total equity, USD million";
-          } else if (val == null) td.textContent = "—";
+          if (val == null) td.textContent = "—";
           else if (field.key === "Source document" && /^https:\/\//.test(val)) {
             const link = element("a", "Filing ↗"); link.href = val; link.target = "_blank"; link.rel = "noopener"; td.append(link);
           } else if (typeof val === "number") {
             td.textContent = fmt(val, 6);
+            if (basis?.[i]) {
+              td.append("†");
+              td.title = basis[i] + ", USD million";
+              td.setAttribute("aria-label", fmt(val, 6) + " million US dollars, " + basis[i]);
+            }
             if (field.key.includes("per ordinary share") || ["Close As Traded", "Split-adjusted Close"].includes(field.key) || field.key.startsWith("Cash Dividend per Share") || field.key === "BOS Price") {
               const currency = field.key === "BOS Price" ? marketPeriod["BOS Price Currency"]?.[i] : field.market ? companies[i].quoteCurrency : companies[i].currency;
               if (currency) td.append(" " + currency);
