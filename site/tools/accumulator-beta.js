@@ -10,6 +10,29 @@
   let simulation;
   let onSaleChange;
 
+  function monthlyLedger(deliverySales, soldBeforeExit) {
+    const {exit, payment, rows} = simulation;
+    let sharesSoldToDate = 0;
+    let cashReceivedToDate = 0;
+    return rows.slice(0, exit.month).map(row => {
+      const atExit = row.month === exit.month;
+      const sale = atExit
+        ? {quantity: exit.shares - soldBeforeExit, priceCents: toCents(exit.price)}
+        : deliverySales.get(row.month);
+      const openingShares = row.shares - row.bought - sharesSoldToDate;
+      const sharesSold = sale?.quantity ?? 0;
+      const salePriceCents = sale?.priceCents ?? 0;
+      const cashReceivedCents = sharesSold * salePriceCents;
+      sharesSoldToDate += sharesSold;
+      cashReceivedToDate += cashReceivedCents;
+      const sharesHeld = row.shares - sharesSoldToDate;
+      const holdingsCents = sharesHeld * toCents(row.price);
+      const valueCents = holdingsCents + cashReceivedToDate + toCents(row.refunded) + toCents(row.remaining);
+      return {openingShares, sharesSold, cashReceivedCents, sharesHeld, salePriceCents,
+        holdingsCents, cashReceivedToDate, valueCents, pnlCents: valueCents - toCents(payment)};
+    });
+  }
+
   function renderCapital() {
     const {maximum, strike, rows, exit, payment, roundingCash} = simulation;
     const strikeCents = toCents(strike);
@@ -56,6 +79,7 @@
   function updateSalePlan() {
     const status = byId('delivery-sales-status');
     const scope = byId('delivery-sales-scope');
+    const deliverySales = new Map();
     let soldShares = 0;
     let proceedsCents = 0;
     let valid = true;
@@ -70,8 +94,10 @@
       if (!sell.checked) continue;
       valid = salePrice.validity.valid && valid;
       const quantity = delivery.bought;
+      const priceCents = toCents(salePrice.valueAsNumber);
+      deliverySales.set(delivery.month, {quantity, priceCents});
       soldShares += quantity;
-      proceedsCents += quantity * toCents(salePrice.valueAsNumber);
+      proceedsCents += quantity * priceCents;
     }
 
     if (!valid || !Number.isSafeInteger(proceedsCents)) {
@@ -81,16 +107,16 @@
       return;
     }
 
-    const {exit, payment} = simulation;
+    const {exit} = simulation;
+    const ledger = monthlyLedger(deliverySales, soldShares);
+    const {valueCents: exitValueCents, pnlCents} = ledger.at(-1);
     const remainingShares = exit.shares - soldShares;
     const remainingValueCents = remainingShares * toCents(exit.price);
-    const exitValueCents = proceedsCents + remainingValueCents + toCents(exit.refunded);
-    const pnlCents = exitValueCents - toCents(payment);
     scope.hidden = !soldShares;
     status.textContent = soldShares
       ? shares(soldShares) + ' sold early · ' + money(proceedsCents / 100) + ' proceeds'
       : '';
-    onSaleChange({soldShares, proceedsCents, remainingShares, remainingValueCents, exitValueCents, pnlCents});
+    onSaleChange({soldShares, proceedsCents, remainingShares, remainingValueCents, exitValueCents, pnlCents, ledger});
   }
 
   function render(next, activeQuoteId, saleChange) {

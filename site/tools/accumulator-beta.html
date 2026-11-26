@@ -166,7 +166,7 @@
   <p class="small" id="delivery-sales-status" role="status"></p>
 </section>
 </div>
-<div class="tableScroll beta-share-ledger" tabindex="0" aria-label="Share purchases and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th>Cash needed for shares · USD</th><th>Cash refunded · USD</th><th>Total value · USD</th><th>P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
+<div class="tableScroll beta-share-ledger" tabindex="0" aria-label="Monthly share purchases, sales and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th data-beta-column="shares-sold">Shares sold</th><th data-beta-column="sale-cash">Cash received from sales · USD</th><th data-beta-column="shares-held">Shares still held</th><th data-beta-column="4">Cash needed for shares · USD</th><th data-beta-column="5">Cash refunded · USD</th><th data-beta-column="6">Total value · USD</th><th data-beta-column="7">P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
 <div class="beta-sale-range">
 <h3>What if you sell at a different price at exit?</h3>
 <div id="beta-sale-sensitivity" class="tableScroll" tabindex="0" aria-label="Alternative exit prices for shares held until exit"><table><thead><tr><th>NVDA sale price</th><th>Shares sold at exit</th><th>Market value at exit</th><th id="beta-early-proceeds" hidden>Earlier sale proceeds</th><th>Share profit / loss</th><th>Cash refunded</th><th>Total value</th><th>Total P&amp;L</th></tr></thead><tbody id="saleRange"></tbody></table></div>
@@ -208,7 +208,7 @@
 <div id="monthResult" class="month-result" aria-live="polite"></div></div>
 </section>
 <section class="panel" aria-labelledby="ledger"><div class="heading"><div><h2 id="ledger">Capital &amp; share movements</h2><p>See how much of your payment goes into shares and how much comes back as unspent cash. The highlighted knock-out month gives the trigger day and price. Tinted refund cells show capital returned. Tap any amount for the calculation.</p></div></div>
-<div class="tableScroll" tabindex="0" aria-label="Monthly capital and share movements"><table id="movements"><thead><tr><th>Month</th><th>Month-end<br>price · USD</th><th>Event</th><th>Shares<br>bought</th><th>Capital<br>used · USD</th><th>Cash refunded<br>USD</th><th>Share sale<br>proceeds · USD</th><th>Capital left<br>in note · USD</th><th>Shares<br>held</th><th>Refunded<br>to date · USD</th><th>Holdings<a href="#holdings-note" aria-label="How holdings are valued"><sup>1</sup></a><br>USD</th><th>Total shares<br>bought</th><th>P&amp;L<br>USD</th></tr></thead><tbody id="rows"></tbody></table></div>
+<div class="tableScroll" tabindex="0" aria-label="Monthly capital and share movements"><table id="movements"><thead><tr><th>Month</th><th>Month-end<br>price · USD</th><th>Event</th><th>Shares<br>bought</th><th>Capital<br>used · USD</th><th>Cash refunded<br>USD</th><th data-beta-column="shares-sold">Shares sold</th><th data-beta-column="6">Share sale<br>proceeds · USD</th><th data-beta-column="7">Capital left<br>in note · USD</th><th data-beta-column="8">Shares still<br>held</th><th data-beta-column="9">Refunded<br>to date · USD</th><th data-beta-column="10">Holdings<a href="#holdings-note" aria-label="How holdings are valued"><sup>1</sup></a><br>USD</th><th data-beta-column="11">Total shares<br>bought</th><th data-beta-column="12">P&amp;L<br>USD</th></tr></thead><tbody id="rows"></tbody></table></div>
 </section>
 <section class="panel" aria-labelledby="scenario-returns"><div class="heading"><div><h2 id="scenario-returns">Three scenarios to try</h2><p>Compare the note with buying whole NVDA shares at the start and keeping the change in cash. Both use the same payment and assume a sale at the same knock-out or maturity close.</p></div></div><div class="scenario-grid" id="scenarios"></div></section>
 <section id="nvda-stress-context" class="panel" aria-label="NVDA financial statements and stress price" data-stress-price-evidence></section>
@@ -266,7 +266,7 @@
 <p>Overview cards show whole shares and rounded dollars. The calculations use exact cents. Displayed rounded amounts can differ by a dollar when added.</p>
 <p id="monthly-cash-reconcile"></p><p id="monthly-cash-rounding" hidden></p><p id="monthly-cash-timing" hidden></p>
 <p id="saleBasis"></p><p id="valuation"></p><p id="exitValue"></p>
-<p id="delivery-sales-scope" hidden>The purchase ledger shows the original modelled exit. The exit summary and exit-price table include your delivery sales.</p>
+<p id="delivery-sales-scope" hidden>Sale cash enters the ledger in the month you sell. The ledger values unsold shares at each month’s close and assumes the remaining shares sell at KO or maturity.</p>
 <p id="overviewHistoryNote"></p>
 <details class="nvda-overlay-details" id="nvda-overlay-details" hidden><summary>Chart overlay dates and sources</summary><div></div></details>
 </details>
@@ -281,7 +281,7 @@
 <p>A normal accumulator buys the full scheduled quantity while active, including when NVDA trades above the purchase strike. The purchase price stays at the strike. The chart joins your month-end prices with evenly spaced daily closes and checks every trading day. A daily close at or above the knock-out level ends accumulation, subject to the minimum period.</p>
 <p>For an early knock-out, the model counts all guaranteed shares and refunds unused cash. After the minimum, purchases through the trading day before knock-out count. Each month’s whole-share quantity accrues across its model trading days. At a partial month, cumulative entitlement is rounded down to whole shares. The default exit assumes the shares sell at the knock-out close or, if there is no knock-out, at the maturity close. Actual fixing schedules, share allocation and settlement dates follow the final terms.</p></details>
 <details><summary>Holdings, cash refunds and P&amp;L</summary>
-<p>All amounts in USD. Total P&amp;L = share market value + cash refunded − actual payment. The refund returns unused capital. It adds to your proceeds and counts once.</p>
+<p>All amounts in USD. At exit, total P&amp;L equals proceeds from all share sales plus cash refunded, less the actual payment. The refund returns unused capital and counts once.</p>
 <p id="holdings-note">Holdings value includes shares still held at the month-end price, sale proceeds and refunds received to date, and capital still in the note at face value. Cash and simulated prices display to the nearest dollar. P&amp;L and percentage returns round down. Tap a figure for the underlying calculation. An early unwind can have a different value.</p>
 </details>
 <details><summary>Probability cone</summary><p id="method"></p><p>The shaded range is a model interval for the share price at each future month. It assumes independent normal log returns and a flat median price. It does not estimate the chance of a knock-out or a positive note return. Large gaps, volatility changes and unusual returns can put actual prices outside the cone.</p></details>
@@ -298,8 +298,8 @@
 <script src="accumulator-nvda-chart.js?v=20261127-analysis"></script>
 <script src="accumulator-benchmark.js?v=1"></script>
 <script src="accumulator-beta-model.js?v=20261126-ko"></script>
-<script src="accumulator-beta-ledger-workings.js?v=20261126-ko"></script>
-<script src="accumulator-beta.js?v=20261127-compact-overview"></script>
+<script src="accumulator-beta-ledger-workings.js?v=20261127-monthly-sales"></script>
+<script src="accumulator-beta.js?v=20261127-monthly-sales"></script>
 <script src="accumulator-beta-saved-setups.js?v=20261127-grouped-setups"></script>
 <script src="accumulator-beta-table-view.js?v=20261127-saved-setups"></script>
 <script src="accumulator-quotes.js?v=20261126-asof"></script><script id="accumulator-model">
@@ -483,13 +483,6 @@ function strikeButton(id,strike,description){
   const name=description+' at '+fmt.quote(strike)+' strike';
   return '<button type="button" class="strike-button" data-quote="'+id+'" data-name="'+name+'" aria-pressed="false" aria-label="Add '+name+' to comparison">'+fmt.quote(strike)+'</button>';
 }
-function displayLedger(sim){
-  const sale=sim.exit.shares*sim.exit.price;
-  return sim.rows.slice(0,sim.exit.month).map(r=>{
-    const atExit=r.month===sim.exit.month, sold=r.month>=sim.exit.month;
-    return {...r, sold:atExit?sale:0, held:sold?0:r.shares, value:sold?sim.exit.value:r.value};
-  });
-}
 function tenorTable(table, months, rows, guarantees=table.guarantees, earlier=false){
   const days=rows[0].days;
   const title=months+' months'+(days?' · '+days+' trading days':'')+(earlier?' · earlier quote':'');
@@ -602,40 +595,50 @@ function render(){
   el('graphSource').textContent=comparisonPath?'Comparison path · '+comparisonPath.name+'. This chart values the original accumulator through knock-out or maturity. Any later hold or decumulator outcome is shown in the comparison table.':sourceNotice;
   el('pathName').textContent=comparisonPath?comparisonPath.name:(A.scenarios.find(s=>s.id===preset)?.name||'Custom price path')+(dailyOverride?' · day '+dailyOverride.day+' override':'');
   document.querySelectorAll('#quickPaths button,#overviewPaths button').forEach(b=>b.setAttribute('aria-pressed',String(!dailyOverride && b.dataset.scenario===preset)));
-  el('rows').innerHTML=displayLedger(simulation).map(r=>{
-    const knockedOut=r.month===simulation.koMonth;
-    const event=knockedOut?r.status+' · day '+simulation.koDay+' at '+dollars(simulation.exit.price):r.status;
-    const rowClass=knockedOut?'ko-row':r.status==='Maturity'?'maturity-row':'';
-    const pnl=Math.round((r.value-simulation.payment)*100)/100;
-    const cells=[dollars(r.price),event,count.format(r.bought),dollars(r.cost),cash(r.refund),dollars(r.sold),dollars(r.remaining),count.format(r.held),cash(r.refunded),dollars(r.value),count.format(r.shares),signedCash(pnl)];
-    return '<tr data-row="'+r.month+'" class="'+rowClass+'"><td><button data-edit="'+r.month+'" aria-label="Edit month '+r.month+'">M'+r.month+'</button></td>'+cells.map((value,index)=>{
-      const cls=index===1?'event-cell':index===4&&r.refund>0?'refund-cell':'';
-      const heat=index===11?window.AccumulatorBetaTable.heat(pnl,simulation.payment):'';
-      return '<td class="'+cls+'"'+heat+'>'+value+'</td>';
-    }).join('')+'</tr>';
-  }).join('');
-  window.AccumulatorLedgerWorkings?.bind(el('rows'),{simulation,quote:q,spot,target:capital});
   updateOverview();
   renderScenarios(q);
   selectMonth(month);
 }
-function updateOverview(){
+function renderMonthlyLedger(salePlan){
   const sim=simulation, exit=sim.exit;
-  el('beta-overview-notes').hidden=false;
+  const ledger=salePlan?.ledger;
   const exitLabel=sim.koDay?'KO on day '+sim.koDay:'Maturity';
-  el('overviewTerms').innerHTML=nvdaChart.pricingTerms(chosen(),sim,el('pathName').textContent);
-  el('overviewRows').innerHTML=displayLedger(sim).map(r=>{
-    const ended=r.month===exit.month;
-    const pnl=Math.round((r.value-sim.payment)*100)/100;
+  const overview=[], detailed=[];
+  for(const r of sim.rows.slice(0,exit.month)){
+    const ended=r.month===exit.month, knockedOut=ended&&sim.koDay;
+    const flow=ledger?.[r.month-1];
+    const sold=flow?fmt.shares(flow.sharesSold):'—';
+    const received=flow?exact(flow.cashReceivedCents/100):'—';
+    const held=flow?fmt.shares(flow.sharesHeld):'—';
+    const value=flow?dollars(flow.valueCents/100):'—';
+    const pnl=flow?signedCash(flow.pnlCents/100):'—';
+    const heat=flow?window.AccumulatorBetaTable.heat(flow.pnlCents/100,sim.payment):'';
+    const refundCell='<td class="'+(r.refund>0?'refund-cell':'')+'">'+cash(r.refund)+'</td>';
+    const classes=(knockedOut?'ko-row':ended?'maturity-row':'')+(r.month===month?' active':'');
+    const start='<tr data-row="'+r.month+'" class="'+classes.trim()+'">';
     const rowTitle='M'+r.month+(ended?' · '+exitLabel:'');
-    return '<tr data-row="'+r.month+'" class="'+(ended&&sim.koDay?'ko-row':'')+'"><td>'+rowTitle+'</td><td>'+dollars(ended?exit.price:r.price)+'</td><td>'+fmt.shares(r.bought)+'</td><td>'+fmt.shares(r.shares)+'</td><td>'+dollars(r.cost)+'</td><td class="'+(r.refund>0?'refund-cell':'')+'">'+cash(r.refund)+'</td><td>'+cash(r.value)+'</td><td'+window.AccumulatorBetaTable.heat(pnl,sim.payment)+'>'+signedCash(pnl)+'</td></tr>';
-  }).join('');
+    overview.push(start+'<td>'+rowTitle+'</td><td>'+dollars(ended?exit.price:r.price)+'</td><td>'+fmt.shares(r.bought)+'</td><td>'+fmt.shares(r.shares)+'</td><td>'+sold+'</td><td>'+received+'</td><td>'+held+'</td><td>'+dollars(r.cost)+'</td>'+refundCell+'<td>'+value+'</td><td'+heat+'>'+pnl+'</td></tr>');
+    const event=knockedOut?r.status+' · day '+sim.koDay+' at '+dollars(exit.price):r.status;
+    detailed.push(start+'<td><button data-edit="'+r.month+'" aria-label="Edit month '+r.month+'">M'+r.month+'</button></td>'+
+      '<td>'+dollars(r.price)+'</td><td class="event-cell">'+event+'</td><td>'+fmt.shares(r.bought)+'</td><td>'+dollars(r.cost)+'</td>'+refundCell+
+      '<td>'+sold+'</td><td>'+received+'</td><td>'+dollars(r.remaining)+'</td><td>'+held+'</td><td>'+cash(r.refunded)+'</td><td>'+value+'</td><td>'+fmt.shares(r.shares)+'</td><td'+heat+'>'+pnl+'</td></tr>');
+  }
+  el('overviewRows').innerHTML=overview.join('');
+  el('rows').innerHTML=detailed.join('');
+  const state={simulation:sim,quote:chosen(),spot,target:capital,ledger};
+  const workings=window.AccumulatorLedgerWorkings;
+  workings.bind(el('overviewRows'),state,[null,'mark','bought','cumulative','sharesSold','sold','held','cost','refund','value','pnl']);
+  workings.bind(el('rows'),state);
+}
+function updateOverview(){
   const quote=chosen();
-  window.AccumulatorLedgerWorkings?.bind(el('overviewRows'),{simulation:sim,quote,spot,target:capital},[null,'mark','bought','cumulative','cost','refund','value','pnl']);
-  window.AccumulatorMonthlyCash.render(sim,quote.id,updateSaleRange);
+  el('beta-overview-notes').hidden=false;
+  el('overviewTerms').innerHTML=nvdaChart.pricingTerms(quote,simulation,el('pathName').textContent);
+  window.AccumulatorMonthlyCash.render(simulation,quote.id,updateSaleRange);
 }
 function updateSaleRange(salePlan){
   const sim=simulation, exit=sim.exit;
+  renderMonthlyLedger(salePlan);
   const pnlField=el('overview-pnl');
   const pnlCents=salePlan?.pnlCents ?? 0;
   el('overview-total-shares').textContent=fmt.shares(exit.shares);

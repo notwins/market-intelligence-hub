@@ -8,19 +8,21 @@
     bought: 'Shares bought this month',
     cost: 'Capital used this month',
     refund: 'Cash refunded this month',
-    sold: 'Share sale proceeds this month',
+    sharesSold: 'Shares sold this month',
+    sold: 'Cash received from share sales this month',
     remaining: 'Capital remaining in the note',
     held: 'Shares held at month-end',
     refunded: 'Cash refunded to date',
     value: 'Total value at month-end'
   };
-  const columns = [null, 'price', null, 'bought', 'cost', 'refund', 'sold', 'remaining', 'held', 'refunded', 'value', 'cumulative', 'pnl'];
+  const columns = [null, 'price', null, 'bought', 'cost', 'refund', 'sharesSold', 'sold', 'remaining', 'held', 'refunded', 'value', 'cumulative', 'pnl'];
   const states = new WeakMap();
 
   function workings(state, month, field) {
-    const {simulation: sim, quote, spot, target} = state;
+    const {simulation: sim, quote, spot, target, ledger} = state;
     const {price: usd, shares: units, quote: percentage} = window.AccumulatorFormat;
     const row = sim.rows[month - 1];
+    const flow = ledger?.[month - 1];
     const previous = sim.rows[month - 2];
     const openingShares = previous?.shares || 0;
     const openingRefund = previous?.refunded || 0;
@@ -28,7 +30,6 @@
     const atExit = month === exit.month;
     const afterExit = month > exit.month;
     const atKO = atExit && Boolean(sim.koDay);
-    const exited = atExit || afterExit;
     const saleDay = sim.koDay ? 'knock-out on day ' + exit.day : 'maturity on day ' + exit.day;
     const lastDay = previous?.day || 0;
     const sessions = row.day - lastDay;
@@ -46,8 +47,7 @@
         steps=[units(openingShares)+' shares purchased before this month + '+units(row.bought)+' purchased this month = '+units(row.shares)+' total shares bought.'];
         break;
       case 'pnl': {
-        const value=exited?exit.value:row.value;
-        steps=[...workings(state,month,'value').steps,usd(value)+' total value − '+usd(sim.payment)+' actual payment = '+usd(value-sim.payment)+' profit or loss.'];
+        steps=[...workings(state,month,'value').steps,usd(flow.valueCents/100)+' total value − '+usd(sim.payment)+' actual payment = '+usd(flow.pnlCents/100)+' profit or loss.'];
         break;
       }
       case 'price':
@@ -98,15 +98,17 @@
           steps = [afterExit ? 'The note ended at ' + saleDay + ' and had already returned ' + usd(exit.refunded) + '.' : 'The note is still active. Unspent cash stays committed until knock-out or maturity.', 'New refund this month = ' + usd(row.refund) + '.'];
         }
         break;
+      case 'sharesSold':
       case 'sold': {
-        const proceeds = atExit ? exit.shareValue : 0;
-        steps = atExit ? [
-          'The model assumes an immediate sale at ' + saleDay + ' for ' + usd(exit.price) + ' per share.',
-          'Sale proceeds = ' + units(exit.shares) + ' shares × ' + usd(exit.price) + ' = ' + usd(proceeds) + '.',
-          'The separate cash refund is ' + usd(exit.refunded) + '.'
-        ] : [
-          afterExit ? 'All ' + units(exit.shares) + ' shares were assumed sold at ' + saleDay + '.' : 'The note is active. Shares acquired so far remain in the holdings.',
-          'Shares sold this month = 0. New sale proceeds = ' + usd(proceeds) + '.'
+        const {sharesSold, salePriceCents, cashReceivedCents} = flow;
+        if (!sharesSold) {
+          steps = ['No shares are sold this month. Cash received from sales is ' + usd(0) + '.'];
+          break;
+        }
+        steps = [
+          atExit ? 'The remaining shares sell at ' + saleDay + '.'
+            : 'The model sells this month’s delivery at your selected price.',
+          units(sharesSold) + ' shares sold × ' + usd(salePriceCents/100) + ' per share = ' + usd(cashReceivedCents/100) + ' received this month.'
         ];
         break;
       }
@@ -118,14 +120,11 @@
         ];
         break;
       case 'held': {
-        const opening = afterExit ? 0 : openingShares;
-        const sold = atExit ? exit.shares : 0;
-        const held = exited ? 0 : row.shares;
+        const {openingShares: opening, sharesSold, sharesHeld} = flow;
         steps = [
           'Shares held at the start of the month = ' + units(opening) + '.',
-          'Ending shares = ' + units(opening) + ' opening + ' + units(row.bought) + ' bought − ' + units(sold) + ' sold = ' + units(held) + '.'
+          'Ending shares = ' + units(opening) + ' opening + ' + units(row.bought) + ' bought − ' + units(sharesSold) + ' sold = ' + units(sharesHeld) + '.'
         ];
-        if (atExit) steps.push('The model sells all delivered shares at ' + saleDay + '.');
         break;
       }
       case 'refunded':
@@ -135,21 +134,16 @@
           'Refunds return unused subscription cash. They count once in total value.'
         ];
         break;
-      case 'value':
-        if (exited) {
-          steps = [
-            'All ' + units(exit.shares) + ' shares were assumed sold at ' + saleDay + ' at ' + usd(exit.price) + ' per share = ' + usd(exit.shareValue) + '.',
-            'Total cash after the sale = ' + usd(exit.shareValue) + ' sale proceeds + ' + usd(exit.refunded) + ' refunded cash = ' + usd(exit.value) + '.',
-            afterExit ? 'The model carries this cash forward with zero interest and no remaining shares.' : 'At the end of this month the note holds no further committed capital.'
-          ];
-        } else {
-          steps = [
-            'Share market value = ' + units(row.shares) + ' shares held × ' + usd(row.price) + ' month-end price = ' + usd(row.shareValue) + '.',
-            'Add ' + usd(row.refunded) + ' refunded cash, ' + usd(0) + ' prior sale proceeds and ' + usd(row.remaining) + ' still committed to the note at face value.',
-            'Total model value = ' + usd(row.shareValue) + ' + ' + usd(row.refunded) + ' + ' + usd(0) + ' + ' + usd(row.remaining) + ' = ' + usd(row.value) + '. An actual early-unwind quote may differ.'
-          ];
-        }
+      case 'value': {
+        const {sharesHeld, holdingsCents, cashReceivedToDate, valueCents} = flow;
+        steps = [
+          atExit ? 'All shares have been sold by the modelled exit.'
+            : units(sharesHeld) + ' shares held × ' + usd(row.price) + ' month-end price = ' + usd(holdingsCents/100) + ' in shares.',
+          usd(holdingsCents/100) + ' in shares + ' + usd(cashReceivedToDate/100) + ' sale proceeds to date + ' +
+            usd(row.refunded) + ' refunds to date + ' + usd(row.remaining) + ' still in the note = ' + usd(valueCents/100) + ' total value.'
+        ];
         break;
+      }
       default:
         return null;
     }
@@ -172,6 +166,7 @@
         if (!field) return;
         const cell = row.cells[i];
         const value = cell.textContent;
+        if (value === '—') return;
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'ledger-figure';
