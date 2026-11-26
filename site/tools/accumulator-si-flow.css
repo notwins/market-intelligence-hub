@@ -1,0 +1,209 @@
+.flow-main h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.flow-main .share-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 10px;
+}
+
+.share-controls .field {
+  flex: 1 1 260px;
+  max-width: 440px;
+}
+
+#share-history:not(:empty) {
+  margin-top: 12px;
+}
+
+.flow-main .mp-card {
+  margin-bottom: 0;
+}
+
+.flow-main .flow-disclosure {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #f7faf8;
+}
+
+.flow-disclosure > summary {
+  cursor: pointer;
+  font-weight: 720;
+  color: var(--forest);
+}
+
+.flow-main .quote-disclosure {
+  margin: 0 0 14px;
+}
+
+.quote-grid,
+.company-analysis,
+.flow-main .sb-reading-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.flow-main .quote-grid table {
+  background: white;
+  white-space: normal;
+  align-self: start;
+}
+
+.quote-grid caption {
+  padding: 6px 0;
+  font-weight: 720;
+  text-align: left;
+}
+
+.flow-main .quote-grid :is(th, td) {
+  text-align: center;
+}
+
+.quote-grid th small {
+  display: block;
+  font-weight: 500;
+}
+
+.flow-main .quote-grid button {
+  width: 100%;
+  padding: 6px 4px;
+  min-height: 36px;
+  font-size: .875rem;
+  font-weight: 720;
+}
+
+.flow-main button:disabled {
+  cursor: default;
+  opacity: .5;
+}
+
+.quote-missing {
+  color: var(--muted);
+}
+
+.company-analysis > section,
+.flow-main .sb-reading-grid > div {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  overflow-wrap: anywhere;
+}
+
+.company-analysis dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin: 10px 0;
+}
+
+.company-analysis dt,
+.flow-main .sb-meta,
+.flow-main .sb-note,
+.flow-main .sb-empty {
+  color: var(--muted);
+  font-size: .8125rem;
+}
+
+.company-analysis dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.flow-main .sb-report,
+.flow-main .sb-news {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.flow-main .sb-report h4,
+.flow-main .sb-news h4 {
+  margin: 3px 0;
+  font-size: .925rem;
+}
+
+.flow-main .sb-news details {
+  margin-top: 5px;
+}
+
+.flow-main .sb-news summary {
+  cursor: pointer;
+}
+
+.sensitivity {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.sensitivity .head {
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.sensitivity .field {
+  width: 94px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.sensitivity .field label {
+  flex-shrink: 0;
+}
+
+.sensitivity .tablewrap {
+  margin-top: 8px;
+}
+
+.flow-main .sensitivity table :is(td, th):not(:first-child) {
+  text-align: right;
+}
+
+.sensitivity tbody th {
+  background: transparent;
+}
+
+.sensitivity-base {
+  background: var(--sage);
+  font-weight: 750;
+}
+
+.sensitivity .sensitivity-mobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .quote-grid,
+  .company-analysis,
+  .flow-main .sb-reading-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .flow-main .quote-grid :is(th, td) {
+    padding: 5px 3px;
+  }
+
+  .flow-main .sensitivity table {
+    font-size: .75rem;
+  }
+
+  .flow-main .sensitivity :is(th, td) {
+    padding: 6px 4px;
+  }
+
+  .sensitivity .sensitivity-desktop {
+    display: none;
+  }
+
+  .sensitivity .sensitivity-mobile {
+    display: table-cell;
+  }
+}

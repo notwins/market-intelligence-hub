@@ -307,9 +307,8 @@
     const current=++generation; $('load-status').hidden=false;$('load-status').textContent='Loading filing and market comparisons…';$('retry').hidden=true;
     try {
       const lib=window.StocksBeta2PeerLibrary;
-      const [base,extra,pub]=await Promise.all([json('shares-beta3-annual-filings-2026-11-26.json'),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published()]);
+      const [base,extra,pub]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published()]);
       if(current!==generation)return;
-      if(!Array.isArray(base.listings)||base.listings.length!==110||!base.companies)throw Error('Invalid filing coverage');
       if(extra&&extra.version!==1)throw Error('Invalid comparison data');
       state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
       const q=new URLSearchParams(location.search),input=(q.get('ticker')||'GOOG US').toUpperCase();
