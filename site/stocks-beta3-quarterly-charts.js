@@ -268,7 +268,7 @@
         '<span class="sq-tooltip" aria-hidden="true">' + esc(hint) + '</span></span>';
     }).join('');
     return '<div class="sq-chart-meta"><span>' + present.length + '/' + rows.length + ' figures</span><span>' + esc(label) + ' ↑</span></div>' +
-      '<div class="sq-scatter" role="group" aria-label="' + esc(label + ' against year-on-year revenue growth') + '">' +
+      '<div class="sq-scatter" role="group" aria-label="' + esc(label + ' against revenue growth') + '">' +
       '<div class="sq-scatter-plot">' + xGrid.lines + yLines + points + '<div class="sq-scatter-x" aria-hidden="true">' + xGrid.labels + '</div></div>' +
       '<div class="sq-scatter-label">Revenue growth →</div></div><div class="sq-legend">' + legend + '</div>' + table;
   }
@@ -388,7 +388,7 @@
     state.rows = rows;
     const period = data.periodLabel || (data.period === 'latest' || !data.period ? 'Latest reported periods' : 'Fiscal year ' + data.period);
     const standalone = !container.closest('section[aria-labelledby]');
-    const head = '<header class="sq-head"><div>' + (standalone ? '<h2>Fundamentals at a glance</h2>' : '') + '<p>' + esc(period) + '</p></div>' +
+    const head = '<header class="sq-head"><div>' + (standalone ? '<h2>Fundamentals at a glance</h2>' : '') + '<p>' + esc(period+(data.growthBasis==='qoq'?' · Growth QoQ':data.growthBasis==='yoy'?' · Growth YoY':'')) + '</p></div>' +
       '<span class="sq-count">' + rows.length + (rows.length === 1 ? ' company' : ' companies') + '</span></header>';
     container.classList.add('shares-quarterly-charts');
     const cards = rows.some(row => row.history.size >= 2) ? [...layouts, trendLayout] : layouts;

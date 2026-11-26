@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=4">
+  <link rel="stylesheet" href="stocks-beta3.css?v=5">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="content-source.js"></script>
   <script defer src="stocks-beta2-private-research.js?v=1"></script>
@@ -18,11 +18,11 @@
   <script defer src="stocks-beta3-disclosures.js?v=3"></script>
   <script defer src="stocks-beta3-details.js?v=3"></script>
   <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=1">
-  <script defer src="shares-quarterly-core.js?v=1"></script>
-  <script defer src="stocks-beta3-quarterly-charts.js?v=1"></script>
-  <script defer src="stocks-beta3-comparison.js?v=3"></script>
+  <script defer src="shares-quarterly-core.js?v=2"></script>
+  <script defer src="stocks-beta3-quarterly-charts.js?v=2"></script>
+  <script defer src="stocks-beta3-comparison.js?v=4"></script>
   <script defer src="stocks-beta3-model.js?v=4"></script>
-  <script defer src="stocks-beta3.js?v=4"></script>
+  <script defer src="stocks-beta3.js?v=5"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -39,7 +39,7 @@
         <div class="control-group" id="focus-picker"><div class="share-picker"><label for="choose-company">Focus company</label><div class="share-picker-field"><input id="choose-company" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="choose-company-list" autocomplete="off" placeholder="Company or ticker"><button type="button" aria-label="Show focus company options" aria-controls="choose-company-list"><span aria-hidden="true"></span></button></div><div id="choose-company-list" class="share-picker-list" role="listbox" aria-label="Focus company" hidden></div></div></div>
         <div class="control-group peer-control"><span id="peer-label">Competitors</span><button id="choose-peers" class="picker-control" type="button" aria-expanded="false" aria-controls="peer-editor" aria-labelledby="peer-label peer-name"><span id="peer-name"></span><span class="edit-affordance">Edit</span></button></div>
         <label class="control-group">Automatic peer count<select id="peer-count"><option>5</option><option>6</option><option>7</option><option>8</option><option selected>9</option><option>10</option></select></label>
-        <label class="control-group">Comparison period<select id="period"><option value="latest">Latest quarter</option></select></label>
+        <label class="control-group">Comparison period<select id="period"><option value="latest">Latest 10-Q quarter</option></select></label>
         <div id="peer-editor" hidden><div id="peer-picker"><div class="share-picker"><label for="peer-add">Add competitor</label><div class="share-picker-field"><input id="peer-add" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="peer-add-list" autocomplete="off" placeholder="Company or ticker"><button type="button" aria-label="Show add competitor options" aria-controls="peer-add-list"><span aria-hidden="true"></span></button></div><div id="peer-add-list" class="share-picker-list" role="listbox" aria-label="Add competitor" hidden></div></div></div><div class="selected-peers" id="selected-peers"></div><div class="peer-actions"><span id="peer-draft"></span><button type="button" id="auto-peers">Use automatic peers</button><button type="button" id="cancel-peers">Cancel</button><button type="button" id="apply-peers" class="apply">Apply peers</button></div></div>
         <div class="peer-context"><span id="peer-basis"></span><button type="button" id="open-bos" aria-haspopup="dialog" hidden>BOS comparison</button></div>
       </section>
@@ -47,6 +47,11 @@
         <div class="sticky-companies"><div class="horizontal" id="company-scroll" tabindex="0" aria-label="Company columns, horizontal scroll"><div class="compare-grid company-grid" id="companies"></div></div></div>
         <section class="filing-section" id="quarterly-dashboard" aria-labelledby="quarterly-dashboard-title">
           <header class="block-heading"><h2 id="quarterly-dashboard-title">Quarterly comparison charts</h2></header>
+          <fieldset id="quarter-growth" class="quarter-growth">
+            <legend>Growth comparison</legend>
+            <label><input type="radio" name="quarter-growth" value="yoy" checked> YoY</label>
+            <label><input type="radio" name="quarter-growth" value="qoq"> QoQ</label>
+          </fieldset>
           <div id="quarterly-charts"></div>
         </section>
         <section id="disclosure-charts" class="filing-section" aria-label="Filing analysis charts"><header class="block-heading"><h2>Solvency and filing detail</h2></header>

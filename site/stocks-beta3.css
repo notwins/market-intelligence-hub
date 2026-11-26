@@ -223,3 +223,8 @@ dialog#bos-dialog{width:min(1050px,calc(100vw - 24px));max-height:85dvh;border:1
 @media(max-width:760px){.disclosure-workbench{grid-template-columns:1fr}.ranking-panel,.note-chart{padding:12px}.filing-controls .share-picker-identity{gap:2px 4px}.company-brand{gap:4px}.company-brand .note-logo{width:21px;height:21px}#peer-editor{grid-template-columns:1fr}.peer-actions{grid-column:auto}.diagram-list{max-height:230px}}
 
 #quarterly-dashboard {scroll-margin-top:calc(var(--hub-primary-height,0px) + var(--company-head-height,90px) + 10px)}
+.quarter-growth{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;width:max-content;max-width:100%;margin:0 0 9px;padding:6px 12px 8px;border:1px solid #b8cdca;border-radius:8px;background:#f8fbfa;color:#244845}
+.quarter-growth legend{font-size:.85rem;font-weight:700;padding:0 5px}
+.quarter-growth label{display:flex;gap:5px;align-items:center;font-size:.875rem;font-weight:650;cursor:pointer}
+.quarter-growth input{accent-color:#176b5a}
+.quarter-growth[hidden]{display:none}

@@ -79,23 +79,23 @@
     const growth=valid(v.revenue)&&valid(prev?.values.revenue)?scale(v.revenue-prev.values.revenue,prev.values.revenue):null;
     return {period:observation.period,currency:record.currency,asOf:record.asOf,source:record.source,values:{qRevenue:v.revenue,qGrowth:growth,qOperatingMargin:scale(v.operatingIncome,v.revenue),qNetMargin:scale(v.netIncome,v.revenue),ttmRevenue:ttm?.revenue,ttmNetCommon:ttm?.netCommon}};
   }
-  function valueView(data,id,ticker,year,period,core) {
-    const c=data.companies[id],latest=period==='latest',x=data.expansion||{};
-    const q=quarterView(x.quarters?.[ticker]||x.quarters?.[c.ticker],year,latest);
+  function valueView(data,id,ticker,year,period,core,{alignedQuarter=false,useLatestMarket=false}={}) {
+    const c=data.companies[id],latest=alignedQuarter?useLatestMarket:period==='latest',x=data.expansion||{};
+    const q=alignedQuarter?{values:{}}:quarterView(x.quarters?.[ticker]||x.quarters?.[c.ticker],year,latest);
     if(core){
       const {period,currency,ended,asOf,source,kind,values}=core;
       Object.assign(q,{period,currency,ended,asOf,source,sourceLabel:kind});
       q.values={qRevenue:values.revenue,qGrowth:values.revenueGrowth,qOperatingMargin:values.operatingMargin,
         qNetMargin:values.netMargin,ttmRevenue:values.ttmRevenue,ttmNetCommon:values.ttmNetCommon};
     }
-    const interim=latest&&!q.source?x.interim?.[id]:null;
+    const interim=!alignedQuarter&&latest&&!q.source?x.interim?.[id]:null;
     if(interim&&interim.currency===c.currency){
       Object.assign(q,{asOf:interim.filed,ended:interim.ended,source:interim.source,sourceLabel:'SEC interim filing',currency:interim.currency});
       q.values.ttmRevenue=interim.values.revenue;
       q.values.ttmNetCommon=interim.values.netCommon;
     }
     const book=x.market?.[ticker]||x.market?.[c.ticker]||x.market?.[id];
-    const m=latest?book?.latest:book?.history?.[year?.end];
+    const m=latest?book?.latest:alignedQuarter?null:book?.history?.[year?.end];
     const values={...q.values}, nm=new Set(), inputs=year?.values||{};
     if(!m)return {values,nm,q,m:null};
     const cap=m.cap,capital=valid(cap)&&cap>0 && m.currency===c.currency?cap:null;
