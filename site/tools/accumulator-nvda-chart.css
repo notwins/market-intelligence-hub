@@ -23,6 +23,22 @@
 .nvda-term-path { color: #226288; font-weight: 650; }
 .nvda-term-divider { color: #63788a; }
 
+#overview .chart-sale-comparison {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 8px 0 12px;
+}
+
+#overview .chart-sale-comparison small,
+#overview #summary .chart-sale-basis {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.35;
+}
+
+#overview .chart-sale-comparison .positive { color: #216858; }
+#overview .chart-sale-comparison .negative { color: var(--risk); }
+
 [data-nvda-overlay-status] { margin: 5px 0; }
 .nvda-overlay-details { margin: 3px 0 10px; }
 .nvda-overlay-details p { margin: 4px 0; }
