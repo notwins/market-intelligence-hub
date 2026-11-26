@@ -128,6 +128,8 @@
   }
 
   function snapshotTable(table) {
+    const issuer = table.closest('.quote-issuer');
+    const accent = issuer?.classList.contains('sn') ? 'secondary' : issuer?.classList.contains('si') ? 'tertiary' : null;
     const rows = Array.from(table.rows).filter(visible).map(row => ({
       header: row.parentElement.tagName === 'THEAD',
       cells: Array.from(row.cells).filter(visible).map(cell => {
@@ -141,7 +143,7 @@
         };
       })
     })).filter(row => row.cells.length);
-    return {kind: 'table', label: table.getAttribute('aria-label') || table.closest('.tableScroll')?.getAttribute('aria-label'), rows};
+    return {kind: 'table', label: table.getAttribute('aria-label') || table.closest('.tableScroll')?.getAttribute('aria-label'), rows, accent};
   }
 
   function collect(section) {
@@ -247,7 +249,9 @@
     const style = getComputedStyle(document.body);
     const tokens = {
       ink: '--ink', muted: '--muted', line: '--line', accent: '--teal', soft: '--soft',
-      panel: '--beta-panel', hero: '--beta-hero', positive: '--beta-positive', negative: '--beta-negative'
+      panel: '--beta-panel', hero: '--beta-hero', positive: '--beta-positive', negative: '--beta-negative',
+      secondary: '--beta-secondary', secondaryLight: '--beta-secondary-light',
+      tertiary: '--beta-tertiary', tertiaryLight: '--beta-tertiary-light'
     };
     return Object.fromEntries(Object.entries(tokens).map(([key, token]) => [key, style.getPropertyValue(token).trim()]));
   }
@@ -295,8 +299,13 @@
       if (!first) doc.addPage();
       doc.setFillColor(colour.hero);
       doc.rect(0, 0, pageWidth, first ? 39 : 15, 'F');
-      doc.setFillColor(colour.accent);
-      doc.rect(0, 0, pageWidth, 2.2, 'F');
+      let x = 0;
+      for (const [tone, fraction] of [['accent', .5], ['secondary', .28], ['tertiary', .22]]) {
+        const bandWidth = pageWidth * fraction;
+        doc.setFillColor(colour[tone]);
+        doc.rect(x, 0, bandWidth, 2.2, 'F');
+        x += bandWidth;
+      }
       logo('NVDA', pageWidth - margin - (first ? 26 : 9), 3, first ? 26 : 9);
       font(first ? 23 : 11, 'ink', 'bold', 'times');
       doc.text('NVDA Accumulator Beta 2', margin, first ? 19 : 10);
@@ -328,7 +337,8 @@
     function heading(block) {
       room(17);
       if (block.logo) logo(block.logo, pageWidth - margin - 12, y - 1, 12);
-      paragraph(block.text, 12, 'accent', 'bold', 'times');
+      const tone = block.logo === 'JPM' ? 'secondary' : block.logo === 'O39.SI' ? 'tertiary' : 'accent';
+      paragraph(block.text, 12, tone, 'bold', 'times');
     }
 
     function drawTable(block) {
@@ -352,19 +362,21 @@
       const headers = layout.filter(row => row.header);
       const body = layout.filter(row => !row.header);
       const headerHeight = headers.reduce((sum, row) => sum + row.height, 0);
+      const headerFill = block.accent ? colour[block.accent + 'Light'] : colour.soft;
       room(headerHeight + (body[0]?.height || 0) + (block.label ? 7 : 2));
       if (block.label) paragraph(block.label, 9, 'muted', 'bold');
       function drawRow(row, index) {
         let x = margin;
         row.cells.forEach(cell => {
           const [r, g, b, a = 1] = cell.background;
-          if (row.header || row.merged) doc.setFillColor(colour.soft);
+          if (row.header || row.merged) doc.setFillColor(headerFill);
           else if (a > 0 && r !== undefined && (r < 250 || g < 250 || b < 250)) doc.setFillColor(r, g, b);
           else doc.setFillColor(index % 2 ? colour.panel : '#ffffff');
           doc.setDrawColor(colour.line);
           doc.setLineWidth(.15);
           doc.rect(x, y, cell.width, row.height, 'FD');
-          font(fontSize, cell.tone, row.header || row.merged ? 'bold' : 'normal');
+          const emphasized = row.header || row.merged;
+          font(fontSize, emphasized && block.accent ? block.accent : cell.tone, emphasized ? 'bold' : 'normal');
           const offset = cell.align === 'right' ? cell.width - pad : cell.align === 'center' ? cell.width / 2 : pad;
           doc.text(cell.lines, x + offset, y + pad + fontSize * .29, {align: cell.align});
           x += cell.width;

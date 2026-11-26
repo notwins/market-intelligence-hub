@@ -1,19 +1,24 @@
-.accumulator-beta {
+.accumulator-beta,
+.accumulator-beta .beta-styles [data-beta-style="harbour"] {
   --paper: #edf3f8;
   --ink: #18304a;
   --muted: #455b70;
   --line: #d5e1eb;
-  --equity: #185c81;
-  --teal: #225d73;
-  --soft: #e3f0f5;
+  --equity: #23577e;
+  --teal: #244f73;
+  --soft: #e5eff8;
   --lav: #665184;
-  --ochre: #8b582d;
+  --beta-secondary: #146873;
+  --beta-secondary-light: #e0f2ef;
+  --beta-secondary-edge: #92c4c0;
+  --beta-tertiary: #86511c;
+  --beta-tertiary-light: #fff0d9;
+  --beta-tertiary-edge: #dbb784;
   --beta-panel: #ffffff;
   --beta-subtle: #f4f8fb;
   --beta-hero: #dbe9f4;
   --beta-hero-edge: #a6c5d8;
-  --beta-deep: #174455;
-  --beta-history: #475e91;
+  --beta-deep: #153c60;
   --beta-path-tail: #657e89;
   --beta-cone: #a9ccd8;
   --beta-focus: #1c6390;
@@ -22,13 +27,10 @@
   --beta-negative: #963b3f;
   --beta-loss: #f9eeee;
   --beta-ko: #eee8f6;
-  --beta-display-font: Georgia, "Times New Roman", serif;
-  background: var(--paper);
-  color: var(--ink);
-  accent-color: var(--teal);
 }
 
-.accumulator-beta[data-beta-style="sage"] {
+.accumulator-beta[data-beta-style="sage"],
+.accumulator-beta .beta-styles [data-beta-style="sage"] {
   --paper: #eef3eb;
   --ink: #283b2c;
   --muted: #4a5e4d;
@@ -37,20 +39,25 @@
   --teal: #3e6546;
   --soft: #e5eee1;
   --lav: #66527c;
-  --ochre: #865827;
+  --beta-secondary: #4d568f;
+  --beta-secondary-light: #eaedfb;
+  --beta-secondary-edge: #b3bce3;
+  --beta-tertiary: #964c37;
+  --beta-tertiary-light: #fbeee6;
+  --beta-tertiary-edge: #d8a48f;
   --beta-panel: #fdfefc;
   --beta-subtle: #f4f7f2;
   --beta-hero: #e1ecdc;
   --beta-hero-edge: #afc6a9;
   --beta-deep: #2c5135;
-  --beta-history: #675d33;
   --beta-path-tail: #6a7b6c;
   --beta-cone: #b4c8ab;
   --beta-focus: #386040;
   --beta-ko: #eee9f2;
 }
 
-.accumulator-beta[data-beta-style="plum"] {
+.accumulator-beta[data-beta-style="plum"],
+.accumulator-beta .beta-styles [data-beta-style="plum"] {
   --paper: #f5eff4;
   --ink: #382a40;
   --muted: #604f62;
@@ -59,17 +66,30 @@
   --teal: #70435e;
   --soft: #f1e5ed;
   --lav: #615189;
-  --ochre: #8c502f;
+  --beta-secondary: #216553;
+  --beta-secondary-light: #e2f2e9;
+  --beta-secondary-edge: #a4c9b5;
+  --beta-tertiary: #944827;
+  --beta-tertiary-light: #fbeadd;
+  --beta-tertiary-edge: #dcb199;
   --beta-panel: #fffdfd;
   --beta-subtle: #f9f4f7;
   --beta-hero: #efdfeb;
   --beta-hero-edge: #d9b9ce;
   --beta-deep: #5b3452;
-  --beta-history: #80543d;
   --beta-path-tail: #826c80;
   --beta-cone: #d5b7ce;
   --beta-focus: #804768;
   --beta-ko: #eee8f6;
+}
+
+.accumulator-beta {
+  --ochre: var(--beta-tertiary);
+  --beta-history: var(--beta-secondary);
+  --beta-display-font: Georgia, "Times New Roman", serif;
+  background: var(--paper);
+  color: var(--ink);
+  accent-color: var(--teal);
 }
 
 .accumulator-beta .top { background: var(--beta-panel); }
@@ -89,7 +109,7 @@
   margin: clamp(10px, 1.6vw, 24px) 0 10px;
   border: 1px solid var(--beta-hero-edge);
   border-radius: 16px;
-  background: linear-gradient(112deg, var(--beta-panel), var(--beta-hero));
+  background: linear-gradient(112deg, var(--beta-panel), var(--beta-hero) 44%, var(--beta-secondary-light) 73%, var(--beta-tertiary-light));
 }
 
 .accumulator-beta .hero > div:first-child { min-width: 0; }
@@ -101,8 +121,9 @@
 }
 
 .accumulator-beta .beta-version {
-  color: var(--beta-deep);
-  border: 1px solid var(--beta-hero-edge);
+  background: var(--beta-tertiary-light);
+  color: var(--beta-tertiary);
+  border: 1px solid var(--beta-tertiary-edge);
   font-family: system-ui, sans-serif;
   font-size: clamp(.7rem, 1.25vw, .9rem);
   line-height: 1.2;
@@ -110,11 +131,13 @@
 
 .accumulator-beta .hero-side {
   color: var(--beta-deep);
-  border-color: var(--beta-hero-edge);
+  border-color: var(--beta-secondary-edge);
   margin-top: clamp(45px, 5vw, 86px);
 }
-.accumulator-beta .hero-side strong { font-family: var(--beta-display-font); }
+.accumulator-beta .hero-side strong { color: var(--beta-secondary); font-family: var(--beta-display-font); }
 .accumulator-beta .hero .section-links { column-gap: 18px; }
+.accumulator-beta .section-links :is([href="#library"], [href="#compare"], [href="#chartTitle"]) { color: var(--beta-secondary); }
+.accumulator-beta .section-links :is([href="#delivery-sales-title"], [href="#nvda-stress-context"], [href="#client-sheet"]) { color: var(--beta-tertiary); }
 
 .accumulator-beta :is(.hero, #library .quote-issuer, #nvda-stress-context) { --beta-watermark: url("../assets/company-logos/NVDA.webp"); }
 .accumulator-beta #library .sn { --beta-watermark: url("../assets/company-logos/JPM.webp"); }
@@ -173,16 +196,13 @@
 }
 .accumulator-beta .beta-styles button::before {
   content: "";
-  width: 11px;
-  height: 11px;
+  width: 21px;
+  height: 10px;
   border-radius: 50%;
-  background: var(--beta-swatch);
-  border: 1px solid currentColor;
+  background: linear-gradient(90deg, var(--teal) 33%, var(--beta-secondary) 33% 66%, var(--beta-tertiary) 66%);
+  box-shadow: 0 0 0 1px var(--beta-hero-edge);
   flex: none;
 }
-.accumulator-beta [data-beta-style="harbour"] { --beta-swatch: #357494; }
-.accumulator-beta [data-beta-style="sage"] { --beta-swatch: #56835a; }
-.accumulator-beta [data-beta-style="plum"] { --beta-swatch: #925b82; }
 .accumulator-beta #beta-quick-open { white-space: nowrap; }
 
 .accumulator-beta .panel { background: var(--beta-panel); }
@@ -195,8 +215,36 @@
 .accumulator-beta :is(.quote-case strong, .monthly-cash-totals dd, .metrics strong, .scenario .return) {
   font-family: var(--beta-display-font);
   letter-spacing: -.01em;
+}
+.accumulator-beta :is(.monthly-cash-totals dd, .metrics strong, .scenario .return) {
   color: var(--beta-deep);
 }
+.accumulator-beta .quote-case {
+  gap: 8px;
+  padding: 0;
+  border: 0;
+}
+.accumulator-beta .quote-case article {
+  --card-fill: var(--soft);
+  --card-edge: var(--beta-hero-edge);
+  --card-ink: var(--beta-deep);
+  padding: .65rem .85rem;
+  border: 0;
+  border-top: 3px solid var(--card-edge);
+  border-radius: 7px;
+  background: var(--card-fill);
+}
+.accumulator-beta .quote-case article:nth-child(2) {
+  --card-fill: var(--beta-secondary-light);
+  --card-edge: var(--beta-secondary-edge);
+  --card-ink: var(--beta-secondary);
+}
+.accumulator-beta .quote-case article:nth-child(3) {
+  --card-fill: var(--beta-tertiary-light);
+  --card-edge: var(--beta-tertiary-edge);
+  --card-ink: var(--beta-tertiary);
+}
+.accumulator-beta .quote-case :is(h3, strong) { color: var(--card-ink); }
 .accumulator-beta :is(.metrics strong, .scenario .return).positive, .accumulator-beta .positive { color: var(--beta-positive); }
 .accumulator-beta :is(.metrics strong, .scenario .return).negative, .accumulator-beta .negative { color: var(--beta-negative); }
 .accumulator-beta .beta-display ~ .panel,
@@ -221,6 +269,14 @@
   background: var(--beta-deep);
   border-color: var(--beta-deep);
 }
+.accumulator-beta :is(#beta-quick-open, #beta-quick-download).primary {
+  background: var(--beta-tertiary);
+  border-color: var(--beta-tertiary);
+}
+.accumulator-beta :is(#beta-quick-open, #beta-quick-download).primary:not(:disabled):hover {
+  background: var(--beta-tertiary-light);
+  color: var(--beta-tertiary);
+}
 .accumulator-beta :is(button, input, select, a, summary, [tabindex]):focus-visible {
   outline-color: var(--beta-focus);
 }
@@ -231,14 +287,40 @@
 }
 .accumulator-beta :is(.chip, .termstrip b, .walkthrough li h3::before) { color: var(--beta-deep); }
 .accumulator-beta .walkthrough li h3::before { background: var(--soft); }
-.accumulator-beta :is(.formula, .month-result) { border-left-color: var(--beta-hero-edge); }
+.accumulator-beta :is(.formula, .month-result) {
+  background: var(--beta-secondary-light);
+  border-left-color: var(--beta-secondary-edge);
+}
 .accumulator-beta :is(.tableScroll, td, th) { border-color: var(--line); }
-.accumulator-beta :is(th, #sn-comparison .cmp-results .cmp-section-row th) {
+.accumulator-beta th,
+.accumulator-beta #sn-comparison .cmp-results .cmp-section-row th {
   color: var(--ink);
   background: var(--soft);
 }
 .accumulator-beta :is(#library .priceMatrix tbody th, #sn-comparison .cmp-results tbody th:first-child, .cash-tranche, #overview .delivery-sales table) {
   background: var(--beta-panel);
+}
+.accumulator-beta #library .quote-issuer.sn {
+  --quote-ink: var(--beta-secondary);
+  --quote-fill: var(--beta-secondary-light);
+  --quote-edge: var(--beta-secondary-edge);
+}
+.accumulator-beta #library .quote-issuer.si {
+  --quote-ink: var(--beta-tertiary);
+  --quote-fill: var(--beta-tertiary-light);
+  --quote-edge: var(--beta-tertiary-edge);
+}
+.accumulator-beta #library .quote-issuer { border-color: var(--quote-ink); }
+.accumulator-beta #library .quote-issuer :is(h3, .quote-term) { color: var(--quote-ink); }
+.accumulator-beta #library .quote-issuer :is(thead th, .strike-button) {
+  background: var(--quote-fill);
+  color: var(--quote-ink);
+}
+.accumulator-beta #library .quote-issuer .strike-button { border-color: var(--quote-edge); }
+.accumulator-beta #library .quote-issuer .strike-button:is([aria-pressed="true"], :hover) {
+  background: var(--quote-ink);
+  border-color: var(--quote-ink);
+  color: white;
 }
 .accumulator-beta :is(#rows tr.active td, #sn-comparison .cmp-results tr.cmp-active th) { background: var(--soft); }
 .accumulator-beta :is(#rows tr.ko-row td.event-cell, #rows tr.ko-row td:first-child, #overview .ko-row td:first-child, #sn-comparison .cmp-results td.cmp-ko) {
@@ -253,13 +335,19 @@
   background: var(--beta-loss);
   color: var(--beta-negative);
 }
-.accumulator-beta .monthly-cash-totals div { background: var(--beta-gain); }
-.accumulator-beta .monthly-cash-totals div:last-child { background: var(--soft); }
-.accumulator-beta :is(.monthly-cash-bar, .cash-tranche-bar, .monthly-cash-bar span:last-child) { background: var(--beta-hero-edge); }
-.accumulator-beta :is(.monthly-cash-bar span:first-child, .cash-tranche-bar span) { background: var(--teal); }
+.accumulator-beta .monthly-cash-totals div { background: var(--beta-tertiary-light); }
+.accumulator-beta .monthly-cash-totals div:first-child dd { color: var(--beta-tertiary); }
+.accumulator-beta .monthly-cash-totals div:last-child { background: var(--beta-gain); }
+.accumulator-beta .monthly-cash-totals div:last-child dd { color: var(--beta-positive); }
+.accumulator-beta :is(.monthly-cash-bar, .cash-tranche-bar, .monthly-cash-bar span:last-child) { background: var(--beta-positive); }
+.accumulator-beta :is(.monthly-cash-bar span:first-child, .cash-tranche-bar span) { background: var(--beta-tertiary); }
 .accumulator-beta #sn-comparison .cmp-calculation { background: var(--beta-panel); }
-.accumulator-beta :is(.nvda-term-product, .nvda-valuation-summary b) { color: var(--beta-deep); }
-.accumulator-beta .nvda-valuation-summary b { font-family: var(--beta-display-font); }
+.accumulator-beta .nvda-term-product { color: var(--beta-deep); }
+.accumulator-beta .nvda-chart-valuation {
+  background: var(--beta-tertiary-light);
+  border-color: var(--beta-tertiary-edge);
+}
+.accumulator-beta .nvda-valuation-summary b { color: var(--beta-tertiary); font-family: var(--beta-display-font); }
 .accumulator-beta .nvda-term-strike { color: var(--ochre); }
 .accumulator-beta .nvda-term-ko { color: var(--lav); }
 .accumulator-beta .nvda-term-path { color: var(--equity); }
@@ -288,6 +376,10 @@
   color: var(--beta-positive);
 }
 .accumulator-beta #nvda-stress-context :is(.nv-statement dd, .nv-frequency-pair strong, .nv-supporting summary) { color: var(--beta-deep); }
+.accumulator-beta #nvda-stress-context .nv-frequency-pair > div:first-child { background: var(--beta-secondary-light); }
+.accumulator-beta #nvda-stress-context .nv-frequency-pair > div:last-child { background: var(--beta-tertiary-light); }
+.accumulator-beta #nvda-stress-context .nv-frequency-pair > div:first-child strong { color: var(--beta-secondary); }
+.accumulator-beta #nvda-stress-context .nv-frequency-pair > div:last-child strong { color: var(--beta-tertiary); }
 .accumulator-beta #nvda-stress-context :is(.nv-note, .nv-refs, .nv-frequency-pair small, .nv-chart-key) { color: var(--muted); }
 .accumulator-beta #nvda-stress-context .nv-chart-key span:first-child::before { border-color: var(--beta-history); }
 
@@ -330,9 +422,10 @@
   display: flex;
   justify-content: space-between;
   padding: 7px 10px;
-  background: var(--soft);
+  background: var(--beta-secondary-light);
   border-radius: 6px;
 }
+.accumulator-beta .beta-pdf-style strong { color: var(--beta-secondary); }
 .accumulator-beta #beta-quick-pdf fieldset { min-inline-size: 0; padding: 0; border: 0; margin: 13px 0; }
 .accumulator-beta #beta-quick-pdf legend { font-weight: 700; }
 .accumulator-beta #beta-quick-pdf label {
@@ -375,8 +468,9 @@
   .accumulator-beta .beta-display { gap: 4px; padding: 5px; }
   .accumulator-beta .beta-display button { min-height: 44px; padding: 4px 7px; }
   .accumulator-beta .beta-styles button { gap: 4px; }
-  .accumulator-beta .beta-styles button::before { width: 8px; height: 8px; }
+  .accumulator-beta .beta-styles button::before { width: 13px; height: 8px; }
   .accumulator-beta .inputs > label { min-width: 0; }
+  .accumulator-beta .quote-case article { padding: .55rem .7rem; }
 }
 
 @media (max-width: 370px) {
