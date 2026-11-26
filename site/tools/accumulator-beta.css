@@ -28,18 +28,19 @@
   white-space: nowrap;
 }
 
+.beta-chart-capital,
 .beta-overview-grid {
   display: grid;
-  grid-template-areas: "ledger" "deliveries" "capital" "sale";
   gap: 12px;
-  margin-top: 8px;
   align-items: start;
 }
 
+.beta-overview-grid {
+  margin-top: 8px;
+}
+
+.beta-chart-capital > *,
 .beta-overview-grid > * { min-width: 0; }
-.beta-share-ledger { grid-area: ledger; }
-.delivery-sales { grid-area: deliveries; }
-.beta-sale-range { grid-area: sale; }
 
 #overview .beta-share-ledger { margin: 0; }
 #overview .beta-share-ledger th { white-space: normal; }
@@ -48,7 +49,6 @@
 #overview .delivery-sales h3 { margin-top: 0; }
 
 .monthly-cash {
-  grid-area: capital;
   padding: 14px;
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -167,12 +167,13 @@
 #delivery-sales-status:not(:empty) { margin-top: 7px; font-weight: 650; }
 #delivery-sales-empty:not([hidden]) { margin-top: 5px; }
 
-@media (min-width: 1100px) {
-  .beta-overview-grid {
-    grid-template-columns: minmax(0, 1fr) clamp(344px, 29vw, 520px);
-    grid-template-rows: auto auto 1fr;
-    grid-template-areas: "ledger capital" "deliveries capital" "sale capital";
+@media (min-width: 1240px) {
+  .beta-chart-capital {
+    grid-template-columns: minmax(0, 1fr) clamp(344px, 30vw, 540px);
     column-gap: clamp(14px, 1.35vw, 25px);
+  }
+  .monthly-cash-tranches {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 124px), 1fr));
   }
 }
 

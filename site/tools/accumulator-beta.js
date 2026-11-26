@@ -34,7 +34,8 @@
     byId('monthly-cash-tranches').innerHTML = tranches.map(({month, quantity, delivery}) => {
       const cashBack = (fundingPerTranche - quantity * strikeCents) / 100;
       const purchased = quantity > 0 ? 'Delivered in M' + delivery : 'Returned in M' + exit.month;
-      return `<article class="cash-tranche">
+      const refunded = cashBack > 0 && !quantity ? ' cash-tranche--refunded' : '';
+      return `<article class="cash-tranche${refunded}">
         <small>Tranche ${month} · ${price(fundingPerTranche / 100)}</small>
         <strong>${shares(quantity)} shares</strong>
         <div class="cash-tranche-bar" aria-hidden="true"><span style="width:${100 * quantity / maximum}%"></span></div>

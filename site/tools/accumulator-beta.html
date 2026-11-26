@@ -90,9 +90,9 @@
 #notes-and-terms h3{margin:1rem 0 .35rem}
 #marketStatus,#overviewTerms,#overviewHistoryNote,#saleBasis,#chartTerms,#graphSource,#chartNote,#historyStamp,#exitValue,#library .pricing-note,.quote-case p{font-size:.9375rem;color:var(--ink)}
 </style>
-<link rel="stylesheet" href="accumulator-beta.css?v=20261126-deliveries">
+<link rel="stylesheet" href="accumulator-beta.css?v=20261127-ko">
 <link rel="stylesheet" href="accumulator-nvda-chart.css?v=20261126">
-<link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127-combinations">
+<link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127-ko">
 </head>
 <body class="accumulator-beta">
 <div class="top"><nav class="wrap" aria-label="Breadcrumb"><a href="../desk.html">Market Intel</a><span>/</span><a href="../v4.html#tools">Tools</a><span>/</span><a href="accumulator.html">Accumulator</a><span>/</span><b aria-current="page">Beta 2</b><span>/</span><a href="accumulator-3d.html">3D pricing</a></nav></div>
@@ -126,14 +126,14 @@
 <label class="check"><input type="checkbox" data-nvda-overlay="calls">Past house calls</label>
 <label class="check"><input type="checkbox" data-nvda-overlay="target">Price target</label>
 </div>
-<div class="legend"><span class="hist">Historical NVDA close</span><span class="path">Simulated NVDA · drag a monthly dot</span><span class="strike">Strike</span><span class="ko">Knock-out</span><span class="nvda-earnings-key" data-nvda-legend="earnings" hidden>Earnings · E</span><span class="nvda-calls-key" data-nvda-legend="calls" hidden>BOS calls · Buy / Hold / Sell</span><span class="nvda-target-key" data-nvda-legend="target" hidden></span></div>
+<div class="legend"><span class="hist">Historical NVDA close</span><span class="path">Simulated NVDA · drag a monthly dot</span><span class="strike">Strike</span><span class="ko">Knock-out</span><span class="after-ko" id="overviewAfterKo" hidden>After KO · purchases ended</span><span class="nvda-earnings-key" data-nvda-legend="earnings" hidden>Earnings · E</span><span class="nvda-calls-key" data-nvda-legend="calls" hidden>BOS calls · Buy / Hold / Sell</span><span class="nvda-target-key" data-nvda-legend="target" hidden></span></div>
+<div class="beta-chart-capital">
+<div class="beta-overview-chart">
 <div class="chartFrame"><div class="axis" id="overviewAxis" aria-hidden="true"></div><div id="overviewScroll" tabindex="0" aria-label="Historical and simulated NVDA prices. Scroll horizontally to explore." aria-describedby="overviewHistoryNote"><div id="overviewPlot"></div></div></div>
 <p class="small" id="overviewHistoryNote"></p>
 <p class="small" data-nvda-overlay-status role="status" hidden></p>
 <details class="nvda-overlay-details" id="nvda-overlay-details" hidden><summary>Chart overlay dates and sources</summary><div></div></details>
-<section class="nvda-chart-valuation" id="nvda-chart-valuation" aria-label="NVDA valuation multiples"><p>Loading NVDA forward P/E and P/B…</p></section>
-<div class="beta-overview-grid">
-<div class="tableScroll beta-share-ledger" tabindex="0" aria-label="Share purchases and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th>Cash needed for shares · USD</th><th>Cash refunded · USD</th><th>Total value · USD</th><th>P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
+</div>
 <aside class="monthly-cash" aria-labelledby="monthly-cash-title">
   <div class="monthly-cash-heading"><h3 id="monthly-cash-title">Where capital goes</h3><span>Principal only · USD</span></div>
   <div class="monthly-cash-bar" aria-hidden="true"><span></span><span></span></div>
@@ -145,6 +145,10 @@
   <p id="monthly-cash-reconcile" class="small"></p>
   <p id="monthly-cash-rounding" class="small" hidden></p>
 </aside>
+</div>
+<section class="nvda-chart-valuation" id="nvda-chart-valuation" aria-label="NVDA valuation multiples"><p>Loading NVDA forward P/E and P/B…</p></section>
+<div class="beta-overview-grid">
+<div class="tableScroll beta-share-ledger" tabindex="0" aria-label="Share purchases and cumulative profit or loss"><table><thead><tr><th>Month / event</th><th>NVDA · USD</th><th>Shares bought</th><th>Total shares bought</th><th>Cash needed for shares · USD</th><th>Cash refunded · USD</th><th>Total value · USD</th><th>P&amp;L · USD</th></tr></thead><tbody id="overviewRows"></tbody></table></div>
 <section class="delivery-sales" aria-labelledby="delivery-sales-title">
   <h3 id="delivery-sales-title">Sell shares on delivery</h3>
   <p class="small">Choose any delivery before KO or maturity to sell those shares. The default sale price is that month’s modelled close. Sale proceeds are held in cash.</p>
@@ -179,7 +183,7 @@
 <label class="check"><input type="checkbox" data-nvda-overlay="calls">Past house calls</label>
 <label class="check"><input type="checkbox" data-nvda-overlay="target">Price target</label>
 </div>
-<div class="legend"><span class="hist">Historical close</span><span class="path">Simulated price</span><span class="strike">Strike</span><span class="ko">Knock-out</span><span class="band" id="bandLegend" hidden>10th–90th percentiles</span><span class="nvda-earnings-key" data-nvda-legend="earnings" hidden>Earnings · E</span><span class="nvda-calls-key" data-nvda-legend="calls" hidden>BOS calls · Buy / Hold / Sell</span><span class="nvda-target-key" data-nvda-legend="target" hidden></span></div>
+<div class="legend"><span class="hist">Historical close</span><span class="path">Simulated price</span><span class="strike">Strike</span><span class="ko">Knock-out</span><span class="after-ko" id="chartAfterKo" hidden>After KO · purchases ended</span><span class="band" id="bandLegend" hidden>10th–90th percentiles</span><span class="nvda-earnings-key" data-nvda-legend="earnings" hidden>Earnings · E</span><span class="nvda-calls-key" data-nvda-legend="calls" hidden>BOS calls · Buy / Hold / Sell</span><span class="nvda-target-key" data-nvda-legend="target" hidden></span></div>
 <div class="chartFrame"><div class="axis" id="axis" aria-hidden="true"></div><div id="plotScroll" tabindex="0" aria-label="Price chart. Scroll horizontally to explore history and future months"><div id="plot"></div></div></div>
 <div class="inline jump"><span>Jump to</span><button data-jump="history">History</button><button data-jump="start">Trade start</button><button data-jump="end" id="endJump">Month 12</button></div>
 <p class="small" id="chartNote"></p>
@@ -194,7 +198,7 @@
 <div class="inline quick" id="quickPaths" aria-label="Quick scenario prices"></div>
 <div id="monthResult" class="month-result" aria-live="polite"></div></div>
 </section>
-<section class="panel" aria-labelledby="ledger"><div class="heading"><div><h2 id="ledger">Capital &amp; share movements</h2><p>See how much of your payment goes into shares and how much comes back as unspent cash. The highlighted knock-out month gives the trigger day and price. Green refund cells show capital returned. Tap any amount for the calculation.</p></div></div>
+<section class="panel" aria-labelledby="ledger"><div class="heading"><div><h2 id="ledger">Capital &amp; share movements</h2><p>See how much of your payment goes into shares and how much comes back as unspent cash. The highlighted knock-out month gives the trigger day and price. Tinted refund cells show capital returned. Tap any amount for the calculation.</p></div></div>
 <div class="tableScroll" tabindex="0" aria-label="Monthly capital and share movements"><table id="movements"><thead><tr><th>Month</th><th>Month-end<br>price · USD</th><th>Event</th><th>Shares<br>bought</th><th>Capital<br>used · USD</th><th>Cash refunded<br>USD</th><th>Share sale<br>proceeds · USD</th><th>Capital left<br>in note · USD</th><th>Shares<br>held</th><th>Refunded<br>to date · USD</th><th>Holdings<a href="#holdings-note" aria-label="How holdings are valued"><sup>1</sup></a><br>USD</th><th>Total shares<br>bought</th><th>P&amp;L<br>USD</th></tr></thead><tbody id="rows"></tbody></table></div>
 <div class="heading sub"><h3 id="endingMonth">At the end of month 12</h3></div><div class="metrics" id="summary"></div><p id="valuation" class="formula"></p><p id="exitValue" class="small"></p></section>
 <section class="panel" aria-labelledby="scenario-returns"><div class="heading"><div><h2 id="scenario-returns">Three scenarios to try</h2><p>Compare the note with buying whole NVDA shares at the start and keeping the change in cash. Both use the same payment and assume a sale at the same knock-out or maturity close.</p></div></div><div class="scenario-grid" id="scenarios"></div></section>
@@ -238,7 +242,7 @@
 <script src="accumulator-benchmark.js?v=1"></script>
 <script src="accumulator-beta-model.js?v=20261126-ko"></script>
 <script src="accumulator-beta-ledger-workings.js?v=20261126-ko"></script>
-<script src="accumulator-beta.js?v=20261126-deliveries"></script>
+<script src="accumulator-beta.js?v=20261127-ko"></script>
 <script src="accumulator-quotes.js?v=20261126-asof"></script><script id="accumulator-model">
 'use strict';
 const Accumulator = (() => {
@@ -604,6 +608,13 @@ function drawPriceChart(compact){
   if(!compact){tradeX=startX;unit=spacing;}
   const sx=i=>startX+i*spacing,w=Math.ceil(sx(months)+46);
   const attrs=(x)=>Number(x).toFixed(2);
+  const pointX=(day,monthIndex)=>{
+    const prior=monthIndex?simulation.monthEnds[monthIndex-1]:0;
+    return sx(monthIndex+(day-prior)/(simulation.monthEnds[monthIndex]-prior));
+  };
+  const koX=simulation.koDay?pointX(simulation.koDay,simulation.koMonth-1):null;
+  const afterKo=koX!==null&&simulation.koDay<simulation.days;
+  el(compact?'overviewAfterKo':'chartAfterKo').hidden=!afterKo;
   const line=(x1,y1,x2,y2,stroke,extra='')=>'<line x1="'+attrs(x1)+'" y1="'+attrs(y1)+'" x2="'+attrs(x2)+'" y2="'+attrs(y2)+'" stroke="'+stroke+'" '+extra+'/>';
   const label=(x,y1,t,extra='')=>'<text x="'+attrs(x)+'" y="'+attrs(y1)+'" '+extra+'>'+t+'</text>';
   const points=arr=>arr.map(p=>p.map(attrs).join(',')).join(' ');
@@ -614,7 +625,9 @@ function drawPriceChart(compact){
     axis+=label(44,y(v)+4,count.format(v),'text-anchor="end" font-size="14" fill="#4d6570"');
   }
   el(compact?'overviewAxis':'axis').innerHTML='<svg width="100%" height="'+H+'">'+axis+'</svg>';
-  let svg='<rect width="'+w+'" height="'+H+'" fill="#fbfdfd"/>'+grid;
+  let svg='<rect width="'+w+'" height="'+H+'" fill="#fbfdfd"/>';
+  if(afterKo)svg+='<rect class="after-ko-shade" x="'+attrs(koX)+'" y="'+yt+'" width="'+attrs(sx(months)-koX)+'" height="'+(yb-yt)+'"><title>After knock-out: no further purchases</title></rect>';
+  svg+=grid;
   if(first){
     const historyColour=compact?'#6D28D9':'#617d93';
     svg+=label(hp,16,'NVDA HISTORY','font-size="12" fill="'+historyColour+'" font-weight="700"');
@@ -626,7 +639,7 @@ function drawPriceChart(compact){
     let previousTick=-Infinity;
     for(const date of new Set([first,...history.map(p=>p[0])])){
       const x=hx(date);
-      if(x-previousTick<86||(compact&&date!==first&&historyEnd-x<90))continue;
+      if(x-previousTick<86||(compact&&date!==first&&historyEnd-x<112))continue;
       svg+=label(x,yb+21,date.slice(0,7),'font-size="13" fill="#536975"');
       previousTick=x;
     }
@@ -646,21 +659,17 @@ function drawPriceChart(compact){
     svg+='<g data-nvda-price-target><title>Analyst fair value · '+exact(events.fairValue.value)+' · '+events.fairValue.date+'</title>'+
       line(startX,level,sx(months),level,'#a34621','stroke-dasharray="6 4 2 4" stroke-width="1.7"')+'</g>';
   }
-  const pointX=(day,monthIndex)=>{
-    const prior=monthIndex?simulation.monthEnds[monthIndex-1]:0;
-    return sx(monthIndex+(day-prior)/(simulation.monthEnds[monthIndex]-prior));
-  };
   const path=[[startX,y(spot)]];
   rows.forEach((row,i)=>{
     const prior=i?simulation.monthEnds[i-1]:0;
     for(let day=prior+1;day<=simulation.monthEnds[i];day++) path.push([pointX(day,i),y(simulation.daily[day-1])]);
   });
-  const exit=simulation.koMonth||months;
   if(simulation.koDay){
     const d=simulation.koDay,[x,py]=path[d];
+    if(afterKo)svg+=line(x,yt,x,yb,'#665778','class="after-ko-boundary" stroke-dasharray="3 4"');
     svg+=poly(path.slice(0,d+1),'#0b7377',3);
-    svg+=poly(path.slice(d),'#69888a',2,'5 4');
-    svg+='<g><title>Knock-out on trading day '+d+' at '+exact(simulation.exit.price)+'</title><circle cx="'+x+'" cy="'+py+'" r="6" fill="white" stroke="#665778" stroke-width="2"/></g>';
+    if(afterKo)svg+=poly(path.slice(d),'#69888a',2,'5 4');
+    svg+='<g><title>Knock-out on trading day '+d+' at '+exact(simulation.exit.price)+' · '+count.format(simulation.exit.bought)+' shares bought in the KO month · '+cash(simulation.exit.refund)+' refunded</title><circle cx="'+x+'" cy="'+py+'" r="6" fill="white" stroke="#665778" stroke-width="2"/></g>';
     svg+=label(x,Math.min(yb-6,py+20),'KO day '+d,'text-anchor="middle" font-size="13" fill="#665778" font-weight="700" stroke="white" stroke-width="3" paint-order="stroke"');
   }else svg+=poly(path,'#0b7377',3);
   if(dailyOverride && dailyOverride.day!==simulation.koDay){
@@ -671,21 +680,26 @@ function drawPriceChart(compact){
   svg+=label(startX,yb+20,'Start','font-size="13" fill="#536975" text-anchor="middle"');
   rows.forEach(r=>{
     const x=sx(r.month),py=y(r.price),active=r.month===month;
-    const title='Month '+r.month+', '+dollars(r.price)+', '+count.format(r.bought)+' shares bought, '+cash(r.refund)+' refunded';
+    const trading=!simulation.koDay||simulation.monthEnds[r.month-1]<=simulation.koDay;
+    const detail=trading?', '+count.format(r.bought)+' shares bought, '+cash(r.refund)+' refunded':', hypothetical after knock-out';
+    const title='Month '+r.month+', '+dollars(r.price)+detail;
     svg+='<g data-month="'+r.month+'" data-price-handle tabindex="0" role="slider" aria-orientation="vertical" aria-label="Month '+r.month+' closing price in USD" aria-valuemin="0" aria-valuemax="1000000" aria-valuenow="'+r.price+'" aria-valuetext="'+title+'"><title>'+title+' · Drag vertically or use the arrow keys</title>';
-    if(active)svg+='<circle cx="'+x+'" cy="'+py+'" r="9" fill="#daeeeb" stroke="#3b8f83"/>';
-    svg+='<circle cx="'+x+'" cy="'+py+'" r="4" fill="'+(r.month<=exit?'#0b7377':'#69888a')+'"/>';
-    if(r.bought||r.month===simulation.koMonth)svg+=label(x,Math.max(yt+8,py-13),'+'+count.format(r.bought),'font-weight="700" text-anchor="middle" fill="#185a57" font-size="13" stroke="white" stroke-width="3" paint-order="stroke"');
+    if(active)svg+='<circle cx="'+x+'" cy="'+py+'" r="9" fill="#daeeeb" stroke="'+(trading?'#3b8f83':'#69888a')+'"/>';
+    svg+='<circle cx="'+x+'" cy="'+py+'" r="4" fill="'+(trading?'#0b7377':'#69888a')+'"/>';
+    if(r.bought||r.month===simulation.koMonth){
+      const [boughtX,boughtY]=r.month===simulation.koMonth?path[simulation.koDay]:[x,py];
+      svg+=label(boughtX,Math.max(yt+8,boughtY-13),'+'+count.format(r.bought),'font-weight="700" text-anchor="middle" fill="#185a57" font-size="13" stroke="white" stroke-width="3" paint-order="stroke"');
+    }
     if(active)svg+=label(x,py>yb-20?py-28:py+22,dollars(r.price),'text-anchor="middle" font-size="14" font-weight="700" fill="#172a42" stroke="white" stroke-width="4" paint-order="stroke"');
     svg+='<circle class="handle-hit" cx="'+x+'" cy="'+py+'" r="21" fill="transparent"/></g>';
     svg+=label(x,yb+20,'M'+r.month,'font-size="14" fill="#294656" text-anchor="middle"');
   });
-  plot.innerHTML='<svg width="'+w+'" height="'+H+'" aria-label="NVDA prices, simulated price path and share purchases">'+svg+'</svg>';
+  plot.innerHTML='<svg width="'+w+'" height="'+H+'" aria-label="NVDA prices, simulated price path and share purchases'+(afterKo?'. Shaded after knock-out on trading day '+simulation.koDay:'')+'">'+svg+'</svg>';
   if(compact){
     el('overviewHistoryNote').textContent=(priceHistory.length?'Historical NVDA closes through '+last[0]+' ('+origin+'). ':'')+'The simulation starts at '+exact(spot)+'.';
     return;
   }
-  el('chartNote').textContent=(history.length?'History ends at '+exact(last[1])+' on '+last[0]+'. The simulation starts separately at '+exact(spot)+'. ':'')+'Drag a dot vertically or enter a price below. On a focused dot, use ↑ or ↓ for $1 steps, or hold Shift for $10 steps. The dotted line follows NVDA after the shares are sold.';
+  el('chartNote').textContent=(history.length?'History ends at '+exact(last[1])+' on '+last[0]+'. The simulation starts separately at '+exact(spot)+'. ':'')+'Drag a dot vertically or enter a price below. On a focused dot, use ↑ or ↓ for $1 steps, or hold Shift for $10 steps.'+(afterKo?' The shaded period shows hypothetical prices after knock-out.':'');
   el('method').textContent=haveCone?'The 10th–90th percentile band uses '+fmt.rate(market.vol*100)+' annualised volatility from '+market.sessions+' daily log returns through '+last[0]+'. Daily sample volatility is multiplied by √252. At month m the endpoints are starting price × exp(±1.28155 × volatility × √(m/12)). Changing the history window only changes the chart view.':'At least 60 usable daily returns are needed for the cone.';
 }
 function jump(where){
@@ -875,5 +889,5 @@ if(location.protocol==='https:'||location.protocol==='http:'){
   </form>
 </dialog>
 <script src="accumulator-beta-appearance.js?v=20261127" defer></script>
-<script src="accumulator-beta-quick-pdf.js?v=20261127-combinations" defer></script>
+<script src="accumulator-beta-quick-pdf.js?v=20261127-ko" defer></script>
 </body></html>

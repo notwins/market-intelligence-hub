@@ -19,7 +19,7 @@
   --beta-hero: #dbe9f4;
   --beta-hero-edge: #a6c5d8;
   --beta-deep: #153c60;
-  --beta-path-tail: #657e89;
+  --beta-history: #536d7a;
   --beta-cone: #a9ccd8;
   --beta-focus: #1c6390;
   --beta-positive: #24634e;
@@ -50,7 +50,7 @@
   --beta-hero: #e1ecdc;
   --beta-hero-edge: #afc6a9;
   --beta-deep: #2c5135;
-  --beta-path-tail: #6a7b6c;
+  --beta-history: #5d6e5f;
   --beta-cone: #b4c8ab;
   --beta-focus: #386040;
   --beta-ko: #eee9f2;
@@ -77,7 +77,7 @@
   --beta-hero: #efdfeb;
   --beta-hero-edge: #d9b9ce;
   --beta-deep: #5b3452;
-  --beta-path-tail: #826c80;
+  --beta-history: #776377;
   --beta-cone: #d5b7ce;
   --beta-focus: #804768;
   --beta-ko: #eee8f6;
@@ -85,7 +85,9 @@
 
 .accumulator-beta {
   --ochre: var(--beta-tertiary);
-  --beta-history: var(--beta-secondary);
+  --beta-shares: var(--teal);
+  --beta-refund: var(--beta-secondary);
+  --beta-refund-light: var(--beta-secondary-light);
   --beta-display-font: Georgia, "Times New Roman", serif;
   background: var(--paper);
   color: var(--ink);
@@ -297,7 +299,8 @@
   color: var(--ink);
   background: var(--soft);
 }
-.accumulator-beta :is(#library .priceMatrix tbody th, #sn-comparison .cmp-results tbody th:first-child, .cash-tranche, #overview .delivery-sales table) {
+.accumulator-beta :is(#library .priceMatrix tbody th, #sn-comparison .cmp-results tbody th:first-child, #overview .delivery-sales table),
+.accumulator-beta .cash-tranche {
   background: var(--beta-panel);
 }
 .accumulator-beta #library .quote-issuer.sn {
@@ -327,7 +330,11 @@
   background: var(--beta-ko);
   color: var(--lav);
 }
-.accumulator-beta :is(#rows tr td.refund-cell, #overview td.refund-cell, #sn-comparison .cmp-results :is(td.cmp-refund, .cmp-best)) {
+.accumulator-beta :is(#rows tr td.refund-cell, #overview td.refund-cell, #sn-comparison .cmp-results td.cmp-refund) {
+  background: var(--beta-refund-light);
+  color: var(--beta-refund);
+}
+.accumulator-beta #sn-comparison .cmp-results .cmp-best {
   background: var(--beta-gain);
   color: var(--beta-positive);
 }
@@ -335,12 +342,13 @@
   background: var(--beta-loss);
   color: var(--beta-negative);
 }
-.accumulator-beta .monthly-cash-totals div { background: var(--beta-tertiary-light); }
-.accumulator-beta .monthly-cash-totals div:first-child dd { color: var(--beta-tertiary); }
-.accumulator-beta .monthly-cash-totals div:last-child { background: var(--beta-gain); }
-.accumulator-beta .monthly-cash-totals div:last-child dd { color: var(--beta-positive); }
-.accumulator-beta :is(.monthly-cash-bar, .cash-tranche-bar, .monthly-cash-bar span:last-child) { background: var(--beta-positive); }
-.accumulator-beta :is(.monthly-cash-bar span:first-child, .cash-tranche-bar span) { background: var(--beta-tertiary); }
+.accumulator-beta .monthly-cash-totals div:first-child { background: var(--soft); }
+.accumulator-beta .monthly-cash-totals div:first-child dd { color: var(--beta-shares); }
+.accumulator-beta .monthly-cash-totals div:last-child,
+.accumulator-beta .cash-tranche--refunded { background: var(--beta-refund-light); }
+.accumulator-beta :is(.monthly-cash-totals div:last-child dd, .cash-tranche--refunded strong) { color: var(--beta-refund); }
+.accumulator-beta :is(.cash-tranche-bar, .monthly-cash-bar span:last-child) { background: var(--beta-refund); }
+.accumulator-beta :is(.monthly-cash-bar span:first-child, .cash-tranche-bar span) { background: var(--beta-shares); }
 .accumulator-beta #sn-comparison .cmp-calculation { background: var(--beta-panel); }
 .accumulator-beta .nvda-term-product { color: var(--beta-deep); }
 .accumulator-beta .nvda-chart-valuation {
@@ -384,15 +392,23 @@
 .accumulator-beta #nvda-stress-context .nv-chart-key span:first-child::before { border-color: var(--beta-history); }
 
 /* Presentation colours for the live SVGs and their PDF copies. */
-.accumulator-beta :is(.hist::before, #overview .legend .hist::before) { color: var(--beta-history); border-color: var(--beta-history); }
-.accumulator-beta .path::before { color: var(--teal); }
+.accumulator-beta .hist::before,
+.accumulator-beta #overview .legend .hist::before { border-color: var(--beta-history); }
+.accumulator-beta .path::before { color: var(--beta-shares); }
+.accumulator-beta .legend .after-ko::before {
+  height: .65rem;
+  border: 1px dashed var(--beta-refund);
+  border-radius: 2px;
+  background: var(--beta-refund-light);
+}
 .accumulator-beta .band::before { color: var(--beta-cone); }
 .accumulator-beta main svg :is([stroke="#6D28D9"], [stroke="#617d93"], [stroke="#466981"]) { stroke: var(--beta-history); }
 .accumulator-beta main svg :is([fill="#6D28D9"], [fill="#617d93"]) { fill: var(--beta-history); }
-.accumulator-beta main svg :is([stroke="#0b7377"], [stroke="#3b8f83"]) { stroke: var(--teal); }
-.accumulator-beta main svg :is([fill="#0b7377"], [fill="#176b68"], [fill="#185a57"]) { fill: var(--teal); }
-.accumulator-beta main svg [stroke="#69888a"] { stroke: var(--beta-path-tail); }
-.accumulator-beta main svg [fill="#69888a"] { fill: var(--beta-path-tail); }
+.accumulator-beta main svg :is([stroke="#0b7377"], [stroke="#3b8f83"]) { stroke: var(--beta-shares); }
+.accumulator-beta main svg :is([fill="#0b7377"], [fill="#176b68"], [fill="#185a57"]) { fill: var(--beta-shares); }
+.accumulator-beta main svg [stroke="#69888a"] { stroke: var(--beta-refund); }
+.accumulator-beta main svg [fill="#69888a"] { fill: var(--beta-refund); }
+.accumulator-beta main svg .after-ko-shade { fill: var(--beta-refund-light); }
 .accumulator-beta main svg [stroke="#665778"] { stroke: var(--lav); }
 .accumulator-beta main svg [fill="#665778"] { fill: var(--lav); }
 .accumulator-beta main svg :is([stroke="#86602e"], [stroke="#88553c"], [stroke="#a34621"]) { stroke: var(--ochre); }
