@@ -5,7 +5,7 @@ const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__di
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
 const navigationVersion = '?v=20261127.atlas1';
-const settingsVersion = '?v=20261122.navsettings1';
+const settingsVersion = '?v=20261127.usage1';
 const accessFile = path.join(root, 'data/blueprint-access.json');
 const access = fs.existsSync(accessFile) ? JSON.parse(fs.readFileSync(accessFile, 'utf8')) : null;
 if(access){const owner=new URL(access.owner_url);if(access.schema_version!==1||owner.protocol!=='https:'||owner.username||owner.password||owner.search||owner.hash||!owner.hostname.endsWith('.chatgpt.site'))throw Error('Invalid blueprint access destination');}
@@ -21,6 +21,10 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   if (relative.startsWith('legal/')) { legal++; continue; }
   let content = fs.readFileSync(filename, 'utf8');
   const directory = path.posix.dirname(relative);
+  if (!content.includes('id="mih-usage"') && !/(?:-preview|-backup)\.html$/i.test(relative)) {
+    const script = path.posix.relative(directory, 'hub-usage.js');
+    content = content.replace(/<\/head\s*>/i, '<script id="mih-usage" defer src="' + script + '?v=1"></script></head>');
+  }
   // Shared navigation belongs to mutable UI shells, never frozen reports.
   if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html)$/.test(relative)
       || relative === 'blueprint.html' || relative === 'research-feed.html') {
@@ -37,6 +41,9 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
     if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   }
   content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
+  const usageScript = path.posix.relative(directory, 'hub-usage.js') + '?v=1';
+  if (!content.includes('id="mih-usage"')) content = content.replace(/<\/head\s*>/i,
+    '<script id="mih-usage" defer src="' + usageScript + '"></script></head>');
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
   const bootstrap=path.posix.relative(directory,'blueprint-access.js')+settingsVersion;

@@ -331,6 +331,8 @@
         </section>`;
       }).join('')}`;
     dialog.showModal();
+    document.dispatchEvent(new CustomEvent('hub-report-open', {detail: 'hourly-briefing'}));
+    window.HubUsage?.hourlyBriefing();
     dialog.scrollTop = 0;
     const slots = [...body.querySelectorAll('[data-briefing-indicators]')];
     drawIndicators(edition).then(indicators => {
