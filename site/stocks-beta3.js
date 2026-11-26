@@ -69,8 +69,9 @@
       cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-name">${esc(co.name)}</span><small>${esc(c.ticker[i])} · ${esc(co.currency)}</small><small>${c.years[i]?esc(date(c.years[i].end)):'No filing for period'}</small><small class="peer-role">${i===0?'Focus company':esc(reason(c.ids[i]))}</small></div>`).join('');
     const financial=cos.some(M.financial), ratioKeys=financial?['roe','roa','revenueGrowth','profitGrowth']:['operatingMargin','netMargin','grossMargin','roe','roa','revenueGrowth','profitGrowth','fcfMargin','cashMargin'];
     const trail=ratioKeys.filter(k=>cos.some(co=>co.years.some(y=>Number.isFinite(M.metric(co,y,k)))));
-    const valKeys=['peTTM','peFY','forwardPE','evEbitda','priceBook'].filter(k=>c.views.some(v=>Number.isFinite(v.values[k])));
-    for(const [component,options,fallback] of [['bar',[...trail,...valKeys],financial?'roe':'operatingMargin'],['trend',trail,financial?'roa':'netMargin']]) {
+    const comparisonKeys=[...E.multiples,'earningsYield','qGrowth','qOperatingMargin','qNetMargin']
+      .filter(k=>c.views.some(v=>Number.isFinite(v.values[k])));
+    for(const [component,options,fallback] of [['bar',[...trail,...comparisonKeys],financial?'roe':'operatingMargin'],['trend',trail,financial?'roa':'netMargin']]) {
       const available=options.length?options:ratioKeys;
       if(!available.includes(state[component]))state[component]=available.includes(fallback)?fallback:available[0];
       const select=$(component+'-metric');select.innerHTML=available.map(k=>opt(k,allLabels[k])).join('');select.value=state[component];

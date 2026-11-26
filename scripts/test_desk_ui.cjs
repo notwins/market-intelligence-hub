@@ -302,6 +302,9 @@ test('Shares Beta 3 calculates dated equity and enterprise multiples without ass
  y.values.netCommon=-1;assert(view().nm.has('peFY'));
  market.currency='GBP';assert.equal(view().values.peFY,undefined);
  market.currency='USD';company.model='bank';assert.equal(view().values.proxyEvEbitda,undefined);
+ delete y.values.netCommon;market.priceBasisOK=true;market.quoteCurrency='USD';market.quotePrice=72;market.epsEnd=y.end;market.priceEps=9;y.values.dilutedEps=72;
+ assert.equal(view().values.peFY,8);market.priceBasisOK=false;assert.equal(view().values.peFY,undefined);
 });
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
+
