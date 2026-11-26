@@ -85,6 +85,7 @@
   const credit = ['Bonds & credit', 'v4.html#credit', '▤'];
   const treasury = ['UST selection desk', 'v4.html#ust', '◒'];
   const filingsLink = ['Shares Beta 3 · 10-K filings', 'stocks-beta3.html', '▤'];
+  const siPrivateLink = ['SI Private', 'https://si-private.winstonnggw.chatgpt.site/', '🔒'];
   const watchlist = ['Bonds & shares watchlist', 'v4.html#watchlist'];
   const crossMarketRoute = /^cross-market-history(?:-beta2)?\.html(?:#|$)/;
   const newsLinks = [
@@ -111,6 +112,7 @@
       treasury, ['SI pricing', 'v4.html#history/si'], ['SI BETA 2', 'si-beta2.html'],
       ['Security master', 'v4.html#master/explore'], ['Saved securities', 'saved-securities.html']
     ], 'green'],
+    ['Tools', [siPrivateLink], 'blue'],
     ['Historical charts', [
       ['Cross-market history', 'cross-market-history.html'], ['Cross-Market History Beta 2', 'cross-market-history-beta2.html'],
       ['Gold charts', 'tools/gold-charts.html'],
@@ -331,7 +333,10 @@
     heading.textContent = title;
     const items = document.createElement('div');
     items.className = 'hub-menu-items';
-    items.append(...links.map(([name, href, icon]) => link(name, href, href === filingsLink[1] ? icon : undefined, toneFor(href))));
+    items.append(...links.map(item => {
+      const [name, href, icon] = item;
+      return link(name, href, item === filingsLink || item === siPrivateLink ? icon : undefined, toneFor(href));
+    }));
     group.append(heading, items);
     destinations.append(group);
   });
