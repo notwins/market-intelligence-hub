@@ -20,8 +20,9 @@
       defer
       src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261122.cashflow"
     ></script>
-  </head>
-  <body>
+  <link rel="stylesheet" href="market-editions.css?v=1">
+</head>
+  <body data-market="bonds" data-edition="analytical">
     <a class="studio-skip" href="#main">Skip to Bond Cashflow Studio</a>
     <header class="app-header">
       <a class="brand" href="desk.html"
@@ -63,7 +64,7 @@
           Inputs changed. Update the report to refresh these figures.
         </p>
       </section>
-      <section class="intro">
+      <section class="intro market-cover">
         <div>
           <p class="eyebrow">Fixed income</p>
           <h1>Bond Cashflow Studio</h1>
@@ -80,6 +81,7 @@
       <p class="feed-health" id="feedHealth" role="status">
         Loading Market Intel data…
       </p>
+      <nav class="edition-jumps" aria-label="Cashflow workspace sections"><a href="#inputs">Purchase assumptions</a><a href="#price-title">Historical price</a></nav>
       <div class="workspace">
         <aside class="input-panel" aria-label="Bond and scenario inputs">
           <div class="panel-heading">
