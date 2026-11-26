@@ -39,6 +39,41 @@
   const eps = income.trailingDilutedEps;
   const bookPerShare = balance.equity / shares;
   const quarterFcf = cashFlow.operating + cashFlow.capitalPurchases + cashFlow.capitalPrincipalPayments;
+  const sensitivityCuts = [0, .25, .50, .75];
+
+  function sensitivityTable(test, cap, reference, scale) {
+    const rows = sensitivityCuts.map(cut => {
+      const retained = 1 - cut;
+      const label = cut ? percent.format(cut) + ' lower' : 'Reported levels';
+      const pe = test ? multiple(test / (eps * retained)) : '—';
+      const yieldText = cap ? percent.format(fcf * retained / cap) : '—';
+      const highlight = test && scale !== null && retained < scale ? ' data-above-benchmark' : '';
+      return '<tr' + highlight + '><th scope="row">' + label + '</th><td>' + pe + '</td><td>' + yieldText + '</td></tr>';
+    }).join('');
+    let comparison = '';
+    if (reference && test) {
+      comparison = 'At the ' + price(reference.price) + ' close on ' + reference.date + ', reported figures imply ' +
+        multiple(reference.price / eps) + ' P/E and ' + percent.format(fcf / reference.cap) + ' FCF yield.';
+      if (scale < 1) {
+        const firstAbove = sensitivityCuts.find(cut => 1 - cut < scale);
+        comparison += ' Both metrics match that benchmark at a ' + percent.format(1 - scale) + ' cut.' +
+          (firstAbove ? ' The ' + percent.format(firstAbove) + ' cut is the first shown with higher P/E and lower yield.' :
+            ' The displayed cuts are at or below that crossover.');
+      } else if (scale === 1) {
+        comparison += ' Any cut raises P/E and lowers yield at this price.';
+      } else {
+        comparison += ' At the test price, even reported earnings and cash flow imply a higher P/E and lower yield.';
+      }
+    } else if (!test) {
+      comparison = 'P/E and free cash flow yield are shown as unavailable at a zero share price.';
+    }
+    return '<section class="nv-fundamentals-sensitivity" aria-labelledby="nv-fundamentals-sensitivity-title">' +
+      '<h4 id="nv-fundamentals-sensitivity-title">If earnings and free cash flow fall</h4>' +
+      '<p class="nv-fundamentals-sensitivity-basis">Each cut applies to trailing diluted EPS and free cash flow. The share price stays at ' +
+      price(test) + '.</p><table aria-labelledby="nv-fundamentals-sensitivity-title"><thead><tr><th scope="col">EPS and FCF</th>' +
+      '<th scope="col">P/E</th><th scope="col">FCF yield</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      (comparison ? '<p class="nv-fundamentals-sensitivity-comparison">' + comparison + '</p>' : '') + '</section>';
+  }
 
   function refresh() {
     if (finance.periodEnd !== reported.periodEnd) {
@@ -105,6 +140,7 @@
       '<div class="nv-fundamentals-statements"><div><h4>Balance sheet · ' + filingPeriod + '</h4><p data-valuation-balance>' + balanceText +
       '</p></div><div><h4>Trailing earnings and cash flow</h4><p data-valuation-earnings>' + earningsText + '</p></div></div>' +
       '<p class="nv-fundamentals-implied"><strong>What would support this price?</strong> <span>' + explanation + '</span></p>' +
+      sensitivityTable(test, cap, reference, scale) +
       '<p class="nv-fundamentals-history"><strong>' + (reference && scale < 1 ? 'Could it fall this far?' : 'What can change the valuation?') + '</strong> ' + historical +
       'Weaker earnings, tighter cash flow or a lower valuation multiple can drive a sell-off. Book value is an accounting measure. Share prices can fall below it.</p>' +
       '<details class="nv-fundamentals-sources"' + (sourcesOpen ? ' open' : '') + '><summary>Calculations and sources</summary>' +
