@@ -84,6 +84,23 @@
     const filter=$('dataset-sigma').value,z=item.latest.z;
     return !filter || (filter==='positive'?finite(z)&&z>0:filter==='negative'?finite(z)&&z<0:FredSigma.band(z)===filter);
   }
+  const groupIcons = {
+    'Banks & lending': 'm2 9 10-6 10 6z M3 20h18 M6 11v6 M10 11v6 M14 11v6 M18 11v6',
+    'Commodities': 'M12 2C9 7 5 11 5 15a7 7 0 0 0 14 0c0-4-4-8-7-13z M9 15a3 3 0 0 0 3 3',
+    'Credit & bonds': 'M4 5h16v12H4z M7 9h10 M7 13h5 M13 17v4l2-1 2 1v-4',
+    'Currencies': 'M3 7h17l-4-4 M21 17H4l4 4 M20 7l-4 4 M4 17l4-4',
+    'Economy & jobs': 'M3 8h18v12H3z M8 8V5h8v3 M3 12l9 2 9-2 M10 14v2h4v-2',
+    'Equities': 'M3 20h18 M5 16v-5h3v5z M11 16V7h3v9z M17 16V3h3v13z',
+    'Inflation': 'M3 20h18 M5 16l5-6 4 2 6-8 M15 4h5v5',
+    'Liquidity & funding': 'M2 7q3-3 6 0t6 0t8 0 M2 12q3-3 6 0t6 0t8 0 M2 17q3-3 6 0t6 0t8 0',
+    'Property & housing': 'm3 10 9-7 9 7 M5 9v11h5v-7h4v7h5V9',
+    'Trade & external accounts': 'M2 12h20 M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z M12 2q-9 10 0 20 9-10 0-20z',
+    'Treasury & government debt': 'M4 3h12l4 4v14H4z M15 3v5h5 M8 12h8 M8 16h6'
+  };
+  function groupIcon(group) {
+    const path = groupIcons[group] || 'M3 4h18v16H3z M3 9h18 M9 4v16 M9 14h12';
+    return `<svg class="topic-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${path}"/></svg>`;
+  }
   function renderOverview() {
     const words=$('dataset-search').value.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean),grouped=$('keep-grouping').checked;
     const filtered=state.overview.filter(item=>{
@@ -92,17 +109,27 @@
     });
     const shown=FredOverview.order(filtered,{sort:state.sort,direction:state.direction,grouped});
     const card=({entry:e,metric,mode,rows,latest:r})=>{
-      const band=FredSigma.band(r.z),direction=finite(r.z)?r.z>0?'positive':r.z<0?'negative':'':'',heading=grouped?'h3':'h2';
+      const band=FredSigma.band(r.z),direction=finite(r.z)?r.z>0?'positive':r.z<0?'negative':'':'';
       return `<article role="listitem" aria-labelledby="card-title-${E(e.id)}" data-dataset="${E(e.id)}" data-main-group="${E(e.main_group)}" data-z="${finite(r.z)?r.z:''}" class="dataset-card ${band} ${direction} ${state.selected?.id===e.id?'selected':''}">
-        <div class="card-top sigma-heat ${band} ${direction}"><div class="dataset-card-heading"><div class="card-heading-copy"><${heading} id="card-title-${E(e.id)}"><button type="button" class="dataset-open" data-open="${E(e.id)}">${E(e.name||e.title)}</button></${heading}><p class="card-id">${E(e.id)} · ${E(e.provider)} · ${E(e.main_group)}</p>${e.group!==e.main_group?`<p class="card-topic">${E(e.group)}</p>`:''}</div><div class="card-sigma">${badge(r)}<small>${finite(r.z)?`N=${integer(r.n)} · prior ${$('overview-baseline').value}Y`:E(r.reason||'Unavailable')}</small></div></div>
+        <div class="card-top sigma-heat ${band} ${direction}"><div class="dataset-card-heading"><div class="card-heading-copy"><h3 id="card-title-${E(e.id)}"><button type="button" class="dataset-open" data-open="${E(e.id)}">${E(e.name||e.title)}</button></h3><p class="card-id">${E(e.id)} · ${E(e.provider)} · ${E(e.main_group)}</p>${e.group!==e.main_group?`<p class="card-topic">${E(e.group)}</p>`:''}</div><div class="card-sigma">${badge(r)}<small>${finite(r.z)?`N=${integer(r.n)} · prior ${$('overview-baseline').value}Y`:E(r.reason||'Unavailable')}</small></div></div>
         ${e.series_count>1?`<p class="card-series">${integer(e.series_count)} series · default: ${E(e.default_series?.label||e.default_group)}</p>`:''}
-        <div class="card-value"><span>Latest native value</span><strong class="numeric">${number(r.raw)}</strong><small>${E(metric.unit||e.unit)}</small></div>
+        <div class="card-value">${groupIcon(e.main_group)}<span>Latest native value</span><strong class="numeric">${number(r.raw)}</strong><small>${E(metric.unit||e.unit)}</small></div>
         <dl class="card-facts"><div><dt>Observation date</dt><dd>${E(r.date||e.last||'Unavailable')}<small>${E(e.frequency)}${e.last&&r.date&&e.last!==r.date?` · source table through ${E(e.last)}`:''}</small></dd></div><div><dt>Native records</dt><dd>${integer(e.rows)}<small>${integer(e.observations)} nonmissing</small></dd></div></dl></div>
         <div class="card-heat"><div><span>Heat metric</span><strong class="numeric">${number(r.value)} <small>${E(unitFor(metric,mode))}</small></strong></div><p>${E(metric.label||metric.field)} · ${E(transformName(mode))}</p>${sparkline(rows)}</div>
         <div class="card-links"><a href="${E(FredArchive.resolve(e.csv_url))}" download>CSV ↓</a><a href="${E(FredArchive.resolve(e.json_url))}">JSON</a>${safeSource(e.source_url)?`<a href="${E(safeSource(e.source_url))}" target="_blank" rel="noopener noreferrer">Source ↗</a>`:''}<button class="cite" data-cite="${E(e.id)}" type="button">Copy citation</button></div>
       </article>`;
     };
-    $('dataset-rows').innerHTML=!shown.length?'<p class="empty-row">No datasets match these filters. Try a broader search or another σ band.</p>':grouped?FredOverview.partition(shown).map((group,i)=>`<section class="dataset-group-section" aria-labelledby="main-group-${i}"><h2 class="dataset-group-heading" id="main-group-${i}">${E(group.name)} <span>${integer(group.items.length)} ${group.items.length===1?'dataset':'datasets'}</span></h2><div class="dataset-grid" role="list" aria-label="${E(group.name)} datasets">${group.items.map(card).join('')}</div></section>`).join(''):`<div class="dataset-grid" role="list" aria-label="All saved datasets">${shown.map(card).join('')}</div>`;
+    const sections = grouped ? FredOverview.partition(shown) : [{name:'All datasets',items:shown}];
+    $('dataset-rows').innerHTML = shown.length ? sections.map((group,i) => `
+      <section class="dataset-group-section" aria-labelledby="main-group-${i}">
+        <div class="group-bar">
+          <h2 class="dataset-group-heading" id="main-group-${i}">${groupIcon(group.name)}${E(group.name)}</h2>
+          <span>${integer(group.items.length)} ${group.items.length===1?'dataset':'datasets'}</span>
+          <a href="#dataset-search">Filters</a>
+        </div>
+        <div class="dataset-grid" role="list" aria-labelledby="main-group-${i}">${group.items.map(card).join('')}</div>
+      </section>`).join('') : '<p class="empty-row">No datasets match these filters. Try a broader search or another σ band.</p>';
+
     document.querySelectorAll('[data-sort]').forEach(button=>{const active=button.dataset.sort===state.sort;button.setAttribute('aria-pressed',String(active));button.title=active?(state.sort==='extreme'?'Most extreme absolute sigma first':`${state.direction===1?'Ascending':'Descending'}; select again to reverse`):'Select to sort';button.querySelector('.sort-direction').textContent=active?(state.direction===1?'↑':'↓'):'↕';});
     const orderNote=state.sort==='extreme'?'Most extreme |σ| first, positive or negative':state.sort==='z'?`${state.direction===1?'Lowest':'Highest'} signed σ first`:'Ordered by the selected field';
     text('sort-note',`${orderNote}${grouped?' within each main group.':' across all main groups.'}`);
@@ -261,8 +288,23 @@
     $(key+'-tab').addEventListener('click',()=>setTab(key));
     $(key+'-tab').addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const next=event.key==='Home'?'series':event.key==='End'?'native':key==='native'?'series':'native';setTab(next);$(next+'-tab').focus();}});
   }
-  $('close-detail').addEventListener('click',event=>{event.preventDefault();history.pushState(null,'',location.pathname+location.search);state.selectionToken++;state.nativeToken++;state.selected=null;$('dataset-detail').hidden=true;renderOverview();$('dataset-search').focus();$('catalog-status').scrollIntoView({behavior:'auto',block:'center'});});
-  function readHash(){let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}if(state.entries.some(entry=>entry.id===id))selectDataset(id);}
+  function returnToCard() {
+    const id = state.selected?.id;
+    state.selectionToken++;
+    state.nativeToken++;
+    state.selected = null;
+    $('dataset-detail').hidden = true;
+    renderOverview();
+    const target = document.querySelector(`[data-open="${CSS.escape(id || '')}"]`) || $('dataset-search');
+    target.focus({preventScroll:true});
+    target.scrollIntoView({block:'center',behavior:'instant'});
+  }
+  $('close-detail').addEventListener('click',event=>{
+    event.preventDefault();
+    history.pushState(null,'',location.pathname+location.search);
+    returnToCard();
+  });
+  function readHash(){let id;try{id=decodeURIComponent(location.hash.slice(1));}catch{return;}if(state.entries.some(entry=>entry.id===id))selectDataset(id);else if(!id&&state.selected)returnToCard();}
   window.addEventListener('hashchange',readHash);
   window.AllFredData=Object.freeze({get datasetCount(){return state.entries.length;},get selectedID(){return state.selected?.id || null;},get selectedSeries(){return state.groupKey;},get records(){return state.records.slice();},get overview(){return state.overview.map(item=>({id:item.entry.id,latest:{...item.latest},mode:item.mode}));}});
   FredArchive.catalog().then(async catalog=>{
@@ -272,7 +314,7 @@
     state.entries=index.datasets.map(entry=>({...entry,main_group:FredOverview.mainGroup(entry)}));
     text('snapshot-date',index.snapshot || catalog.snapshot);
     const total=index.record_count ?? state.entries.reduce((sum,entry)=>sum+(entry.rows || 0),0),providers=new Set(state.entries.map(entry=>entry.provider));
-    $('collection-facts').innerHTML=`<span><b>${integer(state.entries.length)}</b> datasets</span><span><b>${integer(total)}</b> native records</span><span><b>${integer(providers.size)}</b> sources</span><span>Full supporting histories · native frequencies</span>`;
+    $('collection-facts').innerHTML=`<span><b>${integer(state.entries.length)}</b> datasets</span><span><b>${integer(total)}</b> native records</span><span><b>${integer(providers.size)}</b> sources</span>`;
     for(const [id,key] of [['dataset-source','provider'],['dataset-group','main_group'],['dataset-frequency','frequency']])fillOptions(id,[...new Set(state.entries.map(entry=>entry[key]))]);
     for(const [id,key] of [['archive-download','archive_url'],['coverage-link','notes_url']])if(catalog[key]){$(id).href=FredArchive.resolve(catalog[key]);$(id).hidden=false;}
     overviewCalculations();readHash();
