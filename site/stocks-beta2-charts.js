@@ -389,6 +389,7 @@
       }
       ctx.fillStyle = '#435b78';
       ctx.textAlign = 'right';
+      if (right - historicalRight >= 68) ctx.fillText('Simulated', right - 8, top + 12);
       ctx.fillText('M' + scenario.months, right, height - 10);
       const midway = Math.floor(scenario.months / 2);
       if (midway && right - historicalRight >= 94) {

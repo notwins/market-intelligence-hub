@@ -63,6 +63,7 @@
 .nvda-model-result { padding: .55rem .7rem; background: var(--beta-secondary-light); color: var(--ink); border-inline-start: 3px solid var(--beta-secondary-edge); }
 .nvda-analysis-valuation .tableScroll { max-height: 300px; margin-top: .4rem; }
 .nvda-analysis-valuation .tableScroll th { white-space: normal; }
+.nvda-analysis-valuation .tableScroll th:not(:first-child) { text-align: right; }
 .nvda-analysis-filings > section { margin-top: .55rem; }
 .nvda-analysis-filings .shares-quarterly-charts { margin-bottom: 0; --sq-ink: var(--ink); --sq-text: var(--muted); --sq-rule: var(--line); --sq-soft: var(--soft); --sq-accent: var(--teal); }
 @media (max-width: 940px) {
