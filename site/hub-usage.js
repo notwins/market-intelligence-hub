@@ -5,14 +5,16 @@
   if (location.origin !== 'https://notwins.github.io' || !location.pathname.startsWith(hub)
       || window.top !== window.self) return;
   const page = location.pathname.slice(hub.length).replace(/\/$/, '/index.html');
+  const preference = 'mih-usage-disabled';
+  const privateSignal = () => navigator.globalPrivacyControl || navigator.doNotTrack === '1' || window.doNotTrack === '1';
   if (!/^[a-z0-9][a-z0-9./-]{1,125}$/.test(page) || !page.endsWith('.html')
       || page === 'index.html' || /(?:^|\/)(?:data|legal)\//.test(page)
       || /(?:preview|backup|connect)\.html$/.test(page)) return;
   const service = 'https://market-intelligence-blueprint-winston.winstonnggw.chatgpt.site/analytics/event';
   function record(category, metric) {
-    if (navigator.globalPrivacyControl || navigator.doNotTrack === '1' || document.prerendering) return;
+    if (privateSignal() || document.prerendering) return;
     try {
-      if (localStorage.getItem('mih-usage-disabled') === '1') return;
+      if (localStorage.getItem(preference) === '1') return;
       fetch(service, {
         method: 'POST', body: JSON.stringify([category, metric]), keepalive: true,
         credentials: 'omit', referrerPolicy: 'no-referrer'
@@ -35,7 +37,7 @@
       if (Object.hasOwn(deskTabs, key)) selected = 'desk/' + deskTabs[key];
     } else if (page === 'bond-cashflow.html') {
       const sheet = document.querySelector('[role="tab"][data-page][aria-selected="true"]')?.dataset.page;
-      if (/^(?:[0-9]|1[0-4])$/.test(sheet)) name = 'cashflow/sheet-'+sheet;
+      if (/^(?:[0-9]|1[0-4])$/.test(sheet)) selected = 'cashflow/sheet-'+sheet;
     } else if (page === 'v4.html') {
       const key = location.hash.slice(1) || 'overview';
       if (tabs.has(key)) selected = 'workspace/' + key;
@@ -67,8 +69,7 @@
     const stamp = Date.now();
     if (stamp - lastToolAction < 180) return;
     lastToolAction = stamp;
-    const name = page.split('/').at(-1).replace(/\.html$/, '');
-    record('tool', name + '/' + action);
+    record('tool', page.replace(/^tools\//, '').replace(/\.html$/, '').replaceAll('/', '-') + '/' + action);
   }
   function bindActions() {
     document.addEventListener('click', event => {
@@ -111,9 +112,10 @@
     record('page', page);
     countTab();
     addEventListener('hashchange', countTab);
-    const deskTablist = document.querySelector('.modebar [role="tablist"]');
-    if (page === 'desk.html' && deskTablist) {
-      new MutationObserver(countTab).observe(deskTablist, {
+    const tablist = page === 'desk.html' ? document.querySelector('.modebar [role="tablist"]')
+      : page === 'bond-cashflow.html' ? document.querySelector('[role="tablist"]') : null;
+    if (tablist) {
+      new MutationObserver(countTab).observe(tablist, {
         subtree: true, attributes: true, attributeFilter: ['aria-selected']
       });
     }

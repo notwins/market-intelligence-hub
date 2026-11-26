@@ -39,7 +39,7 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
   if (!content.includes('id="mih-usage"') && !/(?:-preview|-backup)\.html$/i.test(relative)) {
     const script = path.posix.relative(directory, 'hub-usage.js');
-    content = content.replace(/<\/head\s*>/i, '<script id="mih-usage" defer src="' + script + '?v=2"></script></head>');
+    content = content.replace(/<\/head\s*>/i, '<script id="mih-usage" defer src="' + script + '?v=3"></script></head>');
   }
   const legalBase = path.posix.relative(directory, 'legal') + '/';
   const css = path.posix.relative(directory, 'legal-footer.css');
