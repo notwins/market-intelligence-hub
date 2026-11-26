@@ -317,3 +317,17 @@ html.beta3-nav-hidden{--beta3-nav-top:0px;scroll-padding-top:0}
 .annual-mix-table .annual-geo-0>*{background:#e7f2ed;font-weight:750}
 .annual-mix-table .annual-geo-1 th{padding-left:18px}
 .annual-mix-table .annual-geo-2 th{padding-left:30px;font-weight:500}
+#quarterly-filings,#quarter-solvency-ranking{scroll-margin-top:calc(var(--beta3-nav-top,0px) + var(--company-head-height,90px) + 8px)}
+#quarterly-filings{--quarter-filing-accent:#235e6c}
+#quarterly-filings .annual-panel{border-top:3px solid #6e9ca2}
+#quarterly-filings .annual-solvency h3{color:var(--quarter-filing-accent)}
+.filings-main .filing-ranking-caption{margin:0 18px 12px;font-size:.83rem;color:#46635d}
+.filings-main .quarter-filing-source{margin:6px 0 0;font-size:.75rem}
+.quarter-filing-source a{color:#255c56;text-underline-offset:2px}
+@media(max-width:515px){.filings-main .filing-ranking-caption{margin-inline:10px}}
+.annual-mix-table{table-layout:fixed}
+.annual-mix-table th:first-child{overflow-wrap:anywhere}
+.annual-mix-table thead th:nth-child(2){width:30%}
+.annual-mix-table thead th:nth-child(3){width:23%}
+#quarter-rank-diagram .annual-company small{white-space:normal}
+#quarter-rank-diagram .annual-company small a{white-space:nowrap}

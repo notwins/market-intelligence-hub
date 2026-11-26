@@ -54,7 +54,7 @@
     const dollar=value=>finite(value)&&finite(factor)?value*factor:null;
     return {
       assetsUsd:dollar(values.assets),netAssetsUsd:dollar(scaleRows(values).netAssets),
-      cashUsd:dollar(values.cash),debtUsd:dollar(values.totalDebt),
+      cashUsd:dollar(values.cash),liabilitiesUsd:dollar(values.liabilities),debtUsd:dollar(values.totalDebt),
       revenueUsd:dollar(values.revenue),cashFlowUsd:dollar(values.operatingCashFlow)
     };
   }

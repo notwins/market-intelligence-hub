@@ -6,7 +6,7 @@
   const colors=['#176b5a','#41679b','#9a602b','#76558d','#a5455a','#267a89','#646b30','#584c89','#a45132','#3f6b41','#784a66','#4c596f','#966545','#6d497d','#8a752f','#216a80','#a44a64'];
   const defaultFocus=['peTTM','peFY','evEbitda','proxyEvEbitda','forwardPE','qGrowth','qNetMargin','revenue','operatingIncome','netIncome','ebitda','totalDebt','equity','operatingCashFlow','freeCashFlow','revenueGrowth','operatingMargin','roe','fcfMargin'];
   const state={data:null,focus:'',custom:null,size:9,period:'latest',bonus:[],fx:null,supplement:{},quarterEndMarkets:{},growth:'yoy',unit:'bn',filter:'all',stars:new Set(defaultFocus),
-    draft:[],quarterly:null,peerQuarterly:{},published:null,privateData:null,details:{},annualSort:{key:'score',ascending:false},autoFocus:new Set(),dropped:new Set()};
+    draft:[],quarterly:null,peerQuarterly:{},published:null,privateData:null,details:{},annualSort:{key:'score',ascending:false},quarterSort:{key:'netAssetsRatio',ascending:false},quarterDetails:null,autoFocus:new Set(),dropped:new Set()};
   ['core-revenue','core-netIncome','core-operatingCashFlow','core-freeCashFlow','core-cash','core-totalDebt','core-revenueGrowth','core-netMargin','core-fcfMargin','core-roe','core-roa','core-currentRatio','core-liabAssets','solvency-rank','solvency-score','recent-cash','recent-disclosedCash','recent-cashIncludingRestricted','recent-cashShort','note-cash','note-cashShort','note-treasuries','note-assets','note-ppe','note-totalDebt','note-liabilities','note-leasesTotal','note-interestCover','note-equityAssets','note-debtCoverage','note-cet1','note-firstDebtDue','note-shortDebtShare','note-dueCash','due-debt-y1','due-debt-y2','due-debt-total','due-operatingLease-y1','due-financeLease-y1','due-allLeases-y1'].forEach(k=>state.stars.add(k));
   const highlighted=k=>state.stars.has(k)||(state.autoFocus.has(k)&&!state.dropped.has(k));
   const pct=n=>USD.integer(n,'%');
@@ -91,10 +91,11 @@
       useLatestMarket:isQuarter&&(calendar===latest?.quarter||calendar===snapshotCalendar)&&
         Boolean(current[i]&&current[i].observation===records[i]?.observations.at(-1))
     }));
+    const quarterNotes=isQuarter?ids.map((id,i)=>D.quarterView(state.quarterDetails,id,companies[i],current[i],calendar)):[];
     const check=isQuarter?(co,i,key)=>current[i]?.values[key]:undefined;
     const scale=companies.map((co,i)=>USD.scaleRows(isQuarter?current[i]?.values||{}:notes[i].v));
     return {ids,companies,ticker,peers,years,views,periods,quarters,latest,calendar,report,members,candidates,notes,
-      isQuarter,current,records,indexes,scale,bonus,periodLatest:isQuarter&&calendar===latest?.quarter,score:M.checklist(companies.slice(0,direct.length),years.slice(0,direct.length),check)};
+      isQuarter,current,quarterNotes,records,indexes,scale,bonus,periodLatest:isQuarter&&calendar===latest?.quarter,score:M.checklist(companies.slice(0,direct.length),years.slice(0,direct.length),check)};
   }
   function updateURL() {
     const u=new URL(location.href);
@@ -323,6 +324,7 @@
     <p>Growth requires a positive prior-year base. Margins divide the measure by revenue. Returns use net income to owners and average opening and closing equity or assets. Free cash flow subtracts cash purchases of PP&amp;E from operating cash flow. Cash conversion divides operating cash flow by net income. Asset turnover uses average assets. A dash marks a missing or inapplicable amount. The Figures panel on valuation charts describes missing inputs and explains when a multiple is not meaningful.</p>
     <p>Stars highlight rows you want to follow. Green checks mark leaders among comparable available values at the displayed precision. Checklist points require a figure for every company. Tied companies split a point. Financial institutions and REITs use revenue growth, profit growth, return on equity and return on assets. Company dates, accounting standards and business mix can differ.</p>
     <p>The share selectors order issuer equity values from largest to smallest in USD. The latest balance sheet identifies the newest verified reporting period in this snapshot. The cash observation has its own reporting date. A cash-flow closing balance follows the issuer’s cash-flow definition and may include restricted cash. Annual cash, securities and maturity schedules use the chosen fiscal year. U.S. Treasury holdings use the portfolio and measurement basis in the filing. Broader government portfolios can include agency or other sovereign securities. Cash equivalents and securities can overlap.</p>
+    <p>Quarterly filing comparisons use balance sheet figures from the selected reporting quarter and standalone quarterly operating cash flow. Quarterly revenue amounts are translated at the reported period end or its mapped calendar end. Revenue breakdowns use that quarter’s primary disclosures. The bar colours identify items within a breakdown. The quarterly solvency measures use the quarter’s reported values where available.</p>
     <p>Revenue shares use the total in the issuer’s disclosure. Grouped geography adds only reported amounts. An Americas total that includes the USA stays in the Americas (USA not split) row. APAC without a country split includes broad Asian and combined Greater China figures. Other / unallocated retains mixed territories and undisclosed markets. The rows below each highlighted subtotal are included in it. As filed shows the original breakdown. Each filing’s geographic basis, such as billing location or customer headquarters, still applies. Signed eliminations and hedges reconcile some totals. The colour strip shows positive components. Maturities run from the date on the filing. Grouped ranges retain their boundaries. Payments within an elapsed or ongoing fiscal year may already have been made.</p>
     <p>Solvency scores compare peers with the focus company’s business model. Capital strength uses owners’ equity divided by assets when all eligible peers report it. Otherwise it uses net assets (assets less liabilities) divided by assets when available across the group. Each shared measure gives 100 points to the strongest and zero to the weakest. Ties receive their average position. The overall score averages at least two shared measures. This comparison uses ${esc(D.ranking(c.notes).common.map(k=>D.labels[k]).join(', ')||'no shared measures')}. Regulatory capital uses the group’s reported basis. The percentages use year-end balance sheet amounts. Interest coverage divides operating profit by positive annual interest expense. First-year coverage divides fiscal year-end cash by disclosed first-year debt payments.</p>
     <p>Sources include SEC 10-K, 20-F and 40-F filings and annual reports from other markets. SpaceX uses its audited IPO prospectus. ${link('https://market-intel-fundamentals-vault.vercel.app/statements-public.json','Public Beta 2 statement snapshot')}</p>`;
@@ -351,7 +353,7 @@
     return path?'<img class="note-logo" alt="" title="'+esc(name)+'" src="assets/'+esc(path)+'" width="27" height="27" loading="lazy">':'<span class="note-logo initials" aria-hidden="true">'+esc((name||id).slice(0,2))+'</span>';
   }
   const annualNumbers=[1,2].map(digits=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:digits,maximumFractionDigits:digits}));
-  function annualDisplay(){
+  function filingDisplay(c,quarter=false){
     const num=(value,digits)=>annualNumbers[digits-1].format(value);
     const amount=value=>{
       const scaled=value/(state.unit==='bn'?1000:1);
@@ -360,10 +362,16 @@
     };
     const share=value=>Number.isFinite(value)?num(value,1)+'%':'—';
     const multiple=value=>Number.isFinite(value)?num(value,2)+'×':'—';
-    return {pct:share,times:multiple,amount,fmtDate:date,logo,unit:state.unit,sort:state.annualSort,
+    return {pct:share,times:multiple,amount,fmtDate:date,logo,unit:state.unit,sort:quarter?state.quarterSort:state.annualSort,
+      quarter,periodLabel:Q.labelQuarter(c.calendar),mappedEnd:quarterEnd(c.calendar),link,
       rate:(currency,end)=>USD.rate(state.fx,currency,end)?.factor,scale:USD.annualScale};
   }
-  function drawNotes(c){Notes.renderCharts(c,annualDisplay());}
+  function drawNotes(c){
+    $('quarterly-filings').hidden=!c.isQuarter;
+    $('quarterly-filing-link').hidden=!c.isQuarter;
+    if(c.isQuarter)Notes.renderQuarter(c,filingDisplay(c,true));
+    Notes.renderCharts(c,filingDisplay(c));
+  }
   function capLabel(n){if(!Number.isFinite(n))return '';const unit=n>=1e6?'T':n>=1e3?'B':'M';return 'US$'+USD.integer(n/(unit==='T'?1e6:unit==='B'?1e3:1))+unit;}
   const pickerOptions={escape:esc,logoBase:'assets/',allowCustom:false};
   const focusPicker=window.SISharePicker.mount($('focus-picker'),pickerOptions);
@@ -405,14 +413,18 @@
   $('cancel-peers').onclick=()=>{closePeers();$('choose-peers').focus();};
   $('auto-peers').onclick=()=>{state.custom=null;closePeers();render();};
   $('apply-peers').onclick=()=>{state.custom=[...state.draft];closePeers();render();};
-  $('rank-diagram').addEventListener('click',event=>{
-    const target=event.target.closest('button[data-annual-sort]');
-    if(!target)return;
-    const key=target.dataset.annualSort;
-    state.annualSort={key,ascending:key===state.annualSort.key?!state.annualSort.ascending:target.dataset.ascending==='true'};
-    Notes.renderRanking(comparison(),annualDisplay());
-    $('rank-diagram').querySelector('[data-annual-sort="'+key+'"]').focus({preventScroll:true});
-  });
+  for(const [id,quarter,sort] of [['rank-diagram',false,'annualSort'],['quarter-rank-diagram',true,'quarterSort']]){
+    $(id).addEventListener('click',event=>{
+      const target=event.target.closest('button[data-annual-sort]');
+      if(!target)return;
+      const key=target.dataset.annualSort;
+      const before=state[sort];
+      state[sort]={key,ascending:key===before.key?!before.ascending:target.dataset.ascending==='true'};
+      const c=comparison();
+      Notes.renderRanking(c,filingDisplay(c,quarter));
+      $(id).querySelector('[data-annual-sort="'+key+'"]')?.focus({preventScroll:true});
+    });
+  }
   $('mix-units').onchange=()=>renderTables(comparison());
   for(const id of ['geo-filter','annual-geo-filter'])$(id).onchange=event=>{
     $('geo-filter').value=$('annual-geo-filter').value=event.target.value;
@@ -481,17 +493,19 @@
     const current=++generation; $('load-status').hidden=false;$('load-status').textContent='Loading filing and market comparisons…';$('retry').hidden=true;
     try {
       const lib=window.StocksBeta2PeerLibrary;
-      const [base,extra,pub,disclosures,quarterly,peers,fx,supplement]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published().catch(()=>null),json('shares-beta3-disclosures-2026-11-26.json').catch(()=>null),Q.load().catch(()=>null),Q.peerFilings().catch(()=>({})),json('beta3-usd-fx-2026-11-27.json').catch(()=>null),
-        json('shares-beta3-semiconductor-interim-2026-11-27-v3.json').catch(()=>null)]);
+      const [base,extra,pub,disclosures,quarterly,peers,fx,supplement,quarterDetails]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published().catch(()=>null),json('shares-beta3-disclosures-2026-11-26.json').catch(()=>null),Q.load().catch(()=>null),Q.peerFilings().catch(()=>({})),json('beta3-usd-fx-2026-11-27.json').catch(()=>null),
+        json('shares-beta3-semiconductor-interim-2026-11-27-v3.json').catch(()=>null),
+        json('shares-beta3-quarterly-revenue-2026-11-27.json').catch(()=>null)]);
       if(current!==generation)return;
       if(extra&&extra.version!==1)throw Error('Invalid comparison data');
+      state.quarterDetails=quarterDetails?.version===1?quarterDetails:null;
       state.fx=fx?.version===1?fx:null;state.supplement=supplement?.issuers||{};state.quarterEndMarkets=supplement?.quarterEndMarkets||{};state.quarterly=quarterly;state.peerQuarterly=peers;state.details=disclosures?.version===1?disclosures:{};state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
       const q=new URLSearchParams(location.search),input=(q.get('ticker')||'GOOG US').toUpperCase();
       state.focus=(base.listings.find(l=>l.ticker===input||l.id===input)||base.listings.find(l=>l.ticker==='GOOG US')||base.listings[0]).ticker;
       state.bonus=(q.get('bonus')||'').split(',').filter(id=>Object.hasOwn(USD.choices,id));
       state.size=q.has('count')?E.count(q.get('count')):9;state.custom=q.has('peers')?Array.from(new Set(q.get('peers').split(','))).filter(id=>id!==listing().id&&lookup(id)).slice(0,E.MAX_PEERS):null;
-      state.period=q.get('quarter')||q.get('year')||'latest';state.growth=q.get('growth')==='qoq'?'qoq':'yoy';render();$('filing-app').hidden=false;$('load-status').hidden=!!extra&&!!disclosures&&!!quarterly&&!!state.fx;
-      if(!extra||!disclosures||!quarterly||!state.fx){$('load-status').textContent='Some comparison data could not be loaded.';$('retry').hidden=false;}
+      state.period=q.get('quarter')||q.get('year')||'latest';state.growth=q.get('growth')==='qoq'?'qoq':'yoy';render();$('filing-app').hidden=false;$('load-status').hidden=!!extra&&!!disclosures&&!!quarterly&&!!state.fx&&!!state.quarterDetails;
+      if(!extra||!disclosures||!quarterly||!state.fx||!state.quarterDetails){$('load-status').textContent='Some comparison data could not be loaded.';$('retry').hidden=false;}
       const anchor=location.hash.slice(1);
       if(generation===1&&anchor)requestAnimationFrame(()=>$(anchor)?.scrollIntoView({block:'start'}));
       lib?.connected().then(privateData=>{if(current===generation&&privateData){state.privateData=privateData;render();if($('bos-dialog').open)renderBOS();}});

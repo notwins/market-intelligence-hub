@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.geography">
+  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.quarter-scale">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="stocks-beta3-scroll.js?v=1"></script>
   <script defer src="content-source.js"></script>
@@ -16,16 +16,16 @@
   <script defer src="stocks-beta2-research.js?v=20261126.peers"></script>
   <link rel="stylesheet" href="si-share-picker.css">
   <script defer src="si-share-picker.js?v=3"></script>
-  <script defer src="stocks-beta3-disclosures.js?v=20261127.annual"></script>
+  <script defer src="stocks-beta3-disclosures.js?v=20261127.quarter-scale"></script>
   <script defer src="stocks-beta3-geography.js?v=20261127.geography"></script>
-  <script defer src="stocks-beta3-details.js?v=20261127.geography"></script>
+  <script defer src="stocks-beta3-details.js?v=20261127.quarter-scale"></script>
   <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=20261127.usd1">
   <script defer src="shares-quarterly-core.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-quarterly-charts.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-comparison.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-model.js?v=4"></script>
-  <script defer src="stocks-beta3-usd.js?v=20261127.annual"></script>
-  <script defer src="stocks-beta3.js?v=20261127.geography"></script>
+  <script defer src="stocks-beta3-usd.js?v=20261127.quarter-scale"></script>
+  <script defer src="stocks-beta3.js?v=20261127.quarter-scale"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -34,7 +34,7 @@
     <header class="filings-intro">
       <div><p class="section-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/></svg> Shares Beta 3</p>
         <h1>SEC 10-K &amp; annual filings</h1></div>
-      <nav class="section-links" aria-label="Filing comparison sections"><a href="#quarterly-dashboard">Quarterly charts</a><a href="#solvency-ranking">Annual solvency</a><a href="#statements">Valuation &amp; statements</a><a href="#checklist">Fundamentals checklist</a></nav>
+      <nav class="section-links" aria-label="Filing comparison sections"><a href="#quarterly-dashboard">Quarterly charts</a><a href="#quarterly-filings" id="quarterly-filing-link">Quarterly filings</a><a href="#solvency-ranking">Annual solvency</a><a href="#statements">Valuation &amp; statements</a><a href="#checklist">Fundamentals checklist</a></nav>
     </header>
     <p id="load-status" role="status">Loading annual filings…</p><button id="retry" type="button" hidden>Retry loading filings</button>
     <div id="filing-app" hidden>
@@ -57,6 +57,24 @@
             <label><input type="radio" name="quarter-growth" value="qoq"> QoQ</label>
           </fieldset>
           <div id="quarterly-charts"></div>
+        </section>
+        <section id="quarterly-filings" class="filing-section" aria-labelledby="quarterly-filings-title" hidden>
+          <header class="block-heading annual-overview-heading">
+            <h2 id="quarterly-filings-title">Quarterly filing comparison</h2>
+            <nav class="section-links" aria-label="Quarterly filing comparison">
+              <a href="#quarter-solvency-ranking">Solvency &amp; scale</a>
+              <a href="#quarter-revenue-mix">Revenue mix</a>
+            </nav>
+          </header>
+          <article class="panel annual-panel annual-solvency" id="quarter-solvency-ranking" aria-labelledby="quarter-solvency-heading">
+            <h3 id="quarter-solvency-heading">Quarterly solvency &amp; USD scale</h3>
+            <p class="filing-ranking-caption" id="quarter-ranking-caption"></p>
+            <div id="quarter-rank-diagram" class="horizontal annual-scroll" role="region" aria-label="Sortable quarterly solvency comparison" tabindex="0"></div>
+          </article>
+          <section class="annual-subsection" id="quarter-revenue-mix" aria-labelledby="quarter-revenue-title">
+            <h3 id="quarter-revenue-title">Quarterly revenue mix</h3>
+            <div id="quarter-revenue-diagram"></div>
+          </section>
         </section>
         <section id="disclosure-charts" class="filing-section" aria-labelledby="annual-filing-title">
           <header class="block-heading annual-overview-heading">

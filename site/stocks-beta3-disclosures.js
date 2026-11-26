@@ -61,6 +61,39 @@
     const current=entry.latestBalance, geo=Object.fromEntries((notes.revenue||[]).map(s=>[s.kind,s]));
     return {v,facts,sch,geo,current,latestCash:entry.latestCash,year,company,id};
   }
+  const quarterOf=end=>/^\d{4}-\d{2}-\d{2}$/.test(end||'')?end.slice(0,4)+'-Q'+Math.ceil(Number(end.slice(5,7))/3):null;
+  const near=(a,b)=>finite(a)&&finite(b)&&Math.abs(a-b)<=Math.max(.55,Math.abs(b)*.001);
+  function quarterView(data,id,company,current,calendar){
+    const available=data?.issuers?.[id]||{};
+    const raw=current?.values||{};
+    let end=current?.ended;
+    let disclosed=end?available[end]:null;
+    if(!end&&calendar){
+      const candidates=Object.entries(available).filter(([date,report])=>quarterOf(date)===calendar
+        && (!finite(raw.revenue)||report.revenue?.some(group=>near(group.total,raw.revenue))));
+      if(candidates.length===1)[end,disclosed]=candidates[0];
+    }
+    const revenue=(disclosed?.revenue||[]).filter(group=>!finite(raw.revenue)||near(group.total,raw.revenue));
+    const geo=Object.fromEntries(revenue.map(group=>[group.kind,group]));
+    const primary=revenue[0];
+    const reportedRevenue=raw.revenue??primary?.total;
+    const hasQuarter=Boolean(current||primary||disclosed?.balance);
+    const canSupplyBalance=disclosed?.balance&&(!current||near(disclosed.balance.assets,raw.assets));
+    const balances=canSupplyBalance?disclosed.balance:{};
+    const values={...balances,...Object.fromEntries(Object.entries(raw).filter(([,value])=>finite(value)))};
+    const netAssets=finite(values.assets)&&finite(values.liabilities)?values.assets-values.liabilities:null;
+    const operating=['operating','reit'].includes(company.model);
+    const v={...values,revenue:reportedRevenue,netAssetsRatio:division(netAssets,values.assets,100),
+      debtAssets:division(values.totalDebt,values.assets,100),equityAssets:division(values.equity,values.assets,100),
+      currentRatio:operating?division(values.currentAssets,values.currentLiabilities):null,
+      liabAssets:division(values.liabilities,values.assets,100),cashAssets:division(values.cash,values.assets,100),
+      interestCover:operating?division(values.operatingIncome,values.interestExpense):null,
+      debtCoverage:operating?division(values.operatingCashFlow,values.totalDebt,100):null};
+    return {id,company,year:end?{end}:null,v,geo,hasQuarter,period:current?.period,
+      file:current?.source||primary?.source||disclosed?.balanceSource,
+      kind:current?.kind||disclosed?.form||(disclosed?'Issuer disclosure':null),
+      end,disclosed};
+  }
   // Fractional ranks give equal observations equal standing. Compare like business models.
   function standings(values,digits=2,asc=false) {
     const nums=values.map(x=>finite(x)?Number(x.toFixed(digits)):null), available=nums.filter(finite);
@@ -113,7 +146,7 @@
     const order=k=>{const x=standard.indexOf(k);return x<0?99:x;};
     return [...out.values()].sort((a,b)=>order(a.key)-order(b.key));
   }
-  const api={labels,times,percentages,rows,lower,families,kinds,buckets,groupLabels,division,yearView,standings,ranking,canonical,mixRows,maturityRows};
+  const api={labels,times,percentages,rows,lower,families,kinds,buckets,groupLabels,division,yearView,quarterView,standings,ranking,canonical,mixRows,maturityRows};
   root.FilingNotes=api;
   if(typeof module!=='undefined')module.exports=api;
 })(typeof window==='undefined'?globalThis:window);

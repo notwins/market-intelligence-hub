@@ -471,5 +471,32 @@ test('Grouped filing geography keeps country aliases, broad regions and signed a
  for(const i of [0,1,2])assert.equal(rows.filter(r=>r.depth===0).reduce((sum,row)=>sum+(row.cells[i]?.n||0),0),[77,200,100][i]);
 });
 
+test('Quarterly filings require their own disclosure and preserve compatible balance sheet evidence',()=>{
+ const D=require('../site/stocks-beta3-disclosures.js');
+ const company={currency:'USD',model:'operating'};
+ const segments=(total)=>({kind:'segments',total,source:'https://www.sec.gov/quarter.htm',items:[{value:total*.7},{value:total*.3}]});
+ const data={issuers:{T:{
+   '2026-09-26':{revenue:[segments(80)],balance:{assets:100,liabilities:40}},
+   '2026-12-31':{revenue:[segments(100)]}
+ }}};
+ const base={period:'Q3 2026',ended:'2026-09-26',values:{revenue:80,assets:100,operatingCashFlow:12}};
+ const q=D.quarterView(data,'T',company,base,'2026-Q3');
+ assert.equal(q.v.netAssetsRatio,60);
+ assert.equal(q.v.revenue,80);
+ assert.equal(q.v.liabilities,40);
+ assert.equal(q.geo.segments.total,80);
+ const noMatch=D.quarterView(data,'T',company,{...base,ended:'2026-09-30'},'2026-Q3');
+ assert.equal(noMatch.hasQuarter,true);
+ assert.equal(noMatch.v.netAssetsRatio,null);
+ assert.deepEqual(noMatch.geo,{});
+ const undated=D.quarterView(data,'T',company,{...base,ended:null},'2026-Q3');
+ assert.equal(undated.end,'2026-09-26');
+ const wrong=D.quarterView(data,'T',company,{...base,values:{revenue:900,assets:200}},'2026-Q3');
+ assert.equal(wrong.v.revenue,900);
+ assert.deepEqual(wrong.geo,{});
+ assert.equal(wrong.v.netAssetsRatio,null);
+ assert.equal(D.quarterView(data,'T',company,null,'2025-Q3').hasQuarter,false);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
