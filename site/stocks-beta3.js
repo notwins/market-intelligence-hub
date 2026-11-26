@@ -323,7 +323,7 @@
     <p>Growth requires a positive prior-year base. Margins divide the measure by revenue. Returns use net income to owners and average opening and closing equity or assets. Free cash flow subtracts cash purchases of PP&amp;E from operating cash flow. Cash conversion divides operating cash flow by net income. Asset turnover uses average assets. A dash marks a missing or inapplicable amount. The Figures panel on valuation charts describes missing inputs and explains when a multiple is not meaningful.</p>
     <p>Stars highlight rows you want to follow. Green checks mark leaders among comparable available values at the displayed precision. Checklist points require a figure for every company. Tied companies split a point. Financial institutions and REITs use revenue growth, profit growth, return on equity and return on assets. Company dates, accounting standards and business mix can differ.</p>
     <p>The share selectors order issuer equity values from largest to smallest in USD. The latest balance sheet identifies the newest verified reporting period in this snapshot. The cash observation has its own reporting date. A cash-flow closing balance follows the issuer’s cash-flow definition and may include restricted cash. Annual cash, securities and maturity schedules use the chosen fiscal year. U.S. Treasury holdings use the portfolio and measurement basis in the filing. Broader government portfolios can include agency or other sovereign securities. Cash equivalents and securities can overlap.</p>
-    <p>Revenue shares use the total in the issuer’s disclosure. Geographic boundaries and product lines follow its definitions. Signed eliminations and hedges reconcile some totals. The colour strip shows positive components. Maturities run from the date on the filing. Grouped ranges retain their boundaries. Payments within an elapsed or ongoing fiscal year may already have been made.</p>
+    <p>Revenue shares use the total in the issuer’s disclosure. Grouped geography adds only reported amounts. An Americas total that includes the USA stays in the Americas (USA not split) row. APAC without a country split includes broad Asian and combined Greater China figures. Other / unallocated retains mixed territories and undisclosed markets. The rows below each highlighted subtotal are included in it. As filed shows the original breakdown. Each filing’s geographic basis, such as billing location or customer headquarters, still applies. Signed eliminations and hedges reconcile some totals. The colour strip shows positive components. Maturities run from the date on the filing. Grouped ranges retain their boundaries. Payments within an elapsed or ongoing fiscal year may already have been made.</p>
     <p>Solvency scores compare peers with the focus company’s business model. Capital strength uses owners’ equity divided by assets when all eligible peers report it. Otherwise it uses net assets (assets less liabilities) divided by assets when available across the group. Each shared measure gives 100 points to the strongest and zero to the weakest. Ties receive their average position. The overall score averages at least two shared measures. This comparison uses ${esc(D.ranking(c.notes).common.map(k=>D.labels[k]).join(', ')||'no shared measures')}. Regulatory capital uses the group’s reported basis. The percentages use year-end balance sheet amounts. Interest coverage divides operating profit by positive annual interest expense. First-year coverage divides fiscal year-end cash by disclosed first-year debt payments.</p>
     <p>Sources include SEC 10-K, 20-F and 40-F filings and annual reports from other markets. SpaceX uses its audited IPO prospectus. ${link('https://market-intel-fundamentals-vault.vercel.app/statements-public.json','Public Beta 2 statement snapshot')}</p>`;
   }
@@ -413,7 +413,14 @@
     Notes.renderRanking(comparison(),annualDisplay());
     $('rank-diagram').querySelector('[data-annual-sort="'+key+'"]').focus({preventScroll:true});
   });
-  for(const id of ['mix-units','geo-filter'])$(id).onchange=()=>renderTables(comparison());
+  $('mix-units').onchange=()=>renderTables(comparison());
+  for(const id of ['geo-filter','annual-geo-filter'])$(id).onchange=event=>{
+    $('geo-filter').value=$('annual-geo-filter').value=event.target.value;
+    const c=comparison();
+    state.autoFocus=new Set(Notes.focusKeys(c));
+    drawNotes(c);
+    renderTables(c);
+  };
 
   $('bonus-choices').onclick=e=>{
     const option=e.target.closest('[data-bonus]');

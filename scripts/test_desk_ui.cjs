@@ -452,5 +452,24 @@ test('Annual solvency shows USD amounts on the same conversion basis as the deta
   assert.equal(U.annualScale({assets:320},fx).netAssetsUsd,null);
 });
 
+test('Grouped filing geography keeps country aliases, broad regions and signed amounts within their stated scope',()=>{
+ const G=require('../site/stocks-beta3-geography.js');
+ const view=(id,items,total)=>({id,geo:{geography:{total,items:items.map(([label,value])=>({label,value}))}}});
+ const chip=view('CHIP', [['U.S.',15],['China (including Hong Kong)',10],['Taiwan',7],['Japan',3],['Republic of Korea',5],['Other Asia',12],['Europe, the Middle East and Africa',15],['Latin America',11],['Hedging gains (losses)',-1]],77);
+ const broad=view('BRD',[['Americas',70],['Asia Pacific',100],['EMEA',30]],200);
+ const mixed=view('MIX',[['Greater China',40],['U.S. and Canada',50],['Asia and Africa',10],['Mainland China (excluding Hong Kong)',0]],100);
+ const rows=G.rows([chip,broad,mixed],true);
+ const cell=(id,i=0)=>rows.find(r=>r.id===id).cells[i];
+ assert.deepEqual(rows.filter(r=>r.depth===0).map(r=>r.name),['USA','APAC','EMEA / LATAM / Others']);
+ assert.equal(cell('usa').n,15);assert.equal(cell('apac').n,37);assert.equal(cell('rest-asia').n,24);
+ assert.equal(cell('rest-asia-south-korea').n,5);assert.equal(cell('china').n,10);
+ assert.equal(cell('other').n,25);assert.equal(cell('adjustments').n,-1);
+ assert.equal(cell('usa',1),null);assert.equal(cell('apac',1).p,50);
+ assert.equal(cell('apac-unsplit',1).n,100);assert.equal(cell('americas-unsplit',1).n,70);
+ assert.equal(cell('china',2).n,0);assert.equal(cell('apac-unsplit',2).n,40);
+ assert.equal(cell('unallocated',2).n,10);
+ for(const i of [0,1,2])assert.equal(rows.filter(r=>r.depth===0).reduce((sum,row)=>sum+(row.cells[i]?.n||0),0),[77,200,100][i]);
+});
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
