@@ -1,0 +1,75 @@
+#nvda-stress-context .nvda-analysis {
+  margin: 1.4rem 0 1.65rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--beta-panel);
+}
+.nvda-analysis-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 14px clamp(12px, 2vw, 22px);
+  border-bottom: 1px solid var(--line);
+  background: var(--beta-subtle);
+  border-radius: 12px 12px 0 0;
+}
+.nvda-analysis-head img { object-fit: contain; flex: none; }
+#nvda-stress-context .nvda-analysis-head h3 { margin: 0; font-family: var(--beta-display-font); font-size: clamp(1.22rem, 2.7vw, 1.6rem); }
+.nvda-analysis-head p, .nvda-analysis-figure figcaption p { color: var(--muted); font-size: .9rem; }
+.nvda-analysis-head a { margin-inline-start: auto; font-size: .9rem; font-weight: 650; }
+.nvda-analysis-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); }
+.nvda-analysis-figure, .nvda-analysis-peers, .nvda-analysis-filings {
+  min-width: 0;
+  margin: 0;
+  padding: clamp(11px, 1.65vw, 20px);
+}
+.nvda-analysis-figure h4, .nvda-analysis-filings h4 { margin: 0; color: var(--ink); font-size: 1.08rem; }
+.nvda-analysis-figure figcaption p, .nvda-analysis-figure > p:not(:empty) { margin-top: .4rem; }
+.nvda-analysis-figure canvas {
+  display: block;
+  width: 100%;
+  height: clamp(215px, 22vw, 330px);
+  margin-block: .4rem;
+  background: var(--beta-panel);
+  touch-action: pan-y;
+}
+#nvda-bos-inspect { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+#nvda-bos-inspect input { min-width: 0; height: 26px; padding: 0; }
+#nvda-bos-selected, #nvda-multiple-selected { color: var(--ink); font-weight: 650; }
+#nvda-bos-target, #nvda-multiple-assumptions { color: var(--muted); font-size: .875rem; }
+.nvda-analysis-peers { border-inline-start: 1px solid var(--line); background: var(--beta-subtle); }
+.nvda-analysis-peers > summary, .nvda-analysis-filings > summary { font-size: 1rem; }
+.nvda-analysis-peers [data-sb2-peer-body] { margin-top: .7rem; }
+.nvda-analysis-peers p, .nvda-analysis-peers details { font-size: .875rem; }
+.nvda-analysis-peers :is(.sb2-peer-controls, .sb2-peer-selections) { display: flex; flex-wrap: wrap; gap: 6px 10px; margin-bottom: .55rem; }
+.nvda-analysis-peers .sb2-peer-controls label { flex: 1 1 165px; min-width: 0; }
+.nvda-analysis-peers .sb2-peer-section { border-top: 1px solid var(--line); padding-top: .35rem; }
+.nvda-analysis-peers .sb2-table { overflow-x: auto; margin-top: .35rem; border: 1px solid var(--line); border-radius: 6px; }
+.nvda-analysis-peers .sb2-table th { min-width: 110px; white-space: normal; }
+.nvda-analysis-peers .sb2-table thead :is(small, a) { display: block; margin-top: 3px; font-weight: 500; }
+.nvda-analysis-valuation, .nvda-analysis-filings { border-top: 1px solid var(--line); }
+.nvda-analysis-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 15px; margin-block: .6rem .3rem; color: var(--muted); font-size: .875rem; }
+.nvda-analysis-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.nvda-analysis-legend :is(.nvda-legend-pe, .nvda-legend-pb, .nvda-legend-model, .nvda-legend-test)::before {
+  content: "";
+  width: 17px;
+  border-top: 3px solid var(--nvda-key, #435b78);
+}
+.nvda-analysis-legend .nvda-legend-pe { --nvda-key: #326d9f; }
+.nvda-analysis-legend .nvda-legend-pb { --nvda-key: #8554a1; }
+.nvda-analysis-legend .nvda-legend-model::before { border-top-style: dashed; }
+.nvda-analysis-legend .nvda-legend-test::before { width: 8px; height: 8px; border: 1.5px solid #435b78; border-radius: 50%; }
+.nvda-model-result { padding: .55rem .7rem; background: var(--beta-secondary-light); color: var(--ink); border-inline-start: 3px solid var(--beta-secondary-edge); }
+.nvda-analysis-valuation .tableScroll { max-height: 300px; margin-top: .4rem; }
+.nvda-analysis-valuation .tableScroll th { white-space: normal; }
+.nvda-analysis-filings > section { margin-top: .55rem; }
+.nvda-analysis-filings .shares-quarterly-charts { margin-bottom: 0; --sq-ink: var(--ink); --sq-text: var(--muted); --sq-rule: var(--line); --sq-soft: var(--soft); --sq-accent: var(--teal); }
+@media (max-width: 940px) {
+  .nvda-analysis-grid { grid-template-columns: minmax(0, 1fr); }
+  .nvda-analysis-peers { border-inline-start: 0; border-top: 1px solid var(--line); }
+}
+@media (max-width: 540px) {
+  .nvda-analysis-head a { margin-inline-start: 0; flex-basis: 100%; }
+  #nvda-bos-inspect { display: grid; gap: 2px; }
+}
