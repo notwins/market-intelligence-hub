@@ -439,6 +439,7 @@
       };
     }
     marketKpis();
+    window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, peerLiabilities, fmt, dollar, element, options });
   }
 
   function scrollEnhancements() {

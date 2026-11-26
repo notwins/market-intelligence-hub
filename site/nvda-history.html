@@ -8,9 +8,12 @@
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
 <link rel="stylesheet" href="nvda-history.css?v=3">
+<link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
 <script defer src="nvda-history-charts.js?v=1"></script>
-<script defer src="nvda-history.js?v=3"></script>
+<script defer src="nvda-valuation.js?v=1"></script>
+<script defer src="nvda-peer-lab.js?v=1"></script>
+<script defer src="nvda-history.js?v=20261127.peer-lab"></script>
 </head>
 <body class="nvda-history-page">
 <a class="nv-skip" href="#main">Skip to analysis</a>
@@ -28,7 +31,7 @@
   </div>
   <div class="nv-hero-foot"><span><i></i> 27 November 2026 snapshot</span><span>Quarter ended <strong>25 Oct 2026</strong></span><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000088/q3fy27pr.htm">Earnings filing ↗</a></div>
 </div></header>
-<nav class="nv-jump" aria-label="NVIDIA sections"><div class="nv-shell"><a href="#overview" aria-current="location">Overview</a><a href="#financials">Financials</a><a href="#market">Market history</a><a href="#peers">Peers</a><a href="#credit">Credit</a><a href="#sources">Sources</a></div></nav>
+<nav class="nv-jump" aria-label="NVIDIA sections"><div class="nv-shell"><a href="#overview" aria-current="location">Overview</a><a href="#financials">Financials</a><a href="#market">Market history</a><a href="#peers">Peers</a><a href="#credit">Credit</a><a href="#sources">Sources</a><a href="#comparison-lab">Full comparison</a><a href="#price-simulator">Price simulator</a></div></nav>
 <div class="nv-shell nv-status" id="nv-status" role="status" hidden><span></span><button type="button" id="nv-retry" hidden>Retry</button></div>
 <section class="nv-section nv-shell nv-summary" aria-label="Latest NVIDIA results">
   <div class="nv-section-head nv-reveal"><div><p class="nv-label">Latest actuals · Q3 FY2027</p><h2>Revenue doubled year over year</h2></div><p>NVIDIA reported $107.6 billion in data-center revenue, roughly 93% of consolidated sales. GAAP gross margin reached 74.8% and diluted EPS was $2.70.</p></div>
@@ -146,6 +149,51 @@
     <article><h3>Currency &amp; timing</h3><p>USD comparison uses period-average FX for financial-statement flows and period-end FX for balance-sheet figures.</p><a href="stocks-beta3.html?ticker=NVDA+US">Stocks BETA 3 ↗</a></article>
   </div>
 </section>
+<section id="comparison-lab" class="nv-section nv-shell">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Historical peer comparison</p><h2>Inside the numbers</h2></div><p>Read a filing line across all 31 companies, then open the original research views for revenue mix, debt maturities and guidance.</p></div>
+  <article class="nv-panel nv-reveal">
+    <div class="nv-panel-head"><div><h3>Financials &amp; market data side by side</h3><p class="nv-muted" id="lab-coverage"></p></div></div>
+    <div class="nv-controls lab-controls">
+      <label>Rows<select id="lab-section"></select></label><label>Filing period<select id="lab-period"></select></label>
+      <label>Market month<select id="lab-month"></select></label><label>Companies<select id="lab-group"></select></label>
+      <label>Find a line item<input type="search" id="lab-search" placeholder="e.g. cash flow"></label>
+    </div>
+    <div class="nv-table-scroll lab-scroll" tabindex="0" role="region" aria-label="Historical financial and monthly comparison, scroll to see all companies"><table class="nv-table lab-table"><thead id="lab-head"></thead><tbody id="lab-rows"></tbody></table></div>
+    <p class="nv-note">NVIDIA appears first. Statement amounts show each issuer’s currency in millions. USD comparison rows use millions of US dollars. A dagger marks a verified liabilities balance derived from assets less equity. Scroll across for more companies, or choose a smaller group. A dash means the archive has no value.</p>
+  </article>
+  <article class="nv-panel nv-reveal lab-spaced">
+    <div class="nv-panel-head"><div><h3>Compare the trend</h3><p class="nv-muted">Nearest calendar quarter-end · actual fiscal ends in the chart readout</p></div>
+    <div class="nv-controls"><label>Measure<select id="lab-trend-metric"></select></label><label>Compare with<select id="lab-trend-peer"></select></label></div></div>
+    <div class="nv-chart nv-chart-small" id="lab-trend"></div>
+  </article>
+  <div class="lab-desks nv-reveal">
+    <details class="nv-panel" data-desk="2"><summary><span>Stocks BETA 2</span>Company research &amp; charts</summary>
+      <p class="nv-muted">NVIDIA’s interactive price and valuation charts, earnings, guidance, research cards and credit coverage.</p>
+      <div class="lab-frame"></div><a class="nv-note" target="_blank" rel="noopener" href="stocks-beta2.html?ticker=NVDA+US">Open Stocks BETA 2 in a new tab ↗</a>
+    </details>
+    <details class="nv-panel" data-desk="3"><summary><span>Stocks BETA 3</span>Filings, segments &amp; solvency</summary>
+      <div class="nv-panel-head"><p class="nv-muted">Explore the original filing diagrams, geographic sales, maturity ladders and fundamentals checklist for issuers covered by BETA 3.</p>
+      <div class="nv-controls"><label>Filing comparison group<select id="lab-desk-group"></select></label></div></div>
+      <div class="lab-frame"></div><a class="nv-note" target="_blank" rel="noopener" href="stocks-beta3.html?ticker=NVDA+US">Open Stocks BETA 3 in a new tab ↗</a>
+    </details>
+  </div>
+</section>
+<section id="price-simulator" class="lab-simulator"><div class="nv-section nv-shell">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Share-price simulation</p><h2>What changes at $250?</h2></div><p>Move NVIDIA’s price and see which valuation multiples cross the peer median. Earnings, cash flow, book value, dividends and peer quotes stay fixed.</p></div>
+  <article class="nv-panel nv-reveal lab-sim-card">
+    <div class="nv-panel-head"><div><h3>NVIDIA at your price</h3><p class="nv-muted" id="sim-date"></p></div>
+    <div class="nv-controls"><label>Peer group<select id="sim-group"></select></label></div></div>
+    <div class="lab-price-controls"><label for="sim-price">NVDA price per share (USD)<input type="number" min="0.01" step="any" inputmode="decimal" id="sim-price" value="250" required></label>
+    <div class="lab-presets" role="group" aria-label="NVIDIA price presets"><button type="button" data-price="100">$100</button><button type="button" data-price="150">$150</button><button type="button" data-price="200">$200</button><button type="button" data-price="250">$250</button><button type="button" id="sim-reset">Use closing price</button></div></div>
+    <p id="sim-error" role="status" hidden>Enter a positive share price of at least $0.01.</p>
+    <div id="sim-results"><div class="lab-verdict" aria-live="polite"><h3 id="sim-headline"></h3><p id="sim-reading"></p></div>
+    <div class="nv-table-scroll" tabindex="0" role="region" aria-label="NVIDIA share-price scenarios and peer median"><table class="nv-table lab-table"><thead id="sim-head"></thead><tbody id="sim-rows"></tbody></table></div>
+    <p class="nv-note">Green highlights mark a lower multiple or a higher yield than the selected peer median. Each median excludes NVIDIA. Counts show how many eligible peers NVIDIA beats at the selected price. The parity price is the NVDA share price that would match the peer median.</p>
+    <div class="nv-panel-head lab-spaced"><div><h3>Which peers trade above or below NVIDIA?</h3><p class="nv-muted" id="sim-rank-summary"></p></div><div class="nv-controls"><label>Rank by<select id="sim-metric"></select></label></div></div>
+    <div class="nv-table-scroll lab-ranks" tabindex="0" role="region" aria-label="Individual peer valuation rankings"><table class="nv-table nv-peer-table"><thead><tr><th>Company</th><th id="sim-rank-name">Ratio</th><th>Quote date</th><th>Compared with NVIDIA</th></tr></thead><tbody id="sim-ranks"></tbody></table></div></div>
+    <details class="lab-method"><summary>Calculation basis and dates</summary><p id="sim-basis"></p><p>Market cap scales with price at the archived share count. Trailing P/E and P/B scale from the market close. Forward multiples and forward dividend yield use the BOS quote as their starting price. Earnings yield is 100 divided by trailing P/E. Cash and forward dividend yields move inversely with price.</p><p>Price/sales and cash-flow multiples use four consecutive standalone quarters disclosed by each issuer’s closing quote. Free cash flow is operating cash flow less capital expenditure. ¹ Enterprise value is estimated market cap plus reported interest-bearing debt less cash and equivalents. EBITDA is the archive’s operating income plus depreciation and amortization proxy.</p><p>Multiples require positive denominators. Loss-making peers have no trailing P/E ranking. Zero dividend yields count, and free cash flow yields can be negative. Industry mix, expected growth and capital needs can explain different multiples.</p></details>
+  </article>
+</div></section>
 <noscript><p class="nv-shell nv-note">Enable JavaScript to use the historical charts and tables.</p></noscript>
 </main>
 <footer class="nv-foot"><div class="nv-shell"><a href="desk.html">Market Intel</a><a href="v4.html#history/shares">Shares &amp; Historical ↗</a><a href="#overview">Back to top ↑</a></div></footer>
