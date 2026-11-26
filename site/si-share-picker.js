@@ -99,9 +99,9 @@ function mount(container,{escape:E,logoBase,allowCustom=true}){
    const matches=entries.filter(row=>row.search.includes(query));
    if(!matches.length)return '';
    return `<div role="group" aria-label="${E(label)}"><div class="share-picker-group" aria-hidden="true">${E(label)}</div>
-    ${matches.map(({ticker,name,logo})=>`<div class="share-picker-option" role="option" id="${active.list.id}-${index++}" data-share-option="${E(ticker)}" aria-label="${E(name)}${ticker?' ('+E(ticker)+')':''}" aria-selected="false">
+    ${matches.map(({ticker,name,logo,meta})=>`<div class="share-picker-option" role="option" id="${active.list.id}-${index++}" data-share-option="${E(ticker)}" aria-label="${E(name)}${ticker?' ('+E(ticker)+')':''}" aria-selected="false">
      <span class="share-picker-icon" aria-hidden="true">${E(ticker.slice(0,2))}${logo?`<img src="${E(logoBase+logo)}" width="24" height="24" alt="" loading="lazy">`:''}</span>
-     <span class="share-picker-identity"><span>${E(name)}</span><strong>${E(ticker)}</strong></span>
+     <span class="share-picker-identity"><span>${E(name)}</span><strong>${E(ticker)}</strong></span>${meta?'<small class="share-option-meta">'+E(meta)+'</small>':''}
     </div>`).join('')}
    </div>`;
   }).join('');

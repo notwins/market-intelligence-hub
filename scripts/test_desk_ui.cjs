@@ -311,6 +311,41 @@ test('Shares Beta 3 calculates dated equity and enterprise multiples without ass
  market.date='2026-11-25';market.includesPreferred=true;y.values.noncontrollingInterest=3;
  assert.equal(view().values.peTTM,undefined);assert.equal(view().values.ev,213);
 });
+test('Shares Beta 3 keeps signed revenue components, stated geographic boundaries and source-denominated shares',()=>{
+ const D=require('../site/stocks-beta3-disclosures.js');
+ const d={kind:'geography',total:100,items:[{label:'U.S.',type:'country',value:60},{label:'Asia Pacific',type:'region',value:41},{label:'Hedge',type:'other',value:-1}]};
+ const second={kind:'geography',total:200,items:[{label:'United States',type:'country',value:80},{label:'Asia Pacific excluding China',type:'region',value:120}]};
+ const rows=D.mixRows([{geo:{geography:d}},{geo:{geography:second}}],'geography');
+ assert.deepEqual(rows[0].cells.map(x=>x.p),[60,40]);
+ assert.equal(rows.find(x=>x.name==='Hedge').cells[0].p,-1);
+ assert.equal(rows.find(x=>x.name==='Asia Pacific').cells[1],null);
+ assert.equal(rows.length,4);
+});
+test('Shares Beta 3 separates grouped maturities, audited balances, confirmed zeroes and recent cash',()=>{
+ const D=require('../site/stocks-beta3-disclosures.js'),co={model:'operating'},y={end:'2025-12-31',values:{cash:20,assets:200,liabilities:100,currentLiabilities:50,currentAssets:80,totalDebt:40,operatingCashFlow:12,operatingIncome:16,equity:90}};
+ const s={kind:'debt',total:80,items:[{label:'Years 1–3',bucket:null,value:50},{label:'After year 3',bucket:null,value:30}]};
+ const req={issuers:{T:{years:{[y.end]:{facts:{treasuries:{value:0},opLeaseTotal:{value:4},interestExpense:{value:2}},schedules:[s]}},latestBalance:{end:'2026-09-30',fields:{cash:300}}}}};
+ const v=D.yearView(req,'T',co,y);assert.equal(v.v.cashAssets,10);assert.equal(v.v.treasuryAssets,0);assert.equal(v.v.interestCover,8);assert.equal(v.v.cashShort,null);assert.equal(v.v.leasesTotal,null);assert.equal(v.v.dueCash,null);assert.equal(v.current.fields.cash,300);
+ assert.deepEqual(D.maturityRows([v],'debt').map(r=>r.key),['Years 1–3','After year 3']);
+ s.firstYear=10;assert.equal(D.yearView(req,'T',co,y).v.dueCash,2);
+ assert.equal(D.yearView(req,'T',{model:'bank'},y).v.interestCover,null);
+ assert.deepEqual(D.yearView(req,'T',co,{end:'2024-12-31',values:{}}).sch,{});
+});
+test('Solvency ranks use shared evidence, matched business models, fair ties and lower leverage direction',()=>{
+ const D=require('../site/stocks-beta3-disclosures.js');
+ const comp=(model,v)=>({company:{model},v});
+ const a=[comp('operating',{equityAssets:20,cashFlowAssets:11,debtAssets:40}),comp('operating',{equityAssets:20,cashFlowAssets:11,debtAssets:20}),comp('bank',{equityAssets:50,cet1:16.5})];
+ const s=D.ranking(a);
+ assert.deepEqual(s.common,['equityAssets','cashFlowAssets','debtAssets']);
+ assert.deepEqual(s.ranks.map(x=>x?.rank),[2,1,undefined]);assert.equal(s.scores[2],null);
+ assert.deepEqual(D.ranking(a,'equityAssets').ranks.map(x=>x?.rank),[1,1,undefined]);
+ assert.deepEqual(D.ranking(a,'debtAssets').ranks.map(x=>x?.rank),[2,1,undefined]);
+ assert.equal(D.ranking([comp('bank',{equityAssets:9}),comp('bank',{equityAssets:7,cet1:12})]).scores[0],null);
+ const sparse=[comp('operating',{equityAssets:20,netAssetsRatio:28,cashFlowAssets:9}),comp('operating',{netAssetsRatio:30,cashFlowAssets:10})];
+ assert.deepEqual(D.ranking(sparse).common,['netAssetsRatio','cashFlowAssets']);
+ assert.deepEqual(D.ranking(sparse).scores,[0,100]);
+});
+
+
 let failures=0;for(const [name,fn] of tests){try{fn();console.log('PASS '+name);}catch(e){failures++;console.error('FAIL '+name+'\n'+e.message);}}
 process.exitCode=failures?1:0;
-
