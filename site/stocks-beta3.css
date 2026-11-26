@@ -307,3 +307,13 @@ html.beta3-nav-hidden{--beta3-nav-top:0px;scroll-padding-top:0}
   .annual-matrix :is(th,td){padding:7px 6px}
   .annual-maturity-table th:first-child{width:121px}
 }
+
+.annual-geo-control{display:flex;justify-content:flex-end;margin:0 0 8px}
+.annual-geo-control label{display:flex;align-items:center;gap:8px;font-size:.85rem;color:#365a55;font-weight:650}
+.annual-geo-control select{padding:6px 9px;border:1px solid #b9ceca;border-radius:6px;background:#fff;color:#21433d;font:inherit}
+#table-geography tr[data-row^="geo-summary-"]>*{background:#e3f0eb;color:#254c43;font-weight:750;border-top:1px solid #bbd6cd}
+#table-geography tr[data-row^="geo-sub-"] th span{padding-left:10px}
+#table-geography tr[data-row^="geo-market-"] th span{padding-left:22px;font-weight:500}
+.annual-mix-table .annual-geo-0>*{background:#e7f2ed;font-weight:750}
+.annual-mix-table .annual-geo-1 th{padding-left:18px}
+.annual-mix-table .annual-geo-2 th{padding-left:30px;font-weight:500}

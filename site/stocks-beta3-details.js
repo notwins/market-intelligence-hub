@@ -1,15 +1,28 @@
 /* Annual filing comparisons and detailed statement table groups. */
 (function(root){
   'use strict';
-  const D=root.FilingNotes,F=Number.isFinite;
+  const D=root.FilingNotes,G=root.FilingGeography,F=Number.isFinite;
   const palette=['#196a60','#4976a1','#c18a46','#80669c','#577b54','#a35f69','#3c818d','#96844a','#617387','#9f745e','#6b679a','#9b9864'];
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const $=id=>document.getElementById(id);
   const keyFor=(kind,row)=>'mix-'+kind+'-'+row.type+'-'+row.name.toLowerCase();
+  const geographyModes=['grouped','grouped-detail'];
+  const geoMode=()=>$('geo-filter').value;
+  const grouped=()=>geographyModes.includes(geoMode());
+  const geoRows=views=>G.rows(views,geoMode()==='grouped-detail');
+  const geoKey=row=>'geo-'+(row.depth===0?'summary-':row.depth===1?'sub-':'market-')+row.id;
+  function reportedRows(views,kind) {
+    return D.mixRows(views,kind).filter(row=>kind!=='geography'||geoMode()==='all'||row.type===geoMode());
+  }
   function focusKeys(c){
     const out=[];
     for(const kind of Object.keys(D.kinds)){
-      for(const row of D.mixRows(c.notes,kind).filter(x=>x.cells[0]?.n>0).slice(0,2))out.push(keyFor(kind,row));
+      if(kind==='geography'&&grouped()){
+        const rows=geoRows(c.notes);
+        out.push(...rows.filter(r=>r.depth===0||(r.depth===1&&Number.isFinite(r.cells[0]?.n))).map(geoKey));
+      }else{
+        out.push(...reportedRows(c.notes,kind).filter(r=>r.cells[0]?.n>0).slice(0,2).map(r=>keyFor(kind,r)));
+      }
     }
     return out;
   }
@@ -30,14 +43,15 @@
     }
     function valueMix(cell,style,i){
       if(!cell)return '—';
-      if(style==='share')return pct(cell.p);
+      if(style==='share')return {main:pct(cell.p),tip:cell.label};
       return {main:amount(cell.n,i),sub:style==='both'&&F(cell.p)?pct(cell.p):'',tip:cell.label};
     }
     const mixMode=$('mix-units').value;
     for(const [kind,title] of Object.entries(D.kinds)){
       const distributions=views.map(v=>v.geo[kind]);if(!distributions.some(Boolean))continue;
-      const records=D.mixRows(views,kind).filter(r=>(kind!=='geography'||$('geo-filter').value==='all'||r.type===$('geo-filter').value)&&show(keyFor(kind,r))).map(r=>
-        row(keyFor(kind,r),r.name,r.cells,(cell,i)=>valueMix(cell,mixMode,i)));
+      const records=kind==='geography'&&grouped()?
+        geoRows(views).filter(r=>show(geoKey(r))).map(r=>row(geoKey(r),r.name,r.cells,(cell,i)=>valueMix(cell,mixMode,i))):
+        reportedRows(views,kind).filter(r=>show(keyFor(kind,r))).map(r=>row(keyFor(kind,r),r.name,r.cells,(cell,i)=>valueMix(cell,mixMode,i)));
       if(records.length){
         const sum=distributions.map(d=>d?d.total:null);
         sections.push([kind,title,[row('scope-'+kind,'Disclosed revenue base',sum,amount,[],false),...records]]);
@@ -141,18 +155,24 @@
     if(!disclosure)return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+
       '<p class="annual-empty">No comparable breakdown reported.</p></article>';
     const rate=view.usdRate;
-    const items=disclosure.items.slice().sort((a,b)=>b.value-a.value);
-    const positive=items.filter(item=>item.value>0);
+    const groupedGeography=kind==='geography'&&grouped();
+    const items=groupedGeography?geoRows([view]).map(r=>({
+      label:r.name,id:r.id,depth:r.depth,value:r.cells[0]?.n,p:r.cells[0]?.p,source:r.cells[0]?.label
+    })):disclosure.items.filter(item=>kind!=='geography'||geoMode()==='all'||item.type===geoMode())
+      .slice().sort((a,b)=>b.value-a.value).map(item=>({...item,p:D.division(item.value,disclosure.total,100)}));
+    const positive=items.filter(item=>item.value>0&&(!groupedGeography||item.depth===0));
     const sum=positive.reduce((total,item)=>total+item.value,0);
-    const segment=positive.map(it=>'<i title="'+esc(it.label+' · '+h.pct(D.division(it.value,disclosure.total,100)))+'" style="width:'+
+    const segment=positive.map(it=>'<i title="'+esc(it.label+' · '+h.pct(it.p))+'" style="width:'+
       (it.value/sum*100)+'%;background:'+color(it)+'"></i>').join('');
-    const body=items.map(item=>'<tr><th scope="row"><span class="annual-dot" style="--dot:'+color(item)+'" aria-hidden="true"></span>'+
-      esc(item.label)+'</th><td>'+esc(usdAmount(usd(item.value,rate),h))+'</td><td>'+percent(D.division(item.value,disclosure.total,100),h.pct)+'</td></tr>').join('');
+    const body=items.map(item=>'<tr'+(groupedGeography?' class="annual-geo-'+item.depth+'"':'')+'><th scope="row">'+
+      (!groupedGeography||item.depth===0?'<span class="annual-dot" style="--dot:'+color(item)+'" aria-hidden="true"></span>':'')+
+      esc(item.label)+'</th><td'+(item.source?' title="'+esc(item.source)+'"':'')+'>'+esc(usdAmount(usd(item.value,rate),h))+
+      '</td><td>'+percent(item.p,h.pct)+'</td></tr>').join('');
     return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+
       '<p class="annual-mix-total"><strong>'+esc(usdAmount(usd(disclosure.total,rate),h))+'</strong><span>disclosed revenue</span></p>'+
       (sum?'<div class="mix-strip" aria-hidden="true">'+segment+'</div>':'')+
       '<table class="annual-mix-table"><caption class="sr-only">'+esc(view.company.name)+' · '+esc(D.kinds[kind])+'</caption>'+
-      '<thead><tr><th scope="col">Reported breakdown</th><th scope="col">'+usdLabel(h)+'</th><th scope="col">Share</th></tr></thead><tbody>'+body+'</tbody></table>'+
+      '<thead><tr><th scope="col">'+(groupedGeography?'Geographic group':'Reported breakdown')+'</th><th scope="col">'+usdLabel(h)+'</th><th scope="col">Share</th></tr></thead><tbody>'+body+'</tbody></table>'+
       (F(rate)?'':'<p class="annual-empty">USD conversion unavailable.</p>')+'</article>';
   }
   function renderRevenue(views,h){
@@ -162,7 +182,8 @@
       const label=item=>item.type+'|'+D.canonical(item.label,item.type).toLowerCase();
       const labels=D.mixRows(views,k).map(item=>label({label:item.name,type:item.type}));
       const colors=new Map(labels.map((name,index)=>[name,palette[index%palette.length]]));
-      const color=item=>colors.get(label(item))||palette[0];
+      const geoColors={usa:palette[0],apac:palette[1],other:palette[2]};
+      const color=item=>geoColors[item.id]||colors.get(label(item))||palette[0];
       return '<section class="annual-breakdown" aria-labelledby="annual-mix-'+k+'"><header class="annual-breakdown-head">'+
         '<h4 id="annual-mix-'+k+'">'+esc(title)+'</h4><span>'+count+'/'+views.length+' companies · '+usdLabel(h)+'</span></header>'+
         '<div class="annual-mix-grid">'+views.map(v=>revenueCard(v,k,h,color)).join('')+'</div></section>';

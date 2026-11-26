@@ -8,7 +8,7 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.annual">
+  <link rel="stylesheet" href="stocks-beta3.css?v=20261127.geography">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
   <script defer src="stocks-beta3-scroll.js?v=1"></script>
   <script defer src="content-source.js"></script>
@@ -17,14 +17,15 @@
   <link rel="stylesheet" href="si-share-picker.css">
   <script defer src="si-share-picker.js?v=3"></script>
   <script defer src="stocks-beta3-disclosures.js?v=20261127.annual"></script>
-  <script defer src="stocks-beta3-details.js?v=20261127.annual"></script>
+  <script defer src="stocks-beta3-geography.js?v=20261127.geography"></script>
+  <script defer src="stocks-beta3-details.js?v=20261127.geography"></script>
   <link rel="stylesheet" href="stocks-beta3-quarterly-charts.css?v=20261127.usd1">
   <script defer src="shares-quarterly-core.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-quarterly-charts.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-comparison.js?v=20261127.usd1"></script>
   <script defer src="stocks-beta3-model.js?v=4"></script>
   <script defer src="stocks-beta3-usd.js?v=20261127.annual"></script>
-  <script defer src="stocks-beta3.js?v=20261127.annual"></script>
+  <script defer src="stocks-beta3.js?v=20261127.geography"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -73,7 +74,7 @@
           </article>
           <section class="annual-subsection" id="annual-revenue-mix" aria-labelledby="annual-revenue-title">
             <h3 id="annual-revenue-title">Annual revenue mix</h3>
-            <div id="revenue-diagram"></div>
+            <div class="annual-geo-control"><label>Geography <select id="annual-geo-filter"><option value="grouped">Grouped regions</option><option value="grouped-detail">Grouped + markets</option><optgroup label="As filed"><option value="all">As filed · all areas</option><option value="country">Countries and markets</option><option value="region">Regions</option><option value="other">Other and adjustments</option></optgroup></select></label></div><div id="revenue-diagram"></div>
           </section>
           <section class="annual-subsection" id="annual-maturity" aria-labelledby="annual-maturity-title">
             <h3 id="annual-maturity-title">Maturity ladders</h3>
@@ -83,7 +84,7 @@
         <section class="filing-section" id="statements"><header class="block-heading"><h2>Valuation &amp; financial statements</h2></header>
           <div class="comparison-tools"><label>Jump to table <select id="jump-table"><option value="">Choose table</option></select></label><label>USD amounts <select id="units"><option value="bn">Billions</option><option value="mn">Millions</option></select></label>
             <label>Show <select id="row-filter"><option value="all">All rows</option><option value="focus">Highlighted rows</option></select></label>
-            <label>Geography <select id="geo-filter"><option value="all">All reported areas</option><option value="country">Countries and markets</option><option value="region">Regions</option><option value="other">Other and adjustments</option></select></label>
+            <label>Geography <select id="geo-filter"><option value="grouped">Grouped regions</option><option value="grouped-detail">Grouped + markets</option><optgroup label="As filed"><option value="all">As filed · all areas</option><option value="country">Countries and markets</option><option value="region">Regions</option><option value="other">Other and adjustments</option></optgroup></select></label>
             <label>Breakdowns <select id="mix-units"><option value="both">Amount and %</option><option value="amount">Amount only</option><option value="share">% only</option></select></label>
             <details id="table-layout"><summary>Table layout</summary><div class="layout-controls">
               <label>Row height <output for="row-height" id="row-height-value"></output><input id="row-height" type="range" min="28" max="76" step="2"></label>
