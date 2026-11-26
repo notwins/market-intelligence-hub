@@ -253,31 +253,33 @@ html[data-nav-size=compact] .bottom-nav.hub-primary {
 .hub-extra-links > summary { --hub-mark:var(--hub-mark-orange); border-radius:8px; padding-left:12px; background:#fdf5ed; }
 
 /* Illustrated destinations share their colors across the header, dropdowns and Jump to. */
-[data-nav-art=home] { --art-ink:#234e77; --art-paper:#e2edf8; --art-wash:#a8c6e5; }
-[data-nav-art=tools] { --art-ink:#5d480e; --art-paper:#f6ebc7; --art-wash:#e1c26e; }
-[data-nav-art=news] { --art-ink:#833d22; --art-paper:#f9e4d5; --art-wash:#efb490; }
-[data-nav-art=shares] { --art-ink:#255941; --art-paper:#e0efe3; --art-wash:#97c5a4; }
-[data-nav-art=bonds] { --art-ink:#762d4f; --art-paper:#f4e1eb; --art-wash:#da96b6; }
-[data-nav-art=fred] { --art-ink:#553581; --art-paper:#ede5f7; --art-wash:#c7afe3; }
-[data-nav-art=pivot] { --art-ink:#344c88; --art-paper:#e5eafa; --art-wash:#acb8e3; }
-[data-nav-art=history] { --art-ink:#793446; --art-paper:#f6e4e7; --art-wash:#e5aab3; }
-[data-nav-art=book] { --art-ink:#67412d; --art-paper:#eee2d7; --art-wash:#c9a88e; }
-[data-nav-art=markets] { --art-ink:#155762; --art-paper:#ddefef; --art-wash:#93c6cd; }
-[data-nav-art=jump] { --art-ink:#173f47; --art-paper:#d5e9eb; --art-wash:#80b2b7; }
-[data-nav-art=archive] { --art-ink:#5a4730; --art-paper:#f2ece0; --art-wash:#d0b795; }
-[data-nav-art=chart] { --art-ink:#235955; --art-paper:#e0eeeb; --art-wash:#a2c5bb; }
-[data-nav-art=map] { --art-ink:#414b61; --art-paper:#e8ecf2; --art-wash:#b3c0d5; }
-[data-nav-art=search] { --art-ink:#364879; --art-paper:#e7edf7; --art-wash:#adbfdb; }
-[data-nav-art=gold] { --art-ink:#745009; --art-paper:#faedca; --art-wash:#e4bd58; }
-[data-nav-art=lock], [data-nav-art=settings] { --art-ink:#404e56; --art-paper:#e6ecee; --art-wash:#a8babe; }
-
+:is([data-nav-art="home"], [data-nav-art="pivot"], [data-nav-art="map"], [data-nav-art="search"], [data-nav-art="lock"], [data-nav-art="folio"], [data-nav-art="fx"], [data-nav-art="screen"], [data-nav-art="review"], [data-nav-art="saved"], [data-nav-art="source"], [data-nav-art="upload"], [data-nav-art="calc"], [data-nav-art="layers"], [data-nav-art="strategy"], [data-nav-art="settings"]) {
+  --art-ink:#284c70; --art-paper:#e4edf6;
+}
+:is([data-nav-art="tools"], [data-nav-art="gold"], [data-nav-art="archive"], [data-nav-art="coupon"], [data-nav-art="etf"]) {
+  --art-ink:#714c27; --art-paper:#f8edcd;
+}
+:is([data-nav-art="shares"], [data-nav-art="chart"], [data-nav-art="earnings"], [data-nav-art="cube"], [data-nav-art="capital"], [data-nav-art="flow"], [data-nav-art="ladder"], [data-nav-art="filing"], [data-nav-art="chip"], [data-nav-art="compare"], [data-nav-art="index"], [data-nav-art="ticker"]) {
+  --art-ink:#275848; --art-paper:#e3efe1;
+}
+:is([data-nav-art="news"], [data-nav-art="book"], [data-nav-art="briefing"], [data-nav-art="hourly"], [data-nav-art="wire"], [data-nav-art="editions"], [data-nav-art="pen"], [data-nav-art="papers"], [data-nav-art="calendar"], [data-nav-art="notebook"], [data-nav-art="library"], [data-nav-art="report"]) {
+  --art-ink:#79472f; --art-paper:#fae9d9;
+}
+:is([data-nav-art="fred"], [data-nav-art="policy"], [data-nav-art="monitor"], [data-nav-art="radar"], [data-nav-art="signal"], [data-nav-art="replay"], [data-nav-art="matrix"], [data-nav-art="network"], [data-nav-art="database"]) {
+  --art-ink:#574375; --art-paper:#ede8f7;
+}
+:is([data-nav-art="bonds"], [data-nav-art="credit"], [data-nav-art="treasury"], [data-nav-art="cashflow"], [data-nav-art="yield"]) {
+  --art-ink:#71455b; --art-paper:#f3e6ec;
+}
+:is([data-nav-art="history"], [data-nav-art="calls"], [data-nav-art="event"], [data-nav-art="cross"], [data-nav-art="tags"], [data-nav-art="palette"], [data-nav-art="swatch"], [data-nav-art="timeline"]) {
+  --art-ink:#814c54; --art-paper:#f7e7e3;
+}
+:is([data-nav-art="markets"], [data-nav-art="jump"], [data-nav-art="curves"], [data-nav-art="watch"], [data-nav-art="pricing"], [data-nav-art="globe"], [data-nav-art="scales"], [data-nav-art="retire"], [data-nav-art="buildings"], [data-nav-art="bookmark"], [data-nav-art="vault"], [data-nav-art="exchange"]) {
+  --art-ink:#245954; --art-paper:#dfefeb;
+}
 .hub-nav-icon {
   display:block; flex:none; box-sizing:border-box; width:1.55rem; height:1.55rem;
-  padding:.2rem; border-radius:5px; background:var(--art-paper); color:var(--art-ink);
-  stroke:currentColor; stroke-width:1.55; stroke-linecap:round; stroke-linejoin:round;
 }
-.hub-nav-icon-fill { fill:var(--art-wash); }
-.hub-nav-icon-detail { fill:none; }
 html[data-nav-style=professional] .hub-primary .hub-primary-group[data-nav-art] {
   border:1px solid #e0e6e6; border-radius:6px; background:#fafbf9;
 }
@@ -322,23 +324,35 @@ html[data-nav-style=professional] .hub-primary .hub-primary-group[data-nav-art]:
 .hub-sections-menu :is(.hub-menu-main,.hub-menu-items) > a[data-nav-art]:focus-visible {
   outline:2px solid var(--art-ink); outline-offset:-3px;
 }
-[data-nav-size=compact] .hub-primary .hub-nav-icon { width:1.25rem; height:1.25rem; padding:.12rem; }
+[data-nav-size=compact] .hub-primary .hub-nav-icon { width:1.25rem; height:1.25rem; }
 @media(min-width:1200px) and (max-width:1600px) {
   .bottom-nav.hub-primary { font-size:13px; }
   .hub-primary .hub-primary-scroll { gap:.2rem; }
-  .hub-primary .hub-nav-icon { width:1.38rem; height:1.38rem; padding:.16rem; }
+  .hub-primary .hub-nav-icon { width:1.38rem; height:1.38rem; }
   .bottom-nav.hub-primary .hub-primary-toggle { min-width:22px; }
 }
 @media(max-width:760px) {
   .hub-primary .hub-primary-link,
   .hub-primary .hub-primary-toggle { min-height:42px; }
-  .hub-primary .hub-nav-icon { width:1.35rem; height:1.35rem; padding:.14rem; }
+  .hub-primary .hub-nav-icon { width:1.35rem; height:1.35rem; }
 }
 @media(max-width:380px) {
   .hub-sections-menu .hub-menu-items, .hub-sections-menu .more-grid { grid-template-columns:minmax(0,1fr); }
 }
 @media(forced-colors:active) {
   .hub-nav-icon { color:ButtonText; background:ButtonFace; }
-  .hub-nav-icon-fill { fill:Canvas; }
   .hub-primary .hub-primary-group:has(>[aria-current]) .hub-primary-link { text-decoration:underline; }
 }
+
+.hub-primary .hub-primary-dropdown a[data-nav-art], .hub-sections-menu .hub-menu-items a[data-nav-art] {
+  display:flex; align-items:center; gap:.65rem; min-height:42px;
+}
+.hub-primary .hub-primary-dropdown a .hub-nav-icon, .hub-menu-items a .hub-nav-icon {
+  width:1.75rem; height:1.75rem;
+}
+.desk-directory nav a[data-nav-art], .dashboard-links a[data-nav-art], .tool-links a.tool-link[data-nav-art] {
+  display:inline-flex; align-items:center; gap:.48rem;
+}
+.rail-group > [data-nav-art] > .hub-nav-icon { width:22px; height:22px; }
+.rail-group > [data-nav-art] > .nav-glyph, .rail-group > [data-nav-art]::before,
+.tool-links > a.tool-link[data-nav-art]::before { display:none; }
