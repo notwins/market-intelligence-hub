@@ -36,7 +36,6 @@
     priceBook: ['Price / book', '×', 'lower'], assets: ['Total assets', 'amount'],
     liabilities: ['Total liabilities', 'amount'], cash: ['Cash and equivalents', 'amount'],
     netIncome: ['Net income', 'amount'], revenueShare: ['Revenue share', 'donut'],
-    revenueArea: ['USD revenue', 'area'],
     balanceMix: ['Liabilities & net assets', 'mix'], growthOperating: ['Operating margin', 'profile', 'operatingMargin'],
     growthNet: ['Net margin', 'profile', 'netMargin'], growthGross: ['Gross margin', 'profile', 'grossMargin'],
     cet1: ['Common equity Tier 1', '%'], totalCapitalRatio: ['Total regulatory capital', '%'],
@@ -46,6 +45,8 @@
     trendNet: ['Net margin', 'trend', 'netMargin']
   };
   const trendLayout = ['trend', 'Quarterly trends', ['trendGrowth', 'trendOperating', 'trendNet']];
+  const areaMeasures = {revenue:'Revenue', assets:'Total assets', liabilities:'Total liabilities', cash:'Cash', netIncome:'Net income'};
+  const areaId = 'revenue-area';
   const amounts = {
     revenue: 'Revenue', netIncome: 'Net income', operatingIncome: 'Operating income', grossProfit: 'Gross profit',
     fcf: 'Free cash flow', operatingCashFlow: 'Operating cash flow', currentAssets: 'Current assets',
@@ -324,12 +325,12 @@
     return new Map(points.map(({ordinal, observation}) => [ordinal, observation]));
   }
 
-  function quarterSlots(rows) {
+  function quarterSlots(rows, through) {
     const ordinals = rows.flatMap(row => [...row.history.keys()]);
     if (!ordinals.length) return [];
 
-    const end = Math.max(...ordinals);
-    const length = Math.min(8, end - Math.min(...ordinals) + 1);
+    const end = historyPoint({label:through})?.ordinal ?? Math.max(...ordinals);
+    const length = Math.max(0, Math.min(8, end - Math.min(...ordinals) + 1));
     const start = end - length + 1;
     return Array.from({length}, (_, pos) => {
       const ordinal = start + pos;
@@ -392,12 +393,12 @@
       '<div class="sq-legend">' + legend + '</div>' + table;
   }
 
-  function peerRevenue(rows) {
+  function directPeers(rows) {
     return rows.filter(row => !row.company.isBonus);
   }
 
   function portrayRevenueShare(allRows) {
-    const rows = peerRevenue(allRows).map(row => ({...row,n:value(row.company,'revenue')}));
+    const rows = directPeers(allRows).map(row => ({...row,n:value(row.company,'revenue')}));
     const present = rows.filter(row=>finite(row.n)&&row.n>=0).sort((a,b)=>b.n-a.n||a.i-b.i);
     const total = present.reduce((sum,row)=>sum+row.n,0);
     const share = row=>present.includes(row)&&total>0?100*row.n/total:null;
@@ -421,62 +422,140 @@
       '<div><strong>'+esc(printed(total,'amount','USD'))+'</strong><small>Peer revenue</small></div></div><ol>'+labels+'</ol></div>'+table;
   }
 
-  function portrayRevenueArea(allRows) {
-    const rows=peerRevenue(allRows), slots=quarterSlots(rows);
-    if (slots.length<2) return '<p class="sq-empty">Stacked revenue needs at least two quarterly observations.</p>';
-    const lookup=(row,slot)=>value(row.history.get(slot.ordinal)||{},'revenue');
-    const available=(row,slot)=>finite(lookup(row,slot))&&lookup(row,slot)>=0;
-    const end=slots.at(-1);
-    // Fix the cohort using the latest plotted quarter and its best-covered earlier match.
-    // A missing observation anywhere else breaks the stack for the entire quarter.
-    const candidates=slots.slice(0,-1).map(slot=>rows.filter(row=>available(row,end)&&available(row,slot)));
-    const cohort=candidates.reduce((best,group)=>group.length>=best.length?group:best,[]);
-    const totals=slots.map(slot=>cohort.length&&cohort.every(row=>available(row,slot))?
-      cohort.reduce((total,row)=>total+lookup(row,slot),0):null);
-    const skipped=rows.filter(row=>!cohort.includes(row)).map(row=>row.ticker);
-    const table='<details class="sq-figures"><summary>Figures <span>'+cohort.length+' matched companies</span></summary>'+
-      '<div class="sq-table-wrap" tabindex="0" role="region" aria-label="Direct peer revenue by calendar quarter"><table><caption class="sr-only">Direct peer quarterly revenue in USD</caption>'+
-      '<thead><tr><th scope="col">Company</th>'+slots.map(slot=>'<th scope="col">'+esc(slot.label)+'</th>').join('')+'</tr></thead><tbody>'+
-      cohort.map(row=>'<tr'+(row.active?' class="sq-active"':'')+'><th scope="row">'+esc(row.company.name)+'<small>'+esc(row.ticker)+'</small></th>'+
-        slots.map(slot=>figureCell({text:printed(lookup(row,slot),'amount','USD',true),note:available(row,slot)?null:'Comparable USD revenue unavailable.'})).join('')+'</tr>').join('')+
-      '<tr><th scope="row">Matched total</th>'+totals.map(total=>figureCell(printed(total,'amount','USD',true))).join('')+'</tr>'+
-      '</tbody></table></div>'+reportingNotes(cohort)+'</details>';
-    if (cohort.length<2) return '<p class="sq-empty">Two or more direct peers need comparable USD revenue in the same two quarters.</p>';
-    const limits=domain(totals.filter(finite)), x=i=>i/(slots.length-1)*100;
-    const y=n=>100-position(n,limits);
-    const xLabels=slots.map((slot,i)=>'<span class="'+(i===0?'sq-start':i===slots.length-1?'sq-end':i%2?'sq-minor':'')+'" style="--tick:'+x(i)+'%">'+esc(slot.abbreviated)+'</span>').join('');
-    const guide=ticks(limits).map(n=>'<i class="sq-yline" style="--tick:'+position(n,limits)+'%"><span>'+esc(printed(n,'amount',''))+'</span></i>').join('');
-    const gaps=totals.map((total,i)=>finite(total)?'':'<i class="sq-area-gap" style="--tick:'+x(i)+'%" title="'+esc(slots[i].label+' · Missing comparable revenue')+'"><span>Gap</span></i>').join('');
-    const cumulative=slots.map(()=>0);
-    const shapes=cohort.map(row=>{
-      const points=slots.map((slot,i)=>{
-        if(!finite(totals[i]))return null;
-        const bottom=cumulative[i];
-        cumulative[i]+=lookup(row,slot);
-        return {x:x(i),top:y(cumulative[i]),bottom:y(bottom)};
-      });
-      const runs=[];
-      let run=[];
-      for(const point of [...points,null]){
-        if(point){run.push(point);continue;}
-        if(run.length)runs.push(run);
-        run=[];
-      }
-      return '<g fill="'+row.color+'" stroke="'+row.color+'">'+runs.map(segment=>{
-        if(segment.length===1){
-          const point=segment[0];
-          return '<line x1="'+point.x+'" x2="'+point.x+'" y1="'+point.top+'" y2="'+point.bottom+'" stroke-width="7" vector-effect="non-scaling-stroke"></line>';
+  function shareOfMagnitude(values){
+    const total=values.reduce((sum,n)=>sum+Math.abs(n),0);
+    return total>0?values.map(n=>100*n/total):null;
+  }
+
+  function peerStack(allRows, measure, mode, through) {
+    const rows = directPeers(allRows);
+    const slots = quarterSlots(rows, through);
+    const series = rows.map(row => ({...row, amounts:slots.map(slot=>value(row.history.get(slot.ordinal)||{},measure))}));
+    // Start with the most recent comparable quarter. Prefer including the
+    // focus company when its filings overlap at least one direct peer.
+    const focus=series.find(row=>row.active);
+    function matchedGroup(required){
+      for(let end=slots.length-1;end>0;end--){
+        let best=[];
+        for(let prior=end-1;prior>=0;prior--){
+          const group=series.filter(row=>finite(row.amounts[end])&&finite(row.amounts[prior]));
+          if(group.length>best.length&&(!required||group.includes(required)))best=group;
         }
-        const edge=(pt,field)=>pt.x+','+pt[field];
-        return '<polygon stroke="none" points="'+segment.map(pt=>edge(pt,'top')).concat(segment.slice().reverse().map(pt=>edge(pt,'bottom'))).join(' ')+'"></polygon>';
-      }).join('')+'</g>';
+        if(best.length>=2)return best;
+      }
+      return [];
+    }
+    const preferred=focus?matchedGroup(focus):[];
+    const cohort=preferred.length?preferred:matchedGroup();
+    const quarters=slots.map((slot,i)=>{
+      const nums=cohort.map(row=>row.amounts[i]);
+      if (nums.length<2||!nums.every(finite)) return {reason:'Missing comparable figure'};
+      const total=nums.reduce((sum,n)=>sum+n,0);
+      const values=mode==='share'?shareOfMagnitude(nums):nums;
+      return values?{total,values}:{total,reason:'Peer total is zero'};
+    });
+    return {rows,slots,cohort,quarters};
+  }
+
+  function stackSamples(quarters, share=false) {
+    const samples=[];
+    quarters.forEach(({values},i)=>{
+      samples.push(values?{x:i,values}:null);
+      const next=quarters[i+1]?.values;
+      if (!values||!next) return;
+      const crossings=new Set();
+      values.forEach((n,j)=>{
+        if ((n<0&&next[j]>0)||(n>0&&next[j]<0)) crossings.add(n/(n-next[j]));
+      });
+      // Break at zero crossings so a loss turning into a profit changes
+      // sides at one point. Leave gaps between missing quarters.
+      for (const t of [...crossings].sort((a,b)=>a-b)) {
+        const interpolated=values.map((n,j)=>{
+          const m=next[j];
+          return n!==m&&n/(n-m)===t?0:n+t*(m-n);
+        });
+        const stack=share?shareOfMagnitude(interpolated):interpolated;
+        samples.push(stack?{x:i+t,values:stack}:null);
+      }
+    });
+    return samples;
+  }
+
+  function areaSegments(points,edge) {
+    const runs=[];
+    let run=[];
+    for (const point of [...points,null]){
+      if (point){run.push(point);continue;}
+      if (run.some(point=>point.top!==point.bottom)) runs.push(run);
+      run=[];
+    }
+    return runs.map(segment=>{
+      if (segment.length===1){
+        const {x,top,bottom}=segment[0];
+        return '<line x1="'+x+'" x2="'+x+'" y1="'+top+'" y2="'+bottom+'" stroke-width="7" vector-effect="non-scaling-stroke"></line>';
+      }
+      return '<polygon stroke="none" points="'+segment.map(pt=>edge(pt,'top')).concat(segment.slice().reverse().map(pt=>edge(pt,'bottom'))).join(' ')+'"></polygon>';
+    }).join('');
+  }
+
+  function portrayPeerArea(allRows,measure,mode,through) {
+    const {rows,slots,cohort,quarters}=peerStack(allRows,measure,mode,through);
+    const label=areaMeasures[measure], share=mode==='share';
+    const unit=share?'%':'amount';
+    const format=n=>share?printed(n,'share',''):printed(n,'amount','USD',true);
+    if (cohort.length<2) return '<p class="sq-empty">At least two direct peers need comparable '+esc(label.toLowerCase())+' in the same two quarters.</p>';
+    const signed=cohort.some(row=>row.amounts.some(n=>finite(n)&&n<0));
+    const skipped=rows.filter(row=>!cohort.some(peer=>peer.i===row.i)).map(row=>row.ticker);
+    const axisLabel=share?'Share of matched peers':'USD';
+    const table='<details class="sq-figures"><summary>Figures <span>'+cohort.length+' matched companies</span></summary>'+
+      '<div class="sq-table-wrap" tabindex="0" role="region" aria-label="'+esc(label+' · '+axisLabel+' by calendar quarter')+'"><table><caption class="sr-only">'+esc(label+' · '+axisLabel)+'</caption>'+
+      '<thead><tr><th scope="col">Company</th>'+slots.map(slot=>'<th scope="col">'+esc(slot.label)+'</th>').join('')+'</tr></thead><tbody>'+
+      cohort.map((row,j)=>'<tr'+(row.active?' class="sq-active"':'')+'><th scope="row">'+esc(row.company.name)+'<small>'+esc(row.ticker)+'</small></th>'+
+        row.amounts.map((n,i)=>{
+          const value=share?quarters[i].values?.[j]:n;
+          const note=!finite(n)?'Comparable USD figure unavailable.':!finite(value)?quarters[i].reason+'.':null;
+          return figureCell({text:format(value),note});
+        }).join('')+'</tr>').join('')+
+      '<tr><th scope="row">'+(share&&signed?'Net share':'Matched total')+'</th>'+
+      quarters.map(q=>figureCell(format(share?q.values?.reduce((sum,n)=>sum+n,0):q.total))).join('')+'</tr>'+
+      '</tbody></table></div>'+reportingNotes(cohort)+'</details>';
+    const extents=quarters.flatMap(q=>q.values?[q.values.reduce((sum,n)=>sum+Math.max(n,0),0),q.values.reduce((sum,n)=>sum+Math.min(n,0),0)]:[]);
+    if (!extents.length) return '<p class="sq-empty">The matched peers have zero totals or incomplete data for this view.</p>'+table;
+    const limits=share?{min:extents.some(n=>n<0)?-100:0,max:extents.some(n=>n>0)?100:0,step:25}:domain(extents);
+    const x=i=>i/(slots.length-1)*100, y=n=>100-position(n,limits);
+    const xLabels=slots.map((slot,i)=>'<span class="'+(i===0?'sq-start':i===slots.length-1?'sq-end':i%2?'sq-minor':'')+'" style="--tick:'+x(i)+'%">'+esc(slot.abbreviated)+'</span>').join('');
+    const guide=ticks(limits).map(n=>'<i class="sq-yline'+(n===0?' sq-zero':'')+'" style="--tick:'+position(n,limits)+'%"><span>'+esc(printed(n,unit,''))+'</span></i>').join('');
+    const gaps=quarters.map((q,i)=>q.values?'':'<i class="sq-area-gap" style="--tick:'+x(i)+'%" title="'+esc(slots[i].label+' · '+q.reason)+'"><span>Gap</span></i>').join('');
+    const samples=stackSamples(quarters,share).map(point=>point?{...point,positive:0,negative:0}:null);
+    const edge=(pt,field)=>pt.x+','+pt[field];
+    const shapes=cohort.map((row,j)=>{
+      const layers=[true,false].map(positive=>areaSegments(samples.map(point=>{
+        if (!point) return null;
+        const n=point.values[j];
+        const outer=positive?'positive':'negative';
+        if ((positive&&n<0)||(!positive&&n>0)) return null;
+        const bottom=point[outer];
+        point[outer]+=n;
+        return {x:x(point.x),top:y(point[outer]),bottom:y(bottom)};
+      }),edge));
+      return '<g fill="'+row.color+'" stroke="'+row.color+'">'+layers.join('')+'</g>';
     }).join('');
     const legend=cohort.map(row=>'<span'+(row.active?' class="sq-active"':'')+'><i style="--mark:'+row.color+'"></i>'+esc(row.ticker)+'</span>').join('');
-    return '<div class="sq-chart-meta"><span>'+cohort.length+'/'+rows.length+' direct peers in matched group</span><span>USD · Calendar quarters</span></div>'+
-      '<div class="sq-trend-inner sq-area-inner" role="img" aria-label="Stacked area of quarterly revenue for a fixed group of direct peers in US dollars">'+
+    const scoreNote=share&&signed?'<p class="sq-reporting-currencies">Share divides each value by the sum of the peers’ absolute values. Negative values appear below zero.</p>':'';
+    return '<div class="sq-chart-meta"><span>'+cohort.length+'/'+rows.length+' in matched peer group</span><span>'+axisLabel+' · Calendar quarters</span></div>'+
+      '<div class="sq-trend-inner sq-area-inner" role="img" aria-label="'+esc(label+' by calendar quarter · '+axisLabel)+'">'+
       '<div class="sq-scatter-plot sq-trend-plot" aria-hidden="true">'+guide+'<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">'+shapes+
-      '</svg>'+gaps+'<div class="sq-scatter-x">'+xLabels+'</div></div></div><div class="sq-legend">'+legend+'</div>'+
+      '</svg>'+gaps+'<div class="sq-scatter-x">'+xLabels+'</div></div></div><div class="sq-legend">'+legend+'</div>'+scoreNote+
       (skipped.length?'<p class="sq-reporting-currencies">Outside the matched group · '+esc(skipped.join(', '))+'</p>':'')+table;
+  }
+
+  function peerAreaCard(state) {
+    const options=Object.entries(areaMeasures).map(([key,label])=>'<button type="button" data-sq-area-measure="'+key+'" aria-pressed="'+(state.areaMeasure===key)+'">'+label+'</button>').join('');
+    const modes=[['usd','USD'],['share','% share']].map(([key,label])=>'<button type="button" data-sq-area-mode="'+key+'" aria-pressed="'+(state.areaMode===key)+'">'+label+'</button>').join('');
+    return '<article id="direct-peer-area" class="sq-card sq-revenue-area" data-sq-card="'+areaId+'"><header><h3>Direct peer financials over time</h3>'+
+      '<div class="sq-area-controls"><div class="sq-switches" role="group" aria-label="Stacked area metric">'+options+'</div>'+
+      '<div class="sq-switches sq-area-units" role="group" aria-label="Stacked area units">'+modes+'</div></div></header>'+
+      '<div class="sq-card-body">'+portrayPeerArea(state.rows,state.areaMeasure,state.areaMode,state.through)+'</div></article>';
   }
 
   function cardHtml(id, title, group, active, rows) {
@@ -493,7 +572,6 @@
     if (kind === 'profile') return portrayProfile(rows, key);
     if (kind === 'trend') return portrayTrends(rows, key);
     if (kind === 'donut') return portrayRevenueShare(rows);
-    if (kind === 'area') return portrayRevenueArea(rows);
     return portrayBars(rows, key, id);
   }
 
@@ -503,34 +581,53 @@
     const rows = companyRows(companies, data.focus).map(row => ({...row, history: normalizedHistory(row.company)}));
     let state = settings.get(container);
     if (!state) {
-      state = {selected: new Map(), rows};
+      state = {selected: new Map(), rows, areaMeasure:'revenue', areaMode:'usd'};
       settings.set(container, state);
       container.addEventListener('click', event => {
-        const button = event.target.closest('[data-sq-metric]');
+        const button = event.target.closest('[data-sq-metric],[data-sq-area-measure],[data-sq-area-mode]');
         const card = button?.closest('[data-sq-card]');
         if (!card || !container.contains(card)) return;
-        const key = button.dataset.sqMetric;
         if (button.getAttribute('aria-pressed') === 'true') return;
         const id = card.dataset.sqCard;
-        state.selected.set(id, key);
-        for (const item of card.querySelectorAll('[data-sq-metric]')) item.setAttribute('aria-pressed', item === button);
-        const body = card.querySelector('.sq-card-body');
-        const preserve = body.querySelector('.sq-figures')?.open;
-        body.innerHTML = chart(key, state.rows, id);
-        if (preserve && body.querySelector('.sq-figures')) body.querySelector('.sq-figures').open = true;
+        let plot;
+        let group;
+        if (id===areaId){
+          if (button.dataset.sqAreaMeasure) state.areaMeasure=button.dataset.sqAreaMeasure;
+          else state.areaMode=button.dataset.sqAreaMode;
+          group=button.parentElement;
+          plot=portrayPeerArea(state.rows,state.areaMeasure,state.areaMode,state.through);
+        } else {
+          const key=button.dataset.sqMetric;
+          state.selected.set(id,key);
+          group=button.parentElement;
+          plot=chart(key,state.rows,id);
+        }
+        for (const item of group.querySelectorAll('button')) item.setAttribute('aria-pressed',item===button);
+        const body=card.querySelector('.sq-card-body');
+        const preserve=body.querySelector('.sq-figures')?.open;
+        const scroll=body.querySelector('.sq-table-wrap')?.scrollLeft;
+        body.innerHTML=plot;
+        const detail=body.querySelector('.sq-figures');
+        if (preserve&&detail){
+          detail.open=true;
+          const table=detail.querySelector('.sq-table-wrap');
+          if (table) table.scrollLeft=scroll;
+        }
       });
     }
     const open = new Set([...container.querySelectorAll('.sq-figures[open]')].map(item => item.closest('[data-sq-card]').dataset.sqCard));
     state.rows = rows;
+    state.through = data.selectedQuarter;
     const period = data.periodLabel || (data.period === 'latest' || !data.period ? 'Latest reported periods' : 'Fiscal year ' + data.period);
     const standalone = !container.closest('section[aria-labelledby]');
     const head = '<header class="sq-head"><div>' + (standalone ? '<h2>Fundamentals at a glance</h2>' : '') + '<p>' + esc(period+(data.growthBasis==='qoq'?' · Growth QoQ':data.growthBasis==='yoy'?' · Growth YoY':'')) + '</p></div>' +
       '<span class="sq-count">' + rows.length + (rows.length === 1 ? ' company' : ' companies') + '</span></header>';
     container.classList.add('shares-quarterly-charts');
     const cards = [...sizeLayouts,...layouts];
-    if (rows.some(row=>!row.company.isBonus&&row.history.size>=2)) cards.push(['revenue-area','Direct peer revenue over time',['revenueArea']]);
+    if (quarterSlots(directPeers(rows),state.through).length>=2) cards.push([areaId]);
     if (rows.some(row=>row.history.size>=2)) cards.push(trendLayout);
     container.innerHTML = head + '<div class="sq-grid">' + cards.map(([id, title, base]) => {
+      if (id===areaId) return peerAreaCard(state);
       const group = options(id, companies[0], base);
       const current = state.selected.get(id);
       const active = group.includes(current) ? current : group[0];
@@ -541,7 +638,7 @@
     }
   }
 
-  const api = {render};
+  const api = {render,peerStack,stackSamples};
   root.SharesQuarterlyCharts = api;
   if (typeof module === 'object' && module.exports) module.exports = api;
 })(typeof window === 'undefined' ? globalThis : window);
