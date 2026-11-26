@@ -373,7 +373,16 @@ function describeDeskTab(tab = deskTabs.find(tab => tab.getAttribute('aria-selec
     document.getElementById(candidate.getAttribute('aria-describedby')).hidden = candidate !== tab;
   }
 }
+const deskViewTitles = {briefing: 'Market Desk', markets: 'Price and Charts', 'full-history': 'Full History'};
+const deskFavicon = document.querySelector('link[rel="icon"]');
+const deskTouchIcon = document.querySelector('link[rel="apple-touch-icon"]');
+const deskShortcutTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
 function mode(selected) {
+  const title = deskViewTitles[selected];
+  document.title = title + ' · Market Intel';
+  deskFavicon.setAttribute('href', 'assets/desk/icons/' + selected + '-32.png');
+  deskTouchIcon.setAttribute('href', 'assets/desk/icons/' + selected + '-180.png');
+  deskShortcutTitle.content = title;
   for (const tab of deskTabs) {
     const active = tab.dataset.mode === selected;
     document.getElementById(tab.getAttribute('aria-controls')).hidden = !active;
