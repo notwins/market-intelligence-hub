@@ -56,12 +56,7 @@ body { font-family: var(--font); background: var(--paper); }
   background: #fdfcf7; border-color: var(--line); box-shadow: none; font-family: var(--font);
 }
 .hub-primary .hub-primary-scroll { gap: .3rem; }
-html[data-nav-style=professional] .hub-primary-group {
-  border: 1px solid #e1e1d7; border-radius: 5px; background: #f6f6ef;
-}
-html[data-nav-style=professional] .hub-primary-group:has(>[aria-current]) { border-color: #a6b1a0; background: #e3eadd; }
-html[data-nav-style=professional] .hub-primary .hub-primary-link { background: transparent; color: #343e32; }
-.hub-primary .hub-primary-group .hub-primary-link { gap: .35rem; border-radius: 4px; padding-left: .55rem!important; }
+.hub-primary .hub-primary-group .hub-primary-link { gap: .35rem; border-radius: 4px; }
 .hub-primary .hub-primary-toggle { border-left: 1px solid #8d988330!important; }
 .bottom-nav.hub-primary > .hub-primary-more, .desk-mobile-tools .hub-primary-more, .desk-gear {
   display: inline-flex; align-items: center; justify-content: center; gap: .45rem; margin: 0;
@@ -191,7 +186,7 @@ input:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visibl
   .desk-mast :is(.overview-switch,.mast-actions) a, .desk-directory summary { min-height: 2.25rem; gap: .25rem; padding: .32rem .38rem; font-size: .8rem; }
   .desk-directory { margin-left: auto; }
   .desk-mobile-tools .hub-primary-more { padding: .4rem .55rem!important; }
-  .desk-mobile-tools .hub-primary-more svg { display: none; }
+  .desk-mobile-tools .hub-nav-icon { width: 1.25rem; height: 1.25rem; }
   .desk-hero, #markets .desk-hero, #full-history .desk-hero { grid-template-columns: minmax(0,1fr); gap: 1rem; padding: 1.25rem 0; }
   .desk-kicker { margin-bottom: .6rem; }
   .desk-hero h1, #markets .desk-hero h1, #full-history .desk-hero h1 { font-size: clamp(2.8rem,9.5vw,4.4rem); }
