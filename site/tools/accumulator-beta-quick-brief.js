@@ -41,6 +41,18 @@
         value: node.querySelector('strong').textContent.trim(),
         label: node.querySelector('span').textContent.trim()
       }));
+      const fundamentals = document.querySelector('#nv-stress-fundamentals');
+      const ratios = Array.from(fundamentals?.querySelectorAll('.nv-fundamentals-multiples > div') || [],
+        node => [node.querySelector('dt').textContent, node.querySelector('dd').firstChild.textContent]);
+      if (ratios.length) {
+        view.stressFundamentals = {
+          lead: read('.nv-fundamentals-lead'),
+          ratios,
+          balance: read('[data-valuation-balance]'),
+          earnings: read('[data-valuation-earnings]'),
+          implications: read('.nv-fundamentals-implied > span')
+        };
+      }
       view.valuation = Array.from(document.querySelectorAll('.nvda-valuation-summary > *'), node => node.textContent.trim()).join('  /  ');
     }
     if (view.archive) view.archiveDate = read('#pricing-archive summary');
@@ -333,6 +345,18 @@
           cards(view.stressFrequency.map(({label,value}) => [label.replace(/^At the end of /,'End of ').replace(/^At any /,'Any '), value]));
         }
         if (view.valuation) y = wrap(view.valuation, margin, y, width, 8.8, 'muted') + 5;
+        const fundamentals = view.stressFundamentals;
+        if (fundamentals) {
+          const title = 'NVIDIA at the test price';
+          heading(title, fundamentals.lead, 55);
+          cards(fundamentals.ratios.slice(0, 3));
+          const [, book] = fundamentals.ratios[3];
+          const balance = fundamentals.balance + (book === '—' ? '' : ' Price to book at the test price is ' + book + '.');
+          for (const paragraph of [balance, fundamentals.earnings, fundamentals.implications]) {
+            space(22, title);
+            y = wrap(paragraph, margin, y, width, 9.6) + 4;
+          }
+        }
       }
       if (view.after) reference('After shares are delivered', 'Holding keeps the stock exposure. Covered calls or a decumulator add separate terms and trade-offs.', 'after');
       if (view.archive) reference('Earlier pricing', view.archiveDate || 'The archive lists prior indicative terms.', 'pricing-archive');
