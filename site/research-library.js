@@ -16,9 +16,9 @@ entry.innerHTML=`
   </div>
   <nav class="library-choices" aria-label="Research workspaces"><a href="#main-published-research"><b>Latest reports</b><span>Full reports and matching Quick reads</span></a><a href="#my-research"><b>My blog write-ups</b><span>Search past editions by topic or date</span></a><a href="../external-sources.html"><b>Official papers</b><span>Open the original source documents</span></a></nav>`;
 root.prepend(entry);entry.after(latest);
-import('./research-workspaces.js?v=2');
+import('./research-workspaces.js?v=3');
 function group(id,title,description,nodes){
- const section=document.createElement('details');section.className='library-group';section.id=id;
+ const section=document.createElement('details');section.className='library-group';section.id=id;section.open=true;
  const summary=document.createElement('summary');const label=document.createElement('strong');label.textContent=title;const sub=document.createElement('span');sub.textContent=description;summary.append(label,sub);section.append(summary);
  nodes.filter(Boolean).forEach(node=>section.append(node));root.append(section);return section;
 }
@@ -56,6 +56,8 @@ thoughts.innerHTML=`
   <div class="mu-writeups-grid" data-thoughts-feed hidden></div>
   <div class="mu-writeups-grid" data-thoughts-legacy></div>`;
 latest.after(thoughts);
+root.querySelectorAll('details.mu-explanation, details.mu-card-previous, #library-basics details').forEach(details=>{details.open=true;});
+import('./research-editorial-gallery.js?v=1');
 const thoughtsFeed=thoughts.querySelector('[data-thoughts-feed]');
 const thoughtsLegacy=thoughts.querySelector('[data-thoughts-legacy]');
 function renderThoughts(feed){

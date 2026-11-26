@@ -394,7 +394,7 @@
     svg.setAttribute('focusable', 'false');
     svg.classList.add('hub-nav-icon');
     const picture = document.createElementNS(ns, 'use');
-    picture.setAttribute('href', new URL('assets/navigation-atlas.svg?v=2#' + key, base).href);
+    picture.setAttribute('href', new URL('assets/navigation-atlas.svg?v=menu-art1#' + key, base).href);
     svg.append(picture);
     return svg;
   }
@@ -725,6 +725,101 @@
   if (skip) skip.after(bar);
   else document.body.prepend(bar);
   document.documentElement.classList.add('hub-primary-ready');
+  function installCollapsibleMenu() {
+    const rail = document.querySelector('aside.rail:has(.hub-side-menu)');
+    const directory = document.querySelector('.desk-directory.hub-side-directory');
+    const panel = rail || directory?.querySelector(':scope > div');
+    if (!panel || typeof HTMLDialogElement === 'undefined') return;
+    const parent = panel.parentNode;
+    const placeholder = document.createComment('Side menu location');
+    parent.insertBefore(placeholder, panel);
+    if (rail) {
+      root.classList.add('hub-has-workspace-rail');
+      rail.id ||= 'hub-workspace-rail';
+      const collapse = document.createElement('button');
+      collapse.type = 'button';
+      collapse.className = 'hub-rail-collapse';
+      collapse.setAttribute('data-no-translate', '');
+      collapse.setAttribute('aria-controls', rail.id);
+      collapse.setAttribute('aria-label', 'Icon-only side menu');
+      rail.prepend(collapse);
+      const preference = 'market-hub-side-menu';
+      let collapsed = false;
+      try { collapsed = localStorage.getItem(preference) === 'collapsed'; } catch {}
+      for (const item of rail.querySelectorAll('.hub-side-item')) {
+        const label = item.textContent.replace(/\s+/g, ' ').trim();
+        if (item.matches('a,button,summary')) item.title ||= label;
+        for (const child of [...item.childNodes]) {
+          if (child.nodeType !== Node.TEXT_NODE || !child.textContent.trim()) continue;
+          const text = document.createElement('span');
+          text.className = 'hub-rail-label';
+          text.textContent = child.textContent;
+          child.replaceWith(text);
+        }
+      }
+      function updateCollapse() {
+        root.classList.toggle('hub-rail-collapsed', collapsed);
+        const label = collapsed ? 'Expand side menu' : 'Collapse side menu';
+        collapse.replaceChildren(navigationIcon(collapsed ? 'rail-expand' : 'rail-collapse'));
+        collapse.title = label;
+        collapse.setAttribute('aria-pressed', String(collapsed));
+        if (!collapsed) collapse.append(document.createTextNode('Collapse menu'));
+      }
+      updateCollapse();
+      collapse.addEventListener('click', () => {
+        collapsed = !collapsed;
+        updateCollapse();
+        try { localStorage.setItem(preference, collapsed ? 'collapsed' : 'expanded'); } catch {}
+      });
+    }
+
+    const opener = document.createElement('button');
+    opener.type = 'button';
+    opener.className = 'hub-mobile-menu';
+    opener.setAttribute('data-no-translate', '');
+    opener.dataset.navArt = 'map';
+    opener.setAttribute('aria-haspopup', 'dialog');
+    opener.setAttribute('aria-controls', 'hub-side-drawer');
+    opener.setAttribute('aria-expanded', 'false');
+    opener.append(navigationIcon('menu-drawer'), document.createTextNode('Menu'));
+    if (directory) {
+      root.classList.add('hub-desk-has-drawer');
+      directory.before(opener);
+    } else bar.prepend(opener);
+    const drawer = document.createElement('dialog');
+    drawer.id = 'hub-side-drawer';
+    drawer.className = 'hub-side-drawer';
+    drawer.setAttribute('aria-labelledby', 'hub-side-drawer-title');
+    drawer.innerHTML = '<header data-no-translate><h2 id="hub-side-drawer-title">Menu</h2><button type="button" aria-label="Close menu" autofocus>Close</button></header>';
+    document.body.append(drawer);
+    if (directory) drawer.classList.add('hub-drawer-directory');
+    const close = () => drawer.close();
+    opener.addEventListener('click', () => {
+      if (!mobileDock.matches || drawer.open) return;
+      if (directory) directory.open = false;
+      drawer.append(panel);
+      drawer.showModal();
+      opener.setAttribute('aria-expanded', 'true');
+    });
+    drawer.querySelector('button').addEventListener('click', close);
+    drawer.addEventListener('click', event => {
+      if (event.target === drawer || event.target.closest('a[href],button[data-view]')) close();
+    });
+    drawer.addEventListener('close', () => {
+      placeholder.after(panel);
+      opener.setAttribute('aria-expanded', 'false');
+      if (mobileDock.matches) opener.focus({preventScroll:true});
+    });
+    mobileDock.addEventListener('change', () => {
+      if (!mobileDock.matches && drawer.open) close();
+    });
+  }
+  installCollapsibleMenu();
+  if (document.querySelector('#featured-cards,[data-feed-cards],#dashboard-report-cards')) {
+    const artwork = document.createElement('script');
+    artwork.src = new URL('card-artwork.js?v=1', base);
+    document.head.append(artwork);
+  }
   const workspaceToolbar = document.querySelector('.topbar');
   function active() {
     const relative = pagePath;

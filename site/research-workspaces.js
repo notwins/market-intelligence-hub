@@ -56,7 +56,7 @@ gear.addEventListener('click', () => {
 
 const targets = [
   '.ws-intro', '.ws-plate', '.library-choices a', '.mu-writeups-heading h2',
-  '.mu-writeups-grid > article', '.library-group > summary', '.rr-results > li',
+  '.mu-writeups-grid > article', '.library-group > summary', '.rr-results > li', '.mu-chapter > h2',
   '.calls-companies > h3', '.calls-ledger > h3', '.calls-edition .watchlist-card',
   '.featured-research', '.cd-heading h2', '.cd-card', '.publication-heading h2',
   '.briefing-lead > article', '.market-snapshot h2', '.overview-card-grid > *',
@@ -116,6 +116,7 @@ function applyPreference() {
   toggle.disabled = reduced.matches;
   note.textContent = reduced.matches ? 'Your device’s reduced-motion setting pauses the effects.' : 'Fade headings and slide selected cards into view. This choice also applies to the main desk.';
   observePage();
+  if (library) window.dispatchEvent(new CustomEvent('research-motion-change', {detail: enabled}));
 }
 toggle.addEventListener('change', () => {
   enabled = toggle.checked;
