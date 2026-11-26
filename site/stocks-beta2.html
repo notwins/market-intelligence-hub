@@ -3,8 +3,9 @@
 <head>
   <script defer src="financial-display.js?v=20261122.figures1"></script>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="company-fundamentals.css?v=20261122.figures1">
-  <script defer src="company-fundamentals.js?v=20261123.public2"></script>
+  <link rel="stylesheet" href="company-fundamentals.css?v=20261126.quarterly">
+  <script defer src="shares-quarterly-core.js?v=20261126.quarterly"></script>
+  <script defer src="company-fundamentals.js?v=20261126.quarterly"></script>
   <link rel="stylesheet" href="company-credit.css?v=1">
   <script defer src="company-credit.js?v=9"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -136,8 +137,8 @@
             <button type="button" id="sb2-fiscal-compare" aria-pressed="false" aria-controls="sb2-detail" hidden>Compare 5 fiscal years</button>
             <label class="sb2-layout-control">Statement period
               <select data-fund-frequency aria-label="Statement period" aria-controls="sb2-detail">
-                <option value="annual" selected>Annual</option>
-                <option value="quarterly">Quarterly</option>
+                <option value="annual">Annual</option>
+                <option value="quarterly" selected>Quarterly</option>
               </select>
             </label>
             <button type="button" id="sb2-expand-statements" aria-controls="sb2-detail" disabled>Expand all statements</button>

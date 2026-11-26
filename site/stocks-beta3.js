@@ -2,19 +2,39 @@
   'use strict';
   const M=window.FilingComparison, E=window.SharesComparison, $=id=>document.getElementById(id);
   const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  const D=window.FilingNotes, Notes=window.FilingNotesView;
+  const D=window.FilingNotes, Notes=window.FilingNotesView, Q=window.SharesQuarterlyCore;
   const colors=['#176b5a','#41679b','#9a602b','#76558d','#a5455a','#267a89','#646b30','#584c89','#a45132','#3f6b41','#784a66'];
   const defaultFocus=['peTTM','peFY','evEbitda','proxyEvEbitda','forwardPE','qGrowth','qNetMargin','revenue','operatingIncome','netIncome','ebitda','totalDebt','equity','operatingCashFlow','freeCashFlow','revenueGrowth','operatingMargin','roe','fcfMargin'];
-  const state={data:null,focus:'',custom:null,size:5,period:'latest',unit:'bn',filter:'all',stars:new Set(defaultFocus),hidden:new Set(),
-    bar:'operatingMargin',trend:'netMargin',draft:[],published:null,privateData:null,details:{},diagramCompany:'',autoFocus:new Set(),dropped:new Set()};
-  ['solvency-rank','solvency-score','recent-cash','recent-disclosedCash','recent-cashIncludingRestricted','recent-cashShort','note-cash','note-cashShort','note-treasuries','note-assets','note-ppe','note-totalDebt','note-liabilities','note-leasesTotal','note-interestCover','note-equityAssets','note-debtCoverage','note-cet1','note-firstDebtDue','note-shortDebtShare','note-dueCash','due-debt-y1','due-debt-y2','due-debt-total','due-operatingLease-y1','due-financeLease-y1','due-allLeases-y1'].forEach(k=>state.stars.add(k));
+  const state={data:null,focus:'',custom:null,size:9,period:'latest',unit:'bn',filter:'all',stars:new Set(defaultFocus),
+    draft:[],quarterly:null,peerQuarterly:{},published:null,privateData:null,details:{},diagramCompany:'',autoFocus:new Set(),dropped:new Set()};
+  ['core-revenue','core-netIncome','core-operatingCashFlow','core-freeCashFlow','core-cash','core-totalDebt','core-revenueGrowth','core-netMargin','core-fcfMargin','core-roe','core-roa','core-currentRatio','core-liabAssets','solvency-rank','solvency-score','recent-cash','recent-disclosedCash','recent-cashIncludingRestricted','recent-cashShort','note-cash','note-cashShort','note-treasuries','note-assets','note-ppe','note-totalDebt','note-liabilities','note-leasesTotal','note-interestCover','note-equityAssets','note-debtCoverage','note-cet1','note-firstDebtDue','note-shortDebtShare','note-dueCash','due-debt-y1','due-debt-y2','due-debt-total','due-operatingLease-y1','due-financeLease-y1','due-allLeases-y1'].forEach(k=>state.stars.add(k));
   const highlighted=k=>state.stars.has(k)||(state.autoFocus.has(k)&&!state.dropped.has(k));
   const num=(n,digits=1)=>new Intl.NumberFormat('en-GB',{minimumFractionDigits:digits,maximumFractionDigits:digits}).format(n);
   const pct=n=>!Number.isFinite(n)?'—':n!==0&&Math.abs(n)<0.005?(n<0?'−':'')+'<0.01%':num(n,Math.abs(n)>0&&Math.abs(n)<0.05?2:1)+'%';
   const times=n=>Number.isFinite(n)?num(n,2)+'×':'—';
   const date=iso=>iso?new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}).format(new Date(iso+'T00:00:00Z')):'';
-  const cmult=new Set(['currentRatio','debtEquity','assetTurnover','cashConversion']);
-  const allLabels={...M.fields,...M.labels,...E.marketLabels,...E.quarterLabels};
+  const cmult=new Set(['currentRatio','debtEquity','assetTurnover','cashConversion','interestCover']);
+  const quarterFields={
+    revenue:'Quarterly revenue / total income',grossProfit:'Quarterly gross profit',operatingIncome:'Quarterly operating profit',
+    netIncome:'Quarterly net income',dilutedEps:'Quarterly diluted EPS',cash:'Cash and equivalents',
+    operatingCashFlow:'Quarterly operating cash flow',investingCashFlow:'Quarterly investing cash flow',financingCashFlow:'Quarterly financing cash flow',
+    capex:'Quarterly capital expenditure',freeCashFlow:'Quarterly free cash flow',equity:'Owners’ equity',
+    assets:'Total assets',liabilities:'Total liabilities',totalDebt:'Interest-bearing debt',
+    currentAssets:'Current assets',currentLiabilities:'Current liabilities'
+  };
+  const quarterRatios={
+    revenueGrowth:'Revenue growth · YoY',profitGrowth:'Net income growth · YoY',grossMargin:'Gross margin',
+    operatingMargin:'Operating margin',netMargin:'Net margin',fcfMargin:'Free cash flow margin',cashMargin:'Operating cash flow margin',
+    roe:'Return on equity · trailing',roa:'Return on assets · trailing',currentRatio:'Current ratio',cashConversion:'Cash conversion',
+    cashAssets:'Cash / total assets',cashDebt:'Cash / interest-bearing debt',debtAssets:'Debt / assets',liabAssets:'Liabilities / assets',
+    equityAssets:'Owners’ equity / assets',cashCurrent:'Cash / current liabilities',debtCoverage:'Trailing operating cash flow / debt',
+    interestCover:'Trailing operating profit / interest expense',assetTurnover:'Asset turnover · trailing'
+  };
+  const allLabels={...M.fields,...M.labels,...E.marketLabels,...E.quarterLabels,...E.coreMarketLabels,
+    ...Object.fromEntries([...Object.entries(quarterFields),...Object.entries(quarterRatios)].map(([k,v])=>['core-'+k,v]))};
+  function latestValues(c,i){
+    return c.current[i]?.values||{};
+  }
   const opt=(v,label)=>`<option value="${esc(v)}">${esc(label)}</option>`;
   function amount(n) {
     if(!Number.isFinite(n))return '—';
@@ -43,24 +63,31 @@
     const periods=M.periods(companies);
     if(state.period!=='latest'&&!periods.includes(state.period))state.period='latest';
     const years=companies.map(c=>M.yearFor(c,state.period));
-    const views=ids.map((id,i)=>E.valueView(state.data,id,ticker[i],years[i],state.period));
+    const periodLatest=state.period==='latest';
+    const records=ids.map((id,i)=>Q.listing(state.quarterly,ticker[i],id)||state.peerQuarterly[id]);
+    const current=records.map((record,i)=>periodLatest?Q.view(record,{currency:companies[i].currency,model:companies[i].model}):null);
+    const views=ids.map((id,i)=>E.valueView(state.data,id,ticker[i],years[i],state.period,current[i]));
+    const quarterlyAvailable=periodLatest&&current.some(Boolean);
+    const check=quarterlyAvailable?(co,i,key)=>current[i]?.values[key]:undefined;
     const notes=ids.map((id,i)=>D.yearView(state.details,id,companies[i],years[i]));
-    return {ids,companies,ticker,peers,years,views,periods,report,members,candidates,notes,periodLatest:state.period==='latest',score:M.checklist(companies,years)};
+    return {ids,companies,ticker,peers,years,views,periods,report,members,candidates,notes,periodLatest,current,records,score:M.checklist(companies,years,check)};
   }
   function updateURL() {
     const u=new URL(location.href);
     u.searchParams.set('ticker',state.focus);
-    for(const [k,v] of [['peers',state.custom?.join(',')],['count',state.size===5?null:state.size],['year',state.period==='latest'?null:state.period]]){
+    for(const [k,v] of [['peers',state.custom?.join(',')],['count',state.size===9?null:state.size],['year',state.period==='latest'?null:state.period]]){
       if(v==null)u.searchParams.delete(k);else u.searchParams.set(k,v);
     }
     history.replaceState(null,'',u);
   }
   function value(c,i,key) {
+    if(key.startsWith('core-'))return latestValues(c,i)[key.slice(5)];
+    if(Object.hasOwn(E.coreMarketLabels,key))return c.views[i].values[key];
     return Object.hasOwn(E.marketLabels,key)||Object.hasOwn(E.quarterLabels,key)?c.views[i].values[key]:M.metric(c.companies[i],c.years[i],key);
   }
   function render() {
     const c=comparison(), cos=c.companies;
-    $('period').innerHTML=opt('latest','Latest reported')+c.periods.map(y=>opt(y,'FY ending in '+y)).join('');$('period').value=state.period;
+    $('period').innerHTML=opt('latest','Latest quarter')+c.periods.map(y=>opt(y,'FY ending in '+y)).join('');$('period').value=state.period;
     $('peer-count').value=String(state.size);$('comparison').style.setProperty('--columns',cos.length);
     state.autoFocus=new Set(Notes.focusKeys(c));
     updateFocusPicker();
@@ -71,57 +98,36 @@
     $('peer-basis').textContent=(state.custom?'Selected comparison':'Automatic comparison')+(basis?' · '+basis:'')+(state.custom===null&&c.peers.length<state.size?' · '+c.peers.length+' available':'');
     $('open-bos').hidden=!c.report;
     $('companies').innerHTML=`<div class="column-label"><strong>Comparison item</strong><small>${esc(cos[0].industry)}</small></div>`+
-      cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-brand">${logo(c.ids[i],co.name)}<span class="company-name">${esc(co.name)}</span></span><small>${esc(c.ticker[i])} · ${esc(co.currency)}</small><small>${c.years[i]?esc(date(c.years[i].end)):'No filing for period'}</small><small class="peer-role">${i===0?'Focus company':esc(reason(c.ids[i]))}</small></div>`).join('');
-    const financial=cos.some(M.financial), ratioKeys=financial?['roe','roa','revenueGrowth','profitGrowth']:['operatingMargin','netMargin','grossMargin','roe','roa','revenueGrowth','profitGrowth','fcfMargin','cashMargin'];
-    const trail=ratioKeys.filter(k=>cos.some(co=>co.years.some(y=>Number.isFinite(M.metric(co,y,k)))));
-    const comparisonKeys=[...E.multiples,'earningsYield','qGrowth','qOperatingMargin','qNetMargin']
-      .filter(k=>c.views.some(v=>Number.isFinite(v.values[k])));
-    for(const [component,options,fallback] of [['bar',[...trail,...comparisonKeys],financial?'roe':'operatingMargin'],['trend',trail,financial?'roa':'netMargin']]) {
-      const available=options.length?options:ratioKeys;
-      if(!available.includes(state[component]))state[component]=available.includes(fallback)?fallback:available[0];
-      const select=$(component+'-metric');select.innerHTML=available.map(k=>opt(k,allLabels[k])).join('');select.value=state[component];
-    }
-    renderBars(c);renderTrend(c);Notes.chartControls(c,state,opt);drawNotes(c);renderTables(c);renderSources(c);updateURL();
+      cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-brand">${logo(c.ids[i],co.name)}<span class="company-name">${esc(co.name)}</span></span><small>${esc(c.ticker[i])} · ${esc(co.currency)}</small><small>${c.current[i]?esc(c.current[i].period+(c.current[i].ended?' · '+date(c.current[i].ended):'')):c.years[i]?esc('Annual · '+date(c.years[i].end)):'No filing for period'}</small><small class="peer-role">${i===0?'Focus company':esc(reason(c.ids[i]))}</small></div>`).join('');
+    renderDashboard(c);Notes.chartControls(c,state,opt);drawNotes(c);renderTables(c);renderSources(c);updateURL();
   }
-  function scale(values) {
-    const lo=Math.min(0,...values),hi=Math.max(0,...values),raw=(hi-lo||4)/4,order=10**Math.floor(Math.log10(raw));
-    const step=([1,2,2.5,5,10].find(n=>n*order>=raw)||10)*order;
-    const min=Math.floor(lo/step)*step,max=lo===hi?min+4*step:Math.ceil(hi/step)*step;
-    return {min,max,ticks:Array.from({length:Math.round((max-min)/step)+1},(_,i)=>min+i*step)};
+  function renderDashboard(c){
+    $('quarterly-dashboard-title').textContent=c.periodLatest?'Quarterly comparison charts':'Annual comparison charts';
+    const companies=c.companies.map((co,i)=>{
+      let values;
+      if(c.periodLatest){
+        values={...latestValues(c,i),peTTM:c.views[i].values.peTTMLatest,
+          priceBook:c.views[i].values.priceBookLatest,priceSales:c.views[i].values.priceSalesTTM,
+          evEbitda:c.views[i].values.evEbitdaTTM,proxyEvEbitda:c.views[i].values.proxyEvEbitdaTTM};
+      }else{
+        values={...c.notes[i].v,...Object.fromEntries(Object.keys(M.labels).map(k=>[k,M.metric(co,c.years[i],k)])),
+          ...c.views[i].values,peTTM:c.views[i].values.peFY,freeCashFlow:M.metric(co,c.years[i],'freeCashFlow')};
+      }
+      const current=c.current[i],annual=c.years[i];
+      const record=c.records[i];
+      const history=c.periodLatest&&current?(record.observations||[]).slice(-8).map(observation=>{
+        const view=Q.view(record,{model:co.model,observation});
+        return {label:observation.period,end:observation.end,periodLabel:view?.periodLabel,values:view?.values||{}};
+      }):[];
+      return {id:c.ids[i],name:co.name,ticker:c.ticker[i],model:co.model,currency:co.currency,logo:assetFile(c.ids[i]),
+        periodLabel:c.periodLatest?(current?current.period+(current.ended?' · '+date(current.ended):''):'Quarter unavailable'):(annual?date(annual.end):'Annual period unavailable'),
+        basisLabel:c.periodLatest?current?.kind:co.form,history,
+        values:{...values,earningsGrowth:values.profitGrowth,freeCashFlowMargin:values.fcfMargin,
+          operatingCashFlowMargin:values.cashMargin,revenueTTM:values.ttmRevenue,fcf:values.freeCashFlow??values.fcf}};
+    });
+    window.SharesQuarterlyCharts.render($('quarterly-charts'),{companies,period:c.periodLatest?'quarterly':'annual',
+      periodLabel:c.periodLatest?'Latest reported quarter':'FY ending in '+state.period,focus:c.ids[0]});
   }
-  const axis=n=>new Intl.NumberFormat('en-GB',{maximumFractionDigits:2,notation:Math.abs(n)>=10000?'compact':'standard'}).format(Math.abs(n)<1e-8?0:n);
-  function renderBars(c) {
-    const k=state.bar,values=c.ids.map((_,i)=>value(c,i,k)),valid=values.filter(Number.isFinite),multiple=E.multiples.has(k);
-    if(!valid.length){$('bars').innerHTML='<p class="chart-empty">No reported values for this period.</p>';return;}
-    const s=scale(valid),fmt=multiple?times:pct,left=87,right=405,x=v=>left+(v-s.min)/(s.max-s.min)*(right-left);
-    const line=Math.max(18,Math.min(28,132/c.ids.length)),base=12+c.ids.length*line;
-    const ticks=s.ticks.map(v=>`<line class="${v===0?'zero-line':'axis-line'}" x1="${x(v)}" x2="${x(v)}" y1="4" y2="${base}"/><text x="${x(v)}" y="${base+18}" text-anchor="middle">${axis(v)}${multiple?'×':'%'}</text>`).join('');
-    const bars=values.map((v,i)=>{const y=8+(i+.5)*line;return `<g><title>${esc(c.companies[i].name+' · '+allLabels[k]+' · '+fmt(v))}</title><text x="0" y="${y+4}">${esc(c.ticker[i])}</text>${Number.isFinite(v)?`<rect x="${Math.min(x(0),x(v))}" y="${y-6}" width="${Math.max(1,Math.abs(x(v)-x(0)))}" height="12" rx="3" fill="${colors[i]}"/>`:''}<text class="bar-value" x="477" y="${y+4}" text-anchor="end">${fmt(v)}</text></g>`;}).join('');
-    $('bars').innerHTML=`<svg viewBox="0 0 480 ${base+24}" role="img" aria-label="${esc(allLabels[k]+'. '+c.companies.map((co,i)=>co.name+' '+fmt(values[i])).join(', '))}">${ticks}${bars}</svg>`;
-  }
-  function renderTrend(c) {
-    const k=state.trend,end=state.period==='latest'?'9999':state.period;
-    const series=c.companies.map((co,i)=>state.hidden.has(c.ids[i])?[]:co.years.filter(y=>y.end.slice(0,4)<=end).slice(0,3).map(y=>({year:+y.end.slice(0,4),end:y.end,v:M.metric(co,y,k)})));
-    const years=Array.from(new Set(series.flat().map(p=>p.year))).sort((a,b)=>a-b),valid=series.flat().map(p=>p.v).filter(Number.isFinite);
-    let plot='<p class="chart-empty">No visible values for this metric and period.</p>';
-    if(valid.length){
-      const s=scale(valid),left=55,right=461,base=135,top=10,x=yr=>years.length<2?(left+right)/2:left+(yr-years[0])/(years.at(-1)-years[0])*(right-left),y=v=>base-(v-s.min)/(s.max-s.min)*(base-top);
-      const grid=s.ticks.map(v=>`<line class="${v===0?'zero-line':'axis-line'}" x1="${left}" x2="${right}" y1="${y(v)}" y2="${y(v)}"/><text x="${left-7}" y="${y(v)+4}" text-anchor="end">${axis(v)}%</text>`).join('');
-      const labels=years.map(yr=>`<text x="${x(yr)}" y="154" text-anchor="middle">${yr}</text>`).join('');
-      const lines=series.map((pts,i)=>{let prev;return pts.slice().reverse().map(p=>{
-        if(!Number.isFinite(p.v)){prev=null;return '';}
-        const seg=prev&&p.year===prev.year+1?`<line stroke="${colors[i]}" stroke-width="2.5" x1="${x(prev.year)}" x2="${x(p.year)}" y1="${y(prev.v)}" y2="${y(p.v)}"/>`:'';
-        prev=p;const title=c.companies[i].name+' · '+date(p.end)+' · '+pct(p.v);
-        return seg+`<circle tabindex="0" role="button" aria-label="${esc(title)}" cx="${x(p.year)}" cy="${y(p.v)}" r="4.4" fill="${colors[i]}" stroke="white" stroke-width="1.3"><title>${esc(title)}</title></circle>`;}).join('');}).join('');
-      plot=`<svg viewBox="0 0 480 161" role="group" aria-label="${esc(allLabels[k])} by fiscal year">${grid}${labels}${lines}</svg>`;
-    }
-    const legend=c.ids.map((id,i)=>`<button type="button" data-series="${esc(id)}" aria-pressed="${!state.hidden.has(id)}" aria-label="${esc('Show '+c.companies[i].name+' trend')}"><i class="dot" style="--company-color:${colors[i]}"></i>${esc(c.ticker[i])}</button>`).join('');
-    $('trend').innerHTML=plot+'<div class="chart-legend">'+legend+'</div><output class="trend-readout" aria-live="polite"></output>';
-  }
-  function trendPoint(e) {const p=e.target.closest('circle[aria-label]');if(!p||e.type==='keydown'&&!['Enter',' '].includes(e.key))return;if(e.type==='keydown')e.preventDefault();$('trend').querySelector('output').textContent=p.getAttribute('aria-label');}
-  for(const e of ['click','focusin','keydown'])$('trend').addEventListener(e,trendPoint);
-  $('trend').addEventListener('click',e=>{const b=e.target.closest('[data-series]');if(!b)return;const id=b.dataset.series;if(state.hidden.has(id))state.hidden.delete(id);else state.hidden.add(id);renderTrend(comparison());Array.from($('trend').querySelectorAll('[data-series]')).find(x=>x.dataset.series===id)?.focus({preventScroll:true});});
-
 
   function head(c,title) {
     return `<caption class="sr-only">${esc(title)}</caption><thead class="sr-only"><tr><th scope="col">Comparison item</th>${c.companies.map(co=>`<th scope="col">${esc(co.name)}</th>`).join('')}</tr></thead>`;
@@ -155,18 +161,31 @@
         display('quotePrice',(v,i)=>Number.isFinite(v)?num(v,2)+' '+(c.views[i].m?.quoteUnit||''):'—'),
         display('cap',amount),display('ev',amount),
         ...['peTTM','peFY','evEbitda','proxyEvEbitda','evEbit','priceBook','priceSales'].map(k=>display(k,times,true,true)),
+        ...(c.periodLatest?Object.keys(E.coreMarketLabels).filter(k=>k!=='peTTMLatest'&&c.views.some(v=>Number.isFinite(v.values[k])||v.nm.has(k))).map(k=>display(k,times,true,true)):[]),
         display('earningsYield',pct,true),
         textRow('consensus-date','Consensus price date',i=>date(c.views[i].m?.forwardDate)),
         display('forwardPE',times,true,true)
       ]],
-      ['quarterly','Quarterly & trailing results',[
+      ['quarterly','Quarterly growth & trailing results',[
         textRow('quarter-period','Fiscal quarter',i=>c.views[i].q.period),
+        textRow('quarter-result-source','Quarterly results source',i=>c.current[i]?.kind||c.views[i].q.sourceLabel||(c.views[i].q.source?'Morningstar':null)),
         display('qRevenue',amount),display('qGrowth',pct,true),display('qOperatingMargin',pct,true),display('qNetMargin',pct,true),
         ...(state.period==='latest'?[textRow('trailing-period','Trailing period',i=>c.views[i].q.ended?date(c.views[i].q.ended):c.views[i].q.period),display('ttmRevenue',amount),display('ttmNetCommon',amount)]:[])
       ]],
+      ...(c.periodLatest&&c.current.some(Boolean)?[
+        ['core-statements','Latest quarterly statements',[
+          textRow('quarter-source','Filing source',i=>c.current[i]?.kind),
+          textRow('quarter-end','Quarter ended',i=>c.current[i]?.ended?date(c.current[i].ended):c.current[i]?.period),
+          ...Object.keys(quarterFields).map(k=>display('core-'+k,k==='dilutedEps'?v=>Number.isFinite(v)?num(v,2):'—':amount))
+        ]],
+        ['core-ratios','Latest quarterly ratios',Object.keys(quarterRatios).map(k=>display('core-'+k,
+          cmult.has(k)||k==='interestCover'?times:pct,
+          ['revenueGrowth','profitGrowth','grossMargin','operatingMargin','netMargin','fcfMargin','roe','roa','equityAssets','debtAssets','liabAssets'].includes(k),
+          ['debtAssets','liabAssets'].includes(k)))]
+      ]:[]),
       ...Notes.groups(c,{row:rowCells,text:textRow,show:k=>state.filter!=='focus'||highlighted(k),amount,pct,times,best,fmtDate:date,period:state.period}),
-      ...M.groups.map(([title,keys],i)=>[['income','balance','cash'][i],title,keys.map(k=>display(k,amount))]),
-      ['ratios','Financial ratios',Object.keys(M.labels).map(k=>display(k,cmult.has(k)?times:pct,!cmult.has(k)&&k!=='equityRatio'))]
+      ...M.groups.map(([title,keys],i)=>[['income','balance','cash'][i],'Annual '+title.toLowerCase(),keys.map(k=>display(k,amount))]),
+      ['ratios','Annual financial ratios',Object.keys(M.labels).map(k=>display(k,cmult.has(k)?times:pct,!cmult.has(k)&&k!=='equityRatio'))]
     ];
     const scrollLeft=$('company-scroll').scrollLeft;
     $('statement-groups').innerHTML=headers.map(([id,title,rows],i)=>{
@@ -179,14 +198,16 @@
     const summary=sc.counted?(names+(sc.winners.length>1?' share the lead':' leads the checklist')):'No comparable score';
     const detail=sc.counted?`${format(sc.scores[sc.winners[0]])} of ${sc.counted} available points · ${sc.counted} of ${sc.rows.length} criteria scored`:
       c.ids.length===1?'Choose a competitor to score the checklist.':'No checklist measure is available for every selected company in this period.';
-    $('check-result').innerHTML=`<strong>${esc(summary)}</strong>${esc(detail)}`;
+    $('check-result').innerHTML=`<strong>${esc(summary)}</strong>${esc((c.periodLatest?(c.current.some(Boolean)?'Quarterly · ':'Annual fallback · '):'Annual · ')+detail)}`;
     $('check-table').innerHTML=head(c,'Fundamentals checklist')+'<tbody>'+sc.rows.map(r=>rowCells(r.key,M.labels[r.key],r.values,pct,r.winners,false)).join('')+
       rowCells('score','Checklist points',sc.counted?sc.scores:c.ids.map(()=>null),format,sc.winners,false)+'</tbody>';
     for(const el of document.querySelectorAll('[data-sync-scroll],#check-scroll'))el.scrollLeft=scrollLeft;
   }
   function renderSources(c) {
     $('sources').innerHTML=c.companies.map((co,i)=>{
-      const y=c.years[i],v=c.views[i],m=v.m;
+      const y=c.years[i],v=c.views[i],m=v.m,current=c.current[i];
+      const sources=current?[current.observation.reconciledSource,current.ttm?.annualSource,current.observation.priorQuarterBalanceSource,current.observation.quarterBridges?.values?.source,c.records[i]?.filing?.source].filter((u,index,all)=>u&&u!==current.source&&all.indexOf(u)===index):[];
+      const quarterDetails=sources.length?'<p>'+sources.map((u,index)=>link(u,'Quarterly comparison source '+(index+1))).join(' · ')+'</p>':'';
       const refs=Object.entries(y?.refs||{}).filter(([k])=>M.fields[k]||['preferredEquity','noncontrollingInterest','dilutedEps','bookCommon'].includes(k)).map(([k,ref])=>{
         const raw=String(ref), file=raw.match(/^(R\d+\.htm)\b/i);
         const urls=Array.from(new Set(raw.match(/https:\/\/[^\s;]+/g)||[]));
@@ -198,15 +219,16 @@
       }).join('');
       const market=m?`<p><b>Market inputs.</b> ${esc(m.method||'')}${m.date?' · '+esc(date(m.date)):''}${m.anchorDate?' · Anchor '+esc(date(m.anchorDate)):''}${m.shareDate?' · Share count '+esc(date(m.shareDate)):''}${m.fxDate?' · FX '+esc(date(m.fxDate)):''}. ${(m.sources||[]).map(s=>link(s.url,s.label)).join(' · ')}</p>`:'';
       const notes=Array.from(new Set(Object.values(co.notes||{}).flat().filter(s=>typeof s==='string')));
-      return `<details class="source-card"><summary>${esc(co.name)} · ${esc(co.form)}</summary><p>Report period ended ${esc(date(co.period))}${co.filed?' · Filed or published '+esc(date(co.filed)):''}.</p><p>${co.sources.map(s=>link(s.url,s.label)).join(' · ')}</p>${market}${v.q.source?`<p>${link(v.q.source,v.q.sourceLabel||'Morningstar financial statements')} · ${v.q.ended?'Filed':'Snapshot'} ${esc(date(v.q.asOf))}.</p>`:''}${refs?`<p><b>Figures for ${esc(date(y.end))}</b></p><ul>${refs}</ul>`:''}${Notes.sourceList(c,i,state.details,link,date)}${notes.length?`<ul>${notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul>`:''}</details>`;
+      return `<details class="source-card"><summary>${esc(co.name)} · ${esc(co.form)}</summary><p>Report period ended ${esc(date(co.period))}${co.filed?' · Filed or published '+esc(date(co.filed)):''}.</p><p>${co.sources.map(s=>link(s.url,s.label)).join(' · ')}</p>${market}${v.q.source?`<p>${link(v.q.source,v.q.sourceLabel||'Morningstar financial statements')} · ${v.q.ended?'Filed':'Snapshot'} ${esc(date(v.q.asOf))}.</p>`:''}${quarterDetails}${refs?`<p><b>Figures for ${esc(date(y.end))}</b></p><ul>${refs}</ul>`:''}${Notes.sourceList(c,i,state.details,link,date)}${notes.length?`<ul>${notes.map(n=>'<li>'+esc(n)+'</li>').join('')}</ul>`:''}</details>`;
     }).join('');
     const r=c.report;
     const bosRef=r?`<p><b>BOS peer comparison.</b> ${link(r.source+'#page='+r.page,'Original comparison, page '+r.page)} · ${esc(date(r.date))}.</p>`:'';
     $('method-text').innerHTML=bosRef+`<p>Filing snapshot checked ${esc(date(state.data.asOf))}. The 110 focus listings represent 97 issuers. Share classes and exchange listings for one issuer share its financial statements. Automatic selection starts with matched companies from the Beta 2 BOS report and continues with industry peers, then related industries. The selection stops when those candidates run out. Editing peers lets you choose up to ten. The BOS comparison preserves the report’s own group and dates. Connected Beta 2 research supplies its detailed table on this browser.</p>
-    <p>Each column shows its filing currency and fiscal year-end. Amounts follow the units control. Share prices use the displayed quotation unit. Market values are estimates where a filed share count is multiplied by a close or an earlier equity value is updated by the change in price and FX. Each company’s source panel identifies its dates and method. Reported forward P/E comes from the dated consensus comparison.</p>
+    <p>Each column shows its filing currency and comparison period. Amounts follow the units control. Share prices use the displayed quotation unit. Market values are estimates where a filed share count is multiplied by a close or an earlier equity value is updated by the change in price and FX. Each company’s source panel identifies its dates and method. Reported forward P/E comes from the dated consensus comparison.</p>
     <p>Trailing P/E divides equity market value by trailing 12-month earnings available to common shareholders. Filed-year P/E uses annual common earnings, or verified matching per-share figures where available. Earnings yield is the inverse of filed-year P/E. Price/sales uses revenue. Price/book uses common book equity. A multiple with nonpositive earnings or enterprise value is shown as N/M. Valuation rows highlight the lowest comparable positive multiple or the highest earnings yield. Valuations carry no fundamentals checklist points.</p>
     <p>Enterprise value includes common equity market value, interest-bearing debt, preferred equity and noncontrolling interests, less cash. The EV proxy uses common equity market value plus debt less cash. EBITDA is filing-reported or operating profit plus verified depreciation and amortisation. For Petrobras, the market value includes common and participating preferred shares at their respective prices. Each multiple uses the named denominator. Banks, financial groups and REITs omit the enterprise multiples.</p>
-    <p>Morningstar’s quarterly figures use fiscal-quarter labels. Year-on-year growth compares the same fiscal quarter one year earlier. Morningstar supplies the published trailing figures for focus listings. For filing peers with a verified interim comparison, trailing results add the current fiscal year to date to the last annual result and subtract the prior-year comparative. A historical fiscal-year selection shows the associated fourth quarter and dated historical market observations when available. Historical market prices are never paired with earnings from a later filing without a verified publication date.</p>
+    <p>Core comparisons use the latest confirmed quarterly data in the 26 November snapshot. Source priority is a Form 10-Q, a verified fiscal fourth-quarter bridge or a current issuer release, followed by the dated Morningstar quarterly statements. Additional peers can use verified SEC interim filing facts. Rows show reporting currencies. Year-on-year growth compares the same fiscal quarter. Quarterly cash flows use standalone quarters or comparable year-to-date differences. Trailing returns use twelve months of earnings and same-quarter year-over-year average balances. Morningstar trailing figures enter core ratios when the last four consecutive quarterly figures reconcile to the vendor total. Valuation ratios require a market observation on or after the relevant source date. Historical fiscal-year selections use audited annual statements and the dated market observations.</p>
+    <p>${Object.values(state.quarterly?.archives||{}).map(a=>link('https://notwins.github.io/market-intelligence-content/'+a.path,a.fileName+' (.gz)')).join(' · ')}</p>
     <p>Growth requires a positive prior-year base. Margins divide the measure by revenue. Returns use net income to owners and average opening and closing equity or assets. Free cash flow subtracts cash purchases of PP&amp;E from operating cash flow. Cash conversion divides operating cash flow by net income. Asset turnover uses average assets. A dash marks a missing or inapplicable amount.</p>
     <p>Stars highlight rows you want to follow. Green checks mark leaders among comparable available values at the displayed precision. Checklist points require a figure for every company. Tied companies split a point. Financial institutions and REITs use revenue growth, profit growth, return on equity and return on assets. Company dates, accounting standards and business mix can differ.</p>
     <p>The share selectors order issuer equity values from largest to smallest in USD. The latest balance sheet identifies the newest verified reporting period in this snapshot. The cash observation has its own reporting date. A cash-flow closing balance follows the issuer’s cash-flow definition and may include restricted cash. Annual cash, securities and maturity schedules use the chosen fiscal year. U.S. Treasury holdings use the portfolio and measurement basis in the filing. Broader government portfolios can include agency or other sovereign securities. Cash equivalents and securities can overlap.</p>
@@ -260,7 +282,7 @@
     if(!$('peer-editor').hidden)renderPeerEditor();
   }
   function focusCompany(ticker){
-    state.focus=ticker;state.custom=null;state.period='latest';state.bar='operatingMargin';state.trend='netMargin';state.diagramCompany='';state.hidden.clear();$('company-scroll').scrollLeft=0;
+    state.focus=ticker;state.custom=null;state.period='latest';state.diagramCompany='';$('company-scroll').scrollLeft=0;
   }
   $('choose-company').addEventListener('change',()=>{const t=$('choose-company').value;if(t!==state.focus&&state.data.listings.some(x=>x.ticker===t)){closePeers();focusCompany(t);render();}});
   function renderPeerEditor(){
@@ -277,13 +299,13 @@
     if(id&&id!==listing().id&&!state.draft.includes(id)&&state.draft.length<E.MAX_PEERS){state.draft.push(id);renderPeerEditor();}});
   $('selected-peers').onclick=event=>{const id=event.target.closest('[data-remove]')?.dataset.remove;if(id){state.draft=state.draft.filter(k=>k!==id);renderPeerEditor();$('peer-add').focus();}};
   $('cancel-peers').onclick=()=>{closePeers();$('choose-peers').focus();};
-  $('auto-peers').onclick=()=>{state.custom=null;state.hidden.clear();closePeers();render();};
-  $('apply-peers').onclick=()=>{state.custom=[...state.draft];state.hidden.clear();closePeers();render();};
+  $('auto-peers').onclick=()=>{state.custom=null;closePeers();render();};
+  $('apply-peers').onclick=()=>{state.custom=[...state.draft];closePeers();render();};
   $('diagram-company').onchange=()=>{state.diagramCompany=$('diagram-company').value;const c=comparison();Notes.chartControls(c,state,opt);drawNotes(c);};
   for(const id of ['distribution-kind','schedule-kind','ranking-metric'])$(id).onchange=()=>drawNotes(comparison());
   for(const id of ['mix-units','geo-filter'])$(id).onchange=()=>renderTables(comparison());
 
-  $('peer-count').onchange=e=>{state.size=E.count(e.target.value);state.custom=null;state.hidden.clear();render();};
+  $('peer-count').onchange=e=>{state.size=E.count(e.target.value);state.custom=null;render();};
   $('period').onchange=e=>{state.period=e.target.value;render();};
   $('units').onchange=e=>{state.unit=e.target.value;const c=comparison();renderTables(c);drawNotes(c);};
   $('row-filter').onchange=e=>{state.filter=e.target.value;renderTables(comparison());};
@@ -292,8 +314,6 @@
     const el=choice==='checklist'?$('checklist'):document.querySelector('[data-section="'+choice+'"]');
     if(el)el.scrollIntoView({block:'start'});e.target.value='';
   };
-  $('bar-metric').onchange=e=>{state.bar=e.target.value;renderBars(comparison());};
-  $('trend-metric').onchange=e=>{state.trend=e.target.value;renderTrend(comparison());};
   $('open-bos').onclick=()=>{renderBOS();$('bos-dialog').showModal();};$('close-bos').onclick=()=>$('bos-dialog').close();
   $('statement-groups').addEventListener('click',e=>{
     const b=e.target.closest('[data-star]');if(!b)return;
@@ -335,15 +355,17 @@
     const current=++generation; $('load-status').hidden=false;$('load-status').textContent='Loading filing and market comparisons…';$('retry').hidden=true;
     try {
       const lib=window.StocksBeta2PeerLibrary;
-      const [base,extra,pub,disclosures]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published(),json('shares-beta3-disclosures-2026-11-26.json').catch(()=>null)]);
+      const [base,extra,pub,disclosures,quarterly,peers]=await Promise.all([M.loadPublished(),json('shares-beta3-comparisons-2026-11-26.json').catch(()=>null),lib?.published().catch(()=>null),json('shares-beta3-disclosures-2026-11-26.json').catch(()=>null),Q.load().catch(()=>null),Q.peerFilings().catch(()=>({}))]);
       if(current!==generation)return;
       if(extra&&extra.version!==1)throw Error('Invalid comparison data');
-      state.details=disclosures?.version===1?disclosures:{};state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
+      state.quarterly=quarterly;state.peerQuarterly=peers;state.details=disclosures?.version===1?disclosures:{};state.data=E.prepare(base,extra||{});state.published=pub;state.privateData=lib?.saved()||null;
       const q=new URLSearchParams(location.search),input=(q.get('ticker')||'GOOG US').toUpperCase();
       state.focus=(base.listings.find(l=>l.ticker===input||l.id===input)||base.listings.find(l=>l.ticker==='GOOG US')||base.listings[0]).ticker;
-      state.size=E.count(q.get('count'));state.custom=q.has('peers')?Array.from(new Set(q.get('peers').split(','))).filter(id=>id!==listing().id&&lookup(id)).slice(0,E.MAX_PEERS):null;
-      state.period=q.get('year')||'latest';render();$('filing-app').hidden=false;$('load-status').hidden=!!extra&&!!disclosures;
-      if(!extra||!disclosures){$('load-status').textContent='Some comparison data could not be loaded.';$('retry').hidden=false;}
+      state.size=q.has('count')?E.count(q.get('count')):9;state.custom=q.has('peers')?Array.from(new Set(q.get('peers').split(','))).filter(id=>id!==listing().id&&lookup(id)).slice(0,E.MAX_PEERS):null;
+      state.period=q.get('year')||'latest';render();$('filing-app').hidden=false;$('load-status').hidden=!!extra&&!!disclosures&&!!quarterly;
+      if(!extra||!disclosures||!quarterly){$('load-status').textContent='Some comparison data could not be loaded.';$('retry').hidden=false;}
+      const anchor=location.hash.slice(1);
+      if(generation===1&&anchor)requestAnimationFrame(()=>$(anchor)?.scrollIntoView({block:'start'}));
       lib?.connected().then(privateData=>{if(current===generation&&privateData){state.privateData=privateData;render();if($('bos-dialog').open)renderBOS();}});
     } catch(error){$('load-status').hidden=false;$('load-status').textContent='Comparison data could not be loaded.';$('retry').hidden=false;console.error('Shares Beta 3',error);}
   }

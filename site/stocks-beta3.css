@@ -221,3 +221,5 @@ dialog#bos-dialog{width:min(1050px,calc(100vw - 24px));max-height:85dvh;border:1
 .diagram-empty{color:#45605f;font-size:13px}.filing-note-refs>summary{margin:8px 0;font-weight:650;cursor:pointer}
 #solvency-ranking,.matrix-section,#checklist{scroll-margin-top:calc(var(--hub-primary-height,0px) + var(--company-head-height,90px) + 8px)}
 @media(max-width:760px){.disclosure-workbench{grid-template-columns:1fr}.ranking-panel,.note-chart{padding:12px}.filing-controls .share-picker-identity{gap:2px 4px}.company-brand{gap:4px}.company-brand .note-logo{width:21px;height:21px}#peer-editor{grid-template-columns:1fr}.peer-actions{grid-column:auto}.diagram-list{max-height:230px}}
+
+#quarterly-dashboard {scroll-margin-top:calc(var(--hub-primary-height,0px) + var(--company-head-height,90px) + 10px)}

@@ -205,3 +205,38 @@ market-fundamentals:empty { display: none; }
   font-weight: 500;
   white-space: nowrap;
 }
+
+.fund-core-quarter {
+  padding: .58rem .65rem;
+  background: #f2f7f9;
+  border: 1px solid #cbdde5;
+  border-left: 3px solid #1e726e;
+  border-radius: 7px;
+  color: #183342;
+}
+.fund-core-quarter h4 { margin: 0; font-size: .87rem; }
+.fund-core-quarter p { margin: .22rem 0 .42rem; font-size: .78rem; color: #3b5464; }
+.fund-core-quarter dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(7.8rem, 100%), 1fr));
+  gap: .4rem .55rem;
+  margin: 0;
+}
+.fund-core-quarter dl > div { min-width: 0; border-top: 1px solid #d8e5eb; padding-top: .25rem; }
+.fund-core-quarter dt { font-size: .76rem; color: #405b6a; }
+.fund-core-quarter dd { margin: .07rem 0 0; font-size: .9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.fund-period-control { display: flex; gap: .25rem; flex-wrap: wrap; padding: .15rem 0; }
+.fund-period-control button {
+  background: #fff;
+  border: 1px solid #afc7d5;
+  border-radius: 5px;
+  color: #244958;
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 650;
+  line-height: 1.35;
+  padding: .28rem .62rem;
+  cursor: pointer;
+}
+.fund-period-control button[aria-pressed="true"] { background: #e1f0ef; color: #124f4a; border-color: #7eb0aa; }
+.fund-period-control button:focus-visible { outline: 2px solid #1e5b84; outline-offset: 1px; }

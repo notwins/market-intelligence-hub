@@ -1,4 +1,4 @@
-/* Financial statements from private online storage or a browser-local import. */
+/* Share cards, quarterly filings and historical financial statements. */
 (function (root) {
   'use strict';
 
@@ -25,7 +25,23 @@
   const publicArchiveUrl = 'https://market-intel-fundamentals-vault.vercel.app/statements-public.json';
   const privateArchiveUrl = 'https://market-intel-fundamentals-vault.vercel.app/statements.bin';
   const privateArchiveKey = 'private-online';
-  let frequency = 'annual';
+  let frequency = 'quarterly';
+  let quarterlyFeedRequest;
+
+  function quarterlyFeed(retry = false) {
+    if (!root.SharesQuarterlyCore) return Promise.resolve(null);
+    if (retry || !quarterlyFeedRequest) quarterlyFeedRequest = root.SharesQuarterlyCore.load(retry).catch(() => null);
+    return quarterlyFeedRequest;
+  }
+
+  function statementCompany(bundle, id, quarterlyBundle) {
+    const history = bundle?.companies?.[id] || null;
+    const core = root.SharesQuarterlyCore;
+    const record = core?.listing(quarterlyBundle, id);
+    const current = core?.view(record);
+    if (!current) return history;
+    return core.overlay(history || { statements: {}, quarterly: {}, quarterlyCapturedAt: quarterlyBundle.asOf }, record);
+  }
   const frequencyKey = 'mih.fundamentals.frequency';
   let temporary = false, writing = false;
   const importPanels = new Set();
@@ -741,11 +757,28 @@
   }
 
   function reportContent(company, key, id, compareYears = false, grouped = false, quarterly = false, compact = false) {
-    const original = quarterly ? company.quarterly?.[key] : company.statements[key];
-    if (!original) return { html: '<p class="fund-note">Morningstar supplied no quarterly figures for this statement.</p>' };
+    const original = quarterly ? company.quarterly?.[key] : company.statements?.[key];
+    if (!original) return { html: '<p class="fund-note">This statement has no '
+      + (quarterly ? 'quarterly' : 'annual') + ' figures available.</p>' };
+    const core = quarterly ? company.coreQuarter : null;
     // TSMC's audited FY2025 filings reconcile to the export totals in Taiwan dollars.
     // The provider's field mirrors the listing currency for several other cross-listings.
-    const report = { ...original, currency: id === 'TSM US' ? 'TWD' : '', compact };
+    const report = { ...original, currency: core ? original.currency : id === 'TSM US' ? 'TWD' : '', compact };
+    const filingNote = core ? '<p class="fund-note"><b>' + esc(core.periodLabel) + '</b> · '
+      + '<a href="' + esc(core.source) + '" target="_blank" rel="noopener noreferrer">' + esc(core.kind) + '</a>'
+      + (core.kind === 'Morningstar' ? '' : ' · Published ' + esc(core.asOf || 'date unavailable'))
+      + '. This period uses figures from the linked source where available. The table also shows figures from the statement history.</p>' : '';
+    const currentCash = core?.observation;
+    const filingCash = key === 'cash' && currentCash?.span === 'quarter' && Number.isFinite(core.values.operatingCashFlow);
+    const ytdCash = currentCash?.ytd?.operatingCashFlow;
+    const reconciled = filingCash && currentCash.reconciledFields?.values?.includes('operatingCashFlow')
+      && /^https:\/\//i.test(currentCash.reconciledSource);
+    const cashBasis = filingCash ? '<p class="fund-note">Latest operating cash flow covers the standalone quarter.'
+      + (currentCash.quarter > 1 && Number.isFinite(ytdCash) ? ' Filed year-to-date operating cash flow was '
+        + esc(original.currency + ' ' + number.format(ytdCash) + 'm') + '.' : '')
+      + (reconciled ? ' <a href="' + esc(currentCash.reconciledSource)
+        + '" target="_blank" rel="noopener noreferrer">Quarter figure reconciled with Morningstar</a>.' : '')
+      + '</p>' : '';
     const options = report.rows.map((row, index) => ({ row, index })).filter(({ row }) => row[2].some(Number.isFinite));
     const selected = options.find(({ row }) => initialSeries[key].test(row[1])) || options[0];
     const title = key === 'income' ? 'Income statement · ' : '';
@@ -764,16 +797,19 @@
       )).join('') + '</select></label><div data-fund-chart>' + chart(report, selected.index) + '</div></details>' : '';
     return {
       report,
-      html: '<p class="fund-note">' + title + (quarterly ? 'Quarterly' : 'Annual') + ' · As Originally Reported · Fiscal year ends ' + esc(report.fiscalEnd)
+      html: filingNote + '<p class="fund-note">' + title + (quarterly ? 'Quarterly' : 'Annual') + ' · As Originally Reported · Fiscal year ends ' + esc(report.fiscalEnd)
         + (compact ? ". M = millions · '000 = thousands. Each line uses a consistent unit. "
           : '. Amounts in ' + esc(scale) + ', with shares in millions and per-share figures as reported. ')
-        + 'Export currency field: ' + esc(original.currency) + '.'
+        + (core ? 'Reporting currency: ' : 'Export currency field: ') + esc(original.currency) + '.'
         + (report.periods.includes('TTM') ? ' TTM is trailing 12 months.' : '') + '</p>'
         + summary + (compareYears ? comparisonPlot(report, key, views, quarterly) : '') + chartPanel
         + (compact && quarterly && key === 'income'
           ? '<p class="fund-note">Quarter-over-quarter (QoQ) compares adjacent fiscal quarters using the absolute prior-quarter amount. A dash marks a missing figure or zero comparison base.</p>' : '')
-        + table(report, key, grouped, quarterly) + '<p class="fund-note">Captured ' + esc(quarterly ? company.quarterlyCapturedAt : company.capturedAt.slice(0, 10))
-        + ' (SGT). Dashes mark unavailable values.</p>'
+        + table(report, key, grouped, quarterly) + '<p class="fund-note">'
+        + ((quarterly ? company.quarterlyCapturedAt : company.capturedAt?.slice(0, 10))
+          ? 'Statement history captured ' + esc(quarterly ? company.quarterlyCapturedAt : company.capturedAt.slice(0, 10)) + ' (SGT). '
+          : '')
+        + 'Dashes mark unavailable values.</p>' + cashBasis
     };
   }
 
@@ -823,17 +859,24 @@
     fit.addEventListener('click', () => syncHeight(fit.getAttribute('aria-pressed') !== 'true'));
   }
 
-  function paintStatement(disclosure, id) {
+  const statementRequests = new WeakMap();
+
+  async function paintStatement(disclosure, id, force = false) {
     const body = disclosure.querySelector('[data-fund-body]');
-    const quarterly = frequency === 'quarterly';
-    if (!publicStatements && publicState !== 'unavailable') {
-      body.innerHTML = '<p class="fund-note" role="status">Loading public financial statements…</p>';
-      readPublic().catch(load).finally(() => {
-        if (disclosure.open && disclosure.isConnected) paintStatement(disclosure, id);
-      });
-      return;
+    const display = disclosure.closest('market-fundamentals')?.dataset.statementFrequency || frequency;
+    const quarterly = display === 'quarterly';
+    const pending = Symbol();
+    statementRequests.set(disclosure, pending);
+    if (!publicStatements || (quarterly && !root.SharesQuarterlyCore?.data) || force) {
+      body.innerHTML = '<p class="fund-note" role="status">Loading financial statements…</p>';
     }
-    const company = (publicStatements ?? memory)?.companies[id];
+    const [bundle, current] = await Promise.all([
+      readPublic(force).catch(async () => { await load().catch(() => {}); return publicStatements ?? memory; }),
+      quarterly ? quarterlyFeed(force) : null
+    ]);
+    if (!disclosure.isConnected || statementRequests.get(disclosure) !== pending) return;
+    if (!disclosure.open) { body.replaceChildren(); return; }
+    const company = quarterly ? statementCompany(bundle, id, current) : bundle?.companies?.[id];
     if (!company || (quarterly && !company.quarterly)) {
       body.innerHTML = publicState === 'ready' ? '<p class="fund-note">No statements available for this listing and period.</p>'
         : '<p class="fund-note" role="status">Public statements could not load.</p><button type="button">Retry statements</button>';
@@ -867,9 +910,7 @@
   }
 
   function paintStatementAfterRetry(disclosure, id) {
-    const retry = readPublic(true);
-    paintStatement(disclosure, id);
-    retry.then(updateImportPanels, () => {});
+    paintStatement(disclosure, id, true).then(updateImportPanels, () => {});
   }
 
   function rowsFor([id, mic, symbol], research, label) {
@@ -877,6 +918,10 @@
       + encodeURIComponent(symbol.toLowerCase()) + '/financials';
     return '<section class="fund-inline" data-no-ticker-links>'
       + (label ? '<h4 class="fund-card-heading">' + esc(label) + '</h4>' : '')
+      + '<div data-fund-core></div>'
+      + (!doc?.querySelector('[data-fund-frequency]') ? '<div class="fund-period-control" role="group" aria-label="Statement period">'
+        + '<button type="button" data-fund-period="quarterly" aria-pressed="true">Quarterly</button>'
+        + '<button type="button" data-fund-period="annual" aria-pressed="false">Annual</button></div>' : '')
       + (research ? '<details class="fund-research"><summary>BOS Equity Research</summary>'
         + '<p class="fund-note" data-fund-research>Loading the listing’s equity research…</p></details>' : '')
       + Object.entries(types).map(([key, title]) => '<details class="fund-statement" data-fund-statement="' + key
@@ -889,11 +934,12 @@
     const listings = await directory();
     const listing = findListing(item, listings);
     if (!listing) return null;
-    const [bundle, briefs] = await Promise.all([
-      readPublic().catch(async () => { await load(); return memory; }), readResearch().catch(() => ({}))
+    const [bundle, briefs, current] = await Promise.all([
+      readPublic().catch(async () => { await load().catch(() => {}); return publicStatements ?? memory; }),
+      readResearch().catch(() => ({})), quarterlyFeed()
     ]);
     const [id, mic, symbol] = listing;
-    return { id, mic, symbol, company: bundle?.companies?.[id] || null,
+    return { id, mic, symbol, company: statementCompany(bundle, id, current),
       research: briefs[id] || null,
       statementsUrl: 'https://notwins.github.io/market-intelligence-hub/stocks-beta2.html?ticker='
         + encodeURIComponent(id) + '&research=1',
@@ -930,7 +976,7 @@
   }
   const frequencyControl = doc.querySelector('[data-fund-frequency]');
   if (frequencyControl) {
-    try { if (root.localStorage.getItem(frequencyKey) === 'quarterly') frequency = 'quarterly'; } catch {}
+    try { if (root.localStorage.getItem(frequencyKey) === 'annual') frequency = 'annual'; } catch {}
     frequencyControl.value = frequency;
     frequencyControl.addEventListener('change', () => {
       frequency = frequencyControl.value === 'quarterly' ? 'quarterly' : 'annual';
@@ -954,6 +1000,12 @@
         if (!match || !this.isConnected) return;
         this.innerHTML = rowsFor(match, this.hasAttribute('data-bos-research'), this.dataset.label);
         const refresh = () => {
+          const quarter = this.querySelector('[data-fund-core]');
+          quarterlyFeed().then(bundle => {
+            if (!this.isConnected || !bundle) return;
+            const core = root.SharesQuarterlyCore;
+            quarter.innerHTML = core.card(core.listing(bundle, match[0]));
+          });
           for (const detail of this.querySelectorAll('[data-fund-statement][open]')) paintStatement(detail, match[0]);
           for (const detail of this.querySelectorAll('[data-fund-statement]:not([open])')) {
             detail.querySelector('[data-fund-body]').replaceChildren();
@@ -964,7 +1016,16 @@
           if (!detail.matches('[data-fund-statement]') || !detail.open || detail.querySelector('[data-fund-body]').childElementCount) return;
           paintStatement(detail, match[0]);
         }, true);
+        this.addEventListener('click', event => {
+          const control = event.target.closest('[data-fund-period]');
+          if (!control || control.getAttribute('aria-pressed') === 'true') return;
+          this.dataset.statementFrequency = control.dataset.fundPeriod;
+          for (const button of this.querySelectorAll('[data-fund-period]'))
+            button.setAttribute('aria-pressed', String(button === control));
+          refresh();
+        });
         this.refresh = refresh;
+        refresh();
         doc.addEventListener('fundamentals-updated', refresh);
         this.dispatchEvent(new CustomEvent('fund-statements-ready', { bubbles: true }));
         const link = this.querySelector('[data-fund-research]');
