@@ -7,16 +7,19 @@
     assets: 'Total assets', currentLiabilities: 'Current liabilities', liabilities: 'Total liabilities',
     equity: 'Equity attributable to owners', operatingCashFlow: 'Operating cash flow',
     investingCashFlow: 'Net investing cash flow', financingCashFlow: 'Net financing cash flow',
-    capex: 'Cash purchases of PP&E', freeCashFlow: 'Free cash flow'
+    capex: 'Cash purchases of PP&E', freeCashFlow: 'Free cash flow', netCommon:'Net income to common shareholders',
+    ebitda:'EBITDA', depreciationAmortization:'Depreciation and amortisation', totalDebt:'Interest-bearing debt'
   };
   const labels = {
     revenueGrowth: 'Revenue growth', profitGrowth: 'Net income growth', grossMargin: 'Gross margin',
     operatingMargin: 'Operating margin', netMargin: 'Net margin', roe: 'Return on equity',
-    roa: 'Return on assets', fcfMargin: 'Free cash flow margin', currentRatio: 'Current ratio'
+    roa: 'Return on assets', fcfMargin: 'Free cash flow margin', currentRatio: 'Current ratio',
+    cashMargin:'Operating cash flow margin', debtEquity:'Debt / equity', assetTurnover:'Asset turnover',
+    equityRatio:'Equity / assets', cashConversion:'Operating cash flow / net income'
   };
   const groups = [
-    ['Income statement', ['revenue','grossProfit','operatingIncome','netIncome']],
-    ['Balance sheet', ['cash','currentAssets','assets','currentLiabilities','liabilities','equity']],
+    ['Income statement', ['revenue','grossProfit','operatingIncome','depreciationAmortization','ebitda','netIncome','netCommon']],
+    ['Balance sheet', ['cash','currentAssets','assets','currentLiabilities','liabilities','totalDebt','equity']],
     ['Cash flow statement', ['operatingCashFlow','investingCashFlow','financingCashFlow','capex','freeCashFlow']]
   ];
   function yearFor(company, period) {
@@ -49,6 +52,11 @@
       case 'profitGrowth': return growth('netIncome');
       case 'roe': return returns('equity');
       case 'roa': return returns('assets');
+      case 'cashMargin': return financial(company) ? null : ratio(current.operatingCashFlow,current.revenue);
+      case 'debtEquity': return !financial(company) && valid(current.totalDebt) && current.equity>0 ? current.totalDebt/current.equity : null;
+      case 'equityRatio': return ratio(current.equity,current.assets);
+      case 'cashConversion': return !financial(company) && valid(current.operatingCashFlow) && current.netIncome>0 ? current.operatingCashFlow/current.netIncome : null;
+      case 'assetTurnover': return !financial(company) && valid(current.revenue) && current.assets>0 && prev.assets>0 ? current.revenue/((current.assets+prev.assets)/2) : null;
       case 'freeCashFlow': return !financial(company) && valid(current.operatingCashFlow) && valid(current.capex)
         ? current.operatingCashFlow - current.capex : null;
       case 'grossMargin': return financial(company) ? null : ratio(current.grossProfit,current.revenue);
@@ -86,9 +94,9 @@
     const winners = counted ? scores.flatMap((s,i) => Math.abs(s-best) < 1e-8 ? [i] : []) : [];
     return {rows,scores,counted,winners};
   }
-  function initialPeers(data,id) {
-    const peerIds = data.companies[id]?.peers || [];
-    return [...new Set(peerIds)].filter(key => key !== id && data.companies[key]).slice(0,3);
+  function initialPeers(data,id,size,reportPeers) {
+    const comparison=root.SharesComparison || (typeof module!=='undefined' ? require('./stocks-beta3-comparison.js') : null);
+    return comparison.select(data,id,size,reportPeers);
   }
   function periods(companies) {
     return [...new Set(companies.flatMap(c => c.years.map(y => y.end.slice(0,4))))].sort().reverse();
