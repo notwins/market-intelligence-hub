@@ -118,6 +118,7 @@
   }
   function render() {
     const c=comparison(), cos=c.companies;
+    $('nvda-history-link').hidden=!/^NVDA(?:\s|$)/i.test(c.ticker[0]);
     const auto=c.latest?(c.latest.has10Q?'Latest 10-Q quarter · ':'Latest reported quarter · ')+Q.labelQuarter(c.latest.quarter):'Latest 10-Q quarter';
     const offered=c.quarters.map(({quarter,coverage})=>opt(quarter,Q.labelQuarter(quarter)+' · '+coverage+'/'+cos.length+' reporting'));
     if(c.isQuarter&&c.calendar&&!c.quarters.some(item=>item.quarter===c.calendar))offered.unshift(opt(c.calendar,Q.labelQuarter(c.calendar)+' · no filings'));

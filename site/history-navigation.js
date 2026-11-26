@@ -15,6 +15,7 @@ const groups=[
   ['stocks-beta','Stocks BETA','shares','stocks-beta.html'],
   ['stocks-beta2','Stocks BETA 2','shares','stocks-beta2.html'],
   ['stocks-beta3','Shares Beta 3 · 10-K filings','bond','stocks-beta3.html'],
+  ['nvda-history','NVIDIA Historical','trend','nvda-history.html'],
   ['shares','Share prices','shares'],
   ['si','SI pricing','bond'],
   ['beta2-shares','Event studies','event'],

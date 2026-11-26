@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="NVIDIA quarterly and annual financial history, ten years of prices and valuation, comparisons with 30 peers, and credit analysis.">
+<title>NVIDIA Historical · Market Intel Shares</title>
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
+<link rel="stylesheet" href="nvda-history.css?v=1">
+<script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
+<script defer src="nvda-history-charts.js?v=1"></script>
+<script defer src="nvda-history.js?v=1"></script>
+</head>
+<body class="nvda-history-page">
+<a class="nv-skip" href="#main">Skip to analysis</a>
+<main id="main" class="nv-main">
+<header class="nv-hero" id="overview"><div class="nv-shell">
+  <nav class="nv-crumb" aria-label="Breadcrumb"><a href="stocks-beta.html">Shares</a><span>/</span><a href="v4.html#history/shares">Historical</a><span>/</span><span aria-current="page">NVIDIA</span></nav>
+  <div class="nv-hero-grid">
+    <div class="nv-hero-copy">
+      <div class="nv-brand"><img src="assets/company-logos/NVDA.webp" width="44" height="44" alt=""><span>NASDAQ <i></i> NVDA</span></div>
+      <h1>NVIDIA<br><em>in history.</em></h1>
+      <p>Explore how NVIDIA’s earnings, balance sheet and valuation changed as the business scaled, and how it compares with 30 technology peers.</p>
+      <div class="nv-hero-links"><a class="nv-primary" href="#financials">Explore the financials <span aria-hidden="true">↓</span></a><a href="#peers">Compare peers <span aria-hidden="true">↗</span></a></div>
+    </div>
+    <figure class="nv-hero-image"><img src="assets/nvda-history-chip.webp" width="1200" height="800" alt="" fetchpriority="high"><figcaption><span>AI infrastructure</span><span>Concept illustration</span></figcaption></figure>
+  </div>
+  <div class="nv-hero-foot"><span><i></i> 27 November 2026 snapshot</span><span>Quarter ended <strong>25 Oct 2026</strong></span><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000088/q3fy27pr.htm">Earnings filing ↗</a></div>
+</div></header>
+<nav class="nv-jump" aria-label="NVIDIA sections"><div class="nv-shell"><a href="#overview" aria-current="location">Overview</a><a href="#financials">Financials</a><a href="#market">Market history</a><a href="#peers">Peers</a><a href="#credit">Credit</a><a href="#sources">Sources</a></div></nav>
+<div class="nv-shell nv-status" id="nv-status" role="status" hidden><span></span><button type="button" id="nv-retry" hidden>Retry</button></div>
+<section class="nv-section nv-shell nv-summary" aria-label="Latest NVIDIA results">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Latest actuals · Q3 FY2027</p><h2>Revenue doubled year over year</h2></div><p>NVIDIA reported $107.6 billion in data-center revenue, roughly 93% of consolidated sales. GAAP gross margin reached 74.8% and diluted EPS was $2.70.</p></div>
+  <dl class="nv-kpis nv-reveal">
+    <div><dt>Revenue</dt><dd>$115.84B</dd><small>+$19.62B QoQ · +20.39%</small></div>
+    <div><dt>GAAP net income</dt><dd>$65.29B</dd><small>YoY from $31.91B</small></div>
+    <div><dt>Total assets</dt><dd>$372.19B</dd><small>$266.67B shareholders’ equity</small></div>
+    <div><dt>Gross margin</dt><dd>74.82%</dd><small>−0.15 percentage points QoQ</small></div>
+  </dl>
+  <div class="nv-insights nv-reveal">
+    <article><h3>The scale changed</h3><p>Annual revenue rose from $26.9B in FY2022 to $215.9B in FY2026. The latest quarter alone exceeds half of that FY2026 total.</p><a href="#financials" data-story="annual">See annual revenue ↗</a></article>
+    <article><h3>Profit grew faster</h3><p>GAAP net income rose from $31.9B to $65.3B year over year. Margins show how much of each sales dollar became profit.</p><a href="#financials" data-story="margin">Follow the margins ↗</a></article>
+    <article><h3>The balance sheet expanded</h3><p>Assets rose from $206.8B at the January year-end to $372.2B in October. Receivables, inventories and investments help explain the increase.</p><a href="#credit">Read credit analysis ↗</a></article>
+  </div>
+</section>
+<section class="nv-section nv-shell" id="financials">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Company filings</p><h2>Financial history</h2></div><p>Switch between reported amounts, dollar changes and growth rates. The actual period end appears with each observation.</p></div>
+  <div class="nv-panel nv-reveal">
+    <div class="nv-panel-head"><div><h3 id="nv-fin-chart-title">Revenue history</h3><p id="nv-fin-detail" class="nv-muted"></p></div>
+      <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label><label>Metric<select id="nv-fin-metric"></select></label><label>View<select id="nv-fin-mode"></select></label></div>
+    </div>
+    <div class="nv-chart" id="nv-fin-chart"></div>
+    <p class="nv-note">Growth rates use a positive comparison base. Margin movements are shown in percentage points.</p>
+  </div>
+  <div class="nv-grid-2 nv-fin-pair">
+    <article class="nv-panel nv-reveal"><h3>Assets, liabilities &amp; equity</h3><p class="nv-muted">Closing balances · USD billions</p><div class="nv-chart nv-chart-small" id="nv-balance-chart"></div></article>
+    <article class="nv-panel nv-reveal"><h3>Margins over time</h3><p class="nv-muted">Gross, operating and net · % of revenue</p><div class="nv-chart nv-chart-small" id="nv-margin-chart"></div></article>
+  </div>
+  <article class="nv-panel nv-reveal">
+    <div class="nv-panel-head"><div><h3>Statement explorer</h3><p id="nv-sheet-date" class="nv-muted"></p></div>
+      <div class="nv-controls"><label>Filing period<select id="nv-filing-select"></select></label><label>Statement<select id="nv-statement"><option>Income statement</option><option>Balance sheet</option><option>Cash flow</option><option value="Ratios and growth">Margins &amp; ratios</option></select></label></div>
+    </div>
+    <div class="nv-table-scroll" role="region" aria-label="Financial statements" tabindex="0"><table class="nv-table">
+      <thead><tr><th scope="col">Line item</th><th scope="col">Actual</th><th scope="col">QoQ change</th><th scope="col">QoQ growth</th><th scope="col">YoY change</th><th scope="col">YoY growth</th></tr></thead><tbody id="nv-statement-rows"></tbody>
+    </table></div>
+    <p id="nv-filing-source" class="nv-note"></p>
+  </article>
+</section>
+<section class="nv-dark" id="market"><div class="nv-section nv-shell">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">December 2016 – November 2026</p><h2>Price &amp; valuation</h2></div><p>Explore month-end price, distributions and valuation. Choose a Bank of Singapore metric to see dated consensus forward quotes.</p></div>
+  <dl class="nv-kpis nv-market-kpis nv-reveal" id="nv-market-kpis"></dl>
+  <article class="nv-panel nv-market-panel nv-reveal">
+    <div class="nv-panel-head"><div><h3 id="nv-market-title">Split-adjusted price</h3><p id="nv-market-detail" class="nv-muted"></p></div>
+      <div class="nv-controls"><label>Measure<select id="nv-market-metric"></select></label><label>Range<select id="nv-market-range"><option value="12">1 year</option><option value="36">3 years</option><option value="60">5 years</option><option value="120" selected>10 years</option></select></label></div>
+    </div>
+    <div class="nv-chart" id="nv-market-chart"></div>
+    <p class="nv-note">Monthly closes use the last available trading day. November 2026 is partial. Dividends are grouped by ex-date.</p>
+  </article>
+</div></section>
+<section class="nv-section nv-shell" id="peers">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">30 comparison companies</p><h2>Peers across the AI supply chain</h2></div><p>Compare NVIDIA with chip designers, manufacturers, cloud platforms and infrastructure suppliers. Each company retains its own fiscal period end.</p></div>
+  <article class="nv-panel nv-reveal">
+    <div class="nv-panel-head"><div><h3>Compare actuals and valuation</h3><p class="nv-muted" id="nv-peer-detail"></p></div>
+      <div class="nv-controls">
+        <label>Universe<select id="nv-peer-group"><option value="all">All 30 peers</option></select></label>
+        <label>Filing period<select id="nv-peer-period"></select></label>
+        <label>Market month<select id="nv-peer-month"></select></label>
+        <label>Revenue growth<select id="nv-peer-growth"><option value="YoY">YoY</option><option value="QoQ">QoQ</option></select></label>
+        <label>Sort by<select id="nv-peer-sort"><option value="revenue">Revenue</option><option value="income">Net income</option><option value="assets">Assets</option><option value="liabilities">Liabilities</option><option value="margin">Gross margin</option><option value="growth">Revenue growth</option><option value="cap">Market cap</option><option value="pe">Trailing P/E</option><option value="pb">P/B</option><option value="yield">Dividend yield</option></select></label>
+      </div>
+    </div>
+    <div class="nv-table-scroll nv-peer-scroll" role="region" aria-label="Peer company comparison" tabindex="0"><table class="nv-table nv-peer-table">
+      <thead><tr><th scope="col">Company</th><th scope="col">Filing end</th><th scope="col">Revenue<br><small>USD bn</small></th><th scope="col">Net income<br><small>USD bn</small></th><th scope="col">Assets<br><small>USD bn</small></th><th scope="col">Liabilities<br><small>USD bn</small></th><th scope="col">Gross margin</th><th scope="col" id="nv-peer-growth-label">Revenue YoY</th><th scope="col">Market cap<br><small>USD bn</small></th><th scope="col">P/E TTM</th><th scope="col">P/B</th><th scope="col">Yield TTM</th></tr></thead><tbody id="nv-peer-rows"></tbody>
+    </table></div>
+    <p class="nv-note">The NVIDIA row stays at the top. Monetary totals use reported figures and the applicable period FX. Missing values appear as a dash.</p>
+  </article>
+  <article class="nv-panel nv-reveal nv-peer-chart-box">
+    <div class="nv-panel-head"><div><h3>Indexed price comparison</h3><p class="nv-muted">100 at the first shared month · local-currency prices</p></div>
+      <div class="nv-controls"><label>Compare NVIDIA with<select id="nv-line-peer"></select></label><label>Range<select id="nv-peer-range"><option value="12">1 year</option><option value="36">3 years</option><option value="60" selected>5 years</option><option value="120">10 years</option></select></label></div>
+    </div>
+    <div class="nv-chart nv-chart-small" id="nv-peer-chart"></div>
+    <p class="nv-note">Indexed prices exclude dividends and the effect of currency conversion.</p>
+  </article>
+</section>
+<section class="nv-credit-band" id="credit"><div class="nv-section nv-shell">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Issuer credit</p><h2>Liquidity and leverage</h2></div><p>Cash generation remains strong. The June debt issuance, larger investment portfolio and higher working capital change how much cash the business has committed.</p></div>
+  <div class="nv-grid-2 nv-reveal">
+    <article class="nv-panel">
+      <h3>Liquidity at 25 October 2026</h3>
+      <dl class="nv-credit-metrics">
+        <div><dt>Cash and equivalents</dt><dd>$29.09B</dd></div><div><dt>Marketable debt securities</dt><dd>$24.42B</dd></div>
+        <div><dt>Marketable equity securities</dt><dd>$44.22B</dd></div><div><dt>Long-term debt carrying value</dt><dd>$32.37B</dd></div>
+        <div><dt>Current ratio</dt><dd>4.08×</dd></div><div><dt>Quarterly operating cash flow</dt><dd>$48.25B</dd></div>
+      </dl>
+      <p class="nv-note">Cash plus marketable debt securities totaled $53.51B, or $21.14B above reported debt. The equity holdings introduce market-price exposure. <a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000088/q3fy27pr.htm">October quarter release ↗</a></p>
+    </article>
+    <article class="nv-panel">
+      <h3>June 2026 note offering</h3><p class="nv-muted">New notes only · $25.0B principal</p>
+      <ul class="nv-debt-bars" aria-label="New debt by maturity">
+        <li><span>2028</span><i style="--bar:87.5%"></i><b>$3.5B <small>4.250%</small></b></li>
+        <li><span>2029</span><i style="--bar:87.5%"></i><b>$3.5B <small>4.350%</small></b></li>
+        <li><span>2031</span><i style="--bar:100%"></i><b>$4.0B <small>4.500%</small></b></li>
+        <li><span>2033</span><i style="--bar:87.5%"></i><b>$3.5B <small>4.750%</small></b></li>
+        <li><span>2036</span><i style="--bar:100%"></i><b>$4.0B <small>4.950%</small></b></li>
+        <li><span>2046</span><i style="--bar:75%"></i><b>$3.0B <small>5.550%</small></b></li>
+        <li><span>2056</span><i style="--bar:87.5%"></i><b>$3.5B <small>5.625%</small></b></li>
+      </ul>
+      <p class="nv-note"><a href="https://www.sec.gov/Archives/edgar/data/1045810/000119312526273139/d118718d424b5.htm">Prospectus with coupons and maturities ↗</a></p>
+    </article>
+  </div>
+  <div class="nv-insights nv-reveal">
+    <article><h3>Cash generation</h3><p>October-quarter operating cash flow was $48.25B. Capex of $4.42B leaves $43.83B on the dashboard’s operating cash flow less capex measure.</p></article>
+    <article><h3>Capital allocation</h3><p>Quarterly repurchases and dividends totaled $28.15B. Receivables and inventory were both materially higher than at the January year-end.</p></article>
+    <article><h3>Risks to watch</h3><p>Two direct customers accounted for 36% of FY2026 sales. Export controls, customer capex and the investment portfolio can affect cash flow and liquidity.</p><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm">FY2026 10-K risk factors ↗</a></article>
+  </div>
+</div></section>
+<section class="nv-section nv-shell nv-sources" id="sources">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Data &amp; methodology</p><h2>Trace the figures</h2></div><p>Use the actual period end and publication date when comparing results. NVIDIA’s fiscal quarters can end in a different month from those of its peers.</p></div>
+  <div class="nv-source-grid nv-reveal">
+    <article><h3>Filings</h3><p>SEC filings and local equivalents. Some standalone quarters are derived from year-to-date statements. The October quarter uses the 17 November earnings exhibit.</p><a href="https://www.sec.gov/edgar/browse/?CIK=1045810&amp;owner=exclude">NVIDIA SEC filings ↗</a></article>
+    <article><h3>Market history</h3><p>Exchange closes, cash distributions, filed share counts, FX and dated BOS snapshots. Trailing P/E requires positive earnings.</p><a href="stocks-beta2.html?ticker=NVDA+US">Stocks BETA 2 ↗</a></article>
+    <article><h3>Currency &amp; timing</h3><p>USD comparison uses period-average FX for financial-statement flows and period-end FX for balance-sheet figures.</p><a href="stocks-beta3.html?ticker=NVDA+US">Stocks BETA 3 ↗</a></article>
+  </div>
+</section>
+<noscript><p class="nv-shell nv-note">Enable JavaScript to use the historical charts and tables.</p></noscript>
+</main>
+<footer class="nv-foot"><div class="nv-shell"><a href="desk.html">Market Intel</a><a href="v4.html#history/shares">Shares &amp; Historical ↗</a><a href="#overview">Back to top ↑</a></div></footer>
+</body>
+</html>
