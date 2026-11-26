@@ -123,5 +123,23 @@
     updateSalePlan();
   });
 
-  window.AccumulatorMonthlyCash = {render};
+  function restoreChoices(activeQuoteId, saved) {
+    quoteId = activeQuoteId;
+    choices.clear();
+    if (!Array.isArray(saved)) return;
+    for (const entry of saved) {
+      if (!Array.isArray(entry)) continue;
+      const [month, choice] = entry;
+      if (!Number.isInteger(month) || month < 1 || month > 12 || !choice) continue;
+      const price = choice.enteredPrice;
+      choices.set(month, {sell:choice.sell===true, enteredPrice:typeof price==='string'&&price.length<32?price:undefined});
+    }
+  }
+  window.AccumulatorMonthlyCash = {
+    render, restoreChoices,
+    captureChoices: () => Array.from(sales.rows, row => {
+      const [sell, entered] = row.querySelectorAll('input');
+      return [Number(row.dataset.delivery), {sell:sell.checked, enteredPrice:sell.checked?entered.value:choices.get(Number(row.dataset.delivery))?.enteredPrice}];
+    })
+  };
 })();

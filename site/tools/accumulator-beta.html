@@ -95,7 +95,7 @@
 <link rel="stylesheet" href="accumulator-nvda-chart.css?v=20261126">
 <link rel="stylesheet" href="../stocks-beta3-quarterly-charts.css?v=1">
 <link rel="stylesheet" href="accumulator-beta-nvda-analysis.css?v=20261127-test-price">
-<link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127-subtle-heat">
+<link rel="stylesheet" href="accumulator-beta-appearance.css?v=20261127-saved-setups">
 </head>
 <body class="accumulator-beta">
 <div class="top"><nav class="wrap" aria-label="Breadcrumb"><a href="../desk.html">Market Intel</a><span>/</span><a href="../v4.html#tools">Tools</a><span>/</span><a href="accumulator.html">Accumulator</a><span>/</span><b aria-current="page">Beta 2</b><span>/</span><a href="accumulator-3d.html">3D pricing</a></nav></div>
@@ -112,7 +112,8 @@
 </div>
 <section class="panel" aria-labelledby="setup"><div class="heading"><h2 id="setup">Pricing &amp; capital</h2><a href="#accumulator-guide">How to use</a></div>
 <div class="inputs"><label>Indicative structure<select id="quote"></select></label><label>Starting price · USD<input id="spot" type="number" placeholder="Dated NVDA close" min="0.01" max="100000" step="0.01" required></label><label>Target budget · USD<input id="capital" type="number" value="300000" min="0.01" max="1000000000" step="0.01" required></label></div>
-<div class="inline actions"><button type="button" id="close">Use dated NVDA close</button><button id="reset">Restore $100 example</button><span id="marketStatus" class="small" role="status"></span></div>
+<div class="inline actions"><button type="button" id="close">Use dated NVDA close</button><button id="reset">Restore $100 example</button><button type="button" id="beta-setups-open" aria-haspopup="dialog">Saved setups</button><span id="marketStatus" class="small" role="status"></span></div>
+<p id="beta-setup-loaded" class="small" role="status"></p>
 <div class="quote-case" id="quote-case" role="group" aria-label="Economics of the selected quote" hidden>
   <article><h3>Saving per share at the start</h3><strong id="case-saving"></strong><p id="case-saving-note"></p></article>
   <article><h3>If NVDA finishes flat</h3><strong id="case-flat"></strong><p id="case-flat-note"></p></article>
@@ -286,8 +287,9 @@
 <script src="accumulator-benchmark.js?v=1"></script>
 <script src="accumulator-beta-model.js?v=20261126-ko"></script>
 <script src="accumulator-beta-ledger-workings.js?v=20261126-ko"></script>
-<script src="accumulator-beta.js?v=20261127-ko"></script>
-<script src="accumulator-beta-table-view.js?v=20261127-tables"></script>
+<script src="accumulator-beta.js?v=20261127-saved-setups"></script>
+<script src="accumulator-beta-saved-setups.js?v=20261127"></script>
+<script src="accumulator-beta-table-view.js?v=20261127-saved-setups"></script>
 <script src="accumulator-quotes.js?v=20261126-asof"></script><script id="accumulator-model">
 'use strict';
 const Accumulator = (() => {
@@ -372,6 +374,92 @@ function updateClientSheet(){
 window.AccumulatorMarket.getClientSelection=()=>simulation && ({
   quote:chosen(),spot,capital,simulation,path:el('pathName').textContent,usingDatedSpot,scenarioResults
 });
+
+function savedQuote(raw){
+  const id=raw?.originalId||raw?.id;
+  if(typeof id!=='string'||!/^[-a-z0-9]{1,80}$/.test(id)||!['JPM SN','OCBC SI'].includes(raw.product)||
+    !Number.isInteger(raw.months)||raw.months<1||raw.months>12||!Number.isInteger(raw.days)||raw.days<raw.months||raw.days>366||
+    !Number.isInteger(raw.minimum)||raw.minimum<0||raw.minimum>raw.months||
+    ![raw.strike,raw.ko].every(v=>Number.isFinite(v)&&v>0&&v<=1000)||
+    !Array.isArray(raw.knownMonthEnds)||raw.knownMonthEnds.length>raw.months||
+    !raw.knownMonthEnds.every((day,i,days)=>Number.isInteger(day)&&day>(days[i-1]||0)&&day<=raw.days))return null;
+  const asOf=typeof raw.asOf==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(raw.asOf)&&Number.isFinite(Date.parse(raw.asOf))?raw.asOf:null;
+  return {id,product:raw.product,asOf,months:raw.months,days:raw.days,label:'Normal',strike:raw.strike,
+    ko:raw.ko,multiple:1,minimum:raw.minimum,knownMonthEnds:raw.knownMonthEnds.slice(),
+    guaranteedDays:Number.isInteger(raw.guaranteedDays)?raw.guaranteedDays:null};
+}
+
+function registerSavedQuote(raw){
+  const quote=savedQuote(raw);
+  if(!quote)return null;
+  const terms=JSON.stringify(quote);
+  const matching=A.quotes.find(item=>JSON.stringify(savedQuote(item))===terms);
+  if(matching)return matching;
+  const id=['saved',quote.id,quote.asOf||'undated',quote.strike,quote.days,
+    ...quote.knownMonthEnds,quote.guaranteedDays||0].join('-').replaceAll('.','-');
+  const archived={...quote,id,originalId:quote.id};
+  A.quotes.push(archived);
+  el('quote').add(new Option('Saved quote · '+quote.product+' · '+quote.months+'M · '+fmt.quote(quote.strike)+
+    ' strike / '+fmt.quote(quote.ko)+' KO · '+quote.minimum+'M guarantee',id));
+  return archived;
+}
+
+window.AccumulatorBetaScenario={
+  capture(){
+    return simulation&&{
+      quote:chosen(),spot,capital,payment:simulation.payment,ratios:ratios.slice(),preset,month,
+      pathLabel:el('pathName').textContent,dailyOverride,comparisonPath,
+      comparison:window.AccumulatorComparison?.captureSetup(),deliveries:window.AccumulatorMonthlyCash.captureChoices(),
+      chart:{years:el('years').value,band:el('band').checked,overlays:{...nvdaContext.enabled}}
+    };
+  },
+  restore(setup){
+    const draft=savedQuote(setup?.quote);
+    if(!draft||!Number.isFinite(setup.spot)||setup.spot<.01||setup.spot>100000||
+      !Number.isFinite(setup.capital)||setup.capital<.01||setup.capital>1000000000||
+      !Array.isArray(setup.ratios)||setup.ratios.length!==A.scenarios[0].prices.length||
+      !setup.ratios.every(v=>Number.isFinite(v)&&v>=0))throw Error('Invalid saved inputs.');
+    const step=setup.dailyOverride;
+    const override=Number.isInteger(step?.day)&&step.day>0&&step.day<=draft.days&&
+      Number.isFinite(step.price)&&step.price>=0&&step.price<=1000000?{day:step.day,price:step.price}:null;
+    const path=setup.comparisonPath;
+    const imported=Array.isArray(path?.daily)&&path.daily.length===draft.days&&path.daily.every(v=>Number.isFinite(v)&&v>=0)
+      ? {daily:path.daily.slice(),name:String(path.name||'Comparison scenario').slice(0,180),spot:setup.spot,
+        completeMonthAtKO:Number.isInteger(path.completeMonthAtKO)?path.completeMonthAtKO:undefined}:null;
+    dailySimulation(draft,setup.spot,setup.capital,A.scale(setup.ratios.slice(0,draft.months),setup.spot),override,imported);
+
+    const q=registerSavedQuote(setup.quote);
+    const aliases=new Map([[setup.quote.id,q.id]]);
+    el('quote').value=q.id;
+    el('spot').value=setup.spot;
+    el('capital').value=setup.capital;
+    usingDatedSpot=false;
+    ratios=setup.ratios.slice();
+    preset=A.scenarios.some(item=>item.id===setup.preset)?setup.preset:'custom';
+    month=Number.isInteger(setup.month)?Math.max(1,Math.min(q.months,setup.month)):1;
+    comparisonPath=imported&&{...imported,quoteId:q.id};
+    dailyOverride=override&&{...override,quoteId:q.id};
+    if(override){el('dayIndex').value=override.day;el('dayPrice').value=override.price;}
+    sourceNotice='Loaded saved setup.';
+    window.AccumulatorMonthlyCash.restoreChoices(q.id,setup.deliveries);
+    window.AccumulatorComparison?.restoreSetup(setup.comparison, raw=>{
+      const quote=registerSavedQuote(raw);
+      if(quote)aliases.set(raw.id,quote.id);
+      return quote;
+    });
+    if(Array.from(el('years').options).some(option=>option.value===setup.chart?.years))el('years').value=setup.chart.years;
+    el('band').checked=setup.chart?.band===true;
+    render();
+    for(const key of Object.keys(nvdaContext.enabled)){
+      const enabled=setup.chart?.overlays?.[key];
+      if(typeof enabled!=='boolean'||enabled===nvdaContext.enabled[key])continue;
+      const input=document.querySelector('[data-nvda-overlay="'+key+'"]');
+      if(input){input.checked=enabled;input.dispatchEvent(new Event('change'));}
+    }
+    jump('start');
+    return aliases;
+  }
+};
 const explanations={
  recover:'The price dips and then recovers. The share count follows the schedule. The recovery changes the value of the shares acquired at strike.',
  rally:'The rally reaches knock-out. Guaranteed purchases still apply and remaining capital comes back. The model sells the shares at the knock-out close.',
@@ -922,7 +1010,7 @@ if(location.protocol==='https:'||location.protocol==='http:'){
   const lib=document.createElement('script');lib.src='../share-prices.js';lib.setAttribute('data-price-render-only','');lib.onload=refreshHistory;document.head.append(lib);
 }
 </script>
-<script src="accumulator-beta-comparison.js?v=20261127-tables"></script>
+<script src="accumulator-beta-comparison.js?v=20261127-saved-setups"></script>
 <script src="accumulator-guide.js?v=20261124" defer></script>
 <script src="../vendor/jspdf-4.2.0.umd.min.js" defer></script>
 <script src="accumulator-beta-report.js?v=20261126-ko" defer></script>
@@ -938,6 +1026,22 @@ if(location.protocol==='https:'||location.protocol==='http:'){
 <script src="../stocks-beta3-quarterly-charts.js?v=1" defer></script>
 <script src="accumulator-beta-nvda-analysis.js?v=20261127-test-price" defer></script>
 <script src="accumulator-client-sheet.js?v=20261126-research" defer></script>
+<dialog id="beta-setups" aria-labelledby="beta-setups-title">
+  <div class="beta-setups-heading">
+    <h2 id="beta-setups-title">Saved setups</h2>
+    <button type="button" id="beta-setups-close">Close</button>
+  </div>
+  <p class="small">Saved in this browser only.</p>
+  <form id="beta-setup-form">
+    <label>Description<textarea id="beta-setup-description" maxlength="180" rows="2" placeholder="For example, lower starting price" autofocus></textarea></label>
+    <div class="beta-setup-actions">
+      <button type="submit" class="primary">Save current setup</button>
+      <span class="small" id="beta-setup-current"></span>
+    </div>
+  </form>
+  <p class="small" id="beta-setup-status" role="status"></p>
+  <div id="beta-setup-list" aria-label="Saved setup history"></div>
+</dialog>
 <dialog id="beta-columns" aria-labelledby="beta-columns-title">
   <form>
     <h2 id="beta-columns-title">Column options</h2>
@@ -986,7 +1090,7 @@ if(location.protocol==='https:'||location.protocol==='http:'){
     </div>
   </form>
 </dialog>
-<script src="accumulator-beta-appearance.js?v=20261127" defer></script>
+<script src="accumulator-beta-appearance.js?v=20261127-saved-setups" defer></script>
 <script src="accumulator-beta-quick-brief.js?v=20261127-sensitivity" defer></script>
 <script src="accumulator-beta-pdf-editions.js?v=20261127" defer></script>
 <script src="accumulator-beta-pdf-research.js?v=20261127-test-price" defer></script>

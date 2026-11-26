@@ -21,8 +21,47 @@
     const emphasis = byId('beta-column-emphasis');
     const left = byId('beta-column-left');
     const right = byId('beta-column-right');
+    const storage = window.AccumulatorBetaStorage;
+    const tables = new Map();
     let current;
     let invoker;
+
+    function restoreLayout(state, layout, aliases) {
+      const remap = key => state.id.startsWith('cmp-') ? aliases?.get(key) || key : key;
+      const columns = Array.isArray(layout?.columns) ? layout.columns : [];
+      state.settings = new Map(columns.filter(item => Array.isArray(item) && typeof item[0] === 'string' && item[1])
+        .map(([key, config]) => [remap(key), {
+          hidden: key !== '0' && config.hidden === true,
+          emphasis: config.emphasis === true,
+          width: Number.isInteger(config.width) && config.width >= minWidth && config.width <= maxWidth ? config.width : undefined
+        }]));
+      const order = Array.isArray(layout?.order) ? layout.order : [];
+      state.preferredOrder = [...new Set(order.map(remap).filter(key => state.settings.has(key)))];
+    }
+
+    function layoutOf(state) {
+      return {
+        order: state.preferredOrder.slice(),
+        columns: Array.from(state.settings, ([key, {hidden, emphasis, width}]) => [key, {hidden, emphasis, width}])
+      };
+    }
+
+    function saveLayout(state) {
+      if (!storage.write('table:' + state.id, layoutOf(state))) {
+        byId('beta-setup-loaded').textContent = 'This browser could not remember the column layout.';
+      }
+    }
+
+    Object.assign(window.AccumulatorBetaTable, {
+      captureLayouts: () => Object.fromEntries(Array.from(tables, ([id, state]) => [id, layoutOf(state)])),
+      restoreLayouts(layouts, aliases) {
+        for (const [id, state] of tables) {
+          restoreLayout(state, layouts?.[id], aliases);
+          state.refresh();
+          saveLayout(state);
+        }
+      }
+    });
 
     function syncDialog(updateFields = true) {
       const {state, key} = current;
@@ -54,9 +93,11 @@
       picker.focus();
     }
 
-    function mount(table) {
+    function mount(id, table) {
       const saved = new WeakMap();
-      const state = {table, settings: new Map(), labels: new Map(), order: [], pinned: ''};
+      const state = {id, table, labels: new Map(), order: [], pinned: ''};
+      restoreLayout(state, storage.read('table:' + id, null));
+      tables.set(id, state);
       const colgroup = document.createElement('colgroup');
       const observer = new MutationObserver(refresh);
 
@@ -66,10 +107,10 @@
         if (head?.cells.length > 1) {
           const original = Array.from(head.cells);
           original.forEach((cell, index) => {
-            if (cell.hasAttribute('data-beta-slot')) return;
-            const key = cell.dataset.betaColumn || String(index);
-            cell.dataset.betaSlot = key;
+            const key = cell.dataset.betaSlot || cell.dataset.betaColumn || String(index);
             if (!state.settings.has(key)) state.settings.set(key, {hidden:false, emphasis:false});
+            if (cell.hasAttribute('data-beta-slot')) return;
+            cell.dataset.betaSlot = key;
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'beta-column-heading';
@@ -87,8 +128,10 @@
           const headers = saved.get(head);
           const keys = headers.map(cell => cell.dataset.betaSlot);
           state.pinned = keys[0];
-          state.order = [state.pinned, ...state.order.filter(key => key !== state.pinned && keys.includes(key)),
-            ...keys.slice(1).filter(key => !state.order.includes(key))];
+          for (const key of keys) {
+            if (!state.preferredOrder.includes(key)) state.preferredOrder.push(key);
+          }
+          state.order = [state.pinned, ...state.preferredOrder.filter(key => key !== state.pinned && keys.includes(key))];
           const visible = state.order.filter(key => !state.settings.get(key).hidden);
           const indices = state.order.map(key => keys.indexOf(key));
 
@@ -145,7 +188,7 @@
     }
 
     document.querySelectorAll('#overviewRows, #movements, #cmp-grid, #cmp-detail')
-      .forEach(node => mount(node.closest('table')));
+      .forEach(node => mount(node.id, node.closest('table')));
 
     picker.addEventListener('change', () => {
       current.key = picker.value;
@@ -159,25 +202,25 @@
       config.emphasis = emphasis.checked;
       config.width = width.value ? Math.min(maxWidth, Math.max(minWidth, width.valueAsNumber)) : undefined;
       state.refresh();
+      saveLayout(state);
       dialog.close();
     });
     for (const [button, step] of [[left, -1], [right, 1]]) {
       button.addEventListener('click', () => {
         const {state, key} = current;
         const visible = state.order.filter(id => !state.settings.get(id).hidden);
-        const from = state.order.indexOf(key);
-        const to = state.order.indexOf(visible[visible.indexOf(key) + step]);
-        [state.order[from], state.order[to]] = [state.order[to], state.order[from]];
+        const from = state.preferredOrder.indexOf(key);
+        const to = state.preferredOrder.indexOf(visible[visible.indexOf(key) + step]);
+        [state.preferredOrder[from], state.preferredOrder[to]] = [state.preferredOrder[to], state.preferredOrder[from]];
         state.refresh();
+        saveLayout(state);
       });
     }
     byId('beta-column-reset').addEventListener('click', () => {
       const {state} = current;
-      state.order = [];
-      for (const config of state.settings.values()) {
-        Object.assign(config, {hidden:false, emphasis:false, width:undefined, measured:undefined});
-      }
+      restoreLayout(state, null);
       state.refresh();
+      saveLayout(state);
       syncDialog();
     });
     byId('beta-column-close').addEventListener('click', () => dialog.close());

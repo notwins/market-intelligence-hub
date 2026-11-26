@@ -95,7 +95,8 @@
   if (comparisonNotes) comparisonNotes.innerHTML = notesMarkup;
   else root.insertAdjacentHTML('beforeend', notesMarkup);
 
-  byId('cmp-choices').innerHTML = quotes.map(q => `<label><input type="checkbox" data-cmp-quote="${q.id}"><span><b>${q.product} · ${quotePct(q.strike)}</b><small>${q.months}M tenor · ${quotePct(q.ko)} KO · ${q.minimum}M guarantee</small></span></label>`).join('');
+  const quoteChoice = q => `<label><input type="checkbox" data-cmp-quote="${q.id}"><span><b>${q.product} · ${quotePct(q.strike)}</b><small>${q.months}M tenor · ${quotePct(q.ko)} KO · ${q.minimum}M guarantee${q.originalId?' · Saved quote':''}</small></span></label>`;
+  byId('cmp-choices').innerHTML = quotes.map(quoteChoice).join('');
 
   function read(id, fallback, placeholder = fallback) {
     const field = byId('cmp-' + id);
@@ -559,7 +560,45 @@
     // Give consumers independent data, including the paths and quote records.
     return JSON.parse(JSON.stringify(result));
   }
-  window.AccumulatorComparison = Object.freeze({getSnapshot});
+  const setupFields = ['early','late','rally','down','gap','rank','origin','recovery','sale-strike','sale-units'];
+  function captureSetup() {
+    return {quotes:Array.from(selected, id=>quoteById.get(id)), active,
+      reference:quoteById.get(byId('cmp-reference').value),
+      fields:Object.fromEntries(setupFields.map(key=>[key, byId('cmp-'+key).value]))};
+  }
+  function includeSavedQuote(quote) {
+    if (!quote || quoteById.has(quote.id)) return;
+    quotes.push(quote);
+    quoteById.set(quote.id,quote);
+    byId('cmp-choices').insertAdjacentHTML('beforeend',quoteChoice(quote));
+  }
+  function restoreSetup(setup, register) {
+    if (!Array.isArray(setup?.quotes)) return;
+    selected.clear();
+    for (const raw of setup.quotes) {
+      const quote = register(raw);
+      if (!quote) continue;
+      includeSavedQuote(quote);
+      selected.add(quote.id);
+    }
+    const reference = register(setup.reference);
+    includeSavedQuote(reference);
+    const field = byId('cmp-reference');
+    if (reference && !Array.from(field.options).some(option=>option.value===reference.id)) {
+      field.add(new Option(quoteLabel(reference),reference.id));
+    }
+    field.value = reference?.id || 'lowest';
+    for (const key of setupFields) {
+      const input = byId('cmp-'+key);
+      const value = setup.fields?.[key];
+      if (typeof value !== 'string') continue;
+      if (input.tagName === 'SELECT' && !Array.from(input.options).some(option=>option.value===value)) continue;
+      input.value=value;
+    }
+    if (typeof setup.active === 'string') active=setup.active;
+    selectionChanged('');
+  }
+  window.AccumulatorComparison = Object.freeze({getSnapshot, captureSetup, restoreSetup});
 
   function selectionChanged(message) {
     render();
@@ -568,8 +607,9 @@
   }
 
   function add(id) {
-    const quote = quoteById.get(id);
+    const quote = quoteById.get(id) || Accumulator.quotes.find(item=>item.id===id&&item.originalId);
     if (!quote) return;
+    includeSavedQuote(quote);
     const included = selected.has(id);
     selected.add(id);
     selectionChanged(quoteLabel(quote) + (included ? ' is already in the comparison.' : ' added to comparison.'));

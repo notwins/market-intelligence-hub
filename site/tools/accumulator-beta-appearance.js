@@ -2,14 +2,27 @@
   'use strict';
   const toolbar = document.querySelector('.beta-display');
   const styles = Array.from(toolbar.querySelectorAll('[data-beta-style]'));
+  const storage = window.AccumulatorBetaStorage;
   const panels = Array.from(document.querySelectorAll('main > .panel, #sim > .panel'));
   panels.forEach(panel => panel.setAttribute('data-beta-panel', ''));
 
+  function setStyle(name, save) {
+    const selected = styles.find(button => button.dataset.betaStyle === name);
+    if (!selected) return;
+    document.body.dataset.betaStyle = name;
+    styles.forEach(button => button.setAttribute('aria-pressed', String(button === selected)));
+    if (save && !storage.write('style', name)) {
+      document.getElementById('beta-setup-loaded').textContent = 'This browser could not remember the colour style.';
+    }
+  }
+  window.AccumulatorBetaAppearance = {
+    current: () => document.body.dataset.betaStyle || 'harbour',
+    restore: name => setStyle(name, true)
+  };
+  setStyle(storage.read('style', 'harbour'), false);
   toolbar.addEventListener('click', event => {
     const selected = event.target.closest('button[data-beta-style]');
-    if (!selected) return;
-    document.body.dataset.betaStyle = selected.dataset.betaStyle;
-    styles.forEach(button => button.setAttribute('aria-pressed', String(button === selected)));
+    if (selected) setStyle(selected.dataset.betaStyle, true);
   });
 
   const motion = matchMedia('(prefers-reduced-motion: no-preference)');
