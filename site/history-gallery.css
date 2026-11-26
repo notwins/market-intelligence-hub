@@ -1,0 +1,138 @@
+@font-face {
+  font-family:"DM Sans";src:url("assets/desk/dm-sans.woff2") format("woff2");font-weight:100 1000;font-display:swap;
+}
+@font-face {
+  font-family:"STIX Two Text";src:url("assets/desk/stix-two-text.woff2") format("woff2");font-weight:400 700;font-display:swap;
+}
+:root {
+  --hist-paper:#f8f7f2;--hist-card:#fffefa;--hist-ink:#252823;--hist-muted:#565d54;
+  --hist-line:#cfcec3;--hist-green:#3c5747;--hist-rust:#8c422d;
+  --hist-serif:"STIX Two Text",Georgia,serif;--hist-sans:"DM Sans",system-ui,sans-serif;
+  --hist-gutter:clamp(1rem,2.6vw,3rem);
+  --hist-print:url("assets/desk/history-triptych.jpg");
+}
+:is(.history-timeline,.history-replay,.history-gold),body:has(.history-page) {
+  background:var(--hist-paper);font-family:var(--hist-sans);color:var(--hist-ink)
+}
+:is(.history-timeline,.history-replay,.history-gold) main,.history-gold .gold-nav {
+  box-sizing:border-box;width:100%;max-width:104rem;margin:auto;padding-inline:var(--hist-gutter)
+}
+:is(.history-timeline,.history-replay) :is(.masthead,.page-footer) {
+  background:var(--hist-paper);border-color:var(--hist-line);padding-inline:max(var(--hist-gutter),calc((100vw - 104rem)/2 + var(--hist-gutter)))
+}
+:is(.history-timeline,.history-replay) .brand {font:600 1.4rem/1.2 var(--hist-serif);color:var(--hist-ink)}
+:is(.history-timeline,.history-replay,.history-gold,.history-page) :is(h1,h2,h3),#si-library #library-title {
+  font-family:var(--hist-serif);letter-spacing:-.025em
+}
+:is(.history-timeline,.history-replay,.history-gold,.history-page) :is(.hero,.replay-intro,.history-cover,.history-opener) {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(12rem,30%);gap:var(--hist-gutter);align-items:center;
+  margin:0 0 1.2rem;padding:clamp(1.2rem,2.4vw,2.5rem) 0;border:0;border-bottom:1px solid var(--hist-line);border-radius:0;background:transparent
+}
+:is(.history-timeline,.history-replay,.history-gold,.history-page) :is(.hero,.replay-intro,.history-cover,.history-opener) h1 {
+  margin:.3rem 0 .6rem;font:500 clamp(2.35rem,4.2vw,4.5rem)/1.02 var(--hist-serif);letter-spacing:-.055em;color:var(--hist-ink)
+}
+.history-page .history-opener .page-head {padding:0;margin:0;border:0;background:none}
+.history-opener .page-head p,.history-cover .intro,.history-replay .replay-intro p {color:var(--hist-muted);font-size:1rem;max-width:68ch}
+.history-opener .button {margin-top:.65rem}
+.history-engraving,.hf-title::after,.history-cover img {
+  display:block;width:100%;height:clamp(6rem,11vw,12rem);border:1px solid var(--hist-line);border-radius:6px;
+  background-image:var(--hist-print);background-size:300% auto;background-repeat:no-repeat;background-position:var(--print-position,0%) 50%
+}
+.history-engraving.triptych {height:auto;aspect-ratio:3/1;background-size:cover}
+.history-engraving.ticker,[data-history-topic="shares"],[data-history-topic="spx"],[data-history-topic="beta2-shares"] {--print-position:50%}
+[data-history-topic="fx"],[data-history-topic="beta4-shares"],.hf[data-view="3"] {--print-position:100%}
+.hf[data-view="1"] {--print-position:50%}
+.hf-title::after {content:"";width:clamp(9rem,19vw,18rem);height:clamp(5rem,8vw,8rem);flex:none}
+.hf-title {align-items:center}
+.hf .hf-shell {max-width:106rem}
+.history-cover img {height:auto;aspect-ratio:3/1;object-fit:cover}
+.history-timeline .hero-links button,.history-replay .chart-controls button[aria-pressed=true] {background:var(--hist-green);border-color:var(--hist-green)}
+.history-timeline #episode-index,.history-jumps,.episode-turn {display:flex;flex-wrap:wrap;align-items:center;gap:.45rem .8rem}
+.history-jumps,.episode-turn {padding:.65rem 0;border-block:1px solid var(--hist-line);margin-top:1rem}
+.episode-turn {justify-content:space-between;border-bottom:0;margin-bottom:0}
+:is(.history-jumps,.episode-turn) a {min-height:2rem;display:inline-flex;align-items:center;font-size:.88rem;color:var(--hist-green);text-underline-offset:.2em}
+.history-timeline .episode,.history-timeline .research,.history-replay .surface,.history-gold :is(.panel,figure) {
+  background:var(--hist-card);border-color:var(--hist-line);border-radius:7px;box-shadow:none
+}
+.history-timeline :is(.core,.macro,.event-notes),.history-gold .chart-grid {gap:clamp(.85rem,1.4vw,1.5rem)}
+.history-timeline :is(.core,.macro) .panel {background:#fffefa;border-color:var(--hist-line);padding:clamp(.8rem,1.6vw,1.55rem)}
+.history-timeline .plot {max-height:none;height:auto}
+.history-replay #reaction-figure svg {height:clamp(17rem,26vw,27rem)}
+.history-timeline .episode-head h2,.history-replay .surface-heading h2 {font-size:clamp(1.6rem,2.3vw,2.5rem);font-weight:550}
+.history-timeline .panel h3,.history-gold figure h2 {font:550 clamp(1.15rem,1.6vw,1.6rem)/1.2 var(--hist-serif)}
+.history-gold .chart-grid svg {width:100%;height:auto}
+.history-page {--history-key:var(--hist-green);font-family:var(--hist-sans)}
+.content:has(.history-page) {max-width:none;width:100%;padding-inline:var(--hist-gutter)}
+.history-page :is(.v4-history-grid,.history-comparison,.chart-panel) {min-width:0}
+.history-page :is(.card,.chart-panel) {border-color:var(--hist-line);border-radius:7px;box-shadow:none}
+.history-page #history-analysis {scroll-margin-top:4.5rem}
+.history-page .history-window-grid {gap:clamp(.9rem,2vw,2rem)}
+.nvda-history-page {--nv-serif:var(--hist-serif);--nv-sans:var(--hist-sans);--nv-paper:var(--hist-paper)}
+.nvda-history-page .nv-shell {width:min(100rem,calc(100% - 2 * var(--hist-gutter)))}
+.nvda-history-page .nv-main [id]:is(section,header) {scroll-margin-top:7.5rem}
+#si-library .section-head {border-bottom:1px solid var(--hist-line);padding-bottom:.65rem}
+.history-timeline .hero,.history-timeline .episode,.history-timeline #episode-index,
+.history-replay :is(#price-path,#market-title,#sector-title,#watchlist-title,#methods) {scroll-margin-top:.8rem}
+.history-timeline .cover-copy {min-width:0}
+.history-timeline.embedded-history .hero .cover-copy > :is(.eyebrow,h1) {display:none}
+.history-timeline.embedded-history .hero {display:block}
+.history-timeline.embedded-history .hero > .history-engraving {display:none}
+@media (max-width:900px) {
+  .history-timeline :is(.macro,.event-notes),.history-gold .chart-grid,.history-page .history-window-grid {grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:700px) {
+  :is(.history-timeline,.history-replay,.history-gold,.history-page) :is(.hero,.replay-intro,.history-cover,.history-opener) {
+    grid-template-columns:minmax(0,1fr);gap:.85rem;padding:1rem 0
+  }
+  .history-engraving,.history-cover img,.history-engraving.triptych {height:clamp(4.5rem,22vw,7.5rem);aspect-ratio:auto}
+  .history-engraving:not(.triptych) {background-size:300% auto}
+  .hf-title::after {width:100%;height:4.25rem;margin-top:.65rem}
+  .history-replay #reaction-figure svg {height:15rem}
+}
+@media print {
+  .history-engraving,.history-cover img,.hf-title::after,.history-jumps,.episode-turn {display:none}
+}
+
+/* A subject mark appears in the heading and as a pale stamp in its reserved margin. */
+:root {
+  --hist-rates:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='m2 9 10-6 10 6z M3 20h18 M6 11v6 M10 11v6 M14 11v6 M18 11v6'/%3E%3C/svg%3E");
+  --hist-stock:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 20h18 M5 16v-5h3v5z M11 16V7h3v9z M17 16V3h3v13z'/%3E%3C/svg%3E");
+  --hist-globe:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M2 12h20 M12 2a10 10 0 1 0 0 20 10 10 0 1 0 0-20z M12 2q-9 10 0 20 9-10 0-20z'/%3E%3C/svg%3E");
+  --hist-curve:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 3v17h18 M5 16c4-7 6-9 9-10s4-1 6-1'/%3E%3C/svg%3E");
+  --hist-fx:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 7h17l-4-4 M21 17H4l4 4 M20 7l-4 4 M4 17l4-4'/%3E%3C/svg%3E");
+  --hist-gold:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M5 5h5l2 5H3z M14 5h5l2 5h-9z M9 13h6l3 6H6z'/%3E%3C/svg%3E");
+  --hist-jobs:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 8h18v12H3z M8 8V5h8v3 M3 12l9 2 9-2 M10 14v2h4v-2'/%3E%3C/svg%3E");
+  --hist-credit:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M4 5h16v12H4z M7 9h10 M7 13h5 M13 17v4l2-1 2 1v-4'/%3E%3C/svg%3E");
+  --hist-pulse:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M2 12h5l3-8 4 16 3-8h5'/%3E%3C/svg%3E");
+  --hist-chip:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M6 6h12v12H6z M9 9h6v6H9z M9 2v4 M15 2v4 M9 18v4 M15 18v4 M2 9h4 M2 15h4 M18 9h4 M18 15h4'/%3E%3C/svg%3E");
+  --hist-calendar:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 5h18v16H3z M3 10h18 M8 3v4 M16 3v4 M8 14h2 M14 14h2 M8 17h2'/%3E%3C/svg%3E");
+  --hist-matrix:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.4' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M3 3h18v18H3z M3 10h18 M3 16h18 M9 3v18 M15 3v18'/%3E%3C/svg%3E");
+}
+.history-timeline,.history-page {--glyph:var(--hist-rates)}
+.history-timeline .equity,[data-history-topic="shares"],[data-history-topic="spx"],.history-replay [aria-labelledby="watchlist-title"] {--glyph:var(--hist-stock)}
+.history-timeline .episode-head,[data-history-topic="beta2-shares"] {--glyph:var(--hist-calendar)}
+.history-timeline [data-subject="jobs"] {--glyph:var(--hist-jobs)}
+.history-timeline [data-subject="inflation"],[data-history-topic="curves"] {--glyph:var(--hist-curve)}
+.history-timeline [data-subject="credit"],[data-history-topic="si"],#si-library {--glyph:var(--hist-credit)}
+.history-timeline [data-subject="signal"],.history-replay #price-path {--glyph:var(--hist-pulse)}
+.history-timeline [data-subject="macro"],.history-replay {--glyph:var(--hist-globe)}
+[data-history-topic="beta4-shares"],.history-replay [aria-labelledby="sector-title"] {--glyph:var(--hist-matrix)}
+[data-history-topic="fx"] {--glyph:var(--hist-fx)}
+.history-gold {--glyph:var(--hist-gold)}
+.nvda-history-page {--glyph:var(--hist-chip)}
+.history-replay #price-path:has([data-group="yields"][aria-pressed="true"]) {--glyph:var(--hist-curve)}
+.history-replay #price-path:has([data-group="shares"][aria-pressed="true"]) {--glyph:var(--hist-stock)}
+:is(.history-timeline .panel h3,.history-replay .surface-heading h2,.history-gold figure h2,.nv-panel-head h3,.history-chart-heading h3,.history-window-panel h4,#si-library #library-title) {
+  position:relative;padding-right:2.7rem;min-width:0
+}
+:is(.history-timeline .panel h3,.history-replay .surface-heading h2,.history-gold figure h2,.nv-panel-head h3,.history-chart-heading h3,.history-window-panel h4,#si-library #library-title)::before {
+  content:"";display:inline-block;vertical-align:-.08em;width:.9em;height:.9em;margin-right:.42em;
+  background:var(--hist-rust);mask:var(--glyph) center / contain no-repeat;pointer-events:none
+}
+:is(.history-timeline .panel h3,.history-replay .surface-heading h2,.history-gold figure h2,.nv-panel-head h3,.history-chart-heading h3,.history-window-panel h4,#si-library #library-title)::after {
+  content:"";position:absolute;right:0;top:50%;transform:translateY(-50%) rotate(-7deg);height:2.2rem;width:2.2rem;
+  background:var(--hist-green);opacity:.13;mask:var(--glyph) center / contain no-repeat;pointer-events:none
+}
+.embedded-history #reading-guide[open] {
+  top:var(--guide-top,1rem);bottom:auto;margin:0 auto;max-height:var(--guide-height,80vh)
+}

@@ -143,7 +143,31 @@ function timeData(second=false){const fx=X.historyTab==='fx',a=X.history.series.
  if(fx&&X.fxMode==='index'){const common=sets.length>1?sets[0].points.filter(p=>C.finite(p[1])&&sets[1].points.some(q=>q[0]===p[0]&&C.finite(q[1])))[0]?.[0]:sets[0].points.find(p=>C.finite(p[1]))?.[0];sets=sets.map(s=>{const base=s.points.find(p=>p[0]===common)?.[1];return{...s,points:base?s.points.filter(p=>p[0]>=common).map(p=>[p[0],C.finite(p[1])?p[1]/base*100:null]):[]};});}
  return{a,b,lines:sets};
 }
-function historyView(){const intro=head('History & context','Historical charts',t(X.historyTab==='shares'?'Compare selected shares, dated valuation observations and reported earnings.':'Explore historical yields and FX, with rounded SI reference terms in a separate section.'))+(['yield','fx','curves'].includes(X.historyTab)&&window.HubFullReportEditions?'<article class="card section">'+window.HubFullReportEditions.panel('weekly-fx')+'</article>':'');const tabs=subnav([['yield','Yield history'],['shares','Share prices'],['beta2-shares','▤ Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']],X.historyTab,'historyTab');if(X.historyTab==='beta4-shares')return '<div class="history-page">'+tabs+'<section id="'+X.historyTab+'" aria-label="Share history pivot"></section></div>';if(X.historyTab==='beta2-shares')return '<div class="history-page">'+tabs+window.Beta2Shares.view()+'</div>';if(X.historyTab==='shares')return '<div class="history-page">'+intro+tabs+(window.MarketPrices?.historyPanel()||'<p>Share history unavailable.</p>')+(window.BOSEquity?.panel('history')||'')+'</div>';if(X.historyTab==='si')return '<div class="history-page">'+intro+tabs+(window.MarketSI?.view()||'<p>SI reference unavailable.</p>')+'</div>';if(!X.history)return intro+tabs+loading('history');return '<div class="history-page">'+intro+tabs+(X.historyTab!=='fx'&&X.historyTab!=='spx'?bondWatchPanel('history'):'')+(X.historyTab==='yield'?'<div class="mp-history-link"><a class="button ghost" href="#history/shares" data-view="history/shares">Share prices &amp; historical charts</a><span>Shared daily closes for earnings, watchlist and SI tracking</span></div>':'')+historyControls()+contextControls()+(X.historyTab==='spx'?(window.HistoryContext?.spxView()||'SPX source unavailable'):X.historyTab==='curves'?curveView():timeView())+(X.historyTab!=='spx'?(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):'')+'</div>';}
+function historyView(){
+ const topics=[['yield','Yield history'],['shares','Share prices'],['beta2-shares','Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','SI Pricing']];
+ const tab=X.historyTab, title=topics.find(item=>item[0]===tab)?.[1]||'Historical charts';
+ const descriptions={yield:'Compare yields and spreads across maturities and observation dates.',shares:'Compare selected shares, dated valuation observations and reported earnings.',fx:'Compare exchange rates over a shared period using native rates or a common index.',curves:'Compare Treasury and Singapore government yield curves on two observation dates.',spx:'Explore the saved S&P 500 index history and its source coverage.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
+ const jump=['yield','fx','curves'].includes(tab);
+ const intro='<header class="history-opener"><div>'+head('Historical charts',title,t(descriptions[tab]||''))+
+   (jump&&X.history?button(t('Jump to charts'),'data-tool="history-charts"','button ghost'):'')+'</div><div class="history-engraving" aria-hidden="true"></div></header>';
+ const edition=jump&&window.HubFullReportEditions?'<article class="card section">'+window.HubFullReportEditions.panel('weekly-fx')+'</article>':'';
+ const tabs=subnav(topics,tab,'historyTab');
+ let content;
+ if(tab==='beta4-shares')content='<section id="beta4-shares" aria-label="Share history pivot"></section>';
+ else if(tab==='beta2-shares')content=window.Beta2Shares.view();
+ else if(tab==='shares')content=(window.MarketPrices?.historyPanel()||'<p>Share history unavailable.</p>')+(window.BOSEquity?.panel('history')||'');
+ else if(tab==='si')content=window.MarketSI?.view()||'<p>SI reference unavailable.</p>';
+ else if(!X.history)content=loading('history');
+ else {
+  const watch=tab!=='fx'&&tab!=='spx'?bondWatchPanel('history'):'';
+  const shares=tab==='yield'?'<div class="mp-history-link"><a class="button ghost" href="#history/shares" data-view="history/shares">Share prices &amp; historical charts</a><span>Shared daily closes for earnings, watchlist and SI tracking</span></div>':'';
+  const plot=tab==='spx'?(window.HistoryContext?.spxView()||'SPX source unavailable'):tab==='curves'?curveView():timeView();
+  content=watch+shares+historyControls()+contextControls()+'<section id="history-analysis" tabindex="-1" aria-label="'+e(title)+'">'+plot+'</section>'+
+    (tab!=='spx'?(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):'');
+ }
+ const sgs=tab==='yield'?'<section class="sgs-daily section card" data-sgs-daily="history"></section>':'';
+ return '<div class="history-page" data-history-topic="'+e(tab)+'">'+intro+tabs+sgs+edition+content+'</div>';
+}
 function historyPeriodControls(){return `<div class="tool-controls history-period-controls" role="group" aria-label="${e(t('Shared period'))}">${label('Period',select('history-period',[['all','All history'],['5','5 years'],['10','10 years'],['20','20 years'],['custom','Custom dates']],X.historyPeriod))}${label('From',input('history-start',X.start,'date'))}${label('To',input('history-end',X.end,'date'))}</div>`;}
 function addHistoryComparison(){if(X.historySecond)return;const pool=X.history.series.filter(s=>s.family!=='fx').map(s=>s.id),unused=pool.filter(id=>![X.historyA,X.historyB].includes(id)),preferred=['UST 2Y','UST 30Y',...unused].filter((id,i,a)=>unused.includes(id)&&a.indexOf(id)===i);X.historyA2=preferred[0]||pool.find(id=>id!==X.historyA)||pool[0]||'';X.historyB2=preferred[1]||'';X.historySecond=true;}
 function historyChartPeriod(){const pool=X.history.series.filter(s=>X.historyTab==='fx'?s.family==='fx':s.family!=='fx'),dates=pool.flatMap(s=>s.points.filter(p=>p[0]>=X.start&&p[0]<=X.end).map(p=>p[0])).sort();return dates.length?[dates[0],dates.at(-1)]:null;}
@@ -249,6 +273,7 @@ document.addEventListener('click',async ev=>{
  const det=ev.target.closest('[data-detail]');if(det){masterDetail(det.dataset.detail);return;}
  const b=ev.target.closest('[data-tool]');if(!b)return;const a=b.dataset.tool;ev.preventDefault();
  if(a==='tab'){X[b.dataset.key]=b.dataset.tab;if(b.dataset.key==='historyTab')X.scenario=0;host.navigate(host.getView()+'/'+b.dataset.tab);if(b.dataset.key==='historyTab')document.querySelector('.history-tabs [data-tab="'+b.dataset.tab+'"]')?.focus({preventScroll:true});}
+ else if(a==='history-charts'){const charts=$('#history-analysis');charts?.focus({preventScroll:true});charts?.scrollIntoView({block:'start'});}
  else if(a==='history-add'){addHistoryComparison();host.render();$('#history-series-2')?.focus();}
  else if(a==='history-remove'){X.historySecond=false;host.render();$('#history-add')?.focus();}
  else if(a==='history-expand'){const key=b.dataset.second==='true'?'historyExpanded2':'historyExpanded';X[key]=!X[key];host.render();$('[data-tool="history-expand"][data-second="'+b.dataset.second+'"]')?.focus();}

@@ -69,8 +69,8 @@ class NavigationShortcutsTests(unittest.TestCase):
    self.assertIn(view,menu.routes)
    self.assertIn('v4.html#'+view,site_map.links)
   tools=(ROOT/'v4-tools.js').read_text().split('function historyView(){')[1].split('function ')[0]
-  self.assertIn("if(!X.history)return intro+tabs+loading('history')",tools)
-  self.assertIn("return '<div class=\"history-page\">'+intro+tabs+",tools)
+  self.assertIn("else if(!X.history)content=loading('history')",tools)
+  self.assertIn('+intro+tabs+sgs+edition+content+',tools)
   self.assertNotIn('contextControls()+tabs',tools)
  def test_settings_shortcuts_and_phone_grid(self):
   display=(ROOT/'v4-display.js').read_text();self.assertIn('class="settings-shortcuts"',display)
