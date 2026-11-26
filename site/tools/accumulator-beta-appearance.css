@@ -536,7 +536,7 @@
 }
 .accumulator-beta #beta-setups-title { font-family: var(--beta-display-font); }
 .accumulator-beta #beta-setup-form { display: grid; gap: 10px; margin: 12px 0; }
-.accumulator-beta #beta-setup-description {
+.accumulator-beta :is(#beta-setup-description, .beta-setup-description-edit textarea) {
   width: 100%;
   resize: vertical;
   padding: 8px 10px;
@@ -547,7 +547,7 @@
   border: 1px solid var(--beta-hero-edge);
   border-radius: 7px;
 }
-.accumulator-beta #beta-setup-description:focus-visible {
+.accumulator-beta :is(#beta-setup-description, .beta-setup-description-edit textarea):focus-visible {
   outline: 3px solid var(--beta-focus);
   outline-offset: 2px;
 }
@@ -584,6 +584,8 @@
   font-variant-numeric: tabular-nums;
 }
 .accumulator-beta #beta-setup-list .beta-setup-actions { margin-top: 8px; }
+.accumulator-beta .beta-setup-description-edit { margin-top: 10px; }
+.accumulator-beta #beta-setup-version-of { color: var(--beta-secondary); font-weight: 650; }
 
 .accumulator-beta #beta-quick-pdf {
   width: min(550px, calc(100% - 24px));
