@@ -631,4 +631,148 @@
       <path fill="none" d="M5 13l3-3 3 1m3 5h4"/>
     </g>
   </symbol>
+  <symbol id="sunrise" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#f8edcd" stroke="#714c27" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#714c27" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#dfb068" d="M3 16h18v4H3z"/>
+      <path fill="#fff0b0" d="M6 14a6 6 0 0 1 12 0z"/>
+      <path fill="none" d="M3 14h18M12 3v2M4 7l2 2m12 0 2-2"/>
+    </g>
+  </symbol>
+  <symbol id="dashboard" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#e4edf6" stroke="#284c70" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#284c70" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#88aeca" d="M2 4h20v15H2z"/>
+      <path fill="#ffcf86" d="M5 7h5v4H5zm8 6h6v3h-6z"/>
+      <path fill="none" d="M13 8h6m-14 6h5m-2 7h8"/>
+    </g>
+  </symbol>
+  <symbol id="movers" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#e3efe1" stroke="#275848" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#275848" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#85b79b" d="M3 11h8v9H3z"/>
+      <path fill="#f3cc77" d="M13 4h8v9h-8z"/>
+      <path fill="none" d="M5 17l4-4m-3 0h3v3m6-9 4 4m0-3v3h-3"/>
+    </g>
+  </symbol>
+  <symbol id="quotes" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#dfefeb" stroke="#245954" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#245954" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#85b6ad" d="M2 5h15v9H2z"/>
+      <path fill="#f3c787" d="M8 11h14v9H8z"/>
+      <path fill="none" d="M5 9h6m-2-2 2 2-2 2m10 5h-7m2-2-2 2 2 2"/>
+    </g>
+  </symbol>
+  <symbol id="maturity" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#f3e6ec" stroke="#71455b" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#71455b" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#cd98ae" d="M3 4h13v16H3z"/>
+      <path fill="#f4cc98" d="M12 13h9v8h-9z"/>
+      <path fill="none" d="M5 8h8m-8 3h5m6 4v3h3"/>
+    </g>
+  </symbol>
+  <symbol id="closebell" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#f8edcd" stroke="#714c27" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#714c27" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#dfb068" d="M4 17c3-2 2-5 3-8a5 5 0 0 1 10 0c1 3 0 6 3 8z"/>
+      <path fill="#fff0b0" d="M9 19h6a3 3 0 0 1-6 0z"/>
+      <path fill="none" d="M12 3V2m5 2 2 2"/>
+    </g>
+  </symbol>
+  <symbol id="chronicle" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#f7e7e3" stroke="#814c54" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#814c54" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#d8a1a0" d="M4 3h16v17H4z"/>
+      <path fill="#f9d59b" d="M6 5h3v13H6z"/>
+      <path fill="none" d="M11 8h6m-6 4h5m-5 4h4"/>
+    </g>
+  </symbol>
+  <symbol id="journal" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#fae9d9" stroke="#79472f" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#79472f" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#e4a27e" d="M3 5h14v15H3z"/>
+      <path fill="#ffdb82" d="M8 3h13v15H8z"/>
+      <path fill="none" d="M10 7h8m-8 3h8m-8 3h5"/>
+    </g>
+  </symbol>
+  <symbol id="catalog" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#e4edf6" stroke="#284c70" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#284c70" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#88aeca" d="M3 8h18v12H3z"/>
+      <path fill="#ffcf86" d="M5 4h6l2 3h6v4H5z"/>
+      <path fill="none" d="M3 12h18m-12 3h6"/>
+    </g>
+  </symbol>
+  <symbol id="security" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#e4edf6" stroke="#284c70" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#284c70" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#88aeca" d="M3 4h15v15H3z"/>
+      <path fill="#ffcf86" d="M11 14a4 4 0 1 0 8 0 4 4 0 0 0-8 0z"/>
+      <path fill="none" d="M6 7h8m-8 3h3m9 7 4 4"/>
+    </g>
+  </symbol>
+  <symbol id="rewind" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#ede8f7" stroke="#574375" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#574375" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#a59acc" d="M3 5h18v15H3z"/>
+      <path fill="#f1c386" d="M12 8l-5 4 5 4zm6 0-5 4 5 4z"/>
+      <path fill="none" d="M4 3h14"/>
+    </g>
+  </symbol>
+  <symbol id="legacy" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#e4edf6" stroke="#284c70" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#284c70" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#88aeca" d="M2 4h20v14H2z"/>
+      <path fill="#ffcf86" d="M5 6h14v9H5z"/>
+      <path fill="none" d="M7 20h10m-8-9 2 2 4-4"/>
+    </g>
+  </symbol>
+  <symbol id="browser" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#e3efe1" stroke="#275848" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#275848" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#85b79b" d="M2 4h20v16H2z"/>
+      <path fill="#f3cc77" d="M5 10h14v7H5z"/>
+      <path fill="none" d="M2 8h20M5 6h1m2 0h1m-2 8h7"/>
+    </g>
+  </symbol>
+  <symbol id="balance" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#f8edcd" stroke="#714c27" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#714c27" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#dfb068" d="M3 16h8v4H3zm11-7h7v4h-7z"/>
+      <path fill="#fff0b0" d="M3 12h8v4H3zm11-7h7v4h-7z"/>
+      <path fill="none" d="M4 8l5-5m-4 0h4v4m8 9v4m-2-2 2 2 2-2"/>
+    </g>
+  </symbol>
+  <symbol id="prospect" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#f8edcd" stroke="#714c27" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#714c27" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#dfb068" d="M3 12l3-6h7l3 6z"/>
+      <path fill="#fff0b0" d="M7 18l3-6h7l3 6z"/>
+      <path fill="none" d="M3 20h18M17 3v4m-2-2h4"/>
+    </g>
+  </symbol>
+  <symbol id="cabinet" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#dfefeb" stroke="#245954" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#245954" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#85b6ad" d="M3 3h18v18H3z"/>
+      <path fill="#f3c787" d="M5 12h14v7H5z"/>
+      <path fill="none" d="M3 11h18M10 7h4m-4 8h4"/>
+    </g>
+  </symbol>
+  <symbol id="certificates" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#f3e6ec" stroke="#71455b" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#71455b" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#cd98ae" d="M3 6h15v14H3z"/>
+      <path fill="#f4cc98" d="M7 3h14v13H7z"/>
+      <path fill="none" d="M10 7h8m-8 3h4m1 4 2-2 2 2-2 2z"/>
+    </g>
+  </symbol>
+  <symbol id="blueprint" viewBox="0 0 32 32">
+    <rect x=".5" y=".5" width="31" height="31" rx="7" fill="#e4edf6" stroke="#284c70" stroke-opacity=".18"/>
+    <g transform="translate(3 3) scale(1.08)" stroke="#284c70" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round">
+      <path fill="#88aeca" d="M3 4h18v16H3z"/>
+      <path fill="#ffcf86" d="M6 7h6v6H6z"/>
+      <path fill="none" d="M15 7h3v9H7v-2m5-4h3"/>
+    </g>
+  </symbol>
 </svg>

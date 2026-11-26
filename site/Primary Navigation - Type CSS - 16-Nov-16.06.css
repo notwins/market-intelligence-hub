@@ -253,28 +253,28 @@ html[data-nav-size=compact] .bottom-nav.hub-primary {
 .hub-extra-links > summary { --hub-mark:var(--hub-mark-orange); border-radius:8px; padding-left:12px; background:#fdf5ed; }
 
 /* Illustrated destinations share their colors across the header, dropdowns and Jump to. */
-:is([data-nav-art="home"], [data-nav-art="pivot"], [data-nav-art="map"], [data-nav-art="search"], [data-nav-art="lock"], [data-nav-art="folio"], [data-nav-art="fx"], [data-nav-art="screen"], [data-nav-art="review"], [data-nav-art="saved"], [data-nav-art="source"], [data-nav-art="upload"], [data-nav-art="calc"], [data-nav-art="layers"], [data-nav-art="strategy"], [data-nav-art="settings"]) {
+:is([data-nav-art="home"], [data-nav-art="dashboard"], [data-nav-art="catalog"], [data-nav-art="security"], [data-nav-art="legacy"], [data-nav-art="blueprint"], [data-nav-art="pivot"], [data-nav-art="map"], [data-nav-art="search"], [data-nav-art="lock"], [data-nav-art="folio"], [data-nav-art="fx"], [data-nav-art="screen"], [data-nav-art="review"], [data-nav-art="saved"], [data-nav-art="source"], [data-nav-art="upload"], [data-nav-art="calc"], [data-nav-art="layers"], [data-nav-art="strategy"], [data-nav-art="settings"]) {
   --art-ink:#284c70; --art-paper:#e4edf6;
 }
-:is([data-nav-art="tools"], [data-nav-art="gold"], [data-nav-art="archive"], [data-nav-art="coupon"], [data-nav-art="etf"]) {
+:is([data-nav-art="tools"], [data-nav-art="sunrise"], [data-nav-art="closebell"], [data-nav-art="balance"], [data-nav-art="prospect"], [data-nav-art="gold"], [data-nav-art="archive"], [data-nav-art="coupon"], [data-nav-art="etf"]) {
   --art-ink:#714c27; --art-paper:#f8edcd;
 }
-:is([data-nav-art="shares"], [data-nav-art="chart"], [data-nav-art="earnings"], [data-nav-art="cube"], [data-nav-art="capital"], [data-nav-art="flow"], [data-nav-art="ladder"], [data-nav-art="filing"], [data-nav-art="chip"], [data-nav-art="compare"], [data-nav-art="index"], [data-nav-art="ticker"]) {
+:is([data-nav-art="shares"], [data-nav-art="movers"], [data-nav-art="browser"], [data-nav-art="accumulator-beta"], [data-nav-art="chart"], [data-nav-art="earnings"], [data-nav-art="cube"], [data-nav-art="capital"], [data-nav-art="flow"], [data-nav-art="ladder"], [data-nav-art="filing"], [data-nav-art="chip"], [data-nav-art="compare"], [data-nav-art="index"], [data-nav-art="ticker"]) {
   --art-ink:#275848; --art-paper:#e3efe1;
 }
-:is([data-nav-art="news"], [data-nav-art="book"], [data-nav-art="briefing"], [data-nav-art="hourly"], [data-nav-art="wire"], [data-nav-art="editions"], [data-nav-art="pen"], [data-nav-art="papers"], [data-nav-art="calendar"], [data-nav-art="notebook"], [data-nav-art="library"], [data-nav-art="report"]) {
+:is([data-nav-art="news"], [data-nav-art="journal"], [data-nav-art="book"], [data-nav-art="briefing"], [data-nav-art="hourly"], [data-nav-art="wire"], [data-nav-art="editions"], [data-nav-art="pen"], [data-nav-art="papers"], [data-nav-art="calendar"], [data-nav-art="notebook"], [data-nav-art="library"], [data-nav-art="report"]) {
   --art-ink:#79472f; --art-paper:#fae9d9;
 }
-:is([data-nav-art="fred"], [data-nav-art="policy"], [data-nav-art="monitor"], [data-nav-art="radar"], [data-nav-art="signal"], [data-nav-art="replay"], [data-nav-art="matrix"], [data-nav-art="network"], [data-nav-art="database"]) {
+:is([data-nav-art="fred"], [data-nav-art="rewind"], [data-nav-art="policy"], [data-nav-art="monitor"], [data-nav-art="radar"], [data-nav-art="signal"], [data-nav-art="replay"], [data-nav-art="matrix"], [data-nav-art="network"], [data-nav-art="database"]) {
   --art-ink:#574375; --art-paper:#ede8f7;
 }
-:is([data-nav-art="bonds"], [data-nav-art="credit"], [data-nav-art="treasury"], [data-nav-art="cashflow"], [data-nav-art="yield"]) {
+:is([data-nav-art="bonds"], [data-nav-art="maturity"], [data-nav-art="certificates"], [data-nav-art="credit"], [data-nav-art="treasury"], [data-nav-art="cashflow"], [data-nav-art="yield"]) {
   --art-ink:#71455b; --art-paper:#f3e6ec;
 }
-:is([data-nav-art="history"], [data-nav-art="calls"], [data-nav-art="event"], [data-nav-art="cross"], [data-nav-art="tags"], [data-nav-art="palette"], [data-nav-art="swatch"], [data-nav-art="timeline"]) {
+:is([data-nav-art="history"], [data-nav-art="chronicle"], [data-nav-art="calls"], [data-nav-art="event"], [data-nav-art="cross"], [data-nav-art="tags"], [data-nav-art="palette"], [data-nav-art="swatch"], [data-nav-art="timeline"]) {
   --art-ink:#814c54; --art-paper:#f7e7e3;
 }
-:is([data-nav-art="markets"], [data-nav-art="jump"], [data-nav-art="curves"], [data-nav-art="watch"], [data-nav-art="pricing"], [data-nav-art="globe"], [data-nav-art="scales"], [data-nav-art="retire"], [data-nav-art="buildings"], [data-nav-art="bookmark"], [data-nav-art="vault"], [data-nav-art="exchange"]) {
+:is([data-nav-art="markets"], [data-nav-art="quotes"], [data-nav-art="cabinet"], [data-nav-art="jump"], [data-nav-art="curves"], [data-nav-art="watch"], [data-nav-art="pricing"], [data-nav-art="globe"], [data-nav-art="scales"], [data-nav-art="retire"], [data-nav-art="buildings"], [data-nav-art="bookmark"], [data-nav-art="vault"], [data-nav-art="exchange"]) {
   --art-ink:#245954; --art-paper:#dfefeb;
 }
 .hub-nav-icon {
