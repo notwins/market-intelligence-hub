@@ -90,26 +90,59 @@
   const hint = option.querySelector('p');
   const key = 'market-hub-desk-motion';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
-  let enabled = false;
-  try { enabled = localStorage.getItem(key) === 'on'; } catch { /* Use this tab's setting. */ }
+  let enabled = true;
+  try { enabled = localStorage.getItem(key) !== 'off'; } catch { /* Use this tab's setting. */ }
 
-  // Start effects on entry only. Content is visible before observation, on jumps and in print.
-  const targets = document.querySelectorAll(
-    '.desk-hero-copy, #briefing > section > .section-head, #main-news .daily-desk-editions, ' +
-    '#markets > section > .section-head, #markets > section > h2, #full-history-frame, #archive > summary'
-  );
+  // Feeds replace these cards after initial layout. Observe only their stable list containers.
+  function observeEntries(doc, selector, containers) {
+    const view = doc.defaultView;
+    if (!view?.IntersectionObserver) return;
+    const observer = new view.IntersectionObserver(entries => {
+      for (const {target, isIntersecting} of entries) target.classList.toggle('desk-enter', isIntersecting);
+    }, {rootMargin: '0px 0px -3% 0px'});
+    let observed = new Set();
+    function syncTargets() {
+      const current = new Set(doc.querySelectorAll(selector));
+      for (const node of observed) {
+        if (!current.has(node)) {
+          observer.unobserve(node);
+          node.classList.remove('desk-enter');
+        }
+      }
+      for (const node of current) {
+        if (!observed.has(node)) observer.observe(node);
+      }
+      observed = current;
+    }
+    syncTargets();
+    const updates = new view.MutationObserver(syncTargets);
+    doc.querySelectorAll(containers).forEach(list => updates.observe(list, {childList: true}));
+    return () => {
+      updates.disconnect();
+      observer.disconnect();
+      observed.forEach(node => node.classList.remove('desk-enter'));
+    };
+  }
+  const targets = '.desk-hero-copy, .desk-plate, #briefing > section > .section-head, ' +
+    '#markets > section > .section-head, #markets > section > h2, #full-history-frame, #archive > summary, ' +
+    '#daily-desk-editions > .daily-edition, #markets .dashboard-grid > .dashboard-card';
   const frame = document.getElementById('full-history-frame');
+  let stopHistory;
   function styleHistory() {
+    stopHistory?.();
+    stopHistory = undefined;
     const doc = frame.contentDocument;
     if (!doc?.body?.classList.contains('embedded-history')) return;
     if (!doc.getElementById('desk-history-design')) {
       const theme = doc.createElement('link');
       theme.id = 'desk-history-design';
       theme.rel = 'stylesheet';
-      theme.href = new URL('desk-history-edition.css?v=1', document.baseURI).href;
+      theme.href = new URL('desk-history-edition.css?v=2', document.baseURI).href;
       doc.head.append(theme);
     }
-    doc.documentElement.classList.toggle('desk-motion', enabled && !reduce.matches);
+    const active = enabled && !reduce.matches;
+    doc.documentElement.classList.toggle('desk-motion', active);
+    if (active) stopHistory = observeEntries(doc, '.episode .core > .panel', '#market-episodes');
   }
   frame.addEventListener('load', styleHistory);
   const nativeProgress = CSS.supports('animation-timeline', 'scroll()');
@@ -117,19 +150,19 @@
     const total = root.scrollHeight - root.clientHeight;
     root.style.setProperty('--desk-progress', total > 0 ? Math.min(1, Math.max(0, scrollY / total)) : 0);
   }
-  let observer;
+  let stopDesk;
   function applyMotion() {
-    observer?.disconnect();
+    stopDesk?.();
+    stopDesk = undefined;
     styleHistory();
     window.removeEventListener('scroll', updateProgress);
     window.removeEventListener('resize', updateProgress);
     root.classList.remove('desk-motion');
-    for (const node of targets) node.classList.remove('desk-enter');
-    toggle.checked = enabled;
+    toggle.checked = enabled && !reduce.matches;
     toggle.disabled = reduce.matches;
     hint.textContent = reduce.matches
       ? 'Your device’s reduced-motion setting pauses desk animations.'
-      : 'Fade sections into view and follow your place with a reading progress line.';
+      : 'Sections fade in, selected cards slide in from the sides, and a line shows your reading progress.';
     if (!enabled || reduce.matches) return;
     root.classList.add('desk-motion');
     if (!nativeProgress) {
@@ -137,13 +170,7 @@
       window.addEventListener('scroll', updateProgress, {passive: true});
       window.addEventListener('resize', updateProgress);
     }
-    if (!('IntersectionObserver' in window)) return;
-    observer = new IntersectionObserver(entries => {
-      for (const {target, isIntersecting} of entries) {
-        target.classList.toggle('desk-enter', isIntersecting);
-      }
-    }, {threshold: 0, rootMargin: '0px 0px -3% 0px'});
-    targets.forEach(node => observer.observe(node));
+    stopDesk = observeEntries(document, targets, '#daily-desk-editions, #markets .dashboard-grid');
   }
   toggle.addEventListener('change', () => {
     enabled = toggle.checked;
@@ -151,8 +178,8 @@
     applyMotion();
   });
   window.addEventListener('storage', event => {
-    if (event.key === key || event.key === null) {
-      enabled = event.newValue === 'on';
+    if (event.storageArea === window.localStorage && (event.key === key || event.key === null)) {
+      enabled = event.newValue !== 'off';
       applyMotion();
     }
   });

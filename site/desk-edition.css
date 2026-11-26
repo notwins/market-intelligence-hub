@@ -202,9 +202,20 @@ input:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visibl
   .daily-desk-editions { grid-template-columns: 1fr; }
   .desk-directory > div { width: min(19rem, 91vw); }
 }
-@media (prefers-reduced-motion: no-preference) {
-  .desk-motion .desk-enter { animation: desk-entry .62s cubic-bezier(.21,.71,.25,1) both; }
-  @keyframes desk-entry { from { opacity: .24; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media screen and (prefers-reduced-motion: no-preference) {
+  .desk-plate, .daily-edition, .dashboard-grid > .dashboard-card {
+    --desk-slide: clamp(.6rem, 2.6vw, 2.25rem);
+    --desk-entry-x: var(--desk-slide);
+    --desk-entry-y: 0px;
+  }
+  .daily-edition:nth-child(even), .dashboard-grid > .dashboard-card:nth-child(even) {
+    --desk-entry-x: calc(-1 * var(--desk-slide));
+  }
+  .desk-motion .desk-enter:not(:focus-within) { animation: desk-entry .62s cubic-bezier(.21,.71,.25,1) backwards; }
+  @keyframes desk-entry {
+    from { opacity: .24; transform: translate(var(--desk-entry-x, 0px), var(--desk-entry-y, 12px)); }
+    to { opacity: 1; transform: none; }
+  }
   html.desk-motion::after { content: ""; pointer-events: none; position: fixed; z-index: 90; inset: 0 0 auto; height: 3px; background: #a35438; transform: scaleX(var(--desk-progress,0)); transform-origin: left; }
   @supports (animation-timeline: scroll()) {
     html.desk-motion::after { animation: desk-progress linear both; animation-timeline: scroll(root); }
