@@ -99,9 +99,16 @@
     currentRatio:['Current ratio','multiple'],interestCover:['Interest cover','multiple'],
     debtCoverage:['Cash flow / debt','percent'],cet1:['CET1','percent'],totalCapitalRatio:['Total capital ratio','percent']
   };
+  const quarterFields={
+    score:annualFields.score,netAssetsRatio:annualFields.netAssetsRatio,netAssetsUsd:annualFields.netAssetsUsd,
+    assetsUsd:annualFields.assetsUsd,liabilitiesUsd:['Liabilities','usd'],liabAssets:['Liabilities / assets','percent'],
+    revenueUsd:annualFields.revenueUsd,cashUsd:annualFields.cashUsd,cashAssets:['Cash / assets','percent'],
+    ...Object.fromEntries(Object.entries(annualFields).slice(6))
+  };
   const cashColor='#177969';
   function filingView(view,h){
-    return {...view,usdRate:h.rate(view.company.currency,view.year?.end)};
+    const fxDate=view.year?.end||(h.quarter&&view.hasQuarter?h.mappedEnd:null);
+    return {...view,usdRate:h.rate(view.company.currency,fxDate)};
   }
   function usd(value,rate){return F(value)&&F(rate)?value*rate:null;}
   function percent(value,pct){return '<span class="filing-percent">'+esc(pct(value))+'</span>';}
@@ -111,24 +118,32 @@
   }
   function companyMark(view,h){
     const name=view.company.name;
+    const date=view.year?esc(h.fmtDate(view.year.end)):'';
+    const label=h.quarter?(view.hasQuarter?[date||esc(view.period||h.periodLabel),(view.kind?h.link(view.file,view.kind):'')].filter(Boolean).join(' · '):
+      'No filing this quarter'):(date||'Annual period unavailable');
     return '<span class="annual-company">'+h.logo(view.id,name)+'<span><strong>'+esc(name)+'</strong><small>'+
-      (view.year?esc(h.fmtDate(view.year.end)):'Annual period unavailable')+'</small></span></span>';
+      label+'</small></span></span>';
   }
-  function renderRanking(c,h,views=c.notes.map(view=>filingView(view,h))){
+  function renderRanking(c,h,views=(h.quarter?c.quarterNotes:c.notes).map(view=>filingView(view,h))){
     const rank=D.ranking(views);
     const rows=views.map((view,i)=>({
       view,i,rank:rank.ranks[i]?.rank,
       values:{...view.v,...h.scale(view.v,view.usdRate),score:rank.scores[i]}
     }));
-    const keys=Object.keys(annualFields).filter(k=>!['cet1','totalCapitalRatio'].includes(k)||rows.some(r=>F(r.values[k])));
+    const fields=h.quarter?quarterFields:annualFields;
+    const keys=Object.keys(fields).filter(k=>!['cet1','totalCapitalRatio'].includes(k)||rows.some(r=>F(r.values[k])));
     const {key,ascending}=keys.includes(h.sort.key)?h.sort:{key:'score',ascending:false};
     const sortable=row=>F(row.values[key]);
     rows.sort((a,b)=>Number(sortable(b))-Number(sortable(a))||
       (sortable(a)&&sortable(b)?(a.values[key]-b.values[key])*(ascending?1:-1):0)||a.i-b.i);
     const scale=Math.max(0,...rows.map(r=>Math.abs(r.values.netAssetsUsd||0)));
-    $('ranking-caption').textContent=c.companies.length+' companies · '+usdLabel(h)+' · '+D.groupLabels[rank.model]+' score based on '+rank.common.length+(rank.common.length===1?' shared measure':' shared measures');
+    const prefix=h.quarter?'quarter-':'';
+    const common=rank.common.length;
+    const coverage=h.quarter?h.periodLabel+' · '+views.filter(v=>v.hasQuarter).length+'/'+c.companies.length+' reporting · ':'';
+    const scoreNote=common>=2?D.groupLabels[rank.model]+' score based on '+common+' shared measures':'Solvency score needs two shared measures';
+    $(prefix+'ranking-caption').textContent=coverage+c.companies.length+' companies · '+usdLabel(h)+' · '+scoreNote;
     const headers=keys.map(k=>{
-      const [label,style]=annualFields[k],isSort=key===k;
+      const [label,style]=fields[k],isSort=key===k;
       return '<th scope="col" class="annual-metric annual-'+style+'"'+(isSort?' aria-sort="'+(ascending?'ascending':'descending')+'"':'')+'>'+
         '<button type="button" data-annual-sort="'+k+'" data-ascending="'+D.lower.has(k)+'" aria-label="Sort by '+esc(label)+'">'+
         esc(label)+(isSort?'<span aria-hidden="true">'+(ascending?'▲':'▼')+'</span>':'')+'</button></th>';
@@ -136,7 +151,7 @@
     const body=rows.map(r=>{
       const leader=r.rank===1,focus=r.i===0;
       const cells=keys.map(k=>{
-        const v=r.values[k], style=annualFields[k][1];
+        const v=r.values[k], style=fields[k][1];
         const formatted=style==='usd'?esc(usdAmount(v,h)):style==='percent'?percent(v,h.pct):
           style==='multiple'?esc(h.times(v)):F(v)?esc(v.toFixed(0)):'—';
         const scaleBar=k==='netAssetsUsd'&&F(v)?'<span class="annual-bar" aria-hidden="true"><i style="--bar:'+Math.abs(v)/(scale||1)*100+'%;--bar-color:'+(v<0?'#a35f69':cashColor)+'"></i></span>':'';
@@ -145,20 +160,26 @@
       }).join('');
       return '<tr data-annual-id="'+esc(r.view.id)+'" class="'+(focus?'annual-focus ':'')+(leader?'annual-leader':'')+'"><th scope="row">'+companyMark(r.view,h)+'</th>'+cells+'</tr>';
     }).join('');
-    $('rank-diagram').innerHTML='<table class="annual-matrix annual-rank-table"><caption class="sr-only">Annual solvency measures and scale in '+usdLabel(h)+'. Each heading sorts its column.</caption>'+
-      '<thead><tr><th scope="col">Company / FY end</th>'+headers+'</tr></thead><tbody>'+body+'</tbody></table>';
+    $(prefix+'rank-diagram').innerHTML='<table class="annual-matrix annual-rank-table"><caption class="sr-only">'+
+      (h.quarter?'Quarterly':'Annual')+' solvency measures and scale in '+usdLabel(h)+'. Each metric heading sorts its column.</caption>'+
+      '<thead><tr><th scope="col">'+(h.quarter?'Company / period end':'Company / FY end')+'</th>'+headers+'</tr></thead><tbody>'+body+'</tbody></table>';
   }
   function revenueCard(view,kind,h,color){
     const disclosure=view.geo[kind];
     const heading=companyMark(view,h);
     const klass='panel annual-mix-card'+(view.focus?' annual-focus':'');
-    if(!disclosure)return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+
-      '<p class="annual-empty">No comparable breakdown reported.</p></article>';
     const rate=view.usdRate;
-    const groupedGeography=kind==='geography'&&grouped();
+    if(!disclosure){
+      const total=h.quarter&&F(view.v.revenue)?'<p class="annual-mix-total"><strong>'+esc(usdAmount(usd(view.v.revenue,rate),h))+
+        '</strong><span>quarterly revenue</span></p>':'';
+      const message=h.quarter?(view.hasQuarter?'Breakdown unavailable for this quarter.':'No matching quarterly figures.'):'No comparable breakdown reported.';
+      return '<article data-annual-id="'+esc(view.id)+'" class="'+klass+'">'+heading+total+
+        '<p class="annual-empty">'+message+'</p></article>';
+    }
+    const groupedGeography=!h.quarter&&kind==='geography'&&grouped();
     const items=groupedGeography?geoRows([view]).map(r=>({
       label:r.name,id:r.id,depth:r.depth,value:r.cells[0]?.n,p:r.cells[0]?.p,source:r.cells[0]?.label
-    })):disclosure.items.filter(item=>kind!=='geography'||geoMode()==='all'||item.type===geoMode())
+    })):disclosure.items.filter(item=>h.quarter||kind!=='geography'||geoMode()==='all'||item.type===geoMode())
       .slice().sort((a,b)=>b.value-a.value).map(item=>({...item,p:D.division(item.value,disclosure.total,100)}));
     const positive=items.filter(item=>item.value>0&&(!groupedGeography||item.depth===0));
     const sum=positive.reduce((total,item)=>total+item.value,0);
@@ -173,21 +194,25 @@
       (sum?'<div class="mix-strip" aria-hidden="true">'+segment+'</div>':'')+
       '<table class="annual-mix-table"><caption class="sr-only">'+esc(view.company.name)+' · '+esc(D.kinds[kind])+'</caption>'+
       '<thead><tr><th scope="col">'+(groupedGeography?'Geographic group':'Reported breakdown')+'</th><th scope="col">'+usdLabel(h)+'</th><th scope="col">Share</th></tr></thead><tbody>'+body+'</tbody></table>'+
-      (F(rate)?'':'<p class="annual-empty">USD conversion unavailable.</p>')+'</article>';
+      (F(rate)?'':'<p class="annual-empty">USD conversion unavailable.</p>')+
+      (h.quarter?'<p class="quarter-filing-source">'+h.link(disclosure.source,'Revenue source')+'</p>':'')+'</article>';
   }
   function renderRevenue(views,h){
     const categories=Object.entries(D.kinds).filter(([k])=>views.some(v=>v.geo[k]));
-    $('revenue-diagram').innerHTML=categories.length?categories.map(([k,title])=>{
+    const prefix=h.quarter?'quarter-':'';
+    const grid=(kind,color)=>'<div class="annual-mix-grid">'+views.map(v=>revenueCard(v,kind,h,color)).join('')+'</div>';
+    $(prefix+'revenue-diagram').innerHTML=categories.length?categories.map(([k,title])=>{
       const count=views.filter(v=>v.geo[k]).length;
       const label=item=>item.type+'|'+D.canonical(item.label,item.type).toLowerCase();
       const labels=D.mixRows(views,k).map(item=>label({label:item.name,type:item.type}));
       const colors=new Map(labels.map((name,index)=>[name,palette[index%palette.length]]));
       const geoColors={usa:palette[0],apac:palette[1],other:palette[2]};
       const color=item=>geoColors[item.id]||colors.get(label(item))||palette[0];
-      return '<section class="annual-breakdown" aria-labelledby="annual-mix-'+k+'"><header class="annual-breakdown-head">'+
-        '<h4 id="annual-mix-'+k+'">'+esc(title)+'</h4><span>'+count+'/'+views.length+' companies · '+usdLabel(h)+'</span></header>'+
-        '<div class="annual-mix-grid">'+views.map(v=>revenueCard(v,k,h,color)).join('')+'</div></section>';
-    }).join(''):'<p class="annual-empty">No comparable revenue breakdowns are available for this annual period.</p>';
+      const id=prefix+'filing-mix-'+k;
+      return '<section class="annual-breakdown" aria-labelledby="'+id+'"><header class="annual-breakdown-head">'+
+        '<h4 id="'+id+'">'+esc(title)+'</h4><span>'+count+'/'+views.length+' companies · '+usdLabel(h)+'</span></header>'+
+        grid(k,color)+'</section>';
+    }).join(''):h.quarter?grid(null):'<p class="annual-empty">No comparable revenue breakdowns are available for this annual period.</p>';
   }
   function renderMaturities(views,h){
     const families=Object.entries(D.families).filter(([k])=>views.some(v=>v.sch[k]));
@@ -212,6 +237,11 @@
         '<thead><tr><th scope="col">Payment window</th>'+headers+'</tr></thead><tbody>'+body+'</tbody></table></div></article>';
     }).join(''):'<p class="annual-empty">No maturity schedules are available for this annual period.</p>';
   }
+  function renderQuarter(c,h){
+    const views=c.quarterNotes.map((view,i)=>({...filingView(view,h),focus:i===0}));
+    renderRanking(c,h,views);
+    renderRevenue(views,h);
+  }
   function renderCharts(c,h){
     const views=c.notes.map((view,i)=>({...filingView(view,h),focus:i===0}));
     renderRanking(c,h,views);
@@ -234,5 +264,5 @@
     if(mark!=null)refs.push('<li><b>Company logo</b> · '+link(url(mark),v.company.name)+'</li>');
     return refs.length?'<details class="filing-note-refs"><summary>Revenue, balance sheet and maturity references</summary><ul>'+refs.join('')+'</ul></details>':'';
   }
-  root.FilingNotesView={focusKeys,groups,renderRanking,renderCharts,sourceList};
+  root.FilingNotesView={focusKeys,groups,renderRanking,renderQuarter,renderCharts,sourceList};
 })(window);
