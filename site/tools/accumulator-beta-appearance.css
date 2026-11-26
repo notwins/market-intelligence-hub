@@ -392,7 +392,8 @@
 .accumulator-beta #nvda-stress-context .nv-chart-key span:first-child::before { border-color: var(--beta-history); }
 
 /* Presentation colours for the live SVGs and their PDF copies. */
-.accumulator-beta :is(.hist::before, #overview .legend .hist::before) { color: var(--beta-history); border-color: var(--beta-history); }
+.accumulator-beta .hist::before,
+.accumulator-beta #overview .legend .hist::before { border-color: var(--beta-history); }
 .accumulator-beta .path::before { color: var(--beta-shares); }
 .accumulator-beta .legend .after-ko::before {
   height: .65rem;

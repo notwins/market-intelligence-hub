@@ -639,7 +639,7 @@ function drawPriceChart(compact){
     let previousTick=-Infinity;
     for(const date of new Set([first,...history.map(p=>p[0])])){
       const x=hx(date);
-      if(x-previousTick<86||(compact&&date!==first&&historyEnd-x<90))continue;
+      if(x-previousTick<86||(compact&&date!==first&&historyEnd-x<112))continue;
       svg+=label(x,yb+21,date.slice(0,7),'font-size="13" fill="#536975"');
       previousTick=x;
     }
