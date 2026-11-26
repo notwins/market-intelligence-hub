@@ -44,5 +44,22 @@ const Metals = (() => {
     const ticks = points.length ? indices.map(i => [points[i][0], new Date(points[i][0]).toISOString().slice(0,10)]) : [];
     return chart(points, label, {ticks, color, gap: 8 * 86400000});
   }
-  return {series, metrics, chart, history, format};
+  function showHistory(panel, rows, key, label, unit, color) {
+    const range = panel.querySelector('select');
+    const plot = panel.querySelector('.history-plot');
+    const coverage = panel.querySelector('figcaption');
+    const available = rows.filter(row => Number.isFinite(row[key]));
+    if (!available.length) {
+      plot.textContent = 'Price history is unavailable.';
+      coverage.textContent = '';
+      return;
+    }
+    const latest = available.at(-1);
+    const cutoff = new Date(latest.date);
+    cutoff.setUTCFullYear(cutoff.getUTCFullYear() - Number(range.value || 0));
+    const shown = range.value ? available.filter(row => Date.parse(row.date) >= cutoff) : available;
+    plot.innerHTML = history(shown, key, label, color);
+    coverage.textContent = `${shown[0].date} to ${latest.date} · ${shown.length.toLocaleString('en-US')} closes · Latest ${format(latest[key])} ${unit}`;
+  }
+  return {series, metrics, chart, history, showHistory, format};
 })();

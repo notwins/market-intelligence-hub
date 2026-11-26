@@ -3,13 +3,32 @@
   const el = id => document.getElementById(id);
   const form = el('terms');
   const result = el('result');
+  const currency = el('currency');
+  const principalMinimum = {USD: 165000, SGD: 200000};
+  const currencyFields = ['principal', 'initial', 'final'];
+  const overrides = {USD: new Map(), SGD: new Map()};
   let history = [];
-  function loadReference() {
-    const currency = el('currency').value;
-    const key = currency === 'USD' ? 'usd_per_oz' : 'sgd_per_oz';
-    const row = history.findLast(r => r[key] !== null);
-    for (const id of ['initial','final']) el(id).value = row?.[key] ?? '';
-    el('basis').textContent = row ? 'Starting and final scenarios use the '+row.date+' reference of '+currency+' '+Metals.format(row[key])+' per troy ounce. Both prices are editable.' : 'Enter a reference price in '+currency+' per troy ounce.';
+  const priceKey = () => currency.value === 'USD' ? 'usd_per_oz' : 'sgd_per_oz';
+
+  function renderHistory() {
+    Metals.showHistory(el('price-history'), history, priceKey(), 'Historical gold spot price in '+currency.value,
+      currency.value+' / troy oz', currency.value === 'USD' ? '#96701c' : '#26766e');
+  }
+
+  function loadDefaults() {
+    const cur = currency.value;
+    const key = priceKey();
+    const row = history.findLast(r => Number.isFinite(r[key]));
+    const price = row ? row[key].toFixed(2) : '';
+    const edits = overrides[cur];
+    el('principal').value = edits.get('principal') ?? principalMinimum[cur];
+    for (const id of ['initial','final']) el(id).value = edits.get(id) ?? price;
+    el('principal-hint').textContent = `Assumed minimum ${cur} ${principalMinimum[cur].toLocaleString('en-US')}. You can edit the principal.`;
+    el('basis').textContent = row
+      ? `Gold reference on ${row.date} · ${cur} ${Metals.format(row[key])} per troy ounce. You can edit both prices.`
+      : `Enter the gold prices in ${cur} per troy ounce.`;
+    renderHistory();
+    render();
   }
   function render() {
     if (!form.checkValidity()) {
@@ -34,11 +53,16 @@
       'Total note proceeds in '+cur+' by final gold price',{ticks:[[0,'0'],[strike,'Strike '+Metals.format(strike)],[high,Metals.format(high)]]})+
       '<p class="hint">Horizontal axis in '+cur+' per troy ounce. Vertical axis includes all coupons in '+cur+'.</p>';
   }
-  el('currency').addEventListener('change', () => { loadReference(); render(); });
-  form.addEventListener('input',render);
+  currency.addEventListener('change', loadDefaults);
+  el('history-range').addEventListener('change', renderHistory);
+  form.addEventListener('input', event => {
+    const {id, value} = event.target;
+    if (id === 'currency') return;
+    if (currencyFields.includes(id)) overrides[currency.value].set(id, value);
+    render();
+  });
   form.addEventListener('submit', e => e.preventDefault());
   try { history = await Metals.series('xau-spot'); }
-  catch { el('basis').textContent = 'History unavailable. Enter the initial and final gold prices.'; }
-  loadReference();
-  render();
+  catch { /* The terms remain editable when the price archive is unavailable. */ }
+  loadDefaults();
 })();

@@ -18,14 +18,18 @@ h3 { font-size: 1rem }
 label { display: grid; align-content: start; gap: 5px; font-size: .84rem; font-weight: 650 }
 input, select { width: 100%; min-width: 0; border: 1px solid #a2b1aa; border-radius: 6px; padding: 8px; font: inherit; color: #192c34; background: white }
 input:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #317d73 }
-.pricing-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 10px 14px }
-.pricing-controls label { width: min(100%, 21rem) }
-.pricing-controls + .pricing-controls { margin-top: 12px }
+.history-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 16px; margin-bottom: 8px }
+.history-heading h2 { margin: 0 }
+.history-heading label { min-width: 8rem }
 .pricing-saved-link { display: inline-block; padding: 8px 13px; border-radius: 6px; background: #245958; color: #fff; font-weight: 650; text-decoration: none }
-.pricing-controls button, #pricing-table button { border: 1px solid #a2b1aa; border-radius: 6px; padding: 7px 10px; font: inherit; color: #245958; background: #f0f5f0; cursor: pointer }
-.pricing-controls button:focus-visible, #pricing-table button:focus-visible { outline: 3px solid #317d73 }
+#pricing-table button { border: 1px solid #a2b1aa; border-radius: 6px; padding: 7px 10px; font: inherit; color: #245958; background: #f0f5f0; cursor: pointer }
+#pricing-table button:focus-visible { outline: 3px solid #317d73 }
+#pricing-table button[aria-pressed="true"] { background: #245958; color: #fff }
 #pricing-table { margin-top: 12px }
 #pricing-table tbody th { font-weight: 600 }
+#path { margin-top: 12px }
+#path summary { cursor: pointer; color: #245958; font-weight: 650 }
+#month-prices { margin-top: 10px }
 .hint, figcaption, .sources { font-size: .88rem }
 .hint { margin-top: 10px }
 .metrics { margin-bottom: 18px }
