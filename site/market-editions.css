@@ -96,6 +96,7 @@
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 34rem), 1fr));
   }
   .bb-card.sb2-panel { border-top: 2px solid var(--edition-rule); }
+  .bb-card .bb-plot { overflow: clip; overflow-clip-margin: 3px; }
   .bb-card .bb-figure canvas { height: clamp(11rem, 14vw, 15.5rem); }
   [data-market="shares"] .sq-grid, [data-market="shares"] .charts-grid {
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 34rem), 1fr));
@@ -127,6 +128,14 @@
   }
   .sb-section, .sb2-valuation, #quarterly-dashboard, .price-panel { --edition-mark: var(--edition-chart); }
   .sb2-research, #statements, #checklist { --edition-mark: var(--edition-folio); }
+
+  .content:has(> #view:is([data-market-view="ust"],[data-market-view="credit"])) {
+    padding-inline: clamp(.875rem, 1.4vw, 1.75rem);
+  }
+  [data-market-view="ust"] .ust-chart-deck > :is(.bond-watchlist,#ust-curves) { max-width: none; }
+  [data-market-view="ust"] .ust-chart-deck {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 45rem), 1fr));
+  }
 
   /* Reuse the art within the existing multi-purpose desk and router. */
   :is([data-market-view="credit"],[data-market-view="ust"]) > .page-head,
