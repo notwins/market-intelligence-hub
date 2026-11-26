@@ -115,9 +115,22 @@
     const basis=Array.from(tally,([k,v])=>v+' '+({'BOS report peer':'from the BOS report','Industry peer':'industry','Related industry':'related industry','Selected peer':'manually added'}[k])).join(' · ');
     $('peer-basis').textContent=(state.custom?'Selected comparison':'Automatic comparison')+(basis?' · '+basis:'')+(state.custom===null&&c.peers.length<state.size?' · '+c.peers.length+' available':'');
     $('open-bos').hidden=!c.report;
-    $('companies').innerHTML=`<div class="column-label"><strong>Comparison item</strong><small>${esc(cos[0].industry)}</small></div>`+
-      cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-brand">${logo(c.ids[i],co.name)}<span class="company-name">${esc(co.name)}</span></span><small>${esc(c.ticker[i])} · ${esc(co.currency)}</small><small>${c.current[i]?esc(c.current[i].period+(c.current[i].ended?' · '+date(c.current[i].ended):'')):c.isQuarter?'No filing this quarter':c.years[i]?esc('Annual · '+date(c.years[i].end)):'No filing for period'}</small><small class="peer-role">${i===0?'Focus company':esc(reason(c.ids[i]))}</small></div>`).join('');
+    $('companies').innerHTML='<div class="column-label"><strong>Comparison item</strong></div>'+
+      cos.map((co,i)=>`<div class="company-id" style="--company-color:${colors[i]}">${c.score.winners.includes(i)?'<span class="head-leader" title="Checklist leader" aria-label="Checklist leader">✓</span>':''}<span class="company-brand">${logo(c.ids[i],co.name)}<span class="company-name" title="${esc(co.name)}">${esc(co.name)}</span></span></div>`).join('');
+    renderCompanyContext(c,reason);
     renderDashboard(c);Notes.chartControls(c,state,opt);drawNotes(c);renderTables(c);renderSources(c);updateURL();
+  }
+  function renderCompanyContext(c,reason) {
+    const labels=['Company','Listing','Currency','Fiscal period','Period end','Peer selection','Industry'];
+    const rows=c.companies.map((company,i)=>{
+      const current=c.current[i], annual=c.years[i];
+      const period=current?.period||(c.isQuarter?'No filing this quarter':annual?'Annual':'—');
+      const periodEnd=current?.ended || (!c.isQuarter?annual?.end:null);
+      const cells=[c.ticker[i],company.currency,period,periodEnd?date(periodEnd):'—',i===0?'Focus company':reason(c.ids[i]),company.industry||'—'];
+      return '<tr><th scope="row">'+esc(company.name)+'</th>'+cells.map(value=>'<td>'+esc(value)+'</td>').join('')+'</tr>';
+    });
+    $('company-context').innerHTML='<table><thead><tr>'+labels.map(label=>'<th scope="col">'+label+'</th>').join('')+
+      '</tr></thead><tbody>'+rows.join('')+'</tbody></table>';
   }
   function renderDashboard(c){
     $('quarterly-dashboard-title').textContent=c.isQuarter?'Quarterly comparison charts':'Annual comparison charts';

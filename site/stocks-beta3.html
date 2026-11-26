@@ -8,8 +8,9 @@
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="stocks-beta.css">
   <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261121.layout1">
-  <link rel="stylesheet" href="stocks-beta3.css?v=5">
+  <link rel="stylesheet" href="stocks-beta3.css?v=6">
   <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261126.filings1"></script>
+  <script defer src="stocks-beta3-scroll.js?v=1"></script>
   <script defer src="content-source.js"></script>
   <script defer src="stocks-beta2-private-research.js?v=1"></script>
   <script defer src="stocks-beta2-research.js?v=20261126.peers"></script>
@@ -22,7 +23,7 @@
   <script defer src="stocks-beta3-quarterly-charts.js?v=2"></script>
   <script defer src="stocks-beta3-comparison.js?v=4"></script>
   <script defer src="stocks-beta3-model.js?v=4"></script>
-  <script defer src="stocks-beta3.js?v=5"></script>
+  <script defer src="stocks-beta3.js?v=6"></script>
 </head>
 <body class="filings-page">
   <a class="skip" href="#main">Skip to filing comparison</a>
@@ -77,7 +78,12 @@
           <div class="matrix-section" data-section="checklist"><h3 class="pinned-section"><span>Checklist measures</span></h3><div class="table-panel panel horizontal" id="check-scroll" tabindex="0" aria-label="Fundamentals checklist columns, horizontal scroll"><table id="check-table"><caption class="sr-only">Fundamentals checklist results by company</caption></table></div></div>
         </section>
       </section>
-      <footer id="filing-footer"><h2>Sources &amp; methodology</h2><div id="sources"></div>
+      <footer id="filing-footer">
+        <section aria-labelledby="compared-companies-title">
+          <h2 id="compared-companies-title">Compared companies</h2>
+          <div class="horizontal comparison-context" id="company-context" tabindex="0" aria-labelledby="compared-companies-title"></div>
+        </section>
+        <h2>Sources &amp; methodology</h2><div id="sources"></div>
         <details class="method"><summary>How the comparison works</summary><div id="method-text"></div></details>
       </footer>
     </div>
