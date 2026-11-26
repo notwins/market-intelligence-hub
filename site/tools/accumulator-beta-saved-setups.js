@@ -34,12 +34,23 @@
     const dateLabel = new Intl.DateTimeFormat('en-SG', {
       dateStyle: 'medium', timeStyle: 'short', timeZone: 'Asia/Singapore'
     });
-    const entries = () => {
-      const saved = read('setups', []);
-      return Array.isArray(saved) ? saved.filter(record => typeof record?.id === 'string' &&
+    const entries = saved => Array.isArray(saved) ? saved.filter(record => typeof record?.id === 'string' &&
         typeof record.description === 'string' && typeof record.date === 'string' &&
         Number.isFinite(Date.parse(record.date)) && record.setup?.quote && Number.isFinite(record.setup.payment)) : [];
-    };
+    let database;
+    function openHistory() {
+      if (!database) database = new Promise(resolve => {
+        try {
+          const request = indexedDB.open(prefix + 'history', 1);
+          request.onupgradeneeded = () => request.result.createObjectStore('library');
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = request.onblocked = () => resolve(null);
+        } catch {
+          resolve(null);
+        }
+      });
+      return database;
+    }
     const titleOf = record => record.description || record.setup.quote.product + ' · ' + record.setup.quote.months + 'M';
     const versionOfRecord = record => Number.isSafeInteger(record.version) && record.version >= 1 ? record.version : 1;
     const part = (tag, value, className) => {
@@ -54,16 +65,54 @@
       button.addEventListener('click', handler);
       return button;
     }
-    async function updateLibrary(update) {
+    async function history(update) {
+      const db = await openHistory();
       try {
-        const operation = () => update(entries());
-        return navigator.locks ? await navigator.locks.request(prefix + 'setups', operation) : operation();
+        if (!db) {
+          const saved = entries(read('setups', []));
+          if (!update) return saved;
+          const {records, result} = update(saved);
+          return write('setups', records) ? result : null;
+        }
+        return await new Promise(resolve => {
+          const transaction = db.transaction('library', update ? 'readwrite' : 'readonly');
+          const store = transaction.objectStore('library');
+          const request = store.get('setups');
+          let result, legacy;
+          request.onsuccess = () => {
+            try {
+              if (request.result === undefined) {
+                try { legacy = localStorage.getItem(prefix + 'setups'); } catch {}
+              }
+              const saved = entries(request.result ?? read('setups', []));
+              if (!update) {
+                result = saved;
+                return;
+              }
+              const change = update(saved);
+              store.put(change.records, 'setups');
+              result = change.result;
+            } catch {
+              transaction.abort();
+            }
+          };
+          transaction.oncomplete = () => {
+            if (update) {
+              try {
+                if (legacy && localStorage.getItem(prefix + 'setups') === legacy) localStorage.removeItem(prefix + 'setups');
+              } catch {}
+              write('history-updated', Date.now() + '-' + Math.random());
+            }
+            resolve(result);
+          };
+          transaction.onabort = () => resolve(null);
+        });
       } catch {
         return null;
       }
     }
     async function saveRecord(snapshot, name, parent, feedback = status) {
-      const record = await updateLibrary(saved => {
+      const record = await history(saved => {
         const date = new Date().toISOString();
         const id = crypto.randomUUID?.() || date + '-' + Math.random().toString(36).slice(2);
         const copy = {id, date, description: name.trim(), ...snapshot};
@@ -73,13 +122,13 @@
             ? Math.max(highest, versionOfRecord(item)) : highest, versionOfRecord(parent));
           Object.assign(copy, {familyId, version: latest + 1, parentId: parent.id, parentTitle: titleOf(parent)});
         }
-        return write('setups', [copy, ...saved]) ? copy : null;
+        return {records:[copy, ...saved], result:copy};
       });
       if (!record) {
         feedback.textContent = 'This browser could not save the setup. Check that site storage is available.';
         return null;
       }
-      showList(record.id);
+      await showList(record.id);
       status.textContent = parent ? 'Version ' + record.version + ' saved in this browser.' : 'Saved in this browser.';
       return record;
     }
@@ -88,8 +137,15 @@
       versionOf.textContent = loaded ? 'Based on ' + titleOf(loaded) + ' · Version ' + versionOfRecord(loaded) : '';
       versionOf.hidden = separate.hidden = !loaded;
     }
-    function showList(focusId) {
-      const saved = entries();
+    let listRequest = 0;
+    async function showList(focusId) {
+      const request = ++listRequest;
+      const saved = await history();
+      if (request !== listRequest) return;
+      if (!saved) {
+        status.textContent = 'This browser could not open saved setups.';
+        return;
+      }
       const families = new Set(saved.map(record => record.familyId).filter(Boolean));
       list.replaceChildren(...saved.map(record => {
         const {setup, date} = record;
@@ -169,13 +225,13 @@
         const remove = action('Remove', () => {
           const confirm = action('Confirm remove', async () => {
             confirm.disabled = true;
-            const removed = await updateLibrary(saved => write('setups', saved.filter(item => item.id !== record.id)));
+            const removed = await history(saved => ({records:saved.filter(item => item.id !== record.id),result:true}));
             if (!removed) {
               status.textContent = 'This browser could not update saved setups.';
               confirm.disabled = false;
               return;
             }
-            showList();
+            await showList();
             status.textContent = 'Removed ' + title + '.';
             form.querySelector('button').focus();
           });
@@ -239,7 +295,7 @@
     });
     window.addEventListener('storage', event => {
       if (dialog.open && !list.querySelector('.beta-setup-description-edit') &&
-        (event.key === prefix + 'setups' || event.key === null)) showList();
+        (event.key === prefix + 'setups' || event.key === prefix + 'history-updated' || event.key === null)) showList();
     });
   });
 })();
