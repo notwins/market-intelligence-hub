@@ -66,10 +66,12 @@
           sensitivity: Array.from(fundamentals.querySelectorAll('.nv-fundamentals-sensitivity table tr'), row => ({
             cells: Array.from(row.cells, cell => cell.textContent.trim()),
             aboveBenchmark: row.hasAttribute('data-above-benchmark'),
-            crossover: row.hasAttribute('data-crossover')
+            crossover: row.hasAttribute('data-crossover'),
+            custom: row.hasAttribute('data-custom-sensitivity')
           })),
           sensitivityBasis: read('.nv-fundamentals-sensitivity-basis'),
-          sensitivityComparison: read('.nv-fundamentals-sensitivity-comparison')
+          sensitivityComparison: read('.nv-fundamentals-sensitivity-comparison'),
+          customComparison: read('.nv-fundamentals-custom-comparison')
         };
       }
       view.valuation = Array.from(document.querySelectorAll('.nvda-valuation-summary > *'), node => node.textContent.trim()).join('  /  ');
@@ -389,10 +391,10 @@
             text(sensitivityTitle, margin, y + 4, 13, 'ink', {weight:'bold', family:'times'});
             y = wrap(fundamentals.sensitivityBasis, margin, y + 7, width, 9.3, 'muted') + 2;
             const rightEdges = [.44, .65, .81, 1];
-            fundamentals.sensitivity.forEach(({cells, aboveBenchmark, crossover}, index) => {
-              const shade = index === 0 ? 'soft' : crossover ? 'secondaryLight' : aboveBenchmark ? 'tertiaryLight' : null;
+            fundamentals.sensitivity.forEach(({cells, aboveBenchmark, crossover, custom}, index) => {
+              const shade = index === 0 || custom ? 'soft' : crossover ? 'secondaryLight' : aboveBenchmark ? 'tertiaryLight' : null;
               if (shade) fill(shade, margin, y, width, 5);
-              const weight = index === 0 || crossover ? 'bold' : 'normal';
+              const weight = index === 0 || crossover || custom ? 'bold' : 'normal';
               const tone = crossover ? 'secondary' : 'ink';
               text(cells[0], margin + 2, y + 3.5, 9.3, tone, {weight});
               cells.slice(1).forEach((value, column) => text(value, margin + width * rightEdges[column] - 2,
@@ -401,6 +403,10 @@
               rule('line', margin, y, w - margin);
             });
             y = wrap(fundamentals.sensitivityComparison, margin, y + 2, width, 9.3, 'muted') + 1;
+            if (fundamentals.customComparison) {
+              space(10, 'Custom cuts');
+              y = wrap(fundamentals.customComparison, margin, y + 1, width, 9, 'ink') + 2;
+            }
           }
         }
       }

@@ -40,6 +40,56 @@
   const bookPerShare = balance.equity / shares;
   const quarterFcf = cashFlow.operating + cashFlow.capitalPurchases + cashFlow.capitalPrincipalPayments;
   const sensitivityCuts = [0, .25, .50, .75];
+  const customControls = document.createElement('fieldset');
+  customControls.className = 'nv-fundamentals-custom-controls';
+  customControls.innerHTML = '<legend>Custom cuts</legend>' +
+    '<label>EPS cut (%)<input type="number" inputmode="decimal" min="0" max="100" step="any" required value="30" aria-controls="nv-custom-valuation"></label>' +
+    '<label>Free cash flow cut (%)<input type="number" inputmode="decimal" min="0" max="100" step="any" required value="50" aria-controls="nv-custom-valuation"></label>';
+  const [epsCutInput, fcfCutInput] = customControls.querySelectorAll('input');
+
+  function scenarioMetrics(test, cap, adjustedEps, adjustedFcf) {
+    const pe = test && adjustedEps > 0 ? test / adjustedEps : null;
+    const yieldRate = cap && adjustedFcf !== null ? adjustedFcf / cap : null;
+    return {
+      pe, yieldRate,
+      cells: [adjustedEps === null ? '—' : price(adjustedEps), adjustedFcf === null ? '—' : billions(adjustedFcf),
+        pe === null ? '—' : multiple(pe), yieldRate === null ? '—' : percent.format(yieldRate)]
+    };
+  }
+
+  function renderCustomScenario(row, output, test, cap, reference) {
+    const readCut = control => {
+      const valid = control.checkValidity() && Number.isFinite(control.valueAsNumber);
+      control.setAttribute('aria-invalid', String(!valid));
+      return valid ? control.valueAsNumber / 100 : null;
+    };
+    const epsCut = readCut(epsCutInput);
+    const fcfCut = readCut(fcfCutInput);
+    const cutText = cut => cut === null ? '—' : percent.format(cut);
+    row.querySelector('[data-eps-cut]').textContent = 'EPS ' + cutText(epsCut);
+    row.querySelector('[data-fcf-cut]').textContent = 'FCF ' + cutText(fcfCut);
+    const {pe, yieldRate, cells} = scenarioMetrics(test, cap,
+      epsCut === null ? null : eps * (1 - epsCut), fcfCut === null ? null : fcf * (1 - fcfCut));
+    row.querySelectorAll('td').forEach((cell, index) => { cell.textContent = cells[index]; });
+
+    const notes = [];
+    if (test && reference) {
+      const compare = (label, value, benchmark, format) => {
+        const simulated = format(value);
+        const dated = format(benchmark);
+        return label + (simulated === dated ? ' matches the close at ' + dated :
+          (value < benchmark ? ' is lower (' : ' is higher (') + simulated + ' vs ' + dated + ')') + '.';
+      };
+      if (pe !== null || yieldRate !== null) notes.push('Custom vs. dated close.');
+      if (pe !== null) notes.push(compare('P/E', pe, reference.price / eps, multiple));
+      if (yieldRate !== null) notes.push(compare('FCF yield', yieldRate, fcf / reference.cap, value => percent.format(value)));
+    } else if (test) {
+      notes.push('A dated close is needed to compare the custom ratios.');
+    }
+    if (epsCut === 1 && test) notes.push('P/E is unavailable at zero EPS.');
+    if (epsCut === null || fcfCut === null) notes.push('Enter each cut from 0% to 100%.');
+    output.textContent = notes.join(' ');
+  }
 
   function sensitivityTable(test, cap, reference, scale) {
     const scenarios = sensitivityCuts.map(cut => ({
@@ -52,14 +102,11 @@
       scenarios.sort((a, b) => b.retained - a.retained);
     }
     const rows = scenarios.map(({retained, label, crossover}) => {
-      const adjustedEps = eps * retained;
-      const adjustedFcf = fcf * retained;
-      const pe = test ? multiple(test / adjustedEps) : '—';
-      const yieldText = cap ? percent.format(adjustedFcf / cap) : '—';
+      const {cells} = scenarioMetrics(test, cap, eps * retained, fcf * retained);
       const highlight = crossover ? ' data-crossover' :
         test && scale !== null && retained < scale ? ' data-above-benchmark' : '';
-      return '<tr' + highlight + '><th scope="row">' + label + '</th><td>' + price(adjustedEps) +
-        '</td><td>' + billions(adjustedFcf) + '</td><td>' + pe + '</td><td>' + yieldText + '</td></tr>';
+      return '<tr' + highlight + '><th scope="row">' + label + '</th>' +
+        cells.map(cell => '<td>' + cell + '</td>').join('') + '</tr>';
     }).join('');
     let comparison = '';
     if (reference && test) {
@@ -84,8 +131,11 @@
       '<p class="nv-fundamentals-sensitivity-basis">Each cut applies to annual diluted EPS and free cash flow. Ratios use unrounded amounts at ' +
       price(test) + '.</p><div class="nv-fundamentals-sensitivity-scroll"><table aria-labelledby="nv-fundamentals-sensitivity-title"><thead><tr><th scope="col">Scenario</th>' +
       '<th scope="col">EPS</th><th scope="col">Annual FCF</th>' +
-      '<th scope="col">P/E</th><th scope="col">FCF yield</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
-      (comparison ? '<p class="nv-fundamentals-sensitivity-comparison">' + comparison + '</p>' : '') + '</section>';
+      '<th scope="col">P/E</th><th scope="col">FCF yield</th></tr></thead><tbody>' + rows +
+      '<tr id="nv-custom-valuation" data-custom-sensitivity><th scope="row">Custom <small><span data-eps-cut></span> <span data-fcf-cut></span></small></th>' +
+      '<td></td><td></td><td></td><td></td></tr></tbody></table></div>' +
+      '<p class="nv-fundamentals-sensitivity-comparison">' + comparison + '</p>' +
+      '<p class="nv-fundamentals-custom-comparison" role="status"></p></section>';
   }
 
   function refresh() {
@@ -147,6 +197,7 @@
       '</strong> in free cash flow. ' + finance.quarter + ' alone generated ' + billions(quarterFcf) + ' in free cash flow.';
 
     const sourcesOpen = body.querySelector('details')?.open;
+    const focusedCut = customControls.contains(document.activeElement) ? document.activeElement : null;
     body.innerHTML = '<p class="nv-fundamentals-lead">' + lead + '</p>' +
       '<dl class="nv-fundamentals-multiples">' + cells.map(([label, value, detail]) =>
         '<div><dt>' + label + '</dt><dd>' + value + '<small>' + detail + '</small></dd></div>').join('') + '</dl>' +
@@ -167,6 +218,12 @@
       '<li><a href="' + q3Release + '" target="_blank" rel="noopener noreferrer">' + finance.quarter + ' free cash flow reconciliation</a></li>' +
       '<li><a href="' + q4Release + '" target="_blank" rel="noopener noreferrer">Q4 FY2026 earnings and cash flow</a></li>' +
       '<li><a href="' + finance.sources[2].url + '" target="_blank" rel="noopener noreferrer">Q2 FY2027 Form 10-Q share count</a></li></ul></details>';
+    body.querySelector('.nv-fundamentals-sensitivity-scroll').before(customControls);
+    const customRow = body.querySelector('#nv-custom-valuation');
+    const customOutput = body.querySelector('.nv-fundamentals-custom-comparison');
+    customControls.oninput = () => renderCustomScenario(customRow, customOutput, test, cap, reference);
+    renderCustomScenario(customRow, customOutput, test, cap, reference);
+    focusedCut?.focus({preventScroll: true});
   }
 
   // The shared context refreshes the sale price and historical sample before these listeners run.
