@@ -1,0 +1,32 @@
+/* Loaded only by the desk when it embeds its historical chart workspace. */
+@font-face {
+  font-family: "DM Sans"; src: url("assets/desk/dm-sans.woff2") format("woff2");
+  font-style: normal; font-weight: 100 1000; font-display: swap;
+}
+@font-face {
+  font-family: "STIX Two Text"; src: url("assets/desk/stix-two-text.woff2") format("woff2");
+  font-style: normal; font-weight: 400 700; font-display: swap;
+}
+:root {
+  --bg: #f1f0ed; --ink: #29282e; --muted: #5e5a64; --border: #cecbd2;
+  --accent: #564c65; font-family: "DM Sans", system-ui, sans-serif;
+  scroll-padding-top: 1rem;
+}
+.embedded-history > .bottom-nav.hub-primary { display: none!important; }
+.embedded-history main { max-width: none; padding: clamp(.65rem,1.5vw,1.4rem); }
+.embedded-history .hero { border: 1px solid #c5bfce; background: #e8e4ed; border-radius: 5px; padding: clamp(.85rem,1.4vw,1.3rem); }
+.embedded-history .hero strong { color: #38333e; }
+.embedded-history .episode, .embedded-history .research { border-radius: 5px; background: #fffefa; }
+.embedded-history :is(h2,h3) { font-family: "STIX Two Text", Georgia, serif; font-weight: 550; letter-spacing: -.025em; }
+.embedded-history .episode-head h2 { font-size: clamp(1.8rem,2.7vw,2.6rem); }
+.embedded-history :is(.hero-links,#episode-index) a { color: #514761; text-underline-offset: .18em; }
+.embedded-history #episode-index a { background: #faf9f6; border: 1px solid #c9c4cd; border-radius: 4px; padding: .45rem .65rem; }
+.embedded-history .hero-links button { border-color: #52485e; background: #52485e; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    html.desk-motion .episode-head, html.desk-motion .panel > h3 {
+      animation: history-entry linear both; animation-timeline: view(); animation-range: entry 0% entry 100%;
+    }
+    @keyframes history-entry { from { opacity: .4; transform: translateY(.5rem); } to { opacity: 1; transform: none; } }
+  }
+}
