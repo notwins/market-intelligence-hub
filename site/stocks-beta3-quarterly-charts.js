@@ -122,6 +122,7 @@
       const number = detail && amount && Math.abs(amount) < .5 ? (amount < 0 ? '−<1' : '<1') : textNumber(amount, detail ? whole : fmt);
       return (currency ? currency + ' ' : '') + number + (bn ? 'bn' : 'm');
     }
+    if (unit === 'share') return textNumber(Math.abs(n) < .5 ? 0 : n, whole) + '%';
     const numberFormat = detail ? whole : fmt;
     if (n && Math.abs(n) < (detail ? .5 : .05)) return (n < 0 ? '−' : '') + '<' + (detail ? '1' : '0.1') + unit;
     return textNumber(n, numberFormat) + unit;
@@ -403,7 +404,7 @@
     const table = details([...present,...rows.filter(row=>!present.includes(row))], 'Direct peer revenue share',
       ['Revenue','Share of reported peer revenue'],row=>[
         {text:printed(row.n,'amount','USD',true),note:!finite(row.n)?unavailable(row.company,'revenue'):row.n<0?'Negative revenue excluded from the share calculation.':null},
-        printed(share(row),'%','',true)
+        printed(share(row),'share','')
       ],true);
     if (total<=0) return '<p class="sq-empty">No positive comparable revenue to show a share.</p>'+table;
     let before=0;
@@ -414,7 +415,7 @@
       return stop;
     }).join(',');
     const labels=present.map((row,i)=>'<li class="'+(row.active?'sq-active':'')+'"><span class="sq-pie-mark" style="--mark:'+row.color+'"></span>'+
-      (i<3?logo(row.company):'')+'<span>'+esc(row.ticker)+'</span><strong>'+esc(printed(share(row),'%','',true))+'</strong></li>').join('');
+      (i<3?logo(row.company):'')+'<span>'+esc(row.ticker)+'</span><strong>'+esc(printed(share(row),'share',''))+'</strong></li>').join('');
     const basis='<div class="sq-chart-meta"><span>'+present.length+'/'+rows.length+' direct peers reporting</span><span>Selected peer group</span></div>';
     return basis+'<div class="sq-share-view"><div class="sq-donut" role="img" aria-label="Share of reported revenue among selected direct peers" style="--sq-stops:'+stops+'">'+
       '<div><strong>'+esc(printed(total,'amount','USD'))+'</strong><small>Peer revenue</small></div></div><ol>'+labels+'</ol></div>'+table;
