@@ -79,9 +79,11 @@
     // Annual notes expose the most recent annual report available by the selected calendar quarter.
     const cutoff=quarterEnd(calendar);
     const years=companies.map(co=>isQuarter?co.years.find(y=>!cutoff||y.end<=cutoff):M.yearFor(co,state.period));
+    const notes=ids.map((id,i)=>D.yearView(state.details,id,companies[i],years[i]));
     const current=records.map((record,i)=>{
       const observation=isQuarter?indexes[i].get(calendar):null;
-      return observation?Q.view(USD.recordForObservation(record,observation),{currency:companies[i].currency,model:companies[i].model,observation,growthBasis:state.growth}):null;
+      return observation?Q.view(USD.recordForObservation(record,observation),{currency:companies[i].currency,model:companies[i].model,observation,
+        balanceFields:USD.matchedBalance(observation,notes[i].current),growthBasis:state.growth}):null;
     });
     const snapshotCalendar=state.data.asOf.slice(0,4)+'-Q'+Math.ceil(Number(state.data.asOf.slice(5,7))/3);
     const views=ids.map((id,i)=>E.valueView(state.data,id,ticker[i],years[i],state.period,current[i],{
@@ -90,7 +92,6 @@
         Boolean(current[i]&&current[i].observation===records[i]?.observations.at(-1))
     }));
     const check=isQuarter?(co,i,key)=>current[i]?.values[key]:undefined;
-    const notes=ids.map((id,i)=>D.yearView(state.details,id,companies[i],years[i]));
     const scale=companies.map((co,i)=>USD.scaleRows(isQuarter?current[i]?.values||{}:notes[i].v));
     return {ids,companies,ticker,peers,years,views,periods,quarters,latest,calendar,report,members,candidates,notes,
       isQuarter,current,records,indexes,scale,bonus,periodLatest:isQuarter&&calendar===latest?.quarter,score:M.checklist(companies.slice(0,direct.length),years.slice(0,direct.length),check)};
@@ -287,6 +288,14 @@
     $('sources').innerHTML=c.companies.map((co,i)=>{
       const y=c.years[i],v=c.views[i],m=v.m,current=c.current[i];
       const sources=current?[current.observation.reconciledSource,current.ttm?.annualSource,current.observation.priorQuarterBalanceSource,current.observation.quarterBridges?.values?.source,c.records[i]?.filing?.source].filter((u,index,all)=>u&&u!==current.source&&all.indexOf(u)===index):[];
+      const matched=USD.matchedBalance(current?.observation,c.notes[i].current);
+      const currentRef=matched?c.notes[i].current:null;
+      if(currentRef&&Object.keys(matched).some(k=>!Object.hasOwn(current.observation.balance||{},k))){
+        for(const key of ['source','additionalSource']){
+          const url=state.details.sources?.[currentRef[key]];
+          if(url&&url!==current.source&&!sources.includes(url))sources.push(url);
+        }
+      }
       const quarterDetails=sources.length?'<p>'+sources.map((u,index)=>link(u,'Quarterly comparison source '+(index+1))).join(' · ')+'</p>':'';
       const refs=Object.entries(y?.refs||{}).filter(([k])=>M.fields[k]||['preferredEquity','noncontrollingInterest','dilutedEps','bookCommon'].includes(k)).map(([k,ref])=>{
         const raw=String(ref), file=raw.match(/^(R\d+\.htm)\b/i);

@@ -31,6 +31,11 @@
     const quote=rate(feed,currency,end);
     return quote?value*quote.factor:null;
   }
+  function matchedBalance(observation, filing) {
+    const reported=observation?.balance?.assets, supplemental=filing?.fields?.assets;
+    if(!observation?.end||observation.end!==filing?.end||!finite(reported)||!finite(supplemental))return undefined;
+    return Math.abs(reported-supplemental)<=Math.max(.01,Math.abs(reported)*.00001)?filing.fields:undefined;
+  }
   function scaleRows(values) {
     const difference=(a,b)=>finite(a)&&finite(b)?a-b:null;
     return {
@@ -95,7 +100,7 @@
     const through=record.observations.indexOf(observation);
     return {...record,observations:record.observations.slice(0,through+1),ttm};
   }
-  const api={choices,mergeRecord,recordForObservation,integer,rate,convert,scaleRows,valuesInUsd,peers,quarterlyReason};
+  const api={choices,matchedBalance,mergeRecord,recordForObservation,integer,rate,convert,scaleRows,valuesInUsd,peers,quarterlyReason};
   root.SharesBeta3Usd=api;
   if(typeof module!=='undefined')module.exports=api;
 })(typeof window==='undefined'?globalThis:window);

@@ -417,6 +417,10 @@ test('Beta 3 translates reporting currencies on or before the period end and rou
   assert.equal(U.integer(0.25,'%'),'<1%');assert.equal(U.integer(0,'%'),'0%');
   assert.equal(U.scaleRows({assets:10,liabilities:6,currentAssets:5,currentLiabilities:2,cash:1,totalDebt:3,shortInvestments:4}).netDebt,2);
   assert.equal(U.scaleRows({assets:10}).workingCapital,null);
+  const o={end:'2026-09-30',balance:{assets:10}};
+  assert.equal(U.matchedBalance(o,{end:o.end,fields:{assets:11,liabilities:3}}),undefined);
+  assert.equal(U.matchedBalance(o,{end:o.end,fields:{assets:10,liabilities:3}}).liabilities,3);
+  assert.equal(U.matchedBalance(o,{end:'2026-10-01',fields:{assets:10,liabilities:3}}),undefined);
 });
 test('Bonus companies preserve the direct peers and supplements retain earlier observations and trailing values',()=>{
   const U=require('../site/stocks-beta3-usd.js');
