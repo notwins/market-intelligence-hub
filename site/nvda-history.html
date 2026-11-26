@@ -9,11 +9,13 @@
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
 <link rel="stylesheet" href="nvda-history.css?v=3">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
+<link rel="stylesheet" href="nvda-statement-comparisons.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
-<script defer src="nvda-history-charts.js?v=1"></script>
+<script defer src="nvda-history-charts.js?v=2"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
 <script defer src="nvda-peer-lab.js?v=20261127.liabilities-r2"></script>
-<script defer src="nvda-history.js?v=20261127.liabilities-r2"></script>
+<script defer src="nvda-statement-comparisons.js?v=1"></script>
+<script defer src="nvda-history.js?v=20261127.statement-charts"></script>
 </head>
 <body class="nvda-history-page">
 <a class="nv-skip" href="#main">Skip to analysis</a>
@@ -31,7 +33,7 @@
   </div>
   <div class="nv-hero-foot"><span><i></i> 27 November 2026 snapshot</span><span>Quarter ended <strong>25 Oct 2026</strong></span><a href="https://www.sec.gov/Archives/edgar/data/1045810/000104581026000088/q3fy27pr.htm">Earnings filing ↗</a></div>
 </div></header>
-<nav class="nv-jump" aria-label="NVIDIA sections"><div class="nv-shell"><a href="#overview" aria-current="location">Overview</a><a href="#financials">Financials</a><a href="#market">Market history</a><a href="#peers">Peers</a><a href="#credit">Credit</a><a href="#sources">Sources</a><a href="#comparison-lab">Full comparison</a><a href="#price-simulator">Price simulator</a></div></nav>
+<nav class="nv-jump" aria-label="NVIDIA sections"><div class="nv-shell"><a href="#overview" aria-current="location">Overview</a><a href="#financials">Financials</a><a href="#statement-comparisons">Statement comparison</a><a href="#market">Market history</a><a href="#peers">Peers</a><a href="#credit">Credit</a><a href="#sources">Sources</a><a href="#comparison-lab">Full comparison</a><a href="#price-simulator">Price simulator</a></div></nav>
 <div class="nv-shell nv-status" id="nv-status" role="status" hidden><span></span><button type="button" id="nv-retry" hidden>Retry</button></div>
 <section class="nv-section nv-shell nv-summary" aria-label="Latest NVIDIA results">
   <div class="nv-section-head nv-reveal"><div><p class="nv-label">Latest actuals · Q3 FY2027</p><h2>Revenue doubled year over year</h2></div><p>NVIDIA reported $107.6 billion in data-center revenue, roughly 93% of consolidated sales. GAAP gross margin reached 74.8% and diluted EPS was $2.70.</p></div>
@@ -71,6 +73,28 @@
     </table></div>
     <p id="nv-filing-source" class="nv-note"></p>
   </article>
+</section>
+<section class="nv-section nv-shell" id="statement-comparisons">
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">NVIDIA and 30 peers</p><h2>Financial statement comparison</h2></div><p>Compare financial statements side by side. Select a point on a trend chart to update its table, or select a bar to highlight the company.</p></div>
+  <div class="nv-panel nv-statement-peer-tools">
+    <div class="nv-statement-peer-tabs" id="nv-statement-peer-tabs" role="group" aria-label="Financial statement">
+      <button type="button" data-statement="income" aria-pressed="true">Income statement</button>
+      <button type="button" data-statement="balance" aria-pressed="false">Balance sheet</button>
+      <button type="button" data-statement="cash" aria-pressed="false">Cash flow</button>
+    </div>
+    <div class="nv-controls">
+      <label>Filing period<select id="nv-statement-peer-period"></select></label>
+      <label id="nv-statement-peer-growth-basis">Growth basis<select id="nv-statement-peer-growth"><option value="YoY">Year over year</option><option value="QoQ">Quarter over quarter</option></select></label>
+      <label>Trend range<select id="nv-statement-peer-range"><option value="8">8 periods</option><option value="16" selected>16 periods</option><option value="40">Up to 40 periods</option></select></label>
+      <label>Peer set<select id="nv-statement-peer-preset"></select></label>
+    </div>
+    <details class="nv-statement-peer-details">
+      <summary>Choose individual peers <span id="nv-statement-peer-count"></span></summary>
+      <div class="nv-statement-peer-options" id="nv-statement-peer-options"></div>
+    </details>
+    <p class="nv-muted">Dollar figures are in USD billions. Trends use calendar reporting buckets. Each table shows the issuer’s actual filing period end.</p>
+  </div>
+  <div class="nv-statement-peer-cards" id="nv-statement-peer-cards"></div>
 </section>
 <section class="nv-dark" id="market"><div class="nv-section nv-shell">
   <div class="nv-section-head nv-reveal"><div><p class="nv-label">December 2016 – November 2026</p><h2>Price &amp; valuation</h2></div><p>Explore month-end price, distributions and valuation. Choose a Bank of Singapore metric to see dated consensus forward quotes.</p></div>
