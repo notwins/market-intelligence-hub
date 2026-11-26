@@ -13,7 +13,7 @@ PERIOD = re.compile(r"^(Latest annual|Latest quarterly|Annual \d{4}|Quarterly \d
 MONTH = re.compile(r"^(\d{4}-\d{2}) / (.+)$")
 STATEMENTS = ("Income statement", "Balance sheet", "Cash flow", "Ratios and growth", "USD comparison", "QoQ", "YoY")
 DATES = ("Period ending", "Filing or release date", "Period starting (filing date range or inferred)")
-FIN_TEXT = {*DATES, "Form or source type", "Source document", "Reporting currency"}
+FIN_TEXT = {*DATES, "Form or source type", "Source document", "Reporting currency", "Total liabilities calculation basis"}
 FIN_FX = ("Reporting currency per USD, period average", "Reporting currency per USD, period end")
 MARKET_FIELDS = (
     "Close Date", "Close As Traded", "Split-adjusted Close",

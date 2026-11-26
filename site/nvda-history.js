@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const snapshot = "https://raw.githubusercontent.com/notwins/market-intelligence-hub/market-prices/nvda-history/2026-11-27/";
+  const snapshot = "https://raw.githubusercontent.com/notwins/market-intelligence-hub/market-prices/nvda-history/";
   const $ = id => document.getElementById(id);
   const charts = window.NvidiaCharts;
   const colors = ["#286d42", "#4b749d", "#8c5482"];
@@ -45,11 +45,6 @@
     "Revenue", "Gross profit", "Operating income", "Net income to parent", "Consolidated net income",
     "Operating cash flow", "Free cash flow", "Gross margin %", "Operating margin %", "Net margin %",
   ]);
-  // These balance sheets were reconciled against the linked SEC filings.
-  // Match the actual fiscal end so the calculation applies only to that filing.
-  const verifiedLiabilityPeriods = {
-    AMD: "2026-09-26", INTC: "2026-09-26", AMZN: "2026-09-30", ORCL: "2026-08-31", HPE: "2026-07-31",
-  };
   let financial, market, companies, logos, descriptors, monthKeys, nvidiaPeriods;
 
   const actual = (period, field, i = 0) => financial.periods[period]?.[field]?.[i] ?? null;
@@ -276,21 +271,11 @@
     return Number.isFinite(source) && rate > 0 ? scaleBn(source / rate) : null;
   }
 
-  function peerLiabilities(period, index, end) {
-    const group = "Balance sheet";
-    const filed = usd(period, "Total liabilities", group, index);
-    if (filed !== null) return { liabilities: filed, calculatedLiabilities: false };
-
-    const company = companies[index];
-    if (!end || verifiedLiabilityPeriods[company.ticker] !== end || company.currency !== "USD") {
-      return { liabilities: null, calculatedLiabilities: false };
-    }
-    const assets = actual(period, nativeField(group, "Total assets"), index);
-    const equity = actual(period, nativeField(group, "Total equity"), index);
-    if (!Number.isFinite(assets) || !Number.isFinite(equity) || assets < equity) {
-      return { liabilities: null, calculatedLiabilities: false };
-    }
-    return { liabilities: scaleBn(assets - equity), calculatedLiabilities: true };
+  function peerLiabilities(period, index) {
+    return {
+      liabilities: usd(period, "Total liabilities", "Balance sheet", index),
+      calculatedLiabilities: Boolean(actual(period, "Total liabilities calculation basis", index)),
+    };
   }
 
   function companyCell(company) {
@@ -332,7 +317,7 @@
       revenue: usd(period, "Revenue", "Income statement", index),
       income: usd(period, "Net income to parent", "Income statement", index),
       assets: usd(period, "Total assets", "Balance sheet", index),
-      ...peerLiabilities(period, index, endDate(period, index)),
+      ...peerLiabilities(period, index),
       margin: actual(period, "Ratios and growth / Gross margin %", index),
       growth: growth(period, "Revenue", growthBasis, "growth (%)", index),
       cap: mkt(month, valuationKeys[0], index), pe: mkt(month, valuationKeys[1], index),
@@ -439,7 +424,7 @@
       };
     }
     marketKpis();
-    window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, peerLiabilities, fmt, dollar, element, options });
+    window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, fmt, dollar, element, options });
   }
 
   function scrollEnhancements() {
@@ -494,7 +479,7 @@
     $("nv-retry").hidden = true;
     try {
       const catalogue = fetchJson("assets/company-logos/company-logos.json").catch(() => ({ companies: [], aliases: {} }));
-      [financial, market] = await Promise.all([fetchJson(snapshot + "financials.json"), fetchJson(snapshot + "monthly.json")]);
+      [financial, market] = await Promise.all([fetchJson(snapshot + "2026-11-27-r2/financials.json"), fetchJson(snapshot + "2026-11-27/monthly.json")]);
       if (financial.schemaVersion !== 1 || market.schemaVersion !== 1 || financial.asOf !== market.asOf
         || financial.companies?.length !== 31 || !market.tickers.every((ticker, index) => ticker === financial.companies[index].ticker)
         || market.tickers.length !== financial.companies.length) throw new Error("The two data snapshots do not match.");
