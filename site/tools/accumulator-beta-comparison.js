@@ -339,7 +339,7 @@
           if (!v) return '<td aria-label="Scenario does not apply"></td>';
           const tag=extremeLabel(best,worst,count,i);
           const colour=tag.endsWith('best')||tag==='Best'?'cmp-best':tag.endsWith('worst')||tag==='Worst'?'cmp-worst':'';
-          return `<td class="${colour} ${cellClass(v.pnl)}"${heat(v.pnl, notes[i].terms.payment)}>${resultButton(r.id,i,metric,asValue(v[metric]))}${v.shareLabel ? `<small>${v.shareLabel}</small>` : ''}${tag ? `<span class="cmp-extreme">${tag}</span>` : ''}</td>`;
+          return `<td class="${colour}">${resultButton(r.id,i,metric,asValue(v[metric]))}${v.shareLabel ? `<small>${v.shareLabel}</small>` : ''}${tag ? `<span class="cmp-extreme">${tag}</span>` : ''}</td>`;
         }).join('') + '</tr>';
     }).join('') + '</tbody>';
     renderRanges(notes,rows.filter(r=>!r.follow),metric);
