@@ -3,3 +3,130 @@
 @media print{.ed-companies{display:block}.ed-company{break-inside:avoid;margin-bottom:20px}.ed-table-wrap{overflow:visible}.ed-filter{display:none}.ed-takeaways strong{color:#111}}
 
 .ed-bar-axis{margin-left:175px;margin-right:100px}@media(max-width:760px){.ed-bar-axis{margin-left:108px;margin-right:80px}}
+
+/* V4 US Earnings. Typography follows the reading workspace; figures keep the V4 controls. */
+.ws-earnings {
+  --ws-color:#704431;
+  --ws-tint:#f0e2d6;
+  --ws-line:#cfb8a7;
+  --earn-panel:#fffdf8;
+  --earn-title:var(--ws-display,Georgia,serif);
+}
+.ws-earnings :is(.shell,.content) { background:var(--ws-paper); }
+.ws-earnings .rail { background:#352e2c; }
+.ws-earnings #view { font-family:var(--ws-font); }
+.ws-earnings .earnings-masthead {
+  display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); align-items:center;
+  gap:clamp(1rem,4vw,3.25rem); margin:0 0 1rem; padding:clamp(1rem,2.7vw,2.4rem) 0;
+  border:0; border-block:1px solid var(--ws-rule); background:transparent; border-radius:0;
+}
+.ws-earnings .earnings-masthead .eyebrow { color:var(--ws-color); }
+.ws-earnings .earnings-masthead h1 {
+  margin:.45rem 0 .65rem; max-width:16ch; color:var(--ws-ink);
+  font:480 calc(clamp(2.5rem,4.7vw,5.1rem) * var(--text-scale,1))/.99 var(--earn-title); letter-spacing:-.055em;
+}
+.ws-earnings .earnings-masthead p { max-width:50ch; margin:0 0 .7rem; color:var(--ws-muted); }
+.ws-earnings .earnings-masthead .date-chip { color:var(--ws-color); }
+.ws-earnings .ws-jumps { display:flex; flex-wrap:wrap; gap:.45rem; margin-top:.8rem; }
+.ws-earnings .ws-jumps button {
+  min-height:44px; padding:.45rem .75rem; border:1px solid var(--ws-line); border-radius:4px;
+  background:#f9f2e9; color:#744631; font:650 calc(.875rem * var(--text-scale,1)) / 1.25 var(--ws-font); cursor:pointer;
+}
+.ws-earnings .ws-jumps button:hover { background:var(--ws-tint); border-color:var(--ws-color); }
+.ws-earnings .earnings-plate {
+  aspect-ratio:2.15; position:relative; overflow:hidden; border:1px solid #c7ab95; border-radius:4px;
+  background:repeating-linear-gradient(0deg,#6b42311a 0 1px,transparent 1px 9px),linear-gradient(145deg,#f2e6d8,#d5ab91);
+}
+.ws-earnings .earnings-plate::before,
+.ws-earnings .earnings-plate::after {
+  content:""; position:absolute; inset:-30% 20%; border-radius:50%; transform:rotate(-27deg);
+  background:repeating-radial-gradient(ellipse at 50% 50%,transparent 0 6px,#7044319c 7px 8px,transparent 9px 12px);
+}
+.ws-earnings .earnings-plate::after {
+  inset:14% 45% 10% -12%; transform:rotate(27deg);
+  background:repeating-radial-gradient(ellipse at 50% 50%,transparent 0 9px,#faf1e691 10px 11px,transparent 12px 15px);
+}
+.ws-earnings #view :is(#earnings-edition,#earnings-desk,#earnings-reuters) {
+  scroll-margin-top:calc(var(--hub-primary-height,56px) + var(--sticky-topbar-height,64px) + 1rem);
+}
+
+/* A saved edition, a comparison sheet and dated story clippings. */
+.ws-earnings #view :is(.earnings-edition,.ed-fcf,.ed-company,.earnings-explainer,.company-card,.earnings-calendar) {
+  background:var(--earn-panel); color:var(--ws-ink); border:1px solid #d5cec2; border-radius:5px; box-shadow:none;
+}
+.ws-earnings #view :is(.earnings-edition h2,.ed-fcf h3,#earnings-reuters h2,.earnings-explainer h3,.earnings-calendar h3) {
+  color:var(--ws-ink); font:520 calc(clamp(1.65rem,2.85vw,3rem) * var(--text-scale,1))/1.12 var(--earn-title);
+  letter-spacing:-.035em; overflow-wrap:anywhere;
+}
+.ws-earnings #view .earnings-edition { background:#f3e5d7; border-inline-start:6px double #a37253; }
+.ws-earnings .earnings-edition > :is(p,.eyebrow) { color:#523b32; }
+.ws-earnings #view .ed-fcf {
+  --earn-panel:#f4f5ed; border-block-start:3px solid #74836b;
+  background-image:repeating-linear-gradient(0deg,transparent 0 31px,#6b8a6010 31px 32px);
+}
+.ws-earnings .ed-fcf :is(.ed-bar-row,.ed-calculations > *) { border-color:#c9d1c2; }
+.ws-earnings #view .earnings-explainer { --earn-panel:#f0e9df; border-inline-start:4px solid #986d55; }
+.ws-earnings #view .earnings-calendar { --earn-panel:#f5f2e8; border-block-start:3px dashed #b09a7a; }
+.ws-earnings #earnings-reuters .company-card {
+  --earn-panel:#f9f5ed; --clipping:repeating-linear-gradient(90deg,#7d705c 0 1px,transparent 1px 7px);
+}
+.ws-earnings #earnings-reuters [data-earnings-tone=negative] {
+  --earn-panel:#faf1ec; --clipping:repeating-linear-gradient(135deg,#895e51 0 1px,transparent 1px 7px);
+}
+.ws-earnings #earnings-reuters .company-card .company-top {
+  padding-bottom:.7rem; margin-bottom:.65rem; border-bottom:1px solid #d5c7ba;
+}
+.ws-earnings #earnings-reuters .company-card::before {
+  content:""; display:block; block-size:.42rem; inline-size:3rem; margin-bottom:.8rem; background:var(--clipping);
+}
+.ws-earnings #earnings-reuters .company-card h4 {
+  color:var(--ws-ink); font:550 calc(1.28rem * var(--text-scale,1))/1.2 var(--earn-title);
+}
+.ws-earnings #earnings-reuters .company-top h3 { overflow-wrap:anywhere; }
+
+/* Issuer profiles keep their company identity when the filter or sort order changes. */
+.ws-earnings #view .ed-company { --issuer:#665949; border-top:3px solid var(--issuer); min-width:0; }
+.ws-earnings #view .ed-company[data-ticker=AAPL] { --issuer:#526776; --issuer-mark:repeating-linear-gradient(116deg,transparent 0 5px,#526776 6px 7px,transparent 8px 10px); }
+.ws-earnings #view .ed-company[data-ticker=MSFT] { --issuer:#386e72; --issuer-mark:linear-gradient(90deg,#386e72 1px,transparent 1px),linear-gradient(#386e72 1px,transparent 1px); --issuer-step:9px 9px; }
+.ws-earnings #view .ed-company[data-ticker=NVDA] { --issuer:#587045; --issuer-mark:repeating-linear-gradient(45deg,transparent 0 4px,#587045 5px 6px,transparent 6px 9px),repeating-linear-gradient(135deg,transparent 0 8px,#587045 9px 10px,transparent 10px 13px); }
+.ws-earnings #view .ed-company[data-ticker=GOOGL] { --issuer:#486282; --issuer-mark:repeating-radial-gradient(ellipse at 35% 100%,transparent 0 3px,#486282 4px 5px,transparent 6px 9px); }
+.ws-earnings #view .ed-company[data-ticker=AMZN] { --issuer:#895034; --issuer-mark:repeating-radial-gradient(ellipse at 85% -80%,transparent 0 5px,#895034 6px 7px,transparent 8px 12px); }
+.ws-earnings #view .ed-company[data-ticker=TSM] { --issuer:#845353; --issuer-mark:linear-gradient(90deg,#845353 1px,transparent 1px),linear-gradient(#845353 1px,transparent 1px); --issuer-step:7px 5px; }
+.ws-earnings #view .ed-company[data-ticker=META] { --issuer:#654c79; --issuer-mark:repeating-radial-gradient(circle at 45% 5%,transparent 0 3px,#654c79 4px 5px,transparent 6px 8px); }
+.ws-earnings #view .ed-company[data-ticker=TSLA] { --issuer:#8f484c; --issuer-mark:repeating-linear-gradient(156deg,transparent 0 4px,#8f484c 5px 6px,transparent 6px 11px); }
+.ws-earnings #view .ed-company[data-ticker=AVGO] { --issuer:#496966; --issuer-mark:repeating-linear-gradient(0deg,transparent 0 3px,#496966 4px 5px,transparent 5px 7px); }
+.ws-earnings #view .ed-company[data-ticker="BRK.B"] { --issuer:#6c6241; --issuer-mark:repeating-linear-gradient(90deg,#6c6241 0 2px,transparent 2px 10px); }
+.ws-earnings #view .ed-company[data-ticker=MU] { --issuer:#575888; --issuer-mark:radial-gradient(#575888 1px,transparent 1.7px); --issuer-step:6px 6px; }
+.ws-earnings #view .ed-company[data-ticker=AMD] { --issuer:#794956; --issuer-mark:repeating-linear-gradient(45deg,transparent 0 8px,#794956 9px 11px,transparent 11px 15px); }
+.ws-earnings #view .ed-company[data-ticker=BABA] { --issuer:#8e5a32; --issuer-mark:repeating-linear-gradient(105deg,#8e5a32 0 1px,transparent 1px 4px,#8e5a32 5px 7px,transparent 7px 13px); }
+.ws-earnings .ed-company > header {
+  flex-wrap:wrap; align-items:flex-start; padding:.7rem; border-radius:3px; border-bottom:1px solid #ded6ca;
+  background:color-mix(in srgb,var(--issuer) 9%,var(--earn-panel));
+}
+.ws-earnings .ed-company > header > div { flex:1; min-width:min(100%,11rem); }
+.ws-earnings .ed-company > header .eyebrow { color:var(--issuer); letter-spacing:.07em; }
+.ws-earnings .ed-company > header h3 {
+  margin:.35rem 0 .15rem; color:var(--ws-ink); font:530 calc(clamp(1.4rem,2.1vw,2.2rem) * var(--text-scale,1))/1.12 var(--earn-title);
+  letter-spacing:-.035em; overflow-wrap:anywhere;
+}
+.ws-earnings .ed-company > header > .ticker { color:var(--issuer); background:#f3f0e9; border:1px solid #d2c9bb; border-radius:3px; max-width:100%; }
+.ws-earnings .ed-company > header > .ticker::after {
+  content:""; display:block; block-size:.4rem; margin-top:.3rem; opacity:.72;
+  background-image:var(--issuer-mark,repeating-linear-gradient(90deg,#665949 0 1px,transparent 1px 4px));
+  background-size:var(--issuer-step,auto);
+}
+/* Keep visually hidden link labels inside the history table’s scroll region. */
+.ws-earnings .ed-table-wrap { position:relative; }
+.ws-earnings .ed-filter { flex-wrap:wrap; }
+.ws-earnings #ed-company-filter { min-width:0; max-width:100%; }
+.ws-earnings .ed-company .ed-history { border-top:1px solid #ded6ca; }
+.ws-earnings :is(.ed-company,.ed-fcf) > details > summary { text-underline-offset:.2em; }
+@media(max-width:760px) {
+  .ws-earnings .earnings-masthead { grid-template-columns:minmax(0,1fr); }
+  .ws-earnings .earnings-plate { aspect-ratio:3.55; }
+  .ws-earnings .earnings-masthead h1 { font-size:calc(clamp(2.1rem,8.5vw,3.6rem) * var(--text-scale,1)); }
+}
+@media print {
+  .ws-earnings .earnings-masthead { display:block; }
+  .ws-earnings #view :is(.earnings-edition,.ed-fcf,.ed-company,.earnings-calendar) { background:white; }
+}
