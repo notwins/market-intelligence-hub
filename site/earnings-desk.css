@@ -115,6 +115,8 @@
   background-image:var(--issuer-mark,repeating-linear-gradient(90deg,#665949 0 1px,transparent 1px 4px));
   background-size:var(--issuer-step,auto);
 }
+/* Keep visually hidden link labels inside the history table’s scroll region. */
+.ws-earnings .ed-table-wrap { position:relative; }
 .ws-earnings .ed-company .ed-history { border-top:1px solid #ded6ca; }
 .ws-earnings :is(.ed-company,.ed-fcf) > details > summary { text-underline-offset:.2em; }
 @media(max-width:760px) {
