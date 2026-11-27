@@ -4,7 +4,7 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
-const navigationVersion = '?v=20261127.archive1';
+const navigationVersion = '?v=20261128.desk-pivot1';
 const navigationCSS = 'Primary Navigation - Type CSS - 16-Nov-16.06.css';
 const navigationJS = 'Primary Navigation - Type JS - 16-Nov-16.06.js';
 const mobileCharts = 'Mobile Charts - Type JS - 16-Nov-16.06.js';

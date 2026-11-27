@@ -371,6 +371,14 @@
     "v4.html#search": "search",
     "desk.html#main-company-cards": "buildings",
     "desk.html#main-news": "news",
+    "desk.html#market-highlights": "movers",
+    "desk.html#featured": "pen",
+    "desk.html#calls": "calls",
+    "desk.html#bonds": "bonds",
+    "desk.html#fred-observatory": "fred",
+    "desk.html#pulse": "treasury",
+    "desk.html#yields": "yield",
+    "desk.html#chart-shortcuts": "history",
     "desk.html#yield-curves": "curves",
     "desk.html#briefing": "briefing",
     "desk.html#market-history": "history",
@@ -775,7 +783,8 @@
   decorateJumpShortcuts();
   new MutationObserver(decorateJumpShortcuts).observe(grid, {childList:true});
   for (const control of document.querySelectorAll('.dashboard-links > a:not(.history-featured), .tool-links > a.tool-link')) {
-    const route = controlRoute(control);
+    const route = onDesk && control.id && destinationArt['desk.html#' + control.id]
+      ? 'desk.html#' + control.id : controlRoute(control);
     const tone = toneFor(route);
     if (tone) control.dataset.navTone = tone;
     const label = control.matches('.tool-link') ? control.querySelector('strong') || control : control;
@@ -783,11 +792,10 @@
   }
   const sectionTabs = document.querySelector('.top-subsections');
   if (sectionTabs) {
-    const tabArt = {explore: 'security', pivot: 'pivot', watchlists: 'watch', screens: 'screen', review: 'review'};
     function decorateSubsections() {
       if (sectionTabs.classList.contains('history-menu-toolbar')) return;
       for (const tab of sectionTabs.querySelectorAll(':scope > [data-tab]')) {
-        addIcon(tab, tabArt[tab.dataset.tab] || 'pivot');
+        addIcon(tab, destinationArt['v4.html#master/' + tab.dataset.tab] || 'pivot');
       }
     }
     decorateSubsections();
@@ -1048,12 +1056,12 @@
   requestAnimationFrame(active);
 
   const page = pagePath.replace(/^(fred|market-understanding|colour-templates-v3)\/index\.html$/, '$1/');
-  const standalone = /^(?:stocks-beta[23]?|nvda-history|si-beta2|bos-monthly|bonds-beta|bond-cashflow|historical-fred|fred-[123]|fred-feed|cross-market-history(?:-beta2)?|archive|research-editions|search|tag-map|colour-reference|external-sources|desk|v4)\.html$/;
+  const standalone = /^(?:stocks-beta[23]?|nvda-history|si-beta2|bos-monthly|bonds-beta|bond-cashflow|saved-securities|historical-fred|fred-[123]|fred-feed|cross-market-history(?:-beta2)?|archive|research-editions|search|tag-map|colour-reference|external-sources|desk|v4)\.html$/;
   if (standalone.test(page) || page.startsWith('fred/') || page.startsWith('tools/') ||
       page === 'market-understanding/' || page === 'colour-templates-v3/') {
     const content = page === 'v4.html' ? document.getElementById('view')
-      : page === 'desk.html' ? document.getElementById('full-history') : document.body;
-    if (content) import(new URL('workspace-icons.js?v=2', base).href).then(({mountWorkspaceIcons}) => {
+      : page === 'desk.html' ? document.getElementById('main') : document.body;
+    if (content) import(new URL('workspace-icons.js?v=3', base).href).then(({mountWorkspaceIcons}) => {
       mountWorkspaceIcons({root: content, page, destinationArt, chapterArt, controlRoute, navigationIcon: destinationPicture});
     });
   }

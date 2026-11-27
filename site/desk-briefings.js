@@ -3,7 +3,7 @@
   'use strict';
   const topics = [
     ['news', 'Daily News', 'news'], ['bonds', 'Bonds & Credit', 'credit'],
-    ['earnings', 'Earnings', 'earnings'], ['economy', 'Economy & Economic News', 'globe']
+    ['earnings', 'Earnings', 'earnings'], ['economy', 'Economy & Economic News', 'policy']
   ];
   const date = new Intl.DateTimeFormat('en-SG', {dateStyle: 'long', timeZone: 'Asia/Singapore'});
   const time = new Intl.DateTimeFormat('en-GB', {hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Singapore'});
