@@ -4,7 +4,10 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
-const navigationVersion = '?v=20261127.pageicons2';
+const navigationVersion = '?v=20261127.scrollnav1';
+const navigationCSS = 'Primary Navigation - Type CSS - 16-Nov-16.06.css';
+const navigationJS = 'Primary Navigation - Type JS - 16-Nov-16.06.js';
+const mobileCharts = 'Mobile Charts - Type JS - 16-Nov-16.06.js';
 const settingsVersion = '?v=20261127.usage1';
 const accessFile = path.join(root, 'data/blueprint-access.json');
 const access = fs.existsSync(accessFile) ? JSON.parse(fs.readFileSync(accessFile, 'utf8')) : null;
@@ -21,21 +24,18 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   if (relative.startsWith('legal/')) { legal++; continue; }
   let content = fs.readFileSync(filename, 'utf8');
   const directory = path.posix.dirname(relative);
-  // Shared navigation belongs to mutable UI shells, never frozen reports.
-  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html)$/.test(relative)
-      || relative === 'blueprint.html' || relative === 'research-feed.html') {
-    const dependencies = content.slice(0, content.search(/<\/head\s*>/i)).replace(/%20/gi, ' ');
-    const navigationCSS = 'Primary Navigation - Type CSS - 16-Nov-16.06.css';
-    const navigationJS = 'Primary Navigation - Type JS - 16-Nov-16.06.js';
-    const mobileCharts = 'Mobile Charts - Type JS - 16-Nov-16.06.js';
-    const addPath = filename => path.posix.relative(directory, filename);
-    const addScript = filename => '<script defer src="' + addPath(filename) + '"></script>';
-    let assets = '';
+  const dependencies = content.slice(0, content.search(/<\/head\s*>/i)).replace(/%20/gi, ' ');
+  const addPath = filename => path.posix.relative(directory, filename);
+  const addScript = filename => '<script defer src="' + addPath(filename) + '"></script>';
+  let assets = '';
+  // Retired entry points immediately forward to a page with the shared navigation.
+  if (!/<script\b[^>]*\bsrc="[^"]*\blegacy-redirect\.js\b/.test(content)) {
     if (!dependencies.includes(navigationCSS)) assets += '<link id="hub-primary-assets" rel="stylesheet" href="' + addPath(navigationCSS) + navigationVersion + '">';
     if (!dependencies.includes(navigationJS)) assets += addScript(navigationJS + navigationVersion);
-    if (relative !== 'blueprint.html' && relative !== 'research-feed.html' && !dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
-    if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   }
+  if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html)$/.test(relative)
+      && !dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
+  if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
   // The standalone CPF calculator runs its model entirely in the browser.
   if (relative !== 'tools/cpf-life-ra.html' && !content.includes('id="mih-usage"') && !/(?:-preview|-backup)\.html$/i.test(relative)) {
