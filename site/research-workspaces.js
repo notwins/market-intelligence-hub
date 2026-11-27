@@ -1,7 +1,7 @@
 /* Editorial workspace presentation. Data rendering stays with the page owners. */
 const sheet = document.createElement('link');
 sheet.rel = 'stylesheet';
-sheet.href = new URL('./research-workspaces.css?v=2', import.meta.url).href;
+sheet.href = new URL('./research-workspaces.css?v=3', import.meta.url).href;
 document.head.append(sheet);
 
 const html = document.documentElement;
@@ -60,7 +60,9 @@ const targets = [
   '.calls-companies > h3', '.calls-ledger > h3', '.calls-edition .watchlist-card',
   '.featured-research', '.cd-heading h2', '.cd-card', '.publication-heading h2',
   '.briefing-lead > article', '.market-snapshot h2', '.overview-card-grid > *',
-  '.latest-quick-reads h2', '.latest-quick-card', '#view > .section .section-title h2'
+  '.latest-quick-reads h2', '.latest-quick-card', '#view > .section .section-title h2',
+  '.earnings-edition', '.ed-fcf', '.ed-company', '#earnings-reuters .company-card',
+  '.earnings-calendar', '.earnings-explainer'
 ].join(',');
 const seen = new Set();
 const running = new Set();
@@ -134,13 +136,15 @@ window.addEventListener('storage', event => {
 function syncPage() {
   const calls = view?.querySelector('.calls-edition');
   const briefing = Boolean(view?.querySelector('.briefing-masthead'));
-  const next = library || calls || (briefing ? view : null);
-  if (next === page) return;
+  const earnings = view?.dataset.marketView === 'earnings';
+  const next = library || calls || (briefing || earnings ? view : null);
+  if (next === page && earnings === html.classList.contains('ws-earnings')) return;
   if (!calls || !html.classList.contains('ws-calls')) seen.clear();
   page = next;
   html.classList.toggle('ws-blog', Boolean(library));
   html.classList.toggle('ws-calls', Boolean(calls));
   html.classList.toggle('ws-briefing', briefing);
+  html.classList.toggle('ws-earnings', earnings);
   if (page) mountChrome();
   else {
     gear.remove();
