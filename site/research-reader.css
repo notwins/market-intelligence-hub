@@ -16,6 +16,7 @@
   --reader-ink: #292a24;
   --reader-rule: #d1cfc3;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
   height: 100vh;
   height: 100dvh;
@@ -211,13 +212,16 @@
 }
 @media (max-width: 530px) {
   .reader-bar .reader-original span, .reader-bar .reader-jump .reader-icon { display: none; }
+  .reader-bar .reader-library { font-size: .86rem; }
+}
+@media (max-width: 420px) {
+  .reader-bar .reader-original .reader-icon { display: none; }
 }
 @media (max-width: 365px) {
   .reader-bar { padding-inline: .3rem; }
   .reader-actions { gap: .2rem; }
   .reader-bar :is(a, summary) { padding-inline: .3rem; }
   .reader-bar .reader-library { font-size: .82rem; }
-  .reader-original .reader-icon { display: none; }
 }
 @media print {
   .reader-bar, .research-reading-cover { display: none !important; }
