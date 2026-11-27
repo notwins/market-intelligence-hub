@@ -222,6 +222,7 @@
   .reader-actions { gap: .2rem; }
   .reader-bar :is(a, summary) { padding-inline: .3rem; }
   .reader-bar .reader-library { font-size: .82rem; }
+  .reader-bar .reader-library .reader-icon { display: none; }
 }
 @media print {
   .reader-bar, .research-reading-cover { display: none !important; }

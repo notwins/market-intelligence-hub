@@ -188,7 +188,7 @@ function mountArticle() {
   const articleTitle = title || doc.querySelector('h1')?.textContent.trim() || doc.title;
   const style = doc.createElement('link');
   style.rel = 'stylesheet';
-  style.href = new URL('research-reader.css?v=2', import.meta.url);
+  style.href = new URL('research-reader.css?v=3', import.meta.url);
   const cover = addCover(doc, articleTitle);
   setContents(doc, cover);
   if (doc.defaultView.IntersectionObserver && window.ResizeObserver && Element.prototype.animate) {
