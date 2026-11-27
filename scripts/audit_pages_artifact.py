@@ -6,6 +6,7 @@ import subprocess
 from collections import Counter
 from pathlib import Path
 from public_data_projection import projected_bytes
+from archive_navigation import decorate, restore
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -24,7 +25,18 @@ def inventory(root):
     return files
 
 
-def audit(source, artifact, repo=ROOT):
+def protected_paths(source, repo=ROOT):
+    code = 'console.log(JSON.stringify([...require(process.argv[1]).protectedHtml(process.argv[2],process.argv[3])]))'
+    return set(json.loads(subprocess.check_output(
+        ['node', '-e', code, str(repo/'scripts/publication_policy.cjs'), str(source), str(repo)], text=True)))
+
+
+def archive_paths(protected):
+    # The Research Explained catalogue already loads shared navigation through its own script.
+    return protected - {'market-understanding/index.html'}
+
+
+def audit(source, artifact, repo=ROOT, *, archive_navigation=False):
     source, artifact, repo = Path(source).resolve(), Path(artifact).resolve(), Path(repo).resolve()
     if source == artifact:
         raise ValueError('Source and deployment artifact must be separate trees')
@@ -32,9 +44,8 @@ def audit(source, artifact, repo=ROOT):
     if source_files.keys() != artifact_files.keys():
         raise ValueError(f'Artifact file set changed: missing={sorted(source_files.keys()-artifact_files.keys())}, '
                          f'extra={sorted(artifact_files.keys()-source_files.keys())}')
-    code = 'console.log(JSON.stringify([...require(process.argv[1]).protectedHtml(process.argv[2],process.argv[3])]))'
-    protected = set(json.loads(subprocess.check_output(
-        ['node', '-e', code, str(repo/'scripts/publication_policy.cjs'), str(source), str(repo)], text=True)))
+    protected = protected_paths(source, repo)
+    decorated = archive_paths(protected) if archive_navigation else set()
     unchanged = 0
     mutable = []
     privacy_projection = []
@@ -46,6 +57,8 @@ def audit(source, artifact, repo=ROOT):
             expected = projected_bytes(relative, original)
             if expected != original:
                 privacy_projection.append(relative)
+            if relative in decorated:
+                expected = decorate(expected)
             if expected != artifact_files[relative].read_bytes():
                 raise ValueError(f'Protected source bytes changed: {relative}')
             unchanged += int(expected == original)
@@ -61,6 +74,8 @@ def audit(source, artifact, repo=ROOT):
         if not isinstance(expected, str) or len(expected) != 64 or any(c not in '0123456789abcdef' for c in expected):
             raise ValueError(f'Invalid SHA-256 receipt: {relative}')
         raw = (artifact / relative).read_bytes()
+        if relative in decorated:
+            raw = restore(raw)
         if digest(raw) != expected:
             raise ValueError(f'{category} SHA-256 mismatch: {relative}')
         if size is not None and len(raw) != size:
@@ -107,6 +122,7 @@ def audit(source, artifact, repo=ROOT):
         'receipt_checks': dict(sorted(Counter(row['category'] for row in checks).items())),
         'mutable_html': sorted(mutable), 'immutable_footer_exceptions': sorted(protected),
         'checks': checks, 'public_data_privacy_projection': privacy_projection,
+        'archive_navigation_pages': sorted(decorated),
     }
 
 
@@ -115,9 +131,10 @@ if __name__ == '__main__':
     parser.add_argument('--source-site', type=Path, default=ROOT/'site')
     parser.add_argument('--artifact-site', type=Path, required=True)
     parser.add_argument('--report', type=Path)
+    parser.add_argument('--archive-navigation', action='store_true')
     args = parser.parse_args()
-    result = audit(args.source_site, args.artifact_site)
+    result = audit(args.source_site, args.artifact_site, archive_navigation=args.archive_navigation)
     if args.report:
         args.report.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({key: value for key, value in result.items()
-                      if key not in ('checks', 'mutable_html', 'immutable_footer_exceptions')}, indent=2))
+                      if key not in ('checks', 'mutable_html', 'immutable_footer_exceptions', 'archive_navigation_pages')}, indent=2))

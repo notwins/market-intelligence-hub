@@ -1,5 +1,11 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),R=require('../site/research-feed.js');
+const archiveTag='<script defer data-mih-archive-navigation src="/market-intelligence-hub/archive-navigation.js"></script>';
+const original=Buffer.from('\ufeff<html><head></head><body>Market · Archive</body></html>\r\n');
+const deployed=Buffer.from(original.toString('utf8').replace('</head>',archiveTag+'</head>'));
+assert.deepEqual(Buffer.from(R.originalReportBytes(deployed)),original);
+assert.strictEqual(R.originalReportBytes(original),original);
+assert.throws(()=>R.originalReportBytes(Buffer.concat([deployed,Buffer.from(archiveTag)])),/Duplicate/);
 const id='test-alpha-2026-11-14',hash='a'.repeat(64),tag={label:'Bonds',text:'#166534',background:'#F0FDF4',dark_text:'#86EFAC',dark_background:'#052E16'};
 const r={id,title:'Alpha <study>',summary:'Complete synthetic research',category:'Credit',tags:['bond'],kind:'complete-report',cutoff_sgt:'2026-11-14T08:00:00+08:00',verified_at_sgt:'2026-11-14T09:00:00+08:00',full_report_url:`research/${id}/index.html`,full_report_sha256:hash,assets:{'index.html':hash},quick_read:null};
 const f={schema_version:1,generation:1,revision:hash,verified_at_sgt:r.verified_at_sgt,records:[r],tags:{bond:tag}};

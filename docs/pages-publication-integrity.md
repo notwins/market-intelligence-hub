@@ -26,10 +26,11 @@ This includes `market-understanding/index.html`: although it contains a catalogu
 it also contains original report text and a protected historical baseline. Its
 existing baseline must not be weakened to treat it as a freely mutable shell.
 Current legal information is accessible through the mutable dashboard/reader and
-`legal/`. A direct original archive URL retains its original disclosure and bytes;
-it does not acquire the new common footer. GitHub Pages cannot add markup to that
-original response without changing its bytes. No hash normalization or alternate
-"footer-free" receipt is used to hide this exception.
+`legal/`. Direct archive URLs load the shared Hub navigation on their original
+HTML. The release adds one exact script tag to the served copy. The audit requires
+that removing this tag recovers the original file, and calculates every receipt
+from those recovered bytes. The original source, receipts and URLs are retained.
+The Research Explained catalogue loads the same script through its existing reader.
 
 ## Final artifact gate
 
@@ -38,9 +39,10 @@ original response without changing its bytes. No hash normalization or alternate
    directory outside the checkout. It refuses to overwrite another candidate and
    applies the footer only to eligible staged HTML. The source site is untouched.
 3. `validate_pages_artifact.py` runs **all** Python tests and every JavaScript test
-   listed in the publishing workflow against the final staged site. This includes
+   listed in the publishing workflow against the staged site before adding the
+   archive navigation tag. This includes
    all existing protected-baseline, text-preservation, call and download validators.
-4. The final byte audit requires the exact source file set, identical protected
+4. The final byte audit requires the exact source file set, the exact navigation insertion on protected
    HTML, and identical bytes for every non-HTML file and native legal page. This
    protects all archive JSON, review receipts, publication manifests, downloads and
    assets. It separately verifies every watchlist and call HTML receipt, all direct
@@ -68,6 +70,6 @@ python scripts/validate_pages_artifact.py --artifact-root ../mih-pages-candidate
 ```
 
 After deployment, download that run's `github-pages` artifact, extract `artifact.tar`
-and run `audit_pages_artifact.py --artifact-site EXTRACTED --report AUDIT.json` against
+and run `audit_pages_artifact.py --artifact-site EXTRACTED --archive-navigation --report AUDIT.json` against
 the same reconciled source site. Check the live reader's footer and original report
 hashes separately; a green pre-transformation check alone is not publication proof.

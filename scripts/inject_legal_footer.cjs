@@ -4,7 +4,7 @@ const {walk, protectedHtml} = require('./publication_policy.cjs');
 const root = process.argv[2] ? path.resolve(process.argv[2]) : path.resolve(__dirname, '../site');
 const protectedPaths = protectedHtml(root);
 const marker = '<!-- MIH_LEGAL_FOOTER_V1 -->';
-const navigationVersion = '?v=20261127.scrollnav1';
+const navigationVersion = '?v=20261127.archive1';
 const navigationCSS = 'Primary Navigation - Type CSS - 16-Nov-16.06.css';
 const navigationJS = 'Primary Navigation - Type JS - 16-Nov-16.06.js';
 const mobileCharts = 'Mobile Charts - Type JS - 16-Nov-16.06.js';
@@ -37,6 +37,7 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
       && !dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
   if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
+  content = content.replace(/(\bsrc="[^"]*\/?(?:research-feed|company-dashboard)\.js)(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
   // The standalone CPF calculator runs its model entirely in the browser.
   if (relative !== 'tools/cpf-life-ra.html' && !content.includes('id="mih-usage"') && !/(?:-preview|-backup)\.html$/i.test(relative)) {
     const script = path.posix.relative(directory, 'hub-usage.js');

@@ -78,7 +78,9 @@
   };
 
   const base = new URL('./', document.currentScript.src);
-  const pagePath = location.pathname.slice(base.pathname.length);
+  const archivePage = document.currentScript.hasAttribute('data-archive-navigation');
+  const pagePath = location.pathname.startsWith(base.pathname) ? location.pathname.slice(base.pathname.length) : '';
+  if (archivePage) root.classList.add('hub-archive-page');
   const onDesk = pagePath === 'desk.html';
   const mobileDock = matchMedia('(max-width:760px)');
   const credit = ['Bonds & credit', 'v4.html#credit'];
@@ -774,10 +776,105 @@
   }
   menu.addEventListener('click', e => { if (e.target.closest('a[href]')) menu.close(); });
   menu.addEventListener('close', () => more.focus({preventScroll: true}));
-  bar.replaceChildren(scroll, more);
+  const back = document.createElement('a');
+  back.className = 'hub-last-section';
+  back.setAttribute('aria-label', 'Back to Last Section');
+  back.innerHTML = '<span class="hub-back-full">Back to Last Section</span><span class="hub-back-short" aria-hidden="true">Back</span>';
+
+  const returnKey = 'mih-section-return';
+  const sectionHistoryKey = 'mih-section-history';
+  const contentPath = new URL('../market-intelligence-content/', base).pathname;
+  const cataloguePath = new URL('market-understanding/', base).pathname;
+
+  function archiveURL(url) {
+    if (url.origin !== base.origin || !/(?:\/|\.html)$/i.test(url.pathname)) return false;
+    const relative = url.pathname.slice(base.pathname.length);
+    return url.pathname.startsWith(contentPath) ||
+      (url.pathname.startsWith(base.pathname) &&
+       /^(?:data|research|market-understanding)\//.test(relative) &&
+       ![cataloguePath, cataloguePath + 'index.html'].includes(url.pathname));
+  }
+
+  function sectionURL(value) {
+    if (!value) return null;
+    try {
+      const url = new URL(value, base);
+      if (url.origin !== base.origin || !url.pathname.startsWith(base.pathname) ||
+          !/(?:\/|\.html)$/i.test(url.pathname) || archiveURL(url)) return null;
+      url.username = '';
+      url.password = '';
+      for (const key of [...url.searchParams.keys()]) {
+        if (!['day', 'directory', 'research', 'view', 'tab', 'month'].includes(key)) url.searchParams.delete(key);
+      }
+      return url.href;
+    } catch { return null; }
+  }
+
+  const referrer = sectionURL(document.referrer);
+  const passedSection = archivePage && sectionURL(new URL(location.href).searchParams.get(returnKey));
+
+  function updateReturn() {
+    let history;
+    try { history = JSON.parse(sessionStorage.getItem(sectionHistoryKey)) || {}; }
+    catch { history = {}; }
+    const here = archivePage ? null : sectionURL(location.href);
+    let current = sectionURL(history.current);
+    let previous = sectionURL(history.previous);
+    if (here && current !== here) {
+      previous = current || (referrer !== here ? referrer : null);
+      current = here;
+      try { sessionStorage.setItem(sectionHistoryKey, JSON.stringify({current, previous})); }
+      catch { /* The referrer and archive defaults still work. */ }
+    }
+    const fallback = /\/data\/watchlist\//.test(location.pathname) ? 'v4.html#watchlist'
+      : /\/research\/calls\//.test(location.pathname) ? 'v4.html#calls'
+      : location.pathname.includes('/read-ups/') ? 'v4.html#hourly'
+      : archivePage || (onDesk && location.hash !== '#archive') ? 'desk.html#archive' : 'desk.html';
+    back.href = new URL((archivePage ? passedSection || current || referrer : previous) || fallback, base);
+  }
+  updateReturn();
+  window.addEventListener('pageshow', updateReturn);
+  window.addEventListener('hashchange', updateReturn);
+  window.addEventListener('popstate', updateReturn);
+  window.addEventListener('hub-desk-route', updateReturn);
+  window.navigation?.addEventListener('currententrychange', updateReturn);
+
+  back.addEventListener('click', event => {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const navigation = window.navigation;
+    const priorEntry = navigation?.currentEntry && navigation.entries()[navigation.currentEntry.index - 1];
+    if (priorEntry?.url !== back.href) return;
+    event.preventDefault();
+    window.history.back();
+  });
+
+  function passSectionToNewTab(event) {
+    const anchor = event.target.closest('a[href]');
+    if (archivePage || !(anchor instanceof HTMLAnchorElement) || anchor.hasAttribute('download')) return;
+    if (anchor.target !== '_blank' && !event.ctrlKey && !event.metaKey && !event.shiftKey && event.button !== 1) return;
+    const url = new URL(anchor.href);
+    const section = sectionURL(location.href);
+    if (!section || !archiveURL(url)) return;
+    url.searchParams.set(returnKey, section.slice(base.origin.length));
+    const originalHref = anchor.getAttribute('href');
+    anchor.href = url.href;
+    // Keep the ordinary link canonical for later visits and copying.
+    setTimeout(() => {
+      if (anchor.href === url.href) anchor.setAttribute('href', originalHref);
+    }, 0);
+  }
+  document.addEventListener('click', passSectionToNewTab, true);
+  document.addEventListener('auxclick', passSectionToNewTab, true);
+  bar.replaceChildren(back, scroll, more);
   const skip = document.querySelector('body > .skip, body > .skip-link');
   if (skip) skip.after(bar);
   else document.body.prepend(bar);
+  if (archivePage) {
+    const spacer = document.createElement('div');
+    spacer.className = 'hub-archive-spacer';
+    spacer.setAttribute('aria-hidden', 'true');
+    bar.after(spacer);
+  }
   document.documentElement.classList.add('hub-primary-ready');
   function installCollapsibleMenu() {
     const rail = document.querySelector('aside.rail:has(.hub-side-menu)');
@@ -883,7 +980,8 @@
     const shares = ['stocks-beta.html', 'stocks-beta2.html', 'stocks-beta3.html', 'bos-monthly.html', 'si-beta2.html', 'nvda-history.html'].includes(relative)
       || (onWorkspace && route === '#history/si');
     const tools = relative.startsWith('tools/') || (onWorkspace && route === '#tools');
-    const key = tools ? 'Tools' : shares ? 'Shares'
+    const key = archivePage ? (/\/(?:watchlist|calls|read-ups)\//.test(location.pathname) ? 'News' : 'My Blog')
+      : tools ? 'Tools' : shares ? 'Shares'
       : relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
       : ['bonds-beta.html','bond-cashflow.html'].includes(relative) || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA'
       : /#master(?:\/|$)/.test(location.hash) ? 'Master Pivot' : /#history(?:\/|$)/.test(location.hash) || crossMarketRoute.test(relative) ? 'Historical charts'
