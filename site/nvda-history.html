@@ -7,16 +7,17 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=4">
+<link rel="stylesheet" href="nvda-history.css?v=5">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
+<script defer src="nvda-chart-controls.js?v=1"></script>
 <script defer src="nvda-history-charts.js?v=4"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
-<script defer src="nvda-peer-lab.js?v=20261127.liabilities-r2"></script>
-<script defer src="nvda-statement-comparisons.js?v=1"></script>
-<script defer src="nvda-revenue-peer-history.js?v=2"></script>
-<script defer src="nvda-history.js?v=20261127.comparison-metrics"></script>
+<script defer src="nvda-peer-lab.js?v=20261128.chart-layout"></script>
+<script defer src="nvda-statement-comparisons.js?v=2"></script>
+<script defer src="nvda-revenue-peer-history.js?v=3"></script>
+<script defer src="nvda-history.js?v=20261128.chart-layout"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
 <body class="nvda-history-page">
@@ -59,8 +60,15 @@
         <button type="button" id="nv-fin-solo-toggle" aria-controls="nv-fin-solo" aria-pressed="true">NVIDIA history</button>
         <button type="button" id="nv-fin-peer-toggle" aria-controls="nv-fin-compare" aria-pressed="false">Compare competitors</button>
       </div>
-      <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label><label>Metric<select id="nv-fin-metric"></select></label></div>
+      <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label></div>
     </div>
+    <div class="nv-metric-controls" data-metric-controls>
+        <div class="nv-metric-tabs" data-metric-families role="group" aria-label="Financial metric categories"></div>
+        <div class="nv-controls">
+          <label hidden>Metric group<select data-metric-subgroup></select></label>
+          <label>Metric<select id="nv-fin-metric"></select></label><button type="button" class="nv-layout-button" data-metric-next hidden>Next <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
     <div id="nv-fin-solo">
       <div class="nv-panel-head"><div><h3 id="nv-fin-chart-title">Revenue history</h3><p id="nv-fin-detail" class="nv-muted"></p></div>
         <div class="nv-controls"><label>View<select id="nv-fin-mode"></select></label></div>
@@ -95,10 +103,12 @@
         </article>
       </div>
       <p class="nv-muted" id="nv-revenue-method">Select a period on the chart to update both cards and the table. Growth uses each issuer’s reporting currency and requires a positive prior-period figure. Quarterly filing ends match within 45 days of NVIDIA’s. Annual filing ends match within 125 days.</p>
-      <div class="nv-table-scroll nv-revenue-compare-table nv-statement-chart-table" tabindex="0" role="region" aria-label="Financial metric comparison figures" aria-describedby="nv-revenue-method">
+      <div id="nv-revenue-table-card">
+        <div class="nv-table-scroll nv-revenue-compare-table nv-statement-chart-table" tabindex="0" role="region" aria-label="Financial metric comparison figures" aria-describedby="nv-revenue-method">
         <table class="nv-table nv-peer-table">
           <thead><tr><th scope="col">Company</th><th scope="col">Filing period end</th><th scope="col" id="nv-revenue-amount-column">Revenue (USD)</th><th scope="col" id="nv-revenue-qoq-column">QoQ growth</th><th scope="col" id="nv-revenue-growth-column">YoY growth</th><th scope="col" id="nv-revenue-share-column">Share of selected revenue</th></tr></thead><tbody id="nv-revenue-rows"></tbody>
         </table>
+        </div>
       </div>
     </div>
   </div>
@@ -145,8 +155,15 @@
   <dl class="nv-kpis nv-market-kpis nv-reveal" id="nv-market-kpis"></dl>
   <article class="nv-panel nv-market-panel nv-reveal">
     <div class="nv-panel-head"><div><h3 id="nv-market-title">Split-adjusted price</h3><p id="nv-market-detail" class="nv-muted"></p></div>
-      <div class="nv-controls"><label>Measure<select id="nv-market-metric"></select></label><label>Range<select id="nv-market-range"><option value="12">1 year</option><option value="36">3 years</option><option value="60">5 years</option><option value="120" selected>10 years</option></select></label></div>
+      <div class="nv-controls"><label>Range<select id="nv-market-range"><option value="12">1 year</option><option value="36">3 years</option><option value="60">5 years</option><option value="120" selected>10 years</option></select></label></div>
     </div>
+    <div class="nv-metric-controls" data-metric-controls>
+        <div class="nv-metric-tabs" data-metric-families role="group" aria-label="Market measure categories"></div>
+        <div class="nv-controls">
+          <label hidden>Metric group<select data-metric-subgroup></select></label>
+          <label>Measure<select id="nv-market-metric"></select></label><button type="button" class="nv-layout-button" data-metric-next hidden>Next <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
     <div class="nv-chart" id="nv-market-chart"></div>
     <p class="nv-note">Monthly closes use the last available trading day. November 2026 is partial. Dividends are grouped by ex-date.</p>
   </article>
@@ -231,7 +248,14 @@
   </article>
   <article class="nv-panel nv-reveal lab-spaced">
     <div class="nv-panel-head"><div><h3>Compare the trend</h3><p class="nv-muted">Nearest calendar quarter-end · actual fiscal ends in the chart readout</p></div>
-    <div class="nv-controls"><label>Measure<select id="lab-trend-metric"></select></label><label>Compare with<select id="lab-trend-peer"></select></label></div></div>
+    <div class="nv-controls"><label>Compare with<select id="lab-trend-peer"></select></label></div></div>
+    <div class="nv-metric-controls" data-metric-controls>
+        <div class="nv-metric-tabs" data-metric-families role="group" aria-label="Peer trend measure categories"></div>
+        <div class="nv-controls">
+          <label hidden>Metric group<select data-metric-subgroup></select></label>
+          <label>Measure<select id="lab-trend-metric"></select></label><button type="button" class="nv-layout-button" data-metric-next hidden>Next <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
     <div class="nv-chart nv-chart-small" id="lab-trend"></div>
   </article>
   <div class="lab-desks nv-reveal">

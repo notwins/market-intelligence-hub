@@ -40,7 +40,14 @@
     options($("lab-period"), Object.keys(financial.periods).map(p => [p, periodLabel(p)]), "Latest quarterly");
     options($("lab-month"), [...months].reverse().map(m => [m, charts.date(m)]), latestMonth);
     options($("lab-trend-peer"), companies.slice(1).map(c => [c.ticker, c.name]), "AMD");
-    options($("lab-trend-metric"), trends.map(([name]) => [name, name]), "Revenue");
+    const trendGroups = [
+      ["Income & growth", [0, 1, 2, 3, 12, 13], [0, 3, 12]],
+      ["Balance sheet", [4, 5, 6], []],
+      ["Cash flow & margins", [7, 8, 9, 10, 11], [7, 8, 9]],
+    ];
+    window.NvdaChartControls.mount("lab-trend-metric", trendGroups.map(([label, metrics, quick]) => ({
+      label, groups: [{ label, items: metrics.map(index => [trends[index][0], trends[index][0]]), quick: quick.map(index => trends[index][0]) }],
+    })), "Revenue");
     options($("sim-metric"), model.metrics.map(m => [m.id, m.label]), "pe");
     function indices(group) {
       return companies.map((c, i) => i).filter(i => i === 0 || group === "all" || groups[group].includes(companies[i].ticker));

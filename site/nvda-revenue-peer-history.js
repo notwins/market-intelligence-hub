@@ -10,7 +10,7 @@
   const blue = "#416e9b";
   const peerColors = [blue, "#946241", "#7b568c", "#237c84"];
 
-  function mount({ financial, companies, nvidiaPeriods, groups, descriptors, usd, fmt, dollar, companyCell, element, options }) {
+  function mount({ financial, companies, nvidiaPeriods, groups, descriptors, metricControls, usd, fmt, dollar, companyCell, element, options }) {
     const periods = financial.periods;
     const dateKey = "Period ending";
     const get = (period, key, i) => periods[period][key]?.[i] ?? null;
@@ -24,7 +24,7 @@
     const units = $("nv-revenue-units");
     const metric = $("nv-fin-metric");
     const revenueField = metric.value;
-    const isComparable = option => descriptors.get(option.value)?.type === "money";
+    const isComparable = field => descriptors.get(field)?.type === "money";
     const chart = $("nv-revenue-scale-chart");
     const tableRows = $("nv-revenue-rows");
     const companyChoices = $("nv-revenue-peer-options");
@@ -247,16 +247,13 @@
 
     function show(value) {
       isComparing = value;
-      for (const option of metric.options) option.disabled = value && !isComparable(option);
-      if (value && !isComparable(metric.selectedOptions[0])) {
-        metric.value = revenueField;
-        metric.dispatchEvent(new Event("change"));
-      }
+      const changedMetric = metricControls.setFilter(value ? isComparable : () => true);
       $("nv-fin-solo").hidden = value;
       compare.hidden = !value;
       $("nv-fin-solo-toggle").setAttribute("aria-pressed", String(!value));
       $("nv-fin-peer-toggle").setAttribute("aria-pressed", String(value));
-      render();
+      if (changedMetric) metric.dispatchEvent(new Event("change"));
+      else render();
     }
 
     $("nv-fin-solo-toggle").onclick = () => show(false);
