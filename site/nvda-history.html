@@ -7,15 +7,16 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=3">
+<link rel="stylesheet" href="nvda-history.css?v=4">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
-<script defer src="nvda-history-charts.js?v=2"></script>
+<script defer src="nvda-history-charts.js?v=3"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
 <script defer src="nvda-peer-lab.js?v=20261127.liabilities-r2"></script>
 <script defer src="nvda-statement-comparisons.js?v=1"></script>
-<script defer src="nvda-history.js?v=20261127.statement-charts"></script>
+<script defer src="nvda-revenue-peer-history.js?v=1"></script>
+<script defer src="nvda-history.js?v=20261127.revenue-comp"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
 <body class="nvda-history-page">
@@ -53,11 +54,53 @@
 <section class="nv-section nv-shell" id="financials">
   <div class="nv-section-head nv-reveal"><div><p class="nv-label">Company filings</p><h2>Financial history</h2></div><p>Switch between reported amounts, dollar changes and growth rates. The actual period end appears with each observation.</p></div>
   <div class="nv-panel nv-reveal">
-    <div class="nv-panel-head"><div><h3 id="nv-fin-chart-title">Revenue history</h3><p id="nv-fin-detail" class="nv-muted"></p></div>
-      <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label><label>Metric<select id="nv-fin-metric"></select></label><label>View<select id="nv-fin-mode"></select></label></div>
+    <div class="nv-fin-history-toolbar">
+      <div class="nv-statement-peer-tabs" role="group" aria-label="Financial history view">
+        <button type="button" id="nv-fin-solo-toggle" aria-controls="nv-fin-solo" aria-pressed="true">NVIDIA history</button>
+        <button type="button" id="nv-fin-peer-toggle" aria-controls="nv-fin-compare" aria-pressed="false">Compare competitors</button>
+      </div>
+      <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label></div>
     </div>
-    <div class="nv-chart" id="nv-fin-chart"></div>
-    <p class="nv-note">Growth rates use a positive comparison base. Margin movements are shown in percentage points.</p>
+    <div id="nv-fin-solo">
+      <div class="nv-panel-head"><div><h3 id="nv-fin-chart-title">Revenue history</h3><p id="nv-fin-detail" class="nv-muted"></p></div>
+        <div class="nv-controls"><label>Metric<select id="nv-fin-metric"></select></label><label>View<select id="nv-fin-mode"></select></label></div>
+      </div>
+      <div class="nv-chart" id="nv-fin-chart"></div>
+      <p class="nv-note">Growth rates use a positive comparison base. Margin movements are shown in percentage points.</p>
+    </div>
+    <div id="nv-fin-compare" hidden>
+      <div class="nv-controls nv-revenue-compare-controls">
+        <label>NVIDIA period end<select id="nv-revenue-period"></select></label>
+        <label>Growth basis<select id="nv-revenue-growth-basis"><option value="YoY">Year over year</option><option value="QoQ">Quarter over quarter</option></select></label>
+        <label>Chart range<select id="nv-revenue-range"><option value="8">Last 8 periods</option><option value="16">Last 16 periods</option><option value="99">All periods</option></select></label>
+        <label>Peer set<select id="nv-revenue-peer-preset"></select></label>
+      </div>
+      <details class="nv-statement-peer-details">
+        <summary>Choose individual peers <span id="nv-revenue-peer-count"></span></summary>
+        <div class="nv-statement-peer-options" id="nv-revenue-peer-options"></div>
+      </details>
+      <div class="nv-revenue-peer-grid">
+        <article class="nv-panel nv-revenue-peer-card" aria-labelledby="nv-revenue-growth-title">
+          <h3 id="nv-revenue-growth-title">Revenue growth</h3>
+          <p class="nv-muted" id="nv-revenue-growth-detail"></p>
+          <div class="nv-statement-bar-body nv-revenue-growth-bars" id="nv-revenue-growth-bars" role="group" aria-label="Revenue growth by company"></div>
+        </article>
+        <article class="nv-panel nv-revenue-peer-card" aria-labelledby="nv-revenue-scale-title">
+          <div class="nv-panel-head">
+            <h3 id="nv-revenue-scale-title">Revenue scale and share</h3>
+            <div class="nv-controls"><label>Bar units<select id="nv-revenue-units"><option value="usd">USD billions</option><option value="share">Revenue share %</option></select></label></div>
+          </div>
+          <p class="nv-revenue-share"><strong id="nv-revenue-share-value">—</strong><span>NVIDIA share of selected revenue <small id="nv-revenue-share-coverage"></small></span></p>
+          <div class="nv-chart nv-chart-small" id="nv-revenue-scale-chart"></div>
+        </article>
+      </div>
+      <p class="nv-muted" id="nv-revenue-method">Select a period on the chart to update both cards and the table. Share uses the selected companies’ combined revenue and requires a figure for every company. Peer fiscal year ends match within 125 days of NVIDIA’s. Quarterly ends match within 45 days.</p>
+      <div class="nv-table-scroll nv-revenue-compare-table nv-statement-chart-table" tabindex="0" role="region" aria-label="Revenue comparison figures" aria-describedby="nv-revenue-method">
+        <table class="nv-table nv-peer-table">
+          <thead><tr><th scope="col">Company</th><th scope="col">Filing period end</th><th scope="col">Revenue (USD)</th><th scope="col" id="nv-revenue-growth-column">YoY growth</th><th scope="col">Share of selected revenue</th></tr></thead><tbody id="nv-revenue-rows"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
   <div class="nv-grid-2 nv-fin-pair">
     <article class="nv-panel nv-reveal"><h3>Assets, liabilities &amp; equity</h3><p class="nv-muted">Closing balances · USD billions</p><div class="nv-chart nv-chart-small" id="nv-balance-chart"></div></article>
