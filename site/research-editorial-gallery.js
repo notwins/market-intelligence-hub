@@ -1,10 +1,19 @@
 /* Illustrated research cards and scroll position for the Research Explained landing. */
+import {createCover, pickTheme} from './research-cover.js?v=1';
+import {articleURL, artworkURL, readerURL} from './research-reader-route.js?v=1';
+
 const library = document.querySelector('[data-library-ready]');
 const base = new URL('./', import.meta.url);
 const style = document.createElement('link');
 style.rel = 'stylesheet';
-style.href = new URL('research-editorial-gallery.css?v=2', base);
+style.href = new URL('research-editorial-gallery.css?v=3', base);
 document.head.append(style);
+if (!document.getElementById('mih-usage')) {
+  const usage = document.createElement('script');
+  usage.id = 'mih-usage';
+  usage.src = new URL('hub-usage.js?v=4', base);
+  document.head.append(usage);
+}
 const sections = [
   ['main-published-research', 'Latest reports'],
   ['my-thoughts', 'My thoughts'],
@@ -14,59 +23,6 @@ const sections = [
   ['library-basics', 'Market basics']
 ];
 
-const themes = [
-  ['markets', 'markets', '#784b37', '#efd9cb'],
-  ['rates', 'yield', '#36564a', '#dee8d8'],
-  ['chips', 'shares', '#436070', '#dce7eb'],
-  ['risk', 'review', '#5b4b6c', '#ebe4ee'],
-  ['gold', 'gold', '#704d1f', '#f0dfb6'],
-  ['global', 'map', '#28555b', '#d3e8e3'],
-  ['credit', 'credit', '#713e31', '#efddd4'],
-  ['savings', 'cashflow', '#466143', '#e8ebd7'],
-  ['notes', 'pen', '#6d4a49', '#f0e1d9'],
-  ['infrastructure', 'tools', '#43536c', '#d9e1e9'],
-  ['fx', 'fx', '#2d5d58', '#dcebe1'],
-  ['portfolio', 'pivot', '#65536a', '#ece3e5']
-];
-const byTheme = Object.fromEntries(themes.map(([key], index) => [key, index]));
-
-// Ordered from specific subjects to broad beats. The title has priority over tags.
-const subjects = [
-  ['savings', /\b(?:cpf(?: life| oa)?|temasek 2070|payout|retirement|annuit|pension|savings)/i],
-  ['infrastructure', /\b(?:data[ -]?cent(?:er|re)|electricity|power grid|power supply|infrastructure|energy|lng)\b/i],
-  ['gold', /\b(?:gold|bullion|precious metal|xau|gld)\b/i],
-  ['risk', /\b(?:collars?|sharpe|hedg\w*|option\w*|floor and cap|price of conviction)\b/i],
-  ['chips', /\b(?:nvidia|nvda|tsmc|foundry|amd|chips?|semiconductor\w*|alphabet|anthropic|ai|technology)\b/i],
-  ['notes', /\b(?:howard marks|personal reading|my thoughts|journal|conviction)\b/i],
-  ['fx', /\b(?:[a-z]{3}\s*[\/-]\s*[a-z]{3}|franc|currency|currencies|forex|exchange rate|fx)\b/i],
-  ['credit', /\b(?:credit|refinanc\w*|borrowing|cash.flow|liquidity|pimco|private debt|cre)\b/i],
-  ['rates', /\b(?:bonds?|treasur\w*|yield\w*|rate\w*|monetary|snb|mas|t-bills|interest|bank\w*)\b/i],
-  ['portfolio', /\b(?:diversif\w*|allocation|portfoli\w*|alternatives|concentration|asset|structured investment)\b/i],
-  ['global', /\b(?:global|trade|shipping|tariff|macro|econom\w*|growth|inflation|singapore|gic)\b/i],
-  ['markets', /\b(?:market|markets|earnings|valuation|stocks?|shares?|index)\b/i]
-];
-function pickTheme(title, context) {
-  return subjects.find(([, match]) => match.test(title))?.[0]
-    || subjects.find(([, match]) => match.test(context))?.[0] || 'notes';
-}
-function hashTitle(text) {
-  let hash = 2166136261;
-  for (const char of text.toLowerCase()) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
-  return hash >>> 0;
-}
-function icon(name, className) {
-  const ns = 'http://www.w3.org/2000/svg';
-  const svg = document.createElementNS(ns, 'svg');
-  const use = document.createElementNS(ns, 'use');
-  svg.setAttribute('class', className);
-  svg.setAttribute('viewBox', '0 0 32 32');
-  svg.setAttribute('aria-hidden', 'true');
-  svg.setAttribute('focusable', 'false');
-  use.setAttribute('href', new URL('assets/navigation-atlas.svg?v=2#' + name, base));
-  svg.append(use);
-  return svg;
-}
-
 const cardSelector = '.mu-writeup, #my-research .rr-item';
 function decorateCard(card) {
   if (card.dataset.coverDesign) return;
@@ -74,25 +30,22 @@ function decorateCard(card) {
   if (!title) return;
   const context = [...card.querySelectorAll('.mu-eyebrow, .mu-card-tags, .rr-tags')].map(node => node.textContent).join(' ');
   const key = pickTheme(title, context);
-  const panel = byTheme[key];
-  const [, mark, ink, tint] = themes[panel];
-  const hash = hashTitle(title);
-  const hasOriginal = Boolean(card.querySelector('figure img, img:not([class*="logo"]):not([class*="flag"])'));
-  const cover = document.createElement('div');
-  cover.className = 'research-cover';
-  cover.setAttribute('aria-hidden', 'true');
-  cover.style.setProperty('--cover-x', 100 * (panel % 4) / 3 + '%');
-  cover.style.setProperty('--cover-y', 50 * Math.floor(panel / 4) + '%');
-  cover.dataset.crop = String(hash % 4);
-  const art = document.createElement('span');
-  art.className = 'research-cover-art';
-  cover.append(art, icon(mark, 'research-cover-icon'));
-  card.dataset.coverDesign = hasOriginal ? 'existing' : key;
-  card.dataset.coverFrame = String(Math.floor(hash / 13) % 3);
-  card.style.setProperty('--research-ink', ink);
-  card.style.setProperty('--research-tint', tint);
-  if (!hasOriginal) card.prepend(cover);
-  // The heading receives its destination icon from the shared workspace navigation.
+  const originalArt = card.querySelector('figure img, img:not([class*="logo"]):not([class*="flag"])');
+  const artwork = artworkURL(originalArt?.currentSrc || originalArt?.src);
+  const actions = card.querySelectorAll('a[href]:not([download])');
+  let primary;
+  for (const link of actions) {
+    if (link.matches('.mu-open-brief') || /^open brief\b/i.test(link.textContent.trim())) continue;
+    const source = articleURL(link.href);
+    if (!source || source.hash) continue;
+    const destination = readerURL(source, {title, theme: key, artwork});
+    link.dataset.researchSource = source.href;
+    link.href = destination;
+    primary ||= link;
+  }
+  card.dataset.coverDesign = originalArt ? 'existing' : key;
+  const cover = createCover(card, title, key, null, primary);
+  if (!originalArt) card.prepend(cover);
 }
 
 const nav = document.createElement('nav');

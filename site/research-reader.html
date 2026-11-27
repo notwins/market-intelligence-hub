@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, follow">
+  <title>Article reader | Market Intelligence Hub</title>
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="stylesheet" href="research-reader.css?v=1">
+  <script type="module" src="research-reader.js?v=1"></script>
+</head>
+<body class="reader-shell">
+  <header class="reader-bar">
+    <a class="reader-library" href="market-understanding/" data-icon="library">Research library</a>
+    <div class="reader-actions">
+      <a class="reader-original" target="_blank" rel="noopener" data-icon="source" hidden>Original<span> article</span></a>
+      <details class="reader-jump" hidden>
+        <summary data-icon="map">Jump to</summary>
+        <nav aria-label="Article sections"></nav>
+      </details>
+      <button type="button" class="reader-settings" aria-label="Reading settings" title="Reading settings" data-icon="settings"></button>
+    </div>
+  </header>
+  <main>
+    <p class="reader-status" role="status">Opening article…</p>
+    <iframe class="reader-frame" title="Research article" hidden></iframe>
+    <noscript><p class="reader-status"><a href="market-understanding/">Open the research library to read the original articles.</a></p></noscript>
+  </main>
+  <dialog class="reader-dialog" aria-labelledby="reading-settings">
+    <form method="dialog">
+      <h2 id="reading-settings">Reading settings</h2>
+      <button type="submit" aria-label="Close settings">×</button>
+    </form>
+    <label><span>Interactive scrolling</span><input type="checkbox" role="switch" aria-describedby="reader-motion-note"></label>
+    <p id="reader-motion-note"></p>
+  </dialog>
+</body>
+</html>

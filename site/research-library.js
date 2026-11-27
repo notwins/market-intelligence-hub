@@ -117,7 +117,7 @@ thoughts.innerHTML=`
   <div class="mu-writeups-grid" data-thoughts-legacy></div>`;
 latest.after(thoughts);
 root.querySelectorAll('details.mu-explanation, details.mu-card-previous, #library-basics details').forEach(details=>{details.open=true;});
-import('./research-editorial-gallery.js?v=2');
+import('./research-editorial-gallery.js?v=3');
 const thoughtsFeed=thoughts.querySelector('[data-thoughts-feed]');
 const thoughtsLegacy=thoughts.querySelector('[data-thoughts-legacy]');
 function renderThoughts(feed){

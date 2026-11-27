@@ -28,8 +28,9 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   const addPath = filename => path.posix.relative(directory, filename);
   const addScript = filename => '<script defer src="' + addPath(filename) + '"></script>';
   let assets = '';
+  // The article reader has its own compact toolbar and reading pane.
   // Retired entry points immediately forward to a page with the shared navigation.
-  if (!/<script\b[^>]*\bsrc="[^"]*\blegacy-redirect\.js\b/.test(content)) {
+  if (relative !== 'research-reader.html' && !/<script\b[^>]*\bsrc="[^"]*\blegacy-redirect\.js\b/.test(content)) {
     if (!dependencies.includes(navigationCSS)) assets += '<link id="hub-primary-assets" rel="stylesheet" href="' + addPath(navigationCSS) + navigationVersion + '">';
     if (!dependencies.includes(navigationJS)) assets += addScript(navigationJS + navigationVersion);
   }
