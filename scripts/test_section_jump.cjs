@@ -46,7 +46,7 @@ test('desktop controls dock in the existing rail while mobile clears measured na
   const css=fs.readFileSync(path.join(__dirname,'../site/section-jump.css'),'utf8');
   for(const text of ["rail.insertBefore(bar, rail.querySelector('.rail-foot'))",'section-jump-docked','doc.documentElement.clientWidth - 24','spacer !== doc.body.lastElementChild','bottom + toolbar.getBoundingClientRect().height + 28',"doc.querySelectorAll('.bottom-nav,.topbar')"]) assert(code.includes(text),text);
   assert(css.includes('#section-jump.section-jump-docked{position:relative;inset:auto'));
-  assert(code.includes("if (bar.hidden) setExpanded(false)"),'Dynamic content must not close an open picker');
+  assert(code.includes("if (bar.hidden || modalOpen) setExpanded(false)"),'Dynamic content must not close an open picker');
   assert(!code.includes('if (bar.hidden || changed) setExpanded(false)'));
 });
 test('floating bar is icon-only with direct previous and next actions',()=>{

@@ -29,7 +29,7 @@
     const bar = doc.createElement('nav');
     bar.id = 'section-jump'; bar.hidden = true;
     bar.setAttribute('aria-label', 'Subsection navigation');
-    bar.innerHTML = '<div class="section-jump-toolbar"><button type="button" id="section-jump-toggle" aria-label="Choose subsection" title="Choose subsection" aria-expanded="false" aria-controls="section-jump-panel"><span aria-hidden="true">☰</span></button><span class="section-jump-divider" aria-hidden="true"></span><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection"><span aria-hidden="true">↑</span></button><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection"><span aria-hidden="true">↓</span></button></div><div id="section-jump-panel" hidden><div class="section-jump-heading">On this page <button type="button" class="section-jump-close" aria-label="Close sections">×</button></div><div class="section-jump-controls"><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection">↑ Previous</button><label class="section-jump-label" for="section-jump-select">Jump to subsection</label><select id="section-jump-select" aria-label="Jump to subsection"></select><span class="section-jump-progress" aria-hidden="true"></span><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection">↓ Next</button></div><ol class="section-jump-list" aria-label="Page sections"></ol></div><span class="section-jump-status" role="status" aria-live="polite" aria-atomic="true"></span>';
+    bar.innerHTML = '<div class="section-jump-toolbar"><button type="button" id="section-jump-toggle" aria-label="Choose subsection" title="Choose subsection" aria-expanded="false" aria-controls="section-jump-panel"><span aria-hidden="true">☰</span><span class="section-jump-mobile-label">On page</span></button><span class="section-jump-divider" aria-hidden="true"></span><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection"><span aria-hidden="true">↑</span></button><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection"><span aria-hidden="true">↓</span></button></div><div id="section-jump-panel" hidden><div class="section-jump-heading">On this page <button type="button" class="section-jump-close" aria-label="Close sections">×</button></div><div class="section-jump-controls"><button type="button" class="section-jump-prev" aria-label="Previous subsection" title="Previous subsection">↑ Previous</button><label class="section-jump-label" for="section-jump-select">Jump to subsection</label><select id="section-jump-select" aria-label="Jump to subsection"></select><span class="section-jump-progress" aria-hidden="true"></span><button type="button" class="section-jump-next" aria-label="Next subsection" title="Next subsection">↓ Next</button></div><ol class="section-jump-list" aria-label="Page sections"></ol></div><span class="section-jump-status" role="status" aria-live="polite" aria-atomic="true"></span>';
     const spacer = doc.createElement('div'); spacer.className = 'section-jump-spacer'; spacer.hidden = true; spacer.setAttribute('aria-hidden', 'true');
     doc.body.append(bar, spacer);
     const previous = [...bar.querySelectorAll('.section-jump-prev')], next = [...bar.querySelectorAll('.section-jump-next')];
@@ -37,7 +37,8 @@
     const toggle = bar.querySelector('#section-jump-toggle'), panel = bar.querySelector('#section-jump-panel');
     const list = bar.querySelector('.section-jump-list'), toolbar = bar.querySelector('.section-jump-toolbar');
     const progress = bar.querySelector('.section-jump-progress'), rail = doc.querySelector('aside.rail');
-    let docked = false, expanded = false;
+    const phone = root.matchMedia('(max-width:760px)');
+    let docked = false, integrated = false, expanded = false;
     function setExpanded(value, restoreFocus = false) {
       expanded = !docked && value;
       toggle.setAttribute('aria-expanded', String(expanded));
@@ -49,13 +50,18 @@
       }
     }
     function layout() {
-      const shouldDock = !!rail && visible(rail, root);
-      if (shouldDock !== docked) {
+      const jumpButton = phone.matches && doc.querySelector('.hub-primary[data-workspace-dock] > .hub-primary-more');
+      const shouldIntegrate = !!jumpButton;
+      const shouldDock = !shouldIntegrate && !!rail && visible(rail, root);
+      if (shouldDock !== docked || shouldIntegrate !== integrated) {
         const hadFocus = bar.contains(doc.activeElement);
         docked = shouldDock;
+        integrated = shouldIntegrate;
         if (docked) rail.insertBefore(bar, rail.querySelector('.rail-foot'));
+        else if (integrated) jumpButton.before(bar);
         else doc.body.insertBefore(bar, spacer);
         bar.classList.toggle('section-jump-docked', docked);
+        toggle.setAttribute('aria-label', integrated ? 'On page: choose a subsection' : 'Choose subsection');
         setExpanded(false);
         if (hadFocus) (docked ? picker : toggle).focus({ preventScroll: true });
       }
@@ -63,7 +69,6 @@
     let highlightTimer; function highlight(){bar.classList.remove('sj-highlight');void bar.offsetWidth;bar.classList.add('sj-highlight');root.clearTimeout(highlightTimer);highlightTimer=root.setTimeout(()=>bar.classList.remove('sj-highlight'),1000);}
     let targets = [], current = -1, anchor = null, pending = null, offset = 16, refreshFrame = 0, positionFrame = 0, settle = 0;
     function offsets() {
-      layout();
       offset = 16;
       doc.querySelectorAll('header,nav,[data-section-jump-offset]').forEach(node => {
         if (node === bar || bar.contains(node) || !visible(node, root)) return;
@@ -82,7 +87,7 @@
       bar.style.setProperty('--section-jump-panel-width', Math.min(350, doc.documentElement.clientWidth - 24) + 'px');
       // Keep this as the last body child so even subsequently inserted legal links clear the pill.
       if (spacer !== doc.body.lastElementChild) doc.body.append(spacer);
-      spacer.style.height = docked ? '0px' : (bottom + toolbar.getBoundingClientRect().height + 28) + 'px';
+      spacer.style.height = docked || integrated ? '0px' : (bottom + toolbar.getBoundingClientRect().height + 28) + 'px';
     }
     function position() {
       positionFrame = 0;
@@ -124,8 +129,11 @@
       if (!targets.some(item => item.node === pending)) pending = null;
       if (!targets.some(item => item.node === anchor)) anchor = null;
       // A title alone is not a subsection. Empty/filter-only views stay uncluttered.
-      bar.hidden = spacer.hidden = targets.length < 2 || !!doc.querySelector('dialog[open]');
-      if (bar.hidden) setExpanded(false);
+      layout();
+      const modalOpen = !!doc.querySelector('dialog[open]');
+      bar.hidden = targets.length < 2 || (modalOpen && !integrated);
+      spacer.hidden = bar.hidden || integrated;
+      if (bar.hidden || modalOpen) setExpanded(false);
       if (changed) {
         const options = targets.map((item, i) => {
           const option = doc.createElement('option'); option.value = String(i);
