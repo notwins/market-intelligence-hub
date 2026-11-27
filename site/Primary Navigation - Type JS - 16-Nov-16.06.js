@@ -681,6 +681,13 @@
 
   window.addEventListener('scroll', updateScrollDirection, {passive: true});
   document.addEventListener('scrollend', endScroll);
+  window.addEventListener('touchstart', endScroll, {passive: true});
+  window.addEventListener('wheel', event => {
+    const distance = Math.abs(event.deltaY);
+    if (event.ctrlKey || distance <= Math.abs(event.deltaX)) return;
+    // Two mouse wheel detents can arrive before the browser emits scrollend.
+    if (event.deltaMode !== 0 || (distance >= 100 && distance % 100 === 0)) endScroll();
+  }, {passive: true});
   window.addEventListener('hashchange', showNavigation);
   window.addEventListener('hub-desk-route', showNavigation);
   window.addEventListener('pageshow', event => { if (event.persisted) showNavigation(); });

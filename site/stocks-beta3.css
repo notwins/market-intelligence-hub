@@ -204,18 +204,14 @@ dialog#bos-dialog{width:min(1050px,calc(100vw - 24px));max-height:85dvh;border:1
 .quarter-growth label{display:flex;gap:5px;align-items:center;font-size:.875rem;font-weight:650;cursor:pointer}
 .quarter-growth input{accent-color:#176b5a}
 .quarter-growth[hidden]{display:none}
-/* This page uses the shared menu while managing its own available sticky-header space. */
+/* Place the company selector below the shared navigation when it occupies the top edge. */
 html:has(.filings-page){--beta3-nav-top:var(--hub-primary-height,0px)}
-html.beta3-nav-hidden{--beta3-nav-top:0px;scroll-padding-top:0}
-.filings-page > .hub-primary{transition:transform 150ms ease-out}
-.beta3-nav-hidden .filings-page > .hub-primary{transform:translateY(-110%);pointer-events:none}
 #filing-footer section{margin-bottom:22px}
 .comparison-context{border:1px solid #cddbd8;border-radius:8px;background:#fff}
 .comparison-context table{width:100%;border-collapse:collapse;text-align:left}
 .comparison-context :is(th,td){padding:7px 10px;white-space:nowrap}
 .comparison-context thead{background:#ebf3f0;color:#314e4a}
 .comparison-context tbody tr+tr{border-top:1px solid #e3ece9}
-@media(prefers-reduced-motion:reduce){.filings-page > .hub-primary{transition:none}}
 .bonus-companies{grid-column:1/-1;min-width:0;margin:0;padding:4px 0;border:0}
 .bonus-companies legend{font-size:12px;font-weight:700;color:#405a5a}
 #bonus-choices{display:flex;flex-wrap:wrap;gap:5px}
