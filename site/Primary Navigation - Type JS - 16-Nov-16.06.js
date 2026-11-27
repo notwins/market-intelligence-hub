@@ -81,7 +81,6 @@
   const pagePath = location.pathname.slice(base.pathname.length);
   const onDesk = pagePath === 'desk.html';
   const mobileDock = matchMedia('(max-width:760px)');
-  const hasMobileDock = () => onDesk || root.classList.contains('hub-tools-nav');
   const credit = ['Bonds & credit', 'v4.html#credit'];
   const treasury = ['UST selection desk', 'v4.html#ust'];
   const filingsLink = ['Shares Beta 3 · 10-K filings', 'stocks-beta3.html'];
@@ -551,7 +550,7 @@
       closeMenu();
       return;
     }
-    const docked = hasMobileDock() && mobileDock.matches;
+    const docked = mobileDock.matches;
     panel.style.top = docked ? 'auto' : anchor.bottom + 'px';
     panel.style.bottom = docked ? window.innerHeight - anchor.top + 'px' : 'auto';
     panel.style.left = Math.max(8, Math.min(anchor.left, document.documentElement.clientWidth - panel.offsetWidth - 8)) + 'px';
@@ -586,7 +585,7 @@
       if (openMenu?.group !== group) closeMenu();
       openMenu = {group, panel, button, pinned};
       panel.hidden = false;
-      if (hasMobileDock()) {
+      if (mobileDock.matches) {
         panel.setAttribute('popover', 'manual');
         panel.showPopover?.();
       } else {
@@ -624,32 +623,71 @@
     e.preventDefault();
   });
   scroll.addEventListener('scroll', positionMenu, {passive: true});
-  if (onDesk) {
-    const marketsTab = document.getElementById('tab-markets');
-    let turningPoint = Math.max(0, window.scrollY);
-    let compact = false;
-    function setCompact(value, y) {
-      compact = value;
-      turningPoint = y;
-      root.classList.toggle('hub-desk-scrolled-down', value);
-      if (value && !mobileDock.matches) closeMenu();
-    }
-    function updateScrollDirection() {
-      // Clamp Safari's overscroll so a bounce cannot reverse the detected direction.
-      const limit = Math.max(0, root.scrollHeight - root.clientHeight);
-      const y = Math.min(limit, Math.max(0, window.scrollY));
-      if (marketsTab.getAttribute('aria-selected') !== 'true' || y === 0) setCompact(false, y);
-      else if (compact && turningPoint - y >= 8) setCompact(false, y);
-      else if (!compact && y - turningPoint >= 8) setCompact(true, y);
-      else turningPoint = compact ? Math.max(turningPoint, y) : Math.min(turningPoint, y);
-      positionMenu();
-    }
-    window.addEventListener('scroll', updateScrollDirection, {passive: true});
-    window.addEventListener('hub-desk-route', () => setCompact(false, Math.max(0, window.scrollY)));
-    root.classList.add('hub-desk-nav');
-  } else {
-    window.addEventListener('scroll', positionMenu, {passive: true});
+  if (onDesk) root.classList.add('hub-desk-nav');
+
+  function scrollPosition() {
+    // Clamp Safari's overscroll so a bounce does not count as a reversal.
+    const limit = Math.max(0, root.scrollHeight - root.clientHeight);
+    return Math.min(limit, Math.max(0, window.scrollY));
   }
+
+  const scrollThreshold = 8;
+  let lastY = scrollPosition();
+  let lowestY = lastY, highestY = lastY;
+  let previousScrollTime = -Infinity;
+  let upwardScrolls = 0;
+  let countedThisScroll = false;
+  let navigationHidden = false;
+
+  function endScroll() {
+    countedThisScroll = false;
+    lowestY = highestY = lastY;
+  }
+
+  function setNavigationHidden(hidden) {
+    if (navigationHidden === hidden) return;
+    navigationHidden = hidden;
+    upwardScrolls = 0;
+    if (hidden) closeMenu();
+    root.classList.toggle('hub-primary-hidden', hidden);
+  }
+
+  function showNavigation() {
+    setNavigationHidden(false);
+    lastY = scrollPosition();
+    endScroll();
+  }
+
+  function updateScrollDirection(event) {
+    const y = scrollPosition();
+    if (y === lastY) return;
+    // Track one upward movement per gesture, including its momentum.
+    if (!('onscrollend' in document) && event.timeStamp - previousScrollTime > 140) endScroll();
+    previousScrollTime = event.timeStamp;
+    lastY = y;
+    if (y === 0) showNavigation();
+    else if (y - lowestY >= scrollThreshold) {
+      upwardScrolls = 0;
+      endScroll();
+      if (!bar.querySelector(':focus-visible')) setNavigationHidden(true);
+    } else if (navigationHidden && !countedThisScroll && highestY - y >= scrollThreshold) {
+      countedThisScroll = true;
+      if (++upwardScrolls === 2) showNavigation();
+    }
+    lowestY = Math.min(lowestY, y);
+    highestY = Math.max(highestY, y);
+    positionMenu();
+  }
+
+  window.addEventListener('scroll', updateScrollDirection, {passive: true});
+  document.addEventListener('scrollend', endScroll);
+  window.addEventListener('hashchange', showNavigation);
+  window.addEventListener('hub-desk-route', showNavigation);
+  window.addEventListener('pageshow', event => { if (event.persisted) showNavigation(); });
+  mobileDock.addEventListener('change', () => { closeMenu(); showNavigation(); });
+  bar.addEventListener('focusin', event => {
+    if (event.target.matches(':focus-visible')) showNavigation();
+  });
   more.type = 'button'; more.classList.add('hub-primary-more'); more.textContent = 'Jump to';
   addIcon(more, 'jump');
   more.setAttribute('aria-haspopup', 'dialog');
@@ -838,7 +876,6 @@
     const shares = ['stocks-beta.html', 'stocks-beta2.html', 'stocks-beta3.html', 'bos-monthly.html', 'si-beta2.html', 'nvda-history.html'].includes(relative)
       || (onWorkspace && route === '#history/si');
     const tools = relative.startsWith('tools/') || (onWorkspace && route === '#tools');
-    root.classList.toggle('hub-tools-nav', tools);
     const key = tools ? 'Tools' : shares ? 'Shares'
       : relative.startsWith('fred/') || /^(?:historical-fred|fred-[123]|fred-feed)\.html$/.test(relative) ? 'FRED' : relative.startsWith('market-understanding/') ? 'My Blog'
       : ['bonds-beta.html','bond-cashflow.html'].includes(relative) || (onWorkspace && ['#credit', '#ust'].includes(route)) ? 'Bonds BETA'
@@ -859,7 +896,7 @@
     positionMenu();
   }
   new ResizeObserver(() => {
-    document.documentElement.style.setProperty('--hub-primary-height', bar.getBoundingClientRect().height + 'px');
+    root.style.setProperty('--hub-primary-size', bar.getBoundingClientRect().height + 'px');
     positionMenu();
   }).observe(bar);
   if (onDesk) new MutationObserver(active).observe(document.querySelector('.modebar'), {

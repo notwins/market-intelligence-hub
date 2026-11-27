@@ -8,9 +8,14 @@ let count=0,legal=0,preserved=0;
 for(const filename of walk(root).filter(p=>p.toLowerCase().endsWith('.html'))){
   const rel=path.relative(root,filename).replace(/\\/g,'/'),s=fs.readFileSync(filename,'utf8');
   if(protectedPaths.has(rel)){preserved++;continue}
-  const navigation=(s.replace(/%20/gi,' ').match(/src="[^"]*Primary Navigation - Type JS - 16-Nov-16\.06\.js(?:\?[^"]*)?"/g)||[]).length;
-  assert(navigation<=1,rel+' duplicate primary navigation');
-  if(['blueprint.html','research-feed.html'].includes(rel))assert.equal(navigation,1,rel+' missing primary navigation');
+  const decoded=s.replace(/%20/gi,' ');
+  const navigation=(decoded.match(/src="[^"]*Primary Navigation - Type JS - 16-Nov-16\.06\.js(?:\?[^"]*)?"/g)||[]).length;
+  const styles=(decoded.match(/href="[^"]*Primary Navigation - Type CSS - 16-Nov-16\.06\.css(?:\?[^"]*)?"/g)||[]).length;
+  assert(navigation<=1&&styles<=1,rel+' duplicate primary navigation');
+  if(!/<script\b[^>]*\bsrc="[^"]*\blegacy-redirect\.js\b/.test(s)){
+    assert.equal(navigation,1,rel+' missing primary navigation');
+    assert.equal(styles,1,rel+' missing primary navigation stylesheet');
+  }
   if(rel.startsWith('legal/')){
     assert.equal((s.match(/<footer\b[^>]*class="footer"/g)||[]).length,1,rel+' native footer count');
     assert(/<footer\b[^>]*class="footer"[\s\S]*<\/footer>\s*<\/body>\s*<\/html>\s*$/i.test(s),rel+' native footer must be last');
