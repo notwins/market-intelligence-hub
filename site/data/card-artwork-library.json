@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "rules": [
+    [
+      "space",
+      "\\b(?:astronom\\w*|spacecraft|satellite launch\\w*|space colon\\w*|space exploration|spacex|nasa|moon mission|orbital launch|exoplanet\\w*|saturn|telescope\\w*)\\b"
+    ],
+    [
+      "rates",
+      "\\b(?:bonds?|credit|treasur\\w*|gilts?|bunds?|yields?|fixed[ ._-]income|interest[ ._-]rates?|rate[ ._-](?:cut|hike|decision|path)\\w*|policy rate\\w*|central[ ._-]banks?|federal reserve|fed policy|fomc|treasury_yields|credit_spread)\\b"
+    ],
+    [
+      "trade",
+      "\\b(?:tariffs?|exports?|imports?|trade[ ._-](?:deficit|surplus|deal|balance|policy|flows?)|customs|trade war)\\b"
+    ],
+    [
+      "computing",
+      "\\b(?:semiconductors?|chips?|nvidia|nvda|amd|tsmc|intel|avgo|broadcom|gpu\\w*|cuda|arm holdings|artificial[ ._-]intelligence|ai|data[ ._-]cent(?:er|re)s?|computing)\\b"
+    ],
+    [
+      "transport",
+      "\\b(?:railroads?|railways?|shipping|ports?|airports?|airlines?|aviation|transit|canals?|bridges?|urban infrastructure)\\b"
+    ],
+    [
+      "industry",
+      "\\b(?:factories|factory|manufactur\\w*|industrial\\w*|machinery|automaker\\w*|mining|commodit\\w*|energy|oil|gas|steel|copper|gold|utilities|electricity|power grid)\\b"
+    ],
+    [
+      "science",
+      "\\b(?:oceans?|climate|environment(?:al)?|laborator\\w*|biology|ecology|biodiversity|medical research|radiation|medicine|biotech\\w*|x[ ._-]ray\\w*)\\b"
+    ],
+    [
+      "markets",
+      "\\b(?:earnings|equities|shares|stocks?|dividends?|etfs?|etns?|valuations?|buybacks?|s&p|nasdaq|fund[ ._-]flows?|watchlist|ticker\\.)\\b"
+    ],
+    [
+      "demographics",
+      "\\b(?:demograph\\w*|population|wealth[ ._-](?:gap|distribution)|inequality|historical labor|census|mortality)\\b"
+    ],
+    [
+      "economy",
+      "\\b(?:macro\\w*|econom\\w*|gdp|inflation|prices?|labou?r|employment|jobs|payrolls|currenc\\w*|monetary|fx|consumer spending|retail sales|recession)\\b"
+    ]
+  ],
+  "pools": {
+    "computing": [
+      "computing-ada-lovelaces-bernoulli-number-table",
+      "computing-apollo-core-rope-memory",
+      "computing-babbage-analytical-engine-model",
+      "computing-convair-computer-modules",
+      "computing-fairchild-54s11-die",
+      "computing-fairchild-7447a-die",
+      "computing-fairchild-decoder-micrograph",
+      "computing-hybrid-chip-metrology",
+      "computing-ibm-system-360-controls",
+      "computing-magnetic-core-memory-close-up",
+      "computing-marconi-transatlantic-transmitter-circuit",
+      "computing-noyce-integrated-circuit-patent-diagram",
+      "computing-open-integrated-circuit-package",
+      "computing-power-transistor-interior",
+      "computing-raptor-lake-processor-layout",
+      "computing-sandy-bridge-processor-die",
+      "computing-semiconductor-lead-patent",
+      "computing-wagner-core-memory-close-up"
+    ],
+    "space": [
+      "space-bernal-sphere-colony-concept",
+      "space-ceres-travel-poster",
+      "space-europa-travel-poster",
+      "space-kepler-16b-travel-poster",
+      "space-lunar-habitat-interior-concept",
+      "space-mars-travel-poster",
+      "space-northern-hemisphere-constellations",
+      "space-solar-system-chart-of-1873",
+      "space-titan-travel-poster",
+      "space-torus-space-colony-construction",
+      "space-trouvelots-aurora",
+      "space-trouvelots-mare-humorum",
+      "space-trouvelots-saturn",
+      "space-trouvelots-solar-prominences",
+      "space-uranias-mirror-constellation-engraving",
+      "space-venus-travel-poster",
+      "space-voyager-golden-record-cover",
+      "space-vuillemins-astronomical-atlas"
+    ],
+    "rates": [
+      "geometry-el-lissitzkys-proun-s-k-study",
+      "geometry-kandinskys-composition-8",
+      "geometry-paul-klees-red-balloon",
+      "markets-playfairs-england-and-france-revenue-chart",
+      "markets-playfairs-national-debt-of-england"
+    ],
+    "economy": [
+      "geometry-el-lissitzkys-proun-s-k-study",
+      "geometry-kandinskys-composition-8",
+      "geometry-paul-klees-red-balloon",
+      "markets-andrewss-united-states-railroad-map",
+      "markets-united-states-manufacturing-statistics"
+    ],
+    "trade": [
+      "markets-minards-cotton-trade-flow-map",
+      "markets-playfairs-imports-and-exports-chart",
+      "markets-playfairs-north-american-trade-chart",
+      "markets-united-states-foreign-commerce-by-transport",
+      "markets-world-trade-atlas-plate"
+    ],
+    "demographics": [
+      "markets-du-bois-exhibit-horizontal-bar-chart",
+      "markets-du-bois-exhibit-population-comparison",
+      "markets-du-bois-exhibit-radial-chart",
+      "markets-du-bois-exhibit-united-states-population-map",
+      "markets-nightingales-polar-area-chart",
+      "markets-united-states-wealth-distribution-map"
+    ],
+    "industry": [
+      "engineering-coal-electric-locomotive-cutaway",
+      "engineering-encyclopedie-press-assembly-engraving",
+      "engineering-encyclopedie-printing-press-engraving",
+      "engineering-le-creusot-industrial-landscape",
+      "engineering-mazda-rotary-engine-cutaway",
+      "engineering-newcomen-steam-engine-engraving",
+      "engineering-north-bulli-colliery-dynamo",
+      "engineering-portable-steam-engine-engraving",
+      "engineering-steam-engine-and-pumps-engraving",
+      "engineering-steam-engine-cross-sections",
+      "engineering-tesla-power-transmission-patent",
+      "engineering-tesla-turbine-patent-drawing",
+      "engineering-whitehouse-factory-lithograph"
+    ],
+    "transport": [
+      "cities-brooklyn-bridge-birds-eye-lithograph",
+      "cities-brooklyn-bridge-excelsior-lithograph",
+      "cities-federal-art-project-poster-exhibition",
+      "cities-historic-bridge-blueprint",
+      "cities-lakeview-terrace-wpa-poster",
+      "cities-new-york-municipal-airports-poster",
+      "cities-panama-canal-and-canal-zone-map",
+      "cities-panama-canal-water-elevation",
+      "cities-shimbashi-station-woodblock",
+      "cities-tokyo-steam-railway-woodblock",
+      "cities-winter-in-new-york-wpa-poster",
+      "cities-world-of-tomorrow-1939-poster"
+    ],
+    "science": [
+      "science-anna-atkins-algae-cyanotype",
+      "science-anna-atkins-fern-cyanotype",
+      "science-anna-atkins-horsetail-cyanotype",
+      "science-haeckels-marine-life-plate-77",
+      "science-haeckels-plate-91-radiolarians",
+      "science-haeckels-siphonophores-plate-17",
+      "science-haeckels-siphonophores-plate-59",
+      "science-haeckels-stephoidea-radiolarians",
+      "science-hemisphere-of-x-ray-activity-diagram",
+      "science-johnsons-ocean-temperature-and-currents-map"
+    ],
+    "markets": [
+      "geometry-delaunays-first-disc",
+      "geometry-el-lissitzkys-first-kestner-portfolio",
+      "geometry-el-lissitzkys-proun-5a",
+      "geometry-el-lissitzkys-proun-93",
+      "geometry-el-lissitzkys-proun-s-k-study",
+      "geometry-four-unit-exhibition-wpa-poster",
+      "geometry-hilma-af-klints-old-age",
+      "geometry-hilma-af-klints-the-ten-largest-no-6",
+      "geometry-hilma-af-klints-youth",
+      "geometry-kandinskys-composition-8",
+      "geometry-kandinskys-white-point",
+      "geometry-malevichs-monumental-suprematist-ornament",
+      "geometry-malevichs-suprematist-composition",
+      "geometry-paul-klees-red-balloon"
+    ]
+  }
+}

@@ -21,3 +21,33 @@
   .brief-identity > .card-artwork { max-height: 5.5rem; }
 }
 @media print { .card-artwork { display: none; } }
+
+.card-artwork--thumbnail {
+  float: right;
+  width: clamp(72px, 15vw, 110px);
+  aspect-ratio: 4 / 3;
+  margin: 0 0 .5rem .75rem;
+}
+.card-artwork-credit {
+  font: 600 .71rem/1.3 system-ui,sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.card-artwork > .card-artwork-credit {
+  position: absolute;
+  inset: auto 0 0 auto;
+  padding: .25rem .4rem;
+  color: #fff;
+  background: #212421;
+  border-radius: 5px 0 0 0;
+}
+.card-artwork-credit:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+.brief-identity > .card-artwork-credit {
+  grid-column: 1 / -1;
+  justify-self: start;
+  color: inherit;
+}
+@media print { .card-artwork-credit { display: none; } }
