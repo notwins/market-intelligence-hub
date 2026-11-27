@@ -21,7 +21,14 @@ test('weekly snapshots preserve tenor-null values, holiday dates and no mutation
  const f=[{id:'A',asset:'ust',kind:'yield',frequency:'daily',date:'2026-11-08',value:null,calendar:['2026-10-29','2026-10-30','2026-11-08'],points:[['2026-10-29',4]]},{id:'B',asset:'ust',kind:'yield',frequency:'daily',date:'2026-11-08',value:5,calendar:['2026-10-29','2026-10-30','2026-11-08'],points:[['2026-10-29',3],['2026-10-30',0],['2026-11-08',5]]}];
  const before=JSON.stringify(f),snap=M.weeklySnapshot(f,1);a.equal(snap.targetDate,'2026-11-01');a.equal(snap.observationDate,'2026-10-30');a.equal(snap.rows[0].value,null);a.equal(snap.rows[1].value,0);a.equal(M.weeklySnapshot(f,0).rows[0].value,null);a.equal(JSON.stringify(f),before);for(const n of [-1,5,1.5,NaN])a.equal(M.weeklySnapshot(f,n).rows.length,0);
 });
-test('HTML integration is narrow and script parses',()=>{const h=read('site/v4.html');a.ok(h.includes('market-snapshot.css'));a.ok(h.includes('market-snapshot.js'));a.ok(h.includes('market-snapshot.css?v=20261116.eight1'));a.ok(h.includes('market-snapshot.js?v=20261116.eight1'));a.ok(h.includes('MarketSnapshot.shell()'));a.ok(h.includes("if(S.view==='overview'&&window.MarketSnapshot)MarketSnapshot.mount()"));for(const m of h.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);});
+test('HTML integration is narrow and script parses',()=>{const h=read('site/v4.html');a.ok(h.includes('market-snapshot.css'));a.ok(h.includes('market-snapshot.js'));a.ok(h.includes('market-snapshot.css?v=20261127.chart-svg1'));a.ok(h.includes('market-snapshot.js?v=20261116.eight1'));a.ok(h.includes('MarketSnapshot.shell()'));a.ok(h.includes("if(S.view==='overview'&&window.MarketSnapshot)MarketSnapshot.mount()"));for(const m of h.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);});
+test('curve sizing applies only to the chart inside its scroll container',()=>{
+ for(const path of ['site/market-snapshot.css','site/ui-eight.css']){
+  const css=read(path);
+  a.match(css,/\.ms-chart-scroll\s*>\s*svg\s*\{[^}]*min-width:/);
+  a.doesNotMatch(css,/\.ms-curve\s+svg\s*\{[^}]*min-width:/);
+ }
+});
 (async()=>{await M.mount();test('mount loads saved files and renders table, source qualifications and two curves',()=>{a.ok(mount.innerHTML.includes('44 instruments'));a.ok(mount.innerHTML.includes('US Treasury curve'));a.ok(mount.innerHTML.includes('Singapore benchmark curve'));a.ok(mount.innerHTML.includes('No live feed is claimed'));a.ok(!mount.innerHTML.includes('NaN'));a.ok(!calls.some(x=>/^https?:/.test(x)));});test('one selector overlays both latest curves and keeps missing SGS history explicit',()=>{a.equal((mount.innerHTML.match(/class="ms-history-link"/g)||[]).length,2);a.equal((mount.innerHTML.match(/data-ms-overlay=/g)||[]).length,16);a.equal((mount.innerHTML.match(/data-ms-curve-line="latest"/g)||[]).length,2);});
 const overlay=k=>handlers.click({target:{closest:q=>q==='[data-ms-overlay]'?{dataset:{msOverlay:k}}:null}});
 for(const k of ['1w','2w'])overlay(k);
