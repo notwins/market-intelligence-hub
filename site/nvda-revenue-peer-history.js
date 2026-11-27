@@ -128,7 +128,12 @@
           track.append(bar);
         }
         button.append(label, track, value);
-        button.addEventListener("click", () => showCompany(i));
+        button.addEventListener("click", () => {
+          showCompany(i);
+          const row = tableRows.querySelector('tr[data-company="' + i + '"]');
+          row.focus({ preventScroll: true });
+          row.scrollIntoView({ block: "center", inline: "nearest" });
+        });
         return button;
       }));
     }
@@ -138,6 +143,7 @@
         const { i, end, amount, growth, source } = item;
         const row = element("tr");
         row.dataset.company = i;
+        row.tabIndex = -1;
         if (i === 0) row.classList.add("nv-focus");
         const filing = element("td");
         const filingDate = charts.date(end);
@@ -172,7 +178,6 @@
       const name = descriptor.name === "Net income to parent" ? "Net income to shareholders" : descriptor.name;
       const revenueShare = metric.value === revenueField;
       const shareOption = units.querySelector('[value="share"]');
-      shareOption.disabled = !revenueShare;
       units.closest("label").hidden = !revenueShare;
       $("nv-revenue-share").hidden = !revenueShare;
       $("nv-revenue-share-column").hidden = !revenueShare;
@@ -183,6 +188,10 @@
       const dates = nvidiaPeriods[frequency].slice(-Number(lookback.value));
       const peers = companies.map((_, i) => i).filter(i => i > 0 && selected.has(companies[i].ticker));
       const snapshots = dates.map(period => comparison(period, peers, frequency, descriptor, revenueShare));
+      const shareAvailable = snapshots.some(item => item.total !== null);
+      shareOption.disabled = !shareAvailable;
+      shareOption.textContent = shareAvailable || !revenueShare ? "Revenue share %" : "Revenue share % · incomplete data";
+      if (revenueShare && !shareAvailable) units.value = "usd";
       const labels = dates.map(period => period.split(" ")[1]);
       const asShare = revenueShare && units.value === "share";
       const plottedValue = (item, value) => {
@@ -220,10 +229,12 @@
         chooser.value = snapshot.period;
         $("nv-revenue-growth-detail").textContent = basis.value + " · NVIDIA period ended " + charts.date(snapshot.end);
         $("nv-revenue-share-value").textContent = pct(snapshot.total ? snapshot.own / snapshot.total * 100 : null);
-        const coverage = snapshot.reported.length + " of " + peers.length + " peers with matched revenue";
+        const matched = snapshot.reported.length;
+        const coverage = matched + " of " + peers.length + " selected peers with a matched figure";
+        $("nv-revenue-coverage").textContent = peers.length ? coverage : "NVIDIA only";
         $("nv-revenue-share-coverage").textContent = peers.length === 0 ? "Select a peer to calculate NVIDIA’s share."
-          : snapshot.total ? coverage + " · " + fig(snapshot.total) + " combined"
-            : coverage + " · a complete set is required to calculate share";
+          : snapshot.total ? fig(snapshot.total) + " combined"
+            : "Every selected company needs a matched revenue figure.";
         drawGrowth(snapshot.rows, name, basis.value);
         drawTable(snapshot, annual, revenueShare);
         showCompany(activeCompany);

@@ -7,7 +7,7 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=5">
+<link rel="stylesheet" href="nvda-history.css?v=6">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
@@ -15,8 +15,8 @@
 <script defer src="nvda-history-charts.js?v=4"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
 <script defer src="nvda-peer-lab.js?v=20261128.chart-layout"></script>
-<script defer src="nvda-statement-comparisons.js?v=2"></script>
-<script defer src="nvda-revenue-peer-history.js?v=3"></script>
+<script defer src="nvda-statement-comparisons.js?v=3"></script>
+<script defer src="nvda-revenue-peer-history.js?v=4"></script>
 <script defer src="nvda-history.js?v=20261128.chart-layout"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
@@ -89,20 +89,21 @@
       </details>
       <div class="nv-revenue-peer-grid">
         <article class="nv-panel nv-revenue-peer-card" aria-labelledby="nv-revenue-growth-title">
-          <h3 id="nv-revenue-growth-title">Revenue growth</h3>
+          <div class="nv-panel-head"><h3 id="nv-revenue-growth-title">Revenue growth</h3></div>
           <p class="nv-muted" id="nv-revenue-growth-detail"></p>
           <div class="nv-statement-bar-body nv-revenue-growth-bars" id="nv-revenue-growth-bars" role="group" aria-label="Revenue growth by company"></div>
         </article>
         <article class="nv-panel nv-revenue-peer-card" aria-labelledby="nv-revenue-scale-title">
           <div class="nv-panel-head">
             <h3 id="nv-revenue-scale-title">Revenue scale and share</h3>
-            <div class="nv-controls"><label>Bar units<select id="nv-revenue-units"><option value="usd">USD billions</option><option value="share">Revenue share %</option></select></label></div>
           </div>
+          <div class="nv-controls"><label>Bar units<select id="nv-revenue-units"><option value="usd">USD billions</option><option value="share">Revenue share %</option></select></label></div>
           <p class="nv-revenue-share" id="nv-revenue-share"><strong id="nv-revenue-share-value">—</strong><span>NVIDIA share of selected revenue <small id="nv-revenue-share-coverage"></small></span></p>
+          <p class="nv-muted" id="nv-revenue-coverage"></p>
           <div class="nv-chart nv-chart-small" id="nv-revenue-scale-chart"></div>
         </article>
       </div>
-      <p class="nv-muted" id="nv-revenue-method">Select a period on the chart to update both cards and the table. Growth uses each issuer’s reporting currency and requires a positive prior-period figure. Quarterly filing ends match within 45 days of NVIDIA’s. Annual filing ends match within 125 days.</p>
+      <p class="nv-muted" id="nv-revenue-method">Select a period on the chart to update both cards and the table. Select a growth bar to jump to that company’s filing row. Growth uses each issuer’s reporting currency and requires a positive prior-period figure. Quarterly filing ends match within 45 days of NVIDIA’s. Annual filing ends match within 125 days.</p>
       <div id="nv-revenue-table-card">
         <div class="nv-table-scroll nv-revenue-compare-table nv-statement-chart-table" tabindex="0" role="region" aria-label="Financial metric comparison figures" aria-describedby="nv-revenue-method">
         <table class="nv-table nv-peer-table">
