@@ -2,7 +2,7 @@
 window.AccumulatorQuotes = [
   {
     "id": "sn",
-    "asOf": "2026-11-24",
+    "asOf": "2026-11-27",
     "label": "JPM SN",
     "guarantees": [
       1,
@@ -11,134 +11,66 @@ window.AccumulatorQuotes = [
     ],
     "rows": [
       {
-        "months": 12,
-        "ko": 130,
-        "strikes": [
-          89.84,
-          90.45,
-          91.4,
-          null
-        ],
-        "days": 251,
-        "guarantees": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
-      {
-        "months": 12,
-        "ko": 120,
-        "strikes": [
-          87.21,
-          88.6,
-          90.4,
-          null
-        ],
-        "days": 251,
-        "guarantees": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
-      {
-        "months": 12,
-        "ko": 110,
-        "strikes": [
-          87.35,
-          90.47,
-          93.33,
-          null
-        ],
-        "days": 251,
-        "guarantees": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
-      {
-        "months": 12,
-        "ko": 105,
-        "strikes": [
-          92.96,
-          96.5,
-          99.04,
-          null
-        ],
-        "days": 251,
-        "guarantees": [
-          1,
-          2,
-          3,
-          4
-        ]
-      },
-      {
         "months": 9,
         "ko": 130,
         "strikes": [
-          93.14,
-          93.85,
-          94.94
+          90.52,
+          91.66,
+          93.32
         ],
-        "days": 186
+        "days": 187
       },
       {
         "months": 9,
         "ko": 120,
         "strikes": [
-          90.56,
-          92.09,
-          94.02
+          88.01,
+          90.22,
+          92.85
         ],
-        "days": 186
+        "days": 187
       },
       {
         "months": 9,
         "ko": 105,
         "strikes": [
-          95.31,
-          98.91,
+          93.8,
+          98.18,
           null
         ],
-        "days": 186
+        "days": 187
       },
       {
         "months": 6,
         "ko": 130,
         "strikes": [
-          96.76,
-          97.79,
-          99.59
+          94.6,
+          96.13,
+          98.64
         ],
-        "days": 123
+        "days": 124
       },
       {
         "months": 6,
         "ko": 120,
         "strikes": [
-          94.39,
-          96.33,
-          99.09
+          92.27,
+          94.97,
+          98.48
         ],
-        "days": 123
+        "days": 124
       },
       {
         "months": 3,
         "ko": 130,
         "strikes": [
-          null,
+          99.72,
           null,
           null
         ],
-        "days": 61,
+        "days": 62,
         "missing": [
-          "No strike supplied",
+          null,
           "No strike supplied",
           "Not shown"
         ]
@@ -147,15 +79,15 @@ window.AccumulatorQuotes = [
         "months": 3,
         "ko": 120,
         "strikes": [
-          null,
+          98.1,
           null,
           null
         ],
-        "days": 61,
+        "days": 62,
         "missing": [
-          "Not shown",
+          null,
           "No strike supplied",
-          "No strike supplied"
+          "Not shown"
         ]
       },
       {
@@ -166,12 +98,7 @@ window.AccumulatorQuotes = [
           null,
           null
         ],
-        "days": 61,
-        "missing": [
-          "No strike supplied",
-          "No strike supplied",
-          "No strike supplied"
-        ]
+        "days": 62
       }
     ]
   },

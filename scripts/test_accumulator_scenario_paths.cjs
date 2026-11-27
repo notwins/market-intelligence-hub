@@ -52,7 +52,7 @@ const initial = snapshot();
 const indexE = note(initial, 'sn-9-130-1');
 assert.equal(initial.notes.length,5);
 assert(initial.notes.every(n=>n.quote.product==='JPM SN'));
-assert.equal(initial.settings.rampDay,123);
+assert.equal(initial.settings.rampDay,124);
 assert(row(initial,'down').values[indexE].pnl < 0);
 assert(row(initial,'flat').values[indexE].pnl > 0);
 assert(initial.ranges[indexE].best.every(i=>!initial.rows[i].follow && initial.rows[i].values[indexE]),
@@ -74,12 +74,12 @@ if (beta) {
     assert.equal(v.exitSpot,initial.settings.rally);
     assert.equal(v.shareLabel,`${v.shares.toLocaleString('en-US')} shares (${n.quote.minimum}gm/${n.quote.months}m)`);
   }
-  select('sn-12-120-3',true);
-  const mixed = snapshot(), i = note(mixed,'sn-12-120-3');
-  assert.equal(row(mixed,'ko-12').exits[i].koDay,mixed.notes[i].terms.days);
-  assert.equal(row(mixed,'ko-12').values[i].shares,12*mixed.notes[i].terms.maximum);
-  assert.equal(row(mixed,'ko-12').values[a],null);
-  select('sn-12-120-3',false);
+  select('sn-3-120-1',true);
+  const mixed = snapshot(), i = note(mixed,'sn-3-120-1');
+  assert.equal(row(mixed,'ko-3').exits[i].koDay,mixed.notes[i].terms.days);
+  assert.equal(row(mixed,'ko-3').values[i].shares,3*mixed.notes[i].terms.maximum);
+  assert.equal(row(mixed,'ko-6').values[i],null);
+  select('sn-3-120-1',false);
 }
 for (const n of initial.notes) if (n.quote.id !== 'sn-9-130-1') select(n.quote.id,false);
 const single = snapshot();
@@ -94,7 +94,7 @@ set('cmp-late',150);
 select(shortId,true);
 const mixed = snapshot(), idx = note(mixed,shortId);
 const shortLate = row(mixed,'late');
-assert.equal(shortLate.exits[idx].day,123);
+assert.equal(shortLate.exits[idx].day,124);
 assert.equal(shortLate.values[idx].direct.mark,125.53,'6M benchmark closes before the day-150 shock');
 assert.equal(shortLate.values[idx].direct.pnl,0);
 set('cmp-down',156);

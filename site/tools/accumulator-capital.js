@@ -96,10 +96,15 @@
   let copyText = '';
 
   const quotePicker = byId('sn-quote');
-  for (const row of window.AccumulatorQuotes.find(table => table.id === 'sn').rows.filter(row => row.months === 12)) {
+  const jpm = window.AccumulatorQuotes.find(table => table.id === 'sn');
+  const quoteDate = new Intl.DateTimeFormat('en-GB', {dateStyle:'long', timeZone:'UTC'});
+  byId('sn-quote-date').textContent = 'NVDA · ' + quoteDate.format(new Date(jpm.asOf + 'T00:00:00Z'));
+  for (const row of jpm.rows) {
     row.strikes.forEach((strike, index) => {
       if (strike === null) return;
-      const option = new Option(row.ko + '% KO · ' + (index + 1) + 'M guarantee · ' + strike + '% strike', row.ko + '-' + (index + 1));
+      const guarantee = (row.guarantees || jpm.guarantees)[index];
+      const option = new Option(row.months + 'M · ' + row.ko + '% KO · ' + guarantee + 'M guarantee · ' +
+        strike + '% strike', [row.months, row.ko, guarantee].join('-'));
       option.dataset.strike = strike;
       option.dataset.months = row.months;
       option.dataset.days = row.days;

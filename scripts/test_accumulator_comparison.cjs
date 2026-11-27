@@ -111,7 +111,7 @@ const html = fs.readFileSync(require.resolve('../site/tools/accumulator.html'), 
 const catalogScript = html.match(/<script id="accumulator-model">([\s\S]*?)<\/script>/)[1];
 const catalog = vm.runInNewContext(fs.readFileSync(require.resolve('../site/tools/accumulator-quotes.js'),'utf8')+'\n'+catalogScript+'; Accumulator', {window:{AccumulatorModel:model}});
 assert(catalog.quotes.every(q => q.label === 'Normal' && q.multiple === 1));
-assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [6,9,12]);
+assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [3,6,9]);
 assert.equal(model.terms(catalog.quotes.find(q=>q.product==='OCBC SI' && q.minimum===3), 100, budget).guaranteeDay,61);
 
 // The five-note comparison values a later shareholding separately from maturity.
@@ -136,21 +136,19 @@ close(2628 * 69 + stressE.exit.refunded - stressE.payment, -118417.68, 'Conditio
 // strike cells in an indication must never become a selectable zero or duplicate.
 const quotedStrikes = {
   'JPM SN': {
-    '12-130-1':89.84, '12-130-2':90.45, '12-130-3':91.4,
-    '12-120-1':87.21, '12-120-2':88.6, '12-120-3':90.4,
-    '12-110-1':87.35, '12-110-2':90.47, '12-110-3':93.33,
-    '12-105-1':92.96, '12-105-2':96.5, '12-105-3':99.04,
-    '9-130-1':93.14, '9-130-2':93.85, '9-130-3':94.94,
-    '9-120-1':90.56, '9-120-2':92.09, '9-120-3':94.02, '9-105-1':95.31, '9-105-2':98.91,
-    '6-130-1':96.76, '6-130-2':97.79, '6-130-3':99.59,
-    '6-120-1':94.39, '6-120-2':96.33, '6-120-3':99.09
+    '9-130-1':90.52, '9-130-2':91.66, '9-130-3':93.32,
+    '9-120-1':88.01, '9-120-2':90.22, '9-120-3':92.85, '9-105-1':93.8, '9-105-2':98.18,
+    '6-130-1':94.6, '6-130-2':96.13, '6-130-3':98.64,
+    '6-120-1':92.27, '6-120-2':94.97, '6-120-3':98.48,
+    '3-130-1':99.72, '3-120-1':98.1
   },
   'OCBC SI': {
     '9-120-1':95.89, '9-120-2':96.89, '9-120-3':98.25,
     '9-110-1':96.08, '9-110-2':97.98, '6-120-1':98.30, '6-110-1':98.13
   }
 };
-const counts = {6:123, 9:186, 12:251};
+const counts = {'JPM SN':{3:62, 6:124, 9:187}, 'OCBC SI':{6:123, 9:186}};
+const dates = {'JPM SN':'2026-11-27', 'OCBC SI':'2026-11-24'};
 for (const [product, expected] of Object.entries(quotedStrikes)) {
   const actual = {};
   for (const q of catalog.quotes.filter(q => q.product === product)) {
@@ -158,7 +156,8 @@ for (const [product, expected] of Object.entries(quotedStrikes)) {
     assert(!(key in actual), product + ' has a duplicate quote ' + key);
     actual[key] = q.strike;
     const {guaranteeDay, days} = model.terms(q, initialSpot, budget);
-    assert.equal(days, counts[q.months], product + ' total trading days');
+    assert.equal(days, counts[product][q.months], product + ' total trading days');
+    assert.equal(q.asOf, dates[product], product + ' quote date');
     if (product === 'OCBC SI') assert.equal(guaranteeDay, [0,21,40,61][q.minimum],
       'SI uses the quoted guaranteed days for ' + key);
   }
