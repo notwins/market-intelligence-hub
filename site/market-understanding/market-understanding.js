@@ -6,7 +6,7 @@
   const scriptURL = document.currentScript?.src;
   if (!scriptURL || document.documentElement.classList.contains('hub-primary-ready')) return;
   const base = new URL('../', scriptURL);
-  const version = '?v=20261127.archive1';
+  const version = '?v=20261128.desk-pivot1';
   const style = document.createElement('link');
   style.rel = 'stylesheet';
   style.href = new URL('Primary Navigation - Type CSS - 16-Nov-16.06.css' + version, base);
