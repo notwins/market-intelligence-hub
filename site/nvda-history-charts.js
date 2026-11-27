@@ -73,15 +73,25 @@
       ctx.fillStyle = "#536257";
       ctx.fillText(axis(value), left - 8, lineY);
     }
-    const labels = dates.map((value, i) => model.axisLabels?.[i] ?? date(value, true));
-    const widestLabel = Math.max(...labels.map(label => ctx.measureText(label).width));
-    const spacedLabels = Math.max(2, 1 + Math.floor((chartRight - chartLeft) / (1.5 * widestLabel + 7)));
-    const labelCount = Math.min(count, spacedLabels, width < 480 ? 4 : width < 800 ? 6 : 8);
+    function ticks(size) {
+      return Array.from({ length: size }, (_, i) => {
+        const index = size === 1 ? 0 : Math.round(i * (count - 1) / (size - 1));
+        const label = model.axisLabels?.[index] ?? date(dates[index], true);
+        const at = x(index);
+        const length = ctx.measureText(label).width;
+        const align = size === 1 ? "center" : i === 0 ? "left" : i === size - 1 ? "right" : "center";
+        const start = at - (align === "center" ? length / 2 : align === "right" ? length : 0);
+        return { label, at, align, start, end: start + length };
+      });
+    }
+    let labels = ticks(Math.min(count, width < 480 ? 4 : width < 800 ? 6 : 8));
+    while (labels.length > 2 && labels.some((tick, i) => i > 0 && tick.start < labels[i - 1].end + 6)) {
+      labels = ticks(labels.length - 1);
+    }
     ctx.fillStyle = "#536257";
-    for (let i = 0; i < labelCount; i++) {
-      const index = labelCount === 1 ? 0 : Math.round(i * (count - 1) / (labelCount - 1));
-      ctx.textAlign = labelCount === 1 ? "center" : i === 0 ? "left" : i === labelCount - 1 ? "right" : "center";
-      ctx.fillText(labels[index], x(index), bottom + 19);
+    for (const { label, at, align } of labels) {
+      ctx.textAlign = align;
+      ctx.fillText(label, at, bottom + 19);
     }
     const positive = Array(count).fill(0), negative = Array(count).fill(0);
     for (const s of series) {
