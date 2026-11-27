@@ -326,6 +326,8 @@
   color: white;
 }
 .accumulator-beta :is(#rows tr.active td, #sn-comparison .cmp-results tr.cmp-active th) { background: var(--soft); }
+.accumulator-beta #sn-comparison #cmp-grid .cmp-active td:not(.cmp-best, .cmp-worst) { background: transparent; }
+.accumulator-beta #sn-comparison #cmp-grid .cmp-number { font-weight: 700; }
 .accumulator-beta :is(#rows tr.ko-row td.event-cell, #rows tr.ko-row td:first-child, #overview .ko-row td:first-child, #sn-comparison .cmp-results td.cmp-ko) {
   background: var(--beta-ko);
   color: var(--lav);
