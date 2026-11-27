@@ -1,7 +1,8 @@
 {
   "kind": "gld-accumulator-pricing",
   "version": 1,
-  "requestDate": "2026-11-25",
+  "addedDate": "2026-11-27",
+  "issuer": "JPM SP BV",
   "settlementFrequency": "monthly",
   "koPlusOne": true,
   "offset": 7,
@@ -11,189 +12,196 @@
       "ko": 120,
       "days": 251,
       "guarantee": 1,
-      "strike": 98.61
+      "strike": 95.63
     },
     {
       "months": 12,
       "ko": 120,
       "days": 251,
       "guarantee": 2,
-      "strike": 98.84
+      "strike": 95.89
     },
     {
       "months": 12,
       "ko": 120,
       "days": 251,
       "guarantee": 3,
-      "strike": 99.25
+      "strike": 96.35
+    },
+    {
+      "months": 12,
+      "ko": 115,
+      "days": 251,
+      "guarantee": 1,
+      "strike": 94.32
+    },
+    {
+      "months": 12,
+      "ko": 115,
+      "days": 251,
+      "guarantee": 2,
+      "strike": 94.77
+    },
+    {
+      "months": 12,
+      "ko": 115,
+      "days": 251,
+      "guarantee": 3,
+      "strike": 95.52
     },
     {
       "months": 12,
       "ko": 110,
       "days": 251,
       "guarantee": 1,
-      "strike": 97.92
+      "strike": 93.3
     },
     {
       "months": 12,
       "ko": 110,
       "days": 251,
       "guarantee": 2,
-      "strike": 98.59
+      "strike": 94.23
     },
     {
       "months": 12,
       "ko": 110,
       "days": 251,
       "guarantee": 3,
-      "strike": 99.56
+      "strike": 95.49
     },
     {
       "months": 12,
       "ko": 105,
       "days": 251,
       "guarantee": 1,
-      "strike": null
+      "strike": 94.93
     },
     {
       "months": 12,
       "ko": 105,
       "days": 251,
       "guarantee": 2,
-      "strike": null
+      "strike": 96.77
     },
     {
       "months": 12,
       "ko": 105,
       "days": 251,
       "guarantee": 3,
-      "strike": null
+      "strike": 98.44
     },
     {
       "months": 9,
       "ko": 120,
-      "days": 186,
+      "days": 187,
       "guarantee": 1,
-      "strike": null
+      "strike": 97.34
     },
     {
       "months": 9,
       "ko": 120,
-      "days": 186,
+      "days": 187,
       "guarantee": 2,
-      "strike": null
+      "strike": 97.61
     },
     {
       "months": 9,
-      "ko": 120,
-      "days": 186,
-      "guarantee": 3,
-      "strike": null
-    },
-    {
-      "months": 9,
-      "ko": 110,
-      "days": 186,
+      "ko": 115,
+      "days": 187,
       "guarantee": 1,
-      "strike": 99.17
+      "strike": 96.12
     },
     {
       "months": 9,
-      "ko": 110,
-      "days": 186,
+      "ko": 115,
+      "days": 187,
       "guarantee": 2,
-      "strike": 99.83
+      "strike": 96.59
     },
     {
       "months": 9,
       "ko": 110,
-      "days": 186,
-      "guarantee": 3,
-      "strike": null
-    },
-    {
-      "months": 9,
-      "ko": 105,
-      "days": 186,
+      "days": 187,
       "guarantee": 1,
-      "strike": null
+      "strike": 95.04
     },
     {
       "months": 9,
-      "ko": 105,
-      "days": 186,
+      "ko": 110,
+      "days": 187,
       "guarantee": 2,
-      "strike": null
+      "strike": 95.98
     },
     {
       "months": 9,
       "ko": 105,
-      "days": 186,
-      "guarantee": 3,
-      "strike": null
+      "days": 187,
+      "guarantee": 1,
+      "strike": 96.08
+    },
+    {
+      "months": 9,
+      "ko": 105,
+      "days": 187,
+      "guarantee": 2,
+      "strike": 97.84
     },
     {
       "months": 6,
       "ko": 120,
-      "days": 123,
+      "days": 124,
       "guarantee": 1,
-      "strike": null
+      "strike": 99.1
     },
     {
       "months": 6,
       "ko": 120,
-      "days": 123,
+      "days": 124,
       "guarantee": 2,
-      "strike": null
+      "strike": 99.41
     },
     {
       "months": 6,
-      "ko": 120,
-      "days": 123,
-      "guarantee": 3,
-      "strike": null
-    },
-    {
-      "months": 6,
-      "ko": 110,
-      "days": 123,
+      "ko": 115,
+      "days": 124,
       "guarantee": 1,
-      "strike": null
+      "strike": 98.04
     },
     {
       "months": 6,
-      "ko": 110,
-      "days": 123,
+      "ko": 115,
+      "days": 124,
       "guarantee": 2,
-      "strike": null
+      "strike": 98.57
     },
     {
       "months": 6,
       "ko": 110,
-      "days": 123,
-      "guarantee": 3,
-      "strike": null
-    },
-    {
-      "months": 6,
-      "ko": 105,
-      "days": 123,
+      "days": 124,
       "guarantee": 1,
-      "strike": null
+      "strike": 96.98
     },
     {
       "months": 6,
-      "ko": 105,
-      "days": 123,
+      "ko": 110,
+      "days": 124,
       "guarantee": 2,
-      "strike": null
+      "strike": 98.01
     },
     {
       "months": 6,
       "ko": 105,
-      "days": 123,
-      "guarantee": 3,
-      "strike": null
+      "days": 124,
+      "guarantee": 1,
+      "strike": 97.63
+    },
+    {
+      "months": 6,
+      "ko": 105,
+      "days": 124,
+      "guarantee": 2,
+      "strike": 99.33
     }
   ]
 }

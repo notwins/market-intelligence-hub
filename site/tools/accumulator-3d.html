@@ -33,7 +33,7 @@
 @media print{body{background:white}.camera,.help,details{display:none}.plots{grid-template-columns:1fr 1fr}main{padding:0}.controls{border-top:0}h1{font-size:32pt}.card{break-inside:avoid}}
 </style><meta name="description" content="Compare NVDA accumulator strikes on two interactive 3D charts for JPM structured notes and OCBC structured investments."><link rel="stylesheet" href="../Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261123.tools3d"><script defer src="../Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261123.tools3d"></script><link rel="stylesheet" href="../market-editions.css?v=1">
 <link rel="stylesheet" href="../tool-editions.css?v=1">
-</head><body data-tool-art="pricing-3d" data-tool-style="analytical"><main><header class="tool-cover"><div><div class="kicker">NVDA &nbsp;/&nbsp; Indicative desk quotes &nbsp;/&nbsp; 24 Nov 2026</div><h1>Accumulator pricing in 3D</h1><p>Each dot shows one quoted buying price, called the <b>strike</b>. A lower dot means a cheaper price per share. The two floor axes show the knock-out level and the length of the guaranteed buying period.</p></div><div class="tool-plate" aria-hidden="true"></div></header>
+</head><body data-tool-art="pricing-3d" data-tool-style="analytical"><main><header class="tool-cover"><div><div class="kicker" id="pricing-kicker">NVDA / Indicative desk quotes</div><h1>Accumulator pricing in 3D</h1><p>Each dot shows one quoted buying price, called the <b>strike</b>. A lower dot means a cheaper price per share. The two floor axes show the knock-out level and the length of the guaranteed buying period.</p></div><div class="tool-plate" aria-hidden="true"></div></header>
 <nav class="tool-jumps" aria-label="Tool sections"><a href="#issuer-charts">Issuer charts</a><a href="#pricing-archive">Pricing archive</a></nav>
 <p class="help" id="close-date">NVDA regular close · 2026-11-23 · USD 165.05</p>
 <section class="controls" aria-label="Chart controls">
@@ -74,7 +74,7 @@
 <p><b>Reading the lines.</b> Colour identifies the contract length. Solid lines vary the guarantee at a fixed knock-out. Dashed lines vary the knock-out at a fixed guarantee. Each dot is a quote, and a ring marks your selection.</p>
 <p><b>Reading the price.</b> A lower strike reduces what you pay per delivered share. Your overall gain or loss also depends on how many shares you receive and what they are worth when you sell.</p></div>
 <footer>Source: <a href="accumulator.html">Market Intel accumulator pricing tables</a>. <span id="pricing-source"></span> Confirm tradeable terms with the desk. &nbsp;·&nbsp; <a href="../v4.html#tools">Back to Intel Tools</a></footer><section class="panel" id="pricing-archive"><h2>Pricing archive</h2><details><summary>23 November 2026 · Previous indicative strikes</summary><h3>JPM SN</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>87.97%</td><td>90.30%</td></tr><tr><td>9M</td><td>186</td><td>105%</td><td>92.41%</td><td>97.27%</td></tr><tr><td>6M</td><td>124</td><td>120%</td><td>92.31%</td><td>95.12%</td></tr><tr><td>6M</td><td>124</td><td>105%</td><td>95.96%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>120%</td><td>98.24%</td><td>—</td></tr><tr><td>3M</td><td>61</td><td>105%</td><td>—</td><td>—</td></tr></tbody></table></div><h3>OCBC SI</h3><div style='overflow-x:auto'><table><thead><tr><th>Tenor</th><th>Trading days</th><th>KO</th><th>1M guarantee</th><th>2M guarantee</th><th>3M guarantee</th></tr></thead><tbody><tr><td>9M</td><td>186</td><td>120%</td><td>93.11%</td><td>94.82%</td><td>96.70%</td></tr><tr><td>9M</td><td>186</td><td>115%</td><td>92.73%</td><td>95.01%</td><td>97.20%</td></tr><tr><td>9M</td><td>186</td><td>110%</td><td>94.04%</td><td>96.62%</td><td>98.83%</td></tr><tr><td>6M</td><td>124</td><td>115%</td><td>—</td><td>98.05%</td><td>—</td></tr><tr><td>6M</td><td>124</td><td>110%</td><td>96.36%</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>110%</td><td>—</td><td>—</td><td>—</td></tr><tr><td>3M</td><td>—</td><td>105%</td><td>—</td><td>—</td><td>—</td></tr></tbody></table></div><p>— No numerical strike in the prior grid. The previous nine-month SI used 21, 41 and 61 guaranteed trading days for 1M, 2M and 3M respectively.</p></details><details><summary>Earlier sheet · 12-month JPM SN</summary><p>90.86% strike · 120% KO · 3-month guarantee · 251 trading days.</p></details></section></main>
-<script src="accumulator-quotes.js?v=20261127-jpm"></script><script>
+<script src="accumulator-quotes.js?v=20261127-jpm2"></script><script>
 const allQuotes = window.AccumulatorQuotes.flatMap(issuer => issuer.rows.flatMap(row =>
   row.strikes.flatMap((strike, index) => strike === null ? [] : [{
     issuer: issuer.id,
@@ -84,12 +84,19 @@ const allQuotes = window.AccumulatorQuotes.flatMap(issuer => issuer.rows.flatMap
     cents: Math.round(strike * 100)
   }])));
 const dateFormat = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' });
+const latestQuoteDate = window.AccumulatorQuotes.map(issuer => issuer.asOf).sort().at(-1);
+document.getElementById('pricing-kicker').textContent +=
+  ' / Latest ' + dateFormat.format(new Date(latestQuoteDate + 'T00:00:00Z'));
 const quoteDates = window.AccumulatorQuotes.map(issuer =>
   issuer.label + ' ' + dateFormat.format(new Date(issuer.asOf + 'T00:00:00Z')));
 document.getElementById('pricing-source').textContent = quoteDates.join(' · ') + '. ' +
   allQuotes.length + ' indicative Normal quotes.';
 const tenorColours = new Map([[3, '#59636f'], [6, '#883d77'], [9, '#235e9b'], [12, '#217157']]);
 const visibleTenors = new Set(tenorColours.keys());
+const strikeFloor = Math.floor(Math.min(85, ...allQuotes.map(q => q.cents / 100)) / 5) * 5;
+const strikeCeiling = 100;
+const strikeMidpoint = (strikeFloor + strikeCeiling) / 2;
+const strikeTicks = Array.from({length: (strikeCeiling - strikeFloor) / 5 + 1}, (_, i) => strikeFloor + i * 5);
 const quoteKey = ({tenor, ko, g}) => [tenor, ko, g].join('-');
 let closePrice = 165.05;
 const views = [
@@ -103,7 +110,7 @@ function projectPoint(ko, guarantee, strike, camera) {
   const a = camera.turn * Math.PI / 180, e = camera.tilt * Math.PI / 180;
   const x = (ko - 117.5) / 12.5 * 112;
   const y = (guarantee - 2) * 87;
-  const z = (strike - 92.5) / 7.5 * 79;
+  const z = (strike - strikeMidpoint) / (strikeCeiling - strikeMidpoint) * 79;
   const depth = x * Math.sin(a) - y * Math.cos(a);
   return {x:228 + x*Math.cos(a) + y*Math.sin(a),
           y:167 + depth*Math.sin(e) - z*Math.cos(e), depth:depth*Math.cos(e)+z*Math.sin(e)};
@@ -119,8 +126,7 @@ function makePlot(quotes, camera, selection) {
   const face = (points,fill)=>'<polygon points="'+points.map(xy).join(' ')+'" fill="'+fill+'"/>';
   const txt = (p,t,anchor='middle',size=12,weight=500,fill='#4c6068')=>'<text x="'+p.x+'" y="'+p.y+'" text-anchor="'+anchor+'" font-family="Arial, sans-serif" font-size="'+size+'" font-weight="'+weight+'" fill="'+fill+'">'+t+'</text>';
   const grid='#cfd8cf', axis='#a8b7ab';
-  const strikeTicks = [85, 90, 95, 100];
-  const koTicks = [105, 110, 120, 130];
+  const koTicks = [105, 110, 115, 120, 125, 130];
   const guaranteeTicks = [1, 2, 3];
   const parts = ['<g aria-hidden="true" pointer-events="none">'];
   if (camera.axis) {
@@ -128,47 +134,47 @@ function makePlot(quotes, camera, selection) {
     const ticks = byKnockOut ? koTicks : guaranteeTicks;
     const axisPoint = (tick, strike) => byKnockOut ? pt(tick, 2, strike) : pt(117.5, tick, strike);
     const left = ticks[0], right = ticks.at(-1);
-    parts.push(face([axisPoint(left,85),axisPoint(right,85),axisPoint(right,100),axisPoint(left,100)],'#f2f3ee'));
+    parts.push(face([axisPoint(left,strikeFloor),axisPoint(right,strikeFloor),axisPoint(right,strikeCeiling),axisPoint(left,strikeCeiling)],'#f2f3ee'));
     for (const z of strikeTicks) {
       const p = axisPoint(left,z);
       parts.push(line(p,axisPoint(right,z),grid),txt({x:p.x-8,y:p.y+3},z+'%','end',12));
     }
     for (const tick of ticks) {
-      const p = axisPoint(tick,85);
-      parts.push(line(p,axisPoint(tick,100),grid),txt({x:p.x,y:p.y+19},tick+(byKnockOut?'%':'m'),'middle',12));
+      const p = axisPoint(tick,strikeFloor);
+      parts.push(line(p,axisPoint(tick,strikeCeiling),grid),txt({x:p.x,y:p.y+19},tick+(byKnockOut?'%':'m'),'middle',12));
     }
-    const base = axisPoint(left,85), top = axisPoint(left,100);
-    parts.push(line(base,top,axis,1.5),line(base,axisPoint(right,85),axis,1.5));
+    const base = axisPoint(left,strikeFloor), top = axisPoint(left,strikeCeiling);
+    parts.push(line(base,top,axis,1.5),line(base,axisPoint(right,strikeFloor),axis,1.5));
     parts.push(txt({x:top.x,y:top.y-14},'Strike','end',13,700));
     parts.push(txt({x:228,y:base.y+41},byKnockOut?'Knock-out':'Guarantee','middle',13,700));
   } else {
-    parts.push(face([pt(105,1,85),pt(130,1,85),pt(130,3,85),pt(105,3,85)],'#edf0e9'),
-               face([pt(105,farY,85),pt(130,farY,85),pt(130,farY,100),pt(105,farY,100)],'#f2f3ee'),
-               face([pt(farX,1,85),pt(farX,3,85),pt(farX,3,100),pt(farX,1,100)],'#f5f5ef'));
+    parts.push(face([pt(105,1,strikeFloor),pt(130,1,strikeFloor),pt(130,3,strikeFloor),pt(105,3,strikeFloor)],'#edf0e9'),
+               face([pt(105,farY,strikeFloor),pt(130,farY,strikeFloor),pt(130,farY,strikeCeiling),pt(105,farY,strikeCeiling)],'#f2f3ee'),
+               face([pt(farX,1,strikeFloor),pt(farX,3,strikeFloor),pt(farX,3,strikeCeiling),pt(farX,1,strikeCeiling)],'#f5f5ef'));
     for (const x of koTicks) {
-      parts.push(line(pt(x,1,85),pt(x,3,85),grid),line(pt(x,farY,85),pt(x,farY,100),grid,.8));
+      parts.push(line(pt(x,1,strikeFloor),pt(x,3,strikeFloor),grid),line(pt(x,farY,strikeFloor),pt(x,farY,strikeCeiling),grid,.8));
     }
     for (const y of guaranteeTicks) {
-      parts.push(line(pt(105,y,85),pt(130,y,85),grid),line(pt(farX,y,85),pt(farX,y,100),grid,.8));
+      parts.push(line(pt(105,y,strikeFloor),pt(130,y,strikeFloor),grid),line(pt(farX,y,strikeFloor),pt(farX,y,strikeCeiling),grid,.8));
     }
     for (const z of strikeTicks) {
       parts.push(line(pt(farX,1,z),pt(farX,3,z),grid,.8),line(pt(105,farY,z),pt(130,farY,z),grid,.8));
     }
-    parts.push(line(pt(leftX,leftY,85),pt(leftX,leftY,100),axis,1.5),line(pt(105,nearY,85),pt(130,nearY,85),axis,1.2),line(pt(nearX,1,85),pt(nearX,3,85),axis,1.2));
+    parts.push(line(pt(leftX,leftY,strikeFloor),pt(leftX,leftY,strikeCeiling),axis,1.5),line(pt(105,nearY,strikeFloor),pt(130,nearY,strikeFloor),axis,1.2),line(pt(nearX,1,strikeFloor),pt(nearX,3,strikeFloor),axis,1.2));
     for(const z of strikeTicks){
       const p=pt(leftX,leftY,z);parts.push(txt({x:p.x-8,y:p.y+3},z+'%','end',11));
     }
-    const ztop=pt(leftX,leftY,100);
+    const ztop=pt(leftX,leftY,strikeCeiling);
     parts.push(txt({x:ztop.x-5,y:ztop.y-10},'Strike','end',12,700));
     for(const x of koTicks) {
-      const p=pt(x,nearY,85);parts.push(txt({x:p.x,y:p.y+15},x+'%','middle',11));
+      const p=pt(x,nearY,strikeFloor);parts.push(txt({x:p.x,y:p.y+15},x+'%','middle',11));
     }
-    const xmid=pt(117.5,nearY,85);
+    const xmid=pt(117.5,nearY,strikeFloor);
     parts.push(txt({x:xmid.x,y:xmid.y+37},'Knock-out','middle',13,700));
-    const frontMid=pt(nearX,2,85);
+    const frontMid=pt(nearX,2,strikeFloor);
     const way=frontMid.x>228?1:-1;
     for(const y of guaranteeTicks) {
-      const p=pt(nearX,y,85);parts.push(txt({x:p.x+way*15,y:p.y-1},y+'m',way>0?'start':'end',11));
+      const p=pt(nearX,y,strikeFloor);parts.push(txt({x:p.x+way*15,y:p.y-1},y+'m',way>0?'start':'end',11));
     }
     parts.push(txt({x:frontMid.x+way*26,y:frontMid.y+23},'Guarantee',way>0?'start':'end',12,700));
   }
