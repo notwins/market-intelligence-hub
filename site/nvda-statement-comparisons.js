@@ -214,7 +214,10 @@
       scroll.append(table);
       tablePanel.append(caption, scroll);
       layout.append(chart, tablePanel);
-      article.append(heading, layout);
+      const header = element("div", "", "nv-panel-head");
+      header.append(heading);
+      article.append(header, layout);
+      window.NvdaChartControls.expandable(article, card.title, header);
       if (card.note) article.append(element("p", card.note, "nv-note"));
       $("nv-statement-peer-cards").append(article);
       host.tbody = tbody;

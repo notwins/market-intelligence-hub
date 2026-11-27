@@ -101,11 +101,19 @@ reveal(location.hash,Boolean(location.hash));
 const thoughts=document.createElement('section');
 thoughts.className='mu-writeups';
 thoughts.id='my-thoughts';
-thoughts.hidden=true;
+thoughts.hidden=false;
 thoughts.setAttribute('aria-labelledby','my-thoughts-title');
 thoughts.innerHTML=`
   <div class="mu-writeups-heading"><div><h2 id="my-thoughts-title">My thoughts</h2></div></div>
   <div class="mu-writeups-grid" data-thoughts-feed hidden></div>
+  <div class="mu-writeups-grid" data-thoughts-snapshots>
+    <article class="mu-writeup">
+      <p class="mu-eyebrow"><time datetime="2026-11-28">28 Nov 2026</time> · Saved dashboard</p>
+      <h3>NVIDIA Historical</h3>
+      <p>Interactive snapshot of the financial charts, peer comparisons and valuation tools before the desktop layout update.</p>
+      <p><a href="../nvda-history-snapshot-2026-11-28.html">Open saved NVIDIA dashboard →</a></p>
+    </article>
+  </div>
   <div class="mu-writeups-grid" data-thoughts-legacy></div>`;
 latest.after(thoughts);
 root.querySelectorAll('details.mu-explanation, details.mu-card-previous, #library-basics details').forEach(details=>{details.open=true;});
@@ -118,11 +126,11 @@ function renderThoughts(feed){
  const records=reader.thoughts(feed.records);
  thoughtsFeed.innerHTML=reader.cards(records,feed.tags,'../');
  thoughtsFeed.hidden=!records.length;
- thoughts.hidden=!records.length&&!thoughtsLegacy.children.length;
  if(!thoughts.hidden&&location.hash==='#my-thoughts')reveal(location.hash,true);
 }
 window.addEventListener('mih-research-feed-updated',event=>renderThoughts(event.detail));
 renderThoughts(window.MIH_RESEARCH_FEED);
+if(location.hash==="#my-thoughts")reveal(location.hash,true);
 
 function addNvidiaReading() {
  const link=window.NvdaArticle.link('NVDA');

@@ -219,3 +219,62 @@ body.nvda-history-page { margin: 0; color: var(--nv-ink); background: var(--nv-p
   .nv-revenue-compare-controls label { min-width: 0; }
   .nv-fin-history-toolbar .nv-statement-peer-tabs button { flex: 0 1 auto; }
 }
+
+.nv-metric-controls {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.nv-metric-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.nv-metric-tabs button, .nv-layout-button {
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid #bdcdb9;
+  border-radius: 6px;
+  background: var(--nv-white);
+  color: var(--nv-green);
+  font: 650 .8rem/1.2 var(--nv-sans);
+  cursor: pointer;
+}
+.nv-metric-tabs button[aria-pressed="true"] {
+  background: var(--nv-green);
+  border-color: var(--nv-green);
+  color: white;
+}
+.nv-layout-button:hover { border-color: var(--nv-green); }
+.nv-metric-controls .nv-controls { align-items: end; }
+.nv-metric-controls [data-metric-next] { min-height: 39px; }
+.nv-metric-controls select { max-width: min(100%, 27ch); }
+.nv-expand-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 7px;
+}
+.nv-expandable .nv-layout-button[aria-expanded] { display: none; }
+.nv-expandable > .nv-panel-head { align-items: center; }
+.nv-expandable > .nv-panel-head > .nv-layout-button[aria-expanded] { margin-inline-start: auto; }
+@media (min-width: 960px) {
+  .nv-expandable .nv-layout-button[aria-expanded] { display: inline-flex; align-items: center; }
+  .nv-revenue-peer-grid { align-items: start; }
+  .nv-revenue-peer-card #nv-revenue-scale-chart canvas { height: clamp(278px, 25vw, 350px); }
+  .nv-revenue-peer-card.nv-expanded #nv-revenue-scale-chart canvas,
+  .nv-expanded .nv-chart canvas { height: clamp(430px, 58vh, 680px); }
+  .nv-statement-peer-layout .nv-chart canvas { height: clamp(270px,23vw,330px); }
+  .nv-expanded .nv-statement-peer-layout .nv-chart canvas { height: clamp(430px, 58vh, 680px); }
+  .nv-expandable .nv-statement-chart-table,
+  .nv-expandable .nv-statement-bar-body,
+  .nv-expandable .lab-ranks { max-height: clamp(390px, 58vh, 580px); }
+  .nv-expandable .lab-scroll { max-height: clamp(570px, 72vh, 780px); }
+  .nv-expanded .nv-statement-chart-table,
+  .nv-expanded .nv-statement-bar-body,
+  .nv-expanded .nv-peer-scroll,
+  .nv-expanded .lab-ranks { max-height: none; }
+  .nv-expanded .lab-scroll { max-height: min(125vh, 1100px); }
+}
+@media (max-width: 959px) {
+  .nv-expand-toolbar { display: none; }
+}

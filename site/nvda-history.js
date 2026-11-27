@@ -374,6 +374,80 @@
       dates, format: n => fmt(n, 1), axis: n => fmt(n, 0), series });
   }
 
+  function financialMetricFamilies() {
+    const layout = [
+      ["Income statement", [
+        ["Sales & earnings", ["Revenue", "Gross profit", "Operating income", "Pretax income", "Net income to parent", "Consolidated net income", "EBITDA proxy", "Interest income"], ["Revenue", "Operating income", "Net income to parent"]],
+        ["Expenses", ["Cost of revenue", "Research and development", "Total operating expenses", "Selling, general and administrative", "Sales and marketing", "General and administrative", "Interest expense", "Income tax expense"], ["Cost of revenue", "Research and development", "Total operating expenses"]],
+        ["Margins & returns", ["Gross margin %", "Operating margin %", "Net margin %", "R&D as % of revenue", "Effective tax rate %", "Return on ending assets %", "Return on ending equity %"], ["Gross margin %", "Operating margin %", "Net margin %"]],
+        ["Per share", ["Basic EPS", "Diluted EPS", "Basic weighted-average shares", "Diluted weighted-average shares"], ["Basic EPS", "Diluted EPS"]],
+      ]],
+      ["Balance sheet", [
+        ["Assets", ["Total assets", "Total current assets", "Net accounts receivable", "Inventories", "Net property, plant and equipment", "Goodwill", "Intangibles excluding goodwill"], ["Total assets", "Net accounts receivable", "Inventories"]],
+        ["Liabilities & debt", ["Total liabilities", "Total current liabilities", "Total debt", "Accounts payable", "Deferred revenue, current", "Current debt", "Long-term debt", "Net debt"], ["Total liabilities", "Total current liabilities", "Total debt"]],
+        ["Cash & equity", ["Cash and cash equivalents", "Short-term investments", "Total equity", "Parent shareholders' equity", "Retained earnings", "Common shares outstanding", "Current ratio", "Debt to equity"], ["Cash and cash equivalents", "Total equity", "Current ratio"]],
+      ]],
+      ["Cash flow", [
+        ["Cash generation", ["Operating cash flow", "Investing cash flow", "Financing cash flow", "Free cash flow", "Capital expenditures", "Change in cash and restricted cash"], ["Operating cash flow", "Free cash flow", "Capital expenditures"]],
+        ["Capital allocation", ["Cash dividends paid", "Share repurchases", "Business acquisitions, net", "Debt issuance proceeds", "Long-term debt repayments", "Stock-based compensation", "Depreciation and amortization"], ["Cash dividends paid", "Share repurchases", "Debt issuance proceeds"]],
+        ["Cash flow ratios", ["Operating cash flow margin %", "Free cash flow margin %", "Capex as % of revenue", "Cash dividends as % of net income"], ["Operating cash flow margin %", "Free cash flow margin %"]],
+      ]],
+    ];
+    const lookup = new Map([...descriptors.values()].map(desc => [desc.name, desc.field]));
+    const displayed = new Set();
+    const families = layout.map(([label, groups]) => ({
+      label, groups: groups.map(([name, metrics, quick]) => {
+        const items = metrics.filter(metric => lookup.has(metric)).map(metric => {
+          const field = lookup.get(metric);
+          displayed.add(field);
+          return [field, metric];
+        });
+        return { label: name, items, quick: quick.map(metric => lookup.get(metric)) };
+      }),
+    }));
+    for (const { field, group, name } of descriptors.values()) {
+      if (displayed.has(field)) continue;
+      const family = families.find(item => item.label === group) || families[0];
+      let other = family.groups.at(-1);
+      if (!other.label.startsWith("Other measures") || other.items.length === 8) {
+        const count = family.groups.filter(item => item.label.startsWith("Other measures")).length;
+        other = { label: count ? "Other measures " + (count + 1) : "Other measures", items: [], quick: [] };
+        family.groups.push(other);
+      }
+      other.items.push([field, name]);
+    }
+    return families;
+  }
+
+  function mountMarketMetrics() {
+    const layout = [
+      ["Price & market cap", [0, 1, 2], []],
+      ["Valuation & dividends", [3, 4, 5, 6, 7], [3, 4, 5]],
+      ["BOS quotes", [8, 9, 10, 11, 12], [8, 9, 11]],
+    ];
+    window.NvdaChartControls.mount("nv-market-metric", layout.map(([label, metrics, quick]) => ({
+      label, groups: [{ label, items: metrics.map(index => [String(index), marketMeasures[index][0]]), quick: quick.map(String) }],
+    })), "0");
+  }
+
+  function mountDesktopExpansion() {
+    const targets = [
+      ["nv-revenue-growth-bars", "peer growth chart"],
+      ["nv-revenue-scale-chart", "peer USD chart"],
+      ["nv-market-chart", "market history chart"],
+      ["nv-peer-chart", "indexed peer chart"],
+      ["lab-trend", "peer trend chart"],
+      ["nv-peer-rows", "peer companies table"],
+      ["lab-rows", "full comparison table"],
+      ["sim-ranks", "peer rankings table"],
+    ];
+    for (const [id, label] of targets) {
+      window.NvdaChartControls.expandable($(id)?.closest(".nv-panel"), label);
+    }
+    window.NvdaChartControls.expandable($("nv-fin-solo"), "NVIDIA financial history");
+    window.NvdaChartControls.expandable($("nv-revenue-table-card"), "metric comparison table");
+  }
+
   function wirePage() {
     const statementGroups = new Set([...Object.keys(unitsByGroup), "Ratios and growth"]);
     descriptors = new Map(financial.fields.filter(field => statementGroups.has(field.split(" / ")[0])).map(field => [field, fieldInfo(field)]));
@@ -385,19 +459,11 @@
       return [frequency, periods];
     }));
     monthKeys = Object.keys(market.months).sort();
-    const optionGroups = new Map();
-    for (const desc of descriptors.values()) {
-      const group = optionGroups.get(desc.group) || document.createElement("optgroup");
-      group.label = desc.group === "Ratios and growth" ? "Margins & ratios" : desc.group;
-      group.append(new Option(desc.name, desc.field));
-      optionGroups.set(desc.group, group);
-    }
-    $("nv-fin-metric").replaceChildren(...optionGroups.values());
-    $("nv-fin-metric").value = nativeField("Income statement", "Revenue");
+    const metricControls = window.NvdaChartControls.mount("nv-fin-metric", financialMetricFamilies(), nativeField("Income statement", "Revenue"));
     const dates = [...nvidiaPeriods.quarterly, ...nvidiaPeriods.annual]
       .sort((a, b) => endDate(b).localeCompare(endDate(a)) || a.localeCompare(b));
     options($("nv-filing-select"), dates.map(p => [p, (p.startsWith("Quarterly") ? "Quarter · " : "Annual · ") + charts.date(endDate(p))]), nvidiaPeriods.quarterly.at(-1));
-    options($("nv-market-metric"), marketMeasures.map(([label], index) => [String(index), label]), "0");
+    mountMarketMetrics();
     const historical = keys.filter(period => !period.startsWith("Latest")).sort((a, b) => b.split(" ")[1].localeCompare(a.split(" ")[1]));
     options($("nv-peer-period"), [["Latest quarterly", "Latest available quarterly"], ["Latest annual", "Latest available annual"],
       ...historical.map(period => [period, period])], "Latest quarterly");
@@ -415,14 +481,14 @@
       render();
     }
     const showRevenueComparison = window.NvidiaRevenuePeerHistory.mount({
-      financial, companies, nvidiaPeriods, groups, descriptors, usd, fmt, dollar, companyCell, element, options,
+      financial, companies, nvidiaPeriods, groups, descriptors, metricControls, usd, fmt, dollar, companyCell, element, options,
     });
     for (const story of document.querySelectorAll("[data-story]")) {
       story.onclick = () => {
         showRevenueComparison(false);
         $("nv-frequency").value = story.dataset.story === "annual" ? "annual" : "quarterly";
-        $("nv-fin-metric").value = story.dataset.story === "annual"
-          ? nativeField("Income statement", "Revenue") : "Ratios and growth / Gross margin %";
+        metricControls.setValue(story.dataset.story === "annual"
+          ? nativeField("Income statement", "Revenue") : "Ratios and growth / Gross margin %");
         $("nv-fin-mode").value = "actual";
         financialPlot();
       };
@@ -430,6 +496,7 @@
     marketKpis();
     window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, fmt, dollar, element, options });
     window.NvidiaStatementComparisons.mount({ financial, groups, companyCell, usd, element, options });
+    mountDesktopExpansion();
   }
 
   function scrollEnhancements() {
