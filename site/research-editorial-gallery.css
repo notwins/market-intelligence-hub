@@ -54,10 +54,11 @@ html.ws-blog .research-gallery .mu-writeups .mu-writeup[data-cover-design]:hover
   border-color:var(--research-ink); box-shadow:0 5px 20px #2d2b201a;
 }
 .research-gallery .research-cover {
-  position:relative; isolation:isolate; overflow:clip; min-width:0; min-height:7rem; aspect-ratio:16/8;
+  position:relative; display:block; isolation:isolate; overflow:clip; min-width:0; min-height:7rem; aspect-ratio:16/8;
   margin:calc(-1 * var(--article-pad,0px)) calc(-1 * var(--article-pad,0px)) .65rem;
   border-radius:6px 6px 0 0; background:var(--research-tint);
 }
+.research-gallery a.research-cover:hover .research-cover-icon { background:var(--research-tint); }
 .research-gallery .research-cover-art {
   position:absolute; inset-inline:0; top:50%; width:100%; aspect-ratio:9/8; transform:translateY(-50%) scale(1.01);
   background-image:url("assets/research/editorial-illustrations.webp");

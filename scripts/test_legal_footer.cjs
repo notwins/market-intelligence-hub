@@ -12,7 +12,10 @@ for(const filename of walk(root).filter(p=>p.toLowerCase().endsWith('.html'))){
   const navigation=(decoded.match(/src="[^"]*Primary Navigation - Type JS - 16-Nov-16\.06\.js(?:\?[^"]*)?"/g)||[]).length;
   const styles=(decoded.match(/href="[^"]*Primary Navigation - Type CSS - 16-Nov-16\.06\.css(?:\?[^"]*)?"/g)||[]).length;
   assert(navigation<=1&&styles<=1,rel+' duplicate primary navigation');
-  if(!/<script\b[^>]*\bsrc="[^"]*\blegacy-redirect\.js\b/.test(s)){
+  if(rel==='research-reader.html'){
+    assert.equal(navigation+styles,0,rel+' compact reader must use its own toolbar');
+    assert(s.includes('class="reader-library"')&&s.includes('class="reader-frame"'),rel+' reader navigation absent');
+  }else if(!/<script\b[^>]*\bsrc="[^"]*\blegacy-redirect\.js\b/.test(s)){
     assert.equal(navigation,1,rel+' missing primary navigation');
     assert.equal(styles,1,rel+' missing primary navigation stylesheet');
   }

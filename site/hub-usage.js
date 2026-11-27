@@ -76,7 +76,7 @@
       if (!event.isTrusted || !(event.target instanceof Element)) return;
       const link = event.target.closest('a[href]');
       if (link) {
-        const url = new URL(link.href);
+        const url = new URL(link.dataset.researchSource || link.href);
         const report = url.origin === location.origin && publicReport.exec(url.pathname);
         if (report) record('report', 'research/' + report[1]);
         if (link.hasAttribute('download')) toolAction('download');
