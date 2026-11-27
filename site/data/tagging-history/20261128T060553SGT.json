@@ -1,0 +1,527 @@
+{
+  "schema": 1,
+  "id": "20261128T060553SGT",
+  "checkedAt": "2026-11-28T06:05:53+08:00",
+  "sources": {
+    "hub": "aacdc0f0e51690f707915eb5860e417d4a0efc0a",
+    "content": "9cd9827b0510dca263c0a7ecdccd9f934fc2cd1f"
+  },
+  "baseline": "20261127T175811SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 323,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 14,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 244,
+      "changed": 9,
+      "tags": 9,
+      "colour": 9,
+      "logos": 0
+    }
+  ],
+  "changes": [
+    {
+      "key": "reuters:R-20261103-ECB-NAGEL-DEC-HIKE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Nagel says euro-area inflation could remain above 3% in 2027",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "institution.european_central_bank"
+        ],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.ecb_monetary_policy_decision",
+          "event.guidance_change",
+          "institution.european_central_bank"
+        ],
+        "colour": {
+          "tag": "institution.european_central_bank",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "event.ecb_monetary_policy_decision": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "event.guidance_change": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "institution.european_central_bank": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261126-NORSE-ATLANTIC-LIQUIDITY",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Norse Atlantic’s Norwegian operating subsidiary enters bankruptcy; listed parent excluded",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [
+          "event.bankruptcy_insolvency",
+          "event.mergers_acquisitions"
+        ],
+        "colour": {
+          "tag": "event.bankruptcy_insolvency",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "event.bankruptcy_insolvency": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "event.mergers_acquisitions": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.bankruptcy_insolvency"
+        ],
+        "colour": {
+          "tag": "event.bankruptcy_insolvency",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "event.bankruptcy_insolvency": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-GERMANY-2027-BUDGET-PASSED",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "German lower house approves €556bn 2027 budget with €210.4bn planned borrowing",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.germany",
+          "macro.debt_issuance_supply",
+          "sector.defence_aerospace"
+        ],
+        "colour": {
+          "tag": "geo.germany",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "geo.germany": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "macro.debt_issuance_supply": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FCD34D",
+              "dark_background": "#451A03"
+            },
+            "sector.defence_aerospace": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-GLOBAL-FUND-FLOWS-WEEK-NOV25",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "US fund-flow detail separates government-bond inflows from investment-grade withdrawals",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.investment_grade_credit",
+          "geo.united_states"
+        ],
+        "colour": {
+          "tag": "asset.investment_grade_credit",
+          "light": "#166534",
+          "dark": "#86EFAC",
+          "chips": {
+            "asset.investment_grade_credit": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-INDIA-STATE-FINANCIERS-USD-DEBT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "IIFCL and UCO Bank consider debut US-dollar bond offerings before RBI hedge window closes",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.india",
+          "geo.united_states",
+          "institution.fitch_ratings",
+          "institution.reserve_bank_of_india",
+          "institution.s_p_global_ratings",
+          "sector.infrastructure_construction"
+        ],
+        "colour": {
+          "tag": "geo.india",
+          "light": "#9A3412",
+          "dark": "#FDBA74",
+          "chips": {
+            "geo.india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "institution.fitch_ratings": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FCD34D",
+              "dark_background": "#451A03"
+            },
+            "institution.reserve_bank_of_india": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "institution.s_p_global_ratings": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FCD34D",
+              "dark_background": "#451A03"
+            },
+            "sector.infrastructure_construction": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-TAIWAN-GDP-FORECAST-AI",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Taiwan raises its 2026 growth forecast to 13.28% on AI demand",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.equities_shares",
+          "geo.taiwan",
+          "sector.artificial_intelligence",
+          "ticker.apple_aapl",
+          "ticker.nvidia_nvda",
+          "ticker.tsmc_tsm"
+        ],
+        "colour": {
+          "tag": "geo.taiwan",
+          "light": "#9D174D",
+          "dark": "#FDA4AF",
+          "chips": {
+            "asset.equities_shares": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            },
+            "geo.taiwan": {
+              "text": "#9D174D",
+              "background": "#FFF1F2",
+              "dark_text": "#FDA4AF",
+              "dark_background": "#4C0519"
+            },
+            "ticker.apple_aapl": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            },
+            "ticker.tsmc_tsm": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-TURKEY-FUND-CRISIS-CAPITAL-MARKETS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Turkey’s fund crisis restricts capital-market issuance and leaves IPO applicants waiting",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.bond_issue_placement",
+          "event.ipo_listing"
+        ],
+        "colour": {
+          "tag": "event.bond_issue_placement",
+          "light": "#166534",
+          "dark": "#86EFAC",
+          "chips": {
+            "event.bond_issue_placement": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-US-EQUITY-FX-HEDGE-REBALANCING",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Citi links some US-dollar buying after equity declines to FX hedge rebalancing",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.chf_sgd",
+          "asset.equities_shares",
+          "asset.foreign_exchange",
+          "asset.usd_sgd",
+          "geo.global_cross_border",
+          "geo.united_states",
+          "ticker.citigroup_c"
+        ],
+        "colour": {
+          "tag": "ticker.citigroup_c",
+          "light": "#1E40AF",
+          "dark": "#BFDBFE",
+          "chips": {
+            "asset.chf_sgd": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "asset.equities_shares": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            },
+            "asset.usd_sgd": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "ticker.citigroup_c": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-US-OCT-GOODS-TRADE-DEFICIT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "US October goods deficit reaches US$149.5bn as AI investment raises imports",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.ai_capital_expenditure",
+          "geo.united_states",
+          "macro.trade_data",
+          "sector.artificial_intelligence"
+        ],
+        "colour": {
+          "tag": "event.ai_capital_expenditure",
+          "light": "#6D28D9",
+          "dark": "#DDD6FE",
+          "chips": {
+            "event.ai_capital_expenditure": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            },
+            "macro.trade_data": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
