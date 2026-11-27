@@ -127,7 +127,7 @@
     $("nv-fin-chart-title").textContent = descriptor.name + " history";
     $("nv-fin-detail").textContent = (annual ? "Annual" : "Quarterly") + " · " + $("nv-fin-mode").selectedOptions[0].text;
     const display = value => mode === "actual" ? financialAmount(value, type) : signed(value, n => financialAmount(n, type));
-    charts.render($("nv-fin-chart"), { title: seriesName, dates, bars: mode !== "actual",
+    charts.render($("nv-fin-chart"), { title: seriesName, dates, bars: true,
       zero: type === "money", format: display, axis: n => financialAmount(n, type, true),
       series: [{ label: seriesName, values: data, color: colors[0] }],
       extra: mode === "actual" ? undefined : list.map(period => {
@@ -414,8 +414,12 @@
       for (const id of controls) $(id).onchange = render;
       render();
     }
+    const showRevenueComparison = window.NvidiaRevenuePeerHistory.mount({
+      financial, companies, nvidiaPeriods, groups, usd, fmt, dollar, companyCell, element, options,
+    });
     for (const story of document.querySelectorAll("[data-story]")) {
       story.onclick = () => {
+        showRevenueComparison(false);
         $("nv-frequency").value = story.dataset.story === "annual" ? "annual" : "quarterly";
         $("nv-fin-metric").value = story.dataset.story === "annual"
           ? nativeField("Income statement", "Revenue") : "Ratios and growth / Gross margin %";

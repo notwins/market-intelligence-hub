@@ -73,13 +73,17 @@
       ctx.fillStyle = "#536257";
       ctx.fillText(axis(value), left - 8, lineY);
     }
-    const labelCount = Math.min(count, width < 480 ? 4 : width < 800 ? 6 : 8);
+    const labels = dates.map((value, i) => model.axisLabels?.[i] ?? date(value, true));
+    const widestLabel = Math.max(...labels.map(label => ctx.measureText(label).width));
+    const spacedLabels = Math.max(2, 1 + Math.floor((chartRight - chartLeft) / (1.5 * widestLabel + 7)));
+    const labelCount = Math.min(count, spacedLabels, width < 480 ? 4 : width < 800 ? 6 : 8);
     ctx.fillStyle = "#536257";
     for (let i = 0; i < labelCount; i++) {
       const index = labelCount === 1 ? 0 : Math.round(i * (count - 1) / (labelCount - 1));
-      ctx.textAlign = i === 0 ? "left" : i === labelCount - 1 ? "right" : "center";
-      ctx.fillText(model.axisLabels?.[index] ?? date(dates[index], true), x(index), bottom + 19);
+      ctx.textAlign = labelCount === 1 ? "center" : i === 0 ? "left" : i === labelCount - 1 ? "right" : "center";
+      ctx.fillText(labels[index], x(index), bottom + 19);
     }
+    const positive = Array(count).fill(0), negative = Array(count).fill(0);
     for (const s of series) {
       ctx.strokeStyle = s.color;
       ctx.fillStyle = s.color;
@@ -89,10 +93,13 @@
       ctx.setLineDash(s.dash || []);
       if (bars) {
         const bar = Math.min((right - left) / Math.max(count, 1) * .64, 25);
-        const baseline = y(Math.max(floor, Math.min(0, ceil)));
         for (const [i, point] of s.values.entries()) {
           if (!Number.isFinite(point)) continue;
-          ctx.fillRect(x(i) - bar / 2, Math.min(baseline, y(point)), bar, Math.max(1, Math.abs(baseline - y(point))));
+          const offsets = point >= 0 ? positive : negative;
+          const base = model.stacked ? offsets[i] : 0;
+          if (model.stacked) offsets[i] += point;
+          const bottomY = y(base), topY = y(base + point);
+          ctx.fillRect(x(i) - bar / 2, Math.min(bottomY, topY), bar, Math.max(1, Math.abs(bottomY - topY)));
         }
       } else {
         ctx.beginPath();
@@ -124,6 +131,7 @@
     ctx.lineTo(cursor, bottom);
     ctx.stroke();
     ctx.setLineDash([]);
+    if (model.stacked) return;
     for (const s of series) {
       const selected = s.values[plot.active];
       if (!Number.isFinite(selected)) continue;
@@ -200,7 +208,14 @@
 
   function render(container, model) {
     const plot = plots.get(container) || createPlot(container);
-    const limits = scale(model.series, model.zero || model.bars);
+    const series = model.stacked ? [-1, 1].map(direction => ({
+      values: model.dates.map((_, index) => {
+        const points = model.series.map(s => s.values[index]).filter(Number.isFinite);
+        return points.length ? points.reduce((sum, value) => sum + (direction * value > 0 ? value : 0), 0) : null;
+      }),
+    })) : model.series;
+    const auto = scale(series, model.zero || model.bars);
+    const limits = auto && (model.domain || auto);
     plot.canvas.hidden = !limits;
     plot.summary.hidden = !limits;
     plot.placeholder.hidden = Boolean(limits);
@@ -211,5 +226,10 @@
     updateSelection(plot, model.active ?? last);
   }
 
-  window.NvidiaCharts = { render, date };
+  function select(container, index) {
+    const plot = plots.get(container);
+    if (plot?.model.limits && index !== plot.active) updateSelection(plot, index);
+  }
+
+  window.NvidiaCharts = { render, date, select };
 })();
