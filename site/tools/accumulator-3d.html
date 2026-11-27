@@ -31,7 +31,10 @@
   .tenor-swatch{width:.575rem;height:.575rem}
 }
 @media print{body{background:white}.camera,.help,details{display:none}.plots{grid-template-columns:1fr 1fr}main{padding:0}.controls{border-top:0}h1{font-size:32pt}.card{break-inside:avoid}}
-</style><meta name="description" content="Compare NVDA accumulator strikes on two interactive 3D charts for JPM structured notes and OCBC structured investments."><link rel="stylesheet" href="../Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261123.tools3d"><script defer src="../Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261123.tools3d"></script></head><body><main><header><div class="kicker">NVDA &nbsp;/&nbsp; Indicative desk quotes &nbsp;/&nbsp; 24 Nov 2026</div><h1>Accumulator pricing in 3D</h1><p>Each dot shows one quoted buying price, called the <b>strike</b>. A lower dot means a cheaper price per share. The two floor axes show the knock-out level and the length of the guaranteed buying period.</p></header>
+</style><meta name="description" content="Compare NVDA accumulator strikes on two interactive 3D charts for JPM structured notes and OCBC structured investments."><link rel="stylesheet" href="../Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261123.tools3d"><script defer src="../Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261123.tools3d"></script><link rel="stylesheet" href="../market-editions.css?v=1">
+<link rel="stylesheet" href="../tool-editions.css?v=1">
+</head><body data-tool-art="pricing-3d" data-tool-style="analytical"><main><header class="tool-cover"><div><div class="kicker">NVDA &nbsp;/&nbsp; Indicative desk quotes &nbsp;/&nbsp; 24 Nov 2026</div><h1>Accumulator pricing in 3D</h1><p>Each dot shows one quoted buying price, called the <b>strike</b>. A lower dot means a cheaper price per share. The two floor axes show the knock-out level and the length of the guaranteed buying period.</p></div><div class="tool-plate" aria-hidden="true"></div></header>
+<nav class="tool-jumps" aria-label="Tool sections"><a href="#issuer-charts">Issuer charts</a><a href="#pricing-archive">Pricing archive</a></nav>
 <p class="help" id="close-date">NVDA regular close · 2026-11-23 · USD 165.05</p>
 <section class="controls" aria-label="Chart controls">
   <fieldset class="tenor-control" aria-describedby="tenor-note">
@@ -52,7 +55,7 @@
 </section>
 <p class="help">Toggle a contract length to hide or show it. Drag or swipe sideways to rotate both charts. Tap a dot to compare issuers.</p>
 <noscript><p class="help">Enable JavaScript to view the charts and exact quote tables.</p></noscript>
-<div class="plots">
+<div class="plots" id="issuer-charts">
   <article class="card sn" data-issuer="sn">
     <div class="cardheader"><h2>JPM structured note (SN)</h2><span class="count"></span></div>
     <div class="plot"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 350" aria-label="JPM structured note pricing chart" role="group" tabindex="0"></svg><p class="empty" hidden></p></div>
