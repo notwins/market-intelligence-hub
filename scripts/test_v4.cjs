@@ -27,6 +27,8 @@ test('navigation creates distinct history entries, preserves search and leaves s
  history.state={mihV4Route:location.hash};
  vm.runInContext("navigate('history/fx',{fromHistory:true});",ctx);
  assert.equal(log.length,2);assert.equal(state.view,'history');assert.deepEqual(scrolls,[0,0]);
+ vm.runInContext("navigate('directory')",ctx);
+ assert.equal(state.view,'watchlist');assert.deepEqual(log.at(-1),['replace','/v4.html?test=1#watchlist']);
  vm.runInContext("navigate('unknown',{replace:true})",ctx);assert.equal(state.view,'overview');assert.equal(log.at(-1)[0],'replace');
 });
 test('V4 preferences are independent and sanitize extreme text/card values',()=>{
