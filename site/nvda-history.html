@@ -15,8 +15,8 @@
 <script defer src="nvda-valuation.js?v=1"></script>
 <script defer src="nvda-peer-lab.js?v=20261127.liabilities-r2"></script>
 <script defer src="nvda-statement-comparisons.js?v=1"></script>
-<script defer src="nvda-revenue-peer-history.js?v=1"></script>
-<script defer src="nvda-history.js?v=20261127.revenue-comp"></script>
+<script defer src="nvda-revenue-peer-history.js?v=2"></script>
+<script defer src="nvda-history.js?v=20261127.comparison-metrics"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
 <body class="nvda-history-page">
@@ -59,11 +59,11 @@
         <button type="button" id="nv-fin-solo-toggle" aria-controls="nv-fin-solo" aria-pressed="true">NVIDIA history</button>
         <button type="button" id="nv-fin-peer-toggle" aria-controls="nv-fin-compare" aria-pressed="false">Compare competitors</button>
       </div>
-      <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label></div>
+      <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label><label>Metric<select id="nv-fin-metric"></select></label></div>
     </div>
     <div id="nv-fin-solo">
       <div class="nv-panel-head"><div><h3 id="nv-fin-chart-title">Revenue history</h3><p id="nv-fin-detail" class="nv-muted"></p></div>
-        <div class="nv-controls"><label>Metric<select id="nv-fin-metric"></select></label><label>View<select id="nv-fin-mode"></select></label></div>
+        <div class="nv-controls"><label>View<select id="nv-fin-mode"></select></label></div>
       </div>
       <div class="nv-chart" id="nv-fin-chart"></div>
       <p class="nv-note">Growth rates use a positive comparison base. Margin movements are shown in percentage points.</p>
@@ -90,14 +90,14 @@
             <h3 id="nv-revenue-scale-title">Revenue scale and share</h3>
             <div class="nv-controls"><label>Bar units<select id="nv-revenue-units"><option value="usd">USD billions</option><option value="share">Revenue share %</option></select></label></div>
           </div>
-          <p class="nv-revenue-share"><strong id="nv-revenue-share-value">—</strong><span>NVIDIA share of selected revenue <small id="nv-revenue-share-coverage"></small></span></p>
+          <p class="nv-revenue-share" id="nv-revenue-share"><strong id="nv-revenue-share-value">—</strong><span>NVIDIA share of selected revenue <small id="nv-revenue-share-coverage"></small></span></p>
           <div class="nv-chart nv-chart-small" id="nv-revenue-scale-chart"></div>
         </article>
       </div>
-      <p class="nv-muted" id="nv-revenue-method">Select a period on the chart to update both cards and the table. Share uses the selected companies’ combined revenue and requires a figure for every company. Peer fiscal year ends match within 125 days of NVIDIA’s. Quarterly ends match within 45 days.</p>
-      <div class="nv-table-scroll nv-revenue-compare-table nv-statement-chart-table" tabindex="0" role="region" aria-label="Revenue comparison figures" aria-describedby="nv-revenue-method">
+      <p class="nv-muted" id="nv-revenue-method">Select a period on the chart to update both cards and the table. Growth uses each issuer’s reporting currency and requires a positive prior-period figure. Quarterly filing ends match within 45 days of NVIDIA’s. Annual filing ends match within 125 days.</p>
+      <div class="nv-table-scroll nv-revenue-compare-table nv-statement-chart-table" tabindex="0" role="region" aria-label="Financial metric comparison figures" aria-describedby="nv-revenue-method">
         <table class="nv-table nv-peer-table">
-          <thead><tr><th scope="col">Company</th><th scope="col">Filing period end</th><th scope="col">Revenue (USD)</th><th scope="col" id="nv-revenue-growth-column">YoY growth</th><th scope="col">Share of selected revenue</th></tr></thead><tbody id="nv-revenue-rows"></tbody>
+          <thead><tr><th scope="col">Company</th><th scope="col">Filing period end</th><th scope="col" id="nv-revenue-amount-column">Revenue (USD)</th><th scope="col" id="nv-revenue-qoq-column">QoQ growth</th><th scope="col" id="nv-revenue-growth-column">YoY growth</th><th scope="col" id="nv-revenue-share-column">Share of selected revenue</th></tr></thead><tbody id="nv-revenue-rows"></tbody>
         </table>
       </div>
     </div>
