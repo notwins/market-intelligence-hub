@@ -61,6 +61,7 @@
         else if (integrated) jumpButton.before(bar);
         else doc.body.insertBefore(bar, spacer);
         bar.classList.toggle('section-jump-docked', docked);
+        toggle.setAttribute('aria-label', integrated ? 'On page: choose a subsection' : 'Choose subsection');
         setExpanded(false);
         if (hadFocus) (docked ? picker : toggle).focus({ preventScroll: true });
       }
