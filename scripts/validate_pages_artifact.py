@@ -5,7 +5,8 @@ import re
 import subprocess
 import sys
 from pathlib import Path
-from audit_pages_artifact import audit, ROOT
+from archive_navigation import decorate
+from audit_pages_artifact import archive_paths, audit, protected_paths, ROOT
 from validate_research_contracts import validate_site
 from verify_research_destinations import verify_staged
 
@@ -28,7 +29,11 @@ def validate(artifact_root, report):
         subprocess.run(['node', 'scripts/' + name], cwd=artifact_root, check=True)
     research_contracts = validate_site(artifact_root/'site')
     served_research = verify_staged(artifact_root/'site')
-    result = audit(ROOT/'site', artifact_root/'site')
+    site = artifact_root/'site'
+    for relative in archive_paths(protected_paths(ROOT/'site')):
+        page = site/relative
+        page.write_bytes(decorate(page.read_bytes()))
+    result = audit(ROOT/'site', site, archive_navigation=True)
     result['research_contracts'] = research_contracts
     result['served_research_destinations'] = served_research
     result['source_git_commit'] = subprocess.check_output(
@@ -36,7 +41,7 @@ def validate(artifact_root, report):
     result['final_validation'] = {'python': "unittest discover -s scripts -p test_*.py", 'javascript': checks}
     Path(report).write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({key: value for key, value in result.items()
-                     if key not in ('checks', 'mutable_html', 'immutable_footer_exceptions', 'final_validation')}, indent=2))
+                     if key not in ('checks', 'mutable_html', 'immutable_footer_exceptions', 'archive_navigation_pages', 'final_validation')}, indent=2))
 
 
 if __name__ == '__main__':
