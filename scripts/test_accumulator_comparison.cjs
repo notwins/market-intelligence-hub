@@ -111,7 +111,7 @@ const html = fs.readFileSync(require.resolve('../site/tools/accumulator.html'), 
 const catalogScript = html.match(/<script id="accumulator-model">([\s\S]*?)<\/script>/)[1];
 const catalog = vm.runInNewContext(fs.readFileSync(require.resolve('../site/tools/accumulator-quotes.js'),'utf8')+'\n'+catalogScript+'; Accumulator', {window:{AccumulatorModel:model}});
 assert(catalog.quotes.every(q => q.label === 'Normal' && q.multiple === 1));
-assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [3,6,9]);
+assert.deepEqual([...new Set(catalog.quotes.filter(q => q.product === 'JPM SN').map(q => q.months))].sort((a,b)=>a-b), [3,6,9,12]);
 assert.equal(model.terms(catalog.quotes.find(q=>q.product==='OCBC SI' && q.minimum===3), 100, budget).guaranteeDay,61);
 
 // The five-note comparison values a later shareholding separately from maturity.
@@ -136,10 +136,18 @@ close(2628 * 69 + stressE.exit.refunded - stressE.payment, -118417.68, 'Conditio
 // strike cells in an indication must never become a selectable zero or duplicate.
 const quotedStrikes = {
   'JPM SN': {
+    '12-125-1':85.65, '12-125-2':87.06, '12-125-3':88.99,
+    '12-120-1':84.42, '12-120-2':86.44, '12-120-3':88.92,
+    '12-115-1':83.91, '12-115-2':86.77, '12-115-3':89.84,
+    '12-105-1':91.19, '12-105-2':95.55, '12-105-3':98.52,
     '9-130-1':90.52, '9-130-2':91.66, '9-130-3':93.32,
-    '9-120-1':88.01, '9-120-2':90.22, '9-120-3':92.85, '9-105-1':93.8, '9-105-2':98.18,
+    '9-125-1':89.15, '9-125-2':90.73,
+    '9-120-1':88.01, '9-120-2':90.22, '9-120-3':92.85,
+    '9-115-1':87.35, '9-115-2':90.4, '9-105-1':93.8, '9-105-2':98.18,
     '6-130-1':94.6, '6-130-2':96.13, '6-130-3':98.64,
+    '6-125-1':93.36, '6-125-2':95.38,
     '6-120-1':92.27, '6-120-2':94.97, '6-120-3':98.48,
+    '6-115-1':91.73, '6-115-2':95.24, '6-105-1':96.94,
     '3-130-1':99.72, '3-120-1':98.1
   },
   'OCBC SI': {
@@ -147,7 +155,7 @@ const quotedStrikes = {
     '9-110-1':96.08, '9-110-2':97.98, '6-120-1':98.30, '6-110-1':98.13
   }
 };
-const counts = {'JPM SN':{3:62, 6:124, 9:187}, 'OCBC SI':{6:123, 9:186}};
+const counts = {'JPM SN':{3:62, 6:124, 9:187, 12:251}, 'OCBC SI':{6:123, 9:186}};
 const dates = {'JPM SN':'2026-11-27', 'OCBC SI':'2026-11-24'};
 for (const [product, expected] of Object.entries(quotedStrikes)) {
   const actual = {};

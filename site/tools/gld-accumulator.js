@@ -19,9 +19,11 @@
 
   function readPricing(text) {
     const pricing = JSON.parse(text.replace(/^\uFEFF/, ''));
-    const date = Date.parse(pricing?.requestDate);
+    const pricingDate = pricing?.addedDate ?? pricing?.requestDate;
+    const date = Date.parse(pricingDate);
     if (pricing?.kind !== 'gld-accumulator-pricing' || pricing.version !== 1 ||
-        !Number.isFinite(date) || new Date(date).toISOString().slice(0, 10) !== pricing.requestDate ||
+        !Number.isFinite(date) || new Date(date).toISOString().slice(0, 10) !== pricingDate ||
+        (pricing.issuer !== undefined && (typeof pricing.issuer !== 'string' || !pricing.issuer.trim())) ||
         pricing.settlementFrequency !== 'monthly' || typeof pricing.koPlusOne !== 'boolean' ||
         !Number.isFinite(pricing.offset) || !Array.isArray(pricing.rows) || !pricing.rows.length) {
       throw Error('Invalid GLD pricing header.');
@@ -56,12 +58,14 @@
   function displayPricing(pricing) {
     const summary = el('pricing-terms');
     const wrapper = el('pricing-table');
-    const {rows, requestDate, koPlusOne, offset} = pricing;
+    const {rows, addedDate, requestDate, issuer, koPlusOne, offset} = pricing;
     const quoted = rows.filter(row => row.strike !== null).length;
     pricingStatus.textContent = quoted
       ? 'Choose a quoted strike to fill the terms below. You can edit the terms after selecting a quote.'
       : 'This pricing request has no quoted strikes. Enter your own terms below.';
-    summary.textContent = `Pricing request ${dateLabel(requestDate)} · Normal · Monthly settlement · KO+1 ${koPlusOne ? 'yes' : 'no'} · Offset ${Metals.format(offset, 1)}`;
+    const edition = addedDate ? `Pricing added ${dateLabel(addedDate)}` : `Pricing request ${dateLabel(requestDate)}`;
+    const issuerLabel = issuer ? ` · ${issuer}` : '';
+    summary.textContent = `${edition}${issuerLabel} · Normal · Monthly settlement · KO+1 ${koPlusOne ? 'yes' : 'no'} · Offset ${Metals.format(offset, 1)}`;
 
     const guarantees = [...new Set(rows.map(row => row.guarantee))].sort((a, b) => a - b);
     const groups = new Map();
@@ -118,7 +122,7 @@
 
   async function loadPricing() {
     try {
-      const response = await fetch('../data/metals/gld-accumulator-pricing.json?v=20261126.pricing3');
+      const response = await fetch('../data/metals/gld-accumulator-pricing.json?v=20261127.pricing1');
       if (!response.ok) throw Error('Pricing request failed');
       displayPricing(readPricing(await response.text()));
     } catch {

@@ -11,6 +11,46 @@ window.AccumulatorQuotes = [
     ],
     "rows": [
       {
+        "months": 12,
+        "ko": 125,
+        "strikes": [
+          85.65,
+          87.06,
+          88.99
+        ],
+        "days": 251
+      },
+      {
+        "months": 12,
+        "ko": 120,
+        "strikes": [
+          84.42,
+          86.44,
+          88.92
+        ],
+        "days": 251
+      },
+      {
+        "months": 12,
+        "ko": 115,
+        "strikes": [
+          83.91,
+          86.77,
+          89.84
+        ],
+        "days": 251
+      },
+      {
+        "months": 12,
+        "ko": 105,
+        "strikes": [
+          91.19,
+          95.55,
+          98.52
+        ],
+        "days": 251
+      },
+      {
         "months": 9,
         "ko": 130,
         "strikes": [
@@ -22,11 +62,31 @@ window.AccumulatorQuotes = [
       },
       {
         "months": 9,
+        "ko": 125,
+        "strikes": [
+          89.15,
+          90.73,
+          null
+        ],
+        "days": 187
+      },
+      {
+        "months": 9,
         "ko": 120,
         "strikes": [
           88.01,
           90.22,
           92.85
+        ],
+        "days": 187
+      },
+      {
+        "months": 9,
+        "ko": 115,
+        "strikes": [
+          87.35,
+          90.4,
+          null
         ],
         "days": 187
       },
@@ -52,11 +112,41 @@ window.AccumulatorQuotes = [
       },
       {
         "months": 6,
+        "ko": 125,
+        "strikes": [
+          93.36,
+          95.38,
+          null
+        ],
+        "days": 124
+      },
+      {
+        "months": 6,
         "ko": 120,
         "strikes": [
           92.27,
           94.97,
           98.48
+        ],
+        "days": 124
+      },
+      {
+        "months": 6,
+        "ko": 115,
+        "strikes": [
+          91.73,
+          95.24,
+          null
+        ],
+        "days": 124
+      },
+      {
+        "months": 6,
+        "ko": 105,
+        "strikes": [
+          96.94,
+          null,
+          null
         ],
         "days": 124
       },
