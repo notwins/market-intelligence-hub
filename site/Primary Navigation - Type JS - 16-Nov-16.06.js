@@ -528,7 +528,7 @@
   }
   decorateSideMenus();
 
-  const old = document.querySelector('.bottom-nav');
+  const old = archivePage ? null : document.querySelector('.bottom-nav');
   const bar = old || document.createElement('nav');
   const more = old?.querySelector('button#more-btn') || document.createElement('button');
   bar.className = 'bottom-nav hub-primary'; bar.setAttribute('aria-label', 'Main sections');
@@ -663,6 +663,11 @@
   function updateScrollDirection(event) {
     const y = scrollPosition();
     if (y === lastY) return;
+    if (initialArchiveHash) {
+      lastY = y;
+      endScroll();
+      return;
+    }
     // Track one upward movement per gesture, including its momentum.
     if (!('onscrollend' in document) && event.timeStamp - previousScrollTime > 140) endScroll();
     previousScrollTime = event.timeStamp;
@@ -681,6 +686,25 @@
     positionMenu();
   }
 
+  let initialArchiveHash = archivePage ? location.hash : '';
+  if (initialArchiveHash) {
+    const cancelInitialArchiveScroll = () => { initialArchiveHash = ''; };
+    for (const type of ['wheel', 'pointerdown', 'touchstart', 'keydown']) {
+      window.addEventListener(type, cancelInitialArchiveScroll, {once: true, passive: true});
+    }
+    const alignInitialAnchor = () => requestAnimationFrame(() => {
+      const hash = initialArchiveHash;
+      initialArchiveHash = '';
+      if (!hash || hash !== location.hash) return;
+      let id;
+      try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+      const anchor = document.getElementById(id);
+      if (anchor) anchor.scrollIntoView({block: 'start', behavior: 'instant'});
+      showNavigation();
+    });
+    if (document.readyState === 'complete') alignInitialAnchor();
+    else window.addEventListener('load', alignInitialAnchor, {once: true});
+  }
   window.addEventListener('scroll', updateScrollDirection, {passive: true});
   document.addEventListener('scrollend', endScroll);
   window.addEventListener('touchstart', endScroll, {passive: true});
