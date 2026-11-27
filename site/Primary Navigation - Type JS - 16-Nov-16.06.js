@@ -1009,9 +1009,9 @@
     });
   }
   installCollapsibleMenu();
-  if (document.querySelector('#featured-cards,[data-feed-cards],#dashboard-report-cards')) {
+  if (document.querySelector('#featured-cards,[data-feed-cards],#dashboard-report-cards,script[src*="hourly-news.js"]')) {
     const artwork = document.createElement('script');
-    artwork.src = new URL('card-artwork.js?v=2', base);
+    artwork.src = new URL('card-artwork.js?v=retro1', base);
     document.head.append(artwork);
   }
   const workspaceToolbar = document.querySelector('.topbar');
