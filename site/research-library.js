@@ -27,6 +27,58 @@ group('library-news','Reuters briefs','Short reads with links to the original ne
 const olderIds=['full-market-research-20261106','diversification-simple-20261106','research-added-20261106','research-readings','published-research'];
 group('library-older','Browse earlier report cards','Older reports, explanations and downloads.',olderIds.map(id=>document.getElementById(id)));
 group('library-basics','Market basics','Dated teaching guide: bonds, currencies, shares and portfolio risk.',original.filter(node=>node.matches('.mu-hero,.mu-shortcuts,.mu-summary,.mu-toolbar,.mu-layout')));
+// Personal principles are an optional footer to My Blog, outside the report feed.
+// A fresh visit starts closed; only the reader opens this native disclosure.
+const tradingCode=document.createElement('details');
+tradingCode.className='library-group library-trading-code';
+tradingCode.id='my-trading-code';
+tradingCode.innerHTML=`
+  <summary><strong>My Trading Code</strong><span>Personal principles · Seven rules for every recommendation</span></summary>
+  <section aria-label="Personal trading principles">
+    <p class="trading-code-date"><time datetime="2026-11-27">27 November 2026</time> · Personal principles</p>
+    <ol class="trading-code-rules">
+      <li><h3>No trading for the sake of trading.</h3>
+        <p>Every trade must have a clear investment reason and a useful role in the client’s portfolio.</p>
+        <p>Boredom, sales targets and the need to appear active are never sufficient reasons.</p>
+        <blockquote>Waiting is a valid decision. Every trade must earn its place.</blockquote>
+      </li>
+      <li><h3>Act fairly when I have conviction.</h3>
+        <p>When the evidence supports my conviction, I bring the opportunity promptly to all suitable clients.</p>
+        <p>I do not spread entries across different clients merely to hedge my own uncertainty or test whether my timing is right.</p>
+        <p>Each client still decides independently. Allocation and execution must fit their existing exposure, liquidity and risk capacity. Any phased entry must serve that client’s interests.</p>
+      </li>
+      <li><h3>Never compromise my standards.</h3>
+        <p>Revenue pressure, deadlines and a busy schedule must never lower the quality of my recommendations.</p>
+        <p>Trade preparation, execution and monitoring receive protected time.</p>
+        <p>If I cannot properly assess, explain and follow through on a trade, I postpone it.</p>
+        <blockquote>My revenue needs and lack of time must never become the client’s risk.</blockquote>
+      </li>
+      <li><h3>Client benefit comes first.</h3>
+        <p>Every recommendation must offer a credible benefit after fees, financing and FX costs, with the downside clearly understood.</p>
+        <p>The value I aim to create for the client must justify the costs and risks they take. My remuneration must be transparent and proportionate.</p>
+        <p>I must be willing to recommend the same trade even if it earns me nothing.</p>
+      </li>
+      <li><h3>Avoid panic and forced selling.</h3>
+        <p>I size and fund positions so the client can withstand adverse moves within the agreed risk limits.</p>
+        <p>A price fall triggers a review. It does not automatically require a sale.</p>
+        <p>If the investment case fails, credit quality deteriorates materially, or the client’s risk capacity changes, I recommend reducing or exiting—even at a loss.</p>
+        <blockquote>Protecting the remaining capital takes priority over defending my original call.</blockquote>
+      </li>
+      <li><h3>Never borrow to the limit.</h3>
+        <p>Borrowing must leave a substantial margin buffer and accessible cash reserves.</p>
+        <p>Before entry, assess falling asset prices, adverse FX moves, higher borrowing costs and reduced collateral lending values—including several happening together.</p>
+        <p>Set a review and reduction trigger before the bank’s margin-call level. If the client cannot withstand the stress scenario, reduce the borrowing or do not proceed.</p>
+      </li>
+      <li><h3>No chasing recent highs.</h3>
+        <p>My default is to avoid new purchases at the week’s, month’s or three-month high.</p>
+        <p>An exception requires documented fundamental improvement and a valuation that still offers sufficient reward for the risk.</p>
+        <p>Before making that exception, write down what changed, why the price is justified and what would invalidate the view.</p>
+        <p>A fall from the high is also insufficient on its own to justify buying.</p>
+      </li>
+    </ol>
+    <div class="trading-code-check"><h3>Before every recommendation</h3><p>Record the client’s benefit, the entry rationale, the position size, the downside, the funding buffer and the conditions for reducing or exiting.</p></div>
+  </section>`;
+root.append(tradingCode);
 const heading=document.getElementById('main-research-title');if(heading)heading.textContent='Latest reports';
 const libraryHeading=document.getElementById('my-research-title');if(libraryHeading)libraryHeading.textContent='My blog write-ups';
 const next=document.createElement('p');next.className='library-next';next.innerHTML='Looking for an older report? <a href="#my-research">Search all editions →</a>';latest.append(next);
