@@ -1,0 +1,558 @@
+{
+  "schema": 1,
+  "id": "20261127T175811SGT",
+  "checkedAt": "2026-11-27T17:58:11+08:00",
+  "sources": {
+    "hub": "0981890b1e959d7301fb036cf172886cbd78a82a",
+    "content": "fb57f253a08d84f3f31e5c64a92943bc4bd0e02e"
+  },
+  "baseline": "20261127T055715SGT",
+  "rollbackCommit": null,
+  "comparison": "Previous sweep snapshot",
+  "checked": 316,
+  "sections": [
+    {
+      "section": "Research",
+      "subsection": "Independent reports",
+      "checked": 14,
+      "changed": 3,
+      "tags": 3,
+      "colour": 3,
+      "logos": 1
+    },
+    {
+      "section": "Research",
+      "subsection": "Market Understanding",
+      "checked": 2,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Research archive",
+      "checked": 60,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Research",
+      "subsection": "Calls",
+      "checked": 3,
+      "changed": 0,
+      "tags": 0,
+      "colour": 0,
+      "logos": 0
+    },
+    {
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "checked": 237,
+      "changed": 7,
+      "tags": 7,
+      "colour": 7,
+      "logos": 0
+    }
+  ],
+  "changes": [
+    {
+      "key": "content:bond-credit-full-2026-11-27",
+      "section": "Research",
+      "subsection": "Independent reports",
+      "title": "Bonds & Credit · Global Markets & Credit Research · 27 November 2026",
+      "href": "https://notwins.github.io/market-intelligence-content/research/bond-credit-full-2026-11-27/index.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.fixed_income_bonds",
+          "geo.global_cross_border",
+          "institution.bank_of_england",
+          "macro.debt_issuance_supply",
+          "macro.treasury_yields_rates"
+        ],
+        "colour": {
+          "tag": "asset.fixed_income_bonds",
+          "light": "#166534",
+          "dark": "#86EFAC",
+          "chips": {
+            "asset.fixed_income_bonds": {
+              "text": "#166534",
+              "background": "#F0FDF4",
+              "dark_text": "#86EFAC",
+              "dark_background": "#052E16"
+            },
+            "geo.global_cross_border": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "institution.bank_of_england": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#C4B5FD",
+              "dark_background": "#2E1065"
+            },
+            "macro.debt_issuance_supply": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FCD34D",
+              "dark_background": "#451A03"
+            },
+            "macro.treasury_yields_rates": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "content:central-banks-policy-full-2026-11-27-r2",
+      "section": "Research",
+      "subsection": "Independent reports",
+      "title": "Central Banks, Rates, FX & US Administration · 27 November 2026 morning edition",
+      "href": "https://notwins.github.io/market-intelligence-content/research/central-banks-policy-full-2026-11-27-r2/index.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.foreign_exchange",
+          "event.tariffs_trade_restrictions",
+          "geo.united_states",
+          "institution.federal_reserve",
+          "institution.people_s_bank_of_china",
+          "macro.treasury_yields_rates",
+          "sector.financials_banking"
+        ],
+        "colour": {
+          "tag": "institution.federal_reserve",
+          "light": "#4338CA",
+          "dark": "#A5B4FC",
+          "chips": {
+            "event.tariffs_trade_restrictions": {
+              "text": "#9A3412",
+              "background": "#FFF7ED",
+              "dark_text": "#FDBA74",
+              "dark_background": "#431407"
+            },
+            "institution.federal_reserve": {
+              "text": "#4338CA",
+              "background": "#EEF2FF",
+              "dark_text": "#A5B4FC",
+              "dark_background": "#1E1B4B"
+            },
+            "institution.people_s_bank_of_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "macro.treasury_yields_rates": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "sector.financials_banking": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "content:us-earnings-full-2026-11-27",
+      "section": "Research",
+      "subsection": "Independent reports",
+      "title": "US Earnings Command Centre · 27 November 2026 Thanksgiving edition",
+      "href": "https://notwins.github.io/market-intelligence-content/research/us-earnings-full-2026-11-27/index.html",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.cash_deposits",
+          "asset.options_derivatives",
+          "geo.united_states",
+          "macro.corporate_earnings_metrics",
+          "macro.treasury_yields_rates",
+          "ticker.nvidia_nvda"
+        ],
+        "colour": {
+          "tag": "macro.corporate_earnings_metrics",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "asset.cash_deposits": {
+              "text": "#334155",
+              "background": "#F1F5F9",
+              "dark_text": "#CBD5E1",
+              "dark_background": "#1E293B"
+            },
+            "asset.options_derivatives": {
+              "text": "#86198F",
+              "background": "#FDF4FF",
+              "dark_text": "#F0ABFC",
+              "dark_background": "#4A044E"
+            },
+            "macro.corporate_earnings_metrics": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            },
+            "macro.treasury_yields_rates": {
+              "text": "#1E40AF",
+              "background": "#DBEAFE",
+              "dark_text": "#BFDBFE",
+              "dark_background": "#172554"
+            },
+            "ticker.nvidia_nvda": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            }
+          }
+        },
+        "logos": [
+          "NVDA"
+        ]
+      },
+      "kinds": [
+        "tags",
+        "colour",
+        "logos"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-AUSTRALIA-LNG-RESERVATION-LAW",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Australia passes legislation reserving part of LNG production for domestic use",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.regulatory_legal_decision",
+          "geo.australia"
+        ],
+        "colour": {
+          "tag": "geo.australia",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "event.regulatory_legal_decision": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            },
+            "geo.australia": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-CHINA-CABINET-CAPITAL-MARKET-SUPPORT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "China’s cabinet plans stronger support for equities",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "asset.equities_shares",
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "asset.equities_shares": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-CHINA-NOVEMBER-PMI-POLL",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Reuters poll forecasts another month of contraction in China’s official manufacturing PMI",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "macro.pmi_ism"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "macro.pmi_ism": {
+              "text": "#0E7490",
+              "background": "#ECFEFF",
+              "dark_text": "#67E8F9",
+              "dark_background": "#083344"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-CHINA-OCT-INDUSTRIAL-PROFITS",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "China’s October industrial profit growth reaches 20.1%, with an uneven recovery",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.mainland_china",
+          "sector.artificial_intelligence",
+          "sector.property_real_estate"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "sector.artificial_intelligence": {
+              "text": "#6D28D9",
+              "background": "#F5F3FF",
+              "dark_text": "#DDD6FE",
+              "dark_background": "#2E1065"
+            },
+            "sector.property_real_estate": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-CHINA-SHENHUA-EQUITY-DEBT-REPAYMENT",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "China Shenhua Energy sets discounted placement terms with proceeds intended for debt repayment",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "company.601088_ss",
+          "geo.hong_kong",
+          "geo.mainland_china"
+        ],
+        "colour": {
+          "tag": "geo.mainland_china",
+          "light": "#B91C1C",
+          "dark": "#FCA5A5",
+          "chips": {
+            "company.601088_ss": {
+              "text": "#92400E",
+              "background": "#FFFBEB",
+              "dark_text": "#FDE68A",
+              "dark_background": "#451A03"
+            },
+            "geo.hong_kong": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            },
+            "geo.mainland_china": {
+              "text": "#B91C1C",
+              "background": "#FEF2F2",
+              "dark_text": "#FCA5A5",
+              "dark_background": "#450A0A"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-INDONESIA-SUBSIDISED-FUEL-FISCAL-PRESSURE",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "Indonesia considers higher subsidised fuel prices as budget pressure increases",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "geo.indonesia"
+        ],
+        "colour": {
+          "tag": "geo.indonesia",
+          "light": "#0F766E",
+          "dark": "#5EEAD4",
+          "chips": {
+            "geo.indonesia": {
+              "text": "#0F766E",
+              "background": "#F0FDFA",
+              "dark_text": "#5EEAD4",
+              "dark_background": "#042F2E"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    },
+    {
+      "key": "reuters:R-20261127-NZ-FINAL-ELECTION-COALITION",
+      "section": "Reuters News",
+      "subsection": "Hourly timeline",
+      "title": "New Zealand’s ruling coalition falls one seat short of a parliamentary majority",
+      "href": "https://notwins.github.io/market-intelligence-hub/v4.html#hourly",
+      "before": {
+        "tags": [],
+        "colour": null,
+        "logos": []
+      },
+      "after": {
+        "tags": [
+          "event.elections_results",
+          "geo.new_zealand"
+        ],
+        "colour": {
+          "tag": "geo.new_zealand",
+          "light": "#0369A1",
+          "dark": "#7DD3FC",
+          "chips": {
+            "event.elections_results": {
+              "text": "#7E22CE",
+              "background": "#FAF5FF",
+              "dark_text": "#D8B4FE",
+              "dark_background": "#3B0764"
+            },
+            "geo.new_zealand": {
+              "text": "#0369A1",
+              "background": "#F0F9FF",
+              "dark_text": "#7DD3FC",
+              "dark_background": "#082F49"
+            }
+          }
+        },
+        "logos": []
+      },
+      "kinds": [
+        "tags",
+        "colour"
+      ]
+    }
+  ]
+}
