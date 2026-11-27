@@ -278,3 +278,16 @@ body.nvda-history-page { margin: 0; color: var(--nv-ink); background: var(--nv-p
 @media (max-width: 959px) {
   .nv-expand-toolbar { display: none; }
 }
+
+#nv-revenue-rows tr:focus {
+  outline: 2px solid var(--nv-green);
+  outline-offset: -2px;
+}
+.nv-revenue-peer-card > .nv-panel-head { align-items: center; }
+.nv-revenue-peer-card > .nv-controls { margin-top: 8px; }
+@media (min-width: 960px) {
+  .nv-expanded > .nv-statement-wide-table { grid-template-columns: minmax(0, 1fr); }
+}
+@media (min-width: 960px) and (max-width: 1199px) {
+  .nv-expanded > .nv-statement-peer-layout { grid-template-columns: minmax(0, 1fr); }
+}

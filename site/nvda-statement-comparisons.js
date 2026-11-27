@@ -173,6 +173,7 @@
       heading.id = "nv-statement-title-" + id;
       article.setAttribute("aria-labelledby", heading.id);
       const layout = element("div", "", "nv-statement-peer-layout");
+      if (card.columns.length > 3) layout.classList.add("nv-statement-wide-table");
       const chart = element("div", "", card.kind === "trend" ? "nv-chart nv-chart-small" : "nv-statement-bars");
       chart.id = "nv-statement-chart-" + id;
       const tablePanel = element("div", "", "nv-statement-table-panel");
