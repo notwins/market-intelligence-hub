@@ -6,12 +6,27 @@ function test(name,fn){fn();count++;console.log('PASS '+name);}
 const html=read('v4.html');
 test('V4 retains mobile navigation and shared V3 engines',()=>{assert.ok(html.includes('mobile-navigation.js'));for(const file of ['v3.css','v3-display.css','v3-source-engine.js','v3-core.js','v3-i18n.js'])assert.ok(html.includes(file),file);});
 test('all V4 inline and external application scripts parse',()=>{for(const f of ['v4-tools.js','v4-display.js','version-switch.js','v4-layout.js'])new vm.Script(read(f));for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(m[1]);});
-test('navigation creates distinct history entries, preserves search and restores without pushing',()=>{
- const log=[],location={pathname:'/v4.html',search:'?test=1',hash:'#overview'},state={view:'overview'},tabs={history:'yield',master:'explore'};
- const ctx={document:{querySelector:()=>null},S:state,location,history:{pushState:(_,__,url)=>{log.push(['push',url]);location.hash=url.slice(url.indexOf('#'));},replaceState:(_,__,url)=>{log.push(['replace',url]);location.hash=url.slice(url.indexOf('#'));}},MarketV3:{applyRoute:(v,t)=>{if(t&&Object.hasOwn(tabs,v))tabs[v]=t;},routeSuffix:v=>tabs[v]?'/'+tabs[v]:''},$:()=>({close(){}}),render(){},window:{scrollTo(){}}};
+test('navigation creates distinct history entries, preserves search and leaves scroll restoration to the browser',()=>{
+ const log=[],scrolls=[],origin='https://example.test',location=new URL('/v4.html?test=1#overview',origin);
+ const state={view:'overview'},tabs={history:'yield',master:'explore'};
+ const history={state:null};
+ function navigateEntry(method, entry, url) {
+   log.push([method,url]);
+   history.state=entry;
+   location.href=new URL(url,origin).href;
+ }
+ history.pushState=(entry,_,url)=>navigateEntry('push',entry,url);
+ history.replaceState=(entry,_,url)=>navigateEntry('replace',entry,url);
+ const ctx={document:{querySelector:()=>null},S:state,location,history,Event,MarketV3:{applyRoute:(v,t)=>{if(t&&Object.hasOwn(tabs,v))tabs[v]=t;},routeSuffix:v=>tabs[v]?'/'+tabs[v]:''},$:()=>({close(){}}),render(){},window:{scrollTo:options=>scrolls.push(options.top),dispatchEvent(){}}};
  vm.createContext(ctx);vm.runInContext(html.slice(html.indexOf('const viewNames='),html.indexOf('\nfunction openReport')),ctx);
- vm.runInContext("navigate('history/fx');navigate('history/fx');navigate('credit');navigate('history/fx',{fromHistory:true});",ctx);
- assert.equal(log.length,2);assert.equal(log[0][1],'/v4.html?test=1#history/fx');assert.equal(state.view,'history');
+ vm.runInContext("navigate('history/fx');navigate('history/fx');navigate('credit');",ctx);
+ assert.deepEqual(log,[['push','/v4.html?test=1#history/fx'],['push','/v4.html?test=1#credit']]);
+ assert.equal(history.state.mihV4Previous,origin+'/v4.html?test=1#history/fx');
+ assert.deepEqual(scrolls,[0,0]);
+ location.hash='history/fx';
+ history.state={mihV4Route:location.hash};
+ vm.runInContext("navigate('history/fx',{fromHistory:true});",ctx);
+ assert.equal(log.length,2);assert.equal(state.view,'history');assert.deepEqual(scrolls,[0,0]);
  vm.runInContext("navigate('unknown',{replace:true})",ctx);assert.equal(state.view,'overview');assert.equal(log.at(-1)[0],'replace');
 });
 test('V4 preferences are independent and sanitize extreme text/card values',()=>{

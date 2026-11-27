@@ -529,6 +529,7 @@
   decorateSideMenus();
 
   const old = archivePage ? null : document.querySelector('.bottom-nav');
+  const workspaceDock = old?.hasAttribute('data-workspace-dock');
   const bar = old || document.createElement('nav');
   const more = old?.querySelector('button#more-btn') || document.createElement('button');
   bar.className = 'bottom-nav hub-primary'; bar.setAttribute('aria-label', 'Main sections');
@@ -716,6 +717,7 @@
   }, {passive: true});
   window.addEventListener('hashchange', showNavigation);
   window.addEventListener('hub-desk-route', showNavigation);
+  window.addEventListener('hub-v4-route', () => requestAnimationFrame(showNavigation));
   window.addEventListener('pageshow', event => { if (event.persisted) showNavigation(); });
   mobileDock.addEventListener('change', () => { closeMenu(); showNavigation(); });
   bar.addEventListener('focusin', event => {
@@ -837,6 +839,14 @@
   const referrer = sectionURL(document.referrer);
   const passedSection = archivePage && sectionURL(new URL(location.href).searchParams.get(returnKey));
 
+  function priorSection() {
+    const navigation = window.navigation;
+    const entry = navigation?.currentEntry;
+    return sectionURL(entry
+      ? navigation.entries()[entry.index - 1]?.url
+      : workspaceDock && window.history.state?.mihV4Previous);
+  }
+
   function updateReturn() {
     let history;
     try { history = JSON.parse(sessionStorage.getItem(sectionHistoryKey)) || {}; }
@@ -854,20 +864,20 @@
       : /\/research\/calls\//.test(location.pathname) ? 'v4.html#calls'
       : location.pathname.includes('/read-ups/') ? 'v4.html#hourly'
       : archivePage || (onDesk && location.hash !== '#archive') ? 'desk.html#archive' : 'desk.html';
-    back.href = new URL((archivePage ? passedSection || current || referrer : previous) || fallback, base);
+    const prior = workspaceDock ? priorSection() : null;
+    back.href = new URL((archivePage ? passedSection || current || referrer : (prior !== here && prior) || previous) || fallback, base);
   }
   updateReturn();
   window.addEventListener('pageshow', updateReturn);
   window.addEventListener('hashchange', updateReturn);
   window.addEventListener('popstate', updateReturn);
   window.addEventListener('hub-desk-route', updateReturn);
+  window.addEventListener('hub-v4-route', updateReturn);
   window.navigation?.addEventListener('currententrychange', updateReturn);
 
   back.addEventListener('click', event => {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    const navigation = window.navigation;
-    const priorEntry = navigation?.currentEntry && navigation.entries()[navigation.currentEntry.index - 1];
-    if (priorEntry?.url !== back.href) return;
+    if (priorSection() !== back.href) return;
     event.preventDefault();
     window.history.back();
   });
@@ -971,6 +981,7 @@
     const close = () => drawer.close();
     opener.addEventListener('click', () => {
       if (!mobileDock.matches || drawer.open) return;
+      opener.focus({preventScroll: true});
       if (directory) directory.open = false;
       drawer.append(panel);
       drawer.showModal();
@@ -1032,6 +1043,7 @@
     subtree: true, attributes: true, attributeFilter: ['aria-selected']
   });
   window.addEventListener('hashchange', active);
+  window.addEventListener('hub-v4-route', active);
   window.addEventListener('resize', active);
   requestAnimationFrame(active);
 
