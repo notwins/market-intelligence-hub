@@ -555,6 +555,7 @@ h1 .workspace-icon { width:.8em; height:.8em; min-width:0; max-width:38px; max-h
 }
 .bottom-nav.hub-primary > .hub-last-section:hover {background:#d7e8ef}
 .hub-last-section .hub-back-short {display:none}
+html.hub-archive-page .bottom-nav.hub-primary {transform:none}
 .hub-archive-spacer {display:none}
 @media(min-width:761px) {
   html.hub-archive-page .bottom-nav.hub-primary {position:fixed;inset:0 0 auto;margin:0}
@@ -564,5 +565,6 @@ h1 .workspace-icon { width:.8em; height:.8em; min-width:0; max-width:38px; max-h
   .bottom-nav.hub-primary > .hub-last-section {margin-inline-end:4px;padding-inline:7px}
   .hub-last-section .hub-back-full {display:none}
   .hub-last-section .hub-back-short {display:inline}
+  .hub-archive-page .bottom-nav:not(.hub-primary) {margin-bottom:var(--hub-primary-bottom,0px)}
 }
 @media print {.hub-archive-spacer {display:none}}

@@ -528,7 +528,7 @@
   }
   decorateSideMenus();
 
-  const old = document.querySelector('.bottom-nav');
+  const old = archivePage ? null : document.querySelector('.bottom-nav');
   const bar = old || document.createElement('nav');
   const more = old?.querySelector('button#more-btn') || document.createElement('button');
   bar.className = 'bottom-nav hub-primary'; bar.setAttribute('aria-label', 'Main sections');
