@@ -415,7 +415,7 @@
       render();
     }
     const showRevenueComparison = window.NvidiaRevenuePeerHistory.mount({
-      financial, companies, nvidiaPeriods, groups, usd, fmt, dollar, companyCell, element, options,
+      financial, companies, nvidiaPeriods, groups, descriptors, usd, fmt, dollar, companyCell, element, options,
     });
     for (const story of document.querySelectorAll("[data-story]")) {
       story.onclick = () => {

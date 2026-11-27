@@ -9,9 +9,8 @@
   const green = "#267044";
   const blue = "#416e9b";
   const peerColors = [blue, "#946241", "#7b568c", "#237c84"];
-  const group = "Income statement";
 
-  function mount({ financial, companies, nvidiaPeriods, groups, usd, fmt, dollar, companyCell, element, options }) {
+  function mount({ financial, companies, nvidiaPeriods, groups, descriptors, usd, fmt, dollar, companyCell, element, options }) {
     const periods = financial.periods;
     const dateKey = "Period ending";
     const get = (period, key, i) => periods[period][key]?.[i] ?? null;
@@ -23,6 +22,9 @@
     const basis = $("nv-revenue-growth-basis");
     const lookback = $("nv-revenue-range");
     const units = $("nv-revenue-units");
+    const metric = $("nv-fin-metric");
+    const revenueField = metric.value;
+    const isComparable = option => descriptors.get(option.value)?.type === "money";
     const chart = $("nv-revenue-scale-chart");
     const tableRows = $("nv-revenue-rows");
     const companyChoices = $("nv-revenue-peer-options");
@@ -69,24 +71,26 @@
       return [frequency, matched];
     }));
 
-    function comparison(period, peers, frequency, growthBasis) {
+    function comparison(period, peers, frequency, descriptor, revenueShare) {
       const end = get(period, dateKey, 0);
       const rows = [0, ...peers].map(i => {
         const match = statements[frequency][i].get(period);
-        if (!match) return { i, revenue: null, growth: null, end: null, source: null };
+        if (!match) return { i, amount: null, growth: {}, end: null, source: null };
         const key = match.key;
+        const { name, group } = descriptor;
         return {
-          i, end: match.end, revenue: usd(key, "Revenue", group, i),
-          growth: get(key, growthBasis + " / Revenue growth (%)", i),
+          i, end: match.end, amount: usd(key, name, group, i),
+          growth: { QoQ: get(key, "QoQ / " + name + " growth (%)", i), YoY: get(key, "YoY / " + name + " growth (%)", i) },
           source: get(key, "Source document", i),
         };
       });
-      const reported = rows.slice(1).filter(row => Number.isFinite(row.revenue) && row.revenue >= 0);
-      const peerRevenue = reported.length ? reported.reduce((sum, row) => sum + row.revenue, 0) : null;
-      const ownRevenue = rows[0].revenue;
-      const total = Number.isFinite(ownRevenue) && ownRevenue >= 0 && peers.length && reported.length === peers.length
-        ? ownRevenue + peerRevenue : null;
-      return { period, end, rows, ownRevenue, peerRevenue, coverage: reported.length, total: total > 0 ? total : null };
+      const reported = rows.slice(1).filter(row => Number.isFinite(row.amount));
+      const own = rows[0].amount;
+      const peerTotal = reported.length ? reported.reduce((sum, row) => sum + row.amount, 0) : null;
+      const complete = peers.length > 0 && reported.length === peers.length && own >= 0
+        && Number.isFinite(own) && reported.every(row => row.amount >= 0);
+      const total = revenueShare && complete ? own + peerTotal : null;
+      return { period, end, rows, own, reported, peerTotal, total: total > 0 ? total : null };
     }
 
     function showCompany(index) {
@@ -97,14 +101,16 @@
       });
     }
 
-    function drawGrowth(rows) {
+    function drawGrowth(rows, name, growthBasis) {
       const bars = $("nv-revenue-growth-bars");
-      const present = rows.filter(row => Number.isFinite(row.growth));
+      bars.setAttribute("aria-label", name + " growth by company");
+      const values = rows.map(row => ({ i: row.i, growth: row.growth[growthBasis] }));
+      const present = values.filter(row => Number.isFinite(row.growth));
       const maxUp = Math.max(0, ...present.map(row => row.growth));
       const maxDown = Math.max(0, ...present.map(row => -row.growth));
       const span = maxUp + maxDown || 1;
       bars.style.setProperty("--bar-zero", 100 * maxDown / span + "%");
-      bars.replaceChildren(...rows.map(({ i, growth }) => {
+      bars.replaceChildren(...values.map(({ i, growth }) => {
         const company = companies[i];
         const button = element("button", "", "nv-statement-bar-row");
         const label = element("span", company.ticker);
@@ -113,7 +119,7 @@
         const value = element("span", growthPct(growth), "nv-revenue-bar-value");
         button.type = "button";
         button.dataset.company = i;
-        button.setAttribute("aria-label", company.name + ", revenue growth " + (Number.isFinite(growth) ? growthPct(growth) : "unavailable"));
+        button.setAttribute("aria-label", company.name + ", " + name.toLowerCase() + " growth " + (Number.isFinite(growth) ? growthPct(growth) : "unavailable"));
         if (Number.isFinite(growth)) {
           const bar = element("i", "", growth === 0 ? "nv-statement-bar-zero" : "");
           bar.style.left = 100 * (maxDown + Math.min(0, growth)) / span + "%";
@@ -127,9 +133,9 @@
       }));
     }
 
-    function drawTable(snapshot) {
+    function drawTable(snapshot, annual, revenueShare) {
       tableRows.replaceChildren(...snapshot.rows.map(item => {
-        const { i, end, revenue, growth, source } = item;
+        const { i, end, amount, growth, source } = item;
         const row = element("tr");
         row.dataset.company = i;
         if (i === 0) row.classList.add("nv-focus");
@@ -145,10 +151,13 @@
         } else {
           filing.textContent = filingDate;
         }
-        const share = snapshot.total && Number.isFinite(revenue) ? revenue / snapshot.total * 100 : null;
-        row.append(companyCell(companies[i]), filing, element("td", fig(revenue)),
-          element("td", growthPct(growth), growth < 0 ? "nv-neg" : growth > 0 ? "nv-pos" : ""),
-          element("td", pct(share)));
+        const growthCell = value => element("td", growthPct(value), value < 0 ? "nv-neg" : value > 0 ? "nv-pos" : "");
+        const qoq = growthCell(growth.QoQ);
+        qoq.hidden = annual;
+        const share = snapshot.total && Number.isFinite(amount) ? amount / snapshot.total * 100 : null;
+        const shareCell = element("td", pct(share));
+        shareCell.hidden = !revenueShare;
+        row.append(companyCell(companies[i]), filing, element("td", fig(amount)), qoq, growthCell(growth.YoY), shareCell);
         return row;
       }));
     }
@@ -159,23 +168,45 @@
       const annual = frequency === "annual";
       basis.querySelector('[value="QoQ"]').disabled = annual;
       if (annual) basis.value = "YoY";
+      const descriptor = descriptors.get(metric.value);
+      const name = descriptor.name === "Net income to parent" ? "Net income to shareholders" : descriptor.name;
+      const revenueShare = metric.value === revenueField;
+      const shareOption = units.querySelector('[value="share"]');
+      shareOption.disabled = !revenueShare;
+      units.closest("label").hidden = !revenueShare;
+      $("nv-revenue-share").hidden = !revenueShare;
+      $("nv-revenue-share-column").hidden = !revenueShare;
+      $("nv-revenue-qoq-column").hidden = annual;
+      $("nv-revenue-growth-title").textContent = name + " growth";
+      $("nv-revenue-scale-title").textContent = revenueShare ? "Revenue scale and share" : name + " · USD billions";
+      $("nv-revenue-amount-column").textContent = name + " (USD)";
       const dates = nvidiaPeriods[frequency].slice(-Number(lookback.value));
       const peers = companies.map((_, i) => i).filter(i => i > 0 && selected.has(companies[i].ticker));
-      const snapshots = dates.map(period => comparison(period, peers, frequency, basis.value));
+      const snapshots = dates.map(period => comparison(period, peers, frequency, descriptor, revenueShare));
       const labels = dates.map(period => period.split(" ")[1]);
-      const asShare = units.value === "share";
+      const asShare = revenueShare && units.value === "share";
       const plottedValue = (item, value) => {
         if (!asShare) return value;
         return item.total && Number.isFinite(value) ? 100 * value / item.total : null;
       };
-      const series = [{ label: "NVIDIA", color: green, values: snapshots.map(item => plottedValue(item, item.ownRevenue)) }];
+      const series = [{ label: "NVIDIA", color: green, values: snapshots.map(item => plottedValue(item, item.own)) }];
       if (peers.length <= peerColors.length) {
         peers.forEach((company, index) => {
           series.push({ label: companies[company].ticker, color: peerColors[index],
-            values: snapshots.map(item => plottedValue(item, item.rows[index + 1].revenue)) });
+            values: snapshots.map(item => plottedValue(item, item.rows[index + 1].amount)) });
         });
       } else {
-        series.push({ label: "Matched peers", color: blue, values: snapshots.map(item => plottedValue(item, item.peerRevenue)) });
+        if (asShare || !snapshots.some(item => item.reported.some(row => row.amount < 0))) {
+          series.push({ label: "Matched peers", color: blue, values: snapshots.map(item => plottedValue(item, item.peerTotal)) });
+        } else {
+          for (const [label, color, sign] of [["Peer positives", blue, 1], ["Peer negatives", "#933e44", -1]]) {
+            const values = snapshots.map(item => {
+              const amounts = item.reported.filter(row => sign * row.amount >= 0);
+              return amounts.length ? amounts.reduce((sum, row) => sum + row.amount, 0) : null;
+            });
+            if (values.some(Number.isFinite)) series.push({ label, color, values });
+          }
+        }
       }
       const hasPlot = series.some(line => line.values.some(Number.isFinite));
       if (!peers.includes(activeCompany)) activeCompany = 0;
@@ -188,14 +219,13 @@
         activePeriods[frequency] = snapshot.period;
         chooser.value = snapshot.period;
         $("nv-revenue-growth-detail").textContent = basis.value + " · NVIDIA period ended " + charts.date(snapshot.end);
-        $("nv-revenue-growth-column").textContent = basis.value + " growth";
-        $("nv-revenue-share-value").textContent = pct(snapshot.total ? snapshot.ownRevenue / snapshot.total * 100 : null);
-        const coverage = snapshot.coverage + " of " + peers.length + " peers with matched revenue";
+        $("nv-revenue-share-value").textContent = pct(snapshot.total ? snapshot.own / snapshot.total * 100 : null);
+        const coverage = snapshot.reported.length + " of " + peers.length + " peers with matched revenue";
         $("nv-revenue-share-coverage").textContent = peers.length === 0 ? "Select a peer to calculate NVIDIA’s share."
           : snapshot.total ? coverage + " · " + fig(snapshot.total) + " combined"
             : coverage + " · a complete set is required to calculate share";
-        drawGrowth(snapshot.rows);
-        drawTable(snapshot);
+        drawGrowth(snapshot.rows, name, basis.value);
+        drawTable(snapshot, annual, revenueShare);
         showCompany(activeCompany);
       };
       chooser.onchange = () => {
@@ -206,7 +236,7 @@
       };
       if (!hasPlot) inspect(initial);
       charts.render(chart, {
-        title: asShare ? "Share of selected revenue by company" : "Revenue in US dollars, NVIDIA and matched peers",
+        title: asShare ? "Share of selected revenue by company" : name + " in US dollars, NVIDIA and matched peers",
         dates: snapshots.map(item => item.end),
         axisLabels: labels, selectionLabels: snapshots.map(item => charts.date(item.end)),
         domain: asShare ? { floor: 0, ceil: 100, step: 25 } : undefined,
@@ -217,6 +247,11 @@
 
     function show(value) {
       isComparing = value;
+      for (const option of metric.options) option.disabled = value && !isComparable(option);
+      if (value && !isComparable(metric.selectedOptions[0])) {
+        metric.value = revenueField;
+        metric.dispatchEvent(new Event("change"));
+      }
       $("nv-fin-solo").hidden = value;
       compare.hidden = !value;
       $("nv-fin-solo-toggle").setAttribute("aria-pressed", String(!value));
@@ -226,7 +261,7 @@
 
     $("nv-fin-solo-toggle").onclick = () => show(false);
     $("nv-fin-peer-toggle").onclick = () => show(true);
-    [$("nv-frequency"), basis, lookback, units].forEach(control => control.addEventListener("change", render));
+    [$("nv-frequency"), metric, basis, lookback, units].forEach(control => control.addEventListener("change", render));
 
     const preset = $("nv-revenue-peer-preset");
     options(preset, [["", "Choose a peer set"], ["direct", "AMD, Intel and Qualcomm"],
