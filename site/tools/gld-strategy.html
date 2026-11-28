@@ -5,7 +5,7 @@
 <title>GLD game plan · Five price plays | Market Intel</title>
 <link rel="stylesheet" href="gld-strategy.css?v=1"><link rel="stylesheet" href="gld-plays.css?v=20261129.visual1"><link rel="stylesheet" href="gld-replay.css?v=1">
 <script defer src="metals-common.js"></script><script defer src="accumulator-model.js"></script><script defer src="gld-strategy-model.js?v=1"></script>
-<script defer src="gld-plays-paths.js?v=1"></script><script defer src="gld-plays-model.js?v=1"></script><script defer src="gld-play-history.js?v=2"></script><script defer src="gld-play-visuals.js?v=1"></script><script defer src="gld-replay-board.js?v=1"></script><script defer src="gld-plays.js?v=20261129.replay1"></script>
+<script defer src="gld-plays-paths.js?v=1"></script><script defer src="gld-plays-model.js?v=1"></script><script defer src="gld-play-history.js?v=2"></script><script defer src="gld-play-visuals.js?v=1"></script><script defer src="gld-replay-board.js?v=1"></script><script defer src="../xau-regimes.js?v=1"></script><script defer src="gld-plays.js?v=20261129.regime1"></script>
 </head><body>
 <nav class="mast" aria-label="Gold workspace"><a class="brand" href="../v4.html#tools">Market Intel</a><div class="navlinks"><a href="gld-accumulator.html">Saved GLD pricing</a><a href="gld-strategy-detail.html">Single-quote planner</a><a href="../xau-history.html">XAU research</a><a href="#decision-map">Decision map</a><a href="#timelines">Timelines</a></div></nav>
 <main class="play-shell">
@@ -48,7 +48,7 @@
 <div class="play-tools"><button class="run-btn" type="submit">Run all quotes</button><span class="play-note" id="run-status" role="status" aria-live="polite">Preparing comparisons…</span></div></form>
 <p class="play-note">Each quote is a separate trade using the same starting capital. P&amp;L includes cash and the value of GLD held. An open contract is shown before any bank unwind adjustment.</p>
 </section>
-<section class="play-config" id="replay-overview" aria-labelledby="replay-overview-title" hidden><h2 id="replay-overview-title">What happened to the first accumulator?</h2><p class="play-note">Full-period outcomes for the selected funding. Choose a period to inspect every quote by date.</p><div class="play-scroll" tabindex="0" aria-label="First-contract outcomes by historical period"><table class="play-table"><thead><tr><th scope="col">Recorded period</th><th scope="col">Knocked out</th><th scope="col">Matured without KO</th><th scope="col">Open at final close</th><th scope="col">Unfunded</th></tr></thead><tbody id="replay-totals"></tbody></table></div></section>
+<section class="play-config" id="replay-overview" aria-labelledby="replay-overview-title" hidden><h2 id="replay-overview-title">What happened to the first accumulator?</h2><p class="play-note">Full-period outcomes for the selected funding. Choose a period to inspect every quote by date.</p><div class="play-scroll" tabindex="0" aria-label="First-contract outcomes by historical period"><table class="play-table"><thead><tr><th scope="col" id="replay-period-column">Recorded period</th><th scope="col">Knocked out</th><th scope="col">Matured without KO</th><th scope="col">Open at final close</th><th scope="col">Unfunded</th></tr></thead><tbody id="replay-totals"></tbody></table></div></section>
 <details class="flow-section" id="decision-map" open>
 <summary class="flow-header"><span class="with-icon" data-icon="observation">How a GLD accumulator plays out</span></summary>
 <div class="flow-body"><div class="flow-track">

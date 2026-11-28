@@ -2,6 +2,14 @@
 (() => {
   const params = new URLSearchParams(location.search);
   let replayMode = params.get('mode') === 'historical';
+  function readRegime(query) {
+    const id=query.get('regime'),phase=query.get('phase')??'cycle';
+    return XauRegimes.periods.some(p=>p.id===id)&&Object.hasOwn(XauRegimes.phases,phase)?{id,phase}:null;
+  }
+  let regimeRequest=replayMode?readRegime(params):null, regimeData, gldHistory=[];
+  function regimeHref(id,phase) {
+    return '?mode=historical&regime='+id+'&phase='+phase+'#path-history-replay';
+  }
   if (['strike','ko','guarantee','days','spot'].some(key=>params.has(key))) {
     location.replace('gld-strategy-detail.html'+location.search+location.hash);
     return;
@@ -232,7 +240,7 @@
   function readableTime(day) {return day===0?'Entry':'Fixing '+day;}
   function makeChart(panel,points) {
     const svg=svgNode;
-    const unit=units(),raw=panel.path.checkpoints,live=Boolean(panel.path.dates);
+    const unit=units(),raw=panel.path.checkpoints,live=Boolean(panel.path.dates||panel.path.proxy);
     const values=live?panel.path.prices:raw.map(p=>getY(p,unit)),q=quotes[panel.selected];
     const start=values[0], exit=panel.runs[panel.selected].firstExit;
     const levels=[q.strike,q.ko].map(n=>start*n/100);
@@ -262,7 +270,7 @@
     const mark=selectedPoint(panel,panel.day);
     out.append(svg('line',{x1:dx(mark.day),x2:dx(mark.day),y1:top,y2:bottom,stroke:'#536c5b','stroke-dasharray':'3 4'}),
       svg('circle',{cx:dx(mark.day),cy:y(getY(mark,unit)),r:4,fill:'#9a692c',stroke:'white','stroke-width':1.3}));
-    for(const i of [0,Math.floor(n/2),n])out.append(svg('text',{...textAttrs,x:xx(i),y:130,'text-anchor':i===0?'start':i===n?'end':'middle'},live?dateLabel(panel.path.dates[i]):raw[i].label));
+    for(const i of [0,Math.floor(n/2),n])out.append(svg('text',{...textAttrs,x:xx(i),y:130,'text-anchor':i===0?'start':i===n?'end':'middle'},panel.path.dates?dateLabel(panel.path.dates[i]):panel.path.proxy?'Fixing '+i:raw[i].label));
     panel.chart.replaceChildren(out);
   }
   function makeStrip(panel,points) {
@@ -451,14 +459,14 @@
   function paint(panel) {
     const points=timeline(panel),mark=selectedPoint(panel,panel.day);
     makeChart(panel,points);makeStrip(panel,points);reportLeaders(panel);
-    panel.chartCaption.textContent=(panel.path.dates?'Recorded GLD closes in USD/share, one per trading session.':unitLabel()+' · equally spaced checkpoints.')+' Dashed lines show '+quoteId(panel.selected)+' buy strike and upper KO during its first term.';
-    if(panel.board){
-      GldReplayBoard.select(panel.board,panel.selected,panel.day);
+    panel.chartCaption.textContent=(panel.path.proxy?'Gold-price proxy in USD/share · elapsed model fixings.':panel.path.dates?'Recorded GLD closes in USD/share, one per trading session.':unitLabel()+' · equally spaced checkpoints.')+' Dashed lines show '+quoteId(panel.selected)+' buy strike and upper KO during its first term.';
+    if(panel.board) GldReplayBoard.select(panel.board,panel.selected,panel.day);
+    if(panel.slider){
       panel.slider.value=panel.day;
       panel.dateReadout.value=fixingLabel(panel,panel.day)+' · '+price(mark.price);
       panel.slider.setAttribute('aria-valuetext',panel.dateReadout.value);
       panel.backSession.disabled=panel.day===0;
-      panel.nextSession.disabled=panel.day===panel.path.dates.length-1;
+      panel.nextSession.disabled=panel.day===panel.path.prices.length-1;
     }
     panel.caption.textContent=panel.view.value==='at'?
       'Total P&L from entry at '+stepName(panel,mark)+' · '+quotes.length+' quotes. Select a row to inspect its cash, KO and next decisions below.':
@@ -492,9 +500,9 @@
     panel.desc.textContent=path.description;editPrices(panel);koExamples(panel);paint(panel);updateFlowCase();
   }
   function dailyControls(panel) {
-    const bar=node('div',null,'replay-day-controls'),label=node('label','Inspect any trading close');
+    const bar=node('div',null,'replay-day-controls'),label=node('label',panel.path.proxy?'Inspect a model fixing':'Inspect any trading close');
     const slider=node('input'),output=node('output');
-    slider.type='range';slider.min=0;slider.max=panel.path.dates.length-1;slider.step=1;
+    slider.type='range';slider.min=0;slider.max=panel.path.prices.length-1;slider.step=1;
     slider.id='session-'+panel.id;output.htmlFor=slider.id;
     slider.addEventListener('input',()=>{
       output.value=fixingLabel(panel,Number(slider.value))+' · '+price(panel.path.prices[Number(slider.value)]);
@@ -502,23 +510,34 @@
     });
     slider.addEventListener('change',()=>changeDay(panel,Number(slider.value),true));
     panel.slider=slider;panel.dateReadout=output;
-    panel.backSession=button('Previous close',()=>changeDay(panel,panel.day-1,true));
-    panel.nextSession=button('Next close',()=>changeDay(panel,panel.day+1,true));
+    panel.backSession=button(panel.path.proxy?'Previous fixing':'Previous close',()=>changeDay(panel,panel.day-1,true));
+    panel.nextSession=button(panel.path.proxy?'Next fixing':'Next close',()=>changeDay(panel,panel.day+1,true));
     label.append(slider);bar.append(label,output,panel.backSession,panel.nextSession);return bar;
   }
   function createPanel(path,previous) {
     const id=path.id, section=node('section',null,'play-section'); section.id='path-'+id;section.setAttribute('aria-labelledby',id+'-title');
     const p={id,path,section,runs:simulate(path),cache:new Map(),selected:previous?.selected??0,
-      day:Math.min(previous?.day??(path.dates?0:21),path.prices.length-1),ledgerKey:previous?.ledgerKey};
+      day:Math.min(previous?.day??(path.basis?path.prices.length-1:path.dates?0:21),path.prices.length-1),ledgerKey:previous?.ledgerKey};
     if(path.dates&&!previous&&location.hash==='#path-'+id){
       const request=new URLSearchParams(location.search),quote=request.get('quote');
       const i=quotes.findIndex((_,index)=>quoteId(index)===quote),d=path.dates.indexOf(request.get('date'));
       if(i>=0)p.selected=i;
       if(d>=0)p.day=d;
     }
-    const header=node('header',null,'play-header'),box=node('div'),h=node('h2');h.append(iconLabel(path.label,id));h.id=id+'-title';
+    const header=node('header',null,'play-header'),box=node('div'),h=node('h2');h.append(iconLabel(path.label,path.basis?'history':id));h.id=id+'-title';
     p.desc=node('p',path.dates?dateLabel(path.dates[0])+' to '+dateLabel(path.dates.at(-1))+' · '+path.dates.length.toLocaleString('en-US')+' recorded closes · '+price(path.prices[0])+' per share at entry. '+path.description:path.description,'play-note');
     box.append(h,p.desc);header.append(box);
+    if(path.basis){
+      const links=node('nav',null,'play-nav');links.setAttribute('aria-label','Regime replay phases');
+      const summary=XauRegimes.summarize(regimeData,regimeRequest.id);
+      for(const [phase,window] of Object.entries(summary.windows)){
+        const link=node('a',window.label,'history-launch');link.href=regimeHref(regimeRequest.id,phase);
+        if(phase===regimeRequest.phase)link.setAttribute('aria-current','page');
+        links.append(link);
+      }
+      const source=node('a','Back to the macro comparison');source.href='../xau-history.html#regimes';links.append(source);
+      box.append(links);
+    }
     p.chart=node('div',null,'play-chart');p.chartCaption=node('p',null,'play-note');
     p.strip=node('div',null,'play-strip');p.strip.setAttribute('aria-label',path.label+' timeline');
     const move=dir=>{const points=timeline(p),i=points.findIndex(x=>x.day===p.day),next=points[i+dir];if(next)changeDay(p,next.day,true);};
@@ -551,8 +570,8 @@
     const tbl=node('table',null,'play-table');tbl.append(node('caption','All saved quotes · '+path.label,'sr-only'));p.thead=tbl.createTHead();p.tbody=tbl.createTBody();scroller.append(tbl);
     p.detail=node('div',null,'play-detail');p.detail.tabIndex=-1;p.examples=node('div',null,'play-ko-examples');
     section.append(header,stage);
+    if(path.dates||path.proxy)stage.append(dailyControls(p));
     if(path.dates){
-      stage.append(dailyControls(p));
       p.board=GldReplayBoard.render({path,quotes,runs:p.runs,day:p.day,selected:p.selected,onSelect:(index,day)=>{
         p.selected=index;changeDay(p,day,true);
       }});
@@ -562,8 +581,8 @@
     }else{
       p.historyBox=historyContext(id,previous?.historyBox?.open);
       if(p.historyBox)section.append(p.historyBox);
-      section.append(edit,p.kpis,p.examples,tools,p.caption,scroller,p.detail);
-      editPrices(p);
+      if(!path.proxy){section.append(edit);editPrices(p);}
+      section.append(p.kpis,p.examples,tools,p.caption,scroller,p.detail);
     }
     koExamples(p);paint(p);
     return p;
@@ -592,9 +611,20 @@
     try{
       if(!quotes.length)throw Error('The saved pricing did not load. Reload to retry.');
       config=settings();
-      setText('run-status','Calculating all five timelines…');
+      setText('run-status',regimeRequest?'Calculating the selected historical window…':'Calculating all five timelines…');
       const next=[],missing=[];
-      for(const p of GldPlayPaths.plays) {
+      if(regimeRequest){
+        regimeData??=await fetch('../data/metals/xau-research.json').then(r=>{
+          if(!r.ok)throw Error('World Bank gold history is unavailable.');return r.json();
+        }).then(data=>data.series.pink);
+        if(seq!==version)return;
+        const path=XauRegimes.replay({gold:regimeData,gld:gldHistory,id:regimeRequest.id,phase:regimeRequest.phase,spot:config.spot});
+        if(path.basis==='Gold-price proxy'){
+          path.proxy=true;path.proxyDates=path.dates;path.dates=null;
+        }
+        next.push(createPanel(path,old.get(path.id)));
+      }
+      for(const p of regimeRequest?[]:GldPlayPaths.plays) {
         await new Promise(resolve=>setTimeout(resolve,0));
         if(seq!==version)return;
         const path=pricePath(p.id,overrides.get(p.id));
@@ -610,13 +640,13 @@
       updateFlowCase();
       $('csv').disabled=!next.length;
       if(missing.length){$('error').hidden=false;setText('error','Complete daily GLD history unavailable for '+missing.join(', ')+'. Reload to retry.');}
-      setText('run-status',quotes.length+' quotes × '+next.length+(replayMode?' historical paths':' price paths · '+config.years+' year'+(config.years===1?'':'s'))+' · '+money(config.terms.budget)+
+      setText('run-status',quotes.length+' quotes × '+next.length+(replayMode?(next.length===1?' historical replay':' historical paths'):' price paths · '+config.years+' year'+(config.years===1?'':'s'))+' · '+money(config.terms.budget)+
         ($('budget').value===''?' illustrative cash':' starting cash')+'.');
     }catch(e){panels.clear();updateFlowCase();$('plays').replaceChildren();$('error').hidden=false;setText('error',e.message);setText('run-status','Check the comparison inputs.');}
   }
   function download() {
     const records=[['Price path','Quote ID','Sheet date','Issuer','Tenor months','Buy strike %','KO %','Guaranteed months','Fixing day','Checkpoint','GLD USD/share','Illustrative XAU USD/oz','Basis','Strategy','Starting value USD','Marked value USD','PnL USD','Eligible','Checkpoint leader','Status']];
-    if(replayMode){records[0][9]='Trading date';records[0].splice(11,1);}
+    if(replayMode){records[0][9]='Trading date or model checkpoint';records[0].splice(11,1);records[0].push('Price basis');}
     for(const panel of panels.values()){
       const gridDays=panel.board?GldReplayBoard.days(panel.board):[];
       panel.runs.forEach((run,i)=>{
@@ -627,9 +657,11 @@
             if(after&&(!run.postKo||day<run.postKo.day))continue;
             const view=GldPlays.atDay(run,day,after),names=after?post:pre;
             for(const k of keys){
-              const s=view.outcomes[k],row=[panel.path.label,quoteId(i),sheet.addedDate??sheet.requestDate,sheet.issuer,q.months,q.strike,q.ko,q.guarantee,day,panel.path.dates?.[day]??point.label,point.price.toFixed(2)];
+              const s=view.outcomes[k],row=[panel.path.label,quoteId(i),sheet.addedDate??sheet.requestDate,sheet.issuer,q.months,q.strike,q.ko,q.guarantee,day,panel.path.dates?.[day]??panel.path.proxyDates?.[day]??point.label,point.price.toFixed(2)];
               if(!replayMode)row.push(point.xau?.toFixed(2)??'');
-              row.push(after?'From KO':'From entry',names[k],after?run.postKo.initialWealth:run.initialWealth,s.value,s.pnl,s.eligible,view.leaders.includes(k),s.status);records.push(row);
+              row.push(after?'From KO':'From entry',names[k],after?run.postKo.initialWealth:run.initialWealth,s.value,s.pnl,s.eligible,view.leaders.includes(k),s.status);
+              if(replayMode)row.push(panel.path.basis??'Actual GLD daily closes');
+              records.push(row);
             }
           }
         }
@@ -645,6 +677,7 @@
       if(!r.ok)throw Error('Quote sheet unavailable.');return r.json();}),Metals.series('gld'),Metals.series('xau-spot')]);
     const series=g.status==='fulfilled'?g.value.filter(r=>r.close>0):[],gold=x.status==='fulfilled'?x.value.filter(r=>r.usd_per_oz>0):[];
     gld=series.at(-1);
+    gldHistory=series.map(r=>[r.date,r.close]);
     for(const path of GldPlayPaths.plays){
       historical.set(path.id,GldPlayHistory.summarize(series,path.id));
       replays.set(path.id,GldPlayHistory.replay(series,path.id));
@@ -688,13 +721,24 @@
       setText('page-lead','Replay every saved quote on five recorded GLD price paths. Scroll right to find each knock-out and compare what holding, rolling, selling or adding would have earned afterward.');
       setText('price-method','Replay pricing uses one recorded GLD close per trading session. The first close sets each quote’s dollar strike and KO. Observations begin on the next session and stop at the last available close in the chosen period.');
     }else for(const [id,html] of Object.entries(originals))$(id).innerHTML=html;
+    if(regimeRequest){
+      setText('page-lead','Apply all saved GLD quotes to the selected XAU regime and compare the results through the chosen historical window.');
+      setText('price-method','The opening replay price sets the strike and KO for each quote. Earlier windows can use a monthly gold-price proxy where GLD closes have no coverage.');
+    }
+    setText('replay-assumptions',regimeRequest?
+      'Recorded GLD closes or a labelled monthly gold proxy set the path shown below. The model applies saved quotes and illustrative follow-on terms to that path.':
+      'Each replay applies the saved quote percentages to that period’s opening GLD close. Prices are historical. Contracts, follow-on terms and P&L are hypothetical. The market references above show the latest saved closes.');
     document.title=(replayMode?'Historical GLD replay':'GLD game plan · Five price plays')+' | Market Intel';
     const nav=$('timelines');nav.replaceChildren();
-    for(const p of GldPlayPaths.plays){
+    if(regimeRequest){
+      const link=node('a','Selected XAU regime');link.href='#path-history-replay';nav.append(link);
+    }
+    for(const p of regimeRequest?[]:GldPlayPaths.plays){
       if(replayMode&&replays.size&&!replays.get(p.id))continue;
       const a=node('a',replayMode?(replays.get(p.id)?.label??p.label):p.label,'with-icon');a.prepend(icon(p.id));a.href='#path-'+p.id;nav.append(a);
     }
     $('replay-assumptions').hidden=!replayMode;
+    setText('replay-period-column',regimeRequest?'Replay window':'Recorded period');
     $('replay-overview').hidden=!replayMode||!panels.size;
     $('decision-map').open=!replayMode||location.hash==='#decision-map';
   }
@@ -703,9 +747,10 @@
     if(id==='timelines'||id==='replay-overview'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
   }
   async function changeMode(){
-    const requested=new URLSearchParams(location.search).get('mode')==='historical';
-    if(requested!==replayMode){
-      replayMode=requested;panels.clear();modeLayout();
+    const query=new URLSearchParams(location.search),requested=query.get('mode')==='historical';
+    const regime=requested?readRegime(query):null;
+    if(requested!==replayMode||regime?.id!==regimeRequest?.id||regime?.phase!==regimeRequest?.phase){
+      replayMode=requested;regimeRequest=regime;panels.clear();modeLayout();
       if(quotes.length)await renderAll();
     }
     scrollToPath();
