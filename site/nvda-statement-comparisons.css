@@ -624,3 +624,61 @@
   .nv-print-events td[data-move] { background: var(--move-bg, transparent); color: var(--move-ink, var(--nv-ink)); }
   .nv-print-events td[data-move] small { font-size: 7pt; }
 }
+@media print {
+  .nv-print-full { page: nvda-full-report; }
+  @page nvda-full-report {
+    size: A4 landscape;
+    margin: 11mm 12mm;
+    @bottom-right {
+      content: counter(page);
+      font: 8pt "DM Sans", sans-serif;
+      color: #385447;
+    }
+  }
+  .nv-print-toc { width: min(100%, 180mm); margin: 9mm 0 0; break-inside: avoid; }
+  .nv-print-toc h2 { font: 620 23pt/1.08 var(--nv-serif); margin: 0 0 3mm; }
+  .nv-print-toc ul { list-style: none; padding: 0; margin: 0; }
+  .nv-print-toc li { margin-bottom: 1.4mm; }
+  .nv-print-toc a {
+    display: flex;
+    gap: 2.2mm;
+    align-items: center;
+    padding: 1.8mm 2.5mm;
+    border: .2mm solid var(--nv-line);
+    border-radius: 1.3mm;
+    color: var(--nv-green);
+    background: #f1f6eb;
+    text-decoration: none;
+  }
+  .nv-print-toc a::before {
+    content: "";
+    width: 4mm;
+    height: 4mm;
+    flex: none;
+    background: currentColor;
+    mask: var(--nv-toc-mark, var(--hist-stock)) center / contain no-repeat;
+  }
+  .nv-print-toc :is([data-toc-topic="peers"], [data-toc-topic="balance"]) { --nv-toc-mark: var(--hist-matrix); }
+  .nv-print-toc [data-toc-topic="cash"] { --nv-toc-mark: var(--hist-fx); }
+  .nv-print-toc [data-toc-topic="market"] { --nv-toc-mark: var(--hist-curve); }
+  .nv-print-toc [data-toc-topic="credit"] { --nv-toc-mark: var(--hist-credit); }
+  .nv-print-toc-label { flex: auto; }
+  .nv-print-toc-label strong { display: block; font: 620 13pt/1.1 var(--nv-serif); }
+  .nv-print-toc-label small { display: block; color: var(--nv-muted); font-size: 8pt; margin-top: .45mm; }
+  .nv-print-toc-page { font-size: 9pt; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .nv-print-toc .nv-print-toc-sub { margin-inline-start: 8mm; }
+  .nv-print-toc .nv-print-toc-sub a { background: #fff; padding-block: 1mm; }
+  .nv-print-toc .nv-print-toc-sub a::before { width: 3mm; height: 3mm; }
+  .nv-print-toc .nv-print-toc-sub strong { font-size: 11pt; }
+  .nv-print-ranking { --rank-plot-height: 68mm; --rank-axis-width: 14mm; break-inside: avoid; }
+  .nv-print-ranking .lab-rank-window { overflow: visible; }
+  .nv-print-ranking .lab-rank-bars {
+    grid-template-columns: repeat(var(--rank-count), minmax(0, 1fr));
+    min-width: 0;
+  }
+  .nv-print-ranking .lab-rank-company { font-size: 6.5pt; }
+  .nv-print-ranking .lab-rank-identity :is(img, .nv-peer-mark) { width: 4.1mm; height: 4.1mm; }
+  .nv-print-full .nv-print-figure .nv-revenue-growth-bars .nv-statement-bar-row {
+    grid-template-columns: 10mm minmax(0, 1fr) 12mm;
+  }
+}
