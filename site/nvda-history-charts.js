@@ -32,23 +32,23 @@
     return { floor, ceil, step };
   }
 
-  function redraw(plot) {
+  function redraw(plot, output) {
     const { canvas, model } = plot;
     if (!model || (canvas.hidden && !model.onLayout)) return;
-    const box = (canvas.hidden ? canvas.parentElement : canvas).getBoundingClientRect();
+    const box = output || (canvas.hidden ? canvas.parentElement : canvas).getBoundingClientRect();
     const width = Math.round(box.width), height = Math.round(box.height);
     if (width < 10) return;
     const { dates, series, axis, bars, limits } = model;
     const left = width < 430 ? 51 : 69;
     const right = width - 18;
     const count = dates.length;
-    const gutter = bars || model.sharedTimeline ? Math.min((right - left) / (count + 1) / 2, 14) : 0;
+    const gutter = bars || model.sharedTimeline ? Math.min((right - left) / (count + 1) / 2, model.grouped ? 24 : 14) : 0;
     const chartLeft = left + gutter, chartRight = right - gutter;
     plot.position = { chartLeft, chartRight };
     if (model.onLayout) model.onLayout(plot.position);
     const top = 18, bottom = height - 37;
     if (canvas.hidden || right <= left || bottom <= top) return;
-    const ratio = Math.min(devicePixelRatio || 1, 2);
+    const ratio = output ? 2 : Math.min(devicePixelRatio || 1, 2);
     const fullWidth = Math.round(width * ratio), fullHeight = Math.round(height * ratio);
     if (canvas.width !== fullWidth || canvas.height !== fullHeight) {
       canvas.width = fullWidth;
@@ -111,7 +111,7 @@
       ctx.fillText(label, at, bottom + 19);
     }
     const positive = Array(count).fill(0), negative = Array(count).fill(0);
-    for (const s of series) {
+    for (const [seriesIndex, s] of series.entries()) {
       ctx.strokeStyle = s.color;
       ctx.fillStyle = s.color;
       ctx.lineWidth = 2.25;
@@ -119,14 +119,17 @@
       ctx.lineCap = "round";
       ctx.setLineDash(s.dash || []);
       if (bars) {
-        const bar = Math.min((right - left) / Math.max(count, 1) * .64, 25);
+        const groupWidth = Math.min((right - left) / Math.max(count, 1) * .7, model.grouped ? 46 : 25);
+        const slot = model.grouped ? groupWidth / series.length : groupWidth;
+        const bar = model.grouped ? slot * .82 : slot;
+        const offset = model.grouped ? slot * (seriesIndex - (series.length - 1) / 2) : 0;
         for (const [i, point] of s.values.entries()) {
           if (!Number.isFinite(point)) continue;
           const offsets = point >= 0 ? positive : negative;
           const base = model.stacked ? offsets[i] : 0;
           if (model.stacked) offsets[i] += point;
           const bottomY = y(base), topY = y(base + point);
-          ctx.fillRect(x(i) - bar / 2, Math.min(bottomY, topY), bar, Math.max(1, Math.abs(bottomY - topY)));
+          ctx.fillRect(x(i) + offset - bar / 2, Math.min(bottomY, topY), bar, Math.max(1, Math.abs(bottomY - topY)));
         }
       } else {
         ctx.beginPath();
@@ -160,7 +163,7 @@
     ctx.lineTo(cursor, bottom);
     ctx.stroke();
     ctx.setLineDash([]);
-    if (model.stacked) return;
+    if (model.stacked || model.grouped) return;
     for (const s of series) {
       const selected = s.values[plot.active];
       if (!Number.isFinite(selected)) continue;
@@ -263,5 +266,17 @@
     if (plot?.model.limits && index !== plot.active) updateSelection(plot, index);
   }
 
-  window.NvidiaCharts = { render, date, select };
+  function printChart(container) {
+    const plot = plots.get(container);
+    if (!plot?.model.limits) return null;
+    const canvas = document.createElement("canvas");
+    const { onLayout, ...model } = plot.model;
+    redraw({ canvas, model, active: plot.active }, { width: 490, height: 275 });
+    const image = document.createElement("img");
+    image.src = canvas.toDataURL("image/png");
+    image.alt = model.title;
+    return { image, series: model.series.map(({ label, color, dash }) => ({ label, color, dash })) };
+  }
+
+  window.NvidiaCharts = { render, date, select, printChart };
 })();

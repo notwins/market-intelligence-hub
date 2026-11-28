@@ -9,13 +9,14 @@
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
 <link rel="stylesheet" href="nvda-history.css?v=8">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
-<link rel="stylesheet" href="nvda-statement-comparisons.css?v=1">
+<link rel="stylesheet" href="nvda-statement-comparisons.css?v=2">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
 <script defer src="nvda-chart-controls.js?v=1"></script>
-<script defer src="nvda-history-charts.js?v=5"></script>
+<script defer src="nvda-history-charts.js?v=6"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
 <script defer src="nvda-peer-lab.js?v=20261128.chart-layout"></script>
-<script defer src="nvda-statement-comparisons.js?v=3"></script>
+<script defer src="nvda-statement-print.js?v=1"></script>
+<script defer src="nvda-statement-comparisons.js?v=4"></script>
 <script defer src="nvda-revenue-peer-history.js?v=4"></script>
 <script defer src="nvda-market-events.js?v=1"></script>
 <script defer data-price-render-only src="share-prices.js?v=20261128.event-moves"></script>
@@ -136,10 +137,14 @@
 <section class="nv-section nv-shell" id="statement-comparisons">
   <div class="nv-section-head nv-reveal"><div><p class="nv-label">NVIDIA and 30 peers</p><h2>Financial statement comparison</h2></div><p>Compare financial statements side by side. Select a point on a trend chart to update its table, or select a bar to highlight the company.</p></div>
   <div class="nv-panel nv-statement-peer-tools">
+    <div class="nv-statement-view-tools">
     <div class="nv-statement-peer-tabs" id="nv-statement-peer-tabs" role="group" aria-label="Financial statement">
       <button type="button" data-statement="income" aria-pressed="true">Income statement</button>
       <button type="button" data-statement="balance" aria-pressed="false">Balance sheet</button>
       <button type="button" data-statement="cash" aria-pressed="false">Cash flow</button>
+      <button type="button" data-statement="all" aria-pressed="false">All statements</button>
+    </div>
+    <button type="button" id="nv-statement-peer-print" class="nv-layout-button" disabled>Print / Save PDF</button>
     </div>
     <div class="nv-controls">
       <label>Filing period<select id="nv-statement-peer-period"></select></label>
