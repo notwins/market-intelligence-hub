@@ -78,11 +78,33 @@
     caption.setAttribute("aria-live", playing && voice.checked ? "off" : "polite");
   }
 
+  function revealRow(node) {
+    if (!node.matches("tr")) return;
+    const scroller = node.closest(".nv-table-scroll");
+    if (!scroller || scroller.scrollHeight <= scroller.clientHeight) return;
+    const row = node.getBoundingClientRect();
+    const frame = scroller.getBoundingClientRect();
+    const header = node.closest("table").tHead;
+    const top = frame.top + (header?.offsetHeight || 0) + 8;
+    if (row.top < top || row.bottom > frame.bottom - 8) scroller.scrollTop += row.top - top;
+  }
+
+  function revealRankingBar(node) {
+    const scroller = node.closest(".lab-rank-window");
+    if (!scroller || scroller.scrollWidth <= scroller.clientWidth) return;
+    const bar = node.getBoundingClientRect();
+    const frame = scroller.getBoundingClientRect();
+    if (bar.left < frame.left || bar.right > frame.right) {
+      scroller.scrollLeft += (bar.left + bar.right - frame.left - frame.right) / 2;
+    }
+  }
+
   function spotlight(node) {
     highlighted?.classList.remove("nv-presenter-highlight");
     highlighted = node;
     if (!node) return;
     node.classList.add("nv-presenter-highlight");
+    revealRow(node);
     // Leave room for the sticky navigation and the dock on a phone.
     const nav = document.querySelector(".nv-jump");
     const navStyle = nav && getComputedStyle(nav);
@@ -112,6 +134,7 @@
       case "click": {
         const focused = panel.contains(document.activeElement) && document.activeElement;
         node.click();
+        if (node.matches(".lab-rank-company")) revealRankingBar(node);
         if (focused && document.activeElement !== focused) focused.focus({ preventScroll: true });
         break;
       }
