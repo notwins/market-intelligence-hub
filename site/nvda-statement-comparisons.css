@@ -670,15 +670,32 @@
   .nv-print-toc .nv-print-toc-sub a { background: #fff; padding-block: 1mm; }
   .nv-print-toc .nv-print-toc-sub a::before { width: 3mm; height: 3mm; }
   .nv-print-toc .nv-print-toc-sub strong { font-size: 11pt; }
+
+  .nv-print-full .nv-print-table { font-size: 8.6pt; line-height: 1.13; }
+  .nv-print-full .nv-print-sheet .nv-print-peer-overview { font-size: 8.1pt; }
+  .nv-print-full .nv-print-peer-overview thead small { font-size: 7pt; }
+  .nv-print-full .nv-print-table td, .nv-print-full .nv-print-table .nv-peer-mark {
+    white-space: nowrap;
+    overflow-wrap: normal;
+  }
+  .nv-print-full .nv-print-sheet .nv-print-pair .nv-print-table th:first-child { width: 26%; }
+  .nv-print-full .nv-print-sheet .nv-print-pair .nv-print-table th:nth-child(2) { width: 16%; }
+  .nv-print-full .nv-print-table .nv-peer-name .nv-peer-mark { font-size: 4.1pt; }
+  .nv-print-full .nv-print-legend { font-size: 8.25pt; }
+  .nv-print-full .nv-print-figure .nv-statement-bar-row { font-size: 7.9pt; }
+  .nv-print-full .nv-print-figure .nv-revenue-growth-bars .nv-statement-bar-row {
+    grid-template-columns: 10mm minmax(0, 1fr) 16mm;
+  }
+  .nv-print-full .nv-revenue-bar-value { white-space: nowrap; }
+  .nv-print-full .nv-print-note { font-size: 8pt; }
+
   .nv-print-ranking { --rank-plot-height: 68mm; --rank-axis-width: 14mm; break-inside: avoid; }
   .nv-print-ranking .lab-rank-window { overflow: visible; }
   .nv-print-ranking .lab-rank-bars {
     grid-template-columns: repeat(var(--rank-count), minmax(0, 1fr));
     min-width: 0;
   }
-  .nv-print-ranking .lab-rank-company { font-size: 6.5pt; }
+  .nv-print-ranking .lab-rank-company { font-size: 7.5pt; }
+  .nv-print-ranking :is(.lab-rank-guide > span, .lab-rank-direction) { font-size: 8pt; }
   .nv-print-ranking .lab-rank-identity :is(img, .nv-peer-mark) { width: 4.1mm; height: 4.1mm; }
-  .nv-print-full .nv-print-figure .nv-revenue-growth-bars .nv-statement-bar-row {
-    grid-template-columns: 10mm minmax(0, 1fr) 12mm;
-  }
 }
