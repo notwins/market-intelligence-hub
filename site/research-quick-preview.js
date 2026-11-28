@@ -11,7 +11,7 @@ function installStyles() {
   const style = document.createElement('link');
   style.id = 'quick-preview-styles';
   style.rel = 'stylesheet';
-  style.href = new URL('research-quick-preview.css?v=1', import.meta.url);
+  style.href = new URL('research-quick-preview.css?v=2', import.meta.url);
   document.head.append(reader, style);
 }
 

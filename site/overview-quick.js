@@ -34,7 +34,7 @@ async function open(i,button){
  dialog.showModal();
  dialog.querySelector('button').focus();
 
- import('./research-quick-preview.js?v=1').then(async module=>{
+ import('./research-quick-preview.js?v=2').then(async module=>{
   if(n!==ticket||!dialog.open)return;
   const preview=module.quickPreview(dialog,{body,original,full});
   preview.cover({title:r.title});

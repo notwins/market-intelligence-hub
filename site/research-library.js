@@ -118,7 +118,7 @@ thoughts.innerHTML=`
 latest.after(thoughts);
 root.querySelectorAll('details.mu-explanation, details.mu-card-previous, #library-basics details').forEach(details=>{details.open=true;});
 import('./research-editorial-gallery.js?v=4');
-import('./research-quick-preview.js?v=1').then(module=>module.libraryQuickPreviews()).catch(()=>{});
+import('./research-quick-preview.js?v=2').then(module=>module.libraryQuickPreviews()).catch(()=>{});
 const thoughtsFeed=thoughts.querySelector('[data-thoughts-feed]');
 const thoughtsLegacy=thoughts.querySelector('[data-thoughts-legacy]');
 function renderThoughts(feed){
