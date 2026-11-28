@@ -553,6 +553,12 @@
       const dow=new Date(d+'T00:00:00Z').getUTCDay();
       return dow>0&&dow<6;
     });
+    try {
+      XauAnalogs.mount(el('drawdown-analogs'),{snapshot,labor:openMacro?.series,spot:prices});
+    } catch(error) {
+      text('xa-status','The drawdown analysis could not load. Reload to retry.');
+      console.error(error);
+    }
     const local=(id,inverse)=>m(model.multiply(prices,fed(id),inverse));
     const spxSource=['Hub S&P 500 close history','data/spx/history.json'];
     gold={
