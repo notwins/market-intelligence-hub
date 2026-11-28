@@ -1,0 +1,119 @@
+.yield-history-page {
+  --yield-ink: #17314d;
+  --yield-navy: #102b43;
+  --yield-blue: #235d91;
+  --yield-muted: #455f77;
+  --yield-rule: #c8d8e5;
+  --yield-wash: #e9f1f7;
+  --yield-card: #fdfefe;
+  --yield-inset: clamp(.8rem, 2vw, 1.75rem);
+  --line: var(--yield-rule);
+  --panel: var(--yield-card);
+  --history-key: var(--yield-blue);
+  color: var(--yield-ink);
+}
+body:has(.yield-history-page) { background: #f4f7fa; }
+.yield-history-page .yield-masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+  align-items: center;
+  gap: clamp(1rem, 4vw, 4rem);
+  padding: clamp(1.3rem, 3vw, 3rem);
+  border: 1px solid var(--yield-rule);
+  border-radius: 13px;
+  background: #e6eff6;
+}
+.yield-kicker {
+  margin: 0 0 .45rem;
+  color: var(--yield-blue);
+  font: 750 .72rem/1.4 var(--hist-sans);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.yield-history-page .yield-masthead h1 {
+  margin: 0;
+  color: var(--yield-navy);
+  font: 500 clamp(2.65rem, 5.4vw, 5.75rem)/.98 var(--hist-serif);
+  letter-spacing: -.065em;
+}
+.yield-masthead h1 em { color: var(--yield-blue); }
+.yield-masthead div > p:not(.yield-kicker) { max-width: 43ch; margin: .9rem 0 1.1rem; color: var(--yield-muted); }
+.yield-masthead figure {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 9px;
+  background: var(--yield-navy);
+}
+.yield-masthead img { display: block; width: 100%; height: clamp(13rem, 24vw, 23rem); object-fit: cover; object-position: center 43%; }
+.yield-history-page .yield-masthead .button.ghost { background: var(--yield-navy); color: #fff; border: 1px solid var(--yield-navy); }
+.yield-history-page .yield-masthead .button.ghost:hover { background: #245478; }
+.yield-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem .6rem;
+  margin: .65rem 0 1rem;
+  padding: .5rem 0;
+  border-block: 1px solid var(--yield-rule);
+}
+.yield-history-page .yield-jump button {
+  min-height: 38px;
+  color: var(--yield-ink);
+  background: transparent;
+  border: 1px solid transparent;
+}
+.yield-history-page .yield-jump button:hover { background: var(--yield-wash); border-color: var(--yield-rule); }
+.yield-chapter { margin-block: 1.35rem; }
+.yield-chapter-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .75fr);
+  align-items: end;
+  gap: .6rem 1.5rem;
+  padding-block: .35rem .85rem;
+}
+.yield-history-page .yield-chapter-head h2 { margin: 0; color: var(--yield-navy); font: 550 clamp(1.9rem, 3.5vw, 3.15rem)/1.05 var(--hist-serif); }
+.yield-chapter-head > p { margin: 0; color: var(--yield-muted); max-width: 49ch; }
+.yield-chart-chapter { padding-block: var(--yield-inset); border-radius: 12px; background: var(--yield-navy); color: #eaf4fc; }
+.yield-chart-chapter > header,
+.yield-chart-tools,
+.yield-chart-chapter #history-analysis > :is(.history-period-controls, .history-comparison-toolbar, .source-line) { padding-inline: var(--yield-inset); }
+.yield-history-page .yield-chart-chapter .yield-chapter-head h2 { color: #f3f8ff; }
+.yield-chart-chapter .yield-chapter-head > p { color: #dce9f5; }
+.yield-chart-chapter .yield-kicker { color: #a8d1f2; }
+.yield-chart-tools {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
+  align-items: start;
+  gap: .6rem 1rem;
+  margin-bottom: 1rem;
+}
+.yield-chart-tools > .tool-controls { grid-column: 1; margin: 0; }
+.yield-chart-tools > :is(.source-notice, .source-line) { grid-column: 1; margin: 0; color: #d5e7f6; }
+.yield-chart-tools > .source-notice { background: #1b3e5b; border-color: #456581; }
+.yield-chart-tools .source-line a,
+.yield-chart-chapter #history-analysis > .history-comparison-toolbar p,
+.yield-chart-chapter #history-analysis > .source-line,
+.yield-chart-chapter .history-comparison > .source-line { color: #d5e7f6; }
+.yield-chart-tools > .history-context-controls { grid-column: 2; grid-row: 1 / span 3; margin: 0; }
+.yield-history-page :is(.yield-chart-tools > .tool-controls, .history-period-controls) label > span { color: #e2effb; }
+.yield-history-page :is(.yield-chart-tools, .history-period-controls) :is(select,input:not([type=checkbox])) {
+  color: var(--yield-ink);
+  background: var(--yield-card);
+  border-color: var(--yield-rule);
+}
+.yield-chart-chapter .history-comparison > .source-line { padding-inline: var(--yield-inset); }
+.yield-history-page .history-yield-comparison :is(.chart-panel,.v4-history-side) { color: var(--yield-ink); }
+.yield-history-page .history-yield-comparison .chart-panel { background: var(--yield-card); }
+.yield-history-page .history-yield-comparison .chart-description { color: var(--yield-muted); }
+.yield-history-page .history-yield-comparison .stats-strip > .card { background: var(--yield-wash); color: var(--yield-ink); }
+.yield-history-page :is(.sgs-daily,.history-event-windows) h3 { color: var(--yield-navy); }
+.yield-history-page .sgs-eyebrow { color: var(--yield-blue); }
+.yield-history-page [data-yield-feed-status] .feed-freshness { color: var(--yield-muted); }
+.yield-history-page :is(#history-analysis,.yield-chapter[id]) { scroll-margin-top: calc(var(--hub-primary-height, 0px) + 7.5rem); }
+.yield-related { margin: 1rem 0 0; }
+@media (max-width: 760px) {
+  .yield-history-page .yield-masthead { grid-template-columns: minmax(0, 1fr); }
+  .yield-masthead img { height: clamp(8.5rem, 40vw, 13rem); object-position: center 42%; }
+  .yield-chapter-head, .yield-chart-tools { grid-template-columns: minmax(0, 1fr); }
+  .yield-chart-tools > .history-context-controls { grid-column: 1; grid-row: auto; }
+  .yield-history-page :is(#history-analysis,.yield-chapter[id]) { scroll-margin-top: 1rem; }
+}

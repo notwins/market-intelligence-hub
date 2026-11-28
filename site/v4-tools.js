@@ -118,6 +118,7 @@ function redrawContext(){const key=d=>d.querySelector('summary')?.textContent.re
 function recessionContext(){return historySets.published?.recession_context||X.history?.recession_context;}
 function addMonths(day,m){const d0=new Date(day+'T12:00:00Z');d0.setUTCMonth(d0.getUTCMonth()+m);return d0.toISOString().slice(0,10);}
 function lineChart(lines,{title='',unit='%',curve=false,scenario=null,fullWidth=false,period=null,historyLayout=false}={}){
+ const palette=X.historyTab==='yield'&&historyLayout?['#235d91','#8b4e70','#ac6a35','#4a809f']:colors;
  const mobile=matchMedia('(max-width:760px)').matches,scale=Number(document.documentElement.style.getPropertyValue('--chart-text-scale'))||1,large=document.documentElement.dataset.displayCharts==='large',W=(historyLayout?window.MarketLayout?.historyChartWidth?.({fullWidth}):window.MarketLayout?.chartWidth({fullWidth}))||(mobile?400:900),L=Math.ceil(64*scale),R=Math.ceil(20*scale),B=Math.ceil(40*scale);
  const all=lines.flatMap(s=>s.points).filter(p=>C.finite(p[1]));if(!all.length)return`<div class="empty">${e(t('No observations for these dates.','所选日期没有观测值。','所選日期沒有觀測值。'))}</div>`;
  const xval=v=>curve?Number(v):Date.parse(v+'T00:00:00Z');let xmin=Math.min(...all.map(p=>xval(p[0]))),xmax=Math.max(...all.map(p=>xval(p[0]))),min=Math.min(...all.map(p=>p[1])),max=Math.max(...all.map(p=>p[1]));
@@ -133,25 +134,58 @@ function lineChart(lines,{title='',unit='%',curve=false,scenario=null,fullWidth=
  else{const ticks=W<500?2:W<720||scale>1.5?4:7;for(let i=0;i<ticks;i++){const v=xmin+(xmax-xmin)*i/(ticks-1),day=historyDate(new Date(v).toISOString().slice(0,10));svg+=`<text class="history-date" x="${L+(W-L-R)*i/(ticks-1)}" y="${H-12}" text-anchor="${i===0?'start':i===ticks-1?'end':'middle'}">${day}</text>`;}
  for(const {ev,x,left,width,lane,labelLines} of markers){const y=12*scale+lane*rowHeight;svg+=`<line class="event-line" x1="${x}" x2="${x}" y1="${y+markerHeight}" y2="${H-B}"/><a class="event-marker-link" href="${e(ev.url)}" target="_blank" rel="noopener noreferrer" aria-label="${e((events.indexOf(ev)+1)+'. '+ev.shortName+' · '+ev.label+' · '+ev.date+' · official source, opens new tab')}"><title>${e(ev.label+' · '+ev.date)}</title><rect x="${left}" y="${y}" width="${width}" height="${markerHeight}" rx="5" fill="var(--panel,white)"/><text class="event-marker-label" x="${left+width/2}" y="${y+22*scale}" text-anchor="middle">${labelLines.map((label,i)=>`<tspan x="${left+width/2}" dy="${i?16*scale:0}">${e(label)}</tspan>`).join('')}</text></a>`;}}
 
- lines.forEach((s,i)=>{let seg=[],segments=[],prev=null;for(const p of s.points){if(!C.finite(p[1])){if(seg.length)segments.push(seg);seg=[];prev=null;continue;}if(!curve&&prev&&(historyMode==='weekly'?Date.parse(p[0])-Date.parse(prev)>10*86400000:p[0].slice(0,7)!==addMonths(prev,1).slice(0,7))){if(seg.length)segments.push(seg);seg=[];}seg.push([xx(p[0]),yy(p[1])]);prev=p[0];}if(seg.length)segments.push(seg);svg+=segments.map(a=>`<polyline points="${a.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${colors[i]}" stroke-width="2.7" stroke-linejoin="round"/>`).join('');if(curve)svg+=s.points.filter(p=>C.finite(p[1])).map(p=>`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="3.5" fill="${colors[i]}"><title>${e(s.name)} · ${p[0]}Y · ${n(p[1])}%</title></circle>`).join('');else{const p=s.points.filter(p=>C.finite(p[1])).at(-1);if(p)svg+=`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="4" fill="${colors[i]}"/>`;}});
+ lines.forEach((s,i)=>{let seg=[],segments=[],prev=null;for(const p of s.points){if(!C.finite(p[1])){if(seg.length)segments.push(seg);seg=[];prev=null;continue;}if(!curve&&prev&&(historyMode==='weekly'?Date.parse(p[0])-Date.parse(prev)>10*86400000:p[0].slice(0,7)!==addMonths(prev,1).slice(0,7))){if(seg.length)segments.push(seg);seg=[];}seg.push([xx(p[0]),yy(p[1])]);prev=p[0];}if(seg.length)segments.push(seg);svg+=segments.map(a=>`<polyline points="${a.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${palette[i]}" stroke-width="2.7" stroke-linejoin="round"/>`).join('');if(curve)svg+=s.points.filter(p=>C.finite(p[1])).map(p=>`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="3.5" fill="${palette[i]}"><title>${e(s.name)} · ${p[0]}Y · ${n(p[1])}%</title></circle>`).join('');else{const p=s.points.filter(p=>C.finite(p[1])).at(-1);if(p)svg+=`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="4" fill="${palette[i]}"/>`;}});
  if(scenario){const endx=xx(scenario.end[0]),startx=xx(scenario.start[0]);svg+=`<rect x="${startx}" y="${T}" width="${endx-startx}" height="${H-T-B}" fill="#d6e8f4" opacity=".32"/><line x1="${startx}" x2="${endx}" y1="${yy(scenario.start[1])}" y2="${yy(scenario.end[1])}" stroke="#a74478" stroke-width="3" stroke-dasharray="7 5"/><text x="${W-R}" y="${T-13}" text-anchor="end" fill="#9a3c73">${e(t('Hypothetical path'))}</text>`;}
  const eventList=visibleEvents.map(ev=>`<span>${mobile?`<a href="${e(ev.url)}" target="_blank" rel="noopener noreferrer">`:''}<b>${events.indexOf(ev)+1} ${e(ev.shortName)}</b> · ${e(ev.label)} · <time class="history-date">${e(ev.date)}</time>${mobile?'</a>':''}</span>`).join('');
- return svg+'</svg>'+(!curve&&X.recessions&&recessionContext()?'<p class="caption">Shaded: U.S. recession months (FRED USREC / NBER chronology).</p>':'')+`<div class="legend">${lines.map((s,i)=>`<span><i style="background:${colors[i]}"></i>${e(s.name)}</span>`).join('')}${scenario?`<span><i style="background:#a74478"></i>${e(t('Hypothetical path'))}</span>`:''}</div>`+(eventList?(mobile?`<details class="section history-event-details"><summary>${e(t('Events in this chart','本图事件','本圖事件'))} (${visibleEvents.length})</summary><div class="legend v4-event-legend">${eventList}</div></details>`:`<div class="legend v4-event-legend">${eventList}</div>`):'');
+ return svg+'</svg>'+(!curve&&X.recessions&&recessionContext()?'<p class="caption">Shaded: U.S. recession months (FRED USREC / NBER chronology).</p>':'')+`<div class="legend">${lines.map((s,i)=>`<span><i style="background:${palette[i]}"></i>${e(s.name)}</span>`).join('')}${scenario?`<span><i style="background:#a74478"></i>${e(t('Hypothetical path'))}</span>`:''}</div>`+(eventList?(mobile?`<details class="section history-event-details"><summary>${e(t('Events in this chart','本图事件','本圖事件'))} (${visibleEvents.length})</summary><div class="legend v4-event-legend">${eventList}</div></details>`:`<div class="legend v4-event-legend">${eventList}</div>`):'');
 }
 function timeData(second=false){const fx=X.historyTab==='fx',a=X.history.series.find(s=>s.id===(fx?X.fxA:second?X.historyA2:X.historyA));let b=X.history.series.find(s=>s.id===(fx?X.fxB:second?X.historyB2:X.historyB));if(!a)return{a:null,lines:[]};if(b?.family!==a.family&&!(b?.family!=='fx'&&a.family!=='fx'))b=null;
  const cut=s=>[...s.points,...(s.missing_periods||[]).map(day=>[day,null])].filter(p=>p[0]>=X.start&&p[0]<=X.end).sort((a,b)=>a[0].localeCompare(b[0]));let sets=[a,...(b&&b.id!==a.id?[b]:[])].map(s=>({name:s.id,points:cut(s)}));
  if(fx&&X.fxMode==='index'){const common=sets.length>1?sets[0].points.filter(p=>C.finite(p[1])&&sets[1].points.some(q=>q[0]===p[0]&&C.finite(q[1])))[0]?.[0]:sets[0].points.find(p=>C.finite(p[1]))?.[0];sets=sets.map(s=>{const base=s.points.find(p=>p[0]===common)?.[1];return{...s,points:base?s.points.filter(p=>p[0]>=common).map(p=>[p[0],C.finite(p[1])?p[1]/base*100:null]):[]};});}
  return{a,b,lines:sets};
 }
+function yieldHistoryView(tabs,edition){
+ const jump=(id,label)=>button(label,'data-tool="yield-chapter" data-yield-chapter="'+id+'"','button ghost');
+ return `<div class="history-page yield-history-page" data-history-topic="yield">
+  <header class="yield-masthead">
+   <div><p class="yield-kicker">${e(t('Historical charts'))}</p><h1>${e(t('Yield'))} <em>${e(t('history'))}</em></h1>
+   <p>${e(t('Compare U.S. Treasury and Singapore government yields across maturities and market cycles.'))}</p>
+   ${jump('history-analysis','Explore yield charts ↓')}</div>
+   <figure><img src="assets/desk/bonds-analytical.webp" width="600" height="800" alt="" fetchpriority="high"></figure>
+  </header>
+  ${tabs}
+  <nav class="yield-jump" aria-label="Yield history sections">${jump('history-analysis','Yield charts')}${jump('yield-singapore','Singapore SGS')}${jump('yield-watch','Bond watchlist')}${jump('yield-sources','Sources & events')}</nav>
+  <section class="yield-chapter yield-chart-chapter">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Historical comparisons</p><h2>Yield trends</h2></div><p>Compare two maturities on one chart, or add a second chart on the same date range.</p></header>
+   <section id="history-analysis" tabindex="-1" aria-label="Yield charts">${X.history?'<div class="yield-chart-tools">'+historyControls()+contextControls()+'</div>'+timeView():loading('history')}</section>
+  </section>
+  <section id="yield-singapore" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Daily closing levels</p><h2>Singapore SGS</h2></div><p>See the latest MAS curve and the published history for each tenor.</p></header>
+   <section class="sgs-daily section card" data-sgs-daily="history"></section>
+  </section>
+  <section id="yield-watch" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Issue-level observations</p><h2>Bond watchlist</h2></div></header>
+   ${X.history?bondWatchPanel('history'):''}
+  </section>
+  <section id="yield-sources" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Data & context</p><h2>Sources and events</h2></div></header>
+   <div data-yield-feed-status></div>
+   ${edition}
+   ${X.history?(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):'<p>Loading historical context…</p>'}
+   <p class="yield-related"><a class="button ghost" href="#history/shares" data-view="history/shares">Share prices &amp; historical charts ↗</a></p>
+  </section>
+ </div>`;
+}
 function historyView(){
  const topics=[['yield','Yield history'],['shares','Share prices'],['beta2-shares','▤ Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']];
  const tab=X.historyTab, title=topics.find(item=>item[0]===tab)?.[1].replace(/^[▤▧] /,'')||'Historical charts';
- const descriptions={yield:'Compare yields and spreads across maturities and observation dates.',shares:'Compare selected shares, dated valuation observations and reported earnings.',fx:'Compare exchange rates over a shared period using native rates or a common index.',curves:'Compare Treasury and Singapore government yield curves on two observation dates.',spx:'Explore the saved S&P 500 index history and its source coverage.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
  const jump=['yield','fx','curves'].includes(tab);
- const intro='<header class="history-opener"><div>'+head('Historical charts',title,t(descriptions[tab]||''))+
-   (jump&&X.history?button(t('Jump to charts'),'data-tool="history-charts"','button ghost'):'')+'</div><div class="history-engraving" aria-hidden="true"></div></header>';
  const edition=jump&&window.HubFullReportEditions?'<article class="card section">'+window.HubFullReportEditions.panel('weekly-fx')+'</article>':'';
  const tabs=subnav(topics,tab,'historyTab');
+ if(tab==='yield')return yieldHistoryView(tabs,edition);
+ const descriptions={shares:'Compare selected shares, dated valuation observations and reported earnings.',fx:'Compare exchange rates over a shared period using native rates or a common index.',curves:'Compare Treasury and Singapore government yield curves on two observation dates.',spx:'Explore the saved S&P 500 index history and its source coverage.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
+ const intro='<header class="history-opener"><div>'+head('Historical charts',title,t(descriptions[tab]||''))+
+   (jump&&X.history?button(t('Jump to charts'),'data-tool="history-charts"','button ghost'):'')+'</div><div class="history-engraving" aria-hidden="true"></div></header>';
  let content;
  if(tab==='beta4-shares')content='<section id="beta4-shares" aria-label="Share history pivot"></section>';
  else if(tab==='beta2-shares')content=window.Beta2Shares.view();
@@ -160,13 +194,11 @@ function historyView(){
  else if(!X.history)content=loading('history');
  else {
   const watch=tab!=='fx'&&tab!=='spx'?bondWatchPanel('history'):'';
-  const shares=tab==='yield'?'<div class="mp-history-link"><a class="button ghost" href="#history/shares" data-view="history/shares">Share prices &amp; historical charts</a><span>Shared daily closes for earnings, watchlist and SI tracking</span></div>':'';
   const plot=tab==='spx'?(window.HistoryContext?.spxView()||'SPX source unavailable'):tab==='curves'?curveView():timeView();
-  content=watch+shares+historyControls()+contextControls()+'<section id="history-analysis" tabindex="-1" aria-label="'+e(title)+'">'+plot+'</section>'+
+  content=watch+historyControls()+contextControls()+'<section id="history-analysis" tabindex="-1" aria-label="'+e(title)+'">'+plot+'</section>'+
     (tab!=='spx'?(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):'');
  }
- const sgs=tab==='yield'?'<section class="sgs-daily section card" data-sgs-daily="history"></section>':'';
- return '<div class="history-page" data-history-topic="'+e(tab)+'">'+intro+tabs+sgs+edition+content+'</div>';
+ return '<div class="history-page" data-history-topic="'+e(tab)+'">'+intro+tabs+edition+content+'</div>';
 }
 function historyPeriodControls(){return `<div class="tool-controls history-period-controls" role="group" aria-label="${e(t('Shared period'))}">${label('Period',select('history-period',[['all','All history'],['5','5 years'],['10','10 years'],['20','20 years'],['custom','Custom dates']],X.historyPeriod))}${label('From',input('history-start',X.start,'date'))}${label('To',input('history-end',X.end,'date'))}</div>`;}
 function addHistoryComparison(){if(X.historySecond)return;const pool=X.history.series.filter(s=>s.family!=='fx').map(s=>s.id),unused=pool.filter(id=>![X.historyA,X.historyB].includes(id)),preferred=['UST 2Y','UST 30Y',...unused].filter((id,i,a)=>unused.includes(id)&&a.indexOf(id)===i);X.historyA2=preferred[0]||pool.find(id=>id!==X.historyA)||pool[0]||'';X.historyB2=preferred[1]||'';X.historySecond=true;}
@@ -274,6 +306,7 @@ document.addEventListener('click',async ev=>{
  const b=ev.target.closest('[data-tool]');if(!b)return;const a=b.dataset.tool;ev.preventDefault();
  if(a==='tab'){X[b.dataset.key]=b.dataset.tab;if(b.dataset.key==='historyTab')X.scenario=0;host.navigate(host.getView()+'/'+b.dataset.tab);if(b.dataset.key==='historyTab')document.querySelector('.history-tabs [data-tab="'+b.dataset.tab+'"]')?.focus({preventScroll:true});}
  else if(a==='history-charts'){const charts=$('#history-analysis');charts?.focus({preventScroll:true});charts?.scrollIntoView({block:'start'});}
+ else if(a==='yield-chapter'){const chapter=document.getElementById(b.dataset.yieldChapter);chapter?.focus({preventScroll:true});chapter?.scrollIntoView({block:'start'});}
  else if(a==='history-add'){addHistoryComparison();host.render();$('#history-series-2')?.focus();}
  else if(a==='history-remove'){X.historySecond=false;host.render();$('#history-add')?.focus();}
  else if(a==='history-expand'){const key=b.dataset.second==='true'?'historyExpanded2':'historyExpanded';X[key]=!X[key];host.render();$('[data-tool="history-expand"][data-second="'+b.dataset.second+'"]')?.focus();}
@@ -405,7 +438,3 @@ window.HubFullReportEditions=(()=>{
  return Object.freeze({setRegistry,select,valid,panel,library,readerNotice});
 })();
 /* full-report-destinations:end */
-
-
-
-
