@@ -26,15 +26,20 @@
     return {
       chapter,
       title: item.querySelector("h3").textContent.trim(),
-      words: item.querySelector("p").textContent.trim(),
       target: item.dataset.target,
       actions: JSON.parse(item.dataset.actions || "[]"),
+      cues: Array.from(item.querySelectorAll("p"), paragraph => ({
+        words: paragraph.textContent.trim(),
+        target: paragraph.dataset.target,
+        actions: JSON.parse(paragraph.dataset.actions || "[]"),
+      })),
     };
   });
   if (!stops.length) return;
 
   for (const [chapter, index] of firstStops) picker.add(new Option(chapter, index));
   let index = 0;
+  let cueIndex = 0;
   let playing = false;
   let complete = false;
   let highlighted;
@@ -73,6 +78,7 @@
     play.textContent = playing ? "Pause" : complete ? "Replay" : "Play";
     prev.disabled = index === 0;
     next.disabled = index === stops.length - 1;
+    panel.dataset.cue = String(cueIndex);
     picker.value = firstStops.get(stops[index].chapter);
     progress.textContent = `${index + 1} of ${stops.length} · ${stops[index].chapter}`;
     caption.setAttribute("aria-live", playing && voice.checked ? "off" : "polite");
@@ -87,6 +93,17 @@
     const header = node.closest("table").tHead;
     const top = frame.top + (header?.offsetHeight || 0) + 8;
     if (row.top < top || row.bottom > frame.bottom - 8) scroller.scrollTop += row.top - top;
+  }
+
+  function revealTableCell(node) {
+    const cell = node.closest("th, td");
+    const scroller = cell?.closest(".nv-table-scroll");
+    if (!scroller || scroller.scrollWidth <= scroller.clientWidth) return;
+    const item = cell.getBoundingClientRect();
+    const frame = scroller.getBoundingClientRect();
+    if (item.left < frame.left + 12 || item.right > frame.right - 12) {
+      scroller.scrollLeft += (item.left + item.right - frame.left - frame.right) / 2;
+    }
   }
 
   function revealRankingBar(node) {
@@ -105,25 +122,54 @@
     if (!node) return;
     node.classList.add("nv-presenter-highlight");
     revealRow(node);
+    revealTableCell(node);
     // Leave room for the sticky navigation and the dock on a phone.
     const nav = document.querySelector(".nv-jump");
     const navStyle = nav && getComputedStyle(nav);
-    const top = (nav ? nav.offsetHeight + Math.max(0, parseFloat(navStyle.top) || 0) : 0) + 24;
+    let top = (nav ? nav.offsetHeight + Math.max(0, parseFloat(navStyle.top) || 0) : 0) + 24;
     const rect = node.getBoundingClientRect();
+    const rightSide = rect.left >= innerWidth * .53 && rect.width <= innerWidth * .45;
+    panel.toggleAttribute("data-dock-left", desktop.matches && rightSide);
     const dock = panel.getBoundingClientRect();
-    const overlapsDock = rect.right > dock.left && rect.left < dock.right && dock.top > top;
-    const bottom = overlapsDock ? dock.top : innerHeight;
+    const overlapsDock = rect.right > dock.left && rect.left < dock.right;
+    let bottom = innerHeight;
+    if (overlapsDock) {
+      if (dock.top - top >= 100) bottom = dock.top;
+      else if (innerHeight - dock.bottom >= 100) top = dock.bottom + 12;
+    }
     const room = Math.max(0, bottom - top - 16);
-    const inset = Math.min(32, Math.max(0, (room - rect.height) / 2));
-    window.scrollTo({
-      top: window.scrollY + rect.top - top - inset,
-      behavior: reduced.matches ? "instant" : "smooth",
-    });
+    const spare = Math.max(0, room - rect.height);
+    // Keep the plot above its readout whenever the readout is the focus.
+    const inset = node.matches(".nv-chart-values") ? spare : Math.min(32, spare / 2);
+    const max = document.documentElement.scrollHeight - innerHeight;
+    const y = Math.max(0, Math.min(max, scrollY + rect.top - top - inset));
+    const smooth = playing && !reduced.matches && Math.abs(scrollY - y) > 6;
+    window.scrollTo({ top: y, behavior: smooth ? "smooth" : "instant" });
+    return smooth ? y : null;
   }
 
   function pointTo(selector) {
     const node = selector && main.querySelector(selector);
-    if (node && node.getClientRects().length) spotlight(node);
+    return node?.getClientRects().length ? spotlight(node) : null;
+  }
+
+  function afterSpotlight(target, delivery, ready) {
+    const timeout = performance.now() + 1050;
+    function check(now) {
+      if (delivery !== generation) return;
+      if (target !== null && Math.abs(scrollY - target) > 5 && now < timeout) {
+        requestAnimationFrame(check);
+        return;
+      }
+      const rail = document.querySelector(".nv-jump")?.getBoundingClientRect();
+      const anchor = highlighted?.getBoundingClientRect();
+      // The shared header can change height as the scroll direction changes.
+      if (rail && anchor && rail.top < 150 && rail.top <= anchor.top + 8 && rail.bottom + 12 > anchor.top) {
+        window.scrollTo({ top: Math.max(0, scrollY + anchor.top - rail.bottom - 12), behavior: "instant" });
+        requestAnimationFrame(() => { if (delivery === generation) ready(); });
+      } else ready();
+    }
+    requestAnimationFrame(check);
   }
 
   function interact(action) {
@@ -159,23 +205,32 @@
         if (header.getAttribute("aria-sort") !== value) node.click();
         break;
       }
-      case "scan": {
-        const charts = window.NvidiaCharts;
-        const fractions = value || [0, .24, .48, .72, 1];
-        if (reduced.matches || !playing) {
-          charts?.seek(node, fractions.at(-1));
-          break;
-        }
-        fractions.forEach((fraction, step) => later(350 + step * 620, () => charts?.seek(node, fraction)));
-        break;
-      }
-      case "point":
-        pointTo(selector);
+      case "seek":
+        window.NvidiaCharts?.seek(node, value);
         break;
     }
   }
 
-  function finish() {
+  function scanChart([, selector, values]) {
+    const node = main.querySelector(selector);
+    if (!node?.getClientRects().length) return 0;
+    const fractions = values || [0, .24, .48, .72, 1];
+    const seek = fraction => window.NvidiaCharts?.seek(node, fraction);
+    if (reduced.matches || !playing) {
+      seek(fractions.at(-1));
+      return 0;
+    }
+    seek(fractions[0]);
+    fractions.slice(1).forEach((fraction, index) => later((index + 1) * 520, () => seek(fraction)));
+    return (fractions.length - 1) * 520;
+  }
+
+  function finishCue() {
+    if (cueIndex + 1 < stops[index].cues.length) {
+      cueIndex++;
+      deliverCue();
+      return;
+    }
     if (index + 1 < stops.length) {
       show(index + 1);
       return;
@@ -187,11 +242,20 @@
     refresh();
   }
 
-  function speak(words) {
-    const readingTime = Math.max(5200, 1000 + words.split(/\s+/).length * 395);
+  function speak(words, scans) {
+    const readingTime = Math.max(3500, 800 + words.split(/\s+/).length * 390);
+    let visibleUntil;
+    // A cue owns one utterance. Hold it long enough for any chart sweep to finish.
+    function startVisuals() {
+      if (visibleUntil === undefined) visibleUntil = performance.now() + Math.max(0, ...scans.map(scanChart));
+    }
+    function captionsOnly(message) {
+      status.textContent = message;
+      startVisuals();
+      later(Math.max(readingTime, visibleUntil - performance.now()), finishCue);
+    }
     if (!synth || !voice.checked) {
-      status.textContent = "Playing with captions.";
-      later(readingTime, finish);
+      captionsOnly("Playing with captions.");
       return;
     }
     status.textContent = "";
@@ -201,13 +265,12 @@
       stopSpeech();
       voice.checked = false;
       refresh();
-      status.textContent = "Voice unavailable. The tour will continue with captions.";
-      later(readingTime, finish);
+      captionsOnly("Voice unavailable. The tour will continue with captions.");
     };
     const startWatch = later(4000, fallback);
     const endWatch = later(readingTime * 2 + 7000, fallback);
     try {
-      utterance = new SpeechSynthesisUtterance(words);
+      utterance = new SpeechSynthesisUtterance(words.replace(/\bAMD\b/g, "A M D"));
       utterance.lang = "en-US";
       const localVoices = synth.getVoices().filter(item => item.localService && /^en(?:-|$)/i.test(item.lang));
       const local = localVoices.find(item => item.default) || localVoices[0];
@@ -216,12 +279,16 @@
         utterance.lang = local.lang;
       }
       utterance.rate = .96;
-      utterance.onstart = () => clearTimeout(startWatch);
+      utterance.onstart = () => {
+        clearTimeout(startWatch);
+        startVisuals();
+      };
       utterance.onend = () => {
         utterance = null;
         clearTimeout(startWatch);
         clearTimeout(endWatch);
-        later(650, finish);
+        startVisuals();
+        later(Math.max(360, visibleUntil - performance.now() + 260), finishCue);
       };
       utterance.onerror = fallback;
       synth.speak(utterance);
@@ -230,46 +297,58 @@
     }
   }
 
-  function show(position) {
+  function deliverCue() {
     stopDelivery();
-    index = position;
-    complete = false;
     const stop = stops[index];
+    const cue = stop.cues[cueIndex];
     const delivery = generation;
     refresh();
     const title = document.createElement("h3");
     title.textContent = stop.title;
     const words = document.createElement("p");
-    words.textContent = stop.words;
+    words.textContent = cue.words;
     caption.replaceChildren(title, words);
     caption.scrollTop = 0;
     status.textContent = playing ? "" : "Paused.";
     const begin = performance.now();
+    const visualActions = [...(cueIndex === 0 ? stop.actions : []), ...cue.actions];
+    const scans = visualActions.filter(action => action[0] === "scan");
 
     function apply() {
       if (delivery !== generation) return;
-      // Interactive tabs depend on the same snapshots as the page itself.
-      if (stop.actions.length && document.body.dataset.nvdaHistory !== "ready"
+      // Interactive views share the same snapshots as the rest of the page.
+      if (visualActions.length && document.body.dataset.nvdaHistory !== "ready"
         && byId("nv-retry").hidden && performance.now() - begin < 7000) {
         status.textContent = "Waiting for dashboard data…";
         later(180, apply);
         return;
       }
-      const after = [];
-      for (const action of stop.actions) {
-        if (action[0] === "after") after.push(action);
-        else if (action[0] !== "scan") interact(action);
+      if (visualActions.length && document.body.dataset.nvdaHistory !== "ready") {
+        pause();
+        status.textContent = "Dashboard data unavailable. Load the charts before continuing.";
+        return;
       }
+      visualActions.filter(action => action[0] !== "scan").forEach(interact);
       requestAnimationFrame(() => {
         if (delivery !== generation) return;
-        pointTo(stop.target);
-        for (const action of stop.actions) if (action[0] === "scan") interact(action);
-        if (playing) for (const [, delay, ...action] of after) later(delay, () => interact(action));
+        const target = cue.target || (cueIndex === 0 ? stop.target : null);
+        const landing = target ? pointTo(target) : null;
+        if (!playing) {
+          scans.forEach(scanChart);
+          status.textContent = "Paused.";
+          return;
+        }
+        afterSpotlight(landing, delivery, () => speak(cue.words, scans));
       });
-      if (playing) speak(stop.words);
-      else status.textContent = "Paused.";
     }
     apply();
+  }
+
+  function show(position) {
+    index = position;
+    cueIndex = 0;
+    complete = false;
+    deliverCue();
   }
 
   function pause() {
@@ -277,7 +356,7 @@
     window.scrollTo({ top: window.scrollY, behavior: "instant" });
     playing = false;
     refresh();
-    status.textContent = "Paused. Play restarts this stop.";
+    status.textContent = "Paused. Play resumes here.";
   }
 
   function closePlayer() {
@@ -305,7 +384,8 @@
     if (playing) pause();
     else {
       playing = true;
-      show(complete ? 0 : index);
+      if (complete) show(0);
+      else deliverCue();
     }
   });
   prev.addEventListener("click", () => show(index - 1));
@@ -313,7 +393,7 @@
   picker.addEventListener("change", () => show(Number(picker.value)));
   voice.addEventListener("change", () => {
     refresh();
-    if (playing) show(index);
+    if (playing) deliverCue();
   });
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && !event.defaultPrevented && !panel.hidden && panel.contains(document.activeElement)) closePlayer();
@@ -325,7 +405,7 @@
   const handle = panel.querySelector(".nv-presenter-header");
   let drag;
   handle.addEventListener("pointerdown", event => {
-    if (!desktop.matches || event.button !== 0 || event.target.closest("button")) return;
+    if (!desktop.matches || event.button !== 0 || event.target.closest("button, label")) return;
     const { left, top } = panel.getBoundingClientRect();
     drag = { id: event.pointerId, x: event.clientX - left, y: event.clientY - top };
     handle.setPointerCapture(event.pointerId);

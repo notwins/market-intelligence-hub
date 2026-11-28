@@ -5,13 +5,14 @@
   position: fixed;
   inset: var(--nv-presenter-top, auto) var(--nv-presenter-right, clamp(.75rem, 3vw, 2.25rem)) var(--nv-presenter-bottom, 1.25rem) var(--nv-presenter-left, auto);
   z-index: 95;
-  display: grid;
-  gap: .72rem;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
   box-sizing: border-box;
   inline-size: min(24rem, calc(100vw - 1.5rem));
   max-block-size: min(38rem, calc(100dvh - 2rem));
   padding: .85rem;
-  overflow: auto;
+  overflow: hidden;
   overscroll-behavior: contain;
   border: 1px solid var(--guide-border);
   border-block-start: 3px solid var(--guide-accent);
@@ -23,6 +24,14 @@
 }
 
 .nv-presenter[hidden] { display: none; }
+.nv-presenter > :not(.nv-presenter-caption) { flex: none; }
+
+@media (min-width: 761px) {
+  .nv-presenter[data-dock-left] {
+    right: var(--nv-presenter-right, auto);
+    left: var(--nv-presenter-left, clamp(.75rem, 3vw, 2.25rem));
+  }
+}
 
 .nv-presenter-header {
   display: flex;
@@ -36,7 +45,7 @@
   touch-action: none;
 }
 .nv-presenter-header:active { cursor: grabbing; }
-.nv-presenter-header :is(h2, h3, p) { margin: 0; }
+.nv-presenter-header :is(h2, h3, p) { margin: 0 auto 0 0; }
 .nv-presenter-header :is(h2, h3) {
   font: 600 1.18rem/1.16 var(--nv-serif, Georgia, serif);
   letter-spacing: -.02em;
@@ -55,7 +64,7 @@
 .nv-presenter button { cursor: pointer; }
 .nv-presenter button:hover:not(:disabled) { background: #e9f0e2; }
 .nv-presenter button:disabled { cursor: default; opacity: .52; }
-.nv-presenter :is(button, select):focus-visible,
+.nv-presenter :is(button, select, .nv-presenter-caption):focus-visible,
 .nv-presenter-script summary:focus-visible,
 .nv-presenter-launch:focus-visible {
   outline: 2px solid #527e43;
@@ -91,6 +100,7 @@
 
 .nv-presenter-caption {
   min-inline-size: 0;
+  min-block-size: 0;
   max-block-size: min(10rem, 24dvh);
   overflow: auto;
   overscroll-behavior: contain;
@@ -167,10 +177,15 @@
   .nv-presenter {
     inset: var(--nv-presenter-top, auto) var(--nv-presenter-right, .5rem) var(--nv-presenter-bottom, calc(.55rem + var(--hub-primary-bottom, 0px) + env(safe-area-inset-bottom, 0px))) var(--nv-presenter-left, auto);
     inline-size: min(24rem, calc(100vw - 1rem));
-    max-block-size: min(49dvh, calc(100dvh - 3.5rem - var(--hub-primary-bottom, 0px)));
+    gap: .38rem;
+    padding: .55rem;
+    max-block-size: min(45dvh, calc(100dvh - 3.5rem - var(--hub-primary-bottom, 0px)));
   }
-  .nv-presenter :is(button, select) { min-block-size: 2.65rem; }
-  .nv-presenter-caption { max-block-size: 18dvh; }
+  .nv-presenter-header { padding-block-end: .3rem; }
+  .nv-presenter-pick { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .5rem; }
+  .nv-presenter :is(button, select) { min-block-size: 2.4rem; }
+  .nv-presenter-caption { max-block-size: 20dvh; padding: .45rem .55rem; }
+  .nv-presenter-caption:focus-visible { outline-offset: -2px; }
 }
 
 @media print {
@@ -185,13 +200,14 @@
 }
 
 .nv-presenter-caption p { margin: .35rem 0 0; }
-.nv-presenter-voice { display: inline-flex; align-items: center; gap: .3rem; padding-inline: .25rem; }
+.nv-presenter-voice { display: inline-flex; flex: none; align-items: center; gap: .3rem; font-size: .8rem; }
 .nv-presenter-voice input { margin: 0; accent-color: var(--guide-accent); }
 .nv-presenter-status { margin: 0; color: var(--nv-muted, #43574a); font-size: .78rem; }
 .nv-presenter-status:empty { display: none; }
 .nv-presenter-script li { margin-block: .8rem; }
 .nv-presenter-script li h3 { margin: 0 0 .2rem; color: var(--nv-ink, #171f1a); font-size: .94rem; }
 .nv-presenter-script li p { margin: 0; }
+.nv-presenter-script li p + p { margin-block-start: .45rem; }
 
 @media (max-width: 760px) {
   .nv-presenter-header { cursor: default; touch-action: auto; }

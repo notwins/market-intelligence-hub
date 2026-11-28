@@ -174,9 +174,10 @@
         button.setAttribute("aria-label", monthName(month) + " · " + button.title);
         button.style.setProperty("--event-color", categories[category].color);
         button.addEventListener("focus", () => selectEventMonth(index));
-        button.addEventListener("click", () => {
+        button.addEventListener("click", event => {
           selectEventMonth(index);
-          if (besideChart()) return;
+          // Scripted activation leaves scrolling and focus to its caller.
+          if (!event.isTrusted || besideChart()) return;
           const moves = list.querySelector("[data-active] .nv-market-move-grid") || eventBox;
           if (moves.getBoundingClientRect().bottom > window.innerHeight - 46) {
             eventBox.scrollIntoView({ block: "start" });

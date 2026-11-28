@@ -285,11 +285,14 @@
     if (plot?.model.limits && index !== plot.active) updateSelection(plot, index);
   }
 
-  function seek(container, fraction) {
+  function seek(container, position) {
     const plot = plots.get(container);
-    if (!plot?.model.limits || !Number.isFinite(fraction)) return;
-    const last = plot.model.dates.length - 1;
-    select(container, Math.round(Math.min(1, Math.max(0, fraction)) * last));
+    if (!plot?.model.limits) return;
+    const dates = plot.model.dates;
+    const index = Number.isFinite(position)
+      ? Math.round(Math.min(1, Math.max(0, position)) * (dates.length - 1))
+      : dates.indexOf(position);
+    if (index >= 0) select(container, index);
   }
 
   function printChart(container, { width = 490, height = 275 } = {}) {
