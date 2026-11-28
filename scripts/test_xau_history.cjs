@@ -32,4 +32,29 @@ assert.ok(latest[0].last[1] > 8133 && latest[0].last[1] < 8134);
 assert.equal(snapshot.series.safeGold.at(-1)[1],2435.402);
 assert.equal(snapshot.mining.world.at(-1),3331.141);
 assert.ok(snapshot.fred.CPIAUCSL[0][0] < '1960-01-01');
-console.log('Gold research source extracts, exact-date FX, calendar alignment, inflation, correlation and historical recovery passed.');
+const library = require('../site/data/metals/xau-library.json');
+const available = id => library.series[id].points;
+const base = model.monthly(snapshot.series.pink);
+const start = '1996-11-01', end = '2026-10-31';
+for (const id of ['NBUSBIS','pink_silver','pink_platinum','pink_copper','DGS10']) {
+  assert.equal(model.pairs(base,available(id),start,end,'Monthly').length,360,id);
+}
+assert.equal(model.pairs(base,available('USGS_WORLD_GOLD'),start,end,'Annual').length,30);
+assert.equal(available('DFII10')[0][0],'2003-01-01');
+assert.deepEqual(model.quarterly(model.monthly([
+  ['2025-01-31',2700],['2025-02-28',2900],['2025-03-31',3100],['2025-06-30',3300]
+]),true),[['2025-03-31',2900,'2025-03-31']]);
+assert.deepEqual(model.pairs(model.monthly([['2024-03-27',2172]]),
+  [['2024-03-31',300]],'2024-03-01','2024-03-31','Quarterly'),[['2024-03-31',2172,300,'2024-03-27','2024-03-31']]);
+assert.equal(model.change(-10,5,'difference'),15);
+for (const id of ['SP500','BAA10Y','wgc_World tonnes','wgc_China gold share']) {
+  assert.equal(available(id).length,0);
+  assert.ok(library.series[id].local);
+}
+assert.equal(library.papers.length,30);
+assert.ok(library.papers.every(p => p.url.startsWith('https://') && p.note && !p.note.includes('[PDF')));
+for (const s of Object.values(library.series)) {
+  assert.ok(s.points.every(([d,v],i) => Number.isFinite(v) && (!i || d > s.points[i-1][0])));
+  assert.ok(s.points.length ? s.points.length === s.length : s.local?.[0] in library.tables);
+}
+console.log('Gold research, 360-month benchmark spans, annual and quarterly matching, source permissions and bibliography passed.');
