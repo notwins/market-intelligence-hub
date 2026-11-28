@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "status": "ok",
-  "last_attempt": "2026-11-27T11:56:16Z",
-  "last_success": "2026-11-27T11:56:16Z",
+  "last_attempt": "2026-11-28T18:47:17Z",
+  "last_success": "2026-11-28T18:47:17Z",
   "latest_observation_date": "2026-11-27",
   "source_url": "https://eservices.mas.gov.sg/statistics/fdanet/SgsBenchmarkIssuePrices.aspx",
-  "message": "MAS checked; new dated observations saved.",
-  "observation_age_calendar_days": 0,
-  "data_changed": true,
+  "message": "MAS checked; no new observation; history unchanged.",
+  "observation_age_calendar_days": 2,
+  "data_changed": false,
   "observation_count": 22,
   "refresh_runner": "github_actions"
 }
