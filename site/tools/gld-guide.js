@@ -120,8 +120,11 @@
       if(exit.type==='ko')return day===exit.day?'ko':'stillKo';
       return day===exit.day?'maturity':'stillMature';
     }
-    function show(day,needsTable) {
-      if(needsTable&&!panel.board)panel.view.value='at';
+    function show(day,needsTable,after) {
+      if(needsTable&&!after){
+        panel.view.value='at';
+        if(panel.board)panel.tbody.closest('details').open=true;
+      }
       if(panel.selected!==i||panel.day!==day||needsTable){
         panel.selected=i;api.move(panel,day,true);
       }
@@ -140,7 +143,6 @@
         gap:winner&&bench?api.price((cents(snap.outcomes[winner].pnl)-cents(bench.pnl))/100):null};
       // Finance table markup is refreshed by a date change; resolve the target afterwards.
       const pnlTarget=key=>{
-        if(panel.board)return qsel('.replay-readout [data-strategy="'+key+'"] .replay-action-pnl');
         if(after)return panel.detail.querySelector('[data-guide-post="'+key+'"]');
         return panel.tbody.querySelector('tr[data-quote-index="'+i+'"] [data-guide-pnl="'+key+'"]');
       };
@@ -160,7 +162,6 @@
         target=()=>{
           if(line==='zero')return panel.detail.querySelector('.play-detail > .play-note');
           if(snap.leaders.length>1){
-            if(panel.board)return qsel('.replay-readout-lead');
             if(after)return panel.detail.querySelector('.play-detail .play-summary');
             return panel.tbody.querySelector('tr[data-quote-index="'+i+'"] .play-winner');
           }
@@ -171,7 +172,7 @@
         if(!winner||!bench?.eligible||after&&day===exit.day)continue;
         needsTable=true;target=()=>pnlTarget(benchKey);
       }
-      if(target)tour.push(step(line,values,target,()=>show(day,needsTable),prefix));
+      if(target)tour.push(step(line,values,target,()=>show(day,needsTable,after),prefix));
     }
     return tour;
   }
