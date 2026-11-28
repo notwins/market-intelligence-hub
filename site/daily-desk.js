@@ -9,6 +9,12 @@
   const cards = document.querySelector('#daily-desk-editions');
   const dialog = document.querySelector('#daily-desk-dialog');
   const body = document.querySelector('#daily-desk-report');
+  const artwork = new URL('assets/desk/briefing-ticker.jpg', document.baseURI).href;
+  const preview = import('./research-quick-preview.js?v=3').then(({quickPreview}) => quickPreview(dialog, {
+    body, label: 'Hourly briefing', jumpLabel: 'Go to brief',
+    sectionIcons: {Economy: 'policy', 'Bonds & credit': 'credit', 'Shares & earnings': 'earnings', 'Daily news': 'news'},
+    motionTargets: '.briefing-coverage, .briefing-selected, .briefing-section'
+  })).catch(() => undefined);
   const dateLabel = new Intl.DateTimeFormat('en-GB', {day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Singapore'});
   const timeLabel = new Intl.DateTimeFormat('en-GB', {hour: '2-digit', minute: '2-digit', hourCycle: 'h23', timeZone: 'Asia/Singapore'});
   const stamp = value => dateLabel.format(new Date(value));
@@ -98,6 +104,14 @@
       <h3>${day ? dayLabel(day) : 'Edition unavailable'}</h3>
       <p class="fine">${edition ? `Cutoff ${timeLabel.format(new Date(edition.cutoff))} SGT · ${edition.stories.length} sourced stories` : 'No saved briefing for this date.'}</p>`;
     if (edition) {
+      const illustration = document.createElement('img');
+      illustration.className = 'daily-edition-art';
+      illustration.src = artwork;
+      illustration.alt = '';
+      illustration.width = 108;
+      illustration.height = 66;
+      illustration.loading = 'lazy';
+      article.prepend(illustration);
       const summary = document.createElement('p');
       summary.className = 'daily-edition-summary';
       summary.textContent = edition.stories[0]?.headline || 'No sourced headlines in this edition.';
@@ -310,8 +324,10 @@
   function openEdition(edition, trigger, selected) {
     opener = trigger;
     const {E} = root.Desk;
-    dialog.querySelector('#daily-desk-dialog-title').textContent = 'Daily briefing';
-    dialog.querySelector('#daily-desk-dialog-date').textContent = `${dayLabel(edition.day)} · Cutoff ${timeLabel.format(new Date(edition.cutoff))} SGT`;
+    const title = selected?.headline || 'Daily briefing';
+    const byline = `${dayLabel(edition.day)} · Cutoff ${timeLabel.format(new Date(edition.cutoff))} SGT`;
+    dialog.querySelector('#daily-desk-dialog-title').textContent = title;
+    dialog.querySelector('#daily-desk-dialog-date').textContent = byline;
     const grouped = Object.fromEntries(sections.map(([key]) => [key, edition.stories.filter(s => s.category === key)]));
     const count = edition.stories.length;
     const storyCount = key => grouped[key].length;
@@ -331,6 +347,9 @@
         </section>`;
       }).join('')}`;
     dialog.showModal();
+    preview.then(reader => {
+      if (dialog.open && opener === trigger) reader?.cover({title, byline, theme: 'markets', mark: 'hourly', artwork});
+    });
     document.dispatchEvent(new CustomEvent('hub-report-open', {detail: 'hourly-briefing'}));
     dialog.scrollTop = 0;
     const slots = [...body.querySelectorAll('[data-briefing-indicators]')];
@@ -342,7 +361,7 @@
   }
 
   dialog.querySelector('[data-briefing-close]').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => opener?.focus());
+  dialog.addEventListener('close', () => { if (!dialog.open && opener?.isConnected) opener.focus({preventScroll: true}); });
   root.DailyDesk = {render};
   loadHighlights();
 })(window);

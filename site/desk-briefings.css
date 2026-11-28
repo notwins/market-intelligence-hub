@@ -56,7 +56,22 @@
 .briefing-pager button:disabled { cursor: default; opacity: .42; }
 .briefing-pager output { font: 600 .875rem/1 var(--font); font-variant-numeric: tabular-nums; }
 #hourly-briefings .briefing-track { margin-top: .8rem; }
-#hourly-briefings .daily-edition { padding: clamp(1.15rem,2.8vw,2.5rem); }
+#hourly-briefings .daily-edition {
+  position: relative;
+  padding: clamp(1.15rem,2.8vw,2.5rem);
+}
+.daily-edition-art {
+  position: absolute;
+  inset: clamp(1.15rem,2.8vw,2.5rem) clamp(1.15rem,2.8vw,2.5rem) auto auto;
+  width: clamp(68px,12vw,108px);
+  height: auto;
+  aspect-ratio: 18 / 11;
+  object-fit: cover;
+  border-radius: 5px;
+}
+#hourly-briefings .daily-edition:has(.daily-edition-art) :is(.daily-edition-label, h3) {
+  padding-inline-end: calc(clamp(68px,12vw,108px) + .6rem);
+}
 #hourly-briefings .daily-edition h3 { font-size: clamp(1.5rem,2.3vw,2.1rem); }
 #hourly-briefings .daily-edition-summary { font-size: 1rem; max-width: 68ch; }
 #dashboard-report-dialog { width: min(55rem,calc(100% - 1.4rem)); padding: 0; max-height: 87dvh; overscroll-behavior: contain; background: var(--card); }

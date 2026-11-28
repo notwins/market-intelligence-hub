@@ -11,11 +11,14 @@ function installStyles() {
   const style = document.createElement('link');
   style.id = 'quick-preview-styles';
   style.rel = 'stylesheet';
-  style.href = new URL('research-quick-preview.css?v=2', import.meta.url);
+  style.href = new URL('research-quick-preview.css?v=3', import.meta.url);
   document.head.append(reader, style);
 }
 
-export function quickPreview(dialog, {body, original, full}) {
+export function quickPreview(dialog, {
+  body, original, full, label = 'Quick read', jumpLabel = 'Go to brief',
+  sectionIcons = {}, motionTargets
+}) {
   if (mounted.has(dialog)) return mounted.get(dialog);
   installStyles();
 
@@ -24,7 +27,7 @@ export function quickPreview(dialog, {body, original, full}) {
   const close = bar.querySelector('button');
   const title = document.createElement('span');
   title.className = 'quick-preview-label';
-  title.append(icon('book', 'reader-icon'), 'Quick read');
+  title.append(icon('book', 'reader-icon'), label);
   title.setAttribute('aria-hidden', 'true');
 
   const tools = document.createElement('div');
@@ -32,7 +35,7 @@ export function quickPreview(dialog, {body, original, full}) {
   const jump = document.createElement('a');
   jump.className = 'quick-preview-jump';
   jump.href = '#';
-  jump.append(icon('map', 'reader-icon'), 'Go to brief');
+  jump.append(icon('map', 'reader-icon'), jumpLabel);
   jump.addEventListener('click', event => {
     event.preventDefault();
     body.focus({preventScroll: true});
@@ -61,12 +64,12 @@ export function quickPreview(dialog, {body, original, full}) {
   toggle.setAttribute('aria-describedby', note.id);
   close.classList.add('quick-preview-close');
   close.textContent = '×';
-  close.setAttribute('aria-label', 'Close quick read');
+  close.setAttribute('aria-label', 'Close ' + label.toLowerCase());
   tools.append(jump, settings, close);
   bar.prepend(title);
   bar.append(tools);
   bar.classList.add('quick-preview-bar');
-  heading.classList.add('quick-preview-name');
+  (heading.parentElement === bar ? heading : heading.parentElement).classList.add('quick-preview-name');
 
   const links = document.createElement('div');
   links.className = 'quick-preview-links';
@@ -131,10 +134,32 @@ export function quickPreview(dialog, {body, original, full}) {
     cover(meta) {
       effects?.stop();
       effects = undefined;
-      const cover = readingCover(document, {...meta, kicker: 'Quick read'});
+      const cover = readingCover(document, {...meta, kicker: label});
+      if (meta.mark) {
+        cover.querySelector('.research-cover-icon').replaceWith(icon(meta.mark, 'research-cover-icon'));
+      }
+      const intro = cover.querySelector('.research-reading-intro');
+      if (meta.byline) {
+        const date = document.createElement('p');
+        date.className = 'quick-preview-byline';
+        date.textContent = meta.byline;
+        intro.append(date);
+      }
+      if (meta.credit) {
+        const credit = document.createElement('a');
+        credit.href = meta.credit;
+        credit.className = 'quick-preview-art-credit';
+        credit.textContent = 'Art credit';
+        intro.append(credit);
+      }
+      for (const heading of body.querySelectorAll('h3')) {
+        const mark = Object.hasOwn(sectionIcons, heading.textContent) && sectionIcons[heading.textContent];
+        if (mark && !heading.querySelector('svg')) heading.prepend(icon(mark, 'reader-icon research-chapter-icon'));
+      }
       coverSlot.replaceChildren(cover);
       if (window.IntersectionObserver && window.ResizeObserver && Element.prototype.animate) {
-        effects = readingMotion(document, cover, [body], {scroller: dialog, progress: dialog});
+        const targets = motionTargets ? [...body.querySelectorAll(motionTargets)] : [body];
+        effects = readingMotion(document, cover, targets, {scroller: dialog, progress: dialog});
         syncMotion();
       }
     }

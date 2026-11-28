@@ -155,6 +155,12 @@
     enabled = toggle.checked;
     try { localStorage.setItem(key, enabled ? 'on' : 'off'); } catch { /* Remains active for this tab. */ }
     applyMotion();
+    window.dispatchEvent(new CustomEvent('research-motion-change', {detail: enabled}));
+  });
+  window.addEventListener('research-motion-change', event => {
+    if (enabled === event.detail) return;
+    enabled = event.detail;
+    applyMotion();
   });
   window.addEventListener('storage', event => {
     if (event.storageArea === window.localStorage && (event.key === key || event.key === null)) {

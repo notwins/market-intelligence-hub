@@ -20,13 +20,22 @@
   const status = document.getElementById('dashboard-edition-status');
   const retry = document.getElementById('dashboard-retry');
   const dialog = document.getElementById('dashboard-report-dialog');
-  let editions = [], requestActive = false, lastAttempt = 0, previousBytes = '';
+  const body = document.getElementById('dashboard-report-body');
+  const reportThemes = {news: 'markets', bonds: 'credit', earnings: 'markets', economy: 'global'};
+  const preview = import('./research-quick-preview.js?v=3').then(({quickPreview}) => quickPreview(dialog, {
+    body, label: 'Daily report', jumpLabel: 'Go to report',
+    sectionIcons: {'What happened': 'news', 'Key things to note': 'report', 'What to watch': 'watch', Coverage: 'folio', Sources: 'source'},
+    motionTargets: 'h3'
+  })).catch(() => undefined);
+  let editions = [], requestActive = false, lastAttempt = 0, previousBytes = '', opener;
 
-  function openReport(edition, key, title) {
+  function openReport(edition, key, title, mark, trigger) {
     const report = edition.reports[key];
-    document.getElementById('dashboard-report-date').textContent = cutoffText(edition);
+    const card = trigger.closest('.dashboard-brief');
+    opener = trigger;
+    const byline = cutoffText(edition);
+    document.getElementById('dashboard-report-date').textContent = byline;
     document.getElementById('dashboard-report-title').textContent = title;
-    const body = document.getElementById('dashboard-report-body');
     body.replaceChildren(node('p', report.summary, 'briefing-standfirst'));
     for (const [field, label] of [['happened','What happened'],['key_points','Key things to note'],['watch','What to watch']]) {
       if (!report[field].length) continue;
@@ -46,10 +55,18 @@
       body.append(node('h3','Sources'), sources);
     }
     dialog.showModal();
+    preview.then(reader => {
+      if (dialog.open && opener === trigger) reader?.cover({
+        title, theme: reportThemes[key], mark, byline,
+        artwork: card.querySelector('.brief-illustration')?.src,
+        credit: card.querySelector('.card-artwork-credit')?.href
+      });
+    });
     document.dispatchEvent(new CustomEvent('hub-report-open', {detail: key}));
     body.parentElement.scrollTop = 0;
   }
   dialog.querySelector('[data-close-dashboard]').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => { if (!dialog.open && opener?.isConnected) opener.focus({preventScroll: true}); });
   function draw() {
     const edition = editions.find(e => e.date === picker.value) || editions[0];
     if (!edition) return;
@@ -79,7 +96,7 @@
       action.className = 'card-primary-action';
       action.type = 'button';
       action.setAttribute('aria-label','Read ' + title + ' report');
-      action.addEventListener('click',() => openReport(edition,key,title));
+      action.addEventListener('click', () => openReport(edition, key, title, icon, action));
       story.append(action);
       card.append(identity,story);
       return card;
