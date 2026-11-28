@@ -104,14 +104,14 @@
         card("Liquidity ratios", "bars", [currentRatio, cashCoverage, quickRatio],
           quickRatioNote + " Cash coverage uses cash and equivalents. A dash marks an unavailable ratio."),
         { ...comparable("Quick ratio over time", quickRatio), note: quickRatioNote },
-        card("Solvency and interest coverage", "bars", [
+        { ...card("Solvency and interest coverage", "bars", [
           metric("Debt / equity", "multiple", (p, i) => {
             const debt = read(p, field(RATIOS, "Total debt"), i);
             const equityValue = read(p, field(BALANCE, "Total equity"), i);
             return Number.isFinite(debt) && equityValue > 0 ? debt / equityValue : null;
           }),
           interestCoverage,
-        ], "Interest coverage is operating income divided by the magnitude of interest expense. Debt / equity requires positive equity."),
+        ], "Interest coverage is operating income divided by the magnitude of interest expense. Debt / equity requires positive equity."), separateScales: true },
         card("Leverage relative to assets", "bars", [
           percentOfAssets("Total debt / assets", RATIOS, "Total debt"),
           percentOfAssets("Total liabilities / assets", BALANCE, "Total liabilities"),
@@ -278,7 +278,7 @@
       const header = element("div", "", "nv-panel-head");
       header.append(heading);
       article.append(header);
-      if (card.comparisonBars || card.kind === "components" || card.kind === "share") {
+      if (card.comparisonBars || card.kind === "components" || card.measures || card.separateScales) {
         host.controls = element("div", "", "nv-controls nv-statement-chart-controls");
         const picker = text => {
           const label = element("label", text);
@@ -295,6 +295,10 @@
         if (card.measures) {
           host.measure = picker("Share measure");
           options(host.measure, card.measures.map((column, i) => [String(i), column.label]), "0");
+        }
+        if (card.separateScales) {
+          host.measure = picker("Chart ratio");
+          options(host.measure, card.columns.map((column, i) => [String(i), column.label]), "0");
         }
         host.controls.addEventListener("change", () => host.refreshChart());
         article.append(host.controls);
@@ -365,8 +369,8 @@
       showHighlight(host);
     }
 
-    function drawBars(host, card, period, indices, basis) {
-      const columns = card.columns.filter(column => !column.tableOnly);
+    function drawBars(host, card, period, indices, basis, selectedColumn) {
+      const columns = selectedColumn ? [selectedColumn] : card.columns.filter(column => !column.tableOnly);
       const stacked = card.kind === "stack";
       const values = indices.map(i => columns.map(column => column.read(period, i, basis)));
       const format = formatters[columns[0].type];
@@ -549,8 +553,12 @@
             };
             host.refreshChart();
           } else {
-            drawBars(host, card, period, indices, basis);
-            drawTable(host, card, period, indices, basis);
+            host.refreshChart = () => {
+              const column = card.separateScales ? card.columns[Number(host.measure.value)] : undefined;
+              drawBars(host, card, period, indices, basis, column);
+              drawTable(host, card, period, indices, basis, column ? " · Chart " + column.label : "");
+            };
+            host.refreshChart();
           }
         });
       }
