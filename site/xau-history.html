@@ -1,20 +1,21 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="xau-monthly-lab.css?v=1">
-<script defer src="xau-monthly-lab.js?v=1"></script>
+<link rel="stylesheet" href="xau-monthly-lab.css?v=2">
+<script defer src="xau-chart-ui.js?v=1"></script>
+<script defer src="xau-monthly-lab.js?v=2"></script>
 <meta name="description" content="Research XAU spot gold against the dollar, U.S. real rates, inflation, China and the S&P 500. Explore monetary gold holdings and global mine production.">
 <title>Gold in history · Market Intel</title><link rel="icon" href="favicon.ico">
-<link rel="stylesheet" href="xau-history.css?v=3">
-<script defer src="xau-history-model.js?v=2"></script><script defer src="xau-library.js?v=2"></script><script defer src="xau-regimes.js?v=1"></script><script defer src="xau-history.js?v=3"></script>
+<link rel="stylesheet" href="xau-history.css?v=4">
+<script defer src="xau-history-model.js?v=2"></script><script defer src="xau-library.js?v=2"></script><script defer src="xau-regimes.js?v=1"></script><script defer src="xau-history.js?v=4"></script>
 </head><body class="xau-research">
 <a class="skip" href="#main">Skip to gold research</a>
 <main id="main">
 <header class="gold-hero" id="overview"><div class="gold-shell hero-grid">
   <div><nav class="gold-crumb" aria-label="Breadcrumb"><a href="v4.html#tools">Market Intel</a> / <a href="tools/gold-charts.html">Gold tools</a> / <span>XAU</span></nav>
-  <p class="chapter">Market history · XAU/USD</p><h1>Gold<br><em>in history.</em></h1>
+  <p class="chapter" data-xau-icon="bars">Market history · XAU/USD</p><h1>Gold<br><em>in history.</em></h1>
   <p class="hero-lead">Open a 30-year view of gold against currencies, yields, inflation and equities. Trace China’s role, compare metals and see how official holdings and mine supply have changed.</p>
-  <div class="hero-links"><a class="action" href="#compare">Compare gold and its drivers</a><a href="#library">Explore the data matrix</a><a href="tools/gld-strategy.html">GLD game plan</a></div></div>
+  <div class="hero-links"><a class="action" href="#compare" data-xau-icon="trend">Compare gold and its drivers</a><a href="#library" data-xau-icon="table">Explore the data matrix</a><a href="tools/gld-strategy.html" data-xau-icon="route">GLD game plan</a></div></div>
   <figure><img src="assets/desk/history-gold.jpg" width="960" height="320" alt="" fetchpriority="high"><figcaption>Official holdings are a stock. Mine production is an annual flow.</figcaption></figure>
 </div></header>
 <nav class="gold-jump" aria-label="Gold research sections"><div class="gold-shell">
@@ -38,8 +39,13 @@
     <button class="action" type="submit">Apply dates</button>
   </form>
   <p class="chart-note series-detail" id="comparison-source"></p>
+  <div class="xau-chart-toolbar" id="compare-tools" aria-label="Comparison chart controls">
+    <div id="compare-legend" class="xau-legend" aria-label="Chart legend"></div>
+    <div class="xau-chart-actions"><button type="button" data-chart-zoom aria-pressed="false" disabled>Zoom range</button><button type="button" data-chart-reset disabled>Reset zoom</button></div>
+    <p class="xau-chart-hint" data-chart-hint></p>
+  </div>
   <div class="chart-frame" id="comparison-chart"></div>
-  <div class="scrub-row"><label for="inspect-month">Inspect month</label><input type="range" id="inspect-month" min="0" max="0" value="0" disabled><output id="inspect-value" for="inspect-month" aria-live="polite"></output></div>
+  <div class="scrub-row"><label for="inspect-month">Inspect month</label><input type="range" id="inspect-month" min="0" max="0" value="0" disabled><output id="inspect-value" for="inspect-month"></output></div>
   <dl class="gold-kpis compact" id="window-kpis"></dl>
   <p class="chart-note" id="chart-note"></p>
   <details id="obs-details"><summary>Observations and CSV</summary><p class="chart-note">Download the displayed gold and driver observations. The period and underlying source dates appear separately.</p><button class="action secondary" type="button" id="download" disabled>Download comparison CSV</button><div class="table-scroll" id="observations" tabindex="0" aria-label="Comparison observations"></div></details>
@@ -88,8 +94,8 @@
 <section class="gold-section" id="strategy">
 <header class="section-heading"><div><p class="chapter">GLD game plan</p><h2>From gold history to a GLD path</h2></div><p>The research charts give the market backdrop. The game plan uses GLD per share and applies saved quote terms to the dates and prices on each path.</p></header>
 <div class="strategy-grid">
-  <article class="gold-panel"><span class="section-icon" aria-hidden="true">↗</span><h3>Set your own path</h3><p>Move GLD through a deeper fall, a rebound through KO or a sideways market. Compare the accumulator, direct GLD, waiting and possible follow-on positions.</p><a class="action" href="tools/gld-strategy.html#timelines">Open the GLD scenarios</a></article>
-  <article class="gold-panel"><span class="section-icon" aria-hidden="true">⌁</span><h3>Replay recorded prices</h3><p>Use dated GLD closes to see when each saved quote would have knocked out, matured or remained open, and how funding affected the path.</p><a class="action secondary" href="tools/gld-strategy.html?mode=historical#replay-overview">Open the historical replay</a></article>
+  <article class="gold-panel"><span class="section-icon" aria-hidden="true" data-xau-icon="route"></span><h3>Set your own path</h3><p>Move GLD through a deeper fall, a rebound through KO or a sideways market. Compare the accumulator, direct GLD, waiting and possible follow-on positions.</p><a class="action" href="tools/gld-strategy.html#timelines">Open the GLD scenarios</a></article>
+  <article class="gold-panel"><span class="section-icon" aria-hidden="true" data-xau-icon="clock"></span><h3>Replay recorded prices</h3><p>Use dated GLD closes to see when each saved quote would have knocked out, matured or remained open, and how funding affected the path.</p><a class="action secondary" href="tools/gld-strategy.html?mode=historical#replay-overview">Open the historical replay</a></article>
 </div></section>
 <section class="gold-section" id="papers">
 <header class="section-heading"><div><p class="chapter">Research library</p><h2>30 papers and official reports</h2></div><p>Read the original research behind real yields, inflation hedges, central-bank demand, China and gold supply.</p></header>

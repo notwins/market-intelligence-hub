@@ -1,7 +1,7 @@
 'use strict';
 (() => {
   const el = id => document.getElementById(id);
-  const model = XauHistory;
+  const model = XauHistory, ui = XauChartUi;
   const fmt = new Intl.NumberFormat('en-US', {maximumFractionDigits: 2});
   const whole = new Intl.NumberFormat('en-US', {maximumFractionDigits: 0});
   const monthFormat = new Intl.DateTimeFormat('en-GB', {month:'short',year:'numeric',timeZone:'UTC'});
@@ -42,10 +42,11 @@
     const value = series.precision ? v.toFixed(series.precision) : fmt.format(v);
     return ['%', 'Percent'].includes(series.unit) ? value + '%' : value + ' ' + series.unit;
   };
-  let dataset, gold, drivers, builtIn, catalogue, selected, chartMarker, chartPosition, dataMissing = [];
+  let dataset, gold, drivers, builtIn, catalogue, selected, comparisonChart, comparisonViewport, dataMissing = [];
   const windowIsValid = () => el('filters').checkValidity() && el('from').value <= el('to').value;
 
   function comparisonWindow(months) {
+    comparisonViewport?.clear();
     document.querySelectorAll('#window-presets button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.months === months)));
     const base = gold[el('gold-series').value], driver = drivers[el('driver').value];
     if (!base || !driver) return;
@@ -74,9 +75,13 @@
     else renderComparison();
   }
 
-  function customWindow() {
+  function unmarkWindow() {
     el('to').setCustomValidity('');
     document.querySelectorAll('#window-presets button').forEach(b=>b.setAttribute('aria-pressed','false'));
+  }
+  function customWindow() {
+    comparisonViewport?.clear();
+    unmarkWindow();
   }
 
   function availableDrivers(imported = new Map()) {
@@ -118,9 +123,12 @@
   const byId = (file, id) => file?.series.find(s => s.id === id)?.points ?? [];
   const fredLink = id => ['FRED • ' + id, 'https://fred.stlouisfed.org/series/' + id];
 
-  function metric(label, value, context) {
+  function metric(label, value, context, tone, icon) {
     const box = make('div');
-    box.append(make('dt', label), make('dd', value), make('small', context));
+    const title = make('dt',label);
+    if (icon) ui.addIcon(title,icon);
+    if (tone) box.dataset.tone = tone;
+    box.append(title,make('dd',value),make('small',context));
     return box;
   }
   function table(container, headers) {
@@ -145,45 +153,65 @@
     if (defaultId) select.value = defaultId;
   }
 
-  function plot(container, label, lanes, time, dateLabel) {
-    const width = 900, left = 84, right = 879, laneHeight = lanes.length === 1 ? 220 : 145, top = 16;
-    const height = top + lanes.length * laneHeight + 33;
-    const x = d => left + (right-left) * (Date.parse(d)-Date.parse(time[0])) / (Date.parse(time.at(-1))-Date.parse(time[0]) || 1);
-    const figure = svg('svg', {viewBox:'0 0 '+width+' '+height, role:'img','aria-label':label});
-    lanes.forEach((lane,index) => {
-      const all = lane.lines.flatMap(line => line.points.map(p=>p[1]).filter(Number.isFinite));
-      const minimum = Math.min(...all), maximum = Math.max(...all);
-      const padding = (maximum-minimum || Math.abs(maximum) || 1) * .08;
-      const min = minimum-padding, max=maximum+padding;
-      const t = top + index*laneHeight + 20, b = top + (index+1)*laneHeight - 7;
-      const y = value => b - (b-t)*(value-min)/(max-min);
-      figure.append(svg('text',{x:left,y:t-9,class:'series-label'},lane.label));
-      for(let i=0;i<3;i++){
-        const value = min+(max-min)*i/2, row=y(value);
-        figure.append(svg('path',{class:'grid',d:'M'+left+' '+row+'H'+right}),
-          svg('text',{x:left-8,y:row+4,'text-anchor':'end'},Math.abs(value)>1000?whole.format(value):fmt.format(value)));
-      }
-      for(const line of lane.lines){
-        let path='', previous='';
-        for(const [date,value] of line.points){
-          if (!Number.isFinite(value)) {previous='';continue;}
-          const discontinuity = previous && Date.parse(date)-Date.parse(previous)>line.maxGap;
-          path += (previous && !discontinuity ? 'L':'M')+x(date).toFixed(2)+' '+y(value).toFixed(2);
-          previous=date;
+  function plot(container, label, lanes, time, dateLabel, options = {}) {
+    const stamp = new Map(time.map(d=>[d,Date.parse(d)]));
+    const points = lanes.flatMap(lane=>lane.lines.map(line=>({
+      ...line, lookup:new Map(line.points), title:lane.title ?? lane.label,
+      tone:line.className==='plot-driver'?'driver':'gold', display:lane.display ?? (v=>fmt.format(v))
+    })));
+    const valid = time.filter(d=>points.some(line=>Number.isFinite(line.lookup.get(d))));
+    const content = d=>({date:(options.readDate ?? dateLabel)(d),values:points.map(line=>({
+      label:line.title,value:Number.isFinite(line.lookup.get(d))?line.display(line.lookup.get(d)):'—',
+      tone:line.tone
+    }))});
+    return ui.draw(container,width=>{
+      const left=62,right=width-17,top=9;
+      const laneHeight=lanes.length===2?142:width<410?171:204;
+      const height=top+lanes.length*laneHeight+34;
+      const first=stamp.get(time[0]), last=stamp.get(time.at(-1));
+      const x=d=>left+(right-left)*(stamp.get(d)-first)/(last-first||1);
+      const figure=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':label});
+      const coordinates=new Map();
+      let lineIndex=0;
+      lanes.forEach((lane,index)=>{
+        const values=lane.lines.flatMap(line=>line.points.map(p=>p[1]).filter(Number.isFinite));
+        const minimum=values.length?Math.min(...values):0, maximum=values.length?Math.max(...values):1;
+        const padding=(maximum-minimum||Math.abs(maximum)||1)*.08;
+        const floor=minimum>=0?Math.max(0,minimum-padding):minimum-padding;
+        const ceiling=maximum<=0?Math.min(0,maximum+padding):maximum+padding;
+        const interval=(ceiling-floor)/3||1;
+        const scale=10**Math.floor(Math.log10(interval));
+        const step=[1,2,2.5,5,10].find(n=>n*scale>=interval)*scale;
+        const min=Math.floor(floor/step)*step,max=Math.ceil(ceiling/step)*step;
+        const t=top+index*laneHeight+22,b=top+(index+1)*laneHeight-7;
+        const y=value=>b-(b-t)*(value-min)/(max-min||1);
+        figure.append(svg('text',{x:left,y:t-10,class:lane.lines[0].className==='plot-driver'?'series-label title-driver':'series-label'},lane.label));
+        for(let i=0;i<=Math.round((max-min)/step);i++){
+          const value=min+i*step,row=y(value);
+          figure.append(svg('path',{class:'grid',d:'M'+left+' '+row+'H'+right}),
+            svg('text',{x:left-8,y:row+4,'text-anchor':'end'},Math.abs(value)>1000?whole.format(value):fmt.format(value)));
         }
-        figure.append(svg('path',{class:line.className,d:path}));
-        if(line.points.filter(p=>Number.isFinite(p[1])).length === 1){
-          const p=line.points.find(p=>Number.isFinite(p[1]));
-          figure.append(svg('circle',{cx:x(p[0]),cy:y(p[1]),r:3,fill:'#9b6929'}));
+        for(const line of lane.lines){
+          const styled=points[lineIndex++];
+          let path='',previous='';
+          for(const [d,value] of line.points){
+            if(!Number.isFinite(value)){previous='';continue;}
+            const discontinuity=previous && stamp.get(d)-stamp.get(previous)>line.maxGap;
+            path+=(previous&&!discontinuity?'L':'M')+x(d).toFixed(2)+' '+y(value).toFixed(2);
+            previous=d;
+          }
+          coordinates.set(styled,y);
+          figure.append(svg('path',{class:line.className,d:path}));
+          if(values.length===1)figure.append(svg('circle',{cx:x(previous),cy:y(values[0]),r:3,class:'xau-point xau-point--'+styled.tone}));
         }
-      }
-    });
-    const indexes = [...new Set([0,Math.floor((time.length-1)/2),time.length-1])];
-    for (const i of indexes) figure.append(svg('text',{x:x(time[i]),y:height-7,'text-anchor':i===0?'start':i===time.length-1?'end':'middle'},dateLabel(time[i])));
-    const marker = svg('line',{class:'marker',y1:top+18,y2:height-29,visibility:'hidden'});
-    figure.append(marker);
-    container.replaceChildren(figure);
-    return {figure, marker, x};
+      });
+      const indexes=[...new Set([0,...(width>340?[Math.floor((time.length-1)/2)]:[]),time.length-1])];
+      for(const i of indexes)figure.append(svg('text',{x:x(time[i]),y:height-10,
+        'text-anchor':i===0?'start':i===time.length-1?'end':'middle'},dateLabel(time[i])));
+      return {figure,bounds:{left,right,top:29,bottom:height-37},position:d=>({
+        x:x(d),points:points.filter(line=>Number.isFinite(line.lookup.get(d))).map(line=>({y:coordinates.get(line)(line.lookup.get(d)),tone:line.tone}))
+      })};
+    },{data:options.output?time:valid,content,onInspect:options.onInspect,onRange:options.onRange},options.output);
   }
   function optionsDisabled() {
     for(const opt of el('gold-series').options) opt.disabled = !gold[opt.value]?.points.length;
@@ -208,6 +236,10 @@
     const {rows} = selected;
     el('download').disabled = el('inspect-month').disabled = rows.length === 0;
     if (!rows.length) {
+      comparisonViewport.bind();
+      ui.clear(el('comparison-chart'));
+      comparisonChart = undefined;
+      el('compare-legend').replaceChildren();
       el('comparison-chart').replaceChildren(make('p','There are no matched observations in this window. Try a wider date range or another driver.'));
       text('chart-note','');text('inspect-value','');
       renderMatrix(goldSeries,start,end);
@@ -215,29 +247,30 @@
     }
     const first=rows[0], last=rows.at(-1), byChange=el('view').value==='change', time=rows.map(p=>p[0]);
     const gap=(annual ? 370 : quarterly ? 95 : 35)*86400000;
+    const toChange=(value,series)=>movement(value,series.kind,series.unit);
     const lines=[{series:goldSeries,column:1,className:'plot-main'},{series:driver,column:2,className:'plot-driver'}].map(l=>({
       label:(l.column===1?'Gold':'Driver')+' · '+(byChange ? changeUnit(l.series) : l.series.unit),
+      title:l.series.label,display:value=>byChange?toChange(value,l.series):fixed(value,l.series),
       lines:[{points:rows.map(row=>[row[0],byChange ? model.change(first[l.column],row[l.column],l.series.kind) : row[l.column]]),
         className:l.className,maxGap:gap}]
     }));
-    const chart = plot(el('comparison-chart'),goldSeries.label+' and '+driver.label,lines,time,labels);
-    chartMarker=chart.marker;chartPosition=chart.x;
+    el('compare-legend').replaceChildren(make('span',goldSeries.label,'xau-value xau-value--gold'),
+      make('span',driver.label,'xau-value xau-value--driver'));
     const slider=el('inspect-month');
     slider.max=rows.length-1;slider.value=slider.max;
     slider.previousElementSibling.textContent=annual?'Inspect year':quarterly?'Inspect quarter':'Inspect month';
-    chart.figure.addEventListener('click', e=>{
-      const p=chart.figure.createSVGPoint();p.x=e.clientX;p.y=e.clientY;
-      const x=p.matrixTransform(chart.figure.getScreenCTM().inverse()).x;
-      let closest=0;
-      rows.forEach((r,i)=>{if(Math.abs(chart.x(r[0])-x)<Math.abs(chart.x(rows[closest][0])-x))closest=i;});
-      slider.value=closest;inspect();
+    comparisonChart = plot(el('comparison-chart'),goldSeries.label+' and '+driver.label,lines,time,labels,{
+      output:el('inspect-value'),
+      onInspect(d,i) { slider.value=i;slider.setAttribute('aria-valuetext',el('inspect-value').textContent); },
+      onRange:(from,to)=>comparisonViewport.select(from,to)
     });
+    comparisonViewport.bind(comparisonChart);
     const drawdown=model.drawdown(rows.map(r=>r.slice(0,2)));
     const stats=model.correlation(rows,driver.kind);
     el('window-kpis').replaceChildren(
-      metric(goldSeries.label+' move',movement(model.change(first[1],last[1],'level'),'level'),labels(first[0])+' to '+labels(last[0])),
-      metric(driver.label+' move',movement(model.change(first[2],last[2],driver.kind),driver.kind,driver.unit),labels(first[0])+' to '+labels(last[0])),
-      metric('Gold peak-to-trough',drawdown?movement(drawdown.value,'level'):'—',drawdown?.value<0?labels(drawdown.peak[0])+' to '+labels(drawdown.trough[0]):'Within matched periods'),
+      metric(goldSeries.label+' move',movement(model.change(first[1],last[1],'level'),'level'),labels(first[0])+' to '+labels(last[0]),'gold','bars'),
+      metric(driver.label+' move',movement(model.change(first[2],last[2],driver.kind),driver.kind,driver.unit),labels(first[0])+' to '+labels(last[0]),'driver','trend'),
+      metric('Gold peak-to-trough',drawdown?movement(drawdown.value,'level'):'—',drawdown?.value<0?labels(drawdown.peak[0])+' to '+labels(drawdown.trough[0]):'Within matched periods','down','trend'),
       metric('Matched observations',String(rows.length),frequency+' · '+labels(first[0])+' to '+labels(last[0])),
       ...(!annual && !quarterly ? [metric('Monthly correlation',stats.value==null?'—':fmt.format(stats.value),stats.count+' monthly change pairs')] : []));
     text('chart-note',annual?'Each year pairs the annual observation with December gold. The table retains their source dates.':
@@ -248,10 +281,9 @@
     renderMatrix(goldSeries,start,end);inspect();
   }
   function inspect() {
-    const row=selected?.rows[Number(el('inspect-month').value)];
-    if(!row || !chartMarker) return;
-    text('inspect-value',selected.labels(row[0])+' · '+fixed(row[1],selected.goldSeries)+' · '+fixed(row[2],selected.driver)+' '+selected.driver.label);
-    chartMarker.setAttribute('x1',chartPosition(row[0]));chartMarker.setAttribute('x2',chartPosition(row[0]));chartMarker.setAttribute('visibility','visible');
+    const slider=el('inspect-month');
+    comparisonChart?.set(Number(slider.value));
+    slider.setAttribute('aria-valuetext',el('inspect-value').textContent);
   }
   function renderObservations() {
     if(!selected?.rows.length) return;
@@ -345,8 +377,8 @@
   function showRegimes() {
     const list=el('regime-list');
     list.replaceChildren(...[...XauRegimes.periods,latestPullback].map(p=>{
-      const card=make('article',null,'regime-card'), icon=make('span',p.icon,'section-icon');
-      icon.setAttribute('aria-hidden','true');
+      const card=make('article',null,'regime-card'), icon=make('span',null,'section-icon');
+      icon.append(ui.icon(p.id?'clock':'trend'));
       const series=model.within(gold.pink.points,p.from+'-01-01',p.end ? monthEnd(p.end) : p.to+'-12-31');
       const start=series[0],end=series.at(-1),dd=model.drawdown(series);
       const b=make('button','Open in comparison','secondary');b.type='button';
@@ -361,7 +393,7 @@
       card.append(icon,make('p',p.from===p.to?String(p.from):p.from+'–'+p.to,'chapter'),make('h3',p.name),make('p',p.note));
       if(start&&end){
         plot(makeChartContainer(card),p.name,[{label:'Gold · USD/oz',lines:[{points:series,className:'plot-main',maxGap:35*86400000}]}],
-          series.map(x=>x[0]),p.from===p.to?month:d=>d.slice(0,4));
+          series.map(x=>x[0]),p.from===p.to?month:d=>d.slice(0,4),{readDate:month});
         card.append(make('p',movement(model.change(start[1],end[1],'level'),'level')+' over '+month(start[0])+'–'+month(end[0])+'.'));
       }
       if(dd?.value<0){
@@ -394,7 +426,9 @@
     el('china-cards').replaceChildren(...entries.map(([label,value,note,key,id])=>{
       const card=make('article',null,'china-card');
       const h=make('h3',label), strong=make('strong',value);
-      card.append(h,strong,make('p',note));
+      const mark=make('span',null,'section-icon');
+      mark.append(ui.icon(({cpicn:'rates',gdpcn:'trend',safeGold:'bars',safeFx:'bank'})[key]));
+      card.append(mark,h,strong,make('p',note));
       if(['safeGold','safeFx'].includes(key)) {
         const c=makeChartContainer(card),ps=series[key];
         plot(c,label,[{label:key==='safeGold'?'Tonnes':'USD billions',lines:[{points:ps,className:'plot-main',maxGap:35*86400000}]}],ps.map(p=>p[0]),month);
@@ -432,11 +466,11 @@
     const points=series.filter(p=>p[0]<=end), last=points.at(-1);
     text('reserve-title',selectedName+' official gold');
     if(last){
-      const chart=plot(el('reserve-chart'),selectedName+' official gold in tonnes',
-        [{label:'Official holdings · tonnes',lines:[{points,className:'plot-main',maxGap:35*86400000}]}],points.map(p=>p[0]),d=>d.slice(0,4));
-      chart.figure.append(svg('title',{},'Last reported '+fmt.format(last[1])+' tonnes in '+month(last[0])));
+      plot(el('reserve-chart'),selectedName+' official gold in tonnes',
+        [{label:'Official holdings · tonnes',lines:[{points,className:'plot-main',maxGap:35*86400000}]}],points.map(p=>p[0]),d=>d.slice(0,4),{readDate:month});
       text('reserve-note',fmt.format(last[1])+' tonnes in '+month(last[0])+'. History begins '+month(points[0][0])+'. Gaps follow the source.');
     }else{
+      ui.clear(el('reserve-chart'));
       el('reserve-chart').replaceChildren(make('p','No observations before this snapshot.'));
       text('reserve-note','');
     }
@@ -460,7 +494,10 @@
     if(points.some(p=>Number.isFinite(p[1]))){
       plot(el('mine-chart'),label,
         [{label:'Mine output · tonnes',lines:[{points,className:'plot-main',maxGap:370*86400000}]}],points.map(p=>p[0]),d=>d.slice(0,4));
-    }else el('mine-chart').replaceChildren(make('p','No production observations in this edition.'));
+    }else{
+      ui.clear(el('mine-chart'));
+      el('mine-chart').replaceChildren(make('p','No production observations in this edition.'));
+    }
     text('mine-note',long ? 'USGS annual totals, 1996–2025. The 2025 total is an estimate.' : year+' · '+(Number.isFinite(data[idx])?fmt.format(data[idx])+' tonnes':'No reported value')+
       (selectedName==='World'?' globally.':' · '+(Number.isFinite(data[idx])?fmt.format(data[idx]/world[idx]*100)+'% of world production.':'Coverage varies by year.')));
     text('mine-foot','World total uses the source aggregate, including countries outside the top 30. Country flags follow the workbook. ');
@@ -560,22 +597,32 @@
     ]){
       if(!drivers[id])continue;
       const b=make('button',label);b.type='button';b.dataset.series=id;
+      const type = ['dollar','usdcny'].some(text=>id.toLowerCase().includes(text)) || id==='lib:NBUSBIS' ? 'dollar' :
+        ['real10','cpi','us10long'].includes(id) ? 'rates' : id==='official' ? 'bank' : id.includes('USGS') ? 'pick' :
+        id.startsWith('lib:pink') ? 'bars' : id==='gdpcn' ? 'globe' : 'trend';
+      ui.addIcon(b,type);
       b.addEventListener('click',()=>chosenDriver(id));el('presets').append(b);
     }
+    ui.decorate();
+    comparisonViewport = ui.viewport(el('compare-tools'),()=>['from','to'].map(id=>el(id).value),([from,to])=>{
+      el('from').value=from;el('to').value=to;
+      unmarkWindow();
+      renderComparison();
+    });
     const headline = [];
     if(prices.length){
       const actual=prices.at(-1), cutoff=actual[0].slice(0,4)-1+actual[0].slice(4);
       const peak=prices.filter(p=>p[0]>=cutoff).reduce((a,b)=>a[1]>=b[1]?a:b);
-      headline.push(metric('Spot gold · USD/oz',fmt.format(actual[1]),date(actual[0])+' · '+movement(model.change(peak[1],actual[1],'level'),'level')+' from trailing one-year high'));
+      headline.push(metric('Spot gold · USD/oz',fmt.format(actual[1]),date(actual[0])+' · '+movement(model.change(peak[1],actual[1],'level'),'level')+' from trailing one-year high','gold','bars'));
     }
     for(const key of ['real10','cpi','spx']){
       const d=drivers[key],last=d?.points.at(-1);if(!last)continue;
-      headline.push(metric(d.label,key==='spx'?fmt.format(last[1]):fixed(last[1],d),(key==='cpi'?month:date)(last[2])+(key==='spx'?' · price index':'')));
+      headline.push(metric(d.label,key==='spx'?fmt.format(last[1]):fixed(last[1],d),(key==='cpi'?month:date)(last[2])+(key==='spx'?' · price index':''),'driver',key==='spx'?'trend':'rates'));
     }
     const official=drivers.official.points.at(-1);
     const usgs=library?.series.USGS_WORLD_GOLD?.points.at(-1);
-    headline.push(metric('World official gold',fmt.format(official[1])+' t',month(official[0])),
-      usgs ? metric('World mine output',fmt.format(usgs[1])+' t',usgs[0].slice(0,4)+' · USGS estimate') :
+    headline.push(metric('World official gold',fmt.format(official[1])+' t',month(official[0]),'gold','bank'),
+      usgs ? metric('World mine output',fmt.format(usgs[1])+' t',usgs[0].slice(0,4)+' · USGS estimate','gold','pick') :
         metric('World mine output',fmt.format(snapshot.mining.world.at(-1))+' t',String(snapshot.mining.years.at(-1))));
     el('gold-kpis').replaceChildren(...headline);
     text('load-status',dataMissing.length?'Some feeds could not load. Available history is shown. Missing: '+dataMissing.join(', ')+'.':

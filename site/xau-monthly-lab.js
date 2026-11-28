@@ -27,7 +27,7 @@
   const monthIndex=m=>12*Number(m.slice(0,4))+Number(m.slice(5,7))-1;
   const indexMonth=i=>Math.floor(i/12)+'-'+String(i%12+1).padStart(2,'0');
   const fmt=new Intl.NumberFormat('en-US',{maximumFractionDigits:2});
-  const fixed=(v,unit)=>Number.isFinite(v)?fmt.format(v)+(unit==='%'?'%':' '+unit):'—';
+  const fixed=(v,unit)=>Number.isFinite(v)?fmt.format(v)+(unit==='%'?'%':unit?' '+unit:''):'—';
   const node=(tag,txt,cls)=>{
     const e=document.createElement(tag);
     if(txt!=null)e.textContent=txt;
@@ -67,86 +67,97 @@
     });
   }
 
-  // The other research views use a levels chart. This plot uses separate lanes
-  // so a driver measured in basis points never shares gold's percentage axis.
-  function timePlot(container, label, lanes, onSelect) {
-    const width=Math.max(315,Math.round(container.clientWidth));
-    const height=lanes.length===2?310:210;
-    const left=59,right=width-15, laneHeight=(height-33)/lanes.length;
-    const first=monthIndex(lanes[0].points[0][0]), last=monthIndex(lanes[0].points.at(-1)[0]);
-    const x=m=>left+(right-left)*(monthIndex(m)-first)/(last-first||1);
-    const figure=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':label});
-    lanes.forEach((lane,i)=>{
-      const values=lane.points.map(p=>p[1]).filter(Number.isFinite);
-      const min=lane.bounds?.[0] ?? Math.min(0,...values), max=lane.bounds?.[1] ?? Math.max(0,...values);
-      const spread=max-min || 1, top=20+i*laneHeight, bottom=(i+1)*laneHeight-10;
-      const y=v=>bottom-(bottom-top)*(v-min)/spread;
-      figure.append(svg('text',{x:left,y:top-6,class:'xm-series-label'},lane.title));
-      const ticks=[min,(min+max)/2,max];
-      if(min<0&&max>0)ticks[1]=0;
-      for(const v of ticks){
-        figure.append(svg('path',{class:v===0?'xm-zero':'xm-grid',d:'M'+left+' '+y(v)+'H'+right}),
-          svg('text',{x:left-7,y:y(v)+4,'text-anchor':'end'},fmt.format(v)));
-      }
-      let path='',prior;
-      for(const [m,v] of lane.points){
-        if(!Number.isFinite(v)){prior=undefined;continue;}
-        const command=prior&&monthIndex(m)-monthIndex(prior)<=(lane.gap??1)?'L':'M';
-        path+=command+x(m).toFixed(2)+' '+y(v).toFixed(2);
-        prior=m;
-      }
-      if(values.length)figure.append(svg('path',{class:lane.cls||'xm-gold',d:path}));
-      if(values.length<2&&values.length>0){
-        const p=lane.points.find(a=>Number.isFinite(a[1]));
-        figure.append(svg('circle',{cx:x(p[0]),cy:y(p[1]),r:4,class:'xm-dot'}));
-      }
-      if(!values.length)figure.append(svg('text',{x:left+10,y:top+26},'No usable observations in this window'));
-    });
-    const axis=[first,...(last-first>8?[Math.floor((first+last)/2)]:[]),...(first!==last?[last]:[])];
-    axis.forEach((i,k)=>figure.append(svg('text',{x:x(indexMonth(i)),y:height-9,'text-anchor':k===0?'start':k===axis.length-1?'end':'middle'},labelMonth(indexMonth(i)))));
-    const cursor=svg('line',{class:'xm-crosshair',y1:19,y2:height-31,visibility:'hidden'});
-    figure.append(cursor);
-    if(onSelect)figure.addEventListener('click',event=>{
-      const p=figure.createSVGPoint();p.x=event.clientX;p.y=event.clientY;
-      const transform=figure.getScreenCTM();
-      if(!transform)return;
-      const coord=p.matrixTransform(transform.inverse()).x;
-      onSelect(Math.round(first+(last-first)*Math.max(0,Math.min(1,(coord-left)/(right-left)))));
-    });
-    container.replaceChildren(figure);
-    return month=>{
-      if(!month)return;
-      const at=x(month);
-      cursor.setAttribute('x1',at);cursor.setAttribute('x2',at);cursor.setAttribute('visibility','visible');
-    };
+  function timePlot(container, label, lanes, {seek,zoom,output,brief} = {}) {
+    const lookup=lanes.map(lane=>new Map(lane.points));
+    const dates=lanes[0].points.map(p=>p[0]);
+    const indexes=new Map(dates.map((date,i)=>[date,i]));
+    const first=monthIndex(dates[0]),last=monthIndex(dates.at(-1));
+    const tone = lane=>lane.cls==='xm-driver'?'driver':'gold';
+    const control=root.XauChartUi.draw(container,width=>{
+      const height=lanes.length===2?310:210,left=56,right=width-17,laneHeight=(height-33)/lanes.length;
+      const x=m=>left+(right-left)*(monthIndex(m)-first)/(last-first||1);
+      const figure=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':label});
+      const scales=lanes.map((lane,i)=>{
+        const values=lane.points.map(p=>p[1]).filter(Number.isFinite);
+        const min=lane.bounds?.[0] ?? Math.min(0,...values),max=lane.bounds?.[1] ?? Math.max(0,...values);
+        const spread=max-min || 1,top=25+i*laneHeight,bottom=(i+1)*laneHeight-10;
+        const y=v=>bottom-(bottom-top)*(v-min)/spread;
+        figure.append(svg('text',{x:left,y:top-9,class:'xm-series-label '+(tone(lane)==='driver'?'title-driver':'title-gold')},lane.label));
+        const ticks=[min,(min+max)/2,max];
+        if(min<0&&max>0)ticks[1]=0;
+        for(const v of new Set(ticks)){
+          figure.append(svg('path',{class:v===0?'xm-zero':'xm-grid',d:'M'+left+' '+y(v)+'H'+right}),
+            svg('text',{x:left-7,y:y(v)+4,'text-anchor':'end'},fmt.format(v)));
+        }
+        let path='',prior;
+        for(const [m,v] of lane.points){
+          if(!Number.isFinite(v)){prior=undefined;continue;}
+          path+=(prior&&monthIndex(m)-monthIndex(prior)<=(lane.gap??1)?'L':'M')+x(m).toFixed(2)+' '+y(v).toFixed(2);
+          prior=m;
+        }
+        if(values.length)figure.append(svg('path',{class:lane.cls||'xm-gold',d:path}));
+        if(values.length===1){
+          const p=lane.points.find(a=>Number.isFinite(a[1]));
+          figure.append(svg('circle',{cx:x(p[0]),cy:y(p[1]),r:4,class:'xau-point xau-point--'+tone(lane)}));
+        }
+        if(!values.length)figure.append(svg('text',{x:left+6,y:top+26},'No observations in this window'));
+        return y;
+      });
+      const axis=[first,...(last-first>8 && width>345?[Math.floor((first+last)/2)]:[]),...(first!==last?[last]:[])];
+      axis.forEach((i,k)=>figure.append(svg('text',{x:x(indexMonth(i)),y:height-10,
+        'text-anchor':k===0?'start':k===axis.length-1?'end':'middle'},brief?indexMonth(i).slice(0,4):labelMonth(indexMonth(i)))));
+      return {figure,bounds:{left,right,top:18,bottom:height-33},position:m=>({
+        x:x(m),points:lanes.flatMap((lane,i)=>!Number.isFinite(lookup[i].get(m)) ? [] :
+          [{y:scales[i](lookup[i].get(m)),tone:tone(lane)}])
+      })};
+    },{
+      data:dates,content:m=>({date:brief?m.slice(0,4):labelMonth(m),values:lanes.map((lane,i)=>({
+        label:lane.title,value:fixed(lookup[i].get(m),lane.unit),tone:tone(lane)
+      }))}),onInspect:seek,onRange:zoom
+    },output);
+    return {control,set:m=>{if(indexes.has(m))control.set(indexes.get(m));}};
   }
 
-  function scatterPlot(container, points, profile, choose) {
-    if(!points.length){container.replaceChildren(node('p','No paired observations in this window.','chart-note'));return ()=>{};}
-    const width=Math.max(315,Math.round(container.clientWidth)),height=236,left=53,right=width-15,top=17,bottom=188;
+  function scatterPlot(container, points, profile, seek) {
+    if(!points.length){
+      root.XauChartUi.clear(container);
+      container.replaceChildren(node('p','No paired observations in this window.','chart-note'));
+      return ()=>{};
+    }
+    const index=new Map(points.map(([m],i)=>[m,i]));
     const limits=i=>{
       const v=points.map(p=>p[i]),min=Math.min(0,...v),max=Math.max(0,...v),pad=(max-min||1)*.08;
       return [min-pad,max+pad];
     };
     const [minX,maxX]=limits(2),[minY,maxY]=limits(1);
-    const x=v=>left+(right-left)*(v-minX)/(maxX-minX),y=v=>bottom-(bottom-top)*(v-minY)/(maxY-minY);
-    const figure=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':'Scatter plot of gold and '+profile.title+' by month'});
-    figure.append(svg('path',{class:'xm-zero',d:'M'+x(0)+' '+top+'V'+bottom+'M'+left+' '+y(0)+'H'+right}));
-    for(const v of [minX,0,maxX])figure.append(svg('text',{x:x(v),y:bottom+16,'text-anchor':v===minX?'start':v===maxX?'end':'middle'},fmt.format(v)));
-    for(const v of [minY,0,maxY])figure.append(svg('text',{x:left-6,y:y(v)+4,'text-anchor':'end'},fmt.format(v)));
-    figure.append(svg('text',{x:left,y:12,class:'xm-series-label'},'Gold change · %'),
-      svg('text',{x:(left+right)/2,y:height-10,'text-anchor':'middle'},profile.label+' · '+profile.unit));
-    const dots=new Map();
-    for(const [m,a,b] of points){
-      const dot=svg('circle',{cx:x(b),cy:y(a),r:3.6,class:'xm-dot','data-month':m});
-      dot.append(svg('title',{},labelMonth(m)+' · Gold '+fixed(a,'%')+' · '+profile.label+' '+fixed(b,profile.unit)));
-      dot.addEventListener('click',()=>choose(monthIndex(m)));dots.set(m,dot);figure.append(dot);
-    }
-    container.replaceChildren(figure);
-    let highlight;
-    return month=>{
-      highlight?.classList.remove('xm-dot-selected');highlight=dots.get(month);highlight?.classList.add('xm-dot-selected');
-    };
+    const graph=root.XauChartUi.draw(container,width=>{
+      const height=236,left=53,right=width-17,top=17,bottom=188;
+      const x=v=>left+(right-left)*(v-minX)/(maxX-minX),y=v=>bottom-(bottom-top)*(v-minY)/(maxY-minY);
+      const figure=svg('svg',{viewBox:'0 0 '+width+' '+height,role:'img','aria-label':'Scatter plot of gold and '+profile.title+' by month'});
+      figure.append(svg('path',{class:'xm-zero',d:'M'+x(0)+' '+top+'V'+bottom+'M'+left+' '+y(0)+'H'+right}));
+      for(const v of [minX,0,maxX])figure.append(svg('text',{x:x(v),y:bottom+16,'text-anchor':v===minX?'start':v===maxX?'end':'middle'},fmt.format(v)));
+      for(const v of [minY,0,maxY])figure.append(svg('text',{x:left-6,y:y(v)+4,'text-anchor':'end'},fmt.format(v)));
+      figure.append(svg('text',{x:left,y:12,class:'xm-series-label title-gold'},'Gold change · %'),
+        svg('text',{x:(left+right)/2,y:height-10,'text-anchor':'middle'},profile.label+' · '+profile.unit));
+      const point = ([,a,b])=>[x(b),y(a)];
+      const coordinates=points.map(point);
+      for(const [i,[px,py]] of coordinates.entries())figure.append(svg('circle',{cx:px,cy:py,r:3.5,class:'xm-dot','data-month':points[i][0]}));
+      return {figure,bounds:{left,right,top,bottom},position:r=>({x:x(r[2]),points:[{y:y(r[1]),tone:'gold'}]}),
+        nearest(p){
+          let best=-1,distance=20*20;
+          coordinates.forEach(([px,py],i)=>{
+            const squared=(p.x-px)**2+(p.y-py)**2;
+            if(squared<distance){distance=squared;best=i;}
+          });
+          return best;
+        }};
+    },{
+      data:points,onInspect:row=>seek(row[0]),content:([m,g,d])=>({date:labelMonth(m),values:[
+        {label:'Gold',value:fixed(g,'%'),tone:'gold'},
+        {label:profile.label,value:fixed(d,profile.unit),tone:'driver'}
+      ]})
+    });
+    return m=>{if(index.has(m))graph.set(index.get(m));};
   }
 
   function showPhysical(data) {
@@ -166,9 +177,8 @@
       link.href=def.source;source.append(link);
       if(def.extra){const recent=node('a','USGS recent summary');recent.href=def.extra;source.append(recent);}
       head.append(info,stat);box.append(head,plot,source);section.append(box);
-      const paint=()=>timePlot(plot,def.title,[{title:def.unit==='t'?'Metric tonnes':'Share of official reserves · %',points:all,gap:def.gap}],null);
-      paint();
-      new ResizeObserver(()=>{if(plot.clientWidth>0)paint();}).observe(plot);
+      timePlot(plot,def.title,[{title:def.title,label:def.unit==='t'?'Metric tonnes':'Share of official reserves · %',
+        unit:def.unit,points:all,gap:def.gap}],{brief:def.gap===12});
     }
   }
 
@@ -183,9 +193,13 @@
     const from=el('xm-from'),to=el('xm-to'),slider=el('xm-month');
     for(const input of [from,to]){input.min=first;input.max=last;}
     let key='real', range='10y', visible=[], active, charts=[];
+    const viewport=root.XauChartUi.viewport(el('xm-tools'),()=>[from.value,to.value],([start,end])=>{
+      from.value=start;to.value=end;range=null;active=null;render();
+    });
     const maps=new Map();
     for(const [id,p] of Object.entries(profiles)){
       const b=node('button',p.label);b.type='button';b.dataset.driver=id;
+      root.XauChartUi.addIcon(b,p.unit==='bp'||p.gold?'rates':id==='spx'?'trend':'dollar');
       b.addEventListener('click',()=>{key=id;if(range==='all')setWindow(range);else render();});
       el('xm-drivers').append(b);
     }
@@ -198,6 +212,7 @@
       return maps.get(key);
     }
     function setWindow(id) {
+      viewport.clear();
       range=id;
       const available=current().history.filter(matched);
       to.value=id==='pandemic'?'2021-12':last;
@@ -210,12 +225,11 @@
       if(!row)return;
       const {spec}=current(),[m,g,d]=row;
       active=m;
-      el('xm-readout').textContent=labelMonth(m)+' · Gold '+fixed(g,'%')+' · '+spec.label+' '+fixed(d,spec.unit);
-      slider.setAttribute('aria-valuetext',el('xm-readout').textContent);
+      slider.setAttribute('aria-valuetext',labelMonth(m)+' · Gold '+fixed(g,'%')+' · '+spec.label+' '+fixed(d,spec.unit));
       charts.forEach(fn=>fn(m));
     }
-    function seek(i) {
-      const at=visible.findIndex(row=>monthIndex(row[0])===i);
+    function seek(month) {
+      const at=visible.findIndex(row=>row[0]===month);
       if(at>=0){slider.value=at;inspection();}
     }
     function metric(label,value,context) {
@@ -229,7 +243,7 @@
       for(const b of el('xm-windows').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.window===range));
       if(!visible.length)return;
       const pairs=visible.filter(matched);
-      const goldTitle=spec.gold?'Gold 12-month change · %':'Gold monthly change · %';
+      const goldTitle=spec.gold?'Gold 12-month change':'Gold monthly change';
       const end=visible.at(-1)[0],start=visible[0][0],r=pearson(pairs),pairedRolling=roll.filter(p=>p[0]>=start&&p[0]<=end);
       const lastRolling=pairedRolling.findLast(p=>Number.isFinite(p[1]));
       const percent=spec.gold?'Gold and inflation compare year-over-year changes.':'Gold uses the change in World Bank monthly-average prices.';
@@ -246,23 +260,23 @@
       slider.max=String(visible.length-1);slider.disabled=visible.length<2;
       const keep=visible.findIndex(p=>p[0]===active);
       slider.value=keep<0?slider.max:String(keep);
-      charts=[
-        timePlot(el('xm-history'),'Gold and '+spec.title,[
-          {title:goldTitle,points:visible.map(r=>[r[0],r[1]])},
-          {title:spec.title+' · '+spec.unit,points:visible.map(r=>[r[0],r[2]]),cls:'xm-driver'}
-        ],seek),
-        scatterPlot(el('xm-scatter'),pairs,spec,seek),
-        timePlot(el('xm-rolling'),'Rolling 36-month gold correlation with '+spec.label,[
-          {title:'Correlation',points:pairedRolling,bounds:[-1,1],cls:'xm-driver'}
-        ],seek)
-      ];
+      const dots=scatterPlot(el('xm-scatter'),pairs,spec,seek);
+      const historyPlot=timePlot(el('xm-history'),'Gold and '+spec.title,[
+        {title:goldTitle,label:goldTitle+' · %',unit:'%',points:visible.map(r=>[r[0],r[1]])},
+        {title:spec.label,label:'Driver · '+spec.unit,unit:spec.unit,points:visible.map(r=>[r[0],r[2]]),cls:'xm-driver'}
+      ],{seek,zoom:(start,end)=>viewport.select(start,end),output:el('xm-readout')});
+      const rollingPlot=timePlot(el('xm-rolling'),'Rolling 36-month gold correlation with '+spec.label,[
+        {title:'Correlation',label:'Correlation',points:pairedRolling,bounds:[-1,1],cls:'xm-driver'}
+      ],{seek});
+      charts=[historyPlot.set,dots,rollingPlot.set];
+      viewport.bind(historyPlot.control);
       inspection();
     }
     el('xm-form').addEventListener('submit',event=>{
       event.preventDefault();
       to.setCustomValidity(from.value>to.value?'Choose an end month on or after the start month.':'');
       if(!to.reportValidity())return;
-      range=null;active=null;render();
+      viewport.clear();range=null;active=null;render();
     });
     for(const input of [from,to])input.addEventListener('input',()=>to.setCustomValidity(''));
     for(const b of el('xm-windows').querySelectorAll('button'))b.addEventListener('click',()=>{active=null;to.setCustomValidity('');setWindow(b.dataset.window);});
@@ -276,11 +290,6 @@
       document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
     });
     setWindow(range);
-    let width=el('xm-history').clientWidth;
-    new ResizeObserver(()=>{
-      const newWidth=el('xm-history').clientWidth;
-      if(newWidth>0&&newWidth!==width){width=newWidth;render();}
-    }).observe(el('xm-history'));
     showPhysical(data);
   }
 
@@ -308,7 +317,9 @@
 <button type="button" data-window="all">All shared data</button>
 </div>
 <dl id="xm-kpis" class="gold-kpis compact"></dl>
-<figure class="xm-main"><h3>Gold and the selected driver</h3><div class="chart-frame xm-chart" id="xm-history"></div><div class="scrub-row"><label for="xm-month">Inspect month</label><input id="xm-month" type="range" min="0" max="0" value="0"><output id="xm-readout" for="xm-month" aria-live="polite"></output></div></figure>
+<figure class="xm-main"><h3>Gold and the selected driver</h3>
+<div id="xm-tools" class="xau-chart-toolbar" aria-label="Driver lab chart controls"><div class="xau-chart-actions"><button type="button" data-chart-zoom aria-pressed="false" disabled>Zoom range</button><button type="button" data-chart-reset disabled>Reset zoom</button></div><p class="xau-chart-hint" data-chart-hint></p></div>
+<div class="chart-frame xm-chart" id="xm-history"></div><div class="scrub-row"><label for="xm-month">Inspect month</label><input id="xm-month" type="range" min="0" max="0" value="0"><output id="xm-readout" for="xm-month"></output></div></figure>
 <div class="xm-charts">
 <figure><h3>One point per month</h3><div class="chart-frame xm-chart" id="xm-scatter"></div><figcaption class="chart-note" id="xm-scatter-note"></figcaption></figure>
 <figure><h3>Rolling 36-month correlation</h3><div class="chart-frame xm-chart" id="xm-rolling"></div><figcaption class="chart-note">Each point uses the 36 months ending there. A gap in either series leaves a break in the line.</figcaption></figure>
@@ -320,6 +331,7 @@
     const jump=node('a','Driver lab');
     jump.href='#monthly-lab';
     document.querySelector('nav.gold-jump a[href="#compare"]')?.after(jump);
+    root.XauChartUi.decorate();
     init().catch(error=>{document.getElementById('xm-status').textContent=error.message;});
   }
   if(typeof module==='object'&&module.exports)module.exports={dataset,pearson,rolling};
