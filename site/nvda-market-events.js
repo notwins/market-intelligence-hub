@@ -62,6 +62,7 @@
   ];
 
   window.NvdaMarketEvents = entries.map(([date, category, title, note, source, url]) => ({
+    id: "nvda-event-" + date + "-" + title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
     date, category, title, note, source, url,
   }));
 })();
