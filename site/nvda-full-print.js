@@ -186,22 +186,17 @@
     const marketNotes = make("article");
     marketNotes.append(
       make("h3", "Prices and events"),
-      copy(document.querySelector(".nv-market-panel > .nv-note:last-child")),
+      copy($("nv-market-month-method")),
       make("p", "Indexed peer prices are in local currency and exclude dividends and currency conversion."),
       copy($("nv-market-returns-method")),
     );
-    if (!$("nv-market-revenue-chart").parentElement.hidden) {
-      const revenueNote = make("p", "The revenue overlay carries forward the latest quarter reported before each monthly close.");
-      const links = $("nv-market-overlay-note").querySelectorAll("a");
-      if (links.length) revenueNote.append(" Opening-quarter filings include ");
-      links.forEach((link, index) => {
-        if (index) revenueNote.append(" · ");
-        revenueNote.append(copy(link));
-      });
-      if (links.length) revenueNote.append(".");
-      marketNotes.append(revenueNote);
+    for (const note of $("nv-market-overlay-note").children) {
+      if (!$(note.dataset.chart).parentElement.hidden) marketNotes.append(copy(note));
     }
-    notes.append(filingNotes, metricNotes, marketNotes);
+    const creditNotes = make("article");
+    creditNotes.append(make("h3", "Credit and liquidity"),
+      copy($("nv-credit-liquidity-method")), copy($("nv-credit-risk-method")));
+    notes.append(filingNotes, metricNotes, marketNotes, creditNotes);
     sources.append(notes);
     addContents(report, make);
   }
