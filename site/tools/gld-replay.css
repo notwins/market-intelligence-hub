@@ -183,7 +183,7 @@
 .replay-scroll-tools[hidden] { display: none; }
 .replay-control-label { margin: 0 0 .3rem; color: var(--ink); font-weight: 700; }
 .replay-play-choices { display: flex; flex-wrap: wrap; gap: .35rem; max-width: 100%; }
-.play-shell .replay-play-choices button { min-height: 2.4rem; font-size: .88rem; }
+.play-shell .replay-play-choices button { min-height: 2.75rem; font-size: .92rem; }
 .play-shell .replay-play-choices button[aria-pressed="true"] { color: white; background: var(--gld-navy); border-color: var(--gld-navy); }
 @media (max-width: 36rem) {
   .ranking-table th[scope="row"], .ranked-windows-table th:first-child { width: 6.5rem; min-width: 6.5rem; }
