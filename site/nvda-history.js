@@ -500,12 +500,12 @@
       for (const id of controls) $(id).onchange = render;
       render();
     }
-    const showRevenueComparison = window.NvidiaRevenuePeerHistory.mount({
+    const revenueComparison = window.NvidiaRevenuePeerHistory.mount({
       financial, companies, nvidiaPeriods, groups, descriptors, metricControls, nativeField, usd, fmt, dollar, companyCell, companyMark, element, options,
     });
     for (const story of document.querySelectorAll("[data-story]")) {
       story.onclick = () => {
-        showRevenueComparison(false);
+        revenueComparison.show(false);
         $("nv-frequency").value = story.dataset.story === "annual" ? "annual" : "quarterly";
         metricControls.setValue(story.dataset.story === "annual"
           ? nativeField("Income statement", "Revenue") : "Ratios and growth / Gross margin %");
@@ -515,7 +515,7 @@
     }
     marketKpis();
     window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, companyMark, usd, fmt, dollar, element, options });
-    window.NvidiaStatementComparisons.mount({ financial, groups, companyCell, usd, element, options, printFilings });
+    window.NvidiaStatementComparisons.mount({ financial, groups, companyCell, usd, element, options, printFilings, preparePeerPrint: revenueComparison.preparePrint });
     mountDesktopExpansion();
   }
 

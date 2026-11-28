@@ -193,17 +193,19 @@
       }));
     }
 
-    function render() {
-      if (!isComparing) return;
+    function render(printPeers) {
+      const forPrint = printPeers instanceof Set;
+      if (!isComparing && !forPrint) return;
+      const field = isComparable(metric.value) ? metric.value : revenueField;
       const frequency = $("nv-frequency").value;
       const annual = frequency === "annual";
       basis.querySelector('[value="QoQ"]').disabled = annual;
       if (annual) basis.value = "YoY";
       rankingMode.querySelector('[value="QoQ"]').disabled = annual;
       if (annual && rankingMode.value === "QoQ") rankingMode.value = "YoY";
-      const descriptor = descriptors.get(metric.value);
+      const descriptor = descriptors.get(field);
       const margin = descriptor.type === "pct";
-      const shortName = rankingMetrics.find(([field]) => field === metric.value)?.[1];
+      const shortName = rankingMetrics.find(([key]) => key === field)?.[1];
       const name = margin ? shortName : descriptor.name === "Net income to parent" ? "Net income to shareholders" : descriptor.name;
       const changeName = margin ? "change" : "growth";
       const changeUnit = margin ? " (pp)" : "";
@@ -215,7 +217,7 @@
       rankingMode.querySelector('[value="QoQ"]').textContent = "QoQ " + changeName + changeUnit;
       rankingMode.querySelector('[value="YoY"]').textContent = "YoY " + changeName + changeUnit;
       $("nv-revenue-basis-label").textContent = margin ? "Change basis" : "Growth basis";
-      const revenueShare = metric.value === revenueField;
+      const revenueShare = field === revenueField;
       const shareOption = units.querySelector('[value="share"]');
       units.closest("label").hidden = !revenueShare;
       $("nv-revenue-share").hidden = !revenueShare;
@@ -227,7 +229,8 @@
       $("nv-revenue-scale-title").textContent = revenueShare ? "Revenue scale and share" : name + (margin ? " over time" : " · USD billions");
       $("nv-revenue-amount-column").textContent = name + (margin ? " (%)" : " (USD)");
       const dates = nvidiaPeriods[frequency].slice(-Number(lookback.value));
-      const peers = companies.map((_, i) => i).filter(i => i > 0 && selected.has(companies[i].ticker));
+      const peerSet = forPrint ? printPeers : selected;
+      const peers = companies.map((_, i) => i).filter(i => i > 0 && peerSet.has(companies[i].ticker));
       const snapshots = dates.map(period => comparison(period, peers, frequency, descriptor, revenueShare));
       const peerMedian = margin && peers.length > peerColors.length;
       $("nv-revenue-method").textContent = "Select a period on the trend chart to update the ranking, comparison bars and table. "
@@ -287,7 +290,7 @@
         $("fin-rank-summary").textContent = (shortName || name) + " · " + unit + " · NVIDIA period ended " + charts.date(snapshot.end)
           + " · " + count + " of " + entries.length + " companies with data";
         ranking.render(entries, {
-          key: [metric.value, mode, frequency, ...peers].join("/"), label: shortName || name, higher: true,
+          key: [field, mode, frequency, ...peers].join("/"), label: shortName || name, higher: true,
           format: actual ? formatAmount : formatChange,
           axisFormat: actual ? axisAmount : margin ? points : pct,
           onSelect: row => showCompany(row.i),
@@ -296,7 +299,7 @@
       rankingMode.onchange = () => rankSnapshot(snapshots[dates.indexOf(chooser.value)]);
       const inspect = index => {
         const snapshot = snapshots[index];
-        activePeriods[frequency] = snapshot.period;
+        if (!forPrint) activePeriods[frequency] = snapshot.period;
         chooser.value = snapshot.period;
         $("nv-revenue-growth-detail").textContent = basis.value + (margin ? " · Percentage points" : "") + " · NVIDIA period ended " + charts.date(snapshot.end);
         $("nv-revenue-share-value").textContent = pct(snapshot.total ? snapshot.own / snapshot.total * 100 : null);
@@ -373,7 +376,10 @@
       companyChoices.append(label);
     }
     show(false);
-    return show;
+    return {
+      show,
+      preparePrint: peers => { if (!isComparing) render(peers); },
+    };
   }
 
   window.NvidiaRevenuePeerHistory = { mount };

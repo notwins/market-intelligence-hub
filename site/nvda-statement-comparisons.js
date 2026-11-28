@@ -157,7 +157,7 @@
     return period.startsWith("Half-year ") ? period.slice(10, 14) + "-06-30" : period.slice(7, 11) + "-12-31";
   }
 
-  function mount({ financial, groups, usd, companyCell, element, options, printFilings }) {
+  function mount({ financial, groups, usd, companyCell, element, options, printFilings, preparePeerPrint }) {
     const hosts = new Map();
     const companies = financial.companies;
     const periods = Object.keys(financial.periods);
@@ -568,7 +568,10 @@
 
     draw();
     window.NvdaStatementPrint.mount(full => {
-      if (full) draw({ printHidden: true });
+      if (full) {
+        draw({ printHidden: true });
+        preparePeerPrint(chosen);
+      }
       return {
         groups: Object.entries(sections).filter(([, section]) => full || !section.hidden),
         statements,

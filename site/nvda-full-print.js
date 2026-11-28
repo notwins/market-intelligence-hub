@@ -20,6 +20,39 @@
     }
   }
 
+  function addContents(report, make) {
+    const entries = [
+      ["financials", "Financials", "NVIDIA filing figures, balance sheet and margins."],
+      ["peers", "Peer comparisons", "Company rankings, financial trends and valuation comparisons."],
+      ["income", "Income statement"],
+      ["balance", "Balance sheet"],
+      ["cash", "Cash flow"],
+      ["market", "Market history", "Prices, enabled overlays and event returns."],
+      ["credit", "Credit", "Liquidity, debt maturities, risks and sources."],
+    ];
+    const contents = make("nav", "", "nv-print-toc");
+    contents.setAttribute("aria-label", "Table of contents");
+    contents.append(make("h2", "Contents"));
+    const list = make("ul");
+    const pages = [...report.querySelectorAll(":scope > :is(.nv-print-sheet, .nv-print-card)")];
+    entries.forEach(([key, label, description]) => {
+      const target = pages.find(page => page.dataset.printTopic === key || page.dataset.statementFamily === key);
+      target.id = "nv-pdf-" + key;
+      const item = make("li", "", description ? "" : "nv-print-toc-sub");
+      item.dataset.tocTopic = key;
+      const link = make("a");
+      link.href = "#" + target.id;
+      const wording = make("span", "", "nv-print-toc-label");
+      wording.append(make("strong", label));
+      if (description) wording.append(make("small", description));
+      link.append(wording, make("span", String(pages.indexOf(target) + 2), "nv-print-toc-page"));
+      item.append(link);
+      list.append(item);
+    });
+    contents.append(list);
+    report.firstElementChild.after(contents);
+  }
+
   function append(report, { make, printFigure, printTable, printFilings, peerCards, filing, range, coverage }) {
     function sheet(group, title, tone, detail = "") {
       const page = make("section", "", "nv-print-sheet");
@@ -50,6 +83,16 @@
       const grid = make("div", "", "nv-print-pair");
       grid.append(...blocks);
       return grid;
+    }
+
+    function ranking(prefix) {
+      const data = $(prefix + "-chart-data");
+      if (data.hidden) return make("p", text(prefix + "-empty"), "nv-print-description");
+      const view = copy(data);
+      view.classList.add("lab-rank-figure", "nv-print-ranking");
+      view.querySelectorAll(".lab-rank-overflow-note,.lab-rank-watermark").forEach(node => node.remove());
+      view.querySelectorAll("img").forEach(logo => { logo.loading = "eager"; });
+      return view;
     }
 
     const summary = document.querySelector(".nv-summary");
@@ -85,6 +128,23 @@
       make("p", "Statement comparisons · " + filing + " · " + range + " · " + coverage, "nv-print-note"));
     report.append(...peerCards);
 
+    const growth = sheet("Peer comparisons", "Financial scale and growth", "peers", text("nv-revenue-coverage"));
+    const growthBars = make("section", "", "nv-print-chart-panel");
+    const bars = copy($("nv-revenue-growth-bars"));
+    bars.style.setProperty("--nv-print-bar-rows", Math.ceil(bars.children.length / 2));
+    const barFigure = make("figure", "", "nv-print-figure");
+    barFigure.append(bars);
+    growthBars.append(make("h3", text("nv-revenue-growth-title")),
+      make("p", text("nv-revenue-growth-detail"), "nv-print-description"), barFigure);
+    growth.append(pair(chart("nv-revenue-scale-chart", text("nv-revenue-scale-title")), growthBars),
+      make("p", "Growth uses each issuer’s reporting currency. Margin changes are shown in percentage points.", "nv-print-note"));
+
+    sheet("Peer comparisons", "Company financial ranking", "peers", text("fin-rank-summary")).append(ranking("fin-rank"));
+    const comparative = sheet("Peer comparisons", "Historical peer trend", "peers", choice("lab-trend-peer"));
+    comparative.append(chart("lab-trend", choice("lab-trend-metric"), "Calendar quarter-end buckets · fiscal dates shown for the selected period", true));
+    const simulation = sheet("Peer comparisons", "Valuation ranking at the simulated price", "peers", text("sim-rank-summary"));
+    simulation.append(ranking("sim-rank"), make("p", text("sim-basis"), "nv-print-note"));
+
     const market = sheet("Market history", "Price & valuation", "market", choice("nv-market-range") + " · " + text("nv-market-detail"));
     market.append(copy($("nv-market-kpis")), chart("nv-market-chart", text("nv-market-title"), "", true),
       copy(document.querySelector(".nv-market-panel > .nv-note:not([hidden]):last-child")));
@@ -114,6 +174,7 @@
     const sources = make("section", "", "nv-print-sources");
     sources.append(make("h3", "Sources and methodology"), copy(document.querySelector("#sources .nv-source-grid")));
     credit.append(sources);
+    addContents(report, make);
   }
 
   const textFrom = selector => document.querySelector(selector).textContent.trim();
