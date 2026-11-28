@@ -71,4 +71,3 @@
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.GldReplayResults = api;
 })(globalThis);
-
