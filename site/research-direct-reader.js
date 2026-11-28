@@ -1,7 +1,7 @@
 import {pickTheme} from './research-cover.js?v=1';
 import {publishedCover} from './research-cover-metadata.js?v=1';
 import {directArticleURL, originalArticleURL} from './research-reader-route.js?v=2';
-import {presentArticle, readingControls, readingStyles, restoreArticleAnchor} from './research-reading.js?v=2';
+import {presentArticle, readingControls, readingStyles, restoreArticleAnchor} from './research-reading.js?v=3';
 
 const base = new URL('./', import.meta.url);
 

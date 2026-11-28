@@ -1,0 +1,105 @@
+/* The reader cover and controls, sized for a native Quick read dialog. */
+dialog.quick-preview:is(.mu-brief-dialog, .quick-read-dialog) {
+  --quick-paper: #f8f7f2;
+  --quick-ink: #292a24;
+  --quick-rule: #d1cfc3;
+  box-sizing: border-box;
+  width: min(61rem, calc(100vw - 20px));
+  max-width: calc(100vw - 20px);
+  max-height: 94dvh;
+  padding: 0;
+  margin: auto;
+  background: var(--quick-paper);
+  color: var(--quick-ink);
+  border: 1px solid var(--quick-rule);
+  border-radius: 10px;
+  overscroll-behavior: contain;
+  scroll-padding-top: 7rem;
+  font: 500 1rem/1.45 "Reader Sans", system-ui, sans-serif;
+}
+.quick-preview::backdrop { background: #242b27b8; }
+.quick-preview [hidden] { display: none !important; }
+dialog.quick-preview > .quick-preview-bar {
+  position: sticky;
+  z-index: 3;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  justify-content: normal;
+  gap: .25rem .55rem;
+  padding: .4rem clamp(.5rem, 2vw, 1.2rem);
+  border-bottom: 1px solid var(--quick-rule);
+  background: linear-gradient(#91593b, #91593b) left bottom / calc(100% * var(--reader-progress, 0)) 3px no-repeat var(--quick-paper);
+}
+.quick-preview .quick-preview-name {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.quick-preview-label, .quick-preview-tools, .quick-preview-links {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  min-width: 0;
+}
+.quick-preview-label { font-weight: 670; }
+.quick-preview-links { grid-column: 1 / -1; flex-wrap: wrap; }
+.quick-preview .quick-preview-bar :is(a, summary, button.quick-preview-close) {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  min-height: 44px;
+  padding: .35rem .55rem;
+  color: #354538;
+  background: #f0eee4;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  text-decoration: none;
+  font: 650 .86rem/1.15 "Reader Sans", system-ui, sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.quick-preview .quick-preview-bar :is(a, summary, button.quick-preview-close):hover,
+.quick-preview .quick-preview-settings[open] summary { background: #e4ebdd; border-color: #b8c7b3; }
+.quick-preview .quick-preview-settings { margin: 0; padding: 0; border: 0; background: none; }
+.quick-preview .quick-preview-settings summary, .quick-preview .quick-preview-bar .quick-preview-close { min-width: 44px; }
+dialog.quick-preview .quick-preview-bar .quick-preview-close { margin: 0; font-size: 1.4rem; }
+.quick-preview-options {
+  position: absolute;
+  inset: calc(100% + .25rem) .45rem auto auto;
+  width: min(21rem, calc(100% - .9rem));
+  z-index: 1;
+  box-sizing: border-box;
+  padding: .8rem;
+  background: var(--quick-paper);
+  border: 1px solid var(--quick-rule);
+  border-radius: 7px;
+  box-shadow: 0 10px 25px #292a2424;
+}
+.quick-preview-options label { display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-weight: 650; }
+.quick-preview-options input { width: 1.25rem; height: 1.25rem; accent-color: #36564a; }
+dialog.quick-preview .quick-preview-options p { margin: .35rem 0 0; font-size: .84rem; line-height: 1.4; }
+.quick-preview .research-reading-cover { margin: 0; padding: clamp(1.05rem, 3vw, 2.1rem); }
+dialog.quick-preview .research-reading-intro > .research-reading-title {
+  font: 520 clamp(2rem, 4.25vw, 3.65rem)/1.02 "Reader Serif", Georgia, serif;
+}
+dialog.quick-preview .research-reading-intro > .research-reading-kicker {
+  font: 700 .82rem/1.25 "Reader Sans", system-ui, sans-serif;
+}
+.quick-preview-body, .quick-preview > [data-brief-help] { margin: 1rem clamp(.75rem, 3vw, 2rem); }
+.quick-preview .quick-preview-body :is(img, iframe) { max-width: 100%; box-sizing: border-box; }
+.quick-preview .quick-preview-body iframe { min-height: 19rem; border: 1px solid var(--quick-rule); border-radius: 5px; background: #fff; }
+
+@media (max-width: 480px) {
+  dialog.quick-preview:is(.mu-brief-dialog, .quick-read-dialog) { width: calc(100vw - 8px); max-width: calc(100vw - 8px); }
+  .quick-preview .quick-preview-label .reader-icon, .quick-preview .quick-preview-jump .reader-icon { display: none; }
+  dialog.quick-preview > .quick-preview-bar { gap: .22rem .35rem; }
+  .quick-preview .quick-preview-bar :is(a, summary, button.quick-preview-close) { padding-inline: .42rem; }
+}

@@ -2,8 +2,71 @@
 (()=>{'use strict';const E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));let dataPromise,items=[],dialog,opener,ticket=0;
 const href=s=>{try{const u=new URL(s,location.href);return u.protocol==='https:'&&u.hostname==='notwins.github.io'||u.origin===location.origin?u.href:'';}catch{return '';}};
 async function load(){if(dataPromise)return dataPromise;dataPromise=(async()=>{const d=await fetch('data/desk-data.json').then(r=>{if(!r.ok)throw Error('Saved library unavailable');return r.json();});const local=d.reports.map(r=>({...r,when:r.uploaded_at||r.added_at||r.recorded_publication_date||r.research_date}));try{const f=await ContentDelivery.research(ResearchFeed.validate(await fetch('data/research-feed.json').then(r=>r.json())));for(const r of f.records)local.push({id:r.id,title:r.title,summary:r.summary,href:ResearchFeed.destination(r,r.full_report_url),when:r.verified_at_sgt,cutoff:r.cutoff_sgt,brief:r.quick_read?{url:ResearchFeed.destination(r,r.quick_read.url),sha256:r.quick_read.sha256}:null});}catch{}const seen=new Set();return local.filter(r=>href(r.href)&&r.when&&Number.isFinite(Date.parse(r.when))).sort((a,b)=>Date.parse(b.when)-Date.parse(a.when)).filter(r=>{const key=r.id.replace(/-r\d+$/,'');if(seen.has(key))return false;seen.add(key);return true;}).slice(0,5);})();return dataPromise;}
-function create(){dialog=document.createElement('dialog');dialog.className='quick-read-dialog';dialog.setAttribute('aria-labelledby','overview-quick-title');dialog.innerHTML='<header><h2 id="overview-quick-title"></h2><button aria-label="Close Quick Read">×</button></header><div data-quick-body></div><p><a data-quick-full>Read full report →</a></p>';document.body.append(dialog);dialog.querySelector('button').onclick=()=>dialog.close();dialog.addEventListener('close',()=>{if(dialog.open)return;++ticket;dialog.querySelector('[data-quick-body]').replaceChildren();opener?.focus();});}
-async function open(i,button){const r=items[i];if(!r)return;if(!dialog)create();opener=button;const n=++ticket;dialog.querySelector('h2').textContent=r.title+' · Quick Read';dialog.querySelector('[data-quick-full]').href=href(r.href);const body=dialog.querySelector('[data-quick-body]');body.innerHTML=`<p><b>Saved article summary</b></p><p>${E(r.summary||'A saved short summary is unavailable. Open the complete report below.')}</p>${r.cutoff?`<p><small>Report cutoff: ${E(r.cutoff)}</small></p>`:''}`;dialog.showModal();dialog.querySelector('button').focus();if(!r.brief)return;try{const response=await fetch(href(r.brief.url));if(!response.ok)throw Error('Unavailable');const bytes=await response.arrayBuffer(),hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');if(hash!==r.brief.sha256)throw Error('Changed');if(n!==ticket||!dialog.open)return;const a=document.createElement('a');a.href=href(r.brief.url);a.textContent='Open verified matching brief →';body.append(a);if(r.brief.url.endsWith('.html')){const frame=document.createElement('iframe');frame.title=r.title+' matching brief';frame.setAttribute('sandbox','');frame.srcdoc='<base href="'+E(href(r.brief.url))+'">'+new TextDecoder().decode(bytes);body.append(frame);}}catch{if(n===ticket&&dialog.open)body.insertAdjacentHTML('beforeend','<p>Matching brief preview unavailable. The saved summary and full-report link remain available.</p>');}}
+function create(){
+ dialog=document.createElement('dialog');
+ dialog.className='quick-read-dialog';
+ dialog.setAttribute('aria-labelledby','overview-quick-title');
+ dialog.innerHTML='<header><h2 id="overview-quick-title"></h2><button type="button" aria-label="Close Quick Read">×</button></header><div data-quick-body></div><p><a data-quick-original hidden target="_blank" rel="noopener">Open verified matching brief →</a><a data-quick-full>Read full report →</a></p>';
+ document.body.append(dialog);
+ dialog.querySelector('button').onclick=()=>dialog.close();
+ dialog.addEventListener('close',()=>{
+  if(dialog.open)return;
+  ++ticket;
+  dialog.querySelector('[data-quick-body]').replaceChildren();
+  opener?.focus();
+ });
+}
+
+async function open(i,button){
+ const r=items[i];
+ if(!r)return;
+ if(!dialog)create();
+ opener=button;
+ const n=++ticket;
+ const full=dialog.querySelector('[data-quick-full]');
+ const original=dialog.querySelector('[data-quick-original]');
+ const body=dialog.querySelector('[data-quick-body]');
+ dialog.querySelector('h2').textContent=r.title+' · Quick read';
+ full.href=href(r.href);
+ original.hidden=true;
+ original.removeAttribute('href');
+ body.innerHTML=`<p><b>Saved article summary</b></p><p>${E(r.summary||'A saved short summary is unavailable. Open the complete report above.')}</p>${r.cutoff?`<p><small>Report cutoff: ${E(r.cutoff)}</small></p>`:''}`;
+ dialog.showModal();
+ dialog.querySelector('button').focus();
+
+ import('./research-quick-preview.js?v=2').then(async module=>{
+  if(n!==ticket||!dialog.open)return;
+  const preview=module.quickPreview(dialog,{body,original,full});
+  preview.cover({title:r.title});
+  const cover=await module.overviewQuickCover(r);
+  if(n===ticket&&dialog.open)preview.cover(cover);
+ }).catch(()=>{});
+
+ if(!r.brief)return;
+ try{
+  const source=href(r.brief.url);
+  const response=await fetch(source);
+  if(!response.ok)throw Error('Unavailable');
+  const received=await response.arrayBuffer();
+  const html=new URL(source).pathname.endsWith('.html');
+  const bytes=html?ResearchFeed.originalReportBytes(received):received;
+  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
+  if(hash!==r.brief.sha256)throw Error('Changed');
+  if(n!==ticket||!dialog.open)return;
+  original.href=source;
+  original.hidden=false;
+  if(html||!matchMedia('(max-width:620px)').matches){
+   const frame=document.createElement('iframe');
+   frame.title=r.title+' matching brief';
+   frame.setAttribute('sandbox','allow-downloads');
+   if(html)frame.srcdoc='<base href="'+E(source)+'">'+new TextDecoder().decode(bytes);
+   else frame.src=source;
+   body.append(frame);
+  }
+ }catch{
+  if(n===ticket&&dialog.open)body.insertAdjacentHTML('beforeend','<p>Matching brief preview unavailable. The saved summary and full-report link remain available.</p>');
+ }
+}
 async function mount(){const host=document.getElementById('overview-quick-cards');if(!host||host.dataset.bound)return;host.dataset.bound='1';try{items=await load();if(!host.isConnected)return;host.innerHTML=items.map((r,i)=>`<button class="latest-quick-card" data-overview-quick="${i}"><small>Quick Read · published research</small><h3>${E(r.title)}</h3><span>Open Quick Read ↗</span></button>`).join('')||'<p>No dated published research available.</p>';}catch{host.textContent='Saved research unavailable. Open Research Explained from the main page.';}}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-overview-quick]');if(b)open(Number(b.dataset.overviewQuick),b);});new MutationObserver(()=>mount()).observe(document.getElementById('view')||document.body,{childList:true,subtree:true});mount();
 })();
