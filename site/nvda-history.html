@@ -8,6 +8,7 @@
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
 <link rel="stylesheet" href="nvda-history.css?v=13">
+<link rel="stylesheet" href="nvda-presenter.css?v=1">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=3">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=20261129.printreadability">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
@@ -26,6 +27,7 @@
 <script defer src="nvda-market-timeline.js?v=7"></script>
 <script defer src="nvda-market-event-table.js?v=2"></script>
 <script defer src="nvda-history.js?v=20261129.layout"></script>
+<script defer src="nvda-presenter.js?v=2"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
 <body class="nvda-history-page">
@@ -38,7 +40,7 @@
       <div class="nv-brand"><img src="assets/company-logos/NVDA.webp" width="44" height="44" alt=""><span>NASDAQ <i></i> NVDA</span></div>
       <h1>NVIDIA<br><em>in history.</em></h1>
       <p>Explore how NVIDIA’s earnings, balance sheet and valuation changed as the business scaled, and how it compares with 30 technology peers.</p>
-      <div class="nv-hero-links"><a class="nv-primary" href="#financials">Explore the financials <span aria-hidden="true">↓</span></a><a href="#peers">Compare peers <span aria-hidden="true">↗</span></a><button type="button" id="nv-full-print" class="nv-layout-button" disabled>Print Full NVDA Page</button></div>
+      <div class="nv-hero-links"><a class="nv-primary" href="#financials">Explore the financials <span aria-hidden="true">↓</span></a><a href="#peers">Compare peers <span aria-hidden="true">↗</span></a><button type="button" id="nv-presenter-open" class="nv-presenter-launch" aria-controls="nv-presenter" aria-expanded="false" disabled><span aria-hidden="true">▶</span> Play guided tour</button><button type="button" id="nv-full-print" class="nv-layout-button" disabled>Print Full NVDA Page</button></div>
     </div>
     <figure class="nv-hero-image"><img src="assets/nvda-history-chip.webp" width="1200" height="800" alt="" fetchpriority="high"><figcaption><span>AI infrastructure</span><span>Concept illustration</span></figcaption></figure>
   </div>
@@ -432,5 +434,232 @@
 <noscript><p class="nv-shell nv-note">Enable JavaScript to use the historical charts and tables.</p></noscript>
 </main>
 <footer class="nv-foot"><div class="nv-shell"><a href="desk.html">Market Intel</a><a href="v4.html#history/shares">Shares &amp; Historical ↗</a><a href="#overview">Back to top ↑</a></div></footer>
+<aside class="nv-presenter" id="nv-presenter" role="dialog" aria-labelledby="nv-presenter-label" hidden>
+  <div class="nv-presenter-header" title="Drag to move the tour on desktop">
+    <h2 id="nv-presenter-label">NVIDIA guided tour</h2>
+    <button type="button" class="nv-presenter-close" id="nv-presenter-close" aria-label="Close guided tour">×</button>
+  </div>
+  <p class="nv-presenter-progress" id="nv-presenter-progress"></p>
+  <div class="nv-presenter-caption" id="nv-presenter-caption" aria-live="polite" aria-atomic="true"></div>
+  <label class="nv-presenter-pick">Chapter<select id="nv-presenter-chapter"></select></label>
+  <div class="nv-presenter-controls">
+    <button type="button" id="nv-presenter-prev" aria-label="Previous stop">← Previous</button>
+    <button type="button" class="nv-presenter-play" id="nv-presenter-toggle">Pause</button>
+    <button type="button" id="nv-presenter-next" aria-label="Next stop">Next →</button>
+    <label class="nv-presenter-voice"><input type="checkbox" id="nv-presenter-voice" checked> Voice</label>
+  </div>
+  <p class="nv-presenter-status" id="nv-presenter-status" role="status"></p>
+</aside>
+<details class="nv-presenter-script nv-shell" id="nv-presenter-script">
+  <summary>Presenter script</summary>
+  <!--
+    Edit the title and paragraph in each stop. Reorder stops or add another li to change the tour.
+    data-chapter groups stops in the player. data-target is the selector to highlight and scroll to.
+    data-actions is an optional JSON list, applied in order. Supported cues:
+    click(selector), check(selector, boolean), choose(select, option value or label),
+    input(field, text), sort(button, direction), scan(chart, optional array of fractions 0 to 1),
+    point(selector), after(milliseconds, cue, selector, optional value).
+  -->
+  <ol>
+    <li data-chapter="Overview" data-target='.nv-hero-copy'>
+      <h3>From graphics to AI infrastructure</h3>
+      <p>How did a graphics chip company become one of the biggest names in AI? We’ll follow the same business through its filings, its share price and its competitors. By the end, you’ll see where those three stories meet.</p>
+    </li>
+    <li data-chapter="Overview" data-target='.nv-summary .nv-kpis'>
+      <h3>What NVIDIA sells now</h3>
+      <p>Start with the October 2026 quarter. Of roughly 116 billion dollars in revenue, about 108 billion came from Data Center. Keep that concentration in mind as we follow the company’s growth and come back to its credit risks.</p>
+    </li>
+    <li data-chapter="Financials" data-target='#nv-fin-solo'
+        data-actions='[
+          ["click","#nv-fin-solo-toggle"],
+          ["choose","#nv-frequency","annual"],
+          ["click","#financials [data-metric-families] button:first-child"],
+          ["choose","#financials [data-metric-subgroup]","Sales &amp; earnings"],
+          ["choose","#nv-fin-metric","Revenue"],
+          ["choose","#nv-fin-mode","actual"],
+          ["scan","#nv-fin-chart",[0,0.27,0.54,0.62,0.69,0.77,0.85,0.92,1]]
+        ]'>
+      <h3>A business changes scale</h3>
+      <p>Watch the cursor move through the annual bars. Revenue reached nearly 27 billion dollars in fiscal 2022 and nearly 216 billion in fiscal 2026. Seeing the whole series gives us a sense of how quickly the scale changed.</p>
+    </li>
+    <li data-chapter="Financials" data-target='.nv-fin-pair'
+        data-actions='[
+          ["scan","#nv-margin-chart"]
+        ]'>
+      <h3>What stayed from each dollar</h3>
+      <p>As sales grew, how much did NVIDIA keep? The margin chart starts with gross profit and goes down to net profit. Beside it, assets, liabilities and equity show how much larger the balance sheet became.</p>
+    </li>
+    <li data-chapter="Financials" data-target='#nv-statement'
+        data-actions='[
+          ["choose","#nv-statement","Balance sheet"]
+        ]'>
+      <h3>From chart back to filing</h3>
+      <p>The statement explorer takes us back to a single filing. Pick a period and read an actual balance beside its dollar and percentage changes. The year-over-year column compares it with the same quarter a year earlier.</p>
+    </li>
+    <li data-chapter="Financials" data-target='#fin-rank-chart'
+        data-actions='[
+          ["click","#nv-fin-peer-toggle"],
+          ["choose","#nv-frequency","quarterly"],
+          ["click","#financials [data-metric-families] button:first-child"],
+          ["choose","#financials [data-metric-subgroup]","Sales &amp; earnings"],
+          ["choose","#nv-fin-metric","Revenue"],
+          ["choose","#nv-revenue-peer-preset","direct"],
+          ["choose","#fin-rank-mode","actual"],
+          ["click","#fin-rank-bars [data-ticker=\"AMD\"]"],
+          ["after",4900,"choose","#fin-rank-mode","YoY"],
+          ["after",5050,"click","#fin-rank-bars [data-ticker=\"AMD\"]"]
+        ]'>
+      <h3>Find AMD in the ranking</h3>
+      <p>Here’s AMD in the dollar ranking. Now watch the ranking switch to year-over-year growth. The dollar bars show how much each company sold. Growth rates show how fast those sales changed from each company’s own starting point.</p>
+    </li>
+    <li data-chapter="Statement comparison" data-target='#nv-statement-peer-cards [data-statement-family="income"] article'
+        data-actions='[
+          ["click","#nv-statement-peer-tabs button[data-statement=\"income\"]"],
+          ["choose","#nv-statement-peer-preset","core"],
+          ["choose","#nv-statement-peer-period","Latest quarterly"],
+          ["choose","#nv-statement-peer-growth","YoY"]
+        ]'>
+      <h3>Sales and earnings side by side</h3>
+      <p>Let’s put NVIDIA beside AMD, Broadcom and Microsoft. Revenue tells us how large each business is. Net income and margins tell us how much of those sales reached the bottom line. Select any period to update the numbers beside the chart.</p>
+    </li>
+    <li data-chapter="Statement comparison" data-target='#nv-statement-peer-cards [data-statement-family="balance"] article'
+        data-actions='[
+          ["click","#nv-statement-peer-tabs button[data-statement=\"balance\"]"],
+          ["choose","#nv-statement-peer-preset","core"],
+          ["choose","#nv-statement-peer-period","Latest quarterly"],
+          ["choose","#nv-statement-peer-growth","YoY"]
+        ]'>
+      <h3>What the companies own and owe</h3>
+      <p>On the balance sheet, compare assets with liabilities and equity. Check each issuer’s filing date before drawing conclusions. Two companies can report in the same calendar quarter while taking their snapshots on different days.</p>
+    </li>
+    <li data-chapter="Statement comparison" data-target='#nv-statement-peer-cards [data-statement-family="cash"] article'
+        data-actions='[
+          ["click","#nv-statement-peer-tabs button[data-statement=\"cash\"]"],
+          ["choose","#nv-statement-peer-preset","core"],
+          ["choose","#nv-statement-peer-period","Latest quarterly"],
+          ["choose","#nv-statement-peer-growth","YoY"]
+        ]'>
+      <h3>Follow the cash</h3>
+      <p>Operating cash flow shows the cash the business generated. Subtract capital spending to see how much was left after that investment. This is where you can see whether growing earnings are converting into cash.</p>
+    </li>
+    <li data-chapter="Market history" data-target='#nv-market-chart'
+        data-actions='[
+          ["click","#market [data-metric-families] button:first-child"],
+          ["choose","#nv-market-metric","0"],
+          ["choose","#nv-market-range","120"],
+          ["check","#nv-market-overlay-events",false],
+          ["check","#nv-market-overlay-pe",false],
+          ["check","#nv-market-overlay-revenue",false],
+          ["scan","#nv-market-chart"]
+        ]'>
+      <h3>Ten years of share prices</h3>
+      <p>Now follow the investor’s timeline. The price series adjusts for stock splits, which makes prices comparable across the decade. The chart uses monthly closes, so big moves within a month can disappear between the points.</p>
+    </li>
+    <li data-chapter="Market history" data-target='#nv-market-chart'
+        data-actions='[
+          ["click","#market [data-metric-families] button:first-child"],
+          ["choose","#nv-market-metric","0"],
+          ["choose","#nv-market-range","120"],
+          ["check","#nv-market-overlay-events",false],
+          ["check","#nv-market-overlay-pe",true],
+          ["check","#nv-market-overlay-revenue",true],
+          ["scan","#nv-market-chart"],
+          ["after",7200,"point","#nv-market-revenue-chart"]
+        ]'>
+      <h3>Price, earnings and valuation</h3>
+      <p>Add trailing P to E and quarterly revenue. The panels move together as we advance through time. One shows how much investors paid per dollar of trailing earnings. The other shows the most recent revenue figure investors had at each monthly close.</p>
+    </li>
+    <li data-chapter="Market history" data-target='#nvda-event-2024-03-18-blackwell-platform-announced'
+        data-actions='[
+          ["click","#market [data-metric-families] button:first-child"],
+          ["choose","#nv-market-metric","0"],
+          ["choose","#nv-market-range","120"],
+          ["check","#nv-market-overlay-events",true],
+          ["check","#nv-market-event-filter input[value=\"nvidia\"]",true],
+          ["click","#nv-market-annotations button[title*=\"Blackwell platform announced\"]"],
+          ["choose","#nv-market-event-select","Blackwell platform announced"]
+        ]'>
+      <h3>The Blackwell announcement</h3>
+      <p>In March 2024, NVIDIA unveiled Blackwell. From the last close before the announcement, the stock was down about 3.6 percent after one month and up about 54 percent after three months. Those windows include all the other news investors learned along the way.</p>
+    </li>
+    <li data-chapter="Market history" data-target='#nvda-event-returns'
+        data-actions='[
+          ["sort","#nvda-event-returns [data-event-sort=\"3\"]","descending"]
+        ]'>
+      <h3>Compare the moves across events</h3>
+      <p>The table collects all 28 events. Sort by the one-month or three-month move, in dollars or percent. Green and red mark gains and losses. Choose an event’s name to jump back to its marker and see the dates and prices behind the calculation.</p>
+    </li>
+    <li data-chapter="Peers" data-target='#nv-peer-rows'
+        data-actions='[
+          ["choose","#nv-peer-group","all"],
+          ["choose","#nv-peer-period","Latest quarterly"],
+          ["choose","#nv-peer-sort","revenue"],
+          ["after",5000,"choose","#nv-peer-sort","growth"],
+          ["after",5400,"point","#nv-peer-rows tr[data-company=\"AMD\"]"]
+        ]'>
+      <h3>Compare the whole supply chain</h3>
+      <p>The peer table brings together chip companies, cloud platforms and equipment suppliers. Start with revenue to see relative size. Then sort by revenue growth to see who grew fastest. The filing dates beside each company help put those comparisons in context.</p>
+    </li>
+    <li data-chapter="Peers" data-target='#nv-peer-chart'
+        data-actions='[
+          ["choose","#nv-line-peer","AMD"],
+          ["choose","#nv-peer-range","36"],
+          ["scan","#nv-peer-chart"]
+        ]'>
+      <h3>Trace NVDA and AMD from the same starting line</h3>
+      <p>Here’s AMD again, this time on the price chart. Both stocks begin at 100 in their first shared month. Follow the cursor to see how far each moved relative to that starting point. The chart shows price changes before dividends.</p>
+    </li>
+    <li data-chapter="Credit" data-target='#credit .nv-credit-metrics'
+        data-actions='[
+          ["after",7400,"point","#credit .nv-debt-bars"]
+        ]'>
+      <h3>Read NVIDIA like a lender</h3>
+      <p>Here’s the view from a lender’s desk. The October snapshot shows about 54 billion dollars in cash and marketable debt securities combined. The maturity chart shows when the new notes fall due. The cash position and repayment dates answer different questions about credit risk.</p>
+    </li>
+    <li data-chapter="Sources" data-target='#sources .nv-source-grid'>
+      <h3>Trace a number to its source</h3>
+      <p>This is the audit trail. Use the filing links to verify periods and figures. Check the currency notes when comparing international companies, and the market history notes when you want to know which closing price or valuation measure you’re looking at.</p>
+    </li>
+    <li data-chapter="Full comparison" data-target='#lab-search'
+        data-actions='[
+          ["choose","#lab-group","all"],
+          ["choose","#lab-period","Latest quarterly"],
+          ["input","#lab-search","cash flow"],
+          ["after",3900,"point","#lab-rows"]
+        ]'>
+      <h3>Find one line across 31 companies</h3>
+      <p>Think of this table as a workbench. Search for cash flow to see the matching lines across the group. On a smaller screen, scroll the table sideways to reach more companies. A dash marks a value the archive does not have.</p>
+    </li>
+    <li data-chapter="Full comparison" data-target='#lab-trend'
+        data-actions='[
+          ["choose","#lab-trend-peer","AMD"],
+          ["scan","#lab-trend"]
+        ]'>
+      <h3>Look through time</h3>
+      <p>A table is good for reading a number. A trend chart is better for seeing a pattern. Pick a peer and move through the quarters. The readout gives the actual filing dates, which can differ even when companies appear in the same quarter on the chart.</p>
+    </li>
+    <li data-chapter="Full comparison" data-target='.lab-desks'>
+      <h3>Open the deeper research</h3>
+      <p>The two Stocks Beta panels are the next stop when you want more detail. Beta 2 opens company research, earnings and guidance. Beta 3 takes you into filings, business segments and solvency. You can open either from this page.</p>
+    </li>
+    <li data-chapter="Price simulator" data-target='#sim-results'
+        data-actions='[
+          ["choose","#sim-group","all"],
+          ["click","#price-simulator [data-price=\"150\"]"],
+          ["after",5600,"click","#price-simulator [data-price=\"250\"]"]
+        ]'>
+      <h3>What changes at a different price?</h3>
+      <p>Let’s price the same NVIDIA business at 150 dollars a share, then at 250. Watch what happens to the valuation multiples. The reported earnings stay the same. At the higher price, you’re paying more for that same set of results.</p>
+    </li>
+    <li data-chapter="Price simulator" data-target='#sim-rank-chart'
+        data-actions='[
+          ["choose","#sim-group","all"],
+          ["click","#sim-rank-bars [data-ticker=\"AMD\"]"]
+        ]'>
+      <h3>See where NVIDIA ranks</h3>
+      <p>Now compare that scenario with AMD and the wider group. Price to earnings is one lens. The rankings also offer other valuation measures. This is where our tour ends. Pick any chapter to revisit a chart or pause and explore the numbers yourself.</p>
+    </li>
+  </ol>
+</details>
 </body>
 </html>
