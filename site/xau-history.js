@@ -200,16 +200,68 @@
     const a=make('a');a.href=url;a.download='gold-macro-comparison.csv';document.body.append(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
-  const periods = [
-    {from:1980,to:1999,icon:'≋',name:'Inflation era and long decline',note:'The 1980 price spike gave way to a long drawdown. The inflation-adjusted view shows how purchasing power changed over the same period.'},
-    {from:2001,to:2011,icon:'↗',name:'The 2000s gold bull market',note:'The decade spans the 2008 crisis and the subsequent climb into 2011. The monthly path shows the drawdowns along the way.'},
-    {from:2011,to:2020,icon:'⌁',name:'The slow recovery after 2011',note:'Gold’s return to its prior high took years. Compare the U.S. real yield and stock market across their available overlap.'},
-    {from:2020,to:2022,icon:'◈',name:'Pandemic to tightening',note:'Put the 2020 gold rally and the 2022 repricing next to real yields and breakeven inflation.'},
-    {from:2022,to:2026,icon:'◉',name:'Gold, rates and reserves',note:'Gold and the opportunity cost of holding it moved in different directions at points. Compare observed prices and real yields, then review official gold holdings.'}
-  ];
+  let regimeContext={};
+  const purchaseReferences={
+    '2001-2011':[['2008',-235],['2011',457]],
+    '2011-2020':[['2020',272.9]],
+    '2020-2022':[['2020',272.9],['2022',1136]],
+    '2022-2026':[['2022',1136],['2025',863],['Jan–Sep 2026',675]]
+  };
+  const replayHref=(id,phase)=>'tools/gld-strategy.html?replay='+id+'&phase='+phase+'#path-history-replay';
+
+  function measure(base, window, candidates, kind) {
+    const ranked=candidates.filter(Boolean).map(series=>({series,rows:model.pairs(base,series.points,window.start,window.end,false)}));
+    const complete=ranked.find(({rows})=>rows.length>=2&&rows[0][0]===window.start&&rows.at(-1)[0]===window.end);
+    const observed=complete??ranked.sort((a,b)=>b.rows.length-a.rows.length)[0];
+    const box=make('div',null,'regime-movement');
+    if(!observed||observed.rows.length<2){
+      box.append(make('strong','—'),make('small','No comparable endpoints'));
+      return box;
+    }
+    const {series,rows}=observed,first=rows[0],last=rows.at(-1);
+    const value=kind==='tonnes'?signed(last[2]-first[2])+' t':movement(model.change(first[2],last[2],kind),kind);
+    const periods=month(first[0])+' – '+month(last[0]);
+    const unit=kind==='tonnes'?' t':kind==='rate'?'%':'';
+    box.append(make('strong',value),make('small',fmt.format(first[2])+unit+' to '+fmt.format(last[2])+unit),
+      make('small',periods+(complete?'':' · partial')));
+    if(series.hint)box.append(make('small',series.hint));
+    return box;
+  }
+
+  function showRegimeMatrix(phase) {
+    document.querySelectorAll('#regime-phases button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.phase===phase)));
+    const base=gold.pink.points;
+    const olderDollar={points:regimeContext.legacyDollar??[],hint:'Fed legacy major-currency index'};
+    const olderSpx={points:regimeContext.legacySpx??[],hint:'Shiller monthly averages'};
+    const broad=drivers.dollar?{...drivers.dollar,hint:'Fed broad dollar index'}:null;
+    const body=table(el('regime-matrix'),['Regime and replay','Gold · USD/oz','U.S. dollar','U.S. 10Y real yield','U.S. CPI inflation · YoY','S&P 500 · price','Central banks · tonnes']);
+    for(const p of XauRegimes.periods){
+      const summary=XauRegimes.summarize(base,p.id),window=summary?.windows[phase];
+      const first=make('div',null,'regime-row-title');
+      first.append(make('strong',p.name));
+      if(!window){
+        first.append(make('small','This phase falls outside the period.'));
+        dateTableRow(body,[first,'—','—','—','—','—','—']);
+        continue;
+      }
+      first.append(make('small',window.label+' · '+month(window.start)+' – '+month(window.end)));
+      const link=make('a','Replay in GLD');link.href=replayHref(p.id,phase);first.append(link);
+      const banks=measure(base,window,[drivers.official],'tonnes');
+      banks.prepend(make('small','IMF official holdings change'));
+      if(phase==='cycle'&&purchaseReferences[p.id]){
+        const reference=purchaseReferences[p.id].map(([when,amount])=>when+' '+signed(amount)+' t').join(' · ');
+        banks.append(make('small','WGC net purchases by reporting period'),make('small',reference,'bank-reference'));
+      }
+      const goldMove=measure(base,window,[{points:base}],'level');
+      dateTableRow(body,[first,goldMove,measure(base,window,[broad,olderDollar],'level'),
+        measure(base,window,[drivers.real10],'rate'),measure(base,window,[drivers.cpi],'rate'),
+        measure(base,window,[drivers.spx,olderSpx],'level'),banks]);
+    }
+  }
+
   function showRegimes() {
     const list=el('regime-list');
-    list.replaceChildren(...periods.map(p=>{
+    list.replaceChildren(...XauRegimes.periods.map(p=>{
       const card=make('article',null,'regime-card'), icon=make('span',p.icon,'section-icon');
       icon.setAttribute('aria-hidden','true');
       const series=model.within(gold.pink.points,p.from+'-01-01',p.to+'-12-31');
@@ -236,6 +288,7 @@
         card.append(p);
       }
       card.append(b);
+      const replay=make('a','Replay this period','action secondary');replay.href=replayHref(p.id,'cycle');card.append(replay);
       return card;
     }));
   }
@@ -346,14 +399,16 @@
       ['gold and silver mining equities',csv('data/metals/xau-index.csv','close')],
       ['S&P 500',json('data/spx/history.json')],
       ['FRED daily FX and yields',json('data/fred-daily.json')],
+      ['historical dollar and equity benchmarks',json('data/metals/xau-regime-context.json')],
     ];
     const loaded=await Promise.allSettled(sources.map(pair=>pair[1]));
-    const [snapshot,spot=[],gld=[],miningEquities=[],spx,daily]=loaded.map((r,i)=>{
+    const [snapshot,spot=[],gld=[],miningEquities=[],spx,daily,older={} ]=loaded.map((r,i)=>{
       if(r.status==='fulfilled')return r.value;
       dataMissing.push(sources[i][0]);return undefined;
     });
     if(!snapshot)throw Error('The gold research dataset could not load. Reload to try again.');
     dataset=snapshot;
+    regimeContext=older;
     const fred = dataset.fred;
     const source=dataset.sources,s=dataset.series;
     const fed=(id)=>byId(daily,id);
@@ -440,7 +495,12 @@
     el('inspect-month').addEventListener('input',inspect);
     el('obs-details').addEventListener('toggle',()=>{if(el('obs-details').open)renderObservations();});
     el('download').addEventListener('click',download);
-    renderComparison();showRegimes();showChina();setupRanks();
+    const phaseButtons=el('regime-phases');
+    for(const [id,label] of [['cycle','Full periods'],['fall','Drawdowns'],['rebound','After the trough']]){
+      const b=make('button',label);b.type='button';b.dataset.phase=id;
+      b.addEventListener('click',()=>showRegimeMatrix(id));phaseButtons.append(b);
+    }
+    renderComparison();showRegimes();showRegimeMatrix('cycle');showChina();setupRanks();
   }
   init().catch(e=>text('load-status',e.message));
 })();

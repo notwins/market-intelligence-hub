@@ -3,8 +3,8 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Research XAU spot gold against the dollar, U.S. real rates, inflation, China and the S&P 500. Explore monetary gold holdings and global mine production.">
 <title>Gold in history · Market Intel</title><link rel="icon" href="favicon.ico">
-<link rel="stylesheet" href="xau-history.css?v=1">
-<script defer src="xau-history-model.js?v=1"></script><script defer src="xau-history.js?v=1"></script>
+<link rel="stylesheet" href="xau-history.css?v=2">
+<script defer src="xau-history-model.js?v=1"></script><script defer src="xau-regimes.js?v=1"></script><script defer src="xau-history.js?v=2"></script>
 </head><body class="xau-research">
 <a class="skip" href="#main">Skip to gold research</a>
 <main id="main">
@@ -40,7 +40,13 @@
 </div>
 <div class="gold-panel matrix-panel"><header class="small-head"><div><h3>Macro comparison matrix</h3><p id="matrix-window"></p></div><span>Correlation · −1 to +1</span></header><div class="table-scroll" id="matrix" tabindex="0" aria-label="Gold macro correlation matrix"></div></div>
 </section>
-<section class="gold-section" id="regimes"><header class="section-heading"><div><p class="chapter">Historical context</p><h2>Gold across five regimes</h2></div><p>Open a period in the comparison chart or inspect the drawdown and rebound with the same World Bank monthly gold series.</p></header><div class="regime-grid" id="regime-list"></div></section>
+<section class="gold-section" id="regimes"><header class="section-heading"><div><p class="chapter">Historical context</p><h2>Gold across five regimes</h2></div><p>Open a period in the comparison chart or inspect the drawdown and rebound with the same World Bank monthly gold series.</p></header><div class="gold-panel regime-panel">
+<div class="chart-presets" id="regime-phases" role="group" aria-label="Choose a phase of each gold regime"></div>
+<div class="table-scroll" id="regime-matrix" tabindex="0" aria-label="Gold and market drivers by regime"></div>
+<p class="chart-note">Each column shows its own start and end months. Gold uses World Bank monthly averages. Markets use month-end observations where available. Older windows use the Fed’s legacy dollar index and selected Shiller monthly average equity prices where indicated. Yield and inflation changes are percentage points. Partial overlaps are marked.</p>
+<p class="chart-note">IMF holdings changes measure the difference in reported physical stocks. WGC net purchases are separately published estimates for the periods listed and may include unreported activity.</p>
+<div class="source-list"><a href="https://fred.stlouisfed.org/series/TWEXMMTH">Legacy dollar</a><a href="https://shillerdata.com/">Shiller stock market data</a><a href="https://data.imf.org/en/datasets/IMF.STA:IL">IMF official gold</a><a href="https://www.gold.org/sites/default/files/GDT_Q4_2013.pdf">WGC historical purchases</a><a href="https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-full-year-2020">WGC 2020</a><a href="https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-full-year-2022">WGC 2022</a><a href="https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-full-year-2025/central-banks">WGC 2025</a><a href="https://www.gold.org/goldhub/research/gold-demand-trends/gold-demand-trends-q3-2026/central-banks">WGC 2026</a></div>
+</div><div class="regime-grid" id="regime-list"></div></section>
 <section class="gold-section" id="china"><header class="section-heading"><div><p class="chapter">China</p><h2>Growth, inflation and the yuan</h2></div><p>USD/CNY changes the local-currency translation of gold. The physical volume of China’s official gold shows how reported holdings changed independently of the gold price.</p></header>
 <div class="china-grid" id="china-cards"></div><p class="chart-note">CNY gold is a same-date USD gold × USD/CNY translation. Shanghai’s local benchmark can carry a premium or discount.</p>
 </section>

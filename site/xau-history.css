@@ -103,3 +103,13 @@
 .regime-card .chart-frame svg text,.china-card .chart-frame svg text{font-size:24px}
 .china-card a{display:block;margin:.4rem 0}
 .china-card strong{font:600 1.55rem var(--serif)}
+
+.regime-panel{margin-bottom:.9rem}
+#regime-matrix table{min-width:75rem}
+#regime-matrix th,#regime-matrix td{white-space:normal;vertical-align:top}
+#regime-matrix th:first-child,#regime-matrix td:first-child{min-width:13rem}
+.regime-movement strong,.regime-row-title strong{display:block;color:#244e3b;font-size:1rem;font-weight:780}
+.regime-movement small,.regime-row-title small{display:block;color:var(--muted);line-height:1.35;margin:.16rem 0;font-size:.79rem}
+.regime-movement .bank-reference{color:#764b26}
+.regime-row-title a{display:inline-block;font-weight:700;margin-top:.3rem}
+.regime-card .action{margin:.45rem .32rem 0 0}
