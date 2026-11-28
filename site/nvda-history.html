@@ -7,17 +7,19 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=6">
+<link rel="stylesheet" href="nvda-history.css?v=7">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
 <script defer src="nvda-chart-controls.js?v=1"></script>
-<script defer src="nvda-history-charts.js?v=4"></script>
+<script defer src="nvda-history-charts.js?v=5"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
 <script defer src="nvda-peer-lab.js?v=20261128.chart-layout"></script>
 <script defer src="nvda-statement-comparisons.js?v=3"></script>
 <script defer src="nvda-revenue-peer-history.js?v=4"></script>
-<script defer src="nvda-history.js?v=20261128.chart-layout"></script>
+<script defer src="nvda-market-events.js?v=1"></script>
+<script defer src="nvda-market-timeline.js?v=1"></script>
+<script defer src="nvda-history.js?v=20261128.market-timeline"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
 <body class="nvda-history-page">
@@ -165,7 +167,46 @@
           <label>Measure<select id="nv-market-metric"></select></label><button type="button" class="nv-layout-button" data-metric-next hidden>Next <span aria-hidden="true">→</span></button>
         </div>
       </div>
-    <div class="nv-chart" id="nv-market-chart"></div>
+    <fieldset class="nv-market-options" id="nv-market-overlays">
+      <legend>Chart overlays</legend>
+      <label><input type="checkbox" id="nv-market-overlay-events"> Events</label>
+      <label><input type="checkbox" id="nv-market-overlay-pe"> Trailing P/E</label>
+      <label><input type="checkbox" id="nv-market-overlay-revenue"> Quarterly revenue</label>
+    </fieldset>
+    <fieldset class="nv-market-options" id="nv-market-event-filter" hidden>
+      <legend>Event categories</legend>
+      <label><input type="checkbox" value="nvidia" checked> NVIDIA</label>
+      <label><input type="checkbox" value="us" checked> U.S. &amp; macro</label>
+      <label><input type="checkbox" value="tech" checked> Breakthroughs</label>
+    </fieldset>
+    <div id="nv-market-stack">
+      <div class="nv-market-annotations" id="nv-market-annotations" role="group" aria-label="Event months on the chart" hidden></div>
+      <div class="nv-market-event-caption" id="nv-market-event-caption" hidden>
+        <span id="nv-market-event-caption-text"></span>
+        <a href="#nv-market-events">Event details ↓</a>
+      </div>
+      <div class="nv-chart" id="nv-market-chart"></div>
+      <div class="nv-market-subpanel" hidden>
+        <h4>Trailing P/E <span>× earnings</span></h4>
+        <div class="nv-chart nv-market-subchart" id="nv-market-pe-chart"></div>
+      </div>
+      <div class="nv-market-subpanel" hidden>
+        <h4>Latest filed quarterly revenue <span>USD billions</span></h4>
+        <div class="nv-chart nv-market-subchart" id="nv-market-revenue-chart"></div>
+      </div>
+    </div>
+    <section class="nv-market-events" id="nv-market-events" aria-label="Events for the selected month" hidden>
+      <div class="nv-market-event-head">
+        <strong id="nv-market-event-month"></strong>
+        <div>
+          <button type="button" class="nv-layout-button" id="nv-market-event-prev" aria-label="Previous event month">← Prev event</button>
+          <button type="button" class="nv-layout-button" id="nv-market-event-next" aria-label="Next event month">Next event →</button>
+        </div>
+      </div>
+      <div class="nv-market-event-list" id="nv-market-event-list"></div>
+      <p class="nv-note">Markers show event months. Cards show exact dates and sources. Events provide historical context for monthly observations. <a href="https://www.youtube.com/watch?v=yc-dL8oFDNo" target="_blank" rel="noopener noreferrer">Video reference ↗</a></p>
+    </section>
+    <p class="nv-note" id="nv-market-overlay-note" hidden></p>
     <p class="nv-note">Monthly closes use the last available trading day. November 2026 is partial. Dividends are grouped by ex-date.</p>
   </article>
 </div></section>

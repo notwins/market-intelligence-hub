@@ -45,7 +45,7 @@
     "Revenue", "Gross profit", "Operating income", "Net income to parent", "Consolidated net income",
     "Operating cash flow", "Free cash flow", "Gross margin %", "Operating margin %", "Net margin %",
   ]);
-  let financial, market, companies, logos, descriptors, monthKeys, nvidiaPeriods;
+  let financial, market, companies, logos, descriptors, monthKeys, nvidiaPeriods, marketTimeline;
 
   const actual = (period, field, i = 0) => financial.periods[period]?.[field]?.[i] ?? null;
   const mkt = (month, field, i = 0) => market.months[month]?.[field]?.[i] ?? null;
@@ -248,7 +248,7 @@
     const bos = key.startsWith("BOS ");
     $("nv-market-title").textContent = label;
     $("nv-market-detail").textContent = bos ? "Bank of Singapore · quoted snapshot" : "NVIDIA · monthly history";
-    charts.render($("nv-market-chart"), {
+    marketTimeline({
       title: label, dates, bars: type === "div", zero: type === "price" || type === "div",
       format: n => marketFormat(n, type), axis: n => marketFormat(n, type),
       series: [{ label, color: bos ? colors[1] : colors[0], values: dates.map(month => mkt(month, key)) }],
@@ -258,7 +258,7 @@
         const currency = bos ? mkt(month, "BOS Price Currency") : "USD";
         return (bos ? "BOS quote " : "Close ") + charts.date(quote) + (type === "price" && currency ? " · " + currency : "");
       }),
-    });
+    }, key);
   }
 
   function usd(period, metric, group, index) {
@@ -464,6 +464,9 @@
       .sort((a, b) => endDate(b).localeCompare(endDate(a)) || a.localeCompare(b));
     options($("nv-filing-select"), dates.map(p => [p, (p.startsWith("Quarterly") ? "Quarter · " : "Annual · ") + charts.date(endDate(p))]), nvidiaPeriods.quarterly.at(-1));
     mountMarketMetrics();
+    marketTimeline = window.NvdaMarketTimeline.mount({
+      events: window.NvdaMarketEvents, quarters: nvidiaPeriods.quarterly, actual, mkt, usd, dollar, marketFormat, element, refresh: marketPlot,
+    });
     const historical = keys.filter(period => !period.startsWith("Latest")).sort((a, b) => b.split(" ")[1].localeCompare(a.split(" ")[1]));
     options($("nv-peer-period"), [["Latest quarterly", "Latest available quarterly"], ["Latest annual", "Latest available annual"],
       ...historical.map(period => [period, period])], "Latest quarterly");
