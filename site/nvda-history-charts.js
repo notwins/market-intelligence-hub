@@ -39,16 +39,23 @@
     const width = Math.round(box.width), height = Math.round(box.height);
     if (width < 10) return;
     const { dates, series, axis, bars, limits, marketStyle } = model;
-    const left = marketStyle ? (width < 460 ? 66 : 83) : (width < 430 ? 51 : 69);
+    const compact = width < 460;
+    const minimumLeft = marketStyle ? (compact ? 66 : 83) : (compact ? 56 : 73);
     const right = width - 18;
     const count = dates.length;
-    const gutter = bars || model.sharedTimeline ? Math.min((right - left) / (count + 1) / 2, model.grouped ? 24 : 14) : 0;
-    const chartLeft = left + gutter, chartRight = right - gutter;
-    plot.position = { chartLeft, chartRight };
-    if (model.onLayout) model.onLayout(plot.position);
+    function position(left) {
+      const gutter = bars || model.sharedTimeline
+        ? Math.min((right - left) / (count + 1) / 2, model.grouped ? 24 : 14) : 0;
+      plot.position = { chartLeft: left + gutter, chartRight: right - gutter };
+      model.onLayout?.(plot.position);
+      return plot.position;
+    }
     const top = 18;
-    const bottom = height - (marketStyle ? 43 : 37);
-    if (canvas.hidden || right <= left || bottom <= top) return;
+    const bottom = height - 43;
+    if (canvas.hidden || right <= minimumLeft || bottom <= top) {
+      if (model.onLayout) position(minimumLeft);
+      return;
+    }
     const ratio = output ? 2 : Math.min(devicePixelRatio || 1, 2);
     const fullWidth = Math.round(width * ratio), fullHeight = Math.round(height * ratio);
     if (canvas.width !== fullWidth || canvas.height !== fullHeight) {
@@ -59,25 +66,32 @@
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     ctx.clearRect(0, 0, width, height);
     const { floor, ceil, step } = limits;
-    const x = i => count === 1 ? (left + right) / 2 : chartLeft + i * (chartRight - chartLeft) / (count - 1);
-    const y = value => bottom - (value - floor) * (bottom - top) / (ceil - floor);
-    const labelSize = marketStyle ? (width < 460 ? 12 : 14) : (width < 430 ? 10 : 11);
-    const ink = marketStyle ? "#334d3e" : "#536257";
-    const fontFamily = output?.fontFamily || "Segoe UI, system-ui, sans-serif";
-    ctx.font = (marketStyle ? "600 " : "") + labelSize + "px " + fontFamily;
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "right";
+    const labelSize = compact ? 12 : 14;
+    const ink = "#334d3e";
+    const fontFamily = output?.fontFamily || plot.fontFamily || "Segoe UI, system-ui, sans-serif";
+    ctx.font = "600 " + labelSize + "px " + fontFamily;
+    const axisMarks = [];
     for (let n = 0; floor + n * step <= ceil + step * .01 && n < 12; n++) {
       const value = +(floor + n * step).toPrecision(10);
+      axisMarks.push({ value, label: axis(value) });
+    }
+    const longest = Math.max(0, ...axisMarks.map(({ label }) => ctx.measureText(label).width));
+    const left = marketStyle ? minimumLeft : Math.max(minimumLeft, Math.min(width * .39, Math.ceil(longest) + 13));
+    const { chartLeft, chartRight } = position(left);
+    const x = i => count === 1 ? (left + right) / 2 : chartLeft + i * (chartRight - chartLeft) / (count - 1);
+    const y = value => bottom - (value - floor) * (bottom - top) / (ceil - floor);
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "right";
+    for (const { value, label } of axisMarks) {
       const lineY = y(value);
-      ctx.strokeStyle = marketStyle ? (value === 0 ? "#8fa394" : "#d2ded3") : (value === 0 ? "#a2afa3" : "#e0e8dd");
+      ctx.strokeStyle = value === 0 ? "#8fa394" : "#d2ded3";
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(left, lineY);
       ctx.lineTo(right, lineY);
       ctx.stroke();
       ctx.fillStyle = ink;
-      ctx.fillText(axis(value), left - 8, lineY);
+      ctx.fillText(label, left - 8, lineY);
     }
     if (model.annotations?.length) {
       ctx.save();
@@ -112,13 +126,13 @@
     ctx.fillStyle = ink;
     for (const { label, at, align } of labels) {
       ctx.textAlign = align;
-      ctx.fillText(label, at, bottom + (marketStyle ? 21 : 19));
+      ctx.fillText(label, at, bottom + 21);
     }
     const positive = Array(count).fill(0), negative = Array(count).fill(0);
     for (const [seriesIndex, s] of series.entries()) {
       ctx.strokeStyle = s.color;
       ctx.fillStyle = s.color;
-      ctx.lineWidth = marketStyle ? 3 : 2.25;
+      ctx.lineWidth = marketStyle ? 3 : 2.6;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.setLineDash(s.dash || []);
@@ -217,7 +231,8 @@
     const placeholder = span("No data for this selection.", "p");
     placeholder.className = "nv-chart-empty";
     container.replaceChildren(canvas, summary, placeholder);
-    const plot = { canvas, summary, placeholder, active: 0 };
+    const fontFamily = getComputedStyle(container).getPropertyValue("--nv-sans").trim();
+    const plot = { canvas, summary, placeholder, fontFamily, active: 0 };
     const point = event => {
       if (!plot.position) return;
       const { chartLeft, chartRight } = plot.position;

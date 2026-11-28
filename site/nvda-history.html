@@ -7,12 +7,12 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=12">
+<link rel="stylesheet" href="nvda-history.css?v=13">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=3">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=20261129.printcontents">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
 <script defer src="nvda-chart-controls.js?v=1"></script>
-<script defer src="nvda-history-charts.js?v=9"></script>
+<script defer src="nvda-history-charts.js?v=10"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
 <script defer src="nvda-logo-ranking.js?v=1"></script>
 <script defer src="nvda-peer-lab.js?v=20261128.shared-rankings"></script>
@@ -25,7 +25,7 @@
 <script defer src="nvda-market-event-prices.js?v=2"></script>
 <script defer src="nvda-market-timeline.js?v=7"></script>
 <script defer src="nvda-market-event-table.js?v=2"></script>
-<script defer src="nvda-history.js?v=20261129.printcontents"></script>
+<script defer src="nvda-history.js?v=20261129.layout"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
 <body class="nvda-history-page">
@@ -70,7 +70,7 @@
       </div>
       <div class="nv-controls"><label>Period type<select id="nv-frequency"><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label></div>
     </div>
-    <div class="nv-metric-controls" data-metric-controls>
+    <div class="nv-metric-controls nv-fin-control-band" data-metric-controls>
         <div class="nv-metric-tabs" data-metric-families role="group" aria-label="Financial metric categories"></div>
         <div class="nv-controls">
           <label hidden>Metric group<select data-metric-subgroup></select></label>
@@ -364,7 +364,8 @@
       <label>Market month<select id="lab-month"></select></label><label>Companies<select id="lab-group"></select></label>
       <label>Find a line item<input type="search" id="lab-search" placeholder="e.g. cash flow"></label>
     </div>
-    <div class="nv-table-scroll lab-scroll" tabindex="0" role="region" aria-label="Historical financial and monthly comparison, scroll to see all companies"><table class="nv-table lab-table"><thead id="lab-head"></thead><tbody id="lab-rows"></tbody></table></div>
+    <p class="nv-horizontal-note" id="nv-matrix-scroll-note">Scroll sideways to compare more companies <span aria-hidden="true">↔</span></p>
+    <div class="nv-table-scroll lab-scroll" tabindex="0" role="region" aria-label="Historical financial and monthly comparison" aria-describedby="nv-matrix-scroll-note"><table class="nv-table lab-table"><thead id="lab-head"></thead><tbody id="lab-rows"></tbody></table></div>
     <p class="nv-note">NVIDIA appears first. Statement amounts show each issuer’s currency in millions. USD comparison rows use millions of US dollars. A dagger marks a verified liabilities balance derived from assets less equity. Scroll across for more companies, or choose a smaller group. A dash means the archive has no value.</p>
   </article>
   <article class="nv-panel nv-reveal lab-spaced">
@@ -392,7 +393,7 @@
   </div>
 </section>
 <section id="price-simulator" class="lab-simulator"><div class="nv-section nv-shell">
-  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Share-price simulation</p><h2>What changes at $250?</h2></div><p>Move NVIDIA’s price and see which valuation multiples cross the peer median. Earnings, cash flow, book value, dividends and peer quotes stay fixed.</p></div>
+  <div class="nv-section-head nv-reveal"><div><p class="nv-label">Share-price simulation</p><h2>Test NVIDIA’s valuation</h2></div><p>Move NVIDIA’s price and see which valuation multiples cross the peer median. Earnings, cash flow, book value, dividends and peer quotes stay fixed.</p></div>
   <article class="nv-panel nv-reveal lab-sim-card">
     <div class="nv-panel-head"><div><h3>NVIDIA at your price</h3><p class="nv-muted" id="sim-date"></p></div>
     <div class="nv-controls"><label>Peer group<select id="sim-group"></select></label></div></div>

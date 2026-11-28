@@ -536,25 +536,53 @@
     }
     enable();
     reduced.addEventListener("change", enable);
-    const navigation = Array.from(document.querySelectorAll(".nv-jump a"));
-    let pending = false;
+    const nav = document.querySelector(".nv-jump");
+    const track = nav.firstElementChild;
+    const desktop = matchMedia("(min-width: 761px)");
+    const chapters = [...track.querySelectorAll("a")].map(link => {
+      const section = $(link.hash.slice(1));
+      return { link, heading: section.querySelector(".nv-section-head") || section };
+    });
+    let pending = false, selected;
     const activeChapter = () => {
       pending = false;
-      const nav = document.querySelector(".nv-jump");
-      const offset = nav.getBoundingClientRect().bottom + 25;
-      let active = navigation[0];
-      for (const link of navigation) {
-        if ($(link.hash.slice(1)).getBoundingClientRect().top <= offset) active = link;
+      const style = getComputedStyle(nav);
+      const stickyBottom = nav.offsetHeight + (parseFloat(style.top) || 0);
+      const offset = Math.max(nav.getBoundingClientRect().bottom, stickyBottom) + 25;
+      const bottom = scrollY + innerHeight >= document.documentElement.scrollHeight - 2;
+      const barHeight = desktop.matches ? parseFloat(style.getPropertyValue("--hub-primary-size")) || 0 : 0;
+      const landing = Math.max(offset, nav.offsetHeight + barHeight + 25);
+      const anchored = chapters.find(({ link, heading }) =>
+        link.hash === location.hash && heading.getBoundingClientRect().top <= landing
+        && heading.getBoundingClientRect().top > offset);
+      const visible = chapters.findLast(({ heading }) => heading.getBoundingClientRect().top <= offset);
+      const active = (bottom ? chapters.at(-1) : anchored || visible || chapters[0]).link;
+      if (active === selected) return;
+      selected = active;
+      for (const { link } of chapters) {
+        if (link === active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
       }
-      if (scrollY + innerHeight >= document.documentElement.scrollHeight - 2) active = navigation.at(-1);
-      navigation.forEach(link => link === active ? link.setAttribute("aria-current", "location") : link.removeAttribute("aria-current"));
+      const item = active.getBoundingClientRect();
+      const rail = track.getBoundingClientRect();
+      if (item.left < rail.left || item.right > rail.right) {
+        track.scrollBy({ left: (item.left + item.right - rail.left - rail.right) / 2, behavior: "instant" });
+      }
     };
-    addEventListener("scroll", () => {
+    new ResizeObserver(() => {
+      document.body.style.setProperty("--nv-jump-height", nav.offsetHeight + "px");
+      activeChapter();
+    }).observe(nav);
+    const scheduleChapter = () => {
       if (!pending) {
         pending = true;
         requestAnimationFrame(activeChapter);
       }
-    }, { passive: true });
+    };
+    new MutationObserver(scheduleChapter).observe(document.documentElement, { attributeFilter: ["class", "style"] });
+    nav.addEventListener("transitionend", scheduleChapter);
+    addEventListener("hashchange", scheduleChapter);
+    addEventListener("scroll", scheduleChapter, { passive: true });
     activeChapter();
   }
 
