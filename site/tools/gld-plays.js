@@ -321,7 +321,7 @@
     const policy=type==='best'?null:type;
     const rows=all.map((r,i)=>({i,r,score:sum||!policy?leadersOne(r).value:r.outcomes[policy].eligible?r.outcomes[policy].pnl:-Infinity}));
     panel.tbody.replaceChildren(...sorted(rows,panel.sort.value).map(({i,r})=>{
-      const q=quotes[i],tr=node('tr'),h=node('th');h.scope='row';
+      const q=quotes[i],tr=node('tr'),h=node('th');h.scope='row';tr.dataset.quoteIndex=i;
       const pick=button(quoteId(i)+' · '+q.months+'m',()=>{
         panel.selected=i;paint(panel);panel.pick.focus({preventScroll:true});
       });
@@ -332,7 +332,7 @@
         const entry=run.strategies.find(s=>s.key==='acc').events[0];
         const state=entry.type==='skip'?'Insufficient funding':exit&&exit.day<=panel.day?
           (exit.type==='ko'?'KO':'Maturity')+' · '+(panel.path.dates?fixingLabel(panel,exit.day):exit.day):'Open';
-        tr.append(node('td',state),...keys.map(k=>pnlCell(r.outcomes[k])));
+        tr.append(node('td',state),...keys.map(k=>{const td=pnlCell(r.outcomes[k]);td.dataset.guidePnl=k;return td;}));
         const cell=node('td',r.leaders.length>1?r.leaders.length+' tied':short[r.leaders[0]]??'—','play-winner');
         cell.append(node('small',pl(leadersOne(r).value)));
         cell.title=r.leaders.map(k=>pre[k]).join(' / '); tr.append(cell);
@@ -424,7 +424,8 @@
       for(const key of ['acc','hold','roll','decu','wait','staged']){
         const s=marked.outcomes[key],tr=body.insertRow(),h=node('th');h.scope='row';h.append(iconLabel(post[key],actionIcons[key]));
         if(marked.leaders.includes(key))h.append(node('small',marked.leaders.length===1?'Leading play':'Joint leader','play-winner'));
-        tr.append(h,pnlCell(s),node('td',pl(s.pnl-bench.pnl)),node('td',s.status));
+        const amount=pnlCell(s);amount.dataset.guidePost=key;
+        tr.append(h,amount,node('td',pl(s.pnl-bench.pnl)),node('td',s.status));
       }
       box.tabIndex=0;box.setAttribute('aria-label','Post-KO outcome comparison');box.append(t);inset.append(box);
       const roll=run.postKo.strategies.find(s=>s.key==='roll').events.find(e=>e.leg==='roll'&&e.type==='open'&&e.day<=day);
@@ -457,6 +458,7 @@
     panel.detail.replaceChildren(...children);
   }
   function paint(panel) {
+    GldGuide.beforeChange();
     const points=timeline(panel),mark=selectedPoint(panel,panel.day);
     makeChart(panel,points);makeStrip(panel,points);reportLeaders(panel);
     panel.chartCaption.textContent=(panel.path.proxy?'Gold-price proxy in USD/share · elapsed model fixings.':panel.path.dates?'Recorded GLD closes in USD/share, one per trading session.':unitLabel()+' · equally spaced checkpoints.')+' Dashed lines show '+quoteId(panel.selected)+' buy strike and upper KO during its first term.';
@@ -527,6 +529,7 @@
     const header=node('header',null,'play-header'),box=node('div'),h=node('h2');h.append(iconLabel(path.label,path.basis?'history':id));h.id=id+'-title';
     p.desc=node('p',path.dates?dateLabel(path.dates[0])+' to '+dateLabel(path.dates.at(-1))+' · '+path.dates.length.toLocaleString('en-US')+' recorded closes · '+price(path.prices[0])+' per share at entry. '+path.description:path.description,'play-note');
     box.append(h,p.desc);header.append(box);
+    header.append(GldGuide.launcher('card','Play this card'));
     if(path.basis){
       const links=node('nav',null,'play-nav');links.setAttribute('aria-label','Regime replay phases');
       const summary=XauRegimes.summarize(regimeData,regimeRequest.id);
@@ -544,6 +547,8 @@
     p.prev=button('Earlier',()=>move(-1));p.next=button('Later',()=>move(1));p.toExit=button('Go to KO',()=>changeDay(p,p.runs[p.selected].firstExit.day,true));
     const controls=node('div',null,'play-actions');
     controls.append(p.prev,p.next,p.toExit,node('small','Swipe or use the arrow keys to move through time.','play-note'));
+    const explain=GldGuide.launcher('fixing','Explain this fixing');
+    if(!path.dates)controls.append(explain);
     const stage=node('div',null,'play-stage');stage.append(p.chart,p.chartCaption,p.strip,controls);
     const edit=node('details',null,'play-editor');p.editHeader=node('summary','Edit checkpoint prices');p.editFields=node('div',null,'play-fields');p.apply=button('Apply prices',()=>{});
     const reset=button('Restore this path',()=>rebuild(p,{}));
@@ -575,6 +580,7 @@
       p.board=GldReplayBoard.render({path,quotes,runs:p.runs,day:p.day,selected:p.selected,onSelect:(index,day)=>{
         p.selected=index;changeDay(p,day,true);
       }});
+      p.board.querySelector('.replay-readout').before(explain);
       const fromEntry=node('details',null,'play-editor');
       fromEntry.append(node('summary','Compare strategies from the original entry'),p.kpis,p.examples,tools,p.caption,scroller);
       section.append(p.board,p.detail,fromEntry);
@@ -606,6 +612,7 @@
     }
   }
   async function renderAll() {
+    GldGuide.ready(false);
     const seq=++version, old=new Map(panels);
     $('error').hidden=true;$('csv').disabled=true;$('replay-overview').hidden=true;
     try{
@@ -642,6 +649,7 @@
       if(missing.length){$('error').hidden=false;setText('error','Complete daily GLD history unavailable for '+missing.join(', ')+'. Reload to retry.');}
       setText('run-status',quotes.length+' quotes × '+next.length+(replayMode?(next.length===1?' historical replay':' historical paths'):' price paths · '+config.years+' year'+(config.years===1?'':'s'))+' · '+money(config.terms.budget)+
         ($('budget').value===''?' illustrative cash':' starting cash')+'.');
+      GldGuide.ready(next.length>0);
     }catch(e){panels.clear();updateFlowCase();$('plays').replaceChildren();$('error').hidden=false;setText('error',e.message);setText('run-status','Check the comparison inputs.');}
   }
   function download() {
@@ -707,7 +715,7 @@
       '. Guaranteed months are estimated into fixings using the quoted term. The model accrues daily, assumes delivery by the configured re-entry date and excludes the quoted offset. Confirm actual settlement and availability before reusing cash or shares.');
     modeLayout();
     await renderAll();
-    if(replayMode)scrollToPath();
+    if(replayMode||location.hash==='#walkthrough-script')scrollToPath();
   }
   const originals=Object.fromEntries(['page-heading','page-lead','price-method'].map(id=>[id,$(id).innerHTML]));
   function modeLayout(){
@@ -744,6 +752,7 @@
   }
   function scrollToPath(){
     const id=location.hash.slice(1);
+    if(id==='walkthrough-script'){$(id).open=true;$(id).scrollIntoView({block:'start'});return;}
     if(id==='timelines'||id==='replay-overview'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
   }
   async function changeMode(){
@@ -763,11 +772,14 @@
   window.addEventListener('popstate',changeMode);
   $('settings').addEventListener('submit',e=>{e.preventDefault();renderAll();});
   $('settings').addEventListener('input',e=>{
+    GldGuide.beforeChange();
     refreshControls();
     if(e.target.id==='years'||e.target.id==='units'){if($('settings').checkValidity())renderAll();return;}
     setText('run-status','Inputs changed. Run all quotes to update the timelines.');
   });
   $('csv').addEventListener('click',download);
+  GldGuide.init({panels,move:changeDay,quote:index=>quotes[index],quoteCount:()=>quotes.length,
+    terms:()=>config.terms,quoteId,pre,post,price,fixingLabel,units});
   modeLayout();
   refreshControls();
   initFlow();

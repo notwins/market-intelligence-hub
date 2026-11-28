@@ -177,7 +177,7 @@
     for (const key of actionKeys) {
       const item = snap.outcomes[key];
       if (!item) continue;
-      const tile = el('div');
+      const tile = el('div');tile.dataset.strategy=key;
       tile.dataset.eligible = item.eligible; tile.dataset.leader = snap.leaders.includes(key);
       const detail = el('dd');
       const amount=el('span','replay-action-pnl',signed(item.pnl));
