@@ -21,6 +21,12 @@ async function get(url, type) {
   if (response.ok) return response[type]();
 }
 
+async function tagContext(ids) {
+  const standard = await get(new URL('data/external-source-standard.json', base), 'json').catch(() => undefined);
+  const labels = new Map((standard?.tags || []).map(tag => [tag.id, tag.label]));
+  return (ids || []).map(id => labels.get(id) || id.replace(/[._-]/g, ' ')).join(' ');
+}
+
 async function legacyCover(source) {
   const key = articleKey(source);
   const html = await get(gallery, 'text').catch(() => undefined);
@@ -40,10 +46,7 @@ async function legacyCover(source) {
     return url && articleKey(url) === key && entry.state === 'published';
   });
   if (match?.title) {
-    const standard = await get(new URL('data/external-source-standard.json', base), 'json').catch(() => undefined);
-    const labels = new Map((standard?.tags || []).map(tag => [tag.id, tag.label]));
-    const context = (match.tags || []).map(id => labels.get(id) || id.replaceAll('-', ' ')).join(' ');
-    return {title: match.title, theme: pickTheme(match.title, context)};
+    return {title: match.title, theme: pickTheme(match.title, await tagContext(match.tags))};
   }
 }
 
@@ -54,7 +57,8 @@ export async function publishedCover(source) {
     const payload = await get(recordURL, 'json').catch(() => undefined);
     const record = payload?.record;
     if (record?.id === independent[1] && typeof record.title === 'string') {
-      return {title: record.title, theme: pickTheme(record.title, [record.category, ...(record.tags || [])].join(' ').replaceAll('-', ' '))};
+      const context = [record.category, await tagContext(record.tags)].join(' ');
+      return {title: record.title, theme: pickTheme(record.title, context)};
     }
     return;
   }
