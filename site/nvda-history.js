@@ -166,14 +166,8 @@
     return dollar(value * 1000000);
   }
 
-  function filingSheet() {
-    const period = $("nv-filing-select").value;
-    const group = $("nv-statement").value;
-    const displayInMillions = $("nv-statement-units").value === "millions";
+  function filingRows(period, group, displayInMillions) {
     const formatAmount = (amount, type) => statementAmount(amount, type, displayInMillions);
-    const date = endDate(period);
-    const dateParts = [charts.date(date), actual(period, "Form or source type")];
-    $("nv-sheet-date").textContent = dateParts.filter(Boolean).join(" · ");
     const output = document.createDocumentFragment();
     for (const desc of descriptors.values()) {
       if (desc.group !== group) continue;
@@ -195,7 +189,21 @@
         td(signed(yGrowth, n => withUnit(n, "%")), tone, yGrowth));
       output.append(row);
     }
-    $("nv-statement-rows").replaceChildren(output);
+    if (!output.childElementCount) {
+      const row = element("tr");
+      const cell = td("No reported values are available in this statement for this period.");
+      cell.colSpan = 6;
+      row.append(cell);
+      output.append(row);
+    }
+    return output;
+  }
+
+  function filingSheet() {
+    const period = $("nv-filing-select").value;
+    const dateParts = [charts.date(endDate(period)), actual(period, "Form or source type")];
+    $("nv-sheet-date").textContent = dateParts.filter(Boolean).join(" · ");
+    $("nv-statement-rows").replaceChildren(filingRows(period, $("nv-statement").value, $("nv-statement-units").value === "millions"));
     const source = actual(period, "Source document");
     const filed = actual(period, "Filing or release date");
     const earlier = [actual(period, "QoQ / Prior reporting period ending"), actual(period, "YoY / Prior reporting period ending")];
@@ -210,14 +218,20 @@
       link.href = source;
       notes.append(document.createTextNode(metadata.length ? " · " : ""), link);
     }
-    if (!$("nv-statement-rows").children.length) {
-      const row = element("tr");
-      const cell = td("No reported values are available in this statement for this period.");
-      cell.colSpan = 6;
-      row.append(cell);
-      $("nv-statement-rows").append(row);
-    }
   }
+
+  function printFilings() {
+    const period = $("nv-filing-select").value;
+    const millions = $("nv-statement-units").value === "millions";
+    const header = $("nv-statement-rows").parentElement.tHead;
+    return Array.from($("nv-statement").options, option => {
+      const table = element("table");
+      table.append(header.cloneNode(true));
+      table.createTBody().append(filingRows(period, option.value, millions));
+      return { title: option.textContent, table };
+    });
+  }
+
   function marketFormat(n, type) {
     if (type === "pct") return withUnit(n, "%");
     if (type === "multiple") return withUnit(n, "×");
@@ -501,7 +515,7 @@
     }
     marketKpis();
     window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, companyMark, usd, fmt, dollar, element, options });
-    window.NvidiaStatementComparisons.mount({ financial, groups, companyCell, usd, element, options });
+    window.NvidiaStatementComparisons.mount({ financial, groups, companyCell, usd, element, options, printFilings });
     mountDesktopExpansion();
   }
 

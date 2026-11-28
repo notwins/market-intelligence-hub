@@ -157,7 +157,7 @@
     return period.startsWith("Half-year ") ? period.slice(10, 14) + "-06-30" : period.slice(7, 11) + "-12-31";
   }
 
-  function mount({ financial, groups, usd, companyCell, element, options }) {
+  function mount({ financial, groups, usd, companyCell, element, options, printFilings }) {
     const hosts = new Map();
     const companies = financial.companies;
     const periods = Object.keys(financial.periods);
@@ -515,7 +515,7 @@
         index => drawTable(host, card, keys[index], indices, basis, detail));
     }
 
-    function draw() {
+    function draw({ printHidden = false } = {}) {
       const period = $("nv-statement-peer-period").value;
       const frequency = period === "Latest annual" ? "Annual" : period === "Latest quarterly" ? "Quarterly" : period.split(" ")[0];
       const growth = $("nv-statement-peer-growth");
@@ -538,7 +538,7 @@
       for (const [statement, section] of Object.entries(sections)) {
         section.hidden = selected !== "all" && selected !== statement;
         section.querySelector(".nv-statement-group-title").hidden = selected !== "all";
-        if (section.hidden) continue;
+        if (section.hidden !== printHidden) continue;
         cards[statement].forEach((card, index) => {
           const host = getHost(card, index, statement);
           if (!indices.includes(host.focus)) host.focus = 0;
@@ -567,14 +567,18 @@
     }
 
     draw();
-    window.NvdaStatementPrint.mount(() => ({
-      groups: Object.entries(sections).filter(([, section]) => !section.hidden),
-      statements,
-      filing: periodLabel($("nv-statement-peer-period").value),
-      range: $("nv-statement-peer-range").selectedOptions[0].textContent,
-      coverage: chosen.size + " of " + (companies.length - 1) + " peers selected",
-      asOf: financial.asOf,
-    }));
+    window.NvdaStatementPrint.mount(full => {
+      if (full) draw({ printHidden: true });
+      return {
+        groups: Object.entries(sections).filter(([, section]) => full || !section.hidden),
+        statements,
+        filing: periodLabel($("nv-statement-peer-period").value),
+        range: $("nv-statement-peer-range").selectedOptions[0].textContent,
+        coverage: chosen.size + " of " + (companies.length - 1) + " peers selected",
+        asOf: financial.asOf,
+        printFilings,
+      };
+    });
   }
 
   window.NvidiaStatementComparisons = { mount };

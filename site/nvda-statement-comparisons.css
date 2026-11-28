@@ -399,7 +399,7 @@
     background: #244e36;
     border-color: #244e36;
   }
-  .nvda-history-page #nv-statement-peer-print {
+  .nvda-history-page :is(#nv-statement-peer-print, #nv-full-print) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -409,12 +409,12 @@
     background: #fffefa;
     color: #244e36;
   }
-  .nvda-history-page #nv-statement-peer-print:not(:disabled):hover {
+  .nvda-history-page :is(#nv-statement-peer-print, #nv-full-print):not(:disabled):hover {
     background: #244e36;
     border-color: #244e36;
     color: #fff;
   }
-  .nvda-history-page :is(#nv-statement-peer-print, .nv-statement-table-caption)::before {
+  .nvda-history-page :is(#nv-statement-peer-print, #nv-full-print, .nv-statement-table-caption)::before {
     content: "";
     flex: none;
     width: 1em;
@@ -527,4 +527,100 @@
       grid-column: 1 / -1;
     }
   }
+}
+@media print {
+  .nv-print-full > :is(.nv-print-sheet, .nv-print-card):nth-child(n+3) { break-before: page; }
+  .nv-print-sheet {
+    --nv-group-ink: #286045;
+    --nv-group-tint: #e9f2e4;
+    --nv-group-mark: var(--hist-stock);
+  }
+  .nv-print-sheet[data-print-topic="peers"] {
+    --nv-group-ink: #345d6b;
+    --nv-group-tint: #e7eff0;
+    --nv-group-mark: var(--hist-matrix);
+  }
+  .nv-print-sheet[data-print-topic="market"] {
+    --nv-group-ink: #28605a;
+    --nv-group-tint: #e4efea;
+    --nv-group-mark: var(--hist-curve);
+  }
+  .nv-print-sheet[data-print-topic="credit"] {
+    --nv-group-ink: #734b44;
+    --nv-group-tint: #f1e8e1;
+    --nv-group-mark: var(--hist-credit);
+  }
+  .nv-print-sheet .nv-print-heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 1.7mm;
+    font: 620 19pt/1.14 var(--nv-serif);
+    color: var(--nv-ink);
+    margin: .9mm 0 1mm;
+    break-after: avoid;
+  }
+  .nv-print-sheet .nv-print-heading h2::before {
+    content: "";
+    flex: 0 0 .9em;
+    height: .9em;
+    background: var(--nv-group-ink);
+    mask: var(--nv-group-mark) center / contain no-repeat;
+  }
+  .nv-print-sheet h3 {
+    font: 620 12.5pt/1.18 var(--nv-serif);
+    margin: 2mm 0 1mm;
+    break-after: avoid;
+  }
+  .nv-print-description { margin: 0 0 2mm; color: var(--nv-muted); }
+  .nv-print-chart-panel { break-inside: avoid; }
+  .nv-print-pair, .nv-print-sheet .nv-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 5mm;
+  }
+  .nv-print-sheet .nv-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    break-inside: avoid;
+    margin: 2.5mm 0;
+    border: .2mm solid var(--nv-line);
+    border-radius: 1.4mm;
+    background: var(--nv-group-tint);
+  }
+  .nv-print-sheet .nv-kpis > div { padding: 2.2mm; border-color: var(--nv-line); }
+  .nv-print-sheet .nv-kpis dt { font-size: 8pt; color: var(--nv-muted); }
+  .nv-print-sheet .nv-kpis dd { font: 620 16pt/1.1 var(--nv-serif); margin: .6mm 0; }
+  .nv-print-sheet .nv-kpis small { font-size: 7pt; color: var(--nv-group-ink); }
+  .nv-print-sheet .nv-panel {
+    padding: 2mm 3mm;
+    border: .2mm solid var(--nv-line);
+    border-radius: 1.4mm;
+    break-inside: avoid;
+  }
+  .nv-print-sheet .nv-insights, .nv-print-sheet .nv-source-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4mm;
+    margin: 3mm 0 0;
+  }
+  .nv-print-sheet :is(.nv-insights, .nv-source-grid) article { break-inside: avoid; padding-top: .8mm; }
+  .nv-print-sheet :is(.nv-insights, .nv-source-grid) p { margin: .8mm 0 1mm; font-size: 8.5pt; }
+  .nv-print-sheet .nv-note { font-size: 7.5pt; margin-top: 2mm; }
+  .nv-print-sheet .nv-credit-metrics { margin: 2mm 0; font-size: 8.5pt; }
+  .nv-print-sheet .nv-credit-metrics > div { padding: 1.1mm 0; }
+  .nv-print-sheet .nv-debt-bars { gap: .9mm; margin: 1mm 0; font-size: 8pt; }
+  .nv-print-sheet .nv-debt-bars li { grid-template-columns: 11mm 1fr 24mm; gap: 1.5mm; font-size: inherit; }
+  .nv-print-sheet .nv-debt-bars small { display: inline; font-size: 7pt; }
+  .nv-print-sheet .nv-debt-bars i { height: 1.65mm; }
+  .nv-print-sheet .nv-print-sources { margin-top: 4mm; }
+  .nv-print-sheet a { color: var(--nv-green); }
+  .nv-print-sheet .nv-print-peer-overview { font-size: 7.25pt; }
+  .nv-print-peer-overview th:first-child { width: 19%; }
+  .nv-print-peer-overview th:nth-child(2) { width: 10%; }
+  .nv-print-peer-overview small { font-size: 6.5pt; }
+  .nv-print-sheet .nv-print-events th:first-child { width: 11%; }
+  .nv-print-sheet .nv-print-events th:nth-child(2) { width: 46%; }
+  .nv-print-events td[data-move] { background: var(--move-bg, transparent); color: var(--move-ink, var(--nv-ink)); }
+  .nv-print-events td[data-move] small { font-size: 7pt; }
 }
