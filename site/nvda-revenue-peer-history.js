@@ -40,6 +40,8 @@
       [nativeField("Income statement", "Net income to parent"), "Net Income"],
       [nativeField("Balance sheet", "Total assets"), "Assets"],
       [nativeField("Balance sheet", "Total liabilities"), "Liabilities"],
+      [nativeField("Cash flow", "Operating cash flow"), "Operating Cash Flow"],
+      [nativeField("Ratios and growth", "Free cash flow"), "Free Cash Flow"],
     ];
     logoRanking.bindNext({ select: metric, button: $("fin-rank-next"), choices: rankingMetrics, setValue: metricControls.setValue });
     let isComparing = false;
@@ -237,7 +239,6 @@
       let initial = dates.indexOf(chooser.value);
       if (initial < 0) initial = dates.length - 1;
       const shortName = rankingMetrics.find(([field]) => field === metric.value)?.[1] || name;
-      const higher = descriptor.name !== "Total liabilities";
       function rankSnapshot(snapshot) {
         const mode = rankingMode.value;
         const actual = mode === "actual";
@@ -250,10 +251,8 @@
         const unit = actual ? "Actual USD" : mode + " growth";
         $("fin-rank-summary").textContent = shortName + " · " + unit + " · NVIDIA period ended " + charts.date(snapshot.end)
           + " · " + count + " of " + entries.length + " companies with data";
-        $("fin-rank-left").textContent = higher ? "Lower values" : "Higher values";
-        $("fin-rank-right").textContent = higher ? "Higher values →" : "Lower values →";
         ranking.render(entries, {
-          key: [metric.value, mode, frequency, ...peers].join("/"), label: shortName, higher,
+          key: [metric.value, mode, frequency, ...peers].join("/"), label: shortName, higher: true,
           format: actual ? fig : growthPct,
           axisFormat: actual ? value => dollar(value, 1) + "B" : pct,
           onSelect: row => showCompany(row.i),
