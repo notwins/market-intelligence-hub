@@ -1,4 +1,4 @@
-import {presentArticle, readingControls, readingStyles, restoreArticleAnchor} from './research-reading.js?v=1';
+import {presentArticle, readingControls, readingStyles, restoreArticleAnchor} from './research-reading.js?v=2';
 import {articleURL, artworkURL, originalArticleURL} from './research-reader-route.js?v=2';
 
 const args = new URLSearchParams(location.search);

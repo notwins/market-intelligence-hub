@@ -3,7 +3,7 @@
   'use strict';
   if (window.self !== window.top) return;
   function reader() {
-    import('./research-direct-reader.js?v=1')
+    import('./research-direct-reader.js?v=2')
       .then(module => module.openDirectReader())
       .catch(() => {}); // Keep the published article available if the presentation cannot load.
   }

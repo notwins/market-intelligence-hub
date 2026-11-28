@@ -28,7 +28,7 @@
     $('archive-reports').innerHTML = (selected && !match ? '<p class="notice">This edition was not found. All available editions are listed below.</p>' : '') + (match ? '<p><a href="archive.html">Browse all editions</a></p>' : '') + (match ? [match] : reports).map(reportHTML).join('');
     if (match) {
       const article = $('report-' + match.id);
-      import('./research-direct-reader.js?v=1')
+      import('./research-direct-reader.js?v=2')
         .then(module => module.openDirectReader(article, {title: match.title, headings: 'h4'}))
         .catch(() => {});
     }

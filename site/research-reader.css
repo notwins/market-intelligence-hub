@@ -52,6 +52,14 @@
 html.research-direct-active {
   scroll-padding-top: calc(var(--hub-primary-height, 0px) + 58px);
 }
+.research-direct-bar .reader-jump {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
 .research-direct-bar [hidden] { display: none !important; }
 .reader-actions { display: flex; align-items: center; gap: .35rem; }
 .reader-bar :is(a, summary, button) {
@@ -91,7 +99,10 @@ html.research-direct-active {
   --nav-paper: #f8f7f2;
   --nav-ink: currentColor;
 }
+.reader-jump:not([open]) > nav { display: none; }
 .reader-jump > nav {
+  display: block;
+  margin: 0;
   position: absolute;
   inset: calc(100% + .3rem) max(.65rem, calc((100% - 85rem) / 2)) auto auto;
   width: min(calc(100vw - 1.3rem), 25rem);

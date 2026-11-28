@@ -1,6 +1,6 @@
 /* Display layer only. Archived report HTML and edition JSON stay immutable. */
 (async()=>{'use strict';try{const p=JSON.parse(localStorage.getItem('market-hub-display-v4')||'{}');const n=Number(p.scale);if(Number.isFinite(n))document.documentElement.style.setProperty('--text-scale',String(Math.max(.7,Math.min(2,n))));const fonts={system:'system-ui,sans-serif',arial:'Arial,Helvetica,sans-serif',verdana:'Verdana,Geneva,sans-serif',georgia:'Georgia,serif',office:'Aptos,Segoe UI,Arial,sans-serif'};if(fonts[p.font])document.body.style.fontFamily=fonts[p.font];}catch{}const host=document.getElementById('watchlist-report');try{const id=new URLSearchParams(location.search).get('edition');if(!/^watchlist-\d{8}T\d{6}Z(?:-r[1-9][0-9]*)?$/.test(id||''))throw Error('Choose a saved edition from the watchlist.');await MarketWatchlist.readEdition(id);host.innerHTML=MarketWatchlist.readerView();host.removeAttribute('role');await window.CompanyContext?.mountReader?.(host);const ticker=decodeURIComponent(location.hash.slice(1));if(/^[A-Z]{1,5}(?:\.[A-Z])?$/.test(ticker))document.getElementById(ticker)?.scrollIntoView({block:'start'});document.getElementById('reader-print').addEventListener('click',()=>window.print());
-import('./research-direct-reader.js?v=1').then(module=>module.openDirectReader(host,{
+import('./research-direct-reader.js?v=2').then(module=>module.openDirectReader(host,{
   title: host.querySelector('h1,h2')?.textContent.trim() || 'Watchlist research',
   headings: 'h2,h3'
 })).catch(()=>{});

@@ -3,7 +3,7 @@ import {createCover, icon, pickTheme} from './research-cover.js?v=1';
 export function readingStyles(doc) {
   const style = doc.createElement('link');
   style.rel = 'stylesheet';
-  style.href = new URL('research-reader.css?v=4', import.meta.url);
+  style.href = new URL('research-reader.css?v=5', import.meta.url);
   return style;
 }
 
