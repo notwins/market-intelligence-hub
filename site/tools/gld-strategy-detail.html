@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Plan a funded GLD accumulator, a covered decumulator or a rollover across rebounds, prolonged falls and historical trading sessions.">
+<title>Single-quote GLD planner | Market Intel</title>
+<link rel="stylesheet" href="gld-strategy.css?v=1">
+<script defer src="metals-common.js"></script><script defer src="accumulator-model.js"></script>
+<script defer src="gld-strategy-model.js?v=1"></script><script defer src="gld-strategy-paths.js?v=1"></script><script defer src="gld-strategy.js?v=1"></script>
+</head><body>
+<nav class="mast" aria-label="Gold workspace"><a class="brand" href="../v4.html#tools">Market Intel</a><div class="navlinks"><a href="gld-strategy.html">Five price plays</a><a href="gld-accumulator.html">GLD accumulator</a><a href="#compare-label">Results</a></div></nav>
+<main class="shell">
+<header class="hero"><div><p class="eyebrow">Gold strategy simulator</p><h1>Single-quote GLD planner</h1><p class="lede">Follow your cash and shares from the first fixing to the next decision. Compare holding GLD, selling through a covered decumulator, or rolling after knock-out.</p></div>
+<section class="market-card" aria-label="Latest gold market context"><p class="eyebrow">Gold market <span id="asof"></span></p><div class="market-pair"><div><small>GLD · USD/share</small><strong id="gld-mark">—</strong></div><div><small>Spot gold · USD/oz</small><strong id="xau-mark">—</strong></div></div><div id="spark"></div><p class="field-note" id="market-note">Loading market history…</p></section></header>
+<div class="workspace">
+<aside class="controls panel"><h2>Set up a run</h2><form id="sim-form">
+<div class="field-grid">
+<label class="field-wide">Starting point<select id="stage"><option value="start">Before the accumulator</option><option value="ko">My accumulator just knocked out</option></select></label>
+<label class="field-wide">GLD price path<select id="scenario"></select></label>
+<label>Horizon<select id="years"><option value="1">1 year</option><option value="3" selected>3 years</option><option value="5">5 years</option><option value="10">10 years</option></select></label>
+<label id="spot-field">Starting GLD (USD)<input id="spot" type="number" min=".01" max="1000000" step=".01" placeholder="Latest close"></label>
+<label class="field-wide" id="date-field" hidden>Replay from<input id="replay-date" type="date"></label>
+<label id="yearone-field" hidden>Year 1 return (%)<input id="year-one" type="number" min="-100" max="1000" value="-20" step="any"></label>
+<label id="final-field" hidden>Horizon return (%)<input id="final-return" type="number" min="-100" max="1000" value="15" step="any"></label>
+<label class="field-wide"><span id="cash-label">Cash budget (USD)</span><input id="budget" type="number" min="0" max="10000000000" step=".01" placeholder="100,000 illustration"></label>
+<label>GLD shares held<input id="opening" type="number" min="0" max="100000000" step="1" placeholder="0"></label>
+<label>Keep in cash (USD)<input id="reserve" type="number" min="0" max="10000000000" step=".01" placeholder="0"></label>
+</div>
+<p class="field-note" id="basis-note">A blank budget runs a USD 100,000 illustration. Personal inputs stay in this tab.</p>
+<details class="inputs-group" id="acc-terms"><summary>First accumulator</summary><div class="field-grid">
+<label class="field-wide">Term source<select id="quote"><option value="">Illustrative / custom terms</option></select></label>
+<label>Buy strike (% of spot)<input id="acc-strike" type="number" min=".01" max="100" step=".01" value="96" required></label>
+<label>Up KO (% of spot)<input id="acc-ko" type="number" min="100.01" max="1000" step=".01" value="105" required></label>
+<label>Fixings<input id="acc-days" type="number" min="1" max="2520" step="1" value="63" required></label>
+<label>Guaranteed fixings<input id="acc-g" type="number" min="0" max="2520" step="1" value="10" required></label>
+<label class="field-wide">Shares per fixing<input id="acc-lot" type="number" min="1" max="100000000" step="1" placeholder="Auto · fully funded"></label>
+</div><p class="field-note" id="quote-note">The example buys one fixed daily quantity. Replace these terms with your bank’s quote.</p></details>
+<details class="inputs-group"><summary>Rollover terms</summary><div class="field-grid">
+<label>New strike (%)<input id="roll-strike" type="number" value="96" min=".01" max="100" step=".01" required></label>
+<label>New up KO (%)<input id="roll-ko" type="number" value="105" min="100.01" max="1000" step=".01" required></label>
+<label>Fixings per roll<input id="roll-days" type="number" value="63" min="1" max="2520" step="1" required></label>
+<label>Guaranteed fixings<input id="roll-g" type="number" value="5" min="0" max="2520" step="1" required></label>
+<label>Maximum rolls<input id="roll-max" type="number" value="3" min="0" max="40" step="1" required></label>
+<label>Re-entry delay¹<input id="wait" type="number" value="2" min="1" max="252" step="1" required></label></div>
+<p class="field-note">Each roll resets at its own entry close. Only a KO releases the strategy for another roll. ¹Trading sessions after exit, also applied to the decumulator.</p></details>
+<details class="inputs-group"><summary>Covered decumulator terms</summary><div class="field-grid">
+<label>Sale strike (%)<input id="decu-strike" type="number" value="105" min="100" max="1000" step=".01" required></label>
+<label>Down KO (%)<input id="decu-ko" type="number" value="90" min=".01" max="99.99" step=".01" required></label>
+<label>Sale fixings<input id="decu-days" type="number" value="21" min="1" max="2520" step="1" required></label>
+<label>Above-strike delivery<select id="gear"><option value="1">1× daily shares</option><option value="2">2× daily shares</option></select></label>
+<label>Shares available (%)<input id="cover" type="number" value="100" min="0" max="100" step="1" required></label>
+<label>Wait for GLD ≥ (USD)<input id="min-entry" type="number" placeholder="Any entry" min=".01" max="1000000" step=".01"></label></div>
+<p class="field-note">One covered contract after KO or maturity. The model checks the maximum possible share delivery before entry. The example has no guaranteed sale fixings.</p></details>
+<button class="run-btn" type="submit">Update comparison</button></form></aside>
+<div class="report"><div id="error" class="alert" role="alert" hidden></div><noscript>Enable JavaScript to run the simulator.</noscript>
+<div id="report-content">
+<section class="panel" aria-labelledby="compare-label"><div class="section-head"><div><p class="kicker">Strategy comparison</p><h2 id="compare-label">Cash and shares at the horizon</h2></div></div>
+<p id="run-caption" class="status" aria-live="polite">Loading comparison…</p><p class="muted" id="path-caption"></p>
+<div class="pills" aria-label="Quick comparisons"><button type="button" data-preset="rebound">Fast KO</button><button type="button" data-preset="recovery">Fall then recover</button><button type="button" data-preset="history">2011–21 gold cycle</button><button type="button" data-preset="zero">Zero stress</button></div>
+<dl id="path-metrics" class="metric-strip"></dl>
+<div class="scroll-table"><table class="strategy-table"><caption class="sr-only">Outcome by strategy in USD</caption><thead><tr><th>Strategy</th><th>End value</th><th>Profit / loss</th><th>End cash</th><th>GLD shares</th><th>Max drawdown</th></tr></thead><tbody id="comparison"></tbody></table></div>
+<p class="field-note">End value includes cash and shares at the last GLD close. Drawdown measures the largest fall from a previous portfolio high. During an open contract these figures omit the bank’s unwind value.</p>
+</section>
+<section class="panel"><div class="section-head"><div><p class="kicker">Path explorer</p><h2>What happens along the way</h2></div><div class="pills chart-controls" aria-label="Chart measure"><button id="wealth-chart" type="button" aria-pressed="true">Portfolio</button><button id="price-chart" type="button" aria-pressed="false">GLD price</button></div></div>
+<div class="chart-wrap" id="chart"></div><div class="legend" id="legend"></div>
+<label>Inspect a fixing <input id="scrub" type="range" min="0" max="1" value="0" step="1"></label><p id="inspect" class="state-line"></p></section>
+<section class="panel"><div class="section-head"><div><p class="kicker">Decision guide</p><h2>Your next move at each branch</h2></div></div>
+<div class="plan-grid" id="game-plan"></div></section>
+<section class="panel"><div class="section-head"><div><p class="kicker">Trade ledger</p><h2>Follow one strategy</h2></div><label>Strategy<select id="focus"></select></label></div>
+<p id="end-state" class="note"></p><ol class="timeline" id="ledger"></ol></section>
+<section class="panel"><div class="section-head"><div><p class="kicker">Downside and recovery</p><h2>Stress the same starting position</h2></div></div><p class="muted" id="stress-caption"></p>
+<div class="scroll-table"><table class="strategy-table"><caption class="sr-only">Profit or loss by alternative GLD path in USD</caption><thead id="stress-head"></thead><tbody id="stress-body"></tbody></table></div><p id="zero-readout" class="note"></p></section>
+</div>
+<details class="panel report-footer"><summary>Model assumptions and sources</summary><p>Each synthetic year has 252 fixings. Historical replays use the available GLD closes. A close at or above the accumulator KO ends purchases and delivers any guaranteed shortfall. Below KO, purchases continue at the fixed strike even when GLD trades lower. The initial funding rounds up to a whole dollar.</p>
+<p>A decumulator sells daily at its fixed strike until maturity or a close at or below its lower KO. The optional 2× delivery applies only above the sale strike. Unsold shares remain exposed to GLD. Rollover and sale terms are hypothetical until the bank supplies fresh terms.</p>
+<p>Cash earns zero. The model assumes full funding, covered delivery, zero transaction costs and no tax, funding charge, counterparty default or early unwind. Accrued shares count as inventory. Confirm settlement, guarantee dates, KO+1, offsets, available collateral and the actual re-entry date with the bank before using delivered shares or a refund.</p>
+<p>GLD trades in USD per share. Spot gold (XAU/USD) is quoted per troy ounce. All contract observations here use GLD. Historical closes and dated term sheets come from the Hub.</p>
+<div class="navlinks"><a href="../data/metals/gld.csv">GLD history</a><a href="../data/metals/xau-spot.csv">Spot gold history</a><a href="https://www.ssga.com/us/en/intermediary/etfs/spdr-gold-shares-gld">State Street fund data</a><a href="https://www.ifec.org.hk/web/en/blog/2022/12/accumulators-and-decumulators-2.page">IFEC contract guide</a></div></details>
+</div></div></main></body></html>
