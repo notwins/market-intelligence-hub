@@ -57,17 +57,40 @@
   }
   function summarize(runs, last) {
     const accounts = runs.map(account);
-    const winners = accounts.flatMap((a,index)=>{
-      const best=a.best(last);
-      return best?[{...best,index,exit:a.exit}]:[];
-    }).sort(compare);
+    const outcomes = accounts.flatMap((account,index)=>quoted.map(key=>({
+      ...account.at(key,last), index, funded:account.funded, exit:account.exit
+    })));
+    const quote=outcomes.filter(play=>play.eligible).sort(compare)[0];
     const benchmark=accounts[0]?.best(last,order.slice(0,3));
-    const quote=winners[0];
     const overall=[quote,benchmark].filter(Boolean).sort(compare)[0];
-    return {quote,overall};
+    return {quote,overall,outcomes};
   }
 
-  const api = Object.freeze({account,summarize,labels,quoted,quoteId,fixingLabel});
+  function rankAcrossPeriods(periods) {
+    if (!periods.length) return [];
+    const ranked = periods[0].flatMap(({index,key})=>{
+      const outcomes=periods.map(period=>period.find(play=>play.index===index&&play.key===key));
+      if (!outcomes.every(play=>play?.funded)) return [];
+      const worst=outcomes.reduce((worst,play,i)=>play.pnl<outcomes[worst].pnl?i:worst,0);
+      return [{index,key,outcomes,worst,profitPeriods:outcomes.filter(play=>play.pnl>0).length,
+        worstPnl:outcomes[worst].pnl, maxDrawdown:Math.max(...outcomes.map(play=>play.drawdown)),rankTotal:0}];
+    });
+    for (let period=0;period<periods.length;period++) {
+      const ordered=[...ranked].sort((a,b)=>b.outcomes[period].pnl-a.outcomes[period].pnl);
+      for (let start=0;start<ordered.length;) {
+        let end=start+1;
+        while(end<ordered.length&&ordered[end].outcomes[period].pnl===ordered[start].outcomes[period].pnl)end++;
+        const rank=(start+1+end)/2;
+        for(let i=start;i<end;i++)ordered[i].rankTotal+=rank;
+        start=end;
+      }
+    }
+    return ranked.sort((a,b)=>a.rankTotal-b.rankTotal||b.worstPnl-a.worstPnl||
+      a.maxDrawdown-b.maxDrawdown||a.index-b.index||order.indexOf(a.key)-order.indexOf(b.key))
+      .map(({rankTotal,...play})=>({...play,averageRank:rankTotal/periods.length}));
+  }
+
+  const api = Object.freeze({account,summarize,rankAcrossPeriods,labels,quoted,quoteId,fixingLabel});
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.GldReplayResults = api;
 })(globalThis);

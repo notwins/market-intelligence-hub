@@ -76,4 +76,16 @@ assert.equal(Results.fixingLabel(oldRebound,62,()=>assert.fail('no dated close a
 const empty=Results.summarize(calculate(crisis,{...reportTerms,budget:1}),end);
 assert.equal(empty.quote,undefined);
 assert.equal(empty.overall.key,'wait');
+const windows=H.periods.flatMap(({id})=>['fall','rebound'].map(phase=>get(id,phase)));
+const ranking=Results.rankAcrossPeriods(windows.map(path=>Results.summarize(calculate(path),path.prices.length-1).outcomes));
+assert.equal(ranking.length,96);
+const leader=ranking[0];
+assert.deepEqual([Results.quoteId(leader.index),leader.key,leader.profitPeriods,leader.worstPnl,leader.maxDrawdown.toFixed(2),leader.averageRank],
+  ['Q23','decu',6,-10889.38,'20.11',25.6]);
+assert.equal(leader.outcomes.length,10);
+assert.equal(leader.outcomes[leader.worst].pnl,leader.worstPnl);
+const mostProfitable=ranking.find(play=>play.profitPeriods===Math.max(...ranking.map(p=>p.profitPeriods)));
+assert.deepEqual([Results.quoteId(mostProfitable.index),mostProfitable.key,mostProfitable.profitPeriods],['Q19','decu',9]);
+assert.equal(Math.max(...ranking.map(p=>p.worstPnl)),-9351.32);
+assert.ok(ranking.every(play=>play.outcomes.every(o=>o.funded)));
 console.log('All gold regimes and phases, shared GLD closing boundaries, proxy fixings and saved quote outcomes passed.');

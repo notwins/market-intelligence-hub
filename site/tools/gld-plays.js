@@ -6,10 +6,17 @@
     const id=query.get('regime'),phase=query.get('phase')??'cycle';
     return XauRegimes.periods.some(p=>p.id===id)&&Object.hasOwn(XauRegimes.phases,phase)?{id,phase}:null;
   }
-  let regimeRequest=replayMode?readRegime(params):null, regimeData, periodResults, gldHistory=[];
+  function readRanked(query) {
+    const quote=query.get('quote'),play=query.get('play');
+    return /^Q\d{2,}$/.test(quote)&&GldReplayResults.quoted.includes(play)?{quote,play}:null;
+  }
+  let regimeRequest=replayMode?readRegime(params):null, rankedRequest=regimeRequest?readRanked(params):null;
+  let regimeData, periodResults, gldHistory=[];
   const proxyStart=334.4;
-  function regimeHref(id,phase,grid=false) {
-    return '?mode=historical&regime='+id+'&phase='+phase+(grid?'#path-history-replay-grid':'#path-history-replay');
+  function regimeHref(id,phase,grid=false,ranked=null) {
+    const query=new URLSearchParams({mode:'historical',regime:id,phase});
+    if(ranked){query.set('quote',ranked.quote);query.set('play',ranked.play);}
+    return '?'+query+(grid?'#path-history-replay-grid':'#path-history-replay');
   }
   if (['strike','ko','guarantee','days','spot'].some(key=>params.has(key))) {
     location.replace('gld-strategy-detail.html'+location.search+location.hash);
@@ -230,40 +237,131 @@
         try{
           const path=regimePath(gold,id,phase);
           const runs=simulate(path,terms), last=path.prices.length-1;
-          const {quote,overall}=GldReplayResults.summarize(runs,last);
-          rows.push({id,phase,path,quote,overall,unfunded:runs.filter(r=>r.strategies.find(s=>s.key==='acc').events[0]?.type==='skip').length});
+          const {quote,overall,outcomes}=GldReplayResults.summarize(runs,last);
+          const unfunded=outcomes.filter(play=>play.key==='acc'&&!play.funded).length;
+          rows.push({id,phase,path,quote,overall,outcomes,unfunded});
         }catch(error){rows.push({id,phase,error:error.message});}
       }
     }
-    return rows;
+    const ranking=rows.every(row=>!row.error)?GldReplayResults.rankAcrossPeriods(rows.map(row=>row.outcomes)):[];
+    return {rows,ranking};
   }
   const replayMonth=new Intl.DateTimeFormat('en-GB',{month:'short',year:'numeric',timeZone:'UTC'});
   const monthLabel=date=>replayMonth.format(new Date(date+'T00:00:00Z'));
+  const phaseLabel=phase=>phase==='fall'?'fall':'post-trough';
+  const windowLabel=({phase,path})=>monthLabel(path.dates[0])+' – '+monthLabel(path.dates.at(-1))+' '+phaseLabel(phase);
+  const drawdownLabel=value=>value.toFixed(2)+'%';
+  function replayLink(row, label, pair=null) {
+    const a=node('a',label,'history-launch');
+    a.href=regimeHref(row.id,row.phase,true,pair&&{quote:quoteId(pair.index),play:pair.key});
+    return a;
+  }
+  function setReplayScroll(id, visible) {
+    $(id).hidden=!visible;
+    document.querySelector('[data-scroll-for="'+id+'"]').hidden=!visible;
+  }
+  function renderRankedWindows(pair,rows) {
+    const target=panels.get('history-replay')?.rankedWindows;
+    if(!target)return;
+    const {labels,fixingLabel}=GldReplayResults;
+    const back=node('a','Back to overall ranking','replay-back');back.href='#replay-ranking';
+    const title=node('h4',rankedRequest.quote+' · '+labels[rankedRequest.play]);
+    target.replaceChildren(back,title);
+    if(!pair){
+      target.append(node('p','This pair does not have an overall rank under the applied settings.','play-note'));
+      return;
+    }
+    const scroller=node('div',null,'play-scroll ranked-windows-scroll');
+    scroller.tabIndex=0;scroller.setAttribute('role','region');scroller.setAttribute('aria-label','Selected quote and play across all ten periods');
+    const table=node('table',null,'play-table ranked-windows-table'),head=table.createTHead().insertRow(),body=table.createTBody();
+    const metricRows=['P&L','Max drawdown','First KO'].map(label=>{
+      const row=body.insertRow(),th=node('th',label);th.scope='row';row.append(th);return row;
+    });
+    const periodHeading=node('th','Replay period');periodHeading.scope='col';head.append(periodHeading);
+    rows.forEach((row,i)=>{
+      const th=node('th');th.scope='col';
+      const link=replayLink(row,windowLabel(row),pair);
+      if(row.id===regimeRequest.id&&row.phase===regimeRequest.phase)link.setAttribute('aria-current','true');
+      th.append(link);head.append(th);
+      const outcome=pair.outcomes[i];
+      const exit=outcome.exit;
+      const ko=exit?.type==='ko'?fixingLabel(row.path,exit.day,dateLabel):exit?'Matured without KO':'Open at cutoff';
+      metricRows[0].append(pnlCell({...outcome,eligible:true}));
+      metricRows[1].append(node('td',drawdownLabel(outcome.drawdown)));
+      metricRows[2].append(node('td',ko));
+    });
+    const controls=node('div',null,'replay-scroll-tools');
+    GldReplayBoard.addScrollButtons(controls,scroller,['‹ Earlier periods','Later periods ›'],()=>periodHeading.offsetWidth);
+    scroller.append(table);target.append(controls,scroller);
+    const active=head.querySelector('[aria-current="true"]')?.parentElement;
+    if(active)scroller.scrollLeft=Math.max(0,active.offsetLeft-periodHeading.offsetWidth);
+  }
+  function renderRanking({rows,ranking}) {
+    const body=$('ranking-body'),highlights=$('ranking-highlights');
+    const selected=ranking.find(play=>quoteId(play.index)===rankedRequest?.quote&&play.key===rankedRequest.play);
+    if(rankedRequest)renderRankedWindows(selected,rows);
+    body.replaceChildren();highlights.replaceChildren();
+    setReplayScroll('ranking-scroll',Boolean(ranking.length));
+    if(!ranking.length){
+      setText('ranking-status',rows.some(row=>row.error)?'All ten price windows are needed for the overall ranking.':'No quote can fund its opening accumulator in every window with these settings.');
+      return;
+    }
+    const {labels}=GldReplayResults, fragment=document.createDocumentFragment();
+    const eligibleQuotes=new Set(ranking.map(play=>play.index)).size;
+    setText('ranking-status',eligibleQuotes+' of '+quotes.length+' quotes funded in all '+rows.length+' periods · '+ranking.length+' ranked quote-and-play pairs.');
+    const bestFrequency=ranking.reduce((best,play)=>play.profitPeriods>best.profitPeriods?play:best);
+    const smallestLoss=ranking.reduce((best,play)=>play.worstPnl>best.worstPnl?play:best);
+    for(const [heading,play,result] of [
+      ['Best overall',ranking[0],ranking[0].averageRank.toFixed(2)+' average rank'],
+      ['Most profitable periods',bestFrequency,bestFrequency.profitPeriods+' of '+rows.length+' periods'],
+      ['Best worst-period result',smallestLoss,pl(smallestLoss.worstPnl)+' worst P&L']
+    ]){
+      const card=node('div',null,'ranking-highlight');
+      card.append(node('h3',heading),replayLink(rows[play.worst],quoteId(play.index)+' · '+labels[play.key],play),node('p',result));
+      highlights.append(card);
+    }
+    ranking.forEach((play,i)=>{
+      const row=node('tr'),heading=node('th');
+      heading.scope='row';
+      const link=replayLink(rows[play.worst],(i+1)+' · '+quoteId(play.index),play);
+      link.setAttribute('aria-label','Replay rank '+(i+1)+', '+quoteId(play.index)+', '+labels[play.key]);
+      if(play===selected)link.setAttribute('aria-current','true');
+      heading.append(link,node('small',quotes[play.index].months+'m · '+quotes[play.index].strike+'% buy · '+quotes[play.index].ko+'% KO','period-results-note'));
+      row.append(heading,node('td',labels[play.key]),node('td',play.profitPeriods+' / '+rows.length),
+        pnlCell({pnl:play.worstPnl,eligible:true}),node('td',drawdownLabel(play.maxDrawdown)),node('td',play.averageRank.toFixed(2)));
+      fragment.append(row);
+    });
+    body.append(fragment);
+  }
   async function showPeriodResults(terms,seq) {
     $('replay-results').hidden=false;
     const key=JSON.stringify(terms);
     if(periodResults?.key!==key){
-      $('period-results-scroll').hidden=true;
+      setReplayScroll('period-results-scroll',false);
+      setReplayScroll('ranking-scroll',false);
+      $('ranking-highlights').replaceChildren();
+      setText('ranking-status','Calculating overall rankings…');
       setText('period-results-status','Calculating historical results…');
       periodResults={key,promise:collectPeriodResults(terms)};
     }
     const current=periodResults;
     try{
-      const rows=await current.promise;
+      const report=await current.promise;
       if(seq!==version)return;
+      const {rows}=report;
+      renderRanking(report);
       const body=$('period-results-body'), fragment=document.createDocumentFragment();
       const {labels,fixingLabel:dateAt}=GldReplayResults;
       const name=play=> (play.index==null?'':quoteId(play.index)+' · ')+labels[play.key];
       const dd=play=>play.drawdown.toFixed(2)+'%';
       for(const {id,phase,path,quote,overall,unfunded,error} of rows) {
         const row=node('tr'),title=node('th');title.scope='row';row.append(title);
-        const phaseName=phase==='fall'?'fall':'post-trough', selected=id===regimeRequest?.id&&phase===regimeRequest.phase;
+        const phaseName=phaseLabel(phase), selected=id===regimeRequest?.id&&phase===regimeRequest.phase;
         if(error){
           title.textContent=XauRegimes.periods.find(period=>period.id===id).name+' · '+phaseName;
           const detail=node('td',error);detail.colSpan=5;row.append(detail);fragment.append(row);continue;
         }
-        const a=node('a',monthLabel(path.dates[0])+' – '+monthLabel(path.dates.at(-1))+' '+phaseName,'history-launch');
-        a.href=regimeHref(id,phase,true);
+        const a=replayLink({id,phase,path},windowLabel({phase,path}));
         if(selected)a.setAttribute('aria-current','true');
         title.append(a);
         if(path.proxy)title.append(node('small','Monthly gold proxy','period-results-note'));
@@ -281,13 +379,13 @@
         fragment.append(row);
       }
       body.replaceChildren(fragment);
-      $('period-results-scroll').hidden=false;
+      setReplayScroll('period-results-scroll',true);
       setText('period-results-status',quotes.length+' quotes tested per window · '+money(terms.budget)+' starting cash'+
         (terms.openingShares?' · '+terms.openingShares.toLocaleString('en-US')+' opening GLD shares':'')+'.');
-      if(location.hash==='#replay-results')scrollToPath();
+      if(['#replay-results','#replay-ranking'].includes(location.hash))scrollToPath();
     } catch(error) {
       if(periodResults===current)periodResults=null;
-      if(seq===version)setText('period-results-status',error.message);
+      if(seq===version){setText('period-results-status',error.message);setText('ranking-status',error.message);}
     }
   }
   function snapshot(panel,day) {
@@ -640,7 +738,7 @@
       const links=node('nav',null,'play-nav');links.setAttribute('aria-label','Regime replay phases');
       const summary=XauRegimes.summarize(path.regimeGold,regimeRequest.id);
       for(const [phase,window] of Object.entries(summary.windows)){
-        const link=node('a',window.label,'history-launch');link.href=regimeHref(regimeRequest.id,phase);
+        const link=node('a',window.label,'history-launch');link.href=regimeHref(regimeRequest.id,phase,Boolean(rankedRequest),rankedRequest);
         if(phase===regimeRequest.phase)link.setAttribute('aria-current','page');
         links.append(link);
       }
@@ -680,17 +778,26 @@
     p.detail=node('div',null,'play-detail');p.detail.tabIndex=-1;p.examples=node('div',null,'play-ko-examples');
     section.append(header,stage);
     if(path.dates){
-      p.board=GldReplayBoard.render({path,quotes,runs:p.runs,day:p.day,selected:p.selected,onSelect:(index,day)=>{
+      const play=previous?.board?.querySelector('[data-play][aria-pressed=true]')?.dataset.play??rankedRequest?.play;
+      p.board=GldReplayBoard.render({path,quotes,runs:p.runs,day:p.day,selected:p.selected,play,onSelect:(index,day)=>{
         p.selected=index;changeDay(p,day,true);
       }});
       p.board.id='path-'+id+'-grid';
       if(path.basis){
         const back=node('a','Compare all historical periods','replay-back');
         back.href='#replay-results';p.board.prepend(back);
+        if(rankedRequest){
+          p.rankedWindows=node('section',null,'ranked-windows');
+          p.rankedWindows.setAttribute('aria-label','Replay the selected quote in another period');
+          p.board.prepend(p.rankedWindows);
+        }
       }
       p.board.querySelector('.replay-grid-scroll').before(dailyControls(p));
       const fromEntry=node('details',null,'play-editor');
-      fromEntry.append(node('summary','Compare strategies from the original entry'),p.kpis,p.examples,tools,p.caption,scroller);
+      fromEntry.open=true;
+      const compareScroll=node('div',null,'replay-scroll-tools');
+      GldReplayBoard.addScrollButtons(compareScroll,scroller);
+      fromEntry.append(node('summary','Compare strategies from the original entry'),p.kpis,p.examples,tools,p.caption,compareScroll,scroller);
       section.append(p.board,p.detail,fromEntry);
     }else{
       p.historyBox=historyContext(id,previous?.historyBox?.open);
@@ -831,7 +938,7 @@
     });
     if(replayMode){
       setText('page-heading','Historical GLD replay');
-      setText('page-lead','Replay every saved quote on five recorded GLD price paths. Scroll right to find each knock-out and compare what holding, rolling, selling or adding would have earned afterward.');
+      setText('page-lead','Compare the saved quotes across ten historical windows. Open a period to inspect knock-outs, P&L and drawdown through time.');
       setText('price-method','Replay pricing uses one recorded GLD close per trading session. The first close sets each quote’s dollar strike and KO. Observations begin on the next session and stop at the last available close in the chosen period.');
     }else for(const [id,html] of Object.entries(originals))$(id).innerHTML=html;
     if(regimeRequest){
@@ -854,18 +961,22 @@
     setText('replay-period-column',regimeRequest?'Replay window':'Recorded period');
     $('replay-overview').hidden=!replayMode||!panels.size;
     $('replay-results').hidden=!replayMode;
+    $('replay-ranking').hidden=!replayMode;
+    $('ranking-replay-link').hidden=!regimeRequest;
     $('decision-map').open=!replayMode||location.hash==='#decision-map';
   }
   function scrollToPath(){
     const id=location.hash.slice(1);
     if(id==='walkthrough-script'){$(id).open=true;$(id).scrollIntoView({block:'start'});return;}
-    if(id==='timelines'||id==='replay-overview'||id==='replay-results'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
+    if(id==='timelines'||id==='replay-overview'||id==='replay-results'||id==='replay-ranking'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
   }
   async function changeMode(){
     const query=new URLSearchParams(location.search),requested=query.get('mode')==='historical';
     const regime=requested?readRegime(query):null;
-    if(requested!==replayMode||regime?.id!==regimeRequest?.id||regime?.phase!==regimeRequest?.phase){
-      replayMode=requested;regimeRequest=regime;panels.clear();modeLayout();
+    const ranked=regime?readRanked(query):null;
+    if(requested!==replayMode||regime?.id!==regimeRequest?.id||regime?.phase!==regimeRequest?.phase
+      ||ranked?.quote!==rankedRequest?.quote||ranked?.play!==rankedRequest?.play){
+      replayMode=requested;regimeRequest=regime;rankedRequest=ranked;panels.clear();modeLayout();
       if(quotes.length)await renderAll();
     }
     scrollToPath();
@@ -886,6 +997,7 @@
   $('csv').addEventListener('click',download);
   GldGuide.init({panels,getPanel:getGuidePanel,move:changeDay,quote:index=>quotes[index],quoteCount:()=>quotes.length,
     terms:()=>config.terms,quoteId,pre,post,price,fixingLabel,units});
+  document.querySelectorAll('[data-scroll-for]').forEach(controls=>GldReplayBoard.addScrollButtons(controls,$(controls.dataset.scrollFor)));
   modeLayout();
   refreshControls();
   initFlow();
