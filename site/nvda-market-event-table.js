@@ -30,12 +30,10 @@
 
       const title = document.createElement("th");
       title.scope = "row";
-      const source = document.createElement("a");
-      source.href = event.url;
-      source.target = "_blank";
-      source.rel = "noopener noreferrer";
-      source.textContent = event.title;
-      title.append(source);
+      const link = document.createElement("a");
+      link.href = "#" + event.id;
+      link.textContent = event.title;
+      title.append(link);
       row.append(title);
 
       for (const interval of windows) {

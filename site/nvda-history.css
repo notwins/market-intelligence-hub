@@ -401,7 +401,9 @@ body.nvda-history-page { margin: 0; color: var(--nv-ink); background: var(--nv-p
   background: #eff5eb;
   font-size: .9rem;
 }
-#market .nv-market-events, #nvda-event-returns { scroll-margin-top: calc(var(--hub-primary-height, 0px) + 68px); }
+#nv-market-stack, #market .nv-market-events, #market .nv-market-event-card[id], #nvda-event-returns {
+  scroll-margin-top: calc(var(--hub-primary-height, 0px) + 68px);
+}
 .nv-market-subpanel {
   margin-top: 12px;
   padding-top: 12px;

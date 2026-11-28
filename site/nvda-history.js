@@ -468,7 +468,7 @@
     options($("nv-filing-select"), dates.map(p => [p, (p.startsWith("Quarterly") ? "Quarter · " : "Annual · ") + charts.date(endDate(p))]), nvidiaPeriods.quarterly.at(-1));
     mountMarketMetrics();
     marketTimeline = window.NvdaMarketTimeline.mount({
-      events: window.NvdaMarketEvents, quarters: nvidiaPeriods.quarterly, actual, mkt, usd, dollar, marketFormat, element, refresh: marketPlot,
+      events: window.NvdaMarketEvents, months: monthKeys, quarters: nvidiaPeriods.quarterly, actual, mkt, usd, dollar, marketFormat, element, refresh: marketPlot,
     });
     const historical = keys.filter(period => !period.startsWith("Latest")).sort((a, b) => b.split(" ")[1].localeCompare(a.split(" ")[1]));
     options($("nv-peer-period"), [["Latest quarterly", "Latest available quarterly"], ["Latest annual", "Latest available annual"],

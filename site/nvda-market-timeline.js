@@ -44,7 +44,7 @@
     container.replaceChildren(element("p", baseline, "nv-market-move-base"), levels);
   }
 
-  function mount({ events, quarters, actual, mkt, usd, dollar, marketFormat, element, refresh }) {
+  function mount({ events, months, quarters, actual, mkt, usd, dollar, marketFormat, element, refresh }) {
     const price = $("nv-market-chart");
     const pe = $("nv-market-pe-chart");
     const revenue = $("nv-market-revenue-chart");
@@ -54,6 +54,8 @@
     const filters = $("nv-market-event-filter");
     const eventBox = $("nv-market-events");
     const stack = $("nv-market-stack");
+    const eventToggle = $("nv-market-overlay-events");
+    const range = $("nv-market-range");
     const eventMonth = $("nv-market-event-month");
     const eventChoice = $("nv-market-event-choice");
     const eventSelect = $("nv-market-event-select");
@@ -62,6 +64,7 @@
     const list = $("nv-market-event-list");
     const prev = $("nv-market-event-prev");
     const next = $("nv-market-event-next");
+    const eventsByHash = new Map(events.map(event => ["#" + event.id, event]));
     let activeMonth, activeEventMonth, activeEvent;
     const archiveQuarters = quarters.map(period => ({
       reported: actual(period, "Filing or release date"),
@@ -78,9 +81,47 @@
     toggles.addEventListener("change", refresh);
     filters.addEventListener("change", refresh);
 
+    const besideChart = () => getComputedStyle(stack).display === "grid";
+
+    function openLinkedEvent() {
+      const event = eventsByHash.get(window.location.hash);
+      if (!event) return;
+      const month = event.date.slice(0, 7);
+      const index = months.indexOf(month);
+      if (index < 0) return;
+      const needed = months.length - index;
+      if (Number(range.value) < needed) {
+        const fitting = [...range.options].find(option => Number(option.value) >= needed);
+        if (!fitting) return;
+        range.value = fitting.value;
+      }
+      eventToggle.checked = true;
+      filters.querySelector('input[value="' + event.category + '"]').checked = true;
+      activeMonth = activeEventMonth = month;
+      activeEvent = event;
+      refresh();
+
+      const desktop = besideChart();
+      const card = $(event.id);
+      const destination = desktop ? stack : card;
+      const focus = desktop ? rail.querySelector('[aria-pressed="true"]') : card;
+      destination?.scrollIntoView({ block: "start", behavior: "instant" });
+      focus?.focus({ preventScroll: true });
+    }
+
+    window.addEventListener("hashchange", openLinkedEvent);
+    $("nv-market-return-rows").addEventListener("click", action => {
+      const link = action.target.closest("a");
+      if (link?.hash !== window.location.hash || !eventsByHash.has(link.hash)
+        || action.button !== 0 || action.ctrlKey || action.metaKey || action.altKey || action.shiftKey) return;
+      action.preventDefault();
+      openLinkedEvent();
+    });
+    queueMicrotask(openLinkedEvent);
+
     function render(model, primaryKey) {
       const { dates } = model;
-      const eventsOn = $("nv-market-overlay-events").checked;
+      const eventsOn = eventToggle.checked;
       const peToggle = $("nv-market-overlay-pe");
       peToggle.disabled = primaryKey === "P/E TTM x";
       peToggle.closest("label").title = peToggle.disabled ? "Trailing P/E is already the main chart." : "";
@@ -135,7 +176,7 @@
         button.addEventListener("focus", () => selectEventMonth(index));
         button.addEventListener("click", () => {
           selectEventMonth(index);
-          if (getComputedStyle(stack).display === "grid") return;
+          if (besideChart()) return;
           const moves = list.querySelector("[data-active] .nv-market-move-grid") || eventBox;
           if (moves.getBoundingClientRect().bottom > window.innerHeight - 46) {
             eventBox.scrollIntoView({ block: "start" });
@@ -196,6 +237,8 @@
         list.replaceChildren(...selection.map(event => {
           const topic = categories[event.category];
           const article = element("article", "", "nv-market-event-card");
+          article.id = event.id;
+          article.tabIndex = -1;
           article.toggleAttribute("data-active", event === activeEvent);
           article.style.setProperty("--event-color", topic.color);
           const metadata = charts.date(event.date) + " · " + topic.label;
