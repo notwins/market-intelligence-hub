@@ -74,6 +74,8 @@ async function checkMenu(browser,width) {
     await assertHitTarget(page,'.hub-primary-dropdown:not([hidden]) a[data-nav-art="search"]','Search inside News menu');
     await assertHitTarget(page,'#play-walkthrough','Launcher with News menu open');
     await page.locator('#play-walkthrough').click();
+    await page.evaluate(()=>window.scrollTo(0,0));
+    await page.locator('html.hub-primary-ready:not(.hub-primary-hidden)').waitFor({state:'attached'});
     await assertHitTarget(page,'.gld-guide-next','Next after launch');
     await assertHitTarget(page,'.gld-guide-close','Stop after launch');
     await page.locator('.gld-guide-close').click();
