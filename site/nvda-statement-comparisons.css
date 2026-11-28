@@ -550,6 +550,7 @@
     --nv-group-tint: #f1e8e1;
     --nv-group-mark: var(--hist-credit);
   }
+  .nv-print-sheet[data-print-topic="sources"] { --nv-group-mark: var(--hist-globe); }
   .nv-print-sheet .nv-print-heading h2 {
     display: flex;
     align-items: center;
@@ -613,7 +614,7 @@
   .nv-print-sheet .nv-debt-bars li { grid-template-columns: 11mm 1fr 24mm; gap: 1.5mm; font-size: inherit; }
   .nv-print-sheet .nv-debt-bars small { display: inline; font-size: 7pt; }
   .nv-print-sheet .nv-debt-bars i { height: 1.65mm; }
-  .nv-print-sheet .nv-print-sources { margin-top: 4mm; }
+  .nv-print-sheet .nv-print-endnotes { margin-top: 5mm; }
   .nv-print-sheet a { color: var(--nv-green); }
   .nv-print-sheet .nv-print-peer-overview { font-size: 7.25pt; }
   .nv-print-peer-overview th:first-child { width: 19%; }
@@ -694,9 +695,8 @@
   .nv-print-toc [data-toc-topic="cash"] { --nv-toc-mark: var(--hist-fx); }
   .nv-print-toc [data-toc-topic="market"] { --nv-toc-mark: var(--hist-curve); }
   .nv-print-toc [data-toc-topic="credit"] { --nv-toc-mark: var(--hist-credit); }
-  .nv-print-toc-label { flex: auto; }
-  .nv-print-toc-label strong { display: block; font: 620 13pt/1.1 var(--nv-serif); }
-  .nv-print-toc-label small { display: block; color: var(--nv-muted); font-size: 8pt; margin-top: .45mm; }
+  .nv-print-toc [data-toc-topic="sources"] { --nv-toc-mark: var(--hist-globe); }
+  .nv-print-toc-label { flex: auto; font: 620 13pt/1.1 var(--nv-serif); }
   .nv-print-toc-page { font-size: 9pt; font-weight: 700; font-variant-numeric: tabular-nums; }
   .nv-print-toc .nv-print-toc-sub { margin-inline-start: 8mm; }
   .nv-print-toc .nv-print-toc-sub a { background: #fff; padding-block: 1mm; }
