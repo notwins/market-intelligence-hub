@@ -7,7 +7,7 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=7">
+<link rel="stylesheet" href="nvda-history.css?v=8">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=1">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
@@ -18,7 +18,9 @@
 <script defer src="nvda-statement-comparisons.js?v=3"></script>
 <script defer src="nvda-revenue-peer-history.js?v=4"></script>
 <script defer src="nvda-market-events.js?v=1"></script>
-<script defer src="nvda-market-timeline.js?v=2"></script>
+<script defer data-price-render-only src="share-prices.js?v=20261128.event-moves"></script>
+<script defer src="nvda-market-event-prices.js?v=1"></script>
+<script defer src="nvda-market-timeline.js?v=3"></script>
 <script defer src="nvda-history.js?v=20261128.market-timeline"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
@@ -197,14 +199,15 @@
     </div>
     <section class="nv-market-events" id="nv-market-events" aria-label="Events for the selected month" hidden>
       <div class="nv-market-event-head">
-        <strong id="nv-market-event-month"></strong>
+        <strong id="nv-market-event-month" tabindex="-1"></strong>
         <div>
           <button type="button" class="nv-layout-button" id="nv-market-event-prev" aria-label="Previous event month">← Prev event</button>
           <button type="button" class="nv-layout-button" id="nv-market-event-next" aria-label="Next event month">Next event →</button>
         </div>
       </div>
       <div class="nv-market-event-list" id="nv-market-event-list"></div>
-      <p class="nv-note">Markers show event months. Cards show exact dates and sources. Events provide historical context for monthly observations. <a href="https://www.youtube.com/watch?v=yc-dL8oFDNo" target="_blank" rel="noopener noreferrer">Video reference ↗</a></p>
+      <p class="nv-note">Price moves compare the last close before each event with the first trading close on or after its 1- or 3-month anniversary. Prices are split-adjusted USD per share and exclude dividends. <a href="https://finance.yahoo.com/quote/NVDA/history/" target="_blank" rel="noopener noreferrer">Daily price source ↗</a></p>
+      <p class="nv-note">Markers show event months. Cards show exact dates and sources. Other news can also affect these moves. <a href="https://www.youtube.com/watch?v=yc-dL8oFDNo" target="_blank" rel="noopener noreferrer">Video reference ↗</a></p>
     </section>
     <p class="nv-note" id="nv-market-overlay-note" hidden></p>
     <p class="nv-note">Monthly closes use the last available trading day. November 2026 is partial. Dividends are grouped by ex-date.</p>

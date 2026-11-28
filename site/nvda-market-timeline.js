@@ -2,6 +2,10 @@
   "use strict";
   const $ = id => document.getElementById(id);
   const charts = window.NvidiaCharts;
+  const eventPrices = window.NvdaMarketEventPrices;
+  const closeFormat = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  const usdMove = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", signDisplay: "exceptZero" });
+  const pctMove = new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: "exceptZero" });
   const categories = {
     nvidia: { label: "NVIDIA", color: "#286d42" },
     us: { label: "U.S. & macro", color: "#9a5731" },
@@ -17,6 +21,30 @@
       source: "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2017" },
   ];
 
+  function renderPriceMoves(container, date, element) {
+    const { base, windows } = eventPrices.forEvent(date);
+    const levels = element("dl", "", "nv-market-move-grid");
+    for (const { months, target, point } of windows) {
+      const level = element("div", "", "nv-market-move");
+      const value = element("dd");
+      level.append(element("dt", months === 1 ? "1 month" : "3 months"), value);
+      if (base && point) {
+        const change = point[1] - base[1];
+        level.dataset.move = change > 0 ? "up" : change < 0 ? "down" : "flat";
+        const signed = element("strong");
+        signed.append(element("span", usdMove.format(change)), element("span", " / ", "nv-market-move-divider"),
+          element("span", pctMove.format(change / base[1])));
+        value.append(signed, element("small", closeFormat.format(point[1]) + " close · " + charts.date(point[0])));
+      } else {
+        value.append(element("strong", base ? "Pending close" : "Unavailable"),
+          element("small", "Target " + charts.date(target)));
+      }
+      levels.append(level);
+    }
+    const baseline = base ? closeFormat.format(base[1]) + " baseline · " + charts.date(base[0]) : "Baseline close unavailable";
+    container.replaceChildren(element("p", baseline, "nv-market-move-base"), levels);
+  }
+
   function mount({ events, quarters, actual, mkt, usd, dollar, marketFormat, element, refresh }) {
     const price = $("nv-market-chart");
     const pe = $("nv-market-pe-chart");
@@ -26,6 +54,7 @@
     const rail = $("nv-market-annotations");
     const filters = $("nv-market-event-filter");
     const eventBox = $("nv-market-events");
+    const eventMonth = $("nv-market-event-month");
     const caption = $("nv-market-event-caption");
     const captionText = $("nv-market-event-caption-text");
     const list = $("nv-market-event-list");
@@ -102,7 +131,13 @@
         button.setAttribute("aria-label", charts.date(month) + " · " + button.title);
         button.style.setProperty("--event-color", categories[category].color);
         button.addEventListener("focus", () => setMonth(index));
-        button.addEventListener("click", () => setMonth(index));
+        button.addEventListener("click", () => {
+          setMonth(index);
+          if (eventBox.getBoundingClientRect().top > window.innerHeight - 165) {
+            eventBox.scrollIntoView({ block: "start" });
+            eventMonth.focus({ preventScroll: true });
+          }
+        });
         return { month, button, index, color: categories[category].color };
       });
       rail.replaceChildren(...markers.map(marker => marker.button));
@@ -131,7 +166,7 @@
         next.disabled = !later;
         prev.onclick = () => { if (earlier) setMonth(dates.indexOf(earlier)); };
         next.onclick = () => { if (later) setMonth(dates.indexOf(later)); };
-        $("nv-market-event-month").textContent = charts.date(month);
+        eventMonth.textContent = charts.date(month);
         const selection = byMonth.get(month) || [];
         captionText.textContent = selection.length ? charts.date(month) + " · " + selection.map(event => event.title).join(" · ")
           : eventMonths.length ? "Select a marker to read about its events." : "No selected events in this range.";
@@ -147,6 +182,12 @@
           const metadata = charts.date(event.date) + " · " + topic.label;
           article.append(element("p", metadata, "nv-market-event-meta"), element("h4", event.title), element("p", event.note));
           if (close && event.date > close) article.append(element("p", "After the last plotted close on " + charts.date(close) + ".", "nv-muted"));
+          const returns = element("div", "", "nv-market-event-moves");
+          renderPriceMoves(returns, event.date, element);
+          eventPrices.refreshFor(event.date)?.then(() => {
+            if (returns.isConnected) renderPriceMoves(returns, event.date, element);
+          });
+          article.append(returns);
           const source = element("a", event.source + " ↗");
           source.href = event.url;
           source.target = "_blank";
