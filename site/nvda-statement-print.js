@@ -51,7 +51,7 @@
     return table;
   }
 
-  function printCard(card, group) {
+  function printCard(card, group, full) {
     const article = make("article", "", "nv-print-card");
     article.dataset.statementFamily = card.dataset.statement;
     article.dataset.chartKind = card.dataset.chartKind;
@@ -70,7 +70,7 @@
     const table = printTable(card.querySelector("table"), title + " comparison table");
     layout.append(table);
     const note = card.querySelector(".nv-note");
-    if (note) figure.append(make("figcaption", note.textContent, "nv-print-note"));
+    if (note && !full) figure.append(make("figcaption", note.textContent, "nv-print-note"));
     return article;
   }
 
@@ -101,14 +101,14 @@
       copy.append(
         make("p", "NASDAQ · NVDA", "nv-print-market"),
         make("h1", full ? "NVIDIA historical dashboard" : "NVIDIA peer financial comparison"),
-        make("p", full ? "Financials · Peer comparisons · Market history · Credit" : filing + " · " + range + " · " + coverage),
-        make("p", "Financial archive as of " + window.NvidiaCharts.date(asOf) + (full ? "" : " · Dollar amounts in USD billions")),
       );
+      if (!full) copy.append(make("p", filing + " · " + range + " · " + coverage));
+      copy.append(make("p", "Financial archive as of " + window.NvidiaCharts.date(asOf) + (full ? "" : " · Dollar amounts in USD billions")));
       intro.append(copy);
       report.classList.toggle("nv-print-full", full);
       report.replaceChildren(intro);
       const peerCards = groups.flatMap(([key, section]) =>
-        Array.from(section.querySelectorAll(".nv-statement-peer-card"), card => printCard(card, statements[key])));
+        Array.from(section.querySelectorAll(".nv-statement-peer-card"), card => printCard(card, statements[key], full)));
       if (full) window.NvdaFullPrint.append(report, { make, printFigure, printTable, printFilings, peerCards, filing, range, coverage });
       else report.append(...peerCards);
       document.body.classList.add("nv-statement-printing");

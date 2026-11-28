@@ -22,30 +22,29 @@
 
   function addContents(report, make) {
     const entries = [
-      ["financials", "Financials", "NVIDIA filing figures, balance sheet and margins."],
-      ["peers", "Peer comparisons", "Company rankings, financial trends and valuation comparisons."],
-      ["income", "Income statement"],
-      ["balance", "Balance sheet"],
-      ["cash", "Cash flow"],
-      ["market", "Market history", "Prices, enabled overlays and event returns."],
-      ["credit", "Credit", "Liquidity, debt maturities, risks and sources."],
+      ["financials", "Financials"],
+      ["peers", "Peer comparisons"],
+      ["income", "Income statement", true],
+      ["balance", "Balance sheet", true],
+      ["cash", "Cash flow", true],
+      ["market", "Market history"],
+      ["credit", "Credit"],
+      ["sources", "Sources and notes"],
     ];
     const contents = make("nav", "", "nv-print-toc");
     contents.setAttribute("aria-label", "Table of contents");
     contents.append(make("h2", "Contents"));
     const list = make("ul");
     const pages = [...report.querySelectorAll(":scope > :is(.nv-print-sheet, .nv-print-card)")];
-    entries.forEach(([key, label, description]) => {
+    entries.forEach(([key, label, nested]) => {
       const target = pages.find(page => page.dataset.printTopic === key || page.dataset.statementFamily === key);
       target.id = "nv-pdf-" + key;
-      const item = make("li", "", description ? "" : "nv-print-toc-sub");
+      const item = make("li", "", nested ? "nv-print-toc-sub" : "");
       item.dataset.tocTopic = key;
       const link = make("a");
       link.href = "#" + target.id;
-      const wording = make("span", "", "nv-print-toc-label");
-      wording.append(make("strong", label));
-      if (description) wording.append(make("small", description));
-      link.append(wording, make("span", String(pages.indexOf(target) + 2), "nv-print-toc-page"));
+      link.append(make("strong", label, "nv-print-toc-label"),
+        make("span", String(pages.indexOf(target) + 2), "nv-print-toc-page"));
       item.append(link);
       list.append(item);
     });
@@ -58,7 +57,8 @@
       const page = make("section", "", "nv-print-sheet");
       page.dataset.printTopic = tone;
       const heading = make("header", "", "nv-print-heading");
-      heading.append(make("p", group, "nv-print-group"), make("h2", title));
+      if (group) heading.append(make("p", group, "nv-print-group"));
+      heading.append(make("h2", title));
       if (detail) heading.append(make("p", detail, "nv-print-caption"));
       page.append(heading);
       report.append(page);
@@ -67,7 +67,7 @@
 
     function chart(id, title, detail = "", wide = false) {
       const panel = make("section", "", "nv-print-chart-panel");
-      panel.append(make("h3", title));
+      if (title) panel.append(make("h3", title));
       if (detail) panel.append(make("p", detail, "nv-print-description"));
       const figure = printFigure($(id), wide ? { width: 920, height: 290 } : undefined);
       const selected = $(id).querySelector(".nv-chart-values:not([hidden])");
@@ -118,14 +118,13 @@
         pane.append(make("h3", title), printTable(table, "NVIDIA " + title));
         return pane;
       });
-      page.append(pair(...panes), copy($("nv-filing-source")));
+      page.append(pair(...panes));
     }
 
     const peers = sheet("Peer comparisons", "Actuals and valuation across the AI supply chain", "peers", text("nv-peer-detail"));
     const overview = printTable(document.querySelector("#peers table"), "Peer actuals and valuation");
     overview.classList.add("nv-print-peer-overview");
-    peers.append(overview, copy(document.querySelector("#peers > article .nv-note")),
-      make("p", "Statement comparisons · " + filing + " · " + range + " · " + coverage, "nv-print-note"));
+    peers.append(overview, make("p", filing + " · " + range + " · " + coverage, "nv-print-note"));
     report.append(...peerCards);
 
     const growth = sheet("Peer comparisons", "Financial scale and growth", "peers", text("nv-revenue-coverage"));
@@ -136,21 +135,18 @@
     barFigure.append(bars);
     growthBars.append(make("h3", text("nv-revenue-growth-title")),
       make("p", text("nv-revenue-growth-detail"), "nv-print-description"), barFigure);
-    growth.append(pair(chart("nv-revenue-scale-chart", text("nv-revenue-scale-title")), growthBars),
-      make("p", "Growth uses each issuer’s reporting currency. Margin changes are shown in percentage points.", "nv-print-note"));
+    growth.append(pair(chart("nv-revenue-scale-chart", text("nv-revenue-scale-title")), growthBars));
 
     sheet("Peer comparisons", "Company financial ranking", "peers", text("fin-rank-summary")).append(ranking("fin-rank"));
     const comparative = sheet("Peer comparisons", "Historical peer trend", "peers", choice("lab-trend-peer"));
-    comparative.append(chart("lab-trend", choice("lab-trend-metric"), "Calendar quarter-end buckets · fiscal dates shown for the selected period", true));
-    const simulation = sheet("Peer comparisons", "Valuation ranking at the simulated price", "peers", text("sim-rank-summary"));
-    simulation.append(ranking("sim-rank"), make("p", text("sim-basis"), "nv-print-note"));
+    comparative.append(chart("lab-trend", choice("lab-trend-metric"), "", true));
+    sheet("Peer comparisons", "Valuation ranking at the simulated price", "peers", text("sim-rank-summary"))
+      .append(ranking("sim-rank"));
 
     const market = sheet("Market history", "Price & valuation", "market", choice("nv-market-range") + " · " + text("nv-market-detail"));
-    market.append(copy($("nv-market-kpis")), chart("nv-market-chart", text("nv-market-title"), "", true),
-      copy(document.querySelector(".nv-market-panel > .nv-note:not([hidden]):last-child")));
+    market.append(copy($("nv-market-kpis")), chart("nv-market-chart", text("nv-market-title"), "", true));
     const comparison = sheet("Market history", "Indexed peer price history", "market");
-    comparison.append(chart("nv-peer-chart", "Indexed price comparison", "100 at the first shared month · local-currency prices · " + choice("nv-peer-range"), true),
-      copy(document.querySelector(".nv-peer-chart-box .nv-note")));
+    comparison.append(chart("nv-peer-chart", "", "100 at the first shared month · " + choice("nv-peer-range"), true));
 
     const secondary = [
       ["nv-market-pe-chart", "Trailing P/E", "× earnings"],
@@ -160,23 +156,55 @@
     if (secondary.length) {
       const overlays = sheet("Market history", "Valuation and revenue overlays", "market");
       overlays.append(pair(...secondary));
-      if (!$("nv-market-overlay-note").hidden) overlays.append(copy($("nv-market-overlay-note")));
     }
 
     const moves = sheet("Market history", text("nv-market-returns-title"), "market");
     const eventTable = printTable(document.querySelector(".nv-market-event-table"), "NVDA event price moves");
     eventTable.classList.add("nv-print-events", "nv-market-event-table");
     linkToDashboard(eventTable);
-    moves.append(eventTable, copy($("nv-market-returns-method")));
+    moves.append(eventTable);
 
-    const credit = sheet("Credit", "Liquidity and leverage", "credit", textFrom("#credit .nv-section-head > p"));
+    const credit = sheet("Credit", "Liquidity and leverage", "credit");
     credit.append(copy(document.querySelector("#credit .nv-grid-2")), copy(document.querySelector("#credit .nv-insights")));
-    const sources = make("section", "", "nv-print-sources");
-    sources.append(make("h3", "Sources and methodology"), copy(document.querySelector("#sources .nv-source-grid")));
-    credit.append(sources);
+    const sources = sheet("", "Sources and notes", "sources");
+    sources.append(copy(document.querySelector("#sources .nv-source-grid")));
+    const notes = make("div", "", "nv-source-grid nv-print-endnotes");
+    const filingNotes = make("article");
+    filingNotes.append(
+      make("h3", "Statement comparisons"),
+      copy($("nv-filing-source")),
+      make("p", "Peer trends use calendar quarter-end buckets. Tables show actual fiscal dates where available. A dash indicates missing data. An asterisk marks liabilities derived as assets less equity. Some issuers report other interests outside liabilities and equity."),
+      make("p", "Growth uses issuer reporting currency and requires a positive prior-period base. Margin movements are in percentage points. Peer-set shares use available figures from the same bucket. Net income shares use positive earnings only."),
+    );
+    const metricNotes = make("article");
+    metricNotes.append(
+      make("h3", "Financial measures"),
+      make("p", "Quick ratio is current assets less inventory, divided by current liabilities. Other current assets, including prepayments, stay in the numerator. Cash coverage uses cash and equivalents. Interest coverage divides operating income by the magnitude of interest expense. Debt/equity requires positive equity."),
+      make("p", "Working capital is current assets less current liabilities. Operating costs are gross profit less operating income. Free cash flow is operating cash flow less capex. Capex is shown as a positive spend and negative cash flows are outflows."),
+      make("p", text("sim-basis")),
+    );
+    const marketNotes = make("article");
+    marketNotes.append(
+      make("h3", "Prices and events"),
+      copy(document.querySelector(".nv-market-panel > .nv-note:last-child")),
+      make("p", "Indexed peer prices are in local currency and exclude dividends and currency conversion."),
+      copy($("nv-market-returns-method")),
+    );
+    if (!$("nv-market-revenue-chart").parentElement.hidden) {
+      const revenueNote = make("p", "The revenue overlay carries forward the latest quarter reported before each monthly close.");
+      const links = $("nv-market-overlay-note").querySelectorAll("a");
+      if (links.length) revenueNote.append(" Opening-quarter filings include ");
+      links.forEach((link, index) => {
+        if (index) revenueNote.append(" · ");
+        revenueNote.append(copy(link));
+      });
+      if (links.length) revenueNote.append(".");
+      marketNotes.append(revenueNote);
+    }
+    notes.append(filingNotes, metricNotes, marketNotes);
+    sources.append(notes);
     addContents(report, make);
   }
 
-  const textFrom = selector => document.querySelector(selector).textContent.trim();
   window.NvdaFullPrint = { append };
 })();
