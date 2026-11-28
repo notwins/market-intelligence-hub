@@ -26,6 +26,12 @@
     const token = ++request, query = new URLSearchParams(location.search), selected = query.get('report');
     const match = reports.find(r => r.id === selected);
     $('archive-reports').innerHTML = (selected && !match ? '<p class="notice">This edition was not found. All available editions are listed below.</p>' : '') + (match ? '<p><a href="archive.html">Browse all editions</a></p>' : '') + (match ? [match] : reports).map(reportHTML).join('');
+    if (match) {
+      const article = $('report-' + match.id);
+      import('./research-direct-reader.js?v=1')
+        .then(module => module.openDirectReader(article, {title: match.title, headings: 'h4'}))
+        .catch(() => {});
+    }
     const day = query.get('day') || days[0]?.date;
     $('archive-days').innerHTML = days.map(d => `<a href="archive.html?day=${encodeURIComponent(d.date)}#archive-snapshot" ${d.date === day ? 'aria-current="date"' : ''}>${esc(d.date)}<small>${esc(d.count)} headlines</small></a>`).join('') || '<p>No daily snapshots are indexed.</p>';
     if (day && !days.some(d => d.date === day && /^\d{4}-\d{2}-\d{2}$/.test(day))) { $('archive-snapshot').textContent = 'This snapshot date is not in the archive. Choose an available date above.'; return; }

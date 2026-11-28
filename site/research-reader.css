@@ -11,10 +11,12 @@
   font-weight: 400 700;
   font-display: swap;
 }
-.reader-shell {
+.reader-shell, .research-direct-bar, .research-direct-dialog {
   --reader-paper: #f8f7f2;
   --reader-ink: #292a24;
   --reader-rule: #d1cfc3;
+}
+.reader-shell {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
@@ -38,6 +40,19 @@
   border-bottom: 1px solid var(--reader-rule);
   background: linear-gradient(#91593b, #91593b) 0 100% / calc(100% * var(--reader-progress, 0)) 3px no-repeat;
 }
+.research-direct-bar.reader-bar {
+  position: sticky;
+  top: var(--hub-primary-height, 0px);
+  z-index: 25;
+  box-sizing: border-box;
+  margin: 0;
+  background-color: var(--reader-paper);
+  color: var(--reader-ink);
+}
+html.research-direct-active {
+  scroll-padding-top: calc(var(--hub-primary-height, 0px) + 58px);
+}
+.research-direct-bar [hidden] { display: none !important; }
 .reader-actions { display: flex; align-items: center; gap: .35rem; }
 .reader-bar :is(a, summary, button) {
   box-sizing: border-box;
