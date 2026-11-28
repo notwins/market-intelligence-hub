@@ -1,5 +1,6 @@
 /* The reader cover and controls, sized for a native Quick read dialog. */
-dialog.quick-preview:is(.mu-brief-dialog, .quick-read-dialog) {
+dialog.quick-preview:is(.mu-brief-dialog, .quick-read-dialog),
+#dashboard-report-dialog.quick-preview, #daily-desk-dialog.quick-preview {
   --quick-paper: #f8f7f2;
   --quick-ink: #292a24;
   --quick-rule: #d1cfc3;
@@ -93,12 +94,17 @@ dialog.quick-preview .research-reading-intro > .research-reading-title {
 dialog.quick-preview .research-reading-intro > .research-reading-kicker {
   font: 700 .82rem/1.25 "Reader Sans", system-ui, sans-serif;
 }
+#daily-desk-dialog.quick-preview .quick-preview-bar a { color: #354538; text-decoration: none; }
+:is(#dashboard-report-dialog, #daily-desk-dialog).quick-preview .quick-preview-body { margin: 0; }
+.quick-preview .quick-preview-byline { margin: .85rem 0 0; color: var(--research-ink); font-weight: 650; }
+.quick-preview .quick-preview-art-credit { display: inline-block; margin-top: .35rem; font-size: .8rem; }
 .quick-preview-body, .quick-preview > [data-brief-help] { margin: 1rem clamp(.75rem, 3vw, 2rem); }
 .quick-preview .quick-preview-body :is(img, iframe) { max-width: 100%; box-sizing: border-box; }
 .quick-preview .quick-preview-body iframe { min-height: 19rem; border: 1px solid var(--quick-rule); border-radius: 5px; background: #fff; }
 
 @media (max-width: 480px) {
-  dialog.quick-preview:is(.mu-brief-dialog, .quick-read-dialog) { width: calc(100vw - 8px); max-width: calc(100vw - 8px); }
+  dialog.quick-preview:is(.mu-brief-dialog, .quick-read-dialog),
+  #dashboard-report-dialog.quick-preview, #daily-desk-dialog.quick-preview { width: calc(100vw - 8px); max-width: calc(100vw - 8px); }
   .quick-preview .quick-preview-label .reader-icon, .quick-preview .quick-preview-jump .reader-icon { display: none; }
   dialog.quick-preview > .quick-preview-bar { gap: .22rem .35rem; }
   .quick-preview .quick-preview-bar :is(a, summary, button.quick-preview-close) { padding-inline: .42rem; }
