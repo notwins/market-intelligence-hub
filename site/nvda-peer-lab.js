@@ -23,7 +23,7 @@
   const fieldLabel = key => key.slice(key.indexOf(" / ") + 3);
   const cleanLabel = key => (key.includes(" / ") ? fieldLabel(key) : key).replace(" (million in reporting currency)", " · local M")
     .replace(" (reporting currency per ordinary share)", " · local / share").replace(" (million shares)", " · M shares");
-  function mount({ financial, market, groups, companyCell, usd, fmt, dollar, element, options }) {
+  function mount({ financial, market, groups, companyCell, companyMark, usd, fmt, dollar, element, options }) {
     const companies = financial.companies;
     const months = Object.keys(market.months).sort();
     const latestMonth = months.at(-1);
@@ -131,6 +131,7 @@
     const nv = bases[0];
     const point = (n, unit) => Number.isFinite(n) ? fmt(n, 2) + unit : "—";
     const quoteDate = metric => metric.field?.startsWith("BOS ") ? "BOS Quote Date" : "Close Date";
+    const ranking = window.NvidiaSimulatorRanking.mount({ metrics: model.metrics, companyMark, element, dollar, point });
     $("sim-date").textContent = "Closing price " + dollar(nv.price) + " · " + charts.date(nv.quote);
     $("sim-basis").textContent = "NVDA closed at " + dollar(nv.price) + " on " + charts.date(nv.quote) + ". The BOS forward snapshot used " + dollar(nv.bosPrice)
       + " on " + charts.date(nv.cell("BOS Quote Date")) + ". Trailing earnings end " + charts.date(nv.cell("TTM Net Income Period End"))
@@ -179,18 +180,27 @@
       const metric = model.metrics.find(m => m.id === $("sim-metric").value);
       const v = chosen[metric.id], stat = medians[metric.id];
       $("sim-rank-name").textContent = metric.label;
-      $("sim-rank-summary").textContent = (metric.higher ? "Higher yield first" : "Lower multiple first") + " · " + stat.total + " of " + peers.length + " peers with comparable data.";
+      $("sim-rank-summary").textContent = (metric.higher ? "Higher yield ranks higher" : "Lower multiple ranks higher")
+        + " · " + stat.total + " of " + peers.length + " peers with comparable data.";
       const ordered = peers.slice().sort((a, b) => {
         const x = observed[a][metric.id], y = observed[b][metric.id];
         if (!Number.isFinite(x)) return Number.isFinite(y) ? 1 : 0;
         if (!Number.isFinite(y)) return -1;
         return metric.higher ? y - x : x - y;
       });
-      $("sim-ranks").replaceChildren(...[0, ...ordered].map(i => {
-        const n = i ? observed[i][metric.id] : v, tr = element("tr", "", i ? "" : "nv-focus");
-        const relation = n > v ? "Higher" : n < v ? "Lower" : "Equal";
-        tr.append(companyCell(companies[i]), element("td", point(n, metric.unit)), element("td", charts.date(bases[i].cell(quoteDate(metric)))),
-          element("td", !i ? "NVIDIA at " + dollar(price) : Number.isFinite(n) && Number.isFinite(v) ? relation : "—"));
+      const dateKey = quoteDate(metric);
+      const entries = [0, ...ordered].map(i => ({
+        company: companies[i],
+        value: i ? observed[i][metric.id] : v,
+        date: charts.date(bases[i].cell(dateKey)),
+        simulated: i === 0,
+      }));
+      ranking.render(entries, metric, price, $("sim-group").value);
+      $("sim-ranks").replaceChildren(...entries.map(({ company, value, date, simulated }) => {
+        const tr = element("tr", "", simulated ? "nv-focus" : "");
+        const relation = value > v ? "Higher" : value < v ? "Lower" : "Equal";
+        tr.append(companyCell(company), element("td", point(value, metric.unit)), element("td", date),
+          element("td", simulated ? "NVIDIA at " + dollar(price) : Number.isFinite(value) && Number.isFinite(v) ? relation : "—"));
         return tr;
       }));
     }

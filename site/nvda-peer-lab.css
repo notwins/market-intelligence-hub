@@ -41,3 +41,144 @@
  .lab-desks summary span { display: block; min-width: 0; }
  .lab-scroll { max-height: 58vh; }
 }
+
+#sim-ranking { scroll-margin-top: calc(var(--hub-primary-height, 64px) + 60px); }
+.lab-rank-controls { align-items: end; }
+.lab-rank-controls label { min-width: min(210px, 100%); }
+.lab-rank-controls select { max-width: 100%; }
+#sim-rank-next { min-height: 39px; gap: 6px; }
+.lab-rank-figure {
+  --rank-plot-height: clamp(190px, 19vw, 290px);
+  --rank-axis-width: 49px;
+  margin: 13px 0 0;
+  padding: 10px 12px 8px;
+  border: 1px solid #d7e2d0;
+  border-radius: 10px;
+  background: #f8faf4;
+}
+.lab-rank-direction {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding-left: var(--rank-axis-width);
+  color: var(--nv-muted);
+  font-size: .75rem;
+  font-weight: 580;
+}
+.lab-rank-direction strong { color: var(--nv-green); font-weight: 730; }
+.lab-rank-stage {
+  position: relative;
+  isolation: isolate;
+  padding-left: var(--rank-axis-width);
+  margin-top: 13px;
+}
+.lab-rank-guides {
+  position: absolute;
+  height: var(--rank-plot-height);
+  inset: 0 0 auto var(--rank-axis-width);
+  pointer-events: none;
+}
+.lab-rank-guide { position: absolute; inset-inline: 0; border-top: 1px solid #dfe7db; }
+.lab-rank-guide.lab-rank-zero { border-color: #889e88; }
+.lab-rank-guide > span {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 5px);
+  transform: translateY(-50%);
+  font-size: .67rem;
+  color: var(--nv-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.lab-rank-watermark {
+  position: absolute;
+  top: 16px;
+  left: calc(var(--rank-axis-width) + 35px);
+  max-width: min(63%, 21ch);
+  color: #d5e0d1;
+  font: 550 clamp(1.65rem, 4.5vw, 4.15rem)/.97 var(--nv-serif);
+  letter-spacing: -.045em;
+  pointer-events: none;
+}
+.lab-rank-window {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #a3b69d #f2f6ec;
+}
+.lab-rank-bars {
+  display: grid;
+  grid-template-columns: repeat(var(--rank-count), minmax(44px, 1fr));
+  min-width: calc(var(--rank-count) * 44px);
+}
+.lab-rank-company {
+  appearance: none;
+  display: grid;
+  grid-template-rows: var(--rank-plot-height) auto;
+  padding: 0;
+  min-width: 0;
+  border: 0;
+  border-radius: 4px;
+  color: #3c5341;
+  background: transparent;
+  font: 650 .65rem/1.17 var(--nv-sans);
+  cursor: pointer;
+  touch-action: pan-x pan-y;
+}
+.lab-rank-track { position: relative; display: block; width: 100%; height: 100%; }
+.lab-rank-bar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(60%, 32px);
+  min-height: 2px;
+  border-radius: 3px 3px 0 0;
+  background: #607f80;
+}
+.lab-rank-bar.lab-rank-negative { border-radius: 0 0 3px 3px; background: #a75e54; }
+.lab-rank-simulated .lab-rank-bar { background: #28733d; }
+.lab-rank-simulated .lab-rank-bar.lab-rank-negative { background: #8d403a; }
+.lab-rank-company:hover, .lab-rank-company[aria-pressed="true"] { background: #dde9d759; }
+.lab-rank-company:focus-visible { outline: 2px solid #427445; outline-offset: -2px; }
+.lab-rank-identity {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 4px;
+  min-height: 48px;
+  padding: 5px 1px 3px;
+  font-variant-numeric: tabular-nums;
+}
+.lab-rank-identity :is(img, .nv-peer-mark) { width: 24px; height: 24px; }
+.lab-rank-identity img { background: white; border: 1px solid #dbe5d9; border-radius: 5px; object-fit: contain; }
+.lab-rank-simulated .lab-rank-identity { color: #225732; font-weight: 820; }
+.lab-rank-readout {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px 10px;
+  margin-top: 6px;
+  padding: 7px 1px 2px;
+  border-top: 1px solid #dfe7da;
+  color: var(--nv-muted);
+  font-size: .78rem;
+}
+.lab-rank-readout strong { color: var(--nv-ink); }
+.lab-rank-value { font-weight: 760; color: var(--nv-green); font-variant-numeric: tabular-nums; }
+.lab-rank-badge { color: #315941; font-weight: 750; }
+.lab-rank-overflow-note {
+  display: none;
+  margin: 4px 0 0;
+  color: var(--nv-muted);
+  font-size: .73rem;
+  padding-left: var(--rank-axis-width);
+}
+.lab-rank-scrollable .lab-rank-overflow-note { display: block; }
+.lab-rank-scrollable .lab-rank-window { padding-bottom: 4px; }
+@media (max-width: 650px) {
+  .lab-rank-figure { --rank-axis-width: 42px; padding-inline: 7px; }
+  .lab-rank-controls label { flex: 1; }
+  .lab-rank-watermark { left: calc(var(--rank-axis-width) + 8px); max-width: 16ch; }
+}
