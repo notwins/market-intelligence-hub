@@ -8,11 +8,10 @@
     return node;
   }
 
-  function printFigure(card) {
+  function printFigure(chart, dimensions) {
     const figure = make("figure", "", "nv-print-figure");
-    const chart = card.querySelector(".nv-statement-peer-layout > :first-child");
     if (chart.classList.contains("nv-chart")) {
-      const snapshot = window.NvidiaCharts.printChart(chart);
+      const snapshot = window.NvidiaCharts.printChart(chart, dimensions);
       if (!snapshot) {
         figure.append(make("p", "No chart data for this selection."));
         return figure;
@@ -37,11 +36,26 @@
     return figure;
   }
 
+  function printTable(source, label) {
+    const table = source.cloneNode(true);
+    table.className = "nv-print-table";
+    table.removeAttribute("aria-describedby");
+    table.setAttribute("aria-label", label);
+    table.querySelectorAll("[id]").forEach(node => node.removeAttribute("id"));
+    table.querySelectorAll("thead button").forEach(button => button.replaceWith(button.textContent));
+    table.querySelectorAll(".nv-peer-name small").forEach(ticker => ticker.prepend("· "));
+    table.querySelectorAll(".nv-peer-name img").forEach(logo => {
+      logo.loading = "eager";
+      logo.decoding = "sync";
+    });
+    return table;
+  }
+
   function printCard(card, group) {
     const article = make("article", "", "nv-print-card");
     article.dataset.statementFamily = card.dataset.statement;
     article.dataset.chartKind = card.dataset.chartKind;
-    const figure = printFigure(card);
+    const figure = printFigure(card.querySelector(".nv-statement-peer-layout > :first-child"));
     const header = make("header", "", "nv-print-heading");
     const title = card.querySelector(".nv-panel-head h3").textContent;
     header.append(
@@ -53,16 +67,7 @@
     layout.append(figure);
     article.append(header, layout);
 
-    const table = card.querySelector("table").cloneNode(true);
-    table.className = "nv-print-table";
-    table.removeAttribute("aria-describedby");
-    table.setAttribute("aria-label", title + " comparison table");
-    table.querySelectorAll(".nv-statement-sort").forEach(button => button.replaceWith(button.textContent));
-    table.querySelectorAll(".nv-peer-name small").forEach(ticker => ticker.prepend("· "));
-    table.querySelectorAll(".nv-peer-name img").forEach(logo => {
-      logo.loading = "eager";
-      logo.decoding = "sync";
-    });
+    const table = printTable(card.querySelector("table"), title + " comparison table");
     layout.append(table);
     const note = card.querySelector(".nv-note");
     if (note) figure.append(make("figcaption", note.textContent, "nv-print-note"));
@@ -70,7 +75,8 @@
   }
 
   function mount(selection) {
-    const button = document.getElementById("nv-statement-peer-print");
+    const buttons = [document.getElementById("nv-statement-peer-print"), document.getElementById("nv-full-print")];
+    let full = false;
     const report = make("main", "", "nv-statement-print");
     report.id = "nv-statement-print";
     document.body.append(report);
@@ -88,38 +94,44 @@
       }),
     ]);
     const prepare = () => {
-      const { groups, statements, filing, range, coverage, asOf } = selection();
+      const { groups, statements, filing, range, coverage, asOf, printFilings } = selection(full);
       const intro = make("header", "", "nv-print-intro");
       if (issuerLogo) intro.append(issuerLogo.cloneNode(false));
       const copy = make("div");
       copy.append(
         make("p", "NASDAQ · NVDA", "nv-print-market"),
-        make("h1", "NVIDIA peer financial comparison"),
-        make("p", filing + " · " + range + " · " + coverage),
-        make("p", "Financial archive as of " + window.NvidiaCharts.date(asOf) + " · Dollar amounts in USD billions"),
+        make("h1", full ? "NVIDIA historical dashboard" : "NVIDIA peer financial comparison"),
+        make("p", full ? "Financials · Peer comparisons · Market history · Credit" : filing + " · " + range + " · " + coverage),
+        make("p", "Financial archive as of " + window.NvidiaCharts.date(asOf) + (full ? "" : " · Dollar amounts in USD billions")),
       );
       intro.append(copy);
+      report.classList.toggle("nv-print-full", full);
       report.replaceChildren(intro);
-      groups.forEach(([key, section]) => {
-        section.querySelectorAll(".nv-statement-peer-card").forEach(card => report.append(printCard(card, statements[key])));
-      });
+      const peerCards = groups.flatMap(([key, section]) =>
+        Array.from(section.querySelectorAll(".nv-statement-peer-card"), card => printCard(card, statements[key])));
+      if (full) window.NvdaFullPrint.append(report, { make, printFigure, printTable, printFilings, peerCards, filing, range, coverage });
+      else report.append(...peerCards);
       document.body.classList.add("nv-statement-printing");
     };
     window.addEventListener("beforeprint", prepare);
     window.addEventListener("afterprint", () => {
+      full = false;
       document.body.classList.remove("nv-statement-printing");
       report.replaceChildren();
     });
-    button.addEventListener("click", async () => {
-      button.disabled = true;
-      try {
-        await artworkReady;
-        window.print();
-      } finally {
-        button.disabled = false;
-      }
+    buttons.forEach((button, index) => {
+      button.addEventListener("click", async () => {
+        buttons.forEach(item => { item.disabled = true; });
+        try {
+          await artworkReady;
+          full = index === 1;
+          window.print();
+        } finally {
+          buttons.forEach(item => { item.disabled = false; });
+        }
+      });
+      button.disabled = false;
     });
-    button.disabled = false;
   }
 
   window.NvdaStatementPrint = { mount };

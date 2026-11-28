@@ -270,13 +270,13 @@
     if (plot?.model.limits && index !== plot.active) updateSelection(plot, index);
   }
 
-  function printChart(container) {
+  function printChart(container, { width = 490, height = 275 } = {}) {
     const plot = plots.get(container);
     if (!plot?.model.limits) return null;
     const canvas = document.createElement("canvas");
     const { onLayout, ...model } = plot.model;
     const fontFamily = getComputedStyle(container).getPropertyValue("--nv-sans").trim();
-    redraw({ canvas, model, active: plot.active }, { width: 490, height: 275, fontFamily });
+    redraw({ canvas, model, active: plot.active }, { width, height, fontFamily });
     const image = document.createElement("img");
     image.src = canvas.toDataURL("image/png");
     image.alt = model.title;
