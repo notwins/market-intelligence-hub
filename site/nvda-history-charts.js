@@ -34,10 +34,20 @@
 
   function redraw(plot) {
     const { canvas, model } = plot;
-    if (!model || canvas.hidden) return;
-    const box = canvas.getBoundingClientRect();
+    if (!model || (canvas.hidden && !model.onLayout)) return;
+    const box = (canvas.hidden ? canvas.parentElement : canvas).getBoundingClientRect();
     const width = Math.round(box.width), height = Math.round(box.height);
-    if (width < 10 || height < 10) return;
+    if (width < 10) return;
+    const { dates, series, axis, bars, limits } = model;
+    const left = width < 430 ? 51 : 69;
+    const right = width - 18;
+    const count = dates.length;
+    const gutter = bars || model.sharedTimeline ? Math.min((right - left) / (count + 1) / 2, 14) : 0;
+    const chartLeft = left + gutter, chartRight = right - gutter;
+    plot.position = { chartLeft, chartRight };
+    if (model.onLayout) model.onLayout(plot.position);
+    const top = 18, bottom = height - 37;
+    if (canvas.hidden || right <= left || bottom <= top) return;
     const ratio = Math.min(devicePixelRatio || 1, 2);
     const fullWidth = Math.round(width * ratio), fullHeight = Math.round(height * ratio);
     if (canvas.width !== fullWidth || canvas.height !== fullHeight) {
@@ -47,17 +57,9 @@
     const ctx = canvas.getContext("2d");
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     ctx.clearRect(0, 0, width, height);
-    const { dates, series, axis, bars, limits } = model;
     const { floor, ceil, step } = limits;
-    const left = width < 430 ? 51 : 69;
-    const right = width - 18, top = 18, bottom = height - 37;
-    if (right <= left || bottom <= top) return;
-    const count = dates.length;
-    const gutter = bars ? Math.min((right - left) / (count + 1) / 2, 14) : 0;
-    const chartLeft = left + gutter, chartRight = right - gutter;
     const x = i => count === 1 ? (left + right) / 2 : chartLeft + i * (chartRight - chartLeft) / (count - 1);
     const y = value => bottom - (value - floor) * (bottom - top) / (ceil - floor);
-    plot.position = { chartLeft, chartRight };
     ctx.font = (width < 430 ? "10" : "11") + "px Segoe UI, system-ui, sans-serif";
     ctx.textBaseline = "middle";
     ctx.textAlign = "right";
@@ -72,6 +74,21 @@
       ctx.stroke();
       ctx.fillStyle = "#536257";
       ctx.fillText(axis(value), left - 8, lineY);
+    }
+    if (model.annotations?.length) {
+      ctx.save();
+      ctx.globalAlpha = .5;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 4]);
+      for (const event of model.annotations) {
+        const at = x(event.index);
+        ctx.strokeStyle = event.color;
+        ctx.beginPath();
+        ctx.moveTo(at, top);
+        ctx.lineTo(at, bottom);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
     function ticks(size) {
       return Array.from({ length: size }, (_, i) => {
@@ -116,8 +133,10 @@
         let previous = false;
         for (const [i, point] of s.values.entries()) {
           if (Number.isFinite(point)) {
-            if (previous) ctx.lineTo(x(i), y(point));
-            else ctx.moveTo(x(i), y(point));
+            if (previous) {
+              if (model.step) ctx.lineTo(x(i), y(s.values[i - 1]));
+              ctx.lineTo(x(i), y(point));
+            } else ctx.moveTo(x(i), y(point));
           }
           previous = Number.isFinite(point);
         }
@@ -230,7 +249,10 @@
     plot.summary.hidden = !limits;
     plot.placeholder.hidden = Boolean(limits);
     plot.model = { ...model, limits };
-    if (!limits) return;
+    if (!limits) {
+      redraw(plot);
+      return;
+    }
     plot.canvas.setAttribute("aria-label", model.title + ". Use the left and right arrow keys to review dates.");
     const last = model.dates.findLastIndex((_, index) => model.series.some(s => Number.isFinite(s.values[index])));
     updateSelection(plot, model.active ?? last);
