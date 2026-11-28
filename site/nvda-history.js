@@ -278,10 +278,7 @@
     };
   }
 
-  function companyCell(company) {
-    const result = element("th");
-    result.scope = "row";
-    const label = element("span", "", "nv-peer-name");
+  function companyMark(company) {
     const mark = element("span", company.ticker.slice(0, 3), "nv-peer-mark");
     mark.setAttribute("aria-hidden", "true");
     const logo = logos.get(company.ticker) || logos.get(company.symbol);
@@ -292,10 +289,16 @@
       img.width = img.height = 27;
       img.src = "assets/company-logos/" + encodeURIComponent(logo);
       img.addEventListener("error", () => img.replaceWith(mark), { once: true });
-      label.append(img);
-    } else {
-      label.append(mark);
+      return img;
     }
+    return mark;
+  }
+
+  function companyCell(company) {
+    const result = element("th");
+    result.scope = "row";
+    const label = element("span", "", "nv-peer-name");
+    label.append(companyMark(company));
     const info = element("span", company.name);
     info.append(element("small", company.ticker));
     label.append(info);
@@ -497,7 +500,7 @@
       };
     }
     marketKpis();
-    window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, usd, fmt, dollar, element, options });
+    window.NvidiaPeerLab.mount({ financial, market, groups, companyCell, companyMark, usd, fmt, dollar, element, options });
     window.NvidiaStatementComparisons.mount({ financial, groups, companyCell, usd, element, options });
     mountDesktopExpansion();
   }
