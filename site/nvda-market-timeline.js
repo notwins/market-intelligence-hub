@@ -4,10 +4,12 @@
   const charts = window.NvidiaCharts;
   const eventPrices = window.NvdaMarketEventPrices;
   const closeFormat = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  const monthFormat = new Intl.DateTimeFormat("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
+  const monthName = month => monthFormat.format(new Date(month + "-01"));
   const categories = {
-    nvidia: { label: "NVIDIA", color: "#286d42" },
-    us: { label: "U.S. & macro", color: "#9a5731" },
-    tech: { label: "Breakthroughs", color: "#465e96" },
+    nvidia: { label: "NVIDIA", mark: "N", color: "#286d42" },
+    us: { label: "U.S. & macro", mark: "U", color: "#9a5731" },
+    tech: { label: "Breakthroughs", mark: "T", color: "#465e96" },
     mixed: { label: "Multiple categories", color: "#46574b" },
   };
 
@@ -57,7 +59,7 @@
     const list = $("nv-market-event-list");
     const prev = $("nv-market-event-prev");
     const next = $("nv-market-event-next");
-    let activeMonth;
+    let activeMonth, activeEventMonth;
     const archiveQuarters = quarters.map(period => ({
       reported: actual(period, "Filing or release date"),
       end: actual(period, "Period ending"),
@@ -120,17 +122,18 @@
       const markers = eventMonths.map(month => {
         const entries = byMonth.get(month);
         const category = entries.every(entry => entry.category === entries[0].category) ? entries[0].category : "mixed";
-        const button = element("button", entries.length === 1 ? "•" : String(entries.length), "nv-market-event-dot");
+        const button = element("button", entries.length === 1 ? categories[category].mark : String(entries.length), "nv-market-event-dot");
         const index = dates.indexOf(month);
         button.type = "button";
         button.title = entries.map(entry => entry.title).join(" · ");
         button.setAttribute("aria-controls", list.id);
-        button.setAttribute("aria-label", charts.date(month) + " · " + button.title);
+        button.setAttribute("aria-label", monthName(month) + " · " + button.title);
         button.style.setProperty("--event-color", categories[category].color);
         button.addEventListener("focus", () => setMonth(index));
         button.addEventListener("click", () => {
           setMonth(index);
-          if (eventBox.getBoundingClientRect().top > window.innerHeight - 165) {
+          const head = eventBox.getBoundingClientRect().top;
+          if (head > window.innerHeight - 165) {
             eventBox.scrollIntoView({ block: "start" });
             eventMonth.focus({ preventScroll: true });
           }
@@ -143,19 +146,27 @@
       function position({ chartLeft, chartRight }) {
         if (!markers.length) return;
         const lastRight = [];
+        const laneHeight = 28;
+        const lanes = [];
         for (const { button, index } of markers) {
           const x = chartLeft + index * (chartRight - chartLeft) / Math.max(1, dates.length - 1);
-          let lane = lastRight.findIndex(end => end + 29 <= x);
+          let lane = lastRight.findIndex(end => end + 30 <= x);
           if (lane < 0) lane = lastRight.length;
           lastRight[lane] = x;
           button.style.left = x + "px";
-          button.style.top = lane * 26 + "px";
+          button.style.top = (lane * laneHeight + 5) + "px";
+          lanes.push([button, lane]);
         }
-        rail.style.height = (lastRight.length * 26 + 3) + "px";
+        const height = lastRight.length * laneHeight + 12;
+        rail.style.height = height + "px";
+        for (const [button, lane] of lanes) {
+          button.style.setProperty("--nv-event-stem", height - lane * laneHeight - 30 + "px");
+        }
       }
 
       function showEvents(month) {
         if (!eventsOn) return;
+        activeEventMonth = month;
         for (const marker of markers) marker.button.setAttribute("aria-pressed", String(marker.month === month));
         const earlier = eventMonths.findLast(value => value < month);
         const later = eventMonths.find(value => value > month);
@@ -163,9 +174,9 @@
         next.disabled = !later;
         prev.onclick = () => { if (earlier) setMonth(dates.indexOf(earlier)); };
         next.onclick = () => { if (later) setMonth(dates.indexOf(later)); };
-        eventMonth.textContent = charts.date(month);
+        eventMonth.textContent = monthName(month);
         const selection = byMonth.get(month) || [];
-        captionText.textContent = selection.length ? charts.date(month) + " · " + selection.map(event => event.title).join(" · ")
+        captionText.textContent = selection.length ? monthName(month) + " · " + selection.map(event => event.title).join(" · ")
           : eventMonths.length ? "Select a marker to read about its events." : "No selected events in this range.";
         if (!selection.length) {
           list.replaceChildren(element("p", eventMonths.length ? "No selected events in this month." : "No selected events in this range.", "nv-muted"));
@@ -199,7 +210,7 @@
         if (!month || activeMonth === month) return;
         activeMonth = month;
         visible.forEach(chart => charts.select(chart, index));
-        showEvents(month);
+        if (byMonth.has(month) && month !== activeEventMonth) showEvents(month);
       }
 
       let active = dates.indexOf(activeMonth);
@@ -208,7 +219,7 @@
         if (active < 0) active = dates.length - 1;
       }
       activeMonth = dates[active];
-      const alignment = { dates, active, sharedTimeline: eventsOn || peOn || revOn, onSelect: setMonth };
+      const alignment = { dates, active, marketStyle: true, sharedTimeline: eventsOn || peOn || revOn, onSelect: setMonth };
       charts.render(price, { ...model, ...alignment, annotations: markers, onLayout: position });
       if (peOn) {
         const format = n => marketFormat(n, "multiple");
@@ -229,7 +240,7 @@
           extra: reported.map(row => row ? "Quarter ended " + charts.date(row.end) + " · reported by " + charts.date(row.reported) : ""),
         });
       }
-      showEvents(activeMonth);
+      showEvents(byMonth.has(activeMonth) ? activeMonth : byMonth.has(activeEventMonth) ? activeEventMonth : eventMonths.at(-1) || activeMonth);
     }
     return render;
   }
