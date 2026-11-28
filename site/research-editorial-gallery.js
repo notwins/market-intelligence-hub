@@ -1,6 +1,7 @@
 /* Illustrated research cards and scroll position for the Research Explained landing. */
-import {createCover, pickTheme} from './research-cover.js?v=1';
-import {articleURL, artworkURL, readerURL} from './research-reader-route.js?v=1';
+import {createCover} from './research-cover.js?v=1';
+import {cardArticleLinks, cardCover} from './research-cover-metadata.js?v=1';
+import {articleURL, readerURL} from './research-reader-route.js?v=2';
 
 const library = document.querySelector('[data-library-ready]');
 const base = new URL('./', import.meta.url);
@@ -28,14 +29,10 @@ function decorateCard(card) {
   if (card.dataset.coverDesign) return;
   const title = card.querySelector('h3')?.textContent.trim();
   if (!title) return;
-  const context = [...card.querySelectorAll('.mu-eyebrow, .mu-card-tags, .rr-tags')].map(node => node.textContent).join(' ');
-  const key = pickTheme(title, context);
+  const {theme: key, artwork} = cardCover(card, title);
   const originalArt = card.querySelector('figure img, img:not([class*="logo"]):not([class*="flag"])');
-  const artwork = artworkURL(originalArt?.currentSrc || originalArt?.src);
-  const actions = card.querySelectorAll('a[href]:not([download])');
   let primary;
-  for (const link of actions) {
-    if (link.matches('.mu-open-brief') || /^open brief\b/i.test(link.textContent.trim())) continue;
+  for (const link of cardArticleLinks(card)) {
     const source = articleURL(link.href);
     if (!source || source.hash) continue;
     const destination = readerURL(source, {title, theme: key, artwork});

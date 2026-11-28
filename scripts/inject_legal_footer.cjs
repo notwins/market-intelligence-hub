@@ -36,6 +36,9 @@ for (const filename of walk(root).filter(p => p.toLowerCase().endsWith('.html'))
   }
   if (/^(?:desk\.html|v4\.html|historical-fred\.html|fred-[123]\.html|fred\/(?:index|market-desk|risk-observatory|signal-review|cross-market-replay|data)\.html)$/.test(relative)
       && !dependencies.includes(mobileCharts)) assets += addScript(mobileCharts);
+  if (/^nvda-history-snapshot-\d{4}-\d{2}-\d{2}\.html$/.test(relative) && !dependencies.includes('archive-navigation.js')) {
+    assets += addScript('archive-navigation.js');
+  }
   if (assets) content = content.replace(/<\/head\s*>/i, assets + '</head>');
   content = content.replace(/((?:href|src)="[^"]*Primary(?:%20| )Navigation(?:%20| )-(?:%20| )Type(?:%20| )(?:CSS|JS)(?:%20| )-(?:%20| )16-Nov-16\.06\.(?:css|js))(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
   content = content.replace(/(\bsrc="[^"]*\/?(?:research-feed|company-dashboard)\.js)(?:\?[^"]*)?"/g, '$1' + navigationVersion + '"');
