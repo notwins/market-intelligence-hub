@@ -3,44 +3,68 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Research XAU spot gold against the dollar, U.S. real rates, inflation, China and the S&P 500. Explore monetary gold holdings and global mine production.">
 <title>Gold in history · Market Intel</title><link rel="icon" href="favicon.ico">
-<link rel="stylesheet" href="xau-history.css?v=1">
-<script defer src="xau-history-model.js?v=1"></script><script defer src="xau-history.js?v=1"></script>
+<link rel="stylesheet" href="xau-history.css?v=2">
+<script defer src="xau-history-model.js?v=2"></script><script defer src="xau-library.js?v=2"></script><script defer src="xau-history.js?v=2"></script>
 </head><body class="xau-research">
 <a class="skip" href="#main">Skip to gold research</a>
 <main id="main">
 <header class="gold-hero" id="overview"><div class="gold-shell hero-grid">
   <div><nav class="gold-crumb" aria-label="Breadcrumb"><a href="v4.html#tools">Market Intel</a> / <a href="tools/gold-charts.html">Gold tools</a> / <span>XAU</span></nav>
   <p class="chapter">Market history · XAU/USD</p><h1>Gold<br><em>in history.</em></h1>
-  <p class="hero-lead">Study gold across currencies, real yields and inflation. Compare it with equities, then trace who holds official gold and where new supply comes from.</p>
-  <div class="hero-links"><a class="action" href="#compare">Compare gold and its drivers</a><a href="#holdings">Explore global holdings</a><a href="tools/gld-strategy.html">GLD game plan</a></div></div>
+  <p class="hero-lead">Open a 30-year view of gold against currencies, yields, inflation and equities. Trace China’s role, compare metals and see how official holdings and mine supply have changed.</p>
+  <div class="hero-links"><a class="action" href="#compare">Compare gold and its drivers</a><a href="#library">Explore the data matrix</a><a href="tools/gld-strategy.html">GLD game plan</a></div></div>
   <figure><img src="assets/desk/history-gold.jpg" width="960" height="320" alt="" fetchpriority="high"><figcaption>Official holdings are a stock. Mine production is an annual flow.</figcaption></figure>
 </div></header>
 <nav class="gold-jump" aria-label="Gold research sections"><div class="gold-shell">
-<a href="#overview">Overview</a><a href="#compare">Compare</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#sources">Sources</a>
+<a href="#overview">Overview</a><a href="#compare">Compare</a><a href="#library">Data matrix</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#strategy">GLD game plan</a><a href="#papers">Research</a>
 </div></nav>
 <div class="gold-shell">
 <p id="load-status" class="status" role="status">Loading gold and macro histories…</p>
 <dl class="gold-kpis" id="gold-kpis" aria-label="Latest observations"></dl>
-<section class="gold-section" id="compare"><header class="section-heading"><div><p class="chapter">Market comparison</p><h2>What moved with gold?</h2></div><p>Compare spot gold with the broad dollar, major FX pairs, U.S. yields, inflation and the S&amp;P 500 across the same observation periods.</p></header>
+<section class="gold-section" id="compare"><header class="section-heading"><div><p class="chapter">Market comparison</p><h2>What moved with gold?</h2></div><p>Start with 360 complete months of World Bank gold and the broad dollar. Switch drivers, change the date window and inspect shared observations.</p></header>
 <div class="gold-panel">
   <div class="chart-presets" id="presets" aria-label="Compare a market driver"></div>
+  <div class="chart-presets window-presets" id="window-presets" aria-label="Comparison window">
+    <button type="button" data-months="360" aria-pressed="true">30 years</button><button type="button" data-months="120" aria-pressed="false">10 years</button><button type="button" data-months="60" aria-pressed="false">5 years</button><button type="button" data-months="all" aria-pressed="false">All shared history</button>
+  </div>
   <form id="filters" class="gold-fields">
-    <label>Gold series<select id="gold-series"><option value="spot">XAU/USD · spot</option><option value="pink">World Bank gold · monthly average</option><option value="realgold">U.S. inflation-adjusted gold</option><option value="sgdgold">Gold translated to SGD</option><option value="cnygold">Gold translated to CNY</option><option value="eurgold">Gold translated to EUR</option><option value="gld">GLD · USD/share</option></select></label>
+    <label>Gold series<select id="gold-series"><option value="pink">World Bank gold · monthly average</option><option value="spot">XAU/USD · spot</option><option value="realgold">U.S. inflation-adjusted gold</option><option value="sgdgold">Gold translated to SGD</option><option value="cnygold">Gold translated to CNY</option><option value="eurgold">Gold translated to EUR</option><option value="gld">GLD · USD/share</option></select></label>
     <label>Compare with<select id="driver"></select></label>
-    <label>From year<input type="number" id="from" value="2016" min="1957" max="2026" required></label>
-    <label>Through year<input type="number" id="to" value="2026" min="1957" max="2026" required></label>
-    <label>View<select id="view"><option value="native">Aligned charts · original units</option><option value="change">Change from first matched month</option></select></label>
+    <label>From month<input type="month" id="from" value="1996-11" min="1900-01" required></label>
+    <label>Through month<input type="month" id="to" value="2026-10" min="1900-01" required></label>
+    <label>View<select id="view"><option value="native">Aligned charts · original units</option><option value="change">Change from first match</option></select></label>
     <button class="action" type="submit">Apply dates</button>
   </form>
+  <p class="chart-note series-detail" id="comparison-source"></p>
   <div class="chart-frame" id="comparison-chart"></div>
   <div class="scrub-row"><label for="inspect-month">Inspect month</label><input type="range" id="inspect-month" min="0" max="0" value="0" disabled><output id="inspect-value" for="inspect-month" aria-live="polite"></output></div>
   <dl class="gold-kpis compact" id="window-kpis"></dl>
   <p class="chart-note" id="chart-note"></p>
-  <details id="obs-details"><summary>Observations and CSV</summary><p class="chart-note">Download the displayed gold and driver observations. Dates denote the observation period.</p><button class="action secondary" type="button" id="download" disabled>Download comparison CSV</button><div class="table-scroll" id="observations" tabindex="0" aria-label="Comparison observations"></div></details>
+  <details id="obs-details"><summary>Observations and CSV</summary><p class="chart-note">Download the displayed gold and driver observations. The period and underlying source dates appear separately.</p><button class="action secondary" type="button" id="download" disabled>Download comparison CSV</button><div class="table-scroll" id="observations" tabindex="0" aria-label="Comparison observations"></div></details>
 </div>
 <div class="gold-panel matrix-panel"><header class="small-head"><div><h3>Macro comparison matrix</h3><p id="matrix-window"></p></div><span>Correlation · −1 to +1</span></header><div class="table-scroll" id="matrix" tabindex="0" aria-label="Gold macro correlation matrix"></div></div>
 </section>
-<section class="gold-section" id="regimes"><header class="section-heading"><div><p class="chapter">Historical context</p><h2>Gold across five regimes</h2></div><p>Open a period in the comparison chart or inspect the drawdown and rebound with the same World Bank monthly gold series.</p></header><div class="regime-grid" id="regime-list"></div></section>
+<section class="gold-section" id="library">
+<header class="section-heading"><div><p class="chapter">Data matrix</p><h2>Gold and its drivers, side by side</h2></div><p>Filter by topic or search for a series. Scroll across calendar-year snapshots, then open any available series against your selected gold benchmark.</p></header>
+<div class="gold-panel">
+  <div class="gold-fields library-fields">
+    <label>Search series<input id="library-search" type="search" placeholder="e.g. copper, CPI or USD/JPY"></label>
+    <label>Topic<select id="library-topic"></select></label>
+    <label>Availability<select id="library-access"><option value="all">All series</option><option value="chart">Chart ready</option><option value="local">Local CSV available</option></select></label>
+    <label>Snapshot columns<select id="library-years"><option value="5">30 years · every 5 years</option><option value="1">30 annual columns</option></select></label>
+  </div>
+  <p class="chart-note" id="library-status" role="status">Loading the research catalogue…</p>
+  <div class="table-scroll library-scroll" id="library-table" tabindex="0" aria-label="Gold and drivers by year"></div>
+  <p class="chart-note">Year columns show the last observation in each calendar year. The latest year can be partial. Open a series to see its exact periods, units and observations.</p>
+  <details class="local-import" id="local-import">
+    <summary>Bring in the rest of Raw- GOLD</summary>
+    <p class="chart-note">Choose the Raw- GOLD folder or individual catalogued CSVs. Imported values stay in this tab and clear when you reload. PDF research is listed below with publisher links.</p>
+    <div class="import-actions"><input type="file" id="library-folder" webkitdirectory hidden><input type="file" id="library-files" accept=".csv,text/csv" multiple hidden><button type="button" id="choose-folder">Choose Raw- GOLD folder</button><button type="button" id="choose-files">Choose CSV files</button><button type="button" id="clear-import" disabled>Clear imported data</button></div>
+    <p class="chart-note" id="import-status" role="status"></p>
+    <ul id="import-files" class="import-files"></ul>
+  </details>
+</div></section>
+<section class="gold-section" id="regimes"><header class="section-heading"><div><p class="chapter">Historical context</p><h2>Gold through major cycles</h2></div><p>Open a period in the comparison chart or inspect the drawdown and rebound with the same World Bank monthly gold series.</p></header><div class="regime-grid" id="regime-list"></div></section>
 <section class="gold-section" id="china"><header class="section-heading"><div><p class="chapter">China</p><h2>Growth, inflation and the yuan</h2></div><p>USD/CNY changes the local-currency translation of gold. The physical volume of China’s official gold shows how reported holdings changed independently of the gold price.</p></header>
 <div class="china-grid" id="china-cards"></div><p class="chart-note">CNY gold is a same-date USD gold × USD/CNY translation. Shanghai’s local benchmark can carry a premium or discount.</p>
 </section>
@@ -53,10 +77,20 @@
 <div class="rank-controls"><label>Production year<select id="mine-year"></select></label><label>Trace production<select id="mine-trend"></select></label></div>
 <div class="rank-layout"><div><h3>Top 30 producing countries</h3><div id="mine-table" class="table-scroll rank-scroll" tabindex="0" aria-label="Gold mine production ranking"></div></div><figure><h3 id="mine-title">World mine production</h3><div id="mine-chart" class="chart-frame"></div><figcaption id="mine-note" class="chart-note"></figcaption></figure></div>
 <p class="chart-note" id="mine-foot"></p></div></section>
-<section class="gold-section" id="sources"><header class="section-heading"><div><p class="chapter">Documentation</p><h2>Trace the data</h2></div><p>Coverage dates and source links follow the individual series. Earlier periods will have fewer comparable drivers.</p></header>
+<section class="gold-section" id="strategy">
+<header class="section-heading"><div><p class="chapter">GLD game plan</p><h2>From gold history to a GLD path</h2></div><p>The research charts give the market backdrop. The game plan uses GLD per share and applies saved quote terms to the dates and prices on each path.</p></header>
+<div class="strategy-grid">
+  <article class="gold-panel"><span class="section-icon" aria-hidden="true">↗</span><h3>Set your own path</h3><p>Move GLD through a deeper fall, a rebound through KO or a sideways market. Compare the accumulator, direct GLD, waiting and possible follow-on positions.</p><a class="action" href="tools/gld-strategy.html#timelines">Open the GLD scenarios</a></article>
+  <article class="gold-panel"><span class="section-icon" aria-hidden="true">⌁</span><h3>Replay recorded prices</h3><p>Use dated GLD closes to see when each saved quote would have knocked out, matured or remained open, and how funding affected the path.</p><a class="action secondary" href="tools/gld-strategy.html?mode=historical#replay-overview">Open the historical replay</a></article>
+</div></section>
+<section class="gold-section" id="papers">
+<header class="section-heading"><div><p class="chapter">Research library</p><h2>30 papers and official reports</h2></div><p>Read the original research behind real yields, inflation hedges, central-bank demand, China and gold supply.</p></header>
+<div class="gold-panel"><div class="gold-fields library-fields"><label>Search research<input type="search" id="paper-search" placeholder="e.g. inflation or central banks"></label><label>Research topic<select id="paper-topic"></select></label></div><p class="chart-note" id="paper-status" role="status"></p><div id="paper-list" class="paper-grid"></div></div>
+</section>
+<section class="gold-section" id="sources"><header class="section-heading"><div><p class="chapter">Documentation</p><h2>Trace the data</h2></div><p>Coverage dates and source links follow the individual series. TIPS begin in 2003. The Hub’s S&amp;P 500 close history starts in 2006. Official holdings and China series follow their own reporting windows.</p></header>
 <div class="gold-panel"><div class="method-grid">
-<div><h3>Matching periods</h3><p>Market series use the last available close in a calendar month. FRED monthly series and the Pink Sheet retain the source’s monthly observation. A partial latest month can appear. Annual comparisons match by calendar year and use December gold when available. Observations use their economic period and can be published later.</p></div>
-<div><h3>Returns and rates</h3><p>Price, FX and index returns are percent changes. Yields and inflation rates are compared as percentage-point changes. The matrix uses paired changes across consecutive reported months with at least 12 pairs. Correlation describes co-movement over the selected window.</p></div>
+<div><h3>Matching periods</h3><p>Market series use the last available close in a calendar month. FRED monthly series and the Pink Sheet retain the source’s monthly observation. A partial latest month can appear. Annual comparisons use December gold when available. For quarterly comparisons, the World Bank and real-gold views use the mean of the three monthly gold observations. Close-based series use the final month’s close. Observations use their economic period and can be published later.</p></div>
+<div><h3>Returns and rates</h3><p>Price, FX and index returns are percent changes. Yields and inflation rates use percentage-point changes. Signed flows and spreads expressed in other units use differences in those units. The matrix uses paired changes across consecutive reported months with at least 12 pairs. Correlation describes co-movement over the selected window.</p></div>
 <div><h3>Stocks, flows and local currency</h3><p>Spot XAU/USD is gold per troy ounce. GLD trades per share, and Nasdaq’s XAU is a mining equity index. IMF official holdings measure a stock in tonnes. Mine output measures tonnes produced during a year. FX translation joins the daily gold and FX records on the exact date. U.S. real gold divides the Pink Sheet price by CPI and expresses it in dollars of the latest available CPI month.</p></div>
-</div><div id="source-list" class="source-list"></div></div></section>
+</div><p class="chart-note">Source releases vary by series and may revise past observations. The catalogue loads public extracts directly, with exact source links alongside the saved series. World Bank data are attributed to the World Bank.</p><div id="source-list" class="source-list"></div></div></section>
 </div></main></body></html>
