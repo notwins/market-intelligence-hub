@@ -237,16 +237,16 @@
       return section;
     }
     section.append(el('p','replay-window-label',labelDate(dates[0])+' – '+labelDate(dates.at(-1))+' · '+(path.proxy?'Monthly gold proxy':'GLD daily closes')));
-    section.append(el('p','replay-board-note','Scroll right through the checkpoints. Each cell shows the first accumulator’s status, total P&L and max drawdown through that fixing. Select a play to apply it to every quote. Select a cell to compare all follow-on choices.'));
+    section.append(el('p','replay-board-note','Scroll right to see KO, P&L and drawdown through each fixing. Select a cell to compare follow-on plays.'));
     const legend = el('div','replay-board-legend');
-    for (const [kind,text] of [['ko','KO · first trigger'],['post','After KO'],['maturity','Maturity · no KO'],['future','Later than selected date']]) {
+    for (const [kind,text] of [['ko','KO · first trigger'],['post','After KO'],['maturity','Maturity · no KO'],['open-end','Open at cutoff'],['future','Later than selected date']]) {
       const key = el('span','replay-key',text); key.dataset.state=kind; legend.append(key);
     }
     section.append(legend);
-    const scroller=el('div','replay-grid-scroll');
+    const scroller=el('div','replay-grid-scroll');scroller.tabIndex=0;
     scroller.setAttribute('role','region');scroller.setAttribute('aria-label','Historical quotes by fixing date');
     const table=el('table','replay-grid');
-    table.createCaption().textContent='P&L in USD. Max DD is the largest drop from an account peak through that fixing. Use arrow keys and Enter to inspect.';
+    table.createCaption().textContent='P&L in USD. Use the arrow keys and Enter to inspect a quote by fixing.';
     const head = table.createTHead().insertRow();
     const first=el('th','','Quote · full replay');first.scope='col';head.append(first);
     const accounts=quotes.map((_,i)=>account(runs?.[i]));
