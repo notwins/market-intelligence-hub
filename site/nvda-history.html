@@ -7,7 +7,7 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=8">
+<link rel="stylesheet" href="nvda-history.css?v=9">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=1">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=2">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
@@ -20,8 +20,9 @@
 <script defer src="nvda-revenue-peer-history.js?v=4"></script>
 <script defer src="nvda-market-events.js?v=1"></script>
 <script defer data-price-render-only src="share-prices.js?v=20261128.event-moves"></script>
-<script defer src="nvda-market-event-prices.js?v=1"></script>
-<script defer src="nvda-market-timeline.js?v=3"></script>
+<script defer src="nvda-market-event-prices.js?v=2"></script>
+<script defer src="nvda-market-timeline.js?v=4"></script>
+<script defer src="nvda-market-event-table.js?v=1"></script>
 <script defer src="nvda-history.js?v=20261128.market-timeline"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
@@ -217,6 +218,27 @@
     <p class="nv-note" id="nv-market-overlay-note" hidden></p>
     <p class="nv-note">Monthly closes use the last available trading day. November 2026 is partial. Dividends are grouped by ex-date.</p>
   </article>
+  <section class="nv-panel nv-market-returns" id="nvda-event-returns" aria-labelledby="nv-market-returns-title">
+    <div class="nv-panel-head"><div>
+      <h3 id="nv-market-returns-title">NVDA price moves after each event</h3>
+      <p class="nv-muted">Select a change column to sort gains first. Select it again to sort losses first.</p>
+    </div></div>
+    <p class="nv-horizontal-note" id="nv-market-returns-scroll-note">Scroll sideways for all four change columns <span aria-hidden="true">↔</span></p>
+    <div class="nv-table-scroll" role="region" aria-label="Sortable NVDA event price moves" aria-describedby="nv-market-returns-scroll-note" tabindex="0">
+      <table class="nv-table nv-market-event-table" aria-describedby="nv-market-returns-method">
+        <thead><tr>
+          <th scope="col" aria-sort="descending"><button type="button" data-event-sort="date">Date</button></th>
+          <th scope="col">Event</th>
+          <th scope="col"><button type="button" data-event-sort="0">1 month USD</button></th>
+          <th scope="col"><button type="button" data-event-sort="1">1 month %</button></th>
+          <th scope="col"><button type="button" data-event-sort="2">3 months USD</button></th>
+          <th scope="col"><button type="button" data-event-sort="3">3 months %</button></th>
+        </tr></thead>
+        <tbody id="nv-market-return-rows"></tbody>
+      </table>
+    </div>
+    <p class="nv-note" id="nv-market-returns-method">Changes use the last close before the event and the first trading close on or after the calendar anniversary. Prices are split-adjusted USD per share and exclude dividends. <a href="https://finance.yahoo.com/quote/NVDA/history/" target="_blank" rel="noopener noreferrer">Daily price source ↗</a></p>
+  </section>
 </div></section>
 <section class="nv-section nv-shell" id="peers">
   <div class="nv-section-head nv-reveal"><div><p class="nv-label">30 comparison companies</p><h2>Peers across the AI supply chain</h2></div><p>Compare NVIDIA with chip designers, manufacturers, cloud platforms and infrastructure suppliers. Each company retains its own fiscal period end.</p></div>

@@ -35,6 +35,10 @@
   };
 
   const horizons = [1, 3];
+  const formatters = {
+    usd: new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", signDisplay: "exceptZero" }),
+    rate: new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: "exceptZero" }),
+  };
   let pendingCloses = [];
   let request, checkedAt = 0;
 
@@ -53,9 +57,17 @@
     const points = historical?.every(Boolean) || !currentBase
       ? historical || []
       : [currentBase, ...targets.map(target => pendingCloses.find(([day]) => day >= target))];
-    return { base: points[0], windows: targets.map((target, index) => ({
-      months: horizons[index], target, point: points[index + 1],
-    })) };
+    const [base, ...closes] = points;
+    const windows = targets.map((target, index) => {
+      const point = closes[index];
+      const usd = base && point ? point[1] - base[1] : null;
+      return {
+        months: horizons[index], target, point, usd,
+        rate: usd === null ? null : usd / base[1],
+        direction: usd > 0 ? "up" : usd < 0 ? "down" : "flat",
+      };
+    });
+    return { base, windows };
   }
 
   function refreshFor(date) {
@@ -69,5 +81,6 @@
     return request;
   }
 
-  window.NvdaMarketEventPrices = { forEvent, refreshFor };
+  const format = (unit, value) => formatters[unit].format(value);
+  window.NvdaMarketEventPrices = { forEvent, refreshFor, format };
 })();

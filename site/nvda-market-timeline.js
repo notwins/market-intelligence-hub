@@ -4,8 +4,6 @@
   const charts = window.NvidiaCharts;
   const eventPrices = window.NvdaMarketEventPrices;
   const closeFormat = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
-  const usdMove = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", signDisplay: "exceptZero" });
-  const pctMove = new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: "exceptZero" });
   const categories = {
     nvidia: { label: "NVIDIA", color: "#286d42" },
     us: { label: "U.S. & macro", color: "#9a5731" },
@@ -24,16 +22,15 @@
   function renderPriceMoves(container, date, element) {
     const { base, windows } = eventPrices.forEvent(date);
     const levels = element("dl", "", "nv-market-move-grid");
-    for (const { months, target, point } of windows) {
+    for (const { months, target, point, usd, rate, direction } of windows) {
       const level = element("div", "", "nv-market-move");
       const value = element("dd");
       level.append(element("dt", months === 1 ? "1 month" : "3 months"), value);
-      if (base && point) {
-        const change = point[1] - base[1];
-        level.dataset.move = change > 0 ? "up" : change < 0 ? "down" : "flat";
+      if (usd !== null) {
+        level.dataset.move = direction;
         const signed = element("strong");
-        signed.append(element("span", usdMove.format(change)), element("span", " / ", "nv-market-move-divider"),
-          element("span", pctMove.format(change / base[1])));
+        signed.append(element("span", eventPrices.format("usd", usd)), element("span", " / ", "nv-market-move-divider"),
+          element("span", eventPrices.format("rate", rate)));
         value.append(signed, element("small", closeFormat.format(point[1]) + " close · " + charts.date(point[0])));
       } else {
         value.append(element("strong", base ? "Pending close" : "Unavailable"),
