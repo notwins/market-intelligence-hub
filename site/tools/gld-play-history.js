@@ -4,27 +4,27 @@
   if (typeof module === 'object' && module.exports) module.exports = factory();
   else root.GldPlayHistory = factory();
 })(typeof window === 'undefined' ? globalThis : window, function () {
-  // These are fixed observation windows. The count includes the opening close
-  // and lets a partial download fail closed, even when both ends are present.
+  // FNV-1a over the ordered ISO trading dates in each fixed NYSE archive window.
+  // This also detects a missing session replaced by a holiday or a weekend.
   const periods = {
     rebound: {
-      name: 'The 2020 spring rebound', start: '2020-03-18', end: '2021-03-18', count: 253,
+      name: 'The 2020 spring rebound', start: '2020-03-18', end: '2021-03-18', count: 253, dateHash: 0x1aaee9ea,
       rationale: 'GLD rose more than 12% in the first 21 trading sessions, climbed through August, then gave back part of the rally.'
     },
     recovery: {
-      name: 'The 2022 selloff and recovery', start: '2022-03-08', end: '2023-12-01', count: 438,
+      name: 'The 2022 selloff and recovery', start: '2022-03-08', end: '2023-12-01', count: 438, dateHash: 0x417b9990,
       rationale: 'GLD fell through September 2022. The December 2023 endpoint was its first close back above the opening price.'
     },
     bear: {
-      name: 'Nearly nine years below the 2011 high', start: '2011-08-22', end: '2020-07-29', count: 2249,
+      name: 'Nearly nine years below the 2011 high', start: '2011-08-22', end: '2020-07-29', count: 2249, dateHash: 0xb081f5c9,
       rationale: 'The decline continued into December 2015. GLD first regained the opening close in July 2020, nearly nine years after entry.'
     },
     whipsaw: {
-      name: 'The 2023 rally, reversal and late high', start: '2023-01-03', end: '2023-12-29', count: 250,
+      name: 'The 2023 rally, reversal and late high', start: '2023-01-03', end: '2023-12-29', count: 250, dateHash: 0x9014c564,
       rationale: 'GLD rose into May, surrendered those gains by October, then set a new closing high for the year in December.'
     },
     sideways: {
-      name: 'The 2017–18 six-month range', start: '2017-08-31', end: '2018-02-28', count: 124,
+      name: 'The 2017–18 six-month range', start: '2017-08-31', end: '2018-02-28', count: 124, dateHash: 0x3b744be0,
       rationale: 'A December dip and January rebound left GLD within 1% of its opening price at the end of February.'
     }
   };
@@ -53,7 +53,7 @@
     return [...days].sort((a, b) => a - b).map(day => points[day]);
   }
 
-  function summarize(rows, scenarioId) {
+  function observations(rows, scenarioId) {
     if (!Array.isArray(rows) || !Object.hasOwn(periods, scenarioId)) return null;
     const period = periods[scenarioId];
     const closes = new Map();
@@ -69,8 +69,19 @@
       closes.set(date, price);
     }
     if (!closes.has(period.start) || !closes.has(period.end) || closes.size !== period.count) return null;
-    const entry = closes.get(period.start);
-    const points = [...closes].sort(([a], [b]) => a < b ? -1 : 1).map(([date, price], day) => ({
+    const ordered = [...closes].sort(([a], [b]) => a < b ? -1 : 1);
+    let hash = 2166136261;
+    for (const [date] of ordered) {
+      for (let i = 0; i < date.length; i++) hash = Math.imul(hash ^ date.charCodeAt(i), 16777619);
+    }
+    return (hash >>> 0) === period.dateHash ? ordered : null;
+  }
+
+  function summarize(rows, scenarioId) {
+    const ordered = observations(rows, scenarioId);
+    if (!ordered) return null;
+    const period = periods[scenarioId], entry = ordered[0][1];
+    const points = ordered.map(([date, price], day) => ({
       date, price, day, returnPct: change(price, entry)
     }));
     const first = points[0], last = points[points.length - 1];
@@ -94,5 +105,43 @@
     };
   }
 
-  return {summarize};
+  function checkpoints(dates) {
+    const opening = new Date(dates[0] + 'T00:00:00Z');
+    const lastDay = dates.length - 1;
+    const marks = [{day: 0, label: 'Entry'}];
+    let day = 0;
+    function add(target, label) {
+      const iso = target.toISOString().slice(0, 10);
+      if (iso >= dates[lastDay]) return;
+      while (day + 1 < lastDay && dates[day + 1] <= iso) day++;
+      if (day > marks[marks.length - 1].day) marks.push({day, label});
+    }
+    const week = new Date(opening);
+    week.setUTCDate(week.getUTCDate() + 7);
+    add(week, 'Week 1');
+    const monthOffsets = [1, 2, 3, 6, 9, 12, 15, 18, 21, 24];
+    const years = Number(dates[lastDay].slice(0, 4)) - opening.getUTCFullYear();
+    for (let y = 3; y <= years; y++) monthOffsets.push(12 * y);
+    for (const month of monthOffsets) {
+      // Clamp month-end entries such as Aug 31 to the following month's last day.
+      const target = new Date(Date.UTC(opening.getUTCFullYear(), opening.getUTCMonth() + month + 1, 0));
+      target.setUTCDate(Math.min(opening.getUTCDate(), target.getUTCDate()));
+      add(target, month % 12 === 0 ? 'Year ' + month / 12 : 'Month ' + month);
+    }
+    marks.push({day: lastDay, label: 'End'});
+    return marks;
+  }
+
+  function replay(rows, scenarioId) {
+    const ordered = observations(rows, scenarioId);
+    if (!ordered) return null;
+    const period = periods[scenarioId];
+    const dates = ordered.map(([date]) => date);
+    return {
+      id: scenarioId, label: period.name, description: period.rationale, dates,
+      prices: ordered.map(([, price]) => price), checkpoints: checkpoints(dates)
+    };
+  }
+
+  return {summarize, replay};
 });
