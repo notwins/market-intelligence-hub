@@ -97,15 +97,13 @@
     const result = info.results.funded ? (state.play === 'best' ? info.results.best(d) : info.results.at(state.play,d)) : null;
     const exit = info.run.firstExit;
     const firstStatus = status === 'post' ? 'KO ' + fixingLabel(state.path,exit.day,labelDate) : statusText[status];
-    const detail = result?.eligible ? short[result.key] : (result?.pending ? 'Action pending' : 'Unavailable');
+    const detail = result?.eligible ? short[result.key] : (result?.pending ? 'Action pending' : 'Follow-on unavailable');
     const parts = [el('span','replay-cell-status',firstStatus)];
     if (result) {
       parts.push(el('span','replay-cell-label',detail));
-      if (result.eligible || result.pending) {
-        const amount=el('span','replay-cell-value',signed(result.pnl));
-        amount.dataset.sign=result.pnl>0?'positive':result.pnl<0?'negative':'flat';
-        parts.push(amount,el('span','replay-cell-draw','Max DD '+drawText(result.drawdown)));
-      }
+      const amount=el('span','replay-cell-value',signed(result.pnl));
+      amount.dataset.sign=result.pnl>0?'positive':result.pnl<0?'negative':'flat';
+      parts.push(amount,el('span','replay-cell-draw','Max DD '+drawText(result.drawdown)));
     }
     button.replaceChildren(...parts);
     button.setAttribute('aria-label',quoteId(i)+', '+fixingLabel(state.path,d,labelDate)+'. '+parts.map(p=>p.textContent).join('. '));
@@ -161,11 +159,11 @@
       for (const key of quoted) {
         const item = info.results.at(key,day), tile = el('div'), detail = el('dd');
         tile.dataset.eligible = item.eligible; tile.dataset.leader = key === best?.key;
-        const amount=el('span','replay-action-pnl',item.eligible || item.pending ? signed(item.pnl) : 'Unavailable');
-        if (item.eligible && item.pnl) amount.dataset.sign=item.pnl>0?'positive':'negative';
+        const amount=el('span','replay-action-pnl',signed(item.pnl));
+        if (item.pnl) amount.dataset.sign=item.pnl>0?'positive':'negative';
         detail.append(amount);
-        if (item.eligible || item.pending) detail.append(el('span','replay-action-draw','Max drawdown '+drawText(item.drawdown)));
-        detail.append(el('span','replay-action-status',(item.pending?'Action pending. ':'')+item.status));
+        detail.append(el('span','replay-action-draw','Max drawdown '+drawText(item.drawdown)));
+        detail.append(el('span','replay-action-status',(item.pending?'Action pending. ':item.eligible?'':'Follow-on unavailable. ')+item.status));
         tile.append(el('dt','',labels[key]),detail); list.append(tile);
       }
       nodes.push(list);
@@ -222,7 +220,15 @@
     if (options.scroll !== false) keepVisible(state,state.columns.get(day).cells[index]);
   }
 
-  function render({path,quotes,runs,day=0,selected=0,onSelect}) {
+  function addScrollButtons(controls, scroller, labels=['‹ Scroll left','Scroll right ›'], frozen=()=>0) {
+    labels.forEach((text,i)=>{
+      const nav=el('button','',text);nav.type='button';
+      nav.addEventListener('click',()=>scroller.scrollBy({left:(i?1:-1)*Math.max(120,scroller.clientWidth-frozen())}));
+      controls.append(nav);
+    });
+  }
+
+  function render({path,quotes,runs,day=0,selected=0,play='best',onSelect}) {
     const section = el('section','replay-board');
     section.append(el('h3','','All '+quotes.length+' quotes through time'));
     const dates = path?.dates, prices = path?.prices;
@@ -253,24 +259,30 @@
         el('span','replay-quote-outcome',fullOutcome(accounts[i],path)));row.append(th);return row;
     });
     const controls=el('div','replay-grid-controls');
-    const label=el('label','','Play in each cell'), pick=el('select');
-    pick.append(new Option('Best quoted play at each fixing','best'));
-    for (const key of quoted) pick.append(new Option(labels[key],key));
-    label.append(pick);controls.append(label);
-    for (const [text,direction] of [['‹ Earlier dates',-1],['Later dates ›',1]]) {
-      const nav=el('button','',text);nav.type='button';
-      nav.addEventListener('click',()=>scroller.scrollBy({left:direction*Math.max(120,scroller.clientWidth-head.cells[0].offsetWidth)}));
-      controls.append(nav);
-    }
+    const playTitle=el('p','replay-control-label','Play in each cell');
+    const choices=el('div','replay-play-choices');
+    choices.setAttribute('role','group');choices.setAttribute('aria-label','Play in each cell');
+    controls.append(playTitle,choices);
+    const navigation=el('div','replay-scroll-tools');
+    addScrollButtons(navigation,scroller,['‹ Earlier dates','Later dates ›'],()=>head.cells[0].offsetWidth);
+    controls.append(navigation);
     section.append(controls);scroller.append(table);section.append(scroller);
     const read=el('div','replay-readout');section.append(read);
-    const state={path,prices,accounts,play:'best',last:dates.length-1,days:[],columns:new Map(),rows,head,scroller,readout:read,
+    const state={path,prices,accounts,play,last:dates.length-1,days:[],columns:new Map(),rows,head,scroller,readout:read,
       index:null,day:null,transient:null,tabCell:null};
     boards.set(section,state);
     const marks=milestones(path,runs || []);
     for (const d of [...marks.keys()].sort((a,b)=>a-b)) addColumn(state,d,marks.get(d));
-    pick.addEventListener('change',()=>{
-      state.play=pick.value;
+    for (const [key,label] of [['best','Best play by fixing'],...quoted.map(key=>[key,short[key]])]) {
+      const choice=el('button','',label);choice.type='button';choice.dataset.play=key;
+      choice.setAttribute('aria-pressed',String(key===state.play));
+      choices.append(choice);
+    }
+    choices.addEventListener('click',event=>{
+      const choice=event.target.closest('button[data-play]');
+      if (!choice || state.play===choice.dataset.play) return;
+      state.play=choice.dataset.play;
+      for (const control of choices.children) control.setAttribute('aria-pressed',String(control===choice));
       for (const {cells} of state.columns.values()) for (const cell of cells) refreshCell(state,cell);
     });
     table.addEventListener('click',event=>{
@@ -307,5 +319,5 @@
     const state=boards.get(section);
     return state ? [...state.days] : [];
   }
-  root.GldReplayBoard = Object.freeze({render,select,days});
+  root.GldReplayBoard = Object.freeze({render,select,days,addScrollButtons});
 })(globalThis);
