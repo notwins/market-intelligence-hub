@@ -18,7 +18,7 @@
 <script defer src="nvda-peer-lab.js?v=20261128.shared-rankings"></script>
 <script defer src="nvda-statement-print.js?v=3"></script>
 <script defer src="nvda-statement-comparisons.js?v=20261128.visual"></script>
-<script defer src="nvda-revenue-peer-history.js?v=6"></script>
+<script defer src="nvda-revenue-peer-history.js?v=7"></script>
 <script defer src="nvda-market-events.js?v=1"></script>
 <script defer data-price-render-only src="share-prices.js?v=20261128.event-moves"></script>
 <script defer src="nvda-market-event-prices.js?v=2"></script>
@@ -86,7 +86,7 @@
     <div id="nv-fin-compare" hidden>
       <div class="nv-controls nv-revenue-compare-controls">
         <label>NVIDIA period end<select id="nv-revenue-period"></select></label>
-        <label>Growth basis<select id="nv-revenue-growth-basis"><option value="YoY">Year over year</option><option value="QoQ">Quarter over quarter</option></select></label>
+        <label><span id="nv-revenue-basis-label">Growth basis</span><select id="nv-revenue-growth-basis"><option value="YoY">Year over year</option><option value="QoQ">Quarter over quarter</option></select></label>
         <label>Chart range<select id="nv-revenue-range"><option value="8">Last 8 periods</option><option value="16">Last 16 periods</option><option value="99">All periods</option></select></label>
         <label>Peer set<select id="nv-revenue-peer-preset"></select></label>
       </div>
