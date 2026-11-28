@@ -353,3 +353,97 @@ body:has(.yield-history-page) { background: #f4f7fa; }
   .spx-history-page .mp-periods { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .spx-history-page .mp-table-scroll { max-height: min(61dvh,27rem); }
 }
+
+.share-history-page .yield-masthead img { object-position: center 47%; }
+.yield-history-page.share-history-page :is(#history-analysis,#share-valuation-history,#share-history-sources) {
+  scroll-margin-top: calc(var(--hub-primary-height, 0px) + var(--sticky-topbar-height, 75px) + 1rem);
+}
+.share-history-page #mp-history {
+  margin: 0;
+  padding: var(--yield-inset);
+  color: var(--yield-ink);
+  background: var(--yield-card);
+  border-color: var(--yield-rule);
+}
+.share-history-page #mp-history .section-title { align-items: center; gap: .65rem 1rem; }
+.share-history-page #mp-history [data-price-status] { margin: 0; color: var(--yield-muted); }
+.share-history-page #mp-history > .mp-periods { margin: .8rem 0 1.15rem; }
+.share-history-page #mp-history .mp-periods button,
+.share-history-page .mp-share-add > button {
+  min-height: 44px;
+  color: var(--yield-navy);
+  background: var(--yield-card);
+  border-color: var(--yield-rule);
+  font-weight: 650;
+}
+.share-history-page #mp-history .mp-periods button[aria-pressed=true],
+.share-history-page .mp-share-add > button:not(:disabled) {
+  color: white;
+  background: var(--yield-blue);
+  border-color: var(--yield-blue);
+}
+.share-history-page .mp-share-chips > span { background: var(--yield-wash); }
+.share-history-page .mp-share-chips button { min-width: 34px; min-height: 38px; }
+.share-history-page .mp-share-add {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr)) auto;
+  align-items: end;
+  gap: .65rem .85rem;
+}
+.share-history-page .mp-share-add label { min-width: 0; }
+.share-history-page .mp-share-add select,
+.share-history-page .mp-chart-controls select { color: var(--yield-ink); background: var(--yield-card); border-color: var(--yield-rule); }
+.share-history-page .mp-chart-controls { align-items: end; gap: .65rem 1rem; margin-block: .85rem; }
+.share-history-page .mp-chart-controls .mp-periods {
+  display: grid;
+  grid-template-columns: repeat(6,minmax(0,1fr));
+  flex: 1 1 325px;
+  gap: .4rem;
+  margin: 0;
+  padding: .5rem;
+  border-radius: 9px;
+  background: var(--yield-wash);
+}
+.share-history-page .mp-events-toggle { align-self: end; }
+.share-history-page .mp-comparison-dates { margin-bottom: .5rem; color: var(--yield-muted); }
+.share-history-page .mp-workbench-result .mp-legend { flex-wrap: wrap; gap: .45rem 1rem; }
+.share-history-page .mp-workbench-result .mp-chart { max-height: none; }
+.share-history-page .mp-workbench-result .mp-chart text { fill: var(--yield-muted); font-size: 13px; }
+.share-history-page .mp-workbench-result .mp-chart .mp-grid { stroke: var(--yield-rule); }
+.share-history-page [data-snapshot-comparison] .mp-table-scroll {
+  max-height: none;
+  max-width: 100%;
+  isolation: isolate;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--yield-rule);
+  border-radius: 8px;
+}
+.share-history-page .mp-comparison-table { min-width: 36rem; font-variant-numeric: tabular-nums; }
+.share-history-page .mp-comparison-table caption {
+  padding: .65rem .75rem;
+  color: var(--yield-muted);
+  text-align: left;
+}
+.share-history-page .mp-comparison-table thead th { background: var(--yield-wash); color: var(--yield-navy); }
+.share-history-page .mp-comparison-table :is(td,th) { padding: .6rem .75rem; }
+.share-history-page .mp-comparison-table th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  box-shadow: 1px 0 var(--yield-rule);
+}
+.share-history-page .mp-comparison-table tbody th { background: var(--yield-card); color: var(--yield-navy); }
+.share-history-page :is(.mp-periods button,.mp-share-add button,.mp-table-scroll):focus-visible {
+  outline: 2px solid var(--yield-blue);
+  outline-offset: 2px;
+}
+@media (max-width: 620px) {
+  .share-history-page .mp-share-add { grid-template-columns: minmax(0,1fr) auto; }
+  .share-history-page .mp-share-add label:first-child { grid-column: 1 / -1; }
+  .share-history-page .mp-chart-controls .mp-periods { flex-basis: 100%; }
+}
+@media (max-width: 480px) {
+  .share-history-page .mp-chart-controls .mp-periods { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .share-history-page .mp-share-add { grid-template-columns: minmax(0,1fr); }
+}

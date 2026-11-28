@@ -32,6 +32,7 @@
   };
   const button = (label, action, cls) => {const b=node('button',label,cls); b.type='button'; b.addEventListener('click',action); return b;};
   const whole=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
+  const chartDollars=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',notation:'compact',maximumFractionDigits:1});
   const decimals=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:2});
   const money=n=>whole.format(n), price=n=>decimals.format(n), num=(id,def=0)=>$(id).value===''?def:$(id).valueAsNumber;
   const pl=n=>(n>0?'+':'')+money(n), pct=n=>(n>0?'+':'')+Number(n.toFixed(2))+'%';
@@ -459,21 +460,22 @@
       return xx(i-1+(day-raw[i-1].day)/(raw[i].day-raw[i-1].day));
     };
     const out=svg('svg',{viewBox:'0 0 578 142',role:'img','aria-label':panel.path.label+' price path in '+unitLabel()+'. Selected '+fixingLabel(panel,panel.day)});
-    const textAttrs={'font-size':13,fill:'#334a41'};
+    const textAttrs={'font-size':13,fill:'var(--muted)'};
     for(let i=0;i<3;i++) {
       const val=low+(high-low)*i/2;
-      out.append(svg('path',{d:'M'+x0+' '+y(val)+'H'+x1,stroke:'#dce5da'}),svg('text',{...textAttrs,class:'chart-price-label',x:x0-7,y:y(val)+4,'text-anchor':'end'},money(val)));
+      const axisLabel=val>=10000?chartDollars.format(val):money(val);
+      out.append(svg('path',{d:'M'+x0+' '+y(val)+'H'+x1,stroke:'var(--rule)'}),svg('text',{...textAttrs,class:'chart-price-label',x:x0-7,y:y(val)+4,'text-anchor':'end'},axisLabel));
     }
     const lastDay=Math.min(exit?.day??q.days,raw.at(-1).day);
-    levels.forEach((v,i)=>out.append(svg('path',{d:'M'+x0+' '+y(v)+'H'+dx(lastDay),stroke:i?'#986326':'#397161','stroke-dasharray':i?'4 3':'1.5 2','stroke-width':1.5})));
+    levels.forEach((v,i)=>out.append(svg('path',{d:'M'+x0+' '+y(v)+'H'+dx(lastDay),stroke:i?'var(--gld-ko)':'var(--gld-strike)','stroke-dasharray':i?'4 3':'1.5 2','stroke-width':1.5})));
     const parts=values.map((v,i)=>xx(i)+','+y(v));
-    out.append(svg('polygon',{points:x0+','+bottom+' '+parts.join(' ')+' '+x1+','+bottom,fill:'#668b69','fill-opacity':.13}),
-      svg('polyline',{points:parts.join(' '),stroke:'#1e654e','stroke-width':2.6,fill:'none','stroke-linejoin':'round'}));
+    out.append(svg('polygon',{points:x0+','+bottom+' '+parts.join(' ')+' '+x1+','+bottom,fill:'var(--gld-blue)','fill-opacity':.13}),
+      svg('polyline',{points:parts.join(' '),stroke:'var(--gld-navy)','stroke-width':2.6,fill:'none','stroke-linejoin':'round'}));
     if(!live)raw.forEach((p,i)=>out.append(svg('circle',{cx:xx(i),cy:y(values[i]),r:2.5,fill:'#286d54'})));
-    if(live&&exit?.type==='ko')out.append(svg('circle',{cx:dx(exit.day),cy:y(values[exit.day]),r:3.5,fill:'#986326'}));
+    if(live&&exit?.type==='ko')out.append(svg('circle',{cx:dx(exit.day),cy:y(values[exit.day]),r:3.5,fill:'var(--gld-ko)'}));
     const mark=selectedPoint(panel,panel.day);
-    out.append(svg('line',{x1:dx(mark.day),x2:dx(mark.day),y1:top,y2:bottom,stroke:'#536c5b','stroke-dasharray':'3 4'}),
-      svg('circle',{cx:dx(mark.day),cy:y(getY(mark,unit)),r:4,fill:'#9a692c',stroke:'white','stroke-width':1.3}));
+    out.append(svg('line',{x1:dx(mark.day),x2:dx(mark.day),y1:top,y2:bottom,stroke:'var(--gld-blue)','stroke-dasharray':'3 4'}),
+      svg('circle',{cx:dx(mark.day),cy:y(getY(mark,unit)),r:4,fill:'var(--gld-blue)',stroke:'white','stroke-width':1.3}));
     for(const i of [0,Math.floor(n/2),n])out.append(svg('text',{...textAttrs,class:i!==0&&i!==n?'chart-date-middle':'chart-date-edge',x:i===0?4:xx(i),y:132,'text-anchor':i===0?'start':i===n?'end':'middle'},panel.path.dates?fixingLabel(panel,i):raw[i].label));
     panel.chart.replaceChildren(out);
   }
@@ -509,7 +511,9 @@
   function pnlCell(s,format=pl) {
     const td=node('td',format(s.pnl),pnlClass(s.pnl));
     if(!s.eligible)td.append(node('small','Unavailable'));
-    td.title=s.status+' Marked value '+price(s.value)+'.'; return td;
+    if(Number.isFinite(s.value))td.title=s.status+' Marked value '+price(s.value)+'.';
+    else if(s.status)td.title=s.status;
+    return td;
   }
   function table(panel,points) {
     const all=snapshot(panel,panel.day), type=panel.view.value, sum=type==='at';
@@ -930,7 +934,7 @@
       '. Guaranteed months are estimated into fixings using the quoted term. The model accrues daily, assumes delivery by the configured re-entry date and excludes the quoted offset. Confirm actual settlement and availability before reusing cash or shares.');
     modeLayout();
     await renderAll();
-    if(replayMode||location.hash==='#walkthrough-script')scrollToPath();
+    if(replayMode||['#walkthrough-script','#gld-methodology','#decision-map'].includes(location.hash))scrollToPath();
   }
   const originals=Object.fromEntries(['page-heading','page-lead','price-method'].map(id=>[id,$(id).innerHTML]));
   function modeLayout(){
@@ -968,7 +972,7 @@
   }
   function scrollToPath(){
     const id=location.hash.slice(1);
-    if(['walkthrough-script','model-notes','decision-map'].includes(id)){$(id).open=true;$(id).scrollIntoView({block:'start'});return;}
+    if(['walkthrough-script','gld-methodology','decision-map'].includes(id)){$(id).open=true;$(id).scrollIntoView({block:'start'});return;}
     if(id==='timelines'||id==='replay-overview'||id==='replay-results'||id==='replay-ranking'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
   }
   async function changeMode(){
