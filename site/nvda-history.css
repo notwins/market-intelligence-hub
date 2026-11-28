@@ -392,6 +392,43 @@ body.nvda-history-page { margin: 0; color: var(--nv-ink); background: var(--nv-p
 }
 .nv-market-event-card p { margin: 4px 0 6px; font-size: .82rem; }
 .nv-market-event-card .nv-market-event-meta { margin-top: 0; color: var(--event-color); font-size: .75rem; font-weight: 700; }
+.nv-market-event-moves { margin: 9px 0 10px; }
+.nv-market-event-card .nv-market-move-base {
+  color: var(--nv-muted);
+  font-size: .76rem;
+  font-weight: 650;
+}
+.nv-market-move-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  margin: 0;
+}
+.nv-market-move {
+  padding: 6px 8px;
+  border: 1px solid var(--move-border, var(--nv-line));
+  border-radius: 6px;
+  color: var(--move-ink, var(--nv-ink));
+  background: var(--move-bg, #f2f4ef);
+}
+.nv-market-move[data-move="up"] {
+  --move-ink: #1c6036;
+  --move-border: #b5d2ba;
+  --move-bg: #e9f5e9;
+}
+.nv-market-move[data-move="down"] {
+  --move-ink: #9a2d36;
+  --move-border: #e7bfc2;
+  --move-bg: #fbecec;
+}
+.nv-market-move dt { font-size: .72rem; font-weight: 650; }
+.nv-market-move dd { margin: 0; }
+.nv-market-move dd strong { display: block; font-size: .86rem; font-variant-numeric: tabular-nums; }
+.nv-market-move dd small { display: block; font-size: .72rem; color: var(--nv-muted); }
+@media (max-width: 550px) {
+  .nv-market-move dd strong span { display: block; }
+  .nv-market-move dd strong .nv-market-move-divider { display: none; }
+}
 .nv-market-events a { color: #215b38; font-size: .79rem; font-weight: 650; }
 @media (min-width: 960px) {
   .nv-market-panel.nv-expanded .nv-market-subchart canvas { height: clamp(195px, 23vh, 260px); }
