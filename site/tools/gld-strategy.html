@@ -3,19 +3,18 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Compare every saved GLD accumulator quote across five editable gold price timelines. Inspect daily knock-outs and the P&L of holding, rolling, a covered sale, waiting or adding.">
 <title>GLD game plan · Five price plays | Market Intel</title>
-<link rel="stylesheet" href="gld-strategy.css?v=1"><link rel="stylesheet" href="gld-plays.css?v=20261129.visual1"><link rel="stylesheet" href="gld-replay.css?v=20261129.rank1">
-<link rel="stylesheet" href="gld-guide.css?v=20261129.leaders2">
+<link rel="stylesheet" href="gld-strategy.css?v=1"><link rel="stylesheet" href="gld-plays.css?v=20261129.ui2"><link rel="stylesheet" href="gld-replay.css?v=20261129.ui2">
+<link rel="stylesheet" href="gld-guide.css?v=20261129.ui2">
 <script defer src="metals-common.js"></script><script defer src="accumulator-model.js"></script><script defer src="gld-strategy-model.js?v=1"></script>
-<script defer src="gld-plays-paths.js?v=1"></script><script defer src="gld-plays-model.js?v=1"></script><script defer src="gld-play-history.js?v=2"></script><script defer src="gld-play-visuals.js?v=1"></script><script defer src="gld-replay-results.js?v=20261129.rank1"></script><script defer src="gld-replay-board.js?v=20261129.rank1"></script><script defer src="../xau-regimes.js?v=1"></script><script defer src="gld-leader-changes.js?v=1"></script><script defer src="gld-guide-player.js?v=20261129.leaders2"></script><script defer src="gld-guide.js?v=20261129.leaders1"></script><script defer src="gld-plays.js?v=20261129.rank1"></script>
-</head><body>
-<nav class="mast" aria-label="Gold workspace"><a class="brand" href="../v4.html#tools">Market Intel</a><div class="navlinks"><a href="gld-accumulator.html">Saved GLD pricing</a><a href="gld-strategy-detail.html">Single-quote planner</a><a href="../xau-history.html">XAU research</a><a href="#decision-map">Decision map</a><a href="#timelines">Timelines</a></div></nav>
+<script defer src="gld-plays-paths.js?v=1"></script><script defer src="gld-plays-model.js?v=1"></script><script defer src="gld-play-history.js?v=2"></script><script defer src="gld-play-visuals.js?v=1"></script><script defer src="gld-replay-results.js?v=20261129.rank1"></script><script defer src="gld-replay-board.js?v=20261129.ui2"></script><script defer src="../xau-regimes.js?v=1"></script><script defer src="gld-leader-changes.js?v=1"></script><script defer src="gld-guide-player.js?v=20261129.leaders2"></script><script defer src="gld-guide.js?v=20261129.leaders1"></script><script defer src="gld-plays.js?v=20261129.ui2"></script>
+</head><body class="gld-simulator">
+<nav class="mast" aria-label="Gold workspace"><a class="brand" href="../v4.html#tools">Market Intel</a><div class="navlinks"><a href="gld-accumulator.html">Saved GLD pricing</a><a href="gld-strategy-detail.html">Single-quote planner</a><a href="../xau-history.html">XAU research</a><a href="#decision-map">Decision map</a><a href="#timelines">Timelines</a><a href="#gld-methodology">Terms &amp; sources</a></div></nav>
 <main class="play-shell">
 <header class="play-hero"><div><p class="eyebrow">GLD game plan</p><h1 id="page-heading">Five price plays</h1><p class="play-lead" id="page-lead">Follow every saved accumulator quote through a rebound, a deeper fall and three other paths. Move right through time to see which play leads and what changes after knock-out.</p></div>
 <div class="market-card"><p class="eyebrow" id="source-title">Saved GLD pricing</p><div class="market-pair"><div><small>GLD · USD/share</small><strong id="gld-mark">—</strong></div><div><small>Spot gold · USD/oz</small><strong id="xau-mark">—</strong></div></div><p class="play-note" id="market-date">Loading market references…</p><p class="market-history" id="recent-context" hidden></p></div></header>
 <nav class="play-modes" aria-label="Price paths"><a id="scenario-mode" href="gld-strategy.html" aria-current="page">Editable scenarios</a><a id="history-mode" href="?mode=historical#replay-ranking">Historical replay</a></nav>
 <button id="play-walkthrough" data-guide-start="leader" type="button" title="Open the GLD guide" disabled><svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 11V9a7 7 0 0 1 14 0v2"/><rect x="2.7" y="9.8" width="3.6" height="6.4" rx="1.6"/><rect x="13.7" y="9.8" width="3.6" height="6.4" rx="1.6"/></svg>Guide</button>
 <section class="play-config" aria-labelledby="config-title">
-<p class="play-note" id="replay-assumptions" hidden>Each replay applies the saved quote percentages to that period’s opening GLD close. Prices are historical. Contracts, follow-on terms and P&amp;L are hypothetical. The market references above show the latest saved closes.</p>
 <div class="play-header"><div><h2 id="config-title">Comparison settings</h2><p class="play-note" id="quote-status">Loading saved quote sheet…</p></div><button id="csv" type="button" disabled>Download all checkpoints</button></div>
 <form id="settings">
 <div class="play-fields">
@@ -45,13 +44,12 @@
 <label>Fresh up-KO (%)<input id="roll-ko" type="number" min="100.01" max="1000" step=".01" value="105" required></label>
 <label>Fresh fixings<input id="roll-days" type="number" min="1" max="1000" step="1" value="63" required></label>
 <label>Guaranteed fixings<input id="roll-g" type="number" min="0" max="1000" step="1" value="5" required></label>
-</div><p class="play-note">Roll strikes reset from the new entry price. A covered sale needs enough shares for its maximum possible delivery. Fresh roll and sale terms are illustrative until quoted by the bank.</p>
+</div>
 </details>
 <div class="play-tools"><button class="run-btn" type="submit">Run all quotes</button><span class="play-note" id="run-status" role="status" aria-live="polite">Preparing comparisons…</span></div></form>
-<p class="play-note">Each quote is a separate trade using the same starting capital. P&amp;L includes cash and the value of GLD held. An open contract is shown before any bank unwind adjustment.</p>
 </section>
 <section class="play-config" id="replay-ranking" aria-labelledby="replay-ranking-title" hidden>
-<div class="play-header"><div><h2 id="replay-ranking-title">Overall quote and play ranking</h2><p class="play-note">The same quote and play across all 10 windows, ranked by average P&amp;L placement. Select a quote and play to replay its toughest window.</p></div></div>
+<div class="play-header"><div><h2 id="replay-ranking-title">Overall quote and play ranking</h2><p class="play-note">Average P&amp;L rank across all 10 windows. Select a quote and play to replay its worst period.</p></div></div>
 <nav class="play-nav" aria-label="Historical results sections"><a href="#replay-results">Period winners</a><a id="ranking-replay-link" href="#path-history-replay-grid" hidden>Selected replay</a></nav>
 <p class="play-note" id="ranking-status" role="status">Calculating overall rankings…</p>
 <div class="ranking-highlights" id="ranking-highlights" aria-label="Ranking highlights"></div>
@@ -61,7 +59,6 @@
 <thead><tr><th scope="col">Rank and quote</th><th scope="col">Play</th><th scope="col">Profitable periods</th><th scope="col">Worst period P&amp;L</th><th scope="col">Max drawdown</th><th scope="col">Avg. P&amp;L rank</th></tr></thead>
 <tbody id="ranking-body"></tbody>
 </table></div>
-<p class="play-note">A quote must fund the opening accumulator in every window to rank. If the follow-on action never triggers or cannot open, the replay includes the value of the cash and shares left by the accumulator. Worst P&amp;L is the lowest period-end result. Max drawdown is the deepest peak-to-trough account drop in any window.</p>
 </section>
 <section class="play-config" id="replay-results" aria-labelledby="replay-results-title" hidden>
 <h2 id="replay-results-title">Historical results by period</h2>
@@ -74,7 +71,6 @@
 <thead><tr><th scope="col">Replay window</th><th scope="col">Best saved quote and play</th><th scope="col">First accumulator KO</th><th scope="col">P&amp;L</th><th scope="col">Max drawdown</th><th scope="col">Overall winner if different</th></tr></thead>
 <tbody id="period-results-body"></tbody>
 </table></div>
-<p class="play-note">The two pre-GLD windows use monthly World Bank gold returns rebased to $334.40. These windows use simulated fixings. All other rows use GLD daily closes. A post-trough window follows the XAU trough even when GLD finishes lower.</p>
 </section>
 <section class="play-config" id="replay-overview" aria-labelledby="replay-overview-title" hidden><h2 id="replay-overview-title">What happened to the first accumulator?</h2><p class="play-note">Full-period outcomes for the selected funding. Choose a period to inspect every quote by date.</p><div class="replay-scroll-tools" data-scroll-for="replay-overview-scroll"></div><div class="play-scroll" id="replay-overview-scroll" tabindex="0" aria-label="First-contract outcomes by historical period"><table class="play-table"><thead><tr><th scope="col" id="replay-period-column">Recorded period</th><th scope="col">Knocked out</th><th scope="col">Matured without KO</th><th scope="col">Open at final close</th><th scope="col">Unfunded</th></tr></thead><tbody id="replay-totals"></tbody></table></div></section>
 <details class="flow-section" id="decision-map" open>
@@ -92,14 +88,6 @@
 <div id="error" class="play-warning" role="alert" hidden></div><noscript>Enable JavaScript to compare the saved quotes.</noscript>
 <nav id="timelines" class="play-nav" aria-label="Jump to a price path"></nav>
 <div id="plays"></div>
-<details class="play-config"><summary>How to read the plays and settlement assumptions</summary>
-<p class="play-note" id="price-method"><strong>Price and time.</strong> Each path connects editable prices with daily closes across 252 sessions per model year. Every quote sees exactly the same GLD fixings. The XAU view applies the same percentage change to the starting spot gold price per troy ounce. GLD triggers always use USD per share.</p>
-<p class="play-note"><strong>Quote mechanics.</strong> A funded 1× accumulator buys the daily share lot below its upper KO, including below strike. At or above KO, it delivers any outstanding guaranteed shares and releases unused funding. Sizing rounds down to a fully fundable whole daily lot. A covered decumulator sells at its fixed strike until maturity or a lower KO. The starting sale example has no guaranteed deliveries.</p>
-<p class="play-note"><strong>Waiting and adding.</strong> From entry, waiting preserves the opening cash and shares. Staged buying invests the selected fraction of available cash immediately, then invests the remainder at the close after GLD first meets the dip threshold measured from entry. After KO the threshold resets to the KO close. Market buys, new rolls and covered sales observe the re-entry delay. A post-KO dip order also fills at the next close after its signal.</p>
-<p class="play-note"><strong>Decision timing.</strong> The leader has the highest eligible marked P&amp;L on this particular path up to the inspected fixing. At KO, a second comparison measures additional P&amp;L from the same cash and shares. It can take several sessions before the alternatives produce different outcomes.</p>
-<p class="play-note" id="settlement"></p>
-<p class="play-note">Cash earns zero. The simulation excludes fees, tax, borrowing, counterparty failure and early unwind. Market moves between cash settlement and delivery can change the result.</p>
-<p class="play-nav"><a href="../data/metals/gld-accumulator-pricing.json">Saved quote sheet</a><a href="../data/metals/gld.csv">GLD closes</a><a href="../data/metals/xau-spot.csv">Spot gold history</a><a href="https://www.ssga.com/us/en/intermediary/etfs/spdr-gold-shares-gld">GLD fund data</a><a href="https://www.ifec.org.hk/web/en/blog/2022/12/accumulators-and-decumulators-2.page">Accumulator contract guide</a></p></details>
 <details id="walkthrough-script" class="guide-script">
 <summary>Walkthrough script</summary>
 <p>Choose a line to edit what the guide says about a quote, a change in the lead, or a contract rule. Fields in braces fill in the figures for the selected date. Save your wording in this browser, or download the full script. To update the published wording, replace <code>gld-guide-source</code> at the end of this page’s HTML.</p>
@@ -110,6 +98,31 @@
 <div class="guide-script-tools"><button type="button" id="guide-save">Save edits in this browser</button><button type="button" id="guide-reset">Reset this line</button><button type="button" id="guide-export">Download script</button></div>
 <p id="guide-status" class="guide-status" role="status" aria-live="polite"></p>
 </details>
+<footer class="play-config gld-disclosures" id="gld-methodology" aria-labelledby="gld-methodology-title">
+<h2 id="gld-methodology-title">Terms, methodology and sources</h2>
+<div class="gld-disclosure-grid">
+<section><h3>Prices and historical windows</h3>
+<p class="play-note" id="price-method"><strong>Price and time.</strong> Each path connects editable prices with daily closes across 252 sessions per model year. Every quote sees exactly the same GLD fixings. The XAU view applies the same percentage change to the starting spot gold price per troy ounce. GLD triggers always use USD per share.</p>
+<p class="play-note" id="replay-assumptions" hidden>Replay contracts, follow-on trades and P&amp;L are hypothetical. The market header shows the latest saved closes.</p>
+<p class="play-note">The two pre-GLD windows use monthly World Bank gold returns rebased to $334.40. These windows use simulated fixings. All other rows use GLD daily closes. A post-trough window follows the XAU trough even when GLD finishes lower.</p>
+</section>
+<section><h3>Trade terms and funding</h3>
+<p class="play-note"><strong>Quote mechanics.</strong> A funded 1× accumulator buys the daily share lot below its upper KO, including below strike. At or above KO, it delivers any outstanding guaranteed shares and releases unused funding. Sizing rounds down to a fully fundable whole daily lot. A covered decumulator sells at its fixed strike until maturity or a lower KO. The starting sale example has no guaranteed deliveries.</p>
+<p class="play-note"><strong>Waiting and adding.</strong> From entry, waiting preserves the opening cash and shares. Staged buying invests the selected fraction of available cash immediately, then invests the remainder at the close after GLD first meets the dip threshold measured from entry. After KO the threshold resets to the KO close. Market buys, new rolls and covered sales observe the re-entry delay. A post-KO dip order also fills at the next close after its signal.</p>
+<p class="play-note">Roll strikes reset from the new entry price. A covered sale needs enough shares for its maximum possible delivery. Fresh roll and sale terms are illustrative until quoted by the bank.</p>
+</section>
+<section><h3>P&amp;L, drawdown and ranking</h3>
+<p class="play-note">Each quote is a separate trade using the same starting capital. P&amp;L includes cash and the value of GLD held. An open contract is shown before any bank unwind adjustment.</p>
+<p class="play-note"><strong>Decision timing.</strong> The leader has the highest eligible marked P&amp;L on this particular path up to the inspected fixing. At KO, a second comparison measures additional P&amp;L from the same cash and shares. It can take several sessions before the alternatives produce different outcomes.</p>
+<p class="play-note">A quote must fund the opening accumulator in every window to rank. If the follow-on action never triggers or cannot open, the replay includes the value of the cash and shares left by the accumulator. Worst P&amp;L is the lowest period-end result. Max drawdown is the deepest peak-to-trough account drop in any window.</p>
+</section>
+<section><h3>Settlement and exclusions</h3>
+<p class="play-note" id="settlement"></p>
+<p class="play-note">Cash earns zero. The simulation excludes fees, tax, borrowing, counterparty failure and early unwind. Market moves between cash settlement and delivery can change the result.</p>
+</section>
+</div>
+<p class="play-nav"><a href="../data/metals/gld-accumulator-pricing.json">Saved quote sheet</a><a href="../data/metals/gld.csv">GLD closes</a><a href="../data/metals/xau-spot.csv">Spot gold history</a><a href="../xau-history.html#regimes">Gold regime data and sources</a><a href="https://www.ssga.com/us/en/intermediary/etfs/spdr-gold-shares-gld">GLD fund data</a><a href="https://www.ifec.org.hk/web/en/blog/2022/12/accumulators-and-decumulators-2.page">Accumulator contract guide</a></p>
+</footer>
 </main>
 <!-- The walkthrough's published step order, headings and spoken text are maintained here. -->
 <script type="application/json" id="gld-guide-source">
