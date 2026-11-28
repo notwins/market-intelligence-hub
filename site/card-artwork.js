@@ -1,6 +1,24 @@
 /* Local, credited illustrations for public editorial cards. */
 (() => {
   'use strict';
+  function rotate(pool, identity, lastUsed, index) {
+    let value = 2166136261;
+    for (const byte of new TextEncoder().encode(identity)) value = Math.imul(value ^ byte, 16777619);
+    const offset = (value >>> 0) % pool.length;
+    let key = pool[offset];
+    for (let step = 1; step < pool.length; step++) {
+      const candidate = pool[(offset + step) % pool.length];
+      if ((lastUsed.get(candidate) ?? -1) < (lastUsed.get(key) ?? -1)) key = candidate;
+    }
+    lastUsed.set(key, index);
+    return key;
+  }
+
+  if (typeof module === 'object' && typeof document === 'undefined') {
+    module.exports = {rotate};
+    return;
+  }
+
   const base = new URL('./', document.currentScript.src);
   const surfaces = [...document.querySelectorAll(
     '#featured-cards, #daily-cards, #archive-cards, [data-feed-cards], #dashboard-report-cards, #news-cards, #view'
@@ -13,36 +31,41 @@
   let rules = [], pools = {}, assignments = {}, loaded = false;
 
   const href = path => new URL(path, base).href;
-  function keyFor(identity, signals, fallback = 'markets') {
-    if (!allowed.size) return null;
-    let topic;
+  function topicFor(signals, fallback = 'markets') {
     for (const signal of signals) {
-      topic = rules.find(([, rule]) => rule.test(signal || ''))?.[0];
-      if (topic) break;
+      const topic = rules.find(([, rule]) => rule.test(signal || ''))?.[0];
+      if (topic) return topic;
     }
-    let value = 2166136261;
-    for (const byte of new TextEncoder().encode(identity)) value = Math.imul(value ^ byte, 16777619);
-    const pool = pools[topic || fallback];
-    return pool?.[(value >>> 0) % pool.length];
+    return fallback;
   }
 
   function choices(card) {
     const {topic, artDate, newsStory, reportId, feedReport, mihTickers, cardTopic} = card.dataset;
     const title = card.querySelector('h2, h3')?.textContent || '';
-    let fallback = 'macro';
-    if (/\b(?:bonds?|credit|treasur\w*|fixed income)\b/i.test(title)) fallback = 'credit';
-    else if (/\b(?:earnings|equities|shares|stocks?|company|nvidia)\b/i.test(title)) fallback = 'equities';
     if (topic) {
       const signals = topic === 'news' ? [card.querySelector('.brief-summary')?.textContent] : [];
-      const key = assignments.briefings?.[artDate]?.[topic];
-      return [allowed.has(key) ? key : keyFor(artDate + ':' + topic, signals, briefing[topic]), topic === 'bonds' ? 'credit' : topic === 'earnings' ? 'equities' : 'macro'];
+      const theme = topic === 'bonds' ? 'credit' : topic === 'earnings' ? 'equities' : 'macro';
+      return [artDate + ':' + topic, assignments.topics?.briefings?.[artDate]?.[topic],
+        topicFor(signals, briefing[topic]), assignments.briefings?.[artDate]?.[topic], theme];
     }
     const identity = newsStory || reportId || feedReport || mihTickers || title;
-    const assigned = newsStory ? assignments.news?.[newsStory] : assignments.reports?.[identity];
-    if (allowed.has(assigned)) return [assigned, fallback];
+    const group = newsStory ? 'news' : 'reports';
+    const assigned = assignments[group]?.[identity];
+    let theme = 'macro';
+    if (/\b(?:bonds?|credit|treasur\w*|fixed income)\b/i.test(title)) theme = 'credit';
+    else if (/\b(?:earnings|equities|shares|stocks?|company|nvidia)\b/i.test(title)) theme = 'equities';
     const signal = cardTopic || card.querySelector('.mu-eyebrow')?.textContent || '';
-    const key = keyFor(identity, [title, signal], fallback === 'credit' ? 'rates' : 'markets');
-    return [key, Object.hasOwn(themes, assigned) ? assigned : fallback];
+    return [identity, assignments.topics?.[group]?.[identity],
+      topicFor([title, signal], theme === 'credit' ? 'rates' : 'markets'), assigned,
+      Object.hasOwn(themes, assigned) ? assigned : theme];
+  }
+
+  function pickPool(topic, fallback, assigned) {
+    if (Object.hasOwn(pools, topic)) return pools[topic];
+    const pool = pools[fallback];
+    if (!allowed.has(assigned) || pool?.includes(assigned)) return pool;
+    // Older manifests only carry artwork keys and can still identify a matching pool.
+    return Object.values(pools).find(candidates => candidates.includes(assigned)) || pool;
   }
 
   function artCredit(holder, key) {
@@ -60,8 +83,7 @@
     link.href = href('card-artwork-credits.html#' + key);
   }
 
-  function applyArtwork(card) {
-    const [key, theme] = choices(card);
+  function applyArtwork(card, key, theme) {
     const subject = key || theme;
     if (card.dataset.cardArt === subject) return;
     const compact = card.matches('[data-news-story],.company-news-card');
@@ -120,8 +142,9 @@
     if (library.value?.schema_version === 1) {
       const payload = library.value;
       rules = payload.rules.map(([topic, pattern]) => [topic, new RegExp(pattern, 'i')]);
-      pools = payload.pools;
-      Object.values(pools).flat().filter(key => assetKey.test(key)).forEach(key => allowed.add(key));
+      pools = Object.fromEntries(Object.entries(payload.pools)
+        .map(([topic, keys]) => [topic, keys.filter(key => assetKey.test(key))]));
+      Object.values(pools).flat().forEach(key => allowed.add(key));
     }
     if (manifest.value?.schema_version === 1) assignments = manifest.value;
     paint();
@@ -138,13 +161,25 @@
       document.head.append(styles);
       loadLibrary().catch(() => {});
     }
-    for (const card of cards) applyArtwork(card);
+    const histories = new Map();
+    let index = 0;
+    for (const card of cards) {
+      if (card.closest('[hidden]')) continue;
+      const [identity, topic, fallback, assigned, theme] = choices(card);
+      if (!histories.has(card.parentElement)) histories.set(card.parentElement, new Map());
+      const pool = pickPool(topic, fallback, assigned);
+      const key = pool?.length ? rotate(pool, identity, histories.get(card.parentElement), index++) : null;
+      applyArtwork(card, key, theme);
+    }
   }
 
+  const containsCards = node => node.nodeType === 1 && (node.matches(selector) || node.querySelector(selector));
   const observer = new MutationObserver(records => {
-    if (records.some(record => [...record.addedNodes].some(node =>
-      node.nodeType === 1 && (node.matches(selector) || node.querySelector(selector))))) paint();
+    if (records.some(record => record.type === 'attributes' ? containsCards(record.target)
+      : [...record.addedNodes, ...record.removedNodes].some(containsCards))) paint();
   });
-  for (const surface of surfaces) observer.observe(surface, {childList: true, subtree: true});
+  for (const surface of surfaces) observer.observe(surface, {
+    childList: true, subtree: true, attributes: true, attributeFilter: ['hidden']
+  });
   paint();
 })();

@@ -1,5 +1,6 @@
 """Assign allowlisted local artwork to cards from the public Hub feeds."""
 import argparse
+from datetime import datetime
 import json
 from pathlib import Path
 import re
@@ -47,23 +48,35 @@ def seed_hash(identity):
     return value
 
 
-def choose(library, identity, *signals, default='markets'):
-    pools, rules = library
+def topic_for(rules, *signals, default='markets'):
     for signal in signals:
         if isinstance(signal, str):
             topic = next((topic for topic, rule in rules if rule.search(signal)), None)
             if topic:
-                break
-    else:
-        topic = default
-    pool = pools[topic]
-    return pool[seed_hash(identity) % len(pool)]
+                return topic
+    return default
+
+
+def rotate(pool, identity, last_used, index):
+    # Stable starting point, then prefer the image seen least recently in this list.
+    offset = seed_hash(identity) % len(pool)
+    order = pool[offset:] + pool[:offset]
+    key = min(order, key=lambda candidate: last_used.get(candidate, -1))
+    last_used[key] = index
+    return key
+
+
+def rotate_list(pools, topics, prefix=''):
+    last_used = {}
+    return {key: rotate(pools[topic], prefix + key, last_used, index)
+            for index, (key, topic) in enumerate(topics.items())}
 
 
 def assignments(research, briefings, hourly, library):
     records, editions, scans = research.get('records'), briefings.get('editions'), hourly.get('editions')
     if not all(isinstance(rows, list) and rows for rows in (records, editions, scans)):
         raise ValueError('Public card collections unavailable')
+    pools, rules = library
     reports = {}
     seen = set()
     for record in records:
@@ -72,8 +85,8 @@ def assignments(research, briefings, hourly, library):
             raise ValueError('Unexpected or duplicate public report ID')
         seen.add(key)
         if record.get('kind') == 'complete-report':
-            reports[key] = choose(library, key, record.get('title'), record.get('category'),
-                                  ' '.join(record.get('tags') or []), record.get('summary'))
+            reports[key] = topic_for(rules, record.get('title'), record.get('category'),
+                                     ' '.join(record.get('tags') or []), record.get('summary'))
 
     daily = {}
     for edition in editions:
@@ -85,7 +98,7 @@ def assignments(research, briefings, hourly, library):
         daily[day] = {}
         for topic, default in BRIEFINGS.items():
             summary = sections[topic]['summary'] if topic == 'news' else ''
-            daily[day][topic] = choose(library, f'{day}:{topic}', summary, default=default)
+            daily[day][topic] = topic_for(rules, summary, default=default)
 
     latest = {}
     for scan in scans:
@@ -93,11 +106,16 @@ def assignments(research, briefings, hourly, library):
             key, version = story.get('story_id'), story.get('version')
             if not isinstance(key, str) or not STORY_ID.fullmatch(key) or type(version) is not int or version < 1:
                 raise ValueError('Unexpected public news story ID or version')
-            if key not in latest or version > latest[key]['version']:
-                latest[key] = story
-    news = {key: choose(library, key, story.get('headline'), story.get('topic'))
-            for key, story in latest.items()}
-    return {'schema_version': 1, 'briefings': daily, 'reports': reports, 'news': news}
+            if key not in latest or version > latest[key][0]['version']:
+                stamp = scan.get('report_at')
+                latest[key] = (story, datetime.fromisoformat(stamp).timestamp() if stamp else 0)
+    ordered = sorted(latest.items(), key=lambda entry: entry[1][1], reverse=True)
+    news = {key: topic_for(rules, story.get('headline'), story.get('topic')) for key, (story, _) in ordered}
+    return {'schema_version': 1,
+            'briefings': {day: rotate_list(pools, topics, day + ':') for day, topics in daily.items()},
+            'reports': rotate_list(pools, reports),
+            'news': rotate_list(pools, news),
+            'topics': {'briefings': daily, 'reports': reports, 'news': news}}
 
 
 def main():
