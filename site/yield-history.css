@@ -117,3 +117,94 @@ body:has(.yield-history-page) { background: #f4f7fa; }
   .yield-chart-tools > .history-context-controls { grid-column: 1; grid-row: auto; }
   .yield-history-page :is(#history-analysis,.yield-chapter[id]) { scroll-margin-top: 1rem; }
 }
+
+.curve-history-page .curve-history-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1.15fr) repeat(2, minmax(0, .8fr));
+  gap: .65rem .85rem;
+  margin: 0 0 1rem;
+  padding-inline: var(--yield-inset);
+}
+.curve-history-controls .field { min-width: 0; }
+.curve-history-page .curve-history-controls label > span { color: #e2effb; }
+.curve-history-controls select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  color: var(--yield-ink);
+  background: var(--yield-card);
+  border-color: var(--yield-rule);
+}
+.curve-history-page :is(.curve-history-chart,.curve-tenors) {
+  margin: 0;
+  padding: var(--yield-inset);
+  color: var(--yield-ink);
+  background: var(--yield-card);
+}
+.curve-history-chart h3, .curve-tenors h3 {
+  margin: 0;
+  color: var(--yield-navy);
+  font: 550 clamp(1.35rem, 2.5vw, 2rem)/1.1 var(--hist-serif);
+}
+.curve-history-chart :is(.caption,.chart-description) { color: var(--yield-muted); }
+.curve-history-page .curve-history-chart svg { max-height: none; }
+.curve-history-page .curve-history-chart svg text {
+  fill: var(--yield-muted);
+  font-size: calc(13px * var(--chart-text-scale, 1));
+}
+.curve-history-chart .legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: .5rem 1.4rem;
+  color: var(--yield-ink);
+  font-size: calc(13px * var(--text-scale, 1));
+}
+.curve-history-chart .legend .curve-legend-line {
+  flex: 0 0 24px;
+  height: 0;
+  border-top: 3px solid;
+  border-radius: 0;
+}
+.curve-history-chart .legend .curve-legend-line.is-dashed { border-top-style: dashed; }
+.curve-history-page .curve-tenors {
+  margin-top: .85rem;
+  scroll-margin-top: calc(var(--hub-primary-height, 0px) + 7.5rem);
+}
+.curve-tenors .comparison-delta { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.curve-tenors .comparison-delta > div {
+  min-width: 0;
+  color: var(--yield-muted);
+  background: var(--yield-wash);
+}
+.curve-tenors .comparison-delta b { color: var(--yield-navy); font-variant-numeric: tabular-nums; }
+.curve-tenors .table-scroll { max-width: 100%; isolation: isolate; }
+.curve-tenors .data-table { width: 100%; font-variant-numeric: tabular-nums; }
+.curve-tenors .data-table thead th { color: var(--yield-navy); background: var(--yield-wash); }
+.curve-tenors .data-table :is(th,td) {
+  white-space: nowrap;
+  text-align: right;
+  font-size: calc(13px * var(--text-scale, 1));
+}
+.curve-tenors .data-table th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  box-shadow: 1px 0 var(--yield-rule);
+}
+.curve-tenors .data-table tbody th { color: var(--yield-ink); background: var(--yield-card); }
+.curve-table-hint { display: none; color: var(--yield-muted); }
+.curve-series-sources { margin-top: .85rem; }
+.curve-series-sources summary { cursor: pointer; color: var(--yield-blue); }
+@media (max-width: 900px) {
+  .curve-history-page .curve-history-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .curve-history-page .curve-tenors { scroll-margin-top: 1rem; }
+  .curve-tenors .comparison-delta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .curve-table-hint { display: block; }
+}
+@media (max-width: 480px) {
+  .curve-history-controls .field:nth-child(-n+2) { grid-column: 1 / -1; }
+  .curve-history-chart .legend { grid-template-columns: minmax(0, 1fr); }
+}

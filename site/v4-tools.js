@@ -61,9 +61,12 @@ function curveSelection(){
  return{families,dates};
 }
 function historyDate(value){return historyMode==='weekly'?value:value?.slice(0,7);}
-function historyControls(){
+function historySourceControl(){
  const labels={weekly:'FRED weekly · U.S. Treasury and FX',combined:'Monthly Fed history + Singapore SGS workbook',published:'Monthly Federal Reserve history',workbook:'Original workbook (includes SGS)',local:'Your local imported snapshot'};
- let html='<div class="tool-controls">'+label('History source',select('history-source',['weekly','combined','published','workbook','local'].filter(k=>historySets[k]).map(k=>[k,labels[k]]),historyMode))+'</div>';
+ return label('History source',select('history-source',['weekly','combined','published','workbook','local'].filter(k=>historySets[k]).map(k=>[k,labels[k]]),historyMode));
+}
+function historyControls({includeSelector=true}={}){
+ let html=includeSelector?'<div class="tool-controls">'+historySourceControl()+'</div>':'';
  if(historyMode==='weekly')return html+notice('The last available observation in each Friday-ending week. Charts show the actual FRED observation date. Refreshes Wednesday at 7:30 am Singapore time.')+
   '<p class="source-line"><a href="data/fred-weekly-yields.csv" download>Download weekly Treasury yields</a> · <a href="data/fred-weekly-fx.csv" download>Download weekly FX</a></p>';
  if(historyMode==='combined')html+=notice('Federal Reserve monthly history plus <strong>Singapore SGS</strong> from the supplied MAS-labelled workbook. SGS is a preserved snapshot, not a live MAS feed. Latest SGS month: <time class="history-date">'+e(historySets.workbook.series.filter(s=>s.family==='sgs').flatMap(s=>s.points.map(p=>p[0])).sort().at(-1)?.slice(0,7))+'</time>.');
@@ -118,7 +121,7 @@ function redrawContext(){const key=d=>d.querySelector('summary')?.textContent.re
 function recessionContext(){return historySets.published?.recession_context||X.history?.recession_context;}
 function addMonths(day,m){const d0=new Date(day+'T12:00:00Z');d0.setUTCMonth(d0.getUTCMonth()+m);return d0.toISOString().slice(0,10);}
 function lineChart(lines,{title='',unit='%',curve=false,scenario=null,fullWidth=false,period=null,historyLayout=false}={}){
- const palette=X.historyTab==='yield'&&historyLayout?['#235d91','#8b4e70','#ac6a35','#4a809f']:colors;
+ const palette=curve?['#235d91','#235d91','#985023','#985023']:X.historyTab==='yield'&&historyLayout?['#235d91','#8b4e70','#ac6a35','#4a809f']:colors;
  const mobile=matchMedia('(max-width:760px)').matches,scale=Number(document.documentElement.style.getPropertyValue('--chart-text-scale'))||1,large=document.documentElement.dataset.displayCharts==='large',W=(historyLayout?window.MarketLayout?.historyChartWidth?.({fullWidth}):window.MarketLayout?.chartWidth({fullWidth}))||(mobile?400:900),L=Math.ceil(64*scale),R=Math.ceil(20*scale),B=Math.ceil(40*scale);
  const all=lines.flatMap(s=>s.points).filter(p=>C.finite(p[1]));if(!all.length)return`<div class="empty">${e(t('No observations for these dates.','所选日期没有观测值。','所選日期沒有觀測值。'))}</div>`;
  const xval=v=>curve?Number(v):Date.parse(v+'T00:00:00Z');let xmin=Math.min(...all.map(p=>xval(p[0]))),xmax=Math.max(...all.map(p=>xval(p[0]))),min=Math.min(...all.map(p=>p[1])),max=Math.max(...all.map(p=>p[1]));
@@ -134,18 +137,21 @@ function lineChart(lines,{title='',unit='%',curve=false,scenario=null,fullWidth=
  else{const ticks=W<500?2:W<720||scale>1.5?4:7;for(let i=0;i<ticks;i++){const v=xmin+(xmax-xmin)*i/(ticks-1),day=historyDate(new Date(v).toISOString().slice(0,10));svg+=`<text class="history-date" x="${L+(W-L-R)*i/(ticks-1)}" y="${H-12}" text-anchor="${i===0?'start':i===ticks-1?'end':'middle'}">${day}</text>`;}
  for(const {ev,x,left,width,lane,labelLines} of markers){const y=12*scale+lane*rowHeight;svg+=`<line class="event-line" x1="${x}" x2="${x}" y1="${y+markerHeight}" y2="${H-B}"/><a class="event-marker-link" href="${e(ev.url)}" target="_blank" rel="noopener noreferrer" aria-label="${e((events.indexOf(ev)+1)+'. '+ev.shortName+' · '+ev.label+' · '+ev.date+' · official source, opens new tab')}"><title>${e(ev.label+' · '+ev.date)}</title><rect x="${left}" y="${y}" width="${width}" height="${markerHeight}" rx="5" fill="var(--panel,white)"/><text class="event-marker-label" x="${left+width/2}" y="${y+22*scale}" text-anchor="middle">${labelLines.map((label,i)=>`<tspan x="${left+width/2}" dy="${i?16*scale:0}">${e(label)}</tspan>`).join('')}</text></a>`;}}
 
- lines.forEach((s,i)=>{let seg=[],segments=[],prev=null;for(const p of s.points){if(!C.finite(p[1])){if(seg.length)segments.push(seg);seg=[];prev=null;continue;}if(!curve&&prev&&(historyMode==='weekly'?Date.parse(p[0])-Date.parse(prev)>10*86400000:p[0].slice(0,7)!==addMonths(prev,1).slice(0,7))){if(seg.length)segments.push(seg);seg=[];}seg.push([xx(p[0]),yy(p[1])]);prev=p[0];}if(seg.length)segments.push(seg);svg+=segments.map(a=>`<polyline points="${a.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${palette[i]}" stroke-width="2.7" stroke-linejoin="round"/>`).join('');if(curve)svg+=s.points.filter(p=>C.finite(p[1])).map(p=>`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="3.5" fill="${palette[i]}"><title>${e(s.name)} · ${p[0]}Y · ${n(p[1])}%</title></circle>`).join('');else{const p=s.points.filter(p=>C.finite(p[1])).at(-1);if(p)svg+=`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="4" fill="${palette[i]}"/>`;}});
+ lines.forEach((s,i)=>{let seg=[],segments=[],prev=null;for(const p of s.points){if(!C.finite(p[1])){if(seg.length)segments.push(seg);seg=[];prev=null;continue;}if(!curve&&prev&&(historyMode==='weekly'?Date.parse(p[0])-Date.parse(prev)>10*86400000:p[0].slice(0,7)!==addMonths(prev,1).slice(0,7))){if(seg.length)segments.push(seg);seg=[];}seg.push([xx(p[0]),yy(p[1])]);prev=p[0];}if(seg.length)segments.push(seg);svg+=segments.map(a=>`<polyline points="${a.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${palette[i]}" stroke-width="2.7" stroke-linejoin="round"${curve&&i%2?' stroke-dasharray="7 5"':''}/>`).join('');if(curve)svg+=s.points.filter(p=>C.finite(p[1])).map(p=>`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="3.5" fill="${palette[i]}"><title>${e(s.name)} · ${p[0]}Y · ${n(p[1])}%</title></circle>`).join('');else{const p=s.points.filter(p=>C.finite(p[1])).at(-1);if(p)svg+=`<circle cx="${xx(p[0])}" cy="${yy(p[1])}" r="4" fill="${palette[i]}"/>`;}});
  if(scenario){const endx=xx(scenario.end[0]),startx=xx(scenario.start[0]);svg+=`<rect x="${startx}" y="${T}" width="${endx-startx}" height="${H-T-B}" fill="#d6e8f4" opacity=".32"/><line x1="${startx}" x2="${endx}" y1="${yy(scenario.start[1])}" y2="${yy(scenario.end[1])}" stroke="#a74478" stroke-width="3" stroke-dasharray="7 5"/><text x="${W-R}" y="${T-13}" text-anchor="end" fill="#9a3c73">${e(t('Hypothetical path'))}</text>`;}
  const eventList=visibleEvents.map(ev=>`<span>${mobile?`<a href="${e(ev.url)}" target="_blank" rel="noopener noreferrer">`:''}<b>${events.indexOf(ev)+1} ${e(ev.shortName)}</b> · ${e(ev.label)} · <time class="history-date">${e(ev.date)}</time>${mobile?'</a>':''}</span>`).join('');
- return svg+'</svg>'+(!curve&&X.recessions&&recessionContext()?'<p class="caption">Shaded: U.S. recession months (FRED USREC / NBER chronology).</p>':'')+`<div class="legend">${lines.map((s,i)=>`<span><i style="background:${palette[i]}"></i>${e(s.name)}</span>`).join('')}${scenario?`<span><i style="background:#a74478"></i>${e(t('Hypothetical path'))}</span>`:''}</div>`+(eventList?(mobile?`<details class="section history-event-details"><summary>${e(t('Events in this chart','本图事件','本圖事件'))} (${visibleEvents.length})</summary><div class="legend v4-event-legend">${eventList}</div></details>`:`<div class="legend v4-event-legend">${eventList}</div>`):'');
+ return svg+'</svg>'+(!curve&&X.recessions&&recessionContext()?'<p class="caption">Shaded: U.S. recession months (FRED USREC / NBER chronology).</p>':'')+`<div class="legend">${lines.map((s,i)=>`<span><i${curve?' class="curve-legend-line'+(i%2?' is-dashed':'')+'" aria-hidden="true"':''} style="${curve?'border-color':'background'}:${palette[i]}"></i>${e(s.name)}</span>`).join('')}${scenario?`<span><i style="background:#a74478"></i>${e(t('Hypothetical path'))}</span>`:''}</div>`+(eventList?(mobile?`<details class="section history-event-details"><summary>${e(t('Events in this chart','本图事件','本圖事件'))} (${visibleEvents.length})</summary><div class="legend v4-event-legend">${eventList}</div></details>`:`<div class="legend v4-event-legend">${eventList}</div>`):'');
 }
 function timeData(second=false){const fx=X.historyTab==='fx',a=X.history.series.find(s=>s.id===(fx?X.fxA:second?X.historyA2:X.historyA));let b=X.history.series.find(s=>s.id===(fx?X.fxB:second?X.historyB2:X.historyB));if(!a)return{a:null,lines:[]};if(b?.family!==a.family&&!(b?.family!=='fx'&&a.family!=='fx'))b=null;
  const cut=s=>[...s.points,...(s.missing_periods||[]).map(day=>[day,null])].filter(p=>p[0]>=X.start&&p[0]<=X.end).sort((a,b)=>a[0].localeCompare(b[0]));let sets=[a,...(b&&b.id!==a.id?[b]:[])].map(s=>({name:s.id,points:cut(s)}));
  if(fx&&X.fxMode==='index'){const common=sets.length>1?sets[0].points.filter(p=>C.finite(p[1])&&sets[1].points.some(q=>q[0]===p[0]&&C.finite(q[1])))[0]?.[0]:sets[0].points.find(p=>C.finite(p[1]))?.[0];sets=sets.map(s=>{const base=s.points.find(p=>p[0]===common)?.[1];return{...s,points:base?s.points.filter(p=>p[0]>=common).map(p=>[p[0],C.finite(p[1])?p[1]/base*100:null]):[]};});}
  return{a,b,lines:sets};
 }
+function historyChapterJump(id,label){
+ return button(label,'data-tool="yield-chapter" data-yield-chapter="'+id+'"','button ghost');
+}
 function yieldHistoryView(tabs,edition){
- const jump=(id,label)=>button(label,'data-tool="yield-chapter" data-yield-chapter="'+id+'"','button ghost');
+ const jump=historyChapterJump;
  return `<div class="history-page yield-history-page" data-history-topic="yield">
   <header class="yield-masthead">
    <div><p class="yield-kicker">${e(t('Historical charts'))}</p><h1>${e(t('Yield'))} <em>${e(t('history'))}</em></h1>
@@ -176,6 +182,33 @@ function yieldHistoryView(tabs,edition){
   </section>
  </div>`;
 }
+function curveHistoryView(tabs,edition){
+ const jump=historyChapterJump;
+ return `<div class="history-page yield-history-page curve-history-page" data-history-topic="curves">
+  <header class="yield-masthead">
+   <div><p class="yield-kicker">${e(t('Historical charts'))}</p><h1>${e(t('Historical'))} <em>${e(t('curves'))}</em></h1>
+   <p>${e(t('Compare U.S. Treasury and Singapore government yield curves across maturities on two dates.'))}</p>
+   ${jump('history-analysis','Compare curves ↓')}</div>
+   <figure><img src="assets/desk/bonds-analytical.webp" width="600" height="800" alt="" fetchpriority="high"></figure>
+  </header>
+  ${tabs}
+  <nav class="yield-jump" aria-label="Historical curves sections">${jump('history-analysis','Curve comparison')}${jump('curve-tenors','Tenor data')}${jump('curve-watch','Bond watchlist')}${jump('curve-sources','Sources & events')}</nav>
+  <section class="yield-chapter yield-chart-chapter">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Two-date comparison</p><h2>Yield curves</h2></div><p>Compare one market or overlay both. The tenor table shows the change in basis points between Date A and Date B.</p></header>
+   <section id="history-analysis" tabindex="-1" aria-label="Historical curve comparison">${X.history?curveView():loading('history')}</section>
+  </section>
+  <section id="curve-watch" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Issue-level observations</p><h2>Bond watchlist</h2></div></header>
+   ${X.history?bondWatchPanel('history'):''}
+  </section>
+  <section id="curve-sources" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Data & context</p><h2>Sources and events</h2></div></header>
+   <div data-yield-feed-status></div>
+   ${X.history?historyControls({includeSelector:false})+contextControls()+(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):''}
+   ${edition}
+  </section>
+ </div>`;
+}
 function historyView(){
  const topics=[['yield','Yield history'],['shares','Share prices'],['beta2-shares','▤ Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']];
  const tab=X.historyTab, title=topics.find(item=>item[0]===tab)?.[1].replace(/^[▤▧] /,'')||'Historical charts';
@@ -183,7 +216,8 @@ function historyView(){
  const edition=jump&&window.HubFullReportEditions?'<article class="card section">'+window.HubFullReportEditions.panel('weekly-fx')+'</article>':'';
  const tabs=subnav(topics,tab,'historyTab');
  if(tab==='yield')return yieldHistoryView(tabs,edition);
- const descriptions={shares:'Compare selected shares, dated valuation observations and reported earnings.',fx:'Compare exchange rates over a shared period using native rates or a common index.',curves:'Compare Treasury and Singapore government yield curves on two observation dates.',spx:'Explore the saved S&P 500 index history and its source coverage.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
+ if(tab==='curves')return curveHistoryView(tabs,edition);
+ const descriptions={shares:'Compare selected shares, dated valuation observations and reported earnings.',fx:'Compare exchange rates over a shared period using native rates or a common index.',spx:'Explore the saved S&P 500 index history and its source coverage.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
  const intro='<header class="history-opener"><div>'+head('Historical charts',title,t(descriptions[tab]||''))+
    (jump&&X.history?button(t('Jump to charts'),'data-tool="history-charts"','button ghost'):'')+'</div><div class="history-engraving" aria-hidden="true"></div></header>';
  let content;
@@ -193,9 +227,8 @@ function historyView(){
  else if(X.historyTab==='si')content=window.MarketSI?.view()||'<p>SI reference unavailable.</p>';
  else if(!X.history)content=loading('history');
  else {
-  const watch=tab!=='fx'&&tab!=='spx'?bondWatchPanel('history'):'';
-  const plot=tab==='spx'?(window.HistoryContext?.spxView()||'SPX source unavailable'):tab==='curves'?curveView():timeView();
-  content=watch+historyControls()+contextControls()+'<section id="history-analysis" tabindex="-1" aria-label="'+e(title)+'">'+plot+'</section>'+
+  const plot=tab==='spx'?(window.HistoryContext?.spxView()||'SPX source unavailable'):timeView();
+  content=historyControls()+contextControls()+'<section id="history-analysis" tabindex="-1" aria-label="'+e(title)+'">'+plot+'</section>'+
     (tab!=='spx'?(window.HistoryContext?.render({events,published:historySets.published,workbook:historySets.workbook})||''):'');
  }
  return '<div class="history-page" data-history-topic="'+e(tab)+'">'+intro+tabs+edition+content+'</div>';
@@ -229,8 +262,42 @@ function historySource(s,comparison){
 }
 
 function eventsSource(){const rc=recessionContext();return '<details class="section"><summary>Event and recession sources</summary><ol>'+events.map(ev=>'<li>'+e(ev.date)+' / '+link(ev.url,ev.label)+'</li>').join('')+'</ol><p>Events provide context, not proof of causation. They identify announcement dates, not exact monthly market turning points.</p>'+(rc?'<p>'+e(rc.source)+'. '+e(rc.convention)+' Latest indicator month: '+e(rc.latest_observation.slice(0,7))+'. '+link(rc.source_url,'USREC source and method')+' '+link(rc.chronology_url,'NBER chronology')+'. Copyright: Federal Reserve Bank of St. Louis, citation required.</p><ul>'+rc.periods.map(p=>'<li>'+e(p.start.slice(0,7))+' through '+e(addMonths(p.end_exclusive,-1).slice(0,7))+'</li>').join('')+'</ul>':'<p>Recession indicator data are unavailable; no recession shading is inferred.</p>')+'</details>';}
-function curveView(){const{families,dates}=curveSelection();if(!dates.length)return notice(e(t('No dated curve observations are available for this family. Choose another history source.')));const curves=families.flatMap(f=>[X.curveA,X.curveB].map(day=>({family:f,day,name:(f==='ust'?'USD UST':'SGD SGS')+' · '+historyDate(day),curve:C.curve(X.history,f,day)}))),lines=curves.map(c=>({name:c.name,points:c.curve.map(x=>[x.years,x.value])})),a=curves[0]?.curve||[],b=curves[1]?.curve||[],delta=C.curveDelta(a,b),missing=curves.reduce((s,c)=>s+c.curve.filter(p=>p.value===null).length,0);
- return`<div class="tool-controls">${label('Curve family',select('curve-family',(X.history.series.some(s=>s.family==='sgs')?[['ust','U.S. Treasury'],['sgs','Singapore SGS'],['both','USD UST + SGD SGS']]:[['ust','U.S. Treasury']]),X.curveFamily))}${label('Date A',select('curve-a',dates.map(v=>[v,historyDate(v)]),X.curveA))}${label('Date B',select('curve-b',dates.map(v=>[v,historyDate(v)]),X.curveB))}</div><div class="chart-panel"><div class="eyebrow">${e(t('Compare historical curves'))}</div><h3>${e(t('Two dates. The full maturity structure.','两个日期，完整期限结构。','兩個日期，完整期限結構。'))}</h3><p class="caption">${e(t('X: years to maturity · Y: annual yield (%)','横轴：期限（年）· 纵轴：年化收益率（%）','橫軸：期限（年）· 縱軸：年化收益率（%）'))}</p>${lineChart(lines,{title:t('Compare historical curves'),unit:'%',curve:true})}<p class="chart-description">${e(t('Observed benchmark tenors are connected for readability. This is not a bootstrapped zero curve or an executable security-yield curve.','为便于阅读，图中连接已观测的基准期限；这不是引导计算的零息曲线或可成交证券收益率曲线。','為便於閱讀，圖中連接已觀測的基準期限；這不是引導計算的零息曲線或可成交證券收益率曲線。'))}</p></div>${X.curveFamily==='both'?notice(e(t('USD and SGD curves carry different currency and policy exposures. Their yield difference is not an FX-hedged return.','美元与新元曲线具有不同的货币及政策风险，收益率差并非汇率对冲后的回报。','美元與新元曲線具有不同的貨幣及政策風險，收益率差並非匯率對沖後的回報。'))):''}${missing?notice(missing+' '+e(t('Periods missing'))+' · '+e(t('Not interpolated'))):''}<div class="comparison-delta">${delta.filter(x=>['2Y','5Y','10Y','30Y'].includes(x.label)).map(x=>`<div>${e(x.label)} · A − B<b>${x.bp===null?'—':(x.bp>0?'+':'')+n(x.bp,0)+'bp'}</b></div>`).join('')}</div><div class="card"><h3>${e(t('Read the data'))}</h3><div class="table-scroll"><table class="data-table"><thead><tr><th>${e(t('Tenor'))}</th>${curves.map(c=>`<th>${e(c.name)}</th>`).join('')}<th>${e(t('A − B (bp)'))}${X.curveFamily==='both'?' · USD':''}</th></tr></thead><tbody>${Array.from(new Set(curves.flatMap(c=>c.curve.map(p=>p.label)))).sort((a,b)=>C.tenor(a)-C.tenor(b)).map(l=>`<tr><td>${e(l)}</td>${curves.map(c=>`<td>${C.finite(c.curve.find(x=>x.label===l)?.value)?n(c.curve.find(x=>x.label===l).value)+'%':'—'}</td>`).join('')}<td>${n(delta.find(x=>x.label===l)?.bp,0)}</td></tr>`).join('')}</tbody></table></div></div>${historySource(X.history.series.find(s=>s.family===families[0]))}`;
+function curveView(){
+ const {families,dates}=curveSelection();
+ const marketOptions=[['ust','U.S. Treasury']];
+ if(X.history.series.some(s=>s.family==='sgs'))marketOptions.push(['sgs','Singapore SGS'],['both','USD UST + SGD SGS']);
+ const dateOptions=dates.map(day=>[day,historyDate(day)]);
+ const controls=`<div class="tool-controls curve-history-controls">${historySourceControl()}${label('Curve family',select('curve-family',marketOptions,X.curveFamily))}${label('Date A',select('curve-a',dateOptions,X.curveA))}${label('Date B',select('curve-b',dateOptions,X.curveB))}</div>`;
+ if(!dates.length)return controls+notice(e(t('No dated curve observations are available for this family. Choose another history source.')));
+ const curves=families.flatMap(f=>[X.curveA,X.curveB].map((day,index)=>({
+  name:(index===0?'A':'B')+' · '+(f==='ust'?'USD UST':'SGD SGS')+' · '+historyDate(day),
+  curve:C.curve(X.history,f,day)
+ })));
+ const lines=curves.map(c=>({name:c.name,points:c.curve.map(p=>[p.years,p.value])}));
+ const tenorLabels=[...new Set(curves.flatMap(c=>c.curve.map(p=>p.label)))].sort((a,b)=>C.tenor(a)-C.tenor(b));
+ const delta=C.curveDelta(curves[0].curve,curves[1].curve);
+ const missing=curves.reduce((count,c)=>count+c.curve.filter(p=>p.value===null).length,0);
+ const deltaTitle=t('A − B (bp)')+(X.curveFamily==='both'?' · USD':'');
+ const keyMoves=delta.filter(p=>['2Y','5Y','10Y','30Y'].includes(p.label));
+ return `${controls}
+  <div class="chart-panel curve-history-chart">
+   <h3>${e(t('Two dates. The full maturity structure.','两个日期，完整期限结构。','兩個日期，完整期限結構。'))}</h3>
+   <p class="caption">${e(t('X: years to maturity · Y: annual yield (%)','横轴：期限（年）· 纵轴：年化收益率（%）','橫軸：期限（年）· 縱軸：年化收益率（%）'))}</p>
+   ${lineChart(lines,{title:t('Compare historical curves'),unit:'%',curve:true,fullWidth:true})}
+   <p class="chart-description">${e(t('Observed benchmark tenors are connected for readability. This is not a bootstrapped zero curve or an executable security-yield curve.','为便于阅读，图中连接已观测的基准期限；这不是引导计算的零息曲线或可成交证券收益率曲线。','為便於閱讀，圖中連接已觀測的基準期限；這不是引導計算的零息曲線或可成交證券收益率曲線。'))}</p>
+   ${X.curveFamily==='both'?notice(e(t('USD and SGD curves carry different currency and policy exposures. Their yield difference is not an FX-hedged return.','美元与新元曲线具有不同的货币及政策风险，收益率差并非汇率对冲后的回报。','美元與新元曲線具有不同的貨幣及政策風險，收益率差並非匯率對沖後的回報。'))):''}
+   ${missing?notice(missing+' '+e(t('Periods missing'))+' · '+e(t('Not interpolated'))):''}
+  </div>
+  <section id="curve-tenors" class="card curve-tenors" tabindex="-1" aria-labelledby="curve-tenor-title">
+   <h3 id="curve-tenor-title">${e(t('Tenor data'))}</h3>
+   ${keyMoves.length?`<div class="comparison-delta">${keyMoves.map(p=>`<div>${e(p.label)} · ${e(deltaTitle)}<b>${p.bp===null?'—':(p.bp>0?'+':'')+n(p.bp,0)+' bp'}</b></div>`).join('')}</div>`:''}
+   <p class="curve-table-hint caption" id="curve-table-hint">Swipe or scroll the table to see all columns.</p>
+   <div class="table-scroll" tabindex="0" role="region" aria-labelledby="curve-tenor-title" aria-describedby="curve-table-hint"><table class="data-table">
+    <thead><tr><th scope="col">${e(t('Tenor'))}</th>${curves.map(c=>`<th scope="col">${e(c.name)}</th>`).join('')}<th scope="col">${e(deltaTitle)}</th></tr></thead>
+    <tbody>${tenorLabels.map(tenor=>`<tr><th scope="row">${e(tenor)}</th>${curves.map(c=>{const value=c.curve.find(p=>p.label===tenor)?.value;return `<td>${C.finite(value)?n(value)+'%':'—'}</td>`;}).join('')}<td>${n(delta.find(p=>p.label===tenor)?.bp,0)}</td></tr>`).join('')}</tbody>
+   </table></div>
+   <details class="curve-series-sources"><summary>${e(t('Series sources'))}</summary>${historySource(X.history.series.find(s=>s.family===families[0]))}</details>
+  </section>`;
 }
 
 function ustHeatRange(){const values=(X.ust?.rows||[]).map(r=>r.reportedYieldPct).filter(v=>C.finite(v)&&v>=0);return values.length?{min:Math.min(...values),max:Math.max(...values)}:null;}
