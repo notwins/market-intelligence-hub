@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "source_commit": "403a31051d9b8fda562c60bae525375e961e2ad7",
-  "built_at": "2026-11-28T07:15:38.824717+00:00",
+  "source_commit": "3e02767aab07c7e7433978695b27c8451cf35ca3",
+  "built_at": "2026-11-28T07:28:31.872946+00:00",
   "coverage": {
     "archive": "All legacy published research HTML in this checkout; companion assets remain attached. New independent editions are merged by ContentDelivery in the browser.",
     "chronology": "First added to the public repository; not a verified Pages upload time. Unknown introduction dates sort last. Source/research dates remain separate.",
@@ -1942,7 +1942,9 @@
           "additional_review": true
         }
       ],
-      "news_ids": [],
+      "news_ids": [
+        "be228449c80b3ab271e3"
+      ],
       "research_href": "search.html?q=AAPL"
     },
     {
@@ -3272,9 +3274,7 @@
           "additional_review": false
         }
       ],
-      "news_ids": [
-        "d639955c39cfd6f87a13"
-      ],
+      "news_ids": [],
       "research_href": "search.html?q=MSFT"
     },
     {
@@ -8647,18 +8647,11 @@
       ],
       "news_ids": [
         "f5513e70c5f6de828b12",
+        "62363c3d7a0bb3d02f56",
         "3024525a44572e4ee4a1",
         "422181d616c1f56f475e",
         "3502ac3a448a443d70c8",
-        "5c486d3b1bc21dfb1a27",
-        "288837ab599ecfa6ed12",
-        "920941495612b7e1a49f",
-        "de27290ae54443e34ac7",
-        "9cfd471d5a8f66ec4616",
-        "75611aa12fdc6ad8cea9",
-        "c54a26c5a870073f6ce5",
-        "b3356859abb78a553952",
-        "5d9d2da0e259df5e098e"
+        "920941495612b7e1a49f"
       ],
       "research_href": "search.html?q=NVDA"
     },
@@ -30915,58 +30908,18 @@
     {
       "id": "ust-2y",
       "label": "US Treasury 2Y",
-      "value": 4.73,
+      "value": 4.61,
       "unit": "%",
-      "as_of": "2026-11-10",
-      "status": "error",
-      "message": "Treasury refresh failed; last verified observations retained.",
+      "as_of": "2026-11-25",
+      "status": "ok",
+      "message": null,
       "basis": "Saved Federal Reserve H.15 constant-maturity yield; percent per annum",
       "source": "Federal Reserve H.15, retrieved via FRED",
       "source_url": "https://fred.stlouisfed.org/series/DGS2",
       "source_series": "DGS2",
-      "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-27T09:11:32+08:00",
+      "checked_at": "2026-11-28T15:17:11+08:00",
+      "last_attempt": null,
       "history": [
-        {
-          "date": "2026-09-29",
-          "value": 4.89
-        },
-        {
-          "date": "2026-09-30",
-          "value": 4.88
-        },
-        {
-          "date": "2026-10-01",
-          "value": 4.78
-        },
-        {
-          "date": "2026-10-02",
-          "value": 4.83
-        },
-        {
-          "date": "2026-10-05",
-          "value": 4.84
-        },
-        {
-          "date": "2026-10-06",
-          "value": 4.79
-        },
-        {
-          "date": "2026-10-07",
-          "value": 4.77
-        },
-        {
-          "date": "2026-10-08",
-          "value": 4.75
-        },
-        {
-          "date": "2026-10-09",
-          "value": 4.8
-        },
-        {
-          "date": "2026-10-13",
-          "value": 4.79
-        },
         {
           "date": "2026-10-14",
           "value": 4.82
@@ -31046,64 +30999,64 @@
         {
           "date": "2026-11-10",
           "value": 4.73
+        },
+        {
+          "date": "2026-11-12",
+          "value": 4.86
+        },
+        {
+          "date": "2026-11-13",
+          "value": 4.88
+        },
+        {
+          "date": "2026-11-16",
+          "value": 4.83
+        },
+        {
+          "date": "2026-11-17",
+          "value": 4.8
+        },
+        {
+          "date": "2026-11-18",
+          "value": 4.8
+        },
+        {
+          "date": "2026-11-19",
+          "value": 4.76
+        },
+        {
+          "date": "2026-11-20",
+          "value": 4.63
+        },
+        {
+          "date": "2026-11-23",
+          "value": 4.63
+        },
+        {
+          "date": "2026-11-24",
+          "value": 4.63
+        },
+        {
+          "date": "2026-11-25",
+          "value": 4.61
         }
       ]
     },
     {
       "id": "ust-5y",
       "label": "US Treasury 5Y",
-      "value": 4.81,
+      "value": 4.65,
       "unit": "%",
-      "as_of": "2026-11-10",
-      "status": "error",
-      "message": "Treasury refresh failed; last verified observations retained.",
+      "as_of": "2026-11-25",
+      "status": "ok",
+      "message": null,
       "basis": "Saved Federal Reserve H.15 constant-maturity yield; percent per annum",
       "source": "Federal Reserve H.15, retrieved via FRED",
       "source_url": "https://fred.stlouisfed.org/series/DGS5",
       "source_series": "DGS5",
-      "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-27T09:11:32+08:00",
+      "checked_at": "2026-11-28T15:17:11+08:00",
+      "last_attempt": null,
       "history": [
-        {
-          "date": "2026-09-29",
-          "value": 5.06
-        },
-        {
-          "date": "2026-09-30",
-          "value": 5.09
-        },
-        {
-          "date": "2026-10-01",
-          "value": 5.01
-        },
-        {
-          "date": "2026-10-02",
-          "value": 5.06
-        },
-        {
-          "date": "2026-10-05",
-          "value": 5.06
-        },
-        {
-          "date": "2026-10-06",
-          "value": 5.03
-        },
-        {
-          "date": "2026-10-07",
-          "value": 5.03
-        },
-        {
-          "date": "2026-10-08",
-          "value": 4.99
-        },
-        {
-          "date": "2026-10-09",
-          "value": 5.02
-        },
-        {
-          "date": "2026-10-13",
-          "value": 5.0
-        },
         {
           "date": "2026-10-14",
           "value": 5.0
@@ -31183,64 +31136,64 @@
         {
           "date": "2026-11-10",
           "value": 4.81
+        },
+        {
+          "date": "2026-11-12",
+          "value": 4.95
+        },
+        {
+          "date": "2026-11-13",
+          "value": 4.98
+        },
+        {
+          "date": "2026-11-16",
+          "value": 4.93
+        },
+        {
+          "date": "2026-11-17",
+          "value": 4.9
+        },
+        {
+          "date": "2026-11-18",
+          "value": 4.89
+        },
+        {
+          "date": "2026-11-19",
+          "value": 4.86
+        },
+        {
+          "date": "2026-11-20",
+          "value": 4.71
+        },
+        {
+          "date": "2026-11-23",
+          "value": 4.74
+        },
+        {
+          "date": "2026-11-24",
+          "value": 4.69
+        },
+        {
+          "date": "2026-11-25",
+          "value": 4.65
         }
       ]
     },
     {
       "id": "ust-10y",
       "label": "US Treasury 10Y",
-      "value": 4.98,
+      "value": 4.85,
       "unit": "%",
-      "as_of": "2026-11-10",
-      "status": "error",
-      "message": "Treasury refresh failed; last verified observations retained.",
+      "as_of": "2026-11-25",
+      "status": "ok",
+      "message": null,
       "basis": "Saved Federal Reserve H.15 constant-maturity yield; percent per annum",
       "source": "Federal Reserve H.15, retrieved via FRED",
       "source_url": "https://fred.stlouisfed.org/series/DGS10",
       "source_series": "DGS10",
-      "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-27T09:11:32+08:00",
+      "checked_at": "2026-11-28T15:17:11+08:00",
+      "last_attempt": null,
       "history": [
-        {
-          "date": "2026-09-29",
-          "value": 5.26
-        },
-        {
-          "date": "2026-09-30",
-          "value": 5.29
-        },
-        {
-          "date": "2026-10-01",
-          "value": 5.24
-        },
-        {
-          "date": "2026-10-02",
-          "value": 5.28
-        },
-        {
-          "date": "2026-10-05",
-          "value": 5.31
-        },
-        {
-          "date": "2026-10-06",
-          "value": 5.27
-        },
-        {
-          "date": "2026-10-07",
-          "value": 5.28
-        },
-        {
-          "date": "2026-10-08",
-          "value": 5.22
-        },
-        {
-          "date": "2026-10-09",
-          "value": 5.24
-        },
-        {
-          "date": "2026-10-13",
-          "value": 5.21
-        },
         {
           "date": "2026-10-14",
           "value": 5.19
@@ -31320,64 +31273,64 @@
         {
           "date": "2026-11-10",
           "value": 4.98
+        },
+        {
+          "date": "2026-11-12",
+          "value": 5.1
+        },
+        {
+          "date": "2026-11-13",
+          "value": 5.15
+        },
+        {
+          "date": "2026-11-16",
+          "value": 5.12
+        },
+        {
+          "date": "2026-11-17",
+          "value": 5.1
+        },
+        {
+          "date": "2026-11-18",
+          "value": 5.07
+        },
+        {
+          "date": "2026-11-19",
+          "value": 5.04
+        },
+        {
+          "date": "2026-11-20",
+          "value": 4.92
+        },
+        {
+          "date": "2026-11-23",
+          "value": 4.92
+        },
+        {
+          "date": "2026-11-24",
+          "value": 4.91
+        },
+        {
+          "date": "2026-11-25",
+          "value": 4.85
         }
       ]
     },
     {
       "id": "ust-30y",
       "label": "US Treasury 30Y",
-      "value": 5.35,
+      "value": 5.24,
       "unit": "%",
-      "as_of": "2026-11-10",
-      "status": "error",
-      "message": "Treasury refresh failed; last verified observations retained.",
+      "as_of": "2026-11-25",
+      "status": "ok",
+      "message": null,
       "basis": "Saved Federal Reserve H.15 constant-maturity yield; percent per annum",
       "source": "Federal Reserve H.15, retrieved via FRED",
       "source_url": "https://fred.stlouisfed.org/series/DGS30",
       "source_series": "DGS30",
-      "checked_at": "2026-11-13T08:58:14+08:00",
-      "last_attempt": "2026-11-27T09:11:32+08:00",
+      "checked_at": "2026-11-28T15:17:11+08:00",
+      "last_attempt": null,
       "history": [
-        {
-          "date": "2026-09-29",
-          "value": 5.59
-        },
-        {
-          "date": "2026-09-30",
-          "value": 5.64
-        },
-        {
-          "date": "2026-10-01",
-          "value": 5.61
-        },
-        {
-          "date": "2026-10-02",
-          "value": 5.63
-        },
-        {
-          "date": "2026-10-05",
-          "value": 5.66
-        },
-        {
-          "date": "2026-10-06",
-          "value": 5.64
-        },
-        {
-          "date": "2026-10-07",
-          "value": 5.67
-        },
-        {
-          "date": "2026-10-08",
-          "value": 5.6
-        },
-        {
-          "date": "2026-10-09",
-          "value": 5.6
-        },
-        {
-          "date": "2026-10-13",
-          "value": 5.56
-        },
         {
           "date": "2026-10-14",
           "value": 5.52
@@ -31457,6 +31410,46 @@
         {
           "date": "2026-11-10",
           "value": 5.35
+        },
+        {
+          "date": "2026-11-12",
+          "value": 5.43
+        },
+        {
+          "date": "2026-11-13",
+          "value": 5.47
+        },
+        {
+          "date": "2026-11-16",
+          "value": 5.46
+        },
+        {
+          "date": "2026-11-17",
+          "value": 5.46
+        },
+        {
+          "date": "2026-11-18",
+          "value": 5.41
+        },
+        {
+          "date": "2026-11-19",
+          "value": 5.4
+        },
+        {
+          "date": "2026-11-20",
+          "value": 5.31
+        },
+        {
+          "date": "2026-11-23",
+          "value": 5.29
+        },
+        {
+          "date": "2026-11-24",
+          "value": 5.3
+        },
+        {
+          "date": "2026-11-25",
+          "value": 5.24
         }
       ]
     },
@@ -31683,10 +31676,34 @@
   ],
   "news": [
     {
+      "id": "be228449c80b3ab271e3",
+      "title": "OpenAI countersues Apple for stealing trade secrets",
+      "href": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQa0FibW0xZFFBUlJ2MGJkd0NEcWZtRzkzUkdWcFl1VnlRN2dRMkpjWHpKVXlIekttSno1b1RMeWxJN2dtU0ZlS085Y1ZqTkpfM2Jaci13RUdMNFVPOWtqRldaazVrX25mMExUSkU0SmJRcHJsdnZxMWJXU05MNXFzc211YzlXNzMwRTVUM1k1MW5RQTdHbnRpU1p6Y2hQMFE0UnVBSk45eHg?oc=5",
+      "published_at": "2026-11-27T23:00:08+00:00",
+      "tickers": [
+        "AAPL"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
       "id": "f5513e70c5f6de828b12",
       "title": "China's Weimob plans own GPU cluster with Nvidia's RTX PRO 5500",
       "href": "https://news.google.com/rss/articles/CBMitwFBVV95cUxNdDJDTURTXzhBM01qbWY1b2IyN3JBcFN5a0lLRWtWU3hndEMxT2xpRkVScDZJLW1TUXNFOWhzUnpyTkN4THlTOG9HV0hmYWU1TDlGVXhVQUdqOWRESTFZMHM0MUE1ME9LNWREc1VsWEVpcVJhaEliZWVvZG1ZckpKV3RmZlQxZlBZVWVndHlrVF8tbHR6RnNxYUhCcTNCcm54dTdkNThzbXpzeHU0NTdwN2dCVFNaQWs?oc=5",
       "published_at": "2026-11-26T11:00:40+00:00",
+      "tickers": [
+        "NVDA"
+      ],
+      "source": "Reuters",
+      "match_basis": "Explicit company ticker in saved headline metadata",
+      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
+    },
+    {
+      "id": "62363c3d7a0bb3d02f56",
+      "title": "Nvidia halts server shipments to four Southeast Asian countries, FT reports",
+      "href": "https://news.google.com/rss/articles/CBMirAFBVV95cUxOM1ZtZ1FmQ3d0Nk9xZzFmaDNtd3ZURjZ1cm1sWkptUktqcm1aOUc3eWpIYjVpUGoxWGxWd2FjRTZiTzBGRGtaTTA3ZUFsTEJLNk5BV3VfV2VKNHJVbk1mTDJqYkZkdEFPQ09jdzVHRzBHazlKVko5bVp4WDZMSUpUaEpyZk5ZUUUxbm42MjBIRWJCaGZzVXRkNklKN2dfdDRES3RwazQ1UU55Q3Bf?oc=5",
+      "published_at": "2026-11-26T05:09:00+00:00",
       "tickers": [
         "NVDA"
       ],
@@ -31731,30 +31748,6 @@
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     },
     {
-      "id": "5c486d3b1bc21dfb1a27",
-      "title": "Nvidia agrees to settle 2018 US investor class action for $290 million",
-      "href": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQQ2cwWG1mYkVmSG5oSTgwZmcxcVY5SWg2ak5aTHBtbG1qWHVvcGxjOGQzTFZKZkNSdWgtOHJtbW1BenVtTWc2UmFrOFpHbTV1Mnh5MWgxWk00R0NrVG5PX0hkNWxmczRRLWdnRUtvRFBhMzVzZUlRN0FXRFVJYlNTVUJaT1U3eVY4SUwtNFd2a1MweTlBZW1ReG9mU0pQa2ZUd3RnaEZtMXNyQmhxeDV0SGN1eWRGcDN2UExZ?oc=5",
-      "published_at": "2026-11-25T17:36:16+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "288837ab599ecfa6ed12",
-      "title": "Nvidia faces questions from top Senate antitrust Democrat",
-      "href": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOSkxEekVURGxkMXlGUkRxVVNrQ0s1NHJyRjkwMS1jU09nU2xmSVhuSDVCTHotVXgtdWdtMTV4MDE0cGNpSENxdUlMREtQR3BxUl95RTc2aXBsbkRROUNtbzlNb1ZJZTB0S2VBQkJqUjJJZjNpblA4SF9uT213SmhvRlluVUxxRFVkNzZ2QkNHdVFONzUzaV9xN0V5ajNRYWF5dzJxZGx3Nk4?oc=5",
-      "published_at": "2026-11-25T16:31:18+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
       "id": "920941495612b7e1a49f",
       "title": "S&P warns Nvidia's board may be compromised, puts chipmaker's rating on downgrade watch",
       "href": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxNb1ZBby1iVDJnTmJwX3hDYWJpU2lxTUdLTHdlWHFqRHJUcmtTOWFuQkFRTlUyZTJBcGdNMWR3N3d1YlJIV05kWk1mU21JSDZmSVpZR1BlanpqRzFXSkg3NkxkeElWcHM0Q2Y4eFJKb3Fha29XakxYNFJ4cXExZHo4MFVDOHdDbENrQWs0d0lqQ3Z5cEVDRVBQR1hNNWZxSmhiUll4NFg1amZlU01oWm9fN2hkUFBBNkdKT21v?oc=5",
@@ -31765,93 +31758,9 @@
       "source": "Reuters",
       "match_basis": "Explicit company ticker in saved headline metadata",
       "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "de27290ae54443e34ac7",
-      "title": "COMMENTARY: Icarus stock Nvidia sends chill to US savers",
-      "href": "https://news.google.com/rss/articles/CBMirwFBVV95cUxQZGNhQkVCTVBwNVBld3ltcU5FUEI2d1c3M2N5ZW41eUdjX2VtRkRqaWFtUGZQQ194czdhQ2phQ1RHODZzTTFiTC1wY3hyanFNelFpN1hfMUVOR1lSeUVsc3NFRmpvdnBFcmVLa3lSc0VlS0R3WEs4eW43bWRNRjc3YlFHYjJQSWMzOEtINThCQlpjSko1Zm95dzZQeTZlaHhPQk9wMVNCVlhHdmRlQjE4?oc=5",
-      "published_at": "2026-11-25T07:00:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "9cfd471d5a8f66ec4616",
-      "title": "Dollar slips as Nvidia-fueled AI rally fades",
-      "href": "https://news.google.com/rss/articles/CBMinwFBVV95cUxQWk01SnRnY1hzWHBOdlQ5eGdldmlIQkd5QUM4SFJ5S3Z5YWtVQnlYWVp3LXlqajM1QTA5UTBBSFNrOFdjVGdWME54WUJYdFRGUXJDYlVmUDFETjlITTZtYkFiWW9IcU9sVTM0R0otbjlmMXNCdC1HSEVNOXJMaDlIMC1YUnFBUDZNMXh6RlRwMVM5MDFRTy1YQXc3U21zYU0?oc=5",
-      "published_at": "2026-11-25T01:17:55+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "75611aa12fdc6ad8cea9",
-      "title": "US stocks slide as Nvidia rally fizzles out, dollar falls",
-      "href": "https://news.google.com/rss/articles/CBMigwFBVV95cUxPVGQ3cVhHXzJBLXEybDVWX21xeWcxbUVEOHA1ZV9IU0lacEM2a3dKbmFLSGk2Y1MwLXk0OVFzWV8yT1JNQ3FnX3hWNGxidEZvbDZwTl8tdjNoUDV6MU45ZnJSa3lSMnZJNXdwWk5VRUFOYzJlTk11TmZaS1hocXhPVUE4bw?oc=5",
-      "published_at": "2026-11-24T23:33:16+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "c54a26c5a870073f6ce5",
-      "title": "Trading Day: Nvidia bounce fades",
-      "href": "https://news.google.com/rss/articles/CBMipgFBVV95cUxPY0FNNm9mVjIxcnlXT3czU2xOVGZlSzNmZURtXzMzdjZERU1wQjFodjV0QlRZZUpSdEJGUWFsMlcwYnBFaXAwZGhvVkk2Z0x4Z3gzUVZESTJDbkEzV0JvU2pHaktSMWdjVnZoekEzOElIcjlOZWRiM0JWbGZpemNHbWVQTGdUYlgyQ2JwZXVtemg3aG50MVEtQ1MxbnFXMGRxdmVxRzJ3?oc=5",
-      "published_at": "2026-11-24T22:18:25+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "d639955c39cfd6f87a13",
-      "title": "EXCLUSIVE: Microsoft declares 'Code Red' after historic outage, internal memos show",
-      "href": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOZWlZRm9kdXdaMDkwUWdXZVZPM2NTakFfZTFDa3Iwcm5yNXh4enZZVWRpWjBuc2ZpVERzOElVc0h5NjY4eXZnb0w5YUZ4Wm1nRmUwd04xQmNKZDQxOFlQWk12N0FCd3hSQTVLVFFWZmJKbm01S0pCM1AwRXVRZklpdWJfdkJ1N0FDdS1EZGNqTzd4WjZoUy1qZ1QwNktXdUlMWlBDYW9jYlozNEVDV01DSGZlVVc?oc=5",
-      "published_at": "2026-11-24T16:11:00+00:00",
-      "tickers": [
-        "MSFT"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "b3356859abb78a553952",
-      "title": "COMMENTARY: Trump's Nvidia intervention rips up Wall Street playbook",
-      "href": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQczdXX09VbktzSHB2LWVWdy1ZR3d0OTlhbGpndW9HU3ZzWjU0VXZwNzI5M0pFYXhXM0pOSS01REQxeG9rUG9kekdqbzdQdEttaDZ1YUVqSjFBc0xCSk45SnlyQ3ZHeXNlX2RYLUk1aVhuSU9hLTAxMjFoc3pYS3loNWZDLXdIUXFKd2xqcVJOMFVUMFhlOXA1TDd5UVgySHU1d3hwZ3BhTlFxOVc5OEl0UGVfRnUtVEJvZE5zZW82SXU3RmViQnp6Zl9kdkRYZw?oc=5",
-      "published_at": "2026-11-24T14:04:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
-    },
-    {
-      "id": "5d9d2da0e259df5e098e",
-      "title": "Nasdaq, S&P 500 slip following Monday's Nvidia-fueled rally",
-      "href": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQSTdTSVk1YVg0WC1SRVJKVW1XYTZJbjRhRVctYkNzZHZRcW5TaVE3MVdSd2JfYUNaV3otX1FzR1lxYkwyWWZtbS1ONDdiem9UVUI0ckV6c2tiOEt0TGViNlUxZFdSeDV0aVJ4cjZkSkE5Nk9veE1UTmxad0xxaXhScndGMV9IdWVrNUpOQnY0Y0hXVmpZVFgwbTFQMDZiX0NqdExaejlYMzJnbjg?oc=5",
-      "published_at": "2026-11-24T10:52:00+00:00",
-      "tickers": [
-        "NVDA"
-      ],
-      "source": "Reuters",
-      "match_basis": "Explicit company ticker in saved headline metadata",
-      "coverage": "publisher metadata in Google News RSS; article body not reproduced"
     }
   ],
-  "news_generated_at": "2026-11-27T09:11:32+08:00",
+  "news_generated_at": "2026-11-28T15:17:11+08:00",
   "news_status": "ok",
   "calls": [
     {
