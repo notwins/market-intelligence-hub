@@ -629,13 +629,45 @@
   @page nvda-full-report {
     size: A4 landscape;
     margin: 11mm 12mm;
+    @bottom-left {
+      content: "NVDA  /  MARKET INTELLIGENCE HUB";
+      font: 650 7pt "DM Sans", sans-serif;
+      letter-spacing: .09em;
+      color: #61766a;
+    }
     @bottom-right {
       content: counter(page);
       font: 8pt "DM Sans", sans-serif;
       color: #385447;
     }
   }
-  .nv-print-toc { width: min(100%, 180mm); margin: 9mm 0 0; break-inside: avoid; }
+  .nv-print-full .nv-print-intro { gap: 4mm; }
+  .nv-print-full .nv-print-intro > img { width: 13mm; height: 13mm; }
+  .nv-print-full .nv-print-intro h1 { font-size: 20pt; }
+  .nv-print-toc { position: relative; width: min(100%, 180mm); margin: 9mm 0 0; break-inside: avoid; }
+  .nv-print-toc::before, .nv-print-toc::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+  .nv-print-toc::before {
+    left: calc(100% + 14mm);
+    top: 15mm;
+    width: 68mm;
+    height: 68mm;
+    border: .3mm solid #e8efe3;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f2f7ee 35%, #fafbf8 70%);
+  }
+  .nv-print-toc::after {
+    left: calc(100% + 28mm);
+    top: 29mm;
+    width: 40mm;
+    height: 40mm;
+    transform: rotate(-9deg);
+    mask: var(--hist-chip) center / contain no-repeat;
+    background: #dce8d6;
+  }
   .nv-print-toc h2 { font: 620 23pt/1.08 var(--nv-serif); margin: 0 0 3mm; }
   .nv-print-toc ul { list-style: none; padding: 0; margin: 0; }
   .nv-print-toc li { margin-bottom: 1.4mm; }
