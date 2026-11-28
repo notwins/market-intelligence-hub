@@ -1,0 +1,32 @@
+.xm-lab{border-top:3px solid #a47535}
+.xm-lab #xm-status{margin:0 0 .8rem;font-size:.9rem}
+.xm-fields{margin-bottom:.55rem}
+.xm-windows{margin-bottom:1rem}
+.xm-windows button{font-size:.86rem}
+.xm-lab .gold-kpis{margin:1rem 0 1.25rem!important}
+.xm-main,.xm-charts figure{min-width:0}
+.xm-main h3,.xm-charts h3{margin-bottom:.55rem}
+.xm-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.35rem;margin-top:1.25rem}
+.xm-charts figure{border:1px solid var(--line);border-radius:.65rem;padding:clamp(.75rem,2vw,1.2rem)}
+.xm-chart svg{max-width:100%;overflow:visible}
+.xm-chart svg text,.china-card .xm-chart svg text{font-size:12px}
+.xm-chart svg .xm-series-label{font-weight:760;fill:var(--ink);font-size:13px}
+.xm-chart .xm-grid,.xm-chart .xm-zero,.xm-chart .xm-crosshair{fill:none;stroke:#dce5d9;stroke-width:1}
+.xm-chart .xm-zero{stroke:#a0afa3}
+.xm-chart .xm-crosshair{stroke:#617469;stroke-dasharray:4 4}
+.xm-chart .xm-gold,.xm-chart .xm-driver{fill:none;stroke:#986627;stroke-width:2.15;stroke-linejoin:round}
+.xm-chart .xm-driver{stroke:#206957}
+.xm-dot{fill:#347c6a;fill-opacity:.46}
+#xm-scatter .xm-dot{cursor:pointer}
+.xm-dot-selected{fill:#ae6929;fill-opacity:1;stroke:white;stroke-width:1.5;r:6px}
+.xm-footer{display:flex;align-items:center;flex-wrap:wrap;gap:.8rem 1.2rem;margin-top:1.15rem}
+.xm-footer p{flex:1 1 300px}
+.xm-physical{margin-top:1rem}
+.xm-physical-head{display:flex;align-items:start;justify-content:space-between;gap:.85rem 1.6rem;flex-wrap:wrap}
+.xm-physical-head>div{max-width:65ch}
+.xm-physical-stat{display:grid;gap:.15rem;text-align:right}
+.xm-physical-stat strong{font:600 1.65rem/1.1 var(--serif);color:#5c4628}
+.xm-physical-stat span{font-size:.86rem;color:var(--muted)}
+@media(max-width:55rem){.xm-charts{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:35rem){.xm-physical-stat{text-align:left}.xm-lab .gold-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.xm-lab .gold-kpis div:last-child{grid-column:1/-1}}
+@media print{.xm-fields,.xm-windows,#xm-drivers,#xm-month,#xm-download{display:none}.xm-charts figure,.xm-physical{break-inside:avoid}}
