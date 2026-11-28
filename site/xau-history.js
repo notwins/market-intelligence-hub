@@ -207,7 +207,7 @@
     '2020-2022':[['2020',272.9],['2022',1136]],
     '2022-2026':[['2022',1136],['2025',863],['Jan–Sep 2026',675]]
   };
-  const replayHref=(id,phase)=>'tools/gld-strategy.html?replay='+id+'&phase='+phase+'#path-history-replay';
+  const replayHref=(id,phase)=>'tools/gld-strategy.html?mode=historical&regime='+id+'&phase='+phase+'#path-history-replay';
 
   function measure(base, window, candidates, kind) {
     const ranked=candidates.filter(Boolean).map(series=>({series,rows:model.pairs(base,series.points,window.start,window.end,false)}));

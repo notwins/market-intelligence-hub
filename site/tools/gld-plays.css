@@ -355,7 +355,3 @@
   .flow-section, .history-context, .gld-barriers { break-inside: avoid; }
   .flow-routes button { min-height: auto; padding: .2rem .4rem; }
 }
-
-.play-replay-scrub{display:grid;grid-template-columns:auto minmax(7rem,1fr) minmax(13rem,auto);gap:.3rem .75rem;align-items:center;margin:.6rem 0;color:var(--green);font-size:.9rem}
-.play-replay-scrub input{width:100%;accent-color:var(--green)}
-@media(max-width:40rem){.play-replay-scrub{grid-template-columns:auto minmax(0,1fr)}.play-replay-scrub output{grid-column:1/-1}}

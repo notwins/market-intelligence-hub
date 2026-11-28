@@ -1,6 +1,15 @@
 'use strict';
 (() => {
   const params = new URLSearchParams(location.search);
+  let replayMode = params.get('mode') === 'historical';
+  function readRegime(query) {
+    const id=query.get('regime'),phase=query.get('phase')??'cycle';
+    return XauRegimes.periods.some(p=>p.id===id)&&Object.hasOwn(XauRegimes.phases,phase)?{id,phase}:null;
+  }
+  let regimeRequest=replayMode?readRegime(params):null, regimeData, gldHistory=[];
+  function regimeHref(id,phase) {
+    return '?mode=historical&regime='+id+'&phase='+phase+'#path-history-replay';
+  }
   if (['strike','ko','guarantee','days','spot'].some(key=>params.has(key))) {
     location.replace('gld-strategy-detail.html'+location.search+location.hash);
     return;
@@ -25,18 +34,20 @@
   const post={acc:'Hold shares and cash',hold:'Add GLD outright',roll:'Roll the refund',decu:'Covered decu',wait:'Wait for a dip',staged:'Add in stages'};
   const short={hold:'Buy GLD',acc:'Accu + hold',roll:'Roll',decu:'Covered decu',wait:'Wait',staged:'Staged buys'};
   const structureKeys=['acc','roll','decu'];
-  const units=()=> $('units').value;
+  const units=()=> replayMode?'gld':$('units').value;
   const getY=(p,unit)=>unit==='xau'?p.xau:p.price;
   const unitLabel=()=>units()==='xau'?'XAU equivalent · USD/oz':'GLD · USD/share';
   const quoteId=i=>'Q'+String(i+1).padStart(2,'0');
   const quoteLabel=(q,i)=>quoteId(i)+' · '+q.months+'m · '+q.ko+'% KO · '+q.strike+'% buy · '+q.guarantee+'m guaranteed';
   const panels=new Map();
-  let quotes=[], sheet, gld, xau, config, version=0, gldSeries=[], replayGold, replayGoldPromise;
+  let quotes=[], sheet, gld, xau, config, version=0;
   const overrides=new Map();
 
   const historical = new Map();
+  const replays = new Map();
   const dateFormat = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
   const dateLabel = day => dateFormat.format(new Date(day+'T00:00:00Z'));
+  const fixingLabel = (panel,day) => panel.path.dates?dateLabel(panel.path.dates[day]):readableTime(day);
   const actionIcons = {acc:'hold',hold:'buy',roll:'roll',decu:'decu',wait:'wait',staged:'staged'};
   const icon = name => GldPlayVisuals.icon(name);
   const svgNode = (name,attributes,text) => {
@@ -92,7 +103,13 @@
     }
     const link=node('a','Source · GLD daily closes','history-link');link.href='../data/metals/gld.csv';
     const issuer=node('a','SPDR historical archive','history-link');issuer.href='https://www.spdrgoldshares.com/usa/gld/';
-    copy.append(measures,link,document.createTextNode(' · '),issuer);inside.append(copy,historicalChart(data));box.append(heading,inside);return box;
+    copy.append(measures,link,document.createTextNode(' · '),issuer);
+    if(!replayMode){
+      const replay=node('a','Replay every quote on these closes','history-link history-launch');
+      replay.href='?mode=historical#path-'+id;
+      const next=node('p');next.append(replay);copy.append(next);
+    }
+    inside.append(copy,historicalChart(data));box.append(heading,inside);return box;
   }
 
   const choices={
@@ -112,10 +129,10 @@
     if(!flowCase)return;
     const {panel,index,day}=flowCase,run=panel.runs[index],balance=run.postKo;
     const marked=GldPlays.atDay(run,day,true).outcomes[flowKey];
-    const when=selectedPoint(panel,day).label.toLowerCase();
+    const when=panel.path.dates?dateLabel(panel.path.dates[day]):selectedPoint(panel,day).label.toLowerCase();
     const result=marked.eligible?'By '+when+', its P&L since KO is '+pl(marked.pnl)+'.':marked.status;
     const example=node('span',quoteId(index)+' on the '+panel.path.label.toLowerCase()+' path holds '+balance.shares+' shares and '+money(balance.cash)+
-      ' cash at KO on fixing '+balance.day+'. '+result,'flow-numbers');
+      ' cash at KO on '+(panel.path.dates?fixingLabel(panel,balance.day):'fixing '+balance.day)+'. '+result,'flow-numbers');
     output.append(document.createTextNode(' '),example);
     link.href='#'+panel.section.id;
   }
@@ -156,13 +173,14 @@
       decu:{strike:num('sale-strike'),ko:num('sale-ko'),days:num('sale-days'),coveragePct:num('cover'),minEntryPrice:num('trigger'),gear:Number($('gear').value)}};
     if($('roll-mode').value==='custom') c.roll={strike:num('roll-strike'),ko:num('roll-ko'),days:num('roll-days'),guaranteeDays:num('roll-g')};
     const spot=num('spot',gld?.close);
-    if(!Number.isFinite(spot)||spot<=0) throw Error('Enter a starting GLD price greater than zero.');
+    if(!replayMode&&(!Number.isFinite(spot)||spot<=0)) throw Error('Enter a starting GLD price greater than zero.');
     if(c.reserve>c.budget) throw Error('The cash floor exceeds the starting cash budget.');
     if(c.budget===0 && !c.openingShares) throw Error('Enter a cash budget or an opening GLD holding.');
     if(c.roll && c.roll.guaranteeDays>c.roll.days) throw Error('The rollover guarantee exceeds its number of fixings.');
     return {terms:c,spot,years:Number($('years').value),xauSpot:xau?.usd_per_oz};
   }
   function pricePath(id,changes,cfg=config) {
+    if(replayMode) return replays.get(id);
     return GldPlayPaths.build({id,spot:cfg.spot,years:cfg.years,xauSpot:cfg.xauSpot,overrides:changes??{}});
   }
   function simulate(path) {return quotes.map(q=>GldPlays.runQuote(config.terms,q,path.prices));}
@@ -191,10 +209,14 @@
     return who+' · '+(full?ids.join(', '):ids[0]+(ids.length>1?' + '+(ids.length-1)+' tied quotes':''));
   }
   function selectedPoint(panel,day) {
+    if(panel.path.dates){
+      const value=panel.path.prices[day];
+      return {day,label:dateLabel(panel.path.dates[day]),price:value,xau:null,returnPct:(value/panel.path.prices[0]-1)*100};
+    }
     const original=panel.path.checkpoints.find(p=>p.day===day);
     if(original) return original;
     const v=panel.path.prices[day],f=v/panel.path.prices[0];
-    return {day,label:panel.path.dates?.[day]?dateLabel(panel.path.dates[day]):'Fixing '+day,price:v,xau:config.xauSpot?config.xauSpot*f:null,returnPct:(f-1)*100};
+    return {day,label:'Fixing '+day,price:v,xau:config.xauSpot?config.xauSpot*f:null,returnPct:(f-1)*100};
   }
   function timeline(panel) {
     const days=new Set(panel.path.checkpoints.map(p=>p.day));
@@ -205,9 +227,7 @@
   }
   function stepName(panel,point) {
     const exit=panel.runs[panel.selected].firstExit;
-    const observed=panel.path.dates?.[point.day];
-    const label=observed&&point.label!==dateLabel(observed)?point.label+' · '+dateLabel(observed):point.label;
-    return (exit && exit.day===point.day ? (exit.type==='ko'?'KO · ':'Maturity · '):'')+label;
+    return (exit && exit.day===point.day ? (exit.type==='ko'?'KO · ':'Maturity · '):'')+point.label;
   }
   function changeDay(panel,day,move=false,focus=false) {
     panel.day=day;
@@ -220,21 +240,21 @@
   function readableTime(day) {return day===0?'Entry':'Fixing '+day;}
   function makeChart(panel,points) {
     const svg=svgNode;
-    const unit=units(),raw=panel.path.checkpoints, values=raw.map(p=>getY(p,unit)),q=quotes[panel.selected];
-    const displayPrices=panel.path.replay?panel.path.prices.map(v=>unit==='xau'?config.xauSpot*v/panel.path.prices[0]:v):values;
+    const unit=units(),raw=panel.path.checkpoints,live=Boolean(panel.path.dates||panel.path.proxy);
+    const values=live?panel.path.prices:raw.map(p=>getY(p,unit)),q=quotes[panel.selected];
     const start=values[0], exit=panel.runs[panel.selected].firstExit;
     const levels=[q.strike,q.ko].map(n=>start*n/100);
-    const low=Math.max(0,Math.min(...displayPrices,...levels)*.97),high=Math.max(...displayPrices,...levels)*1.035;
-    const x0=56,x1=558,top=13,bottom=111, n=raw.length-1;
+    const low=Math.max(0,Math.min(...values,...levels)*.97),high=Math.max(...values,...levels)*1.035;
+    const x0=56,x1=558,top=13,bottom=111, n=values.length-1;
     const y=v=>bottom-(bottom-top)*(v-low)/(high-low||1);
     const xx=i=>x0+(x1-x0)*i/n;
     const dx=day=>{
-      if(panel.path.replay)return x0+(x1-x0)*day/(displayPrices.length-1);
+      if(live)return xx(day);
       if(day<=0)return xx(0);
       const i=raw.findIndex(p=>p.day>=day); if(i<1)return xx(n);
       return xx(i-1+(day-raw[i-1].day)/(raw[i].day-raw[i-1].day));
     };
-    const out=svg('svg',{viewBox:'0 0 578 137',role:'img','aria-label':panel.path.label+' price path in '+unitLabel()+'. Selected '+readableTime(panel.day)});
+    const out=svg('svg',{viewBox:'0 0 578 137',role:'img','aria-label':panel.path.label+' price path in '+unitLabel()+'. Selected '+fixingLabel(panel,panel.day)});
     const textAttrs={'font-family':'system-ui,sans-serif','font-size':10,fill:'#455e51'};
     for(let i=0;i<3;i++) {
       const val=low+(high-low)*i/2;
@@ -242,14 +262,15 @@
     }
     const lastDay=Math.min(exit?.day??q.days,raw.at(-1).day);
     levels.forEach((v,i)=>out.append(svg('path',{d:'M'+x0+' '+y(v)+'H'+dx(lastDay),stroke:i?'#986326':'#397161','stroke-dasharray':i?'4 3':'1.5 2','stroke-width':1.5})));
-    const parts=displayPrices.map((v,i)=>(panel.path.replay?dx(i):xx(i)).toFixed(2)+','+y(v).toFixed(2));
+    const parts=values.map((v,i)=>xx(i)+','+y(v));
     out.append(svg('polygon',{points:x0+','+bottom+' '+parts.join(' ')+' '+x1+','+bottom,fill:'#668b69','fill-opacity':.13}),
       svg('polyline',{points:parts.join(' '),stroke:'#1e654e','stroke-width':2.6,fill:'none','stroke-linejoin':'round'}));
-    raw.forEach((p,i)=>out.append(svg('circle',{cx:dx(p.day),cy:y(values[i]),r:2.5,fill:'#286d54'})));
+    if(!live)raw.forEach((p,i)=>out.append(svg('circle',{cx:xx(i),cy:y(values[i]),r:2.5,fill:'#286d54'})));
+    if(live&&exit?.type==='ko')out.append(svg('circle',{cx:dx(exit.day),cy:y(values[exit.day]),r:3.5,fill:'#986326'}));
     const mark=selectedPoint(panel,panel.day);
     out.append(svg('line',{x1:dx(mark.day),x2:dx(mark.day),y1:top,y2:bottom,stroke:'#536c5b','stroke-dasharray':'3 4'}),
       svg('circle',{cx:dx(mark.day),cy:y(getY(mark,unit)),r:4,fill:'#9a692c',stroke:'white','stroke-width':1.3}));
-    for(const i of [0,Math.floor(n/2),n])out.append(svg('text',{...textAttrs,x:dx(raw[i].day),y:130,'text-anchor':i===0?'start':i===n?'end':'middle'},raw[i].label));
+    for(const i of [0,Math.floor(n/2),n])out.append(svg('text',{...textAttrs,x:xx(i),y:130,'text-anchor':i===0?'start':i===n?'end':'middle'},panel.path.dates?dateLabel(panel.path.dates[i]):panel.path.proxy?'Fixing '+i:raw[i].label));
     panel.chart.replaceChildren(out);
   }
   function makeStrip(panel,points) {
@@ -273,7 +294,7 @@
     panel.prev.disabled=i===0; panel.next.disabled=i===points.length-1;
     const exit=panel.runs[panel.selected].firstExit;
     panel.toExit.hidden=!exit;
-    if(exit) panel.toExit.textContent='Go to '+(exit.type==='ko'?'KO':'maturity')+' · '+exit.day;
+    if(exit) panel.toExit.textContent='Go to '+(exit.type==='ko'?'KO':'maturity')+' · '+(panel.path.dates?fixingLabel(panel,exit.day):exit.day);
     panel.pick.value=String(panel.selected);
   }
   function sorted(rows,mode) {
@@ -288,7 +309,7 @@
   function table(panel,points) {
     const all=snapshot(panel,panel.day), type=panel.view.value, sum=type==='at';
     const columns=sum?['Saved quote','First leg',...keys.map(k=>pre[k]),'Highest P&L']:
-      ['Saved quote',...panel.path.checkpoints.map(p=>p.label)];
+      ['Saved quote',...panel.path.checkpoints.map(p=>panel.path.dates?fixingLabel(panel,p.day):p.label)];
     panel.thead.replaceChildren();
     const header=node('tr');
     columns.forEach((v,index)=>{
@@ -310,7 +331,7 @@
         const run=panel.runs[i], exit=run.firstExit;
         const entry=run.strategies.find(s=>s.key==='acc').events[0];
         const state=entry.type==='skip'?'Insufficient funding':exit&&exit.day<=panel.day?
-          (exit.type==='ko'?'KO':'Maturity')+' · '+exit.day:'Open';
+          (exit.type==='ko'?'KO':'Maturity')+' · '+(panel.path.dates?fixingLabel(panel,exit.day):exit.day):'Open';
         tr.append(node('td',state),...keys.map(k=>pnlCell(r.outcomes[k])));
         const cell=node('td',r.leaders.length>1?r.leaders.length+' tied':short[r.leaders[0]]??'—','play-winner');
         cell.append(node('small',pl(leadersOne(r).value)));
@@ -352,7 +373,7 @@
           const s=result.outcomes[key],advantage=s.pnl-held;
           const different=Object.values(result.outcomes).some(x=>x.eligible&&x.pnl<s.pnl-.005);
           if(!different || (key!=='acc'&&advantage<.005)) continue;
-          examples.set(key,{i,day:point.day,label:point.label,advantage,pnl:s.pnl,joint:result.leaders.length>1});
+          examples.set(key,{i,day:point.day,label:panel.path.dates?fixingLabel(panel,point.day):point.label,advantage,pnl:s.pnl,joint:result.leaders.length>1});
         }
       });
     }
@@ -372,7 +393,7 @@
     const i=panel.selected,q=quotes[i],run=panel.runs[i],exit=run.firstExit,day=panel.day;
     const acc=run.strategies.find(s=>s.key==='acc'),buy=acc.events[0];
     const children=[];
-    children.push(node('h3','Inside '+quoteId(i)+' · '+q.months+' months'));
+    children.push(node('h3','Inside '+quoteId(i)+' · '+q.months+' months'+(panel.path.dates?' · '+fixingLabel(panel,day):'')));
     children.push(node('p','Buy strike '+price(buy.strike)+' · upper KO '+price(buy.ko)+' · '+q.days+' fixings · '+GldPlays.quoteTerms(q).guaranteeDays+
       ' estimated guaranteed fixings'+(buy.type==='open'?' · '+buy.lot+(buy.lot===1?' share':' shares')+'/fixing · maximum purchase cost '+price(buy.maxPurchaseCost)+'.':'.'),'play-note'));
     if(Number.isFinite(buy.strike)&&Number.isFinite(buy.ko)){
@@ -383,16 +404,16 @@
       children.push(node('p',buy.message+' The direct GLD and cash alternatives remain available according to their own sizing rules.','play-warning'));
     } else if(!exit||day<exit.day){
       const remaining=Math.max(0,q.days-day), del=buy.lot*day, cost=del*buy.strike;
-      children.push(node('p','At '+readableTime(day).toLowerCase()+', the first accumulator is open. '+del.toLocaleString('en-US')+' shares have accrued at the buy strike for '+money(cost)+
+      children.push(node('p','At '+(panel.path.dates?fixingLabel(panel,day):readableTime(day).toLowerCase())+', the first accumulator is open. '+del.toLocaleString('en-US')+' shares have accrued at the buy strike for '+money(cost)+
         '. Up to '+(remaining*buy.lot).toLocaleString('en-US')+' more shares can be bought over '+remaining+' fixings if GLD stays below '+price(buy.ko)+'.','play-summary'));
     } else {
-      children.push(node('p',(exit.type==='ko'?'Upper KO':'Ordinary maturity')+' on fixing '+exit.day+' at GLD '+price(exit.price)+'. This leg bought '+exit.quantity+
+      children.push(node('p',(exit.type==='ko'?'Upper KO':'Ordinary maturity')+' on fixing '+exit.day+(panel.path.dates?' ('+fixingLabel(panel,exit.day)+')':'')+' at GLD '+price(exit.price)+'. This leg bought '+exit.quantity+
         ' shares. Total holdings were '+exit.shares+' shares and cash was '+price(exit.cash)+', including '+price(exit.refund)+' released from funding.','play-summary'));
     }
     const inset=node('div',null,'play-detail');
     if(run.postKo && day>=exit.day){
       const marked=GldPlays.atDay(run,day,true), bench=marked.outcomes.acc;
-      inset.append(node('h3','Decision after KO · fixing '+exit.day),node('p','Every choice starts with '+price(run.postKo.initialWealth)+' at KO. The figures below are additional P&L through '+readableTime(day).toLowerCase()+'.','play-note'));
+      inset.append(node('h3','Decision after KO · '+(panel.path.dates?fixingLabel(panel,exit.day):'fixing '+exit.day)),node('p','Every choice starts with '+price(run.postKo.initialWealth)+' at KO. The figures below are additional P&L through '+(panel.path.dates?fixingLabel(panel,day):readableTime(day).toLowerCase())+'.','play-note'));
       if(marked.leaders.length){
         const top=marked.outcomes[marked.leaders[0]], spread=top.pnl-bench.pnl;
         inset.append(node('p',(marked.leaders.length===1?post[marked.leaders[0]]+' leads':marked.leaders.map(k=>post[k]).join(' / ')+' are tied')+
@@ -426,7 +447,7 @@
       const items=s.events.filter(e=>e.day<=day);
       events.replaceChildren(node('p','Portfolio value '+price(asOf.value)+' · cumulative P&L '+pl(asOf.pnl)+'. '+asOf.status,'play-note'));
       const ul=node('ul');
-      for(const e of items){ul.append(node('li',readableTime(e.day)+' · GLD '+price(e.price)+' · '+e.message+
+      for(const e of items){ul.append(node('li',fixingLabel(panel,e.day)+' · GLD '+price(e.price)+' · '+e.message+
         ' Cash '+price(e.cash)+' and '+e.shares+' shares at this event.'));}
       events.append(ul);
       if(day===panel.path.prices.length-1)events.append(node('p','End cash '+price(s.cash)+' · GLD shares '+s.shares+' · maximum drawdown '+s.maxDrawdownPct.toFixed(1)+'%.'+
@@ -435,16 +456,18 @@
     selector.addEventListener('change',displayEvents);displayEvents();ledger.append(toolbar,events);children.push(ledger);
     panel.detail.replaceChildren(...children);
   }
-  function showReplayFixing(panel,day) {
-    const observed=panel.path.dates[day];
-    panel.fixing.readout.textContent=(observed?dateLabel(observed)+' · ':'')+'Fixing '+day+' · '+price(panel.path.prices[day])+' GLD';
-  }
   function paint(panel) {
-    if(panel.fixing){panel.fixing.range.value=panel.day;showReplayFixing(panel,panel.day);}
     const points=timeline(panel),mark=selectedPoint(panel,panel.day);
     makeChart(panel,points);makeStrip(panel,points);reportLeaders(panel);
-    panel.chartCaption.textContent=unitLabel()+(panel.path.replay?' · '+panel.path.basis+' · elapsed fixings.':' · equally spaced checkpoints.')+
-      ' Dashed lines show '+quoteId(panel.selected)+' buy strike and upper KO during its first term.';
+    panel.chartCaption.textContent=(panel.path.proxy?'Gold-price proxy in USD/share · elapsed model fixings.':panel.path.dates?'Recorded GLD closes in USD/share, one per trading session.':unitLabel()+' · equally spaced checkpoints.')+' Dashed lines show '+quoteId(panel.selected)+' buy strike and upper KO during its first term.';
+    if(panel.board) GldReplayBoard.select(panel.board,panel.selected,panel.day);
+    if(panel.slider){
+      panel.slider.value=panel.day;
+      panel.dateReadout.value=fixingLabel(panel,panel.day)+' · '+price(mark.price);
+      panel.slider.setAttribute('aria-valuetext',panel.dateReadout.value);
+      panel.backSession.disabled=panel.day===0;
+      panel.nextSession.disabled=panel.day===panel.path.prices.length-1;
+    }
     panel.caption.textContent=panel.view.value==='at'?
       'Total P&L from entry at '+stepName(panel,mark)+' · '+quotes.length+' quotes. Select a row to inspect its cash, KO and next decisions below.':
       'P&L from entry at each checkpoint · '+quotes.length+' quotes. Scroll right for the later years. Rankings use the currently inspected fixing.';
@@ -476,12 +499,45 @@
     panel.warning.hidden=true;
     panel.desc.textContent=path.description;editPrices(panel);koExamples(panel);paint(panel);updateFlowCase();
   }
+  function dailyControls(panel) {
+    const bar=node('div',null,'replay-day-controls'),label=node('label',panel.path.proxy?'Inspect a model fixing':'Inspect any trading close');
+    const slider=node('input'),output=node('output');
+    slider.type='range';slider.min=0;slider.max=panel.path.prices.length-1;slider.step=1;
+    slider.id='session-'+panel.id;output.htmlFor=slider.id;
+    slider.addEventListener('input',()=>{
+      output.value=fixingLabel(panel,Number(slider.value))+' · '+price(panel.path.prices[Number(slider.value)]);
+      slider.setAttribute('aria-valuetext',output.value);
+    });
+    slider.addEventListener('change',()=>changeDay(panel,Number(slider.value),true));
+    panel.slider=slider;panel.dateReadout=output;
+    panel.backSession=button(panel.path.proxy?'Previous fixing':'Previous close',()=>changeDay(panel,panel.day-1,true));
+    panel.nextSession=button(panel.path.proxy?'Next fixing':'Next close',()=>changeDay(panel,panel.day+1,true));
+    label.append(slider);bar.append(label,output,panel.backSession,panel.nextSession);return bar;
+  }
   function createPanel(path,previous) {
     const id=path.id, section=node('section',null,'play-section'); section.id='path-'+id;section.setAttribute('aria-labelledby',id+'-title');
     const p={id,path,section,runs:simulate(path),cache:new Map(),selected:previous?.selected??0,
-      day:Math.min(previous?.day??(path.replay?path.prices.length-1:21),path.prices.length-1),ledgerKey:previous?.ledgerKey};
-    const header=node('header',null,'play-header'),box=node('div'),h=node('h2');h.append(iconLabel(path.label,path.replay?'history':id));h.id=id+'-title';if(path.replay)h.tabIndex=-1;
-    p.desc=node('p',path.description,'play-note');box.append(h,p.desc);header.append(box);
+      day:Math.min(previous?.day??(path.basis?path.prices.length-1:path.dates?0:21),path.prices.length-1),ledgerKey:previous?.ledgerKey};
+    if(path.dates&&!previous&&location.hash==='#path-'+id){
+      const request=new URLSearchParams(location.search),quote=request.get('quote');
+      const i=quotes.findIndex((_,index)=>quoteId(index)===quote),d=path.dates.indexOf(request.get('date'));
+      if(i>=0)p.selected=i;
+      if(d>=0)p.day=d;
+    }
+    const header=node('header',null,'play-header'),box=node('div'),h=node('h2');h.append(iconLabel(path.label,path.basis?'history':id));h.id=id+'-title';
+    p.desc=node('p',path.dates?dateLabel(path.dates[0])+' to '+dateLabel(path.dates.at(-1))+' · '+path.dates.length.toLocaleString('en-US')+' recorded closes · '+price(path.prices[0])+' per share at entry. '+path.description:path.description,'play-note');
+    box.append(h,p.desc);header.append(box);
+    if(path.basis){
+      const links=node('nav',null,'play-nav');links.setAttribute('aria-label','Regime replay phases');
+      const summary=XauRegimes.summarize(regimeData,regimeRequest.id);
+      for(const [phase,window] of Object.entries(summary.windows)){
+        const link=node('a',window.label,'history-launch');link.href=regimeHref(regimeRequest.id,phase);
+        if(phase===regimeRequest.phase)link.setAttribute('aria-current','page');
+        links.append(link);
+      }
+      const source=node('a','Back to the macro comparison');source.href='../xau-history.html#regimes';links.append(source);
+      box.append(links);
+    }
     p.chart=node('div',null,'play-chart');p.chartCaption=node('p',null,'play-note');
     p.strip=node('div',null,'play-strip');p.strip.setAttribute('aria-label',path.label+' timeline');
     const move=dir=>{const points=timeline(p),i=points.findIndex(x=>x.day===p.day),next=points[i+dir];if(next)changeDay(p,next.day,true);};
@@ -489,16 +545,6 @@
     const controls=node('div',null,'play-actions');
     controls.append(p.prev,p.next,p.toExit,node('small','Swipe or use the arrow keys to move through time.','play-note'));
     const stage=node('div',null,'play-stage');stage.append(p.chart,p.chartCaption,p.strip,controls);
-    if(path.replay){
-      const label=node('label','Inspect a fixing'),range=node('input'),readout=node('output');
-      range.type='range';range.min=0;range.max=path.prices.length-1;range.step=1;
-      range.id='history-fixing';label.htmlFor=range.id;
-      readout.htmlFor=range.id;
-      p.fixing={range,readout};
-      const scrub=node('div',null,'play-replay-scrub');scrub.append(label,range,readout);stage.append(scrub);
-      range.addEventListener('input',()=>showReplayFixing(p,Number(range.value)));
-      range.addEventListener('change',()=>changeDay(p,Number(range.value),true));
-    }
     const edit=node('details',null,'play-editor');p.editHeader=node('summary','Edit checkpoint prices');p.editFields=node('div',null,'play-fields');p.apply=button('Apply prices',()=>{});
     const reset=button('Restore this path',()=>rebuild(p,{}));
     const editControls=node('div',null,'play-actions');editControls.append(p.apply,reset);
@@ -523,117 +569,107 @@
     const scroller=node('div',null,'play-scroll play-matrix');scroller.tabIndex=0;scroller.setAttribute('aria-label','All saved quotes for '+path.label);
     const tbl=node('table',null,'play-table');tbl.append(node('caption','All saved quotes · '+path.label,'sr-only'));p.thead=tbl.createTHead();p.tbody=tbl.createTBody();scroller.append(tbl);
     p.detail=node('div',null,'play-detail');p.detail.tabIndex=-1;p.examples=node('div',null,'play-ko-examples');
-    p.historyBox=historyContext(id,previous?.historyBox?.open);
     section.append(header,stage);
-    if(p.historyBox)section.append(p.historyBox);
-    if(!path.replay){section.append(edit);editPrices(p);}
-    section.append(p.kpis,p.examples,tools,p.caption,scroller,p.detail);
+    if(path.dates||path.proxy)stage.append(dailyControls(p));
+    if(path.dates){
+      p.board=GldReplayBoard.render({path,quotes,runs:p.runs,day:p.day,selected:p.selected,onSelect:(index,day)=>{
+        p.selected=index;changeDay(p,day,true);
+      }});
+      const fromEntry=node('details',null,'play-editor');
+      fromEntry.append(node('summary','Compare strategies from the original entry'),p.kpis,p.examples,tools,p.caption,scroller);
+      section.append(p.board,p.detail,fromEntry);
+    }else{
+      p.historyBox=historyContext(id,previous?.historyBox?.open);
+      if(p.historyBox)section.append(p.historyBox);
+      if(!path.proxy){section.append(edit);editPrices(p);}
+      section.append(p.kpis,p.examples,tools,p.caption,scroller,p.detail);
+    }
     koExamples(p);paint(p);
     return p;
   }
-  function renderReplayPhases(selected) {
-    const summary=replayGold&&XauRegimes.summarize(replayGold,$('replay-period').value);
-    const phases=summary?.windows??XauRegimes.phases;
-    $('replay-phase').replaceChildren(...Object.entries(phases).map(([key,info])=>option(key,info.label??info)));
-    if(Object.hasOwn(phases,selected))$('replay-phase').value=selected;
-  }
-  async function prepareReplay() {
-    if(!replayGold){
-      replayGoldPromise??=fetch('../data/metals/xau-research.json').then(r=>{
-        if(!r.ok)throw Error('World Bank gold history is unavailable.');return r.json();
-      }).then(data=>data.series.pink);
-      try{replayGold=await replayGoldPromise;}catch(e){replayGoldPromise=null;throw e;}
-    }
-    renderReplayPhases($('replay-phase').value);
-  }
-  function updateReplayLink() {
-    const url=new URL(location.href);
-    if($('replay-period').value){
-      url.searchParams.set('replay',$('replay-period').value);url.searchParams.set('phase',$('replay-phase').value);
-    }else{
-      url.searchParams.delete('replay');url.searchParams.delete('phase');
-      if(url.hash==='#path-history-replay')url.hash='#historical-replay';
-    }
-    history.replaceState(null,'',url);
-  }
-  async function refreshReplay(move=false) {
-    if(!sheet) return;
-    $('replay-error').hidden=true;
-    try{
-      if($('replay-period').value) await prepareReplay();
-      updateReplayLink();
-      await renderAll();
-      if(move&&panels.has('history-replay')){
-        const panel=panels.get('history-replay');
-        panel.section.scrollIntoView({block:'start'});
-        panel.section.querySelector('h2').focus({preventScroll:true});
-      }
-    }catch(error){
-      $('replay-error').hidden=false;
-      setText('replay-error',error.message);
-    }
-  }
-
   function refreshControls(){
     const enabled=$('roll-mode').value==='custom';
     $('roll-inputs').hidden=!enabled;
     $('roll-inputs').querySelectorAll('input').forEach(e=>e.disabled=!enabled);
   }
+  function replayTotals(list){
+    const body=$('replay-totals');body.replaceChildren();
+    for(const panel of list){
+      const counts={ko:0,maturity:0,open:0,unfunded:0};
+      for(const run of panel.runs){
+        const entry=run.strategies.find(s=>s.key==='acc').events[0];
+        counts[entry.type==='skip'?'unfunded':run.firstExit?.type??'open']++;
+      }
+      const row=body.insertRow(),title=node('th'),url=node('a',panel.path.label);
+      title.scope='row';url.href='#path-'+panel.id;title.append(url);row.append(title);
+      for(const key of ['ko','maturity','open','unfunded'])row.append(node('td',String(counts[key])));
+    }
+  }
   async function renderAll() {
     const seq=++version, old=new Map(panels);
-    $('error').hidden=true;$('csv').disabled=true;
+    $('error').hidden=true;$('csv').disabled=true;$('replay-overview').hidden=true;
     try{
       if(!quotes.length)throw Error('The saved pricing did not load. Reload to retry.');
       config=settings();
-      setText('run-status','Calculating all five timelines…');
-      const next=[];
-      for(const p of GldPlayPaths.plays) {
+      setText('run-status',regimeRequest?'Calculating the selected historical window…':'Calculating all five timelines…');
+      const next=[],missing=[];
+      if(regimeRequest){
+        regimeData??=await fetch('../data/metals/xau-research.json').then(r=>{
+          if(!r.ok)throw Error('World Bank gold history is unavailable.');return r.json();
+        }).then(data=>data.series.pink);
+        if(seq!==version)return;
+        const path=XauRegimes.replay({gold:regimeData,gld:gldHistory,id:regimeRequest.id,phase:regimeRequest.phase,spot:config.spot});
+        if(path.basis==='Gold-price proxy'){
+          path.proxy=true;path.proxyDates=path.dates;path.dates=null;
+        }
+        next.push(createPanel(path,old.get(path.id)));
+      }
+      for(const p of regimeRequest?[]:GldPlayPaths.plays) {
         await new Promise(resolve=>setTimeout(resolve,0));
         if(seq!==version)return;
-        const view=createPanel(pricePath(p.id,overrides.get(p.id)),old.get(p.id));next.push(view);
-      }
-      const replayId=$('replay-period').value;
-      if(replayId&&replayGold){
-        try{
-          const phase=$('replay-phase').value;
-          const path=XauRegimes.replay({gold:replayGold,gld:gldSeries,id:replayId,phase,spot:config.spot,xauSpot:config.xauSpot});
-          path.selection=replayId+'|'+phase;
-          const previous=old.get(path.id);
-          next.unshift(createPanel(path,previous?.path.selection===path.selection?previous:undefined));
-        }catch(error){
-          $('replay-error').hidden=false;setText('replay-error',error.message);
-        }
+        const path=pricePath(p.id,overrides.get(p.id));
+        if(!path){missing.push(p.label);continue;}
+        const view=createPanel(path,old.get(p.id));next.push(view);
       }
       panels.clear();next.forEach(p=>panels.set(p.id,p));$('plays').replaceChildren(...next.map(p=>p.section));
+      if(replayMode&&next.length){replayTotals(next);$('replay-overview').hidden=false;}
       for(const p of next){
         const active=p.strip.querySelector('[aria-pressed="true"]');
         if(active)p.strip.scrollLeft=active.offsetLeft-p.strip.offsetLeft-(p.strip.clientWidth-active.offsetWidth)/2;
       }
       updateFlowCase();
-      $('csv').disabled=false;
-      setText('run-status',quotes.length+' quotes × 5 price paths · '+config.years+' year'+(config.years===1?'':'s')+(panels.has('history-replay')?' + 1 historical replay':'')+' · '+money(config.terms.budget)+
+      $('csv').disabled=!next.length;
+      if(missing.length){$('error').hidden=false;setText('error','Complete daily GLD history unavailable for '+missing.join(', ')+'. Reload to retry.');}
+      setText('run-status',quotes.length+' quotes × '+next.length+(replayMode?(next.length===1?' historical replay':' historical paths'):' price paths · '+config.years+' year'+(config.years===1?'':'s'))+' · '+money(config.terms.budget)+
         ($('budget').value===''?' illustrative cash':' starting cash')+'.');
     }catch(e){panels.clear();updateFlowCase();$('plays').replaceChildren();$('error').hidden=false;setText('error',e.message);setText('run-status','Check the comparison inputs.');}
   }
   function download() {
-    const records=[['Price path','Price basis','Observation date','Quote ID','Sheet date','Issuer','Tenor months','Buy strike %','KO %','Guaranteed months','Fixing day','Checkpoint','GLD USD/share','Illustrative XAU USD/oz','Basis','Strategy','Starting value USD','Marked value USD','PnL USD','Eligible','Checkpoint leader','Status']];
+    const records=[['Price path','Quote ID','Sheet date','Issuer','Tenor months','Buy strike %','KO %','Guaranteed months','Fixing day','Checkpoint','GLD USD/share','Illustrative XAU USD/oz','Basis','Strategy','Starting value USD','Marked value USD','PnL USD','Eligible','Checkpoint leader','Status']];
+    if(replayMode){records[0][9]='Trading date or model checkpoint';records[0].splice(11,1);records[0].push('Price basis');}
     for(const panel of panels.values()){
+      const gridDays=panel.board?GldReplayBoard.days(panel.board):[];
       panel.runs.forEach((run,i)=>{
-        const q=quotes[i],allDays=new Set(panel.path.checkpoints.map(p=>p.day));if(run.firstExit)allDays.add(run.firstExit.day);
+        const q=quotes[i],allDays=new Set([...panel.path.checkpoints.map(p=>p.day),...gridDays]);if(run.firstExit)allDays.add(run.firstExit.day);
         for(const day of [...allDays].sort((a,b)=>a-b)){
           const point=selectedPoint(panel,day);
           for(const after of [false,true]){
             if(after&&(!run.postKo||day<run.postKo.day))continue;
             const view=GldPlays.atDay(run,day,after),names=after?post:pre;
-            for(const k of keys){const s=view.outcomes[k];records.push([panel.path.label,panel.path.basis??'Synthetic scenario',panel.path.dates?.[day]??'',quoteId(i),sheet.addedDate??sheet.requestDate,sheet.issuer,q.months,q.strike,q.ko,q.guarantee,day,point.label,
-              point.price.toFixed(2),point.xau?.toFixed(2)??'',after?'From KO':'From entry',names[k],after?run.postKo.initialWealth:run.initialWealth,s.value,s.pnl,s.eligible,view.leaders.includes(k),s.status]);}
+            for(const k of keys){
+              const s=view.outcomes[k],row=[panel.path.label,quoteId(i),sheet.addedDate??sheet.requestDate,sheet.issuer,q.months,q.strike,q.ko,q.guarantee,day,panel.path.dates?.[day]??panel.path.proxyDates?.[day]??point.label,point.price.toFixed(2)];
+              if(!replayMode)row.push(point.xau?.toFixed(2)??'');
+              row.push(after?'From KO':'From entry',names[k],after?run.postKo.initialWealth:run.initialWealth,s.value,s.pnl,s.eligible,view.leaders.includes(k),s.status);
+              if(replayMode)row.push(panel.path.basis??'Actual GLD daily closes');
+              records.push(row);
+            }
           }
         }
       });
     }
     const escape=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
     const blob=new Blob(['\ufeff'+records.map(r=>r.map(escape).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
-    const url=URL.createObjectURL(blob),a=node('a');a.href=url;a.download=(panels.has('history-replay')?'GLD-plays-and-replay-':'GLD-five-plays-')+(sheet.addedDate??sheet.requestDate)+'.csv';
+    const url=URL.createObjectURL(blob),a=node('a');a.href=url;a.download=(replayMode?'GLD-historical-replay-':'GLD-five-plays-')+(sheet.addedDate??sheet.requestDate)+'.csv';
     document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
   async function init() {
@@ -641,8 +677,11 @@
       if(!r.ok)throw Error('Quote sheet unavailable.');return r.json();}),Metals.series('gld'),Metals.series('xau-spot')]);
     const series=g.status==='fulfilled'?g.value.filter(r=>r.close>0):[],gold=x.status==='fulfilled'?x.value.filter(r=>r.usd_per_oz>0):[];
     gld=series.at(-1);
-    gldSeries=series.map(row=>[row.date,row.close]);
-    for(const path of GldPlayPaths.plays)historical.set(path.id,GldPlayHistory.summarize(series,path.id));
+    gldHistory=series.map(r=>[r.date,r.close]);
+    for(const path of GldPlayPaths.plays){
+      historical.set(path.id,GldPlayHistory.summarize(series,path.id));
+      replays.set(path.id,GldPlayHistory.replay(series,path.id));
+    }
     if(gld){
       const cutoff=new Date(gld.date+'T00:00:00Z');cutoff.setUTCFullYear(cutoff.getUTCFullYear()-1);
       const from=cutoff.toISOString().slice(0,10);
@@ -666,25 +705,70 @@
       ' months · '+sheet.issuer+' · saved '+date+'.'+(missing?' '+missing+' unquoted rows have no simulatable strike.':''));
     setText('settlement','The saved sheet specifies '+sheet.settlementFrequency+' settlement, KO+1 '+(sheet.koPlusOne?'enabled':'disabled')+', stated offset '+sheet.offset+
       '. Guaranteed months are estimated into fixings using the quoted term. The model accrues daily, assumes delivery by the configured re-entry date and excludes the quoted offset. Confirm actual settlement and availability before reusing cash or shares.');
-    const nav=$('timelines');for(const p of GldPlayPaths.plays){const a=node('a',p.label,'with-icon');a.prepend(icon(p.id));a.href='#path-'+p.id;nav.append(a);}
-    for(const period of XauRegimes.periods)$('replay-period').append(option(period.id,period.name+' · '+period.from+'–'+period.to));
-    const target=params.get('replay');
-    if(XauRegimes.periods.some(p=>p.id===target)){
-      $('replay-period').value=target;
-      renderReplayPhases(params.get('phase')??'cycle');
-      await refreshReplay(location.hash==='#path-history-replay');
-    }else await renderAll();
+    modeLayout();
+    await renderAll();
+    if(replayMode)scrollToPath();
   }
-  $('replay-period').addEventListener('change',()=>{renderReplayPhases('cycle');refreshReplay(false);});
-  $('replay-phase').addEventListener('change',()=>refreshReplay(false));
-  $('run-replay').addEventListener('click',()=>refreshReplay(true));
-  $('settings').addEventListener('submit',e=>{e.preventDefault();refreshReplay(false);});
+  const originals=Object.fromEntries(['page-heading','page-lead','price-method'].map(id=>[id,$(id).innerHTML]));
+  function modeLayout(){
+    const active=replayMode?'history-mode':'scenario-mode',other=replayMode?'scenario-mode':'history-mode';
+    $(active).setAttribute('aria-current','page');$(other).removeAttribute('aria-current');
+    document.querySelectorAll('.scenario-only').forEach(label=>{
+      label.hidden=replayMode;label.querySelector('input,select').disabled=replayMode;
+    });
+    if(replayMode){
+      setText('page-heading','Historical GLD replay');
+      setText('page-lead','Replay every saved quote on five recorded GLD price paths. Scroll right to find each knock-out and compare what holding, rolling, selling or adding would have earned afterward.');
+      setText('price-method','Replay pricing uses one recorded GLD close per trading session. The first close sets each quote’s dollar strike and KO. Observations begin on the next session and stop at the last available close in the chosen period.');
+    }else for(const [id,html] of Object.entries(originals))$(id).innerHTML=html;
+    if(regimeRequest){
+      setText('page-lead','Apply all saved GLD quotes to the selected XAU regime and compare the results through the chosen historical window.');
+      setText('price-method','The opening replay price sets the strike and KO for each quote. Earlier windows can use a monthly gold-price proxy where GLD closes have no coverage.');
+    }
+    setText('replay-assumptions',regimeRequest?
+      'Recorded GLD closes or a labelled monthly gold proxy set the path shown below. The model applies saved quotes and illustrative follow-on terms to that path.':
+      'Each replay applies the saved quote percentages to that period’s opening GLD close. Prices are historical. Contracts, follow-on terms and P&L are hypothetical. The market references above show the latest saved closes.');
+    document.title=(replayMode?'Historical GLD replay':'GLD game plan · Five price plays')+' | Market Intel';
+    const nav=$('timelines');nav.replaceChildren();
+    if(regimeRequest){
+      const link=node('a','Selected XAU regime');link.href='#path-history-replay';nav.append(link);
+    }
+    for(const p of regimeRequest?[]:GldPlayPaths.plays){
+      if(replayMode&&replays.size&&!replays.get(p.id))continue;
+      const a=node('a',replayMode?(replays.get(p.id)?.label??p.label):p.label,'with-icon');a.prepend(icon(p.id));a.href='#path-'+p.id;nav.append(a);
+    }
+    $('replay-assumptions').hidden=!replayMode;
+    setText('replay-period-column',regimeRequest?'Replay window':'Recorded period');
+    $('replay-overview').hidden=!replayMode||!panels.size;
+    $('decision-map').open=!replayMode||location.hash==='#decision-map';
+  }
+  function scrollToPath(){
+    const id=location.hash.slice(1);
+    if(id==='timelines'||id==='replay-overview'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
+  }
+  async function changeMode(){
+    const query=new URLSearchParams(location.search),requested=query.get('mode')==='historical';
+    const regime=requested?readRegime(query):null;
+    if(requested!==replayMode||regime?.id!==regimeRequest?.id||regime?.phase!==regimeRequest?.phase){
+      replayMode=requested;regimeRequest=regime;panels.clear();modeLayout();
+      if(quotes.length)await renderAll();
+    }
+    scrollToPath();
+  }
+  document.addEventListener('click',event=>{
+    const a=event.target.closest('.play-modes a, a.history-launch');
+    if(!a||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+    event.preventDefault();history.pushState(null,'',a.href);changeMode();
+  });
+  window.addEventListener('popstate',changeMode);
+  $('settings').addEventListener('submit',e=>{e.preventDefault();renderAll();});
   $('settings').addEventListener('input',e=>{
     refreshControls();
     if(e.target.id==='years'||e.target.id==='units'){if($('settings').checkValidity())renderAll();return;}
     setText('run-status','Inputs changed. Run all quotes to update the timelines.');
   });
   $('csv').addEventListener('click',download);
+  modeLayout();
   refreshControls();
   initFlow();
   init().catch(e=>{$('error').hidden=false;setText('error',e.message);setText('run-status','Comparison unavailable.');setText('quote-status','Pricing status unavailable.');});

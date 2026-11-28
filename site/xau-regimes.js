@@ -76,7 +76,7 @@
       id:'history-replay', label:summary.period.name+' · '+window.label, prices, dates, checkpoints, window, phase, replay:true,
       basis:canUseActual?'Actual GLD daily closes':'Gold-price proxy',
       description:canUseActual?'Actual GLD closes from '+dates[0]+' to '+dates.at(-1)+'. The last closes of the boundary months set the entry and exit. Saved quotes are tested hypothetically at entry.':
-        'World Bank gold monthly averages from '+window.start.slice(0,7)+' to '+window.end.slice(0,7)+' scaled to the input GLD price. The model interpolates 21 fixings per month, so proxy KO dates are model fixings.'
+        'World Bank gold monthly averages from '+window.start.slice(0,7)+' to '+window.end.slice(0,7)+' scaled to a GLD entry price of $'+spot.toFixed(2)+'. The model interpolates 21 fixings per month. Any KO occurs on a model fixing.'
     };
   }
 
