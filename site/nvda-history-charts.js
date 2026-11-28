@@ -285,6 +285,13 @@
     if (plot?.model.limits && index !== plot.active) updateSelection(plot, index);
   }
 
+  function seek(container, fraction) {
+    const plot = plots.get(container);
+    if (!plot?.model.limits || !Number.isFinite(fraction)) return;
+    const last = plot.model.dates.length - 1;
+    select(container, Math.round(Math.min(1, Math.max(0, fraction)) * last));
+  }
+
   function printChart(container, { width = 490, height = 275 } = {}) {
     const plot = plots.get(container);
     if (!plot?.model.limits) return null;
@@ -298,5 +305,5 @@
     return { image, series: model.series.map(({ label, color, dash }) => ({ label, color, dash })) };
   }
 
-  window.NvidiaCharts = { render, date, select, printChart };
+  window.NvidiaCharts = { render, date, select, seek, printChart };
 })();
