@@ -13,7 +13,20 @@
   const stamp = n=>String(Math.floor(n/12)).padStart(4,'0')+'-'+String(n%12+1).padStart(2,'0')+'-01';
   const clean = rows=>rows.filter(([d,v])=>typeof d==='string'&&Number.isFinite(v)&&v>0).sort(([a],[b])=>a.localeCompare(b));
 
+  function dateWindow(id) {
+    const match=/^dates:(\d{4}-(?:0[1-9]|1[0-2])):(\d{4}-(?:0[1-9]|1[0-2]))$/.exec(id);
+    if(!match)return null;
+    const [,start,end]=match, elapsed=months(end)-months(start);
+    return elapsed>=1&&elapsed<=36?{start:start+'-01',end:end+'-01',label:'Selected calendar window'}:null;
+  }
+
   function summarize(rows, id) {
+    const selected=dateWindow(id);
+    if(selected){
+      const points=clean(rows).filter(([d])=>d>=selected.start&&d<=selected.end);
+      if(points[0]?.[0]!==selected.start||points.at(-1)?.[0]!==selected.end)return null;
+      return {period:{id,name:'Gold drawdown analog'},points,windows:{cycle:selected}};
+    }
     const period=periods.find(p=>p.id===id);
     if(!period)return null;
     const points=clean(rows).filter(([d])=>d>=period.from+'-01-01'&&d<=period.to+'-12-31');
@@ -45,6 +58,7 @@
     if(canUseActual){
       dates=recorded.map(p=>p[0]);prices=recorded.map(p=>p[1]);
     }else{
+      if(dateWindow(id))throw Error('GLD daily closes are unavailable at a boundary of this selected window.');
       if(window.start>=rows[0]?.[0] && rows.at(-1)?.[0]>=window.end)
         throw Error('GLD history is incomplete at one of the replay boundaries.');
       if(!Number.isFinite(spot)||spot<.01)throw Error('Enter a GLD starting price to use the gold-price proxy.');
@@ -80,7 +94,7 @@
     };
   }
 
-  const api={periods,phases,summarize,replay};
+  const api={periods,phases,dateWindow,summarize,replay};
   if(typeof module==='object'&&module.exports)module.exports=api;
   else root.XauRegimes=api;
 })(globalThis);
