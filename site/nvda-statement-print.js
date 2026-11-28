@@ -59,7 +59,7 @@
     table.querySelectorAll("img, .nv-peer-mark").forEach(icon => icon.remove());
     layout.append(table);
     const note = card.querySelector(".nv-note");
-    if (note) article.append(make("p", note.textContent, "nv-print-note"));
+    if (note) figure.append(make("figcaption", note.textContent, "nv-print-note"));
     return article;
   }
 
