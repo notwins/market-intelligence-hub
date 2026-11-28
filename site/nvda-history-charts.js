@@ -63,7 +63,8 @@
     const y = value => bottom - (value - floor) * (bottom - top) / (ceil - floor);
     const labelSize = marketStyle ? (width < 460 ? 12 : 14) : (width < 430 ? 10 : 11);
     const ink = marketStyle ? "#334d3e" : "#536257";
-    ctx.font = (marketStyle ? "600 " : "") + labelSize + "px Segoe UI, system-ui, sans-serif";
+    const fontFamily = output?.fontFamily || "Segoe UI, system-ui, sans-serif";
+    ctx.font = (marketStyle ? "600 " : "") + labelSize + "px " + fontFamily;
     ctx.textBaseline = "middle";
     ctx.textAlign = "right";
     for (let n = 0; floor + n * step <= ceil + step * .01 && n < 12; n++) {
@@ -274,7 +275,8 @@
     if (!plot?.model.limits) return null;
     const canvas = document.createElement("canvas");
     const { onLayout, ...model } = plot.model;
-    redraw({ canvas, model, active: plot.active }, { width: 490, height: 275 });
+    const fontFamily = getComputedStyle(container).getPropertyValue("--nv-sans").trim();
+    redraw({ canvas, model, active: plot.active }, { width: 490, height: 275, fontFamily });
     const image = document.createElement("img");
     image.src = canvas.toDataURL("image/png");
     image.alt = model.title;
