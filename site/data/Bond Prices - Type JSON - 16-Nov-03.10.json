@@ -344,532 +344,532 @@
   ],
   "latest": {
     "US91282CJJ18": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 98.546875,
-      "ask": 98.609375,
-      "bid_raw": "98.1740",
-      "ask_raw": "98.1940",
-      "yield_pct": 4.736,
+      "bid": 98.0546875,
+      "ask": 98.1015625,
+      "bid_raw": "98.0160",
+      "ask_raw": "98.0320",
+      "yield_pct": 4.824,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "2536bc8d436d0389084a0422"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "1b4d4d4bba3f4d3122e78fbd"
     },
     "US91282CJZ59": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 95.4140625,
-      "ask": 95.4765625,
-      "bid_raw": "95.1320",
-      "ask_raw": "95.1520",
-      "yield_pct": 4.747,
+      "bid": 94.9140625,
+      "ask": 94.9765625,
+      "bid_raw": "94.2920",
+      "ask_raw": "94.3120",
+      "yield_pct": 4.833,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "3ba68624f98ab36a2fabd35f"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "80be1fa0e5970d72ecb560b0"
     },
     "US91282CMM00": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 98.8515625,
-      "ask": 98.9140625,
-      "bid_raw": "98.2720",
-      "ask_raw": "98.2920",
-      "yield_pct": 4.785,
+      "bid": 98.2578125,
+      "ask": 98.3203125,
+      "bid_raw": "98.0820",
+      "ask_raw": "98.1020",
+      "yield_pct": 4.875,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "7977e53855fc1e925cf7c6f0"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "1e985b55c88d471f6b565c01"
     },
     "US912810FT08": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 99.1953125,
-      "ask": 99.2578125,
-      "bid_raw": "99.0620",
-      "ask_raw": "99.0820",
-      "yield_pct": 4.599,
+      "bid": 98.171875,
+      "ask": 98.234375,
+      "bid_raw": "98.0540",
+      "ask_raw": "98.0740",
+      "yield_pct": 4.738,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "f92e796cc662d22145336e27"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "a5fdf57869c3aaf724806319"
     },
     "US912810PT97": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 100.6171875,
-      "ask": 100.6796875,
-      "bid_raw": "100.1960",
-      "ask_raw": "100.2160",
-      "yield_pct": 4.665,
+      "bid": 99.9375,
+      "ask": 100.0,
+      "bid_raw": "99.3000",
+      "ask_raw": "100.0000",
+      "yield_pct": 4.749,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "0f274b93870e6560907758e8"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "31f8c3713c9f227350e0d791"
     },
     "US912810PU60": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 102.359375,
-      "ask": 102.421875,
-      "bid_raw": "102.1140",
-      "ask_raw": "102.1340",
-      "yield_pct": 4.704,
+      "bid": 101.703125,
+      "ask": 101.765625,
+      "bid_raw": "101.2240",
+      "ask_raw": "101.2440",
+      "yield_pct": 4.783,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "c721bbf104719a84e430dc22"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "6a8b1ab8845f000356767e2e"
     },
     "US912810PX00": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 97.3359375,
-      "ask": 97.3984375,
-      "bid_raw": "97.1060",
-      "ask_raw": "97.1260",
-      "yield_pct": 4.797,
+      "bid": 96.6015625,
+      "ask": 96.6640625,
+      "bid_raw": "96.1920",
+      "ask_raw": "96.2120",
+      "yield_pct": 4.883,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "0a4dd92853207799bbbcfff1"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "acd92717f391b91e825e3459"
     },
     "US912810QC53": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 95.7421875,
-      "ask": 95.8046875,
-      "bid_raw": "95.2360",
-      "ask_raw": "95.2560",
-      "yield_pct": 4.948,
+      "bid": 95.0,
+      "ask": 95.0625,
+      "bid_raw": "95.0000",
+      "ask_raw": "95.0200",
+      "yield_pct": 5.03,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "7cbbd73b571c481d95c0d841"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "03383356994592fb80a78099"
     },
     "US912810QE10": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 96.3671875,
-      "ask": 96.4296875,
-      "bid_raw": "96.1160",
-      "ask_raw": "96.1360",
-      "yield_pct": 4.997,
+      "bid": 95.5546875,
+      "ask": 95.6171875,
+      "bid_raw": "95.1760",
+      "ask_raw": "95.1960",
+      "yield_pct": 5.084,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "b981f88b4a91d872929f69a8"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "9f7f7eae007a481a34d69fd3"
     },
     "US912810QN19": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 96.828125,
-      "ask": 96.890625,
-      "bid_raw": "96.2640",
-      "ask_raw": "96.2840",
-      "yield_pct": 5.059,
+      "bid": 95.9921875,
+      "ask": 96.0546875,
+      "bid_raw": "95.3160",
+      "ask_raw": "96.0160",
+      "yield_pct": 5.144,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "92dd8a251b9a691e695ec95e"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "4876d211ac8ceda92af6b68f"
     },
     "US912810QQ40": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 92.7578125,
-      "ask": 92.8203125,
-      "bid_raw": "92.2420",
-      "ask_raw": "92.2620",
-      "yield_pct": 5.082,
+      "bid": 91.90625,
+      "ask": 91.9765625,
+      "bid_raw": "91.2900",
+      "ask_raw": "91.3120",
+      "yield_pct": 5.17,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "6bf042fd742caaf1ab65f274"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "84eeb5cc7ec68b4b7391c69a"
     },
     "US912810QW18": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 76.921875,
-      "ask": 76.984375,
-      "bid_raw": "76.2940",
-      "ask_raw": "76.3140",
-      "yield_pct": 5.181,
+      "bid": 76.1640625,
+      "ask": 76.2265625,
+      "bid_raw": "76.0520",
+      "ask_raw": "76.0720",
+      "yield_pct": 5.267,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "ac158e0852f4d52f2069e800"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "09db6d7c7cbb4ff1a88fbaf2"
     },
     "US912810TM09": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 86.9765625,
-      "ask": 87.0390625,
-      "bid_raw": "86.3120",
-      "ask_raw": "87.0120",
-      "yield_pct": 5.205,
+      "bid": 86.15625,
+      "ask": 86.21875,
+      "bid_raw": "86.0500",
+      "ask_raw": "86.0700",
+      "yield_pct": 5.289,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "ed50f3a3d61b4cc540e4f22a"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "e2f4d321ca74eb012d146f09"
     },
     "US912810TW80": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 94.546875,
-      "ask": 94.609375,
-      "bid_raw": "94.1740",
-      "ask_raw": "94.1940",
-      "yield_pct": 5.233,
+      "bid": 93.6171875,
+      "ask": 93.6796875,
+      "bid_raw": "93.1960",
+      "ask_raw": "93.2160",
+      "yield_pct": 5.32,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "8f3ccc4ce305fc950f8045ac"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "618ec854d13184379c383be2"
     },
     "US912810TZ12": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 91.5078125,
-      "ask": 91.5703125,
-      "bid_raw": "91.1620",
-      "ask_raw": "91.1820",
-      "yield_pct": 5.249,
+      "bid": 90.59375,
+      "ask": 90.65625,
+      "bid_raw": "90.1900",
+      "ask_raw": "90.2100",
+      "yield_pct": 5.336,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "a751769fa82f4888a5a1d78a"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "2df0722e264cc7edac6ce4e6"
     },
     "US912810RJ97": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 73.4765625,
-      "ask": 73.5390625,
-      "bid_raw": "73.1520",
-      "ask_raw": "73.1720",
-      "yield_pct": 5.302,
+      "bid": 72.640625,
+      "ask": 72.703125,
+      "bid_raw": "72.2040",
+      "ask_raw": "72.2240",
+      "yield_pct": 5.392,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "cd6483ccc0789b251123a380"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "efbdc5832cbcacf4d14cccf2"
     },
     "US912810RK60": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 67.3203125,
-      "ask": 67.3828125,
-      "bid_raw": "67.1020",
-      "ask_raw": "67.1220",
-      "yield_pct": 5.317,
+      "bid": 66.5234375,
+      "ask": 66.5859375,
+      "bid_raw": "66.1660",
+      "ask_raw": "66.1860",
+      "yield_pct": 5.407,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "d6bc3803b4ee3a518321ec91"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "26f893d5be1279b486c48ea6"
     },
     "US912810UL07": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 96.71875,
-      "ask": 96.78125,
-      "bid_raw": "96.2300",
-      "ask_raw": "96.2500",
-      "yield_pct": 5.275,
+      "bid": 95.7578125,
+      "ask": 95.8203125,
+      "bid_raw": "95.2420",
+      "ask_raw": "95.2620",
+      "yield_pct": 5.359,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "698e9b95d4cde374f308e8e4"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "203377cb9b9d93a8625f7100"
     },
     "US912810RM27": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 73.0,
-      "ask": 73.0625,
-      "bid_raw": "73.0000",
-      "ask_raw": "73.0200",
-      "yield_pct": 5.306,
+      "bid": 72.15625,
+      "ask": 72.21875,
+      "bid_raw": "72.0500",
+      "ask_raw": "72.0700",
+      "yield_pct": 5.395,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "866774211af47c0a02747845"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "f0166b04f1dab1384d235a53"
     },
     "US912810RP57": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 72.4296875,
-      "ask": 72.4921875,
-      "bid_raw": "72.1360",
-      "ask_raw": "72.1560",
-      "yield_pct": 5.321,
+      "bid": 71.65625,
+      "ask": 71.71875,
+      "bid_raw": "71.2100",
+      "ask_raw": "71.2300",
+      "yield_pct": 5.402,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "0912d60b4b4522a8d7af1106"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "316f6936f94e76fda7bb0274"
     },
     "US912810RQ31": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 66.1171875,
-      "ask": 66.1796875,
-      "bid_raw": "66.0360",
-      "ask_raw": "66.0560",
-      "yield_pct": 5.335,
+      "bid": 65.34375,
+      "ask": 65.40625,
+      "bid_raw": "65.1100",
+      "ask_raw": "65.1300",
+      "yield_pct": 5.42,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "b0e7783a167d9d6cdba281f3"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "c4786dc60b275e6be5b34388"
     },
     "US912810UV88": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 96.421875,
-      "ask": 96.484375,
-      "bid_raw": "96.1340",
-      "ask_raw": "96.1540",
-      "yield_pct": 5.291,
+      "bid": 95.4296875,
+      "ask": 95.4921875,
+      "bid_raw": "95.1360",
+      "ask_raw": "95.1560",
+      "yield_pct": 5.376,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "ec2cbf729af63870501dc231"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "d396c0a780799cb87c7c9941"
     },
     "US912810SA79": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 70.421875,
-      "ask": 70.484375,
-      "bid_raw": "70.1340",
-      "ask_raw": "70.1540",
-      "yield_pct": 5.341,
+      "bid": 69.5703125,
+      "ask": 69.6328125,
+      "bid_raw": "69.1820",
+      "ask_raw": "69.2020",
+      "yield_pct": 5.428,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "741ab37fb54b18aae056988c"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "2e568960b2cee8700dec19a9"
     },
     "US912810SD19": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 70.0546875,
-      "ask": 70.1171875,
-      "bid_raw": "70.0160",
-      "ask_raw": "70.0360",
-      "yield_pct": 5.341,
+      "bid": 69.1875,
+      "ask": 69.25,
+      "bid_raw": "69.0600",
+      "ask_raw": "69.0800",
+      "yield_pct": 5.428,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "6492e669a8359e0ba6e23681"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "9e3bada1da02e224ded8788e"
     },
     "US912810SF66": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 69.7265625,
-      "ask": 69.7890625,
-      "bid_raw": "69.2320",
-      "ask_raw": "69.2520",
-      "yield_pct": 5.338,
+      "bid": 68.828125,
+      "ask": 68.890625,
+      "bid_raw": "68.2640",
+      "ask_raw": "68.2840",
+      "yield_pct": 5.427,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "0e3e7a78503fa81d91947819"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "7e4c50b87f9e354c540711c1"
     },
     "US912810SL35": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 55.703125,
-      "ask": 55.765625,
-      "bid_raw": "55.2240",
-      "ask_raw": "55.2440",
-      "yield_pct": 5.349,
+      "bid": 54.90625,
+      "ask": 54.96875,
+      "bid_raw": "54.2900",
+      "ask_raw": "54.3100",
+      "yield_pct": 5.439,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "aa8814e6c176d8884eb88343"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "54e0ca89244b13a5e46bf13e"
     },
     "US912810SZ21": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 54.4140625,
-      "ask": 54.4765625,
-      "bid_raw": "54.1320",
-      "ask_raw": "54.1520",
-      "yield_pct": 5.337,
+      "bid": 53.59375,
+      "ask": 53.65625,
+      "bid_raw": "53.1900",
+      "ask_raw": "53.2100",
+      "yield_pct": 5.428,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "8ed1c48897fa7a8fa862048b"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "d661dd7dd60d8298cb9df4d9"
     },
     "US912810TL26": {
-      "date": "2026-11-25",
-      "observed_at": "2026-11-25",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27",
       "time_precision": "date_only",
-      "bid": 81.765625,
-      "ask": 81.828125,
-      "bid_raw": "81.2440",
-      "ask_raw": "81.2640",
-      "yield_pct": 5.296,
+      "bid": 80.6953125,
+      "ask": 80.7578125,
+      "bid_raw": "80.2220",
+      "ask_raw": "80.2420",
+      "yield_pct": 5.385,
       "yield_basis": "Asked yield",
       "source": "WSJ",
       "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
-      "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
-      "retrieved_at": "2026-11-25T23:48:47Z",
-      "observation_id": "8e4c23a97c294edfa8b41053"
+      "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "343d4b7b059f87e654271139"
     },
     "US87973RAW07": {
-      "date": "2026-11-26",
-      "observed_at": "2026-11-26T08:03:14Z",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27T08:12:59Z",
       "time_precision": "second",
-      "bid": 49.77,
-      "ask": 50.28,
-      "yield_pct": 5.577,
-      "ask_yield_pct": 5.523,
+      "bid": 49.388,
+      "ask": 49.891,
+      "yield_pct": 5.618,
+      "ask_yield_pct": 5.564,
       "yield_basis": "Bid yield to worst",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/US87973RAW07",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/US87973RAW07",
-      "source_sha256": "c351599076dba782eccc30c0b27fbebeb6e6c99c181f53ca37fef704a2cd240a",
-      "retrieved_at": "2026-11-26T23:54:51Z",
-      "observation_id": "ef7d6d00f9a1292d1edbe74b"
+      "source_sha256": "a743d890c06c3e4a6e6abece7a0db63023ecddecd46cbf31dbbac32a026a25a3",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "bba4c3391c2e696770beba84"
     },
     "AU000XCLWAP3": {
-      "date": "2026-11-26",
-      "observed_at": "2026-11-26T08:03:15Z",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27T08:13:00Z",
       "time_precision": "second",
-      "bid": 84.367,
-      "ask": 84.526,
-      "yield_pct": 4.935,
-      "ask_yield_pct": 4.916,
+      "bid": 84.219,
+      "ask": 84.366,
+      "yield_pct": 4.953,
+      "ask_yield_pct": 4.935,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/AU000XCLWAP3",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/AU000XCLWAP3",
-      "source_sha256": "6b75c1c1ccdffff0b75e8130c7833f7af473e5988007cb904e75bd720a8d4377",
-      "retrieved_at": "2026-11-26T23:54:51Z",
-      "observation_id": "1cbe05fa54641bd04dc678dd"
+      "source_sha256": "6c9c79b409650cd853248fd81e283433da935a45562c71b0a61e0f46fe321cad",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "3dc4b43822392a627a3dab46"
     },
     "NC22300W": {
-      "date": "2026-11-26",
-      "observed_at": "2026-11-26T08:03:14Z",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27T08:12:59Z",
       "time_precision": "second",
-      "bid": 112.39,
-      "ask": 113.865,
-      "yield_pct": 2.54,
-      "ask_yield_pct": 2.49,
+      "bid": 111.775,
+      "ask": 113.45,
+      "yield_pct": 2.561,
+      "ask_yield_pct": 2.504,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NC22300W",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NC22300W",
-      "source_sha256": "ec6f1c835351d76d7ba486f6e8fd8e0f0a5203b04c7eb37670adede640c1e94b",
-      "retrieved_at": "2026-11-26T23:54:51Z",
-      "observation_id": "a939b1bc9ad9963dd49ddbfd"
+      "source_sha256": "883a1fe1db0c674b9d48cdbfff85bbc2b3875e64478a0539565497255d87a8ac",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "e5a71dc772a21c90a62a7067"
     },
     "NZ13100V": {
-      "date": "2026-11-26",
-      "observed_at": "2026-11-26T08:03:15Z",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27T08:12:59Z",
       "time_precision": "second",
-      "bid": 108.066,
-      "ask": 108.445,
-      "yield_pct": 2.088,
-      "ask_yield_pct": 2.03,
+      "bid": 107.74,
+      "ask": 108.105,
+      "yield_pct": 2.137,
+      "ask_yield_pct": 2.081,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NZ13100V",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NZ13100V",
-      "source_sha256": "8ae9c2229d633317638d6c2094661f02764c42c895a80e7218170fdc80441c83",
-      "retrieved_at": "2026-11-26T23:54:51Z",
-      "observation_id": "6f25b8259e16728a501ac212"
+      "source_sha256": "cce5f24dd8b48c94563f456deb76a9d5e4b7fed468df469a4718ae332b0a8ef0",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "ff70d40b14a03e4cb4eb3295"
     },
     "NX24100T": {
-      "date": "2026-11-26",
-      "observed_at": "2026-11-26T09:49:37Z",
+      "date": "2026-11-27",
+      "observed_at": "2026-11-27T08:12:59Z",
       "time_precision": "second",
-      "bid": 108.627,
-      "ask": 108.99,
-      "yield_pct": 2.113,
-      "ask_yield_pct": 2.061952,
+      "bid": 108.277,
+      "ask": 108.61,
+      "yield_pct": 2.161,
+      "ask_yield_pct": 2.114,
       "yield_basis": "Bid yield to maturity",
       "source": "Bondsupermart",
       "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NX24100T",
       "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NX24100T",
-      "source_sha256": "3e36821fb8c01ad811c7b64d5100515b6c217252e8a1a412dec9b445f5482b38",
-      "retrieved_at": "2026-11-26T23:54:51Z",
-      "observation_id": "758932aa12a7862dcdbf5372"
+      "source_sha256": "ab180a4ce1658a75ea2277c178459975938072d34885b8a282c2f9b3ada603a3",
+      "retrieved_at": "2026-11-28T04:41:47Z",
+      "observation_id": "6cefa275234458884c1e0c1e"
     }
   },
   "history": {
@@ -1017,6 +1017,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "2536bc8d436d0389084a0422"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 98.0546875,
+        "ask": 98.1015625,
+        "bid_raw": "98.0160",
+        "ask_raw": "98.0320",
+        "yield_pct": 4.824,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "1b4d4d4bba3f4d3122e78fbd"
       }
     ],
     "US91282CJZ59": [
@@ -1163,6 +1179,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "3ba68624f98ab36a2fabd35f"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 94.9140625,
+        "ask": 94.9765625,
+        "bid_raw": "94.2920",
+        "ask_raw": "94.3120",
+        "yield_pct": 4.833,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "80be1fa0e5970d72ecb560b0"
       }
     ],
     "US91282CMM00": [
@@ -1309,6 +1341,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "7977e53855fc1e925cf7c6f0"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 98.2578125,
+        "ask": 98.3203125,
+        "bid_raw": "98.0820",
+        "ask_raw": "98.1020",
+        "yield_pct": 4.875,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "1e985b55c88d471f6b565c01"
       }
     ],
     "US912810FT08": [
@@ -1455,6 +1503,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "f92e796cc662d22145336e27"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 98.171875,
+        "ask": 98.234375,
+        "bid_raw": "98.0540",
+        "ask_raw": "98.0740",
+        "yield_pct": 4.738,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "a5fdf57869c3aaf724806319"
       }
     ],
     "US912810PT97": [
@@ -1601,6 +1665,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "0f274b93870e6560907758e8"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 99.9375,
+        "ask": 100.0,
+        "bid_raw": "99.3000",
+        "ask_raw": "100.0000",
+        "yield_pct": 4.749,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "31f8c3713c9f227350e0d791"
       }
     ],
     "US912810PU60": [
@@ -1747,6 +1827,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "c721bbf104719a84e430dc22"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 101.703125,
+        "ask": 101.765625,
+        "bid_raw": "101.2240",
+        "ask_raw": "101.2440",
+        "yield_pct": 4.783,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "6a8b1ab8845f000356767e2e"
       }
     ],
     "US912810PX00": [
@@ -1893,6 +1989,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "0a4dd92853207799bbbcfff1"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 96.6015625,
+        "ask": 96.6640625,
+        "bid_raw": "96.1920",
+        "ask_raw": "96.2120",
+        "yield_pct": 4.883,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "acd92717f391b91e825e3459"
       }
     ],
     "US912810QC53": [
@@ -2039,6 +2151,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "7cbbd73b571c481d95c0d841"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 95.0,
+        "ask": 95.0625,
+        "bid_raw": "95.0000",
+        "ask_raw": "95.0200",
+        "yield_pct": 5.03,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "03383356994592fb80a78099"
       }
     ],
     "US912810QE10": [
@@ -2185,6 +2313,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "b981f88b4a91d872929f69a8"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 95.5546875,
+        "ask": 95.6171875,
+        "bid_raw": "95.1760",
+        "ask_raw": "95.1960",
+        "yield_pct": 5.084,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "9f7f7eae007a481a34d69fd3"
       }
     ],
     "US912810QN19": [
@@ -2331,6 +2475,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "92dd8a251b9a691e695ec95e"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 95.9921875,
+        "ask": 96.0546875,
+        "bid_raw": "95.3160",
+        "ask_raw": "96.0160",
+        "yield_pct": 5.144,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "4876d211ac8ceda92af6b68f"
       }
     ],
     "US912810QQ40": [
@@ -2477,6 +2637,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "6bf042fd742caaf1ab65f274"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 91.90625,
+        "ask": 91.9765625,
+        "bid_raw": "91.2900",
+        "ask_raw": "91.3120",
+        "yield_pct": 5.17,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "84eeb5cc7ec68b4b7391c69a"
       }
     ],
     "US912810TC27": [],
@@ -2624,6 +2800,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "ac158e0852f4d52f2069e800"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 76.1640625,
+        "ask": 76.2265625,
+        "bid_raw": "76.0520",
+        "ask_raw": "76.0720",
+        "yield_pct": 5.267,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "09db6d7c7cbb4ff1a88fbaf2"
       }
     ],
     "US912810TM09": [
@@ -2770,6 +2962,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "ed50f3a3d61b4cc540e4f22a"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 86.15625,
+        "ask": 86.21875,
+        "bid_raw": "86.0500",
+        "ask_raw": "86.0700",
+        "yield_pct": 5.289,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "e2f4d321ca74eb012d146f09"
       }
     ],
     "US912810TW80": [
@@ -2916,6 +3124,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "8f3ccc4ce305fc950f8045ac"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 93.6171875,
+        "ask": 93.6796875,
+        "bid_raw": "93.1960",
+        "ask_raw": "93.2160",
+        "yield_pct": 5.32,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "618ec854d13184379c383be2"
       }
     ],
     "US912810TZ12": [
@@ -3062,6 +3286,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "a751769fa82f4888a5a1d78a"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 90.59375,
+        "ask": 90.65625,
+        "bid_raw": "90.1900",
+        "ask_raw": "90.2100",
+        "yield_pct": 5.336,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "2df0722e264cc7edac6ce4e6"
       }
     ],
     "US912810RJ97": [
@@ -3208,6 +3448,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "cd6483ccc0789b251123a380"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 72.640625,
+        "ask": 72.703125,
+        "bid_raw": "72.2040",
+        "ask_raw": "72.2240",
+        "yield_pct": 5.392,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "efbdc5832cbcacf4d14cccf2"
       }
     ],
     "US912810RK60": [
@@ -3354,6 +3610,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "d6bc3803b4ee3a518321ec91"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 66.5234375,
+        "ask": 66.5859375,
+        "bid_raw": "66.1660",
+        "ask_raw": "66.1860",
+        "yield_pct": 5.407,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "26f893d5be1279b486c48ea6"
       }
     ],
     "US912810UL07": [
@@ -3500,6 +3772,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "698e9b95d4cde374f308e8e4"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 95.7578125,
+        "ask": 95.8203125,
+        "bid_raw": "95.2420",
+        "ask_raw": "95.2620",
+        "yield_pct": 5.359,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "203377cb9b9d93a8625f7100"
       }
     ],
     "US912810RM27": [
@@ -3646,6 +3934,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "866774211af47c0a02747845"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 72.15625,
+        "ask": 72.21875,
+        "bid_raw": "72.0500",
+        "ask_raw": "72.0700",
+        "yield_pct": 5.395,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "f0166b04f1dab1384d235a53"
       }
     ],
     "US912810RP57": [
@@ -3792,6 +4096,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "0912d60b4b4522a8d7af1106"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 71.65625,
+        "ask": 71.71875,
+        "bid_raw": "71.2100",
+        "ask_raw": "71.2300",
+        "yield_pct": 5.402,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "316f6936f94e76fda7bb0274"
       }
     ],
     "US912810RQ31": [
@@ -3938,6 +4258,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "b0e7783a167d9d6cdba281f3"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 65.34375,
+        "ask": 65.40625,
+        "bid_raw": "65.1100",
+        "ask_raw": "65.1300",
+        "yield_pct": 5.42,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "c4786dc60b275e6be5b34388"
       }
     ],
     "US912810UV88": [
@@ -4084,6 +4420,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "ec2cbf729af63870501dc231"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 95.4296875,
+        "ask": 95.4921875,
+        "bid_raw": "95.1360",
+        "ask_raw": "95.1560",
+        "yield_pct": 5.376,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "d396c0a780799cb87c7c9941"
       }
     ],
     "US912810SA79": [
@@ -4230,6 +4582,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "741ab37fb54b18aae056988c"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 69.5703125,
+        "ask": 69.6328125,
+        "bid_raw": "69.1820",
+        "ask_raw": "69.2020",
+        "yield_pct": 5.428,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "2e568960b2cee8700dec19a9"
       }
     ],
     "US912810SD19": [
@@ -4376,6 +4744,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "6492e669a8359e0ba6e23681"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 69.1875,
+        "ask": 69.25,
+        "bid_raw": "69.0600",
+        "ask_raw": "69.0800",
+        "yield_pct": 5.428,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "9e3bada1da02e224ded8788e"
       }
     ],
     "US912810SF66": [
@@ -4522,6 +4906,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "0e3e7a78503fa81d91947819"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 68.828125,
+        "ask": 68.890625,
+        "bid_raw": "68.2640",
+        "ask_raw": "68.2840",
+        "yield_pct": 5.427,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "7e4c50b87f9e354c540711c1"
       }
     ],
     "US912810SL35": [
@@ -4668,6 +5068,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "aa8814e6c176d8884eb88343"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 54.90625,
+        "ask": 54.96875,
+        "bid_raw": "54.2900",
+        "ask_raw": "54.3100",
+        "yield_pct": 5.439,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "54e0ca89244b13a5e46bf13e"
       }
     ],
     "US912810SZ21": [
@@ -4814,6 +5230,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "8ed1c48897fa7a8fa862048b"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 53.59375,
+        "ask": 53.65625,
+        "bid_raw": "53.1900",
+        "ask_raw": "53.2100",
+        "yield_pct": 5.428,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "d661dd7dd60d8298cb9df4d9"
       }
     ],
     "US912810TL26": [
@@ -4960,6 +5392,22 @@
         "source_sha256": "a2a92a5259556ff27f84db61decc340ee337887f5608d2a81cf86cef50476c88",
         "retrieved_at": "2026-11-25T23:48:47Z",
         "observation_id": "8e4c23a97c294edfa8b41053"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27",
+        "time_precision": "date_only",
+        "bid": 80.6953125,
+        "ask": 80.7578125,
+        "bid_raw": "80.2220",
+        "ask_raw": "80.2420",
+        "yield_pct": 5.385,
+        "yield_basis": "Asked yield",
+        "source": "WSJ",
+        "source_url": "https://www.wsj.com/market-data/bonds/treasuries",
+        "source_sha256": "d05ff4e2b156fe85b24dc556f2191f4a19bbf6e6097470891518b2a9b67f3079",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "343d4b7b059f87e654271139"
       }
     ],
     "US87973RAW07": [
@@ -5122,6 +5570,22 @@
         "source_sha256": "c351599076dba782eccc30c0b27fbebeb6e6c99c181f53ca37fef704a2cd240a",
         "retrieved_at": "2026-11-26T23:54:51Z",
         "observation_id": "ef7d6d00f9a1292d1edbe74b"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27T08:12:59Z",
+        "time_precision": "second",
+        "bid": 49.388,
+        "ask": 49.891,
+        "yield_pct": 5.618,
+        "ask_yield_pct": 5.564,
+        "yield_basis": "Bid yield to worst",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/US87973RAW07",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/US87973RAW07",
+        "source_sha256": "a743d890c06c3e4a6e6abece7a0db63023ecddecd46cbf31dbbac32a026a25a3",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "bba4c3391c2e696770beba84"
       }
     ],
     "AU000XCLWAP3": [
@@ -5284,6 +5748,22 @@
         "source_sha256": "6b75c1c1ccdffff0b75e8130c7833f7af473e5988007cb904e75bd720a8d4377",
         "retrieved_at": "2026-11-26T23:54:51Z",
         "observation_id": "1cbe05fa54641bd04dc678dd"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27T08:13:00Z",
+        "time_precision": "second",
+        "bid": 84.219,
+        "ask": 84.366,
+        "yield_pct": 4.953,
+        "ask_yield_pct": 4.935,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/AU000XCLWAP3",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/AU000XCLWAP3",
+        "source_sha256": "6c9c79b409650cd853248fd81e283433da935a45562c71b0a61e0f46fe321cad",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "3dc4b43822392a627a3dab46"
       }
     ],
     "NC22300W": [
@@ -5446,6 +5926,22 @@
         "source_sha256": "ec6f1c835351d76d7ba486f6e8fd8e0f0a5203b04c7eb37670adede640c1e94b",
         "retrieved_at": "2026-11-26T23:54:51Z",
         "observation_id": "a939b1bc9ad9963dd49ddbfd"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27T08:12:59Z",
+        "time_precision": "second",
+        "bid": 111.775,
+        "ask": 113.45,
+        "yield_pct": 2.561,
+        "ask_yield_pct": 2.504,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NC22300W",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NC22300W",
+        "source_sha256": "883a1fe1db0c674b9d48cdbfff85bbc2b3875e64478a0539565497255d87a8ac",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "e5a71dc772a21c90a62a7067"
       }
     ],
     "NZ13100V": [
@@ -5608,6 +6104,22 @@
         "source_sha256": "8ae9c2229d633317638d6c2094661f02764c42c895a80e7218170fdc80441c83",
         "retrieved_at": "2026-11-26T23:54:51Z",
         "observation_id": "6f25b8259e16728a501ac212"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27T08:12:59Z",
+        "time_precision": "second",
+        "bid": 107.74,
+        "ask": 108.105,
+        "yield_pct": 2.137,
+        "ask_yield_pct": 2.081,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NZ13100V",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NZ13100V",
+        "source_sha256": "cce5f24dd8b48c94563f456deb76a9d5e4b7fed468df469a4718ae332b0a8ef0",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "ff70d40b14a03e4cb4eb3295"
       }
     ],
     "NX24100T": [
@@ -5770,181 +6282,197 @@
         "source_sha256": "3e36821fb8c01ad811c7b64d5100515b6c217252e8a1a412dec9b445f5482b38",
         "retrieved_at": "2026-11-26T23:54:51Z",
         "observation_id": "758932aa12a7862dcdbf5372"
+      },
+      {
+        "date": "2026-11-27",
+        "observed_at": "2026-11-27T08:12:59Z",
+        "time_precision": "second",
+        "bid": 108.277,
+        "ask": 108.61,
+        "yield_pct": 2.161,
+        "ask_yield_pct": 2.114,
+        "yield_basis": "Bid yield to maturity",
+        "source": "Bondsupermart",
+        "source_url": "https://www.bondsupermart.com/bsm/bond-factsheet/NX24100T",
+        "data_url": "https://www.bondsupermart.com/main/ws/v4/bond-info/bond-factsheet/NX24100T",
+        "source_sha256": "ab180a4ce1658a75ea2277c178459975938072d34885b8a282c2f9b3ada603a3",
+        "retrieved_at": "2026-11-28T04:41:47Z",
+        "observation_id": "6cefa275234458884c1e0c1e"
       }
     ]
   },
   "checks": {
     "US91282CJJ18": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US91282CJZ59": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US91282CMM00": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810FT08": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810PT97": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810PU60": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810PX00": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810QC53": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810QE10": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810QN19": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810QQ40": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810TC27": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "unavailable",
       "message": "Exact coupon/maturity match unavailable; no substitute bond used"
     },
     "US912810QW18": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810TM09": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810TW80": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810TZ12": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810RJ97": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810RK60": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810UL07": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810RM27": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810RP57": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810RQ31": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810UV88": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810SA79": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810SD19": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810SF66": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810SL35": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810SZ21": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US912810TL26": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
-      "result": "Source unchanged; actual quote date retained"
+      "result": "New source observation"
     },
     "US87973RAW07": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
       "result": "New source observation"
     },
     "AU000XCLWAP3": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
       "result": "New source observation"
     },
     "NC22300W": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
       "result": "New source observation"
     },
     "NZ13100V": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
       "result": "New source observation"
     },
     "NX24100T": {
-      "checked_at": "2026-11-26T23:54:51Z",
+      "checked_at": "2026-11-28T04:41:47Z",
       "status": "ok",
       "result": "New source observation"
     }
   },
-  "checked_at": "2026-11-26T23:54:51Z",
+  "checked_at": "2026-11-28T04:41:47Z",
   "status": "partial"
 }
