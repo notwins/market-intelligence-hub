@@ -212,3 +212,8 @@
 @media (max-width: 760px) {
   .nv-presenter-header { cursor: default; touch-action: auto; }
 }
+
+@media (max-width: 360px) {
+  .nv-presenter-header { gap: .4rem; }
+  .nv-presenter-header h2 { font-size: 1rem; }
+}
