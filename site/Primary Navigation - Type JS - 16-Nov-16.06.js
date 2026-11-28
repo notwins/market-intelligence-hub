@@ -1011,7 +1011,7 @@
   installCollapsibleMenu();
   if (document.querySelector('#featured-cards,[data-feed-cards],#dashboard-report-cards,script[src*="hourly-news.js"]')) {
     const artwork = document.createElement('script');
-    artwork.src = new URL('card-artwork.js?v=retro1', base);
+    artwork.src = new URL('card-artwork.js?v=rotation1', base);
     document.head.append(artwork);
   }
   const workspaceToolbar = document.querySelector('.topbar');

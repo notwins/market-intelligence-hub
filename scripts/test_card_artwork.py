@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import subprocess
 from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
@@ -33,6 +34,36 @@ class CardArtworkTests(unittest.TestCase):
         self.assertIn(assigned['briefings']['2026-11-28']['news'], self.pools['trade'])
         self.assertIn(assigned['briefings']['2026-11-28']['bonds'], self.pools['rates'])
         self.assertEqual(artwork.seed_hash('hello'), 0x4f9f2cab)
+
+    def test_rotation_uses_the_full_topic_pool_before_repeating(self):
+        pool = self.pools['rates']
+        topics = {f'story-{i}': 'rates' for i in range(2 * len(pool))}
+        picks = list(artwork.rotate_list(self.pools, topics).values())
+        for start in range(0, len(picks), len(pool)):
+            self.assertEqual(set(picks[start:start + len(pool)]), set(pool))
+        self.assertTrue(all(a != b for a, b in zip(picks, picks[1:])))
+        self.assertEqual(picks, list(artwork.rotate_list(self.pools, topics).values()))
+
+    def test_browser_and_daily_rotation_agree_for_reordered_topic_pools(self):
+        runner = """
+const {rotate} = require(process.argv[1]);
+const decks = JSON.parse(require('node:fs').readFileSync(0, 'utf8'));
+console.log(JSON.stringify(decks.map(deck => {
+  const lastUsed = new Map();
+  return deck.map(([pool, key], index) => rotate(pool, key, lastUsed, index));
+})));
+"""
+        deck = [(self.pools[topic], f'story-{i}') for i, topic in enumerate(
+            ['rates', 'rates', 'markets', 'economy', 'markets', 'rates'] * 4)]
+        decks = [deck, deck[::3], deck[::-1]]
+        expected = []
+        for entries in decks:
+            last_used = {}
+            expected.append([artwork.rotate(pool, key, last_used, i)
+                             for i, (pool, key) in enumerate(entries)])
+        result = subprocess.run(['node', '-e', runner, str(artwork.SITE / 'card-artwork.js')],
+                                input=json.dumps(decks), text=True, capture_output=True, check=True)
+        self.assertEqual(json.loads(result.stdout), expected)
 
     def test_assets_credits_and_assignments_agree(self):
         keys = {key for pool in self.pools.values() for key in pool}
