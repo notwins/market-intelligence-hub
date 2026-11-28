@@ -3,17 +3,17 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Compare every saved GLD accumulator quote across five editable gold price timelines. Inspect daily knock-outs and the P&L of holding, rolling, a covered sale, waiting or adding.">
 <title>GLD game plan · Five price plays | Market Intel</title>
-<link rel="stylesheet" href="gld-guide.css?v=1">
 <link rel="stylesheet" href="gld-strategy.css?v=1"><link rel="stylesheet" href="gld-plays.css?v=20261129.visual1"><link rel="stylesheet" href="gld-replay.css?v=20261129.periods1">
+<link rel="stylesheet" href="gld-guide.css?v=20261129.leaders1">
 <script defer src="metals-common.js"></script><script defer src="accumulator-model.js"></script><script defer src="gld-strategy-model.js?v=1"></script>
-<script defer src="gld-plays-paths.js?v=1"></script><script defer src="gld-plays-model.js?v=1"></script><script defer src="gld-play-history.js?v=2"></script><script defer src="gld-play-visuals.js?v=1"></script><script defer src="gld-replay-results.js?v=1"></script><script defer src="gld-replay-board.js?v=20261129.periods1"></script><script defer src="../xau-regimes.js?v=1"></script><script defer src="gld-guide-player.js?v=1"></script><script defer src="gld-guide.js?v=20261129.periods1"></script><script defer src="gld-plays.js?v=20261129.periods2"></script>
+<script defer src="gld-plays-paths.js?v=1"></script><script defer src="gld-plays-model.js?v=1"></script><script defer src="gld-play-history.js?v=2"></script><script defer src="gld-play-visuals.js?v=1"></script><script defer src="gld-replay-results.js?v=1"></script><script defer src="gld-replay-board.js?v=20261129.periods1"></script><script defer src="../xau-regimes.js?v=1"></script><script defer src="gld-leader-changes.js?v=1"></script><script defer src="gld-guide-player.js?v=20261129.leaders1"></script><script defer src="gld-guide.js?v=20261129.leaders1"></script><script defer src="gld-plays.js?v=20261129.leaders1"></script>
 </head><body>
 <nav class="mast" aria-label="Gold workspace"><a class="brand" href="../v4.html#tools">Market Intel</a><div class="navlinks"><a href="gld-accumulator.html">Saved GLD pricing</a><a href="gld-strategy-detail.html">Single-quote planner</a><a href="../xau-history.html">XAU research</a><a href="#decision-map">Decision map</a><a href="#timelines">Timelines</a></div></nav>
 <main class="play-shell">
 <header class="play-hero"><div><p class="eyebrow">GLD game plan</p><h1 id="page-heading">Five price plays</h1><p class="play-lead" id="page-lead">Follow every saved accumulator quote through a rebound, a deeper fall and three other paths. Move right through time to see which play leads and what changes after knock-out.</p></div>
 <div class="market-card"><p class="eyebrow" id="source-title">Saved GLD pricing</p><div class="market-pair"><div><small>GLD · USD/share</small><strong id="gld-mark">—</strong></div><div><small>Spot gold · USD/oz</small><strong id="xau-mark">—</strong></div></div><p class="play-note" id="market-date">Loading market references…</p><p class="market-history" id="recent-context" hidden></p></div></header>
 <nav class="play-modes" aria-label="Price paths"><a id="scenario-mode" href="gld-strategy.html" aria-current="page">Editable scenarios</a><a id="history-mode" href="?mode=historical#replay-results">Historical replay</a></nav>
-<button class="guide-start" id="play-walkthrough" data-guide-start="page" type="button" disabled>Play page walkthrough</button>
+<button id="play-walkthrough" data-guide-start="leader" type="button" title="Open the GLD guide" disabled><svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 11V9a7 7 0 0 1 14 0v2"/><rect x="2.7" y="9.8" width="3.6" height="6.4" rx="1.6"/><rect x="13.7" y="9.8" width="3.6" height="6.4" rx="1.6"/></svg>Guide</button>
 <section class="play-config" aria-labelledby="config-title">
 <p class="play-note" id="replay-assumptions" hidden>Each replay applies the saved quote percentages to that period’s opening GLD close. Prices are historical. Contracts, follow-on terms and P&amp;L are hypothetical. The market references above show the latest saved closes.</p>
 <div class="play-header"><div><h2 id="config-title">Comparison settings</h2><p class="play-note" id="quote-status">Loading saved quote sheet…</p></div><button id="csv" type="button" disabled>Download all checkpoints</button></div>
@@ -73,7 +73,7 @@
 </div></div></div>
 <div class="flow-follow"><h3>Compare choices after KO</h3><div id="flow-options" class="flow-routes" role="group" aria-label="Action after knock-out"></div>
 <p class="flow-explanation" id="flow-explanation" aria-live="polite"></p><a class="flow-example" id="flow-example" href="#timelines" hidden>Inspect this quote and its alternatives</a>
-</div><button class="guide-start" data-guide-start="flow" type="button" disabled>Explain this decision flow</button></div></details>
+</div></div></details>
 <div id="error" class="play-warning" role="alert" hidden></div><noscript>Enable JavaScript to compare the saved quotes.</noscript>
 <nav id="timelines" class="play-nav" aria-label="Jump to a price path"></nav>
 <div id="plays"></div>
@@ -87,7 +87,7 @@
 <p class="play-nav"><a href="../data/metals/gld-accumulator-pricing.json">Saved quote sheet</a><a href="../data/metals/gld.csv">GLD closes</a><a href="../data/metals/xau-spot.csv">Spot gold history</a><a href="https://www.ssga.com/us/en/intermediary/etfs/spdr-gold-shares-gld">GLD fund data</a><a href="https://www.ifec.org.hk/web/en/blog/2022/12/accumulators-and-decumulators-2.page">Accumulator contract guide</a></p></details>
 <details id="walkthrough-script" class="guide-script">
 <summary>Walkthrough script</summary>
-<p>Choose a line to edit its heading and narration. Words in braces fill in from the current quote. Saving applies your wording in this browser. For a site-wide edit, download the script and replace the JSON in <code>gld-guide-source</code> at the end of this page’s HTML.</p>
+<p>Choose a line to edit what the guide says about a quote, a change in the lead, or a contract rule. Fields in braces fill in the figures for the selected date. Save your wording in this browser, or download the full script. To update the published wording, replace <code>gld-guide-source</code> at the end of this page’s HTML.</p>
 <label>Script line<select id="guide-line"></select></label>
 <label>Step heading<input id="guide-heading" maxlength="140"></label>
 <label>Narration<textarea id="guide-line-text" rows="4" maxlength="2000"></textarea></label>
@@ -131,104 +131,196 @@
   },
   "lines": {
     "market": [
-      "Market reference",
-      "{reference}. The historical cards use the opening close of each period."
+      "Gold by the share",
+      "All amounts in this guide are in US dollars. GLD is a gold fund and its price is per share. {reference}. Spot gold, labelled XAU, is priced per troy ounce."
     ],
     "settings": [
-      "Starting position",
-      "The comparison runs each quote separately with {budget} in starting cash and {openingShares} opening shares. {quotes} saved quotes are priced."
+      "What you start with",
+      "Each quote starts with {budget} in cash and {openingShares} GLD shares. We try all {quotes} quotes separately. Profit or loss counts the cash left and the closing value of the shares you hold."
     ],
     "outcomes": [
-      "First-contract outcomes",
-      "Across {paths} displayed historical windows, {kos} first contracts knocked out, {maturities} matured, {open} were still open at the last close, and {skipped} were unfunded."
+      "How the first contracts ended",
+      "Across {paths} historical periods, {kos} contracts knocked out and {maturities} reached maturity. At the last close, {open} were still running. Another {skipped} could not open with the cash available."
     ],
     "pathList": [
-      "Choose a price path",
-      "There are {paths} price paths in this view. The walkthrough will now follow the selected quote on each card."
+      "Follow a price path",
+      "There are {paths} price paths in this view. Each shows what happens to the same starting position when gold takes a different course."
     ],
     "fund": [
-      "Fund the accumulator",
-      "Reserve enough cash for the maximum number of shares the quote can require at its buy strike."
+      "The cash commitment",
+      "An accumulator is an agreement to buy GLD shares in instalments. You set aside enough cash for every share you may have to buy at the agreed price."
     ],
     "observe": [
-      "Watch each fixing",
-      "At each eligible close below the upper barrier, the accumulator buys its daily lot at the strike. That purchase can cost more than buying GLD at the market close."
+      "The price checked each day",
+      "A fixing is the closing price the contract checks. Below the upper knock-out level, you buy the daily number of shares at the agreed price, called the strike. A cheaper market close still leaves you paying the strike."
     ],
     "knockout": [
-      "If GLD knocks out",
-      "A fixing at or above the upper barrier stops ordinary purchases. Any guaranteed shortfall is delivered and the unused cash becomes available."
+      "When buying stops early",
+      "KO means knock-out. If GLD closes at or above the upper level, ordinary purchases stop. You receive any shares still due under the guarantee, keep the shares already bought and get the unused cash back."
     ],
     "mature": [
-      "If maturity comes first",
-      "The first contract ends at its scheduled fixing. You keep the acquired shares. The roll-on-knock-out rule has no trigger."
+      "If the contract runs to maturity",
+      "The contract ends on its scheduled day and you keep the shares you bought. A strategy that rolls only after a knock-out stops here."
     ],
     "choices": [
-      "Compare the next action",
-      "{flow}"
+      "What you can do after KO",
+      "You can hold the shares and cash, wait for a dip, or buy more. Rolling means using available cash for a new accumulator. A covered decumulator sells shares you already own, in instalments at an agreed price. {flow}"
     ],
     "entry": [
-      "Entry on this path",
-      "{path}. {basis} The starting reference for {quote} is {entry} per share. The first observation comes after entry."
+      "The opening price",
+      "{quote} starts at {entry} per GLD share on this path, {path}. {basis} All the money figures are in US dollars. The first contract check comes after entry."
     ],
     "terms": [
-      "Strike and knock-out barrier",
-      "{quote} has a buy strike of {strike} and an upper knock-out of {barrier}. Its term is {term} fixings. The model estimates {guarantee} guaranteed fixings."
+      "The two prices to remember",
+      "For {quote}, you agree to buy at {strike}. A close at or above {barrier} triggers the knock-out. There are {term} scheduled price checks. The model estimates the guarantee covers {guarantee} of them."
     ],
     "ko": [
       "The first knock-out",
-      "{quote} knocked out at {when}, with a close of {close}. The portfolio held {shares} shares and {cash} in cash. The follow-on choices all begin with that same balance."
+      "{quote} knocked out at {when}, when GLD closed at {close}. You had {shares} shares and {cash} in cash. Every choice from here starts with those same holdings."
     ],
     "maturity": [
-      "Reached ordinary maturity",
-      "{quote} reached maturity at {when} without a knock-out. The portfolio had {shares} shares and {cash} in cash at that fixing."
+      "The contract reached maturity",
+      "{quote} reached the end at {when} without a knock-out. You held {shares} shares and {cash} in cash."
     ],
     "openEnd": [
-      "Still open at the last close",
-      "The available path ends at {when}. {quote} is still open with {remaining} scheduled fixings left. No post-knock-out P&L exists in this window."
+      "The record ends first",
+      "The price record ends at {when}. {quote} is still running with {remaining} price checks left. There has been no knock-out to compare yet."
     ],
     "unfunded": [
-      "Insufficient funding",
-      "{quote} could not fund one full daily lot for the entire term. The first accumulator never opened. The comparison still shows the eligible cash and direct GLD plays."
+      "Too little cash to open",
+      "{quote} needs enough cash for at least one share at every scheduled purchase. The opening cash fell short. The model can still compare the choices that the available cash permits."
     ],
     "fixing": [
-      "This quote and fixing",
-      "{quote} on {path}, at {when}. {basis} The selected price is {close} per share."
+      "The selected close",
+      "For {quote} on {path}, GLD closed at {close} at {when}. {basis}"
     ],
     "active": [
-      "Before the first exit",
-      "At {when}, {quote} is open. Its upper barrier is {barrier}, and {remaining} scheduled fixings remain."
+      "Still buying under the contract",
+      "{quote} is still open at {when}. Its upper knock-out is {barrier}. There are {remaining} scheduled price checks to go."
     ],
     "stillMature": [
-      "After ordinary maturity",
-      "{quote} matured at {exitWhen} without a knock-out. This fixing compares profits and losses from the original entry."
+      "After maturity",
+      "{quote} reached maturity at {exitWhen} without a knock-out. This comparison counts the gains and losses since the original entry."
     ],
     "stillKo": [
-      "After the knock-out",
-      "{quote} knocked out at {exitWhen} and settled with {shares} shares and {cash}. The highlighted balance is the starting point for the follow-on comparison."
+      "What came back at KO",
+      "{quote} knocked out at {exitWhen}. You held {shares} GLD shares and {cash} in cash. Those are the starting holdings for the next decision."
     ],
     "pnl": [
-      "The leading play",
-      "At {when}, {leader} has the highest eligible P&L of {amount} {pnlBasis} for {quote}."
+      "The choice in front",
+      "For {quote} at {when}, the leading eligible choice is {leader}. Its profit or loss {pnlBasis} is {amount}, including the closing value of its shares."
     ],
     "tie": [
-      "A tied result",
-      "At {when}, {winners} tie for the highest eligible P&L of {amount} {pnlBasis} for {quote}."
+      "An even result",
+      "The joint leaders for {quote} at {when} are {winners}. Each has a result of {amount} {pnlBasis}."
     ],
     "zero": [
-      "The KO balance",
-      "This is the knock-out fixing itself. Each follow-on action starts at zero additional P&L. A later fixing is needed to rank them."
+      "A common starting balance",
+      "This is the close that triggered KO. Every follow-on choice starts here with the same shares and cash, so each is level at zero."
     ],
     "none": [
-      "No eligible outcome",
-      "At {when}, no eligible play can be ranked for {quote}."
+      "Nothing eligible to rank",
+      "At {when}, none of the choices for {quote} qualifies for a comparison."
     ],
     "benchmark": [
-      "Compare with the baseline",
-      "At {when}, {benchmark} shows {basePnl} {pnlBasis}. The gap between it and the leading eligible result is {gap}."
+      "How far ahead",
+      "At {when}, {benchmark} shows {basePnl} {pnlBasis}. The difference between that result and the lead is {gap}."
     ],
     "finish": [
-      "At the final close",
-      "At the end of {path}, the price is {close} per share. {winners} finished highest at {amount} {pnlBasis}."
+      "The last close on this path",
+      "{path} ends with GLD at {close} per share. The highest result is {amount} {pnlBasis}, earned by {winners}."
+    ],
+    "leaderKo": [
+      "The starting point after KO",
+      "On {when}, GLD closed at {close} and triggered a knock-out, or KO. The first contract stopped buying and each choice starts with {shares} shares and {cash} in cash. A roll starts a new accumulator with cash from the KO. A covered decumulator sells shares in instalments. {basis}"
+    ],
+    "leaderNow": [
+      "Who leads at this close",
+      "{leaders} on {when}. {result} {trade} {comparison}"
+    ],
+    "leaderChange": [
+      "The lead has changed",
+      "{leaders} on {when}, replacing {previous}. {result} {trade} {comparison}"
+    ],
+    "leaderNoKo": [
+      "No knock-out on this path",
+      "At {when}, there is no knock-out to start from. {reason}"
+    ],
+    "leaderUnranked": [
+      "No result to rank yet",
+      "At {when}, GLD closed at {close}. {reason}"
+    ],
+    "leaderPosition": [
+      "Shares and cash",
+      "With {policy}, you have {shares} GLD shares and {cash} in cash."
+    ],
+    "leaderCompare": [
+      "Cash and shares explain the gap",
+      "Compare {policy} with {other}. The cash difference is {cashDelta}. The difference of {shareDelta} shares accounts for {holdingDelta} at this close. Together they give {gap}."
+    ],
+    "leaderCross": [
+      "What changed since the last close",
+      "Against {other}, the gap moved from {previousGap} to {gap}. Different share holdings explain {marketEffect} of that change. Trades at this close account for {tradeEffect}."
+    ],
+    "leaderMove": [
+      "Change in the GLD close",
+      "GLD moved from {priorPrice} at the preceding close to {close}."
+    ],
+    "leaderOnly": [
+      "One eligible choice",
+      "Only {policy} qualifies at this close."
+    ],
+    "leaderGap": [
+      "The gap to the next choice",
+      "The gap to {other} is {gap}."
+    ],
+    "leaderEqual": [
+      "Everyone is level",
+      "All the eligible choices are level at this close."
+    ],
+    "leaderReasonSkip": [
+      "The quote could not open",
+      "The first contract could not open. {detail}"
+    ],
+    "leaderReasonMaturity": [
+      "Maturity came first",
+      "The original contract reached maturity at {exitWhen}. It ran to the end without a knock-out."
+    ],
+    "leaderReasonOpen": [
+      "The price window ends",
+      "The first contract is still running when the available prices end at {endWhen}."
+    ],
+    "leaderReasonNone": [
+      "No eligible comparison",
+      "None of the available actions qualifies for a ranking at this close."
+    ],
+    "leaderLoss": [
+      "The smallest loss still leads",
+      "First place is still down {amount} since KO."
+    ],
+    "leaderGain": [
+      "Gain from the KO balance",
+      "The gain since KO is {amount}."
+    ],
+    "leaderFlat": [
+      "Level with the KO balance",
+      "The leading result is level with the starting balance at KO."
+    ],
+    "leaderLast": [
+      "The last change in the lead",
+      "The lead stays the same through {endWhen}, the last close on this path."
+    ],
+    "leaderBought": [
+      "What the extra shares earned",
+      "{policy} paid {tradePrice} per share on average for {quantity} shares, so at {close} their gain or loss is {tradePnl}."
+    ],
+    "leaderSold": [
+      "What the share sales earned",
+      "{policy} sold {quantity} shares for {tradePrice} each on average, so at {close} selling instead of holding made a difference of {tradePnl}."
+    ],
+    "leaderNoTrades": [
+      "No trades after KO",
+      "The eligible choices still hold the shares and cash they started with at KO."
     ]
   }
 }

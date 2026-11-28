@@ -1,7 +1,7 @@
 /* An on-demand, captioned walkthrough of live GLD simulator controls. */
 (function (root) {
   'use strict';
-  let current = null;
+  let current = null, voicePreference = true;
 
   function element(tag, cls, text) {
     const node = document.createElement(tag);
@@ -20,11 +20,8 @@
   const sayStatus = (s,text) => { if (s.status.textContent !== text) s.status.textContent = text; };
 
   function controls(s) {
-    s.dock.dataset.playing = String(s.auto && !s.paused);
     s.prev.disabled = s.index <= 0;
     s.next.disabled = s.index >= s.steps.length-1;
-    s.play.textContent = s.complete ? 'Play again' : s.auto && !s.paused ? 'Pause' : 'Play';
-    s.play.setAttribute('aria-label',s.complete ? 'Play guide again' : s.auto && !s.paused ? 'Pause guide' : 'Play guide');
     s.voice.disabled = !s.synth;
     s.voice.textContent = s.voiced ? 'Voice on' : 'Voice off';
     s.voice.setAttribute('aria-pressed',String(s.voiced));
@@ -40,43 +37,25 @@
       p.utterance.onstart = p.utterance.onend = p.utterance.onerror = null;
       try {
         s.synth.cancel();
-        if (p.held && s.synth.paused) s.synth.resume();
       } catch { /* Caption controls still work when speech is unavailable. */ }
     }
   }
   function finish(s,p) {
     if (!alive(s,p)) return;
-    if (document.hidden || s.paused) {
-      clearTimers(p); p.ended = true;
-      if (document.hidden && !s.paused) pause(s,true);
-      return;
-    }
     s.delivery = null;
     clearTimers(p);
-    if (!s.auto) return;
-    if (s.index+1 < s.steps.length) { showStep(s,s.index+1,true); return; }
-    s.auto = false; s.complete = true;
-    controls(s); sayStatus(s,'Guide complete.');
   }
   function timed(s,p,milliseconds,callback) {
-    p.remaining = milliseconds; p.until = performance.now()+milliseconds;
     p.timer = setTimeout(()=>{ if (alive(s,p)) callback(); },milliseconds);
-  }
-  function captions(s) {
-    if (!s.auto || s.paused || document.hidden) return;
-    const p = {utterance:null}; s.delivery = p;
-    timed(s,p,duration(s.words),()=>finish(s,p));
   }
   function speechFallback(s,p) {
     if (!alive(s,p)) return;
     cancelDelivery(s); s.voiced = false;
-    controls(s); sayStatus(s,'Voice unavailable. The guide is using captions.');
-    captions(s);
+    controls(s); sayStatus(s,'Voice unavailable. Read the caption.');
   }
   function speak(s) {
-    if (!s.ready || s.paused || document.hidden) return;
-    if (!s.voiced) { captions(s); return; }
-    const p = {utterance:null, held:false, started:false, ended:false};
+    if (!s.ready || !s.voiced || document.hidden) return;
+    const p = {utterance:null, started:false};
     s.delivery = p;
     try {
       const utterance = new root.SpeechSynthesisUtterance(s.words);
@@ -94,48 +73,16 @@
       // Engines can accept speak() without starting or delivering an end event.
       timed(s,p,Math.max(14000,duration(s.words)*2+6000),()=>speechFallback(s,p));
       p.startWatch=setTimeout(()=>{
-        if (alive(s,p) && !s.paused && !p.started && !s.synth.speaking) speechFallback(s,p);
+        if (alive(s,p) && !p.started && !s.synth.speaking) speechFallback(s,p);
       },4500);
       s.synth.speak(utterance);
     } catch { speechFallback(s,p); }
   }
-  function pause(s,hidden) {
-    if (current !== s) return;
-    s.auto=false; s.paused=true;
-    const p=s.delivery;
-    if (p) {
-      p.remaining=Math.max(150,(p.until || performance.now())-performance.now());
-      clearTimers(p);
-      if (p.utterance && !p.ended) {
-        try { s.synth.pause(); p.held=true; } catch { cancelDelivery(s); }
-      }
-    }
-    controls(s);
-    sayStatus(s,hidden ? 'Paused while this tab is hidden. Press Play to continue.' : 'Paused. Press Play to continue.');
-  }
-  function togglePlay(s) {
-    if (s.auto && !s.paused) { pause(s,false); return; }
-    if (s.complete) { showStep(s,0,true); return; }
-    const wasPaused=s.paused;
-    s.auto=true; s.paused=false; controls(s);
-    sayStatus(s,s.voiced ? 'Playing with voice.' : 'Playing with captions.');
-    const p=s.delivery;
-    if (!p) { speak(s); return; }
-    if (!wasPaused) return; // Already reading a manually selected step.
-    if (p.ended) { finish(s,p); return; }
-    if (p.utterance) {
-      try {
-        s.synth.resume(); p.held=false;
-        if (!s.synth.speaking && !s.synth.pending) { cancelDelivery(s); speak(s); return; }
-        timed(s,p,p.remaining,()=>speechFallback(s,p));
-      } catch { speechFallback(s,p); }
-    } else timed(s,p,p.remaining,()=>finish(s,p));
-  }
   function toggleVoice(s) {
     if (!s.synth) return;
-    cancelDelivery(s); s.voiced=!s.voiced; controls(s);
+    cancelDelivery(s); s.voiced=!s.voiced; voicePreference=s.voiced; controls(s);
     sayStatus(s,s.voiced ? 'Voice on.' : 'Voice off. Captions remain available.');
-    if (!s.paused && !s.complete) speak(s);
+    if (s.voiced) speak(s);
   }
 
   function intersection(a,b) {
@@ -250,23 +197,31 @@
     }
     queueLayout(s);
   }
-  function showStep(s,index,auto) {
+  function showStep(s,index) {
     if (current!==s || !s.steps[index]) return;
     const version=++s.version, step=s.steps[index];
-    cancelDelivery(s); s.index=index; s.auto=auto && !document.hidden; s.paused=document.hidden; s.complete=false; s.ready=false;
+    cancelDelivery(s); s.index=index; s.ready=false;
+    for (const node of s.leaderTargets) node.classList.remove('gld-guide-leader-target');
+    s.leaderTargets=[];
     targetStep(s,null);
-    s.count.textContent='Step '+(index+1)+' of '+s.steps.length;
+    s.count.textContent=s.mode==='changes' ? (index ? 'Change '+index+' of '+(s.steps.length-1) : 'Selected fixing') :
+      'Step '+(index+1)+' of '+s.steps.length;
     s.heading.textContent=step.title || 'Step '+(index+1);
     s.caption.textContent=step.text || '';
+    s.evidence.open=false;s.evidence.hidden=true;s.workingText.textContent='';
     controls(s);
-    sayStatus(s,document.hidden ? 'Paused while this tab is hidden. Press Play to continue.' :
-      !s.synth ? 'Browser speech is unavailable. Captions are on.' : auto ? (s.voiced ? 'Playing with voice.' : 'Playing with captions.') : 'Manual step.');
+    s.note.textContent=step.note || '';
+    s.note.hidden=!step.note;
+    sayStatus(s,!s.synth ? 'Browser speech is unavailable. Captions are on.' : '');
     function ready(result) {
       if (current!==s || s.version!==version) return;
       s.caption.textContent=result?.text || step.text || s.heading.textContent;
+      if (result?.workings) { s.workingText.textContent=result.workings; s.evidence.hidden=false; }
       s.words=s.heading.textContent.replace(/[.!?]+$/,'')+'. '+s.caption.textContent;
       s.ready=true;
       targetStep(s,result?.target);
+      s.leaderTargets=(result?.leaders || []).filter(node=>node?.isConnected);
+      for (const node of s.leaderTargets) node.classList.add('gld-guide-leader-target');
       speak(s);
     }
     try {
@@ -281,6 +236,7 @@
     current=null; s.version++; cancelDelivery(s);
     s.listeners.abort();s.resize?.disconnect();s.mutations?.disconnect();
     if (s.frame) cancelAnimationFrame(s.frame);
+    for (const node of s.leaderTargets) node.classList.remove('gld-guide-leader-target');
     s.target?.classList.remove('gld-guide-active-target');
     s.pointer.remove();s.spot.remove();s.dock.remove();
     if (restoreFocus) {
@@ -288,34 +244,38 @@
       target?.focus({preventScroll:true});
     }
   }
-  function start({title,steps,resolve,trigger}={}) {
+  function start({title,steps,resolve,trigger,mode='manual',options}={}) {
     if (!Array.isArray(steps) || !steps.length) return false;
     stop();
     const synth=typeof root.SpeechSynthesisUtterance==='function' ? root.speechSynthesis : null;
-    const s={steps,resolve,trigger:trigger || document.activeElement,synth,voiced:!!synth,version:0,target:null,
+    const s={steps,resolve,mode,trigger:trigger || document.activeElement,synth,voiced:!!synth && voicePreference,version:0,target:null,leaderTargets:[],
       delivery:null,ready:false,frame:0,listeners:new AbortController()};
     current=s;
     const dock=s.dock=element('aside','gld-guide-dock');
-    dock.tabIndex=-1;dock.dataset.placement='bottom';dock.setAttribute('role','region');
+    dock.tabIndex=-1;dock.dataset.mode=mode;dock.dataset.placement='bottom';dock.setAttribute('role','region');
     dock.setAttribute('aria-labelledby','gld-walkthrough-title');
     dock.setAttribute('aria-describedby','gld-walkthrough-step gld-walkthrough-caption');
     const header=element('div','gld-guide-header');
     const name=element('strong','gld-guide-title',title || 'GLD walkthrough');
     name.id='gld-walkthrough-title';
     s.count=element('span','gld-guide-count');
-    const close=button('close','Close',()=>stop({restoreFocus:true}));close.setAttribute('aria-label','Close guide');
+    const close=button('close','Stop',()=>stop({restoreFocus:true}));close.setAttribute('aria-label','Stop guide');
     header.append(name,s.count,close);
     s.heading=element('h3','gld-guide-step-title');s.caption=element('p','gld-guide-caption');
     s.heading.id='gld-walkthrough-step';s.caption.id='gld-walkthrough-caption';s.caption.setAttribute('aria-atomic','true');
     const bar=element('div','gld-guide-controls');bar.setAttribute('role','group');bar.setAttribute('aria-label','Guide playback');
-    s.prev=button('prev','Previous',()=>showStep(s,s.index-1,false));
-    s.play=button('play','Pause',()=>togglePlay(s));
-    s.next=button('next','Next',()=>showStep(s,s.index+1,false));
-    const repeat=button('repeat','Repeat',()=>showStep(s,s.index,false));repeat.setAttribute('aria-label','Repeat current step');
+    s.prev=button('prev','Previous',()=>showStep(s,s.index-1));
+    s.next=button('next',mode==='changes'?'Next change':'Next step',()=>showStep(s,s.index+1));
+    const repeat=button('repeat','Repeat',()=>showStep(s,s.index));repeat.setAttribute('aria-label','Repeat current step');
     s.voice=button('voice','Voice on',()=>toggleVoice(s));
-    bar.append(s.prev,s.play,s.next,repeat,s.voice);
+    bar.append(s.prev,s.next,repeat,s.voice);
     s.status=element('p','gld-guide-status');s.status.setAttribute('role','status');s.status.setAttribute('aria-live','polite');
-    dock.append(header,s.heading,s.caption,bar,s.status);
+    s.note=element('p','gld-guide-note');
+    s.evidence=element('details','gld-guide-evidence');
+    s.workingText=element('p','gld-guide-workings');
+    s.evidence.append(element('summary','','Cash and share workings'),s.workingText);
+    dock.append(header,s.heading,s.caption,s.note,bar,s.evidence,s.status);
+    if (options) dock.append(options);
     s.spot=element('div','gld-guide-spotlight');s.pointer=element('div','gld-guide-pointer');
     for (const node of [s.spot,s.pointer]) { node.hidden=true;node.setAttribute('aria-hidden','true'); }
     document.body.append(s.spot,s.pointer,dock);
@@ -325,7 +285,9 @@
     root.visualViewport?.addEventListener('resize',()=>queueLayout(s),{signal,passive:true});
     root.visualViewport?.addEventListener('scroll',()=>queueLayout(s),{signal,passive:true});
     document.addEventListener('visibilitychange',()=>{
-      if(document.hidden && !s.paused && !s.complete)pause(s,true);else queueLayout(s);
+      if (document.hidden && s.delivery) {
+        cancelDelivery(s); sayStatus(s,'Narration stopped while this tab was hidden. Repeat will read this step.');
+      } else queueLayout(s);
     },{signal});
     document.addEventListener('keydown',event=>{
       if (event.key==='Escape' && !event.defaultPrevented) { event.preventDefault();stop({restoreFocus:true}); }
@@ -334,7 +296,7 @@
     if (root.MutationObserver) {
       s.mutations=new MutationObserver(()=>queueLayout(s));s.mutations.observe(document.body,{childList:true,subtree:true});
     }
-    showStep(s,0,true);
+    showStep(s,0);
     dock.focus({preventScroll:true});
     return true;
   }
