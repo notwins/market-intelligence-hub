@@ -7,12 +7,7 @@ export function readingStyles(doc) {
   return style;
 }
 
-export function readingControls(bar, dialog) {
-  const jump = bar.querySelector('.reader-jump');
-  const list = jump.querySelector('nav');
-  const gear = bar.querySelector('.reader-settings');
-  const toggle = dialog.querySelector('input');
-  const note = dialog.querySelector('p');
+export function readingPreference(toggle, note, changed) {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const preference = 'market-hub-desk-motion';
   let enabled = true;
@@ -22,32 +17,49 @@ export function readingControls(bar, dialog) {
     return enabled && !reduced.matches;
   }
 
-  let effects;
   function syncMotion() {
     toggle.checked = motionAllowed();
     toggle.disabled = reduced.matches;
     note.textContent = reduced.matches ? 'Your device’s reduced-motion setting pauses the effects.'
       : 'Fade in headings and move the cover as you scroll. This setting also applies to the research library and desk.';
-    effects?.stop();
-    if (motionAllowed()) effects?.start();
+    changed();
   }
 
-  bar.querySelectorAll('[data-icon]').forEach(element => {
-    element.prepend(icon(element.dataset.icon, 'reader-icon'));
-  });
-  gear.addEventListener('click', () => dialog.showModal());
   toggle.addEventListener('change', () => {
     enabled = toggle.checked;
     try { localStorage.setItem(preference, enabled ? 'on' : 'off'); } catch { /* Keep this tab’s setting. */ }
     syncMotion();
+    window.dispatchEvent(new CustomEvent('research-motion-change', {detail: enabled}));
   });
   reduced.addEventListener('change', syncMotion);
-  window.addEventListener('storage', event => {
-    if (event.key !== preference && event.key !== null) return;
-    enabled = event.newValue !== 'off';
+  function receive(next) {
+    if (enabled === next) return;
+    enabled = next;
     syncMotion();
+  }
+  window.addEventListener('storage', event => {
+    if (event.key === preference || event.key === null) receive(event.newValue !== 'off');
   });
+  window.addEventListener('research-motion-change', event => receive(event.detail));
   syncMotion();
+  return motionAllowed;
+}
+
+export function readingControls(bar, dialog) {
+  const jump = bar.querySelector('.reader-jump');
+  const list = jump.querySelector('nav');
+  const gear = bar.querySelector('.reader-settings');
+  let effects;
+  function syncMotion() {
+    if (!effects) return;
+    effects.stop();
+    if (motionAllowed()) effects.start();
+  }
+  const motionAllowed = readingPreference(dialog.querySelector('input'), dialog.querySelector('p'), syncMotion);
+  bar.querySelectorAll('[data-icon]').forEach(element => {
+    element.prepend(icon(element.dataset.icon, 'reader-icon'));
+  });
+  gear.addEventListener('click', () => dialog.showModal());
   return {
     jump, list, motionAllowed,
     reset() {
@@ -64,7 +76,7 @@ export function readingControls(bar, dialog) {
   };
 }
 
-function addCover(doc, articleTitle, theme, artwork) {
+export function readingCover(doc, {title, theme, artwork, kicker: label = 'Research Explained'}) {
   const header = doc.createElement('section');
   header.className = 'research-reading-cover';
   header.setAttribute('aria-label', 'Article cover');
@@ -72,12 +84,12 @@ function addCover(doc, articleTitle, theme, artwork) {
   text.className = 'research-reading-intro';
   const kicker = doc.createElement('p');
   kicker.className = 'research-reading-kicker';
-  kicker.append(icon('book', 'reader-icon', doc), 'Research Explained');
+  kicker.append(icon('book', 'reader-icon', doc), label);
   const heading = doc.createElement('p');
   heading.className = 'research-reading-title';
-  heading.textContent = articleTitle;
+  heading.textContent = title;
   text.append(kicker, heading);
-  header.append(text, createCover(header, articleTitle, theme || pickTheme(articleTitle, ''), artwork));
+  header.append(text, createCover(header, title, theme || pickTheme(title, ''), artwork));
   return header;
 }
 
@@ -117,9 +129,10 @@ function setContents(scope, cover, {jump, list, motionAllowed}, headingsSelector
   return headings;
 }
 
-function articleMotion(doc, cover, headings) {
-  const scroller = doc.scrollingElement;
+export function readingMotion(doc, cover, headings, {scroller = doc.scrollingElement, progress = document.body} = {}) {
   const win = doc.defaultView;
+  const root = scroller === doc.scrollingElement ? null : scroller;
+  const target = root || win;
   const art = cover.querySelector('.research-cover');
   const shown = new WeakSet();
   const running = new Set();
@@ -133,17 +146,17 @@ function articleMotion(doc, cover, headings) {
       pending = 0;
       const distance = scroller.scrollTop;
       const range = scroller.scrollHeight - scroller.clientHeight;
-      document.body.style.setProperty('--reader-progress', range > 0 ? Math.min(distance / range, 1) : 0);
+      progress.style.setProperty('--reader-progress', range > 0 ? Math.min(distance / range, 1) : 0);
       art.style.translate = '0 ' + Math.min(28, Math.max(0, distance * .09)) + 'px';
       art.style.opacity = String(1 - Math.min(.45, Math.max(0, distance / 1000)));
     });
   }
 
   function start() {
-    win.addEventListener('scroll', syncProgress, {passive:true});
+    target.addEventListener('scroll', syncProgress, {passive:true});
     win.addEventListener('resize', syncProgress, {passive:true});
     resize = new ResizeObserver(syncProgress);
-    resize.observe(doc.body);
+    resize.observe(root || doc.body);
     syncProgress();
     observer = new win.IntersectionObserver(entries => {
       for (const {target,isIntersecting} of entries) {
@@ -157,7 +170,7 @@ function articleMotion(doc, cover, headings) {
         running.add(animation);
         animation.finished.catch(() => {}).finally(() => running.delete(animation));
       }
-    });
+    }, {root});
     for (const node of [...headings, cover.querySelector('.research-reading-intro')]) {
       if (!shown.has(node)) observer.observe(node);
     }
@@ -166,13 +179,13 @@ function articleMotion(doc, cover, headings) {
   function stop() {
     observer?.disconnect();
     resize?.disconnect();
-    win.removeEventListener('scroll', syncProgress);
+    target.removeEventListener('scroll', syncProgress);
     win.removeEventListener('resize', syncProgress);
     cancelAnimationFrame(pending);
     pending = 0;
     running.forEach(animation => animation.cancel());
     running.clear();
-    document.body.style.removeProperty('--reader-progress');
+    progress.style.removeProperty('--reader-progress');
     art.style.removeProperty('translate');
     art.style.removeProperty('opacity');
   }
@@ -181,13 +194,13 @@ function articleMotion(doc, cover, headings) {
 
 export function presentArticle(scope, controls, {title, theme, artwork, headings = 'h2', before}) {
   const doc = scope.ownerDocument;
-  const cover = addCover(doc, title, theme, artwork);
+  const cover = readingCover(doc, {title, theme, artwork});
   if (before) before.after(cover);
   else scope.prepend(cover);
   const chapters = setContents(scope, cover, controls, headings);
   if (doc.defaultView.IntersectionObserver && window.ResizeObserver && Element.prototype.animate) {
     const minor = [...scope.querySelectorAll('h3')].filter(node => !node.closest('nav, dialog, .reader-bar'));
-    controls.use(articleMotion(doc, cover, [...new Set([...chapters, ...minor])]));
+    controls.use(readingMotion(doc, cover, [...new Set([...chapters, ...minor])]));
   }
   return cover;
 }

@@ -72,8 +72,8 @@ grid.addEventListener('click',async e=>{
   const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');if(hash!==r.quick_read.sha256)throw Error('Brief changed');
   if(ticket!==preview||!dialog.open)return;content.replaceChildren();
   if(r.quick_read.url.endsWith('.pdf')&&matchMedia('(max-width:620px)').matches){content.textContent='The matching PDF brief is verified. Open brief above to read it.';return;}
-  const frame=document.createElement('iframe');frame.title=r.title+' matching brief';frame.setAttribute('sandbox','allow-same-origin');
-  if(r.quick_read.url.endsWith('.html'))frame.srcdoc=new TextDecoder().decode(bytes);else frame.src=direct.href;
+  const frame=document.createElement('iframe');frame.title=r.title+' matching brief';frame.setAttribute('sandbox','allow-same-origin allow-downloads');
+  if(r.quick_read.url.endsWith('.html'))frame.srcdoc='<base href="'+E(direct.href)+'">'+new TextDecoder().decode(bytes);else frame.src=direct.href;
   frame.addEventListener('load',()=>{try{frame.contentDocument.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();dialog.close();}});}catch{}});content.append(frame);
  }catch{if(ticket===preview&&dialog.open)content.textContent='Preview unavailable. Open the matching brief directly using the link above.';}
 });

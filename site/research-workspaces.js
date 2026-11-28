@@ -112,13 +112,13 @@ function observePage() {
   });
   dataObserver.observe(page, {childList:true, subtree:true});
 }
-function applyPreference() {
+function applyPreference(notify = true) {
   stopEffects();
   toggle.checked = enabled && !reduced.matches;
   toggle.disabled = reduced.matches;
   note.textContent = reduced.matches ? 'Your device’s reduced-motion setting pauses the effects.' : 'Fade headings and slide selected cards into view. This choice also applies to the main desk.';
   observePage();
-  if (library) window.dispatchEvent(new CustomEvent('research-motion-change', {detail: enabled}));
+  if (library && notify !== false) window.dispatchEvent(new CustomEvent('research-motion-change', {detail: enabled}));
 }
 toggle.addEventListener('change', () => {
   enabled = toggle.checked;
@@ -126,6 +126,11 @@ toggle.addEventListener('change', () => {
   applyPreference();
 });
 reduced.addEventListener('change', applyPreference);
+window.addEventListener('research-motion-change', event => {
+  if (enabled === event.detail) return;
+  enabled = event.detail;
+  applyPreference(false);
+});
 window.addEventListener('storage', event => {
   if (event.key === preference || event.key === null) {
     enabled = event.newValue !== 'off';
