@@ -5,6 +5,7 @@
   const charts = window.NvidiaCharts;
   const palette = ["#267044", "#416e9b", "#a45185", "#a35c26", "#6c5da8", "#007b7d", "#7d4f44", "#667625"];
   const otherUnit = "million in reporting currency";
+  const statements = { income: "Income statement", balance: "Balance sheet", cash: "Cash flow" };
   const moneyFmt = value => Number.isFinite(value)
     ? (value < 0 ? "−$" : "$") + Math.abs(value).toLocaleString("en-US", { maximumFractionDigits: 3 }) + "B" : "—";
   const percentFmt = value => Number.isFinite(value)
@@ -37,9 +38,39 @@
       return Number.isFinite(value) ? value / 1000 : null;
     }, true);
     const card = (title, kind, columns, note = "", usesGrowth = false) => ({ title, kind, columns, note, usesGrowth });
+    const comparable = (title, column) => ({ ...card(title, "trend", [column]), comparisonBars: true });
+    const peerShare = (title, measures, note) => ({
+      ...card(title, "share", [metric("Amount", "money"), metric("Peer-set share", "percent")], note),
+      measures,
+    });
+    const cash = dollars(BALANCE, "Cash and cash equivalents", "Cash");
+    const currentLiabilities = dollars(BALANCE, "Total current liabilities", "Current liabilities");
+    const currentRatio = metric("Current ratio", "multiple", (p, i) => read(p, RATIOS + " / Current ratio", i));
+    const liabilities = dollars(BALANCE, "Total liabilities", "Liabilities");
+    const equity = dollars(BALANCE, "Total equity", "Equity");
+    const assets = dollars(BALANCE, "Total assets", "Assets");
+    const quickRatio = metric("Quick ratio", "multiple", (p, i) => {
+      const denominator = read(p, field(BALANCE, "Total current liabilities"), i);
+      const currentAssets = read(p, field(BALANCE, "Total current assets"), i);
+      const inventory = read(p, field(BALANCE, "Inventories"), i);
+      return denominator > 0 && Number.isFinite(currentAssets) && Number.isFinite(inventory)
+        ? (currentAssets - inventory) / denominator : null;
+    });
+    const cashCoverage = metric("Cash / current liabilities", "multiple", (p, i) => {
+      const amount = read(p, field(BALANCE, "Cash and cash equivalents"), i);
+      const denominator = read(p, field(BALANCE, "Total current liabilities"), i);
+      return denominator > 0 && Number.isFinite(amount) ? amount / denominator : null;
+    });
+    const quickRatioNote = "Quick ratio uses current assets less inventory, divided by current liabilities. Other current assets, including any prepayments, remain in the numerator.";
+    const interestCoverage = metric("Interest coverage", "multiple", (p, i) => {
+      const expense = read(p, field(INCOME, "Interest expense"), i);
+      const operatingIncome = read(p, field(INCOME, "Operating income"), i);
+      return Number.isFinite(expense) && expense !== 0 && Number.isFinite(operatingIncome)
+        ? operatingIncome / Math.abs(expense) : null;
+    });
     return {
       income: [
-        card("Revenue over time", "trend", [dollars(INCOME, "Revenue")]),
+        comparable("Revenue over time", dollars(INCOME, "Revenue")),
         card("Revenue and earnings growth", "bars", [
           rate("Revenue", "Revenue growth"), rate("Net income to parent", "Net income growth"),
           growthAmount("Revenue", "Revenue change"), growthAmount("Net income to parent", "Net income change"),
@@ -52,17 +83,35 @@
           metric("Operating costs", "money", (p, i) => difference(p, i, INCOME, "Gross profit", "Operating income")),
           dollars(INCOME, "Operating income"), dollars(INCOME, "Revenue", "Total revenue", true),
         ], "Operating costs are gross profit less operating income. The stack places losses to the left of zero."),
-        card("Net income over time", "trend", [dollars(INCOME, "Net income to parent", "Net income")]),
+        comparable("Net income over time", dollars(INCOME, "Net income to parent", "Net income")),
+        peerShare("Share of peer revenue and net income", [
+          dollars(INCOME, "Revenue"), dollars(INCOME, "Net income to parent", "Positive net income"),
+        ], "Shares use the selected companies with figures in the same reporting bucket. Positive net income excludes losses from the share calculation. The table still shows those losses."),
       ],
       balance: [
         card("Liabilities and equity", "stack", [
-          dollars(BALANCE, "Total liabilities", "Liabilities"), dollars(BALANCE, "Total equity", "Equity"),
-          dollars(BALANCE, "Total assets", "Assets", true),
+          liabilities, equity, { ...assets, tableOnly: true },
         ], "Some issuers present additional interests outside liabilities and equity. An asterisk marks liabilities derived from reported assets and equity."),
         card("Cash and current liabilities", "bars", [
-          dollars(BALANCE, "Cash and cash equivalents", "Cash"), dollars(BALANCE, "Total current liabilities", "Current liabilities"),
-          metric("Current ratio", "multiple", (p, i) => read(p, RATIOS + " / Current ratio", i), true),
+          cash, currentLiabilities, { ...currentRatio, tableOnly: true },
         ]),
+        { ...card("Liabilities and equity over time", "components", [liabilities, equity, { ...assets, tableOnly: true }],
+          "Stacked bars display one company at a time. The table compares all selected companies for the highlighted period."), stacked: true },
+        card("Cash and current liabilities over time", "components", [cash, currentLiabilities, { ...currentRatio, tableOnly: true }],
+          "Compare two balances over time for one company. The table follows the highlighted period."),
+        peerShare("Share of peer assets and liabilities", [assets, liabilities],
+          "Each share uses the selected companies with a figure for the same reporting bucket."),
+        card("Liquidity ratios", "bars", [currentRatio, cashCoverage, quickRatio],
+          quickRatioNote + " Cash coverage uses cash and equivalents. A dash marks an unavailable ratio."),
+        { ...comparable("Quick ratio over time", quickRatio), note: quickRatioNote },
+        { ...card("Solvency and interest coverage", "bars", [
+          metric("Debt / equity", "multiple", (p, i) => {
+            const debt = read(p, field(RATIOS, "Total debt"), i);
+            const equityValue = read(p, field(BALANCE, "Total equity"), i);
+            return Number.isFinite(debt) && equityValue > 0 ? debt / equityValue : null;
+          }),
+          interestCoverage,
+        ], "Interest coverage is operating income divided by the magnitude of interest expense. Debt / equity requires positive equity."), separateScales: true },
         card("Leverage relative to assets", "bars", [
           percentOfAssets("Total debt / assets", RATIOS, "Total debt"),
           percentOfAssets("Total liabilities / assets", BALANCE, "Total liabilities"),
@@ -117,6 +166,15 @@
     const chosen = new Set(["AMD", "AVGO", "MSFT"]);
     let selected = "income";
     const checkboxes = [];
+    const sections = Object.fromEntries(Object.entries(statements).map(([key, label]) => {
+      const section = element("section", "", "nv-statement-group");
+      const heading = element("h3", label, "nv-statement-group-title");
+      heading.id = "nv-statement-group-" + key;
+      section.setAttribute("aria-labelledby", heading.id);
+      section.append(heading);
+      $("nv-statement-peer-cards").append(section);
+      return [key, section];
+    }));
 
     const select = (id, rows, defaultValue) => options($(id), rows.map(x => [x, periodLabel(x)]), defaultValue);
     const byFrequency = Object.fromEntries(["Quarterly", "Annual", "Half-year"].map(frequency => [
@@ -163,18 +221,19 @@
       draw();
     });
 
-    function getHost(card, index) {
-      const id = selected + "-" + (index + 1);
+    function getHost(card, index, statement) {
+      const id = statement + "-" + (index + 1);
       const existing = hosts.get(id);
       if (existing) return existing;
       const article = element("article", "", "nv-panel nv-statement-peer-card");
-      article.dataset.statement = selected;
+      article.dataset.statement = statement;
       const heading = element("h3", card.title);
       heading.id = "nv-statement-title-" + id;
       article.setAttribute("aria-labelledby", heading.id);
       const layout = element("div", "", "nv-statement-peer-layout");
       if (card.columns.length > 3) layout.classList.add("nv-statement-wide-table");
-      const chart = element("div", "", card.kind === "trend" ? "nv-chart nv-chart-small" : "nv-statement-bars");
+      const historical = ["trend", "components", "share"].includes(card.kind);
+      const chart = element("div", "", historical ? "nv-chart nv-chart-small" : "nv-statement-bars");
       chart.id = "nv-statement-chart-" + id;
       const tablePanel = element("div", "", "nv-statement-table-panel");
       const caption = element("p", "", "nv-statement-table-caption");
@@ -197,6 +256,7 @@
         th.scope = "col";
         const button = element("button", column.label, "nv-statement-sort");
         button.type = "button";
+        button.setAttribute("aria-label", column.label);
         button.addEventListener("click", () => {
           host.sortDirection = host.sortColumn === j ? -host.sortDirection : -1;
           host.sortColumn = j;
@@ -204,8 +264,8 @@
             if (index === j) header.setAttribute("aria-sort", host.sortDirection < 0 ? "descending" : "ascending");
             else header.removeAttribute("aria-sort");
           });
-          const { period, indices, basis } = host.tableView;
-          drawTable(host, card, period, indices, basis);
+          const { card: shownCard, period, indices, basis, detail } = host.tableView;
+          drawTable(host, shownCard, period, indices, basis, detail);
         });
         th.append(button);
         head.append(th);
@@ -217,10 +277,36 @@
       layout.append(chart, tablePanel);
       const header = element("div", "", "nv-panel-head");
       header.append(heading);
-      article.append(header, layout);
+      article.append(header);
+      if (card.comparisonBars || card.kind === "components" || card.measures || card.separateScales) {
+        host.controls = element("div", "", "nv-controls nv-statement-chart-controls");
+        const picker = text => {
+          const label = element("label", text);
+          const select = element("select");
+          label.append(select);
+          host.controls.append(label);
+          return select;
+        };
+        if (card.comparisonBars) {
+          host.mode = picker("Chart view");
+          options(host.mode, [["line", "Lines · selected companies"], ["bar", "Bars · NVIDIA and one peer"]], "line");
+        }
+        if (card.comparisonBars || card.kind === "components") host.issuer = picker(card.comparisonBars ? "Bar comparison peer" : "Chart company");
+        if (card.measures) {
+          host.measure = picker("Share measure");
+          options(host.measure, card.measures.map((column, i) => [String(i), column.label]), "0");
+        }
+        if (card.separateScales) {
+          host.measure = picker("Chart ratio");
+          options(host.measure, card.columns.map((column, i) => [String(i), column.label]), "0");
+        }
+        host.controls.addEventListener("change", () => host.refreshChart());
+        article.append(host.controls);
+      }
+      article.append(layout);
       window.NvdaChartControls.expandable(article, card.title, header);
       if (card.note) article.append(element("p", card.note, "nv-note"));
-      $("nv-statement-peer-cards").append(article);
+      sections[statement].append(article);
       host.tbody = tbody;
       hosts.set(id, host);
       return host;
@@ -233,10 +319,10 @@
       });
     }
 
-    function drawTable(host, card, period, indices, basis) {
-      host.tableView = { period, indices, basis };
+    function drawTable(host, card, period, indices, basis, detail = "") {
+      host.tableView = { card, period, indices, basis, detail };
       const basisLabel = card.usesGrowth ? " · " + basis : "";
-      host.caption.textContent = periodLabel(period) + basisLabel;
+      host.caption.textContent = periodLabel(period) + basisLabel + detail;
       const sort = card.columns[host.sortColumn];
       const ordered = sort ? [...indices].sort((a, b) => {
         if (a === 0 || b === 0) return a - b;
@@ -269,7 +355,7 @@
           if (value < 0) td.classList.add("nv-neg");
           if (value > 0 && card.usesGrowth) td.classList.add("nv-pos");
           const basisNote = read(period, "Total liabilities calculation basis", i);
-          if (Number.isFinite(value) && basisNote && ["Liabilities", "Total liabilities / assets"].includes(column.label)) {
+          if (Number.isFinite(value) && basisNote && ["Liabilities", "Total liabilities / assets"].includes(column.liabilityLabel || column.label)) {
             const marker = element("sup", "*");
             marker.title = basisNote;
             marker.setAttribute("aria-label", basisNote);
@@ -283,8 +369,8 @@
       showHighlight(host);
     }
 
-    function drawBars(host, card, period, indices, basis) {
-      const columns = card.columns.filter(column => !column.tableOnly);
+    function drawBars(host, card, period, indices, basis, selectedColumn) {
+      const columns = selectedColumn ? [selectedColumn] : card.columns.filter(column => !column.tableOnly);
       const stacked = card.kind === "stack";
       const values = indices.map(i => columns.map(column => column.read(period, i, basis)));
       const format = formatters[columns[0].type];
@@ -361,28 +447,70 @@
       host.chart.replaceChildren(legend, scale, body);
     }
 
-    function drawTrend(host, card, trendKeys, period, indices, basis) {
-      const column = card.columns[0];
-      const format = formatters[column.type];
-      const axis = column.type === "money"
-        ? value => (value < 0 ? "−" : "") + "$" + Math.abs(value).toLocaleString("en-US", { maximumFractionDigits: 1 }) + "B"
-        : format;
+    function drawHistory(host, card, trendKeys, period, indices, basis) {
       const keys = trendKeys.length ? trendKeys : [period];
-      const current = keys.indexOf(period);
-      const series = indices.map((i, j) => ({
-        label: companies[i].ticker,
+      const active = keys.includes(period) ? keys.indexOf(period) : keys.length - 1;
+      const dates = keys.map(periodAnchor);
+      const labels = keys.map(axisKey);
+      const base = { dates, axisLabels: labels, selectionLabels: labels, title: card.title, active };
+      const show = (model, update) => {
+        if (!model.series.some(line => line.values.some(Number.isFinite))) update(active);
+        charts.render(host.chart, { ...base, ...model, onSelect: update });
+      };
+      const asMoney = value => (value < 0 ? "−" : "") + "$" + Math.abs(value).toLocaleString("en-US", { maximumFractionDigits: 1 }) + "B";
+      const seriesFor = (column, i, label, j) => ({
+        label,
         color: palette[j % palette.length],
         values: keys.map(key => column.read(key, i, basis)),
         dash: j >= palette.length ? [2 + 2 * Math.floor(j / palette.length), 3] : [],
-      }));
-      const active = current >= 0 ? current : keys.length - 1;
-      if (!series.some(line => line.values.some(Number.isFinite))) drawTable(host, card, keys[active], indices, basis);
-      charts.render(host.chart, {
-        dates: keys.map(periodAnchor), axisLabels: keys.map(axisKey), selectionLabels: keys.map(axisKey),
-        series, title: card.title, axis, format, zero: column.type === "money",
-        active,
-        onSelect: index => drawTable(host, card, keys[index], indices, basis),
       });
+      if (card.kind === "share") {
+        const measure = card.measures[Number(host.measure.value)];
+        const summaries = keys.map(key => {
+          const amounts = new Map(indices.map(i => [i, measure.read(key, i, basis)]));
+          const values = [...amounts.values()].filter(Number.isFinite);
+          const total = values.reduce((sum, value) => sum + Math.max(value, 0), 0);
+          const shares = new Map([...amounts].map(([i, value]) => [i, total > 0 && value >= 0 && Number.isFinite(value) ? 100 * value / total : null]));
+          return { amounts, shares, total, count: values.length };
+        });
+        const series = [
+          { label: "NVIDIA", color: palette[0], values: summaries.map(({ shares }) => shares.get(0)) },
+          { label: "Other selected companies", color: palette[1], values: summaries.map(({ shares, total }) => {
+            if (!total) return null;
+            return 100 - (shares.get(0) ?? 0);
+          }) },
+        ];
+        show({ series, bars: true, stacked: true, domain: { floor: 0, ceil: 100, step: 25 },
+          format: percentFmt, axis: percentFmt, title: measure.label + " share of selected companies" }, index => {
+          const { amounts, shares, total, count } = summaries[index];
+          const tableCard = { ...card, columns: [
+            { ...card.columns[0], read: (_, i) => amounts.get(i), liabilityLabel: measure.label },
+            { ...card.columns[1], read: (_, i) => shares.get(i) },
+          ] };
+          const detail = " · " + measure.label + " · " + count + " of " + indices.length + " with figures"
+            + (total ? " · Denominator " + moneyFmt(total) : " · Share unavailable");
+          drawTable(host, tableCard, keys[index], indices, basis, detail);
+        });
+        return;
+      }
+      const bars = card.kind === "components" || host.mode?.value === "bar";
+      const column = card.columns[0];
+      const format = formatters[column.type];
+      const axis = column.type === "money" ? asMoney : format;
+      let series;
+      let detail = "";
+      if (card.kind === "components") {
+        const issuer = Number(host.issuer.value);
+        series = card.columns.filter(metric => !metric.tableOnly).map((metric, j) => seriesFor(metric, issuer, metric.label, j));
+        detail = " · Chart company " + companies[issuer].ticker;
+      } else {
+        const shown = bars && indices.length > 1 ? [0, Number(host.issuer.value)] : indices;
+        series = shown.map((i, j) => seriesFor(column, i, companies[i].ticker, j));
+        if (bars && shown.length > 1) detail = " · Bars NVDA and " + companies[shown[1]].ticker;
+      }
+      const stacked = Boolean(card.stacked);
+      show({ series, axis, format, zero: column.type === "money", bars, stacked, grouped: bars && !stacked },
+        index => drawTable(host, card, keys[index], indices, basis, detail));
     }
 
     function draw() {
@@ -391,9 +519,10 @@
       const growth = $("nv-statement-peer-growth");
       const quarterly = frequency === "Quarterly";
       growth.querySelector('[value="QoQ"]').disabled = !quarterly;
-      growth.disabled = selected !== "income";
+      const showGrowth = selected === "income" || selected === "all";
+      growth.disabled = !showGrowth;
       const basis = quarterly ? growth.value : "YoY";
-      $("nv-statement-peer-growth-basis").hidden = selected !== "income";
+      $("nv-statement-peer-growth-basis").hidden = !showGrowth;
       if (!quarterly) growth.value = "YoY";
       const trendKeys = byFrequency[frequency]
         .filter(key => period.startsWith("Latest ") || key <= period)
@@ -403,19 +532,47 @@
       });
       $("nv-statement-peer-count").textContent = chosen.size + " of " + (companies.length - 1) + " peers";
       const indices = companies.map((_, i) => i).filter(i => i === 0 || chosen.has(companies[i].ticker));
-      hosts.forEach(({ article }) => { article.hidden = article.dataset.statement !== selected; });
-      cards[selected].forEach((card, index) => {
-        const host = getHost(card, index);
-        if (!indices.includes(host.focus)) host.focus = 0;
-        if (card.kind === "trend") drawTrend(host, card, trendKeys, period, indices, basis);
-        else {
-          drawBars(host, card, period, indices, basis);
-          drawTable(host, card, period, indices, basis);
-        }
-      });
+      $("nv-statement-peer-cards").dataset.view = selected;
+      for (const [statement, section] of Object.entries(sections)) {
+        section.hidden = selected !== "all" && selected !== statement;
+        section.firstElementChild.hidden = selected !== "all";
+        if (section.hidden) continue;
+        cards[statement].forEach((card, index) => {
+          const host = getHost(card, index, statement);
+          if (!indices.includes(host.focus)) host.focus = 0;
+          if (host.issuer) {
+            const selectable = card.comparisonBars ? indices.slice(1) : indices;
+            const choices = selectable.map(i => [String(i), companies[i].name + " · " + companies[i].ticker]);
+            const current = host.issuer.value;
+            options(host.issuer, choices, choices.some(([value]) => value === current) ? current : choices[0]?.[0]);
+          }
+          if (["trend", "components", "share"].includes(card.kind)) {
+            host.refreshChart = () => {
+              if (host.mode) host.issuer.closest("label").hidden = host.mode.value !== "bar" || indices.length < 2;
+              drawHistory(host, card, trendKeys, period, indices, basis);
+            };
+            host.refreshChart();
+          } else {
+            host.refreshChart = () => {
+              const column = card.separateScales ? card.columns[Number(host.measure.value)] : undefined;
+              drawBars(host, card, period, indices, basis, column);
+              drawTable(host, card, period, indices, basis, column ? " · Chart " + column.label : "");
+            };
+            host.refreshChart();
+          }
+        });
+      }
     }
 
     draw();
+    window.NvdaStatementPrint.mount(() => ({
+      groups: Object.entries(sections).filter(([, section]) => !section.hidden),
+      statements,
+      filing: periodLabel($("nv-statement-peer-period").value),
+      range: $("nv-statement-peer-range").selectedOptions[0].textContent,
+      coverage: chosen.size + " of " + (companies.length - 1) + " peers selected",
+      asOf: financial.asOf,
+    }));
   }
 
   window.NvidiaStatementComparisons = { mount };
