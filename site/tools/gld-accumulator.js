@@ -199,7 +199,7 @@
 
   function render() {
     const planner = el('strategy-planner');
-    planner.setAttribute('href', 'gld-strategy.html');
+    planner.setAttribute('href', 'gld-strategy-detail.html');
     const historical = el('mode').value === 'history';
     const months = Number(el('months').value);
     const {trade, observations} = historical ? replayFor(months) : {};
@@ -237,7 +237,7 @@
         spot: String(spot), strike: String(quote.strike), ko: String(quote.ko),
         days: String(sim.days), guarantee: String(sim.guaranteeDay)
       });
-      planner.setAttribute('href', 'gld-strategy.html?' + plannerTerms);
+      planner.setAttribute('href', 'gld-strategy-detail.html?' + plannerTerms);
       sharesInput.placeholder = String(sim.dailyShares);
       const difference = sim.payment - target;
       const comparison = difference === 0 ? 'matches target capital' :
