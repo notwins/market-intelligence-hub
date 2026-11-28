@@ -4,6 +4,7 @@
   let replayMode = params.get('mode') === 'historical';
   function readRegime(query) {
     const id=query.get('regime'),phase=query.get('phase')??'cycle';
+    if(XauRegimes.dateWindow(id))return {id,phase:'cycle'};
     return XauRegimes.periods.some(p=>p.id===id)&&Object.hasOwn(XauRegimes.phases,phase)?{id,phase}:null;
   }
   function readRanked(query) {
@@ -749,7 +750,9 @@
         if(phase===regimeRequest.phase)link.setAttribute('aria-current','page');
         links.append(link);
       }
-      const source=node('a','Back to the macro comparison');source.href='../xau-history.html#regimes';links.append(source);
+      const analog=XauRegimes.dateWindow(regimeRequest.id);
+      const source=node('a',analog?'Back to gold drawdown matches':'Back to the macro comparison');
+      source.href='../xau-history.html'+(analog?'#drawdown-analogs':'#regimes');links.append(source);
       box.append(links);
     }
     p.chart=node('div',null,'play-chart');p.chartCaption=node('p',null,'play-note');
@@ -948,9 +951,14 @@
       setText('page-lead','Replay the saved quotes through ten historical windows. Pick a quote and date to see knock-outs, P&L and drawdown.');
       setText('price-method','Replay pricing uses one recorded GLD close per trading session. The first close sets each quote’s dollar strike and KO. Observations begin on the next session and stop at the last available close in the chosen period.');
     }else for(const [id,html] of Object.entries(originals))$(id).innerHTML=html;
+    const analog=regimeRequest&&XauRegimes.dateWindow(regimeRequest.id);
     if(regimeRequest){
-      setText('page-lead','Apply all saved GLD quotes to the selected XAU regime and compare the results through the chosen historical window.');
-      setText('price-method','The opening replay price sets the strike and KO for each quote. Earlier windows can use a monthly gold-price proxy where GLD closes have no coverage.');
+      setText('page-lead',analog?
+        'Apply the saved GLD quotes to the exact historical window selected in Gold History.':
+        'Apply all saved GLD quotes to the selected XAU regime and compare the results through the chosen historical window.');
+      setText('price-method',analog?
+        'This analog uses actual GLD closes from the last sessions of the selected months. The opening close sets each quote’s strike and KO.':
+        'The opening replay price sets the strike and KO for each quote. Earlier windows can use a monthly gold-price proxy where GLD closes have no coverage.');
     }
     document.title=(replayMode?'Historical GLD replay':'GLD game plan · Five price plays')+' | Market Intel';
     const nav=$('timelines');nav.replaceChildren();

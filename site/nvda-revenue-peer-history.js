@@ -233,9 +233,7 @@
       const peers = companies.map((_, i) => i).filter(i => i > 0 && peerSet.has(companies[i].ticker));
       const snapshots = dates.map(period => comparison(period, peers, frequency, descriptor, revenueShare));
       const peerMedian = margin && peers.length > peerColors.length;
-      $("nv-revenue-method").textContent = "Select a period on the trend chart to update the ranking, comparison bars and table. "
-        + "Select a comparison bar to jump to its filing row. "
-        + (margin ? "Margin changes are current minus prior margin, shown in percentage points. "
+      $("nv-revenue-method").textContent = (margin ? "Margin changes are current minus prior margin, shown in percentage points. "
           + (peerMedian ? "The peer trend shows the median of selected peers with data. " : "")
           : "Growth uses each issuer’s reporting currency and requires a positive prior-period figure. ")
         + "Quarterly filing ends match within 45 days of NVIDIA’s. Annual filing ends match within 125 days.";

@@ -49,6 +49,19 @@
     const pe = $("nv-market-pe-chart");
     const revenue = $("nv-market-revenue-chart");
     const overlayNote = $("nv-market-overlay-note");
+    const peMethod = element("p", "Trailing P/E uses positive trailing earnings in the monthly archive.", "nv-note");
+    peMethod.dataset.chart = pe.id;
+    const revenueMethod = element("p", "Revenue carries forward the latest quarterly figure reported before each monthly close. Opening quarters: ", "nv-note");
+    revenueMethod.dataset.chart = revenue.id;
+    openingQuarters.forEach((row, index) => {
+      if (index) revenueMethod.append(" · ");
+      const link = element("a", "FY2017 Q" + (index + 3));
+      link.href = row.source;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      revenueMethod.append(link);
+    });
+    overlayNote.replaceChildren(peMethod, revenueMethod);
     const toggles = $("nv-market-overlays");
     const rail = $("nv-market-annotations");
     const filters = $("nv-market-event-filter");
@@ -133,22 +146,6 @@
       filters.hidden = !eventsOn;
       eventBox.hidden = !eventsOn;
       caption.hidden = !eventsOn;
-      overlayNote.hidden = !peOn && !revOn;
-      overlayNote.textContent = [
-        peOn && "Trailing P/E uses positive trailing earnings in the monthly archive.",
-        revOn && "Revenue carries forward the latest quarterly figure reported before each monthly close.",
-      ].filter(Boolean).join(" ");
-      if (revOn) {
-        overlayNote.append(" Opening quarters: ");
-        openingQuarters.forEach((row, index) => {
-          if (index) overlayNote.append(" · ");
-          const link = element("a", "FY2017 Q" + (index + 3));
-          link.href = row.source;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          overlayNote.append(link);
-        });
-      }
 
       const selected = new Set(Array.from(filters.querySelectorAll("input:checked"), input => input.value));
       const byMonth = new Map();

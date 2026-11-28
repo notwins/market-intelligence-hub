@@ -8,8 +8,8 @@
   --nv-green: #255439;
   --nv-navy: #17251c;
   --nv-lime: #c6eb83;
-  --nv-serif: Georgia, "Times New Roman", serif;
-  --nv-sans: "Segoe UI", system-ui, sans-serif;
+  --nv-serif: "STIX Two Text", Georgia, "Times New Roman", serif;
+  --nv-sans: "DM Sans", "Segoe UI", system-ui, sans-serif;
 }
 html { scroll-behavior: smooth; }
 body.nvda-history-page { margin: 0; color: var(--nv-ink); background: var(--nv-paper); font: 16px/1.55 var(--nv-sans); }
@@ -69,10 +69,17 @@ body.nvda-history-page .nv-main > section[id] {
 .nv-main h3 { font: 500 clamp(1.27rem,2.1vw,1.83rem)/1.12 var(--nv-serif); letter-spacing: -.035em; margin: 0; }
 .nv-insights p, .nv-source-grid p { color: var(--nv-muted); margin: 8px 0 10px; font-size: .92rem; }
 .nv-insights a, .nv-source-grid a { font-size: .86rem; font-weight: 660; }
+.nv-methods { display: grid; gap: .55rem; margin-top: 1.6rem; }
+.nv-methods > details { background: var(--nv-white); border: 1px solid var(--nv-line); border-radius: 7px; padding-inline: .9rem; }
+.nv-methods summary { color: var(--nv-green); cursor: pointer; font-size: .95rem; font-weight: 700; padding-block: .65rem; }
+.nv-methods :is(p,dl) { font: .9rem/1.55 var(--nv-sans); max-width: 80ch; margin: 0 0 .8rem; }
+.nv-methods :is(p,dd) { color: var(--nv-muted); }
+.nv-methods dt { font-weight: 700; }
+.nv-methods dd { margin: .1rem 0 .7rem; }
 .nv-panel { border: 1px solid var(--nv-line); background: var(--nv-white); color: var(--nv-ink); padding: clamp(14px,2.2vw,27px); border-radius: 12px; min-width: 0; }
 .nv-panel-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 17px; flex-wrap: wrap; margin-bottom: 6px; }
-.nv-muted { color: var(--nv-muted); margin: 6px 0 0; font-size: .84rem; line-height: 1.45; }
-.nv-note { color: var(--nv-muted); font-size: .79rem; margin: 12px 0 0; }
+.nv-muted { color: var(--nv-muted); margin: 6px 0 0; font-size: .875rem; line-height: 1.45; }
+.nv-note { color: var(--nv-muted); font-size: .825rem; line-height: 1.5; margin: 12px 0 0; }
 .nv-grid-2 { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
 .nv-fin-pair { margin-block: 16px; }
 .nv-peer-chart-box { margin-top: 16px; }
@@ -226,7 +233,6 @@ body.nvda-history-page .nv-main > section[id] {
 .nv-revenue-share small { display: block; font-size: .75rem; color: var(--nv-muted); font-weight: 500; }
 #nv-revenue-scale-chart { min-height: 0; }
 #nv-revenue-scale-chart canvas { height: clamp(176px,20vw,222px); }
-#nv-revenue-method { margin: 12px 0 9px; }
 .nv-revenue-compare-table { max-height: 300px; }
 .nv-revenue-compare-table tbody th { min-width: 134px; }
 @media (max-width: 820px) {
@@ -452,8 +458,6 @@ body.nvda-history-page .nv-main > section[id] {
 .nv-market-event-head > div { display: flex; flex-wrap: wrap; gap: 6px; }
 .nv-market-event-head button:disabled { opacity: .54; cursor: default; }
 .nv-market-event-choice { display: none; }
-.nv-market-event-method { margin-top: 9px; font-size: .8rem; color: var(--nv-muted); }
-.nv-market-event-method summary { color: var(--nv-green); font-weight: 650; cursor: pointer; }
 .nv-market-event-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));

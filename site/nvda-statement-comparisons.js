@@ -163,6 +163,15 @@
     const periods = Object.keys(financial.periods);
     const read = (period, key, i) => financial.periods[period]?.[key]?.[i] ?? null;
     const cards = definitions(read, usd);
+    const methods = $("nv-statement-methods");
+    for (const [statement, definitions] of Object.entries(cards)) {
+      definitions.forEach((card, index) => {
+        if (!card.note) return;
+        const note = element("dd", card.note);
+        note.id = "nv-statement-method-" + statement + "-" + (index + 1);
+        methods.append(element("dt", card.title), note);
+      });
+    }
     const chosen = new Set(["AMD", "AVGO", "MSFT"]);
     let selected = "income";
     const checkboxes = [];
@@ -307,7 +316,7 @@
       }
       article.append(layout);
       window.NvdaChartControls.expandable(article, card.title, header);
-      if (card.note) article.append(element("p", card.note, "nv-note"));
+      if (card.note) article.setAttribute("aria-describedby", "nv-statement-method-" + id);
       sections[statement].append(article);
       host.tbody = tbody;
       hosts.set(id, host);

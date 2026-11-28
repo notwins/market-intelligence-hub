@@ -8,7 +8,8 @@
 <title>Gold in history · Market Intel</title><link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="xau-history.css?v=4">
 <link rel="stylesheet" href="xau-open-history.css?v=1">
-<script defer src="xau-history-model.js?v=2"></script><script defer src="xau-library.js?v=2"></script><script defer src="xau-regimes.js?v=1"></script><script defer src="xau-open-history.js?v=1"></script><script defer src="xau-history.js?v=5"></script>
+<link rel="stylesheet" href="xau-analogs.css?v=1">
+<script defer src="xau-history-model.js?v=2"></script><script defer src="xau-library.js?v=2"></script><script defer src="xau-regimes.js?v=2"></script><script defer src="xau-open-history.js?v=1"></script><script defer src="xau-analogs.js?v=1"></script><script defer src="xau-history.js?v=6"></script>
 </head><body class="xau-research">
 <a class="skip" href="#main">Skip to gold research</a>
 <main id="main">
@@ -16,15 +17,52 @@
   <div><nav class="gold-crumb" aria-label="Breadcrumb"><a href="v4.html#tools">Market Intel</a> / <a href="tools/gold-charts.html">Gold tools</a> / <span>XAU</span></nav>
   <p class="chapter" data-xau-icon="bars">Market history · XAU/USD</p><h1>Gold<br><em>in history.</em></h1>
   <p class="hero-lead">Read gold’s history from 1960 alongside stocks, inflation, jobs, interest rates, currencies and geopolitical risk. Trace China’s role, compare metals and see how official holdings and mine supply have changed.</p>
-  <div class="hero-links"><a class="action" href="#full-history" data-xau-icon="clock">Explore the full history</a><a href="#library" data-xau-icon="table">Explore the data matrix</a><a href="tools/gld-strategy.html" data-xau-icon="route">GLD game plan</a></div></div>
+  <div class="hero-links"><a class="action" href="#full-history" data-xau-icon="clock">Explore the full history</a><a href="#drawdown-analogs" data-xau-icon="trend">Compare the recent fall</a><a href="tools/gld-strategy.html" data-xau-icon="route">GLD game plan</a></div></div>
   <figure><img src="assets/desk/history-gold.jpg" width="960" height="320" alt="" fetchpriority="high"><figcaption>Official holdings are a stock. Mine production is an annual flow.</figcaption></figure>
 </div></header>
 <nav class="gold-jump" aria-label="Gold research sections"><div class="gold-shell">
-<a href="#overview">Overview</a><a href="#full-history" data-xau-icon="clock">Full history</a><a href="#compare">Compare</a><a href="#library">Data matrix</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#strategy">GLD game plan</a><a href="#papers">Research</a>
+<a href="#overview">Overview</a><a href="#drawdown-analogs" data-xau-icon="trend">Recent fall</a><a href="#full-history" data-xau-icon="clock">Full history</a><a href="#compare">Compare</a><a href="#library">Data matrix</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#strategy">GLD game plan</a><a href="#papers">Research</a>
 </div></nav>
 <div class="gold-shell">
 <p id="load-status" class="status" role="status">Loading gold and macro histories…</p>
 <dl class="gold-kpis" id="gold-kpis" aria-label="Latest observations"></dl>
+<section class="gold-section xa-study" id="drawdown-analogs" aria-labelledby="xa-title">
+  <header class="section-heading"><div><p class="chapter" data-xau-icon="trend">Historical drawdown matches</p><h2 id="xa-title">Which gold falls look like this one?</h2></div><p>Compare the dollar, Fed policy, Treasury yields, inflation and jobs over similar falls. Then see what gold did in the months that followed.</p></header>
+  <div class="gold-panel xa-lead">
+    <p class="status" id="xa-status" role="status">Matching the latest drawdown with historical periods…</p>
+    <dl id="xa-latest" class="gold-kpis compact"></dl>
+    <p id="xa-reference-link" class="xa-reference-link"></p>
+  </div>
+  <div id="xa-results" hidden>
+    <div class="xa-summary" id="xa-summary"></div>
+    <section class="gold-panel xa-panel">
+      <header><h3>How the economy changed during each fall</h3><p class="chart-note">Each column runs from the local gold high to the matched month. Rates and inflation use percentage points.</p></header>
+      <div class="chart-presets xa-order" aria-label="Order historical matches">
+        <button type="button" data-analog-rank="macro" aria-pressed="true">Rank by macro changes</button>
+        <button type="button" data-analog-rank="beta" aria-pressed="false">Rank by beta profile</button>
+      </div>
+      <p id="xa-ranking" class="chart-note" role="status"></p>
+      <div id="xa-deltas" class="table-scroll xa-table" tabindex="0" aria-label="Macro changes during the matched gold falls"></div>
+    </section>
+    <section class="gold-panel xa-panel">
+      <header><h3>What gold did next</h3><p class="chart-note">Every path is indexed to 100 in its matched month. The shaded area shows the following 12 months. The recent path uses published monthly observations as they become available.</p></header>
+      <div class="xa-legend" id="xa-legend" aria-label="Gold price paths"></div>
+      <div class="chart-frame" id="xa-chart"></div>
+      <div id="xa-after" class="table-scroll xa-table" tabindex="0" aria-label="Gold returns after the matched falls and GLD replay links"></div>
+    </section>
+    <section class="gold-panel xa-panel">
+      <header><h3>How sensitive was gold to each driver?</h3><p class="chart-note">A beta of −2 means a one-unit rise in that driver was associated with a 2% lower monthly gold return. One unit is 1% for the dollar and payrolls and 1 percentage point elsewhere. Each beta uses the 36 months up to that match, requiring at least 24 paired changes.</p></header>
+      <div id="xa-betas" class="table-scroll xa-table" tabindex="0" aria-label="Gold betas and monthly sample sizes"></div>
+    </section>
+    <div class="gold-panel xa-panel">
+      <h3>How the matches are measured</h3>
+      <p class="chart-note" id="xa-method-range"></p>
+      <p class="chart-note">Distance gives equal weight to five groups: dollar, policy rate, yields, inflation and jobs. Yields and jobs each split their group weight across two series. Macro distance scales differences by typical historical changes. Beta distance compares standardized betas, which are the correlations shown as r. Betas use one driver at a time and describe association. Replay applies saved GLD quote terms hypothetically to actual daily GLD closes.</p>
+      <p class="chart-note">Inflation is the annualized change in seasonally adjusted CPI over three months. The dollar, fed funds and real yield are monthly averages of available daily observations. Jobs use the seasonally adjusted unemployment rate and nonfarm payrolls. The stock of payroll jobs is compared in percentage terms across periods.</p>
+      <div class="source-list" id="xa-sources"></div>
+    </div>
+  </div>
+</section>
 <section class="gold-section xo-history" id="full-history" aria-labelledby="xo-title">
 <header class="section-heading"><div><p class="chapter" data-xau-icon="clock">Gold and the world around it</p><h2 id="xo-title">The full history, in view</h2></div><p>Follow the monthly gold benchmark from 1960. See what else moved in each era, then use the detailed comparison for custom dates.</p></header>
 <nav id="xo-jump" class="xo-jump" aria-label="Jump to a gold history period"></nav>
