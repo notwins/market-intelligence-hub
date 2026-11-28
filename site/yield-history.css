@@ -166,9 +166,9 @@ body:has(.yield-history-page) { background: #f4f7fa; }
   border-radius: 0;
 }
 .curve-history-chart .legend .curve-legend-line.is-dashed { border-top-style: dashed; }
-.curve-history-page .curve-tenors {
-  margin-top: .85rem;
-  scroll-margin-top: calc(var(--hub-primary-height, 0px) + 7.5rem);
+.curve-history-page .curve-tenors { margin-top: .85rem; }
+.yield-history-page.curve-history-page :is(#history-analysis,.yield-chapter[id],#curve-tenors) {
+  scroll-margin-top: calc(var(--hub-primary-height, 0px) + var(--sticky-topbar-height, 75px) + 1rem);
 }
 .curve-tenors .comparison-delta { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .curve-tenors .comparison-delta > div {
@@ -200,7 +200,6 @@ body:has(.yield-history-page) { background: #f4f7fa; }
   .curve-history-page .curve-history-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
-  .curve-history-page .curve-tenors { scroll-margin-top: 1rem; }
   .curve-tenors .comparison-delta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .curve-table-hint { display: block; }
 }
