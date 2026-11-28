@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "last_attempt": "2026-11-27T09:11:32+08:00",
-  "last_success": "2026-11-27T09:11:32+08:00",
+  "last_attempt": "2026-11-28T15:17:11+08:00",
+  "last_success": "2026-11-28T15:17:11+08:00",
   "message": "Feed check succeeded; 240 Reuters-attributed headlines loaded.",
-  "run_url": "https://github.com/notwins/market-intelligence-hub/actions/runs/45920958692"
+  "run_url": "https://github.com/notwins/market-intelligence-hub/actions/runs/46120361106"
 }
