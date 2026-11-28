@@ -6,9 +6,10 @@
     const id=query.get('regime'),phase=query.get('phase')??'cycle';
     return XauRegimes.periods.some(p=>p.id===id)&&Object.hasOwn(XauRegimes.phases,phase)?{id,phase}:null;
   }
-  let regimeRequest=replayMode?readRegime(params):null, regimeData, gldHistory=[];
-  function regimeHref(id,phase) {
-    return '?mode=historical&regime='+id+'&phase='+phase+'#path-history-replay';
+  let regimeRequest=replayMode?readRegime(params):null, regimeData, periodResults, gldHistory=[];
+  const proxyStart=334.4;
+  function regimeHref(id,phase,grid=false) {
+    return '?mode=historical&regime='+id+'&phase='+phase+(grid?'#path-history-replay-grid':'#path-history-replay');
   }
   if (['strike','ko','guarantee','days','spot'].some(key=>params.has(key))) {
     location.replace('gld-strategy-detail.html'+location.search+location.hash);
@@ -47,7 +48,7 @@
   const replays = new Map();
   const dateFormat = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
   const dateLabel = day => dateFormat.format(new Date(day+'T00:00:00Z'));
-  const fixingLabel = (panel,day) => panel.path.dates?dateLabel(panel.path.dates[day]):readableTime(day);
+  const fixingLabel = (panel,day) => panel.path.dates?GldReplayResults.fixingLabel(panel.path,day,dateLabel):readableTime(day);
   const actionIcons = {acc:'hold',hold:'buy',roll:'roll',decu:'decu',wait:'wait',staged:'staged'};
   const icon = name => GldPlayVisuals.icon(name);
   const svgNode = (name,attributes,text) => {
@@ -129,7 +130,7 @@
     if(!flowCase)return;
     const {panel,index,day}=flowCase,run=panel.runs[index],balance=run.postKo;
     const marked=GldPlays.atDay(run,day,true).outcomes[flowKey];
-    const when=panel.path.dates?dateLabel(panel.path.dates[day]):selectedPoint(panel,day).label.toLowerCase();
+    const when=panel.path.dates?fixingLabel(panel,day):selectedPoint(panel,day).label.toLowerCase();
     const result=marked.eligible?'By '+when+', its P&L since KO is '+pl(marked.pnl)+'.':marked.status;
     const example=node('span',quoteId(index)+' on the '+panel.path.label.toLowerCase()+' path holds '+balance.shares+' shares and '+money(balance.cash)+
       ' cash at KO on '+(panel.path.dates?fixingLabel(panel,balance.day):'fixing '+balance.day)+'. '+result,'flow-numbers');
@@ -183,7 +184,88 @@
     if(replayMode) return replays.get(id);
     return GldPlayPaths.build({id,spot:cfg.spot,years:cfg.years,xauSpot:cfg.xauSpot,overrides:changes??{}});
   }
-  function simulate(path) {return quotes.map(q=>GldPlays.runQuote(config.terms,q,path.prices));}
+  function simulate(path,terms=config.terms) {return quotes.map(q=>GldPlays.runQuote(terms,q,path.prices));}
+  function loadRegimeData() {
+    regimeData??=fetch('../data/metals/xau-research.json').then(r=>{
+      if(!r.ok)throw Error('World Bank gold history is unavailable.');
+      return r.json();
+    }).then(data=>data.series.pink).catch(error=>{regimeData=null;throw error;});
+    return regimeData;
+  }
+  function regimePath(gold,id,phase) {
+    const path=XauRegimes.replay({gold,gld:gldHistory,id,phase,spot:proxyStart});
+    path.proxy=path.basis==='Gold-price proxy';
+    if(path.proxy&&phase!=='cycle'&&id!=='1980-1999')throw Error('GLD daily closes are unavailable for this replay window.');
+    return path;
+  }
+  async function collectPeriodResults(terms) {
+    const gold=await loadRegimeData(), rows=[];
+    for(const {id} of XauRegimes.periods) {
+      for(const phase of ['fall','rebound']) {
+        await new Promise(resolve=>setTimeout(resolve,0));
+        try{
+          const path=regimePath(gold,id,phase);
+          const runs=simulate(path,terms), last=path.prices.length-1;
+          const {quote,overall}=GldReplayResults.summarize(runs,last);
+          rows.push({id,phase,path,quote,overall,unfunded:runs.filter(r=>r.strategies.find(s=>s.key==='acc').events[0]?.type==='skip').length});
+        }catch(error){rows.push({id,phase,error:error.message});}
+      }
+    }
+    return rows;
+  }
+  const replayMonth=new Intl.DateTimeFormat('en-GB',{month:'short',year:'numeric',timeZone:'UTC'});
+  const monthLabel=date=>replayMonth.format(new Date(date+'T00:00:00Z'));
+  async function showPeriodResults(terms,seq) {
+    $('replay-results').hidden=false;
+    const key=JSON.stringify(terms);
+    if(periodResults?.key!==key){
+      $('period-results-scroll').hidden=true;
+      setText('period-results-status','Calculating historical results…');
+      periodResults={key,promise:collectPeriodResults(terms)};
+    }
+    const current=periodResults;
+    try{
+      const rows=await current.promise;
+      if(seq!==version)return;
+      const body=$('period-results-body'), fragment=document.createDocumentFragment();
+      const {labels,fixingLabel:dateAt}=GldReplayResults;
+      const name=play=> (play.index==null?'':quoteId(play.index)+' · ')+labels[play.key];
+      const dd=play=>play.drawdown.toFixed(2)+'%';
+      for(const {id,phase,path,quote,overall,unfunded,error} of rows) {
+        const row=node('tr'),title=node('th');title.scope='row';row.append(title);
+        const phaseName=phase==='fall'?'fall':'post-trough', selected=id===regimeRequest?.id&&phase===regimeRequest.phase;
+        if(error){
+          title.textContent=XauRegimes.periods.find(period=>period.id===id).name+' · '+phaseName;
+          const detail=node('td',error);detail.colSpan=5;row.append(detail);fragment.append(row);continue;
+        }
+        const a=node('a',monthLabel(path.dates[0])+' – '+monthLabel(path.dates.at(-1))+' '+phaseName,'history-launch');
+        a.href=regimeHref(id,phase,true);
+        if(selected)a.setAttribute('aria-current','true');
+        title.append(a);
+        if(path.proxy)title.append(node('small','Monthly gold proxy','period-results-note'));
+        let status='—';
+        if(quote){
+          const exit=quote.exit;
+          status=exit?(exit.type==='ko'?dateAt(path,exit.day,dateLabel):'Matured '+(path.dates[exit.day]?'':'at ')+dateAt(path,exit.day,dateLabel)+' without KO'):'No KO by cutoff';
+        }
+        const quotedPlay=node('td',quote?name(quote):'No funded quote');
+        if(unfunded)quotedPlay.append(node('small',unfunded+' unfunded at entry','period-results-note'));
+        const result=pnlCell({pnl:quote?.pnl??0,eligible:!!quote});
+        if(!quote)result.textContent='—';
+        row.append(quotedPlay,node('td',status),result,node('td',quote?dd(quote):'—'),
+          node('td',overall&&overall!==quote?name(overall)+' · '+pl(overall.pnl)+' · '+dd(overall):''));
+        fragment.append(row);
+      }
+      body.replaceChildren(fragment);
+      $('period-results-scroll').hidden=false;
+      setText('period-results-status',quotes.length+' quotes tested per window · '+money(terms.budget)+' starting cash'+
+        (terms.openingShares?' · '+terms.openingShares.toLocaleString('en-US')+' opening GLD shares':'')+'.');
+      if(location.hash==='#replay-results')scrollToPath();
+    } catch(error) {
+      if(periodResults===current)periodResults=null;
+      if(seq===version)setText('period-results-status',error.message);
+    }
+  }
   function snapshot(panel,day) {
     if(!panel.cache.has(day)) panel.cache.set(day,panel.runs.map(run=>GldPlays.atDay(run,day)));
     return panel.cache.get(day);
@@ -211,7 +293,7 @@
   function selectedPoint(panel,day) {
     if(panel.path.dates){
       const value=panel.path.prices[day];
-      return {day,label:dateLabel(panel.path.dates[day]),price:value,xau:null,returnPct:(value/panel.path.prices[0]-1)*100};
+      return {day,label:fixingLabel(panel,day),price:value,xau:null,returnPct:(value/panel.path.prices[0]-1)*100};
     }
     const original=panel.path.checkpoints.find(p=>p.day===day);
     if(original) return original;
@@ -270,7 +352,7 @@
     const mark=selectedPoint(panel,panel.day);
     out.append(svg('line',{x1:dx(mark.day),x2:dx(mark.day),y1:top,y2:bottom,stroke:'#536c5b','stroke-dasharray':'3 4'}),
       svg('circle',{cx:dx(mark.day),cy:y(getY(mark,unit)),r:4,fill:'#9a692c',stroke:'white','stroke-width':1.3}));
-    for(const i of [0,Math.floor(n/2),n])out.append(svg('text',{...textAttrs,x:xx(i),y:130,'text-anchor':i===0?'start':i===n?'end':'middle'},panel.path.dates?dateLabel(panel.path.dates[i]):panel.path.proxy?'Fixing '+i:raw[i].label));
+    for(const i of [0,Math.floor(n/2),n])out.append(svg('text',{...textAttrs,x:xx(i),y:130,'text-anchor':i===0?'start':i===n?'end':'middle'},panel.path.dates?fixingLabel(panel,i):raw[i].label));
     panel.chart.replaceChildren(out);
   }
   function makeStrip(panel,points) {
@@ -519,20 +601,20 @@
   function createPanel(path,previous) {
     const id=path.id, section=node('section',null,'play-section'); section.id='path-'+id;section.setAttribute('aria-labelledby',id+'-title');
     const p={id,path,section,runs:simulate(path),cache:new Map(),selected:previous?.selected??0,
-      day:Math.min(previous?.day??(path.basis?path.prices.length-1:path.dates?0:21),path.prices.length-1),ledgerKey:previous?.ledgerKey};
-    if(path.dates&&!previous&&location.hash==='#path-'+id){
+      day:Math.min(previous?.day??(path.basis&&location.hash!=='#path-'+id+'-grid'?path.prices.length-1:path.dates?0:21),path.prices.length-1),ledgerKey:previous?.ledgerKey};
+    if(path.dates&&!previous&&location.hash.startsWith('#path-'+id)){
       const request=new URLSearchParams(location.search),quote=request.get('quote');
       const i=quotes.findIndex((_,index)=>quoteId(index)===quote),d=path.dates.indexOf(request.get('date'));
       if(i>=0)p.selected=i;
       if(d>=0)p.day=d;
     }
     const header=node('header',null,'play-header'),box=node('div'),h=node('h2');h.append(iconLabel(path.label,path.basis?'history':id));h.id=id+'-title';
-    p.desc=node('p',path.dates?dateLabel(path.dates[0])+' to '+dateLabel(path.dates.at(-1))+' · '+path.dates.length.toLocaleString('en-US')+' recorded closes · '+price(path.prices[0])+' per share at entry. '+path.description:path.description,'play-note');
+    p.desc=node('p',path.dates&&!path.proxy?path.dates.length.toLocaleString('en-US')+' recorded closes · '+price(path.prices[0])+' per share at entry. '+path.description:path.description,'play-note');
     box.append(h,p.desc);header.append(box);
     header.append(GldGuide.launcher('card','Play this card'));
     if(path.basis){
       const links=node('nav',null,'play-nav');links.setAttribute('aria-label','Regime replay phases');
-      const summary=XauRegimes.summarize(regimeData,regimeRequest.id);
+      const summary=XauRegimes.summarize(path.regimeGold,regimeRequest.id);
       for(const [phase,window] of Object.entries(summary.windows)){
         const link=node('a',window.label,'history-launch');link.href=regimeHref(regimeRequest.id,phase);
         if(phase===regimeRequest.phase)link.setAttribute('aria-current','page');
@@ -575,11 +657,16 @@
     const tbl=node('table',null,'play-table');tbl.append(node('caption','All saved quotes · '+path.label,'sr-only'));p.thead=tbl.createTHead();p.tbody=tbl.createTBody();scroller.append(tbl);
     p.detail=node('div',null,'play-detail');p.detail.tabIndex=-1;p.examples=node('div',null,'play-ko-examples');
     section.append(header,stage);
-    if(path.dates||path.proxy)stage.append(dailyControls(p));
     if(path.dates){
       p.board=GldReplayBoard.render({path,quotes,runs:p.runs,day:p.day,selected:p.selected,onSelect:(index,day)=>{
         p.selected=index;changeDay(p,day,true);
       }});
+      p.board.id='path-'+id+'-grid';
+      if(path.basis){
+        const back=node('a','Compare all historical periods','replay-back');
+        back.href='#replay-results';p.board.prepend(back);
+      }
+      p.board.querySelector('.replay-grid-scroll').before(dailyControls(p));
       p.board.querySelector('.replay-readout').before(explain);
       const fromEntry=node('details',null,'play-editor');
       fromEntry.append(node('summary','Compare strategies from the original entry'),p.kpis,p.examples,tools,p.caption,scroller);
@@ -621,14 +708,10 @@
       setText('run-status',regimeRequest?'Calculating the selected historical window…':'Calculating all five timelines…');
       const next=[],missing=[];
       if(regimeRequest){
-        regimeData??=await fetch('../data/metals/xau-research.json').then(r=>{
-          if(!r.ok)throw Error('World Bank gold history is unavailable.');return r.json();
-        }).then(data=>data.series.pink);
+        const gold=await loadRegimeData();
         if(seq!==version)return;
-        const path=XauRegimes.replay({gold:regimeData,gld:gldHistory,id:regimeRequest.id,phase:regimeRequest.phase,spot:config.spot});
-        if(path.basis==='Gold-price proxy'){
-          path.proxy=true;path.proxyDates=path.dates;path.dates=null;
-        }
+        const path=regimePath(gold,regimeRequest.id,regimeRequest.phase);
+        path.regimeGold=gold;
         next.push(createPanel(path,old.get(path.id)));
       }
       for(const p of regimeRequest?[]:GldPlayPaths.plays) {
@@ -645,6 +728,7 @@
         if(active)p.strip.scrollLeft=active.offsetLeft-p.strip.offsetLeft-(p.strip.clientWidth-active.offsetWidth)/2;
       }
       updateFlowCase();
+      if(replayMode)void showPeriodResults(config.terms,seq);
       $('csv').disabled=!next.length;
       if(missing.length){$('error').hidden=false;setText('error','Complete daily GLD history unavailable for '+missing.join(', ')+'. Reload to retry.');}
       setText('run-status',quotes.length+' quotes × '+next.length+(replayMode?(next.length===1?' historical replay':' historical paths'):' price paths · '+config.years+' year'+(config.years===1?'':'s'))+' · '+money(config.terms.budget)+
@@ -665,7 +749,7 @@
             if(after&&(!run.postKo||day<run.postKo.day))continue;
             const view=GldPlays.atDay(run,day,after),names=after?post:pre;
             for(const k of keys){
-              const s=view.outcomes[k],row=[panel.path.label,quoteId(i),sheet.addedDate??sheet.requestDate,sheet.issuer,q.months,q.strike,q.ko,q.guarantee,day,panel.path.dates?.[day]??panel.path.proxyDates?.[day]??point.label,point.price.toFixed(2)];
+              const s=view.outcomes[k],row=[panel.path.label,quoteId(i),sheet.addedDate??sheet.requestDate,sheet.issuer,q.months,q.strike,q.ko,q.guarantee,day,panel.path.dates?.[day]??point.label,point.price.toFixed(2)];
               if(!replayMode)row.push(point.xau?.toFixed(2)??'');
               row.push(after?'From KO':'From entry',names[k],after?run.postKo.initialWealth:run.initialWealth,s.value,s.pnl,s.eligible,view.leaders.includes(k),s.status);
               if(replayMode)row.push(panel.path.basis??'Actual GLD daily closes');
@@ -739,7 +823,7 @@
     document.title=(replayMode?'Historical GLD replay':'GLD game plan · Five price plays')+' | Market Intel';
     const nav=$('timelines');nav.replaceChildren();
     if(regimeRequest){
-      const link=node('a','Selected XAU regime');link.href='#path-history-replay';nav.append(link);
+      const link=node('a','All saved quotes');link.href='#path-history-replay-grid';nav.append(link);
     }
     for(const p of regimeRequest?[]:GldPlayPaths.plays){
       if(replayMode&&replays.size&&!replays.get(p.id))continue;
@@ -748,12 +832,13 @@
     $('replay-assumptions').hidden=!replayMode;
     setText('replay-period-column',regimeRequest?'Replay window':'Recorded period');
     $('replay-overview').hidden=!replayMode||!panels.size;
+    $('replay-results').hidden=!replayMode;
     $('decision-map').open=!replayMode||location.hash==='#decision-map';
   }
   function scrollToPath(){
     const id=location.hash.slice(1);
     if(id==='walkthrough-script'){$(id).open=true;$(id).scrollIntoView({block:'start'});return;}
-    if(id==='timelines'||id==='replay-overview'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
+    if(id==='timelines'||id==='replay-overview'||id==='replay-results'||id.startsWith('path-'))$(id)?.scrollIntoView({block:'start'});
   }
   async function changeMode(){
     const query=new URLSearchParams(location.search),requested=query.get('mode')==='historical';

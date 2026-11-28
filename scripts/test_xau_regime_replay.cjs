@@ -6,6 +6,7 @@ const H = require('../site/xau-regimes.js');
 const source = require('../site/data/metals/xau-research.json');
 const context = require('../site/data/metals/xau-regime-context.json');
 const M = require('../site/tools/gld-plays-model.js');
+const Results = require('../site/tools/gld-replay-results.js');
 const quotes = require('../site/data/metals/gld-accumulator-pricing.json').rows;
 const gld = fs.readFileSync(path.join(__dirname, '../site/data/metals/gld.csv'), 'utf8').trim()
   .split(/\r?\n/).slice(1).map(line => line.split(',')).map(p => [p[0],Number(p[4])]);
@@ -45,4 +46,34 @@ for(const {id} of H.periods){
     }
   }
 }
+// The report and fixing grid share entry-based accounting, even for actions taken after KO.
+const reportTerms={budget:100000,reserve:0,openingShares:0,decu:{strike:105,ko:90,days:21},
+  waitDays:2,maxRolls:3,firstBuyPct:50,dipPct:10};
+const calculate = (path, terms=reportTerms) => quotes.map(q=>M.runQuote(terms,q,path.prices));
+const crisis=get('2001-2011','rebound');
+const crisisRuns=calculate(crisis), end=crisis.prices.length-1;
+const result=Results.summarize(crisisRuns,end);
+assert.deepEqual([Results.quoteId(result.quote.index),result.quote.key,result.quote.pnl,result.quote.drawdown.toFixed(2)],
+  ['Q28','add',19836.76,'12.86']);
+assert.equal(crisis.dates[result.quote.exit.day],'2008-12-16');
+assert.deepEqual([result.overall.key,result.overall.pnl],['hold',23082.3]);
+const q28=Results.account(crisisRuns[27]), ko=result.quote.exit.day;
+assert.equal(q28.at('add',ko).pending,true);
+assert.equal(q28.at('add',ko).pnl,q28.at('acc',ko).pnl);
+assert.equal(q28.at('add',ko+2).eligible,true);
+for(const day of [ko,ko+3,100]) {
+  const first=M.runQuote(reportTerms,quotes[27],crisis.prices.slice(0,day+1));
+  for(const key of Results.quoted) {
+    const current=q28.at(key,day), prefix=Results.account(first).at(key,day);
+    assert.equal(current.pnl,prefix.pnl);
+    assert.equal(current.drawdown,prefix.drawdown);
+  }
+}
+const oldRebound=get('1980-1999','rebound');
+const oldResult=Results.summarize(calculate(oldRebound),oldRebound.prices.length-1);
+assert.deepEqual([Results.quoteId(oldResult.quote.index),oldResult.quote.exit.day,oldResult.quote.pnl],['Q21',62,10519.71]);
+assert.equal(Results.fixingLabel(oldRebound,62,()=>assert.fail('no dated close at this fixing')),'Model fixing 62');
+const empty=Results.summarize(calculate(crisis,{...reportTerms,budget:1}),end);
+assert.equal(empty.quote,undefined);
+assert.equal(empty.overall.key,'wait');
 console.log('All gold regimes and phases, shared GLD closing boundaries, proxy fixings and saved quote outcomes passed.');
