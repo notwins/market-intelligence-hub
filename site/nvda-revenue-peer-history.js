@@ -31,6 +31,8 @@
     const marginMetrics = [
       ["Ratios and growth / Operating margin %", "Operating Margin"],
       ["Ratios and growth / Free cash flow margin %", "Free Cash Flow Margin"],
+      ["Ratios and growth / Gross margin %", "Gross Margin"],
+      ["Ratios and growth / Net margin %", "Net Profit Margin"],
     ];
     const isComparable = field => descriptors.get(field)?.type === "money" || marginMetrics.some(([key]) => key === field);
     const chart = $("nv-revenue-scale-chart");
