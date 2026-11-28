@@ -129,3 +129,13 @@
 .paper-grid h3{margin-top:.28rem;font-size:1.29rem}.paper-grid article a{margin-top:auto}
 @media(max-width:53rem){#filters label:nth-child(2){max-width:100%}.library-scroll tbody small{font-size:.75rem}.import-files{columns:1}}
 @media print{.library-scroll{max-height:none}.local-import,.window-presets{display:none}}
+
+.regime-panel{margin-bottom:.9rem}
+#regime-matrix table{min-width:75rem}
+#regime-matrix th,#regime-matrix td{white-space:normal;vertical-align:top}
+#regime-matrix th:first-child,#regime-matrix td:first-child{min-width:13rem}
+.regime-movement strong,.regime-row-title strong{display:block;color:#244e3b;font-size:1rem;font-weight:780}
+.regime-movement small,.regime-row-title small{display:block;color:var(--muted);line-height:1.35;margin:.16rem 0;font-size:.79rem}
+.regime-movement .bank-reference{color:#764b26}
+.regime-row-title a{display:inline-block;font-weight:700;margin-top:.3rem}
+.regime-card .action{margin:.45rem .32rem 0 0}
