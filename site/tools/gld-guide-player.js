@@ -94,8 +94,8 @@
   function viewport() {
     const css=getComputedStyle(document.documentElement), visual=root.visualViewport;
     const left=visual?.offsetLeft || 0, top=visual?.offsetTop || 0;
-    const safeTop=parseFloat(css.getPropertyValue('--hub-primary-height')) || 0;
-    const safeBottom=parseFloat(css.getPropertyValue('--hub-primary-bottom')) || 0;
+    const safeTop=parseFloat(css.getPropertyValue('--gld-guide-safe-top')) || 0;
+    const safeBottom=parseFloat(css.getPropertyValue('--gld-guide-safe-bottom')) || 0;
     return {left:left+3,right:left+(visual?.width || root.innerWidth)-3,top:top+safeTop+3,
       bottom:top+(visual?.height || root.innerHeight)-safeBottom-3};
   }
