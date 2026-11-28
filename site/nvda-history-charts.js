@@ -66,7 +66,7 @@
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     ctx.clearRect(0, 0, width, height);
     const { floor, ceil, step } = limits;
-    const labelSize = compact ? 12 : 14;
+    const labelSize = (compact ? 12 : 14) + (output ? 2 : 0);
     const ink = "#334d3e";
     const fontFamily = output?.fontFamily || plot.fontFamily || "Segoe UI, system-ui, sans-serif";
     ctx.font = "600 " + labelSize + "px " + fontFamily;
@@ -76,7 +76,7 @@
       axisMarks.push({ value, label: axis(value) });
     }
     const longest = Math.max(0, ...axisMarks.map(({ label }) => ctx.measureText(label).width));
-    const left = marketStyle ? minimumLeft : Math.max(minimumLeft, Math.min(width * .39, Math.ceil(longest) + 13));
+    const left = marketStyle && !output ? minimumLeft : Math.max(minimumLeft, Math.min(width * .39, Math.ceil(longest) + 13));
     const { chartLeft, chartRight } = position(left);
     const x = i => count === 1 ? (left + right) / 2 : chartLeft + i * (chartRight - chartLeft) / (count - 1);
     const y = value => bottom - (value - floor) * (bottom - top) / (ceil - floor);
