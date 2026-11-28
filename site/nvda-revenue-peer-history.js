@@ -10,7 +10,8 @@
   const blue = "#416e9b";
   const peerColors = [blue, "#946241", "#7b568c", "#237c84"];
 
-  function mount({ financial, companies, nvidiaPeriods, groups, descriptors, metricControls, usd, fmt, dollar, companyCell, element, options }) {
+  function mount({ financial, companies, nvidiaPeriods, groups, descriptors, metricControls, nativeField, usd, fmt, dollar,
+    companyCell, companyMark, element, options }) {
     const periods = financial.periods;
     const dateKey = "Period ending";
     const get = (period, key, i) => periods[period][key]?.[i] ?? null;
@@ -31,6 +32,16 @@
     const selected = new Set(defaultPeers);
     const inputs = [];
     const activePeriods = {};
+    const rankingMode = $("fin-rank-mode");
+    const logoRanking = window.NvidiaLogoRanking;
+    const ranking = logoRanking.mount("fin-rank", { companyMark, element });
+    const rankingMetrics = [
+      [nativeField("Income statement", "Revenue"), "Revenue"],
+      [nativeField("Income statement", "Net income to parent"), "Net Income"],
+      [nativeField("Balance sheet", "Total assets"), "Assets"],
+      [nativeField("Balance sheet", "Total liabilities"), "Liabilities"],
+    ];
+    logoRanking.bindNext({ select: metric, button: $("fin-rank-next"), choices: rankingMetrics, setValue: metricControls.setValue });
     let isComparing = false;
     let activeCompany = 0;
 
@@ -174,6 +185,8 @@
       const annual = frequency === "annual";
       basis.querySelector('[value="QoQ"]').disabled = annual;
       if (annual) basis.value = "YoY";
+      rankingMode.querySelector('[value="QoQ"]').disabled = annual;
+      if (annual && rankingMode.value === "QoQ") rankingMode.value = "YoY";
       const descriptor = descriptors.get(metric.value);
       const name = descriptor.name === "Net income to parent" ? "Net income to shareholders" : descriptor.name;
       const revenueShare = metric.value === revenueField;
@@ -223,6 +236,30 @@
       options(chooser, [...snapshots].reverse().map(({ period, end }) => [period, charts.date(end)]), activePeriods[frequency]);
       let initial = dates.indexOf(chooser.value);
       if (initial < 0) initial = dates.length - 1;
+      const shortName = rankingMetrics.find(([field]) => field === metric.value)?.[1] || name;
+      const higher = descriptor.name !== "Total liabilities";
+      function rankSnapshot(snapshot) {
+        const mode = rankingMode.value;
+        const actual = mode === "actual";
+        const entries = snapshot.rows.map(row => ({
+          company: companies[row.i], i: row.i, featured: row.i === 0,
+          value: actual ? row.amount : row.growth[mode],
+          context: row.end ? "Filing ended " + charts.date(row.end) : "",
+        }));
+        const count = entries.filter(row => Number.isFinite(row.value)).length;
+        const unit = actual ? "Actual USD" : mode + " growth";
+        $("fin-rank-summary").textContent = shortName + " · " + unit + " · NVIDIA period ended " + charts.date(snapshot.end)
+          + " · " + count + " of " + entries.length + " companies with data";
+        $("fin-rank-left").textContent = higher ? "Lower values" : "Higher values";
+        $("fin-rank-right").textContent = higher ? "Higher values →" : "Lower values →";
+        ranking.render(entries, {
+          key: [metric.value, mode, frequency, ...peers].join("/"), label: shortName, higher,
+          format: actual ? fig : growthPct,
+          axisFormat: actual ? value => dollar(value, 1) + "B" : pct,
+          onSelect: row => showCompany(row.i),
+        });
+      }
+      rankingMode.onchange = () => rankSnapshot(snapshots[dates.indexOf(chooser.value)]);
       const inspect = index => {
         const snapshot = snapshots[index];
         activePeriods[frequency] = snapshot.period;
@@ -238,6 +275,7 @@
         drawGrowth(snapshot.rows, name, basis.value);
         drawTable(snapshot, annual, revenueShare);
         showCompany(activeCompany);
+        rankSnapshot(snapshot);
       };
       chooser.onchange = () => {
         const index = dates.indexOf(chooser.value);

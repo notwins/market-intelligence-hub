@@ -487,7 +487,7 @@
       render();
     }
     const showRevenueComparison = window.NvidiaRevenuePeerHistory.mount({
-      financial, companies, nvidiaPeriods, groups, descriptors, metricControls, usd, fmt, dollar, companyCell, element, options,
+      financial, companies, nvidiaPeriods, groups, descriptors, metricControls, nativeField, usd, fmt, dollar, companyCell, companyMark, element, options,
     });
     for (const story of document.querySelectorAll("[data-story]")) {
       story.onclick = () => {

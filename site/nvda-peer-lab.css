@@ -42,11 +42,12 @@
  .lab-scroll { max-height: 58vh; }
 }
 
-#sim-ranking { scroll-margin-top: calc(var(--hub-primary-height, 64px) + 60px); }
+#sim-ranking, #financial-peer-ranking { scroll-margin-top: calc(var(--hub-primary-height, 64px) + 60px); }
+.lab-fin-rank-card { margin-bottom: 14px; }
 .lab-rank-controls { align-items: end; }
 .lab-rank-controls label { min-width: min(210px, 100%); }
 .lab-rank-controls select { max-width: 100%; }
-#sim-rank-next { min-height: 39px; gap: 6px; }
+.lab-rank-controls .nv-layout-button { min-height: 39px; gap: 6px; }
 .lab-rank-figure {
   --rank-plot-height: clamp(190px, 19vw, 290px);
   --rank-axis-width: 49px;
@@ -138,8 +139,8 @@
   background: #607f80;
 }
 .lab-rank-bar.lab-rank-negative { border-radius: 0 0 3px 3px; background: #a75e54; }
-.lab-rank-simulated .lab-rank-bar { background: #28733d; }
-.lab-rank-simulated .lab-rank-bar.lab-rank-negative { background: #8d403a; }
+.lab-rank-featured .lab-rank-bar { background: #28733d; }
+.lab-rank-featured .lab-rank-bar.lab-rank-negative { background: #8d403a; }
 .lab-rank-company:hover, .lab-rank-company[aria-pressed="true"] { background: #dde9d759; }
 .lab-rank-company:focus-visible { outline: 2px solid #427445; outline-offset: -2px; }
 .lab-rank-identity {
@@ -153,7 +154,7 @@
 }
 .lab-rank-identity :is(img, .nv-peer-mark) { width: 24px; height: 24px; }
 .lab-rank-identity img { background: white; border: 1px solid #dbe5d9; border-radius: 5px; object-fit: contain; }
-.lab-rank-simulated .lab-rank-identity { color: #225732; font-weight: 820; }
+.lab-rank-featured .lab-rank-identity { color: #225732; font-weight: 820; }
 .lab-rank-readout {
   display: flex;
   align-items: baseline;
