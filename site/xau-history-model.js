@@ -18,6 +18,15 @@
     // Use December for the price comparison, preserving years without a December value as gaps.
     return points.filter(([day]) => day.slice(5, 7) === '12').map(([day, value, observed]) => [day.slice(0, 4) + '-12-31', value, observed ?? day]);
   }
+  function quarterly(points, average) {
+    const byMonth = new Map(points.map(p => [months(p[0]), p]));
+    return points.filter(([date]) => Number(date.slice(5, 7)) % 3 === 0).flatMap(([date, value, observed]) => {
+      const preceding = [2, 1].map(offset => byMonth.get(months(date) - offset)?.[1]);
+      if (average && !preceding.every(Number.isFinite)) return [];
+      const end = new Date(Date.UTC(Number(date.slice(0, 4)), Number(date.slice(5, 7)), 0)).toISOString().slice(0, 10);
+      return [[end, average ? (preceding[0] + preceding[1] + value) / 3 : value, observed ?? date]];
+    });
+  }
   function multiply(gold, fx, inverse = false) {
     const rates = new Map(fx.filter(valid));
     return gold.filter(p => valid(p) && rates.get(p[0]) > 0)
@@ -34,14 +43,15 @@
     return gold.filter(p => valid(p) && lookup.get(months(p[0])) > 0)
       .map(([d, v]) => [d, v * base / lookup.get(months(d))]);
   }
-  function pairs(gold, driver, start, end, annual) {
-    const price = annual ? yearly(gold) : gold;
+  function pairs(gold, driver, start, end, frequency, average = false) {
+    const price = frequency === true || frequency === 'Annual' ? yearly(gold) :
+      frequency === 'Quarterly' ? quarterly(gold, average) : gold;
     const comparison = new Map(driver.map(p => [p[0], p]));
     return within(price, start, end).filter(p => comparison.has(p[0]))
       .map(([date, value, observed]) => [date, value, comparison.get(date)[1], observed ?? date, comparison.get(date)[2] ?? date]);
   }
   function change(first, last, kind) {
-    return kind === 'rate' ? last - first : first > 0 ? 100 * (last / first - 1) : null;
+    return kind === 'rate' || kind === 'difference' ? last - first : first > 0 ? 100 * (last / first - 1) : null;
   }
   function correlation(rows, driverKind) {
     const xy = [];
@@ -83,7 +93,7 @@
       .sort((a, b) => b.last[1] - a.last[1] || a.name.localeCompare(b.name));
   }
 
-  const model = {monthly, within, multiply, yearOnYear, realGold, pairs, change, correlation, drawdown, ranked};
+  const model = {monthly, quarterly, within, multiply, yearOnYear, realGold, pairs, change, correlation, drawdown, ranked};
   if (typeof module === 'object' && module.exports) module.exports = model;
   else root.XauHistory = model;
 })(globalThis);

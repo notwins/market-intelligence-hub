@@ -104,6 +104,32 @@
 .china-card a{display:block;margin:.4rem 0}
 .china-card strong{font:600 1.55rem var(--serif)}
 
+.window-presets{margin-top:.8rem;padding-top:.75rem;border-top:1px solid var(--line)}
+.window-presets button{border-radius:.45rem}
+#filters label:nth-child(2){flex:1 1 12rem;max-width:23rem}
+#compare .series-detail{display:flex;align-items:baseline;gap:.3rem .65rem;flex-wrap:wrap;min-height:1.3em;overflow-wrap:anywhere}
+.library-fields{margin-top:.15rem}
+.library-fields label:first-child{flex:1 1 16rem}
+.library-fields label{flex:1 1 10rem}
+.library-scroll{max-height:36rem;border:1px solid var(--line);border-radius:.55rem;overscroll-behavior:contain}
+.library-scroll table{border-collapse:separate;border-spacing:0}
+.library-scroll :is(td,th){min-width:6rem;vertical-align:top}
+.library-scroll th:first-child{position:sticky;left:0;z-index:1;min-width:clamp(10rem,25vw,16.5rem);max-width:16.5rem;white-space:normal;background:#fff;box-shadow:1px 0 #d6ddd2}
+.library-scroll thead th{position:sticky;top:0;z-index:2}
+.library-scroll thead th:first-child{z-index:3;background:#edf3e9}
+.library-scroll tbody tr:first-child :is(td,th){background:#f5eddf}
+.library-scroll tbody small{display:block;margin-top:.12rem;white-space:normal;color:var(--muted);font-weight:500}
+.library-scroll tbody .series-pick{min-height:0;background:none;border:0;padding:0;color:var(--green);text-decoration:underline;text-align:left;white-space:normal}
+.library-scroll tbody .series-pick:hover{box-shadow:none;color:var(--gold)}
+.import-actions{display:flex;flex-wrap:wrap;gap:.55rem}
+.import-files{columns:2;margin:.6rem 0 0;padding:0 1rem;font-size:.84rem;color:var(--muted);overflow-wrap:normal}
+.strategy-grid,.paper-grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))}
+.strategy-grid p,.paper-grid article p:not(.chapter){margin:.48rem 0 .8rem;color:var(--muted)}
+.paper-grid article{padding:.9rem;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:.55rem;background:#fafbf8}
+.paper-grid h3{margin-top:.28rem;font-size:1.29rem}.paper-grid article a{margin-top:auto}
+@media(max-width:53rem){#filters label:nth-child(2){max-width:100%}.library-scroll tbody small{font-size:.75rem}.import-files{columns:1}}
+@media print{.library-scroll{max-height:none}.local-import,.window-presets{display:none}}
+
 .regime-panel{margin-bottom:.9rem}
 #regime-matrix table{min-width:75rem}
 #regime-matrix th,#regime-matrix td{white-space:normal;vertical-align:top}
