@@ -531,14 +531,21 @@
       ['FRED daily FX and yields',json('data/fred-daily.json')],
       ['Raw- GOLD research catalogue',json('data/metals/xau-library.json')],
       ['historical dollar and equity benchmarks',json('data/metals/xau-regime-context.json')],
+      ['historical jobs and risk',json('data/metals/xau-open-macro.json?v=1')],
     ];
     const loaded=await Promise.allSettled(sources.map(pair=>pair[1]));
-    const [snapshot,spot=[],gld=[],miningEquities=[],spx,daily,library,older={}]=loaded.map((r,i)=>{
+    const [snapshot,spot=[],gld=[],miningEquities=[],spx,daily,library,older={},openMacro]=loaded.map((r,i)=>{
       if(r.status==='fulfilled')return r.value;
       dataMissing.push(sources[i][0]);return undefined;
     });
     if(!snapshot)throw Error('The gold research dataset could not load. Reload to try again.');
     dataset=snapshot;catalogue=library;regimeContext=older;
+    try {
+      XauOpenHistory.mount({snapshot,older,spx,macro:openMacro,library});
+    } catch (error) {
+      text('xo-status','The full-history view could not load. Use the detailed comparison below.');
+      console.error(error);
+    }
     const fred = dataset.fred;
     const source=dataset.sources,s=dataset.series;
     const fed=(id)=>byId(daily,id);

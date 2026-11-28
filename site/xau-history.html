@@ -4,26 +4,51 @@
 <link rel="stylesheet" href="xau-monthly-lab.css?v=2">
 <script defer src="xau-chart-ui.js?v=1"></script>
 <script defer src="xau-monthly-lab.js?v=2"></script>
-<meta name="description" content="Research XAU spot gold against the dollar, U.S. real rates, inflation, China and the S&P 500. Explore monetary gold holdings and global mine production.">
+<meta name="description" content="Follow gold since 1960 alongside rates, the dollar, stocks, consumer prices, jobs and geopolitical risk.">
 <title>Gold in history · Market Intel</title><link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="xau-history.css?v=4">
-<script defer src="xau-history-model.js?v=2"></script><script defer src="xau-library.js?v=2"></script><script defer src="xau-regimes.js?v=1"></script><script defer src="xau-history.js?v=4"></script>
+<link rel="stylesheet" href="xau-open-history.css?v=1">
+<script defer src="xau-history-model.js?v=2"></script><script defer src="xau-library.js?v=2"></script><script defer src="xau-regimes.js?v=1"></script><script defer src="xau-open-history.js?v=1"></script><script defer src="xau-history.js?v=5"></script>
 </head><body class="xau-research">
 <a class="skip" href="#main">Skip to gold research</a>
 <main id="main">
 <header class="gold-hero" id="overview"><div class="gold-shell hero-grid">
   <div><nav class="gold-crumb" aria-label="Breadcrumb"><a href="v4.html#tools">Market Intel</a> / <a href="tools/gold-charts.html">Gold tools</a> / <span>XAU</span></nav>
   <p class="chapter" data-xau-icon="bars">Market history · XAU/USD</p><h1>Gold<br><em>in history.</em></h1>
-  <p class="hero-lead">Open a 30-year view of gold against currencies, yields, inflation and equities. Trace China’s role, compare metals and see how official holdings and mine supply have changed.</p>
-  <div class="hero-links"><a class="action" href="#compare" data-xau-icon="trend">Compare gold and its drivers</a><a href="#library" data-xau-icon="table">Explore the data matrix</a><a href="tools/gld-strategy.html" data-xau-icon="route">GLD game plan</a></div></div>
+  <p class="hero-lead">Read gold’s history from 1960 alongside stocks, inflation, jobs, interest rates, currencies and geopolitical risk. Trace China’s role, compare metals and see how official holdings and mine supply have changed.</p>
+  <div class="hero-links"><a class="action" href="#full-history" data-xau-icon="clock">Explore the full history</a><a href="#library" data-xau-icon="table">Explore the data matrix</a><a href="tools/gld-strategy.html" data-xau-icon="route">GLD game plan</a></div></div>
   <figure><img src="assets/desk/history-gold.jpg" width="960" height="320" alt="" fetchpriority="high"><figcaption>Official holdings are a stock. Mine production is an annual flow.</figcaption></figure>
 </div></header>
 <nav class="gold-jump" aria-label="Gold research sections"><div class="gold-shell">
-<a href="#overview">Overview</a><a href="#compare">Compare</a><a href="#library">Data matrix</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#strategy">GLD game plan</a><a href="#papers">Research</a>
+<a href="#overview">Overview</a><a href="#full-history" data-xau-icon="clock">Full history</a><a href="#compare">Compare</a><a href="#library">Data matrix</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#strategy">GLD game plan</a><a href="#papers">Research</a>
 </div></nav>
 <div class="gold-shell">
 <p id="load-status" class="status" role="status">Loading gold and macro histories…</p>
 <dl class="gold-kpis" id="gold-kpis" aria-label="Latest observations"></dl>
+<section class="gold-section xo-history" id="full-history" aria-labelledby="xo-title">
+<header class="section-heading"><div><p class="chapter" data-xau-icon="clock">Gold and the world around it</p><h2 id="xo-title">The full history, in view</h2></div><p>Follow the monthly gold benchmark from 1960. See what else moved in each era, then use the detailed comparison for custom dates.</p></header>
+<nav id="xo-jump" class="xo-jump" aria-label="Jump to a gold history period"></nav>
+<div class="gold-panel xo-atlas">
+  <div class="xo-atlas-head"><div><h3>Gold alongside the major macro indicators</h3><p class="chart-note" id="xo-status" role="status">Loading the complete history…</p></div><div class="xo-atlas-links"><a href="#macro-evidence">Jump to the driver evidence</a><a href="#compare">Open a custom comparison</a></div></div>
+  <div class="chart-frame" id="xo-full-plot"></div>
+  <p class="chart-note">Move across the chart, tap to pin a month, or use the arrow keys. The gold lane uses a logarithmic scale so early periods are visible. Each lane has its own units. Stocks, observed real yields and the broad dollar use the last available observation in each month. S&amp;P 500 prices exclude dividends.</p>
+  <div class="source-list" id="xo-full-sources"></div>
+</div>
+<div class="gold-panel xo-evidence" id="macro-evidence">
+  <header class="xo-atlas-head"><div><h3>Which indicators moved with gold?</h3><p class="chart-note">Compare changes in each period. Blue-green means they generally moved together, and red means they generally moved in opposite directions.</p></div></header>
+  <div id="xo-examples" class="xo-examples"></div>
+  <div class="table-scroll xo-table" id="xo-correlation" tabindex="0" aria-label="Gold and macro changes by historical period"></div>
+  <p class="chart-note">Pearson correlation uses consecutive monthly observations, with at least 18 pairs. Gold, stocks and dollar use returns. CPI, unemployment and yields use percentage-point changes. Risk and financial conditions use index-point changes. The yield column uses nominal 10-year Treasuries for eras beginning before 2003 and observed real yields afterward. The dollar column uses the Fed’s major-currency index for eras beginning before 2006 and its broad index afterward. Each cell gives its sample size. Correlations describe co-movement and cannot isolate a single cause.</p>
+  <p class="xo-tail" id="xo-tail"></p>
+</div>
+<div class="xo-channels" aria-label="Ways macro events can reach the gold market">
+  <article><p class="chapter" data-xau-icon="rates">Inflation and jobs</p><h3>Expected Fed policy</h3><p>Inflation and employment releases can change expectations for policy, real yields and the dollar. These changes affect the cost of holding gold.</p></article>
+  <article><p class="chapter" data-xau-icon="lab">Equities and market stress</p><h3>Demand for liquidity</h3><p>When investors need cash, gold may sell alongside equities. The 2008 and 2020 chapters show the initial shock and the periods that followed.</p></article>
+  <article><p class="chapter" data-xau-icon="globe">Geopolitics and reserves</p><h3>Demand for protection</h3><p>Geopolitical risk can change demand for gold. The risk index tracks news, while official holdings and purchases track separate aspects of central-bank demand.</p></article>
+</div>
+<div id="xo-periods" class="xo-periods"></div>
+<p class="chart-note xo-credits">Sources include World Bank monthly commodity prices, BLS employment and consumer prices via FRED, Federal Reserve yields and dollar indexes via FRED, and the Federal Reserve Bank of Chicago’s National Financial Conditions Index via FRED (monthly average of weekly data). Recession shading uses NBER dates, with peak and trough months included. Geopolitical risk uses Matteo Iacoviello and Jonathan Tong’s 2026 working paper, <a href="https://www.matteoiacoviello.com/ai_gpr.html">The AI-GPR Index</a>, monthly series downloaded on 29 November 2026, under the authors’ <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license</a>. AI-GPR measures coverage in selected newspapers. NFCI measures U.S. financial conditions.</p>
+</section>
 <section class="gold-section" id="compare"><header class="section-heading"><div><p class="chapter">Market comparison</p><h2>What moved with gold?</h2></div><p>Start with 360 complete months of World Bank gold and the broad dollar. Switch drivers, change the date window and inspect shared observations.</p></header>
 <div class="gold-panel">
   <div class="chart-presets" id="presets" aria-label="Compare a market driver"></div>
@@ -99,7 +124,8 @@
 </div></section>
 <section class="gold-section" id="papers">
 <header class="section-heading"><div><p class="chapter">Research library</p><h2>30 papers and official reports</h2></div><p>Read the original research behind real yields, inflation hedges, central-bank demand, China and gold supply.</p></header>
-<div class="gold-panel"><div class="gold-fields library-fields"><label>Search research<input type="search" id="paper-search" placeholder="e.g. inflation or central banks"></label><label>Research topic<select id="paper-topic"></select></label></div><p class="chart-note" id="paper-status" role="status"></p><div id="paper-list" class="paper-grid"></div></div>
+<div id="xo-papers" class="xo-paper-grid" aria-label="Research findings and matching charts"></div>
+<div class="gold-panel"><h3>Full research catalogue</h3><div class="gold-fields library-fields"><label>Search research<input type="search" id="paper-search" placeholder="e.g. inflation or central banks"></label><label>Research topic<select id="paper-topic"></select></label></div><p class="chart-note" id="paper-status" role="status"></p><div id="paper-list" class="paper-grid"></div></div>
 </section>
 <section class="gold-section" id="sources"><header class="section-heading"><div><p class="chapter">Documentation</p><h2>Trace the data</h2></div><p>Coverage dates and source links follow the individual series. TIPS begin in 2003. The Hub’s S&amp;P 500 close history starts in 2006. Official holdings and China series follow their own reporting windows.</p></header>
 <div class="gold-panel"><div class="method-grid">
