@@ -155,19 +155,39 @@
 
   function afterSpotlight(target, delivery, ready) {
     const timeout = performance.now() + 1050;
+
+    function frame() {
+      if (delivery !== generation) return;
+      const anchor = highlighted?.getBoundingClientRect();
+      const rail = document.querySelector(".nv-jump")?.getBoundingClientRect();
+      if (anchor) {
+        // The shared header and mobile dock can move as the scroll direction changes.
+        const top = rail && rail.top < 150 ? rail.bottom + 12 : 12;
+        const dock = panel.getBoundingClientRect();
+        const aboveDock = dock.top - top > 90 && anchor.right > dock.left && anchor.left < dock.right;
+        const bottom = (aboveDock ? dock.top : innerHeight) - 12;
+        const visibleHeight = Math.min(anchor.height, Math.max(0, bottom - top));
+        const shift = anchor.top < top ? anchor.top - top : Math.max(0, anchor.top + visibleHeight - bottom);
+        if (Math.abs(shift) > 2 && (target !== null || rail?.top < 150)) {
+          window.scrollTo({ top: Math.max(0, scrollY + shift), behavior: "instant" });
+          requestAnimationFrame(() => { if (delivery === generation) ready(); });
+          return;
+        }
+      }
+      ready();
+    }
+
     function check(now) {
       if (delivery !== generation) return;
-      if (target !== null && Math.abs(scrollY - target) > 5 && now < timeout) {
-        requestAnimationFrame(check);
+      if (target !== null && Math.abs(scrollY - target) > 5) {
+        if (now < timeout) requestAnimationFrame(check);
+        else {
+          window.scrollTo({ top: target, behavior: "instant" });
+          requestAnimationFrame(frame);
+        }
         return;
       }
-      const rail = document.querySelector(".nv-jump")?.getBoundingClientRect();
-      const anchor = highlighted?.getBoundingClientRect();
-      // The shared header can change height as the scroll direction changes.
-      if (rail && anchor && rail.top < 150 && rail.top <= anchor.top + 8 && rail.bottom + 12 > anchor.top) {
-        window.scrollTo({ top: Math.max(0, scrollY + anchor.top - rail.bottom - 12), behavior: "instant" });
-        requestAnimationFrame(() => { if (delivery === generation) ready(); });
-      } else ready();
+      frame();
     }
     requestAnimationFrame(check);
   }
