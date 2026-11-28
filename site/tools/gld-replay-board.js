@@ -237,7 +237,7 @@
       return section;
     }
     section.append(el('p','replay-window-label',labelDate(dates[0])+' – '+labelDate(dates.at(-1))+' · '+(path.proxy?'Monthly gold proxy':'GLD daily closes')));
-    section.append(el('p','replay-board-note','Scroll right through the checkpoints. Each cell shows the first accumulator’s status, total P&L and max drawdown through that fixing. Select a play to apply it to every quote. Select a cell to compare all follow-on choices.'));
+    section.append(el('p','replay-board-note','Scroll right for later dates. Pick a cell to compare every play for that quote and date.'));
     const legend = el('div','replay-board-legend');
     for (const [kind,text] of [['ko','KO · first trigger'],['post','After KO'],['maturity','Maturity · no KO'],['future','Later than selected date']]) {
       const key = el('span','replay-key',text); key.dataset.state=kind; legend.append(key);

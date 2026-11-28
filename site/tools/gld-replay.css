@@ -89,8 +89,8 @@
 .replay-cell-label { font-size: .84rem; font-weight: 600; }
 .replay-cell-value { font: 500 .88rem/1.3 var(--number-face,monospace); white-space: nowrap; letter-spacing: -.035em; }
 .replay-cell[data-tied="true"] .replay-cell-label { font-style: italic; }
-.replay-board [data-sign="positive"] { color: #195c3e; }
-.replay-board [data-sign="negative"] { color: #903c30; }
+.replay-board [data-sign="positive"] { color: var(--gain-ink); }
+.replay-board [data-sign="negative"] { color: var(--loss-ink); }
 .replay-cell[data-state="ko"] .replay-cell-label, [data-state="ko"] > .replay-cell .replay-cell-label { font-weight: 800; }
 .replay-readout { margin-top: .85rem; min-width: 0; }
 .replay-readout h4 { margin: .4rem 0; font: 600 1.23rem/1.23 var(--display-face, Georgia, serif); }
@@ -183,7 +183,7 @@
 .replay-scroll-tools[hidden] { display: none; }
 .replay-control-label { margin: 0 0 .3rem; color: #344e3e; font-weight: 700; }
 .replay-play-choices { display: flex; flex-wrap: wrap; gap: .35rem; max-width: 100%; }
-.play-shell .replay-play-choices button { min-height: 2.4rem; font-size: .88rem; }
+.play-shell .replay-play-choices button { min-height: 2.75rem; font-size: .92rem; }
 .play-shell .replay-play-choices button[aria-pressed="true"] { color: white; background: #244f3e; border-color: #244f3e; }
 @media (max-width: 36rem) {
   .ranking-table th[scope="row"], .ranked-windows-table th:first-child { width: 6.5rem; min-width: 6.5rem; }
