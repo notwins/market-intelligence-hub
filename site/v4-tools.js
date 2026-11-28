@@ -232,6 +232,29 @@ function fxHistoryView(tabs,edition){
   </section>
  </div>`;
 }
+function spxHistoryView(tabs){
+ const jump=historyChapterJump;
+ return `<div class="history-page yield-history-page spx-history-page" data-history-topic="spx">
+  <header class="yield-masthead">
+   <div><p class="yield-kicker">Historical charts</p><h1>SPX <em>history</em></h1>
+   <p>Explore the S&amp;P 500 price index across market cycles. Choose a date range and review the closing levels behind the chart.</p>
+   ${jump('history-analysis','Explore SPX chart ↓')}</div>
+   <figure><img src="assets/desk/shares-analytical.webp" width="600" height="800" alt="" fetchpriority="high"></figure>
+  </header>
+  ${tabs}
+  <nav class="yield-jump" aria-label="SPX history sections">${jump('history-analysis','Index chart')}${jump('spx-sources','Sources & methodology')}</nav>
+  <section class="yield-chapter yield-chart-chapter">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">U.S. equity benchmark</p><h2>S&amp;P 500 price history</h2></div><p>Closing levels are in index points. The change shown is for the selected period.</p></header>
+   <section id="history-analysis" tabindex="-1" aria-label="S&amp;P 500 chart">${window.HistoryContext?.spxView()||'SPX source unavailable'}</section>
+  </section>
+  <section id="spx-sources" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Data & methodology</p><h2>Sources and coverage</h2></div></header>
+   <div data-yield-feed-status></div>
+   <p>The chart tracks the S&amp;P 500 price index. Period returns use closing index levels and exclude dividends. The observation table shows the dates and levels plotted for the window.</p>
+   <a class="button ghost" href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/" target="_blank" rel="noopener noreferrer">S&amp;P 500 index methodology ↗</a>
+  </section>
+ </div>`;
+}
 function historyView(){
  const topics=[['yield','Yield history'],['shares','Share prices'],['beta2-shares','▤ Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']];
  const tab=X.historyTab, title=topics.find(item=>item[0]===tab)?.[1].replace(/^[▤▧] /,'')||'Historical charts';
@@ -241,18 +264,15 @@ function historyView(){
  if(tab==='yield')return yieldHistoryView(tabs,edition);
  if(tab==='curves')return curveHistoryView(tabs,edition);
  if(tab==='fx')return fxHistoryView(tabs,edition);
- const descriptions={shares:'Compare selected shares, dated valuation observations and reported earnings.',spx:'Explore the saved S&P 500 index history and its source coverage.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
+ if(tab==='spx')return spxHistoryView(tabs);
+ const descriptions={shares:'Compare selected shares, dated valuation observations and reported earnings.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
  const intro='<header class="history-opener"><div>'+head('Historical charts',title,t(descriptions[tab]||''))+'</div><div class="history-engraving" aria-hidden="true"></div></header>';
  let content;
  if(tab==='beta4-shares')content='<section id="beta4-shares" aria-label="Share history pivot"></section>';
  else if(tab==='beta2-shares')content=window.Beta2Shares.view();
  else if(tab==='shares')content=(window.MarketPrices?.historyPanel()||'<p>Share history unavailable.</p>')+(window.BOSEquity?.panel('history')||'');
  else if(X.historyTab==='si')content=window.MarketSI?.view()||'<p>SI reference unavailable.</p>';
- else if(!X.history)content=loading('history');
- else {
-  const plot=window.HistoryContext?.spxView()||'SPX source unavailable';
-  content=historyControls()+contextControls()+'<section id="history-analysis" tabindex="-1" aria-label="'+e(title)+'">'+plot+'</section>';
- }
+ else content=loading('history');
  return '<div class="history-page" data-history-topic="'+e(tab)+'">'+intro+tabs+edition+content+'</div>';
 }
 function historyPeriodControls(includeSource=false){return `<div class="tool-controls history-period-controls" role="group" aria-label="${e(t('Shared period'))}">${includeSource?historySourceControl():''}${label('Period',select('history-period',[['all','All history'],['5','5 years'],['10','10 years'],['20','20 years'],['custom','Custom dates']],X.historyPeriod))}${label('From',input('history-start',X.start,'date'))}${label('To',input('history-end',X.end,'date'))}</div>`;}
