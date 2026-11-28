@@ -7,7 +7,7 @@
 <title>NVIDIA Historical · Market Intel Shares</title>
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
-<link rel="stylesheet" href="nvda-history.css?v=10">
+<link rel="stylesheet" href="nvda-history.css?v=11">
 <link rel="stylesheet" href="nvda-peer-lab.css?v=3">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=20261128.print">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
@@ -22,7 +22,7 @@
 <script defer src="nvda-market-events.js?v=1"></script>
 <script defer data-price-render-only src="share-prices.js?v=20261128.event-moves"></script>
 <script defer src="nvda-market-event-prices.js?v=2"></script>
-<script defer src="nvda-market-timeline.js?v=5"></script>
+<script defer src="nvda-market-timeline.js?v=6"></script>
 <script defer src="nvda-market-event-table.js?v=1"></script>
 <script defer src="nvda-history.js?v=20261128.shared-rankings"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
@@ -228,7 +228,7 @@
         <div class="nv-market-event-caption" id="nv-market-event-caption" hidden>
           <span id="nv-market-event-caption-text"></span>
           <div class="nv-market-event-links">
-            <a href="#nv-market-events">Event details ↓</a>
+            <a class="nv-market-details-jump" href="#nv-market-events">Event details ↓</a>
             <a href="#nvda-event-returns">All event moves ↓</a>
           </div>
         </div>
@@ -243,9 +243,16 @@
             <button type="button" class="nv-layout-button" id="nv-market-event-next" aria-label="Next event month">Next event →</button>
           </div>
         </div>
+        <label class="nv-market-event-choice" id="nv-market-event-choice" hidden>
+          Event this month
+          <select id="nv-market-event-select" aria-controls="nv-market-event-list"></select>
+        </label>
         <div class="nv-market-event-list" id="nv-market-event-list"></div>
-        <p class="nv-note">Price moves compare the last close before each event with the first trading close on or after its 1- or 3-month anniversary. Prices are split-adjusted USD per share and exclude dividends. <a href="https://finance.yahoo.com/quote/NVDA/history/" target="_blank" rel="noopener noreferrer">Daily price source ↗</a></p>
-        <p class="nv-note">Markers show event months. Cards show exact dates and sources. Other news can also affect these moves. <a href="https://www.youtube.com/watch?v=yc-dL8oFDNo" target="_blank" rel="noopener noreferrer">Video reference ↗</a></p>
+        <details class="nv-market-event-method">
+          <summary>Price move method and sources</summary>
+          <p class="nv-note">Price moves compare the last close before each event with the first trading close on or after its 1- or 3-month anniversary. Prices are split-adjusted USD per share and exclude dividends. <a href="https://finance.yahoo.com/quote/NVDA/history/" target="_blank" rel="noopener noreferrer">Daily price source ↗</a></p>
+          <p class="nv-note">Markers show event months. Cards show exact dates and sources. Other news can also affect these moves. <a href="https://www.youtube.com/watch?v=yc-dL8oFDNo" target="_blank" rel="noopener noreferrer">Video reference ↗</a></p>
+        </details>
       </section>
       <div class="nv-market-subpanel" hidden>
         <h4>Trailing P/E <span>× earnings</span></h4>

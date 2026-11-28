@@ -53,13 +53,16 @@
     const rail = $("nv-market-annotations");
     const filters = $("nv-market-event-filter");
     const eventBox = $("nv-market-events");
+    const stack = $("nv-market-stack");
     const eventMonth = $("nv-market-event-month");
+    const eventChoice = $("nv-market-event-choice");
+    const eventSelect = $("nv-market-event-select");
     const caption = $("nv-market-event-caption");
     const captionText = $("nv-market-event-caption-text");
     const list = $("nv-market-event-list");
     const prev = $("nv-market-event-prev");
     const next = $("nv-market-event-next");
-    let activeMonth, activeEventMonth;
+    let activeMonth, activeEventMonth, activeEvent;
     const archiveQuarters = quarters.map(period => ({
       reported: actual(period, "Filing or release date"),
       end: actual(period, "Period ending"),
@@ -129,11 +132,12 @@
         button.setAttribute("aria-controls", list.id);
         button.setAttribute("aria-label", monthName(month) + " · " + button.title);
         button.style.setProperty("--event-color", categories[category].color);
-        button.addEventListener("focus", () => setMonth(index));
+        button.addEventListener("focus", () => selectEventMonth(index));
         button.addEventListener("click", () => {
-          setMonth(index);
-          const head = eventBox.getBoundingClientRect().top;
-          if (head > window.innerHeight - 165) {
+          selectEventMonth(index);
+          if (getComputedStyle(stack).display === "grid") return;
+          const moves = list.querySelector("[data-active] .nv-market-move-grid") || eventBox;
+          if (moves.getBoundingClientRect().bottom > window.innerHeight - 46) {
             eventBox.scrollIntoView({ block: "start" });
             eventMonth.focus({ preventScroll: true });
           }
@@ -172,20 +176,27 @@
         const later = eventMonths.find(value => value > month);
         prev.disabled = !earlier;
         next.disabled = !later;
-        prev.onclick = () => { if (earlier) setMonth(dates.indexOf(earlier)); };
-        next.onclick = () => { if (later) setMonth(dates.indexOf(later)); };
+        prev.onclick = () => { if (earlier) selectEventMonth(dates.indexOf(earlier)); };
+        next.onclick = () => { if (later) selectEventMonth(dates.indexOf(later)); };
         eventMonth.textContent = monthName(month);
         const selection = byMonth.get(month) || [];
+        eventChoice.hidden = selection.length < 2;
         captionText.textContent = selection.length ? monthName(month) + " · " + selection.map(event => event.title).join(" · ")
           : eventMonths.length ? "Select a marker to read about its events." : "No selected events in this range.";
         if (!selection.length) {
           list.replaceChildren(element("p", eventMonths.length ? "No selected events in this month." : "No selected events in this range.", "nv-muted"));
           return;
         }
+        const prior = selection.indexOf(activeEvent);
+        const selectedIndex = Math.max(0, prior);
+        activeEvent = selection[selectedIndex];
+        eventSelect.replaceChildren(...selection.map((event, index) => new Option(event.title, index)));
+        eventSelect.value = String(selectedIndex);
         const close = mkt(month, "Close Date");
         list.replaceChildren(...selection.map(event => {
           const topic = categories[event.category];
           const article = element("article", "", "nv-market-event-card");
+          article.toggleAttribute("data-active", event === activeEvent);
           article.style.setProperty("--event-color", topic.color);
           const metadata = charts.date(event.date) + " · " + topic.label;
           article.append(element("p", metadata, "nv-market-event-meta"), element("h4", event.title), element("p", event.note));
@@ -203,6 +214,11 @@
           article.append(source);
           return article;
         }));
+        eventSelect.onchange = () => {
+          const index = Number(eventSelect.value);
+          activeEvent = selection[index];
+          [...list.children].forEach((card, item) => card.toggleAttribute("data-active", item === index));
+        };
       }
 
       function setMonth(index) {
@@ -210,6 +226,11 @@
         if (!month || activeMonth === month) return;
         activeMonth = month;
         visible.forEach(chart => charts.select(chart, index));
+      }
+
+      function selectEventMonth(index) {
+        setMonth(index);
+        const month = dates[index];
         if (byMonth.has(month) && month !== activeEventMonth) showEvents(month);
       }
 
@@ -240,7 +261,7 @@
           extra: reported.map(row => row ? "Quarter ended " + charts.date(row.end) + " · reported by " + charts.date(row.reported) : ""),
         });
       }
-      showEvents(byMonth.has(activeMonth) ? activeMonth : byMonth.has(activeEventMonth) ? activeEventMonth : eventMonths.at(-1) || activeMonth);
+      showEvents(byMonth.has(activeEventMonth) ? activeEventMonth : byMonth.has(activeMonth) ? activeMonth : eventMonths.at(-1) || activeMonth);
     }
     return render;
   }
