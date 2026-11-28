@@ -168,6 +168,7 @@
     const checkboxes = [];
     const sections = Object.fromEntries(Object.entries(statements).map(([key, label]) => {
       const section = element("section", "", "nv-statement-group");
+      section.dataset.statementFamily = key;
       const heading = element("h3", label, "nv-statement-group-title");
       heading.id = "nv-statement-group-" + key;
       section.setAttribute("aria-labelledby", heading.id);
@@ -227,6 +228,7 @@
       if (existing) return existing;
       const article = element("article", "", "nv-panel nv-statement-peer-card");
       article.dataset.statement = statement;
+      article.dataset.chartKind = card.kind;
       const heading = element("h3", card.title);
       heading.id = "nv-statement-title-" + id;
       article.setAttribute("aria-labelledby", heading.id);
@@ -535,7 +537,7 @@
       $("nv-statement-peer-cards").dataset.view = selected;
       for (const [statement, section] of Object.entries(sections)) {
         section.hidden = selected !== "all" && selected !== statement;
-        section.firstElementChild.hidden = selected !== "all";
+        section.querySelector(".nv-statement-group-title").hidden = selected !== "all";
         if (section.hidden) continue;
         cards[statement].forEach((card, index) => {
           const host = getHost(card, index, statement);
