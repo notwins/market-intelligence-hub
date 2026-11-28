@@ -72,10 +72,17 @@ class NavigationShortcutsTests(unittest.TestCase):
   for view in self.views-{'master','history','directory'}:
    self.assertIn(view,menu.routes)
    self.assertIn('v4.html#'+view,site_map.links)
-  tools=(ROOT/'v4-tools.js').read_text().split('function historyView(){')[1].split('function ')[0]
+  source=(ROOT/'v4-tools.js').read_text()
+  tools=source.split('function historyView(){')[1].split('function ')[0]
   self.assertIn("else if(!X.history)content=loading('history')",tools)
-  self.assertIn('+intro+tabs+sgs+edition+content+',tools)
+  self.assertIn('+intro+tabs+edition+content+',tools)
   self.assertNotIn('contextControls()+tabs',tools)
+  self.assertIn("if(tab==='yield')return yieldHistoryView(tabs,edition)",tools)
+  yield_view=source.split('function yieldHistoryView(tabs,edition){')[1].split('function historyView(){')[0]
+  self.assertLess(yield_view.index('${tabs}'),yield_view.index('id="history-analysis"'))
+  self.assertLess(yield_view.index('id="history-analysis"'),yield_view.index('data-sgs-daily="history"'))
+  self.assertLess(yield_view.index('data-sgs-daily="history"'),yield_view.index('id="yield-sources"'))
+  self.assertIn('${edition}',yield_view)
  def test_settings_shortcuts_and_phone_grid(self):
   display=(ROOT/'v4-display.js').read_text();self.assertIn('class="settings-shortcuts"',display)
   self.assertIn('href="site-map.html"',display);self.assertIn('href="tag-map.html"',display)
