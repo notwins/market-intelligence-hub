@@ -603,8 +603,8 @@
     const p={id,path,section,runs:simulate(path),cache:new Map(),selected:previous?.selected??0,
       day:Math.min(previous?.day??(path.basis&&location.hash!=='#path-'+id+'-grid'?path.prices.length-1:path.dates?0:21),path.prices.length-1),ledgerKey:previous?.ledgerKey};
     if(path.dates&&!previous&&location.hash.startsWith('#path-'+id)){
-      const request=new URLSearchParams(location.search),quote=request.get('quote');
-      const i=quotes.findIndex((_,index)=>quoteId(index)===quote),d=path.dates.indexOf(request.get('date'));
+      const request=new URLSearchParams(location.search),quote=request.get('quote'),date=request.get('date');
+      const i=quotes.findIndex((_,index)=>quoteId(index)===quote),d=date?path.dates.indexOf(date):-1;
       if(i>=0)p.selected=i;
       if(d>=0)p.day=d;
     }
