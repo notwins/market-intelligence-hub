@@ -40,6 +40,7 @@
   for (const [chapter, index] of firstStops) picker.add(new Option(chapter, index));
   let index = 0;
   let cueIndex = 0;
+  let pageIndex = 0;
   let playing = false;
   let complete = false;
   let highlighted;
@@ -80,7 +81,8 @@
     next.disabled = index === stops.length - 1;
     panel.dataset.cue = String(cueIndex);
     picker.value = firstStops.get(stops[index].chapter);
-    progress.textContent = `${index + 1} of ${stops.length} · ${stops[index].chapter}`;
+    progress.textContent = `${index + 1} of ${stops.length}`;
+    progress.setAttribute("aria-label", `Stop ${index + 1} of ${stops.length}, ${stops[index].chapter}`);
     caption.setAttribute("aria-live", playing && voice.checked ? "off" : "polite");
   }
 
@@ -246,6 +248,7 @@
   }
 
   function finishCue() {
+    pageIndex = 0;
     if (cueIndex + 1 < stops[index].cues.length) {
       cueIndex++;
       deliverCue();
@@ -262,7 +265,7 @@
     refresh();
   }
 
-  function speak(words, scans) {
+  function speak(words, scans, onComplete) {
     const readingTime = Math.max(3500, 800 + words.split(/\s+/).length * 390);
     let visibleUntil;
     // A cue owns one utterance. Hold it long enough for any chart sweep to finish.
@@ -272,7 +275,7 @@
     function captionsOnly(message) {
       status.textContent = message;
       startVisuals();
-      later(Math.max(readingTime, visibleUntil - performance.now()), finishCue);
+      later(Math.max(readingTime, visibleUntil - performance.now()), onComplete);
     }
     if (!synth || !voice.checked) {
       captionsOnly("Playing with captions.");
@@ -308,13 +311,38 @@
         clearTimeout(startWatch);
         clearTimeout(endWatch);
         startVisuals();
-        later(Math.max(360, visibleUntil - performance.now() + 260), finishCue);
+        later(Math.max(280, visibleUntil - performance.now() + 220), onComplete);
       };
       utterance.onerror = fallback;
       synth.speak(utterance);
     } catch {
       fallback();
     }
+  }
+
+  function captionPages(text, paragraph) {
+    const lines = Number(getComputedStyle(caption).getPropertyValue("--nv-caption-lines"));
+    if (!lines) return [text];
+    const limit = lines * parseFloat(getComputedStyle(paragraph).lineHeight) + 1;
+    const words = text.split(/\s+/);
+    const pages = [];
+    let start = 0;
+    while (start < words.length) {
+      let end = start + 1;
+      while (end < words.length) {
+        paragraph.textContent = words.slice(start, end + 1).join(" ");
+        if (paragraph.getBoundingClientRect().height > limit) break;
+        end++;
+      }
+      if (end < words.length) {
+        const preferred = words.slice(start, end).findLastIndex(word => /[.!?…][”’)]?$/.test(word));
+        if (preferred + 1 >= (end - start) * .65 && words.length - start - preferred > 2) end = start + preferred + 1;
+        else if (words.length - end < 3 && end - start > 6) end -= 3 - (words.length - end);
+      }
+      pages.push(words.slice(start, end).join(" "));
+      start = end;
+    }
+    return pages;
   }
 
   function deliverCue() {
@@ -326,9 +354,32 @@
     const title = document.createElement("h3");
     title.textContent = stop.title;
     const words = document.createElement("p");
-    words.textContent = cue.words;
+    const speaking = playing && voice.checked;
+    // Keep the intermediate text measurements out of the live region.
+    caption.setAttribute("aria-live", "off");
     caption.replaceChildren(title, words);
-    caption.scrollTop = 0;
+    const pages = captionPages(cue.words, words);
+    pageIndex = Math.min(pageIndex, pages.length - 1);
+
+    function showPage() {
+      panel.dataset.captionPart = String(pageIndex);
+      panel.dataset.captionParts = String(pages.length);
+      words.textContent = pages[pageIndex];
+    }
+
+    function playPage() {
+      speak(pages[pageIndex], pageIndex === 0 ? scans : [], () => {
+        if (pageIndex + 1 === pages.length) finishCue();
+        else {
+          pageIndex++;
+          showPage();
+          playPage();
+        }
+      });
+    }
+
+    showPage();
+    caption.setAttribute("aria-live", speaking ? "off" : "polite");
     status.textContent = playing ? "" : "Paused.";
     const begin = performance.now();
     const visualActions = [...(cueIndex === 0 ? stop.actions : []), ...cue.actions];
@@ -358,7 +409,7 @@
           status.textContent = "Paused.";
           return;
         }
-        afterSpotlight(landing, delivery, () => speak(cue.words, scans));
+        afterSpotlight(landing, delivery, playPage);
       });
     }
     apply();
@@ -367,6 +418,7 @@
   function show(position) {
     index = position;
     cueIndex = 0;
+    pageIndex = 0;
     complete = false;
     deliverCue();
   }
@@ -439,5 +491,14 @@
     panel.style.setProperty("--nv-presenter-bottom", "auto");
   });
   handle.addEventListener("lostpointercapture", () => { drag = null; });
-  window.addEventListener("resize", () => { panel.removeAttribute("style"); });
+  let layoutWidth = innerWidth;
+  window.addEventListener("resize", () => {
+    if (layoutWidth === innerWidth) return;
+    layoutWidth = innerWidth;
+    panel.removeAttribute("style");
+    if (!panel.hidden && !complete) {
+      pageIndex = 0;
+      deliverCue();
+    }
+  });
 })();

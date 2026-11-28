@@ -69,7 +69,7 @@
 
     const table = printTable(card.querySelector("table"), title + " comparison table");
     layout.append(table);
-    const note = card.querySelector(".nv-note");
+    const note = document.getElementById(card.getAttribute("aria-describedby"));
     if (note && !full) figure.append(make("figcaption", note.textContent, "nv-print-note"));
     return article;
   }
