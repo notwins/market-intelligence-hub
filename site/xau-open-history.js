@@ -56,7 +56,7 @@
     {id:3, topic:'Opportunity cost', icon:'rates', finding:'Jermann models gold as an investment that pays no cash yield and also has non-investment uses. The model studies why changes in real interest rates can matter to its price.',
       reading:'Follow gold and actual U.S. 10-year TIPS yields from 2003 onward. A month’s yield change and a long holding period answer different questions.', target:'chapter-recovery'},
     {id:19, topic:'Stocks & stress', icon:'trend', finding:'Baur and Lucey distinguish ordinary portfolio diversification from protection in the worst stock-market conditions. Their results allow the safe-haven relationship to vary over time.',
-      reading:'Compare 2008–09 with the broad S&P 500 sample. The downside summary below uses the worst tenth of matched stock months and counts how often gold rose.', target:'chapter-financial-crisis'},
+      reading:'Compare 2008–09 with the broad S&P 500 sample. The downside summary in the driver evidence uses the worst tenth of matched stock months and counts how often gold rose.', target:'chapter-financial-crisis'},
     {id:22, topic:'Pandemic liquidity', icon:'lab', finding:'This paper studies gold and bonds in episodes of epidemic uncertainty. Its question is about behavior in stress episodes, where sample dates and observation frequency matter.',
       reading:'Use the pandemic chapter’s monthly sequence. The stock rebound, April labor shock, and the later easing in financial conditions happened on different clocks.', target:'chapter-pandemic'},
     {id:13, topic:'Central-bank reserves', icon:'bank', finding:'The IMF working paper links reserve diversification partly to relative returns, geopolitical factors and sanctions exposure in its cross-country sample.',
@@ -80,6 +80,7 @@
   const when = d => monthFormat.format(new Date(monthDate(d)+'T00:00:00Z'));
   const fmt = new Intl.NumberFormat('en-US',{maximumFractionDigits:2});
   const signed = v => (v>0?'+':'')+fmt.format(Math.abs(v)<1e-10?0:v);
+  const statistic = r => (r>=.005?'+':'')+(Math.abs(r)<.005?0:r).toFixed(2);
   const valid = Number.isFinite;
   const fred = id => 'https://fred.stlouisfed.org/series/'+id;
 
@@ -252,7 +253,7 @@
       const coverage=first&&last ? amount(first[1],series)+' → '+amount(last[1],series) : 'Series unavailable in this period';
       const detail=make('small',coverage);
       if(first&&last&&(first[0]!==dates[0]||last[0]!==dates.at(-1)))detail.append(make('span',span(first[0],last[0])));
-      const fit=make('small',r==null?'':('r '+signed(r)+' · '+pairs.length+' months'),'xo-fit');
+      const fit=make('small',r==null?'':('r '+statistic(r)+' · '+pairs.length+' months'),'xo-fit');
       card.append(label,figure,detail,fit);
       return card;
     }
@@ -290,9 +291,9 @@
         th.append(link(row.chapter.label,'#chapter-'+row.chapter.id));tr.append(th);
         for(const metric of row.metrics){
           const td=tr.insertCell();
-          td.append(make('strong',metric.r==null?'—':signed(metric.r)),make('small',metric.pairs.length?metric.pairs.length+' months':'No overlap'));
+          td.append(make('strong',metric.r==null?'—':statistic(metric.r)),make('small',metric.pairs.length?metric.pairs.length+' months':'No overlap'));
           td.title=metric.series.label;
-          if(metric.r!=null){
+          if(metric.r!=null&&Math.abs(metric.r)>=.005){
             td.classList.add(metric.r<0?'xo-negative':'xo-positive');
             td.style.setProperty('--xo-strength',String(Math.min(.26,.06+.28*Math.abs(metric.r))));
           }
@@ -310,7 +311,7 @@
         if(drivers.some(item=>item?.r==null))return [];
         const card=make('article',null,'xo-example');
         card.append(link(label,'#chapter-'+id),...drivers.map(metric=>make('p',
-          metric.series.label+' · r '+signed(metric.r)+' ('+metric.pairs.length+' months)')));
+          metric.series.label+' · r '+statistic(metric.r)+' ('+metric.pairs.length+' months)')));
         return [card];
       }));
     }
@@ -340,7 +341,7 @@
         if(leading){
           const data=make('p',null,'xo-observed');
           const heading=Math.abs(leading.r)<.20?'Co-movement was weak across the measured drivers':leading.series.label+' had the largest measured co-movement';
-          data.append(make('strong',heading),make('span',leading.series.label+' · r '+signed(leading.r)+' · '+
+          data.append(make('strong',heading),make('span',leading.series.label+' · r '+statistic(leading.r)+' · '+
             leading.pairs.length+' paired months. The ranking includes drivers with at least 80% of the window.'));
           interpretation.append(data);
         }

@@ -39,7 +39,6 @@
 .xo-atlas-head p { max-width: 80ch; }
 .xo-atlas-head a { font-weight: 730; }
 .xo-evidence { margin: 1rem 0; border-top: 3px solid var(--driver); scroll-margin-top: 5rem; }
-.xo-table { max-height: 31rem; }
 .xo-table td small { display: block; color: var(--muted); font-size: .8rem; }
 .xo-table td strong { display: block; font-size: 1rem; }
 .xo-table .xo-positive { color: #104d40; background-color: rgb(34 125 101 / var(--xo-strength)); }
@@ -106,7 +105,6 @@
 }
 @media print {
   .xo-jump { display: none; }
-  .xo-table { max-height: none; }
   .xo-period { break-inside: auto; }
   .xo-period-figures,.xo-channels article,.xo-paper { break-inside: avoid; }
 }
