@@ -16,7 +16,7 @@
     return step * magnitude;
   }
 
-  function scale(series, includeZero) {
+  function scale(series, includeZero, tickCount = 4) {
     const values = series.flatMap(s => s.values.filter(Number.isFinite));
     if (!values.length) return null;
     let min = Math.min(...values);
@@ -25,7 +25,7 @@
       min = Math.min(0, min);
       max = Math.max(0, max);
     }
-    const step = tickSize((max - min || Math.max(Math.abs(max) * .25, 1)) / 4);
+    const step = tickSize((max - min || Math.max(Math.abs(max) * .25, 1)) / tickCount);
     let floor = Math.floor(min / step) * step;
     let ceil = Math.ceil(max / step) * step;
     if (floor === ceil) ceil += step;
@@ -38,15 +38,16 @@
     const box = output || (canvas.hidden ? canvas.parentElement : canvas).getBoundingClientRect();
     const width = Math.round(box.width), height = Math.round(box.height);
     if (width < 10) return;
-    const { dates, series, axis, bars, limits } = model;
-    const left = width < 430 ? 51 : 69;
+    const { dates, series, axis, bars, limits, marketStyle } = model;
+    const left = marketStyle ? (width < 460 ? 66 : 83) : (width < 430 ? 51 : 69);
     const right = width - 18;
     const count = dates.length;
     const gutter = bars || model.sharedTimeline ? Math.min((right - left) / (count + 1) / 2, model.grouped ? 24 : 14) : 0;
     const chartLeft = left + gutter, chartRight = right - gutter;
     plot.position = { chartLeft, chartRight };
     if (model.onLayout) model.onLayout(plot.position);
-    const top = 18, bottom = height - 37;
+    const top = 18;
+    const bottom = height - (marketStyle ? 43 : 37);
     if (canvas.hidden || right <= left || bottom <= top) return;
     const ratio = output ? 2 : Math.min(devicePixelRatio || 1, 2);
     const fullWidth = Math.round(width * ratio), fullHeight = Math.round(height * ratio);
@@ -60,26 +61,28 @@
     const { floor, ceil, step } = limits;
     const x = i => count === 1 ? (left + right) / 2 : chartLeft + i * (chartRight - chartLeft) / (count - 1);
     const y = value => bottom - (value - floor) * (bottom - top) / (ceil - floor);
-    ctx.font = (width < 430 ? "10" : "11") + "px Segoe UI, system-ui, sans-serif";
+    const labelSize = marketStyle ? (width < 460 ? 12 : 14) : (width < 430 ? 10 : 11);
+    const ink = marketStyle ? "#334d3e" : "#536257";
+    ctx.font = (marketStyle ? "600 " : "") + labelSize + "px Segoe UI, system-ui, sans-serif";
     ctx.textBaseline = "middle";
     ctx.textAlign = "right";
     for (let n = 0; floor + n * step <= ceil + step * .01 && n < 12; n++) {
       const value = +(floor + n * step).toPrecision(10);
       const lineY = y(value);
-      ctx.strokeStyle = value === 0 ? "#a2afa3" : "#e0e8dd";
+      ctx.strokeStyle = marketStyle ? (value === 0 ? "#8fa394" : "#d2ded3") : (value === 0 ? "#a2afa3" : "#e0e8dd");
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(left, lineY);
       ctx.lineTo(right, lineY);
       ctx.stroke();
-      ctx.fillStyle = "#536257";
+      ctx.fillStyle = ink;
       ctx.fillText(axis(value), left - 8, lineY);
     }
     if (model.annotations?.length) {
       ctx.save();
-      ctx.globalAlpha = .5;
-      ctx.lineWidth = 1;
-      ctx.setLineDash([2, 4]);
+      ctx.globalAlpha = marketStyle ? .62 : .5;
+      ctx.lineWidth = marketStyle ? 1.15 : 1;
+      ctx.setLineDash(marketStyle ? [3, 5] : [2, 4]);
       for (const event of model.annotations) {
         const at = x(event.index);
         ctx.strokeStyle = event.color;
@@ -105,16 +108,16 @@
     while (labels.length > 2 && labels.some((tick, i) => i > 0 && tick.start < labels[i - 1].end + 6)) {
       labels = ticks(labels.length - 1);
     }
-    ctx.fillStyle = "#536257";
+    ctx.fillStyle = ink;
     for (const { label, at, align } of labels) {
       ctx.textAlign = align;
-      ctx.fillText(label, at, bottom + 19);
+      ctx.fillText(label, at, bottom + (marketStyle ? 21 : 19));
     }
     const positive = Array(count).fill(0), negative = Array(count).fill(0);
     for (const [seriesIndex, s] of series.entries()) {
       ctx.strokeStyle = s.color;
       ctx.fillStyle = s.color;
-      ctx.lineWidth = 2.25;
+      ctx.lineWidth = marketStyle ? 3 : 2.25;
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
       ctx.setLineDash(s.dash || []);
@@ -155,8 +158,8 @@
       }
     }
     const cursor = x(plot.active);
-    ctx.strokeStyle = "#6a7d69";
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = marketStyle ? "#496550" : "#6a7d69";
+    ctx.lineWidth = marketStyle ? 1.35 : 1;
     ctx.setLineDash([3, 4]);
     ctx.beginPath();
     ctx.moveTo(cursor, top);
@@ -168,7 +171,7 @@
       const selected = s.values[plot.active];
       if (!Number.isFinite(selected)) continue;
       ctx.beginPath();
-      ctx.arc(cursor, y(selected), 4, 0, Math.PI * 2);
+      ctx.arc(cursor, y(selected), marketStyle ? 5 : 4, 0, Math.PI * 2);
       ctx.fillStyle = s.color;
       ctx.strokeStyle = "#fffefa";
       ctx.lineWidth = 1.5;
@@ -246,7 +249,7 @@
         return points.length ? points.reduce((sum, value) => sum + (direction * value > 0 ? value : 0), 0) : null;
       }),
     })) : model.series;
-    const auto = scale(series, model.zero || model.bars);
+    const auto = scale(series, model.zero || model.bars, model.marketStyle ? 5 : 4);
     const limits = auto && (model.domain || auto);
     plot.canvas.hidden = !limits;
     plot.summary.hidden = !limits;
