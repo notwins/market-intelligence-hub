@@ -1,7 +1,17 @@
+:root {
+  --gld-guide-safe-top: 0px;
+  --gld-guide-safe-bottom: 0px;
+  --gld-guide-launch-space: calc(2.75rem + max(.7rem,env(safe-area-inset-bottom,0px)) + .7rem);
+}
+html.hub-primary-ready { --gld-guide-safe-top: var(--hub-primary-size,56px); }
+/* Leave the opposite viewport edge available to the launcher, including on short screens. */
+html.hub-primary-ready .bottom-nav.hub-primary .hub-primary-dropdown {
+  max-height: calc(100dvh - var(--gld-guide-safe-top) - var(--gld-guide-safe-bottom) - var(--gld-guide-launch-space));
+}
 #play-walkthrough {
   position: fixed; z-index: 82;
   right: max(.7rem,env(safe-area-inset-right,0px));
-  bottom: calc(var(--hub-primary-bottom,0px) + max(.7rem,env(safe-area-inset-bottom,0px)));
+  bottom: max(.7rem,env(safe-area-inset-bottom,0px));
   display: inline-flex; align-items: center; justify-content: center; gap: .35rem;
   min-height: 2.75rem; max-width: calc(100% - 1.4rem); padding: .46rem .78rem;
   border: 1px solid #a1b49f; border-radius: 1.4rem; background: #f7faf5;
@@ -11,11 +21,20 @@
 #play-walkthrough svg { flex: none; }
 #play-walkthrough:hover { background: #e8f0e4; border-color: #66846c; }
 body:has(.gld-guide-dock:not([hidden])) #play-walkthrough { visibility: hidden; }
+@media (max-width: 760px) {
+  html.hub-primary-ready {
+    --gld-guide-safe-top: 0px;
+    --gld-guide-safe-bottom: var(--hub-primary-size,46px);
+    --gld-guide-launch-space: calc(2.75rem + max(.7rem,env(safe-area-inset-top,0px)) + .7rem);
+  }
+  html.hub-primary-ready #play-walkthrough { top: max(.7rem,env(safe-area-inset-top,0px)); bottom: auto; }
+  html.hub-primary-ready .mast { padding-right: calc(5.9rem + env(safe-area-inset-right,0px)); }
+}
 
 .guide-script {
   min-width: 0; margin-block: 1.1rem; padding: clamp(.95rem,2vw,1.4rem);
   border: 1px solid #c6d3c5; border-radius: .58rem; background: white;
-  scroll-margin-top: calc(var(--hub-primary-height,0px) + 1rem);
+  scroll-margin-top: calc(var(--gld-guide-safe-top) + 1rem);
 }
 .play-shell .guide-script > summary {
   padding: 0; color: #244b38;
@@ -48,8 +67,8 @@ body:has(.gld-guide-dock:not([hidden])) #play-walkthrough { visibility: hidden; 
   border-radius: .65rem; box-shadow: 0 6px 28px #153b282a,0 1px 4px #153b281f;
   font: 450 1rem/1.42 "DM Sans", system-ui, sans-serif; scrollbar-width: thin;
 }
-.gld-guide-dock[data-placement="bottom"] { bottom: calc(var(--hub-primary-bottom,0px) + max(var(--guide-gap),env(safe-area-inset-bottom,0px))); }
-.gld-guide-dock[data-placement="top"] { top: calc(var(--hub-primary-height,0px) + max(var(--guide-gap),env(safe-area-inset-top,0px))); }
+.gld-guide-dock[data-placement="bottom"] { bottom: calc(var(--gld-guide-safe-bottom) + max(var(--guide-gap),env(safe-area-inset-bottom,0px))); }
+.gld-guide-dock[data-placement="top"] { top: calc(var(--gld-guide-safe-top) + max(var(--guide-gap),env(safe-area-inset-top,0px))); }
 .gld-guide-dock[hidden], .gld-guide-spotlight[hidden], .gld-guide-pointer[hidden] { display: none !important; }
 .gld-guide-header {
   position: sticky; top: 0; z-index: 2; display: flex; align-items: center; flex-wrap: wrap; gap: .35rem .55rem;
