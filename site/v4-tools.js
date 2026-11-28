@@ -255,6 +255,32 @@ function spxHistoryView(tabs){
   </section>
  </div>`;
 }
+function sharePriceHistoryView(tabs){
+ const jump=historyChapterJump;
+ return `<div class="history-page yield-history-page share-history-page" data-history-topic="shares">
+  <header class="yield-masthead">
+   <div><p class="yield-kicker">Historical charts</p><h1>Share price <em>history</em></h1>
+   <p>Explore closing prices for listed shares, ETFs and indices. Compare performance over the same dates.</p>
+   ${jump('history-analysis','Explore share prices ↓')}</div>
+   <figure><img src="assets/desk/shares-exchange.webp" width="600" height="800" alt="" fetchpriority="high"></figure>
+  </header>
+  ${tabs}
+  <nav class="yield-jump" aria-label="Share price history sections">${jump('history-analysis','Price charts')}${jump('share-valuation-history','Valuation history')}${jump('share-history-sources','Sources & methodology')}</nav>
+  <section class="yield-chapter yield-chart-chapter">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Historical closing prices</p><h2>Compare share prices</h2></div><p>Choose a ticker, add up to five comparisons, and select a date range.</p></header>
+   <section id="history-analysis" tabindex="-1" aria-label="Share price charts">${window.MarketPrices?.historyPanel()||'<p>Share history unavailable.</p>'}</section>
+  </section>
+  <section id="share-valuation-history" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Dated research observations</p><h2>Valuation history</h2></div></header>
+   ${window.BOSEquity?.panel('history')||''}
+  </section>
+  <section id="share-history-sources" class="yield-chapter" tabindex="-1">
+   <header class="yield-chapter-head"><div><p class="yield-kicker">Data & methodology</p><h2>Sources and coverage</h2></div></header>
+   <div data-yield-feed-status></div>
+   <p>Comparisons use the first and last observations shared by all selected listings. Exchange rates are not applied. The price-basis section below each chart lists its sources and explains how older observations are dated.</p>
+  </section>
+ </div>`;
+}
 function historyView(){
  const topics=[['yield','Yield history'],['shares','Share prices'],['beta2-shares','▤ Event studies'],['beta4-shares','History pivot'],['fx','FX history'],['curves','Historical curves'],['spx','SPX index'],['si','▧ SI Pricing']];
  const tab=X.historyTab, title=topics.find(item=>item[0]===tab)?.[1].replace(/^[▤▧] /,'')||'Historical charts';
@@ -265,12 +291,12 @@ function historyView(){
  if(tab==='curves')return curveHistoryView(tabs,edition);
  if(tab==='fx')return fxHistoryView(tabs,edition);
  if(tab==='spx')return spxHistoryView(tabs);
- const descriptions={shares:'Compare selected shares, dated valuation observations and reported earnings.',si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
+ if(tab==='shares')return sharePriceHistoryView(tabs);
+ const descriptions={si:'Browse historical structured investment pricing and reference terms.','beta2-shares':'Explore share prices and country heat maps around historical events.','beta4-shares':'Compare share histories by security, measure and period.'};
  const intro='<header class="history-opener"><div>'+head('Historical charts',title,t(descriptions[tab]||''))+'</div><div class="history-engraving" aria-hidden="true"></div></header>';
  let content;
  if(tab==='beta4-shares')content='<section id="beta4-shares" aria-label="Share history pivot"></section>';
  else if(tab==='beta2-shares')content=window.Beta2Shares.view();
- else if(tab==='shares')content=(window.MarketPrices?.historyPanel()||'<p>Share history unavailable.</p>')+(window.BOSEquity?.panel('history')||'');
  else if(X.historyTab==='si')content=window.MarketSI?.view()||'<p>SI reference unavailable.</p>';
  else content=loading('history');
  return '<div class="history-page" data-history-topic="'+e(tab)+'">'+intro+tabs+edition+content+'</div>';
