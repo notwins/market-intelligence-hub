@@ -74,7 +74,12 @@ class NavigationShortcutsTests(unittest.TestCase):
    self.assertIn('v4.html#'+view,site_map.links)
   source=(ROOT/'v4-tools.js').read_text()
   tools=source.split('function historyView(){')[1].split('function ')[0]
-  self.assertIn("else if(!X.history)content=loading('history')",tools)
+  self.assertIn("if(tab==='spx')return spxHistoryView(tabs)",tools)
+  self.assertIn("else content=loading('history')",tools)
+  spx_view=source.split('function spxHistoryView(tabs){')[1].split('function historyView(){')[0]
+  self.assertLess(spx_view.index('${tabs}'),spx_view.index('id="history-analysis"'))
+  self.assertIn('window.HistoryContext?.spxView()',spx_view)
+  self.assertIn('id="spx-sources"',spx_view)
   self.assertIn('+intro+tabs+edition+content+',tools)
   self.assertNotIn('contextControls()+tabs',tools)
   self.assertIn("if(tab==='yield')return yieldHistoryView(tabs,edition)",tools)
