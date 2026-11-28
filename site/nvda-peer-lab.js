@@ -131,7 +131,12 @@
     const nv = bases[0];
     const point = (n, unit) => Number.isFinite(n) ? fmt(n, 2) + unit : "—";
     const quoteDate = metric => metric.field?.startsWith("BOS ") ? "BOS Quote Date" : "Close Date";
-    const ranking = window.NvidiaSimulatorRanking.mount({ metrics: model.metrics, companyMark, element, dollar, point });
+    const logoRanking = window.NvidiaLogoRanking;
+    const ranking = logoRanking.mount("sim-rank", { companyMark, element });
+    logoRanking.bindNext({
+      select: $("sim-metric"), button: $("sim-rank-next"),
+      choices: ["pe", "forwardPE", "pb", "fcfy", "div"].map(id => [id, model.metrics.find(metric => metric.id === id).label]),
+    });
     $("sim-date").textContent = "Closing price " + dollar(nv.price) + " · " + charts.date(nv.quote);
     $("sim-basis").textContent = "NVDA closed at " + dollar(nv.price) + " on " + charts.date(nv.quote) + ". The BOS forward snapshot used " + dollar(nv.bosPrice)
       + " on " + charts.date(nv.cell("BOS Quote Date")) + ". Trailing earnings end " + charts.date(nv.cell("TTM Net Income Period End"))
@@ -195,7 +200,12 @@
         date: charts.date(bases[i].cell(dateKey)),
         simulated: i === 0,
       }));
-      ranking.render(entries, metric, price, $("sim-group").value);
+      ranking.render(entries.map(entry => ({
+        ...entry, featured: entry.simulated, context: entry.simulated ? "Simulated at " + dollar(price) : "Quote " + entry.date,
+      })), {
+        key: metric.id + "/" + $("sim-group").value, label: metric.label, higher: metric.higher,
+        format: value => point(value, metric.unit),
+      });
       $("sim-ranks").replaceChildren(...entries.map(({ company, value, date, simulated }) => {
         const tr = element("tr", "", simulated ? "nv-focus" : "");
         const relation = value > v ? "Higher" : value < v ? "Lower" : "Equal";

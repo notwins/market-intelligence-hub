@@ -8,23 +8,23 @@
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="Primary%20Navigation%20-%20Type%20CSS%20-%2016-Nov-16.06.css?v=20261127.nvda">
 <link rel="stylesheet" href="nvda-history.css?v=10">
-<link rel="stylesheet" href="nvda-peer-lab.css?v=2">
+<link rel="stylesheet" href="nvda-peer-lab.css?v=3">
 <link rel="stylesheet" href="nvda-statement-comparisons.css?v=20261128.visual">
 <script defer src="Primary%20Navigation%20-%20Type%20JS%20-%2016-Nov-16.06.js?v=20261127.nvda"></script>
 <script defer src="nvda-chart-controls.js?v=1"></script>
 <script defer src="nvda-history-charts.js?v=7"></script>
 <script defer src="nvda-valuation.js?v=1"></script>
-<script defer src="nvda-simulator-ranking.js?v=1"></script>
-<script defer src="nvda-peer-lab.js?v=20261128.logo-rankings"></script>
+<script defer src="nvda-logo-ranking.js?v=1"></script>
+<script defer src="nvda-peer-lab.js?v=20261128.shared-rankings"></script>
 <script defer src="nvda-statement-print.js?v=2"></script>
 <script defer src="nvda-statement-comparisons.js?v=20261128.visual"></script>
-<script defer src="nvda-revenue-peer-history.js?v=4"></script>
+<script defer src="nvda-revenue-peer-history.js?v=5"></script>
 <script defer src="nvda-market-events.js?v=1"></script>
 <script defer data-price-render-only src="share-prices.js?v=20261128.event-moves"></script>
 <script defer src="nvda-market-event-prices.js?v=2"></script>
 <script defer src="nvda-market-timeline.js?v=5"></script>
 <script defer src="nvda-market-event-table.js?v=1"></script>
-<script defer src="nvda-history.js?v=20261128.logo-rankings"></script>
+<script defer src="nvda-history.js?v=20261128.shared-rankings"></script>
 <link rel="stylesheet" href="history-gallery.css?v=1"><link rel="stylesheet" href="market-editions.css?v=1">
 </head>
 <body class="nvda-history-page">
@@ -94,6 +94,37 @@
         <summary>Choose individual peers <span id="nv-revenue-peer-count"></span></summary>
         <div class="nv-statement-peer-options" id="nv-revenue-peer-options"></div>
       </details>
+      <article class="nv-panel nv-revenue-peer-card lab-fin-rank-card" id="financial-peer-ranking" aria-labelledby="fin-rank-title">
+        <div class="nv-panel-head">
+          <div>
+            <h3 id="fin-rank-title">Company ranking</h3>
+            <p class="nv-muted" id="fin-rank-summary"></p>
+          </div>
+          <div class="nv-controls lab-rank-controls">
+            <label>Rank by<select id="fin-rank-mode">
+              <option value="actual">Actual USD</option>
+              <option value="QoQ">QoQ growth</option>
+              <option value="YoY">YoY growth</option>
+            </select></label>
+            <button type="button" class="nv-layout-button" id="fin-rank-next">Next <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+        <figure id="fin-rank-chart" class="lab-rank-figure" aria-labelledby="fin-rank-title" aria-describedby="fin-rank-summary">
+          <div id="fin-rank-chart-data" hidden>
+            <div class="lab-rank-direction"><span id="fin-rank-left">Lower values</span><strong id="fin-rank-right">Higher values →</strong></div>
+            <div class="lab-rank-stage">
+              <div class="lab-rank-guides" id="fin-rank-guides" aria-hidden="true"></div>
+              <span class="lab-rank-watermark" id="fin-rank-watermark" aria-hidden="true"></span>
+              <div class="lab-rank-window" id="fin-rank-window">
+                <div class="lab-rank-bars" id="fin-rank-bars" role="group" aria-label="Company financial ranking"></div>
+              </div>
+            </div>
+            <p class="lab-rank-overflow-note">Scroll sideways to see all companies.</p>
+          </div>
+          <p class="nv-muted" id="fin-rank-empty" hidden>No comparable values for this measure and period.</p>
+          <figcaption class="lab-rank-readout" id="fin-rank-readout" aria-live="polite" hidden></figcaption>
+        </figure>
+      </article>
       <div class="nv-revenue-peer-grid">
         <article class="nv-panel nv-revenue-peer-card" aria-labelledby="nv-revenue-growth-title">
           <div class="nv-panel-head"><h3 id="nv-revenue-growth-title">Revenue growth</h3></div>
