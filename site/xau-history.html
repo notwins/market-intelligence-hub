@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Research XAU spot gold against the dollar, U.S. real rates, inflation, China and the S&P 500. Explore monetary gold holdings and global mine production.">
+<title>Gold in history · Market Intel</title><link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="xau-history.css?v=1">
+<script defer src="xau-history-model.js?v=1"></script><script defer src="xau-history.js?v=1"></script>
+</head><body class="xau-research">
+<a class="skip" href="#main">Skip to gold research</a>
+<main id="main">
+<header class="gold-hero" id="overview"><div class="gold-shell hero-grid">
+  <div><nav class="gold-crumb" aria-label="Breadcrumb"><a href="v4.html#tools">Market Intel</a> / <a href="tools/gold-charts.html">Gold tools</a> / <span>XAU</span></nav>
+  <p class="chapter">Market history · XAU/USD</p><h1>Gold<br><em>in history.</em></h1>
+  <p class="hero-lead">Study gold across currencies, real yields and inflation. Compare it with equities, then trace who holds official gold and where new supply comes from.</p>
+  <div class="hero-links"><a class="action" href="#compare">Compare gold and its drivers</a><a href="#holdings">Explore global holdings</a><a href="tools/gld-strategy.html">GLD game plan</a></div></div>
+  <figure><img src="assets/desk/history-gold.jpg" width="960" height="320" alt="" fetchpriority="high"><figcaption>Official holdings are a stock. Mine production is an annual flow.</figcaption></figure>
+</div></header>
+<nav class="gold-jump" aria-label="Gold research sections"><div class="gold-shell">
+<a href="#overview">Overview</a><a href="#compare">Compare</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#sources">Sources</a>
+</div></nav>
+<div class="gold-shell">
+<p id="load-status" class="status" role="status">Loading gold and macro histories…</p>
+<dl class="gold-kpis" id="gold-kpis" aria-label="Latest observations"></dl>
+<section class="gold-section" id="compare"><header class="section-heading"><div><p class="chapter">Market comparison</p><h2>What moved with gold?</h2></div><p>Compare spot gold with the broad dollar, major FX pairs, U.S. yields, inflation and the S&amp;P 500 across the same observation periods.</p></header>
+<div class="gold-panel">
+  <div class="chart-presets" id="presets" aria-label="Compare a market driver"></div>
+  <form id="filters" class="gold-fields">
+    <label>Gold series<select id="gold-series"><option value="spot">XAU/USD · spot</option><option value="pink">World Bank gold · monthly average</option><option value="realgold">U.S. inflation-adjusted gold</option><option value="sgdgold">Gold translated to SGD</option><option value="cnygold">Gold translated to CNY</option><option value="eurgold">Gold translated to EUR</option><option value="gld">GLD · USD/share</option></select></label>
+    <label>Compare with<select id="driver"></select></label>
+    <label>From year<input type="number" id="from" value="2016" min="1957" max="2026" required></label>
+    <label>Through year<input type="number" id="to" value="2026" min="1957" max="2026" required></label>
+    <label>View<select id="view"><option value="native">Aligned charts · original units</option><option value="change">Change from first matched month</option></select></label>
+    <button class="action" type="submit">Apply dates</button>
+  </form>
+  <div class="chart-frame" id="comparison-chart"></div>
+  <div class="scrub-row"><label for="inspect-month">Inspect month</label><input type="range" id="inspect-month" min="0" max="0" value="0" disabled><output id="inspect-value" for="inspect-month" aria-live="polite"></output></div>
+  <dl class="gold-kpis compact" id="window-kpis"></dl>
+  <p class="chart-note" id="chart-note"></p>
+  <details id="obs-details"><summary>Observations and CSV</summary><p class="chart-note">Download the displayed gold and driver observations. Dates denote the observation period.</p><button class="action secondary" type="button" id="download" disabled>Download comparison CSV</button><div class="table-scroll" id="observations" tabindex="0" aria-label="Comparison observations"></div></details>
+</div>
+<div class="gold-panel matrix-panel"><header class="small-head"><div><h3>Macro comparison matrix</h3><p id="matrix-window"></p></div><span>Correlation · −1 to +1</span></header><div class="table-scroll" id="matrix" tabindex="0" aria-label="Gold macro correlation matrix"></div></div>
+</section>
+<section class="gold-section" id="regimes"><header class="section-heading"><div><p class="chapter">Historical context</p><h2>Gold across five regimes</h2></div><p>Open a period in the comparison chart or inspect the drawdown and rebound with the same World Bank monthly gold series.</p></header><div class="regime-grid" id="regime-list"></div></section>
+<section class="gold-section" id="china"><header class="section-heading"><div><p class="chapter">China</p><h2>Growth, inflation and the yuan</h2></div><p>USD/CNY changes the local-currency translation of gold. The physical volume of China’s official gold shows how reported holdings changed independently of the gold price.</p></header>
+<div class="china-grid" id="china-cards"></div><p class="chart-note">CNY gold is a same-date USD gold × USD/CNY translation. Shanghai’s local benchmark can carry a premium or discount.</p>
+</section>
+<section class="gold-section" id="holdings"><header class="section-heading"><div><p class="chapter">Monetary gold</p><h2>Who holds official gold?</h2></div><p>Compare the 30 largest eligible country reporters in the latest snapshot and trace their recorded holdings. The IMF world total includes other reporting economies and international institutions.</p></header>
+<div class="gold-panel"><div class="rank-controls"><label>Show country holdings as of<select id="reserve-period"></select></label><label>Trace holdings<select id="reserve-trend"></select></label></div>
+<div class="rank-layout"><div><h3>30 country reporters</h3><div id="reserve-table" class="table-scroll rank-scroll" tabindex="0" aria-label="Official gold holdings ranking"></div></div><figure><h3 id="reserve-title">World official holdings</h3><div id="reserve-chart" class="chart-frame"></div><figcaption id="reserve-note" class="chart-note"></figcaption></figure></div>
+<p class="chart-note" id="reserve-foot"></p></div>
+</section>
+<section class="gold-section" id="mining"><header class="section-heading"><div><p class="chapter">Physical supply</p><h2>Where gold is mined</h2></div><p>View annual mine output by country and its share of the world total. The rankings measure recovered gold content in tonnes, including source estimates where flagged.</p></header><div class="gold-panel">
+<div class="rank-controls"><label>Production year<select id="mine-year"></select></label><label>Trace production<select id="mine-trend"></select></label></div>
+<div class="rank-layout"><div><h3>Top 30 producing countries</h3><div id="mine-table" class="table-scroll rank-scroll" tabindex="0" aria-label="Gold mine production ranking"></div></div><figure><h3 id="mine-title">World mine production</h3><div id="mine-chart" class="chart-frame"></div><figcaption id="mine-note" class="chart-note"></figcaption></figure></div>
+<p class="chart-note" id="mine-foot"></p></div></section>
+<section class="gold-section" id="sources"><header class="section-heading"><div><p class="chapter">Documentation</p><h2>Trace the data</h2></div><p>Coverage dates and source links follow the individual series. Earlier periods will have fewer comparable drivers.</p></header>
+<div class="gold-panel"><div class="method-grid">
+<div><h3>Matching periods</h3><p>Market series use the last available close in a calendar month. FRED monthly series and the Pink Sheet retain the source’s monthly observation. A partial latest month can appear. Annual comparisons match by calendar year and use December gold when available. Observations use their economic period and can be published later.</p></div>
+<div><h3>Returns and rates</h3><p>Price, FX and index returns are percent changes. Yields and inflation rates are compared as percentage-point changes. The matrix uses paired changes across consecutive reported months with at least 12 pairs. Correlation describes co-movement over the selected window.</p></div>
+<div><h3>Stocks, flows and local currency</h3><p>Spot XAU/USD is gold per troy ounce. GLD trades per share, and Nasdaq’s XAU is a mining equity index. IMF official holdings measure a stock in tonnes. Mine output measures tonnes produced during a year. FX translation joins the daily gold and FX records on the exact date. U.S. real gold divides the Pink Sheet price by CPI and expresses it in dollars of the latest available CPI month.</p></div>
+</div><div id="source-list" class="source-list"></div></div></section>
+</div></main></body></html>
