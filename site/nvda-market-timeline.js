@@ -9,6 +9,14 @@
     mixed: { label: "Multiple categories", color: "#46574b" },
   };
 
+  // The comparison archive starts after the first few months of the price chart.
+  const openingQuarters = [
+    { end: "2016-10-30", reported: "2016-11-10", revenue: 2.004,
+      source: "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-third-quarter-fiscal-2017" },
+    { end: "2017-01-29", reported: "2017-02-09", revenue: 2.173,
+      source: "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2017" },
+  ];
+
   function mount({ events, quarters, actual, mkt, usd, dollar, marketFormat, element, refresh }) {
     const price = $("nv-market-chart");
     const pe = $("nv-market-pe-chart");
@@ -24,16 +32,16 @@
     const prev = $("nv-market-event-prev");
     const next = $("nv-market-event-next");
     let activeMonth;
-    const releases = quarters.map(period => ({
-      filed: actual(period, "Filing or release date"),
+    const archiveQuarters = quarters.map(period => ({
+      reported: actual(period, "Filing or release date"),
       end: actual(period, "Period ending"),
       revenue: usd(period, "Revenue", "Income statement", 0),
-    })).filter(row => row.filed && row.end && Number.isFinite(row.revenue))
-      .sort((a, b) => a.end.localeCompare(b.end));
+    })).filter(row => row.reported && row.end && Number.isFinite(row.revenue));
+    const releases = [...openingQuarters, ...archiveQuarters].sort((a, b) => a.end.localeCompare(b.end));
 
     const availableAt = month => {
       const close = mkt(month, "Close Date");
-      return close ? releases.findLast(row => row.filed < close) : undefined;
+      return close ? releases.findLast(row => row.reported < close) : undefined;
     };
 
     toggles.addEventListener("change", refresh);
@@ -56,8 +64,19 @@
       overlayNote.hidden = !peOn && !revOn;
       overlayNote.textContent = [
         peOn && "Trailing P/E uses positive trailing earnings in the monthly archive.",
-        revOn && "Revenue carries forward the latest quarterly figure filed before each monthly close.",
+        revOn && "Revenue carries forward the latest quarterly figure reported before each monthly close.",
       ].filter(Boolean).join(" ");
+      if (revOn) {
+        overlayNote.append(" Opening quarters: ");
+        openingQuarters.forEach((row, index) => {
+          if (index) overlayNote.append(" · ");
+          const link = element("a", "FY2017 Q" + (index + 3));
+          link.href = row.source;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          overlayNote.append(link);
+        });
+      }
 
       const selected = new Set(Array.from(filters.querySelectorAll("input:checked"), input => input.value));
       const byMonth = new Map();
@@ -164,12 +183,12 @@
         });
       }
       if (revOn) {
-        const filed = dates.map(availableAt);
+        const reported = dates.map(availableAt);
         const format = n => dollar(n, 2) + "B";
-        charts.render(revenue, { ...alignment, title: "Latest filed quarterly revenue", zero: true, step: true,
+        charts.render(revenue, { ...alignment, title: "Latest reported quarterly revenue", zero: true, step: true,
           format, axis: n => dollar(n, 1) + "B",
-          series: [{ label: "Quarterly revenue", color: "#9a5731", values: filed.map(row => row?.revenue ?? null) }],
-          extra: filed.map(row => row ? "Quarter ended " + charts.date(row.end) + " · filed " + charts.date(row.filed) : ""),
+          series: [{ label: "Quarterly revenue", color: "#9a5731", values: reported.map(row => row?.revenue ?? null) }],
+          extra: reported.map(row => row ? "Quarter ended " + charts.date(row.end) + " · reported by " + charts.date(row.reported) : ""),
         });
       }
       showEvents(activeMonth);
