@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="xau-monthly-lab.css?v=1">
+<script defer src="xau-monthly-lab.js?v=1"></script>
 <meta name="description" content="Research XAU spot gold against the dollar, U.S. real rates, inflation, China and the S&P 500. Explore monetary gold holdings and global mine production.">
 <title>Gold in history · Market Intel</title><link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="xau-history.css?v=2">
 <script defer src="xau-history-model.js?v=1"></script><script defer src="xau-regimes.js?v=1"></script><script defer src="xau-history.js?v=2"></script>
-<link rel="stylesheet" href="xau-monthly-lab.css?v=1">
-<script defer src="xau-monthly-lab.js?v=1"></script>
 </head><body class="xau-research">
 <a class="skip" href="#main">Skip to gold research</a>
 <main id="main">
@@ -18,7 +18,7 @@
   <figure><img src="assets/desk/history-gold.jpg" width="960" height="320" alt="" fetchpriority="high"><figcaption>Official holdings are a stock. Mine production is an annual flow.</figcaption></figure>
 </div></header>
 <nav class="gold-jump" aria-label="Gold research sections"><div class="gold-shell">
-<a href="#overview">Overview</a><a href="#compare">Compare</a><a href="#monthly-lab">Driver lab</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#sources">Sources</a>
+<a href="#overview">Overview</a><a href="#compare">Compare</a><a href="#regimes">Historical regimes</a><a href="#china">China</a><a href="#holdings">Official holdings</a><a href="#mining">Mine supply</a><a href="#sources">Sources</a>
 </div></nav>
 <div class="gold-shell">
 <p id="load-status" class="status" role="status">Loading gold and macro histories…</p>
@@ -42,32 +42,6 @@
 </div>
 <div class="gold-panel matrix-panel"><header class="small-head"><div><h3>Macro comparison matrix</h3><p id="matrix-window"></p></div><span>Correlation · −1 to +1</span></header><div class="table-scroll" id="matrix" tabindex="0" aria-label="Gold macro correlation matrix"></div></div>
 </section>
-<section class="gold-section" id="monthly-lab" aria-labelledby="xm-title">
-<header class="section-heading"><div><p class="chapter">Paired monthly observations</p><h2 id="xm-title">Gold driver lab</h2></div><p>See whether gold moved with the dollar, rates, inflation or stocks, and how that relationship changed over time.</p></header>
-<div class="gold-panel xm-lab">
-<p id="xm-status" class="chart-note" role="status">Loading compiled gold history…</p>
-<div id="xm-content" hidden>
-<div class="chart-presets" id="xm-drivers" role="group" aria-label="Choose a gold driver"></div>
-<form class="gold-fields xm-fields" id="xm-form">
-<label>From month<input type="month" id="xm-from" required></label>
-<label>Through month<input type="month" id="xm-to" required></label>
-<button class="action" type="submit">Apply dates</button>
-</form>
-<div class="chart-presets xm-windows" id="xm-windows" role="group" aria-label="Date presets">
-<button type="button" data-window="5y">Last 5 years</button>
-<button type="button" data-window="10y">Last 10 years</button>
-<button type="button" data-window="pandemic">2020–21</button>
-<button type="button" data-window="recent">Since 2022</button>
-<button type="button" data-window="all">All shared data</button>
-</div>
-<dl id="xm-kpis" class="gold-kpis compact"></dl>
-<figure class="xm-main"><h3>Gold and the selected driver</h3><div class="chart-frame xm-chart" id="xm-history"></div><div class="scrub-row"><label for="xm-month">Inspect month</label><input id="xm-month" type="range" min="0" max="0" value="0"><output id="xm-readout" for="xm-month" aria-live="polite"></output></div></figure>
-<div class="xm-charts">
-<figure><h3>One point per month</h3><div class="chart-frame xm-chart" id="xm-scatter"></div><figcaption class="chart-note" id="xm-scatter-note"></figcaption></figure>
-<figure><h3>Rolling 36-month correlation</h3><div class="chart-frame xm-chart" id="xm-rolling"></div><figcaption class="chart-note">Each point uses the 36 months ending there. A gap in either series leaves a break in the line.</figcaption></figure>
-</div>
-<div class="xm-footer"><button type="button" class="action secondary" id="xm-download">Download paired observations</button><p class="chart-note" id="xm-method"></p></div>
-</div></div></section>
 <section class="gold-section" id="regimes"><header class="section-heading"><div><p class="chapter">Historical context</p><h2>Gold across five regimes</h2></div><p>Open a period in the comparison chart or inspect the drawdown and rebound with the same World Bank monthly gold series.</p></header><div class="gold-panel regime-panel">
 <div class="chart-presets" id="regime-phases" role="group" aria-label="Choose a phase of each gold regime"></div>
 <div class="table-scroll" id="regime-matrix" tabindex="0" aria-label="Gold and market drivers by regime"></div>

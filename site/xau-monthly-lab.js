@@ -284,8 +284,44 @@
     showPhysical(data);
   }
 
-  if(typeof module==='object'&&module.exports)module.exports={dataset,pearson,rolling};
-  else if(root.document.getElementById('monthly-lab')){
-    init().catch(error=>{root.document.getElementById('xm-status').textContent=error.message;});
+  function mount() {
+    const anchor=document.getElementById('regimes');
+    if(!anchor)return;
+    const template=document.createElement('template');
+    template.innerHTML=`
+<section class="gold-section" id="monthly-lab" aria-labelledby="xm-title">
+<header class="section-heading"><div><p class="chapter">Paired monthly observations</p><h2 id="xm-title">Gold driver lab</h2></div><p>See whether gold moved with the dollar, rates, inflation or stocks, and how that relationship changed over time.</p></header>
+<div class="gold-panel xm-lab">
+<p id="xm-status" class="chart-note" role="status">Loading compiled gold history…</p>
+<div id="xm-content" hidden>
+<div class="chart-presets" id="xm-drivers" role="group" aria-label="Choose a gold driver"></div>
+<form class="gold-fields xm-fields" id="xm-form">
+<label>From month<input type="month" id="xm-from" required></label>
+<label>Through month<input type="month" id="xm-to" required></label>
+<button class="action" type="submit">Apply dates</button>
+</form>
+<div class="chart-presets xm-windows" id="xm-windows" role="group" aria-label="Date presets">
+<button type="button" data-window="5y">Last 5 years</button>
+<button type="button" data-window="10y">Last 10 years</button>
+<button type="button" data-window="pandemic">2020–21</button>
+<button type="button" data-window="recent">Since 2022</button>
+<button type="button" data-window="all">All shared data</button>
+</div>
+<dl id="xm-kpis" class="gold-kpis compact"></dl>
+<figure class="xm-main"><h3>Gold and the selected driver</h3><div class="chart-frame xm-chart" id="xm-history"></div><div class="scrub-row"><label for="xm-month">Inspect month</label><input id="xm-month" type="range" min="0" max="0" value="0"><output id="xm-readout" for="xm-month" aria-live="polite"></output></div></figure>
+<div class="xm-charts">
+<figure><h3>One point per month</h3><div class="chart-frame xm-chart" id="xm-scatter"></div><figcaption class="chart-note" id="xm-scatter-note"></figcaption></figure>
+<figure><h3>Rolling 36-month correlation</h3><div class="chart-frame xm-chart" id="xm-rolling"></div><figcaption class="chart-note">Each point uses the 36 months ending there. A gap in either series leaves a break in the line.</figcaption></figure>
+</div>
+<div class="xm-footer"><button type="button" class="action secondary" id="xm-download">Download paired observations</button><p class="chart-note" id="xm-method"></p></div>
+</div></div></section>
+`;
+    anchor.before(template.content);
+    const jump=node('a','Driver lab');
+    jump.href='#monthly-lab';
+    document.querySelector('nav.gold-jump a[href="#compare"]')?.after(jump);
+    init().catch(error=>{document.getElementById('xm-status').textContent=error.message;});
   }
+  if(typeof module==='object'&&module.exports)module.exports={dataset,pearson,rolling};
+  else mount();
 })(globalThis);
